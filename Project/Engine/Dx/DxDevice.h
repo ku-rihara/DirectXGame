@@ -10,6 +10,8 @@
 /// <summary>
 /// デバイスを管理するクラス
 /// </summary>
+namespace KetaEngine {
+
 class DxDevice {
 public:
     DxDevice()  = default;
@@ -33,3 +35,5 @@ public:
     Microsoft::WRL::ComPtr<ID3D12Device> GetDevice() const { return device_; }
     Microsoft::WRL::ComPtr<IDXGIFactory7> GetFactory() const { return dxgiFactory_; }
 };
+
+}; // KetaEngine

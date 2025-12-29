@@ -32,7 +32,7 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     void Start(); //< スポーンシステムの開始
     void Stop(); //< スポーンシステムの停止
@@ -64,7 +64,7 @@ private:
   
 
 private:
-    GlobalParameter* globalParameter_ = nullptr;
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_      = "ContinuousEnemySpawner";
 
     EnemyManager* pEnemyManager_    = nullptr;
@@ -85,8 +85,8 @@ public:
     /// getter
     ///=======================================================================================
     const bool& IsActive() const { return isActive_; }
-    const int32_t& GetTotalSpawnedCount() const { return totalSpawnedCount_; }
-    const float& GetNextSpawnTime() const { return config_.spawnInterval - spawnTimer_; }
+    int32_t GetTotalSpawnedCount() const { return totalSpawnedCount_; }
+    float GetNextSpawnTime() const { return config_.spawnInterval - spawnTimer_; }
     SpawnConfig& GetConfig() { return config_; }
 
     ///=======================================================================================

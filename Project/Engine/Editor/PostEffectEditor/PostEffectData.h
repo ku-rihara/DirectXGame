@@ -6,6 +6,8 @@
 /// <summary>
 /// ポストエフェクトデータ
 /// </summary>
+namespace KetaEngine {
+
 class PostEffectData {
 public:
     PostEffectData()  = default;
@@ -41,3 +43,5 @@ public:
     void SetPostEffectMode(PostEffectMode mode) { postEffectModeIndex_ = static_cast<int>(mode); }
     void SetDuration(float duration) { duration_ = duration; }
 };
+
+}; // KetaEngine

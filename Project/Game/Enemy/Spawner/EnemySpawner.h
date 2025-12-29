@@ -54,7 +54,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// 敵が倒されたときの通知
@@ -96,7 +96,7 @@ private:
     using json = nlohmann::json;
     json jsonData_;
 
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "EnemySpawner";
 
     EnemyManager* pEnemyManager_     = nullptr;

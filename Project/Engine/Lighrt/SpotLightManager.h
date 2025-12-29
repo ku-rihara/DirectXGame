@@ -8,6 +8,8 @@
 /// <summary>
 /// スポットライト管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class SpotLightManager {
 public:
     SpotLightManager()  = default;
@@ -66,3 +68,5 @@ public:
     uint32_t GetSrvIndex() const { return srvIndex_; }
     std::vector<SpotLight*> GetLights();
 };
+
+}; // KetaEngine

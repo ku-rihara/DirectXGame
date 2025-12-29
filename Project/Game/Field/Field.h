@@ -2,6 +2,7 @@
 #include "3d/Object3d.h"
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
+#include "Editor/GPUParticleEditor/GPUParticlePlayer.h"
 #include "Editor/ParticleEditor/ParticleEmitter.h"
 #include <array>
 
@@ -20,6 +21,6 @@ public:
     void Update();
 
 private:
-    std::unique_ptr<Object3d> obj3d_ = nullptr;
-  
+    std::unique_ptr<KetaEngine::Object3d> obj3d_                      = nullptr;
+   KetaEngine::GPUParticlePlayer gpuParticlePlayer_;
 };

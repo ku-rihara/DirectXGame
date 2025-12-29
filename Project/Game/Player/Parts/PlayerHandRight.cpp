@@ -12,16 +12,16 @@ void PlayerHandRight::Init() {
     threeComboName_ = "ThreeComboRail";
     forthComboName_ = "StopPunchRail";
 
-    obj3d_.reset(Object3d::CreateModel("RHand.obj"));  
+    obj3d_.reset(KetaEngine::Object3d::CreateModel("RHand.obj"));  
     obj3d_->material_.materialData_->enableLighting = 2;
     obj3d_->transform_.scale_                       = {2, 2, 2};
     obj3d_->material_.SetEnvironmentCoefficient(0.15f);
    
     /// rail
-    threeComboRailManager_ = std::make_unique<RailManager>();
+    threeComboRailManager_ = std::make_unique<KetaEngine::RailManager>();
     threeComboRailManager_->Init(threeComboName_);
 
-    stopPunchRailManager_ = std::make_unique<RailManager>();
+    stopPunchRailManager_ = std::make_unique<KetaEngine::RailManager>();
     stopPunchRailManager_->Init(forthComboName_);
 
     BasePlayerHand::Init();
@@ -31,19 +31,19 @@ void PlayerHandRight::Init() {
 /// 　更新
 ///==========================================================
 void PlayerHandRight::Update() {
-    stopPunchRailManager_->Update(0.1f, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
+    stopPunchRailManager_->Update(0.1f, KetaEngine::RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
     BasePlayerHand::Update();
 }
 
-void PlayerHandRight::RailThreeComboUpdate(const float& speed) {
+void PlayerHandRight::RailThreeComboUpdate(float speed) {
     /// 3コンボレール更新
-    threeComboRailManager_->Update(speed, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
+    threeComboRailManager_->Update(speed, KetaEngine::RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
     obj3d_->transform_.translation_ = (threeComboRailManager_->GetPositionOnRail());
 }
 
-void PlayerHandRight::RailForthComboUpdate(const float& speed) {
+void PlayerHandRight::RailForthComboUpdate(float speed) {
     /// 4コンボレール更新
-    stopPunchRailManager_->Update(speed, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
+    stopPunchRailManager_->Update(speed, KetaEngine::RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
     obj3d_->transform_.translation_ = (stopPunchRailManager_->GetPositionOnRail());
 }
 
@@ -61,7 +61,7 @@ void PlayerHandRight::AdjustParam() {
     }
 }
 
-void PlayerHandRight::DissolveAdapt(const float& dissolve) {
+void PlayerHandRight::DissolveAdapt(float dissolve) {
     BasePlayerHand::DissolveAdapt(dissolve);
 }
 
@@ -73,11 +73,11 @@ void PlayerHandRight::SaveAndLoad() {
     BasePlayerHand::SaveAndLoad();
 }
 
-void PlayerHandRight::SetParent(WorldTransform* parent) {
+void PlayerHandRight::SetParent(KetaEngine::WorldTransform* parent) {
     BasePlayerHand::SetParent(parent);
 }
 
-void PlayerHandRight::SetRailParent(WorldTransform* parent) {
+void PlayerHandRight::SetRailParent(KetaEngine::WorldTransform* parent) {
     threeComboRailManager_->SetParent(parent);
     stopPunchRailManager_->SetParent(parent);
 }

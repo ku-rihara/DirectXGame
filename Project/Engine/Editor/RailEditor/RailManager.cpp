@@ -1,4 +1,5 @@
 #include"RailManager.h"
+using namespace KetaEngine;
 //std
 #include<cmath>
 //Function
@@ -34,7 +35,7 @@ void RailManager::Init(const std::string& groupName) {
 ///===================================================================
 ///更新
 ///====================================================================
-void RailManager::Update(const float& speed, const PositionMode& mode, const Vector3& Direction) {
+void RailManager::Update(float speed, const PositionMode& mode, const Vector3& Direction) {
     emitControlPosManager_->Update(Direction);
 
     if (mode == PositionMode::LOCAL) {

@@ -1,4 +1,6 @@
 #include "PutObjForBlender.h"
+
+using namespace KetaEngine;
 #include "3d/Model.h"
 #include "mathFunction.h"
 #include"Frame/Frame.h"
@@ -310,7 +312,7 @@ void PutObjForBlender::EasingAllReset() {
     currentTime_ = 0.0f;
 }
 
-void PutObjForBlender::AdaptEasing(LevelData::ObjectData& objectData, const int32_t& groupNum) {
+void PutObjForBlender::AdaptEasing(LevelData::ObjectData& objectData, int32_t groupNum) {
     // グループ番号が有効範囲内かチェック
     if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
         return;
@@ -350,7 +352,7 @@ void PutObjForBlender::EmitterAllEdit() {
 }
 
 
-void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum) {
+void PutObjForBlender::EasingUpdateSelectGroup(float deltaTime, int32_t groupNum) {
     currentTime_ += deltaTime;
 
     for (auto& objectData : levelData_->objects) {
@@ -378,7 +380,7 @@ void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int
     }
 }
 
-void PutObjForBlender::EasingResetSelectGroup(const int32_t& groupNum) {
+void PutObjForBlender::EasingResetSelectGroup(int32_t groupNum) {
     for (auto& objectData : levelData_->objects) {
         // 指定されたグループが存在するかチェック
         if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
@@ -401,7 +403,7 @@ void PutObjForBlender::EasingResetSelectGroup(const int32_t& groupNum) {
     }
 }
 
-bool PutObjForBlender::GetIsEasingPlaying(const int32_t& groupNum) const {
+bool PutObjForBlender::GetIsEasingPlaying(int32_t groupNum) const {
     if (!levelData_) {
         return false;
     }
@@ -436,7 +438,7 @@ bool PutObjForBlender::GetIsEasingPlaying(const int32_t& groupNum) const {
     return false;
 }
 
-bool PutObjForBlender::GetIsEasingFinish(const int32_t& groupNum) const {
+bool PutObjForBlender::GetIsEasingFinish(int32_t groupNum) const {
     if (!levelData_) {
         return true;
     }
@@ -471,7 +473,7 @@ bool PutObjForBlender::GetIsEasingFinish(const int32_t& groupNum) const {
     return true;
 }
 
-void PutObjForBlender::SetLoopEndCallback(const int32_t& groupNum, const EasingAdaptTransform& transformType, const std::function<void()>& callback) {
+void PutObjForBlender::SetLoopEndCallback(int32_t groupNum, const EasingAdaptTransform& transformType, const std::function<void()>& callback) {
     for (const auto& objectData : levelData_->objects) {
         // 指定されたグループが存在するかチェック
         if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
@@ -505,7 +507,7 @@ void PutObjForBlender::SetLoopEndCallback(const int32_t& groupNum, const EasingA
     }
 }
 
-bool PutObjForBlender::IsAdaptEasing(const LevelData::ObjectData& objectData, const int32_t& groupNum, const EasingAdaptTransform& type) const {
+bool PutObjForBlender::IsAdaptEasing(const LevelData::ObjectData& objectData, int32_t groupNum, const EasingAdaptTransform& type) const {
     if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
         return false;
     }

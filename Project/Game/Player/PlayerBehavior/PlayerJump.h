@@ -11,18 +11,19 @@ private:
     enum class Step {
         START,
         JUMP,
-
+        FALL_ONLY, 
     };
     /// ===================================================
     /// private variable
     /// ===================================================
-    Step step_ = Step::START;
+    Step step_     = Step::START;
+    bool skipJump_ = false;
 
 public:
     // コンストラクタ
-    PlayerJump(Player* player);
+    PlayerJump(Player* player,const bool& skipJump = false); 
     ~PlayerJump();
 
-    void Update() override; //< 更新
+    void Update([[maybe_unused]] float timeSpeed = 0.0f) override; //< 更新
     void Debug() override; //< デバッグ
 };

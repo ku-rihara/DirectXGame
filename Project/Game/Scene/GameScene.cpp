@@ -1,5 +1,7 @@
 #include "GameScene.h"
-#include "Scene/Manager/SceneManager.h"
+// state
+#include "GameSceneState/GameSceneFinish.h"
+#include "GameSceneState/GameSceneIntro.h"
 
 // base
 #include "base/TextureManager.h"
@@ -7,11 +9,12 @@
 #include "2d/SpriteRegistry.h"
 #include "Frame/Frame.h"
 #include "Lighrt/Light.h"
+#include "Scene/Manager/SceneManager.h"
 #include <imgui.h>
 
 void GameScene::Init() {
     //// グローバル変数の読み込み
-    GlobalParameter::GetInstance()->LoadFiles();
+    KetaEngine::GlobalParameter::GetInstance()->LoadFiles();
     BaseScene::Init();
 
     // オブジェクト生成
@@ -20,185 +23,78 @@ void GameScene::Init() {
     // クラスポインタセット
     SetClassPointer();
 
-    // その他オブジェクト初期化
+    // 初期ステートを設定
+    state_ = std::make_unique<GameSceneIntro>(this);
+    state_->Init();
 
-    isfirstChange_ = false;
-    shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
-    screenSprite_.reset(Sprite::Create("screenChange.png"));
-
-    finishSpriteEase_.Init("finishSpriteTest.json");
-    finishSpriteEase_.SetAdaptValue(&tempSpritePos_);
-    finishSpriteEase_.Reset();
-
-    finishSpriteEase_.SetOnFinishCallback([this]() {
-        // 　ジャンプに切り替え
-        if (Input::GetInstance()->PushKey(KeyboardKey::Space)) {
-            isend_ = true;
-        } else {
-            ChangeForJoyState();
-        }
-    });
-
-    cSprite_.reset(Sprite::Create("Clear.png"));
-    cSprite_->transform_.pos = Vector2(0, -720);
-
-    gameState_ = GameState::INTRO;
-
-    Frame::ResetDeltaTime();
+    KetaEngine::Frame::ResetDeltaTime();
 }
 
 void GameScene::Update() {
-
     BaseScene::Update();
 
-    switch (gameState_) {
-    case GameScene::GameState::INTRO:
-
-        IntroUpdate();
-
-        if (gameIntroManager_->GetIsFinishStep(GameIntroManager::AppearPurpose)) {
-            gameState_ = GameScene::GameState::PLAY;
-        }
-
-        break;
-    case GameScene::GameState::PLAY:
-
-        PlayUpdate();
-
-        /// クリア
-        if (enemyManager_->GetIsAllCleared() && enemySpawner_->GetAllGroupsCompleted()) {
-            gameState_ = GameScene::GameState::FINISH;
-        }
-
-        break;
-    case GameScene::GameState::FINISH:
-
-        FinishUpdate();
-
-        break;
-    default:
-        break;
+    // 現在のステートを更新
+    if (state_) {
+        state_->Update(KetaEngine::Frame::DeltaTimeRate());
     }
 
-    /// パーティクル更新
     ViewProjectionUpdate();
 
-    if (alpha_ >= 1.2f) {
-        alpha_ = 1.0f;
-        SceneManager::GetInstance()->ChangeScene("TITLE");
-    }
-}
-
-void GameScene::IntroUpdate() {
-
-    if (Frame::DeltaTime() >= 2.0f) {
-        return;
-    }
-
-    screenSprite_->SetAlpha(alpha_);
-
-    if (!isfirstChange_) {
-        alpha_ -= Frame::DeltaTime();
-
-        if (alpha_ <= 0.0f) {
-            alpha_         = 0.0f;
-            isfirstChange_ = true;
+    if (GameSceneFinish* finishState = dynamic_cast<GameSceneFinish*>(state_.get())) {
+        if (!finishState->GetIsGameEnd()) {
+            return;
         }
+        KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
     }
-
-    // gameIntro
-    gameIntroManager_->Update();
-    howToOperate_->Update();
-    if (gameIntroManager_->GetIsFinishStep(GameIntroManager::SpawnField)) {
-        enemySpawner_->Update(Frame::DeltaTimeRate());
-        enemyManager_->Update();
-        enemyManager_->HpBarUpdate(viewProjection_);
-    }
-
-    // Editor
-    attackEffect_->Update();
-
-    // obj
-    skyBox_->Update();
-    gameCamera_->Update(gameIntroManager_->GetCurrentPlaySpeedRate());
-    combo_->Update();
-}
-void GameScene::PlayUpdate() {
-
-    // Editor
-    attackEffect_->Update();
-
-    // 各クラス更新
-    comboScene_->Update();
-    player_->Update();
-    skyBox_->Update();
-    howToOperate_->Update();
-    enemySpawner_->Update(Frame::DeltaTimeRate());
-    continuousEnemySpawner_->Update(Frame::DeltaTimeRate());
-    enemyManager_->Update();
-    combo_->Update();
-    fireInjectors_->Update();
-    gameCamera_->Update();
-    comboLevelObjHolder_->Update(Frame::DeltaTimeRate());
-
-    enemyManager_->HpBarUpdate(viewProjection_);
-    lockOnController_->Update(player_.get(), viewProjection_);
-}
-void GameScene::FinishUpdate() {
-
-    screenSprite_->SetAlpha(alpha_);
-
-    finishSpriteEase_.Update(Frame::DeltaTime());
-    cSprite_->transform_.pos = tempSpritePos_;
-
-    if (!isend_) {
-        return;
-    }
-
-    alpha_ += Frame::DeltaTime();
 }
 
 /// ===================================================
 /// SkyBox描画
 /// ===================================================
 void GameScene::SkyBoxDraw() {
-    skyBox_->Draw(viewProjection_);
+    gameObj_.skyBox_->Draw(viewProjection_);
 }
 
 void GameScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Camera");
-    gameCamera_->AdjustParam();
+    gameObj_.gameCamera_->AdjustParam();
     ImGui::End();
 
     BaseScene::Debug();
 
-    Light::GetInstance()->DebugImGui();
-    howToOperate_->Debug();
+    KetaEngine::Light::GetInstance()->DebugImGui();
+    gameObj_.howToOperate_->Debug();
 
     ImGui::Begin("ParameterEditor");
-    player_->AdjustParam();
-    enemyManager_->AdjustParam();
-    enemySpawner_->AdjustParam();
-    continuousEnemySpawner_->AdjustParam();
-    combo_->AdjustParam();
-    fireInjectors_->AdjustParam();
-    gameIntroManager_->AdjustParam();
-    ShadowMap::GetInstance()->DebugImGui();
-    SpriteRegistry::GetInstance()->DebugImGui();
+    gameObj_.player_->AdjustParam();
+    gameObj_.sideRopeController_->AdjustParam();
+    gameObj_.enemyManager_->AdjustParam();
+    gameObj_.enemySpawner_->AdjustParam();
+    gameObj_.continuousEnemySpawner_->AdjustParam();
+    gameObj_.combo_->AdjustParam();
+    gameObj_.fireInjectors_->AdjustParam();
+    gameObj_.gameIntroManager_->AdjustParam();
+    gameObj_.audienceController_->AdjustParam();
+    KetaEngine::ShadowMap::GetInstance()->DebugImGui();
+    KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 
     ImGui::Begin("Rendition");
-    attackEffect_->EditorUpdate();
+    gameObj_.attackEffect_->EditorUpdate();
     ImGui::End();
 
     ImGui::Begin("PlayerAttack");
-    playerComboAttackController_->EditorUpdate();
+    gameObj_.playerComboAttackController_->EditorUpdate();
     ImGui::End();
 
     ImGui::Begin("EnemyDamageReaction");
-    enemyManager_->DamageReactionCreate();
+    gameObj_.enemyManager_->DamageReactionCreate();
     ImGui::End();
+
+    if (state_) {
+        state_->Debug();
+    }
 #endif
 }
 
@@ -208,106 +104,96 @@ void GameScene::ViewProjectionUpdate() {
 }
 
 void GameScene::ViewProcess() {
-    viewProjection_.matView_       = gameCamera_->GetViewProjection().matView_;
-    viewProjection_.matProjection_ = gameCamera_->GetViewProjection().matProjection_;
-    viewProjection_.cameraMatrix_  = gameCamera_->GetViewProjection().cameraMatrix_;
-    viewProjection_.rotation_      = gameCamera_->GetViewProjection().rotation_;
+    viewProjection_.matView_       = gameObj_.gameCamera_->GetViewProjection().matView_;
+    viewProjection_.matProjection_ = gameObj_.gameCamera_->GetViewProjection().matProjection_;
+    viewProjection_.cameraMatrix_  = gameObj_.gameCamera_->GetViewProjection().cameraMatrix_;
+    viewProjection_.rotation_      = gameObj_.gameCamera_->GetViewProjection().rotation_;
     viewProjection_.TransferMatrix();
 }
 
-void GameScene::ChangeForJoyState() {
-
-    if (!((Input::IsTriggerPad(0, GamepadButton::A)))) {
-        return;
-    }
-
-    isend_ = true;
-}
-
 void GameScene::ObjectInit() {
+    // gameObj_のメンバを初期化
+    gameObj_.field_                       = std::make_unique<Field>();
+    gameObj_.lockOnController_            = std::make_unique<LockOnController>();
+    gameObj_.player_                      = std::make_unique<Player>();
+    gameObj_.gameCamera_                  = std::make_unique<GameCamera>();
+    gameObj_.enemyManager_                = std::make_unique<EnemyManager>();
+    gameObj_.enemySpawner_                = std::make_unique<EnemySpawner>();
+    gameObj_.skyDome_                     = std::make_unique<SkyDome>();
+    gameObj_.howToOperate_                = std::make_unique<HowToOperate>();
+    gameObj_.skyBox_                      = std::make_unique<SkyBox>();
+    gameObj_.combo_                       = std::make_unique<Combo>();
+    gameObj_.fireInjectors_               = std::make_unique<FireInjectors>();
+    gameObj_.gameBackGroundObject_        = std::make_unique<GameBackGroundObject>();
+    gameObj_.comboScene_                  = std::make_unique<ComboScene>();
+    gameObj_.attackEffect_                = std::make_unique<AttackEffect>();
+    gameObj_.gameIntroManager_            = std::make_unique<GameIntroManager>();
+    gameObj_.comboLevelObjHolder_         = std::make_unique<ComboLevelObjHolder>();
+    gameObj_.continuousEnemySpawner_      = std::make_unique<ContinuousEnemySpawner>();
+    gameObj_.playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
+    gameObj_.sideRopeController_          = std::make_unique<SideRopeController>();
+    gameObj_.audienceController_          = std::make_unique<AudienceController>();
 
-    //*-------------------------------- オブジェクト生成 --------------------------------*//
-
-    field_                       = std::make_unique<Field>();
-    lockOnController_            = std::make_unique<LockOnController>();
-    player_                      = std::make_unique<Player>();
-    gameCamera_                  = std::make_unique<GameCamera>();
-    enemyManager_                = std::make_unique<EnemyManager>();
-    enemySpawner_                = std::make_unique<EnemySpawner>();
-    skyDome_                     = std::make_unique<SkyDome>();
-    howToOperate_                = std::make_unique<HowToOperate>();
-    skyBox_                      = std::make_unique<SkyBox>();
-    combo_                       = std::make_unique<Combo>();
-    fireInjectors_               = std::make_unique<FireInjectors>();
-    gameBackGroundObject_        = std::make_unique<GameBackGroundObject>();
-    comboScene_                  = std::make_unique<ComboScene>();
-    attackEffect_                = std::make_unique<AttackEffect>();
-    gameIntroManager_            = std::make_unique<GameIntroManager>();
-    comboLevelObjHolder_         = std::make_unique<ComboLevelObjHolder>();
-    continuousEnemySpawner_      = std::make_unique<ContinuousEnemySpawner>();
-    playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
-
-    //*--------------------------------------- 初期化 ---------------------------------------*//
-
-    player_->InitInGameScene();
-    lockOnController_->Init();
-    skyBox_->Init();
-    combo_->Init();
-    gameIntroManager_->Init();
-    enemyManager_->Init();
-    enemySpawner_->Init("enemySpawner.json");
-    continuousEnemySpawner_->Init();
-    fireInjectors_->Init();
-    gameCamera_->Init();
-    howToOperate_->Init();
-    comboScene_->Init();
-    playerComboAttackController_->Init();
-    attackEffect_->Init();
+    // 初期化
+    gameObj_.player_->InitInGameScene();
+    gameObj_.lockOnController_->Init();
+    gameObj_.skyBox_->Init();
+    gameObj_.combo_->Init();
+    gameObj_.gameIntroManager_->Init();
+    gameObj_.enemyManager_->Init();
+    gameObj_.enemySpawner_->Init("enemySpawner.json");
+    gameObj_.continuousEnemySpawner_->Init();
+    gameObj_.fireInjectors_->Init();
+    gameObj_.gameCamera_->Init();
+    gameObj_.howToOperate_->Init();
+    gameObj_.comboScene_->Init();
+    gameObj_.playerComboAttackController_->Init();
+    gameObj_.attackEffect_->Init();
+    gameObj_.sideRopeController_->Init();
+    gameObj_.audienceController_->Init();
     viewProjection_.Init();
 
-    comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");
-    comboLevelObjHolder_->Add(ComboLevelObjType::SPEAKER, "ComboLevel2.json");
-    gameBackGroundObject_->Init("game.json");
+    gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");
+    gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::SPEAKER, "ComboLevel2.json");
+    gameObj_.gameBackGroundObject_->Init("game.json");
 }
 
 void GameScene::SetClassPointer() {
+    gameObj_.gameCamera_->SetTarget(&gameObj_.player_->GetBaseTransform());
 
-    //*-------------------------------- Classポインタセット --------------------------------*//
+    gameObj_.enemyManager_->SetPlayer(gameObj_.player_.get());
+    gameObj_.enemyManager_->SetCombo(gameObj_.combo_.get());
+    gameObj_.enemyManager_->SetGameCamera(gameObj_.gameCamera_.get());
+    gameObj_.enemyManager_->SetEnemySpawner(gameObj_.enemySpawner_.get());
+    gameObj_.enemyManager_->SetAttackEffect(gameObj_.attackEffect_.get());
 
-    gameCamera_->SetTarget(&player_->GetTransform());
+    gameObj_.enemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
+    gameObj_.continuousEnemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
+    gameObj_.continuousEnemySpawner_->SetPlayer(gameObj_.player_.get());
 
-    // enemyManager
-    enemyManager_->SetPlayer(player_.get());
-    enemyManager_->SetCombo(combo_.get());
-    enemyManager_->SetGameCamera(gameCamera_.get());
-    enemyManager_->SetEnemySpawner(enemySpawner_.get());
-    enemyManager_->SetAttackEffect(attackEffect_.get());
+    gameObj_.fireInjectors_->SetCombo(gameObj_.combo_.get());
+    gameObj_.lockOnController_->SetEnemyManager(gameObj_.enemyManager_.get());
 
-    // enemySpawner
-    enemySpawner_->SetEnemyManager(enemyManager_.get());
-    continuousEnemySpawner_->SetEnemyManager(enemyManager_.get());
-    continuousEnemySpawner_->SetPlayer(player_.get());
+    gameObj_.gameIntroManager_->SetFireInjectors(gameObj_.fireInjectors_.get());
+    gameObj_.gameIntroManager_->SetGameCamera(gameObj_.gameCamera_.get());
+    gameObj_.gameIntroManager_->SetPlayer(gameObj_.player_.get());
+    gameObj_.gameIntroManager_->SetGameBackGroundObject(gameObj_.gameBackGroundObject_.get());
+    gameObj_.gameIntroManager_->SetHowToOperate(gameObj_.howToOperate_.get());
+    gameObj_.gameIntroManager_->ClassisSet();
 
-    fireInjectors_->SetCombo(combo_.get());
-    lockOnController_->SetEnemyManager(enemyManager_.get());
-    // gameIntro
-    gameIntroManager_->SetFireInjectors(fireInjectors_.get());
-    gameIntroManager_->SetGameCamera(gameCamera_.get());
-    gameIntroManager_->SetPlayer(player_.get());
-    gameIntroManager_->SetGameBackGroundObject(gameBackGroundObject_.get());
-    gameIntroManager_->SetHowToOperate(howToOperate_.get());
-    gameIntroManager_->ClassisSet();
+    gameObj_.comboScene_->SetPlayer(gameObj_.player_.get());
+    gameObj_.comboScene_->SetCombo(gameObj_.combo_.get());
+    gameObj_.comboScene_->SetComboLevelObjHolder(gameObj_.comboLevelObjHolder_.get());
+    gameObj_.comboScene_->SetAudienceController(gameObj_.audienceController_.get());
 
-    // comboScene
-    comboScene_->SetPlayer(player_.get());
-    comboScene_->SetCombo(combo_.get());
-    comboScene_->SetComboLevelObjHolder(comboLevelObjHolder_.get());
+    gameObj_.player_->SetViewProjection(&viewProjection_);
+    gameObj_.player_->SetLockOn(gameObj_.lockOnController_.get());
+    gameObj_.player_->SetGameCamera(gameObj_.gameCamera_.get());
+    gameObj_.player_->SetComboAttackController(gameObj_.playerComboAttackController_.get());
+    gameObj_.player_->SetCombo(gameObj_.combo_.get());
+    gameObj_.player_->SetHitStop(gameObj_.attackEffect_.get());
+}
 
-      // Player
-    player_->SetViewProjection(&viewProjection_);
-    player_->SetLockOn(lockOnController_.get());
-    player_->SetGameCamera(gameCamera_.get());
-    player_->SetComboAttackController(playerComboAttackController_.get());
-    player_->SetCombo(combo_.get());
-    player_->SetHitStop(attackEffect_.get());
+void GameScene::ChangeState(std::unique_ptr<BaseGameSceneState> state) {
+    state_ = std::move(state);
 }

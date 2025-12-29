@@ -33,13 +33,13 @@ private:
     // サイズ
     Vector2 size_;
     // スプライト
-    std::unique_ptr<Sprite> punchSprite_;
-    std::unique_ptr<Sprite> rushSprite_;
-    std::unique_ptr<Sprite> bottomSprite_;
+    std::unique_ptr<KetaEngine::Sprite> punchSprite_;
+    std::unique_ptr<KetaEngine::Sprite> rushSprite_;
+    std::unique_ptr<KetaEngine::Sprite> bottomSprite_;
 
-    Easing<Vector2> punchEase_;
-    Easing<Vector2> rushEase_;
-    Easing<Vector2> bottomEase_;
+    KetaEngine::Easing<Vector2> punchEase_;
+    KetaEngine::Easing<Vector2> rushEase_;
+    KetaEngine::Easing<Vector2> bottomEase_;
 
     Vector2 punchSpriteScale_;
     Vector2 rushSpriteScale_;

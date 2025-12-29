@@ -7,6 +7,8 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 class WorldTransform;
 class RailPlayer;
 
@@ -29,7 +31,7 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     // BaseEffectDataからのオーバーライド
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
 
@@ -50,14 +52,14 @@ protected:
     // BaseSequenceEffectDataからのオーバーライド
     void UpdateKeyFrameProgression() override;
     void AdvanceToNexTSequenceElement() override;
-    std::unique_ptr<ObjEaseAnimationSection> CreateKeyFrame(const int32_t& index) override;
+    std::unique_ptr<ObjEaseAnimationSection> CreateKeyFrame(int32_t index) override;
     std::string GeTSequenceElementFolderPath() const override;
 
 private:
     //*---------------------------- private Methods ----------------------------*//
     std::string GetSRTName(const TransformType& type) const;
     void CreateOrLoadSections(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
-    void UpdateActiveSection(const float& speedRate);
+    void UpdateActiveSection(float speedRate);
    
 private:
     //*---------------------------- private Variant ----------------------------*//
@@ -77,3 +79,5 @@ public:
     bool GetIsUseRailActiveKeyFrame() const;
     RailPlayer* GetCurrentRailPlayer() const;
 };
+
+}; // KetaEngine

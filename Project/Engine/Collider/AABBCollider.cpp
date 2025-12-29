@@ -1,4 +1,6 @@
 #include "AABBCollider.h"
+
+using namespace KetaEngine;
 #include"Collider/CollisionManager.h"
 
 AABBCollider::AABBCollider() {

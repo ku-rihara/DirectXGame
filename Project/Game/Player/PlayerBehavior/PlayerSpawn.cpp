@@ -42,7 +42,7 @@ PlayerSpawn ::~PlayerSpawn() {
 }
 
 // 更新
-void PlayerSpawn::Update() {
+void PlayerSpawn::Update([[maybe_unused]] float timeSpeed) {
 
     switch (step_) {
 
@@ -52,11 +52,11 @@ void PlayerSpawn::Update() {
     case PlayerSpawn::Step::WAIT:
 
        
-        startWaitTime_ += Frame::DeltaTime();
+        startWaitTime_ += KetaEngine::Frame::DeltaTime();
         if (startWaitTime_ < pPlayerParameter_->GetParamaters().spawnParam.waitTime_) {
             break;
         }
-        pPlayer_->SetShadowFrag(true);
+        pOwner_->SetShadowFrag(true);
         step_ = Step::SPAWN;
         break;
 
@@ -64,19 +64,19 @@ void PlayerSpawn::Update() {
         ///
         ///================================================================
     case PlayerSpawn::Step::SPAWN:
-        spawnEase_.Update(Frame::DeltaTimeRate());
-        pPlayer_->DissolveUpdate(tempDessolve_);
-        pPlayer_->GetLeftHand()->DissolveAdapt(tempDessolve_);
-        pPlayer_->GetRightHand()->DissolveAdapt(tempDessolve_);
+        spawnEase_.Update(KetaEngine::Frame::DeltaTimeRate());
+        pOwner_->DissolveUpdate(tempDessolve_);
+        pOwner_->GetLeftHand()->DissolveAdapt(tempDessolve_);
+        pOwner_->GetRightHand()->DissolveAdapt(tempDessolve_);
         break;
 
         ///================================================================
         ///
         ///================================================================
     case PlayerSpawn::Step::END:
-        pPlayer_->GetLeftHand()->SetIsEmit(true);
-        pPlayer_->GetRightHand()->SetIsEmit(true);
-        pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
+        pOwner_->GetLeftHand()->SetIsEmit(true);
+        pOwner_->GetRightHand()->SetIsEmit(true);
+        pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
         break;
     default:
         break;

@@ -23,7 +23,7 @@ Vector2 Vector2::Normalize(const Vector2& v) {
 }
 
 //スカラー倍
-Vector2 Vector2::Multiply(const Vector2& v1, const float& v2) {
+Vector2 Vector2::Multiply(const Vector2& v1, float v2) {
 	Vector2 result;
 	result.x = v1.x * v2;
 	result.y = v1.y * v2;

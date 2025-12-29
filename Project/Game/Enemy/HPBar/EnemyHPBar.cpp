@@ -2,11 +2,11 @@
 #include "base/TextureManager.h"
 #include "MathFunction.h"
 
-void EnemyHPBar::Init(const float& hpMax) {
+void EnemyHPBar::Init(float hpMax) {
 
     // スプライト生成
-    sprite_.reset(Sprite::Create("boss_Hpbar01.png", false));
-    hpSprite_.reset(Sprite::Create("boss_Hpbar02.png", false));
+    sprite_.reset(KetaEngine::Sprite::Create("boss_Hpbar01.png", false));
+    hpSprite_.reset(KetaEngine::Sprite::Create("boss_Hpbar02.png", false));
 
     hpSprite_->anchorPoint_ = Vector2::ZeroVector();
     sprite_->anchorPoint_   = Vector2::ZeroVector();
@@ -17,7 +17,7 @@ void EnemyHPBar::Init(const float& hpMax) {
     hpMax_ = hpMax;
 }
 
-void EnemyHPBar::Update(const float& hp) {
+void EnemyHPBar::Update(float hp) {
 
     // positionセット
     hpSprite_->transform_.pos = position_;
@@ -30,6 +30,6 @@ void EnemyHPBar::Update(const float& hp) {
     sprite_->transform_.pos = position_;
 
     // isDrawセット
-    sprite_->SetIsDraw(isDraw_);
-    hpSprite_->SetIsDraw(isDraw_);
+    sprite_->SetIsDraw(false);
+    hpSprite_->SetIsDraw(false);
 }

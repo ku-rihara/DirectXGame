@@ -8,6 +8,8 @@
 /// <summary>
 /// レールプレイヤー
 /// </summary>
+namespace KetaEngine {
+
 class RailPlayer : public BaseEffectPlayer {
 public:
     RailPlayer()           = default;
@@ -15,10 +17,10 @@ public:
 
     // 初期化、更新、再生
     void Init() override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
     void Play(const std::string& railName) override;
 
-    void UpdateWithDirection(const float& speedRate, const RailData::PositionMode& mode = RailData::PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
+    void UpdateWithDirection(float speedRate, const RailData::PositionMode& mode = RailData::PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
   
 private:
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
@@ -32,3 +34,5 @@ public:
 
      void SetParent(WorldTransform* parent);
 };
+
+}; // KetaEngine

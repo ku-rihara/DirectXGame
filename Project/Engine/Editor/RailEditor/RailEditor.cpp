@@ -1,11 +1,13 @@
 #include "RailEditor.h"
+
+using namespace KetaEngine;
 #include "Line3D/Line3d.h"
 #include <imgui.h>
 
 RailEditor::RailEditor()   = default;
 RailEditor ::~RailEditor() = default;
 
-void RailEditor::Init(const std::string& editorName, const bool& isUseCategory) {
+void RailEditor::Init(const std::string& editorName, bool isUseCategory) {
     BaseEffectEditor::Init(editorName, isUseCategory);
 
     preViewObj_.reset(Object3d::CreateModel("DebugCube.obj"));
@@ -13,7 +15,7 @@ void RailEditor::Init(const std::string& editorName, const bool& isUseCategory) 
     debugLine3D_.reset(Line3D::Create(1000));
 }
 
-void RailEditor::Update(const float& speedRate) {
+void RailEditor::Update(float speedRate) {
     for (auto& rail : effects_) {
         rail->Update(speedRate);
 

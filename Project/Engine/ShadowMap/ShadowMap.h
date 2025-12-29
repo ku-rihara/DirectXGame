@@ -10,6 +10,8 @@
 #include <vector>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class SrvManager;
 class DsvManager;
 class ShadowMapPipeline;
@@ -115,3 +117,5 @@ public:
     D3D12_RESOURCE_STATES GetCurrentState() const { return currentShadowMapState_; }
     void SetLightCameraMatrix(Matrix4x4 m) { transformData_->lightCamera = m; }
 };
+
+}; // KetaEngine

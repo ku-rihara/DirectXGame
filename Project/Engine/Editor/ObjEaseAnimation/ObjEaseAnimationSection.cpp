@@ -1,13 +1,16 @@
 #include "ObjEaseAnimationSection.h"
+
+using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 #include <imgui.h>
 
-void ObjEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, const int32_t& keyNumber) {
+void ObjEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, int32_t keyNumber) {
     globalParameter_             = GlobalParameter::GetInstance();
     currenTSequenceElementIndex_ = keyNumber;
     groupName_                   = animationName + std::to_string(currenTSequenceElementIndex_);
     folderPath_                  = "ObjEaseAnimation/" + categoryName + "/" + "Sections/" + animationName + "/";
+
 
     // Scaleの初期値を1に設定
     transformParams_[static_cast<size_t>(TransformType::Scale)].endValue = Vector3::OneVector();
@@ -33,7 +36,9 @@ void ObjEaseAnimationSection::Reset() {
     for (auto& param : transformParams_) {
         param.ease.Reset();
         param.returnEase.Reset();
-        param.currentOffset = param.startValue;
+        param.currentOffset     = param.startValue;
+        param.state             = param.isActive ? TransformState::INACTIVE : TransformState::INACTIVE;
+        param.returnElapsedTime = 0.0f;
     }
 
     // レールを停止
@@ -45,8 +50,7 @@ void ObjEaseAnimationSection::Reset() {
     playState_ = PlayState::STOPPED;
 
     // 経過時間リセット
-    elapsedTime_       = 0.0f;
-    returnElapsedTime_ = 0.0f;
+    elapsedTime_ = 0.0f;
 
     // イージング再適応
     AdaptValueSetting();
@@ -64,7 +68,7 @@ void ObjEaseAnimationSection::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
-void ObjEaseAnimationSection::Update(const float& speedRate) {
+void ObjEaseAnimationSection::Update(float speedRate) {
     float actualDeltaTime;
 
     // 時間モードに応じてデルタタイム取得
@@ -94,26 +98,144 @@ void ObjEaseAnimationSection::Update(const float& speedRate) {
         return;
     }
 
-    // 戻り待機中の場合
-    if (playState_ == PlayState::RETURN_WAITING) {
-        returnElapsedTime_ += actualDeltaTime;
-
-        // returnStartTime_を超えたら戻り開始
-        if (returnElapsedTime_ >= returnStartTime_) {
-            StartReturn();
+    // 各Transformを個別に更新
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        auto& param = transformParams_[i];
+        if (param.isActive) {
+            UpdateTransform(param, static_cast<TransformType>(i), actualDeltaTime);
         }
+    }
+
+    // 全体の状態を更新
+    UpdateOverallState();
+}
+
+void ObjEaseAnimationSection::UpdateTransform(TransformParam& param, TransformType type, float deltaTime) {
+    switch (param.state) {
+    case TransformState::INACTIVE:
+        // 何もしない
+        break;
+
+    case TransformState::WAITING:
+        // 待機状態
+        break;
+
+    case TransformState::PLAYING:
+        UpdateTransformPlay(param, type, deltaTime);
+        break;
+
+    case TransformState::RETURN_WAITING:
+        // 戻り待機中
+        param.returnElapsedTime += deltaTime;
+        if (param.returnElapsedTime >= returnStartTime_) {
+            // 戻り開始
+            if (type == TransformType::Translation && param.useRail) {
+                // Rail使用時は戻り処理をスキップして完了
+                param.state = TransformState::FINISHED;
+            } else {
+                // 戻り用イージングの設定
+                param.returnEase.SetAdaptValue(&param.currentOffset);
+                param.returnEase.SetStartValue(param.currentOffset);
+                param.returnEase.SetEndValue(param.startValue);
+                param.returnEase.SetMaxTime(param.returnMaxTime);
+                param.returnEase.SetType(static_cast<EasingType>(param.returnEaseType));
+                param.returnEase.SetIsStartEndReverse(false);
+                param.returnEase.Reset();
+                param.state = TransformState::RETURNING;
+            }
+        }
+        break;
+
+    case TransformState::RETURNING:
+        UpdateTransformReturn(param, type, deltaTime);
+        break;
+
+    case TransformState::FINISHED:
+        // 完了
+        break;
+    }
+}
+
+void ObjEaseAnimationSection::UpdateTransformPlay(TransformParam& param, TransformType type, float deltaTime) {
+    bool isFinished = false;
+
+    // レールの更新かイージング更新で分岐
+    if (type == TransformType::Translation && param.useRail) {
+        railPlayer_->Update();
+        param.currentOffset = railPlayer_->GetCurrentPosition();
+        isFinished          = !railPlayer_->IsPlaying() && !railPlayer_->IsReturning();
+    } else {
+        param.ease.Update(deltaTime);
+        param.currentOffset = param.ease.GetValue();
+        isFinished          = param.ease.IsFinished();
+    }
+
+    // 再生が完了したら次の状態へ
+    if (isFinished) {
+        if (param.isReturnToOrigin) {
+            // 戻り待機状態に遷移
+            param.state             = TransformState::RETURN_WAITING;
+            param.returnElapsedTime = 0.0f;
+        } else {
+            // 戻りが不要なら完了
+            param.state = TransformState::FINISHED;
+        }
+    }
+}
+
+void ObjEaseAnimationSection::UpdateTransformReturn(TransformParam& param, TransformType type, float deltaTime) {
+    // Rail使用時はスキップ
+    if (type == TransformType::Translation && param.useRail) {
+        param.state = TransformState::FINISHED;
         return;
     }
 
-    // 戻り中の更新
-    if (playState_ == PlayState::RETURNING) {
-        UpdateReturn(actualDeltaTime);
-        return;
-    }
+    param.returnEase.Update(deltaTime);
+    param.currentOffset = param.returnEase.GetValue();
 
-    // 再生更新
-    UpdatePlay(actualDeltaTime);
-    CheckPlayFinishAndStartReturn();
+    if (param.returnEase.IsFinished()) {
+        param.state = TransformState::FINISHED;
+    }
+}
+
+void ObjEaseAnimationSection::UpdateOverallState() {
+    // 全てのTransformが完了したかチェック
+    if (AreAllTransformsFinished()) {
+        playState_ = PlayState::STOPPED;
+    } else {
+        // まだ再生中のTransformがあれば再生状態を維持
+        bool anyPlaying   = false;
+        bool anyReturning = false;
+
+        for (const auto& param : transformParams_) {
+            if (!param.isActive)
+                continue;
+
+            if (param.state == TransformState::PLAYING) {
+                anyPlaying = true;
+            } else if (param.state == TransformState::RETURNING || param.state == TransformState::RETURN_WAITING) {
+                anyReturning = true;
+            }
+        }
+
+        if (anyReturning) {
+            playState_ = PlayState::RETURNING;
+        } else if (anyPlaying) {
+            playState_ = PlayState::PLAYING;
+        }
+    }
+}
+
+bool ObjEaseAnimationSection::AreAllTransformsFinished() const {
+    for (const auto& param : transformParams_) {
+        if (!param.isActive)
+            continue;
+
+        if (param.state != TransformState::FINISHED) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void ObjEaseAnimationSection::StartPlay() {
@@ -123,6 +245,8 @@ void ObjEaseAnimationSection::StartPlay() {
     for (auto& param : transformParams_) {
         if (param.isActive) {
             param.ease.Reset();
+            param.state             = TransformState::PLAYING;
+            param.returnElapsedTime = 0.0f;
         }
     }
 
@@ -130,154 +254,6 @@ void ObjEaseAnimationSection::StartPlay() {
     const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
     if (transParam.isActive && transParam.useRail && !transParam.railFileName.empty()) {
         railPlayer_->Play(transParam.railFileName);
-    }
-}
-
-void ObjEaseAnimationSection::UpdatePlay(const float& deltaTime) {
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        auto& param = transformParams_[i];
-
-        // Activeでない場合のスキップ処理
-        if (!param.isActive) {
-            if (i == static_cast<size_t>(TransformType::Scale)) {
-                param.currentOffset = Vector3::OneVector();
-            }
-            continue;
-        }
-
-        // レールの更新かイージング更新で分岐
-        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-            railPlayer_->Update();
-            param.currentOffset = railPlayer_->GetCurrentPosition();
-        } else {
-            param.ease.Update(deltaTime);
-            param.currentOffset = param.ease.GetValue();
-        }
-    }
-}
-
-void ObjEaseAnimationSection::CheckPlayFinishAndStartReturn() {
-    bool allPlayFinished = true;
-    bool anyReturnNeeded = false;
-
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        const auto& param = transformParams_[i];
-
-        if (!param.isActive) {
-            continue;
-        }
-
-        // 戻りが必要かチェック
-        if (param.isReturnToOrigin) {
-            anyReturnNeeded = true;
-        }
-
-        // Translation + Rail使用時の特殊処理
-        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-            if (railPlayer_->IsPlaying() || railPlayer_->IsReturning()) {
-                allPlayFinished = false;
-            }
-        } else {
-            if (!param.ease.IsFinished()) {
-                allPlayFinished = false;
-            }
-        }
-    }
-
-    // 再生が完了した場合
-    if (allPlayFinished) {
-        if (anyReturnNeeded) {
-            // 戻り待機状態に移行
-            playState_         = PlayState::RETURN_WAITING;
-            returnElapsedTime_ = 0.0f;
-        } else {
-            playState_ = PlayState::STOPPED;
-        }
-    }
-}
-
-void ObjEaseAnimationSection::StartReturn() {
-    playState_ = PlayState::RETURNING;
-
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        auto& param = transformParams_[i];
-
-        if (!param.isActive || !param.isReturnToOrigin) {
-            continue;
-        }
-
-        // Rail使用時は戻り動作をスキップ
-        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-            continue;
-        }
-
-        // 戻り用イージングの設定
-        param.returnEase.SetAdaptValue(&param.currentOffset);
-        param.returnEase.SetStartValue(param.currentOffset);
-        param.returnEase.SetEndValue(param.startValue);
-        param.returnEase.SetMaxTime(param.returnMaxTime);
-        param.returnEase.SetType(static_cast<EasingType>(param.returnEaseType));
-        param.returnEase.SetIsStartEndReverse(false);
-        param.returnEase.Reset();
-    }
-}
-
-void ObjEaseAnimationSection::UpdateReturn(const float& deltaTime) {
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        auto& param = transformParams_[i];
-
-        if (!param.isActive || !param.isReturnToOrigin) {
-            continue;
-        }
-
-        // Rail使用時はスキップ
-        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-            continue;
-        }
-
-        param.returnEase.Update(deltaTime);
-        param.currentOffset = param.returnEase.GetValue();
-    }
-
-    CheckFinish();
-}
-
-void ObjEaseAnimationSection::CheckFinish() {
-    bool allFinished = true;
-
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        const auto& param = transformParams_[i];
-
-        if (!param.isActive) {
-            continue;
-        }
-
-        if (playState_ == PlayState::RETURNING) {
-            // 戻り中のチェック
-            if (param.isReturnToOrigin) {
-                if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-                    continue;
-                }
-                if (!param.returnEase.IsFinished()) {
-                    allFinished = false;
-                }
-            }
-        } else {
-            // 通常再生中のチェック
-            if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-                if (railPlayer_->IsPlaying() || railPlayer_->IsReturning()) {
-                    allFinished = false;
-                }
-            } else {
-                if (!param.ease.IsFinished()) {
-                    allFinished = false;
-                }
-            }
-        }
-    }
-
-    if (allFinished) {
-        playState_ = PlayState::STOPPED;
     }
 }
 
@@ -377,7 +353,7 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
         ImGui::DragFloat3("End Value", &param.endValue.x, 0.01f);
     }
 
-    ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.1f, 10.0f);
+    ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.0f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
 
     // 戻り設定
@@ -385,7 +361,7 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
         ImGui::Separator();
         ImGui::Text("Return Settings:");
         ImGui::DragFloat("Return Start Time", &returnStartTime_, 0.01f, 0.0f, 100.0f);
-        ImGui::DragFloat("Return Max Time", &param.returnMaxTime, 0.01f, 0.1f, 10.0f);
+        ImGui::DragFloat("Return Max Time", &param.returnMaxTime, 0.01f, 0.0f, 10.0f);
         ImGuiEasingTypeSelector("Return Easing Type", param.returnEaseType);
     }
 
@@ -433,34 +409,7 @@ void ObjEaseAnimationSection::SetStartValues(const Vector3& scale, const Vector3
 }
 
 bool ObjEaseAnimationSection::IsFinished() const {
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        const auto& param = transformParams_[i];
-
-        if (!param.isActive) {
-            continue;
-        }
-
-        // 戻り中の場合
-        if (playState_ == PlayState::RETURNING && param.isReturnToOrigin) {
-            if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-                continue;
-            }
-            if (!param.returnEase.IsFinished()) {
-                return false;
-            }
-        } else if (playState_ == PlayState::PLAYING) {
-            if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-                if (railPlayer_->IsPlaying() || railPlayer_->IsReturning()) {
-                    return false;
-                }
-            } else {
-                if (!param.ease.IsFinished()) {
-                    return false;
-                }
-            }
-        }
-    }
-    return playState_ == PlayState::STOPPED;
+    return AreAllTransformsFinished();
 }
 
 bool ObjEaseAnimationSection::IsUsingRail() const {
@@ -482,7 +431,14 @@ const char* ObjEaseAnimationSection::GetSRTName(const TransformType& type) const
 }
 
 void ObjEaseAnimationSection::StartWaiting() {
-    playState_         = PlayState::WAITING;
-    elapsedTime_       = 0.0f;
-    returnElapsedTime_ = 0.0f;
+    playState_   = PlayState::WAITING;
+    elapsedTime_ = 0.0f;
+
+    // 各Transformを待機状態に設定
+    for (auto& param : transformParams_) {
+        if (param.isActive) {
+            param.state             = TransformState::WAITING;
+            param.returnElapsedTime = 0.0f;
+        }
+    }
 }

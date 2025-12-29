@@ -6,14 +6,14 @@
 void ComboUI::Init(const ComboDigit& digit) {
 
     /// Sprite create
-    sprite_.reset(Sprite::Create("Number/Numbers.png"));
+    sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.png"));
    
     CreateGroupName(digit);
 
     isVisible_ = true;
 }
 
-void ComboUI::Update(const Vector2& scale, const float& alpha) {
+void ComboUI::Update(const Vector2& scale, float alpha) {
 
     sprite_->SetIsDraw(isVisible_);
 
@@ -49,7 +49,7 @@ void ComboUI::RegisterParams() {
 }
 
 // 　桁数による数字の決定
-void ComboUI::CalculateNumber(const int32_t& value) {
+void ComboUI::CalculateNumber(int32_t value) {
 
     switch (comboDigit_) {
     case ComboDigit::ONE:
@@ -105,7 +105,7 @@ void ComboUI::CreateGroupName(const ComboDigit& digit) {
     }
     comboDigit_ = digit;
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);

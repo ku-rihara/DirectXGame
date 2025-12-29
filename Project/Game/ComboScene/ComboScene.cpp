@@ -1,6 +1,7 @@
 #include "ComboScene.h"
 
 #include "BackGroundObject/ComboLeve/ComboLevelObjHolder.h"
+#include"Audience/AudienceController.h"
 #include "Combo/Combo.h"
 #include "Player/Player.h"
 
@@ -23,7 +24,7 @@ void ComboScene::Update() {
 void ComboScene::CheckIsLevelUp() {
 
     // 現在レベルを取得
-    const int32_t& currentLevel = pCombo_->GetCurrentLevel();
+    int32_t currentLevel = pCombo_->GetCurrentLevel();
 
     if (pCombo_->GetComboCount() < pCombo_->GetLevelUPNum(currentLevel)) {
         return; // レベルアップ条件を満たしていない
@@ -37,9 +38,13 @@ void ComboScene::LevelUp() {
 
     pCombo_->LevelUp();
 
-    // レベル対象のオブジェクトをスポーン
+    // レベル対象のオブジェクト、観客をスポーン
     if (pCombo_->GetCurrentLevel() <= static_cast<int32_t>(ComboLevelObjType::COUNT)) {
-        comboLevelObjHolder_->SetEffectMode(static_cast<ComboLevelObjType>(pCombo_->GetCurrentLevel() - levelOffset_), ObjEffectMode::SPAWN);
+
+        int32_t comboLevel = GetComboLevelZeroStart();
+
+        comboLevelObjHolder_->SetEffectMode(comboLevel, ObjEffectMode::SPAWN);
+        audienceController_->AppearAudienceByLevel(comboLevel);
     }
 
     // チェックに戻す
@@ -47,13 +52,21 @@ void ComboScene::LevelUp() {
 }
 
 void ComboScene::LevelReset() {
+    int32_t comboLevel = GetComboLevelZeroStart();
     // 背景オブジェクトClose
-    comboLevelObjHolder_->CloseForComboLevel(pCombo_->GetCurrentLevel());
+    comboLevelObjHolder_->CloseForComboLevel(comboLevel);
+    audienceController_->DisAppearAudience(comboLevel);
     // コンボリセット
     pCombo_->Reset();
     // チェックに戻す
     state_ = State::CHECK;
 }
+
+int32_t ComboScene::GetComboLevelZeroStart() {
+    // 例としてpCombo_->GetCurrentLevel()が1になったらindex[0]の演出が始まる
+    return pCombo_->GetCurrentLevel() - levelOffset_;
+}
+
 
 ///--------------------------------------------------------------------------------
 /// class Set
@@ -68,6 +81,10 @@ void ComboScene::SetCombo(Combo* combo) {
 
 void ComboScene::SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder) {
     comboLevelObjHolder_ = comboLevelObjHolder;
+}
+
+void ComboScene::SetAudienceController(AudienceController* audienceController) {
+    audienceController_ = audienceController;
 }
 
 /// --------------------------------------------------------------------------------

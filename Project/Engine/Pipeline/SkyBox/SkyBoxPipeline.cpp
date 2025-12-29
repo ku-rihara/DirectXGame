@@ -1,4 +1,6 @@
 #include "SkyBoxPipeline.h"
+
+using namespace KetaEngine;
 #include "Dx/DxCompiler.h"
 #include "function/Log.h"
 #include "Material/ModelMaterial.h"

@@ -1,4 +1,6 @@
 #include "DxSwapChain.h"
+
+using namespace KetaEngine;
 #include "base/RtvManager.h"
 #include "base/WinApp.h"
 #include <cassert>
@@ -6,7 +8,7 @@
 void DxSwapChain::Init(
     Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory,
     Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue,
-    WinApp* winApp, const int32_t& backBufferWidth, const int32_t& backBufferHeight) {
+    WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight) {
 
     commandQueue_ = commandQueue;
 

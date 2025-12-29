@@ -68,7 +68,7 @@ public:
     void AdjustParam();//<パラメータ編集
 
 private:
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Player";
 
 private:

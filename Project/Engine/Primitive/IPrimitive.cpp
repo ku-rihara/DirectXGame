@@ -1,5 +1,6 @@
 #include"IPrimitive.h"
 #include"Dx/DirectXCommon.h"
+using namespace KetaEngine;
 
 void IPrimitive::Init() {
 

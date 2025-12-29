@@ -45,9 +45,9 @@ private:
     float rotateYSpeed_;
     float gravity_;
 
-    Easing<Vector3> landScaleEasing_;
+    KetaEngine::Easing<Vector3> landScaleEasing_;
     Vector3 tempScale_;
-    Easing<float> fallEase_;
+    KetaEngine::Easing<float> fallEase_;
     float tempPosY_;
 
     // float fallSpeed_;

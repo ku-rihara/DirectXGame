@@ -5,11 +5,9 @@
 
 void TitleRogo::Init() {
   
-    punchSprite_.reset(Sprite::Create("TitleFontPunch.png", true));
-   
-    rushSprite_.reset(Sprite::Create("TitleFontRush.png", true));
-    
-    bottomSprite_.reset(Sprite::Create("StartBottomA.png", true));
+    punchSprite_.reset(KetaEngine::Sprite::Create("TitleFontPunch.png", true));   
+    rushSprite_.reset(KetaEngine::Sprite::Create("TitleFontRush.png", true));  
+    bottomSprite_.reset(KetaEngine::Sprite::Create("StartBottomA.png", true));
    
 
     EasingSet();
@@ -23,7 +21,7 @@ void TitleRogo::Update() {
         ///----------------------------------------------------
         /// パンチ
         ///----------------------------------------------------
-        punchEase_.Update(Frame::DeltaTime());
+        punchEase_.Update(KetaEngine::Frame::DeltaTime());
         punchSprite_->transform_.scale = punchSpriteScale_;
 
         break;
@@ -31,7 +29,7 @@ void TitleRogo::Update() {
         ///----------------------------------------------------
         /// ラッシュ
         ///----------------------------------------------------
-        rushEase_.Update(Frame::DeltaTime());
+        rushEase_.Update(KetaEngine::Frame::DeltaTime());
         rushSprite_->transform_.scale = rushSpriteScale_;
 
         break;
@@ -39,7 +37,7 @@ void TitleRogo::Update() {
         ///----------------------------------------------------
         /// ボタン
         ///----------------------------------------------------
-        bottomEase_.Update(Frame::DeltaTime());
+        bottomEase_.Update(KetaEngine::Frame::DeltaTime());
         bottomSprite_->transform_.scale = bottomSpriteScale_;
 
         break;

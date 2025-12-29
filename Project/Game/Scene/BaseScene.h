@@ -5,18 +5,13 @@
 #include "Dx/DirectXCommon.h"
 
 // Transform
-#include "3d/Object3d.h"
 #include "3d/ViewProjection.h"
-#include "3d/WorldTransform.h"
 
-#include "2d/Sprite.h"
 #include "audio/Audio.h"
 #include "input/Input.h"
 
 // editor
 #include "Editor/EffectEditorSuite/EffectEditorSuite.h"
-#include "Editor/RailEditor/RailEditor.h"
-#include "Editor/ShakeEditor/ShakeEditor.h"
 
 // debug
 #include "utility/Debug/DebugCamera.h"
@@ -54,17 +49,17 @@ private:
     void EditorClassUpdate();
 
 protected:
-    DirectXCommon* dxCommon_        = nullptr;
-    Input* input_                   = nullptr;
-    Audio* audio_                   = nullptr;
-    TextureManager* textureManager_ = nullptr;
+    KetaEngine::DirectXCommon* dxCommon_ = nullptr;
+    KetaEngine::Input* input_            = nullptr;
+    KetaEngine::Audio* audio_            = nullptr;
+    KetaEngine::TextureManager* textureManager_ = nullptr;
 
-    std::unique_ptr<EffectEditorSuite> effectEditorSuite_ = nullptr;
+    std::unique_ptr<KetaEngine::EffectEditorSuite> effectEditorSuite_ = nullptr;
    
 
-    ViewProjection viewProjection_;
+    KetaEngine::ViewProjection viewProjection_;
 
-    std::unique_ptr<DebugCamera> debugCamera_;
+    std::unique_ptr<KetaEngine::DebugCamera> debugCamera_;
     CameraMode cameraMode_ = CameraMode::NORMAL;
 
 
@@ -72,7 +67,7 @@ public:
     ///========================================================
     /// getter method
     ///========================================================
-    const ViewProjection&
+    const KetaEngine::ViewProjection&
     GetViewProjection() const { return viewProjection_; }
 
     ///========================================================

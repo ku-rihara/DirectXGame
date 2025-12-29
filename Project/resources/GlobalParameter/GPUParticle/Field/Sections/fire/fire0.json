@@ -1,0 +1,102 @@
+{
+    "fire0": {
+        "Align To Velocity": false,
+        "Billboard Mode": 1,
+        "Blend Mode": 1,
+        "Color Max": [
+            0.9166666865348816,
+            0.326701283454895,
+            0.08088237792253494,
+            1.0
+        ],
+        "Color Min": [
+            0.9313725233078003,
+            0.44916969537734985,
+            0.06848328560590744,
+            0.9921568632125854
+        ],
+        "Count": 1000,
+        "Frequency": 9.999999747378752e-05,
+        "Is Active": true,
+        "Is Move For Rail": false,
+        "Is Rail Loop": false,
+        "LifeTime Max": 6.0,
+        "LifeTime Min": 2.200000047683716,
+        "Move Speed": 1.0,
+        "Position": [
+            -0.5,
+            -40.900001525878906,
+            7.599999904632568
+        ],
+        "Rotation Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation Speed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation Speed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": [
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224
+        ],
+        "Scale Min": [
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224
+        ],
+        "Start Time": 0.0,
+        "Texture Path": "Resources/texture/circle.png",
+        "Translate Max": [
+            66.5,
+            51.20000076293945,
+            95.5
+        ],
+        "Translate Min": [
+            -73.9000015258789,
+            43.70000076293945,
+            -57.599998474121094
+        ],
+        "UV Flip X": false,
+        "UV Flip Y": false,
+        "UV Loop": true,
+        "UV Pixel Step": 0.0,
+        "UV Position": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": 0.0,
+        "UV Scale": [
+            1.0,
+            1.0
+        ],
+        "UV Scroll Speed": [
+            0.0,
+            0.0
+        ],
+        "Velocity Max": [
+            10.100000381469727,
+            38.599998474121094,
+            5.900000095367432
+        ],
+        "Velocity Min": [
+            -12.800000190734863,
+            6.5,
+            -5.400000095367432
+        ],
+        "timeMode": 1
+    }
+}

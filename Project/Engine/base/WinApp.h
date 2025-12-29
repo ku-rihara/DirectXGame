@@ -9,6 +9,8 @@
 /// <summary>
 /// WinAPIアプリケーションクラス
 /// </summary>
+namespace KetaEngine {
+
 class WinApp {
 
 public:
@@ -31,7 +33,7 @@ public:
     /// <param name="title">ウィンドウタイトル</param>
     /// <param name="clientWidth">クライアント領域の幅</param>
     /// <param name="clientHeight">クライアント領域の高さ</param>
-    void MakeWindow(const wchar_t* title = L"DirectXGame", const int32_t& clientWidth = kWindowWidth, const int32_t& clientHeight = kWindowHeight);
+    void MakeWindow(const wchar_t* title = L"DirectXGame", int32_t clientWidth = kWindowWidth, int32_t clientHeight = kWindowHeight);
 
     int ProcessMessage(); //< メッセージ処理
 
@@ -53,3 +55,5 @@ public:
     const HINSTANCE& GetHInstance() const { return wc_.hInstance; }
     ID3D12Debug1* GetDebugController() const { return debugController_.Get(); }
 };
+
+}; // KetaEngine

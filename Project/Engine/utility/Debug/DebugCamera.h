@@ -7,6 +7,8 @@
 /// <summary>
 /// デバッグカメラクラス
 /// </summary>
+namespace KetaEngine {
+
 class DebugCamera {
 public:
     DebugCamera(const int& window_width, const int& window_height);
@@ -30,9 +32,11 @@ private:
 
 public:
     const ViewProjection& GetViewProjection() { return viewProjection_; }
-    void SetIsActive(const bool& is) { isActive_ = is; }
-    void SetFovAngleY(const float& value) { viewProjection_.fovAngleY_ = value; }
-    void SetAspectRatio(const float& value) { viewProjection_.aspectRatio_ = value; }
-    void SetNearZ(const float& value) { viewProjection_.nearZ_ = value; }
-    void SetFarZ(const float& value) { viewProjection_.farZ_ = value; }
+    void SetIsActive(bool is) { isActive_ = is; }
+    void SetFovAngleY(float value) { viewProjection_.fovAngleY_ = value; }
+    void SetAspectRatio(float value) { viewProjection_.aspectRatio_ = value; }
+    void SetNearZ(float value) { viewProjection_.nearZ_ = value; }
+    void SetFarZ(float value) { viewProjection_.farZ_ = value; }
 };
+
+}; // KetaEngine

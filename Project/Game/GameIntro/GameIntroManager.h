@@ -53,21 +53,25 @@ private:
     /// 現在のイントロを更新
     /// </summary>
     /// <param name="speed">再生速度</param>
-    void UpdateCurrentIntro(const float& speed);
+    void UpdateCurrentIntro(float speed);
 
     void ProcessInput(); //< 入力処理
     void MoveToNextIntro(); //< 次のイントロへ移行
 
 private:
-    GlobalParameter* globalParameter_ = nullptr;
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_      = "GameIntroManager";
+
     std::array<std::unique_ptr<BaseGameIntro>, static_cast<size_t>(IntroStep::COUNT)> introSequences_;
+
     int32_t currentIndex_                        = 0;
     bool isInitialized_                          = false;
     std::unique_ptr<MovieLine> movieLine_        = nullptr;
     MovieLineState movieLineState_               = MovieLineState::NONE;
+
     float currentPlaySpeedRate_                  = 1.0f;
     float fastSpeedRate_                         = 3.0f;
+
     HowToOperate* pHowToOperate_                 = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
     Player* pPlayer_                             = nullptr;
@@ -76,9 +80,9 @@ private:
 
 public:
     // getter
-    const int32_t& GetCurrentIntroIndex() const { return currentIndex_; }
-    const int32_t& GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
-    const float& GetCurrentPlaySpeedRate() const { return currentPlaySpeedRate_; }
+    int32_t GetCurrentIntroIndex() const { return currentIndex_; }
+    int32_t GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
+    float GetCurrentPlaySpeedRate() const { return currentPlaySpeedRate_; }
     MovieLine* GetMovieLine() const { return movieLine_.get(); }
 
     // setter
@@ -87,6 +91,6 @@ public:
     void SetPlayer(Player* player);
     void SetFireInjectors(FireInjectors* fireInjectors);
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject);
-    void SetSpeedMultiplier(const float& multiplier) { currentPlaySpeedRate_ = multiplier; }
+    void SetSpeedMultiplier(float multiplier) { currentPlaySpeedRate_ = multiplier; }
     void ClassisSet();
 };

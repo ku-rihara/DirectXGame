@@ -4,6 +4,8 @@
 #include <d3d12.h>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct AmbientLightData {
     Vector4 color;
     float intensity;
@@ -51,3 +53,5 @@ public:
     // getter
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }
 };
+
+}; // KetaEngine

@@ -19,7 +19,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="playSpeed">再生速度</param>
-    void Update(const float& playSpeed) override;
+    void Update(float playSpeed) override;
 
 public:
 };

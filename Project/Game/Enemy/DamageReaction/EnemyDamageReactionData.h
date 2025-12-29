@@ -23,25 +23,27 @@ public:
 
     // Normal状態のパラメータ
     struct NormalParam {
-        float knockBackTime;    
-        float knockBackDamping; 
+        float knockBackTime;
+        float knockBackDamping;
+    };
+
+    // バウンド共通パラメータ
+    struct BoundParam {
+        int32_t boundNum;      
+        float bounceDamping;   
+        float initialBounceRate;
     };
 
     struct SlammedParam {
-        int32_t boundNum;
-        float bounceDamping;
-        float initialBounceRate;
-        float downSpeed;
-        float fallSpeedLimit; 
         float gravity;
-        float thrustRotateSpeed;
+        float rotateSpeed;
     };
 
     struct TakeUpperParam {
-        float floatingTime; 
-        float fallSpeedLimit; 
-        float gravity; 
-        float thrustRotateSpeed;
+        float floatingTime;
+        float fallSpeedLimit;
+        float gravity;
+        float rotateSpeed;
     };
 
     // リアクションパラメータ
@@ -50,9 +52,11 @@ public:
         int32_t intReactionState = 0;
         ReactionState reactionState;
         NormalParam normalParam;
+        BoundParam boundParam; 
         SlammedParam slammedParam;
         TakeUpperParam takeUpperParam;
         float damageCollingTime;
+        bool isPriorityReaction;
     };
 
 public:
@@ -74,7 +78,7 @@ public:
 
     // 演出データ追加、削除、クリア、初期化
     void AddRendition();
-    void RemoveRendition(const int32_t& index);
+    void RemoveRendition(int32_t index);
     void ClearRenditions();
     void InitRenditions();
 
@@ -93,7 +97,7 @@ private:
     //*-------------------------------- Private variants--------------------------------*//
 
     // グローバルパラメータ
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_          = "EnemyDamageReaction/ReactionDates";
     const std::string renditionFolderPath_ = "Resources/GlobalParameter/EnemyDamageReaction/RenditionDates/";
@@ -103,7 +107,7 @@ private:
     int32_t selectedRenditionIndex_ = -1;
     bool showRenditionList_         = true;
 
-    FileSelector fileSelector_;
+    KetaEngine::FileSelector fileSelector_;
 
     // リアクションパラメータ
     ReactionParameter reactionParam_;
@@ -119,7 +123,7 @@ public:
     const std::vector<std::unique_ptr<EnemyDamageRenditionData>>& GetAllRenditions() const { return renditions_; }
     int32_t GetRenditionCount() const { return static_cast<int32_t>(renditions_.size()); }
     const EnemyDamageRenditionData* GetSelectedRendition() const;
-    const int32_t& GetSelectedRenditionIndex() const { return selectedRenditionIndex_; }
+    int32_t GetSelectedRenditionIndex() const { return selectedRenditionIndex_; }
 
-    void SetSelectedRenditionIndex(const int32_t& index);
+    void SetSelectedRenditionIndex(int32_t index);
 };

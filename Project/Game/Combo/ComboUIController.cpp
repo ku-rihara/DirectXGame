@@ -9,7 +9,7 @@
 void ComboUIController::Init() {
 
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
@@ -23,7 +23,7 @@ void ComboUIController::Init() {
     ChangeBehavior(std::make_unique<ComboWait>(this));
 }
 
-void ComboUIController::Update(const int32_t& comboNum) {
+void ComboUIController::Update(int32_t comboNum) {
 
     behavior_->Update();
 
@@ -34,7 +34,7 @@ void ComboUIController::Update(const int32_t& comboNum) {
     }
 }
 
-void ComboUIController::AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime) {
+void ComboUIController::AlphaAdaptForTime(float comboTime, float comboMaxTime) {
 
     alpha_ = std::clamp(comboTime / comboMaxTime, 0.0f, 1.0f);
 }

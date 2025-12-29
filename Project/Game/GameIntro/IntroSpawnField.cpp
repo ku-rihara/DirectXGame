@@ -17,7 +17,7 @@ void IntroSpawnField::Init(const std::string& name) {
     currentTime_      = 0.0f;
 }
 
-void IntroSpawnField::Update(const float& playSpeed) {
+void IntroSpawnField::Update(float playSpeed) {
     BaseGameIntro::Update(playSpeed);
     (this->*spFuncTable_[static_cast<size_t>(step_)])();
 }
@@ -64,13 +64,14 @@ void IntroSpawnField::FinishWait() {
 }
 
 void IntroSpawnField::Finish() {
+    pHowToOperate_->SetScale();
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }
     isFinish_ = true;
 }
 
-bool IntroSpawnField::ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn) {
+bool IntroSpawnField::ProcessStep(float limitTime, const Step& nextStep, const bool& enableEnemySpawn) {
     currentTime_ += playSpeed_;
 
     if (currentTime_ >= limitTime) {

@@ -8,6 +8,8 @@
 /// <summary>
 /// ポストエフェクトコントローラー
 /// </summary>
+namespace KetaEngine {
+
 class PostEffectController {
 public:
     PostEffectController()  = default;
@@ -15,7 +17,7 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// ポストエフェクトの再生
@@ -68,3 +70,5 @@ private:
     float targetDuration_       = 0.0f;
     PostEffectMode defaultMode_ = PostEffectMode::NONE;
 };
+
+}; // KetaEngine

@@ -1,6 +1,8 @@
 #pragma once
 #include <d3d12.h>
 
+namespace KetaEngine {
+
 class GPUParticleResourceData;
 class DirectXCommon;
 class CSPipelineManager;
@@ -40,3 +42,5 @@ private:
     CSPipelineManager* csPipeManager_;
     SrvManager* srvManager_;
 };
+
+}; // KetaEngine

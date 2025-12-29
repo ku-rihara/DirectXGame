@@ -1,14 +1,16 @@
 #include "ShakeEditor.h"
+
+using namespace KetaEngine;
 #include <imgui.h>
 
-void ShakeEditor::Init(const std::string& editorName, const bool& isUseCategory) {
+void ShakeEditor::Init(const std::string& editorName, bool isUseCategory) {
     BaseEffectEditor::Init(editorName, isUseCategory);
 
     preViewObj_.reset(Object3d::CreateModel("debugCube.obj"));
     preViewObj_->SetIsDraw(false);
 }
 
-void ShakeEditor::Update(const float& speedRate) {
+void ShakeEditor::Update(float speedRate) {
     // すべてのシェイクを更新
     for (auto& shake : effects_) {
         shake->Update(speedRate);

@@ -1,0 +1,17 @@
+{
+    "AudienceController": {
+        "BaseSeatsZYPos": [
+            14.300000190734863,
+            0.699999988079071
+        ],
+        "SeatsRowZYOffset": [
+            0.5,
+            0.10000000149011612
+        ],
+        "baseTransformScale": [
+            7.0,
+            7.0,
+            7.0
+        ]
+    }
+}

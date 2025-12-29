@@ -108,7 +108,7 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 }
 
 // X軸回転行列
-Matrix4x4 MakeRotateXMatrix(const float& radian) {
+Matrix4x4 MakeRotateXMatrix(float radian) {
     Matrix4x4 result;
     result.m[0][0] = 1;
     result.m[0][1] = 0;
@@ -130,7 +130,7 @@ Matrix4x4 MakeRotateXMatrix(const float& radian) {
 }
 
 // Y軸回転行列
-Matrix4x4 MakeRotateYMatrix(const float& radian) {
+Matrix4x4 MakeRotateYMatrix(float radian) {
     Matrix4x4 result;
     result.m[0][0] = std::cos(radian);
     result.m[0][1] = 0;
@@ -152,7 +152,7 @@ Matrix4x4 MakeRotateYMatrix(const float& radian) {
 }
 
 // Z軸回転行列
-Matrix4x4 MakeRotateZMatrix(const float& radian) {
+Matrix4x4 MakeRotateZMatrix(float radian) {
     Matrix4x4 result;
     result.m[0][0] = std::cos(radian);
     result.m[0][1] = std::sin(radian);
@@ -281,7 +281,7 @@ Matrix4x4 Transpose(const Matrix4x4& m) {
     return result;
 }
 
-Matrix4x4 MakePerspectiveFovMatrix(const float& fovY, const float& aspectRatio, const float& nearClip, const float& farClip) {
+Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
     Matrix4x4 result;
     result.m[0][0] = (1 / aspectRatio) * (1 / std::tan(fovY / 2));
     result.m[0][1] = 0;
@@ -302,7 +302,7 @@ Matrix4x4 MakePerspectiveFovMatrix(const float& fovY, const float& aspectRatio, 
     return result;
 }
 
-Matrix4x4 MakeOrthographicMatrix(const float& left, const float& top, const float& right, const float& bottom, const float& nearClip, const float& farClip) {
+Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
     Matrix4x4 result;
     result.m[0][0] = 2 / (right - left);
     result.m[0][1] = 0;
@@ -323,7 +323,7 @@ Matrix4x4 MakeOrthographicMatrix(const float& left, const float& top, const floa
     return result;
 }
 
-Matrix4x4 MakeViewportMatrix(const float& left, const float& top, const float& width, const float& height, const float& minDepth, const float& maxDepth) {
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
     Matrix4x4 result;
     result.m[0][0] = width / 2;
     result.m[0][1] = 0;
@@ -344,9 +344,9 @@ Matrix4x4 MakeViewportMatrix(const float& left, const float& top, const float& w
     return result;
 }
 
-Vector2 ScreenTransform(const Vector3& worldPos, const ViewProjection& viewProjection) {
+Vector2 ScreenTransform(const Vector3& worldPos, const KetaEngine::ViewProjection& viewProjection) {
     // ビューポート行列
-    Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+    Matrix4x4 matViewport = MakeViewportMatrix(0, 0, KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight, 0, 1);
     // ビュー行列とプロジェクション行列、ビューポート行列を合成する
     Matrix4x4 matViewProjectionViewport = viewProjection.matView_ * viewProjection.matProjection_ * matViewport;
     // ワールド→スクリーン変換
@@ -374,7 +374,7 @@ Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, const int& row) {
 }
 
 // 任意軸回転行列
-Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, const float& angle) {
+Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
     Matrix4x4 result{};
 
@@ -419,8 +419,8 @@ Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
     Vector3 fromNorm = from.Normalize();
     Vector3 toNorm   = to.Normalize();
 
-    Vector3 axis = Vector3::Cross(fromNorm, toNorm);
-    float dot    = Vector3::Dot(fromNorm, toNorm);
+    Vector3 axis = fromNorm.Cross(toNorm);
+    float dot    = fromNorm.Dot(toNorm);
     float angle  = std::acos(dot);
 
     if (axis.Length() < 1e-6f) {
@@ -497,25 +497,25 @@ Matrix4x4 MakeRotateMatrixFromQuaternion(const Quaternion& q) {
 
 Matrix4x4 MakeRootAtMatrix(const Vector3& eye, const Vector3& target, const Vector3& up) {
     Vector3 zAxis = (target - eye).Normalize(); // 視線方向 (前方向)
-    Vector3 xAxis = Vector3::Cross(up, zAxis).Normalize(); // 右方向
-    Vector3 yAxis = Vector3::Cross(zAxis, xAxis); // 上方向
+    Vector3 xAxis = up.Cross(zAxis).Normalize(); // 右方向
+    Vector3 yAxis = zAxis.Cross(xAxis); // 上方向
 
     Matrix4x4 result = {};
 
     result.m[0][0] = xAxis.x;
     result.m[0][1] = xAxis.y;
     result.m[0][2] = xAxis.z;
-    result.m[0][3] = -Vector3::Dot(xAxis, eye);
+    result.m[0][3] = -xAxis.Dot(eye);
 
     result.m[1][0] = yAxis.x;
     result.m[1][1] = yAxis.y;
     result.m[1][2] = yAxis.z;
-    result.m[1][3] = -Vector3::Dot(yAxis, eye);
+    result.m[1][3] = -yAxis.Dot(eye);
 
     result.m[2][0] = zAxis.x;
     result.m[2][1] = zAxis.y;
     result.m[2][2] = zAxis.z;
-    result.m[2][3] = -Vector3::Dot(zAxis, eye);
+    result.m[2][3] = -zAxis.Dot(eye);
 
     result.m[3][0] = 0.0f;
     result.m[3][1] = 0.0f;

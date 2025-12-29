@@ -6,6 +6,8 @@
 /// std
 #include <unordered_map>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 class SrvManager;
 /// <summary>
@@ -90,14 +92,14 @@ public:
     /// </summary>
     /// <param name="index">インデックス</param>
     /// <returns>GPUディスクリプタハンドル</returns>
-    D3D12_GPU_DESCRIPTOR_HANDLE GetTextureHandle(const uint32_t& index) const;
+    D3D12_GPU_DESCRIPTOR_HANDLE GetTextureHandle(uint32_t index) const;
 
     /// <summary>
     /// メタデータの取得
     /// </summary>
     /// <param name="textureIndex">テクスチャインデックス</param>
     /// <returns>メタデータ</returns>
-    const DirectX::TexMetadata& GetMetaData(const uint32_t& textureIndex);
+    const DirectX::TexMetadata& GetMetaData(uint32_t textureIndex);
 
     /// <summary>
     /// SRVインデックスの取得
@@ -113,3 +115,5 @@ public:
     /// <returns>GPUディスクリプタハンドル</returns>
     D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(const std::string& filePath);
 };
+
+}; // KetaEngine

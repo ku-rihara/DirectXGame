@@ -1,4 +1,6 @@
 #include "GPUParticleCommandExecutor.h"
+
+using namespace KetaEngine;
 #include "base/SrvManager.h"
 #include "Dx//DxResourceBarrier.h"
 #include "Dx/DirectXCommon.h"
@@ -17,7 +19,7 @@ void GPUParticleCommandExecutor::ExecuteInitPass(ID3D12GraphicsCommandList* comm
 
     DxResourceBarrier* barrier = dxCommon_->GetResourceBarrier();
 
-    //  デスクリプタヒープを設定
+    // デスクリプタヒープを設定
     ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
     commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
@@ -46,7 +48,7 @@ void GPUParticleCommandExecutor::ExecuteEmitPass(ID3D12GraphicsCommandList* comm
 
     DxResourceBarrier* barrier = dxCommon_->GetResourceBarrier();
 
-    //  デスクリプタヒープを設定
+    // デスクリプタヒープを設定
     ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
     commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
@@ -57,13 +59,13 @@ void GPUParticleCommandExecutor::ExecuteEmitPass(ID3D12GraphicsCommandList* comm
     commandList->SetComputeRootConstantBufferView(0,
         resourceData_->GetEmitterBuffer().resource->GetGPUVirtualAddress());
 
-    // b1: PerFrame
-    commandList->SetComputeRootConstantBufferView(2,
-        resourceData_->GetPerFrameBuffer().resource->GetGPUVirtualAddress());
-
     // u0: パーティクルバッファ(UAV)
     commandList->SetComputeRootDescriptorTable(1,
         resourceData_->GetParticleUAV().gpuHandle);
+
+    // b1: PerFrame
+    commandList->SetComputeRootConstantBufferView(2,
+        resourceData_->GetPerFrameBuffer().resource->GetGPUVirtualAddress());
 
     // u1: FreeListIndex(UAV)
     commandList->SetComputeRootDescriptorTable(3,
@@ -73,9 +75,20 @@ void GPUParticleCommandExecutor::ExecuteEmitPass(ID3D12GraphicsCommandList* comm
     commandList->SetComputeRootDescriptorTable(4,
         resourceData_->GetFreeListBuffer().gpuHandle);
 
-     // b2: EmitParam
+    // Emitパラメータをバインド
+    const auto& emitBuffers = resourceData_->GetEmitParamBuffers();
+
+    // b2: EmitTransformParams
     commandList->SetComputeRootConstantBufferView(5,
-        resourceData_->GetEmitParamBuffer().resource->GetGPUVirtualAddress());
+        emitBuffers.transformBuffer.resource->GetGPUVirtualAddress());
+
+    // b3: EmitPhysicsParams
+    commandList->SetComputeRootConstantBufferView(6,
+        emitBuffers.physicsBuffer.resource->GetGPUVirtualAddress());
+
+    // b4: EmitAppearanceParams
+    commandList->SetComputeRootConstantBufferView(7,
+        emitBuffers.appearanceBuffer.resource->GetGPUVirtualAddress());
 
     // 1スレッドでエミット処理
     csPipeManager_->DisPatch(CSPipelineType::Particle_Emit, commandList, numThreadsX);

@@ -12,6 +12,8 @@
 /// イージングを扱うのテンプレートクラス
 /// </summary>
 /// <typeParam name="T">イージング対象の型(float, Vector2, Vector3)</typeParam>
+namespace KetaEngine {
+
 template <typename T>
 class Easing {
 public:
@@ -20,7 +22,7 @@ public:
 
     // 初期化(ファイルロード)、更新
     void Init(const std::string& adaptFile);
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// イージングパラメータ設定
@@ -136,10 +138,10 @@ public:
     const T& GetValue() const { return *currentOffset_; }
     const T& GetEndValue() const { return endValue_; }
     const T& GetStartValue() const { return startValue_; }
-    const bool& IsFinished() const { return isFinished_; }
-    const bool& IsPlaying() const { return isPlaying_; }
+    bool IsFinished() const { return isFinished_; }
+    bool IsPlaying() const { return isPlaying_; }
     const std::string& GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
-    const float& GetCurrentEaseTime() const { return currentTime_; }
+    float GetCurrentEaseTime() const { return currentTime_; }
     /// -------------------------------------------------------------------------
     /// Setter methods
     /// -------------------------------------------------------------------------
@@ -148,6 +150,9 @@ public:
     void SetCurrentOffset(const T& value);
     void SetBaseValue(const T& value) { baseValue_ = value; }
     void SetType(const EasingType& type) { type_ = type; }
-    void SetMaxTime(const float& time) { maxTime_ = time; }
-    void SetIsStartEndReverse(const bool& isReverse) { isStartEndReverse_ = isReverse; }
+    void SetMaxTime(float time) { maxTime_ = time; }
+    void SetIsStartEndReverse(bool isReverse) { isStartEndReverse_ = isReverse; }
+    void SetFinishTimeOffset(float time) { finishTimeOffset_ = time; }
 };
+
+}; // KetaEngine

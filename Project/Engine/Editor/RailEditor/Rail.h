@@ -9,6 +9,8 @@
 /// <summary>
 /// レール
 /// </summary>
+namespace KetaEngine {
+
 class Rail {
 private:
     const size_t IndexCount_ = 20;
@@ -44,8 +46,10 @@ public:
     /// </summary>
     /// <param name="progress">進行度(0.0~1.0)</param>
     /// <returns>レール上の座標</returns>
-    Vector3 GetPositionOnRail(const float& progress) const;
+    Vector3 GetPositionOnRail(float progress) const;
 
     const std::vector<Vector3>& GetPointsDrawing() const { return pointsDrawing_; }
-    const float& GetTotalLength() const { return totalRailLength_; }
+    float GetTotalLength() const { return totalRailLength_; }
 };
+
+}; // KetaEngine

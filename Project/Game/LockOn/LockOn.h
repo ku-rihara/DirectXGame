@@ -22,7 +22,7 @@ public:
 
 public:
     struct TargetMarker {
-        std::unique_ptr<Sprite> sprite;
+        std::unique_ptr<KetaEngine::Sprite> sprite;
         Vector2 screenPosition;
         bool isCurrentTarget = false;
     };
@@ -40,7 +40,7 @@ public:
     /// <param name="targets">ターゲットリスト</param>
     /// <param name="player">プレイヤー</param>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    void Update(const std::vector<LockOnVariant>& targets, const Player* player, const ViewProjection& viewProjection);
+    void Update(const std::vector<LockOnVariant>& targets, const Player* player, const KetaEngine::ViewProjection& viewProjection);
 
     /// <summary>
     /// オブジェクト破壊時の処理
@@ -106,28 +106,28 @@ private:
     /// 現在のレティクルUI更新
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    void UpdateCurrentReticleUI(const ViewProjection& viewProjection);
+    void UpdateCurrentReticleUI(const KetaEngine::ViewProjection& viewProjection);
 
     /// <summary>
     /// Lerp時間の増加
     /// </summary>
     /// <param name="incrementTime">増加時間</param>
-    void LerpTimeIncrement(const float& incrementTime);
+    void LerpTimeIncrement(float incrementTime);
 
     /// <summary>
     /// ターゲットマーカー更新
     /// </summary>
     /// <param name="validTargets">有効なターゲットリスト</param>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    void UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets, const ViewProjection& viewProjection);
+    void UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets, const KetaEngine::ViewProjection& viewProjection);
 
 private:
     // global parameter
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "LockOn";
 
     // Sprite
-    std::unique_ptr<Sprite> lockOnMark_;
+    std::unique_ptr<KetaEngine::Sprite> lockOnMark_;
     std::vector<TargetMarker> ableLockOnMarkers_;
     uint32_t reticleHandle_;
     Vector2 currentTargetScale_;

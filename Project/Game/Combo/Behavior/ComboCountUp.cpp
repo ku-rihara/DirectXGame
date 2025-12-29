@@ -45,7 +45,7 @@ void ComboCountUP::Update() {
         /// 更新
         ///-----------------------------------------------------------------------
     case ComboCountUP::AnimationStep::UPDATE:
-        scalingEasing_.Update(Frame::DeltaTime());
+        scalingEasing_.Update(KetaEngine::Frame::DeltaTime());
         pUIController_->SetBaseScale(baseScale_);
         break;
         ///-----------------------------------------------------------------------

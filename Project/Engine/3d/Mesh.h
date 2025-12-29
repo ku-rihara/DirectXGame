@@ -8,6 +8,8 @@
 #include <optional>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 
 /// <summary>
@@ -23,20 +25,20 @@ public:
     /// </summary>
     /// <param name="directXCommon">DirectXCommonのインスタンス</param>
     /// <param name="vertexNum">頂点数</param>
-    void Init(DirectXCommon* directXCommon, const uint32_t& vertexNum);
+    void Init(DirectXCommon* directXCommon, uint32_t vertexNum);
 
     /// <summary>
     /// インデックスデータを設定
     /// </summary>
     /// <param name="indices">インデックス配列</param>
     /// <param name="indexCount">インデックス数</param>
-    void SetIndexData(const uint32_t* indices, const uint32_t& indexCount);
+    void SetIndexData(const uint32_t* indices, uint32_t indexCount);
 
     /// <summary>
     /// インスタンシング描画
     /// </summary>
     /// <param name="instanceNum">インスタンス数</param>
-    void DrawInstancing(const uint32_t& instanceNum);
+    void DrawInstancing(uint32_t instanceNum);
 
     void CreateVertexResource(); //< 頂点リソース作成
     void DebugImGui();           //< ImGuiデバッグ表示
@@ -71,7 +73,9 @@ private:
     uint32_t textureHandle_; //< テクスチャハンドル
 
 public:
-    void SetVertexPositionData(const uint32_t& index, const Vector4& pos) { vertexDate_[index].position = pos; }
-    void SetVertexNormData(const uint32_t& index, const Vector3& norm) { vertexDate_[index].normal = norm; }
-    void SetVertexTexcoordData(const uint32_t& index, const Vector2& texcoord) { vertexDate_[index].texcoord = texcoord; }
+    void SetVertexPositionData(uint32_t index, const Vector4& pos) { vertexDate_[index].position = pos; }
+    void SetVertexNormData(uint32_t index, const Vector3& norm) { vertexDate_[index].normal = norm; }
+    void SetVertexTexcoordData(uint32_t index, const Vector2& texcoord) { vertexDate_[index].texcoord = texcoord; }
 };
+
+}; // KetaEngine

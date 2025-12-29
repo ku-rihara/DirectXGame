@@ -9,7 +9,7 @@
 
 void ContinuousEnemySpawner::Init() {
     // グローバルパラメータ設定
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
@@ -20,7 +20,7 @@ void ContinuousEnemySpawner::Init() {
     Start();
 }
 
-void ContinuousEnemySpawner::Update(const float& deltaTime) {
+void ContinuousEnemySpawner::Update(float deltaTime) {
     // スポーンシステムが非アクティブなら処理しない
     if (!isActive_ || !config_.isEnabled) {
         return;

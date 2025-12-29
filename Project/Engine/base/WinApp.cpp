@@ -1,4 +1,6 @@
 #include "WinApp.h"
+
+using namespace KetaEngine;
 #pragma comment(lib, "winmm.lib")
 
 const wchar_t WinApp::kWindowClassName[] = L"DirectXGame";
@@ -29,7 +31,7 @@ LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-void WinApp::MakeWindow(const wchar_t* title, const int32_t& clientWidth, const int32_t& clientHeight) {
+void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clientHeight) {
     // COMの初期化
     CoInitializeEx(0, COINIT_MULTITHREADED);
     // システムタイマーの分解能をあげる

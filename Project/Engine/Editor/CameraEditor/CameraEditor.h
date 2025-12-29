@@ -10,14 +10,16 @@
 /// <summary>
 /// カメラアニメーションエディタクラス
 /// </summary>
+namespace KetaEngine {
+
 class CameraEditor : public BaseEffectEditor<CameraAnimationData> {
 public:
     CameraEditor()  = default;
     ~CameraEditor() = default;
 
     // 初期化、更新
-    void Init(const std::string& animationName, const bool& isUseCategory = false) override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Init(const std::string& animationName, bool isUseCategory = false) override;
+    void Update(float speedRate = 1.0f) override;
     void EditorUpdate() override;
 
     // 選択アニメーション再生
@@ -46,16 +48,17 @@ private:
 
     bool autoApplyToViewProjection_ = true;
     bool keyFramePreviewMode_       = false;
-    bool isEditing_                 = false;
     bool isPreViewDraw_             = false;
 
 public:
-    const bool& GetIsEditing() const { return isEditing_; }
-    const bool& GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
-    const bool& GetSequenceElementPreviewMode() const { return keyFramePreviewMode_; }
+   
+    bool GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
+    bool GetSequenceElementPreviewMode() const { return keyFramePreviewMode_; }
     CameraAnimationData* GetSelectedAnimation();
 
-    void SetAutoApplyToViewProjection(const bool& enable) { autoApplyToViewProjection_ = enable; }
-    void SetSequenceElementPreviewMode(const bool& enable) { keyFramePreviewMode_ = enable; }
+    void SetAutoApplyToViewProjection(bool enable) { autoApplyToViewProjection_ = enable; }
+    void SetSequenceElementPreviewMode(bool enable) { keyFramePreviewMode_ = enable; }
     void SetViewProjection(ViewProjection* vp);
 };
+
+}; // KetaEngine

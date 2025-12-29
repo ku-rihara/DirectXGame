@@ -13,6 +13,8 @@
 /// <summary>
 /// グローバルパラメータ管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class GlobalParameter {
 public:
 private:
@@ -131,8 +133,8 @@ public:
     void ClearRegistersForGroup(const std::string& groupName);
 
     void ResetAllRegister(); //< 全登録リセット
-    void SyncAll(); //< 全同期
-    void LoadFiles(); //< 全ファイル読み込み
+    void SyncAll();          //< 全同期
+    void LoadFiles();        //< 全ファイル読み込み
     bool HasRegisters(const std::string& groupName) const;
 
 private:
@@ -143,3 +145,5 @@ private:
 public:
     const std::string& GetDirectoryPath() const { return kDirectoryPath; }
 };
+
+}; // KetaEngine

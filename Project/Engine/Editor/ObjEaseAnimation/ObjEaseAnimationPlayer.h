@@ -8,6 +8,8 @@
 /// <summary>
 /// オブジェクトイージングアニメーションプレイヤー
 /// </summary>
+namespace KetaEngine {
+
 class ObjEaseAnimationPlayer : public BaseEffectPlayer {
 public:
     ObjEaseAnimationPlayer()           = default;
@@ -17,10 +19,8 @@ public:
 
     // BaseEffectPlayerからのオーバーライド
     void Init() override;
-    void Update(const float& speedRate = 1.0f) override;
-
-    void Play(const std::string& effectName) override;
-    void PlayInCategory(const std::string& categoryName, const std::string& animationName);
+    void Update(float speedRate = 1.0f) override;
+    void Play(const std::string& categoryName, const std::string& animationName) override;
 
 protected:
     //*---------------------------- protected Methods ----------------------------*//
@@ -40,3 +40,5 @@ public:
     ObjEaseAnimationData* GetAnimationData();
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
 };
+
+}; // KetaEngine

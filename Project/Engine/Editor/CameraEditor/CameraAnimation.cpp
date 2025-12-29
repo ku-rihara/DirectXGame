@@ -1,5 +1,7 @@
 #include "CameraAnimation.h"
 
+using namespace KetaEngine;
+
 void CameraAnimation::Init() {
 
     BaseEffectPlayer::Init();
@@ -7,7 +9,7 @@ void CameraAnimation::Init() {
     ResetOffsetParam();
 }
 
-void CameraAnimation::Update(const float& speedRate) {
+void CameraAnimation::Update(float speedRate) {
     // アニメーションデータの更新
     if (effectData_) {
         effectData_->Update(speedRate);
@@ -80,6 +82,10 @@ void CameraAnimation::SetStartParam() {
     startParam_.position = pViewProjection_->positionOffset_;
     startParam_.rotation = pViewProjection_->rotationOffset_;
     startParam_.fov      = pViewProjection_->fovAngleY_;
+
+    if (CameraAnimationData* date = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
+        date->SetInitialValues(startParam_.position, startParam_.rotation, startParam_.fov);
+    }
 }
 
 void CameraAnimation::ResetOffsetParam() {

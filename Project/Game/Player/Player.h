@@ -3,7 +3,7 @@
 #include "BaseObject/BaseObject.h"
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/PlayerCollisionInfo.h"
-#include "ComboAttackBehavior/BaseComboAattackBehavior.h"
+#include "ComboAttackBehavior/BaseComboAttackBehavior.h"
 #include "Effect/PlayerEffects.h"
 #include "JumpAttackUI/JumpAttackUI.h"
 #include "Parameter/PlayerParameter.h"
@@ -26,11 +26,11 @@ class PlayerComboAttackController;
 /// <summary>
 /// プレイヤークラス
 /// </summary>
-class Player : public BaseObject, public AABBCollider {
+class Player : public BaseObject, public KetaEngine::AABBCollider {
 private:
     struct ParticleEffect {
         std::string name;
-        std::unique_ptr<ParticleEmitter> emitter;
+        std::unique_ptr<KetaEngine::ParticleEmitter> emitter;
     };
 
 public:
@@ -55,19 +55,23 @@ public:
     /// 移動
     /// </summary>
     /// <param name="speed">移動速度</param>
-    void Move(const float& speed);
+    void Move(float speed);
 
     bool CheckIsMoving();         //< 移動中判定
     void MoveToLimit();           //< 移動制限
     Vector3 GetInputDirection();  //< 入力方向取得
     void UpdateMatrix();          //< 行列更新
-    void PositionYReset();        //< Y座標リセット
+
+    // reset
+    void ResetPositionY(); //< Y座標リセット
+    void ResetHeadScale(); //< 頭スケールリセット
+  
   
     /// <summary>
     /// ディゾルブ更新
     /// </summary>
     /// <param name="dissolve">ディゾルブ値</param>
-    void DissolveUpdate(const float& dissolve);
+    void DissolveUpdate(float dissolve);
 
     /// <summary>
     /// ジャンプ
@@ -75,7 +79,7 @@ public:
     /// <param name="speed">速度</param>
     /// <param name="fallSpeedLimit">落下速度制限</param>
     /// <param name="gravity">重力</param>
-    void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);
+    void Jump(float& speed, float fallSpeedLimit, float gravity);
 
     /// <summary>
     /// 落下
@@ -84,11 +88,11 @@ public:
     /// <param name="fallSpeedLimit">落下速度制限</param>
     /// <param name="gravity">重力</param>
     /// <param name="isJump">ジャンプ中か</param>
-    void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump = false);
+    void Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump = false);
 
     // 各Behavior切り替え処理
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);
-    void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior> behavior);
+    void ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior);
     void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior> behavior);
 
     /// <summary>
@@ -108,8 +112,10 @@ public:
     void SoundStrongPunch();  //< 強パンチ音再生
     void FallSound();         //< 落下音再生
 
+    void MainHeadAnimationStart(const std::string& name);
+
 private:
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Player";
 
     /// other class
@@ -119,7 +125,7 @@ private:
     AttackEffect* pHitStop_                             = nullptr;
     PlayerComboAttackController* comboAttackController_ = nullptr;
 
-    const ViewProjection* viewProjection_ = nullptr;
+    const KetaEngine::ViewProjection* viewProjection_ = nullptr;
 
     std::unique_ptr<PlayerHandLeft> leftHand_;
     std::unique_ptr<PlayerHandRight> rightHand_;
@@ -130,7 +136,7 @@ private:
 
     /// behavior
     std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
-    std::unique_ptr<BaseComboAattackBehavior> comboBehavior_ = nullptr;
+    std::unique_ptr<BaseComboAttackBehavior> comboBehavior_ = nullptr;
     std::unique_ptr<BaseTitleBehavior> titleBehavior_        = nullptr;
 
 private:
@@ -147,12 +153,6 @@ private:
     // attackCharge
     float currentUpperChargeTime_;
 
-    // sound
-    int punchSoundID_;
-    int strongPunch_;
-    int fallSound_;
-    int starSound_;
-
 public:
     // getter
     PlayerHandLeft* GetLeftHand() const { return leftHand_.get(); }
@@ -167,11 +167,11 @@ public:
     PlayerCollisionInfo* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
-    const float& GetMoveSpeed() const { return moveSpeed_; }
+    float GetMoveSpeed() const { return moveSpeed_; }
 
     //*-- setter --*//
     // class Set
-    void SetViewProjection(const ViewProjection* viewProjection);
+    void SetViewProjection(const KetaEngine::ViewProjection* viewProjection);
     void SetLockOn(LockOnController* lockon);
     void SetGameCamera(GameCamera* gamecamera);
     void SetCombo(Combo* combo);
@@ -182,7 +182,7 @@ public:
     void RotateReset();
     void HeadLightSetting();
     void SetHeadScale(const Vector3& scale) { obj3d_->transform_.scale_ = scale; }
-    void SetHeadPosY(const float& posy) { obj3d_->transform_.translation_.y = posy; }
-    void SetHeadRotateX(const float& zRotate) { obj3d_->transform_.rotation_.x = zRotate; }
-    void SetHeadRotateY(const float& zRotate) { obj3d_->transform_.rotation_.y = zRotate; }
+    void SetHeadPosY(float posy) { obj3d_->transform_.translation_.y = posy; }
+    void SetHeadRotateX(float zRotate) { obj3d_->transform_.rotation_.x = zRotate; }
+    void SetHeadRotateY(float zRotate) { obj3d_->transform_.rotation_.y = zRotate; }
 };

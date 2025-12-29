@@ -1,4 +1,6 @@
 #include "ObjEaseAnimationData.h"
+
+using namespace KetaEngine;
 #include "3d/WorldTransform.h"
 #include "Editor/RailEditor/RailPlayer.h"
 #include "MathFunction.h"
@@ -23,7 +25,7 @@ void ObjEaseAnimationData::InitWithCategory(const std::string& animationName, co
     InitParams();
 }
 
-void ObjEaseAnimationData::Update(const float& speedRate) {
+void ObjEaseAnimationData::Update(float speedRate) {
     if (playState_ != PlayState::PLAYING) {
         return;
     }
@@ -31,7 +33,7 @@ void ObjEaseAnimationData::Update(const float& speedRate) {
     UpdateActiveSection(speedRate);
 }
 
-void ObjEaseAnimationData::UpdateActiveSection(const float& speedRate) {
+void ObjEaseAnimationData::UpdateActiveSection(float speedRate) {
     if (sectionElements_.empty()) {
         return;
     }
@@ -65,19 +67,20 @@ void ObjEaseAnimationData::UpdateKeyFrameProgression() {
 
 void ObjEaseAnimationData::AdvanceToNexTSequenceElement() {
     if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size()) - 1) {
+        // 前のセクションの最終値を取得
+        Vector3 startScale       = sectionElements_[activeKeyFrameIndex_]->GetCurrentScale();
+        Vector3 startRotation    = sectionElements_[activeKeyFrameIndex_]->GetCurrentRotation();
+        Vector3 startTranslation = sectionElements_[activeKeyFrameIndex_]->GetCurrentTranslation();
+
+        // 次のセクションへ進む
         activeKeyFrameIndex_++;
 
         if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-            // 前のキーフレームの最終値を次のキーフレームの開始値として設定
-            Vector3 startScale       = GetActiveKeyFrameValue(TransformType::Scale);
-            Vector3 startRotation    = GetActiveKeyFrameValue(TransformType::Rotation);
-            Vector3 startTranslation = GetActiveKeyFrameValue(TransformType::Translation);
-
+            // 次のセクションの開始値として設定
             sectionElements_[activeKeyFrameIndex_]->SetStartValues(startScale, startRotation, startTranslation);
         }
     }
 }
-
 void ObjEaseAnimationData::Reset() {
     // 全てのキーフレームをリセット
     for (auto& section : sectionElements_) {
@@ -93,8 +96,8 @@ void ObjEaseAnimationData::Reset() {
 void ObjEaseAnimationData::Play() {
     BaseEffectData::Play();
 
-    Vector3 scale = originalValues_[static_cast<size_t>(TransformType::Scale)];
-    Vector3 rotate = originalValues_[static_cast<size_t>(TransformType::Rotation)];
+    Vector3 scale     = originalValues_[static_cast<size_t>(TransformType::Scale)];
+    Vector3 rotate    = originalValues_[static_cast<size_t>(TransformType::Rotation)];
     Vector3 transform = originalValues_[static_cast<size_t>(TransformType::Translation)];
 
     // 全てのキーフレームをリセット
@@ -102,7 +105,7 @@ void ObjEaseAnimationData::Play() {
         section->StartWaiting();
         section->SetStartValues(scale, rotate, transform);
     }
- }
+}
 
 void ObjEaseAnimationData::RegisterParams() {
     // originalValues_をパラメータとして登録
@@ -117,17 +120,15 @@ void ObjEaseAnimationData::GetParams() {
         std::string srtName = GetSRTName(static_cast<TransformType>(i));
         originalValues_[i]  = globalParameter_->GetValue<Vector3>(groupName_, "Original_" + srtName);
     }
-  
 }
 
 void ObjEaseAnimationData::InitParams() {
     playState_              = PlayState::STOPPED;
     activeKeyFrameIndex_    = 0;
     isAllKeyFramesFinished_ = false;
-
 }
 
-std::unique_ptr<ObjEaseAnimationSection> ObjEaseAnimationData::CreateKeyFrame(const int32_t& index) {
+std::unique_ptr<ObjEaseAnimationSection> ObjEaseAnimationData::CreateKeyFrame(int32_t index) {
     auto keyFrame = std::make_unique<ObjEaseAnimationSection>();
     keyFrame->Init(groupName_, categoryName_, index);
     return keyFrame;
@@ -213,6 +214,10 @@ void ObjEaseAnimationData::AdjustParam() {
     ImGui::Text("Rotation: (%.2f, %.2f, %.2f)", currentRot.x, currentRot.y, currentRot.z);
     ImGui::Text("Translation: (%.2f, %.2f, %.2f)", currentTrans.x, currentTrans.y, currentTrans.z);
 
+    ImGui::Separator();
+    if (ImGui::Button("Play this Date")) {
+        Play();
+    }
 
     // KeyFrame Controls
     ImGui::Separator();

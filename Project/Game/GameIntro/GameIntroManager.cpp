@@ -11,7 +11,7 @@
 void GameIntroManager::Init() {
 
     // GlobalParameter
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     BindParam();
     globalParameter_->SyncParamForGroup(groupName_);
@@ -40,7 +40,7 @@ void GameIntroManager::Update() {
     ProcessInput();
 
     // 再生スピード
-    const float playSpeed = Frame::DeltaTime() * currentPlaySpeedRate_;
+    const float playSpeed = KetaEngine::Frame::DeltaTime() * currentPlaySpeedRate_;
 
     // イントロ更新
     UpdateCurrentIntro(playSpeed);
@@ -125,7 +125,7 @@ bool GameIntroManager::IsAllIntroFinished() const {
 }
 
 void GameIntroManager::ProcessInput() {
-    Input* input = Input::GetInstance();
+    KetaEngine::Input* input = KetaEngine::Input::GetInstance();
 
     if (input->TriggerKey(KeyboardKey::F) || input->IsPressPad(0, GamepadButton::A)) {
         currentPlaySpeedRate_ = fastSpeedRate_;
@@ -134,7 +134,7 @@ void GameIntroManager::ProcessInput() {
     }
 }
 
-void GameIntroManager::UpdateCurrentIntro(const float& speed) {
+void GameIntroManager::UpdateCurrentIntro(float speed) {
     if (currentIndex_ >= static_cast<int>(introSequences_.size())) {
         return;
     }

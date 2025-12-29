@@ -34,13 +34,13 @@ public:
     /// </summary>
     /// <param name="scale">スケール</param>
     /// <param name="alpha">アルファ値</param>
-    void Update(const Vector2& scale, const float& alpha);
+    void Update(const Vector2& scale, float alpha);
 
     /// <summary>
     /// 数値の計算
     /// </summary>
     /// <param name="value">値</param>
-    void CalculateNumber(const int32_t& value);
+    void CalculateNumber(int32_t value);
 
     /// <summary>
     /// グループ名の作成
@@ -53,7 +53,7 @@ public:
 
 private:
     ///* globalParameter *//
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
 
     ///* parameter *//
@@ -67,7 +67,7 @@ private:
     bool isVisible_;
 
     ///* Sprite *//
-    std::unique_ptr<Sprite> sprite_;
+    std::unique_ptr<KetaEngine::Sprite> sprite_;
 
 public:
     ///* Getter *//

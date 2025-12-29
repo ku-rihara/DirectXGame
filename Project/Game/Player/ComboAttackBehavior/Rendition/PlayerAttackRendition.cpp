@@ -16,12 +16,21 @@ void PlayerAttackRendition::Reset() {
     currentTime_ = 0.0f;
     isPlayed_.fill(false);
     isObjAnimPlayed_.fill(false);
-  
 }
 
-void PlayerAttackRendition::Update(const float& deltaTime) {
+void PlayerAttackRendition::Update(float deltaTime) {
     if (!pPlayer_ || !playerComboAttackData_) {
         return;
+    }
+
+    if (!isRendition_) {
+        PlayRendition();
+        isRendition_ = true;
+    }
+
+    if (isBlur_) {
+        rushBlurEase_.Update(KetaEngine::Frame::DeltaTime());
+        KetaEngine::PostEffectRenderer::GetInstance()->GetRadialBlur()->SetBlurWidth(tempBlurParam_);
     }
 
     currentTime_ += deltaTime;
@@ -93,11 +102,15 @@ void PlayerAttackRendition::Update(const float& deltaTime) {
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::RightHand:
-                pPlayer_->GetRightHand()->GetObject3D()->transform_.PlayObjEaseAnimation("Player", param.fileName);
+                pPlayer_->GetRightHand()->GetObject3D()->transform_.PlayObjEaseAnimation("RightHand", param.fileName);
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::LeftHand:
-                pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation("Player", param.fileName);
+                pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation("LeftHand", param.fileName);
+                break;
+
+            case PlayerAttackRenditionData::ObjAnimationType::MainHead:
+                pPlayer_->MainHeadAnimationStart(param.fileName);
                 break;
 
             default:
@@ -107,5 +120,35 @@ void PlayerAttackRendition::Update(const float& deltaTime) {
             // 再生済みに設定
             isObjAnimPlayed_[i] = true;
         }
+    }
+}
+
+void PlayerAttackRendition::PlayRendition() {
+    // ごり押し演出追加処理(絶対消す)
+    std::string name = playerComboAttackData_->GetGroupName();
+    bool usHit       = pPlayer_->GetPlayerCollisionInfo()->GetIsHit();
+
+    if (name == "FallRandingAttack") {
+        pPlayer_->GetEffects()->FallEffectRenditionInit();
+    }
+
+    if (name == "UpperAttack" && usHit) {
+        pPlayer_->GetEffects()->SpecialAttackRenditionInit();
+    }
+
+    if (name == "FallAntipation") {
+        pPlayer_->GetEffects()->SpecialAttackRenditionInit();
+    }
+
+    if (name == "RushAttack") {
+        rushBlurEase_.Init("RushBlur.json");
+        rushBlurEase_.SetAdaptValue(&tempBlurParam_);
+        isBlur_ = true;
+        KetaEngine::PostEffectRenderer::GetInstance()->SetPostEffectMode(KetaEngine::PostEffectMode::RADIALBLUR);
+
+        rushBlurEase_.SetOnWaitEndCallback([this]() {
+            KetaEngine::PostEffectRenderer::GetInstance()->SetPostEffectMode(KetaEngine::PostEffectMode::NONE);
+        });
+        pPlayer_->GetEffects()->RushAttackRingEffectEmit();
     }
 }

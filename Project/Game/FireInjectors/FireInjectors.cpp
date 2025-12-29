@@ -5,12 +5,12 @@
 
 void FireInjectors::Init() {
 
-    putObjForBlender_ = std::make_unique<PutObjForBlender>();
+    putObjForBlender_ = std::make_unique<KetaEngine::PutObjForBlender>();
     putObjForBlender_->LoadJsonFile("FireInjectors.json");
     putObjForBlender_->EasingAllReset();
 
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
@@ -40,10 +40,10 @@ void FireInjectors::Update() {
 }
 
 void FireInjectors::Spawn() {
-    putObjForBlender_->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
+    putObjForBlender_->EasingUpdateSelectGroup(KetaEngine::Frame::DeltaTime(), 0);
 }
 void FireInjectors::Launch() {
-    putObjForBlender_->EasingUpdateSelectGroup(Frame::DeltaTime(), 1);
+    putObjForBlender_->EasingUpdateSelectGroup(KetaEngine::Frame::DeltaTime(), 1);
 }
 
 

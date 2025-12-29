@@ -45,7 +45,7 @@ void EnemySpawn::Update() {
         ///------------------------------------------------------------------
     case EnemySpawn::Step::SPAWN:
 
-        spawnEasing_.Update(Frame::DeltaTimeRate());
+        spawnEasing_.Update(KetaEngine::Frame::DeltaTimeRate());
         pBaseEnemy_->SetScale(tempEnemyScale_);
 
             break;

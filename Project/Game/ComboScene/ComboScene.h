@@ -5,6 +5,7 @@
 class Player;
 class Combo;
 class ComboLevelObjHolder;
+class AudienceController;
 
 /// <summary>
 /// コンボシーンの制御クラス
@@ -27,24 +28,28 @@ public:
 
     void CheckIsLevelUp(); //< レベルアップチェック
     void LevelUp();        //< レベルアップ処理
-    void LevelReset();     //< レベルリセット
+    void LevelReset();    //< レベルリセット
 
 private:
     // メンバ関数のポインタ配列
     static void (ComboScene::* spFuncTable_[])();
 
+    int32_t GetComboLevelZeroStart();
+
 private:
     Player* pPlayer_                          = nullptr;
     Combo* pCombo_                            = nullptr;
     ComboLevelObjHolder* comboLevelObjHolder_ = nullptr;
-    const int32_t levelOffset_                = 1;
+    AudienceController* audienceController_   = nullptr;
+
+    const int32_t levelOffset_ = 1;
 
     State state_ = State::CHECK;
 
 public:
-
     // setter
     void SetPlayer(Player* player);
     void SetCombo(Combo* combo);
     void SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder);
+    void SetAudienceController(AudienceController* audienceController);
 };

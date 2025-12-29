@@ -27,7 +27,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="playSpeed">再生速度</param>
-    virtual void Update(const float& playSpeed);
+    virtual void Update(float playSpeed);
 
     // Param Edit
     virtual void RegisterParams();            //< パラメータバインド
@@ -35,7 +35,7 @@ public:
     virtual void AdjustUniqueParam() = 0; //< 固有パラメータ調整
 
 protected:
-    GlobalParameter* globalParameter_ = nullptr;
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_;
     FireInjectors* pFireInjectors_               = nullptr;
     GameCamera* pGameCamera_                     = nullptr;

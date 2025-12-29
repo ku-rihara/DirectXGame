@@ -8,6 +8,8 @@
 /// <summary>
 /// イージングステップのシーケンス管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class EasingSequence {
 public:
     EasingSequence()  = default;
@@ -32,7 +34,7 @@ public:
     /// シーケンスの更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// 全ステップに基準値を設定
@@ -56,6 +58,8 @@ private:
 public:
     const size_t& GetCurrentIndex() const { return currentStep_; }
     const size_t& GetStepCount() const { return steps_.size(); }
-    void SetLoop(const bool& loop) { loop_ = loop; }
+    void SetLoop(bool loop) { loop_ = loop; }
     void SetOnAllFinishCallback(std::function<void()> callBack) { onAllFinishCallback_ = callBack; }
 };
+
+}; // KetaEngine

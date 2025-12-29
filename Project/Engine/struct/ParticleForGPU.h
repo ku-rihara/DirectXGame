@@ -4,6 +4,8 @@
 #include <cstdint>
 
 
+namespace KetaEngine {
+
 struct ParticleFprGPU {
     Matrix4x4 WVP;
     Matrix4x4 World;
@@ -14,3 +16,5 @@ struct ParticleFprGPU {
     uint32_t isFlipY;
 };
 
+
+}; // KetaEngine

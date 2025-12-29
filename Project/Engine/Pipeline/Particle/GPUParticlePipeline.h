@@ -9,6 +9,8 @@
 /// <summary>
 /// GPUパーティクル描画パイプラインクラス
 /// </summary>
+namespace KetaEngine {
+
 class GPUParticlePipeline : public BasePipeline {
 public:
     GPUParticlePipeline()  = default;
@@ -52,3 +54,5 @@ public:
     ID3D12PipelineState* GetGrahipcsPipeLileStateAdd() const { return graphicsPipelineStateAdd_.Get(); }
     ID3D12PipelineState* GetGrahipcsPipeLileStateNone() const { return graphicsPipelineStateNone_.Get(); }
 };
+
+}; // KetaEngine

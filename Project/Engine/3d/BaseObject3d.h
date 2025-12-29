@@ -13,6 +13,8 @@
 /// <summary>
 /// 3Dオブジェクトの基底クラス
 /// </summary>
+namespace KetaEngine {
+
 class BaseObject3d {
 public:
     ///========================================================================================
@@ -68,14 +70,16 @@ protected:
 public:
     //*----------------------  Getter Methods ----------------------*//
     Model* GetModelPtr() { return model_; }
-    const int32_t& GetTextureIndex() const { return textureIndex_; }
-    const bool& GetIsAutoUpdate() const { return isAutoUpdate_; }
+    int32_t GetTextureIndex() const { return textureIndex_; }
+    bool GetIsAutoUpdate() const { return isAutoUpdate_; }
     //*----------------------  Setter Methods ----------------------*//
-    void SetIsDraw(const bool& is) { isDraw_ = is; }
-    void SetIsAutoUpdate(const bool& is) { isAutoUpdate_ = is; }
+    void SetIsDraw(bool is) { isDraw_ = is; }
+    void SetIsAutoUpdate(bool is) { isAutoUpdate_ = is; }
     void SetModel(Model* model) { model_ = model; }
     void SetBlendMode(const BlendMode& mode) { blendMode = mode; }
     void SetwvpDate(const Matrix4x4& date) { wvpDate_->WVP = date; }
     void SetWorldMatrixDate(const Matrix4x4& date) { wvpDate_->World = date; }
-    void SetIsShadow(const bool& is) { isShadow_ = is; }
+    void SetIsShadow(bool is) { isShadow_ = is; }
 };
+
+}; // KetaEngine

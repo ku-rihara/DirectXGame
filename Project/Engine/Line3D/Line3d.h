@@ -8,6 +8,8 @@
 #include <vector>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct Vertex {
     Vector3 pos;
     Vector4 color;
@@ -46,7 +48,7 @@ public:
     /// <param name="center">中心座標</param>
     /// <param name="radius">半径</param>
     /// <param name="color">色</param>
-    void SetSphereWireframe(const Vector3& center, const float& radius, const Vector4& color);
+    void SetSphereWireframe(const Vector3& center, float radius, const Vector4& color);
 
     /// <summary>
     /// 立方体のワイヤーフレーム描画
@@ -78,3 +80,5 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> constantBufferResource_; //< 定数バッファ
     CBuffer* cBufferData_ = nullptr;                                //< 定数バッファデータ
 };
+
+}; // KetaEngine

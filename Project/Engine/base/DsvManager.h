@@ -6,6 +6,8 @@
 /// <summary>
 /// DSV管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class DsvManager {
 public:
     DsvManager()  = default;
@@ -44,7 +46,7 @@ public:
     /// </summary>
     /// <param name="index">インデックス</param>
     /// <returns>CPUデスクリプタハンドル</returns>
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(const uint32_t& index);
+    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
 
     /// <summary>
     /// DSV作成
@@ -52,7 +54,7 @@ public:
     /// <param name="index">インデックス</param>
     /// <param name="resource">リソース</param>
     /// <param name="desc">DSVデスク</param>
-    void Create(const uint32_t& index, ID3D12Resource* resource, D3D12_DEPTH_STENCIL_VIEW_DESC* desc);
+    void Create(uint32_t index, ID3D12Resource* resource, D3D12_DEPTH_STENCIL_VIEW_DESC* desc);
 
 private:
     ///=========================================
@@ -76,7 +78,7 @@ public:
     /// getter method
     ///===================================================================
 
-    const uint32_t& GetDescriptorSize() const { return descriptorSize_; }
+    uint32_t GetDescriptorSize() const { return descriptorSize_; }
     ID3D12DescriptorHeap* GetDescriptorHeap() const { return descriptorHeap_.Get(); }
 
     ///===================================================================
@@ -84,3 +86,5 @@ public:
     ///===================================================================
     void SetDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& srv) { descriptorHeap_ = srv; }
 };
+
+}; // KetaEngine

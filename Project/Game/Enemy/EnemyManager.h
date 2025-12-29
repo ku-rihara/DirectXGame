@@ -39,8 +39,8 @@ public:
     void CheckIsEnemiesCleared();
 
     // 敵の生成
-    void SpawnEnemy(const std::string& enemyType, const Vector3& position, const int32_t& groupID);
-    void HpBarUpdate(const ViewProjection& viewProjection);
+    void SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID);
+    void HpBarUpdate(const KetaEngine::ViewProjection& viewProjection);
 
     // Particle Effect
     void DamageEffectShot(const Vector3& pos);
@@ -59,7 +59,7 @@ public:
 private: // struct
     struct ParticleEffect {
         std::string name;
-        std::unique_ptr<ParticleEmitter> emitter;
+        std::unique_ptr<KetaEngine::ParticleEmitter> emitter;
     };
 
 private: // json
@@ -67,7 +67,7 @@ private: // json
 
 private:
     // globalParameter
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Enemies";
     std::array<BaseEnemy::Parameter, 2> parameters_;
 
@@ -103,7 +103,7 @@ private: // Particle
     std::array<ParticleEffect, 4> damageEffect;
     std::array<ParticleEffect, 2> spawnEffectNormal_;
     std::array<ParticleEffect, 2> spawnEffectStrong_;
-    std::unique_ptr<ParticleEmitter> fallCrack_;
+    std::unique_ptr<KetaEngine::ParticleEmitter> fallCrack_;
 
 public:
     ///========================================================

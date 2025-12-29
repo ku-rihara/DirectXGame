@@ -1,9 +1,11 @@
 #include "CameraEditor.h"
+
+using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <filesystem>
 #include <imgui.h>
 
-void CameraEditor::Init(const std::string& animationName, const bool& isUseCategory) {
+void CameraEditor::Init(const std::string& animationName, bool isUseCategory) {
     BaseEffectEditor::Init(animationName, isUseCategory);
 
     preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));
@@ -13,21 +15,25 @@ void CameraEditor::Init(const std::string& animationName, const bool& isUseCateg
     preViewFollowObj_->SetIsDraw(false);
 }
 
-void CameraEditor::Update(const float& speedRate) {
+void CameraEditor::Update(float speedRate) {
     // 未使用
     speedRate;
 
-    for (auto& cAnime : effects_) {
-        cAnime->Update();
+    if (!viewProjection_) {
+        return;
     }
 
+    BaseEffectEditor::Update(speedRate);
+
     // 自動でViewProjectionに適用
-    if (autoApplyToViewProjection_ && viewProjection_) {
+    if (autoApplyToViewProjection_) {
         ApplyToViewProjection();
+    } else if (keyFramePreviewMode_) {
+        ApplySelectedKeyFrameToViewProjection();
     }
 
     // debugObjectの更新
-    if (preViewCameraObj_ && viewProjection_) {
+    if (preViewCameraObj_) {
         preViewCameraObj_->transform_.translation_ = preViewFollowObj_->transform_.translation_ + viewProjection_->translation_ + viewProjection_->positionOffset_;
         preViewCameraObj_->transform_.rotation_    = preViewFollowObj_->transform_.rotation_ + viewProjection_->rotation_ + viewProjection_->rotationOffset_;
     }
@@ -109,10 +115,6 @@ void CameraEditor::RenderSpecificUI() {
         ImGui::Separator();
 
         BaseEffectEditor::RenderPlayBack();
-
-        if (keyFramePreviewMode_) {
-            ApplySelectedKeyFrameToViewProjection();
-        }
     }
 }
 

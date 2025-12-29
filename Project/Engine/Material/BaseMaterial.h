@@ -6,6 +6,8 @@
 #include <string>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 
 /// <summary>
@@ -41,6 +43,8 @@ protected:
     Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 
 public:
-    virtual void SetShininess(const float& shininess)                           = 0;
-    virtual void SetEnvironmentCoefficient(const float& environmentCoefficient) = 0;
+    virtual void SetShininess(float shininess)                           = 0;
+    virtual void SetEnvironmentCoefficient(float environmentCoefficient) = 0;
 };
+
+}; // KetaEngine

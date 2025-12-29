@@ -3,6 +3,8 @@
 #include <d3d12.h>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct ConstBufferDataObjectColor {
     Vector4 color_;
 };
@@ -35,3 +37,5 @@ public:
     const Vector4& GetColor() const { return color_; }
     void SetColor(const Vector4& color) { color_ = color; }
 };
+
+}; // KetaEngine

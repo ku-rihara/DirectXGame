@@ -12,19 +12,20 @@ class Combo;
 /// </summary>
 class FireInjectors {
 public:
+
     // 初期化、更新
     void Init();
     void Update();
 
-    void Spawn(); //< 生成
+    void Spawn();  //< 生成
     void Launch(); //< 発射
 
-    void AdjustParam(); //< パラメータ調整
+    void AdjustParam();    //< パラメータ調整
     void RegisterParams(); //< パラメータバインド
 
 private:
-    std::unique_ptr<PutObjForBlender> putObjForBlender_ = nullptr;
-    GlobalParameter* globalParameter_;
+    std::unique_ptr<KetaEngine::PutObjForBlender> putObjForBlender_ = nullptr;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "FireInjectors";
     Combo* pCombo_;
     int32_t fireShotComboNum_;

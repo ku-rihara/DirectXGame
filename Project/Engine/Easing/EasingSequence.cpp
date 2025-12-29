@@ -1,5 +1,7 @@
 #include "EasingSequence.h"
 
+using namespace KetaEngine;
+
 template <typename T>
 void EasingSequence::AddStep(const std::string& name, T* adaptValue) {
     auto step = std::make_unique<EasingStep<T>>();
@@ -63,7 +65,7 @@ void EasingSequence::Reset() {
     }
 }
 
-void EasingSequence::Update(const float& deltaTime) {
+void EasingSequence::Update(float deltaTime) {
     if (steps_.empty()) {
         return;
     }

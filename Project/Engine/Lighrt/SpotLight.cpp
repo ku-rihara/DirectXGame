@@ -1,4 +1,6 @@
 #include "SpotLight.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include <imgui.h>
 
@@ -45,7 +47,7 @@ void SpotLight::AdjustParam() {
         ImGui::ColorEdit4(" Color", (float*)&lightData_->color);
         ImGui::DragFloat3(" Pos", (float*)&tempPos_, 0.01f);
         ImGui::DragFloat3(" Direction", (float*)&lightData_->direction, 0.01f);
-        lightData_->direction = Vector3::Normalize(lightData_->direction);
+        lightData_->direction = lightData_->direction.Normalize();
         ImGui::DragFloat("  Distance", (float*)&lightData_->distance, 0.01f);
         ImGui::DragFloat("  intenesity", (float*)&lightData_->intensity, 0.01f);
         ImGui::DragFloat("  decay", (float*)&lightData_->decay, 0.01f);

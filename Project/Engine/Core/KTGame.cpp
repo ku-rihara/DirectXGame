@@ -1,4 +1,6 @@
 #include "KTGame.h"
+
+using namespace KetaEngine;
 /// Scene
 #include "2d/SpriteRegistry.h"
 #include "3d/Object3DRegistry.h"
@@ -24,8 +26,8 @@ void KTGame::Init() {
     // タイトルから始める
     pSceneManager_ = SceneManager::GetInstance();
     pSceneManager_->SetSceneFactory(sceneFactory_.get());
+  
     pSceneManager_->ChangeScene("TITLE");
-    /*pSceneManager_->ChangeScene("GAMEPLAY");*/
 }
 
 // =============================================================

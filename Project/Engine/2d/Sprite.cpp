@@ -1,4 +1,6 @@
 #include "Sprite.h"
+
+using namespace KetaEngine;
 #include "base/TextureManager.h"
 #include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
@@ -11,7 +13,7 @@ Sprite::~Sprite() {
     }
 }
 
-Sprite* Sprite::Create(const std::string& textureName, const bool& isAbleEdit) {
+Sprite* Sprite::Create(const std::string& textureName, bool isAbleEdit) {
     // 新しいSpriteインスタンスを作成
     std::unique_ptr<Sprite> sprite = std::make_unique<Sprite>();
 
@@ -22,7 +24,7 @@ Sprite* Sprite::Create(const std::string& textureName, const bool& isAbleEdit) {
     return sprite.release();
 }
 
-void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEditor) {
+void Sprite::ParamEditorSet(const std::string& textureName, bool isAbleEditor) {
     if (!isAbleEditor) {
         return;
     }
@@ -272,6 +274,6 @@ void Sprite::SetColor(const Vector3& color) {
     material_.materialData_->color.z = color.z;
 }
 
-void Sprite::SetAlpha(const float& alpha) {
+void Sprite::SetAlpha(float alpha) {
     material_.materialData_->color.w = alpha;
 }

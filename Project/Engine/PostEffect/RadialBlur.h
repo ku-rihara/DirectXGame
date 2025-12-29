@@ -8,6 +8,8 @@
 /// <summary>
 /// ラジアルブラーポストエフェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class RadialBlur : public BasePostEffect {
 public:
     struct ParamData {
@@ -58,3 +60,5 @@ public:
         }
     }
 };
+
+}; // KetaEngine

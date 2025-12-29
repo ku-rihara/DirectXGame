@@ -10,6 +10,8 @@
 /// <summary>
 /// シェイクデータ
 /// </summary>
+namespace KetaEngine {
+
 class ShakeData : public BaseEffectData {
 public:
     enum class ShakeType {
@@ -36,7 +38,7 @@ public:
 
     // BaseEffectDataからのオーバーライド
     void Init(const std::string& shakeName) override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
     void LoadData() override;
@@ -85,3 +87,5 @@ public:
 
     void SetAxisFlag(const AxisFlag& flag) { axisFlag_ = static_cast<int32_t>(flag); }
 };
+
+}; // KetaEngine

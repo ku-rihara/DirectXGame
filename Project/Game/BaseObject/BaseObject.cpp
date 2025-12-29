@@ -6,7 +6,6 @@ void BaseObject::Init() {
 
 void BaseObject::Update() {
     baseTransform_.UpdateMatrix();
-    baseTransform_.UpdateObjEaseAnimation();
 }
 
 Vector3 BaseObject::GetWorldPosition() const {

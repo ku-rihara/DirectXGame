@@ -5,7 +5,7 @@
 void Combo::Init() {
 
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
@@ -32,6 +32,8 @@ void Combo::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
+        DebugMode();
+
         ImGui::SeparatorText("Combo Parameter");
         ImGui::DragFloat("Combo Time Max", &comboTimeMax_, 0.01f);
         for (int32_t i = 0; i < kComboLevel; ++i) {
@@ -45,9 +47,25 @@ void Combo::AdjustParam() {
         ImGui::PopID();
     }
 
+     if (isStopComboTime_) {
+        comboTime_ = comboTimeMax_;
+    }
+
 #endif // _DEBUG
 
     uiController_->AdjustParam();
+}
+
+void Combo::DebugMode() {
+   
+    if (ImGui::TreeNode("DebugMode")) {
+        if (ImGui::Button("CountUP")) {
+            ComboCountUP();
+        }
+        ImGui::Checkbox("isStopComboTime", &isStopComboTime_);
+        ImGui::TreePop();
+    }
+
 }
 
 void Combo::RegisterParams() {
@@ -71,9 +89,9 @@ void Combo::LevelUp() {
 }
 
 void Combo::ComboTimerDecrement() {
-    comboTime_ -= Frame::DeltaTimeRate();
+    comboTime_ -= KetaEngine::Frame::DeltaTimeRate();
 
-    //コンボが途切れたらリセット
+    // コンボが途切れたらリセット
     if (comboCount_ == 0) {
         return;
     }

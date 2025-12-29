@@ -22,7 +22,7 @@ public:
     /// </summary>
     /// <param name="pPlayer">プレイヤー</param>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    void Update(Player* pPlayer, const ViewProjection& viewProjection);
+    void Update(Player* pPlayer, const KetaEngine::ViewProjection& viewProjection);
 
 private:
     std::unique_ptr<LockOn> lockOn_ = nullptr;

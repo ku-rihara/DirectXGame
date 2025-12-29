@@ -1,5 +1,5 @@
 #include "ComboAttackRoot.h"
-#include "DynamicComboAttack.h"
+#include "ComboAttackAction.h"
 #include "input/Input.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
@@ -7,24 +7,26 @@
 
 // 初期化
 ComboAttackRoot::ComboAttackRoot(Player* player)
-    : BaseComboAattackBehavior("ComboAttackRoot", player) {
+    : BaseComboAttackBehavior("ComboAttackRoot", player) {
     Init();
 }
 
 ComboAttackRoot::~ComboAttackRoot() {}
 
 void ComboAttackRoot::Init() {
-    pPlayer_->SetHeadScale(Vector3::OneVector());
-    pPlayer_->RotateReset();
+    pOwner_->SetHeadScale(Vector3::OneVector());
+    pOwner_->RotateReset();
     attackPatern_ = AttackPatern::NORMAL;
 }
 
-void ComboAttackRoot::Update() {
+void ComboAttackRoot::Update(float atkSpeed) {
+    atkSpeed; // 未使用
+
     // 現在の状態を判定
     JudgeAttackPattern();
 
     // 攻撃コントローラーを取得
-    PlayerComboAttackController* controller = pPlayer_->GetComboAttackController();
+    PlayerComboAttackController* controller = pOwner_->GetComboAttackController();
     if (!controller) {
         return;
     }
@@ -39,7 +41,7 @@ void ComboAttackRoot::Update() {
 
         auto& attackParam  = attackPtr->GetAttackParam();
         auto& triggerParam = attackParam.triggerParam;
-    
+
         // isFirstAttackがtrueの攻撃のみ対象
         if (!triggerParam.isFirstAttack) {
             continue;
@@ -54,19 +56,19 @@ void ComboAttackRoot::Update() {
         bool triggered = false;
 
         // キーボード入力チェック
-        if (Input::GetInstance()->TriggerKey(FromDIKCode(triggerParam.keyBordBottom))) {
+        if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(triggerParam.keyBordBottom))) {
             triggered = true;
         }
 
         // ゲームパッド入力チェック
-        if (Input::IsTriggerPad(0, FromXInputButtonFlag(triggerParam.gamePadBottom))) {
+        if (KetaEngine::Input::IsTriggerPad(0, FromXInputButtonFlag(triggerParam.gamePadBottom))) {
             triggered = true;
         }
 
         // トリガーされたら攻撃開始
         if (triggered) {
-            pPlayer_->ChangeComboBehavior(
-                std::make_unique<DynamicComboAttack>(pPlayer_, attackPtr.get()));
+            pOwner_->ChangeComboBehavior(
+                std::make_unique<ComboAttackAction>(pOwner_, attackPtr.get()));
             return; // 最初にマッチした攻撃を実行
         }
     }
@@ -93,7 +95,7 @@ bool ComboAttackRoot::CheckConditionMuch(const PlayerComboAttackData::TriggerCon
 
 void ComboAttackRoot::JudgeAttackPattern() {
     // ジャンプ中かどうかで判定
-    if (dynamic_cast<PlayerJump*>(pPlayer_->GetBehavior())) {
+    if (dynamic_cast<PlayerJump*>(pOwner_->GetBehavior())) {
         attackPatern_ = AttackPatern::JUMP;
     } else {
         attackPatern_ = AttackPatern::NORMAL;
@@ -101,5 +103,4 @@ void ComboAttackRoot::JudgeAttackPattern() {
 }
 
 void ComboAttackRoot::Debug() {
-
 }

@@ -27,6 +27,8 @@ public:
         int32_t easeType = 0;
         float easeTime;
         bool isAbleInputMoving;
+        bool isPositionYSelect;
+        float finishTimeOffset;
     };
 
     // コリジョンパラメータ
@@ -54,6 +56,12 @@ public:
         TriggerCondition condition;
         int32_t keyBordBottom;
         int32_t gamePadBottom;
+        bool requireHit;
+    };
+
+    // 落下パラメータ
+    struct FallParam {
+        bool enableFall;
     };
 
     // アタックパラメータ
@@ -62,9 +70,11 @@ public:
         MoveParam moveParam;
         TimingParam timingParam;
         TriggerParam triggerParam;
+        FallParam fallParam;
         float knockBackPower;
         float power;
         float blowYPower;
+        bool isMotionOnly = false;
         std::string nextAttackType;
     };
 
@@ -88,9 +98,9 @@ public:
     void LoadData();
     void SaveData();
 
-    bool IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger);
-    bool IsWaitFinish(const float& currentTime);
-    bool IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger);
+    bool IsReserveNextAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
+    bool IsWaitFinish(float currentTime);
+    bool IsCancelAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
 
 private:
     //*-------------------------------- private Method --------------------------------*//
@@ -101,12 +111,12 @@ private:
 private:
     //*-------------------------------- Private variants--------------------------------*//
 
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_ = "AttackCreator";
 
     PlayerAttackRenditionData renditionData_;
-    FileSelector fileSelector_;
+    KetaEngine::FileSelector fileSelector_;
 
     // 攻撃パラメータ
     AttackParameter attackParam_;
@@ -119,5 +129,6 @@ public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
     const AttackParameter& GetAttackParam() const { return attackParam_; }
+    AttackParameter& GetAttackParam() { return attackParam_; }
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
 };

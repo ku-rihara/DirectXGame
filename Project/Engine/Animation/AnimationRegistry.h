@@ -5,6 +5,8 @@
 #include <vector>
 
 // 前方宣言
+namespace KetaEngine {
+
 class Object3DAnimation;
 class ViewProjection;
 
@@ -39,7 +41,7 @@ public:
     /// 登録された全てのアニメーションを更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void UpdateAll(const float& deltaTime);
+    void UpdateAll(float deltaTime);
 
     /// <summary>
     /// 全アニメーションを描画
@@ -73,3 +75,5 @@ private:
 public:
     const size_t& GetRegisteredCount() const { return animations_.size(); }
 };
+
+}; // KetaEngine

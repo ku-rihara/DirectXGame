@@ -2,8 +2,8 @@
 #include <cassert>
 #include <imgui.h>
 
-void EnemyDamageRenditionData::Init(const std::string& groupName, const int32_t& renditionIndex) {
-    globalParameter_       = GlobalParameter::GetInstance();
+void EnemyDamageRenditionData::Init(const std::string& groupName, int32_t renditionIndex) {
+    globalParameter_       = KetaEngine::GlobalParameter::GetInstance();
     currentRenditionIndex_ = renditionIndex;
 
     // グループ名を設定
@@ -51,6 +51,6 @@ void EnemyDamageRenditionData::AdjustParam() {
 
 void EnemyDamageRenditionData::SelectObjAnimationFile(
     const char* label,
-    std::pair<ObjAnimationParam, FileSelector>& param) {
+    std::pair<ObjAnimationParam, KetaEngine::FileSelector>& param) {
     param.second.SelectFile(label, objAnimationFolderPath_, param.first.fileName, "", true);
 }

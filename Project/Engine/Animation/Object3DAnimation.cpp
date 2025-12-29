@@ -1,4 +1,6 @@
 #include "Object3DAnimation.h"
+
+using namespace KetaEngine;
 #include "3d/ModelManager.h"
 #include "AnimationRegistry.h"
 #include "Dx/DirectXCommon.h"
@@ -90,6 +92,7 @@ void Object3DAnimation::ChangeAnimation(const std::string& animationName) {
             animationTime_         = 0.0f;
             currentTransitionTime_ = 0.0f;
             isChange_              = true;
+            hasLoopedThisFrame_    = false;
 
             return;
         }
@@ -99,10 +102,11 @@ void Object3DAnimation::ChangeAnimation(const std::string& animationName) {
 ///============================================================
 /// アニメーション時間設定
 ///============================================================
-void Object3DAnimation::SetAnimationTime(const float& time) {
+void Object3DAnimation::SetAnimationTime(float time) {
     if (!animations_.empty()) {
-        float duration = animations_[currentAnimationIndex_].duration;
-        animationTime_ = std::fmod(time, duration);
+        float duration      = animations_[currentAnimationIndex_].duration;
+        animationTime_      = std::fmod(time, duration);
+        hasLoopedThisFrame_ = false;
     }
 }
 
@@ -113,12 +117,13 @@ void Object3DAnimation::ResetAnimation() {
     animationTime_         = 0.0f;
     currentTransitionTime_ = 0.0f;
     isChange_              = false;
+    hasLoopedThisFrame_    = false;
 }
 
 ///============================================================
 /// 更新
 ///============================================================
-void Object3DAnimation::Update(const float& deltaTime) {
+void Object3DAnimation::Update(float deltaTime) {
     if (animations_.empty()) {
         return;
     }
@@ -137,9 +142,40 @@ void Object3DAnimation::Update(const float& deltaTime) {
 ///============================================================
 /// アニメーション更新
 ///============================================================
-void Object3DAnimation::UpdateAnimation(const float& deltaTime) {
+void Object3DAnimation::UpdateAnimation(float deltaTime) {
+    float prevTime = animationTime_;
     animationTime_ += deltaTime;
-    animationTime_ = std::fmod(animationTime_, animations_[currentAnimationIndex_].duration);
+
+    float duration      = animations_[currentAnimationIndex_].duration;
+    hasLoopedThisFrame_ = false;
+
+    // ループ処理
+    if (animationTime_ >= duration) {
+        if (isLoop_) {
+            // ループする場合
+            animationTime_      = std::fmod(animationTime_, duration);
+            hasLoopedThisFrame_ = true;
+
+            // コールバック実行
+            if (onAnimationEnd_) {
+                onAnimationEnd_(animations_[currentAnimationIndex_].name);
+            }
+        } else {
+            // ループしない場合、最後のフレームで停止
+            if (prevTime < duration) {
+                // 初めて終端に到達した時のみコールバック実行
+                animationTime_      = duration;
+                hasLoopedThisFrame_ = true;
+
+                if (onAnimationEnd_) {
+                    onAnimationEnd_(animations_[currentAnimationIndex_].name);
+                }
+            } else {
+                // すでに終端にいる場合はそのまま
+                animationTime_ = duration;
+            }
+        }
+    }
 
     if (isChange_) {
         AnimationTransition(deltaTime);
@@ -196,7 +232,7 @@ void Object3DAnimation::UpdateSkinCluster() {
 ///============================================================
 /// アニメーション遷移
 ///============================================================
-void Object3DAnimation::AnimationTransition(const float& deltaTime) {
+void Object3DAnimation::AnimationTransition(float deltaTime) {
     // 補間タイム加算
     currentTransitionTime_ += deltaTime / transitionDuration_;
     preAnimationTime_ += deltaTime;
@@ -360,11 +396,11 @@ const std::string& Object3DAnimation::GetCurrentAnimationName() const {
 ///============================================================
 /// 計算メソッド
 ///============================================================
-Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, const float& time) {
+Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
     return modelAnimation_->CalculateValue(keyframe, time);
 }
 
-Quaternion Object3DAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, const float& time) {
+Quaternion Object3DAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time) {
     return modelAnimation_->CalculateValueQuaternion(keyframe, time);
 }
 

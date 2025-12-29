@@ -1,10 +1,10 @@
 #pragma once
 
-#include"BaseComboAattackBehavior.h"
+#include"BaseComboAttackBehavior.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 
 
-class ComboAttackRoot : public BaseComboAattackBehavior {
+class ComboAttackRoot : public BaseComboAttackBehavior {
 
 private:
 	enum class AttackPatern {
@@ -14,7 +14,7 @@ private:
 private:
 
 	/// ===================================================
-	///private varians
+	///private variable
 	/// ===================================================
 
 	AttackPatern attackPatern_;
@@ -25,7 +25,7 @@ public:
 	~ComboAttackRoot();
 
 	void Init() override;
-	void Update()override;
+    void Update(float atkSpeed) override;
 	void Debug()override;
 
 	void JudgeAttackPattern(); //攻撃パターンの判断　

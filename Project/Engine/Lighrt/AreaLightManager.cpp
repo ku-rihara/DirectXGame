@@ -1,4 +1,6 @@
 #include "AreaLightManager.h"
+
+using namespace KetaEngine;
 #include"Dx/DirectXCommon.h"
 #include<imgui.h>
 #include<string>

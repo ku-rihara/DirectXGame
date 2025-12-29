@@ -1,4 +1,6 @@
 #include "WorldTransform.h"
+
+using namespace KetaEngine;
 #include "Animation/Object3DAnimation.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 
@@ -129,14 +131,14 @@ void WorldTransform::SetParent(const WorldTransform* parent) {
 
 Vector3 WorldTransform::LookAt(const Vector3& direction) const {
     // 引数の方向ベクトルを正規化
-    Vector3 normalizedDirection = Vector3::Normalize(direction);
+    Vector3 normalizedDirection = direction.Normalize();
 
     // 現在の行列を基にワールド方向を計算
     Matrix4x4 rotateMatrix = MakeRotateMatrix(rotation_);
     Vector3 worldDirection = TransformNormal(normalizedDirection, rotateMatrix);
 
     // 正規化して返す
-    return Vector3::Normalize(worldDirection);
+    return worldDirection.Normalize();
 }
 
 ///=====================================================
@@ -160,9 +162,7 @@ Vector3 WorldTransform::GetLocalPos() const {
 }
 
 void WorldTransform::UpdateAffineMatrix() {
-
-    // オフセット含めた合計を計算
-    const Vector3 scale       = scale_ * offsetTransform_.scale;
+    Vector3 scale             = ScaleCalc(isAdaptDirectScale_);
     const Vector3 rotation    = rotation_ + offsetTransform_.rotation;
     const Vector3 translation = translation_ + offsetTransform_.translation;
     Quaternion quaternion     = quaternion_ * offsetTransform_.quaternion;
@@ -284,7 +284,7 @@ Vector3 WorldTransform::GetForwardVector() const {
 }
 
 Vector3 WorldTransform::CalcForwardOffset(const Vector3& offsetValue) const {
-    
+
     // 向き(Y軸回転)を取得
     float playerRotationY    = rotation_.y;
     Matrix4x4 rotationMatrix = MakeRotateYMatrix(playerRotationY);
@@ -294,7 +294,14 @@ Vector3 WorldTransform::CalcForwardOffset(const Vector3& offsetValue) const {
     Vector3 worldMoveVector = TransformNormal(localMoveVector, rotationMatrix);
 
     // 目標位置を計算
-    return  worldMoveVector;
+    return worldMoveVector;
+}
+
+Vector3 WorldTransform::ScaleCalc(bool isDirectScale) {
+    if (!isDirectScale) {
+        return scale_ * offsetTransform_.scale;
+    }
+    return scale_;
 }
 
 ///============================================================
@@ -306,7 +313,7 @@ void WorldTransform::PlayObjEaseAnimation(const std::string& categoryName, const
         objEaseAnimationPlayer_->Init();
     }
 
-    objEaseAnimationPlayer_->PlayInCategory(categoryName, animationName);
+    objEaseAnimationPlayer_->Play(categoryName, animationName);
 
     // Rail使用時、親を設定
     if (objEaseAnimationPlayer_->GetAnimationData() && objEaseAnimationPlayer_->GetAnimationData()->GetIsUseRailActiveKeyFrame()) {
@@ -352,7 +359,11 @@ void WorldTransform::ApplyAnimationToTransform() {
     }
 
     // Scaleをオフセット
-    offsetTransform_.scale = objEaseAnimationPlayer_->GetCurrentScale();
+    if (isAdaptDirectScale_) {
+        scale_ = objEaseAnimationPlayer_->GetCurrentScale();
+    } else {
+        offsetTransform_.scale = objEaseAnimationPlayer_->GetCurrentScale();
+    }
 
     // Rotationをオフセット
     if (rotateOder_ == RotateOder::Quaternion) {

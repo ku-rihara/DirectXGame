@@ -229,7 +229,7 @@ void ImGuiKeyboardKeySelector(const char* label, int32_t& target) {
     }
 }
 
-int32_t GetGamepadButtonIndex(const int32_t& buttonValue) {
+int32_t GetGamepadButtonIndex(int32_t buttonValue) {
     switch (buttonValue) {
     case XINPUT_GAMEPAD_A:
         return 0;
@@ -265,7 +265,7 @@ int32_t GetGamepadButtonIndex(const int32_t& buttonValue) {
 }
 
 
-int32_t GetKeyboardKeyIndex(const int32_t& keyValue) {
+int32_t GetKeyboardKeyIndex(int32_t keyValue) {
     switch (keyValue) {
     // 文字キー A-Z
     case DIK_A:
@@ -416,7 +416,7 @@ int32_t ToXInputButtonFlag(GamepadButton button) {
     }
 }
 
-GamepadButton FromXInputButtonFlag(const int32_t& xInputFlag) {
+GamepadButton FromXInputButtonFlag(int32_t xInputFlag) {
     switch (xInputFlag) {
     case XINPUT_GAMEPAD_A:
         return GamepadButton::A;
@@ -569,7 +569,7 @@ int32_t ToDIKCode(KeyboardKey key) {
     }
 }
 
-KeyboardKey FromDIKCode(const int32_t& dikCode) {
+KeyboardKey FromDIKCode(int32_t dikCode) {
     switch (dikCode) {
     // 文字キー
     case DIK_A:

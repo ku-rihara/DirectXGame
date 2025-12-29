@@ -2,7 +2,7 @@
 #include <cassert>
 #include <imgui.h>
 
-void PlayerAttackRenditionData::RegisterParams(GlobalParameter* globalParam, const std::string& groupName) {
+void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName) {
     groupName_ = groupName;
 
     struct RegInfo {
@@ -36,6 +36,7 @@ void PlayerAttackRenditionData::RegisterParams(GlobalParameter* globalParam, con
         {ObjAnimationType::Head, "ObjAnim_Head"},
         {ObjAnimationType::RightHand, "ObjAnim_RightHand"},
         {ObjAnimationType::LeftHand, "ObjAnim_LeftHand"},
+        {ObjAnimationType::MainHead, "Main_Head"},
     };
 
     for (const auto& info : objAnimInfos) {
@@ -92,6 +93,7 @@ void PlayerAttackRenditionData::AdjustParam() {
             {ObjAnimationType::Head, "Head Animation"},
             {ObjAnimationType::RightHand, "Right Hand Animation"},
             {ObjAnimationType::LeftHand, "Left Hand Animation"},
+            {ObjAnimationType::MainHead, "Main Head Animation"},
         };
 
         for (const auto& info : objAnimInfos) {
@@ -100,7 +102,8 @@ void PlayerAttackRenditionData::AdjustParam() {
             auto& param     = paramPair.first;
 
             ImGui::SeparatorText(info.label);
-            SelectObjAnimationFile(info.label, paramPair);
+            // 各タイプに応じたフォルダパスを使用
+            SelectObjAnimationFile(info.label, GetObjAnimationFolderPath(info.type), paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
             ImGui::PopID();
         }
@@ -113,19 +116,35 @@ void PlayerAttackRenditionData::AdjustParam() {
 void PlayerAttackRenditionData::SelectRenditionFile(
     const char* label,
     const std::string& directory,
-    std::pair<RenditionParam, FileSelector>& param) {
+    std::pair<RenditionParam, KetaEngine::FileSelector>& param) {
 
     param.second.SelectFile(label, directory, param.first.fileName, "", true);
 }
 
 void PlayerAttackRenditionData::SelectObjAnimationFile(
     const char* label,
-    std::pair<ObjAnimationParam, FileSelector>& param) {
+    const std::string& directory,
+    std::pair<ObjAnimationParam, KetaEngine::FileSelector>& param) {
 
-    param.second.SelectFile(label, objAnimationFolderPath_, param.first.fileName, "", true);
+    param.second.SelectFile(label, directory, param.first.fileName, "", true);
 }
 
-const PlayerAttackRenditionData::RenditionParam& PlayerAttackRenditionData::GetRenditionParamFromIndex(const int32_t& index) const {
+std::string PlayerAttackRenditionData::GetObjAnimationFolderPath(ObjAnimationType type) const {
+    switch (type) {
+    case ObjAnimationType::Head:
+        return objAnimationFolderPath_Head_;
+    case ObjAnimationType::RightHand:
+        return objAnimationFolderPath_RightHand_;
+    case ObjAnimationType::LeftHand:
+        return objAnimationFolderPath_LeftHand_;
+    case ObjAnimationType::MainHead:
+        return objAnimationFolderPath_MainHead_;
+    default:
+        return objAnimationFolderPath_Head_; // デフォルト
+    }
+}
+
+const PlayerAttackRenditionData::RenditionParam& PlayerAttackRenditionData::GetRenditionParamFromIndex(int32_t index) const {
     assert(index >= 0 && index < static_cast<int32_t>(Type::Count) && "Invalid Rendition Type Index");
     return GetRenditionParamFromType(static_cast<Type>(index));
 }

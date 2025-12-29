@@ -17,18 +17,18 @@
 void LockOn::Init() {
 
     //* グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // メインターゲット用スプライト
-    lockOnMark_.reset(Sprite::Create("UI/anchorPoint.png"));
+    lockOnMark_.reset(KetaEngine::Sprite::Create("UI/anchorPoint.png"));
    
 }
 
-void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* player, const ViewProjection& viewProjection) {
-    float deltaTime = Frame::DeltaTime();
+void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* player, const KetaEngine::ViewProjection& viewProjection) {
+    float deltaTime = KetaEngine::Frame::DeltaTime();
     autoSearchTimer_ += deltaTime;
 
     // 現在のターゲットの有効性チェック
@@ -61,7 +61,7 @@ void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* pla
     UpdateTargetMarkers(validTargets_, viewProjection);
 }
 
-void LockOn::UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets, const ViewProjection& viewProjection) {
+void LockOn::UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets, const KetaEngine::ViewProjection& viewProjection) {
     // 必要な数のマーカーを確保
     ResizeTargetMarkers(validTargets.size());
 
@@ -105,7 +105,7 @@ void LockOn::ResizeTargetMarkers(const size_t& targetCount) {
         ableLockOnMarkers_.resize(targetCount);
 
         for (size_t i = currentSize; i < targetCount; ++i) {
-            ableLockOnMarkers_[i].sprite.reset(Sprite::Create("UI/anchorPoint.png"));
+            ableLockOnMarkers_[i].sprite.reset(KetaEngine::Sprite::Create("UI/anchorPoint.png"));
             ableLockOnMarkers_[i].sprite->SetAnchorPoint(Vector2(0.5f, 0.5f));
         }
     }
@@ -114,7 +114,7 @@ void LockOn::ResizeTargetMarkers(const size_t& targetCount) {
 void LockOn::HandleTargetSwitching(const std::vector<LockOnVariant>& targets, const Player* player) {
 
     // ボタン入力の検出
-    bool currentSwitchInput = Input::IsTriggerPad(0, GamepadButton::Y);
+    bool currentSwitchInput = KetaEngine::Input::IsTriggerPad(0, GamepadButton::Y);
     bool switchTriggered    = currentSwitchInput && !prevSwitchInput_;
     prevSwitchInput_        = currentSwitchInput;
 
@@ -141,9 +141,9 @@ void LockOn::HandleTargetSwitching(const std::vector<LockOnVariant>& targets, co
                 sortValue = relativePosition.Length(); // 距離
             } else {
                 // プレイヤーの前方ベクトルとの角度
-                Vector3 playerForward      = player->GetTransform().GetForwardVector();
+                Vector3 playerForward      = player->GetBaseTransform().GetForwardVector();
                 Vector3 toTargetNormalized = relativePosition.Normalize();
-                float dot                  = Vector3::Dot(playerForward, toTargetNormalized);
+                float dot                  = playerForward.Dot(toTargetNormalized);
                 dot                        = std::clamp(dot, -1.0f, 1.0f);
                 sortValue                  = std::acos(dot); // 角度
             }
@@ -243,7 +243,7 @@ std::vector<LockOn::LockOnVariant> LockOn::GetValidTargets(const std::vector<Loc
     return validTargets;
 }
 
-void LockOn::UpdateCurrentReticleUI(const ViewProjection& viewProjection) {
+void LockOn::UpdateCurrentReticleUI(const KetaEngine::ViewProjection& viewProjection) {
     if (!currentTarget_.has_value())
         return;
 
@@ -265,7 +265,7 @@ void LockOn::UpdateCurrentReticleUI(const ViewProjection& viewProjection) {
 
     // スプライトの座標と回転を設定
     lockOnMark_->transform_.pos = lockOnMarkPos_;
-    spriteRotation_ += Frame::DeltaTime();
+    spriteRotation_ += KetaEngine::Frame::DeltaTime();
     /* lockOnMark_->transform_.rotate.z = spriteRotation_;*/
 }
 
@@ -320,7 +320,7 @@ void LockOn::OnObjectDestroyed(const LockOnVariant& obj) {
 bool LockOn::IsTargetRange(const LockOnVariant& target, const Player* player, Vector3& relativePosition) const {
     // プレイヤーの位置と向きを取得
     Vector3 playerPos     = player->GetWorldPosition();
-    Vector3 playerForward = player->GetTransform().GetForwardVector();
+    Vector3 playerForward = player->GetBaseTransform().GetForwardVector();
 
     // ターゲットの位置を取得
     Vector3 targetPos = GetTargetObjectPosition(target);
@@ -338,7 +338,7 @@ bool LockOn::IsTargetRange(const LockOnVariant& target, const Player* player, Ve
     // プレイヤーの前方ベクトルとの角度チェック
     if (distance > 0.001f) { // ゼロ除算回避
         Vector3 toTargetNormalized = toTarget.Normalize();
-        float dot                  = Vector3::Dot(playerForward, toTargetNormalized);
+        float dot                  = playerForward.Dot(toTargetNormalized);
 
         // dotを-1〜1の範囲にクランプ
         dot         = std::clamp(dot, -1.0f, 1.0f);
@@ -351,7 +351,7 @@ bool LockOn::IsTargetRange(const LockOnVariant& target, const Player* player, Ve
     return false;
 }
 
-void LockOn::LerpTimeIncrement(const float& incrementTime) {
+void LockOn::LerpTimeIncrement(float incrementTime) {
     lerpTime_ += incrementTime;
     if (lerpTime_ >= 1.0f) {
         lerpTime_ = 1.0f;

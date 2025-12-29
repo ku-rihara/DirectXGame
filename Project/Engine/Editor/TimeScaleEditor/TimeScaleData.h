@@ -5,6 +5,8 @@
 /// <summary>
 /// タイムスケールデータ
 /// </summary>
+namespace KetaEngine {
+
 class TimeScaleData {
 public:
     TimeScaleData()  = default;
@@ -36,10 +38,12 @@ private:
 public:
     // getter
     const std::string& GetGroupName() const { return groupName_; }
-    const float& GetTimeScale() const { return timeScale_; }
-    const float& GetDuration() const { return duration_; }
+    float GetTimeScale() const { return timeScale_; }
+    float GetDuration() const { return duration_; }
 
     // setter
-    void SetTimeScale(const float& timeScale) { timeScale_ = timeScale; }
-    void SetDuration(const float& duration) { duration_ = duration; }
+    void SetTimeScale(float timeScale) { timeScale_ = timeScale; }
+    void SetDuration(float duration) { duration_ = duration; }
 };
+
+}; // KetaEngine

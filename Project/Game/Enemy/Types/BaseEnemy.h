@@ -14,17 +14,18 @@
 #include "../SearchingSprite/FindSprite.h"
 #include "../SearchingSprite/NotFindSprite.h"
 #include <cstdint>
+#include <memory>
 
 class Player;
 class GameCamera;
 class EnemyManager;
 class Combo;
 class AttackEffect;
-
+class PlayerCollisionInfo;
 /// <summary>
 /// 敵の基底クラス
 /// </summary>
-class BaseEnemy : public BaseObject, public AABBCollider {
+class BaseEnemy : public BaseObject, public KetaEngine::AABBCollider {
 public:
     enum class Type {
         NORMAL,
@@ -32,23 +33,27 @@ public:
         COUNT,
     };
 
-     struct Parameter {
+    struct Parameter {
         Vector3 initScale_;
         Vector2 hpBarPosOffset;
         float chaseDistance;
         float chaseSpeed;
         float basePosY;
         float burstTime;
-        float avoidanceRadius; 
-        float maxChaseTime;    
-        float chaseResetTime; 
+        float avoidanceRadius;
+        float maxChaseTime;
+        float chaseResetTime;
         float chaseLimitDistance;
 
-        float deathBlowValue; 
+        float deathBlowValue;
         float deathBlowValueY;
-        float deathGravity;   
+        float deathGravity;
         float deathRotateSpeed;
-        float deathBurstTime;  
+        float deathBurstTime;
+
+        float ropeReboundJumpValue;
+        float ropeReboundGravity;
+        float ropeReboundFallSpeedLimit;
     };
 
 public:
@@ -67,7 +72,7 @@ public:
     /// スプライトUIの表示
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    virtual void DisplaySprite(const ViewProjection& viewProjection);
+    virtual void DisplaySprite(const KetaEngine::ViewProjection& viewProjection);
 
     virtual void SpawnRenditionInit() = 0; //< スポーン演出初期化
 
@@ -83,7 +88,7 @@ public:
     /// <param name="speed">速度</param>
     /// <param name="fallSpeedLimit">落下速度制限</param>
     /// <param name="gravity">重力</param>
-    void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);
+    void Jump(float& speed, float fallSpeedLimit, float gravity);
 
     /// <summary>
     /// 落下処理
@@ -92,7 +97,7 @@ public:
     /// <param name="fallSpeedLimit">落下速度制限</param>
     /// <param name="gravity">重力</param>
     /// <param name="isJump">ジャンプフラグ</param>
-    void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump);
+    void Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump);
 
     /// <summary>
     /// ターゲットへの方向取得
@@ -104,17 +109,17 @@ public:
     /// ダメージ処理
     /// </summary>
     /// <param name="damageValue">ダメージ量</param>
-    void TakeDamage(const float& damageValue);
+    void TakeDamage(float damageValue);
 
     // ヒットクールタイム開始
-    void StartDamageColling(const float& collingTime, const std::string&reactiveAttackName);
-  
+    void StartDamageColling(float collingTime, const std::string& reactiveAttackName);
+
     // behavior変更
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
 
     void BackToDamageRoot(); //< ダメージルートに戻る
-  
+
     /// ====================================================================
     /// Collision
     /// ====================================================================
@@ -130,14 +135,17 @@ private:
     /// 視野内判定
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    bool IsInView(const ViewProjection& viewProjection) const;
+    bool IsInView(const KetaEngine::ViewProjection& viewProjection) const;
 
-    //　ダメージクールタイムの更新
-    void DamageCollingUpdate(const float& deltaTime);
+    // ダメージクールタイムの更新
+    void DamageCollingUpdate(float deltaTime);
+
+    // ダメージリアクション変更処理
+    void ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController);
 
 private:
-    int deathSound_;
-    int thrustSound_;
+  /*  int deathSound_;
+    int thrustSound_;*/
     int32_t groupId_;
 
 protected:
@@ -158,15 +166,17 @@ protected:
     std::unique_ptr<EnemyHPBar> hpBar_;
 
     // parameter
-    bool isDeath_;
     float hp_;
     float HPMax_;
     Vector2 hpBarSize_;
 
+    // frags
     bool isDeathPending_ = false;
+    bool isDamageColling_;
+    bool isDeath_;
+    bool isCollisionRope_;
 
     // hitParam
-    bool isDamageColling_;
     float damageCollTime_;
     std::string lastReceivedAttackName_;
 
@@ -182,8 +192,8 @@ public:
     const bool& GetIsDeathPending() const { return isDeathPending_; }
     const Type& GetType() const { return type_; }
     const Parameter& GetParameter() const { return parameter_; }
-    const int32_t& GetGroupId() const { return groupId_; }
-    float GetHP() const { return hp_; } // ★追加
+    int32_t GetGroupId() const { return groupId_; }
+    float GetHP() const { return hp_; }
     Vector3 GetBodyRotation() const { return obj3d_->transform_.rotation_; }
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
@@ -200,10 +210,10 @@ public:
     void SetCombo(Combo* combo);
     void SetAttackEffect(AttackEffect* attackEffect);
     void SetParameter(const Type& type, const Parameter& paramater);
-    void SetBodyRotateX(const float& r) { obj3d_->transform_.rotation_.x = r; }
+    void SetBodyRotateX(float r) { obj3d_->transform_.rotation_.x = r; }
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
-    void SetIsDeathPending(const bool& is) { isDeathPending_ = is; } 
-    void SetWorldPositionY(const float& y) { baseTransform_.translation_.y = y; }
+    void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
+    void SetWorldPositionY(float y) { baseTransform_.translation_.y = y; }
 };

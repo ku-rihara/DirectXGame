@@ -4,6 +4,8 @@
 #include <d3d12.h>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct PointLightData {
     Vector4 color; // ライトの色
     Vector3 position; // ライトの位置
@@ -42,3 +44,5 @@ public:
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }
     PointLightData* GetData() { return lightData_; }
 };
+
+}; // KetaEngine

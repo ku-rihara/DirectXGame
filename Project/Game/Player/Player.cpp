@@ -15,9 +15,9 @@
 
 /// object
 #include "CollisionBox/EnemyCollisionBox.h"
+#include "ComboCreator/PlayerComboAttackController.h"
 #include "Field/Field.h"
 #include "LockOn/LockOnController.h"
-#include"ComboCreator/PlayerComboAttackController.h"
 
 /// behavior
 #include "ComboAttackBehavior/ComboAttackRoot.h"
@@ -45,7 +45,7 @@ void Player::Init() {
     rightHand_ = std::make_unique<PlayerHandRight>();
 
     // Playerのモデル
-    obj3d_.reset(Object3d::CreateModel("Player.obj"));
+    obj3d_.reset(KetaEngine::Object3d::CreateModel("Player.obj"));
     obj3d_->material_.materialData_->enableLighting = 7;
     obj3d_->material_.SetEnvironmentCoefficient(0.05f);
 
@@ -77,9 +77,9 @@ void Player::Init() {
     baseTransform_.translation_ = parameters_->GetParamaters().startPos_;
 
     // 音
-    punchSoundID_ = Audio::GetInstance()->LoadWave("punchAir.wav");
-    strongPunch_  = Audio::GetInstance()->LoadWave("StrongPunch.wav");
-    fallSound_    = Audio::GetInstance()->LoadWave("PlayerFall.wav");
+   /* punchSoundID_ = KetaEngine::Audio::GetInstance()->LoadWave("punchAir.wav");
+    strongPunch_  = KetaEngine::Audio::GetInstance()->LoadWave("StrongPunch.wav");
+    fallSound_    = KetaEngine::Audio::GetInstance()->LoadWave("PlayerFall.wav");*/
 
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));
@@ -91,7 +91,8 @@ void Player::Init() {
 /// 　更新
 ///==========================================================
 void Player::Update() {
-    prePos_ = GetWorldPosition(); // 前フレームの座標
+    // 前フレームの座標
+    prePos_ = GetWorldPosition();
     // ライト
     HeadLightSetting();
 
@@ -105,9 +106,11 @@ void Player::Update() {
     /// Particle
     effects_->Update(GetWorldPosition());
 
-    comboBehavior_->Update(); // コンボ攻撃攻撃
-    MoveToLimit(); // 移動制限
+    // コンボ更新
+    comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
 
+    // 移動制限
+    MoveToLimit();
     UpdateMatrix();
 }
 
@@ -138,8 +141,8 @@ void Player::GameIntroUpdate() {
 ///==========================================================
 Vector3 Player::GetInputDirection() {
 
-    Vector3 velocity = {0.0f, 0.0f, 0.0f};
-    Input* input     = Input::GetInstance();
+    Vector3 velocity         = {0.0f, 0.0f, 0.0f};
+    KetaEngine::Input* input = KetaEngine::Input::GetInstance();
 
     // キーボード入力
     if (input->PushKey(KeyboardKey::W)) {
@@ -156,7 +159,7 @@ Vector3 Player::GetInputDirection() {
     }
 
     // ジョイスティック入力
-    Vector2 stickInput = Input::GetPadStick(0, 0);
+    Vector2 stickInput = KetaEngine::Input::GetPadStick(0, 0);
     velocity.x += stickInput.x;
     velocity.z += stickInput.y;
 
@@ -166,7 +169,7 @@ Vector3 Player::GetInputDirection() {
 ///=========================================================
 /// 移動
 ///==========================================================
-void Player::Move(const float& speed) {
+void Player::Move(float speed) {
 
     /// Inputから速度代入
     direction_ = GetInputDirection();
@@ -174,7 +177,7 @@ void Player::Move(const float& speed) {
     /// 移動処理
     if (CheckIsMoving()) {
         // 移動量に速さを反映
-        direction_ = Vector3::Normalize(direction_) * (speed)*Frame::DeltaTimeRate();
+        direction_ = direction_.Normalize() * (speed)*KetaEngine::Frame::DeltaTimeRate();
         // 移動ベクトルをカメラの角度だけ回転する
         Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
         direction_             = TransformNormal(direction_, rotateMatrix);
@@ -191,7 +194,6 @@ void Player::Move(const float& speed) {
         FaceToTarget();
     }
 }
-
 
 void Player::FaceToTarget() {
     if (pLockOn_ && pLockOn_->GetLockOn()->GetIsCurrentTarget()) {
@@ -210,7 +212,7 @@ void Player::AdaptRotate() {
 /// 動いているか
 ///==========================================================
 bool Player::CheckIsMoving() {
-    Input* input               = Input::GetInstance();
+    KetaEngine::Input* input   = KetaEngine::Input::GetInstance();
     bool isMoving              = false;
     const float thresholdValue = 0.3f;
     Vector3 keyboardVelocity   = {0.0f, 0.0f, 0.0f};
@@ -240,7 +242,7 @@ bool Player::CheckIsMoving() {
         //----------------------------------------------------------
         // JoyStick
         //----------------------------------------------------------
-        Vector2 stickInput = Input::GetPadStick(0, 0);
+        Vector2 stickInput = KetaEngine::Input::GetPadStick(0, 0);
 
         if (stickInput.Length() > thresholdValue) {
             isMoving = true;
@@ -296,24 +298,24 @@ void Player::MoveToLimit() {
 /// ===================================================
 ///   Jump
 /// ===================================================
-void Player::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
+void Player::Jump(float& speed, float fallSpeedLimit, float gravity) {
     // 移動
-    baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
+    baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
     Fall(speed, fallSpeedLimit, gravity, true);
 }
 
 ///=========================================================
 /// 　落ちる
 ///==========================================================
-void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump) {
+void Player::Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump) {
 
     if (!isJump) {
         // 移動
-        baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
+        baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
     }
 
     // 加速する
-    speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
+    speed = max(speed - (gravity * KetaEngine::Frame::DeltaTimeRate()), -fallSpeedLimit);
 
     // 着地
     if (baseTransform_.translation_.y <= parameters_->GetParamaters().startPos_.y) {
@@ -347,7 +349,7 @@ void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior) {
     // 引数で受け取った状態を次の状態としてセット
     behavior_ = std::move(behavior);
 }
-void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior> behavior) {
+void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior) {
     // 引数で受け取った状態を次の状態としてセット
     comboBehavior_ = std::move(behavior);
 }
@@ -380,8 +382,8 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-   /* if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
-        return;*/
+    /* if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
+         return;*/
     // 突進などの攻撃は、敵を貫通するようにする
 
     if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
@@ -440,7 +442,7 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 }
 
-void Player::DissolveUpdate(const float& dissolve) {
+void Player::DissolveUpdate(float dissolve) {
     obj3d_->material_.SetDissolveEdgeColor(Vector3(0.6706f, 0.8824f, 0.9804f));
     obj3d_->material_.SetDissolveEdgeWidth(0.09f);
     obj3d_->material_.SetEnableDissolve(true);
@@ -460,10 +462,14 @@ Vector3 Player::GetCollisionPos() const {
 /// =======================================================================================
 void Player::HeadLightSetting() {
     if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
-        Light::GetInstance()->GetAmbientLight()->SetIntensity(0.0f);
+        KetaEngine::Light::GetInstance()->GetAmbientLight()->SetIntensity(0.0f);
     } else {
-        Light::GetInstance()->GetAmbientLight()->SetIntensity(0.9f);
+        KetaEngine::Light::GetInstance()->GetAmbientLight()->SetIntensity(0.9f);
     }
+}
+
+void Player::MainHeadAnimationStart(const std::string& name) {
+    baseTransform_.PlayObjEaseAnimation("MainHead", name);
 }
 
 void Player::RotateReset() {
@@ -471,8 +477,12 @@ void Player::RotateReset() {
     obj3d_->transform_.translation_.y = 0.0f;
 }
 
-void Player::PositionYReset() {
+void Player::ResetPositionY() {
     baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+}
+
+void Player::ResetHeadScale() {
+    obj3d_->transform_.scale_ = Vector3::OneVector();
 }
 
 void Player::InitInGameScene() {
@@ -513,7 +523,7 @@ void Player::SetHitStop(AttackEffect* hitStop) {
     pHitStop_ = hitStop;
 }
 
-void Player::SetViewProjection(const ViewProjection* viewProjection) {
+void Player::SetViewProjection(const KetaEngine::ViewProjection* viewProjection) {
     viewProjection_ = viewProjection;
 }
 
@@ -525,13 +535,13 @@ void Player::SetComboAttackController(PlayerComboAttackController* playerComboAt
 /// Sound
 /// =======================================================================================
 void Player::SoundPunch() {
-    Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
+  /*  KetaEngine::Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);*/
 }
 void Player::SoundStrongPunch() {
-    Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);
+   /* KetaEngine::Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);*/
 }
 void Player::FallSound() {
-    Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
+    /*KetaEngine::Audio::GetInstance()->PlayWave(fallSound_, 0.2f);*/
 }
 
 bool Player::CheckIsChargeMax() const {

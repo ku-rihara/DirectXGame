@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+namespace KetaEngine {
+
 template <typename TEffectData>
 class BaseEffectEditor;
 
@@ -23,24 +25,24 @@ public:
 
     //*----------------------------- public Methods -----------------------------*//
 
-    virtual void Init(const std::string& typeName, const bool& isUseCategory = false);
-    virtual void Update(const float& deltaTimeOrSpeedRate);
+    virtual void Init(const std::string& typeName, bool isUseCategory = false);
+    virtual void Update(float deltaTimeOrSpeedRate);
     virtual void EditorUpdate();
 
     // 共通操作
     void AddEffect(const std::string& name);
-    void RemoveEffect(const int32_t& index);
+    void RemoveEffect(int32_t index);
 
     // カテゴリー操作
     void AddCategory(const std::string& categoryName);
-    void RemoveCategory(const int32_t& index);
-    void AddEffectToCategory(const int32_t& categoryIndex, const std::string& effectName);
-    void RemoveEffectFromCategory(const int32_t& categoryIndex, const int32_t& effectIndex);
+    void RemoveCategory(int32_t index);
+    void AddEffectToCategory(int32_t categoryIndex, const std::string& effectName);
+    void RemoveEffectFromCategory(int32_t categoryIndex, int32_t effectIndex);
 
     // セーブ、ロード
     void AllLoadFile();
     void AllSaveFile();
-    void SaveCategory(const int32_t& categoryIndex);
+    void SaveCategory(int32_t categoryIndex);
     void LoadCategory(const std::string& categoryName);
     void RenderPlayBack();
 
@@ -64,8 +66,7 @@ private:
     void RenderCategoryUI();
     void RenderCategoryEffectListUI();
 
-    // 選択アニメーション再生、一時停止、リセット
- 
+    // 選択アニメーション一時停止、リセット
     void PauseSelectedAnimation();
     void ResetSelectedAnimation();
 
@@ -90,6 +91,8 @@ protected:
     std::string baseFolderPath_;
     std::string effectTypeName_;
 
+    bool isEditing_ = false;
+
 private:
     bool isUseCategorySystem_ = false;
 
@@ -99,8 +102,12 @@ public:
     TEffectData* GetSelectedEffect();
     TEffectData* GetEffectByName(const std::string& name);
 
+    bool GetIsEditing() const {return isEditing_; }
+
     // カテゴリーモード用getter
     TEffectData* GetEffectByName(const std::string& categoryName, const std::string& effectName);
     const std::vector<Category>& GetCategories() const { return categories_; }
     int32_t GetCategoryCount() const { return static_cast<int32_t>(categories_.size()); }
 };
+
+}; // KetaEngine

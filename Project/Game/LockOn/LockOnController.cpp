@@ -8,9 +8,9 @@ void LockOnController::Init() {
     lockOn_ = std::make_unique<LockOn>();
     lockOn_->Init();
 }
-void LockOnController::Update(Player* pPlayer, const ViewProjection& viewProjection) {
+void LockOnController::Update(Player* pPlayer, const KetaEngine::ViewProjection& viewProjection) {
 
-    // より安全で読みやすいバージョン
+    
     std::vector<LockOn::LockOnVariant> targets;
     const auto& enemies = pEnemyManager_->GetEnemies();
 

@@ -3,6 +3,8 @@
 /// <summary>
 /// フレームレート管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class Frame {
 private:
     static std::chrono::steady_clock::time_point reference_;
@@ -25,8 +27,10 @@ public:
     /// タイムスケールを設定
     /// </summary>
     /// <param name="scale">スケール値</param>
-    static void SetTimeScale(const float& scale);
+    static void SetTimeScale(float scale);
 
     static float GetTimeScale(); //< タイムスケールを取得
     static void ResetDeltaTime(); //< デルタタイムをリセット
 };
+
+}; // KetaEngine

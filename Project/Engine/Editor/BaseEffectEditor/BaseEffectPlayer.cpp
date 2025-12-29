@@ -1,8 +1,17 @@
 #include "BaseEffectPlayer.h"
+
+using namespace KetaEngine;
 #include "BaseEffectData.h"
 
 void BaseEffectPlayer::Init() {
     effectData_ = CreateEffectData();
+}
+
+void BaseEffectPlayer::Play([[maybe_unused]] const std::string& effectName) {
+
+}
+void BaseEffectPlayer::Play([[maybe_unused]] const std::string& categoryName, [[maybe_unused]] const std::string& effectName) {
+
 }
 
 void BaseEffectPlayer::Stop() {

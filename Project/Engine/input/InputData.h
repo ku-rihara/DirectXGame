@@ -146,14 +146,14 @@ void ImGuiKeyboardKeySelector(const char* label, int32_t& target);
 /// </summary>
 /// <param name="buttonValue">ボタン値</param>
 /// <returns>インデックス</returns>
-int32_t GetGamepadButtonIndex(const int32_t& buttonValue);
+int32_t GetGamepadButtonIndex(int32_t buttonValue);
 
 /// <summary>
 /// キーボードキーのインデックスを取得
 /// </summary>
 /// <param name="keyValue">キー値</param>
 /// <returns>インデックス</returns>
-int32_t GetKeyboardKeyIndex(const int32_t& keyValue);
+int32_t GetKeyboardKeyIndex(int32_t keyValue);
 
 
 /// <summary>
@@ -168,7 +168,7 @@ int32_t ToXInputButtonFlag(GamepadButton button);
 /// </summary>
 /// <param name="xinputFlag">XINPUTのボタンビット</param>
 /// <returns>対応するGamepadButton</returns>
-GamepadButton FromXInputButtonFlag(const int32_t& xinputFlag);
+GamepadButton FromXInputButtonFlag(int32_t xinputFlag);
 
 /// <summary>
 /// KeyboardKey列挙型からDirectInputのキーコードに変換
@@ -182,4 +182,4 @@ int32_t ToDIKCode(KeyboardKey key);
 /// </summary>
 /// <param name="dikCode">DirectInputのキーコード</param>
 /// <returns>対応するKeyboardKey列挙型のキー</returns>
-KeyboardKey FromDIKCode(const int32_t& dikCode);
+KeyboardKey FromDIKCode(int32_t dikCode);

@@ -1,4 +1,6 @@
 #include "GPUParticleResourceData.h"
+
+using namespace KetaEngine;
 #include "base/SrvManager.h"
 #include "Dx/DirectXCommon.h"
 
@@ -6,7 +8,7 @@ void GPUParticleResourceData::Create() {
     dxCommon_   = DirectXCommon::GetInstance();
     srvManager_ = SrvManager::GetInstance();
 
-    // commandBinder生成
+    // commandExecutor生成
     commandExecutor_ = std::make_unique<GPUParticleCommandExecutor>();
     commandExecutor_->Init(this);
 
@@ -17,7 +19,7 @@ void GPUParticleResourceData::Create() {
     CreatePerFrameResource();
     CreateFreeListIndexResource();
     CreateFreeListResource();
-    CreateEmitParamResource();
+    CreateEmitParamBuffers();
 }
 
 void GPUParticleResourceData::CreateParticleResource() {
@@ -75,16 +77,6 @@ void GPUParticleResourceData::CreatePerFrameResource() {
     perFrameBuffer_.resource->Map(0, nullptr, reinterpret_cast<void**>(&perFrameBuffer_.mappedData));
 }
 
-void GPUParticleResourceData::CreateEmitParamResource() {
-    // Emitterデータ用のバッファ
-    emitParamBuffer_.resource = dxCommon_->CreateBufferResource(
-        dxCommon_->GetDevice(),
-        sizeof(EmitParameter));
-
-    // マップしておく
-    emitParamBuffer_.resource->Map(0, nullptr, reinterpret_cast<void**>(&emitParamBuffer_.mappedData));
-}
-
 void GPUParticleResourceData::CreateFreeListIndexResource() {
     // FreeListIndex用のBufferを作成
     freeListIndexBuffer_.resource = dxCommon_->CreateBufferResource(
@@ -92,7 +84,7 @@ void GPUParticleResourceData::CreateFreeListIndexResource() {
         ViewType::UnorderedAccess);
 
     // UAV作成
-    uint32_t uavIndex        = srvManager_->Allocate();
+    uint32_t uavIndex              = srvManager_->Allocate();
     freeListIndexBuffer_.cpuHandle = srvManager_->GetCPUDescriptorHandle(uavIndex);
     freeListIndexBuffer_.gpuHandle = srvManager_->GetGPUDescriptorHandle(uavIndex);
 
@@ -108,7 +100,7 @@ void GPUParticleResourceData::CreateFreeListResource() {
         ViewType::UnorderedAccess);
 
     // UAV作成
-    uint32_t uavIndex   = srvManager_->Allocate();
+    uint32_t uavIndex         = srvManager_->Allocate();
     freeListBuffer_.cpuHandle = srvManager_->GetCPUDescriptorHandle(uavIndex);
     freeListBuffer_.gpuHandle = srvManager_->GetGPUDescriptorHandle(uavIndex);
 
@@ -117,6 +109,29 @@ void GPUParticleResourceData::CreateFreeListResource() {
         particleMaxCount_, sizeof(int32_t));
 }
 
+void GPUParticleResourceData::CreateEmitParamBuffers() {
+    // Transform用バッファ作成
+    emitParamBuffers_.transformBuffer.resource = CreateBufferResource(sizeof(EmitTransformParams));
+    emitParamBuffers_.transformBuffer.resource->Map(
+        0, nullptr,
+        reinterpret_cast<void**>(&emitParamBuffers_.transformBuffer.mappedData));
+
+    // Physics用バッファ作成
+    emitParamBuffers_.physicsBuffer.resource = CreateBufferResource(sizeof(EmitPhysicsParams));
+    emitParamBuffers_.physicsBuffer.resource->Map(
+        0, nullptr,
+        reinterpret_cast<void**>(&emitParamBuffers_.physicsBuffer.mappedData));
+
+    // Appearance用バッファ作成
+    emitParamBuffers_.appearanceBuffer.resource = CreateBufferResource(sizeof(EmitAppearanceParams));
+    emitParamBuffers_.appearanceBuffer.resource->Map(
+        0, nullptr,
+        reinterpret_cast<void**>(&emitParamBuffers_.appearanceBuffer.mappedData));
+}
+
+Microsoft::WRL::ComPtr<ID3D12Resource> GPUParticleResourceData::CreateBufferResource(size_t sizeInBytes) {
+    return dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeInBytes);
+}
 
 void GPUParticleResourceData::UpdateEmitterData(const ParticleEmit& data) {
     if (emitterBuffer_.IsValid()) {
@@ -130,14 +145,30 @@ void GPUParticleResourceData::UpdatePerViewData(const PerView& data) {
     }
 }
 
-void GPUParticleResourceData::UpdatePerFrameData(const float& deltaTime) {
+void GPUParticleResourceData::UpdatePerFrameData(float deltaTime) {
     if (perFrameBuffer_.IsValid()) {
         perFrameBuffer_.mappedData->deltaTime = deltaTime;
         perFrameBuffer_.mappedData->time += deltaTime;
     }
 }
 
+void GPUParticleResourceData::UpdateEmitParams(const EmitParamBuffers& params) {
+    // Transform更新
+    if (emitParamBuffers_.transformBuffer.IsValid() && params.transformBuffer.IsValid()) {
+        *emitParamBuffers_.transformBuffer.mappedData = *params.transformBuffer.mappedData;
+    }
 
- GPUParticleCommandExecutor* GPUParticleResourceData::GetCommandExecutorRef() const {
+    // Physics更新
+    if (emitParamBuffers_.physicsBuffer.IsValid() && params.physicsBuffer.IsValid()) {
+        *emitParamBuffers_.physicsBuffer.mappedData = *params.physicsBuffer.mappedData;
+    }
+
+    // Appearance更新
+    if (emitParamBuffers_.appearanceBuffer.IsValid() && params.appearanceBuffer.IsValid()) {
+        *emitParamBuffers_.appearanceBuffer.mappedData = *params.appearanceBuffer.mappedData;
+    }
+}
+
+GPUParticleCommandExecutor* GPUParticleResourceData::GetCommandExecutorRef() const {
     return commandExecutor_ ? commandExecutor_.get() : nullptr;
-  }
+}

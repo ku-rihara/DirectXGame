@@ -4,6 +4,7 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 class Combo;
@@ -26,7 +27,7 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     // 攻撃データの追加、削除
     void AddAttack(const std::string& attackName);
@@ -36,21 +37,32 @@ public:
     void AllLoadFile(); //< 全ファイルロード
     void AllSaveFile(); //< 全ファイルセーブ
 
-    float GetRealAttackSpeed(const float& baseTimeSpeed) const;
+    float GetRealAttackSpeed(float baseTimeSpeed) const;
     float GetPowerRate() const;
 
 private:
-
     //*-------------------------------- private Method --------------------------------*//
     void BindCommonParams(); //< 共通パラメータバインド
     void AdjustCommonParam(); //< 共通パラメータ調整
 
-private:
+    // コンボフロー可視化、チェーン構築
+    void VisualizeComboFlow();
+    std::vector<std::vector<std::string>> BuildComboChains();
 
+    void BuildChainRecursive(
+        const std::string& attackName,
+        std::vector<std::string>& chain,
+        std::unordered_set<std::string>& visited);
+
+    // 攻撃名で選択
+    void SelectAttackByName(const std::string& name);
+    bool IsValidIndex(int index) const;
+
+private:
     //*-------------------------------- Private variants--------------------------------*//
-    
+
     // 共通パラメータ
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string commonGroupName_      = "ComboCommonParam";
     const std::string AttackDataFolderPath_ = "Resources/GlobalParameter/AttackCreator/";
 
@@ -59,13 +71,12 @@ private:
     char nameBuffer_[128] = "";
 
     std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
-    Combo* pCombo_=nullptr;
+    Combo* pCombo_ = nullptr;
 
 public:
     PlayerComboAttackData* GetSelectedAttack();
     PlayerComboAttackData* GetAttackByName(const std::string& name);
-    const std::vector<std::unique_ptr<PlayerComboAttackData>>& GetAllAttacks() const {return attacks_;}
+    const std::vector<std::unique_ptr<PlayerComboAttackData>>& GetAllAttacks() const { return attacks_; }
     const int& GetAttackCount() const { return static_cast<int>(attacks_.size()); }
     void SetCombo(Combo* combo);
-   
 };

@@ -27,6 +27,6 @@ private:
     /// ===================================================
 
     AnimationStep animationStep_;
-    Easing<Vector2> scalingEasing_;
+    KetaEngine::Easing<Vector2> scalingEasing_;
     Vector2 baseScale_;
 };

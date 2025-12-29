@@ -1,4 +1,6 @@
 #include "RtvManager.h"
+
+using namespace KetaEngine;
 #include <cassert>
 #include <d3d12.h>
 
@@ -48,13 +50,13 @@ bool RtvManager::IsAbleSecure() {
 }
 
 
-D3D12_CPU_DESCRIPTOR_HANDLE RtvManager::GetCPUDescriptorHandle(const uint32_t& index) {
+D3D12_CPU_DESCRIPTOR_HANDLE RtvManager::GetCPUDescriptorHandle(uint32_t index) {
     D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
     handleCPU.ptr += (descriptorSize_ * index);
     return handleCPU;
 }
 
-void RtvManager::Create(const uint32_t& index, ID3D12Resource* resource, D3D12_RENDER_TARGET_VIEW_DESC* desc) {
+void RtvManager::Create(uint32_t index, ID3D12Resource* resource, D3D12_RENDER_TARGET_VIEW_DESC* desc) {
 
     dxCommon_->GetDevice()->CreateRenderTargetView(resource, desc, GetCPUDescriptorHandle(index));
 }

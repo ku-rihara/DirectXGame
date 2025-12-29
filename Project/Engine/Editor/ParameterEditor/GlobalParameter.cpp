@@ -1,4 +1,6 @@
 #include "GlobalParameter.h"
+
+using namespace KetaEngine;
 #include "base/WinApp.h"
 #include <fstream>
 #include <imgui.h>
@@ -240,7 +242,7 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
         return;
     }
 
-    // データを読み込み
+    // データを安全に読み込み
     for (auto itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
         const std::string& itemName = itItem.key();
 

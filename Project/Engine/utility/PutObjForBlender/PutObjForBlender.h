@@ -20,6 +20,8 @@ enum class EasingAdaptTransform {
 /// <summary>
 /// Blenderからエクスポートしたオブジェクト配置クラス
 /// </summary>
+namespace KetaEngine {
+
 class PutObjForBlender {
 public:
     struct LevelData {
@@ -56,13 +58,13 @@ public:
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
     /// <param name="groupNum">グループ番号</param>
-    void EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum);
+    void EasingUpdateSelectGroup(float deltaTime, int32_t groupNum);
 
     /// <summary>
     /// 指定グループのイージングリセット
     /// </summary>
     /// <param name="groupNum">グループ番号</param>
-    void EasingResetSelectGroup(const int32_t& groupNum);
+    void EasingResetSelectGroup(int32_t groupNum);
 
     /// <summary>
     /// JSONデータをオブジェクトに変換
@@ -89,7 +91,7 @@ private:
     /// </summary>
     /// <param name="objectData">オブジェクトデータ</param>
     /// <param name="groupNum">グループ番号</param>
-    void AdaptEasing(LevelData::ObjectData& objectData, const int32_t& groupNum);
+    void AdaptEasing(LevelData::ObjectData& objectData, int32_t groupNum);
 
     /// <summary>
     /// イージンググループのロード
@@ -105,7 +107,7 @@ private:
     /// <param name="groupNum">グループ番号</param>
     /// <param name="type">変換タイプ</param>
     /// <returns>適用されているか</returns>
-    bool IsAdaptEasing(const LevelData::ObjectData& objectData, const int32_t& groupNum, const EasingAdaptTransform& type) const;
+    bool IsAdaptEasing(const LevelData::ObjectData& objectData, int32_t groupNum, const EasingAdaptTransform& type) const;
 
 private:
     const std::string directoryPath_ = "Resources/BlenderObjectPos/";
@@ -115,8 +117,10 @@ private:
     nlohmann::json jsonData_;
 
 public:
-    bool GetIsEasingFinish(const int32_t& groupNum) const;
-    bool GetIsEasingPlaying(const int32_t& groupNum) const;
+    bool GetIsEasingFinish(int32_t groupNum) const;
+    bool GetIsEasingPlaying(int32_t groupNum) const;
 
-    void SetLoopEndCallback(const int32_t& groupNum, const EasingAdaptTransform& transformType, const std::function<void()>& callback);
+    void SetLoopEndCallback(int32_t groupNum, const EasingAdaptTransform& transformType, const std::function<void()>& callback);
 };
+
+}; // KetaEngine

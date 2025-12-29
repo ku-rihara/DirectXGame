@@ -8,6 +8,8 @@
 /// <summary>
 /// シェイクエディター
 /// </summary>
+namespace KetaEngine {
+
 class ShakeEditor : public BaseEffectEditor<ShakeData> {
 public:
     ShakeEditor()  = default;
@@ -16,8 +18,8 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     // 初期化、更新
-    void Init(const std::string& editorName, const bool& isUseCategory = false) override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Init(const std::string& editorName, bool isUseCategory = false) override;
+    void Update(float speedRate = 1.0f) override;
     void EditorUpdate() override;
 
 private:
@@ -42,3 +44,5 @@ public:
 
     int GetShakeCount() const { return static_cast<int>(effects_.size()); }
 };
+
+}; // KetaEngine

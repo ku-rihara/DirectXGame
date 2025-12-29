@@ -36,11 +36,11 @@ public:
         float appearScaleY;
         float closeScaleY;
         Vector2 centerScale;
-        std::array<std::unique_ptr<Easing<float>>, 2> sideAppearEase;
-        std::array<std::unique_ptr<Easing<float>>, 2> sideBackEase;
-        std::unique_ptr<Easing<Vector2>> centerAppearEase;
-        std::unique_ptr<Easing<float>> appearScaleEaseY;
-        std::unique_ptr<Easing<float>> closeScaleEaseY;
+        std::array<std::unique_ptr<KetaEngine::Easing<float>>, 2> sideAppearEase;
+        std::array<std::unique_ptr<KetaEngine::Easing<float>>, 2> sideBackEase;
+        std::unique_ptr<KetaEngine::Easing<Vector2>> centerAppearEase;
+        std::unique_ptr<KetaEngine::Easing<float>> appearScaleEaseY;
+        std::unique_ptr<KetaEngine::Easing<float>> closeScaleEaseY;
         bool isBackSideUI = false;
     };
 
@@ -58,7 +58,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="playSpeed">再生速度</param>
-    void Update(const float& playSpeed) override;
+    void Update(float playSpeed) override;
 
     // Param Edit
     void AdjustParam() override;       //< パラメータ調整
@@ -84,7 +84,7 @@ private:
     /// <param name="nextStep">次のステップ</param>
     /// <param name="enableEnemySpawn">敵生成有効化</param>
     /// <returns>ステップ完了でtrue</returns>
-    bool ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn = false);
+    bool ProcessStep(float limitTime, const Step& nextStep, const bool& enableEnemySpawn = false);
 
 private:
     static void (IntroPurposeCutIn::* spFuncTable_[])();
@@ -94,8 +94,8 @@ private:
     float closeWaitTime_;
     float centerAppearWaitTime_;
     float finishWaitTime_;
-    std::unique_ptr<Sprite> backLineSprite_;
-    std::array<std::unique_ptr<Sprite>, static_cast<size_t>(SpritePos::COUNT)> sprites_;
+    std::unique_ptr<KetaEngine::Sprite> backLineSprite_;
+    std::array<std::unique_ptr<KetaEngine::Sprite>, static_cast<size_t>(SpritePos::COUNT)> sprites_;
     SpriteVariable spriteVariable_;
     Step step_ = Step::SideAppearWait;
 };

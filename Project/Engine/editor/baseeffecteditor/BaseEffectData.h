@@ -7,6 +7,8 @@
 /// <summary>
 /// エフェクトデータクラス
 /// </summary>
+namespace KetaEngine {
+
 class BaseEffectData {
 public:
     enum class PlayState {
@@ -22,10 +24,10 @@ public:
     //*---------------------------- public Methods ----------------------------*//
 
     // 純粋仮想関数
-    virtual void Init(const std::string& name)         = 0;
-    virtual void Update(const float& speedRate = 1.0f) = 0;
-    virtual void Reset()                               = 0;
-    virtual void Play()                                = 0;
+    virtual void Init(const std::string& name)  = 0;
+    virtual void Update(float speedRate = 1.0f) = 0;
+    virtual void Reset()                        = 0;
+    virtual void Play()                         = 0;
     virtual void InitWithCategory(const std::string& name, const std::string& categoryName);
     // 共通実装
 
@@ -60,3 +62,5 @@ public:
     const std::string& GetGroupName() const { return groupName_; }
     PlayState GetPlayState() const { return playState_; }
 };
+
+}; // KetaEngine

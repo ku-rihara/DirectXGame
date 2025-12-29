@@ -11,7 +11,7 @@ void ComboLevelObjHolder::Init(const std::string& filename) {
     }
 }
 
-void ComboLevelObjHolder::Update(const float& playSpeed) {
+void ComboLevelObjHolder::Update(float playSpeed) {
     // 各オブジェクトの更新
     for (auto& obj : objects_) {
         if (obj) {
@@ -56,7 +56,7 @@ void ComboLevelObjHolder::Add(const ComboLevelObjType& type, const std::string& 
     }
 }
 
-void ComboLevelObjHolder::EasingResetSelectGroup(const int32_t& groupNum) {
+void ComboLevelObjHolder::EasingResetSelectGroup(int32_t groupNum) {
     for (auto& obj : objects_) {
         if (obj) {
             obj->EasingResetSelectGroup(groupNum);
@@ -72,9 +72,9 @@ void ComboLevelObjHolder::EasingAllReset() {
     }
 }
 
-void ComboLevelObjHolder::CloseForComboLevel(const int32_t& level) {
+void ComboLevelObjHolder::CloseForComboLevel(int32_t level) {
     // レベルに応じたオブジェクトのエフェクトモードをCLOSEに設定
-    for (int32_t i = 0; i < level; ++i) {
+    for (int32_t i = 0; i <= level; ++i) {
 
         if (i >= static_cast<int32_t>(ComboLevelObjType::COUNT)) {
             continue;
@@ -84,16 +84,16 @@ void ComboLevelObjHolder::CloseForComboLevel(const int32_t& level) {
     }
 }
 
-bool ComboLevelObjHolder::GetIsEasingFinish(const ComboLevelObjType& type, const int32_t& groupNum) const {
+bool ComboLevelObjHolder::GetIsEasingFinish(const ComboLevelObjType& type, int32_t groupNum) const {
     if (objects_[ToIndex(type)]) {
         return objects_[ToIndex(type)]->GetIsEasingFinish(groupNum);
     }
     return true;
 }
 
-void ComboLevelObjHolder::SetEffectMode(const ComboLevelObjType& type, const ObjEffectMode& mode) {
+void ComboLevelObjHolder::SetEffectMode(int32_t level, const ObjEffectMode& mode) {
 
-    if (objects_[ToIndex(type)]) {
-        objects_[ToIndex(type)]->SetEffectMode(mode);
+    if (objects_[level]) {
+        objects_[level]->SetEffectMode(mode);
     }
 }

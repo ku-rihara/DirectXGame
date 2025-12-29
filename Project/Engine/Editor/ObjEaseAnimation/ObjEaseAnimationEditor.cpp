@@ -1,11 +1,14 @@
 #include "ObjEaseAnimationEditor.h"
+
+using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 #include <Windows.h>
 
-void ObjEaseAnimationEditor::Init(const std::string& typeName, const bool& isUseCategory) {
+void ObjEaseAnimationEditor::Init(const std::string& typeName, bool isUseCategory) {
     BaseEffectEditor::Init(typeName, isUseCategory);
     InitPreviewObject();
+
 }
 
 void ObjEaseAnimationEditor::InitPreviewObject() {
@@ -17,9 +20,10 @@ void ObjEaseAnimationEditor::InitPreviewObject() {
         previewObject_->transform_.rotation_    = previewBaseTransform_.rotation;
         previewObject_->transform_.translation_ = previewBaseTransform_.translation;
     }
+    previewObject_->SetIsDraw(false);
 }
 
-void ObjEaseAnimationEditor::Update(const float& speedRate) {
+void ObjEaseAnimationEditor::Update(float speedRate) {
     // 基底クラスのUpdate呼び出し
     BaseEffectEditor::Update(speedRate);
 
@@ -28,9 +32,11 @@ void ObjEaseAnimationEditor::Update(const float& speedRate) {
 }
 
 void ObjEaseAnimationEditor::UpdatePreviewObject() {
-    if (!previewObject_ || !showPreview_) {
+    if (!previewObject_) {
         return;
     }
+
+    previewObject_->SetIsDraw(showPreview_);
 
     // ベース値をリセット
     previewObject_->transform_.scale_       = previewBaseTransform_.scale;

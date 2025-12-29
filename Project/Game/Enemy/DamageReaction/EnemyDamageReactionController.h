@@ -18,7 +18,7 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     // 攻撃データの追加、削除
     void AddAttack(const std::string& attackName);

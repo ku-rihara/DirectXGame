@@ -28,6 +28,6 @@ public:
     void PlayPostEffect(const std::string& effectName);
 
 private:
-    std::unique_ptr<TimeScaleController> timeScaleController_;
-    std::unique_ptr<PostEffectController> postEffectController_;
+    std::unique_ptr<KetaEngine::TimeScaleController> timeScaleController_;
+    std::unique_ptr<KetaEngine::PostEffectController> postEffectController_;
 };

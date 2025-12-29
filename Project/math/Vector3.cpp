@@ -1,9 +1,6 @@
 #include "Vector3.h"
 #include<math.h>
 
-
-const float kColumnWidth = 60;
-
 // 二項演算子
 Vector3 Vector3::operator+(const Vector3& obj) const {
     return {x + obj.x, y + obj.y, z + obj.z};
@@ -17,7 +14,7 @@ Vector3 Vector3::operator*(const Vector3& obj) const {
     return {x * obj.x, y * obj.y, z * obj.z};
 }
 
-Vector3 Vector3::operator*(const float& scalar) const {
+Vector3 Vector3::operator*(float scalar) const {
     return {x * scalar, y * scalar, z * scalar};
 }
 
@@ -25,7 +22,7 @@ Vector3 Vector3::operator/(const Vector3& obj) const {
     return {x / obj.x, y / obj.y, z / obj.z};
 }
 
-Vector3 Vector3::operator/(const float& scalar) const {
+Vector3 Vector3::operator/(float scalar) const {
     return {x / scalar, y / scalar, z / scalar};
 }
 
@@ -40,13 +37,13 @@ void Vector3::operator+=(const Vector3& obj) {
     z += obj.z;
 }
 
-void Vector3::operator+=(const float& scalar) {
+void Vector3::operator+=(float scalar) {
     x += scalar;
     y += scalar;
     z += scalar;
 }
 
-void Vector3::operator*=(const float& scalar) {
+void Vector3::operator*=(float scalar) {
     x *= scalar;
     y *= scalar;
     z *= scalar;
@@ -65,50 +62,25 @@ bool operator!=(const Vector3& lhs, const Vector3& rhs) {
 }
 
 // スカラー,ベクトル
-Vector3 operator*(const float& scalar, const Vector3& vec) {
+Vector3 operator*(float scalar, const Vector3& vec) {
     return {vec.x * scalar, vec.y * scalar, vec.z * scalar};
 }
 
 //内積
-float Vector3::Dot(const Vector3& v1, const Vector3& v2) {
-	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+float Vector3::Dot(const Vector3& v2) const {
+	return x * v2.x + y * v2.y + z * v2.z;
 }
 
 
-//正規化
-Vector3 Vector3::Normalize(const Vector3& v){
+Vector3 Vector3::Cross(const Vector3& v2) const {
 	Vector3 result;
 
-	float length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-	if (length != 0) {
-		result.x = v.x / length;
-		result.y = v.y / length;
-		result.z = v.z / length;
-	}
-	else {
-		result.x = 0;
-		result.y = 0;
-		result.z = 0;
-	}
+	result.x = (y * v2.z) - (z * v2.y);
+	result.y = (z * v2.x) - (x * v2.z);
+	result.z = (x * v2.y) - (y * v2.x);
 	return result;
 }
 
-Vector3 Vector3::Cross(const Vector3& v1, const Vector3& v2) {
-	Vector3 result;
-
-	result.x = (v1.y * v2.z) - (v1.z * v2.y);
-	result.y = (v1.z * v2.x) - (v1.x * v2.z);
-	result.z = (v1.x * v2.y) - (v1.y * v2.x);
-	return result;
-}
-
-Vector3 Vector3::Multiply(const Vector3& v1, const float& v2) {
-	Vector3 result;
-	result.x = v1.x * v2;
-	result.y = v1.y * v2;
-	result.z = v1.z * v2;
-	return result;
-}
 
 Vector3 Vector3::operator*(const Matrix4x4& obj) const {
 	Vector3 result;
@@ -144,27 +116,32 @@ Vector3 Vector3::Normalize()const {
 }
 
 
-// 上方向の単位ベクトルを返す
+
 Vector3 Vector3::ToUp() {
 	return Vector3(0.0f, 1.0f, 0.0f);
 }
 
-// 前方向の単位ベクトルを返す
 Vector3 Vector3::ToForward() {
 	return Vector3(0.0f, 0.0f, 1.0f);
 }
 
-// 右方向の単位ベクトルを返す
 Vector3 Vector3::ToRight() {
 	return Vector3(1.0f, 0.0f, 0.0f);
 }
 
-// ゼロベクトル
+Vector3 Vector3::ToLeft() {
+    return Vector3(-1.0f, 0.0f, 0.0f);
+}
+
+Vector3 Vector3::ToBack() {
+    return Vector3(0.0f, 0.0f, -1.0f);
+}
+
 Vector3 Vector3::ZeroVector() {
 	return Vector3(0, 0, 0);
 }
 
-// 単位ベクトル
+
 Vector3  Vector3::OneVector() {
 	return Vector3(1.0f, 1.0f, 1.0f);
 }

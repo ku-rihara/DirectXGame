@@ -5,6 +5,8 @@
 /// <summary>
 /// パーティクル更新用コンピュートシェーダパイプラインクラス
 /// </summary>
+namespace KetaEngine {
+
 class UpdateParticlePipeline : public BaseCSPipeline {
 public:
     UpdateParticlePipeline()          = default;
@@ -35,3 +37,5 @@ protected:
 
 private:
 };
+
+}; // KetaEngine

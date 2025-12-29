@@ -7,13 +7,15 @@
 /// <summary>
 /// レール制御点クラス
 /// </summary>
+namespace KetaEngine {
+
 class RailControlPoint {
 public:
     RailControlPoint()  = default;
     ~RailControlPoint() = default;
 
     // 初期化
-    void Init(const std::string& railName, const int32_t& keyNumber);
+    void Init(const std::string& railName, int32_t keyNumber);
 
     void AdjustParam(); //< パラメータ調整
     void RegisterParams(); //< パラメータバインド
@@ -37,3 +39,5 @@ public:
     const Vector3& GetPosition() const { return position_; }
     void SetPosition(const Vector3& position) { position_ = position; }
 };
+
+}; // KetaEngine

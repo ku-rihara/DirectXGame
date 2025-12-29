@@ -9,16 +9,6 @@
 /// オブジェクトの基底クラス
 /// </summary>
 class BaseObject {
-protected:
-    /// ===================================================
-    ///  protected variables
-    /// ===================================================
-
-    // モデル配列データ
-    std::unique_ptr<Object3d> obj3d_;
-    // ベースのワールド変換データ
-    WorldTransform baseTransform_;
-
 public:
     virtual ~BaseObject() = default;
     /// ===================================================
@@ -29,30 +19,41 @@ public:
     virtual void Init();
     virtual void Update();
 
-    virtual Vector3 GetWorldPosition() const; //< 中心座標取得
+    virtual Vector3 GetWorldPosition() const;
 
+protected:
+    /// ===================================================
+    ///  protected variables
+    /// ===================================================
+
+    // モデル配列データ
+    std::unique_ptr<KetaEngine::Object3d> obj3d_;
+    // ベースのワールド変換データ
+    KetaEngine::WorldTransform baseTransform_;
+
+public:
     /// ===================================================
     /// getter
     /// ===================================================
-    const WorldTransform& GetTransform() const { return baseTransform_; }
+    const KetaEngine::WorldTransform& GetBaseTransform() const { return baseTransform_; }
     const Vector3& GetScale() const { return baseTransform_.scale_; }
-    Object3d* GetObject3D() const { return obj3d_.get(); }
+    KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     /// ===================================================
     /// setter
     /// ===================================================
-    void SetParent(WorldTransform* parent);
+    void SetParent(KetaEngine::WorldTransform* parent);
     void SetColor(const Vector4& color);
     void SetWorldPosition(const Vector3& pos) { baseTransform_.translation_ = pos; }
-    void SetWorldPositionY(const float& pos) { baseTransform_.translation_.y = pos; }
-    void SetWorldPositionX(const float& pos) { baseTransform_.translation_.x = pos; }
-    void SetWorldPositionZ(const float& pos) { baseTransform_.translation_.z = pos; }
+    void SetWorldPositionY(float pos) { baseTransform_.translation_.y = pos; }
+    void SetWorldPositionX(float pos) { baseTransform_.translation_.x = pos; }
+    void SetWorldPositionZ(float pos) { baseTransform_.translation_.z = pos; }
     void AddPosition(const Vector3& pos) { baseTransform_.translation_ += pos; }
     void SetRotation(const Vector3& rotate) { baseTransform_.rotation_ = rotate; }
-    void SetRotationY(const float& rotate) { baseTransform_.rotation_.y = rotate; }
-    void SetRotationX(const float& rotate) { baseTransform_.rotation_.x = rotate; }
-    void SetRotationZ(const float& rotate) { baseTransform_.rotation_.z = rotate; }
+    void SetRotationY(float rotate) { baseTransform_.rotation_.y = rotate; }
+    void SetRotationX(float rotate) { baseTransform_.rotation_.x = rotate; }
+    void SetRotationZ(float rotate) { baseTransform_.rotation_.z = rotate; }
     void SetScale(const Vector3& scale) { baseTransform_.scale_ = scale; }
-    void SetScaleX(const float& scale) { baseTransform_.scale_.x = scale; }
-    void SetScaleY(const float& scale) { baseTransform_.scale_.y = scale; }
-    void SetScaleZ(const float& scale) { baseTransform_.scale_.z = scale; }
+    void SetScaleX(float scale) { baseTransform_.scale_.x = scale; }
+    void SetScaleY(float scale) { baseTransform_.scale_.y = scale; }
+    void SetScaleZ(float scale) { baseTransform_.scale_.z = scale; }
 };

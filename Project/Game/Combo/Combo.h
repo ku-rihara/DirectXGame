@@ -27,12 +27,14 @@ public:
 
     void AdjustParam(); //< パラメータ調整
     void RegisterParams(); //< パラメータバインド
+private:
+    void DebugMode();
 
 private:
     // UIコントローラ
     std::unique_ptr<ComboUIController> uiController_;
 
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Combo";
 
     // parameter
@@ -44,10 +46,13 @@ private:
 
     bool isReset_ = false;
 
+    // debug用
+    bool isStopComboTime_=false;
+
 public:
     // Getter
-    const int32_t& GetComboCount() const { return comboCount_; }
-    const int32_t& GetCurrentLevel() const { return currentLevel_; }
-    const int32_t& GetLevelUPNum(const int32_t& level) const { return LevelUpNum[level]; }
+    int32_t GetComboCount() const { return comboCount_; }
+    int32_t GetCurrentLevel() const { return currentLevel_; }
+    int32_t GetLevelUPNum(int32_t level) const { return LevelUpNum[level]; }
     const bool& GetIsReset() const { return isReset_; }
 };

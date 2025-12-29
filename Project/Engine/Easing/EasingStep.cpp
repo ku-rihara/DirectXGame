@@ -1,4 +1,6 @@
 #include "EasingStep.h"
+
+using namespace KetaEngine;
 #include"Vector2.h"
 #include "Vector3.h"
 
@@ -32,7 +34,7 @@ void EasingStep<T>::ApplyFromJson(const std::string& fileName) {
 }
 
 template <typename T>
-void EasingStep<T>::Update(const float& deltaTime) {
+void EasingStep<T>::Update(float deltaTime) {
     easing_->Update(deltaTime);
 }
 

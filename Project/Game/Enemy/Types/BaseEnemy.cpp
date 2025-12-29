@@ -3,6 +3,8 @@
 // behavior
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "../Behavior/NormalBehavior/EnemySpawn.h"
+#include"../Behavior/DamageReactionBehavior/EnemyDamageReactionAction.h"
+#include"../Behavior/DamageReactionBehavior/EnemyRopeBoundReaction.h"
 #include "Enemy/EnemyManager.h"
 
 #include "Combo/Combo.h"
@@ -14,6 +16,8 @@
 #include "AttackEffect/AttackEffect.h"
 #include "audio/Audio.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
+#include "Field/Field.h"
+#include "Field/SideRope/SideRope.h"
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
 #include "Matrix4x4.h"
@@ -25,7 +29,7 @@
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // HP
-    HPMax_ = 105.0f;
+    HPMax_ = 115.0f;
     hp_    = HPMax_;
     hpBar_ = std::make_unique<EnemyHPBar>();
     hpBar_->Init(HPMax_);
@@ -47,8 +51,8 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     notFindSprite_->Init();
 
     // audio
-    deathSound_  = Audio::GetInstance()->LoadWave("EnemyDeath.wav");
-    thrustSound_ = Audio::GetInstance()->LoadWave("Enemythurst.wav");
+    /*deathSound_  = KetaEngine::Audio::GetInstance()->LoadWave("EnemyDeath.wav");
+    thrustSound_ = KetaEngine::Audio::GetInstance()->LoadWave("Enemythurst.wav");*/
 
     // 振る舞い初期化
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
@@ -65,19 +69,20 @@ void BaseEnemy::Update() {
     }
 
     // ダメージクールタイム更新
-    DamageCollingUpdate(Frame::DeltaTimeRate());
+    DamageCollingUpdate(KetaEngine::Frame::DeltaTimeRate());
 
     // ダメージBehavior更新
-    damageBehavior_->Update();
+    damageBehavior_->Update(KetaEngine::Frame::DeltaTimeRate());
 
     collisionBox_->SetPosition(GetWorldPosition());
     collisionBox_->Update();
+   
     BaseObject::Update();
 }
 ///========================================================
 /// HpBar表示
 ///========================================================
-void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
+void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
     // ワールド座標からスクリーン座標に変換
     Vector2 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
     // Vector2に格納
@@ -122,36 +127,49 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    //
-    if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
+    if (SideRope* sideRope = dynamic_cast<SideRope*>(other)) {
 
-        if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+       if (EnemyDamageReactionAction* action = dynamic_cast<EnemyDamageReactionAction*>(damageBehavior_.get())) {
+            Vector3 velocity=action->GetKnockBackVelocity();
+           ChangeDamageReactionBehavior(std::make_unique<EnemyRopeBoundReaction>(this, velocity, sideRope));
             return;
-        }
+       }
 
-        if (!attackController->GetComboAttackData()) {
-            return;
-        }
+    } else if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
+        // プレイヤーとの攻撃コリジョン判定
+        ChangeDamageReactionByPlayerAttack(attackController);
+        return;
+    }
+}
 
-        // プレイヤーの攻撃名を取得
-        std::string attackName = attackController->GetComboAttackData()->GetGroupName();
+void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController) {
 
-        // 攻撃名が空かチェック
-        if (attackName.empty()) {
-            return;
-        }
+    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+        return;
+    }
 
-        // ダメージクーリング中
-        if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
-            return;
-        }
+    if (!attackController->GetComboAttackData()) {
+        return;
+    }
 
-        // Rootにし、受けたダメージの判定を行う
-        ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+    // プレイヤーの攻撃名を取得
+    std::string attackName = attackController->GetComboAttackData()->GetGroupName();
 
-        if (EnemyDamageReactionRoot* damageReaction = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
-            damageReaction->SelectDamageActionBehaviorByAttack(attackController);
-        }
+    // 攻撃名が空かチェック
+    if (attackName.empty()) {
+        return;
+    }
+
+    // ダメージクーリング中
+    if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
+        return;
+    }
+
+    // Rootにし、受けたダメージの判定を行う
+    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+
+    if (EnemyDamageReactionRoot* damageReaction = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
+        damageReaction->SelectDamageActionBehaviorByAttack(attackController);
     }
 }
 
@@ -176,7 +194,7 @@ void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
     moveBehavior_ = std::move(behavior);
 }
 
-bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
+bool BaseEnemy::IsInView(const KetaEngine::ViewProjection& viewProjection) const {
 
     // 敵のワールド座標
     Vector3 positionWorld = GetWorldPosition();
@@ -200,21 +218,27 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
     return true;
 }
 
-void BaseEnemy::TakeDamage(const float& damageValue) {
+void BaseEnemy::TakeDamage(float damageValue) {
+
+    // ダメージを受ける
     hp_ -= damageValue;
+
+    // コンボをカウント
+    pCombo_->ComboCountUP();
 
     if (hp_ < 0.0f) {
         hp_ = 0.0f;
     }
 }
 
-void BaseEnemy::StartDamageColling(const float& collingTime, const std::string& reactiveAttackName) {
+
+void BaseEnemy::StartDamageColling(float collingTime, const std::string& reactiveAttackName) {
     isDamageColling_        = true;
     lastReceivedAttackName_ = reactiveAttackName;
     damageCollTime_         = collingTime;
 }
 
-void BaseEnemy::DamageCollingUpdate(const float& deltaTime) {
+void BaseEnemy::DamageCollingUpdate(float deltaTime) {
     if (!isDamageColling_) {
         return;
     }
@@ -234,45 +258,39 @@ void BaseEnemy::DamageRenditionInit() {
 void BaseEnemy::ThrustRenditionInit() {
     // ガレキパーティクル
     pEnemyManager_->ThrustEmit(GetWorldPosition());
-    Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);
+  /*  KetaEngine::Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);*/
 }
 
 void BaseEnemy::DeathRenditionInit() {
     pEnemyManager_->DeathEmit(GetWorldPosition());
-    Audio::GetInstance()->PlayWave(deathSound_, 0.5f);
+   /* KetaEngine::Audio::GetInstance()->PlayWave(deathSound_, 0.5f);*/
 }
 
 /// ===================================================
 ///  BaseEnemy Jump
 /// ===================================================
-void BaseEnemy::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
+void BaseEnemy::Jump(float& speed, float fallSpeedLimit, float gravity) {
     // 移動
-    baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
+    baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
     Fall(speed, fallSpeedLimit, gravity, true);
 }
 
 ///=========================================================
 /// 　落ちる
 ///==========================================================
-void BaseEnemy::Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump) {
+void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump) {
 
     if (!isJump) {
         // 移動
-        baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
+        baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
     }
 
     // 加速する
-    speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
-
-    // 着地
-    if (baseTransform_.translation_.y <= parameter_.basePosY) {
-        baseTransform_.translation_.y = parameter_.basePosY;
-        speed                         = 0.0f;
-    }
+    speed = max(speed - (gravity * KetaEngine::Frame::DeltaTimeRate()), -fallSpeedLimit);
 }
 
-void BaseEnemy::SetGameCamera(GameCamera* gamecamera) {
-    pGameCamera_ = gamecamera;
+void BaseEnemy::SetGameCamera(GameCamera* gameCamera) {
+    pGameCamera_ = gameCamera;
 }
 
 void BaseEnemy::SetManager(EnemyManager* manager) {
@@ -299,7 +317,7 @@ void BaseEnemy::SetBodyColor(const Vector4& color) {
 }
 
 void BaseEnemy::RotateInit() {
-    obj3d_->transform_.rotation_ = {0.0f, 0.0f, 0.0f};
+    obj3d_->transform_.rotation_ = Vector3::ZeroVector();
 }
 
 void BaseEnemy::ScaleReset() {

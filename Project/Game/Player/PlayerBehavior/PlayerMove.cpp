@@ -28,7 +28,7 @@ PlayerMove::PlayerMove(Player* player)
     });
     
     // moveEase
-    moveEase_ = std::make_unique<EasingSequence>();
+    moveEase_ = std::make_unique<KetaEngine::EasingSequence>();
     moveEase_->AddStep("PlayerMovePosY.json", &tempPosY_);
     moveEase_->AddStep("PlayerLandingScale.json", &tempScale_);
     moveEase_->SetLoop(true);
@@ -42,21 +42,21 @@ PlayerMove ::~PlayerMove() {
 }
 
 // 更新
-void PlayerMove::Update() {
+void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
 
     // アニメーション
     MoveAnimation();
     WaitAnimation();
 
-    if ((Input::IsPressPad(0, GamepadButton::Y))) {
-        pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed * 2.4f);
+    if ((KetaEngine::Input::IsPressPad(0, GamepadButton::B))) {
+        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed * 2.4f);
     } else {
-        pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
     }
 
     // 　ジャンプに切り替え
-    if (Input::GetInstance()->PushKey(KeyboardKey::J)) {
-        pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
+    if (KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::J)) {
+        pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
     } else {
         JumpForJoyState(); // コントローラジャンプ
     }
@@ -64,37 +64,37 @@ void PlayerMove::Update() {
 
 void PlayerMove::JumpForJoyState() {
 
-    if (!(Input::IsTriggerPad(0, GamepadButton::A))) {
+    if (!(KetaEngine::Input::IsTriggerPad(0, GamepadButton::A))) {
         return;
     }
 
-    pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
+    pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
 }
 
 void PlayerMove::MoveAnimation() {
-    if (!pPlayer_->CheckIsMoving()) {
+    if (!pOwner_->CheckIsMoving()) {
         return;
     }
 
     ///============================================================================
     /// 移動アニメーション
     ///============================================================================
-    moveEase_->Update(Frame::DeltaTimeRate());
-    pPlayer_->SetHeadPosY(tempPosY_);
-    pPlayer_->SetHeadScale(tempScale_);
+    moveEase_->Update(KetaEngine::Frame::DeltaTimeRate());
+    pOwner_->SetHeadPosY(tempPosY_);
+    pOwner_->SetHeadScale(tempScale_);
 }
 
 void PlayerMove::WaitAnimation() {
 
-    if (pPlayer_->CheckIsMoving()) {
+    if (pOwner_->CheckIsMoving()) {
         return;
     }
 
     ///============================================================================
     /// 待機アニメーション
     ///============================================================================
-    waitEase_.Update(Frame::DeltaTimeRate());
-    pPlayer_->SetScaleY(tempWaitScaleY_);
+    waitEase_.Update(KetaEngine::Frame::DeltaTimeRate());
+    pOwner_->SetScaleY(tempWaitScaleY_);
 }
 
 void PlayerMove::Debug() {

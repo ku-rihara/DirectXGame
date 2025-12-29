@@ -1,4 +1,6 @@
 #include "Easing.h"
+
+using namespace KetaEngine;
 #include "Easing/EasingFunction.h"
 #include "Function/GetFile.h"
 #include "Editor/EasingCreator/EasingCreator.h"
@@ -192,7 +194,7 @@ void Easing<T>::ApplyForImGui() {
 
 // 時間を進めて値を更新
 template <typename T>
-void Easing<T>::Update(const float& deltaTime) {
+void Easing<T>::Update(float deltaTime) {
 
     currentStartTimeOffset_ += deltaTime;
 

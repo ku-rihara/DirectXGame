@@ -13,6 +13,8 @@
 /// <summary>
 /// オブジェクトイージングアニメーションセクション
 /// </summary>
+namespace KetaEngine {
+
 class ObjEaseAnimationSection {
 public:
     enum class TransformType {
@@ -28,6 +30,15 @@ public:
         PLAYING,
         RETURN_WAITING,
         RETURNING
+    };
+
+    enum class TransformState {
+        INACTIVE,
+        WAITING, 
+        PLAYING, 
+        RETURN_WAITING, 
+        RETURNING, 
+        FINISHED 
     };
 
     struct TransformParam {
@@ -50,9 +61,14 @@ public:
         // 現在のオフセット値
         Vector3 currentOffset = Vector3::ZeroVector();
         Vector3 startValue    = Vector3::ZeroVector();
+
         // イージング
         Easing<Vector3> ease;
         Easing<Vector3> returnEase;
+
+        // 個別の状態管理
+        TransformState state    = TransformState::INACTIVE;
+        float returnElapsedTime = 0.0f; 
     };
 
     struct RailFileSelector {
@@ -64,8 +80,8 @@ public:
     ~ObjEaseAnimationSection() = default;
 
     // 初期化、更新
-    void Init(const std::string& animationName, const std::string& categoryName, const int32_t& keyNumber);
-    void Update(const float& speedRate = 1.0f);
+    void Init(const std::string& animationName, const std::string& categoryName, int32_t keyNumber);
+    void Update(float speedRate = 1.0f);
 
     // リセット、終了判定
     void Reset();
@@ -91,16 +107,16 @@ private:
     // 再生開始
     void StartPlay();
 
-    // 変換更新、戻り更新
-    void UpdatePlay(const float& deltaTime);
-    void UpdateReturn(const float& deltaTime);
-    void CheckFinish();
+    // 各Transformの個別更新
+    void UpdateTransform(TransformParam& param, TransformType type, float deltaTime);
+    void UpdateTransformPlay(TransformParam& param, TransformType type, float deltaTime);
+    void UpdateTransformReturn(TransformParam& param, TransformType type, float deltaTime);
 
-    // 戻り動作開始
-    void StartReturn();
+    // 全体の状態チェック
+    void UpdateOverallState();
+    bool AreAllTransformsFinished() const;
 
     void ImGuiTransformParam(const char* label, TransformParam& param, const TransformType& type);
-    void CheckPlayFinishAndStartReturn();
 
 private:
     GlobalParameter* globalParameter_;
@@ -116,8 +132,7 @@ private:
     float returnStartTime_ = 0.0f;
 
     // 経過時間
-    float elapsedTime_       = 0.0f;
-    float returnElapsedTime_ = 0.0f;
+    float elapsedTime_ = 0.0f;
 
     // rail
     std::unique_ptr<RailPlayer> railPlayer_;
@@ -129,7 +144,7 @@ private:
     TimeModeSelector timeModeSelector_;
 
 public:
-    const float& GetTimePoint() const { return startTime_; }
+    float GetTimePoint() const { return startTime_; }
     const Vector3& GetCurrentScale() const { return transformParams_[static_cast<size_t>(TransformType::Scale)].currentOffset; }
     const Vector3& GetCurrentRotation() const { return transformParams_[static_cast<size_t>(TransformType::Rotation)].currentOffset; }
     const Vector3& GetCurrentTranslation() const { return transformParams_[static_cast<size_t>(TransformType::Translation)].currentOffset; }
@@ -141,3 +156,5 @@ public:
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const;
 };
+
+}; // KetaEngine

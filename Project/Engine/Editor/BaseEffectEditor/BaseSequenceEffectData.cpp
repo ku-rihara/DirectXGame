@@ -1,8 +1,12 @@
 #include "BaseSequenceEffectData.h"
+
+using namespace KetaEngine;
 // editor
 #include "Editor/CameraEditor/CameraKeyFrame.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationSection.h"
 #include "Editor/RailEditor/RailControlPoint.h"
+#include"Editor/GPUParticleEditor/GPUParticleSection.h"
+#include"Editor/ParticleEditor/ParticleSection.h"
 // std
 #include <algorithm>
 #include <filesystem>
@@ -55,7 +59,7 @@ void BaseSequenceEffectData<TSequenceElement>::AddKeyFrame() {
 }
 
 template <typename TSequenceElement>
-void BaseSequenceEffectData<TSequenceElement>::RemoveKeyFrame(const int32_t& index) {
+void BaseSequenceEffectData<TSequenceElement>::RemoveKeyFrame(int32_t index) {
     if (index >= 0 && index < static_cast<int32_t>(sectionElements_.size())) {
         sectionElements_.erase(sectionElements_.begin() + index);
 
@@ -145,7 +149,7 @@ const TSequenceElement* BaseSequenceEffectData<TSequenceElement>::GetSelectedKey
 }
 
 template <typename TSequenceElement>
-void BaseSequenceEffectData<TSequenceElement>::SetSelectedKeyFrameIndex(const int32_t& index) {
+void BaseSequenceEffectData<TSequenceElement>::SetSelectedKeyFrameIndex(int32_t index) {
     if (index >= -1 && index < static_cast<int32_t>(sectionElements_.size())) {
         selectedKeyFrameIndex_ = index;
     }
@@ -155,3 +159,5 @@ void BaseSequenceEffectData<TSequenceElement>::SetSelectedKeyFrameIndex(const in
 template class BaseSequenceEffectData<CameraKeyFrame>;
 template class BaseSequenceEffectData<ObjEaseAnimationSection>;
 template class BaseSequenceEffectData<RailControlPoint>;
+template class BaseSequenceEffectData<GPUParticleSection>;
+template class BaseSequenceEffectData<ParticleSection>;

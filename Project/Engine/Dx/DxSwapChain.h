@@ -7,6 +7,8 @@
 #include <wrl.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class RtvManager;
 class WinApp;
 
@@ -29,7 +31,7 @@ public:
     void Init(
         Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory,
         Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue,
-        WinApp* winApp, const int32_t& backBufferWidth, const int32_t& backBufferHeight);
+        WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight);
 
     /// <summary>
     /// レンダーターゲットビュー作成
@@ -74,3 +76,5 @@ public:
     const DXGI_SWAP_CHAIN_DESC1& GetDesc() const { return desc_; }
     const D3D12_RENDER_TARGET_VIEW_DESC& GetRTVDesc() const { return rtvDesc_; }
 };
+
+}; // KetaEngine

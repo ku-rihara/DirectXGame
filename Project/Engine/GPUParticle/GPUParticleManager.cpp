@@ -1,4 +1,6 @@
 #include "GPUParticleManager.h"
+
+using namespace KetaEngine;
 #include "3d/ModelManager.h"
 #include "3d/ViewProjection.h"
 #include "base/TextureManager.h"
@@ -27,7 +29,7 @@ void GPUParticleManager::Init(SrvManager* srvManager) {
 void GPUParticleManager::CreateParticleGroup(
     const std::string& name,
     const std::string& modelFilePath,
-    const int32_t& maxCount) {
+    int32_t maxCount) {
 
     if (particleGroups_.contains(name)) {
         return;
@@ -51,7 +53,7 @@ void GPUParticleManager::CreateParticleGroup(
 void GPUParticleManager::CreatePrimitiveParticle(
     const std::string& name,
     const PrimitiveType& type,
-    const int32_t& maxCount) {
+    int32_t maxCount) {
 
     if (particleGroups_.contains(name)) {
         return;
@@ -103,7 +105,6 @@ void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
     // デフォルト値を設定
     if (group.emitSphereData) {
         group.emitSphereData->translate     = Vector3(0.0f, 0.0f, 0.0f);
-        group.emitSphereData->radius        = 1.0f;
         group.emitSphereData->count         = 10;
         group.emitSphereData->frequency     = 1.0f;
         group.emitSphereData->frequencyTime = 0.0f;
@@ -139,8 +140,8 @@ void GPUParticleManager::Update() {
         }
 
         // Particle更新
-        // TODO:DeltaTimeはParticleごとに設定できるようにする
         group.resourceData->UpdatePerFrameData(Frame::DeltaTime());
+        group.material.UpdateUVAnimation(Frame::DeltaTime());   
         DispatchEmit(group);
         DispatchUpdate(group);
     }
@@ -196,7 +197,7 @@ void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
         group.material.SetCommandList(commandList);
 
         // t0(PS): テクスチャ
-        commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(group.textureHandle));
+        commandList->SetGraphicsRootDescriptorTable(4, TextureManager::GetInstance()->GetTextureHandle(group.textureHandle));
 
         // 描画
         DrawGroup(group);
@@ -238,7 +239,7 @@ void GPUParticleManager::SetModel(const std::string& name, const std::string& mo
     }
 }
 
-void GPUParticleManager::SetTextureHandle(const std::string& name, const uint32_t& handle) {
+void GPUParticleManager::SetTextureHandle(const std::string& name, uint32_t handle) {
     assert(particleGroups_.contains(name));
     particleGroups_[name].textureHandle = handle;
 }

@@ -22,13 +22,13 @@ public:
     /// 3コンボ目のレール更新
     /// </summary>
     /// <param name="speed">速度</param>
-    void RailThreeComboUpdate(const float& speed);
+    void RailThreeComboUpdate(float speed);
 
     /// <summary>
     /// 4コンボ目のレール更新
     /// </summary>
     /// <param name="speed">速度</param>
-    void RailForthComboUpdate(const float& speed);
+    void RailForthComboUpdate(float speed);
 
     void AdjustParam() override; //< パラメータの調整
     void SaveAndLoad() override; //< セーブ・ロード
@@ -37,7 +37,7 @@ public:
     /// ディゾルブ効果の適用
     /// </summary>
     /// <param name="dissolve">ディゾルブ値</param>
-    virtual void DissolveAdapt(const float& dissolve);
+    virtual void DissolveAdapt(float dissolve);
 
 private:
     ///===========================================
@@ -47,8 +47,8 @@ private:
     std::string forthComboName_;
 
     // 　移動用制御点
-    std::unique_ptr<RailManager> threeComboRailManager_;
-    std::unique_ptr<RailManager> stopPunchRailManager_;
+    std::unique_ptr<KetaEngine::RailManager> threeComboRailManager_;
+    std::unique_ptr<KetaEngine::RailManager> stopPunchRailManager_;
 
     Vector3 combo3MovePos_;
 
@@ -56,12 +56,12 @@ public:
     ///===========================================
     /// getter method
     ///=============================================
-    RailManager* GetThreeComboRailManager() { return threeComboRailManager_.get(); }
-    RailManager* GetStopRailManager() { return stopPunchRailManager_.get(); }
+    KetaEngine::RailManager* GetThreeComboRailManager() { return threeComboRailManager_.get(); }
+    KetaEngine::RailManager* GetStopRailManager() { return stopPunchRailManager_.get(); }
 
     ///===========================================
     /// setter method
     ///=============================================
-    void SetRailParent(WorldTransform* parent) override;
-    void SetParent(WorldTransform* parent) override;
+    void SetRailParent(KetaEngine::WorldTransform* parent) override;
+    void SetParent(KetaEngine::WorldTransform* parent) override;
 };

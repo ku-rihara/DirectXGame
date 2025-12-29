@@ -35,7 +35,7 @@ void EnemyDeath::AngleCaluclation() {
 EnemyDeath::~EnemyDeath() {
 }
 
-void EnemyDeath::Update() {
+void EnemyDeath::Update(float deltaTime) {
     switch (step_) {
     /// ------------------------------------------------------
     /// 方向計算
@@ -43,9 +43,9 @@ void EnemyDeath::Update() {
     case Step::DIRECTIONSET:
         AngleCaluclation();
         blowPower_ = Vector3(
-            direction_.x * -pBaseEnemy_->GetParameter().deathBlowValue * Frame::DeltaTimeRate(),
+            direction_.x * -pBaseEnemy_->GetParameter().deathBlowValue * deltaTime,
             0.0f,
-            direction_.z * -pBaseEnemy_->GetParameter().deathBlowValue * Frame::DeltaTimeRate());
+            direction_.z * -pBaseEnemy_->GetParameter().deathBlowValue * deltaTime);
         step_ = Step::BLOW;
         break;
 
@@ -54,13 +54,13 @@ void EnemyDeath::Update() {
     ///---------------------------------------------------------
     case EnemyDeath::Step::BLOW:
         pBaseEnemy_->SetRotationY(LerpShortAngle(
-            pBaseEnemy_->GetTransform().rotation_.y,
+            pBaseEnemy_->GetBaseTransform().rotation_.y,
             objectiveAngle_,
             0.5f));
-        burstTime_ += Frame::DeltaTimeRate();
+        burstTime_ += deltaTime;
 
         // 吹っ飛び回転
-        rotate_ += pBaseEnemy_->GetParameter().deathRotateSpeed * Frame::DeltaTimeRate();
+        rotate_ += pBaseEnemy_->GetParameter().deathRotateSpeed * deltaTime;
         pBaseEnemy_->SetRotationX(rotate_);
 
         // 吹っ飛び適応

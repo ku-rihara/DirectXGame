@@ -31,14 +31,14 @@ public:
     /// 更新
     /// </summary>
     /// <param name="comboNum">コンボ数</param>
-    void Update(const int32_t& comboNum);
+    void Update(int32_t comboNum);
 
     /// <summary>
     /// 時間に応じたアルファ値適応
     /// </summary>
     /// <param name="comboTime">コンボ時間</param>
     /// <param name="comboMaxTime">コンボ最大時間</param>
-    void AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime);
+    void AlphaAdaptForTime(float comboTime, float comboMaxTime);
 
     /// <summary>
     /// ビヘイビア変更
@@ -50,8 +50,8 @@ public:
     void RegisterParams(); //< パラメータバインド
 
 private:
-    GlobalParameter* globalParameter_; // グローバルパラメータ
-    const std::string groupName_ = "ComboUI"; // グループ名
+    KetaEngine::GlobalParameter* globalParameter_;  // グローバルパラメータ
+    const std::string groupName_ = "ComboUI";       // グループ名
 
     // parameter
     ScalingParameter parameter_;

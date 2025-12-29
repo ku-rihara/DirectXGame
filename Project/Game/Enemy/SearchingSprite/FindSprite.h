@@ -20,7 +20,7 @@ public:
 
 private:
     Vector2 position_;
-    std::unique_ptr<Sprite> sprite_;
+    std::unique_ptr<KetaEngine::Sprite> sprite_;
 
     bool isDraw_ = false;
     float alpha_;
@@ -32,5 +32,5 @@ public:
     // setter
     void SetPosition(const Vector2& pos) { position_ = pos; }
     void SetIsDraw(const bool& is) { isDraw_ = is; }
-    void SetAlpha(const float& a) { alpha_ = a; }
+    void SetAlpha(float a) { alpha_ = a; }
 };

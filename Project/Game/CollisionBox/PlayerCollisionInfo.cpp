@@ -15,6 +15,7 @@ void PlayerCollisionInfo::Init() {
 
 void PlayerCollisionInfo::Update() {
     if (!comboAttackData_) {
+        BaseAABBCollisionBox::Update();
         return;
     }
 
@@ -27,7 +28,7 @@ void PlayerCollisionInfo::Update() {
     BaseAABBCollisionBox::Update();
 }
 
-void PlayerCollisionInfo::TimerUpdate(const float& timeSpeed) {
+void PlayerCollisionInfo::TimerUpdate(float timeSpeed) {
     if (!comboAttackData_) {
         return;
     }
@@ -62,7 +63,7 @@ void PlayerCollisionInfo::TimerUpdate(const float& timeSpeed) {
     }
 }
 
-void PlayerCollisionInfo::LoopWaiting(const float& timeSpeed) {
+void PlayerCollisionInfo::LoopWaiting(float timeSpeed) {
     // ループ待機中の処理
     if (!isInLoopWait_) {
         return;
@@ -106,6 +107,7 @@ void PlayerCollisionInfo::AttackStart(const PlayerComboAttackData* comboAttackDa
     isInLoopWait_     = false;
     isFinish_         = false;
     isHit_            = false;
+    hasHitEnemy_      = false;
 
     // サイズセット
     SetSize(collisionParam.size);
@@ -125,10 +127,11 @@ void PlayerCollisionInfo::UpdateOffset() {
 void PlayerCollisionInfo::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     if (dynamic_cast<BaseEnemy*>(other)) {
         isHit_ = true;
+        hasHitEnemy_ = true;
     }
 }
 
-void PlayerCollisionInfo::SetPlayerBaseTransform(const WorldTransform* playerBaseTransform) {
+void PlayerCollisionInfo::SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform) {
     baseTransform_ = playerBaseTransform;
 }
 
@@ -136,6 +139,6 @@ Vector3 PlayerCollisionInfo::GetCollisionPos() const {
     return BaseAABBCollisionBox::GetCollisionPos();
 }
 
-void PlayerCollisionInfo::SetParentTransform(WorldTransform* transform) {
+void PlayerCollisionInfo::SetParentTransform(KetaEngine::WorldTransform* transform) {
     BaseAABBCollisionBox::SetParentTransform(transform);
 }

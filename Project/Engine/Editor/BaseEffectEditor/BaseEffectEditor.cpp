@@ -1,10 +1,14 @@
 #include "BaseEffectEditor.h"
+
+using namespace KetaEngine;
 // editor
 #include "Editor/CameraEditor/CameraAnimationData.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationData.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailData.h"
 #include"Editor/ShakeEditor/ShakeData.h"
+#include"Editor/GPUParticleEditor/GPUParticleData.h"
+#include "Editor/ParticleEditor/ParticleData.h"
 // std
 #include <algorithm>
 #include <filesystem>
@@ -12,15 +16,16 @@
 #include <Windows.h>
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::Init(const std::string& typeName, const bool& isUseCategory) {
+void BaseEffectEditor<TEffectData>::Init(const std::string& typeName, bool isUseCategory) {
     isUseCategorySystem_ = isUseCategory;
     baseFolderPath_      = GetFolderPath();
     effectTypeName_      = typeName;
     AllLoadFile();
+    isEditing_ = false;
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::Update(const float& deltaTimeOrSpeedRate) {
+void BaseEffectEditor<TEffectData>::Update(float deltaTimeOrSpeedRate) {
     if (isUseCategorySystem_) {
         // 全カテゴリーの全エフェクトを更新
         for (auto& category : categories_) {
@@ -40,6 +45,8 @@ template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader((effectTypeName_ + " Editor").c_str())) {
+        isEditing_ = true;
+
         ImGui::PushID(effectTypeName_.c_str());
 
         // 派生クラス固有のUI
@@ -82,6 +89,8 @@ void BaseEffectEditor<TEffectData>::EditorUpdate() {
         RenderFileOperations();
 
         ImGui::PopID();
+    } else {
+        isEditing_ = false;
     }
 #endif
 }
@@ -339,6 +348,7 @@ void BaseEffectEditor<TEffectData>::RenderPlayBack() {
         ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Playing");
     } else if (IsSelectedAnimationFinished()) {
         ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Finished");
+        ResetSelectedAnimation();
     } else {
         ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Stopped");
     }
@@ -363,7 +373,7 @@ void BaseEffectEditor<TEffectData>::AddEffect(const std::string& name) {
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::RemoveEffect(const int32_t& index) {
+void BaseEffectEditor<TEffectData>::RemoveEffect(int32_t index) {
     if (index >= 0 && index < static_cast<int32_t>(effects_.size())) {
         effects_.erase(effects_.begin() + index);
 
@@ -400,7 +410,7 @@ void BaseEffectEditor<TEffectData>::AddCategory(const std::string& categoryName)
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::RemoveCategory(const int32_t& index) {
+void BaseEffectEditor<TEffectData>::RemoveCategory(int32_t index) {
     if (index >= 0 && index < static_cast<int>(categories_.size())) {
         categories_.erase(categories_.begin() + index);
 
@@ -416,7 +426,7 @@ void BaseEffectEditor<TEffectData>::RemoveCategory(const int32_t& index) {
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::AddEffectToCategory(const int32_t& categoryIndex, const std::string& effectName) {
+void BaseEffectEditor<TEffectData>::AddEffectToCategory(int32_t categoryIndex, const std::string& effectName) {
     if (categoryIndex < 0 || categoryIndex >= static_cast<int>(categories_.size())) {
         return;
     }
@@ -440,8 +450,8 @@ void BaseEffectEditor<TEffectData>::AddEffectToCategory(const int32_t& categoryI
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::RemoveEffectFromCategory(const int32_t& categoryIndex,
-    const int32_t& effectIndex) {
+void BaseEffectEditor<TEffectData>::RemoveEffectFromCategory(int32_t categoryIndex,
+    int32_t effectIndex) {
     if (categoryIndex < 0 || categoryIndex >= static_cast<int>(categories_.size())) {
         return;
     }
@@ -560,7 +570,7 @@ void BaseEffectEditor<TEffectData>::AllSaveFile() {
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::SaveCategory(const int32_t& categoryIndex) {
+void BaseEffectEditor<TEffectData>::SaveCategory(int32_t categoryIndex) {
     if (categoryIndex < 0 || categoryIndex >= static_cast<int>(categories_.size())) {
         return;
     }
@@ -659,3 +669,5 @@ template class BaseEffectEditor<CameraAnimationData>;
 template class BaseEffectEditor<ObjEaseAnimationData>;
 template class BaseEffectEditor<RailData>;
 template class BaseEffectEditor<ShakeData>;
+template class BaseEffectEditor<GPUParticleData>;
+template class BaseEffectEditor<ParticleData>;

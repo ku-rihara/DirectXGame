@@ -8,6 +8,8 @@
 /// <summary>
 /// カメラアニメーション制御クラス
 /// </summary>
+namespace KetaEngine {
+
 class CameraAnimation : public BaseEffectPlayer {
 public:
     struct CameraParam {
@@ -24,7 +26,7 @@ public:
 
     // 初期化、更新
     void Init() override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
 
     // 再生、リセット、初期値保存
     void Play(const std::string& animationName)override;
@@ -54,8 +56,10 @@ public:
 
     const Vector3& GetOffsetPosition() const { return currentOffsetPosition_; }
     const Vector3& GetOffsetRotation() const { return currentOffsetRotation_; }
-    const float& GetOffsetFov() const { return currentOffsetFov_; }
+    float GetOffsetFov() const { return currentOffsetFov_; }
 
-    void SetAdapt(const bool& adapt) { isAdapt_ = adapt; }
+    void SetAdapt(bool adapt) { isAdapt_ = adapt; }
     void SetViewProjection(ViewProjection* viewProjection);
 };
+
+}; // KetaEngine

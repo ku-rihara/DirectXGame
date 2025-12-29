@@ -1,4 +1,6 @@
 #include "Line3D.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include "Line3DManager.h"
 #include "Pipeline/PipelineManager.h"
@@ -107,7 +109,7 @@ void Line3D::Draw(const ViewProjection& viewProj) {
 ///============================================================
 /// 球のワイヤーフレーム描画
 ///============================================================
-void Line3D::SetSphereWireframe(const Vector3& center, const float& radius, const Vector4& color) {
+void Line3D::SetSphereWireframe(const Vector3& center, float radius, const Vector4& color) {
     const int32_t latMax = 8;
     const int32_t lonMax = 8;
 

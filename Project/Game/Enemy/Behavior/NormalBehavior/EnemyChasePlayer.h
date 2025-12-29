@@ -17,8 +17,8 @@ private:
     float chaseResetTimer_; // 追従リセットタイマー
     bool isChaseTimeOver_; // 追従時間超過フラグ
 
-    Easing<Vector2> spriteEasing_;
-    Easing<Vector3> scaleEasing_;
+    KetaEngine::Easing<Vector2> spriteEasing_;
+    KetaEngine::Easing<Vector3> scaleEasing_;
 
     Vector2 tempSpriteScale_;
     Vector3 tempEnemyScale_;
@@ -40,5 +40,5 @@ private:
     /// <summary>
     /// 追従時間を更新
     /// </summary>
-    void UpdateChaseTime(const float& deltaTime);
+    void UpdateChaseTime(float deltaTime);
 };

@@ -19,12 +19,12 @@ Vector3 BaseAABBCollisionBox::GetCollisionPos() const {
     return worldPos;
 }
 
-void BaseAABBCollisionBox::SetParentTransform(WorldTransform* transform) {
+void BaseAABBCollisionBox::SetParentTransform(KetaEngine::WorldTransform* transform) {
     transform_.parent_ = transform;
 }
 
-void BaseAABBCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
+void BaseAABBCollisionBox::OnCollisionEnter([[maybe_unused]] KetaEngine::BaseCollider* other) {
 }
 
-void BaseAABBCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
+void BaseAABBCollisionBox::OnCollisionStay([[maybe_unused]] KetaEngine::BaseCollider* other) {
 }

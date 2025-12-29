@@ -1,4 +1,6 @@
 #include "DebugCamera.h"
+
+using namespace KetaEngine;
 #include <numbers>
 
 DebugCamera::DebugCamera(const int& window_width, const int& window_height) {

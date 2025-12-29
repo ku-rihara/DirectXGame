@@ -94,9 +94,6 @@
     <Filter Include="MyEngine\.h\utility\Debug">
       <UniqueIdentifier>{20818b80-a58e-4c65-84c7-f8fe2b0bdb85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Scene\Factory">
-      <UniqueIdentifier>{33f429d3-39ce-4d12-9f0a-521b426150fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameCamera">
       <UniqueIdentifier>{bfdbb484-9e65-4a8a-af2e-0ef01be0733a}</UniqueIdentifier>
     </Filter>
@@ -136,9 +133,6 @@
     <Filter Include="MyEngine\.cpp\Light">
       <UniqueIdentifier>{5396bc61-e016-4b3e-8707-c28cc9c03b94}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\MonsterBall">
-      <UniqueIdentifier>{0fe76578-dd93-4ebc-a7b1-ff86299b8b82}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Player">
       <UniqueIdentifier>{17bc6e81-f103-4b8a-895b-a16298dcba9e}</UniqueIdentifier>
     </Filter>
@@ -174,9 +168,6 @@
     </Filter>
     <Filter Include="Game\Player\core">
       <UniqueIdentifier>{d3e51b1b-0df3-4fb3-bd66-3f185b05cfcd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Scene\Manager">
-      <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyEngine\.cpp\Primitive">
       <UniqueIdentifier>{a660c6f0-a988-46d1-bca0-d2fc5408ee78}</UniqueIdentifier>
@@ -487,6 +478,45 @@
     <Filter Include="MyEngine\.h\utility\TimeModeSelector">
       <UniqueIdentifier>{03c50b4d-e92c-4dad-91f1-1e665d26cfc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\Editor\GPUParticleEditor">
+      <UniqueIdentifier>{f243c575-978d-4ae9-8871-1dd9359ecb6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\GPUParticleEditor">
+      <UniqueIdentifier>{891cf9dc-1516-4ccb-812e-32cadcff9d26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Scene">
+      <UniqueIdentifier>{026655db-74a6-47d8-8a1f-7aa7e01f04b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Scene">
+      <UniqueIdentifier>{dde66375-3e0a-45fa-9e33-f83fb68b8b5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Scene\Factory">
+      <UniqueIdentifier>{c4c1dae2-abc6-448c-a253-3fdcdbc1fde5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Scene\Manager">
+      <UniqueIdentifier>{3c92dabf-e233-45c2-802c-30eaf967702d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Scene\Factory">
+      <UniqueIdentifier>{6decb64d-417a-4649-aa95-8a30faa375cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Scene\Manager">
+      <UniqueIdentifier>{716432aa-8f34-4922-935a-5ae2c4a5d1e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Field\SideRope">
+      <UniqueIdentifier>{c2dc9632-6ae4-4c2d-8714-ae912c0dea18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Audience">
+      <UniqueIdentifier>{96d14d5f-3312-4d5d-ad76-8f9bc6b404f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Audience\Behavior">
+      <UniqueIdentifier>{b9b0c3cb-e2b1-43a9-b7ee-246537d0dc42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BaseBehavior">
+      <UniqueIdentifier>{e31af7f2-4976-4dfe-a778-349d84cad2f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\GameSceneState">
+      <UniqueIdentifier>{1d931734-646d-4dd0-883f-79d0953b48cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -595,12 +625,6 @@
     <ClCompile Include="Game\Scene\BaseScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scene\Manager\SceneManager.cpp">
-      <Filter>Game\Scene\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
-      <Filter>Game\Scene\Factory</Filter>
-    </ClCompile>
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
@@ -649,9 +673,6 @@
     <ClCompile Include="Engine\Lighrt\AreaLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Game\MonsterBall\MonsterBall.cpp">
-      <Filter>Game\MonsterBall</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Lighrt\AmbientLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
     </ClCompile>
@@ -685,7 +706,7 @@
     <ClCompile Include="Game\GameCamera\GameCamera.cpp">
       <Filter>Game\GameCamera</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.cpp">
       <Filter>Game\Player\Behavior\Base\Atacck</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\TitleBehavior\BaseTitleBehavior.cpp">
@@ -970,9 +991,6 @@
     <ClCompile Include="Engine\2d\SpriteRegistry.cpp">
       <Filter>MyEngine\.cpp\2d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GPUParticle\GPUParticleEmitter.cpp">
-      <Filter>MyEngine\.cpp\GPUParticle</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GPUParticle\GPUParticleManager.cpp">
       <Filter>MyEngine\.cpp\GPUParticle</Filter>
     </ClCompile>
@@ -1021,9 +1039,6 @@
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GPUParticle\GPUParticleParamEditor.cpp">
-      <Filter>MyEngine\.cpp\GPUParticle</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\input\InputData.cpp">
       <Filter>MyEngine\.cpp\input</Filter>
     </ClCompile>
@@ -1039,7 +1054,7 @@
     <ClCompile Include="Game\CollisionBox\PlayerCollisionInfo.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackAction.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
@@ -1174,7 +1189,7 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.cpp">
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp">
@@ -1216,6 +1231,87 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleData.cpp">
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticlePlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleData.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticlePlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSection.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\Manager\SceneManager.cpp">
+      <Filter>MyEngine\.cpp\Scene\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp">
+      <Filter>MyEngine\.cpp\Scene\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Field\SideRope\SideRope.cpp">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Field\SideRope\SideRopeController.cpp">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.cpp">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Field\SideRope\SideRopeReboundSystem.cpp">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\SpatialGrid\SpatialGrid.cpp">
+      <Filter>MyEngine\.cpp\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Audience.cpp">
+      <Filter>Game\Audience</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\AudienceController.cpp">
+      <Filter>Game\Audience</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\AudienceAppear.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\AudienceDisappear.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\AudienceRoot.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\BaseAudienceBehavior.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\BaseGameSceneState.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneIntro.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameScenePlaying.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameScenePose.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneFinish.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneRoot.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1225,9 +1321,6 @@
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\ModelData.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\struct\SoundData.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\Transform.h">
@@ -1359,15 +1452,6 @@
     <ClInclude Include="Game\Scene\BaseScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Scene\Manager\SceneManager.h">
-      <Filter>Game\Scene\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h">
-      <Filter>Game\Scene\Factory</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
-      <Filter>Game\Scene\Factory</Filter>
-    </ClInclude>
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
@@ -1416,9 +1500,6 @@
     <ClInclude Include="Engine\Lighrt\AreaLight.h">
       <Filter>MyEngine\.h\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Game\MonsterBall\MonsterBall.h">
-      <Filter>Game\MonsterBall</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Lighrt\AmbientLight.h">
       <Filter>MyEngine\.h\Light</Filter>
     </ClInclude>
@@ -1452,7 +1533,7 @@
     <ClInclude Include="Game\GameCamera\GameCamera.h">
       <Filter>Game\GameCamera</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.h">
       <Filter>Game\Player\Behavior\Base\Atacck</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\TitleBehavior\BaseTitleBehavior.h">
@@ -1743,9 +1824,6 @@
     <ClInclude Include="Engine\2d\SpriteRegistry.h">
       <Filter>MyEngine\.h\2d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GPUParticle\GPUParticleEmitter.h">
-      <Filter>MyEngine\.h\GPUParticle</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GPUParticle\Data\GPUParticleEmitterData.h">
       <Filter>MyEngine\.h\GPUParticle\Data</Filter>
     </ClInclude>
@@ -1800,9 +1878,6 @@
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h">
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GPUParticle\GPUParticleParamEditor.h">
-      <Filter>MyEngine\.h\GPUParticle</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\input\InputData.h">
       <Filter>MyEngine\.h\input</Filter>
     </ClInclude>
@@ -1818,7 +1893,7 @@
     <ClInclude Include="Game\CollisionBox\PlayerCollisionInfo.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackAction.h">
       <Filter>Game\Player\Behavior\ComboBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
@@ -1953,7 +2028,7 @@
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.h">
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h">
@@ -1994,6 +2069,96 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleData.h">
+      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleEditor.h">
+      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticlePlayer.h">
+      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.h">
+      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleData.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEditor.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticlePlayer.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSection.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Factory\AbstractSceneFactory.h">
+      <Filter>MyEngine\.h\Scene\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Factory\SceneFactory.h">
+      <Filter>MyEngine\.h\Scene\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Manager\SceneManager.h">
+      <Filter>MyEngine\.h\Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\SideRope.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\SideRopeController.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.h">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\SideRopeReboundSystem.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\RopeBoundParam.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\SpatialGrid\SpatialGrid.h">
+      <Filter>MyEngine\.h\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Audience.h">
+      <Filter>Game\Audience</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\AudienceController.h">
+      <Filter>Game\Audience</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\AudienceAppear.h">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\AudienceDisappear.h">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\AudienceRoot.h">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\BaseAudienceBehavior.h">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BaseBehavior\BaseBehavior.h">
+      <Filter>Game\BaseBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\BaseGameSceneState.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneIntro.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameScenePlaying.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameScenePose.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneFinish.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneRoot.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

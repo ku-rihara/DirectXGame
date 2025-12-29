@@ -1,4 +1,6 @@
 #include "ParticleManager.h"
+
+using namespace KetaEngine;
 #include "3d/ModelManager.h"
 #include "Animation/ModelAnimation.h"
 #include "base/TextureManager.h"
@@ -117,6 +119,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 
     for (auto& groupPair : particleGroups_) {
         ParticleGroup& group           = groupPair.second;
+        std::string name               = groupPair.first;
         std::list<Particle>& particles = group.particles;
         ParticleFprGPU* instancingData = group.instancingData;
 
@@ -127,6 +130,10 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             if (it->currentTime_ >= it->lifeTime_) {
                 it = particles.erase(it);
                 continue;
+            }
+
+            if (instanceIndex > particleGroups_[name].currentNum) {
+                return;
             }
 
             // WVP適応
@@ -206,7 +213,7 @@ void ParticleManager::UpdateUV(UVInfo& uvInfo, float deltaTime) {
 ///============================================================
 void ParticleManager::CreateParticleGroup(
     const std::string name, const std::string modelFilePath,
-    const uint32_t& maxnum) {
+    uint32_t maxnum) {
     if (particleGroups_.contains(name)) {
         return;
     }
@@ -225,7 +232,7 @@ void ParticleManager::CreateParticleGroup(
     particleGroups_[name].instanceNum = 0;
 }
 
-void ParticleManager::CreatePrimitiveParticle(const std::string& name, PrimitiveType type, const uint32_t& maxnum) {
+void ParticleManager::CreatePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum) {
     if (particleGroups_.contains(name)) {
         return;
     }
@@ -259,7 +266,7 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
 ///============================================================
 /// テクスチャセット
 ///============================================================
-void ParticleManager::SetTextureHandle(const std::string name, const uint32_t& handle) {
+void ParticleManager::SetTextureHandle(const std::string name, uint32_t handle) {
     particleGroups_[name].textureHandle = handle;
 }
 
@@ -283,9 +290,10 @@ void ParticleManager::CreateMaterialResource(const std::string& name) {
 ///============================================================
 /// インスタンシングリソース作成
 ///============================================================
-void ParticleManager::CreateInstancingResource(const std::string& name, const uint32_t& instanceNum) {
+void ParticleManager::CreateInstancingResource(const std::string& name, uint32_t instanceNum) {
 
     particleGroups_[name].instanceNum = instanceNum;
+    particleGroups_[name].currentNum  = instanceNum;
 
     // Instancing用のTransformationMatrixリソースを作る
     particleGroups_[name].instancingResource = DirectXCommon::GetInstance()->CreateBufferResource(
@@ -518,7 +526,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 /// エミット
 ///======================================================================
 void ParticleManager::Emit(
-    std::string name, const ParticleEmitter::Parameters& paramaters, const ParticleEmitter::GroupParamaters& groupParamaters, const int32_t& count) { // 新パラメータ追加
+    std::string name, const ParticleEmitter::Parameters& paramaters, const ParticleEmitter::GroupParamaters& groupParamaters, int32_t count) { // 新パラメータ追加
 
     // パーティクルグループが存在するか確認
     assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
@@ -576,7 +584,7 @@ void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm, con
     data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
 }
 
-Vector3 ParticleManager::ScaleAdapt(const float& time, const ScaleInFo& info) {
+Vector3 ParticleManager::ScaleAdapt(float time, const ScaleInFo& info) {
 
     if (!info.easeParam.isScaleEase) {
         return info.tempScaleV3;
@@ -587,7 +595,7 @@ Vector3 ParticleManager::ScaleAdapt(const float& time, const ScaleInFo& info) {
 }
 
 Vector3 ParticleManager::EaseAdapt(const ParticleEmitter::EaseType& easetype,
-    const Vector3& start, const Vector3& end, const float& time, const float& maxTime) {
+    const Vector3& start, const Vector3& end, float time, float maxTime) {
 
     switch (easetype) {
     case ParticleEmitter::EaseType::INSINE:
@@ -616,5 +624,5 @@ void ParticleManager::SetViewProjection(const ViewProjection* view) {
 }
 
 void ParticleManager::SetAllParticleFile() {
-    particleFiles_ = GetFileNamesForDirectory(GlobalParameter::GetInstance()->GetDirectoryPath() +ParticleFolderName_);
+    particleFiles_ = GetFileNamesForDirectory(GlobalParameter::GetInstance()->GetDirectoryPath() + ParticleFolderName_);
 }

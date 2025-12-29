@@ -4,14 +4,16 @@
 #include "3d/ViewProjection.h"
 #include "MinMax.h"
 // editor
-#include "Pipeline/Particle/ParticlePipeline.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailManager.h"
+#include "Pipeline/Particle/ParticlePipeline.h"
 // int32_t
 #include <cstdint>
 // std
 #include <string>
 #include <vector>
+
+namespace KetaEngine {
 
 class Object3DAnimation;
 
@@ -41,8 +43,20 @@ public:
         bool isScaleEase;
         int easeTypeInt;
         EaseType easeType;
+
+        // スカラー値用
+        float startValueF = 1.0f;
         FMinMax endValueF;
+
+        // Vector3値用
+        Vector3 startValueV3 = Vector3::OneVector();
         V3MinMax endValueV3;
+
+        // Back系イージング用パラメータ
+        float backRatio;
+
+        // 現在のスケールオフセット
+        Vector3 currentScaleOffset = Vector3::OneVector();
     };
 
     struct UVParm {
@@ -92,14 +106,15 @@ public:
     ParticleParameter()          = default;
     virtual ~ParticleParameter() = default;
 
-    virtual void Init();         //< 初期化
-    void ParameterInit();        //< パラメータ初期化
-    void AdaptTexture();         //< テクスチャ適用
-    void RegisterParams();           //< パラメータのバインド
+    virtual void Init(); //< 初期化
+    void ParameterInit(); //< パラメータ初期化
+    void AdaptTexture(); //< テクスチャ適用
+    void RegisterParams(); //< パラメータのバインド
+    void GetParams(); //< パラメータの取得
     virtual void EditorUpdate(); //< エディタ更新
-    void ParticleChange();       //< パーティクル変更処理
-    void ScaleParmEditor();      //< スケールパラメータエディタ
-    void ImGuiTextureSelection();//< テクスチャ選択ImGui
+    void ParticleChange(); //< パーティクル変更処理
+    void ScaleParmEditor(); //< スケールパラメータエディタ
+    void ImGuiTextureSelection(); //< テクスチャ選択ImGui
 
     /// <summary>
     /// テクスチャの適用
@@ -117,7 +132,7 @@ public:
     void DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int& selectedIndex,
         const std::function<void(const std::string&)>& onApply);
 
-protected:
+public:
     Parameters parameters_;
     GroupParamaters groupParamaters_;
     GlobalParameter* globalParameter_;
@@ -129,6 +144,7 @@ protected:
     bool isShot_;
     float intervalTime_;
     int32_t particleCount_;
+    int32_t maxParticleNum_ = 1000;
 
     bool isMoveForRail_;
     bool isRailRoop_;
@@ -138,6 +154,11 @@ protected:
     const std::string folderPath_      = "Particle";
     const std::string textureFilePath_ = "Resources/texture";
     std::string selectedTexturePath_;
+
+    // Primitive変更用
+    int32_t primitiveTypeInt_ = 0;
+    bool useModel_            = false;
+    std::string modelFilePath_;
 
 public:
     // getter
@@ -149,5 +170,7 @@ public:
     void SetParameter(const Parameters& param) { parameters_ = param; }
     void SetGroupParameter(const GroupParamaters& groupParam) { groupParamaters_ = groupParam; }
     void SetPreBillBordType(const int& preBillBordType) { billBordType_ = preBillBordType; }
-    void SetPreIsShot(const bool& preIsShot) { isShot_ = preIsShot; }
+    void SetPreIsShot(bool preIsShot) { isShot_ = preIsShot; }
 };
+
+}; // KetaEngine

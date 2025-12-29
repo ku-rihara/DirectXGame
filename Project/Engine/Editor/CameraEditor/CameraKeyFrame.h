@@ -11,6 +11,8 @@
 /// <summary>
 /// カメラキーフレームクラス
 /// </summary>
+namespace KetaEngine {
+
 class CameraKeyFrame {
 public:
     struct KeyFrameParam {
@@ -24,8 +26,8 @@ public:
     ~CameraKeyFrame() = default;
 
     // 初期化、更新
-    void Init(const std::string& groupName, const int32_t& keyNumber);
-    void Update(const float& speedRate);
+    void Init(const std::string& groupName, int32_t keyNumber);
+    void Update(float speedRate);
 
     // パラメータ調整、登録、適応
     void AdjustParam();           
@@ -66,15 +68,17 @@ private:
 
 
 public:
-    const float& GetTimePoint() const { return timePoint_; }
+    float GetTimePoint() const { return timePoint_; }
     const Vector3& GetPosition() const { return currenTSequenceElementParam_.position; }
     const Vector3& GetRotation() const { return currenTSequenceElementParam_.rotation; }
-    const float& GetFov() const { return currenTSequenceElementParam_.fov; }
+    float GetFov() const { return currenTSequenceElementParam_.fov; }
     const Vector3& GetEditPosition() const { return keyFrameParam_.position; }
     const Vector3& GetEditRotation() const { return keyFrameParam_.rotation; }
-    const float& GetEditFov() const { return keyFrameParam_.fov; }
+    float GetEditFov() const { return keyFrameParam_.fov; }
    
-    void SetTimePoint(const float& timePoint) { timePoint_ = timePoint; }
-    void SetStartEasing(const Vector3& pos, const Vector3& rotate, const float& fov);
+    void SetTimePoint(float timePoint) { timePoint_ = timePoint; }
+    void SetStartEasing(const Vector3& pos, const Vector3& rotate, float fov);
  
 };
+
+}; // KetaEngine

@@ -15,17 +15,17 @@ public:
     /// 初期化
     /// </summary>
     /// <param name="hpMax">最大HP</param>
-    void Init(const float& hpMax);
+    void Init(float hpMax);
 
     /// <summary>
     /// 更新
     /// </summary>
     /// <param name="hp">現在のHP</param>
-    void Update(const float& hp);
+    void Update(float hp);
 
 private:
-    std::unique_ptr<Sprite> sprite_;
-    std::unique_ptr<Sprite> hpSprite_;
+    std::unique_ptr<KetaEngine::Sprite> sprite_;
+    std::unique_ptr<KetaEngine::Sprite> hpSprite_;
 
     bool isSpawned_ = false;
     bool isDraw_    = false;
@@ -40,6 +40,6 @@ public:
     // setter
     void SetPosition(const Vector2& pos) { position_ = pos; }
     void SetIsSpawned(const bool& is) { isSpawned_ = is; }
-    void SetAlpha(const float& a) { alpha_ = a; }
+    void SetAlpha(float a) { alpha_ = a; }
     void SetIsDraw(const bool& is) { isDraw_ = is; }
 };

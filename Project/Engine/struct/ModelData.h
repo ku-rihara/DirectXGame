@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <map>
 
+namespace KetaEngine {
+
 struct Node {
     QuaternionTransform transform;
 	Matrix4x4 localMatrix;
@@ -31,3 +33,5 @@ struct ModelData {
 	MaterialData material;
 	Node rootNode;
 };
+
+}; // KetaEngine

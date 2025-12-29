@@ -5,6 +5,8 @@
 /// <summary>
 /// シリンダープリミティブクラス
 /// </summary>
+namespace KetaEngine {
+
 class PrimitiveCylinder : public IPrimitive {
 public:
     PrimitiveCylinder()  = default;
@@ -32,3 +34,5 @@ public:
 
 private:
 };
+
+}; // KetaEngine

@@ -22,7 +22,7 @@ void EnemyManager::Init() {
     damageReactionController_->Init();
 
     /// グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
@@ -34,7 +34,7 @@ void EnemyManager::Init() {
 ///========================================================================================
 ///  敵の生成
 ///========================================================================================
-void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& position, const int32_t& groupID) {
+void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID) {
 
     std::unique_ptr<BaseEnemy> enemy;
 
@@ -95,7 +95,7 @@ void EnemyManager::Update() {
     ParticleUpdate();
 }
 
-void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
+void EnemyManager::HpBarUpdate(const KetaEngine::ViewProjection& viewProjection) {
 
     for (size_t i = 0; i < enemies_.size(); ++i) {
         enemies_[i]->DisplaySprite(viewProjection);
@@ -119,6 +119,11 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "chaseResetTime" + std::to_string(int(i + 1)), &parameters_[i].chaseResetTime);
         globalParameter_->Regist(groupName_, "ChaseLimitDistance" + std::to_string(int(i + 1)), &parameters_[i].chaseLimitDistance);
 
+        // ロープパラメータ
+        globalParameter_->Regist(groupName_, "ropeReboundJumpValue" + std::to_string(int(i + 1)), &parameters_[i].ropeReboundJumpValue);
+        globalParameter_->Regist(groupName_, "ropeReboundGravity" + std::to_string(int(i + 1)), &parameters_[i].ropeReboundGravity);
+        globalParameter_->Regist(groupName_, "ropeReboundFallSpeedLimit" + std::to_string(int(i + 1)), &parameters_[i].ropeReboundFallSpeedLimit);
+
         // 死亡パラメータ
         globalParameter_->Regist(groupName_, "deathBlowValue" + std::to_string(int(i + 1)), &parameters_[i].deathBlowValue);
         globalParameter_->Regist(groupName_, "deathBlowValueY" + std::to_string(int(i + 1)), &parameters_[i].deathBlowValueY);
@@ -128,7 +133,6 @@ void EnemyManager::RegisterParams() {
     }
 }
 
-// DrawEnemyParamUI関数にも追加
 void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
     ImGui::DragFloat3("initScale", &parameters_[static_cast<size_t>(type)].initScale_.x, 0.01f);
@@ -149,6 +153,11 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("DeathGravity", &parameters_[static_cast<size_t>(type)].deathGravity, 0.1f);
     ImGui::DragFloat("DeathRotateSpeed", &parameters_[static_cast<size_t>(type)].deathRotateSpeed, 0.01f);
     ImGui::DragFloat("DeathBurstTime", &parameters_[static_cast<size_t>(type)].deathBurstTime, 0.01f);
+
+    ImGui::SeparatorText("Rope Settings");
+    ImGui::DragFloat("ropeReboundJumpValue", &parameters_[static_cast<size_t>(type)].ropeReboundJumpValue, 0.01f);
+    ImGui::DragFloat("ropeReboundGravity", &parameters_[static_cast<size_t>(type)].ropeReboundGravity, 0.01f);
+    ImGui::DragFloat("ropeReboundFallSpeedLimit", &parameters_[static_cast<size_t>(type)].ropeReboundFallSpeedLimit, 0.01f);
 
     ImGui::SeparatorText("UI");
     ImGui::DragFloat2("HPBarOffsetPos", &parameters_[static_cast<size_t>(type)].hpBarPosOffset.x, 0.01f);
@@ -191,33 +200,33 @@ void EnemyManager::DamageReactionCreate() {
 void EnemyManager::ParticleInit() {
 
     // damage
-    damageEffect[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectCenter", PrimitiveType::Plane, 300));
-    damageEffect[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffect", PrimitiveType::Plane, 300));
-    damageEffect[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectWing", PrimitiveType::Plane, 300));
-    damageEffect[3].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectStar", PrimitiveType::Plane, 300));
+    damageEffect[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffectCenter", PrimitiveType::Plane, 300));
+    damageEffect[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffect", PrimitiveType::Plane, 300));
+    damageEffect[2].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffectWing", PrimitiveType::Plane, 300));
+    damageEffect[3].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffectStar", PrimitiveType::Plane, 300));
 
     /// death
-    deathParticle_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathSmoke", PrimitiveType::Plane, 900));
-    deathParticle_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathFireSmoke", PrimitiveType::Plane, 900));
-    deathParticle_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathSpark", PrimitiveType::Plane, 900));
-    deathParticle_[3].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathMiniSpark", PrimitiveType::Plane, 900));
+    deathParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathSmoke", PrimitiveType::Plane, 900));
+    deathParticle_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathFireSmoke", PrimitiveType::Plane, 900));
+    deathParticle_[2].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathSpark", PrimitiveType::Plane, 900));
+    deathParticle_[3].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathMiniSpark", PrimitiveType::Plane, 900));
 
     // debri
-    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriName", "debri.obj", 500));
+    debriParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("DebriName", "debri.obj", 500));
 
     // EnemySpawn
-    spawnEffectNormal_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnCircle", PrimitiveType::Cylinder, 200));
-    spawnEffectNormal_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnSpark", PrimitiveType::Plane, 500));
+    spawnEffectNormal_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnCircle", PrimitiveType::Cylinder, 200));
+    spawnEffectNormal_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnSpark", PrimitiveType::Plane, 500));
 
-    spawnEffectStrong_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnCircle", PrimitiveType::Cylinder, 200));
-    spawnEffectStrong_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnSpark", PrimitiveType::Plane, 500));
+    spawnEffectStrong_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnCircle", PrimitiveType::Cylinder, 200));
+    spawnEffectStrong_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnSpark", PrimitiveType::Plane, 500));
 
     // crack
-    fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
+    fallCrack_.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
 }
 
 ///----------------------------------------------------------------------
-/// Emitt Init
+/// Emit Init
 ///----------------------------------------------------------------------
 
 void EnemyManager::DamageEffectShot(const Vector3& pos) {

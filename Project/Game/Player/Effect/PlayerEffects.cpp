@@ -4,31 +4,31 @@
 ///=========================================================
 /// 　初期化
 ///==========================================================
-void PlayerEffects::Init(WorldTransform* transform) {
+void PlayerEffects::Init(KetaEngine::WorldTransform* transform) {
 
-    starSound_ = Audio::GetInstance()->LoadWave("starEffect.wav");
+   /* starSound_ = KetaEngine::Audio::GetInstance()->LoadWave("starEffect.wav");*/
 
     // debri
-    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri.obj", 100));
+    debriParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("DebriParticle", "debri.obj", 100));
 
     // star
-    starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 100));
-    starEffect_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));
-    starEffect_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
+    starEffect_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 100));
+    starEffect_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));
+    starEffect_[2].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
 
     for (uint32_t i = 0; i < starEffect_.size(); i++) {
         starEffect_[i].emitter->SetFollowingPos(&transform->translation_);
     }
 
-    rushRingEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("RushEffectRing", PrimitiveType::Ring, 200));
+    rushRingEffect_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("RushEffectRing", PrimitiveType::Ring, 200));
     rushRingEffect_[0].emitter->SetFollowingPos(&transform->translation_);
 
     // crack
-    fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
+    fallCrack_.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
 
     // rush
-    rushParticle_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("rushParticle", PrimitiveType::Plane, 800));
-    afterGlowEffect_[0].emitter.reset(ParticleEmitter::CreateParticle("afterGlowEffect", "Player.obj", 100));
+    rushParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("rushParticle", PrimitiveType::Plane, 800));
+    afterGlowEffect_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("afterGlowEffect", "Player.obj", 100));
 }
 
 ///=========================================================
@@ -70,7 +70,7 @@ void PlayerEffects::SpecialAttackRenditionInit() {
     for (uint32_t i = 0; i < starEffect_.size(); i++) {
         starEffect_[i].emitter->Emit();
     }
-    Audio::GetInstance()->PlayWave(starSound_, 0.5f);
+  /*  KetaEngine::Audio::GetInstance()->PlayWave(starSound_, 0.5f);*/
 }
 
 void PlayerEffects::RushAttackEmit() {

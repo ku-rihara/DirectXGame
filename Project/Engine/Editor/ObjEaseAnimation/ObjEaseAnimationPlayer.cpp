@@ -1,36 +1,19 @@
 #include "ObjEaseAnimationPlayer.h"
 
+using namespace KetaEngine;
+
 void ObjEaseAnimationPlayer::Init() {
     BaseEffectPlayer::Init();
 }
 
-void ObjEaseAnimationPlayer::Update(const float& speedRate) {
+void ObjEaseAnimationPlayer::Update(float speedRate) {
     if (effectData_) {
         effectData_->Update(speedRate);
     }
+
 }
 
-void ObjEaseAnimationPlayer::Play(const std::string& animationName) {
-  
-    if (effectData_) {
-        effectData_->Pause();
-    }
-
-    effectData_.reset();
-    effectData_ = CreateEffectData();
-
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
-    if (animeData) {
-        animeData->Init(animationName);
-        animeData->LoadData();
-        animeData->Play();
-    }
-
-    currentEffectName_ = animationName;
-    currentCategoryName_.clear(); 
-}
-
-void ObjEaseAnimationPlayer::PlayInCategory(const std::string& categoryName, const std::string& animationName) {
+void ObjEaseAnimationPlayer::Play(const std::string& categoryName, const std::string& animationName) {
     if (effectData_) {
         effectData_->Pause();
     }

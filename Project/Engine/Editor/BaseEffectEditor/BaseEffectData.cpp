@@ -1,4 +1,6 @@
 #include "BaseEffectData.h"
+
+using namespace KetaEngine;
 #include <imgui.h>
 
 void BaseEffectData::Play() {

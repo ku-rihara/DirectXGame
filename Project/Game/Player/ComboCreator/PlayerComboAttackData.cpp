@@ -7,7 +7,7 @@
 
 void PlayerComboAttackData::Init(const std::string& attackName) {
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
 
     // グループ名設定
     groupName_ = attackName;
@@ -38,6 +38,7 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "power", &attackParam_.power);
     globalParameter_->Regist(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
     globalParameter_->Regist(groupName_, "blowYPower", &attackParam_.blowYPower);
+    globalParameter_->Regist(groupName_, "isMotionOnly", &attackParam_.isMotionOnly);
 
     // CollisionParam
     globalParameter_->Regist(groupName_, "collisionSize", &attackParam_.collisionParam.size);
@@ -52,19 +53,25 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
     globalParameter_->Regist(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
     globalParameter_->Regist(groupName_, "isAbleInputMoving", &attackParam_.moveParam.isAbleInputMoving);
+    globalParameter_->Regist(groupName_, "isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
+    globalParameter_->Regist(groupName_, "finishTimeOffset", &attackParam_.moveParam.finishTimeOffset);
 
     // TriggerParam
     globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
     globalParameter_->Regist(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
     globalParameter_->Regist(groupName_, "Condition", &tempCondition_);
     globalParameter_->Regist(groupName_, "IsFirstAttack", &attackParam_.triggerParam.isFirstAttack);
-    globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance); // ★追加
+    globalParameter_->Regist(groupName_, "RequireHit", &attackParam_.triggerParam.requireHit);
+    globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance);
 
     // TimingParam
     globalParameter_->Regist(groupName_, "isCancel", &attackParam_.timingParam.isCancel);
     globalParameter_->Regist(groupName_, "cancelFrame", &attackParam_.timingParam.cancelTime);
     globalParameter_->Regist(groupName_, "precedeInputFrame", &attackParam_.timingParam.precedeInputTime);
     globalParameter_->Regist(groupName_, "finishWaitTime", &attackParam_.timingParam.finishWaitTime);
+
+    // FallParam
+    globalParameter_->Regist(groupName_, "enableFall", &attackParam_.fallParam.enableFall);
 
     // nextAttack
     globalParameter_->Regist(groupName_, "NextAttackType", &attackParam_.nextAttackType);
@@ -80,56 +87,70 @@ void PlayerComboAttackData::AdjustParam() {
 #ifdef _DEBUG
 
     ImGui::PushID(groupName_.c_str());
+    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), (groupName_ + " Editing").c_str());
+    ImGui::Checkbox("モーションのみ有効", &attackParam_.isMotionOnly);
+    ImGui::Separator();
 
     // TriggerParam
-    ImGui::Checkbox("isFirstAttack", &attackParam_.triggerParam.isFirstAttack);
-    ImGuiKeyboardKeySelector("keyBoard:TriggerBottom", attackParam_.triggerParam.keyBordBottom);
-    ImGuiGamepadButtonSelector("GamePad:TriggerBottom", attackParam_.triggerParam.gamePadBottom);
+    ImGui::Checkbox("最初の攻撃", &attackParam_.triggerParam.isFirstAttack);
+    ImGui::Checkbox("前の攻撃がヒットした時が発動条件", &attackParam_.triggerParam.requireHit);
+    ImGuiKeyboardKeySelector("キーボード:ボタン", attackParam_.triggerParam.keyBordBottom);
+    ImGuiGamepadButtonSelector("パッド:ボタン", attackParam_.triggerParam.gamePadBottom);
 
     // 発動条件
-    const char* conditionItems[] = {"Ground", "Air", "Both"};
+    const char* conditionItems[] = {"地面", "空中", "両方"};
     tempCondition_               = static_cast<int>(attackParam_.triggerParam.condition);
-    if (ImGui::Combo("Trigger Condition", &tempCondition_, conditionItems, IM_ARRAYSIZE(conditionItems))) {
+    if (ImGui::Combo("発動できる状況", &tempCondition_, conditionItems, IM_ARRAYSIZE(conditionItems))) {
         attackParam_.triggerParam.condition = static_cast<TriggerCondition>(tempCondition_);
     }
 
     // Simple Parameter
-    ImGui::SeparatorText("simple Parameter");
-    ImGui::DragFloat("Power", &attackParam_.power, 0.01f);
-    ImGui::DragFloat("KnockBack Power", &attackParam_.knockBackPower, 0.01f);
-    ImGui::DragFloat("Blow Y Power", &attackParam_.blowYPower, 0.01f);
+    if (!attackParam_.isMotionOnly) {
+        ImGui::SeparatorText("基本パラメータ");
+        ImGui::DragFloat("攻撃力", &attackParam_.power, 0.01f);
+        ImGui::DragFloat("正面のノックバック力", &attackParam_.knockBackPower, 0.01f);
+        ImGui::DragFloat("Y方向のノックバック力", &attackParam_.blowYPower, 0.01f);
 
-    // Collision Parameter
-    ImGui::SeparatorText("Collision Parameter");
-    ImGui::DragFloat3("Collision Size", &attackParam_.collisionParam.size.x, 0.01f);
-    ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionParam.offsetPos.x, 0.01f);
-    ImGui::DragFloat("Adapt Time", &attackParam_.collisionParam.adaptTime, 0.01f);
-    ImGui::Checkbox("is Auto Advance to Next Attack", &attackParam_.timingParam.isAutoAdvance);
-    ImGui::InputInt("Loop Num", &attackParam_.collisionParam.loopNum);
-    if (attackParam_.collisionParam.loopNum > 0) {
-        ImGui::DragFloat("Loop Wait Time", &attackParam_.collisionParam.loopWaitTime, 0.01f);
+        // Collision Parameter
+        ImGui::SeparatorText("コライダーについて");
+        ImGui::DragFloat3("サイズ", &attackParam_.collisionParam.size.x, 0.01f);
+        ImGui::DragFloat3("オフセット位置", &attackParam_.collisionParam.offsetPos.x, 0.01f);
+        ImGui::DragFloat("適応時間", &attackParam_.collisionParam.adaptTime, 0.01f);
+     
+        ImGui::InputInt("ループ回数", &attackParam_.collisionParam.loopNum);
+        if (attackParam_.collisionParam.loopNum > 0) {
+            ImGui::DragFloat("ループ待機時間", &attackParam_.collisionParam.loopWaitTime, 0.01f);
+        }
+        ImGui::Checkbox("プレイヤーに追従する", &attackParam_.collisionParam.isAlwaysFollowing);
     }
-    ImGui::Checkbox("is Always Following", &attackParam_.collisionParam.isAlwaysFollowing);
 
     // Move Parameter
-    ImGui::SeparatorText("Move Parameter");
-    ImGui::Checkbox("isAble InputMoving", &attackParam_.moveParam.isAbleInputMoving);
-    ImGui::DragFloat("Move Ease Time", &attackParam_.moveParam.easeTime, 0.01f);
-    ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
-    ImGuiEasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
+    ImGui::SeparatorText("移動について");
+    ImGui::Checkbox("攻撃中入力による移動ができる", &attackParam_.moveParam.isAbleInputMoving);
+    ImGui::DragFloat("イージングタイム", &attackParam_.moveParam.easeTime, 0.01f);
+    ImGui::Checkbox("Yの位置を直接指定する", &attackParam_.moveParam.isPositionYSelect);
+    ImGui::DragFloat3("移動量", &attackParam_.moveParam.value.x, 0.01f);
+    ImGui::DragFloat("終了タイムオフセット", &attackParam_.moveParam.finishTimeOffset, 0.01f);
+
+    ImGuiEasingTypeSelector("イージングタイプ", attackParam_.moveParam.easeType);
 
     // Timing Parameters
-    ImGui::SeparatorText("Timing Parameter");
-    ImGui::DragFloat("Precede Input Time", &attackParam_.timingParam.precedeInputTime, 0.01f);
-    ImGui::DragFloat("finish Wait Time", &attackParam_.timingParam.finishWaitTime, 0.01f);
+    ImGui::SeparatorText("タイミングについて");
+    ImGui::Checkbox("自動で次の攻撃に進む", &attackParam_.timingParam.isAutoAdvance);
+    ImGui::DragFloat("先行入力開始タイム", &attackParam_.timingParam.precedeInputTime, 0.01f);
+    ImGui::DragFloat("攻撃終了時の待機時間", &attackParam_.timingParam.finishWaitTime, 0.01f);
 
-    ImGui::Checkbox("is Add Cancel Time", &attackParam_.timingParam.isCancel);
+    ImGui::Checkbox("キャンセルタイムを使う", &attackParam_.timingParam.isCancel);
     if (attackParam_.timingParam.isCancel) {
-        ImGui::DragFloat("Cancel Time", &attackParam_.timingParam.cancelTime, 0.01f);
+        ImGui::DragFloat("キャンセル開始タイム", &attackParam_.timingParam.cancelTime, 0.01f);
     }
 
+    // Fall Parameters
+    ImGui::SeparatorText("Fall Parameter");
+    ImGui::Checkbox("攻撃終了時に落ちる", &attackParam_.fallParam.enableFall);
+
     // next Attack
-    ImGui::SeparatorText("Next Attack");
+    ImGui::SeparatorText("次の攻撃");
     SelectNextAttack();
 
     renditionData_.AdjustParam();
@@ -146,34 +167,39 @@ void PlayerComboAttackData::AdjustParam() {
 
 void PlayerComboAttackData::SelectNextAttack() {
     fileSelector_.SelectFile(
-        "Next Attack Type",
+        "次の攻撃名",
         "Resources/GlobalParameter/AttackCreator",
         attackParam_.nextAttackType,
         groupName_,
         true);
 }
 
-bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger) {
+bool PlayerComboAttackData::IsReserveNextAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy) {
 
     // 先行入力受付
     if (currentTime < attackParam_.timingParam.precedeInputTime && !IsWaitFinish(currentTime)) {
         return false;
     }
 
+    // ヒット条件チェック
+    if (nextAtkTrigger.requireHit && !hasHitEnemy) {
+        return false;
+    }
+
     // キーボード入力チェック
-    if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
+    if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
         return true;
     }
 
     // ゲームパッド入力チェック
-    if (Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
+    if (KetaEngine::Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
         return true;
     }
 
     return false;
 }
 
-bool PlayerComboAttackData::IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger) {
+bool PlayerComboAttackData::IsCancelAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy) {
 
     if (!attackParam_.timingParam.isCancel) {
         return false;
@@ -183,21 +209,25 @@ bool PlayerComboAttackData::IsCancelAttack(const float& currentTime, const Trigg
         return false;
     }
 
-     // キーボード入力チェック
-    if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
+    // ヒット条件チェック
+    if (nextAtkTrigger.requireHit && !hasHitEnemy) {
+        return false;
+    }
+
+    // キーボード入力チェック
+    if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
         return true;
     }
 
     // ゲームパッド入力チェック
-    if (Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
+    if (KetaEngine::Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
         return true;
     }
 
     return false;
 }
 
-
-bool PlayerComboAttackData::IsWaitFinish(const float& currentTime) {
+bool PlayerComboAttackData::IsWaitFinish(float currentTime) {
     if (currentTime >= attackParam_.timingParam.finishWaitTime) {
         return true;
     } else {

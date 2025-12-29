@@ -1,7 +1,7 @@
 #pragma once
 
-#include "utility/FileSelector/FileSelector.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "utility/FileSelector/FileSelector.h"
 #include <array>
 #include <cstdint>
 #include <string>
@@ -37,6 +37,7 @@ public:
         Head,
         RightHand,
         LeftHand,
+        MainHead,
         Count
     };
 
@@ -47,33 +48,41 @@ public:
     //*-------------------------------- public Method --------------------------------*//
 
     void AdjustParam();
-    void RegisterParams(GlobalParameter* globalParam, const std::string& groupName);
+    void RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName);
 
 private:
     //*-------------------------------- private Method --------------------------------*//
-    void SelectRenditionFile(const char* label, const std::string& directory, std::pair<RenditionParam, FileSelector>& param);
-    void SelectObjAnimationFile(const char* label, std::pair<ObjAnimationParam, FileSelector>& param);
+    void SelectRenditionFile(const char* label, const std::string& directory, std::pair<RenditionParam, KetaEngine::FileSelector>& param);
+    void SelectObjAnimationFile(const char* label, const std::string& directory, std::pair<ObjAnimationParam, KetaEngine::FileSelector>& param);
+
+    // オブジェクトアニメーションタイプに応じたフォルダパスを取得
+    std::string GetObjAnimationFolderPath(ObjAnimationType type) const;
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
     std::string groupName_;
-    const std::string folderPath_             = "Resources/GlobalParameter/";
-    const std::string objAnimationFolderPath_ = "Resources/GlobalParameter/ObjEaseAnimation/Player/Dates/";
+    const std::string folderPath_ = "Resources/GlobalParameter/";
+
+    // 各オブジェクトアニメーションタイプのフォルダパス
+    const std::string objAnimationFolderPath_Head_      = "Resources/GlobalParameter/ObjEaseAnimation/Player/Dates/";
+    const std::string objAnimationFolderPath_RightHand_ = "Resources/GlobalParameter/ObjEaseAnimation/RightHand/Dates/";
+    const std::string objAnimationFolderPath_LeftHand_  = "Resources/GlobalParameter/ObjEaseAnimation/LeftHand/Dates/";
+    const std::string objAnimationFolderPath_MainHead_  = "Resources/GlobalParameter/ObjEaseAnimation/MainHead/Dates/";
 
     // 演出パラメータ配列
-    std::array<std::pair<RenditionParam, FileSelector>, static_cast<size_t>(Type::Count)> renditionParams_;
+    std::array<std::pair<RenditionParam, KetaEngine::FileSelector>, static_cast<size_t>(Type::Count)> renditionParams_;
 
     // オブジェクトアニメーションパラメータ配列
-    std::array<std::pair<ObjAnimationParam, FileSelector>, static_cast<size_t>(ObjAnimationType::Count)> objAnimationParams_;
+    std::array<std::pair<ObjAnimationParam, KetaEngine::FileSelector>, static_cast<size_t>(ObjAnimationType::Count)> objAnimationParams_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
-    const RenditionParam& GetRenditionParamFromIndex(const int32_t& index) const;
+    const RenditionParam& GetRenditionParamFromIndex(int32_t index) const;
     const RenditionParam& GetRenditionParamFromType(const Type& type) const {
         return renditionParams_[static_cast<size_t>(type)].first;
     }
 
-    const ObjAnimationParam& GetObjAnimationParamFromIndex(const int32_t& index) const {
+    const ObjAnimationParam& GetObjAnimationParamFromIndex(int32_t index) const {
         return objAnimationParams_[index].first;
     }
     const ObjAnimationParam& GetObjAnimationParamFromType(const ObjAnimationType& type) const {

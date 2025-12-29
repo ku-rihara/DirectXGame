@@ -38,7 +38,7 @@ EnemyWait::~EnemyWait() {
 
 void EnemyWait::Update() {
 
-	spriteEase_.Update(Frame::DeltaTimeRate());
+	spriteEase_.Update(KetaEngine::Frame::DeltaTimeRate());
 	pBaseEnemy_->GetNotFindSprite()->SetScale(tempSpriteScale_);
 	
 		// ターゲットへのベクトル
@@ -61,7 +61,7 @@ void EnemyWait::Update() {
 		float objectiveAngle = std::atan2(-direction.x, -direction.z);
 
 		// 最短角度補間でプレイヤーの回転を更新
-		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle, 0.3f));
+		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetBaseTransform().rotation_.y, objectiveAngle, 0.3f));
 
 }
 

@@ -1,4 +1,6 @@
 #include "RailData.h"
+
+using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "Line3D/Line3D.h"
 #include "MathFunction.h"
@@ -24,11 +26,11 @@ void RailData::Init(const std::string& railName) {
     InitParams();
 }
 
-void RailData::Update(const float& speedRate) {
+void RailData::Update(float speedRate) {
     UpdateWithDirection(speedRate, PositionMode::WORLD, {1.0f, 1.0f, 1.0f});
 }
 
-void RailData::UpdateWithDirection(const float& speedRate, const PositionMode& mode, const Vector3& direction) {
+void RailData::UpdateWithDirection(float speedRate, const PositionMode& mode, const Vector3& direction) {
     if (playState_ == PlayState::RETURNING) {
         UpdateReturn(speedRate);
         return;
@@ -132,7 +134,7 @@ void RailData::StartReturn() {
     }
 }
 
-void RailData::UpdateReturn(const float& speedRate) {
+void RailData::UpdateReturn(float speedRate) {
     // 実際のデルタタイムを計算
     float actualDeltaTime = 0.0f;
     switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
@@ -270,7 +272,7 @@ void RailData::AdvanceToNexTSequenceElement() {
     // Railはキーフレーム進行を使用しない
 }
 
-std::unique_ptr<RailControlPoint> RailData::CreateKeyFrame(const int32_t& index) {
+std::unique_ptr<RailControlPoint> RailData::CreateKeyFrame(int32_t index) {
     auto keyFrame = std::make_unique<RailControlPoint>();
     keyFrame->Init(groupName_, index);
     return keyFrame;

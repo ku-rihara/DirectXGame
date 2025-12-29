@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+namespace KetaEngine {
+
 class Line3D;
 
 /// <summary>
@@ -55,7 +57,7 @@ public:
 
     // BaseEffectDataからのオーバーライド
     void Init(const std::string& railName) override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
     void LoadData() override;
@@ -66,7 +68,7 @@ public:
     void SaveSequenceElements() override;
 
     // Rail固有の更新
-    void UpdateWithDirection(const float& speedRate, const PositionMode& mode = PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
+    void UpdateWithDirection(float speedRate, const PositionMode& mode = PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
 
     void AdjustParam();
 
@@ -81,7 +83,7 @@ protected:
 
     void UpdateKeyFrameProgression() override;
     void AdvanceToNexTSequenceElement() override;
-    std::unique_ptr<RailControlPoint> CreateKeyFrame(const int32_t& index) override;
+    std::unique_ptr<RailControlPoint> CreateKeyFrame(int32_t index) override;
     std::string GeTSequenceElementFolderPath() const override;
 
 private:
@@ -89,7 +91,7 @@ private:
 
     void CheckAndHandleFinish();
     void StartReturn();
-    void UpdateReturn(const float& speedRate);
+    void UpdateReturn(float speedRate);
     void OnReturnComplete();
   
 private:
@@ -120,3 +122,5 @@ public:
 
     void SetParent(WorldTransform* parent) { parentTransform_ = parent; }
 };
+
+}; // KetaEngine

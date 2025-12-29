@@ -5,6 +5,8 @@
 /// <summary>
 /// リングプリミティブクラス
 /// </summary>
+namespace KetaEngine {
+
 class PrimitiveRing : public IPrimitive {
 public:
     PrimitiveRing()  = default;
@@ -32,3 +34,5 @@ public:
 
 private:
 };
+
+}; // KetaEngine

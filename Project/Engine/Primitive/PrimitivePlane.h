@@ -5,6 +5,8 @@
 /// <summary>
 /// 平面プリミティブクラス
 /// </summary>
+namespace KetaEngine {
+
 class PrimitivePlane : public IPrimitive {
 public:
     PrimitivePlane()  = default;
@@ -32,3 +34,5 @@ public:
 
 private:
 };
+
+}; // KetaEngine

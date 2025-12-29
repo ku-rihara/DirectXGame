@@ -3,6 +3,8 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class DsvManager;
 class SrvManager;
 
@@ -23,7 +25,7 @@ public:
     /// <param name="width">バッファ幅</param>
     /// <param name="height">バッファ高さ</param>
     void Init(Microsoft::WRL::ComPtr<ID3D12Device> device, DsvManager* dsvManager,
-        SrvManager* srvManager, const uint32_t& width, const uint32_t& height);
+        SrvManager* srvManager, uint32_t width, uint32_t height);
 
     /// <summary>
     /// 深度バッファクリア
@@ -79,3 +81,5 @@ public:
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetDepthSrvCPUHandle() const { return depthTextureCPUSrvHandle_; }
     const D3D12_RESOURCE_STATES& GetCurrentState() const { return currentState_; }
 };
+
+}; // KetaEngine

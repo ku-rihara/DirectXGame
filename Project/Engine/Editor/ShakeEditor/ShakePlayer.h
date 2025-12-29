@@ -8,6 +8,8 @@
 /// <summary>
 /// シェイクプレイヤー
 /// </summary>
+namespace KetaEngine {
+
 class ShakePlayer : public BaseEffectPlayer {
 public:
     ShakePlayer()           = default;
@@ -17,7 +19,7 @@ public:
 
     // BaseEffectPlayerからのオーバーライド
     void Init() override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
     void Play(const std::string& shakeName) override;
 
 private:
@@ -36,3 +38,5 @@ public:
 
     const Vector3& GetTotalShakeOffset() const { return totalShakeOffset_; }
 };
+
+}; // KetaEngine

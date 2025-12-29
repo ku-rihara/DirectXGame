@@ -28,19 +28,19 @@ public:
     /// 更新
     /// </summary>
     /// <param name="playSpeed">再生速度</param>
-    void Update(const float& playSpeed);
+    void Update(float playSpeed);
 
     /// <summary>
     /// 指定グループのイージングリセット
     /// </summary>
     /// <param name="groupNum">グループ番号</param>
-    void EasingResetSelectGroup(const int32_t& groupNum);
+    void EasingResetSelectGroup(int32_t groupNum);
 
     /// <summary>
     /// コンボレベルに応じたクローズ処理
     /// </summary>
     /// <param name="level">コンボレベル</param>
-    void CloseForComboLevel(const int32_t& level);
+    void CloseForComboLevel(int32_t level);
 
     /// <summary>
     /// オブジェクトの追加
@@ -54,7 +54,7 @@ public:
     /// </summary>
     /// <param name="type">オブジェクトタイプ</param>
     /// <param name="mode">エフェクトモード</param>
-    void SetEffectMode(const ComboLevelObjType& type, const ObjEffectMode& mode);
+    void SetEffectMode(int32_t level, const ObjEffectMode& mode);
 
     void EasingAllReset(); //< 全イージングリセット
 
@@ -67,6 +67,6 @@ public:
     /// </summary>
     /// <param name="type">オブジェクトタイプ</param>
     /// <param name="groupNum">グループ番号</param>
-    bool GetIsEasingFinish(const ComboLevelObjType& type, const int32_t& groupNum) const;
+    bool GetIsEasingFinish(const ComboLevelObjType& type, int32_t groupNum) const;
     size_t ToIndex(const ComboLevelObjType& type) const { return static_cast<size_t>(type); }
 };

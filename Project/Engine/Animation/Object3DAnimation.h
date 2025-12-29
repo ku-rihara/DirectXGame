@@ -1,12 +1,13 @@
 #pragma once
 
 #include "3d/BaseObject3d.h"
-#include "Line3D/Line3D.h"
 #include "Animation/SkeletonData.h"
 #include "Animation/SkinCluster.h"
 #include "AnimationData.h"
+#include "Line3D/Line3D.h"
 #include "ModelAnimation.h"
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <Quaternion.h>
 #include <string>
@@ -16,15 +17,18 @@
 /// <summary>
 /// 3Dアニメーションオブジェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class Object3DAnimation : public BaseObject3d {
 public:
+  
     Object3DAnimation() = default;
     ~Object3DAnimation() override;
 
     /// ============================================================
     /// public methods
     /// ============================================================
-   
+
     void Init(); //< 初期化
     void ResetAnimation(); //< アニメーションリセット
     void DebugImGui() override; //< ImGuiデバッグ
@@ -52,13 +56,13 @@ public:
     /// アニメーション時間設定
     /// </summary>
     /// <param name="time">設定する時間</param>
-    void SetAnimationTime(const float& time);
+    void SetAnimationTime(float time);
 
     /// <summary>
     /// 更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// 描画
@@ -91,7 +95,7 @@ private:
     /// <param name="keyframe">キーフレーム配列</param>
     /// <param name="time">時間</param>
     /// <returns>補間された値</returns>
-    Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, const float& time);
+    Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time);
 
     /// <summary>
     /// キーフレーム補間計算(Quaternion)
@@ -99,7 +103,7 @@ private:
     /// <param name="keyframe">キーフレーム配列</param>
     /// <param name="time">時間</param>
     /// <returns>補間された値</returns>
-    Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, const float& time);
+    Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
 
     void CSSkinning(); //< コンピュートシェーダーによるスキニング
 
@@ -112,13 +116,13 @@ private:
     /// アニメーション更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void UpdateAnimation(const float& deltaTime);
+    void UpdateAnimation(float deltaTime);
 
     /// <summary>
     /// アニメーション遷移
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void AnimationTransition(const float& deltaTime);
+    void AnimationTransition(float deltaTime);
 
     /// <summary>
     /// WVPデータ更新
@@ -133,12 +137,13 @@ private:
     /// <returns>ジョイントのポインタ</returns>
     const Joint* GetJoint(const std::string& name) const;
 
-    void CreateWVPResource() override; //< WVPリソース作成
+    void CreateWVPResource() override;      //< WVPリソース作成
     void CreateMaterialResource() override; //< マテリアルリソース作成
-    void CreateShadowMap() override; //< シャドウマップ作成
-    void TransitionFinish(); //< 遷移終了
-    void UpdateSkeleton(); //< スケルトン更新
-    void UpdateSkinCluster(); //< スキンクラスター更新
+    void CreateShadowMap() override;        //< シャドウマップ作成
+
+    void TransitionFinish();                //< 遷移終了
+    void UpdateSkeleton();                  //< スケルトン更新
+    void UpdateSkinCluster();               //< スキンクラスター更新
 
 private:
     /// ============================================================
@@ -165,16 +170,29 @@ private:
     bool isChange_                 = false;
     float transitionDuration_      = 0.3f;
 
+    // ループ関連
+    bool isLoop_             = true;
+    bool hasLoopedThisFrame_ = false;
+
+    // コールバック
+    std::function<void(const std::string& animationName)> onAnimationEnd_;
+
 public:
     /// ============================================================
     /// getter/setter methods
     /// ============================================================
 
     const Skeleton& GetSkeleton() const { return skeleton_; }
-    const float& GetAnimationTime() const { return animationTime_; }
+    float GetAnimationTime() const { return animationTime_; }
     float GetAnimationDuration() const;
-    const int32_t& GetCurrentAnimationIndex() const { return currentAnimationIndex_; }
+    int32_t GetCurrentAnimationIndex() const { return currentAnimationIndex_; }
     const std::string& GetCurrentAnimationName() const;
-    const bool& IsAnimationTransitioning() const { return isChange_; }
-    void SetTransitionDuration(const float& duration) { transitionDuration_ = duration; }
+    bool IsAnimationTransitioning() const { return isChange_; }
+    bool IsLoop() const { return isLoop_; }
+
+    void SetTransitionDuration(float duration) { transitionDuration_ = duration; }
+    void SetLoop(bool loop) { isLoop_ = loop; }
+    void SetAnimationEndCallback(std::function<void(const std::string& animationName)> callback) { onAnimationEnd_ = callback; }
 };
+
+} // KetaEngine

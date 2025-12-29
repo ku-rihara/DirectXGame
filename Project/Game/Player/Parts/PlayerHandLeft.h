@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player/Parts/BasePlayerHand.h"
+#include"Editor/GPUParticleEditor/GPUParticlePlayer.h"
 
 /// <summary>
 /// プレイヤーの左手クラス
@@ -17,11 +18,6 @@ public:
     void Init() override;
     void Update() override;
 
-    /// <summary>
-    /// 4コンボ目のレール更新
-    /// </summary>
-    /// <param name="speed">速度</param>
-    void RailForthComboUpdate(const float& speed);
 
     void AdjustParam() override; //< パラメータの調整
     void SaveAndLoad() override; //< セーブ・ロード
@@ -30,7 +26,7 @@ public:
     /// ディゾルブ効果の適用
     /// </summary>
     /// <param name="dissolve">ディゾルブ値</param>
-    void DissolveAdapt(const float& dissolve) override;
+    void DissolveAdapt(float dissolve) override;
 
 private:
     ///===========================================
@@ -38,17 +34,18 @@ private:
     ///=============================================
 
     std::string railGroupName_;
-    std::unique_ptr<RailManager> trustRailManager_;
+    std::unique_ptr<KetaEngine::RailManager> trustRailManager_;
+    KetaEngine::GPUParticlePlayer gpuParticlePlayer_;
 
 public:
     ///===========================================
     /// getter method
     ///=============================================
-    RailManager* GetThrustRailManager() { return trustRailManager_.get(); }
+    KetaEngine::RailManager* GetThrustRailManager() { return trustRailManager_.get(); }
 
     ///===========================================
     /// setter method
     ///=============================================
-    void SetRailParent(WorldTransform* parent) override;
-    void SetParent(WorldTransform* parent) override;
+    void SetRailParent(KetaEngine::WorldTransform* parent) override;
+    void SetParent(KetaEngine::WorldTransform* parent) override;
 };

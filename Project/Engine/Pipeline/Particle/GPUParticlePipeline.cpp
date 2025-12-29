@@ -1,5 +1,7 @@
 #include "Dx/DxCompiler.h"
 #include "GPUParticlePipeline.h"
+
+using namespace KetaEngine;
 // Function
 #include "function/Log.h"
 #include "Material/ModelMaterial.h"
@@ -12,14 +14,15 @@ void GPUParticlePipeline::Init(DirectXCommon* dxCommon) {
 
 void GPUParticlePipeline::CreateRootSignature() {
 
-    staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR; // バイリニアフィルタ
-    staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_WRAP; // 0~1の範囲外をリピート
+    staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+    staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
     staticSamplers_[0].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
     staticSamplers_[0].AddressW         = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-    staticSamplers_[0].ComparisonFunc   = D3D12_COMPARISON_FUNC_NEVER; // 比較しない
-    staticSamplers_[0].MaxLOD           = D3D12_FLOAT32_MAX; // ありったけのMipMapを使う
-    staticSamplers_[0].ShaderRegister   = 0; // レジスタ番号0
-    staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // pixelShaderで使う
+    staticSamplers_[0].ComparisonFunc   = D3D12_COMPARISON_FUNC_NEVER;
+    staticSamplers_[0].MaxLOD           = D3D12_FLOAT32_MAX;
+    staticSamplers_[0].ShaderRegister   = 0;
+    staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
     // DescriptorRangeを設定
     D3D12_DESCRIPTOR_RANGE descriptorRange[2] = {};
 
@@ -36,7 +39,7 @@ void GPUParticlePipeline::CreateRootSignature() {
     descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[4] = {};
+    D3D12_ROOT_PARAMETER rootParameters[5] = {};
 
     // 0: gPerView (b0) - ConstantBuffer
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -54,11 +57,16 @@ void GPUParticlePipeline::CreateRootSignature() {
     rootParameters[2].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[2].Descriptor.ShaderRegister = 0;
 
-    // 3: gTexture (t0) - Texture2D
-    rootParameters[3].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[3].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
-    rootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
+    // 3: gUVAnim (b1) - ConstantBuffer
+    rootParameters[3].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[3].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[3].Descriptor.ShaderRegister = 1;
+
+    // 4: gTexture (t0) - Texture2D
+    rootParameters[4].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[4].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[4].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
+    rootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
 
     // Root Signature Descriptionを設定
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -68,7 +76,6 @@ void GPUParticlePipeline::CreateRootSignature() {
     descriptionRootSignature.pStaticSamplers   = staticSamplers_;
     descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
 
-    // シリアライズしてバイナリにする
     SerializeAndCreateRootSignature(descriptionRootSignature);
 }
 
