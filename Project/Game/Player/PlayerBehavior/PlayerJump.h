@@ -24,6 +24,6 @@ public:
     PlayerJump(Player* player,const bool& skipJump = false); 
     ~PlayerJump();
 
-    void Update() override; //< 更新
+    void Update([[maybe_unused]] float timeSpeed = 0.0f) override; //< 更新
     void Debug() override; //< デバッグ
 };

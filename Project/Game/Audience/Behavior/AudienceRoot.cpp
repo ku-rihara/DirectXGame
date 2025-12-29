@@ -19,18 +19,18 @@ AudienceRoot::~AudienceRoot() {
 }
 
 // 更新
-void AudienceRoot::Update() {
+void AudienceRoot::Update([[maybe_unused]] float timeSpeed) {
 
-   pAudience_->GetObjAnimation()->SetIsDraw(isDraw_);
+   pOwner_->GetObjAnimation()->SetIsDraw(isDraw_);
 }
 
 
 void AudienceRoot::ChangeCloseMode() {
-    pAudience_->ChangeBehavior(std::make_unique<AudienceDisappear>(pAudience_));
+    pOwner_->ChangeBehavior(std::make_unique<AudienceDisappear>(pOwner_));
 }
 
 void AudienceRoot::ChangeAppearMode() {
-    pAudience_->ChangeBehavior(std::make_unique<AudienceAppear>(pAudience_));
+    pOwner_->ChangeBehavior(std::make_unique<AudienceAppear>(pOwner_));
 }
 
 void AudienceRoot::Debug() {

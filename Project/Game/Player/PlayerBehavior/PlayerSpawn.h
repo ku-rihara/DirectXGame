@@ -12,8 +12,8 @@ public:
     PlayerSpawn(Player* player);
     ~PlayerSpawn();
 
-    void Update() override; //< 更新
-    void Debug() override; //< デバッグ
+    void Update([[maybe_unused]] float timeSpeed = 0.0f) override; //< 更新
+    void Debug() override;                                         //< デバッグ
 
 private:
     enum class Step {

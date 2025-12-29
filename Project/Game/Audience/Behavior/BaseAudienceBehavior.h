@@ -1,28 +1,17 @@
 #pragma once
 
-#include <string>
+#include "BaseBehavior/BaseBehavior.h"
 
 class Audience;
 
-class BaseAudienceBehavior {
-protected:
-    // 振る舞い名
-    std::string name_;
-    // 観客
-    Audience* pAudience_ = nullptr;
-
+/// <summary>
+/// 観客振る舞いの基底クラス
+/// </summary>
+class BaseAudienceBehavior : public BaseBehavior<Audience> {
 public:
     BaseAudienceBehavior(const std::string& name, Audience* audience);
-    virtual ~BaseAudienceBehavior() {}
+    virtual ~BaseAudienceBehavior() = default;
 
-    virtual void Update() = 0;
-    virtual void Debug()  = 0;
-
-private:
-   /* bool isDraw_;*/
-
-public:
-    // Getter/Setter
-   /* bool GetIsDraw() const { return isDraw_; }
-    void SetIsDraw(bool is) { isDraw_ = is; }*/
+    virtual void Update(float timeSpeed = 0.0f) override = 0;
+    virtual void Debug() override                        = 0;
 };

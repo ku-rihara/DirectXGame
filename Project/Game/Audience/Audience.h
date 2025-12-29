@@ -72,6 +72,8 @@ private:
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
     float positionX_;
 
+    float cheerAnimationTimer_;
+
     // behavior
     std::unique_ptr<BaseAudienceBehavior> behavior_;
 
@@ -81,4 +83,5 @@ public:
     AudienceRoot* GetAudienceRoot() const;
 
     void SetBaseScale(Vector3 scale);
+    void SetCheerAnimationTimer(float timer) { cheerAnimationTimer_ = timer; }
 };

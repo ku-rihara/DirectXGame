@@ -253,6 +253,12 @@
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\EditorScene.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
+    <ClCompile Include="Game\Scene\GameSceneState\BaseGameSceneState.cpp" />
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneFinish.cpp" />
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneIntro.cpp" />
+    <ClCompile Include="Game\Scene\GameSceneState\GameScenePlaying.cpp" />
+    <ClCompile Include="Game\Scene\GameSceneState\GameScenePose.cpp" />
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneRoot.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Game\SkyDome\SkyDome.cpp" />
@@ -454,6 +460,7 @@
     <ClInclude Include="Game\BackGroundObject\ComboLeve\SpeakerEffect.h" />
     <ClInclude Include="Game\BackGroundObject\ComboLeve\StadiumLightEffect.h" />
     <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h" />
+    <ClInclude Include="Game\BaseBehavior\BaseBehavior.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h" />
@@ -530,6 +537,12 @@
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\EditorScene.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
+    <ClInclude Include="Game\Scene\GameSceneState\BaseGameSceneState.h" />
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneFinish.h" />
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneIntro.h" />
+    <ClInclude Include="Game\Scene\GameSceneState\GameScenePlaying.h" />
+    <ClInclude Include="Game\Scene\GameSceneState\GameScenePose.h" />
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneRoot.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\SkyBox\SkyBox.h" />
     <ClInclude Include="Game\SkyDome\SkyDome.h" />

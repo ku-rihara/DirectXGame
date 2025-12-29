@@ -13,10 +13,11 @@ public:
     PlayerMove(Player* player);
     ~PlayerMove();
 
+     void Update([[maybe_unused]] float timeSpeed = 0.0f) override; //< 更新
+    void Debug() override;                                          //< デバッグ
+
     void MoveAnimation(); //< 移動アニメーション
     void WaitAnimation(); //< 待機アニメーション
-    void Update() override; //< 更新
-    void Debug() override; //< デバッグ
     void JumpForJoyState(); //< ジャンプ待機状態
 
 private:

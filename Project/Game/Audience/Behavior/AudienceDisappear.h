@@ -10,7 +10,7 @@ public:
     AudienceDisappear(Audience* audience);
     ~AudienceDisappear();
 
-    void Update() override;
+    void Update([[maybe_unused]] float timeSpeed = 0.0f) override;
     void Debug() override;
 
 private:
