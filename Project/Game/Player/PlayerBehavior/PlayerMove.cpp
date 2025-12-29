@@ -42,21 +42,21 @@ PlayerMove ::~PlayerMove() {
 }
 
 // 更新
-void PlayerMove::Update() {
+void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
 
     // アニメーション
     MoveAnimation();
     WaitAnimation();
 
     if ((KetaEngine::Input::IsPressPad(0, GamepadButton::B))) {
-        pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed * 2.4f);
+        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed * 2.4f);
     } else {
-        pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
     }
 
     // 　ジャンプに切り替え
     if (KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::J)) {
-        pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
+        pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
     } else {
         JumpForJoyState(); // コントローラジャンプ
     }
@@ -68,11 +68,11 @@ void PlayerMove::JumpForJoyState() {
         return;
     }
 
-    pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
+    pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
 }
 
 void PlayerMove::MoveAnimation() {
-    if (!pPlayer_->CheckIsMoving()) {
+    if (!pOwner_->CheckIsMoving()) {
         return;
     }
 
@@ -80,13 +80,13 @@ void PlayerMove::MoveAnimation() {
     /// 移動アニメーション
     ///============================================================================
     moveEase_->Update(KetaEngine::Frame::DeltaTimeRate());
-    pPlayer_->SetHeadPosY(tempPosY_);
-    pPlayer_->SetHeadScale(tempScale_);
+    pOwner_->SetHeadPosY(tempPosY_);
+    pOwner_->SetHeadScale(tempScale_);
 }
 
 void PlayerMove::WaitAnimation() {
 
-    if (pPlayer_->CheckIsMoving()) {
+    if (pOwner_->CheckIsMoving()) {
         return;
     }
 
@@ -94,7 +94,7 @@ void PlayerMove::WaitAnimation() {
     /// 待機アニメーション
     ///============================================================================
     waitEase_.Update(KetaEngine::Frame::DeltaTimeRate());
-    pPlayer_->SetScaleY(tempWaitScaleY_);
+    pOwner_->SetScaleY(tempWaitScaleY_);
 }
 
 void PlayerMove::Debug() {

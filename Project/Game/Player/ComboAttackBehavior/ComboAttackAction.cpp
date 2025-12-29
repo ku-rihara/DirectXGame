@@ -13,7 +13,7 @@ ComboAttackAction::ComboAttackAction(Player* player, PlayerComboAttackData* atta
 
     // attackDataセット
     attackData_     = attackData;
-    pCollisionInfo_ = pPlayer_->GetPlayerCollisionInfo();
+    pCollisionInfo_ = pOwner_->GetPlayerCollisionInfo();
     // 初期化
     Init();
 }
@@ -32,16 +32,16 @@ void ComboAttackAction::Init() {
     // 次の攻撃データを取得
     nextAttackName_ = attackData_->GetAttackParam().nextAttackType;
     if (nextAttackName_ != "None" && !nextAttackName_.empty()) {
-        nextAttackData_ = pPlayer_->GetComboAttackController()->GetAttackByName(nextAttackName_);
+        nextAttackData_ = pOwner_->GetComboAttackController()->GetAttackByName(nextAttackName_);
     }
 
     attackRendition_ = std::make_unique<PlayerAttackRendition>();
-    attackRendition_->Init(pPlayer_, attackData_);
+    attackRendition_->Init(pOwner_, attackData_);
 
     SetMoveEasing();
 
     //// サウンド再生
-    // pPlayer_->SoundPunch();
+    // pOwner_->SoundPunch();
 
     order_ = Order::INIT;
 }
@@ -50,7 +50,7 @@ void ComboAttackAction::Update(float atkSpeed) {
 
     // 通常移動
     if (attackData_->GetAttackParam().moveParam.isAbleInputMoving) {
-        pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
     }
 
     currentFrame_ += atkSpeed;
@@ -117,7 +117,7 @@ void ComboAttackAction::UpdateWait(float atkSpeed) {
 
     AttackCancel();
 
-    pPlayer_->AdaptRotate();
+    pOwner_->AdaptRotate();
     waitTime_ += atkSpeed;
 
     if (!attackData_->IsWaitFinish(waitTime_)) {
@@ -136,22 +136,22 @@ void ComboAttackAction::ChangeNextAttack() {
     if (nextAttackData_ && shouldAdvance) {
 
         BaseComboAttackBehavior::ChangeNextCombo(
-            std::make_unique<ComboAttackAction>(pPlayer_, nextAttackData_));
+            std::make_unique<ComboAttackAction>(pOwner_, nextAttackData_));
 
         return;
 
     } else {
         // 落下フラグがある場合はPlayerJumpに移行
         if (attackData_->GetAttackParam().fallParam.enableFall) {
-            pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_, true));
-            pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
+            pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, true));
+            pOwner_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pOwner_));
             return;
         }
 
         // データが見つからない場合はルートに戻る
         KetaEngine::PostEffectRenderer::GetInstance()->SetPostEffectMode(KetaEngine::PostEffectMode::NONE);
-        pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
-        pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
+        pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
+        pOwner_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pOwner_));
     }
 }
 
@@ -163,7 +163,7 @@ void ComboAttackAction::PreOderNextComboForButton() {
         return;
     }
 
-    // ヒット状態を渡す (MODIFIED)
+    // ヒット状態を渡す 
     isReserveNextCombo_ = attackData_->IsReserveNextAttack(
         currentFrame_,
         nextAttackData_->GetAttackParam().triggerParam,
@@ -180,7 +180,7 @@ void ComboAttackAction::AttackCancel() {
         return;
     }
 
-    // ヒット状態を渡す (MODIFIED)
+    // ヒット状態を渡す
     isAttackCancel_ = attackData_->IsCancelAttack(
         currentFrame_,
         nextAttackData_->GetAttackParam().triggerParam,
@@ -194,7 +194,7 @@ void ComboAttackAction::AttackCancel() {
 
 void ComboAttackAction::ApplyMovement(float atkSpeed) {
     moveEasing_.Update(atkSpeed);
-    pPlayer_->SetWorldPosition(currentMoveValue_);
+    pOwner_->SetWorldPosition(currentMoveValue_);
 }
 
 void ComboAttackAction::SetupCollision() {
@@ -205,14 +205,14 @@ void ComboAttackAction::SetupCollision() {
     pCollisionInfo_->Update();
 
     // コリジョンサイズ設定
-    pPlayer_->GetPlayerCollisionInfo()->SetSize(collisionParam.size);
+    pOwner_->GetPlayerCollisionInfo()->SetSize(collisionParam.size);
 
     // コリジョンを有効化
-    pPlayer_->GetPlayerCollisionInfo()->SetIsAbleCollision(true);
+    pOwner_->GetPlayerCollisionInfo()->SetIsAbleCollision(true);
 
     // 攻撃スピード
-    const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
-  
+    const PlayerComboAttackController* attackController = pOwner_->GetComboAttackController();
+
     // 攻撃力
     float power = attackData_->GetAttackParam().power * attackController->GetPowerRate();
     pCollisionInfo_->SetAttackPower(power);
@@ -227,10 +227,10 @@ void ComboAttackAction::SetupCollision() {
 void ComboAttackAction::SetMoveEasing() {
     // targetPosを計算
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
-    startPosition_                                    = pPlayer_->GetWorldPosition();
+    startPosition_                                    = pOwner_->GetWorldPosition();
 
     // オフセット計算
-    targetPosition_ = startPosition_ + pPlayer_->GetBaseTransform().CalcForwardOffset(moveParam.value);
+    targetPosition_ = startPosition_ + pOwner_->GetBaseTransform().CalcForwardOffset(moveParam.value);
 
     // Yだけ指定する場合
     if (moveParam.isPositionYSelect) {

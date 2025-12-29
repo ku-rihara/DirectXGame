@@ -511,6 +511,9 @@
     <Filter Include="Game\Audience\Behavior">
       <UniqueIdentifier>{b9b0c3cb-e2b1-43a9-b7ee-246537d0dc42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\BaseBehavior">
+      <UniqueIdentifier>{e31af7f2-4976-4dfe-a778-349d84cad2f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -2114,6 +2117,9 @@
     </ClInclude>
     <ClInclude Include="Game\Audience\Behavior\BaseAudienceBehavior.h">
       <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BaseBehavior\BaseBehavior.h">
+      <Filter>Game\BaseBehavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

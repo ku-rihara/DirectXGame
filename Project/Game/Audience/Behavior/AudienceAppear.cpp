@@ -21,7 +21,7 @@ AudienceAppear::~AudienceAppear() {
 }
 
 // 更新
-void AudienceAppear::Update() {
+void AudienceAppear::Update([[maybe_unused]] float timeSpeed) {
 
     if (currentPhase_) {
         currentPhase_();
@@ -31,9 +31,9 @@ void AudienceAppear::Update() {
 void AudienceAppear::Init() {
 
     // 出現状態に設定
-    pAudience_->GetObjAnimation()->SetIsDraw(true);
-    pAudience_->GetObjAnimation()->ChangeAnimation("AudienceJump");
-    pAudience_->GetObjAnimation()->SetLoop(true);
+    pOwner_->GetObjAnimation()->SetIsDraw(true);
+    pOwner_->GetObjAnimation()->ChangeAnimation("AudienceJump");
+    pOwner_->GetObjAnimation()->SetLoop(true);
 
     currentPhase_ = [this]() {
         Start();
@@ -42,14 +42,14 @@ void AudienceAppear::Init() {
 
 void AudienceAppear::Start() {
 
-    pAudience_->GetObjAnimation()->transform_.PlayObjEaseAnimation("Audience", "AudienceAppear");
+    pOwner_->GetObjAnimation()->transform_.PlayObjEaseAnimation("Audience", "AudienceAppear");
 
     currentPhase_ = [this]() {
         Playing();
     };
 }
 void AudienceAppear::Playing() {
-    bool isFinish = pAudience_->GetObjAnimation()->transform_.GetObjEaseAnimationPlayer()->IsFinished();
+    bool isFinish = pOwner_->GetObjAnimation()->transform_.GetObjEaseAnimationPlayer()->IsFinished();
 
     if (!isFinish) {
         return;
@@ -60,13 +60,13 @@ void AudienceAppear::Playing() {
     };
 }
 void AudienceAppear::End() {
-    pAudience_->ChangeBehavior(std::make_unique<AudienceRoot>(pAudience_, true));
+    pOwner_->ChangeBehavior(std::make_unique<AudienceRoot>(pOwner_, true));
 }
 
 void AudienceAppear::Debug() {
     ImGui::Begin("test");
-    ImGui::Text("test:%f,%f,%f", pAudience_->GetObjAnimation()->transform_.scale_.x,
-        pAudience_->GetObjAnimation()->transform_.scale_.y,
-        pAudience_->GetObjAnimation()->transform_.scale_.z);
+    ImGui::Text("test:%f,%f,%f", pOwner_->GetObjAnimation()->transform_.scale_.x,
+        pOwner_->GetObjAnimation()->transform_.scale_.y,
+        pOwner_->GetObjAnimation()->transform_.scale_.z);
     ImGui::End();
 }

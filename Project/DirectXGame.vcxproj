@@ -454,6 +454,7 @@
     <ClInclude Include="Game\BackGroundObject\ComboLeve\SpeakerEffect.h" />
     <ClInclude Include="Game\BackGroundObject\ComboLeve\StadiumLightEffect.h" />
     <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h" />
+    <ClInclude Include="Game\BaseBehavior\BaseBehavior.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h" />

@@ -31,48 +31,47 @@ PlayerJump ::~PlayerJump() {
 }
 
 // 更新
-void PlayerJump::Update() {
+void PlayerJump::Update([[maybe_unused]] float timeSpeed) {
 
     switch (step_) {
     case PlayerJump::Step::START:
         if (!skipJump_) {
-            pPlayer_->GetGameCamera()->PlayAnimation("PlayerJunmp");
-            pPlayer_->GetObject3D()->transform_.PlayObjEaseAnimation("Player", "JumpRotation");
-    
+            pOwner_->GetGameCamera()->PlayAnimation("PlayerJunmp");
+            pOwner_->GetObject3D()->transform_.PlayObjEaseAnimation("Player", "JumpRotation");
         }
         step_ = Step::JUMP;
         break;
 
     case PlayerJump::Step::JUMP:
         // ジャンプ中の移動
-        pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 
         // ジャンプ処理
-        pPlayer_->Jump(speed_, pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit, pPlayerParameter_->GetParamaters().normalJump.gravity);
+        pOwner_->Jump(speed_, pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit, pPlayerParameter_->GetParamaters().normalJump.gravity);
 
         // 着地、通常移動に戻る
-        if (pPlayer_->GetBaseTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
+        if (pOwner_->GetBaseTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
             return;
         }
 
         // behavior切り替え
-        pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
+        pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
         break;
 
     case PlayerJump::Step::FALL_ONLY:
         // 横方向の移動は可能
-        pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 
         // 落下処理のみ
-        pPlayer_->Fall(
+        pOwner_->Fall(
             speed_,
             pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit,
             pPlayerParameter_->GetParamaters().normalJump.gravity,
             false);
 
         // 着地、通常移動に戻る
-        if (pPlayer_->GetBaseTransform().translation_.y <= pPlayerParameter_->GetParamaters().startPos_.y) {
-            pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
+        if (pOwner_->GetBaseTransform().translation_.y <= pPlayerParameter_->GetParamaters().startPos_.y) {
+            pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
         }
         break;
 
@@ -82,5 +81,4 @@ void PlayerJump::Update() {
 }
 
 void PlayerJump::Debug() {
-   
 }

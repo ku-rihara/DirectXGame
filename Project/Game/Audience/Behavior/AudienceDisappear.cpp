@@ -17,9 +17,9 @@ AudienceDisappear::AudienceDisappear(Audience* audience)
     };
 
     isAnimationEnd_ = false;
-    pAudience_->GetObjAnimation()->SetLoop(false);
+    pOwner_->GetObjAnimation()->SetLoop(false);
 
-    pAudience_->GetObjAnimation()->SetAnimationEndCallback([this](const std::string& name) {
+    pOwner_->GetObjAnimation()->SetAnimationEndCallback([this](const std::string& name) {
         if (name == "AudienceDisAppear") {
             isAnimationEnd_ = true;
         }
@@ -30,7 +30,7 @@ AudienceDisappear::~AudienceDisappear() {
 }
 
 // 更新
-void AudienceDisappear::Update() {
+void AudienceDisappear::Update([[maybe_unused]] float timeSpeed) {
     if (currentPhase_) {
         currentPhase_();
     }
@@ -43,7 +43,7 @@ void AudienceDisappear::Init() {
 }
 
 void AudienceDisappear::Start() {
-    pAudience_->GetObjAnimation()->ChangeAnimation("AudienceDisAppear");
+    pOwner_->GetObjAnimation()->ChangeAnimation("AudienceDisAppear");
 
     // 次のフェーズへ
     currentPhase_ = [this]() {
@@ -58,7 +58,7 @@ void AudienceDisappear::AnimationPlaying() {
         return;
     }
 
-    pAudience_->GetObjAnimation()->transform_.PlayObjEaseAnimation("Audience", "AudienceDisAppear");
+    pOwner_->GetObjAnimation()->transform_.PlayObjEaseAnimation("Audience", "AudienceDisAppear");
 
     // 次のフェーズへ
     currentPhase_ = [this]() {
@@ -69,7 +69,7 @@ void AudienceDisappear::AnimationPlaying() {
 void AudienceDisappear::EasingPlaying() {
     // イージング再生処理
 
-    if (!pAudience_->GetObjAnimation()->transform_.GetObjEaseAnimationPlayer()->IsFinished()) {
+    if (!pOwner_->GetObjAnimation()->transform_.GetObjEaseAnimationPlayer()->IsFinished()) {
         return;
     }
 
@@ -81,8 +81,8 @@ void AudienceDisappear::EasingPlaying() {
 
 void AudienceDisappear::End() {
     // 終了処理
-    pAudience_->GetObjAnimation()->transform_.scale_ = Vector3::ZeroVector();
-    pAudience_->ChangeBehavior(std::make_unique<AudienceRoot>(pAudience_,false));
+    pOwner_->GetObjAnimation()->transform_.scale_ = Vector3::ZeroVector();
+    pOwner_->ChangeBehavior(std::make_unique<AudienceRoot>(pOwner_,false));
 }
 
 void AudienceDisappear::Debug() {

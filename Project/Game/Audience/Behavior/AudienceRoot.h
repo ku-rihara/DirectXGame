@@ -12,7 +12,7 @@ public:
     AudienceRoot(Audience* audience,bool isDraw);
     ~AudienceRoot();
 
-    void Update() override;
+    void Update([[maybe_unused]] float timeSpeed = 0.0f) override;
     void Debug() override;
 
     void ChangeCloseMode();
