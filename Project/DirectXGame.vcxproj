@@ -254,7 +254,7 @@
     <ClCompile Include="Game\Scene\EditorScene.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\BaseGameSceneState.cpp" />
-    <ClCompile Include="Game\Scene\GameSceneState\GameSceneClear.cpp" />
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneFinish.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneIntro.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\GameScenePlaying.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\GameScenePose.cpp" />
@@ -538,7 +538,7 @@
     <ClInclude Include="Game\Scene\EditorScene.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\Scene\GameSceneState\BaseGameSceneState.h" />
-    <ClInclude Include="Game\Scene\GameSceneState\GameSceneClear.h" />
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneFinish.h" />
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneIntro.h" />
     <ClInclude Include="Game\Scene\GameSceneState\GameScenePlaying.h" />
     <ClInclude Include="Game\Scene\GameSceneState\GameScenePose.h" />

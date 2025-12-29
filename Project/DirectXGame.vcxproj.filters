@@ -1306,7 +1306,7 @@
     <ClCompile Include="Game\Scene\GameSceneState\GameScenePose.cpp">
       <Filter>Game\Scene\GameSceneState</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scene\GameSceneState\GameSceneClear.cpp">
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneFinish.cpp">
       <Filter>Game\Scene\GameSceneState</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneRoot.cpp">
@@ -2154,7 +2154,7 @@
     <ClInclude Include="Game\Scene\GameSceneState\GameScenePose.h">
       <Filter>Game\Scene\GameSceneState</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Scene\GameSceneState\GameSceneClear.h">
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneFinish.h">
       <Filter>Game\Scene\GameSceneState</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneRoot.h">
