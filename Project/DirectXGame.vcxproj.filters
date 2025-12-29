@@ -514,6 +514,9 @@
     <Filter Include="Game\BaseBehavior">
       <UniqueIdentifier>{e31af7f2-4976-4dfe-a778-349d84cad2f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\GameSceneState">
+      <UniqueIdentifier>{1d931734-646d-4dd0-883f-79d0953b48cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1290,6 +1293,24 @@
     </ClCompile>
     <ClCompile Include="Game\Audience\Behavior\BaseAudienceBehavior.cpp">
       <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\BaseGameSceneState.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneIntro.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameScenePlaying.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameScenePose.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneClear.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneRoot.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2120,6 +2141,24 @@
     </ClInclude>
     <ClInclude Include="Game\BaseBehavior\BaseBehavior.h">
       <Filter>Game\BaseBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\BaseGameSceneState.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneIntro.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameScenePlaying.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameScenePose.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneClear.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneRoot.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
