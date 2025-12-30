@@ -35,16 +35,9 @@ void ParticleData::UpdateActiveSections(float speedRate) {
         return;
     }
 
-    if (drawAllSections_) {
-        // 全セクションを同時に更新
-        for (auto& section : sectionElements_) {
-            section->Update(speedRate);
-        }
-    } else {
-        // アクティブなセクションのみ更新
-        if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-            sectionElements_[activeKeyFrameIndex_]->Update(speedRate);
-        }
+    // 全セクションを同時に更新
+    for (auto& section : sectionElements_) {
+        section->Update(speedRate);
     }
 }
 
@@ -53,36 +46,18 @@ void ParticleData::UpdateKeyFrameProgression() {
         return;
     }
 
-    // 全セクション同時再生モードの場合は進行管理をスキップ
-    if (drawAllSections_) {
-        // 全セクションが終了したかチェック
-        bool allFinished = true;
-        for (const auto& section : sectionElements_) {
-            if (!section->IsFinished()) {
-                allFinished = false;
-                break;
-            }
+    // 全セクションが終了したかチェック
+    bool allFinished = true;
+    for (const auto& section : sectionElements_) {
+        if (!section->IsFinished()) {
+            allFinished = false;
+            break;
         }
-
-        if (allFinished) {
-            isAllKeyFramesFinished_ = true;
-            playState_              = PlayState::STOPPED;
-        }
-        return;
     }
 
-    // 順次再生モードの場合
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-        if (!sectionElements_[activeKeyFrameIndex_]->IsFinished()) {
-            return;
-        }
-
-        if (activeKeyFrameIndex_ == static_cast<int32_t>(sectionElements_.size()) - 1) {
-            isAllKeyFramesFinished_ = true;
-            playState_              = PlayState::STOPPED;
-        } else {
-            AdvanceToNexTSequenceElement();
-        }
+    if (allFinished) {
+        isAllKeyFramesFinished_ = true;
+        playState_              = PlayState::STOPPED;
     }
 }
 
@@ -119,13 +94,10 @@ void ParticleData::Play() {
     activeKeyFrameIndex_ = 0;
 }
 
-
 void ParticleData::RegisterParams() {
-    globalParameter_->Regist(groupName_, "DrawAllSections", &drawAllSections_);
 }
 
 void ParticleData::GetParams() {
-    drawAllSections_ = globalParameter_->GetValue<bool>(groupName_, "DrawAllSections");
 }
 
 void ParticleData::InitParams() {
@@ -148,8 +120,6 @@ void ParticleData::AdjustParam() {
 #ifdef _DEBUG
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Particle: %s", groupName_.c_str());
-
-    ImGui::Checkbox("Draw All Sections", &drawAllSections_);
 
     ImGui::Separator();
     ImGui::Text("Sections: %d", GetTotalKeyFrameCount());

@@ -111,7 +111,10 @@ public:
     /// </summary>
     void SetTextureHandle(uint32_t handle);
 
-      void AdaptTexture();
+    /// <summary>
+    /// 初期テクスチャ適用
+    /// </summary>
+    void InitAdaptTexture();
 
 private:
     //*---------------------------- Internal Methods ----------------------------*//
@@ -119,7 +122,12 @@ private:
     void RegisterAdditionalParams();
     void GetAdditionalParams();
     void ApplyTexture(const std::string& textureName);
-  
+
+    /// <summary>
+    /// テクスチャをManagerに適用する
+    /// </summary>
+    void ApplyTextureToManager();
+
     void AdaptEaseSettings();
     void AdaptRailSettings();
 

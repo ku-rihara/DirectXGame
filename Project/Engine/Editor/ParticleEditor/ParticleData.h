@@ -44,12 +44,8 @@ private:
 private:
     const std::string baseFolderPath_ = "Particle/";
 
-    // 全体設定
-    bool drawAllSections_ = true;
-
 public:
     const std::string& GetCategoryName() const { return categoryName_; }
-    bool GetDrawAllSections() const { return drawAllSections_; }
 
     // セクション要素へのアクセス
     std::vector<std::unique_ptr<ParticleSection>>& GetSectionElements() {
@@ -59,7 +55,7 @@ public:
         return sectionElements_;
     }
 
-    void SetDrawAllSections(bool value) { drawAllSections_ = value; }
+  
 };
 
 }

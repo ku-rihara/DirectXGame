@@ -42,7 +42,7 @@ void ParticleEmitter::Init() {
     railManager_ = std::make_unique<RailManager>();
     railManager_->Init(particleName_ + "Emit");
 
-    // RailPlayer（新システム）
+    // RailPlayer
     railPlayer_ = std::make_unique<RailPlayer>();
     railPlayer_->Init();
 
@@ -58,7 +58,7 @@ void ParticleEmitter::Emit() {
 
     //  発生座標のパターン切り替え
     if (isMoveForRail_) {
-        // 旧システム：RailManager使用
+        // RailManager使用
         parameters_.emitPos = railManager_->GetWorldTransform().GetWorldPos();
 
         if (!isStartRailMove_) {
@@ -66,7 +66,7 @@ void ParticleEmitter::Emit() {
         }
 
     } else if (useRailPlayer_) {
-        // 新システム：RailPlayer使用
+        // RailPlayer使用
         if (railPlayer_->IsPlaying()) {
             parameters_.emitPos = railPlayer_->GetCurrentPosition();
         }
@@ -109,7 +109,7 @@ void ParticleEmitter::RailMoveUpdate() {
 }
 
 void ParticleEmitter::RailPlayerUpdate() {
-    // 新システム：RailPlayer更新
+    // RailPlayer更新
     if (!useRailPlayer_ || !railPlayer_->IsPlaying()) {
         return;
     }
@@ -122,14 +122,14 @@ void ParticleEmitter::EditorUpdate() {
 }
 
 void ParticleEmitter::StartRailEmit() {
-    // 旧システム
+   
     isStartRailMove_ = true;
     railManager_->SetRailMoveTime(0.0f);
     railManager_->SetIsRoop(isRailRoop_);
 }
 
 void ParticleEmitter::StartRailPlayerEmit(const std::string& railFileName) {
-    // 新システム
+   
     if (railFileName.empty()) {
         return;
     }

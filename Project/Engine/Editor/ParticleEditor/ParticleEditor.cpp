@@ -20,17 +20,15 @@ std::unique_ptr<ParticleData> ParticleEditor::CreateEffectData() {
 }
 
 void ParticleEditor::InitializeAllParticleGroups() {
-   
-        // カテゴリーモードの場合
-        for (auto& category : categories_) {
-            for (auto& effect : category.effects) {
-                auto* particleData = dynamic_cast<ParticleData*>(effect.get());
-                if (particleData) {
-                    InitializeParticleDataGroups(particleData);
-                }
+    // カテゴリーモードの場合
+    for (auto& category : categories_) {
+        for (auto& effect : category.effects) {
+            auto* particleData = dynamic_cast<ParticleData*>(effect.get());
+            if (particleData) {
+                InitializeParticleDataGroups(particleData);
             }
         }
-    
+    }
 }
 
 void ParticleEditor::InitializeParticleDataGroups(ParticleData* particleData) {
@@ -49,7 +47,6 @@ void ParticleEditor::InitializeSectionParticleGroup(ParticleSection* section) {
         return;
     }
 
-
     // モデルまたはプリミティブでパーティクルグループを作成
     if (section->GetParticleParameter()->useModel_) {
         section->CreateModelParticle(
@@ -62,13 +59,11 @@ void ParticleEditor::InitializeSectionParticleGroup(ParticleSection* section) {
     }
 
     // テクスチャを適用
-    section->AdaptTexture();
+    section->InitAdaptTexture();
 }
 
 void ParticleEditor::RenderSpecificUI() {
     ImGui::SeparatorText("Particle Control");
-
-    /*   BaseEffectEditor::RenderPlayBack();*/
 
     // エディタ専用のプレビュー機能
     ImGui::Separator();
@@ -163,7 +158,7 @@ void ParticleEditor::StopAllSections(ParticleData* particleData) {
     if (!particleData)
         return;
 
-   particleData->Pause();
+    particleData->Pause();
 }
 
 std::string ParticleEditor::GetFolderPath() const {
