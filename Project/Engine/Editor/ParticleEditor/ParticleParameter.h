@@ -108,7 +108,7 @@ public:
 
     virtual void Init(); //< 初期化
     void ParameterInit(); //< パラメータ初期化
-    void AdaptTexture(); //< テクスチャ適用
+    void InitAdaptTexture(); //< テクスチャ適用
     void RegisterParams(); //< パラメータのバインド
     void GetParams(); //< パラメータの取得
     virtual void EditorUpdate(); //< エディタ更新

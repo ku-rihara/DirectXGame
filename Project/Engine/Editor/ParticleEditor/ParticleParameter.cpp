@@ -34,7 +34,7 @@ void ParticleParameter::Init() {
     globalParameter_->SyncParamForGroup(particleName_);
 
     // Editorで設定したテクスチャを適用
-    AdaptTexture();
+    InitAdaptTexture();
 
     // セッティングしたもの適用
     groupParamaters_.billBordType      = static_cast<BillboardType>(billBordType_);
@@ -199,7 +199,7 @@ void ParticleParameter::GetParams() {
     isRailRoop_    = globalParameter_->GetValue<bool>(particleName_, "isMoveForRail");
     moveSpeed_     = globalParameter_->GetValue<float>(particleName_, "moveSpeed");
 
-    // EaseParm
+    // EaseParam
     parameters_.scaleEaseParm.isScaleEase    = globalParameter_->GetValue<bool>(particleName_, "scaleEaseParm.isScaleEase");
     parameters_.scaleEaseParm.maxTime        = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.maxTime");
     parameters_.scaleEaseParm.easeTypeInt    = globalParameter_->GetValue<int>(particleName_, "scaleEaseParm.easeTypeInt");
@@ -478,7 +478,7 @@ void ParticleParameter::ApplyTexture(const std::string& textureName) {
 
 
 
-void ParticleParameter::AdaptTexture() {
+void ParticleParameter::InitAdaptTexture() {
     if (selectedTexturePath_ == "") {
         return;
     }

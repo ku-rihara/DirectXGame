@@ -1,13 +1,13 @@
 {
-    "Crack": {
+    "uu_i0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
         "BaseColor": [
-            0.5882352590560913,
-            0.5882352590560913,
-            0.5882352590560913,
-            1.0
+            0.40784314274787903,
+            0.0,
+            0.0,
+            0.0
         ],
         "Color Max": [
             0.0,
@@ -22,22 +22,23 @@
             0.0
         ],
         "Direction Max": [
-            0.0,
+            1.0,
             0.0,
             0.0
         ],
         "Direction Min": [
-            0.0,
+            -1.0,
             0.0,
             0.0
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 1.5499999523162842,
-        "Particle Count": 1,
+        "LifeTime": 0.7799999713897705,
+        "Max Particle Num": 1000,
+        "Particle Count": 48,
         "Position Base": [
-            0.5,
-            0.20000000298023224,
+            0.0,
+            0.0,
             0.0
         ],
         "Position Max": [
@@ -51,18 +52,18 @@
             0.0
         ],
         "Rotate Base": [
-            90.0,
+            0.0,
             0.0,
             0.0
         ],
         "Rotate Max": [
             0.0,
-            179.1999969482422,
+            0.0,
             0.0
         ],
         "Rotate Min": [
             0.0,
-            -151.89999389648438,
+            0.0,
             0.0
         ],
         "RotateSpeed Max": [
@@ -75,20 +76,20 @@
             0.0,
             0.0
         ],
-        "Scale Max": 9.0,
-        "Scale Min": 9.0,
+        "Scale Max": 8.300000190734863,
+        "Scale Min": 10.699999809265137,
         "ScaleV3 Max": [
-            1.0,
-            1.0,
-            1.0
+            0.0,
+            0.0,
+            0.0
         ],
         "ScaleV3 Min": [
-            1.0,
-            1.0,
-            1.0
+            0.0,
+            0.0,
+            0.0
         ],
-        "Speed Max": 0.0,
-        "Speed Min": 0.0,
+        "Speed Max": 72.4000015258789,
+        "Speed Min": 6.5,
         "SpeedV3 Max": [
             0.0,
             0.0,
@@ -99,6 +100,7 @@
             0.0,
             0.0
         ],
+        "Start Time": 0.0,
         "UV IsRoop": false,
         "UV NumOfFrame": 1,
         "UV Pos": [
@@ -115,27 +117,22 @@
         "UV isFlipY": false,
         "UV isScrool": false,
         "UV isScroolEachPixel": false,
-        "Velocity Max": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "Velocity Min": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "blendMode": 0,
+        "blendMode": 1,
         "isAlphaNoMove": false,
-        "isBillBord": false,
+        "isBillBord": true,
         "isFloatVelocity": true,
         "isMoveForRail": false,
+        "isRailRoop": false,
         "isRotateforDirection": false,
         "isScalerScale": true,
-        "isShot": true,
+        "isShot": false,
+        "modelFilePath": "",
         "moveSpeed": 0.0,
-        "preBillBordType_": 2,
-        "scaleEaseParm.easeTypeInt": 3,
+        "preBillBordType_": 0,
+        "primitiveTypeInt": 0,
+        "railFileName": "",
+        "scaleEaseParm.backRatio": 0.0,
+        "scaleEaseParm.easeTypeInt": 0,
         "scaleEaseParm.endValueF.max": 0.0,
         "scaleEaseParm.endValueF.min": 0.0,
         "scaleEaseParm.endValueV3.max": [
@@ -149,7 +146,17 @@
             0.0
         ],
         "scaleEaseParm.isScaleEase": false,
-        "scaleEaseParm.maxTime": 1.059999942779541,
-        "selectedTexturePath_": "Resources/texture/Crack.png"
+        "scaleEaseParm.maxTime": 0.0,
+        "scaleEaseParm.startValueF": 1.0,
+        "scaleEaseParm.startValueV3": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "selectedTexturePath_": "resources/Texture/uvChecker.png",
+        "timeMode": 1,
+        "useModel": false,
+        "useRail": false,
+        "useScaleEasing": false
     }
 }

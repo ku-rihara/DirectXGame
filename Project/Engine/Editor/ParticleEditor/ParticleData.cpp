@@ -35,16 +35,9 @@ void ParticleData::UpdateActiveSections(float speedRate) {
         return;
     }
 
-    if (drawAllSections_) {
-        // 全セクションを同時に更新
-        for (auto& section : sectionElements_) {
-            section->Update(speedRate);
-        }
-    } else {
-        // アクティブなセクションのみ更新
-        if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-            sectionElements_[activeKeyFrameIndex_]->Update(speedRate);
-        }
+    // 全セクションを同時に更新
+    for (auto& section : sectionElements_) {
+        section->Update(speedRate);
     }
 }
 
@@ -53,36 +46,18 @@ void ParticleData::UpdateKeyFrameProgression() {
         return;
     }
 
-    // 全セクション同時再生モードの場合は進行管理をスキップ
-    if (drawAllSections_) {
-        // 全セクションが終了したかチェック
-        bool allFinished = true;
-        for (const auto& section : sectionElements_) {
-            if (!section->IsFinished()) {
-                allFinished = false;
-                break;
-            }
+    // 全セクションが終了したかチェック
+    bool allFinished = true;
+    for (const auto& section : sectionElements_) {
+        if (!section->IsFinished()) {
+            allFinished = false;
+            break;
         }
-
-        if (allFinished) {
-            isAllKeyFramesFinished_ = true;
-            playState_              = PlayState::STOPPED;
-        }
-        return;
     }
 
-    // 順次再生モードの場合
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-        if (!sectionElements_[activeKeyFrameIndex_]->IsFinished()) {
-            return;
-        }
-
-        if (activeKeyFrameIndex_ == static_cast<int32_t>(sectionElements_.size()) - 1) {
-            isAllKeyFramesFinished_ = true;
-            playState_              = PlayState::STOPPED;
-        } else {
-            AdvanceToNexTSequenceElement();
-        }
+    if (allFinished) {
+        isAllKeyFramesFinished_ = true;
+        playState_              = PlayState::STOPPED;
     }
 }
 
@@ -105,35 +80,24 @@ void ParticleData::Reset() {
 void ParticleData::Play() {
     BaseEffectData::Play();
 
-    for (auto& section : sectionElements_) {
-        section->StartWaiting();
-    }
-}
-
-void ParticleData::Draw() {
+    // セクションが空の場合は何もしない
     if (sectionElements_.empty()) {
         return;
     }
 
-    if (drawAllSections_) {
-        // 全セクションを描画
-        for (auto& section : sectionElements_) {
-            section->Emit();
-        }
-    } else {
-        // アクティブなセクションのみ描画
-        if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-            sectionElements_[activeKeyFrameIndex_]->Emit();
-        }
+    // 全セクションを待機状態で開始
+    for (auto& section : sectionElements_) {
+        section->StartWaiting();
     }
+
+    // activeKeyFrameIndexをリセット
+    activeKeyFrameIndex_ = 0;
 }
 
 void ParticleData::RegisterParams() {
-    globalParameter_->Regist(groupName_, "DrawAllSections", &drawAllSections_);
 }
 
 void ParticleData::GetParams() {
-    drawAllSections_ = globalParameter_->GetValue<bool>(groupName_, "DrawAllSections");
 }
 
 void ParticleData::InitParams() {
@@ -157,8 +121,6 @@ void ParticleData::AdjustParam() {
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Particle: %s", groupName_.c_str());
 
-    ImGui::Checkbox("Draw All Sections", &drawAllSections_);
-
     ImGui::Separator();
     ImGui::Text("Sections: %d", GetTotalKeyFrameCount());
 
@@ -174,9 +136,27 @@ void ParticleData::AdjustParam() {
     for (int i = 0; i < GetTotalKeyFrameCount(); ++i) {
         ImGui::PushID(i);
         bool isSelected = (selectedKeyFrameIndex_ == i);
-        if (ImGui::Selectable(("Section " + std::to_string(i)).c_str(), isSelected)) {
+
+        std::string labelText = "Section " + std::to_string(i);
+
+        // セクションの状態を表示
+        if (i < static_cast<int>(sectionElements_.size()) && sectionElements_[i]) {
+            if (sectionElements_[i]->IsPlaying()) {
+                labelText += " [PLAYING]";
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));
+            }
+        }
+
+        if (ImGui::Selectable(labelText.c_str(), isSelected)) {
             SetSelectedKeyFrameIndex(i);
         }
+
+        if (i < static_cast<int>(sectionElements_.size()) && sectionElements_[i]) {
+            if (sectionElements_[i]->IsPlaying()) {
+                ImGui::PopStyleColor();
+            }
+        }
+
         ImGui::PopID();
     }
 

@@ -50,12 +50,7 @@ void ParticlePlayer::PlayInCategory(const std::string& categoryName, const std::
     currentEffectName_   = particleName;
 }
 
-void ParticlePlayer::Draw() {
-    auto* particleData = dynamic_cast<ParticleData*>(effectData_.get());
-    if (particleData) {
-        particleData->Draw();
-    }
-}
+
 
 std::unique_ptr<BaseEffectData> ParticlePlayer::CreateEffectData() {
     return std::make_unique<ParticleData>();

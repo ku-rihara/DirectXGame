@@ -5,17 +5,14 @@
 #include <string>
 #include <vector>
 
-/// <summary>
-/// パーティクルデータクラス - セクションベースのパーティクル管理
-/// </summary>
 namespace KetaEngine {
 
 class ParticleData : public BaseSequenceEffectData<ParticleSection> {
+   
+   
 public:
     ParticleData()           = default;
     ~ParticleData() override = default;
-
-    //*----------------------------- public Methods -----------------------------*//
 
     // BaseEffectDataからのオーバーライド
     void Update(float speedRate = 1.0f) override;
@@ -30,11 +27,7 @@ public:
     void LoadSequenceElements() override;
     void SaveSequenceElements() override;
 
-    // 全セクションの描画指示
-    void Draw();
-
 protected:
-    //*----------------------------- protected Methods from Base -----------------------------*//
     void RegisterParams() override;
     void GetParams() override;
     void InitParams() override;
@@ -46,20 +39,13 @@ protected:
     std::string GeTSequenceElementFolderPath() const override;
 
 private:
-    //*---------------------------- private Methods ----------------------------*//
     void UpdateActiveSections(float speedRate);
 
 private:
-    //*---------------------------- private Variant ----------------------------*//
     const std::string baseFolderPath_ = "Particle/";
 
-    // 全体設定
-    bool drawAllSections_ = true; 
-
 public:
-    //*----------------------------- getter Methods -----------------------------*//
     const std::string& GetCategoryName() const { return categoryName_; }
-    bool GetDrawAllSections() const { return drawAllSections_; }
 
     // セクション要素へのアクセス
     std::vector<std::unique_ptr<ParticleSection>>& GetSectionElements() {
@@ -69,8 +55,7 @@ public:
         return sectionElements_;
     }
 
-    //*----------------------------- setter Methods -----------------------------*//
-    void SetDrawAllSections(bool value) { drawAllSections_ = value; }
+  
 };
 
-}; // KetaEngine
+}
