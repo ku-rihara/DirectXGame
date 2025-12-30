@@ -38,7 +38,7 @@ void ParticleEmitter::Init() {
 
     ParticleParameter::Init();
 
-    // レールマネージャー（旧システム用に維持）
+    // レールマネージャー
     railManager_ = std::make_unique<RailManager>();
     railManager_->Init(particleName_ + "Emit");
 
