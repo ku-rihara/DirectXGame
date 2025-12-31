@@ -1,37 +1,28 @@
 #include "ParticleSection.h"
-
-using namespace KetaEngine;
 #include "3d/ModelManager.h"
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
-#include "Function/GetFile.h"
 #include "ParticleManager.h"
 #include <imgui.h>
+
+using namespace KetaEngine;
 
 void ParticleSection::Init(const std::string& particleName, const std::string& categoryName, int32_t sectionIndex) {
     particleName_ = particleName;
     categoryName_ = categoryName;
     sectionIndex_ = sectionIndex;
-    sectionName_  = particleName + std::to_string(sectionIndex);
-    groupName_    = categoryName + "_" + sectionName_;
+    groupName_    = categoryName + "_" + particleName + std::to_string(sectionIndex);
     folderPath_   = baseFolderPath_ + categoryName_ + "/" + "Sections/" + particleName_ + "/";
 
     globalParameter_ = GlobalParameter::GetInstance();
 
-    // ParticleParameterハンドラーを作成
-    parameterHandler_ = std::make_unique<ParticleParameter>();
-
-    // パラメータの登録と取得
-    if (!globalParameter_->HasRegisters(sectionName_)) {
-        parameterHandler_->particleName_ = sectionName_;
-        parameterHandler_->Init();
-        globalParameter_->CreateGroup(sectionName_);
-        RegisterAdditionalParams();
-        globalParameter_->SyncParamForGroup(sectionName_);
+    // グループ作成
+    if (!globalParameter_->HasRegisters(groupName_)) {
+        globalParameter_->CreateGroup(groupName_);
+        sectionParam_.RegisterParams(globalParameter_, groupName_);
+        globalParameter_->SyncParamForGroup(groupName_);
     } else {
-        parameterHandler_->particleName_ = sectionName_;
-        parameterHandler_->GetParams();
-        GetAdditionalParams();
+        sectionParam_.GetParams(globalParameter_, groupName_);
     }
 
     // Rail初期化
@@ -43,14 +34,20 @@ void ParticleSection::Init(const std::string& particleName, const std::string& c
     emitBoxTransform_.Init();
 
     // スケールイージング初期化
-    scaleEasing_.SetAdaptValue(&parameterHandler_->parameters_.scaleEaseParm.currentScaleOffset);
+    scaleEasing_.SetAdaptValue(&sectionParam_.GetParameters().scaleEaseParm.currentScaleOffset);
+
+    // パーティクルグループが存在しない場合は作成
+    if (ParticleManager::GetInstance()->particleGroups_.find(groupName_) == ParticleManager::GetInstance()->particleGroups_.end()) {
+
+        // デフォルトでPlaneプリミティブを作成
+        CreatePrimitiveParticle(PrimitiveType::Plane, sectionParam_.GetMaxParticleNum());
+    }
 
     AdaptEaseSettings();
     AdaptRailSettings();
 
-    // ブレンドモード適用
-    parameterHandler_->groupParamaters_.blendMode    = static_cast<BlendMode>(parameterHandler_->blendMode_);
-    parameterHandler_->groupParamaters_.billBordType = static_cast<BillboardType>(parameterHandler_->billBordType_);
+    sectionParam_.GetGroupParameters().blendMode    = static_cast<BlendMode>(sectionParam_.GetGroupParameters().blendMode);
+    sectionParam_.GetGroupParameters().billBordType = static_cast<BillboardType>(sectionParam_.GetGroupParameters().billBordType);
 }
 
 //*----------------------------- Playback Control -----------------------------*//
@@ -60,11 +57,12 @@ void ParticleSection::Play() {
     elapsedTime_ = 0.0f;
     currentTime_ = 0.0f;
 
-    if (useRail_ && !railFileName_.empty()) {
-        railPlayer_->Play(railFileName_);
+    auto& railFileName = sectionParam_.GetRailFileName();
+    if (sectionParam_.GetSectionParam().useRail && !railFileName.empty()) {
+        railPlayer_->Play(railFileName);
     }
 
-    if (useScaleEasing_) {
+    if (sectionParam_.GetSectionParam().useScaleEasing) {
         scaleEasing_.Reset();
     }
 }
@@ -84,7 +82,7 @@ void ParticleSection::Stop() {
         railPlayer_->Stop();
     }
 
-    if (useScaleEasing_) {
+    if (sectionParam_.GetSectionParam().useScaleEasing) {
         scaleEasing_.Reset();
     }
 }
@@ -98,12 +96,12 @@ void ParticleSection::StartWaiting() {
 //*----------------------------- Update -----------------------------*//
 
 void ParticleSection::Update(float speedRate) {
-    if (!parameterHandler_->groupParamaters_.isShot && playState_ != PlayState::PLAYING && playState_ != PlayState::WAITING) {
+    if (!sectionParam_.GetGroupParameters().isShot && playState_ != PlayState::PLAYING && playState_ != PlayState::WAITING) {
         return;
     }
 
     float actualDeltaTime;
-    switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
+    switch (static_cast<TimeMode>(sectionParam_.GetTimeModeSelector().GetTimeModeInt())) {
     case TimeMode::DELTA_TIME:
         actualDeltaTime = Frame::DeltaTime() * speedRate;
         break;
@@ -119,12 +117,12 @@ void ParticleSection::Update(float speedRate) {
     }
 
     if (playState_ == PlayState::PLAYING) {
-        if (useRail_ && railPlayer_->IsPlaying()) {
+        if (sectionParam_.GetSectionParam().useRail && railPlayer_->IsPlaying()) {
             railPlayer_->Update(speedRate);
-            parameterHandler_->parameters_.emitPos = railPlayer_->GetCurrentPosition();
+            sectionParam_.GetParameters().emitPos = railPlayer_->GetCurrentPosition();
         }
 
-        if (useScaleEasing_) {
+        if (sectionParam_.GetSectionParam().useScaleEasing) {
             scaleEasing_.Update(actualDeltaTime);
         }
 
@@ -136,7 +134,7 @@ void ParticleSection::Update(float speedRate) {
 
 void ParticleSection::UpdateWaiting(float deltaTime) {
     elapsedTime_ += deltaTime;
-    if (elapsedTime_ >= startTime_) {
+    if (elapsedTime_ >= sectionParam_.GetTimingParam().startTime) {
         StartPlay();
     }
 }
@@ -144,29 +142,30 @@ void ParticleSection::UpdateWaiting(float deltaTime) {
 void ParticleSection::StartPlay() {
     playState_ = PlayState::PLAYING;
 
-    if (useRail_ && !railFileName_.empty()) {
-        railPlayer_->Play(railFileName_);
+    auto& railFileName = sectionParam_.GetRailFileName();
+    if (sectionParam_.GetSectionParam().useRail && !railFileName.empty()) {
+        railPlayer_->Play(railFileName);
     }
 
-    if (useScaleEasing_) {
+    if (sectionParam_.GetSectionParam().useScaleEasing) {
         scaleEasing_.Reset();
     }
 }
 
 void ParticleSection::UpdateEmitTransform() {
-    emitBoxTransform_.translation_ = parameterHandler_->parameters_.emitPos;
+    emitBoxTransform_.translation_ = sectionParam_.GetParameters().emitPos;
 
     emitBoxTransform_.scale_ = {
-        parameterHandler_->parameters_.positionDist.max.x - parameterHandler_->parameters_.positionDist.min.x,
-        parameterHandler_->parameters_.positionDist.max.y - parameterHandler_->parameters_.positionDist.min.y,
-        parameterHandler_->parameters_.positionDist.max.z - parameterHandler_->parameters_.positionDist.min.z};
+        sectionParam_.GetParameters().positionDist.max.x - sectionParam_.GetParameters().positionDist.min.x,
+        sectionParam_.GetParameters().positionDist.max.y - sectionParam_.GetParameters().positionDist.min.y,
+        sectionParam_.GetParameters().positionDist.max.z - sectionParam_.GetParameters().positionDist.min.z};
 
     emitBoxTransform_.UpdateMatrix();
 }
 
 void ParticleSection::SetEmitLine() {
 #ifdef _DEBUG
-    if (useRail_) {
+    if (sectionParam_.GetSectionParam().useRail) {
         // Rail使用時のデバッグ表示
     } else {
         debugLine_->SetCubeWireframe(
@@ -180,32 +179,41 @@ void ParticleSection::SetEmitLine() {
 //*----------------------------- Emit Methods -----------------------------*//
 
 void ParticleSection::EmitInternal() {
+    // パーティクルグループが存在するか確認
+    auto& groups = ParticleManager::GetInstance()->particleGroups_;
+    if (groups.find(groupName_) == groups.end()) {
+        return;
+    }
+
     currentTime_ += Frame::DeltaTime();
 
-    if (currentTime_ >= parameterHandler_->intervalTime_ || parameterHandler_->groupParamaters_.isShot) {
-        auto& group = ParticleManager::GetInstance()->particleGroups_[groupName_];
-        if (static_cast<int32_t>(group.particles.size()) + parameterHandler_->particleCount_ > parameterHandler_->maxParticleNum_) {
+    if (currentTime_ >= sectionParam_.GetIntervalTime() || sectionParam_.GetGroupParameters().isShot) {
+        auto& group = groups[groupName_];
+
+        // パーティクル数制限チェック
+        if (static_cast<int32_t>(group.particles.size()) + sectionParam_.GetParticleCount() > sectionParam_.GetMaxParticleNum()) {
             currentTime_ = 0.0f;
             return;
         }
 
-        if (useScaleEasing_) {
-            Vector3 currentScale                           = scaleEasing_.GetValue();
-            parameterHandler_->parameters_.scaleDistV3.min = currentScale;
-            parameterHandler_->parameters_.scaleDistV3.max = currentScale;
+        // スケールイージング適用
+        if (sectionParam_.GetSectionParam().useScaleEasing) {
+            Vector3 currentScale                          = scaleEasing_.GetValue();
+            sectionParam_.GetParameters().scaleDistV3.min = currentScale;
+            sectionParam_.GetParameters().scaleDistV3.max = currentScale;
 
-            if (parameterHandler_->parameters_.isScalerScale) {
-                float scaleValue                             = (currentScale.x + currentScale.y + currentScale.z) / 3.0f;
-                parameterHandler_->parameters_.scaleDist.min = scaleValue;
-                parameterHandler_->parameters_.scaleDist.max = scaleValue;
+            if (sectionParam_.GetParameters().isScalerScale) {
+                float scaleValue                            = (currentScale.x + currentScale.y + currentScale.z) / 3.0f;
+                sectionParam_.GetParameters().scaleDist.min = scaleValue;
+                sectionParam_.GetParameters().scaleDist.max = scaleValue;
             }
         }
 
         ParticleManager::GetInstance()->Emit(
             groupName_,
-            parameterHandler_->parameters_,
-            parameterHandler_->groupParamaters_,
-            parameterHandler_->particleCount_);
+            sectionParam_.GetParameters(),
+            sectionParam_.GetGroupParameters(),
+            sectionParam_.GetParticleCount());
 
         currentTime_ = 0.0f;
     }
@@ -214,24 +222,24 @@ void ParticleSection::EmitInternal() {
 //*----------------------------- Primitive/Model Management -----------------------------*//
 
 void ParticleSection::ChangePrimitive(const PrimitiveType& primitiveType) {
-    CreatePrimitiveParticle(primitiveType, parameterHandler_->maxParticleNum_);
-    // テクスチャを再適用
+    CreatePrimitiveParticle(primitiveType, sectionParam_.GetMaxParticleNum());
     ApplyTextureToManager();
 }
 
 //*----------------------------- Easing and Rail Settings -----------------------------*//
 
 void ParticleSection::AdaptEaseSettings() {
-    if (!useScaleEasing_) {
+    if (!sectionParam_.GetSectionParam().useScaleEasing) {
         return;
     }
 
-    auto& easeParm = parameterHandler_->parameters_.scaleEaseParm;
+    auto& easeParm = sectionParam_.GetParameters().scaleEaseParm;
 
+    // EasingTypeをEasing.hのEasingTypeにマッピング
     scaleEasing_.SetType(static_cast<EasingType>(easeParm.easeTypeInt));
     scaleEasing_.SetMaxTime(easeParm.maxTime);
 
-    if (parameterHandler_->parameters_.isScalerScale) {
+    if (sectionParam_.GetParameters().isScalerScale) {
         Vector3 startScale = Vector3::OneVector() * easeParm.startValueF;
         Vector3 endScale   = Vector3::OneVector() * easeParm.endValueF.max;
         scaleEasing_.SetStartValue(startScale);
@@ -243,7 +251,8 @@ void ParticleSection::AdaptEaseSettings() {
 }
 
 void ParticleSection::AdaptRailSettings() {
-    if (!useRail_ || railFileName_.empty()) {
+    auto& railFileName = sectionParam_.GetRailFileName();
+    if (!sectionParam_.GetSectionParam().useRail || railFileName.empty()) {
         return;
     }
 }
@@ -252,12 +261,10 @@ void ParticleSection::AdaptRailSettings() {
 
 void ParticleSection::AdjustParam() {
 #ifdef _DEBUG
-    ImGui::SeparatorText(("Section: " + sectionName_).c_str());
-    ImGui::PushID(sectionName_.c_str());
+    ImGui::SeparatorText(("Section: " + groupName_).c_str());
+    ImGui::PushID(groupName_.c_str());
 
-    ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 100.0f);
-    timeModeSelector_.SelectTimeModeImGui("Time Mode");
-
+    // Playback状態表示
     ImGui::Separator();
     ImGui::Text("Playback State:");
     switch (playState_) {
@@ -265,87 +272,42 @@ void ParticleSection::AdjustParam() {
         ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "STOPPED");
         break;
     case PlayState::WAITING:
-        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "WAITING (%.2f / %.2f)", elapsedTime_, startTime_);
+        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "WAITING (%.2f / %.2f)",
+            elapsedTime_, sectionParam_.GetTimingParam().startTime);
         break;
     case PlayState::PLAYING:
         ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "PLAYING");
         break;
     }
 
-    if (ImGui::CollapsingHeader("Rail Settings")) {
-        ImGui::Checkbox("Use Rail", &useRail_);
-
-        if (useRail_) {
-            std::string railDirectory = globalParameter_->GetDirectoryPath() + "RailEditor/Dates";
-
-            railFileSelector_.SelectFile(
-                "Rail File",
-                railDirectory,
-                railFileName_,
-                "",
-                false);
-
-            if (ImGui::Button("Preview Rail") && !railFileName_.empty()) {
-                railPlayer_->Play(railFileName_);
-            }
-        }
-    }
-
-    if (ImGui::CollapsingHeader("Scale Easing")) {
-        ImGui::Checkbox("Use Scale Easing", &useScaleEasing_);
-
-        if (useScaleEasing_) {
-            auto& easeParm = parameterHandler_->parameters_.scaleEaseParm;
-
-            ImGui::DragFloat("Max Time", &easeParm.maxTime, 0.01f, 0.0f, 10.0f);
-            ImGuiEasingTypeSelector("Easing Type", easeParm.easeTypeInt);
-
-            if (parameterHandler_->parameters_.isScalerScale) {
-                ImGui::DragFloat("Start Scale", &easeParm.startValueF, 0.01f);
-                ImGui::DragFloat("End Scale Max", &easeParm.endValueF.max, 0.01f);
-            } else {
-                ImGui::DragFloat3("Start Scale", &easeParm.startValueV3.x, 0.01f);
-                ImGui::DragFloat3("End Scale Max", &easeParm.endValueV3.max.x, 0.01f);
-            }
-
-            ImGui::DragFloat("Back Ratio", &easeParm.backRatio, 0.01f, 0.0f, 5.0f);
-
-            if (ImGui::Button("Apply Easing Settings")) {
-                AdaptEaseSettings();
-            }
-        }
-    }
-
+    // Primitive/Model設定
     if (ImGui::CollapsingHeader("Primitive/Model Type")) {
-        bool useModel = parameterHandler_->useModel_;
+        bool useModel = sectionParam_.IsUseModel();
         ImGui::Checkbox("Use Model", &useModel);
-        parameterHandler_->useModel_ = useModel;
 
         if (useModel) {
             modelFileSelector_.SelectFile(
                 "Model Folder",
                 modelBasePath_,
-                parameterHandler_->modelFilePath_,
+                const_cast<std::string&>(sectionParam_.GetModelFilePath()),
                 "",
                 false);
 
-            if (!parameterHandler_->modelFilePath_.empty()) {
-                std::string fullPath = parameterHandler_->modelFilePath_ + "/" + parameterHandler_->modelFilePath_ + ".obj";
+            if (!sectionParam_.GetModelFilePath().empty()) {
+                std::string fullPath = sectionParam_.GetModelFilePath() + "/" + sectionParam_.GetModelFilePath() + ".obj";
                 ImGui::Text("Full Path: %s", fullPath.c_str());
             }
 
-            if (ImGui::Button("Apply Model") && !parameterHandler_->modelFilePath_.empty()) {
-                std::string fullPath = parameterHandler_->modelFilePath_ + "/" + parameterHandler_->modelFilePath_ + ".obj";
-                CreateModelParticle(fullPath, parameterHandler_->maxParticleNum_);
-                // テクスチャを再適用
+            if (ImGui::Button("Apply Model") && !sectionParam_.GetModelFilePath().empty()) {
+                std::string fullPath = sectionParam_.GetModelFilePath() + "/" + sectionParam_.GetModelFilePath() + ".obj";
+                CreateModelParticle(fullPath, sectionParam_.GetMaxParticleNum());
                 ApplyTextureToManager();
             }
         } else {
             const char* primitiveItems[] = {"Plane", "Ring", "Cylinder"};
-            int primitiveType            = parameterHandler_->primitiveTypeInt_;
+            int primitiveType            = sectionParam_.GetPrimitiveTypeInt();
 
             ImGui::Combo("Primitive Type", &primitiveType, primitiveItems, IM_ARRAYSIZE(primitiveItems));
-            parameterHandler_->primitiveTypeInt_ = primitiveType;
 
             ImGui::Text("Note: Primitive changes apply on Init or manual Apply");
 
@@ -355,35 +317,29 @@ void ParticleSection::AdjustParam() {
         }
     }
 
-    parameterHandler_->EditorUpdate();
+    // 全パラメータ編集
+    sectionParam_.AdjustParam();
 
-    globalParameter_->ParamSaveForImGui(sectionName_, folderPath_);
-    globalParameter_->ParamLoadForImGui(sectionName_, folderPath_);
+    if (ImGui::Button("Apply Easing Settings")) {
+        AdaptEaseSettings();
+    }
+
+    // セーブ・ロード
+    globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
+    globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
 
     ImGui::PopID();
 #endif
 }
 
-void ParticleSection::ImGuiTextureSelection() {
-    parameterHandler_->ImGuiTextureSelection();
-}
-
-void ParticleSection::ApplyTexture(const std::string& textureName) {
-    parameterHandler_->ApplyTexture(textureName);
-    // Managerに反映
-    ApplyTextureToManager();
-}
-
 void ParticleSection::InitAdaptTexture() {
-    parameterHandler_->InitAdaptTexture();
-    // Managerに反映
+    sectionParam_.InitAdaptTexture();
     ApplyTextureToManager();
 }
 
 void ParticleSection::ApplyTextureToManager() {
-    // ParticleParameterが保持しているテクスチャパスからハンドルを取得
-    if (!parameterHandler_->selectedTexturePath_.empty()) {
-        uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture(parameterHandler_->selectedTexturePath_);
+    if (!sectionParam_.GetSelectedTexturePath().empty()) {
+        uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture(sectionParam_.GetSelectedTexturePath());
         ParticleManager::GetInstance()->SetTextureHandle(groupName_, textureHandle);
     }
 }
@@ -392,23 +348,19 @@ void ParticleSection::SetTexture(uint32_t textureHandle) {
     ParticleManager::GetInstance()->SetTextureHandle(groupName_, textureHandle);
 }
 
-//*----------------------------- Private Helper Methods -----------------------------*//
-
 //*----------------------------- File Operations -----------------------------*//
 
 void ParticleSection::LoadData() {
-    globalParameter_->LoadFile(sectionName_, folderPath_);
-    globalParameter_->SyncParamForGroup(sectionName_);
-    parameterHandler_->GetParams();
-    GetAdditionalParams();
+    globalParameter_->LoadFile(groupName_, folderPath_);
+    globalParameter_->SyncParamForGroup(groupName_);
+    sectionParam_.GetParams(globalParameter_, groupName_);
     AdaptEaseSettings();
     AdaptRailSettings();
-    // テクスチャを再適用
     ApplyTextureToManager();
 }
 
 void ParticleSection::SaveData() {
-    globalParameter_->SaveFile(sectionName_, folderPath_);
+    globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
 //*----------------------------- State Management -----------------------------*//
@@ -433,24 +385,4 @@ void ParticleSection::CreatePrimitiveParticle(PrimitiveType primitiveType, int32
 
 void ParticleSection::SetTextureHandle(uint32_t handle) {
     ParticleManager::GetInstance()->SetTextureHandle(groupName_, handle);
-}
-
-void ParticleSection::RegisterAdditionalParams() {
-    globalParameter_->Regist(sectionName_, "Start Time", &startTime_);
-    timeModeSelector_.RegisterParam(sectionName_, globalParameter_);
-
-    globalParameter_->Regist(sectionName_, "useRail", &useRail_);
-    globalParameter_->Regist(sectionName_, "railFileName", &railFileName_);
-
-    globalParameter_->Regist(sectionName_, "useScaleEasing", &useScaleEasing_);
-}
-
-void ParticleSection::GetAdditionalParams() {
-    startTime_ = globalParameter_->GetValue<float>(sectionName_, "Start Time");
-    timeModeSelector_.GetParam(sectionName_, globalParameter_);
-
-    useRail_      = globalParameter_->GetValue<bool>(sectionName_, "useRail");
-    railFileName_ = globalParameter_->GetValue<std::string>(sectionName_, "railFileName");
-
-    useScaleEasing_ = globalParameter_->GetValue<bool>(sectionName_, "useScaleEasing");
 }

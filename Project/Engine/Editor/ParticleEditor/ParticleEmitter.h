@@ -82,7 +82,7 @@ private:
     bool isStartRailMove_;
     std::string editorMessage_;
 
-    // 旧システム用（互換性のため残す）
+    // 旧システム用
     std::unique_ptr<RailManager> railManager_;
 
     // 新システム用

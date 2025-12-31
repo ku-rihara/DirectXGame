@@ -526,7 +526,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 /// エミット
 ///======================================================================
 void ParticleManager::Emit(
-    std::string name, const ParticleEmitter::Parameters& paramaters, const ParticleEmitter::GroupParamaters& groupParamaters, int32_t count) { // 新パラメータ追加
+    std::string name, const ParticleEmitter::Parameters& paramaters, const ParticleEmitter::GroupParamaters& groupParamaters, int32_t count) {
 
     // パーティクルグループが存在するか確認
     assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");

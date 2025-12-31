@@ -85,6 +85,7 @@
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleParameter.cpp" />
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticlePlayer.cpp" />
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSection.cpp" />
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.cpp" />
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectController.cpp" />
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectData.cpp" />
     <ClCompile Include="Engine\Editor\RailEditor\ControlPosManager.cpp" />
@@ -256,6 +257,7 @@
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationPlayer.h" />
     <ClInclude Include="Engine\Editor\ParameterEditor\GlobalParameter.h" />
+    <ClInclude Include="Engine\Editor\ParticleEditor\Parameter\ParticleCommonParameters.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleData.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEditor.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEmitter.h" />
@@ -263,6 +265,7 @@
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleParameter.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticlePlayer.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSection.h" />
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.h" />
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectController.h" />
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectData.h" />
     <ClInclude Include="Engine\Editor\RailEditor\ControlPosManager.h" />
