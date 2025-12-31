@@ -1,4 +1,5 @@
 #pragma once
+#include "3d/WorldTransform.h"
 #include "MinMax.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "Vector2.h"
@@ -16,6 +17,14 @@ class WorldTransform;
 /// パーティクル共通パラメータ
 /// </summary>
 namespace ParticleCommon {
+
+// イージングタイプ
+enum class EaseType {
+    INSINE,
+    OUTSINE,
+    OUTBACK,
+    OUTQUINT,
+};
 
 // UVパラメータ
 struct UVParm {
@@ -37,10 +46,11 @@ struct JointParent {
 };
 
 // スケールイージングパラメータ
-struct ScaleEaseParm {
+struct ScaleEaseParam {
     float maxTime       = 1.0f;
     bool isScaleEase    = false;
     int32_t easeTypeInt = 0;
+    EaseType easeType   = EaseType::INSINE;
 
     // スカラー値用
     float startValueF = 1.0f;
@@ -50,8 +60,7 @@ struct ScaleEaseParm {
     Vector3 startValueV3 = Vector3::OneVector();
     V3MinMax endValueV3;
 
-    float backRatio            = 1.70158f;
-    Vector3 currentScaleOffset = Vector3::OneVector();
+    float backRatio = 0.0f;
 };
 
 // パーティクルパラメータ
@@ -76,7 +85,7 @@ struct Parameters {
     bool isFloatVelocity;
     bool isScalerScale;
     bool isRotateforDirection;
-    ScaleEaseParm scaleEaseParm;
+    ScaleEaseParam scaleEaseParm;
     UVParm uvParm;
     JointParent jointParent;
 };

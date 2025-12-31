@@ -16,9 +16,12 @@ using namespace KetaEngine;
 #include "Primitive/PrimitiveCylinder.h"
 #include "Primitive/PrimitivePlane.h"
 #include "Primitive/PrimitiveRing.h"
+// editor
+#include"Editor/ParameterEditor/GlobalParameter.h"
 // std
 #include <cassert>
 #include <string>
+
 ParticleManager* ParticleManager::GetInstance() {
     static ParticleManager instance;
     return &instance;
@@ -318,7 +321,7 @@ void ParticleManager::CreateInstancingResource(const std::string& name, uint32_t
 ///======================================================================
 /// パーティクル作成
 ///======================================================================
-ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::Parameters& paramaters) {
+ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& paramaters) {
 
     Particle particle;
 
@@ -526,7 +529,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 /// エミット
 ///======================================================================
 void ParticleManager::Emit(
-    std::string name, const ParticleEmitter::Parameters& paramaters, const ParticleEmitter::GroupParamaters& groupParamaters, int32_t count) {
+    std::string name, const Parameters& paramaters, const GroupParamaters& groupParamaters, int32_t count) {
 
     // パーティクルグループが存在するか確認
     assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
@@ -594,22 +597,22 @@ Vector3 ParticleManager::ScaleAdapt(float time, const ScaleInFo& info) {
         time, info.easeParam.maxTime);
 }
 
-Vector3 ParticleManager::EaseAdapt(const ParticleEmitter::EaseType& easetype,
+Vector3 ParticleManager::EaseAdapt(const EaseType& easetype,
     const Vector3& start, const Vector3& end, float time, float maxTime) {
 
     switch (easetype) {
-    case ParticleEmitter::EaseType::INSINE:
+    case EaseType::INSINE:
         return EaseInSine(start, end, time, maxTime);
         break;
 
-    case ParticleEmitter::EaseType::OUTSINE:
+    case EaseType::OUTSINE:
         return EaseInOutSine(start, end, time, maxTime);
         break;
 
-    case ParticleEmitter::EaseType::OUTBACK:
+    case EaseType::OUTBACK:
         return EaseInOutBack(start, end, time, maxTime);
         break;
-    case ParticleEmitter::EaseType::OUTQUINT:
+    case EaseType::OUTQUINT:
         return EaseOutQuint(start, end, time, maxTime);
         break;
     default:

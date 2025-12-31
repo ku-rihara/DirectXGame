@@ -6,6 +6,7 @@
 #include "Line3D/Line3D.h"
 #include "ParticleSectionParameter.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
+#include "Primitive/IPrimitive.h"
 #include "utility/FileSelector/FileSelector.h"
 #include <memory>
 #include <string>
@@ -78,10 +79,7 @@ private:
     int32_t sectionIndex_ = -1;
 
     // パラメータ
-    ParticleSectionParameter sectionParam_;
-
-    // スケールイージング用
-    Easing<Vector3> scaleEasing_;
+    std::unique_ptr<ParticleSectionParameter> sectionParam_;
 
     GlobalParameter* globalParameter_ = nullptr;
     std::unique_ptr<RailPlayer> railPlayer_;
@@ -104,16 +102,10 @@ public:
     //*----------------------------- Getters -----------------------------*//
 
     const std::string& GetGroupName() const { return groupName_; }
-    ParticleSectionParameter::Parameters& GetParameters() { return sectionParam_.GetParameters(); }
-    ParticleSectionParameter::GroupParamaters& GetGroupParameters() { return sectionParam_.GetGroupParameters(); }
-    int32_t GetParticleCount() const { return sectionParam_.GetParticleCount(); }
-    float GetIntervalTime() const { return sectionParam_.GetIntervalTime(); }
-    int32_t GetMaxParticleNum() const { return sectionParam_.GetMaxParticleNum(); }
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     PlayState GetPlayState() const { return playState_; }
     bool IsPlaying() const { return playState_ == PlayState::PLAYING; }
-    ParticleSectionParameter& GetSectionParam() { return sectionParam_; }
-    const ParticleSectionParameter& GetSectionParam() const { return sectionParam_; }
+    ParticleSectionParameter* GetSectionParam() { return sectionParam_.get(); }
 
     //*----------------------------- Setters -----------------------------*//
 

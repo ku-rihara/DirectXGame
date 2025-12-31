@@ -3,8 +3,8 @@
 using namespace KetaEngine;
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
-#include "ParticleManager.h"
 #include "Function/GetFile.h"
+#include "ParticleManager.h"
 #include <format>
 #include <imgui.h>
 
@@ -25,6 +25,7 @@ void ParticleParameter::ParameterInit() {
     parameters_.uvParm.numOfFrame    = 1;
     selectedTexturePath_             = "resources/Texture/uvChecker.png";
 }
+
 void ParticleParameter::Init() {
     ParameterInit();
 
@@ -42,7 +43,6 @@ void ParticleParameter::Init() {
     groupParamaters_.blendMode         = static_cast<BlendMode>(blendMode_);
     parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);
 }
-
 
 void ParticleParameter::RegisterParams() {
     // Position
@@ -224,7 +224,6 @@ void ParticleParameter::GetParams() {
     modelFilePath_    = globalParameter_->GetValue<std::string>(particleName_, "modelFilePath");
 }
 
-
 ///=================================================================================
 /// Editor 更新
 ///=================================================================================
@@ -370,7 +369,7 @@ void ParticleParameter::EditorUpdate() {
     // パーティクル切り替え
     ParticleChange();
 
-    globalParameter_->ParamSaveForImGui(particleName_,folderPath_);
+    globalParameter_->ParamSaveForImGui(particleName_, folderPath_);
     globalParameter_->ParamLoadForImGui(particleName_, folderPath_);
 
     ImGui::PopID();
@@ -453,7 +452,7 @@ void ParticleParameter::ParticleChange() {
     DisplayFileSelection("SelectParticle", filenames, selectedIndex, [this](const std::string& selectedFile) {
         globalParameter_->CopyGroup(selectedFile, particleName_);
         globalParameter_->SyncParamForGroup(particleName_);
-     
+
         ImGui::Text("Load Successful: %s", (folderPath_ + selectedFile).c_str());
     });
 }
@@ -475,8 +474,6 @@ void ParticleParameter::ApplyTexture(const std::string& textureName) {
     selectedTexturePath_ = textureFilePath_ + "/" + textureName + ".png";
     ParticleManager::GetInstance()->SetTextureHandle(particleName_, TextureManager::GetInstance()->LoadTexture(selectedTexturePath_));
 }
-
-
 
 void ParticleParameter::InitAdaptTexture() {
     if (selectedTexturePath_ == "") {

@@ -7,33 +7,37 @@
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 
-#include "ParticleEmitter.h"
+#include "Parameter/ParticleCommonParameters.h"
 #include "struct/ParticleForGPU.h"
+#include "Primitive/IPrimitive.h"
 
 // math
 #include "Box.h"
 #include "MinMax.h"
 // std
+
 #include <list>
 #include <memory>
 #include <unordered_map>
 
 namespace KetaEngine {
 
-struct ParticleEmitter::GroupParamaters;
-struct ParticleEmitter::Parameters;
-struct ParticleEmitter::EaseParm;
-
 /// <summary>
 /// パーティクルマネージャー
 /// </summary>
 class ParticleManager {
+public:
+    // 共通パラメータの型エイリアス
+    using GroupParamaters = ParticleCommon::GroupParamaters;
+    using Parameters      = ParticleCommon::Parameters;
+    using EaseParm        = ParticleCommon::ScaleEaseParam;
+    using EaseType        = ParticleCommon::EaseType;
 
 private:
     struct ScaleInFo {
         Vector3 tempScaleV3;
         Vector3 easeEndScale;
-        ParticleEmitter::EaseParm easeParam;
+        EaseParm easeParam;
     };
     struct UVInfo {
         Vector3 pos;
@@ -64,7 +68,7 @@ private:
         Vector3 rotateSpeed_;
         Vector4 color_;
         const Vector3* followPos = nullptr;
-        std::unique_ptr<WorldTransform> worldTransform_; 
+        std::unique_ptr<WorldTransform> worldTransform_;
         ScaleInFo scaleInfo;
         UVInfo uvInfo_;
     };
@@ -85,7 +89,7 @@ private:
         uint32_t textureHandle;
         ParticleFprGPU* instancingData;
         std::list<Particle> particles;
-        ParticleEmitter::GroupParamaters param;
+        GroupParamaters param;
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
     };
 
@@ -93,7 +97,6 @@ public:
     ParticleManager()  = default;
     ~ParticleManager() = default;
 
-    
     // 初期化、更新、描画
     void Init(SrvManager* srvManager);
     void Update();
@@ -104,7 +107,6 @@ public:
     /// </summary>
     /// <param name="name">パーティクルグループ名</param>
     void ResetInstancingData(const std::string& name);
-
 
     /// <summary>
     /// UV更新
@@ -156,7 +158,7 @@ public:
     /// </summary>
     /// <param name="paramaters">パラメータ</param>
     /// <returns>生成されたパーティクル</returns>
-    Particle MakeParticle(const ParticleEmitter::Parameters& paramaters);
+    Particle MakeParticle(const Parameters& paramaters);
 
     /// <summary>
     /// パーティクルの放出
@@ -165,8 +167,8 @@ public:
     /// <param name="paramaters">パラメータ</param>
     /// <param name="groupParamaters">グループパラメータ</param>
     /// <param name="count">放出数</param>
-    void Emit(std::string name, const ParticleEmitter::Parameters& paramaters,
-        const ParticleEmitter::GroupParamaters& groupParamaters, int32_t count);
+    void Emit(std::string name, const Parameters& paramaters,
+        const GroupParamaters& groupParamaters, int32_t count);
 
     /// <summary>
     /// アルファ値の適用
@@ -193,7 +195,7 @@ public:
     /// <param name="time">経過時間</param>
     /// <param name="maxTime">最大時間</param>
     /// <returns>イージング後の値</returns>
-    Vector3 EaseAdapt(const ParticleEmitter::EaseType& easetype, const Vector3& start,
+    Vector3 EaseAdapt(const EaseType& easetype, const Vector3& start,
         const Vector3& end, float time, float maxTime);
 
 private:

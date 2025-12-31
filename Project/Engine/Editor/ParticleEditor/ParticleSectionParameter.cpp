@@ -6,7 +6,10 @@
 
 using namespace KetaEngine;
 
-// ImGuiEasingTypeSelectorは削除 - EasingParameterData.hのものを使用
+void ParticleSectionParameter::AdaptIntToType() {
+    groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
+    groupParameters_.billBordType = static_cast<BillboardType>(groupParameters_.billBordType);
+}
 
 void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, const std::string& groupName) {
     groupName_ = groupName;
@@ -33,10 +36,10 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "UV Pos", &parameters_.uvParm.pos);
     globalParam->Regist(groupName, "UV Rotate", &parameters_.uvParm.rotate);
     globalParam->Regist(groupName, "UV NumOfFrame", &parameters_.uvParm.numOfFrame);
-    globalParam->Regist(groupName, "UV ScroolSpeed", &parameters_.uvParm.frameScroolSpeed);
-    globalParam->Regist(groupName, "UV IsRoop", &parameters_.uvParm.isRoop);
-    globalParam->Regist(groupName, "UV isScroolEachPixel", &parameters_.uvParm.isScroolEachPixel);
-    globalParam->Regist(groupName, "UV isScrool", &parameters_.uvParm.isScrool);
+    globalParam->Regist(groupName, "UV ScrollSpeed", &parameters_.uvParm.frameScroolSpeed);
+    globalParam->Regist(groupName, "UV IsLoop", &parameters_.uvParm.isRoop);
+    globalParam->Regist(groupName, "UV isScrollEachPixel", &parameters_.uvParm.isScroolEachPixel);
+    globalParam->Regist(groupName, "UV isScroll", &parameters_.uvParm.isScrool);
     globalParam->Regist(groupName, "UV isFlipX", &parameters_.uvParm.isFlipX);
     globalParam->Regist(groupName, "UV isFlipY", &parameters_.uvParm.isFlipY);
 
@@ -63,33 +66,31 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
 
     // Flag
     globalParam->Regist(groupName, "isScalerScale", &parameters_.isScalerScale);
-    globalParam->Regist(groupName, "isRotateforDirection", &parameters_.isRotateforDirection);
-    globalParam->Regist(groupName, "isBillBord", &groupParamaters_.isBillBord);
-    globalParam->Regist(groupName, "AdaptRotateIsX", &groupParamaters_.adaptRotate_.isX);
-    globalParam->Regist(groupName, "AdaptRotateIsY", &groupParamaters_.adaptRotate_.isY);
-    globalParam->Regist(groupName, "AdaptRotateIsZ", &groupParamaters_.adaptRotate_.isZ);
+    globalParam->Regist(groupName, "isRotateForDirection", &parameters_.isRotateforDirection);
+    globalParam->Regist(groupName, "isBillBord", &groupParameters_.isBillBord);
+    globalParam->Regist(groupName, "AdaptRotateIsX", &groupParameters_.adaptRotate_.isX);
+    globalParam->Regist(groupName, "AdaptRotateIsY", &groupParameters_.adaptRotate_.isY);
+    globalParam->Regist(groupName, "AdaptRotateIsZ", &groupParameters_.adaptRotate_.isZ);
     globalParam->Regist(groupName, "isShot", &isShot_);
-    globalParam->Regist(groupName, "isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
+    globalParam->Regist(groupName, "isAlphaNoMove", &groupParameters_.isAlphaNoMove);
 
     // EaseParm
-    globalParam->Regist(groupName, "scaleEaseParm.isScaleEase", &parameters_.scaleEaseParm.isScaleEase);
-    globalParam->Regist(groupName, "scaleEaseParm.maxTime", &parameters_.scaleEaseParm.maxTime);
-    globalParam->Regist(groupName, "scaleEaseParm.easeTypeInt", &parameters_.scaleEaseParm.easeTypeInt);
-    globalParam->Regist(groupName, "scaleEaseParm.startValueF", &parameters_.scaleEaseParm.startValueF);
-    globalParam->Regist(groupName, "scaleEaseParm.endValueF.max", &parameters_.scaleEaseParm.endValueF.max);
-    globalParam->Regist(groupName, "scaleEaseParm.endValueF.min", &parameters_.scaleEaseParm.endValueF.min);
-    globalParam->Regist(groupName, "scaleEaseParm.startValueV3", &parameters_.scaleEaseParm.startValueV3);
-    globalParam->Regist(groupName, "scaleEaseParm.endValueV3.max", &parameters_.scaleEaseParm.endValueV3.max);
-    globalParam->Regist(groupName, "scaleEaseParm.endValueV3.min", &parameters_.scaleEaseParm.endValueV3.min);
-    globalParam->Regist(groupName, "scaleEaseParm.backRatio", &parameters_.scaleEaseParm.backRatio);
-    globalParam->Regist(groupName, "scaleEaseParm.currentScaleOffset", &parameters_.scaleEaseParm.currentScaleOffset);
-
+    globalParam->Regist(groupName, "scaleEaseParam.isScaleEase", &parameters_.scaleEaseParm.isScaleEase);
+    globalParam->Regist(groupName, "scaleEaseParam.maxTime", &parameters_.scaleEaseParm.maxTime);
+    globalParam->Regist(groupName, "scaleEaseParam.easeTypeInt", &parameters_.scaleEaseParm.easeTypeInt);
+    globalParam->Regist(groupName, "scaleEaseParam.startValueF", &parameters_.scaleEaseParm.startValueF);
+    globalParam->Regist(groupName, "scaleEaseParam.endValueF.max", &parameters_.scaleEaseParm.endValueF.max);
+    globalParam->Regist(groupName, "scaleEaseParam.endValueF.min", &parameters_.scaleEaseParm.endValueF.min);
+    globalParam->Regist(groupName, "scaleEaseParam.startValueV3", &parameters_.scaleEaseParm.startValueV3);
+    globalParam->Regist(groupName, "scaleEaseParam.endValueV3.max", &parameters_.scaleEaseParm.endValueV3.max);
+    globalParam->Regist(groupName, "scaleEaseParam.endValueV3.min", &parameters_.scaleEaseParm.endValueV3.min);
+    globalParam->Regist(groupName, "scaleEaseParam.backRatio", &parameters_.scaleEaseParm.backRatio);
     // Mode Setting
-    globalParam->Regist(groupName, "preBillBordType_", &billBordType_);
-    globalParam->Regist(groupName, "blendMode", &blendMode_);
+    globalParam->Regist(groupName, "preBillBordType", &billBordTypeInt_);
+    globalParam->Regist(groupName, "blendMode", &blendModeInt_);
 
     // Texture
-    globalParam->Regist(groupName, "selectedTexturePath_", &selectedTexturePath_);
+    globalParam->Regist(groupName, "selectedTexturePath", &selectedTexturePath_);
 
     // Primitive
     globalParam->Regist(groupName, "useModel", &useModel_);
@@ -108,9 +109,11 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
 
     // Scale Easing Parameter
     globalParam->Regist(groupName, "UseScaleEasing", &sectionParam_.useScaleEasing);
+
+    AdaptIntToType();
 }
 
-void ParticleSectionParameter::GetParams(GlobalParameter* globalParam, const std::string& groupName) {
+void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, const std::string& groupName) {
     // Position
     parameters_.emitPos          = globalParam->GetValue<Vector3>(groupName, "Position Base");
     parameters_.positionDist.max = globalParam->GetValue<Vector3>(groupName, "Position Max");
@@ -133,10 +136,10 @@ void ParticleSectionParameter::GetParams(GlobalParameter* globalParam, const std
     parameters_.uvParm.pos               = globalParam->GetValue<Vector2>(groupName, "UV Pos");
     parameters_.uvParm.rotate            = globalParam->GetValue<Vector3>(groupName, "UV Rotate");
     parameters_.uvParm.numOfFrame        = globalParam->GetValue<int32_t>(groupName, "UV NumOfFrame");
-    parameters_.uvParm.frameScroolSpeed  = globalParam->GetValue<float>(groupName, "UV ScroolSpeed");
-    parameters_.uvParm.isRoop            = globalParam->GetValue<bool>(groupName, "UV IsRoop");
-    parameters_.uvParm.isScroolEachPixel = globalParam->GetValue<bool>(groupName, "UV isScroolEachPixel");
-    parameters_.uvParm.isScrool          = globalParam->GetValue<bool>(groupName, "UV isScrool");
+    parameters_.uvParm.frameScroolSpeed  = globalParam->GetValue<float>(groupName, "UV ScrollSpeed");
+    parameters_.uvParm.isRoop            = globalParam->GetValue<bool>(groupName, "UV IsLoop");
+    parameters_.uvParm.isScroolEachPixel = globalParam->GetValue<bool>(groupName, "UV isScrollEachPixel");
+    parameters_.uvParm.isScrool          = globalParam->GetValue<bool>(groupName, "UV isScroll");
     parameters_.uvParm.isFlipX           = globalParam->GetValue<bool>(groupName, "UV isFlipX");
     parameters_.uvParm.isFlipY           = globalParam->GetValue<bool>(groupName, "UV isFlipY");
 
@@ -163,33 +166,32 @@ void ParticleSectionParameter::GetParams(GlobalParameter* globalParam, const std
 
     // Flag
     parameters_.isScalerScale         = globalParam->GetValue<bool>(groupName, "isScalerScale");
-    parameters_.isRotateforDirection  = globalParam->GetValue<bool>(groupName, "isRotateforDirection");
-    groupParamaters_.isBillBord       = globalParam->GetValue<bool>(groupName, "isBillBord");
-    groupParamaters_.adaptRotate_.isX = globalParam->GetValue<bool>(groupName, "AdaptRotateIsX");
-    groupParamaters_.adaptRotate_.isY = globalParam->GetValue<bool>(groupName, "AdaptRotateIsY");
-    groupParamaters_.adaptRotate_.isZ = globalParam->GetValue<bool>(groupName, "AdaptRotateIsZ");
+    parameters_.isRotateforDirection  = globalParam->GetValue<bool>(groupName, "isRotateForDirection");
+    groupParameters_.isBillBord       = globalParam->GetValue<bool>(groupName, "isBillBord");
+    groupParameters_.adaptRotate_.isX = globalParam->GetValue<bool>(groupName, "AdaptRotateIsX");
+    groupParameters_.adaptRotate_.isY = globalParam->GetValue<bool>(groupName, "AdaptRotateIsY");
+    groupParameters_.adaptRotate_.isZ = globalParam->GetValue<bool>(groupName, "AdaptRotateIsZ");
     isShot_                           = globalParam->GetValue<bool>(groupName, "isShot");
-    groupParamaters_.isAlphaNoMove    = globalParam->GetValue<bool>(groupName, "isAlphaNoMove");
+    groupParameters_.isAlphaNoMove    = globalParam->GetValue<bool>(groupName, "isAlphaNoMove");
 
     // EaseParam
-    parameters_.scaleEaseParm.isScaleEase        = globalParam->GetValue<bool>(groupName, "scaleEaseParm.isScaleEase");
-    parameters_.scaleEaseParm.maxTime            = globalParam->GetValue<float>(groupName, "scaleEaseParm.maxTime");
-    parameters_.scaleEaseParm.easeTypeInt        = globalParam->GetValue<int32_t>(groupName, "scaleEaseParm.easeTypeInt");
-    parameters_.scaleEaseParm.startValueF        = globalParam->GetValue<float>(groupName, "scaleEaseParm.startValueF");
-    parameters_.scaleEaseParm.endValueF.max      = globalParam->GetValue<float>(groupName, "scaleEaseParm.endValueF.max");
-    parameters_.scaleEaseParm.endValueF.min      = globalParam->GetValue<float>(groupName, "scaleEaseParm.endValueF.min");
-    parameters_.scaleEaseParm.startValueV3       = globalParam->GetValue<Vector3>(groupName, "scaleEaseParm.startValueV3");
-    parameters_.scaleEaseParm.endValueV3.max     = globalParam->GetValue<Vector3>(groupName, "scaleEaseParm.endValueV3.max");
-    parameters_.scaleEaseParm.endValueV3.min     = globalParam->GetValue<Vector3>(groupName, "scaleEaseParm.endValueV3.min");
-    parameters_.scaleEaseParm.backRatio          = globalParam->GetValue<float>(groupName, "scaleEaseParm.backRatio");
-    parameters_.scaleEaseParm.currentScaleOffset = globalParam->GetValue<Vector3>(groupName, "scaleEaseParm.currentScaleOffset");
+    parameters_.scaleEaseParm.isScaleEase    = globalParam->GetValue<bool>(groupName, "scaleEaseParam.isScaleEase");
+    parameters_.scaleEaseParm.maxTime        = globalParam->GetValue<float>(groupName, "scaleEaseParam.maxTime");
+    parameters_.scaleEaseParm.easeTypeInt    = globalParam->GetValue<int32_t>(groupName, "scaleEaseParam.easeTypeInt");
+    parameters_.scaleEaseParm.startValueF    = globalParam->GetValue<float>(groupName, "scaleEaseParam.startValueF");
+    parameters_.scaleEaseParm.endValueF.max  = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.max");
+    parameters_.scaleEaseParm.endValueF.min  = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.min");
+    parameters_.scaleEaseParm.startValueV3   = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.startValueV3");
+    parameters_.scaleEaseParm.endValueV3.max = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.max");
+    parameters_.scaleEaseParm.endValueV3.min = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.min");
+    parameters_.scaleEaseParm.backRatio      = globalParam->GetValue<float>(groupName, "scaleEaseParam.backRatio");
 
     // Mode
-    billBordType_ = globalParam->GetValue<int>(groupName, "preBillBordType_");
-    blendMode_    = globalParam->GetValue<int>(groupName, "blendMode");
+    billBordTypeInt_ = globalParam->GetValue<int>(groupName, "preBillBordType");
+    blendModeInt_    = globalParam->GetValue<int>(groupName, "blendMode");
 
     // Texture
-    selectedTexturePath_ = globalParam->GetValue<std::string>(groupName, "selectedTexturePath_");
+    selectedTexturePath_ = globalParam->GetValue<std::string>(groupName, "selectedTexturePath");
 
     // Primitive
     useModel_         = globalParam->GetValue<bool>(groupName, "useModel");
@@ -197,9 +199,11 @@ void ParticleSectionParameter::GetParams(GlobalParameter* globalParam, const std
     modelFilePath_    = globalParam->GetValue<std::string>(groupName, "modelFilePath");
 
     // Apply loaded values
-    groupParamaters_.blendMode    = static_cast<BlendMode>(blendMode_);
-    groupParamaters_.billBordType = static_cast<BillboardType>(billBordType_);
-    groupParamaters_.isShot       = isShot_;
+    groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
+    groupParameters_.billBordType = static_cast<BillboardType>(billBordTypeInt_);
+    groupParameters_.isShot       = isShot_;
+
+    AdaptIntToType();
 }
 
 void ParticleSectionParameter::AdjustParam() {
@@ -281,7 +285,7 @@ void ParticleSectionParameter::AdjustParam() {
     }
 
     // Scale
-    ScaleParmEditor();
+    ScaleParamEditor();
 
     // Rotate
     if (ImGui::CollapsingHeader("Rotate(Degree)")) {
@@ -323,25 +327,25 @@ void ParticleSectionParameter::AdjustParam() {
 
     // Billbord
     if (ImGui::CollapsingHeader("BillBoard")) {
-        ImGui::Checkbox("IsBillBoard", &groupParamaters_.isBillBord);
+        ImGui::Checkbox("IsBillBoard", &groupParameters_.isBillBord);
 
         ImGui::SeparatorText("IsRotateAdapt");
-        ImGui::Checkbox("IsX", &groupParamaters_.adaptRotate_.isX);
-        ImGui::Checkbox("IsY", &groupParamaters_.adaptRotate_.isY);
-        ImGui::Checkbox("IsZ", &groupParamaters_.adaptRotate_.isZ);
+        ImGui::Checkbox("IsX", &groupParameters_.adaptRotate_.isX);
+        ImGui::Checkbox("IsY", &groupParameters_.adaptRotate_.isY);
+        ImGui::Checkbox("IsZ", &groupParameters_.adaptRotate_.isZ);
 
         ImGui::SeparatorText("BillBordType");
         const char* billBordItems[] = {"XYZ", "X", "Y", "Z"};
-        if (ImGui::Combo("Billboard Type", &billBordType_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
-            groupParamaters_.billBordType = static_cast<BillboardType>(billBordType_);
+        if (ImGui::Combo("Billboard Type", &billBordTypeInt_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
+            groupParameters_.billBordType = static_cast<BillboardType>(billBordTypeInt_);
         }
     }
 
     // blend mode
     if (ImGui::CollapsingHeader("BlendMode")) {
         const char* blendModeItems[] = {"None", "Add", "Multiply", "Subtractive", "Screen"};
-        if (ImGui::Combo("Blend Mode", &blendMode_, blendModeItems, IM_ARRAYSIZE(blendModeItems))) {
-            groupParamaters_.blendMode = static_cast<BlendMode>(blendMode_);
+        if (ImGui::Combo("Blend Mode", &blendModeInt_, blendModeItems, IM_ARRAYSIZE(blendModeItems))) {
+            groupParameters_.blendMode = static_cast<BlendMode>(blendModeInt_);
         }
     }
 
@@ -349,7 +353,7 @@ void ParticleSectionParameter::AdjustParam() {
     if (ImGui::CollapsingHeader("Frag")) {
         ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateforDirection);
         ImGui::Checkbox("IsShot", &isShot_);
-        ImGui::Checkbox("isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
+        ImGui::Checkbox("isAlphaNoMove", &groupParameters_.isAlphaNoMove);
     }
 
     ImGuiTextureSelection();
@@ -358,7 +362,7 @@ void ParticleSectionParameter::AdjustParam() {
 #endif
 }
 
-void ParticleSectionParameter::ScaleParmEditor() {
+void ParticleSectionParameter::ScaleParamEditor() {
     if (ImGui::CollapsingHeader("Scale")) {
         ImGui::SeparatorText("Scale Mode");
         ImGui::Checkbox("IsScalerScale", &parameters_.isScalerScale);
@@ -425,4 +429,32 @@ void ParticleSectionParameter::SelectRailFile(
     std::pair<std::string, FileSelector>& param) {
 
     param.second.SelectFile(label, directory, param.first, "", false);
+}
+
+void ParticleSectionParameter::SetIsShot(bool shot) {
+    isShot_                 = shot;
+    groupParameters_.isShot = shot;
+}
+void ParticleSectionParameter::SetBlendMode(BlendMode mode) {
+    blendModeInt_              = static_cast<int32_t>(mode);
+    groupParameters_.blendMode = mode;
+}
+void ParticleSectionParameter::SetBillboardType(BillboardType type) {
+    billBordTypeInt_              = static_cast<int32_t>(type);
+    groupParameters_.billBordType = type;
+}
+
+void ParticleSectionParameter::SetParentTransform(const WorldTransform* transform) { parameters_.parentTransform = transform; }
+
+void ParticleSectionParameter::SetParentJoint(const Object3DAnimation* animation, const std::string& jointName) {
+    parameters_.jointParent.animation = animation;
+    parameters_.jointParent.name      = jointName;
+}
+
+void ParticleSectionParameter::SetFollowingPos(const Vector3* pos) {
+    parameters_.followingPos_ = pos;
+}
+
+void ParticleSectionParameter::SetTargetPosition(const Vector3& targetPos) {
+    parameters_.targetPos = targetPos;
 }
