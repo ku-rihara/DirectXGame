@@ -1,7 +1,7 @@
 #pragma once
 #include "3d/WorldTransform.h"
+#include "Material/ModelMaterial.h"
 #include "MinMax.h"
-#include "Pipeline/Particle/ParticlePipeline.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -18,20 +18,12 @@ class WorldTransform;
 /// </summary>
 namespace ParticleCommon {
 
-// イージングタイプ
-enum class EaseType {
-    INSINE,
-    OUTSINE,
-    OUTBACK,
-    OUTQUINT,
-};
-
 // UVパラメータ
-struct UVParm {
-    float frameScroolSpeed;
-    bool isScroolEachPixel;
-    bool isRoop;
-    bool isScrool;
+struct UVParam {
+    float frameScrollSpeed;
+    bool isScrollEachPixel;
+    bool isLoop;
+    bool isScroll;
     bool isFlipX;
     bool isFlipY;
     Vector2 pos;
@@ -50,7 +42,6 @@ struct ScaleEaseParam {
     float maxTime       = 1.0f;
     bool isScaleEase    = false;
     int32_t easeTypeInt = 0;
-    EaseType easeType   = EaseType::INSINE;
 
     // スカラー値用
     float startValueF = 1.0f;
@@ -86,7 +77,7 @@ struct Parameters {
     bool isScalerScale;
     bool isRotateforDirection;
     ScaleEaseParam scaleEaseParm;
-    UVParm uvParm;
+    UVParam uvParm;
     JointParent jointParent;
 };
 

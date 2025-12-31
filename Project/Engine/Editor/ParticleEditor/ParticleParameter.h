@@ -24,11 +24,11 @@ class Object3DAnimation;
 class ParticleParameter {
 public:
     // 共通パラメータの型エイリアス
-    using EaseType        = ParticleCommon::EaseType;
+ 
     using GroupParamaters = ParticleCommon::GroupParamaters;
     using Parameters      = ParticleCommon::Parameters;
     using EaseParm        = ParticleCommon::ScaleEaseParam;
-    using UVParm          = ParticleCommon::UVParm;
+    using UVParm          = ParticleCommon::UVParam;
     using JointParent     = ParticleCommon::JointParent;
 
 public:

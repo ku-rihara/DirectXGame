@@ -58,9 +58,9 @@ void ParticleManager::Update() {
             ///------------------------------------------------------------------------
             /// スケール変更
             ///------------------------------------------------------------------------
-            (*it).easeTime += Frame::DeltaTimeRate();
-            (*it).easeTime                = std::min((*it).easeTime, (*it).scaleInfo.easeParam.maxTime);
-            (*it).worldTransform_->scale_ = ScaleAdapt((*it).easeTime, (*it).scaleInfo);
+            (*it).scaleEasing->Update(Frame::DeltaTimeRate());
+          /*  (*it).easeTime                = std::min((*it).easeTime, (*it).scaleInfo.easeParam.maxTime);*/
+            (*it).worldTransform_->scale_ = (*it).scaleInfo.easingAdaptParam;
 
             ///------------------------------------------------------------------------
             /// 回転させる
@@ -328,197 +328,166 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parama
     /// Init
     particle.lifeTime_       = paramaters.lifeTime;
     particle.currentTime_    = 0.0f;
-    particle.worldTransform_ = std::make_unique<WorldTransform>(); // ポインタとして作成
+    particle.worldTransform_ = std::make_unique<WorldTransform>();
     particle.worldTransform_->Init();
 
     ///------------------------------------------------------------------------
-    /// ペアレント
+    /// ペアレント設定
     ///------------------------------------------------------------------------
-    if (paramaters.parentTransform) { // parent
+    if (paramaters.parentTransform) {
         particle.worldTransform_->parent_ = paramaters.parentTransform;
     }
-
     if (paramaters.jointParent.animation) {
         particle.worldTransform_->SetParentJoint(paramaters.jointParent.animation, paramaters.jointParent.name);
     }
-
     if (paramaters.followingPos_) {
         particle.followPos = paramaters.followingPos_;
     }
 
     ///------------------------------------------------------------------------
-    /// 座標
+    /// 座標設定
     ///------------------------------------------------------------------------
-
-    /// random
     Vector3 randomTranslate = {
         Random::Range(paramaters.positionDist.min.x, paramaters.positionDist.max.x),
         Random::Range(paramaters.positionDist.min.y, paramaters.positionDist.max.y),
         Random::Range(paramaters.positionDist.min.z, paramaters.positionDist.max.z)};
 
-    /// adapt
     particle.worldTransform_->translation_ = paramaters.targetPos + paramaters.emitPos + randomTranslate;
-    // fllow pos用
-    particle.offSet = paramaters.targetPos + paramaters.emitPos + randomTranslate;
+    particle.offSet                        = paramaters.targetPos + paramaters.emitPos + randomTranslate;
 
     ///------------------------------------------------------------------------
-    /// 速度、向き
+    /// 速度、向き設定
     ///------------------------------------------------------------------------
-
     if (paramaters.isFloatVelocity) {
-        // ランダムな方向ベクトルを生成
         Vector3 direction = {
             Random::Range(paramaters.directionDist.min.x, paramaters.directionDist.max.x),
             Random::Range(paramaters.directionDist.min.y, paramaters.directionDist.max.y),
             Random::Range(paramaters.directionDist.min.z, paramaters.directionDist.max.z)};
-
-        direction = direction.Normalize();
-
-        // スピード(float)を生成
-        float speed = Random::Range(paramaters.speedDist.min, paramaters.speedDist.max);
-
-        // カメラ回転を適用
+        direction                      = direction.Normalize();
+        float speed                    = Random::Range(paramaters.speedDist.min, paramaters.speedDist.max);
         Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
         particle.direction_            = TransformNormal(direction, cameraRotationMatrix);
         particle.speed_                = speed;
-
     } else {
-        // 速度ベクトル(Vector3)を直接指定
         Vector3 velocity = {
             Random::Range(paramaters.velocityDistV3.min.x, paramaters.velocityDistV3.max.x),
             Random::Range(paramaters.velocityDistV3.min.y, paramaters.velocityDistV3.max.y),
             Random::Range(paramaters.velocityDistV3.min.z, paramaters.velocityDistV3.max.z)};
-
-        // カメラ回転を適用
         Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
         velocity                       = TransformNormal(velocity, cameraRotationMatrix);
-
-        particle.direction_ = velocity;
-        particle.speedV3    = velocity;
+        particle.direction_            = velocity;
+        particle.speedV3               = velocity;
     }
-    // frag adapt
     particle.isFloatVelocity = paramaters.isFloatVelocity;
 
     ///------------------------------------------------------------------------
-    /// 回転
+    /// 回転設定
     ///------------------------------------------------------------------------
-    if (paramaters.isRotateforDirection) { // 進行方向向き場合
-
-        // caluclation direction angle
+    if (paramaters.isRotateforDirection) {
         particle.worldTransform_->rotation_ = DirectionToEulerAngles(particle.direction_, *viewProjection_);
-
     } else {
-        // random
         Vector3 rotate = {
             Random::Range(paramaters.rotateDist.min.x, paramaters.rotateDist.max.x),
             Random::Range(paramaters.rotateDist.min.y, paramaters.rotateDist.max.y),
             Random::Range(paramaters.rotateDist.min.z, paramaters.rotateDist.max.z)};
-
-        // adapt
         particle.worldTransform_->rotation_ = ToRadian(paramaters.baseRotate + rotate);
     }
 
     ///------------------------------------------------------------------------
-    /// 回転スピード
+    /// 回転スピード設定
     ///------------------------------------------------------------------------
-
-    /// random
     Vector3 rotateSpeed = {
         Random::Range(paramaters.rotateSpeedDist.min.x, paramaters.rotateSpeedDist.max.x),
         Random::Range(paramaters.rotateSpeedDist.min.y, paramaters.rotateSpeedDist.max.y),
         Random::Range(paramaters.rotateSpeedDist.min.z, paramaters.rotateSpeedDist.max.z)};
-
-    /// adapt
     particle.rotateSpeed_ = rotateSpeed;
 
     ///------------------------------------------------------------------------
-    /// スケール
+    ///  スケール設定 
     ///------------------------------------------------------------------------
-    if (paramaters.isScalerScale) { // スカラー
-
-        /// Easing Start Scale
+    if (paramaters.isScalerScale) {
+        // スカラー値の場合
         float scale                      = Random::Range(paramaters.scaleDist.min, paramaters.scaleDist.max);
         particle.worldTransform_->scale_ = {scale, scale, scale};
         particle.scaleInfo.tempScaleV3   = particle.worldTransform_->scale_;
 
-        /// 　Easing end Scale
-        float endscale                  = Random::Range(paramaters.scaleEaseParm.endValueF.min, paramaters.scaleEaseParm.endValueF.min);
+        float endscale                  = Random::Range(paramaters.scaleEaseParm.endValueF.min, paramaters.scaleEaseParm.endValueF.max);
         particle.scaleInfo.easeEndScale = {endscale, endscale, endscale};
-
-    } else { /// Vector3
-
-        /// Easing Start Scale
+    } else {
+        // Vector3の場合
         Vector3 ScaleV3 = {
             Random::Range(paramaters.scaleDistV3.min.x, paramaters.scaleDistV3.max.x),
             Random::Range(paramaters.scaleDistV3.min.y, paramaters.scaleDistV3.max.y),
             Random::Range(paramaters.scaleDistV3.min.z, paramaters.scaleDistV3.max.z)};
-
         particle.worldTransform_->scale_ = ScaleV3;
         particle.scaleInfo.tempScaleV3   = ScaleV3;
 
-        /// 　Easing end Scale
         Vector3 endScaleV3 = {
             Random::Range(paramaters.scaleEaseParm.endValueV3.min.x, paramaters.scaleEaseParm.endValueV3.max.x),
             Random::Range(paramaters.scaleEaseParm.endValueV3.min.y, paramaters.scaleEaseParm.endValueV3.max.y),
             Random::Range(paramaters.scaleEaseParm.endValueV3.min.z, paramaters.scaleEaseParm.endValueV3.max.z)};
-
         particle.scaleInfo.easeEndScale = endScaleV3;
     }
 
-    // EaseParm Adapt
-    particle.easeTime                        = 0.0f;
+    //  Easingパラメータを設定
     particle.scaleInfo.easeParam.isScaleEase = paramaters.scaleEaseParm.isScaleEase;
     particle.scaleInfo.easeParam.maxTime     = paramaters.scaleEaseParm.maxTime;
-    particle.scaleInfo.easeParam.easeType    = paramaters.scaleEaseParm.easeType;
+
+
+    //  Easingクラスのインスタンスを作成して設定
+    if (paramaters.scaleEaseParm.isScaleEase) {
+        particle.scaleEasing = std::make_unique<Easing<Vector3>>();
+
+        // Easingパラメータを構築
+        EasingParameter<Vector3> easingParam;
+        easingParam.type       = static_cast<EasingType>(paramaters.scaleEaseParm.easeTypeInt);
+        easingParam.startValue = particle.scaleInfo.tempScaleV3;
+        easingParam.endValue   = particle.scaleInfo.easeEndScale;
+        easingParam.maxTime    = paramaters.scaleEaseParm.maxTime;
+        easingParam.backRatio  = paramaters.scaleEaseParm.backRatio;
+        easingParam.finishType = EasingFinishValueType::End;
+
+        // Easingに設定
+        particle.scaleEasing->SettingValue(easingParam);
+
+        //  WorldTransformのscaleに直接適用
+        particle.scaleEasing->SetAdaptValue(&particle.scaleInfo.easingAdaptParam);
+    }
 
     ///------------------------------------------------------------------------
-    /// 色
+    /// 色設定
     ///------------------------------------------------------------------------
-
-    /// ramdom
     Vector4 randomColor = {
         Random::Range(paramaters.colorDist.min.x, paramaters.colorDist.max.x),
         Random::Range(paramaters.colorDist.min.y, paramaters.colorDist.max.y),
         Random::Range(paramaters.colorDist.min.z, paramaters.colorDist.max.z),
         0.0f};
-
-    /// adapt
     particle.color_ = paramaters.baseColor + randomColor;
 
     ///------------------------------------------------------------------------
-    /// UVTransform
+    /// UVTransform設定
     ///------------------------------------------------------------------------
     float frameWidth = 1.0f;
-    // 各フレームのUV幅(例:10フレームなら0.1f)
     if (paramaters.uvParm.numOfFrame != 0) {
         frameWidth = 1.0f / float(paramaters.uvParm.numOfFrame);
     }
     const float stopPosition = 1.0f - frameWidth;
 
-    // UV位置(開始オフセット)
-    particle.uvInfo_.pos    = Vector3(paramaters.uvParm.pos.x, paramaters.uvParm.pos.y, 1.0f);
-    particle.uvInfo_.rotate = paramaters.uvParm.rotate;
-
-    // スケーリングとフレーム情報
-    particle.uvInfo_.scale            = Vector3(frameWidth, 1.0f, 1.0f);
-    particle.uvInfo_.frameDistance_   = frameWidth;
-    particle.uvInfo_.frameScroolSpeed = paramaters.uvParm.frameScroolSpeed;
-    particle.uvInfo_.uvStopPos_       = stopPosition;
-
-    // スクロール設定
-    particle.uvInfo_.isScroolEachPixel = paramaters.uvParm.isScroolEachPixel;
-    particle.uvInfo_.isRoop            = paramaters.uvParm.isRoop;
-    particle.uvInfo_.isScrool          = paramaters.uvParm.isScrool;
-
-    // IsFlip
-    particle.uvInfo_.isFlipX = paramaters.uvParm.isFlipX;
-    particle.uvInfo_.isFlipY = paramaters.uvParm.isFlipY;
-
-    // 時間初期化
+    particle.uvInfo_.pos               = Vector3(paramaters.uvParm.pos.x, paramaters.uvParm.pos.y, 1.0f);
+    particle.uvInfo_.rotate            = paramaters.uvParm.rotate;
+    particle.uvInfo_.scale             = Vector3(frameWidth, 1.0f, 1.0f);
+    particle.uvInfo_.frameDistance_    = frameWidth;
+    particle.uvInfo_.frameScroolSpeed  = paramaters.uvParm.frameScrollSpeed;
+    particle.uvInfo_.uvStopPos_        = stopPosition;
+    particle.uvInfo_.isScroolEachPixel = paramaters.uvParm.isScrollEachPixel;
+    particle.uvInfo_.isRoop            = paramaters.uvParm.isLoop;
+    particle.uvInfo_.isScrool          = paramaters.uvParm.isScroll;
+    particle.uvInfo_.isFlipX           = paramaters.uvParm.isFlipX;
+    particle.uvInfo_.isFlipY           = paramaters.uvParm.isFlipY;
     particle.uvInfo_.currentScroolTime = 0.0f;
 
     ///------------------------------------------------------------------------
-    /// 重力
+    /// 重力設定
     ///------------------------------------------------------------------------
     particle.gravity_ = paramaters.gravity;
 
@@ -587,39 +556,6 @@ void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm, con
     data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
 }
 
-Vector3 ParticleManager::ScaleAdapt(float time, const ScaleInFo& info) {
-
-    if (!info.easeParam.isScaleEase) {
-        return info.tempScaleV3;
-    }
-
-    return EaseAdapt(info.easeParam.easeType, info.tempScaleV3, info.easeEndScale,
-        time, info.easeParam.maxTime);
-}
-
-Vector3 ParticleManager::EaseAdapt(const EaseType& easetype,
-    const Vector3& start, const Vector3& end, float time, float maxTime) {
-
-    switch (easetype) {
-    case EaseType::INSINE:
-        return EaseInSine(start, end, time, maxTime);
-        break;
-
-    case EaseType::OUTSINE:
-        return EaseInOutSine(start, end, time, maxTime);
-        break;
-
-    case EaseType::OUTBACK:
-        return EaseInOutBack(start, end, time, maxTime);
-        break;
-    case EaseType::OUTQUINT:
-        return EaseOutQuint(start, end, time, maxTime);
-        break;
-    default:
-        return Vector3::ZeroVector();
-        break;
-    }
-}
 
 void ParticleManager::SetViewProjection(const ViewProjection* view) {
 

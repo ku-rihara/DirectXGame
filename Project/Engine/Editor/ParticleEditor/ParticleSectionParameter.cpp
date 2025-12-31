@@ -36,10 +36,10 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "UV Pos", &parameters_.uvParm.pos);
     globalParam->Regist(groupName, "UV Rotate", &parameters_.uvParm.rotate);
     globalParam->Regist(groupName, "UV NumOfFrame", &parameters_.uvParm.numOfFrame);
-    globalParam->Regist(groupName, "UV ScrollSpeed", &parameters_.uvParm.frameScroolSpeed);
-    globalParam->Regist(groupName, "UV IsLoop", &parameters_.uvParm.isRoop);
-    globalParam->Regist(groupName, "UV isScrollEachPixel", &parameters_.uvParm.isScroolEachPixel);
-    globalParam->Regist(groupName, "UV isScroll", &parameters_.uvParm.isScrool);
+    globalParam->Regist(groupName, "UV ScrollSpeed", &parameters_.uvParm.frameScrollSpeed);
+    globalParam->Regist(groupName, "UV IsLoop", &parameters_.uvParm.isLoop);
+    globalParam->Regist(groupName, "UV isScrollEachPixel", &parameters_.uvParm.isScrollEachPixel);
+    globalParam->Regist(groupName, "UV isScroll", &parameters_.uvParm.isScroll);
     globalParam->Regist(groupName, "UV isFlipX", &parameters_.uvParm.isFlipX);
     globalParam->Regist(groupName, "UV isFlipY", &parameters_.uvParm.isFlipY);
 
@@ -136,10 +136,10 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.uvParm.pos               = globalParam->GetValue<Vector2>(groupName, "UV Pos");
     parameters_.uvParm.rotate            = globalParam->GetValue<Vector3>(groupName, "UV Rotate");
     parameters_.uvParm.numOfFrame        = globalParam->GetValue<int32_t>(groupName, "UV NumOfFrame");
-    parameters_.uvParm.frameScroolSpeed  = globalParam->GetValue<float>(groupName, "UV ScrollSpeed");
-    parameters_.uvParm.isRoop            = globalParam->GetValue<bool>(groupName, "UV IsLoop");
-    parameters_.uvParm.isScroolEachPixel = globalParam->GetValue<bool>(groupName, "UV isScrollEachPixel");
-    parameters_.uvParm.isScrool          = globalParam->GetValue<bool>(groupName, "UV isScroll");
+    parameters_.uvParm.frameScrollSpeed  = globalParam->GetValue<float>(groupName, "UV ScrollSpeed");
+    parameters_.uvParm.isLoop            = globalParam->GetValue<bool>(groupName, "UV IsLoop");
+    parameters_.uvParm.isScrollEachPixel = globalParam->GetValue<bool>(groupName, "UV isScrollEachPixel");
+    parameters_.uvParm.isScroll          = globalParam->GetValue<bool>(groupName, "UV isScroll");
     parameters_.uvParm.isFlipX           = globalParam->GetValue<bool>(groupName, "UV isFlipX");
     parameters_.uvParm.isFlipY           = globalParam->GetValue<bool>(groupName, "UV isFlipY");
 
@@ -309,10 +309,10 @@ void ParticleSectionParameter::AdjustParam() {
 
         ImGui::SeparatorText("UV Animation:");
         ImGui::InputInt("Num of Frames", &parameters_.uvParm.numOfFrame);
-        ImGui::DragFloat("Scrool Speed", &parameters_.uvParm.frameScroolSpeed, 0.01f);
-        ImGui::Checkbox("Is Roop", &parameters_.uvParm.isRoop);
-        ImGui::Checkbox("Is ScroolEachPixel", &parameters_.uvParm.isScroolEachPixel);
-        ImGui::Checkbox("Is Scrool", &parameters_.uvParm.isScrool);
+        ImGui::DragFloat("Scrool Speed", &parameters_.uvParm.frameScrollSpeed, 0.01f);
+        ImGui::Checkbox("Is Roop", &parameters_.uvParm.isLoop);
+        ImGui::Checkbox("Is ScroolEachPixel", &parameters_.uvParm.isScrollEachPixel);
+        ImGui::Checkbox("Is Scrool", &parameters_.uvParm.isScroll);
         ImGui::Checkbox("Is IsFlipX", &parameters_.uvParm.isFlipX);
         ImGui::Checkbox("Is IsFlipY", &parameters_.uvParm.isFlipY);
     }

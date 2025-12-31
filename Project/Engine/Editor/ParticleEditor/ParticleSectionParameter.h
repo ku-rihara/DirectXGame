@@ -26,7 +26,7 @@ public:
     using Parameters      = ParticleCommon::Parameters;
     using GroupParamaters = ParticleCommon::GroupParamaters;
     using ScaleEaseParm   = ParticleCommon::ScaleEaseParam;
-    using UVParm          = ParticleCommon::UVParm;
+    using UVParm          = ParticleCommon::UVParam;
     using JointParent     = ParticleCommon::JointParent;
 
     // タイミングパラメータ

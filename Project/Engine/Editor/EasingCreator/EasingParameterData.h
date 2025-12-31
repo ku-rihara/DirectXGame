@@ -97,8 +97,7 @@ constexpr std::array<const char*, static_cast<int>(EasingType::COUNT)> EasingTyp
     "BackInQuartZero", "BackOutQuartZero", "BackInOutQuartZero",
     "BackInQuintZero", "BackOutQuintZero", "BackInOutQuintZero",
     "BackInExpoZero", "BackOutExpoZero", "BackInOutExpoZero",
-    "BackInCircZero", "BackOutCircZero", "BackInOutCircZero"
-};
+    "BackInCircZero", "BackOutCircZero", "BackInOutCircZero"};
 
 constexpr std::array<const char*, static_cast<int>(AdaptFloatAxisType::COUNT)> AdaptFloatAxisTypeLabels = {
     "X",
@@ -113,8 +112,7 @@ constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)>
 };
 
 constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)> FinishTypeLabels = {
-    "Start", "End"
-};
+    "Start", "End"};
 
 /// <summary>
 /// イージングタイプをImGuiでセレクトする
@@ -123,17 +121,16 @@ constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)>
 /// <param name="target"></param>
 void ImGuiEasingTypeSelector(const char* label, int32_t& target);
 
-
 namespace KetaEngine {
 
 template <typename T>
 struct EasingParameter {
 
-    EasingType type=EasingType::InSine;
+    EasingType type                  = EasingType::InSine;
     EasingFinishValueType finishType = EasingFinishValueType::End;
 
-    AdaptFloatAxisType adaptFloatAxisType=AdaptFloatAxisType::X;
-    AdaptVector2AxisType adaptVec2AxisType=AdaptVector2AxisType::XY;
+    AdaptFloatAxisType adaptFloatAxisType  = AdaptFloatAxisType::X;
+    AdaptVector2AxisType adaptVec2AxisType = AdaptVector2AxisType::XY;
 
     T startValue;
     T endValue;
@@ -143,7 +140,7 @@ struct EasingParameter {
     float period    = 0.0f;
     float backRatio = 0.0f;
 
-    float waitTimeMax     = 0.0f;
+    float waitTimeMax      = 0.0f;
     float finishOffsetTime = 0.0f;
 
     float startTimeOffset = 0.0f;
