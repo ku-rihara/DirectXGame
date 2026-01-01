@@ -95,11 +95,13 @@ void ParticleData::Play() {
 }
 
 void ParticleData::RegisterParams() {
+    globalParameter_->Regist(groupName_, "playSpeed", &playSpeed_);
 }
 
 void ParticleData::GetParams() {
+    playSpeed_ = globalParameter_->GetValue<float>(groupName_, "playSpeed");
 }
-
+ 
 void ParticleData::InitParams() {
     playState_              = PlayState::STOPPED;
     activeKeyFrameIndex_    = 0;
