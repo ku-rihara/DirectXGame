@@ -9,6 +9,11 @@ using namespace KetaEngine;
 void ParticleSectionParameter::AdaptIntToType() {
     groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
     groupParameters_.billBordType = static_cast<BillboardType>(groupParameters_.billBordType);
+
+      /*const std::string& railFileName = GetRailFileName();
+    if (!sectionParam_->GetSectionParam().useRail || railFileName.empty()) {
+        return;
+    }*/
 }
 
 void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, const std::string& groupName) {
@@ -104,11 +109,8 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     timeModeSelector_.RegisterParam(groupName, globalParam);
 
     // Rail Parameter
-    globalParam->Regist(groupName, "UseRail", &sectionParam_.useRail);
+    globalParam->Regist(groupName, "UseRail", &useRailMoveEmitter_);
     globalParam->Regist(groupName, "RailFileName", &railFileParam_.first);
-
-    // Scale Easing Parameter
-    globalParam->Regist(groupName, "UseScaleEasing", &sectionParam_.useScaleEasing);
 
     AdaptIntToType();
 }
@@ -218,31 +220,9 @@ void ParticleSectionParameter::AdjustParam() {
 
     // Rail Settings
     if (ImGui::CollapsingHeader("Rail Settings")) {
-        ImGui::Checkbox("Use Rail", &sectionParam_.useRail);
-        if (sectionParam_.useRail) {
+        ImGui::Checkbox("Use Rail", &useRailMoveEmitter_);
+        if (useRailMoveEmitter_) {
             SelectRailFile("Rail File", railFolderPath_, railFileParam_);
-        }
-    }
-
-    // Scale Easing
-    if (ImGui::CollapsingHeader("Scale Easing")) {
-        ImGui::Checkbox("Use Scale Easing", &sectionParam_.useScaleEasing);
-
-        if (sectionParam_.useScaleEasing) {
-            auto& easeParm = parameters_.scaleEaseParm;
-
-            ImGui::DragFloat("Max Time", &easeParm.maxTime, 0.01f, 0.0f, 10.0f);
-            ImGuiEasingTypeSelector("Easing Type", easeParm.easeTypeInt);
-
-            if (parameters_.isScalerScale) {
-                ImGui::DragFloat("Start Scale", &easeParm.startValueF, 0.01f);
-                ImGui::DragFloat("End Scale Max", &easeParm.endValueF.max, 0.01f);
-            } else {
-                ImGui::DragFloat3("Start Scale", &easeParm.startValueV3.x, 0.01f);
-                ImGui::DragFloat3("End Scale Max", &easeParm.endValueV3.max.x, 0.01f);
-            }
-
-            ImGui::DragFloat("Back Ratio", &easeParm.backRatio, 0.01f, 0.0f, 5.0f);
         }
     }
 
@@ -275,8 +255,8 @@ void ParticleSectionParameter::AdjustParam() {
             ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.1f);
         } else {
             ImGui::SeparatorText("V3 VelocityRange");
-            ImGui::DragFloat3("VelocityV3 Max", reinterpret_cast<float*>(&parameters_.velocityDistV3.max), 0.1f);
-            ImGui::DragFloat3("VelocityV3 Min", reinterpret_cast<float*>(&parameters_.velocityDistV3.min), 0.1f);
+            ImGui::DragFloat3("VelocityV3 Max", &parameters_.velocityDistV3.max.x, 0.1f);
+            ImGui::DragFloat3("VelocityV3 Min", &parameters_.velocityDistV3.min.x, 0.1f);
         }
 
         ImGui::SeparatorText("Direction Range:");
@@ -309,23 +289,23 @@ void ParticleSectionParameter::AdjustParam() {
 
         ImGui::SeparatorText("UV Animation:");
         ImGui::InputInt("Num of Frames", &parameters_.uvParm.numOfFrame);
-        ImGui::DragFloat("Scrool Speed", &parameters_.uvParm.frameScrollSpeed, 0.01f);
-        ImGui::Checkbox("Is Roop", &parameters_.uvParm.isLoop);
-        ImGui::Checkbox("Is ScroolEachPixel", &parameters_.uvParm.isScrollEachPixel);
-        ImGui::Checkbox("Is Scrool", &parameters_.uvParm.isScroll);
+        ImGui::DragFloat("Scroll Speed", &parameters_.uvParm.frameScrollSpeed, 0.01f);
+        ImGui::Checkbox("Is Loop", &parameters_.uvParm.isLoop);
+        ImGui::Checkbox("Is ScrollEachPixel", &parameters_.uvParm.isScrollEachPixel);
+        ImGui::Checkbox("Is Scroll", &parameters_.uvParm.isScroll);
         ImGui::Checkbox("Is IsFlipX", &parameters_.uvParm.isFlipX);
         ImGui::Checkbox("Is IsFlipY", &parameters_.uvParm.isFlipY);
     }
 
     // その他のパラメータ
-    if (ImGui::CollapsingHeader("etcParamater")) {
+    if (ImGui::CollapsingHeader("etcParameter")) {
         ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
         ImGui::DragFloat("Gravity", &parameters_.gravity, 0.1f);
         ImGui::DragFloat("LifeTime", &parameters_.lifeTime, 0.01f);
         ImGui::SliderInt("Particle Count", &particleCount_, 1, 100);
     }
 
-    // Billbord
+    // BillBord
     if (ImGui::CollapsingHeader("BillBoard")) {
         ImGui::Checkbox("IsBillBoard", &groupParameters_.isBillBord);
 
@@ -335,7 +315,7 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::Checkbox("IsZ", &groupParameters_.adaptRotate_.isZ);
 
         ImGui::SeparatorText("BillBordType");
-        const char* billBordItems[] = {"XYZ", "X", "Y", "Z"};
+        const char* billBordItems[] = {"XYZ","Y"};
         if (ImGui::Combo("Billboard Type", &billBordTypeInt_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
             groupParameters_.billBordType = static_cast<BillboardType>(billBordTypeInt_);
         }
@@ -351,7 +331,7 @@ void ParticleSectionParameter::AdjustParam() {
 
     // frag setting
     if (ImGui::CollapsingHeader("Frag")) {
-        ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateforDirection);
+        ImGui::Checkbox("IsRotateForDirection", &parameters_.isRotateforDirection);
         ImGui::Checkbox("IsShot", &isShot_);
         ImGui::Checkbox("isAlphaNoMove", &groupParameters_.isAlphaNoMove);
     }
@@ -373,8 +353,29 @@ void ParticleSectionParameter::ScaleParamEditor() {
             ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.1f);
         } else {
             ImGui::SeparatorText("V3 Range");
-            ImGui::DragFloat3("ScaleV3 Max", reinterpret_cast<float*>(&parameters_.scaleDistV3.max), 0.1f);
-            ImGui::DragFloat3("ScaleV3 Min", reinterpret_cast<float*>(&parameters_.scaleDistV3.min), 0.1f);
+            ImGui::DragFloat3("ScaleV3 Max",&parameters_.scaleDistV3.max.x, 0.1f);
+            ImGui::DragFloat3("ScaleV3 Min",&parameters_.scaleDistV3.min.x, 0.1f);
+        }
+
+        // Scale Easing
+
+        ImGui::Checkbox("Use Scale Easing", &parameters_.scaleEaseParm.isScaleEase);
+
+        if (parameters_.scaleEaseParm.isScaleEase) {
+            auto& easeParam = parameters_.scaleEaseParm;
+
+            ImGui::DragFloat("Max Time", &easeParam.maxTime, 0.01f, 0.0f, 10.0f);
+            ImGuiEasingTypeSelector("Easing Type", easeParam.easeTypeInt);
+
+            if (parameters_.isScalerScale) {           
+                ImGui::DragFloat("End Scale Max", &easeParam.endValueF.max, 0.01f);
+                ImGui::DragFloat("End Scale Min", &easeParam.endValueF.min, 0.01f);
+            } else {         
+                ImGui::DragFloat3("End Scale Max", &easeParam.endValueV3.max.x, 0.01f);
+                ImGui::DragFloat3("End Scale Min", &easeParam.endValueV3.min.x, 0.01f);
+            }
+
+            ImGui::DragFloat("Back Ratio", &easeParam.backRatio, 0.01f, 0.0f, 5.0f);
         }
     }
 }
@@ -419,7 +420,7 @@ void ParticleSectionParameter::ApplyTexture(const std::string& textureName) {
 
 void ParticleSectionParameter::InitAdaptTexture() {
     if (selectedTexturePath_.empty()) {
-        return;
+        selectedTexturePath_ = textureFilePath_ + "/" + "uvChecker" + ".png";
     }
 }
 

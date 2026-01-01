@@ -11,7 +11,7 @@
 #include "Primitive/IPrimitive.h"
 #include "struct/ParticleForGPU.h"
 
-// Easingクラスを追加
+// Easing
 #include "Easing/Easing.h"
 
 // math
@@ -35,24 +35,23 @@ public:
     using Parameters      = ParticleCommon::Parameters;
     using EaseParm        = ParticleCommon::ScaleEaseParam;
 
-private:
+public:
     struct ScaleInFo {
         Vector3 tempScaleV3;
         Vector3 easeEndScale;
         EaseParm easeParam;
-        Vector3 easingAdaptParam;
     };
     struct UVInfo {
         Vector3 pos;
         Vector3 scale;
         Vector3 rotate;
         float frameDistance_;
-        float frameScroolSpeed;
+        float frameScrollSpeed;
         float uvStopPos_;
-        float currentScroolTime;
-        bool isScroolEachPixel;
-        bool isScrool;
-        bool isRoop;
+        float currentScrollTime;
+        bool isScrollEachPixel;
+        bool isScroll;
+        bool isLoop;
         bool isFlipX;
         bool isFlipY;
     };
@@ -74,7 +73,7 @@ private:
         ScaleInFo scaleInfo;
         UVInfo uvInfo_;
 
-       
+        bool isAdaptEasing = false;
         std::unique_ptr<Easing<Vector3>> scaleEasing;
     };
 

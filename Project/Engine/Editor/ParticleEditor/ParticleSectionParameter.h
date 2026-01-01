@@ -34,12 +34,6 @@ public:
         float startTime = 0.0f;
     };
 
-    // Section固有パラメータ
-    struct SectionParam {
-        bool useScaleEasing = false;
-        bool useRail        = false;
-    };
-
 public:
     ParticleSectionParameter()  = default;
     ~ParticleSectionParameter() = default;
@@ -71,7 +65,6 @@ private:
     Parameters parameters_;
     GroupParamaters groupParameters_;
     TimingParam timingParam_;
-    SectionParam sectionParam_;
     TimeModeSelector timeModeSelector_;
 
     // Rail,Model
@@ -84,8 +77,9 @@ private:
     int32_t blendModeInt_     = 0;
 
     // frags
-    bool isShot_   = false;
-    bool useModel_ = false;
+    bool isShot_             = false;
+    bool useModel_           = false;
+    bool useRailMoveEmitter_ = false;
 
     // time
     float intervalTime_ = 1.0f;
@@ -100,7 +94,6 @@ private:
 
 public:
     // Getter
-    const SectionParam& GetSectionParam() const { return sectionParam_; }
     const TimingParam& GetTimingParam() const { return timingParam_; }
     const TimeModeSelector& GetTimeModeSelector() const { return timeModeSelector_; }
     const GroupParamaters& GetGroupParameters() const { return groupParameters_; }
@@ -110,6 +103,7 @@ public:
     int32_t GetMaxParticleNum() const { return maxParticleNum_; }
     int32_t GetPrimitiveTypeInt() const { return primitiveTypeInt_; }
     bool IsUseModel() const { return useModel_; }
+    bool GetIsRailMove() const { return useRailMoveEmitter_; }
     const std::string& GetRailFileName() const { return railFileParam_.first; }
     const std::string& GetModelFilePath() const { return modelFilePath_; }
     const std::string& GetSelectedTexturePath() const { return selectedTexturePath_; }
@@ -122,8 +116,6 @@ public:
     void SetIsShot(bool shot);
     void SetBlendMode(BlendMode mode);
     void SetBillboardType(BillboardType type);
-    void SetUseScaleEasing(bool use) { sectionParam_.useScaleEasing = use; }
-    void SetUseRail(bool use) { sectionParam_.useRail = use; }
     void SetStartTime(float time) { timingParam_.startTime = time; }
     void SetParentTransform(const WorldTransform* transform);
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);

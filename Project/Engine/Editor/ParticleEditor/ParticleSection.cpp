@@ -9,10 +9,9 @@ using namespace KetaEngine;
 
 void ParticleSection::Init(const std::string& particleName, const std::string& categoryName, int32_t sectionIndex) {
     particleName_ = particleName;
-    categoryName_ = categoryName;
     sectionIndex_ = sectionIndex;
-    groupName_    = categoryName + "_" + particleName + std::to_string(sectionIndex);
-    folderPath_   = baseFolderPath_ + categoryName_ + "/" + "Sections/" + particleName_ + "/";
+    groupName_    = particleName + std::to_string(sectionIndex);
+    folderPath_   = baseFolderPath_ + categoryName + "/" + "Sections/" + particleName_ + "/";
 
     sectionParam_ = std::make_unique<ParticleSectionParameter>();
 
@@ -42,8 +41,6 @@ void ParticleSection::Init(const std::string& particleName, const std::string& c
         CreatePrimitiveParticle(PrimitiveType::Plane, sectionParam_->GetMaxParticleNum());
     }
 
-    AdaptEaseSettings();
-    AdaptRailSettings();
 }
 
 //*----------------------------- Playback Control -----------------------------*//
@@ -54,7 +51,7 @@ void ParticleSection::Play() {
     currentTime_ = 0.0f;
 
     auto& railFileName = sectionParam_->GetRailFileName();
-    if (sectionParam_->GetSectionParam().useRail && !railFileName.empty()) {
+    if (sectionParam_->GetIsRailMove() && !railFileName.empty()) {
         railPlayer_->Play(railFileName);
     }
 }
@@ -105,7 +102,7 @@ void ParticleSection::Update(float speedRate) {
     }
 
     if (playState_ == PlayState::PLAYING) {
-        if (sectionParam_->GetSectionParam().useRail && railPlayer_->IsPlaying()) {
+        if (sectionParam_->GetIsRailMove() && railPlayer_->IsPlaying()) {
             railPlayer_->Update(speedRate);
             sectionParam_->SetEmitPos(railPlayer_->GetCurrentPosition());
         }
@@ -127,7 +124,7 @@ void ParticleSection::StartPlay() {
     playState_ = PlayState::PLAYING;
 
     auto& railFileName = sectionParam_->GetRailFileName();
-    if (sectionParam_->GetSectionParam().useRail && !railFileName.empty()) {
+    if (sectionParam_->GetIsRailMove() && !railFileName.empty()) {
         railPlayer_->Play(railFileName);
     }
 }
@@ -145,7 +142,7 @@ void ParticleSection::UpdateEmitTransform() {
 
 void ParticleSection::SetEmitLine() {
 #ifdef _DEBUG
-    if (sectionParam_->GetSectionParam().useRail) {
+    if (sectionParam_->GetIsRailMove()) {
         // Rail使用時のデバッグ表示
     } else {
         debugLine_->SetCubeWireframe(
@@ -194,28 +191,6 @@ void ParticleSection::ChangePrimitive(const PrimitiveType& primitiveType) {
     ApplyTextureToManager();
 }
 
-//*----------------------------- Easing and Rail Settings -----------------------------*//
-
-void ParticleSection::AdaptEaseSettings() {
-    if (!sectionParam_->GetSectionParam().useScaleEasing) {
-        return;
-    }
-
-    auto& easeParam = sectionParam_->GetParticleParameters().scaleEaseParm;
-
-    if (sectionParam_->GetParticleParameters().isScalerScale) {
-        Vector3 startScale = Vector3::OneVector() * easeParam.startValueF;
-        Vector3 endScale   = Vector3::OneVector() * easeParam.endValueF.max;
-       
-    } 
-}
-
-void ParticleSection::AdaptRailSettings() {
-    auto& railFileName = sectionParam_->GetRailFileName();
-    if (!sectionParam_->GetSectionParam().useRail || railFileName.empty()) {
-        return;
-    }
-}
 
 //*----------------------------- Editor UI -----------------------------*//
 
@@ -280,10 +255,6 @@ void ParticleSection::AdjustParam() {
     // 全パラメータ編集
     sectionParam_->AdjustParam();
 
-    if (ImGui::Button("Apply Easing Settings")) {
-        AdaptEaseSettings();
-    }
-
     // セーブ・ロード
     globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
     globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
@@ -314,8 +285,6 @@ void ParticleSection::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
     sectionParam_->AdaptParameters(globalParameter_, groupName_);
-    AdaptEaseSettings();
-    AdaptRailSettings();
     ApplyTextureToManager();
 }
 

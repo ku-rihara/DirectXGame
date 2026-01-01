@@ -62,8 +62,6 @@ private:
     //*---------------------------- Internal Methods ----------------------------*//
 
     void ApplyTextureToManager();
-    void AdaptEaseSettings();
-    void AdaptRailSettings();
     void UpdateEmitTransform();
     void SetEmitLine();
     void StartPlay();
@@ -74,7 +72,6 @@ private:
     //*---------------------------- Member Variables ----------------------------*//
 
     std::string particleName_;
-    std::string categoryName_;
     std::string groupName_;
     int32_t sectionIndex_ = -1;
 
