@@ -6,6 +6,7 @@
 // editor
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailManager.h"
+#include "Parameter/ParticleCommonParameters.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
 // int32_t
 #include <cstdint>
@@ -22,85 +23,13 @@ class Object3DAnimation;
 /// </summary>
 class ParticleParameter {
 public:
-    enum class EaseType {
-        INSINE,
-        OUTSINE,
-        OUTBACK,
-        OUTQUINT,
-    };
-
-    struct GroupParamaters {
-        BlendMode blendMode;
-        bool isBillBord;
-        bool isShot;
-        bool isAlphaNoMove;
-        BillboardType billBordType;
-        AdaptRotate adaptRotate_;
-    };
-
-    struct EaseParm {
-        float maxTime;
-        bool isScaleEase;
-        int easeTypeInt;
-        EaseType easeType;
-
-        // スカラー値用
-        float startValueF = 1.0f;
-        FMinMax endValueF;
-
-        // Vector3値用
-        Vector3 startValueV3 = Vector3::OneVector();
-        V3MinMax endValueV3;
-
-        // Back系イージング用パラメータ
-        float backRatio;
-
-        // 現在のスケールオフセット
-        Vector3 currentScaleOffset = Vector3::OneVector();
-    };
-
-    struct UVParm {
-        float frameScroolSpeed;
-        bool isScroolEachPixel;
-        bool isRoop;
-        bool isScrool;
-        bool isFlipX;
-        bool isFlipY;
-        Vector2 pos;
-        Vector3 rotate;
-        int32_t numOfFrame;
-    };
-
-    struct JointParent {
-        std::string name;
-        const Object3DAnimation* animation = nullptr;
-    };
-
-    struct Parameters {
-        const WorldTransform* parentTransform = nullptr;
-        const Vector3* followingPos_          = nullptr;
-        Vector3 targetPos;
-        Vector3 emitPos;
-        Vector3 baseRotate;
-        Vector4 baseColor;
-        V3MinMax scaleDistV3;
-        V3MinMax positionDist;
-        V3MinMax directionDist;
-        V3MinMax rotateDist;
-        V3MinMax rotateSpeedDist;
-        V3MinMax velocityDistV3;
-        FMinMax scaleDist;
-        FMinMax speedDist;
-        V4MinMax colorDist;
-        float lifeTime;
-        float gravity;
-        bool isFloatVelocity;
-        bool isScalerScale;
-        bool isRotateforDirection;
-        EaseParm scaleEaseParm;
-        UVParm uvParm;
-        JointParent jointParent;
-    };
+    // 共通パラメータの型エイリアス
+ 
+    using GroupParamaters = ParticleCommon::GroupParamaters;
+    using Parameters      = ParticleCommon::Parameters;
+    using EaseParm        = ParticleCommon::ScaleEaseParam;
+    using UVParm          = ParticleCommon::UVParam;
+    using JointParent     = ParticleCommon::JointParent;
 
 public:
     ParticleParameter()          = default;

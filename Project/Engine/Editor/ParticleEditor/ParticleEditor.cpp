@@ -48,14 +48,14 @@ void ParticleEditor::InitializeSectionParticleGroup(ParticleSection* section) {
     }
 
     // モデルまたはプリミティブでパーティクルグループを作成
-    if (section->GetParticleParameter()->useModel_) {
+    if (section->GetSectionParam()->IsUseModel()) {
         section->CreateModelParticle(
-            section->GetParticleParameter()->modelFilePath_,
-            section->GetMaxParticleNum());
+            section->GetSectionParam()->GetModelFilePath(),
+            section->GetSectionParam()->GetMaxParticleNum());
     } else {
         section->CreatePrimitiveParticle(
-            static_cast<PrimitiveType>(section->GetParticleParameter()->primitiveTypeInt_),
-            section->GetMaxParticleNum());
+            static_cast<PrimitiveType>(section->GetSectionParam()->GetPrimitiveTypeInt()),
+            section->GetSectionParam()->GetMaxParticleNum());
     }
 
     // テクスチャを適用
@@ -110,7 +110,7 @@ void ParticleEditor::RenderSpecificUI() {
             if (selectedSectionIndex >= 0 && selectedSectionIndex < particleData->GetTotalKeyFrameCount()) {
                 auto* selectedSection = sections[selectedSectionIndex].get();
 
-                ImGui::Text("Selected Section: %s", selectedSection->GetSectionName().c_str());
+                ImGui::Text("Selected Section: %s", selectedSection->GetGroupName().c_str());
 
                 ImGui::SameLine();
                 if (ImGui::Button("Stop Preview")) {

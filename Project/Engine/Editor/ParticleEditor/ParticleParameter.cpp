@@ -3,8 +3,8 @@
 using namespace KetaEngine;
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
-#include "ParticleManager.h"
 #include "Function/GetFile.h"
+#include "ParticleManager.h"
 #include <format>
 #include <imgui.h>
 
@@ -25,6 +25,7 @@ void ParticleParameter::ParameterInit() {
     parameters_.uvParm.numOfFrame    = 1;
     selectedTexturePath_             = "resources/Texture/uvChecker.png";
 }
+
 void ParticleParameter::Init() {
     ParameterInit();
 
@@ -40,9 +41,8 @@ void ParticleParameter::Init() {
     groupParamaters_.billBordType      = static_cast<BillboardType>(billBordType_);
     groupParamaters_.isShot            = isShot_;
     groupParamaters_.blendMode         = static_cast<BlendMode>(blendMode_);
-    parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);
+  /*  parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);*/
 }
-
 
 void ParticleParameter::RegisterParams() {
     // Position
@@ -67,10 +67,10 @@ void ParticleParameter::RegisterParams() {
     globalParameter_->Regist(particleName_, "UV Pos", &parameters_.uvParm.pos);
     globalParameter_->Regist(particleName_, "UV Rotate", &parameters_.uvParm.rotate);
     globalParameter_->Regist(particleName_, "UV NumOfFrame", &parameters_.uvParm.numOfFrame);
-    globalParameter_->Regist(particleName_, "UV ScroolSpeed", &parameters_.uvParm.frameScroolSpeed);
-    globalParameter_->Regist(particleName_, "UV IsRoop", &parameters_.uvParm.isRoop);
-    globalParameter_->Regist(particleName_, "UV isScroolEachPixel", &parameters_.uvParm.isScroolEachPixel);
-    globalParameter_->Regist(particleName_, "UV isScrool", &parameters_.uvParm.isScrool);
+    globalParameter_->Regist(particleName_, "UV ScroolSpeed", &parameters_.uvParm.frameScrollSpeed);
+    globalParameter_->Regist(particleName_, "UV IsRoop", &parameters_.uvParm.isLoop);
+    globalParameter_->Regist(particleName_, "UV isScroolEachPixel", &parameters_.uvParm.isScrollEachPixel);
+    globalParameter_->Regist(particleName_, "UV isScrool", &parameters_.uvParm.isScroll);
     globalParameter_->Regist(particleName_, "UV isFlipX", &parameters_.uvParm.isFlipX);
     globalParameter_->Regist(particleName_, "UV isFlipY", &parameters_.uvParm.isFlipY);
 
@@ -157,10 +157,10 @@ void ParticleParameter::GetParams() {
     parameters_.uvParm.pos               = globalParameter_->GetValue<Vector2>(particleName_, "UV Pos");
     parameters_.uvParm.rotate            = globalParameter_->GetValue<Vector3>(particleName_, "UV Rotate");
     parameters_.uvParm.numOfFrame        = globalParameter_->GetValue<int32_t>(particleName_, "UV NumOfFrame");
-    parameters_.uvParm.frameScroolSpeed  = globalParameter_->GetValue<float>(particleName_, "UV ScroolSpeed");
-    parameters_.uvParm.isRoop            = globalParameter_->GetValue<bool>(particleName_, "UV IsRoop");
-    parameters_.uvParm.isScroolEachPixel = globalParameter_->GetValue<bool>(particleName_, "UV isScroolEachPixel");
-    parameters_.uvParm.isScrool          = globalParameter_->GetValue<bool>(particleName_, "UV isScrool");
+    parameters_.uvParm.frameScrollSpeed  = globalParameter_->GetValue<float>(particleName_, "UV ScroolSpeed");
+    parameters_.uvParm.isLoop            = globalParameter_->GetValue<bool>(particleName_, "UV IsRoop");
+    parameters_.uvParm.isScrollEachPixel = globalParameter_->GetValue<bool>(particleName_, "UV isScroolEachPixel");
+    parameters_.uvParm.isScroll          = globalParameter_->GetValue<bool>(particleName_, "UV isScrool");
     parameters_.uvParm.isFlipX           = globalParameter_->GetValue<bool>(particleName_, "UV isFlipX");
     parameters_.uvParm.isFlipY           = globalParameter_->GetValue<bool>(particleName_, "UV isFlipY");
 
@@ -223,7 +223,6 @@ void ParticleParameter::GetParams() {
     primitiveTypeInt_ = globalParameter_->GetValue<int32_t>(particleName_, "primitiveTypeInt");
     modelFilePath_    = globalParameter_->GetValue<std::string>(particleName_, "modelFilePath");
 }
-
 
 ///=================================================================================
 /// Editor 更新
@@ -309,10 +308,10 @@ void ParticleParameter::EditorUpdate() {
 
         ImGui::SeparatorText("UV Animation:");
         ImGui::InputInt("Num of Frames", &parameters_.uvParm.numOfFrame);
-        ImGui::DragFloat("Scrool Speed", &parameters_.uvParm.frameScroolSpeed, 0.01f);
-        ImGui::Checkbox("Is Roop", &parameters_.uvParm.isRoop);
-        ImGui::Checkbox("Is ScroolEachPixel", &parameters_.uvParm.isScroolEachPixel);
-        ImGui::Checkbox("Is Scrool", &parameters_.uvParm.isScrool);
+        ImGui::DragFloat("Scrool Speed", &parameters_.uvParm.frameScrollSpeed, 0.01f);
+        ImGui::Checkbox("Is Roop", &parameters_.uvParm.isLoop);
+        ImGui::Checkbox("Is ScroolEachPixel", &parameters_.uvParm.isScrollEachPixel);
+        ImGui::Checkbox("Is Scrool", &parameters_.uvParm.isScroll);
         ImGui::Checkbox("Is IsFlipX", &parameters_.uvParm.isFlipX);
         ImGui::Checkbox("Is IsFlipY", &parameters_.uvParm.isFlipY);
     }
@@ -370,7 +369,7 @@ void ParticleParameter::EditorUpdate() {
     // パーティクル切り替え
     ParticleChange();
 
-    globalParameter_->ParamSaveForImGui(particleName_,folderPath_);
+    globalParameter_->ParamSaveForImGui(particleName_, folderPath_);
     globalParameter_->ParamLoadForImGui(particleName_, folderPath_);
 
     ImGui::PopID();
@@ -417,7 +416,7 @@ void ParticleParameter::ScaleParmEditor() {
 
             if (ImGui::Combo("Easing Type", &parameters_.scaleEaseParm.easeTypeInt, easeItems, IM_ARRAYSIZE(easeItems))) {
 
-                parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);
+             /*   parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);*/
             }
         }
     }
@@ -453,7 +452,7 @@ void ParticleParameter::ParticleChange() {
     DisplayFileSelection("SelectParticle", filenames, selectedIndex, [this](const std::string& selectedFile) {
         globalParameter_->CopyGroup(selectedFile, particleName_);
         globalParameter_->SyncParamForGroup(particleName_);
-     
+
         ImGui::Text("Load Successful: %s", (folderPath_ + selectedFile).c_str());
     });
 }
@@ -475,8 +474,6 @@ void ParticleParameter::ApplyTexture(const std::string& textureName) {
     selectedTexturePath_ = textureFilePath_ + "/" + textureName + ".png";
     ParticleManager::GetInstance()->SetTextureHandle(particleName_, TextureManager::GetInstance()->LoadTexture(selectedTexturePath_));
 }
-
-
 
 void ParticleParameter::InitAdaptTexture() {
     if (selectedTexturePath_ == "") {

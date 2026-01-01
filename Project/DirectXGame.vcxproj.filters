@@ -517,6 +517,9 @@
     <Filter Include="Game\Scene\GameSceneState">
       <UniqueIdentifier>{1d931734-646d-4dd0-883f-79d0953b48cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\Editor\ParticleEditor\ParticleCommonParam">
+      <UniqueIdentifier>{1d5bb759-17c3-41bc-a733-1245e481b2cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1311,6 +1314,9 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneRoot.cpp">
       <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2159,6 +2165,12 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneRoot.h">
       <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\Parameter\ParticleCommonParameters.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor\ParticleCommonParam</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

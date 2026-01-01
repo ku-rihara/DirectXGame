@@ -93,7 +93,7 @@ void ParticleEmitter::Update() {
 }
 
 void ParticleEmitter::RailMoveUpdate() {
-    // 旧システム：RailManager更新
+    // 旧システム:RailManager更新
     if (!isStartRailMove_) {
         return;
     }
@@ -122,14 +122,14 @@ void ParticleEmitter::EditorUpdate() {
 }
 
 void ParticleEmitter::StartRailEmit() {
-   
+
     isStartRailMove_ = true;
     railManager_->SetRailMoveTime(0.0f);
     railManager_->SetIsRoop(isRailRoop_);
 }
 
 void ParticleEmitter::StartRailPlayerEmit(const std::string& railFileName) {
-   
+
     if (railFileName.empty()) {
         return;
     }
