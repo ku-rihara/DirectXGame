@@ -15,6 +15,11 @@ void ParticleSection::Init(const std::string& particleName, const std::string& c
 
     sectionParam_ = std::make_unique<ParticleSectionParameter>();
 
+    // テクスチャ変更コールバックを設定
+    sectionParam_->SetTextureChangedCallback([this]() {
+        ApplyTextureToManager();
+    });
+
     globalParameter_ = GlobalParameter::GetInstance();
 
     // グループ作成
@@ -42,7 +47,6 @@ void ParticleSection::Init(const std::string& particleName, const std::string& c
 }
 
 //*----------------------------- Playback Control -----------------------------*//
-
 
 void ParticleSection::Pause() {
     if (playState_ == PlayState::PLAYING) {
@@ -107,7 +111,7 @@ void ParticleSection::UpdateWaiting(float deltaTime) {
 void ParticleSection::StartPlay() {
     playState_ = PlayState::PLAYING;
 
-     // Rail移動を使用する場合はRailPlayerを起動
+    // Rail移動を使用する場合はRailPlayerを起動
     if (sectionParam_->GetIsRailMove()) {
         auto& railFileName = sectionParam_->GetRailFileName();
         if (!railFileName.empty()) {
@@ -122,34 +126,27 @@ void ParticleSection::UpdateEmitterPosition(float speedRate) {
         railPlayer_->Update(speedRate);
         sectionParam_->SetEmitPos(railPlayer_->GetCurrentPosition());
     }
-  
 }
 
 void ParticleSection::UpdateEmitTransform() {
     emitBoxTransform_.translation_ = sectionParam_->GetParticleParameters().emitPos;
-
-    // scale = max-min
     emitBoxTransform_.scale_ =
         sectionParam_->GetParticleParameters().positionDist.max - sectionParam_->GetParticleParameters().positionDist.min;
-
     emitBoxTransform_.UpdateMatrix();
 }
 
 void ParticleSection::SetEmitLine() {
 #ifdef _DEBUG
-   
-        debugLine_->SetCubeWireframe(
-            emitBoxTransform_.GetWorldPos(),
-            emitBoxTransform_.scale_,
-            Vector4::kWHITE());
-    
+    debugLine_->SetCubeWireframe(
+        emitBoxTransform_.GetWorldPos(),
+        emitBoxTransform_.scale_,
+        Vector4::kWHITE());
 #endif
 }
 
 //*----------------------------- Emit Methods -----------------------------*//
 
 void ParticleSection::EmitInternal() {
-    // パーティクルグループが存在するか確認
     auto& groups = ParticleManager::GetInstance()->particleGroups_;
     if (groups.find(groupName_) == groups.end()) {
         return;
@@ -160,7 +157,6 @@ void ParticleSection::EmitInternal() {
     if (currentTime_ >= sectionParam_->GetIntervalTime() || sectionParam_->GetGroupParameters().isShot) {
         auto& group = groups[groupName_];
 
-        // パーティクル数制限チェック
         if (static_cast<int32_t>(group.particles.size()) + sectionParam_->GetParticleCount() > sectionParam_->GetMaxParticleNum()) {
             currentTime_ = 0.0f;
             return;
@@ -206,7 +202,6 @@ void ParticleSection::AdjustParam() {
         break;
     }
 
- 
     ImGui::Separator();
 
     // Primitive/Model設定

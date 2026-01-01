@@ -10,6 +10,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include <cstdint>
+#include <functional>
 #include <string>
 
 namespace KetaEngine {
@@ -48,10 +49,7 @@ public:
 
 private:
     void SelectRailFile(const char* label, const std::string& directory, std::pair<std::string, FileSelector>* param);
-    void DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int* selectedIndex,
-        const std::function<void(const std::string&)>& onApply);
     void ScaleParamEditor();
-
     void AdaptIntToType();
 
 private:
@@ -92,6 +90,9 @@ private:
     std::string modelFilePath_;
     std::string selectedTexturePath_;
 
+    // テクスチャ変更時のコールバック
+    std::function<void()> onTextureChanged_;
+
 public:
     // Getter
     const TimingParam& GetTimingParam() const { return timingParam_; }
@@ -121,6 +122,7 @@ public:
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
     void SetFollowingPos(const Vector3* pos);
     void SetTargetPosition(const Vector3& targetPos);
+    void SetTextureChangedCallback(std::function<void()> callback);
 };
 
 } // namespace KetaEngine
