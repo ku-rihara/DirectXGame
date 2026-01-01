@@ -9,11 +9,6 @@ using namespace KetaEngine;
 void ParticleSectionParameter::AdaptIntToType() {
     groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
     groupParameters_.billBordType = static_cast<BillboardType>(groupParameters_.billBordType);
-
-      /*const std::string& railFileName = GetRailFileName();
-    if (!sectionParam_->GetSectionParam().useRail || railFileName.empty()) {
-        return;
-    }*/
 }
 
 void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, const std::string& groupName) {
@@ -90,6 +85,7 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "scaleEaseParam.endValueV3.max", &parameters_.scaleEaseParm.endValueV3.max);
     globalParam->Regist(groupName, "scaleEaseParam.endValueV3.min", &parameters_.scaleEaseParm.endValueV3.min);
     globalParam->Regist(groupName, "scaleEaseParam.backRatio", &parameters_.scaleEaseParm.backRatio);
+
     // Mode Setting
     globalParam->Regist(groupName, "preBillBordType", &billBordTypeInt_);
     globalParam->Regist(groupName, "blendMode", &blendModeInt_);
@@ -217,6 +213,7 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
 
     AdaptIntToType();
 }
+
 void ParticleSectionParameter::AdjustParam() {
 #ifdef _DEBUG
     ImGui::PushID((groupName_ + "_AllParams").c_str());
@@ -324,7 +321,7 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::Checkbox("IsZ", &groupParameters_.adaptRotate_.isZ);
 
         ImGui::SeparatorText("BillBordType");
-        const char* billBordItems[] = {"XYZ","Y"};
+        const char* billBordItems[] = {"XYZ", "Y"};
         if (ImGui::Combo("Billboard Type", &billBordTypeInt_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
             groupParameters_.billBordType = static_cast<BillboardType>(billBordTypeInt_);
         }
@@ -362,12 +359,11 @@ void ParticleSectionParameter::ScaleParamEditor() {
             ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.1f);
         } else {
             ImGui::SeparatorText("V3 Range");
-            ImGui::DragFloat3("ScaleV3 Max",&parameters_.scaleDistV3.max.x, 0.1f);
-            ImGui::DragFloat3("ScaleV3 Min",&parameters_.scaleDistV3.min.x, 0.1f);
+            ImGui::DragFloat3("ScaleV3 Max", &parameters_.scaleDistV3.max.x, 0.1f);
+            ImGui::DragFloat3("ScaleV3 Min", &parameters_.scaleDistV3.min.x, 0.1f);
         }
 
         // Scale Easing
-
         ImGui::Checkbox("Use Scale Easing", &parameters_.scaleEaseParm.isScaleEase);
 
         if (parameters_.scaleEaseParm.isScaleEase) {
@@ -376,10 +372,10 @@ void ParticleSectionParameter::ScaleParamEditor() {
             ImGui::DragFloat("Max Time", &easeParam.maxTime, 0.01f, 0.0f, 10.0f);
             ImGuiEasingTypeSelector("Easing Type", easeParam.easeTypeInt);
 
-            if (parameters_.isScalerScale) {           
+            if (parameters_.isScalerScale) {
                 ImGui::DragFloat("End Scale Max", &easeParam.endValueF.max, 0.01f);
                 ImGui::DragFloat("End Scale Min", &easeParam.endValueF.min, 0.01f);
-            } else {         
+            } else {
                 ImGui::DragFloat3("End Scale Max", &easeParam.endValueV3.max.x, 0.01f);
                 ImGui::DragFloat3("End Scale Min", &easeParam.endValueV3.min.x, 0.01f);
             }
@@ -390,36 +386,40 @@ void ParticleSectionParameter::ScaleParamEditor() {
 }
 
 void ParticleSectionParameter::ImGuiTextureSelection() {
-    static int selectedIndex           = 0;
+    static int selectedIndex               = 0;
+    static std::string lastSelectedTexture = "";
+
     std::vector<std::string> filenames = GetFileNamesForDirectory(textureFilePath_);
 
-    DisplayFileSelection("SelectTexture", filenames, &selectedIndex, [this](const std::string& selectedFile) {
-        ApplyTexture(selectedFile);
-        ImGui::Text("Texture Applied: %s", selectedFile.c_str());
-    });
-}
-
-void ParticleSectionParameter::DisplayFileSelection(
-    const std::string& header,
-    const std::vector<std::string>& filenames,
-    int* selectedIndex,
-    const std::function<void(const std::string&)>& onApply) {
-
-    if (!filenames.empty()) {
-        std::vector<const char*> names;
-        for (const auto& file : filenames) {
-            names.push_back(file.c_str());
-        }
-
-        if (ImGui::CollapsingHeader(header.c_str())) {
-            ImGui::ListBox(header.c_str(), selectedIndex, names.data(), static_cast<int>(names.size()));
-
-            if (ImGui::Button(("Apply:" + header).c_str())) {
-                onApply(filenames[*selectedIndex]);
+    if (ImGui::CollapsingHeader("SelectTexture")) {
+        if (!filenames.empty()) {
+            std::vector<const char*> names;
+            for (const auto& file : filenames) {
+                names.push_back(file.c_str());
             }
+
+            // ListBoxで選択
+            if (ImGui::ListBox("Textures", &selectedIndex, names.data(), static_cast<int>(names.size()))) {
+                // 選択が変わったら即座に適用
+                std::string newTextureName = filenames[selectedIndex];
+                if (newTextureName != lastSelectedTexture) {
+                    ApplyTexture(newTextureName);
+                    lastSelectedTexture = newTextureName;
+
+                    // コールバック関数を呼び出して実際のテクスチャを更新
+                    if (onTextureChanged_) {
+                        onTextureChanged_();
+                    }
+                }
+            }
+
+            // 現在のテクスチャパスを表示
+            if (!selectedTexturePath_.empty()) {
+                ImGui::Text("Current: %s", selectedTexturePath_.c_str());
+            }
+        } else {
+            ImGui::Text("No texture files found.");
         }
-    } else {
-        ImGui::Text("No %s files found.", header.c_str());
     }
 }
 
@@ -445,16 +445,20 @@ void ParticleSectionParameter::SetIsShot(bool shot) {
     isShot_                 = shot;
     groupParameters_.isShot = shot;
 }
+
 void ParticleSectionParameter::SetBlendMode(BlendMode mode) {
     blendModeInt_              = static_cast<int32_t>(mode);
     groupParameters_.blendMode = mode;
 }
+
 void ParticleSectionParameter::SetBillboardType(BillboardType type) {
     billBordTypeInt_              = static_cast<int32_t>(type);
     groupParameters_.billBordType = type;
 }
 
-void ParticleSectionParameter::SetParentTransform(const WorldTransform* transform) { parameters_.parentTransform = transform; }
+void ParticleSectionParameter::SetParentTransform(const WorldTransform* transform) {
+    parameters_.parentTransform = transform;
+}
 
 void ParticleSectionParameter::SetParentJoint(const Object3DAnimation* animation, const std::string& jointName) {
     parameters_.jointParent.animation = animation;
@@ -467,4 +471,8 @@ void ParticleSectionParameter::SetFollowingPos(const Vector3* pos) {
 
 void ParticleSectionParameter::SetTargetPosition(const Vector3& targetPos) {
     parameters_.targetPos = targetPos;
+}
+
+void ParticleSectionParameter::SetTextureChangedCallback(std::function<void()> callback) {
+    onTextureChanged_ = callback;
 }
