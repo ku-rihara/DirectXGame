@@ -1,5 +1,5 @@
 {
-    "AllTest0": {
+    "AllTest_0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
@@ -22,13 +22,13 @@
             0.0
         ],
         "Direction Max": [
-            0.0,
-            0.0,
+            -1.0,
+            1.0,
             0.0
         ],
         "Direction Min": [
-            0.0,
-            0.0,
+            1.0,
+            1.0,
             0.0
         ],
         "Gravity": 0.0,
@@ -42,14 +42,14 @@
             0.0
         ],
         "Position Max": [
-            0.0,
-            0.0,
-            0.0
+            -16.100000381469727,
+            -8.699999809265137,
+            -11.300000190734863
         ],
         "Position Min": [
-            0.0,
-            0.0,
-            0.0
+            19.799999237060547,
+            8.399999618530273,
+            13.5
         ],
         "RailFileName": "",
         "Rotate Base": [
@@ -89,8 +89,8 @@
             0.0,
             0.0
         ],
-        "Speed Max": 0.0,
-        "Speed Min": 0.0,
+        "Speed Max": 9.699999809265137,
+        "Speed Min": 9.600000381469727,
         "SpeedV3 Max": [
             0.0,
             0.0,
@@ -122,7 +122,7 @@
         "blendMode": 1,
         "isAlphaNoMove": false,
         "isBillBord": true,
-        "isFloatVelocity": false,
+        "isFloatVelocity": true,
         "isRotateForDirection": false,
         "isScalerScale": true,
         "isShot": false,
