@@ -32,14 +32,14 @@
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 1.0,
-        "LifeTime": 0.8600000143051147,
+        "IntervalTime": 0.019999999552965164,
+        "LifeTime": 0.4300000071525574,
         "Max Particle Num": 1000,
         "Particle Count": 27,
         "Position Base": [
-            11.0,
-            7.699999809265137,
-            8.699999809265137
+            0.19999922811985016,
+            17.400001525878906,
+            14.899999618530273
         ],
         "Position Max": [
             -17.100000381469727,
@@ -51,7 +51,7 @@
             11.600000381469727,
             9.800000190734863
         ],
-        "RailFileName": "",
+        "RailFileName": "sdf",
         "Rotate Base": [
             0.0,
             0.0,
@@ -123,7 +123,7 @@
         "UV isScrollEachPixel": false,
         "UV isScrool": false,
         "UV isScroolEachPixel": false,
-        "UseRail": false,
+        "UseRail": true,
         "UseScaleEasing": true,
         "blendMode": 1,
         "isAlphaNoMove": false,

@@ -47,8 +47,8 @@ public:
     void InitAdaptTexture();
 
 private:
-    void SelectRailFile(const char* label, const std::string& directory, std::pair<std::string, FileSelector>& param);
-    void DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int& selectedIndex,
+    void SelectRailFile(const char* label, const std::string& directory, std::pair<std::string, FileSelector>* param);
+    void DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int* selectedIndex,
         const std::function<void(const std::string&)>& onApply);
     void ScaleParamEditor();
 

@@ -14,6 +14,9 @@ void FileSelector::SelectFile(
     const std::string& excludeName,
     bool addNoneOption) {
 
+        // 現在選択中のインデックスを取得
+    int currentIndex = -1;
+
     // キャッシュの更新が必要か、ディレクトリが変わった場合
     if (needsRefresh_ || cachedDirectory_ != directoryPath || cachedFiles_.empty()) {
         cachedFiles_     = GetFileNamesForDirectory(directoryPath);
@@ -31,14 +34,13 @@ void FileSelector::SelectFile(
 
         // "None"オプションを先頭に追加
         if (addNoneOption) {
+            currentIndex = 0;
             cachedFiles_.insert(cachedFiles_.begin(), "None");
         }
 
         needsRefresh_ = false;
     }
 
-    // 現在選択中のインデックスを取得
-    int currentIndex = 0;
     for (int i = 0; i < static_cast<int>(cachedFiles_.size()); i++) {
         if (cachedFiles_[i] == currentSelection) {
             currentIndex = i;
@@ -53,10 +55,8 @@ void FileSelector::SelectFile(
     }
 
     // コンボボックスで選択
-    bool changed = false;
     if (ImGui::Combo(label, &currentIndex, comboItems.data(), static_cast<int>(comboItems.size()))) {
         currentSelection = cachedFiles_[currentIndex];
-        changed          = true;
     }
 
     // リフレッシュボタン

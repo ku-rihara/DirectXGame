@@ -36,25 +36,13 @@ void ParticleSection::Init(const std::string& particleName, const std::string& c
 
     // パーティクルグループが存在しない場合は作成
     if (ParticleManager::GetInstance()->particleGroups_.find(groupName_) == ParticleManager::GetInstance()->particleGroups_.end()) {
-
         // デフォルトでPlaneプリミティブを作成
         CreatePrimitiveParticle(PrimitiveType::Plane, sectionParam_->GetMaxParticleNum());
     }
-
 }
 
 //*----------------------------- Playback Control -----------------------------*//
 
-void ParticleSection::Play() {
-    playState_   = PlayState::PLAYING;
-    elapsedTime_ = 0.0f;
-    currentTime_ = 0.0f;
-
-    auto& railFileName = sectionParam_->GetRailFileName();
-    if (sectionParam_->GetIsRailMove() && !railFileName.empty()) {
-        railPlayer_->Play(railFileName);
-    }
-}
 
 void ParticleSection::Pause() {
     if (playState_ == PlayState::PLAYING) {
@@ -102,11 +90,7 @@ void ParticleSection::Update(float speedRate) {
     }
 
     if (playState_ == PlayState::PLAYING) {
-        if (sectionParam_->GetIsRailMove() && railPlayer_->IsPlaying()) {
-            railPlayer_->Update(speedRate);
-            sectionParam_->SetEmitPos(railPlayer_->GetCurrentPosition());
-        }
-
+        UpdateEmitterPosition(speedRate);
         UpdateEmitTransform();
         SetEmitLine();
         EmitInternal();
@@ -123,33 +107,42 @@ void ParticleSection::UpdateWaiting(float deltaTime) {
 void ParticleSection::StartPlay() {
     playState_ = PlayState::PLAYING;
 
-    auto& railFileName = sectionParam_->GetRailFileName();
-    if (sectionParam_->GetIsRailMove() && !railFileName.empty()) {
-        railPlayer_->Play(railFileName);
+     // Rail移動を使用する場合はRailPlayerを起動
+    if (sectionParam_->GetIsRailMove()) {
+        auto& railFileName = sectionParam_->GetRailFileName();
+        if (!railFileName.empty()) {
+            railPlayer_->Play(railFileName);
+        }
     }
+}
+
+void ParticleSection::UpdateEmitterPosition(float speedRate) {
+    // Rail移動を使用する場合はRailPlayerの位置を使用
+    if (sectionParam_->GetIsRailMove() && railPlayer_->IsPlaying()) {
+        railPlayer_->Update(speedRate);
+        sectionParam_->SetEmitPos(railPlayer_->GetCurrentPosition());
+    }
+  
 }
 
 void ParticleSection::UpdateEmitTransform() {
     emitBoxTransform_.translation_ = sectionParam_->GetParticleParameters().emitPos;
 
-    // scale=max-min
-    emitBoxTransform_.scale_ = 
-        sectionParam_->GetParticleParameters().positionDist.max - 
-        sectionParam_->GetParticleParameters().positionDist.min,
-       
+    // scale = max-min
+    emitBoxTransform_.scale_ =
+        sectionParam_->GetParticleParameters().positionDist.max - sectionParam_->GetParticleParameters().positionDist.min;
+
     emitBoxTransform_.UpdateMatrix();
 }
 
 void ParticleSection::SetEmitLine() {
 #ifdef _DEBUG
-    if (sectionParam_->GetIsRailMove()) {
-        // Rail使用時のデバッグ表示
-    } else {
+   
         debugLine_->SetCubeWireframe(
             emitBoxTransform_.GetWorldPos(),
             emitBoxTransform_.scale_,
             Vector4::kWHITE());
-    }
+    
 #endif
 }
 
@@ -173,7 +166,6 @@ void ParticleSection::EmitInternal() {
             return;
         }
 
-
         ParticleManager::GetInstance()->Emit(
             groupName_,
             sectionParam_->GetParticleParameters(),
@@ -190,7 +182,6 @@ void ParticleSection::ChangePrimitive(const PrimitiveType& primitiveType) {
     CreatePrimitiveParticle(primitiveType, sectionParam_->GetMaxParticleNum());
     ApplyTextureToManager();
 }
-
 
 //*----------------------------- Editor UI -----------------------------*//
 
@@ -214,6 +205,9 @@ void ParticleSection::AdjustParam() {
         ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "PLAYING");
         break;
     }
+
+ 
+    ImGui::Separator();
 
     // Primitive/Model設定
     if (ImGui::CollapsingHeader("Primitive/Model Type")) {

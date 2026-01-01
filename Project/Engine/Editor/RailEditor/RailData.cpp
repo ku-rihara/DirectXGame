@@ -334,10 +334,6 @@ void RailData::AdjustParam() {
         ImGui::DragFloat("Max Time", &railMoveParam_.maxTime, 0.01f, 0.1f, 10.0f);
         ImGui::Checkbox("Loop", &railMoveParam_.isLoop);
 
-        if (railMoveParam_.returnMode != ReturnMode::NONE) {
-            ImGui::TextWrapped("Note: Loop will restart after return completes");
-        }
-
         ImGui::Separator();
 
         ImGuiEasingTypeSelector("Easing Type", railMoveParam_.easeTypeInt);
@@ -363,7 +359,6 @@ void RailData::AdjustParam() {
         if (railMoveParam_.returnMode != ReturnMode::NONE) {
             ImGui::DragFloat("Return Time", &directReturnParam_.maxTime, 0.01f, 0.1f, 10.0f);
             ImGuiEasingTypeSelector("Return Easing Type", directReturnParam_.easeTypeInt);
-            ImGui::TextWrapped("Return is part of one complete cycle");
         }
 
         ImGui::Separator();

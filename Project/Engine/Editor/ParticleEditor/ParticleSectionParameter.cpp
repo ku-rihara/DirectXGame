@@ -79,7 +79,7 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "isShot", &isShot_);
     globalParam->Regist(groupName, "isAlphaNoMove", &groupParameters_.isAlphaNoMove);
 
-    // EaseParm
+    // EaseParam
     globalParam->Regist(groupName, "scaleEaseParam.isScaleEase", &parameters_.scaleEaseParm.isScaleEase);
     globalParam->Regist(groupName, "scaleEaseParam.maxTime", &parameters_.scaleEaseParm.maxTime);
     globalParam->Regist(groupName, "scaleEaseParam.easeTypeInt", &parameters_.scaleEaseParm.easeTypeInt);
@@ -200,6 +200,16 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     primitiveTypeInt_ = globalParam->GetValue<int32_t>(groupName, "primitiveTypeInt");
     modelFilePath_    = globalParam->GetValue<std::string>(groupName, "modelFilePath");
 
+    // Timing Parameter
+    timingParam_.startTime = globalParam->GetValue<float>(groupName, "StartTime");
+
+    // TimeMode Parameter
+    timeModeSelector_.GetParam(groupName, globalParam);
+
+    // Rail Parameter
+    useRailMoveEmitter_  = globalParam->GetValue<bool>(groupName, "UseRail");
+    railFileParam_.first = globalParam->GetValue<std::string>(groupName, "RailFileName");
+
     // Apply loaded values
     groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
     groupParameters_.billBordType = static_cast<BillboardType>(billBordTypeInt_);
@@ -207,7 +217,6 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
 
     AdaptIntToType();
 }
-
 void ParticleSectionParameter::AdjustParam() {
 #ifdef _DEBUG
     ImGui::PushID((groupName_ + "_AllParams").c_str());
@@ -222,7 +231,7 @@ void ParticleSectionParameter::AdjustParam() {
     if (ImGui::CollapsingHeader("Rail Settings")) {
         ImGui::Checkbox("Use Rail", &useRailMoveEmitter_);
         if (useRailMoveEmitter_) {
-            SelectRailFile("Rail File", railFolderPath_, railFileParam_);
+            SelectRailFile("Rail File", railFolderPath_, &railFileParam_);
         }
     }
 
@@ -384,7 +393,7 @@ void ParticleSectionParameter::ImGuiTextureSelection() {
     static int selectedIndex           = 0;
     std::vector<std::string> filenames = GetFileNamesForDirectory(textureFilePath_);
 
-    DisplayFileSelection("SelectTexture", filenames, selectedIndex, [this](const std::string& selectedFile) {
+    DisplayFileSelection("SelectTexture", filenames, &selectedIndex, [this](const std::string& selectedFile) {
         ApplyTexture(selectedFile);
         ImGui::Text("Texture Applied: %s", selectedFile.c_str());
     });
@@ -393,7 +402,7 @@ void ParticleSectionParameter::ImGuiTextureSelection() {
 void ParticleSectionParameter::DisplayFileSelection(
     const std::string& header,
     const std::vector<std::string>& filenames,
-    int& selectedIndex,
+    int* selectedIndex,
     const std::function<void(const std::string&)>& onApply) {
 
     if (!filenames.empty()) {
@@ -403,10 +412,10 @@ void ParticleSectionParameter::DisplayFileSelection(
         }
 
         if (ImGui::CollapsingHeader(header.c_str())) {
-            ImGui::ListBox(header.c_str(), &selectedIndex, names.data(), static_cast<int>(names.size()));
+            ImGui::ListBox(header.c_str(), selectedIndex, names.data(), static_cast<int>(names.size()));
 
             if (ImGui::Button(("Apply:" + header).c_str())) {
-                onApply(filenames[selectedIndex]);
+                onApply(filenames[*selectedIndex]);
             }
         }
     } else {
@@ -427,9 +436,9 @@ void ParticleSectionParameter::InitAdaptTexture() {
 void ParticleSectionParameter::SelectRailFile(
     const char* label,
     const std::string& directory,
-    std::pair<std::string, FileSelector>& param) {
+    std::pair<std::string, FileSelector>* param) {
 
-    param.second.SelectFile(label, directory, param.first, "", false);
+    param->second.SelectFile(label, directory, param->first, "", false);
 }
 
 void ParticleSectionParameter::SetIsShot(bool shot) {
