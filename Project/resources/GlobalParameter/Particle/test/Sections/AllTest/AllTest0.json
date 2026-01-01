@@ -1,5 +1,5 @@
 {
-    "AllTest_0": {
+    "AllTest0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
@@ -144,7 +144,7 @@
             0.0
         ],
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 1.0,
+        "scaleEaseParam.maxTime": 0.12999999523162842,
         "scaleEaseParam.startValueF": 1.0,
         "scaleEaseParam.startValueV3": [
             1.0,
