@@ -10,7 +10,7 @@ using namespace KetaEngine;
 void ParticleSection::Init(const std::string& particleName, const std::string& categoryName, int32_t sectionIndex) {
     particleName_ = particleName;
     sectionIndex_ = sectionIndex;
-    groupName_    = particleName + "_" + std::to_string(sectionIndex);
+    groupName_    = particleName + std::to_string(sectionIndex);
     folderPath_   = baseFolderPath_ + categoryName + "/" + "Sections/" + particleName_ + "/";
 
     sectionParam_ = std::make_unique<ParticleSectionParameter>();
