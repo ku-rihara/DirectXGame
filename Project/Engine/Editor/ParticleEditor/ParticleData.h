@@ -43,6 +43,7 @@ private:
 
 private:
     const std::string baseFolderPath_ = "Particle/";
+    float playSpeed_;
 
 public:
     const std::string& GetCategoryName() const { return categoryName_; }
