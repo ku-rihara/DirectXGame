@@ -30,6 +30,7 @@ public:
         HitStop,
         ShakeAction,
         PostEffect,
+        ParticleEffect,
         Count
     };
 
@@ -39,6 +40,39 @@ public:
         LeftHand,
         MainHead,
         Count
+    };
+
+private:
+    // 演出タイプ情報構造体
+    struct RenditionTypeInfo {
+        Type type;
+        const char* name;
+        const char* label;
+        const char* dir;
+    };
+
+    // オブジェクトアニメーションタイプ情報構造体
+    struct ObjAnimationTypeInfo {
+        ObjAnimationType type;
+        const char* name;
+        const char* label;
+    };
+
+    // 静的な演出タイプ情報配列
+    static constexpr RenditionTypeInfo kRenditionTypeInfos[] = {
+        {Type::CameraAction, "CameraAction", "Camera Action", "CameraAnimation/AnimationData"},
+        {Type::HitStop, "HitStop", "Hit Stop", "TimeScale"},
+        {Type::ShakeAction, "ShakeAction", "Shake Action", "ShakeEditor"},
+        {Type::PostEffect, "PostEffectParam", "PostEffect", "PostEffect"},
+        {Type::ParticleEffect, "ParticleEffectParam", "ParticleEffect", "Particle/Player/Dates"},
+    };
+
+    // 静的なオブジェクトアニメーションタイプ情報配列
+    static constexpr ObjAnimationTypeInfo kObjAnimationTypeInfos[] = {
+        {ObjAnimationType::Head, "ObjAnim_Head", "Head Animation"},
+        {ObjAnimationType::RightHand, "ObjAnim_RightHand", "Right Hand Animation"},
+        {ObjAnimationType::LeftHand, "ObjAnim_LeftHand", "Left Hand Animation"},
+        {ObjAnimationType::MainHead, "Main_Head", "Main Head Animation"},
     };
 
 public:
@@ -64,10 +98,11 @@ private:
     const std::string folderPath_ = "Resources/GlobalParameter/";
 
     // 各オブジェクトアニメーションタイプのフォルダパス
-    const std::string objAnimationFolderPath_Head_      = "Resources/GlobalParameter/ObjEaseAnimation/Player/Dates/";
-    const std::string objAnimationFolderPath_RightHand_ = "Resources/GlobalParameter/ObjEaseAnimation/RightHand/Dates/";
-    const std::string objAnimationFolderPath_LeftHand_  = "Resources/GlobalParameter/ObjEaseAnimation/LeftHand/Dates/";
-    const std::string objAnimationFolderPath_MainHead_  = "Resources/GlobalParameter/ObjEaseAnimation/MainHead/Dates/";
+    const std::array<std::string, 4> objAnimationFolderPaths_ = {
+        "Resources/GlobalParameter/ObjEaseAnimation/Player/Dates/",
+        "Resources/GlobalParameter/ObjEaseAnimation/RightHand/Dates/",
+        "Resources/GlobalParameter/ObjEaseAnimation/LeftHand/Dates/",
+        "Resources/GlobalParameter/ObjEaseAnimation/MainHead/Dates/"};
 
     // 演出パラメータ配列
     std::array<std::pair<RenditionParam, KetaEngine::FileSelector>, static_cast<size_t>(Type::Count)> renditionParams_;
