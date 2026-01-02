@@ -30,16 +30,20 @@ void TitleScene::Init() {
     // GPUパーティクルの初期化
     test.Init();
     test.InitEffect("Player", "test1");
+
+    particleTestPlayer_.Init();
 }
 
 void TitleScene::Update() {
 
     BaseScene::Update();
 
- 
+  
     if (input_->GetInstance()->PushKey(KeyboardKey::P)) {
-        test.Play("Player", "test1");
+      /*  test.Play("Player", "test1");*/
+        particleTestPlayer_.Play("test", "testD");
     }
+    particleTestPlayer_.Update();
 
     // 常に更新
     test.Update();

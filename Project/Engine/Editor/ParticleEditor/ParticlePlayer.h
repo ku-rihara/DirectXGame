@@ -19,20 +19,31 @@ public:
     void Init() override;
     void Update(float speedRate = 1.0f) override;
 
-    void Play(const std::string& effectName) override;
-    void PlayInCategory(const std::string& categoryName, const std::string& particleName);
+    /// <summary>
+    /// パーティクルをEmitする
+    /// </summary>
+    void Play(const std::string& categoryName, const std::string& particleName) override;
+
+    /// <summary>
+    /// 再生状況
+    /// </summary>
+    void UpdatePlayState();
 
 private:
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
 
 private:
     std::string currentCategoryName_;
+    std::string currentParticleName_;
+    bool isInitialized_          = false;
+    bool wasPlayCalledThisFrame_ = false;
 
 public:
     ParticleData* GetParticleData();
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
+    const std::string& GetCurrentParticleName() const { return currentParticleName_; }
 
-     //*----------------------------- Runtime Settings  -----------------------------*//
+    //*----------------------------- Runtime Settings  -----------------------------*//
 
     void SetParentTransform(const WorldTransform* transform);
     void SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName);
