@@ -33,15 +33,15 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "RotateSpeed Min", &parameters_.rotateSpeedDist.min);
 
     // UV
-    globalParam->Regist(groupName, "UV Pos", &parameters_.uvParm.pos);
-    globalParam->Regist(groupName, "UV Rotate", &parameters_.uvParm.rotate);
-    globalParam->Regist(groupName, "UV NumOfFrame", &parameters_.uvParm.numOfFrame);
-    globalParam->Regist(groupName, "UV ScrollSpeed", &parameters_.uvParm.frameScrollSpeed);
-    globalParam->Regist(groupName, "UV IsLoop", &parameters_.uvParm.isLoop);
-    globalParam->Regist(groupName, "UV isScrollEachPixel", &parameters_.uvParm.isScrollEachPixel);
-    globalParam->Regist(groupName, "UV isScroll", &parameters_.uvParm.isScroll);
-    globalParam->Regist(groupName, "UV isFlipX", &parameters_.uvParm.isFlipX);
-    globalParam->Regist(groupName, "UV isFlipY", &parameters_.uvParm.isFlipY);
+    globalParam->Regist(groupName, "UV Pos", &parameters_.uvParam.pos);
+    globalParam->Regist(groupName, "UV Rotate", &parameters_.uvParam.rotate);
+    globalParam->Regist(groupName, "UV NumOfFrame", &parameters_.uvParam.numOfFrame);
+    globalParam->Regist(groupName, "UV ScrollSpeed", &parameters_.uvParam.frameScrollSpeed);
+    globalParam->Regist(groupName, "UV IsLoop", &parameters_.uvParam.isLoop);
+    globalParam->Regist(groupName, "UV isScrollEachPixel", &parameters_.uvParam.isScrollEachPixel);
+    globalParam->Regist(groupName, "UV isScroll", &parameters_.uvParam.isScroll);
+    globalParam->Regist(groupName, "UV isFlipX", &parameters_.uvParam.isFlipX);
+    globalParam->Regist(groupName, "UV isFlipY", &parameters_.uvParam.isFlipY);
 
     // Velocity
     globalParam->Regist(groupName, "Speed Max", &parameters_.speedDist.max);
@@ -66,7 +66,7 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
 
     // Flag
     globalParam->Regist(groupName, "isScalerScale", &parameters_.isScalerScale);
-    globalParam->Regist(groupName, "isRotateForDirection", &parameters_.isRotateforDirection);
+    globalParam->Regist(groupName, "isRotateForDirection", &parameters_.isRotateForDirection);
     globalParam->Regist(groupName, "isBillBord", &groupParameters_.isBillBord);
     globalParam->Regist(groupName, "AdaptRotateIsX", &groupParameters_.adaptRotate_.isX);
     globalParam->Regist(groupName, "AdaptRotateIsY", &groupParameters_.adaptRotate_.isY);
@@ -75,16 +75,16 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "isAlphaNoMove", &groupParameters_.isAlphaNoMove);
 
     // EaseParam
-    globalParam->Regist(groupName, "scaleEaseParam.isScaleEase", &parameters_.scaleEaseParm.isScaleEase);
-    globalParam->Regist(groupName, "scaleEaseParam.maxTime", &parameters_.scaleEaseParm.maxTime);
-    globalParam->Regist(groupName, "scaleEaseParam.easeTypeInt", &parameters_.scaleEaseParm.easeTypeInt);
-    globalParam->Regist(groupName, "scaleEaseParam.startValueF", &parameters_.scaleEaseParm.startValueF);
-    globalParam->Regist(groupName, "scaleEaseParam.endValueF.max", &parameters_.scaleEaseParm.endValueF.max);
-    globalParam->Regist(groupName, "scaleEaseParam.endValueF.min", &parameters_.scaleEaseParm.endValueF.min);
-    globalParam->Regist(groupName, "scaleEaseParam.startValueV3", &parameters_.scaleEaseParm.startValueV3);
-    globalParam->Regist(groupName, "scaleEaseParam.endValueV3.max", &parameters_.scaleEaseParm.endValueV3.max);
-    globalParam->Regist(groupName, "scaleEaseParam.endValueV3.min", &parameters_.scaleEaseParm.endValueV3.min);
-    globalParam->Regist(groupName, "scaleEaseParam.backRatio", &parameters_.scaleEaseParm.backRatio);
+    globalParam->Regist(groupName, "scaleEaseParam.isScaleEase", &parameters_.scaleEaseParam.isScaleEase);
+    globalParam->Regist(groupName, "scaleEaseParam.maxTime", &parameters_.scaleEaseParam.maxTime);
+    globalParam->Regist(groupName, "scaleEaseParam.easeTypeInt", &parameters_.scaleEaseParam.easeTypeInt);
+    globalParam->Regist(groupName, "scaleEaseParam.startValueF", &parameters_.scaleEaseParam.startValueF);
+    globalParam->Regist(groupName, "scaleEaseParam.endValueF.max", &parameters_.scaleEaseParam.endValueF.max);
+    globalParam->Regist(groupName, "scaleEaseParam.endValueF.min", &parameters_.scaleEaseParam.endValueF.min);
+    globalParam->Regist(groupName, "scaleEaseParam.startValueV3", &parameters_.scaleEaseParam.startValueV3);
+    globalParam->Regist(groupName, "scaleEaseParam.endValueV3.max", &parameters_.scaleEaseParam.endValueV3.max);
+    globalParam->Regist(groupName, "scaleEaseParam.endValueV3.min", &parameters_.scaleEaseParam.endValueV3.min);
+    globalParam->Regist(groupName, "scaleEaseParam.backRatio", &parameters_.scaleEaseParam.backRatio);
 
     // Mode Setting
     globalParam->Regist(groupName, "preBillBordType", &billBordTypeInt_);
@@ -100,6 +100,7 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
 
     // Timing Parameter
     globalParam->Regist(groupName, "StartTime", &timingParam_.startTime);
+    globalParam->Regist(groupName, "afterDuration", &timingParam_.afterDuration);
 
     // TimeMode Parameter
     timeModeSelector_.RegisterParam(groupName, globalParam);
@@ -131,15 +132,15 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.rotateSpeedDist.min = globalParam->GetValue<Vector3>(groupName, "RotateSpeed Min");
 
     // UV
-    parameters_.uvParm.pos               = globalParam->GetValue<Vector2>(groupName, "UV Pos");
-    parameters_.uvParm.rotate            = globalParam->GetValue<Vector3>(groupName, "UV Rotate");
-    parameters_.uvParm.numOfFrame        = globalParam->GetValue<int32_t>(groupName, "UV NumOfFrame");
-    parameters_.uvParm.frameScrollSpeed  = globalParam->GetValue<float>(groupName, "UV ScrollSpeed");
-    parameters_.uvParm.isLoop            = globalParam->GetValue<bool>(groupName, "UV IsLoop");
-    parameters_.uvParm.isScrollEachPixel = globalParam->GetValue<bool>(groupName, "UV isScrollEachPixel");
-    parameters_.uvParm.isScroll          = globalParam->GetValue<bool>(groupName, "UV isScroll");
-    parameters_.uvParm.isFlipX           = globalParam->GetValue<bool>(groupName, "UV isFlipX");
-    parameters_.uvParm.isFlipY           = globalParam->GetValue<bool>(groupName, "UV isFlipY");
+    parameters_.uvParam.pos               = globalParam->GetValue<Vector2>(groupName, "UV Pos");
+    parameters_.uvParam.rotate            = globalParam->GetValue<Vector3>(groupName, "UV Rotate");
+    parameters_.uvParam.numOfFrame        = globalParam->GetValue<int32_t>(groupName, "UV NumOfFrame");
+    parameters_.uvParam.frameScrollSpeed  = globalParam->GetValue<float>(groupName, "UV ScrollSpeed");
+    parameters_.uvParam.isLoop            = globalParam->GetValue<bool>(groupName, "UV IsLoop");
+    parameters_.uvParam.isScrollEachPixel = globalParam->GetValue<bool>(groupName, "UV isScrollEachPixel");
+    parameters_.uvParam.isScroll          = globalParam->GetValue<bool>(groupName, "UV isScroll");
+    parameters_.uvParam.isFlipX           = globalParam->GetValue<bool>(groupName, "UV isFlipX");
+    parameters_.uvParam.isFlipY           = globalParam->GetValue<bool>(groupName, "UV isFlipY");
 
     // Velocity
     parameters_.speedDist.max      = globalParam->GetValue<float>(groupName, "Speed Max");
@@ -164,7 +165,7 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
 
     // Flag
     parameters_.isScalerScale         = globalParam->GetValue<bool>(groupName, "isScalerScale");
-    parameters_.isRotateforDirection  = globalParam->GetValue<bool>(groupName, "isRotateForDirection");
+    parameters_.isRotateForDirection  = globalParam->GetValue<bool>(groupName, "isRotateForDirection");
     groupParameters_.isBillBord       = globalParam->GetValue<bool>(groupName, "isBillBord");
     groupParameters_.adaptRotate_.isX = globalParam->GetValue<bool>(groupName, "AdaptRotateIsX");
     groupParameters_.adaptRotate_.isY = globalParam->GetValue<bool>(groupName, "AdaptRotateIsY");
@@ -173,16 +174,16 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     groupParameters_.isAlphaNoMove    = globalParam->GetValue<bool>(groupName, "isAlphaNoMove");
 
     // EaseParam
-    parameters_.scaleEaseParm.isScaleEase    = globalParam->GetValue<bool>(groupName, "scaleEaseParam.isScaleEase");
-    parameters_.scaleEaseParm.maxTime        = globalParam->GetValue<float>(groupName, "scaleEaseParam.maxTime");
-    parameters_.scaleEaseParm.easeTypeInt    = globalParam->GetValue<int32_t>(groupName, "scaleEaseParam.easeTypeInt");
-    parameters_.scaleEaseParm.startValueF    = globalParam->GetValue<float>(groupName, "scaleEaseParam.startValueF");
-    parameters_.scaleEaseParm.endValueF.max  = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.max");
-    parameters_.scaleEaseParm.endValueF.min  = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.min");
-    parameters_.scaleEaseParm.startValueV3   = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.startValueV3");
-    parameters_.scaleEaseParm.endValueV3.max = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.max");
-    parameters_.scaleEaseParm.endValueV3.min = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.min");
-    parameters_.scaleEaseParm.backRatio      = globalParam->GetValue<float>(groupName, "scaleEaseParam.backRatio");
+    parameters_.scaleEaseParam.isScaleEase    = globalParam->GetValue<bool>(groupName, "scaleEaseParam.isScaleEase");
+    parameters_.scaleEaseParam.maxTime        = globalParam->GetValue<float>(groupName, "scaleEaseParam.maxTime");
+    parameters_.scaleEaseParam.easeTypeInt    = globalParam->GetValue<int32_t>(groupName, "scaleEaseParam.easeTypeInt");
+    parameters_.scaleEaseParam.startValueF    = globalParam->GetValue<float>(groupName, "scaleEaseParam.startValueF");
+    parameters_.scaleEaseParam.endValueF.max  = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.max");
+    parameters_.scaleEaseParam.endValueF.min  = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.min");
+    parameters_.scaleEaseParam.startValueV3   = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.startValueV3");
+    parameters_.scaleEaseParam.endValueV3.max = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.max");
+    parameters_.scaleEaseParam.endValueV3.min = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.min");
+    parameters_.scaleEaseParam.backRatio      = globalParam->GetValue<float>(groupName, "scaleEaseParam.backRatio");
 
     // Mode
     billBordTypeInt_ = globalParam->GetValue<int>(groupName, "preBillBordType");
@@ -198,6 +199,7 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
 
     // Timing Parameter
     timingParam_.startTime = globalParam->GetValue<float>(groupName, "StartTime");
+    timingParam_.afterDuration = globalParam->GetValue<float>(groupName, "afterDuration");
 
     // TimeMode Parameter
     timeModeSelector_.GetParam(groupName, globalParam);
@@ -222,6 +224,7 @@ void ParticleSectionParameter::AdjustParam() {
     if (ImGui::CollapsingHeader("Timing Settings")) {
         ImGui::DragFloat("Start Time", &timingParam_.startTime, 0.01f, 0.0f, 100.0f);
         timeModeSelector_.SelectTimeModeImGui("Time Mode");
+        ImGui::DragFloat("afterDuration", &timingParam_.afterDuration,0.01f);
     }
 
     // Rail Settings
@@ -229,6 +232,51 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::Checkbox("Use Rail", &useRailMoveEmitter_);
         if (useRailMoveEmitter_) {
             SelectRailFile("Rail File", railFolderPath_, &railFileParam_);
+        }
+    }
+
+    // Primitive/Model Settings
+    if (ImGui::CollapsingHeader("Primitive/Model Type")) {
+        ImGui::Checkbox("Use Model", &useModel_);
+
+        if (useModel_) {
+            // モデルモード 
+            ImGui::Text("Model File Path:");
+            ImGui::Text("Format: ModelFolder/ModelName");
+            ImGui::Text("Example: Suzanne/Suzanne");
+
+            // std::string用のバッファを用意
+            static char buffer[256] = "";
+
+            // 初回またはモデルパスが変わった場合、バッファに反映
+            static std::string lastPath = "";
+            if (lastPath != modelFilePath_) {
+                strncpy_s(buffer, sizeof(buffer), modelFilePath_.c_str(), sizeof(buffer) - 1);
+                buffer[sizeof(buffer) - 1] = '\0';
+                lastPath                   = modelFilePath_;
+            }
+
+            // InputTextで編集
+            if (ImGui::InputText("##ModelPath", buffer, sizeof(buffer))) {
+                modelFilePath_ = std::string(buffer);
+                lastPath       = modelFilePath_;
+            }
+
+            if (!modelFilePath_.empty()) {
+                std::string fullPath = modelBasePath_ + modelFilePath_ + "/" + modelFilePath_ + ".obj";
+                ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Full: %s", fullPath.c_str());
+            }
+        } else {
+            // プリミティブモード
+            const char* primitiveItems[] = {"Plane", "Sphere","Cylinder", "Ring", "Box"};
+
+          
+            if (ImGui::Combo("Primitive Type", &primitiveTypeInt_, primitiveItems, IM_ARRAYSIZE(primitiveItems))) {
+                // Comboが変更された時、コールバックを呼び出す
+                if (onPrimitiveChanged_) {
+                    onPrimitiveChanged_(static_cast<PrimitiveType>(primitiveTypeInt_));
+                }
+            }
         }
     }
 
@@ -245,11 +293,11 @@ void ParticleSectionParameter::AdjustParam() {
     // Position
     if (ImGui::CollapsingHeader("Position")) {
         ImGui::SeparatorText("Position Base:");
-        ImGui::DragFloat3("Base", &parameters_.emitPos.x, 0.1f);
+        ImGui::DragFloat3("Base", &parameters_.emitPos.x, 0.01f);
 
         ImGui::SeparatorText("Position Range:");
-        ImGui::DragFloat3("Position Max", &parameters_.positionDist.max.x, 0.1f);
-        ImGui::DragFloat3("Position Min", &parameters_.positionDist.min.x, 0.1f);
+        ImGui::DragFloat3("Position Max", &parameters_.positionDist.max.x, 0.01f);
+        ImGui::DragFloat3("Position Min", &parameters_.positionDist.min.x, 0.01f);
     }
 
     // Velocity
@@ -257,12 +305,12 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::Checkbox("IsFloatVelocity", &parameters_.isFloatVelocity);
         if (parameters_.isFloatVelocity) {
             ImGui::SeparatorText("Velocity Range:");
-            ImGui::DragFloat("Velocity Max", &parameters_.speedDist.max, 0.1f);
-            ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.1f);
+            ImGui::DragFloat("Velocity Max", &parameters_.speedDist.max, 0.01f);
+            ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.01f);
         } else {
             ImGui::SeparatorText("V3 VelocityRange");
-            ImGui::DragFloat3("VelocityV3 Max", &parameters_.velocityDistV3.max.x, 0.1f);
-            ImGui::DragFloat3("VelocityV3 Min", &parameters_.velocityDistV3.min.x, 0.1f);
+            ImGui::DragFloat3("VelocityV3 Max", &parameters_.velocityDistV3.max.x, 0.01f);
+            ImGui::DragFloat3("VelocityV3 Min", &parameters_.velocityDistV3.min.x, 0.01f);
         }
 
         ImGui::SeparatorText("Direction Range:");
@@ -288,19 +336,19 @@ void ParticleSectionParameter::AdjustParam() {
     // UV
     if (ImGui::CollapsingHeader("UV Parameters")) {
         ImGui::SeparatorText("UV Position:");
-        ImGui::DragFloat2("UV_Pos", &parameters_.uvParm.pos.x, 0.01f);
+        ImGui::DragFloat2("UV_Pos", &parameters_.uvParam.pos.x, 0.01f);
 
         ImGui::SeparatorText("UV Rotation:");
-        ImGui::DragFloat3("UV_Rotate", &parameters_.uvParm.rotate.x, 0.1f);
+        ImGui::DragFloat3("UV_Rotate", &parameters_.uvParam.rotate.x, 0.1f);
 
         ImGui::SeparatorText("UV Animation:");
-        ImGui::InputInt("Num of Frames", &parameters_.uvParm.numOfFrame);
-        ImGui::DragFloat("Scroll Speed", &parameters_.uvParm.frameScrollSpeed, 0.01f);
-        ImGui::Checkbox("Is Loop", &parameters_.uvParm.isLoop);
-        ImGui::Checkbox("Is ScrollEachPixel", &parameters_.uvParm.isScrollEachPixel);
-        ImGui::Checkbox("Is Scroll", &parameters_.uvParm.isScroll);
-        ImGui::Checkbox("Is IsFlipX", &parameters_.uvParm.isFlipX);
-        ImGui::Checkbox("Is IsFlipY", &parameters_.uvParm.isFlipY);
+        ImGui::InputInt("Num of Frames", &parameters_.uvParam.numOfFrame);
+        ImGui::DragFloat("Scroll Speed", &parameters_.uvParam.frameScrollSpeed, 0.01f);
+        ImGui::Checkbox("Is Loop", &parameters_.uvParam.isLoop);
+        ImGui::Checkbox("Is ScrollEachPixel", &parameters_.uvParam.isScrollEachPixel);
+        ImGui::Checkbox("Is Scroll", &parameters_.uvParam.isScroll);
+        ImGui::Checkbox("Is IsFlipX", &parameters_.uvParam.isFlipX);
+        ImGui::Checkbox("Is IsFlipY", &parameters_.uvParam.isFlipY);
     }
 
     // その他のパラメータ
@@ -337,7 +385,7 @@ void ParticleSectionParameter::AdjustParam() {
 
     // frag setting
     if (ImGui::CollapsingHeader("Frag")) {
-        ImGui::Checkbox("IsRotateForDirection", &parameters_.isRotateforDirection);
+        ImGui::Checkbox("IsRotateForDirection", &parameters_.isRotateForDirection);
         ImGui::Checkbox("IsShot", &isShot_);
         ImGui::Checkbox("isAlphaNoMove", &groupParameters_.isAlphaNoMove);
     }
@@ -347,7 +395,6 @@ void ParticleSectionParameter::AdjustParam() {
     ImGui::PopID();
 #endif
 }
-
 void ParticleSectionParameter::ScaleParamEditor() {
     if (ImGui::CollapsingHeader("Scale")) {
         ImGui::SeparatorText("Scale Mode");
@@ -355,19 +402,19 @@ void ParticleSectionParameter::ScaleParamEditor() {
 
         if (parameters_.isScalerScale) {
             ImGui::SeparatorText("Scaler Range");
-            ImGui::DragFloat("Scale Max", &parameters_.scaleDist.max, 0.1f);
-            ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.1f);
+            ImGui::DragFloat("Scale Max", &parameters_.scaleDist.max, 0.01f);
+            ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.01f);
         } else {
             ImGui::SeparatorText("V3 Range");
-            ImGui::DragFloat3("ScaleV3 Max", &parameters_.scaleDistV3.max.x, 0.1f);
-            ImGui::DragFloat3("ScaleV3 Min", &parameters_.scaleDistV3.min.x, 0.1f);
+            ImGui::DragFloat3("ScaleV3 Max", &parameters_.scaleDistV3.max.x, 0.01f);
+            ImGui::DragFloat3("ScaleV3 Min", &parameters_.scaleDistV3.min.x, 0.01f);
         }
 
         // Scale Easing
-        ImGui::Checkbox("Use Scale Easing", &parameters_.scaleEaseParm.isScaleEase);
+        ImGui::Checkbox("Use Scale Easing", &parameters_.scaleEaseParam.isScaleEase);
 
-        if (parameters_.scaleEaseParm.isScaleEase) {
-            auto& easeParam = parameters_.scaleEaseParm;
+        if (parameters_.scaleEaseParam.isScaleEase) {
+            auto& easeParam = parameters_.scaleEaseParam;
 
             ImGui::DragFloat("Max Time", &easeParam.maxTime, 0.01f, 0.0f, 10.0f);
             ImGuiEasingTypeSelector("Easing Type", easeParam.easeTypeInt);

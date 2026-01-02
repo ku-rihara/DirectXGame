@@ -93,8 +93,8 @@ private:
     // Model関連
     FileSelector modelFileSelector_;
 
-    PlayState playState_             = PlayState::STOPPED;
-   
+    PlayState playState_ = PlayState::STOPPED;
+
 public:
     //*----------------------------- Getters -----------------------------*//
 
@@ -103,12 +103,11 @@ public:
     PlayState GetPlayState() const { return playState_; }
     bool IsPlaying() const { return playState_ == PlayState::PLAYING; }
     ParticleSectionParameter* GetSectionParam() { return sectionParam_.get(); }
-  
+
     //*----------------------------- Setters -----------------------------*//
 
     void SetTexture(uint32_t textureHandle);
     void SetParentBasePos(WorldTransform* parent) { emitBoxTransform_.parent_ = parent; }
-
 };
 
 }; // KetaEngine

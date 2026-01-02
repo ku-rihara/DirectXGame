@@ -1,4 +1,5 @@
 #include "ParticlePlayer.h"
+#include"Frame/Frame.h"
 
 using namespace KetaEngine;
 
@@ -21,11 +22,12 @@ void ParticlePlayer::Update(float speedRate) {
 }
 
 void ParticlePlayer::UpdatePlayState() {
-    // このフレームでPlayが呼ばれなかった場合、Pauseする
+    // このフレームでPlayが呼ばれなかった場合の処理
     if (isInitialized_ && !wasPlayCalledThisFrame_) {
         auto* particleData = GetParticleData();
         if (particleData && particleData->IsPlaying()) {
-            particleData->Pause();
+            // 各セクションの再生継続時間をチェック
+            particleData->CheckAndPauseSectionsAfterDuration(Frame::DeltaTimeRate()); 
         }
     }
 }

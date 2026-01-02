@@ -90,8 +90,38 @@ void ParticleData::Play() {
         section->StartWaiting();
     }
 
+    // afterPlayTime_をリセット
+    afterPlayTime_ = 0.0f;
+
     // activeKeyFrameIndexをリセット
     activeKeyFrameIndex_ = 0;
+}
+
+void ParticleData::CheckAndPauseSectionsAfterDuration(float deltaTime) {
+    // 再生中でない場合は何もしない
+    if (playState_ != PlayState::PLAYING) {
+        return;
+    }
+
+    afterPlayTime_ += deltaTime;
+
+    bool anyPlaying = false;
+
+    for (auto& section : sectionElements_) {
+        if (section->IsPlaying()) {
+            // 設定された再生継続時間を超えたらPause
+            if (afterPlayTime_ >= section->GetSectionParam()->GetTimingParam().afterDuration) {
+                section->Pause();
+            } else {
+                anyPlaying = true;
+            }
+        }
+    }
+
+    // 全てのセクションがPauseされたらデータもPause
+    if (!anyPlaying) {
+        playState_ = PlayState::STOPPED;
+    }
 }
 
 void ParticleData::RegisterParams() {
@@ -101,7 +131,7 @@ void ParticleData::RegisterParams() {
 void ParticleData::GetParams() {
     playSpeed_ = globalParameter_->GetValue<float>(groupName_, "playSpeed");
 }
- 
+
 void ParticleData::InitParams() {
     playState_              = PlayState::STOPPED;
     activeKeyFrameIndex_    = 0;

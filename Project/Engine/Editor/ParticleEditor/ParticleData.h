@@ -8,8 +8,7 @@
 namespace KetaEngine {
 
 class ParticleData : public BaseSequenceEffectData<ParticleSection> {
-   
-   
+
 public:
     ParticleData()           = default;
     ~ParticleData() override = default;
@@ -26,6 +25,9 @@ public:
     void AdjustParam();
     void LoadSequenceElements() override;
     void SaveSequenceElements() override;
+
+    //  再生継続時間チェック機能
+    void CheckAndPauseSectionsAfterDuration(float deltaTime);
 
 protected:
     void RegisterParams() override;
@@ -44,6 +46,7 @@ private:
 private:
     const std::string baseFolderPath_ = "Particle/";
     float playSpeed_;
+    float afterPlayTime_;
 
 public:
     const std::string& GetCategoryName() const { return categoryName_; }
@@ -55,8 +58,6 @@ public:
     const std::vector<std::unique_ptr<ParticleSection>>& GetSectionElements() const {
         return sectionElements_;
     }
-
-  
 };
 
 }

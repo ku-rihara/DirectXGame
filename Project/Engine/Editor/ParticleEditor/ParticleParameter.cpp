@@ -18,11 +18,11 @@ void ParticleParameter::ParameterInit() {
     parameters_.colorDist.max        = {0.0f, 0.0f, 0.0f, 0.0f};
     parameters_.isScalerScale        = true;
     parameters_.isFloatVelocity      = true;
-    parameters_.isRotateforDirection = false;
+    parameters_.isRotateForDirection = false;
     particleCount_                   = 0;
     intervalTime_                    = 1.0f;
     groupParamaters_.isBillBord      = true;
-    parameters_.uvParm.numOfFrame    = 1;
+    parameters_.uvParam.numOfFrame    = 1;
     selectedTexturePath_             = "resources/Texture/uvChecker.png";
 }
 
@@ -64,15 +64,15 @@ void ParticleParameter::RegisterParams() {
     globalParameter_->Regist(particleName_, "RotateSpeed Min", &parameters_.rotateSpeedDist.min);
 
     // UV
-    globalParameter_->Regist(particleName_, "UV Pos", &parameters_.uvParm.pos);
-    globalParameter_->Regist(particleName_, "UV Rotate", &parameters_.uvParm.rotate);
-    globalParameter_->Regist(particleName_, "UV NumOfFrame", &parameters_.uvParm.numOfFrame);
-    globalParameter_->Regist(particleName_, "UV ScroolSpeed", &parameters_.uvParm.frameScrollSpeed);
-    globalParameter_->Regist(particleName_, "UV IsRoop", &parameters_.uvParm.isLoop);
-    globalParameter_->Regist(particleName_, "UV isScroolEachPixel", &parameters_.uvParm.isScrollEachPixel);
-    globalParameter_->Regist(particleName_, "UV isScrool", &parameters_.uvParm.isScroll);
-    globalParameter_->Regist(particleName_, "UV isFlipX", &parameters_.uvParm.isFlipX);
-    globalParameter_->Regist(particleName_, "UV isFlipY", &parameters_.uvParm.isFlipY);
+    globalParameter_->Regist(particleName_, "UV Pos", &parameters_.uvParam.pos);
+    globalParameter_->Regist(particleName_, "UV Rotate", &parameters_.uvParam.rotate);
+    globalParameter_->Regist(particleName_, "UV NumOfFrame", &parameters_.uvParam.numOfFrame);
+    globalParameter_->Regist(particleName_, "UV ScroolSpeed", &parameters_.uvParam.frameScrollSpeed);
+    globalParameter_->Regist(particleName_, "UV IsRoop", &parameters_.uvParam.isLoop);
+    globalParameter_->Regist(particleName_, "UV isScroolEachPixel", &parameters_.uvParam.isScrollEachPixel);
+    globalParameter_->Regist(particleName_, "UV isScrool", &parameters_.uvParam.isScroll);
+    globalParameter_->Regist(particleName_, "UV isFlipX", &parameters_.uvParam.isFlipX);
+    globalParameter_->Regist(particleName_, "UV isFlipY", &parameters_.uvParam.isFlipY);
 
     // Velocity
     globalParameter_->Regist(particleName_, "Speed Max", &parameters_.speedDist.max);
@@ -97,7 +97,7 @@ void ParticleParameter::RegisterParams() {
 
     // frag
     globalParameter_->Regist(particleName_, "isScalerScale", &parameters_.isScalerScale);
-    globalParameter_->Regist(particleName_, "isRotateforDirection", &parameters_.isRotateforDirection);
+    globalParameter_->Regist(particleName_, "isRotateforDirection", &parameters_.isRotateForDirection);
     globalParameter_->Regist(particleName_, "isBillBord", &groupParamaters_.isBillBord);
     globalParameter_->Regist(particleName_, "AdaptRotateIsX", &groupParamaters_.adaptRotate_.isX);
     globalParameter_->Regist(particleName_, "AdaptRotateIsY", &groupParamaters_.adaptRotate_.isY);
@@ -110,16 +110,16 @@ void ParticleParameter::RegisterParams() {
     globalParameter_->Regist(particleName_, "moveSpeed", &moveSpeed_);
 
     // easeParm
-    globalParameter_->Regist(particleName_, "scaleEaseParm.isScaleEase", &parameters_.scaleEaseParm.isScaleEase);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.maxTime", &parameters_.scaleEaseParm.maxTime);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.easeTypeInt", &parameters_.scaleEaseParm.easeTypeInt);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.startValueF", &parameters_.scaleEaseParm.startValueF);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueF.max", &parameters_.scaleEaseParm.endValueF.max);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueF.min", &parameters_.scaleEaseParm.endValueF.min);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.startValueV3", &parameters_.scaleEaseParm.startValueV3);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueV3.max", &parameters_.scaleEaseParm.endValueV3.max);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueV3.min", &parameters_.scaleEaseParm.endValueV3.min);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.backRatio", &parameters_.scaleEaseParm.backRatio);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.isScaleEase", &parameters_.scaleEaseParam.isScaleEase);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.maxTime", &parameters_.scaleEaseParam.maxTime);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.easeTypeInt", &parameters_.scaleEaseParam.easeTypeInt);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.startValueF", &parameters_.scaleEaseParam.startValueF);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueF.max", &parameters_.scaleEaseParam.endValueF.max);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueF.min", &parameters_.scaleEaseParam.endValueF.min);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.startValueV3", &parameters_.scaleEaseParam.startValueV3);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueV3.max", &parameters_.scaleEaseParam.endValueV3.max);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueV3.min", &parameters_.scaleEaseParam.endValueV3.min);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.backRatio", &parameters_.scaleEaseParam.backRatio);
 
     // mode Setting
     globalParameter_->Regist(particleName_, "preBillBordType_", &billBordType_);
@@ -154,15 +154,15 @@ void ParticleParameter::GetParams() {
     parameters_.rotateSpeedDist.min = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Min");
 
     // UV
-    parameters_.uvParm.pos               = globalParameter_->GetValue<Vector2>(particleName_, "UV Pos");
-    parameters_.uvParm.rotate            = globalParameter_->GetValue<Vector3>(particleName_, "UV Rotate");
-    parameters_.uvParm.numOfFrame        = globalParameter_->GetValue<int32_t>(particleName_, "UV NumOfFrame");
-    parameters_.uvParm.frameScrollSpeed  = globalParameter_->GetValue<float>(particleName_, "UV ScroolSpeed");
-    parameters_.uvParm.isLoop            = globalParameter_->GetValue<bool>(particleName_, "UV IsRoop");
-    parameters_.uvParm.isScrollEachPixel = globalParameter_->GetValue<bool>(particleName_, "UV isScroolEachPixel");
-    parameters_.uvParm.isScroll          = globalParameter_->GetValue<bool>(particleName_, "UV isScrool");
-    parameters_.uvParm.isFlipX           = globalParameter_->GetValue<bool>(particleName_, "UV isFlipX");
-    parameters_.uvParm.isFlipY           = globalParameter_->GetValue<bool>(particleName_, "UV isFlipY");
+    parameters_.uvParam.pos               = globalParameter_->GetValue<Vector2>(particleName_, "UV Pos");
+    parameters_.uvParam.rotate            = globalParameter_->GetValue<Vector3>(particleName_, "UV Rotate");
+    parameters_.uvParam.numOfFrame        = globalParameter_->GetValue<int32_t>(particleName_, "UV NumOfFrame");
+    parameters_.uvParam.frameScrollSpeed  = globalParameter_->GetValue<float>(particleName_, "UV ScroolSpeed");
+    parameters_.uvParam.isLoop            = globalParameter_->GetValue<bool>(particleName_, "UV IsRoop");
+    parameters_.uvParam.isScrollEachPixel = globalParameter_->GetValue<bool>(particleName_, "UV isScroolEachPixel");
+    parameters_.uvParam.isScroll          = globalParameter_->GetValue<bool>(particleName_, "UV isScrool");
+    parameters_.uvParam.isFlipX           = globalParameter_->GetValue<bool>(particleName_, "UV isFlipX");
+    parameters_.uvParam.isFlipY           = globalParameter_->GetValue<bool>(particleName_, "UV isFlipY");
 
     // Velocity
     parameters_.speedDist.max      = globalParameter_->GetValue<float>(particleName_, "Speed Max");
@@ -187,7 +187,7 @@ void ParticleParameter::GetParams() {
 
     // Flag
     parameters_.isScalerScale         = globalParameter_->GetValue<bool>(particleName_, "isScalerScale");
-    parameters_.isRotateforDirection  = globalParameter_->GetValue<bool>(particleName_, "isRotateforDirection");
+    parameters_.isRotateForDirection  = globalParameter_->GetValue<bool>(particleName_, "isRotateforDirection");
     groupParamaters_.isBillBord       = globalParameter_->GetValue<bool>(particleName_, "isBillBord");
     groupParamaters_.adaptRotate_.isX = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsX");
     groupParamaters_.adaptRotate_.isY = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsY");
@@ -200,16 +200,16 @@ void ParticleParameter::GetParams() {
     moveSpeed_     = globalParameter_->GetValue<float>(particleName_, "moveSpeed");
 
     // EaseParam
-    parameters_.scaleEaseParm.isScaleEase    = globalParameter_->GetValue<bool>(particleName_, "scaleEaseParm.isScaleEase");
-    parameters_.scaleEaseParm.maxTime        = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.maxTime");
-    parameters_.scaleEaseParm.easeTypeInt    = globalParameter_->GetValue<int>(particleName_, "scaleEaseParm.easeTypeInt");
-    parameters_.scaleEaseParm.startValueF    = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.startValueF");
-    parameters_.scaleEaseParm.endValueF.max  = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.endValueF.max");
-    parameters_.scaleEaseParm.endValueF.min  = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.endValueF.min");
-    parameters_.scaleEaseParm.startValueV3   = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.startValueV3");
-    parameters_.scaleEaseParm.endValueV3.max = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.endValueV3.max");
-    parameters_.scaleEaseParm.endValueV3.min = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.endValueV3.min");
-    parameters_.scaleEaseParm.backRatio      = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.backRatio");
+    parameters_.scaleEaseParam.isScaleEase    = globalParameter_->GetValue<bool>(particleName_, "scaleEaseParm.isScaleEase");
+    parameters_.scaleEaseParam.maxTime        = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.maxTime");
+    parameters_.scaleEaseParam.easeTypeInt    = globalParameter_->GetValue<int>(particleName_, "scaleEaseParm.easeTypeInt");
+    parameters_.scaleEaseParam.startValueF    = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.startValueF");
+    parameters_.scaleEaseParam.endValueF.max  = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.endValueF.max");
+    parameters_.scaleEaseParam.endValueF.min  = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.endValueF.min");
+    parameters_.scaleEaseParam.startValueV3   = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.startValueV3");
+    parameters_.scaleEaseParam.endValueV3.max = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.endValueV3.max");
+    parameters_.scaleEaseParam.endValueV3.min = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.endValueV3.min");
+    parameters_.scaleEaseParam.backRatio      = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.backRatio");
 
     // Mode
     billBordType_ = globalParameter_->GetValue<int>(particleName_, "preBillBordType_");
@@ -301,19 +301,19 @@ void ParticleParameter::EditorUpdate() {
     // UV Scroll
     if (ImGui::CollapsingHeader("UV Parameters")) {
         ImGui::SeparatorText("UV Position:");
-        ImGui::DragFloat2("UV_Pos", &parameters_.uvParm.pos.x, 0.01f);
+        ImGui::DragFloat2("UV_Pos", &parameters_.uvParam.pos.x, 0.01f);
 
         ImGui::SeparatorText("UV Rotation:");
-        ImGui::DragFloat3("UV_Rotate", &parameters_.uvParm.rotate.x, 0.1f);
+        ImGui::DragFloat3("UV_Rotate", &parameters_.uvParam.rotate.x, 0.1f);
 
         ImGui::SeparatorText("UV Animation:");
-        ImGui::InputInt("Num of Frames", &parameters_.uvParm.numOfFrame);
-        ImGui::DragFloat("Scrool Speed", &parameters_.uvParm.frameScrollSpeed, 0.01f);
-        ImGui::Checkbox("Is Roop", &parameters_.uvParm.isLoop);
-        ImGui::Checkbox("Is ScroolEachPixel", &parameters_.uvParm.isScrollEachPixel);
-        ImGui::Checkbox("Is Scrool", &parameters_.uvParm.isScroll);
-        ImGui::Checkbox("Is IsFlipX", &parameters_.uvParm.isFlipX);
-        ImGui::Checkbox("Is IsFlipY", &parameters_.uvParm.isFlipY);
+        ImGui::InputInt("Num of Frames", &parameters_.uvParam.numOfFrame);
+        ImGui::DragFloat("Scrool Speed", &parameters_.uvParam.frameScrollSpeed, 0.01f);
+        ImGui::Checkbox("Is Roop", &parameters_.uvParam.isLoop);
+        ImGui::Checkbox("Is ScroolEachPixel", &parameters_.uvParam.isScrollEachPixel);
+        ImGui::Checkbox("Is Scrool", &parameters_.uvParam.isScroll);
+        ImGui::Checkbox("Is IsFlipX", &parameters_.uvParam.isFlipX);
+        ImGui::Checkbox("Is IsFlipY", &parameters_.uvParam.isFlipY);
     }
 
     // その他のパラメータ
@@ -359,7 +359,7 @@ void ParticleParameter::EditorUpdate() {
     if (ImGui::CollapsingHeader("Frag")) {
 
         // IsRotateforDirection のチェックボックス
-        ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateforDirection);
+        ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateForDirection);
         ImGui::Checkbox("IsShot", &isShot_);
         ImGui::Checkbox("isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
     }
@@ -383,7 +383,7 @@ void ParticleParameter::ScaleParmEditor() {
         ImGui::SeparatorText("Scale Mode");
 
         ImGui::Checkbox("IsScalerScale", &parameters_.isScalerScale);
-        ImGui::Checkbox("IsEasingMode", &parameters_.scaleEaseParm.isScaleEase);
+        ImGui::Checkbox("IsEasingMode", &parameters_.scaleEaseParam.isScaleEase);
 
         if (parameters_.isScalerScale) {
             ImGui::SeparatorText("Scaler Range");
@@ -396,25 +396,25 @@ void ParticleParameter::ScaleParmEditor() {
         }
 
         // EaseParam
-        if (parameters_.scaleEaseParm.isScaleEase) {
+        if (parameters_.scaleEaseParam.isScaleEase) {
 
             if (parameters_.isScalerScale) {
                 ImGui::SeparatorText("EaseRange Float");
-                ImGui::DragFloat("EaseValue Min", &parameters_.scaleEaseParm.endValueF.min, 0.1f);
-                ImGui::DragFloat("EaseValue Max", &parameters_.scaleEaseParm.endValueF.max, 0.1f);
+                ImGui::DragFloat("EaseValue Min", &parameters_.scaleEaseParam.endValueF.min, 0.1f);
+                ImGui::DragFloat("EaseValue Max", &parameters_.scaleEaseParam.endValueF.max, 0.1f);
             } else {
                 ImGui::SeparatorText("EaseRange V3");
-                ImGui::DragFloat3("EaseValueV3 Max", reinterpret_cast<float*>(&parameters_.scaleEaseParm.endValueV3.max), 0.1f);
-                ImGui::DragFloat3("EaseValueV3 Min", reinterpret_cast<float*>(&parameters_.scaleEaseParm.endValueV3.min), 0.1f);
+                ImGui::DragFloat3("EaseValueV3 Max", reinterpret_cast<float*>(&parameters_.scaleEaseParam.endValueV3.max), 0.1f);
+                ImGui::DragFloat3("EaseValueV3 Min", reinterpret_cast<float*>(&parameters_.scaleEaseParam.endValueV3.min), 0.1f);
             }
             // イージングパラメータ
             ImGui::SeparatorText("Ease Paramater");
-            ImGui::DragFloat("maxTime", &parameters_.scaleEaseParm.maxTime, 0.01f);
+            ImGui::DragFloat("maxTime", &parameters_.scaleEaseParam.maxTime, 0.01f);
             ImGui::SeparatorText("EaseType");
             // イージング種類
             const char* easeItems[] = {"InSine", "OutSine", "OutBack", "OutQuint"};
 
-            if (ImGui::Combo("Easing Type", &parameters_.scaleEaseParm.easeTypeInt, easeItems, IM_ARRAYSIZE(easeItems))) {
+            if (ImGui::Combo("Easing Type", &parameters_.scaleEaseParam.easeTypeInt, easeItems, IM_ARRAYSIZE(easeItems))) {
 
              /*   parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);*/
             }
