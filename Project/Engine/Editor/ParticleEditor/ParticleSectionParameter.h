@@ -4,6 +4,7 @@
 #include "MinMax.h"
 #include "Parameter/ParticleCommonParameters.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
+#include "Primitive/IPrimitive.h"
 #include "utility/FileSelector/FileSelector.h"
 #include "utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector2.h"
@@ -12,7 +13,6 @@
 #include <cstdint>
 #include <functional>
 #include <string>
-
 namespace KetaEngine {
 
 class Object3DAnimation;
@@ -33,6 +33,7 @@ public:
     // タイミングパラメータ
     struct TimingParam {
         float startTime = 0.0f;
+        float afterDuration = 0.0f;
     };
 
 public:
@@ -92,6 +93,7 @@ private:
 
     // テクスチャ変更時のコールバック
     std::function<void()> onTextureChanged_;
+    std::function<void(PrimitiveType)> onPrimitiveChanged_;
 
 public:
     // Getter
@@ -123,6 +125,9 @@ public:
     void SetFollowingPos(const Vector3* pos);
     void SetTargetPosition(const Vector3& targetPos);
     void SetTextureChangedCallback(std::function<void()> callback);
+    void SetPrimitiveChangedCallback(std::function<void(PrimitiveType)> callback) {
+        onPrimitiveChanged_ = callback;
+    }
 };
 
 } // namespace KetaEngine

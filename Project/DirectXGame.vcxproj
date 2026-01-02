@@ -160,6 +160,7 @@
     <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
+    <ClCompile Include="Engine\Primitive\PrimitiveSphere.cpp" />
     <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp" />
     <ClCompile Include="Engine\Scene\Manager\SceneManager.cpp" />
     <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp" />
@@ -435,6 +436,7 @@
     <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
     <ClInclude Include="Engine\Primitive\PrimitivePlane.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h" />
+    <ClInclude Include="Engine\Primitive\PrimitiveSphere.h" />
     <ClInclude Include="Engine\Scene\Factory\AbstractSceneFactory.h" />
     <ClInclude Include="Engine\Scene\Factory\SceneFactory.h" />
     <ClInclude Include="Engine\Scene\Manager\SceneManager.h" />

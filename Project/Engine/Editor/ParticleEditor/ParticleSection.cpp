@@ -204,43 +204,6 @@ void ParticleSection::AdjustParam() {
 
     ImGui::Separator();
 
-    // Primitive/Model設定
-    if (ImGui::CollapsingHeader("Primitive/Model Type")) {
-        bool useModel = sectionParam_->IsUseModel();
-        ImGui::Checkbox("Use Model", &useModel);
-
-        if (useModel) {
-            modelFileSelector_.SelectFile(
-                "Model Folder",
-                modelBasePath_,
-                const_cast<std::string&>(sectionParam_->GetModelFilePath()),
-                "",
-                false);
-
-            if (!sectionParam_->GetModelFilePath().empty()) {
-                std::string fullPath = sectionParam_->GetModelFilePath() + "/" + sectionParam_->GetModelFilePath() + ".obj";
-                ImGui::Text("Full Path: %s", fullPath.c_str());
-            }
-
-            if (ImGui::Button("Apply Model") && !sectionParam_->GetModelFilePath().empty()) {
-                std::string fullPath = sectionParam_->GetModelFilePath() + "/" + sectionParam_->GetModelFilePath() + ".obj";
-                CreateModelParticle(fullPath, sectionParam_->GetMaxParticleNum());
-                ApplyTextureToManager();
-            }
-        } else {
-            const char* primitiveItems[] = {"Plane", "Ring", "Cylinder"};
-            int primitiveType            = sectionParam_->GetPrimitiveTypeInt();
-
-            ImGui::Combo("Primitive Type", &primitiveType, primitiveItems, IM_ARRAYSIZE(primitiveItems));
-
-            ImGui::Text("Note: Primitive changes apply on Init or manual Apply");
-
-            if (ImGui::Button("Apply Primitive")) {
-                ChangePrimitive(static_cast<PrimitiveType>(primitiveType));
-            }
-        }
-    }
-
     // 全パラメータ編集
     sectionParam_->AdjustParam();
 

@@ -14,7 +14,7 @@
 /// <summary>
 ///  タイトルシーン
 /// </summary>
-class TitleScene :public BaseScene {
+class TitleScene : public BaseScene {
 private:
 	
 
@@ -32,17 +32,16 @@ private:
 	bool isFinished_;
 	float alpha_;
 public:
-	
-	TitleScene();
-	~TitleScene()override;
+    TitleScene();
+    ~TitleScene() override;
 
-	///========================================================
-	/// private method
-	///========================================================
+    ///========================================================
+    /// private method
+    ///========================================================
 
-	/// 初期化、更新、描画
-	void Init()override;
-	void Update()override;
+    /// 初期化、更新、描画
+    void Init() override;
+    void Update() override;
     void SkyBoxDraw() override;
 
 

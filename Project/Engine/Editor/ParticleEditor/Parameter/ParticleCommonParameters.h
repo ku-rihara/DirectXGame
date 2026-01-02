@@ -75,9 +75,9 @@ struct Parameters {
     float gravity;
     bool isFloatVelocity;
     bool isScalerScale;
-    bool isRotateforDirection;
-    ScaleEaseParam scaleEaseParm;
-    UVParam uvParm;
+    bool isRotateForDirection;
+    ScaleEaseParam scaleEaseParam;
+    UVParam uvParam;
     JointParent jointParent;
 };
 

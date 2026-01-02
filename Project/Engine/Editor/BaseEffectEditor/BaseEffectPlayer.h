@@ -19,6 +19,8 @@ public:
 
     virtual void Init()                         = 0;
     virtual void Update(float speedRate = 1.0f) = 0;
+
+    // 再生、ストップ、リセット
     virtual void Play([[maybe_unused]] const std::string& effectName);
     virtual void Play([[maybe_unused]] const std::string& categoryName, [[maybe_unused]] const std::string& effectName);
     virtual void Stop();

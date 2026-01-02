@@ -14,6 +14,8 @@ using namespace KetaEngine;
 #include "random.h"
 // Primitive
 #include "Primitive/PrimitiveCylinder.h"
+#include"Primitive/PrimitiveSphere.h"
+#include"Primitive/PrimitiveBox.h"
 #include "Primitive/PrimitivePlane.h"
 #include "Primitive/PrimitiveRing.h"
 // editor
@@ -247,6 +249,12 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
     case PrimitiveType::Plane:
         particleGroups_[name].primitive_ = std::make_unique<PrimitivePlane>();
         break;
+    case PrimitiveType::Sphere:
+        particleGroups_[name].primitive_ = std::make_unique<PrimitiveSphere>();
+        break;
+    case PrimitiveType::Box:
+        particleGroups_[name].primitive_ = std::make_unique<PrimitiveBox>();
+        break;
     case PrimitiveType::Ring:
         particleGroups_[name].primitive_ = std::make_unique<PrimitiveRing>();
         break;
@@ -382,7 +390,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
     ///------------------------------------------------------------------------
     /// 回転設定
     ///------------------------------------------------------------------------
-    if (parameters.isRotateforDirection) {
+    if (parameters.isRotateForDirection) {
         particle.worldTransform_->rotation_ = DirectionToEulerAngles(particle.direction_, *viewProjection_);
     } else {
         Vector3 rotate = {
@@ -410,7 +418,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
         particle.worldTransform_->scale_ = {scale, scale, scale};
         particle.scaleInfo.tempScaleV3   = particle.worldTransform_->scale_;
 
-        float endScale                  = Random::Range(parameters.scaleEaseParm.endValueF.min, parameters.scaleEaseParm.endValueF.max);
+        float endScale                  = Random::Range(parameters.scaleEaseParam.endValueF.min, parameters.scaleEaseParam.endValueF.max);
         particle.scaleInfo.easeEndScale = {endScale, endScale, endScale};
     } else {
         // Vector3の場合
@@ -422,29 +430,29 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
         particle.scaleInfo.tempScaleV3   = ScaleV3;
 
         Vector3 endScaleV3 = {
-            Random::Range(parameters.scaleEaseParm.endValueV3.min.x, parameters.scaleEaseParm.endValueV3.max.x),
-            Random::Range(parameters.scaleEaseParm.endValueV3.min.y, parameters.scaleEaseParm.endValueV3.max.y),
-            Random::Range(parameters.scaleEaseParm.endValueV3.min.z, parameters.scaleEaseParm.endValueV3.max.z)};
+            Random::Range(parameters.scaleEaseParam.endValueV3.min.x, parameters.scaleEaseParam.endValueV3.max.x),
+            Random::Range(parameters.scaleEaseParam.endValueV3.min.y, parameters.scaleEaseParam.endValueV3.max.y),
+            Random::Range(parameters.scaleEaseParam.endValueV3.min.z, parameters.scaleEaseParam.endValueV3.max.z)};
         particle.scaleInfo.easeEndScale = endScaleV3;
     }
 
     //  Easingパラメータを設定
-    particle.scaleInfo.easeParam.isScaleEase = parameters.scaleEaseParm.isScaleEase;
-    particle.scaleInfo.easeParam.maxTime     = parameters.scaleEaseParm.maxTime;
+    particle.scaleInfo.easeParam.isScaleEase = parameters.scaleEaseParam.isScaleEase;
+    particle.scaleInfo.easeParam.maxTime     = parameters.scaleEaseParam.maxTime;
 
 
     //  Easingクラスのインスタンスを作成して設定
-    if (parameters.scaleEaseParm.isScaleEase) {
+    if (parameters.scaleEaseParam.isScaleEase) {
         particle.scaleEasing   = std::make_unique<Easing<Vector3>>();
         particle.isAdaptEasing = true;
 
         // Easingパラメータを構築
         EasingParameter<Vector3> easingParam;
-        easingParam.type       = static_cast<EasingType>(parameters.scaleEaseParm.easeTypeInt);
+        easingParam.type       = static_cast<EasingType>(parameters.scaleEaseParam.easeTypeInt);
         easingParam.startValue = particle.scaleInfo.tempScaleV3;
         easingParam.endValue   = particle.scaleInfo.easeEndScale;
-        easingParam.maxTime    = parameters.scaleEaseParm.maxTime;
-        easingParam.backRatio  = parameters.scaleEaseParm.backRatio;
+        easingParam.maxTime    = parameters.scaleEaseParam.maxTime;
+        easingParam.backRatio  = parameters.scaleEaseParam.backRatio;
         easingParam.finishType = EasingFinishValueType::End;
 
         // Easingに設定
@@ -468,22 +476,22 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
     /// UVTransform設定
     ///------------------------------------------------------------------------
     float frameWidth = 1.0f;
-    if (parameters.uvParm.numOfFrame != 0) {
-        frameWidth = 1.0f / float(parameters.uvParm.numOfFrame);
+    if (parameters.uvParam.numOfFrame != 0) {
+        frameWidth = 1.0f / float(parameters.uvParam.numOfFrame);
     }
     const float stopPosition = 1.0f - frameWidth;
 
-    particle.uvInfo_.pos               = Vector3(parameters.uvParm.pos.x, parameters.uvParm.pos.y, 1.0f);
-    particle.uvInfo_.rotate            = parameters.uvParm.rotate;
+    particle.uvInfo_.pos               = Vector3(parameters.uvParam.pos.x, parameters.uvParam.pos.y, 1.0f);
+    particle.uvInfo_.rotate            = parameters.uvParam.rotate;
     particle.uvInfo_.scale             = Vector3(frameWidth, 1.0f, 1.0f);
     particle.uvInfo_.frameDistance_    = frameWidth;
-    particle.uvInfo_.frameScrollSpeed  = parameters.uvParm.frameScrollSpeed;
+    particle.uvInfo_.frameScrollSpeed  = parameters.uvParam.frameScrollSpeed;
     particle.uvInfo_.uvStopPos_        = stopPosition;
-    particle.uvInfo_.isScrollEachPixel = parameters.uvParm.isScrollEachPixel;
-    particle.uvInfo_.isLoop            = parameters.uvParm.isLoop;
-    particle.uvInfo_.isScroll          = parameters.uvParm.isScroll;
-    particle.uvInfo_.isFlipX           = parameters.uvParm.isFlipX;
-    particle.uvInfo_.isFlipY           = parameters.uvParm.isFlipY;
+    particle.uvInfo_.isScrollEachPixel = parameters.uvParam.isScrollEachPixel;
+    particle.uvInfo_.isLoop            = parameters.uvParam.isLoop;
+    particle.uvInfo_.isScroll          = parameters.uvParam.isScroll;
+    particle.uvInfo_.isFlipX           = parameters.uvParam.isFlipX;
+    particle.uvInfo_.isFlipY           = parameters.uvParam.isFlipY;
     particle.uvInfo_.currentScrollTime = 0.0f;
 
     ///------------------------------------------------------------------------

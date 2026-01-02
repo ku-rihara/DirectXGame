@@ -1318,6 +1318,9 @@
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.cpp">
       <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Primitive\PrimitiveSphere.cpp">
+      <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -2171,6 +2174,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\ParticleEditor\Parameter\ParticleCommonParameters.h">
       <Filter>MyEngine\.h\Editor\ParticleEditor\ParticleCommonParam</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveSphere.h">
+      <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
