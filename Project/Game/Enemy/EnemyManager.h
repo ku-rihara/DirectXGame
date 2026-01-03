@@ -43,7 +43,6 @@ public:
     void HpBarUpdate(const KetaEngine::ViewProjection& viewProjection);
 
     // Particle Effect
-    void DamageEffectShot(const Vector3& pos);
     void ThrustEmit(const Vector3& pos);
     void DeathEmit(const Vector3& pos);
     void SpawnEmitByNormalEnemy(const Vector3& pos);
@@ -100,7 +99,6 @@ private:
 private: // Particle
     std::array<ParticleEffect, 4> deathParticle_;
     std::array<ParticleEffect, 1> debriParticle_;
-    std::array<ParticleEffect, 4> damageEffect;
     std::array<ParticleEffect, 2> spawnEffectNormal_;
     std::array<ParticleEffect, 2> spawnEffectStrong_;
     std::unique_ptr<KetaEngine::ParticleEmitter> fallCrack_;

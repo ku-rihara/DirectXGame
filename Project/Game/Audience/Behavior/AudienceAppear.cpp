@@ -64,9 +64,11 @@ void AudienceAppear::End() {
 }
 
 void AudienceAppear::Debug() {
+#ifdef _DEBUG
     ImGui::Begin("test");
     ImGui::Text("test:%f,%f,%f", pOwner_->GetObjAnimation()->transform_.scale_.x,
         pOwner_->GetObjAnimation()->transform_.scale_.y,
         pOwner_->GetObjAnimation()->transform_.scale_.z);
     ImGui::End();
+#endif // _DEBUG
 }

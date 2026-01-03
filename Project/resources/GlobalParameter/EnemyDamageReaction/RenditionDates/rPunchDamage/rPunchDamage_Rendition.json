@@ -2,7 +2,7 @@
     "rPunchDamage_Rendition": {
         "ObjAnim_FileName": "nockBackReaction",
         "ObjAnim_StartTiming": 0.0,
-        "Particle_FileName": "",
+        "Particle_FileName": "NormalDamageEffect",
         "Particle_StartTiming": 0.0
     }
 }

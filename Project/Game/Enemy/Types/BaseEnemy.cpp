@@ -260,7 +260,7 @@ void BaseEnemy::DamageCollingUpdate(float deltaTime) {
 }
 
 void BaseEnemy::DamageRenditionInit() {
-    pEnemyManager_->DamageEffectShot(GetWorldPosition());
+  
 }
 
 void BaseEnemy::ThrustRenditionInit() {
