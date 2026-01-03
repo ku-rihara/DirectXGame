@@ -39,9 +39,9 @@ void TitleScene::Update() {
     BaseScene::Update();
 
   
-    if (input_->GetInstance()->PushKey(KeyboardKey::P)) {
+    if (input_->GetInstance()->TriggerKey(KeyboardKey::P)) {
       /*  test.Play("Player", "test1");*/
-        particleTestPlayer_.Play("test", "testD");
+        particleTestPlayer_.Play("Enemy", "NormalDamageEffect");
     }
     particleTestPlayer_.Update();
 
