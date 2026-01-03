@@ -1,5 +1,5 @@
 #include "ParticlePlayer.h"
-#include"Frame/Frame.h"
+#include "Frame/Frame.h"
 
 using namespace KetaEngine;
 
@@ -27,7 +27,7 @@ void ParticlePlayer::UpdatePlayState() {
         auto* particleData = GetParticleData();
         if (particleData && particleData->IsPlaying()) {
             // 各セクションの再生継続時間をチェック
-            particleData->CheckAndPauseSectionsAfterDuration(Frame::DeltaTimeRate()); 
+            particleData->CheckAndPauseSectionsAfterDuration(Frame::DeltaTimeRate());
         }
     }
 }
@@ -51,6 +51,7 @@ void ParticlePlayer::Play(const std::string& categoryName, const std::string& pa
         auto* particleData = dynamic_cast<ParticleData*>(effectData_.get());
         if (particleData) {
             particleData->InitWithCategory(particleName, categoryName);
+            AdaptParentTransform();
             particleData->LoadData();
             particleData->Play();
         }
@@ -76,38 +77,50 @@ ParticleData* ParticlePlayer::GetParticleData() {
     return dynamic_cast<ParticleData*>(effectData_.get());
 }
 
-//*----------------------------- Runtime Settings -----------------------------*//
+void ParticlePlayer::AdaptParentTransform() {
+
+    auto* particleData = GetParticleData();
+    if (!particleData) {
+        return;
+    }
+
+    // ParentTransform
+    for (auto& section : particleData->GetSectionElements()) {
+        if (!parentParam_.transform_) {
+            continue;
+        }
+        section->GetSectionParam()->SetParentTransform(parentParam_.transform_);
+    }
+
+    // ParentJoint
+    for (auto& section : particleData->GetSectionElements()) {
+        if (!parentParam_.modelAnimation) {
+            continue;
+        }
+        section->GetSectionParam()->SetParentJoint(parentParam_.modelAnimation, parentParam_.jointName);
+    }
+
+    // FollowPos
+    for (auto& section : particleData->GetSectionElements()) {
+        if (!parentParam_.followPos_) {
+            continue;
+        }
+        section->GetSectionParam()->SetFollowingPos(parentParam_.followPos_);
+    }
+}
+
+// set---------------------------------------------------------------------------------------------------------------
 
 void ParticlePlayer::SetParentTransform(const WorldTransform* transform) {
-    auto* particleData = GetParticleData();
-    if (!particleData)
-        return;
-
-    for (auto& section : particleData->GetSectionElements()) {
-        section->GetSectionParam()->SetParentTransform(transform);
-    }
+    parentParam_.transform_ = transform;
 }
-
 void ParticlePlayer::SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName) {
-    auto* particleData = GetParticleData();
-    if (!particleData)
-        return;
-
-    for (auto& section : particleData->GetSectionElements()) {
-        section->GetSectionParam()->SetParentJoint(modelAnimation, jointName);
-    }
+    parentParam_.modelAnimation = modelAnimation;
+    parentParam_.jointName      = jointName;
 }
-
 void ParticlePlayer::SetFollowingPos(const Vector3* pos) {
-    auto* particleData = GetParticleData();
-    if (!particleData)
-        return;
-
-    for (auto& section : particleData->GetSectionElements()) {
-        section->GetSectionParam()->SetFollowingPos(pos);
-    }
+    parentParam_.followPos_ = pos;
 }
-
 
 void ParticlePlayer::SetTargetPosition(const Vector3& targetPos) {
     auto* particleData = GetParticleData();
@@ -118,4 +131,3 @@ void ParticlePlayer::SetTargetPosition(const Vector3& targetPos) {
         section->GetSectionParam()->SetTargetPosition(targetPos);
     }
 }
-

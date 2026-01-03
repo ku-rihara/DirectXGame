@@ -1,6 +1,8 @@
 #pragma once
+#include "3d/WorldTransform.h"
 #include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
 #include "ParticleData.h"
+#include "Vector3.h"
 #include <memory>
 #include <string>
 
@@ -12,6 +14,14 @@ class Object3DAnimation;
 /// パーティクルプレイヤー
 /// </summary>
 class ParticlePlayer : public BaseEffectPlayer {
+public:
+    struct ParentParam {
+        const Vector3* followPos_               = nullptr;
+        const WorldTransform* transform_        = nullptr;
+        const Object3DAnimation* modelAnimation = nullptr;
+        std::string jointName;
+    };
+
 public:
     ParticlePlayer()           = default;
     ~ParticlePlayer() override = default;
@@ -32,11 +42,19 @@ public:
 private:
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
 
+    void AdaptParentTransform(const WorldTransform* transform);
+    void AdaptParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName);
+    void AdaptFollowingPos(const Vector3* pos);
+
+    void AdaptParentTransform();
+
 private:
     std::string currentCategoryName_;
     std::string currentParticleName_;
     bool isInitialized_          = false;
     bool wasPlayCalledThisFrame_ = false;
+
+    ParentParam parentParam_;
 
 public:
     ParticleData* GetParticleData();
@@ -45,11 +63,10 @@ public:
 
     //*----------------------------- Runtime Settings  -----------------------------*//
 
+    void SetTargetPosition(const Vector3& targetPos);
     void SetParentTransform(const WorldTransform* transform);
     void SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName);
     void SetFollowingPos(const Vector3* pos);
-    void SetTargetPosition(const Vector3& targetPos);
-
 };
 
 }
