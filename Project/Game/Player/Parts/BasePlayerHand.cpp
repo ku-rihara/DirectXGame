@@ -14,9 +14,12 @@ void BasePlayerHand::Init() {
     AddParamGroup();
     ApplyGlobalParameter();
 
-    emitter_.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive(groupName_, PrimitiveType::Plane, 300));
+    particlePlayer_ = std::make_unique<KetaEngine::ParticlePlayer>();
+    particlePlayer_->Init();
+
+    /*emitter_.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive(groupName_, PrimitiveType::Plane, 300));
     uint32_t handle = KetaEngine::TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
-    emitter_->SetTextureHandle(handle);
+    emitter_->SetTextureHandle(handle);*/
 }
 
 ///=========================================================
@@ -27,11 +30,12 @@ void BasePlayerHand::Update() {
     obj3d_->SetIsShadow(isShadow_);
 
     // エミッター更新
-    emitter_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
+   /* emitter_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
     emitter_->Update();
-    emitter_->EditorUpdate();
+    emitter_->EditorUpdate();*/
+    particlePlayer_->Update();
     if (isEmit_) {
-        emitter_->Emit();
+        particlePlayer_->Play("Player","FireAura");
     }
 
     BaseObject::Update();
@@ -114,9 +118,3 @@ void BasePlayerHand::SetParent(KetaEngine::WorldTransform* parent) {
     obj3d_->transform_.parent_ = parent;
 }
 
-void BasePlayerHand::SetBlendModeSub() {
-    emitter_->SetBlendMode(BlendMode::Subtractive);
-}
-void BasePlayerHand::SetBlendModeAdd() {
-    emitter_->SetBlendMode(BlendMode::Add);
-}

@@ -5,7 +5,7 @@
 #include "Editor/RailEditor/RailManager.h"
 
 #include "BaseObject/BaseObject.h"
-#include "Editor/ParticleEditor/ParticleEmitter.h"
+#include "Editor/ParticleEditor/ParticlePlayer.h"
 
 /// <summary>
 /// プレイヤーの手の基底クラス
@@ -29,9 +29,6 @@ public:
     /// <param name="dissolve">ディゾルブ値</param>
     virtual void DissolveAdapt(float dissolve);
 
-    void SetBlendModeSub(); //< ブレンドモードをSubに設定
-    void SetBlendModeAdd(); //< ブレンドモードをAddに設定
-
     void ParamLoadForImGui();    //< ImGui用パラメータロード
     void AddParamGroup();        //< パラメータグループの追加
     void SetValues();            //< 値の設定
@@ -49,7 +46,7 @@ protected:
     std::string groupName_;
 
     // emitter
-    std::unique_ptr<KetaEngine::ParticleEmitter> emitter_;
+    std::unique_ptr<KetaEngine::ParticlePlayer> particlePlayer_;
     Vector3 direction_;
 
     /// parameter
