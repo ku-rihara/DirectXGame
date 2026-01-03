@@ -7,6 +7,7 @@
 void PlayerEffects::Init(KetaEngine::WorldTransform* transform) {
 
     particlePlayer_.Init();
+    particlePlayer_.SetFollowingPos(&transform->translation_);
 
    /* starSound_ = KetaEngine::Audio::GetInstance()->LoadWave("starEffect.wav");*/
 
@@ -38,6 +39,7 @@ void PlayerEffects::Init(KetaEngine::WorldTransform* transform) {
 ///==========================================================
 void PlayerEffects::Update(const Vector3& position) {
 
+    particlePlayer_.SetTargetPosition(position);
     particlePlayer_.Update();
 
     // ガレキパーティクル
