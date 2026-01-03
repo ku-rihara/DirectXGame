@@ -103,14 +103,12 @@ void ParticleData::CheckAndPauseSectionsAfterDuration(float deltaTime) {
         return;
     }
 
-    afterPlayTime_ += deltaTime;
-
     bool anyPlaying = false;
 
     for (auto& section : sectionElements_) {
         if (section->IsPlaying()) {
             // 設定された再生継続時間を超えたらPause
-            if (afterPlayTime_ >= section->GetSectionParam()->GetTimingParam().afterDuration) {
+            if (afterPlayTime_ > section->GetSectionParam()->GetTimingParam().afterDuration) {
                 section->Pause();
             } else {
                 anyPlaying = true;
@@ -122,6 +120,9 @@ void ParticleData::CheckAndPauseSectionsAfterDuration(float deltaTime) {
     if (!anyPlaying) {
         playState_ = PlayState::STOPPED;
     }
+
+    // 判定してからタイム加算
+    afterPlayTime_ += deltaTime;
 }
 
 void ParticleData::RegisterParams() {
@@ -219,4 +220,4 @@ void ParticleData::SetIsPlayByEditor(bool is) {
     for (auto& section : sectionElements_) {
         section->SetIsPlayByEditor(is);
     }
- }
+}
