@@ -17,7 +17,7 @@ public:
     void Debug() override;
 
     /// <summary>
-    /// プレイヤーの攻撃情報からダメージリアクションを選択して実行
+    /// ダメージリアクションを再生
     /// </summary>
     /// <param name="playerCollisionInfo">プレイヤーの攻撃情報</param>
     void SelectDamageActionBehaviorByAttack(const PlayerCollisionInfo* playerCollisionInfo);
@@ -29,9 +29,18 @@ private:
     /// <param name="attackName">攻撃名</param>
     void ApplyReactionByAttackName(const std::string& attackName);
 
-    // 死亡リアクション変更
+    /// <summary>
+    /// 死亡リアクション変更
+    /// </summary>
+    /// <param name="reactionData">リアクションデータ</param>
     void ChangeDeathReaction(EnemyDamageReactionData* reactionData);
-  
+
+    /// <summary>
+    /// ダメージパーティクルエフェクトを再生
+    /// </summary>
+    /// <param name="reactionData">リアクションデータ</param>
+    void PlayDamageParticleEffect(EnemyDamageReactionData* reactionData);
+
 private:
     const PlayerCollisionInfo* pPlayerCollisionInfo_    = nullptr;
     EnemyDamageReactionController* pReactionController_ = nullptr;

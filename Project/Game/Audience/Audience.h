@@ -3,6 +3,7 @@
 #include "BaseObject/BaseObject.h"
 #include "Behavior/BaseAudienceBehavior.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParticleEditor/ParticlePlayer.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include <cstdint>
@@ -71,6 +72,9 @@ private:
     // animationObj
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
     float positionX_;
+
+    // Particle
+    std::unique_ptr<KetaEngine::ParticlePlayer> particlePlayer_;
 
     float cheerAnimationTimer_;
 
