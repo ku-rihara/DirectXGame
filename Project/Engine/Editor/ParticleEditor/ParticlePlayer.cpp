@@ -108,15 +108,6 @@ void ParticlePlayer::SetFollowingPos(const Vector3* pos) {
     }
 }
 
-void ParticlePlayer::SetParentBasePos(WorldTransform* parent) {
-    auto* particleData = GetParticleData();
-    if (!particleData)
-        return;
-
-    for (auto& section : particleData->GetSectionElements()) {
-        section->SetParentBasePos(parent);
-    }
-}
 
 void ParticlePlayer::SetTargetPosition(const Vector3& targetPos) {
     auto* particleData = GetParticleData();
@@ -128,37 +119,3 @@ void ParticlePlayer::SetTargetPosition(const Vector3& targetPos) {
     }
 }
 
-//*----------------------------- Section-Specific Settings -----------------------------*//
-
-void ParticlePlayer::SetSectionParentTransform(int32_t sectionIndex, const WorldTransform* transform) {
-    auto* particleData = GetParticleData();
-    if (!particleData)
-        return;
-
-    auto& sections = particleData->GetSectionElements();
-    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sections.size())) {
-        sections[sectionIndex]->GetSectionParam()->SetParentTransform(transform);
-    }
-}
-
-void ParticlePlayer::SetSectionParentJoint(int32_t sectionIndex, const Object3DAnimation* modelAnimation, const std::string& jointName) {
-    auto* particleData = GetParticleData();
-    if (!particleData)
-        return;
-
-    auto& sections = particleData->GetSectionElements();
-    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sections.size())) {
-        sections[sectionIndex]->GetSectionParam()->SetParentJoint(modelAnimation, jointName);
-    }
-}
-
-void ParticlePlayer::SetSectionFollowingPos(int32_t sectionIndex, const Vector3* pos) {
-    auto* particleData = GetParticleData();
-    if (!particleData)
-        return;
-
-    auto& sections = particleData->GetSectionElements();
-    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sections.size())) {
-        sections[sectionIndex]->GetSectionParam()->SetFollowingPos(pos);
-    }
-}

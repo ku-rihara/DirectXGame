@@ -111,7 +111,6 @@ public:
     void SetFollowingPos(const Vector3* pos);
     void SetBlendMode(const BlendMode& blendmode);
     void SetBillBordType(const BillboardType& billboardType);
-    void SetParentBasePos(WorldTransform* parent);
     void SetIsMoveForRail(bool isMoveForRail) { isMoveForRail_ = isMoveForRail; }
     void SetMoveSpeed(float moveSpeed) { moveSpeed_ = moveSpeed; }
     void SetTargetPosition(const Vector3& targetPos) { parameters_.targetPos = targetPos; }

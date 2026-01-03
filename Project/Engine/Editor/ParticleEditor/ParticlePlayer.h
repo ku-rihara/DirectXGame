@@ -48,14 +48,8 @@ public:
     void SetParentTransform(const WorldTransform* transform);
     void SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName);
     void SetFollowingPos(const Vector3* pos);
-    void SetParentBasePos(WorldTransform* parent);
     void SetTargetPosition(const Vector3& targetPos);
 
-    //*----------------------------- Section-Specific Settings -----------------------------*//
-
-    void SetSectionParentTransform(int32_t sectionIndex, const WorldTransform* transform);
-    void SetSectionParentJoint(int32_t sectionIndex, const Object3DAnimation* modelAnimation, const std::string& jointName);
-    void SetSectionFollowingPos(int32_t sectionIndex, const Vector3* pos);
 };
 
 }

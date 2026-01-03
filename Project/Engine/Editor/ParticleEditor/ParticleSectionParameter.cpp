@@ -9,6 +9,7 @@ using namespace KetaEngine;
 void ParticleSectionParameter::AdaptIntToType() {
     groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
     groupParameters_.billBordType = static_cast<BillboardType>(groupParameters_.billBordType);
+    emitPositionMode_             = static_cast<EmitterPositionMode>(emitPositionModeInt_);
 }
 
 void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, const std::string& groupName) {
@@ -109,6 +110,9 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "UseRail", &useRailMoveEmitter_);
     globalParam->Regist(groupName, "RailFileName", &railFileParam_.first);
 
+    // Parent Setting Flags
+    globalParam->Regist(groupName, "emitPositionMode", &emitPositionModeInt_);
+
     AdaptIntToType();
 }
 
@@ -198,7 +202,7 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     modelFilePath_    = globalParam->GetValue<std::string>(groupName, "modelFilePath");
 
     // Timing Parameter
-    timingParam_.startTime = globalParam->GetValue<float>(groupName, "StartTime");
+    timingParam_.startTime     = globalParam->GetValue<float>(groupName, "StartTime");
     timingParam_.afterDuration = globalParam->GetValue<float>(groupName, "afterDuration");
 
     // TimeMode Parameter
@@ -207,6 +211,9 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     // Rail Parameter
     useRailMoveEmitter_  = globalParam->GetValue<bool>(groupName, "UseRail");
     railFileParam_.first = globalParam->GetValue<std::string>(groupName, "RailFileName");
+
+    // Parent Setting Flags
+    emitPositionModeInt_ = globalParam->GetValue<int32_t>(groupName, "emitPositionMode");
 
     // Apply loaded values
     groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
@@ -220,11 +227,19 @@ void ParticleSectionParameter::AdjustParam() {
 #ifdef _DEBUG
     ImGui::PushID((groupName_ + "_AllParams").c_str());
 
+    // Emit Position Mode
+    ImGui::SeparatorText("PositionMode");
+    const char* PositionModeItems[] = {"None", "ParentTransform", "TargetPosition", "FollowingPosition", "ParentJoint"};
+    if (ImGui::Combo("Emit Position Mode", &emitPositionModeInt_, PositionModeItems, IM_ARRAYSIZE(PositionModeItems))) {
+        emitPositionMode_ = static_cast<EmitterPositionMode>(emitPositionModeInt_);
+        }
+    
+
     // Timing Parameters
     if (ImGui::CollapsingHeader("Timing Settings")) {
         ImGui::DragFloat("Start Time", &timingParam_.startTime, 0.01f, 0.0f, 100.0f);
         timeModeSelector_.SelectTimeModeImGui("Time Mode");
-        ImGui::DragFloat("afterDuration", &timingParam_.afterDuration,0.01f);
+        ImGui::DragFloat("afterDuration", &timingParam_.afterDuration, 0.01f);
     }
 
     // Rail Settings
@@ -240,15 +255,12 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::Checkbox("Use Model", &useModel_);
 
         if (useModel_) {
-            // モデルモード 
+            // モデルモード
             ImGui::Text("Model File Path:");
             ImGui::Text("Format: ModelFolder/ModelName");
             ImGui::Text("Example: Suzanne/Suzanne");
 
-            // std::string用のバッファを用意
-            static char buffer[256] = "";
-
-            // 初回またはモデルパスが変わった場合、バッファに反映
+            static char buffer[256]     = "";
             static std::string lastPath = "";
             if (lastPath != modelFilePath_) {
                 strncpy_s(buffer, sizeof(buffer), modelFilePath_.c_str(), sizeof(buffer) - 1);
@@ -256,7 +268,6 @@ void ParticleSectionParameter::AdjustParam() {
                 lastPath                   = modelFilePath_;
             }
 
-            // InputTextで編集
             if (ImGui::InputText("##ModelPath", buffer, sizeof(buffer))) {
                 modelFilePath_ = std::string(buffer);
                 lastPath       = modelFilePath_;
@@ -268,11 +279,9 @@ void ParticleSectionParameter::AdjustParam() {
             }
         } else {
             // プリミティブモード
-            const char* primitiveItems[] = {"Plane", "Sphere","Cylinder", "Ring", "Box"};
+            const char* primitiveItems[] = {"Plane", "Sphere", "Cylinder", "Ring", "Box"};
 
-          
             if (ImGui::Combo("Primitive Type", &primitiveTypeInt_, primitiveItems, IM_ARRAYSIZE(primitiveItems))) {
-                // Comboが変更された時、コールバックを呼び出す
                 if (onPrimitiveChanged_) {
                     onPrimitiveChanged_(static_cast<PrimitiveType>(primitiveTypeInt_));
                 }
@@ -395,6 +404,7 @@ void ParticleSectionParameter::AdjustParam() {
     ImGui::PopID();
 #endif
 }
+
 void ParticleSectionParameter::ScaleParamEditor() {
     if (ImGui::CollapsingHeader("Scale")) {
         ImGui::SeparatorText("Scale Mode");
@@ -445,22 +455,18 @@ void ParticleSectionParameter::ImGuiTextureSelection() {
                 names.push_back(file.c_str());
             }
 
-            // ListBoxで選択
             if (ImGui::ListBox("Textures", &selectedIndex, names.data(), static_cast<int>(names.size()))) {
-                // 選択が変わったら即座に適用
                 std::string newTextureName = filenames[selectedIndex];
                 if (newTextureName != lastSelectedTexture) {
                     ApplyTexture(newTextureName);
                     lastSelectedTexture = newTextureName;
 
-                    // コールバック関数を呼び出して実際のテクスチャを更新
                     if (onTextureChanged_) {
                         onTextureChanged_();
                     }
                 }
             }
 
-            // 現在のテクスチャパスを表示
             if (!selectedTexturePath_.empty()) {
                 ImGui::Text("Current: %s", selectedTexturePath_.c_str());
             }
@@ -504,22 +510,35 @@ void ParticleSectionParameter::SetBillboardType(BillboardType type) {
 }
 
 void ParticleSectionParameter::SetParentTransform(const WorldTransform* transform) {
+    if (emitPositionMode_ != EmitterPositionMode::ParentTransform) {
+        return;
+    }
     parameters_.parentTransform = transform;
 }
 
 void ParticleSectionParameter::SetParentJoint(const Object3DAnimation* animation, const std::string& jointName) {
+    if (emitPositionMode_ != EmitterPositionMode::ParentJoint) {
+        return;
+    }
     parameters_.jointParent.animation = animation;
     parameters_.jointParent.name      = jointName;
 }
 
 void ParticleSectionParameter::SetFollowingPos(const Vector3* pos) {
+    if (emitPositionMode_ != EmitterPositionMode::FollowingPosition) {
+        return;
+    }
     parameters_.followingPos_ = pos;
 }
 
 void ParticleSectionParameter::SetTargetPosition(const Vector3& targetPos) {
+    if (emitPositionMode_ != EmitterPositionMode::TargetPosition) {
+        return;
+    }
     parameters_.targetPos = targetPos;
 }
 
 void ParticleSectionParameter::SetTextureChangedCallback(std::function<void()> callback) {
+
     onTextureChanged_ = callback;
 }
