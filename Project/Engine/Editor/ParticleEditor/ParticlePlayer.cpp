@@ -52,10 +52,9 @@ void ParticlePlayer::Play(const std::string& categoryName, const std::string& pa
         if (particleData) {
             particleData->InitWithCategory(particleName, categoryName);
 
-            // ParentパラメータをParticleDataに設定
-            ApplyParentParametersToData(particleData);
-
+            // ロード、ペアレント設定、再生
             particleData->LoadData();
+            ApplyParentParametersToData(particleData);
             particleData->Play();
         }
 
