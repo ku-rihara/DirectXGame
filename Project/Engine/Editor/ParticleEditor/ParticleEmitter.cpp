@@ -178,9 +178,7 @@ void ParticleEmitter::SetTextureHandle(uint32_t handle) {
 /// =======================================================================================
 /// setter method
 /// ========================================================================================
-void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
-    emitBoxTransform_.parent_ = parent;
-}
+
 
 void ParticleEmitter::SetBlendMode(const BlendMode& blendmode) {
     groupParamaters_.blendMode = blendmode;

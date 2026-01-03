@@ -32,8 +32,17 @@ public:
 
     // タイミングパラメータ
     struct TimingParam {
-        float startTime = 0.0f;
+        float startTime     = 0.0f;
         float afterDuration = 0.0f;
+    };
+
+    // エミッター位置制御タイプ
+    enum class EmitterPositionMode {
+        None = 0,
+        ParentTransform,
+        TargetPosition,
+        FollowingPosition,
+        ParentJoint
     };
 
 public:
@@ -65,15 +74,17 @@ private:
     GroupParamaters groupParameters_;
     TimingParam timingParam_;
     TimeModeSelector timeModeSelector_;
+    EmitterPositionMode emitPositionMode_ = EmitterPositionMode::None;
 
     // Rail,Model
     std::pair<std::string, FileSelector> railFileParam_;
     FileSelector modelFileSelector_;
 
     // TypeInt
-    int32_t primitiveTypeInt_ = 0;
-    int32_t billBordTypeInt_  = 0;
-    int32_t blendModeInt_     = 0;
+    int32_t primitiveTypeInt_    = 0;
+    int32_t billBordTypeInt_     = 0;
+    int32_t blendModeInt_        = 0;
+    int32_t emitPositionModeInt_ = 0;
 
     // frags
     bool isShot_             = false;
