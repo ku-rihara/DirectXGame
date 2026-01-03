@@ -48,6 +48,7 @@ protected:
     // emitter
     std::unique_ptr<KetaEngine::ParticlePlayer> particlePlayer_;
     Vector3 direction_;
+    Vector3 effectFollowPos_;
 
     /// parameter
     float railRunSpeedThree_;

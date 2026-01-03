@@ -16,6 +16,7 @@ void BasePlayerHand::Init() {
 
     particlePlayer_ = std::make_unique<KetaEngine::ParticlePlayer>();
     particlePlayer_->Init();
+    particlePlayer_->SetFollowingPos(&effectFollowPos_);
 
     /*emitter_.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive(groupName_, PrimitiveType::Plane, 300));
     uint32_t handle = KetaEngine::TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
@@ -33,6 +34,7 @@ void BasePlayerHand::Update() {
    /* emitter_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
     emitter_->Update();
     emitter_->EditorUpdate();*/
+    effectFollowPos_ = obj3d_->transform_.GetWorldPos();
     particlePlayer_->Update();
     if (isEmit_) {
         particlePlayer_->Play("Player","FireAura");
