@@ -1,0 +1,10 @@
+{
+  "punchDamage_Rendition": {
+    "FileName": "nockBackReaction",
+    "ObjAnim_FileName": "nockBackReaction",
+    "ObjAnim_StartTiming": 0.0,
+    "Particle_FileName": "",
+    "Particle_StartTiming": 0.0,
+    "StartTiming": 0.0
+  }
+}

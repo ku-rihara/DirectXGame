@@ -1,10 +1,10 @@
 #include "BaseEnemy.h"
 
 // behavior
+#include "../Behavior/DamageReactionBehavior/EnemyDamageReactionAction.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
+#include "../Behavior/DamageReactionBehavior/EnemyRopeBoundReaction.h"
 #include "../Behavior/NormalBehavior/EnemySpawn.h"
-#include"../Behavior/DamageReactionBehavior/EnemyDamageReactionAction.h"
-#include"../Behavior/DamageReactionBehavior/EnemyRopeBoundReaction.h"
 #include "Enemy/EnemyManager.h"
 
 #include "Combo/Combo.h"
@@ -50,6 +50,10 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     findSprite_->Init();
     notFindSprite_->Init();
 
+    // エフェクト初期化
+    enemyEffects_ = std::make_unique<EnemyEffects>();
+    enemyEffects_->Init(&baseTransform_);
+
     // audio
     /*deathSound_  = KetaEngine::Audio::GetInstance()->LoadWave("EnemyDeath.wav");
     thrustSound_ = KetaEngine::Audio::GetInstance()->LoadWave("Enemythurst.wav");*/
@@ -76,7 +80,12 @@ void BaseEnemy::Update() {
 
     collisionBox_->SetPosition(GetWorldPosition());
     collisionBox_->Update();
-   
+
+    // エフェクト更新
+    if (enemyEffects_) {
+        enemyEffects_->Update(GetWorldPosition());
+    }
+
     BaseObject::Update();
 }
 ///========================================================
@@ -129,11 +138,11 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
     if (SideRope* sideRope = dynamic_cast<SideRope*>(other)) {
 
-       if (EnemyDamageReactionAction* action = dynamic_cast<EnemyDamageReactionAction*>(damageBehavior_.get())) {
-            Vector3 velocity=action->GetKnockBackVelocity();
-           ChangeDamageReactionBehavior(std::make_unique<EnemyRopeBoundReaction>(this, velocity, sideRope));
+        if (EnemyDamageReactionAction* action = dynamic_cast<EnemyDamageReactionAction*>(damageBehavior_.get())) {
+            Vector3 velocity = action->GetKnockBackVelocity();
+            ChangeDamageReactionBehavior(std::make_unique<EnemyRopeBoundReaction>(this, velocity, sideRope));
             return;
-       }
+        }
 
     } else if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
         // プレイヤーとの攻撃コリジョン判定
@@ -231,7 +240,6 @@ void BaseEnemy::TakeDamage(float damageValue) {
     }
 }
 
-
 void BaseEnemy::StartDamageColling(float collingTime, const std::string& reactiveAttackName) {
     isDamageColling_        = true;
     lastReceivedAttackName_ = reactiveAttackName;
@@ -258,12 +266,12 @@ void BaseEnemy::DamageRenditionInit() {
 void BaseEnemy::ThrustRenditionInit() {
     // ガレキパーティクル
     pEnemyManager_->ThrustEmit(GetWorldPosition());
-  /*  KetaEngine::Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);*/
+    /*  KetaEngine::Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);*/
 }
 
 void BaseEnemy::DeathRenditionInit() {
     pEnemyManager_->DeathEmit(GetWorldPosition());
-   /* KetaEngine::Audio::GetInstance()->PlayWave(deathSound_, 0.5f);*/
+    /* KetaEngine::Audio::GetInstance()->PlayWave(deathSound_, 0.5f);*/
 }
 
 /// ===================================================

@@ -18,6 +18,12 @@ public:
         float startTiming = 0.0f;
     };
 
+    // パーティクルエフェクトパラメータ
+    struct ParticleEffectParam {
+        std::string fileName;
+        float startTiming = 0.0f;
+    };
+
 public:
     EnemyDamageRenditionData()  = default;
     ~EnemyDamageRenditionData() = default;
@@ -27,9 +33,9 @@ public:
     /// <summary>
     /// 初期化
     /// </summary>
-    /// <param name="reactionName">リアクション名</param>
+    /// <param name="groupName">グループ名</param>
     /// <param name="renditionIndex">演出インデックス</param>
-    void Init(const std::string& groupName, int32_t renditionIndex);
+    void Init(const std::string& groupName);
 
     void AdjustParam();
     void RegisterParams();
@@ -40,6 +46,7 @@ public:
 private:
     //*-------------------------------- private Method --------------------------------*//
     void SelectObjAnimationFile(const char* label, std::pair<ObjAnimationParam, KetaEngine::FileSelector>& param);
+    void SelectParticleFile(const char* label, std::pair<ParticleEffectParam, KetaEngine::FileSelector>& param);
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
@@ -48,12 +55,17 @@ private:
     int32_t currentRenditionIndex_            = -1;
     std::string folderPath_                   = "EnemyDamageReaction/RenditionDates/";
     const std::string objAnimationFolderPath_ = "Resources/GlobalParameter/ObjEaseAnimation/Enemy/Dates/";
+    const std::string particleFolderPath_     = "Resources/GlobalParameter/Particle/Enemy/Dates/";
 
     // オブジェクトアニメーションパラメータ
     std::pair<ObjAnimationParam, KetaEngine::FileSelector> objAnimationParams_;
+
+    // パーティクルエフェクトパラメータ
+    std::pair<ParticleEffectParam, KetaEngine::FileSelector> particleEffectParams_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
     const ObjAnimationParam& GetObjAnimationParam() const { return objAnimationParams_.first; }
+    const ParticleEffectParam& GetParticleEffectParam() const { return particleEffectParams_.first; }
 };

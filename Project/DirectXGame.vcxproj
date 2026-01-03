@@ -196,6 +196,7 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageRendition.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.cpp" />
@@ -205,6 +206,7 @@
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.cpp" />
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionData.cpp" />
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageRenditionData.cpp" />
+    <ClCompile Include="Game\Enemy\Effects\EnemyEffects.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp" />
     <ClCompile Include="Game\Enemy\SearchingSprite\FindSprite.cpp" />
@@ -482,6 +484,7 @@
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h" />
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageRendition.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.h" />
     <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.h" />
@@ -491,6 +494,7 @@
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.h" />
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionData.h" />
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageRenditionData.h" />
+    <ClInclude Include="Game\Enemy\Effects\EnemyEffects.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h" />
     <ClInclude Include="Game\Enemy\SearchingSprite\FindSprite.h" />

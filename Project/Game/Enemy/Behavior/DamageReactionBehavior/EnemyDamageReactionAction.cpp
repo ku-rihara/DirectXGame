@@ -22,6 +22,10 @@ EnemyDamageReactionAction::EnemyDamageReactionAction(
 
     // リアクションの初期化
     InitReaction();
+
+    // 演出の初期化
+    /*   damageRendition_ = std::make_unique<EnemyDamageRendition>();*/
+    damageRendition_.Init(pBaseEnemy_, pReactionData_);
 }
 
 EnemyDamageReactionAction::~EnemyDamageReactionAction() {
@@ -31,6 +35,8 @@ void EnemyDamageReactionAction::Update(float deltaTime) {
     if (!pReactionData_) {
         return;
     }
+
+     damageRendition_.Update(deltaTime, reactionTimer_, hasPlayedRendition_);
 
     // 状態に応じた更新処理
     switch (currentState_) {
@@ -47,8 +53,7 @@ void EnemyDamageReactionAction::Update(float deltaTime) {
         break;
     }
 
-    // 演出の更新
-    UpdateRenditions();
+ 
 
     // タイマー更新
     reactionTimer_ += deltaTime;
@@ -327,57 +332,6 @@ void EnemyDamageReactionAction::UpdateBounce(float basePosY, float gravity, floa
 
             // バウンドエフェクト
             pBaseEnemy_->ThrustRenditionInit();
-        }
-    }
-}
-
-void EnemyDamageReactionAction::UpdateRenditions() {
-    // 早期nullチェック
-    if (!pReactionData_) {
-        return;
-    }
-
-    if (!pBaseEnemy_) {
-        return;
-    }
-
-    // インデックスが負の値でないか確認
-    if (currentRenditionIndex_ < 0) {
-        return;
-    }
-
-    const auto& renditions = pReactionData_->GetAllRenditions();
-
-    // サイズチェック
-    if (renditions.size() == 0) {
-        return;
-    }
-
-    if (currentRenditionIndex_ >= static_cast<int32_t>(renditions.size())) {
-        return;
-    }
-
-    // 現在の演出データ
-    const auto* currentRendition = renditions[currentRenditionIndex_].get();
-    if (!currentRendition) {
-        return;
-    }
-
-    // 演出のタイミングチェック
-    const auto& animParam = currentRendition->GetObjAnimationParam();
-
-    if (!hasPlayedRendition_ && reactionTimer_ >= animParam.startTiming) {
-        // オブジェクトの有効性チェックを追加
-        if (pBaseEnemy_->GetObject3D()) {
-            pBaseEnemy_->GetObject3D()->transform_.PlayObjEaseAnimation("Enemy", animParam.fileName);
-        }
-
-        hasPlayedRendition_ = true;
-        currentRenditionIndex_++;
-
-        // 次の演出に移行
-        if (currentRenditionIndex_ < static_cast<int32_t>(renditions.size())) {
-            hasPlayedRendition_ = false;
         }
     }
 }

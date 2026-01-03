@@ -514,6 +514,9 @@
     <Filter Include="MyEngine\.h\Editor\ParticleEditor\ParticleCommonParam">
       <UniqueIdentifier>{1d5bb759-17c3-41bc-a733-1245e481b2cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\Effects">
+      <UniqueIdentifier>{adfa1d78-0f6a-46c5-b56f-005a88994661}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1314,6 +1317,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitiveSphere.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Effects\EnemyEffects.cpp">
+      <Filter>Game\Enemy\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageRendition.cpp">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2171,6 +2180,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitiveSphere.h">
       <Filter>MyEngine\.h\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Effects\EnemyEffects.h">
+      <Filter>Game\Enemy\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageRendition.h">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@
 #include "BaseObject/BaseObject.h"
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/EnemyCollisionBox.h"
+#include "Enemy/Effects/EnemyEffects.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
 
 #include "../SearchingSprite/FindSprite.h"
@@ -144,8 +145,8 @@ private:
     void ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController);
 
 private:
-  /*  int deathSound_;
-    int thrustSound_;*/
+    /*  int deathSound_;
+      int thrustSound_;*/
     int32_t groupId_;
 
 protected:
@@ -164,6 +165,7 @@ protected:
     std::unique_ptr<NotFindSprite> notFindSprite_;
     std::unique_ptr<EnemyCollisionBox> collisionBox_;
     std::unique_ptr<EnemyHPBar> hpBar_;
+    std::unique_ptr<EnemyEffects> enemyEffects_;
 
     // parameter
     float hp_;
@@ -201,6 +203,8 @@ public:
     FindSprite* GetFindSprite() const { return findSprite_.get(); }
     NotFindSprite* GetNotFindSprite() const { return notFindSprite_.get(); }
     EnemyManager* GetManager() const { return pEnemyManager_; }
+    EnemyEffects* GetEnemyEffects() const { return enemyEffects_.get(); }
+
     /// ========================================================================================
     ///  setter method
     /// ========================================================================================

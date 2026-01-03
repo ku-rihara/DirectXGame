@@ -1,5 +1,8 @@
 {
     "punchDamage": {
+        "Bound_BounceDamping": 0.0,
+        "Bound_BoundNum": 0,
+        "Bound_InitialBounceRate": 0.0,
         "Normal_KnockBackDamping": 2.5399999618530273,
         "Normal_KnockBackTime": 0.4099999964237213,
         "ReactionState": 0,
@@ -16,6 +19,7 @@
         "TakeUpper_JumpSpeedRate": 1.0,
         "TakeUpper_ThrustRotateSpeed": 25.770000457763672,
         "TriggerAttackName": "leftPunch",
-        "damageCollingTime": 0.27000001072883606
+        "damageCollingTime": 0.27000001072883606,
+        "isPriorityReaction": false
     }
 }
