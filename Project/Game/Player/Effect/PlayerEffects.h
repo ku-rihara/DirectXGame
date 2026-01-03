@@ -4,6 +4,7 @@
 
 /// utility
 #include "Editor/ParticleEditor/ParticleEmitter.h"
+#include "Editor/ParticleEditor/ParticlePlayer.h"
 
 /// std
 #include <array>
@@ -40,6 +41,8 @@ public:
     /// <param name="position">位置座標</param>
     void Update(const Vector3& position);
 
+    void Emit(const std::string&name);
+
     void SpecialAttackRenditionInit(); //< 必殺技演出の初期化
     void FallEffectRenditionInit(); //< 落下エフェクト演出の初期化
     void RushAttackEmit(); //< ラッシュ攻撃エフェクトの放出
@@ -56,6 +59,8 @@ private:
     std::array<ParticleEffect, 1> rushRingEffect_;
     std::array<ParticleEffect, 1> afterGlowEffect_;
     std::array<ParticleEffect, 3> starEffect_;
+
+    KetaEngine::ParticlePlayer particlePlayer_;
 
 public:
     /// =========================================================================================

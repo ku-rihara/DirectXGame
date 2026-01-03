@@ -148,12 +148,6 @@
     <Filter Include="Game\Player\Behavior\ComboBehavior">
       <UniqueIdentifier>{b716b7ec-c13b-49ad-9c4b-07471c4c9782}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\Behavior\ComboBehavior\Normal">
-      <UniqueIdentifier>{fffcf07a-76a3-443b-9184-ae0f9224713e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\Behavior\ComboBehavior\Jump">
-      <UniqueIdentifier>{7a626b88-685f-48d5-93f8-d3026437db2d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Player\Behavior\Base\Atacck">
       <UniqueIdentifier>{b2fb692f-a018-4f1b-b2d5-15d9f559adf9}</UniqueIdentifier>
     </Filter>
