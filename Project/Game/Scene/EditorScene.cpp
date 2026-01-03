@@ -39,11 +39,7 @@ void EditorScene::Update() {
     easingEditor_.Edit();
     easingTestObject_->Update();
 
-    // 通常のパーティクル更新
-    KetaEngine::ParticleManager::GetInstance()->Update();
-
-    // GPUパーティクル更新
-    KetaEngine::GPUParticleManager::GetInstance()->Update();
+  
     ViewProjectionUpdate();
 
     if (input_->TriggerKey(KeyboardKey::Enter)) {
