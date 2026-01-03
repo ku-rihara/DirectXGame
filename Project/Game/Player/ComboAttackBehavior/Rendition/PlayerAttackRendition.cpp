@@ -70,6 +70,10 @@ void PlayerAttackRendition::Update(float deltaTime) {
                 pPlayer_->GetAttackEffect()->PlayPostEffect(param.fileName);
                 break;
 
+            case PlayerAttackRenditionData::Type::ParticleEffect:
+                pPlayer_->GetEffects()->Emit(param.fileName);
+                break;
+
             default:
                 break;
             }
