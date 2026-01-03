@@ -48,6 +48,8 @@ private:
     float playSpeed_;
     float afterPlayTime_;
 
+    bool isPlayByEditor_ = false;
+
 public:
     const std::string& GetCategoryName() const { return categoryName_; }
 
@@ -58,6 +60,8 @@ public:
     const std::vector<std::unique_ptr<ParticleSection>>& GetSectionElements() const {
         return sectionElements_;
     }
+
+    void SetIsPlayByEditor(bool is);
 };
 
 }

@@ -207,3 +207,16 @@ void ParticleData::LoadSequenceElements() {
 void ParticleData::SaveSequenceElements() {
     BaseSequenceEffectData::SaveSequenceElements();
 }
+
+void ParticleData::SetIsPlayByEditor(bool is) {
+
+    // セクションが空の場合は何もしない
+    if (sectionElements_.empty()) {
+        return;
+    }
+
+    // 全セクションを待機状態で開始
+    for (auto& section : sectionElements_) {
+        section->SetIsPlayByEditor(is);
+    }
+ }

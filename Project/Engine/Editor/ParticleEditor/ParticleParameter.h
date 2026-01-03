@@ -35,14 +35,14 @@ public:
     ParticleParameter()          = default;
     virtual ~ParticleParameter() = default;
 
-    virtual void Init(); //< 初期化
-    void ParameterInit(); //< パラメータ初期化
-    void InitAdaptTexture(); //< テクスチャ適用
-    void RegisterParams(); //< パラメータのバインド
-    void GetParams(); //< パラメータの取得
-    virtual void EditorUpdate(); //< エディタ更新
-    void ParticleChange(); //< パーティクル変更処理
-    void ScaleParmEditor(); //< スケールパラメータエディタ
+    virtual void Init();      //< 初期化
+    void ParameterInit();     //< パラメータ初期化
+    void InitAdaptTexture();  //< テクスチャ適用
+    void RegisterParams();    //< パラメータのバインド
+    void GetParams();         //< パラメータの取得
+    virtual void EditorUpdate();  //< エディタ更新
+    void ParticleChange();        //< パーティクル変更処理
+    void ScaleParmEditor();       //< スケールパラメータエディタ
     void ImGuiTextureSelection(); //< テクスチャ選択ImGui
 
     /// <summary>

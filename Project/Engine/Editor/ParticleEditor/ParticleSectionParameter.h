@@ -66,7 +66,7 @@ private:
     // Names
     std::string groupName_;
     const std::string railFolderPath_  = "Resources/GlobalParameter/RailEditor/Dates";
-    const std::string textureFilePath_ = "Resources/texture";
+    const std::string textureFilePath_ = "Resources/texture/Particle";
     const std::string modelBasePath_   = "Resources/Model/";
 
     // Parameters

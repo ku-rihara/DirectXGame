@@ -68,6 +68,8 @@ private:
     void UpdateWaiting(float deltaTime);
     void EmitInternal();
 
+    bool IsShotJudge();
+
 private:
     //*---------------------------- Member Variables ----------------------------*//
 
@@ -85,6 +87,7 @@ private:
 
     float currentTime_ = 0.0f; // Emit間隔タイマー
     float elapsedTime_ = 0.0f; // 待機時間タイマー
+    bool isPlayByEditor_ = false;
 
     const std::string baseFolderPath_ = "Particle/";
     const std::string modelBasePath_  = "Resources/Model/";
@@ -105,7 +108,7 @@ public:
     ParticleSectionParameter* GetSectionParam() { return sectionParam_.get(); }
 
     //*----------------------------- Setters -----------------------------*//
-
+    void SetIsPlayByEditor(bool is) { isPlayByEditor_ = is; }
     void SetTexture(uint32_t textureHandle);
     void SetParentBasePos(WorldTransform* parent) { emitBoxTransform_.parent_ = parent; }
 };

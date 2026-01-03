@@ -152,6 +152,7 @@ void ParticleEditor::PreviewAllSections(ParticleData* particleData) {
     }
 
     particleData->Play();
+    particleData->SetIsPlayByEditor(true);
 }
 
 void ParticleEditor::StopAllSections(ParticleData* particleData) {
