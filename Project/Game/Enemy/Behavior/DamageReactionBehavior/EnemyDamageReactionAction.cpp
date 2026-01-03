@@ -54,7 +54,6 @@ void EnemyDamageReactionAction::Update(float deltaTime) {
     }
 
  
-
     // タイマー更新
     reactionTimer_ += deltaTime;
 
