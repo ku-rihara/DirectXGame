@@ -6,6 +6,7 @@
 
 #include "BaseObject/BaseObject.h"
 #include "Editor/ParticleEditor/ParticlePlayer.h"
+#include <string>
 
 /// <summary>
 /// プレイヤーの手の基底クラス
@@ -35,6 +36,8 @@ public:
     void ApplyGlobalParameter(); //< グローバルパラメータの適用
     void AdjustParamBase();      //< 基本パラメータの調整
     virtual void SaveAndLoad();  //< セーブ・ロード
+protected:
+    void EffectEmit(const std::string& effectName);
 
 protected:
     ///=============================================
@@ -49,11 +52,7 @@ protected:
     std::unique_ptr<KetaEngine::ParticlePlayer> particlePlayer_;
     Vector3 direction_;
     Vector3 effectFollowPos_;
-
-    /// parameter
-    float railRunSpeedThree_;
-    float railRunSpeedForth_;
-
+  
     bool isEmit_   = true;
     bool isShadow_ = true;
 
@@ -63,13 +62,10 @@ public:
     ///========================================================
     Vector3 GetDirection() const { return direction_; }
     const KetaEngine::WorldTransform& GetObjTransform() const { return obj3d_->transform_; }
-    float GetRailRunSpeedThree() const { return railRunSpeedThree_; }
-    float GetRailRunSpeedForth() const { return railRunSpeedForth_; }
-
+   
     ///========================================================
     /// setter method
     ///========================================================
-    virtual void SetRailParent(KetaEngine::WorldTransform* parent) = 0;
     virtual void SetParent(KetaEngine::WorldTransform* parent);
     void SetObjTranslate(const Vector3& pos) { obj3d_->transform_.translation_ = pos; }
     void SetIsEmit(const bool& isEmit) { isEmit_ = isEmit; }
