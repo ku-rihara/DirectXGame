@@ -32,11 +32,11 @@ public:
     void Emit(const std::string& name);
 
 private:
-    KetaEngine::ParticlePlayer particlePlayer_;
+    std::unique_ptr<KetaEngine::ParticlePlayer> particlePlayer_;
 
 public:
     /// =========================================================================================
     /// getter
     /// =========================================================================================
-    KetaEngine::ParticlePlayer* GetParticlePlayer() { return &particlePlayer_; }
+
 };
