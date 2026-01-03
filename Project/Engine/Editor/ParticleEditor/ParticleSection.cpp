@@ -73,7 +73,7 @@ void ParticleSection::StartWaiting() {
 //*----------------------------- Update -----------------------------*//
 
 void ParticleSection::Update(float speedRate) {
-    if (!sectionParam_->GetGroupParameters().isShot && playState_ != PlayState::PLAYING && playState_ != PlayState::WAITING) {
+    if (playState_ != PlayState::PLAYING && playState_ != PlayState::WAITING) {
         return;
     }
 
@@ -154,7 +154,7 @@ void ParticleSection::EmitInternal() {
 
     currentTime_ += Frame::DeltaTime();
 
-    if (currentTime_ >= sectionParam_->GetIntervalTime() || sectionParam_->GetGroupParameters().isShot) {
+    if (currentTime_ >= sectionParam_->GetIntervalTime() || IsShotJudge()) {
         auto& group = groups[groupName_];
 
         if (static_cast<int32_t>(group.particles.size()) + sectionParam_->GetParticleCount() > sectionParam_->GetMaxParticleNum()) {
@@ -266,4 +266,8 @@ void ParticleSection::CreatePrimitiveParticle(PrimitiveType primitiveType, int32
 
 void ParticleSection::SetTextureHandle(uint32_t handle) {
     ParticleManager::GetInstance()->SetTextureHandle(groupName_, handle);
+}
+
+bool ParticleSection::IsShotJudge() {
+    return (sectionParam_->GetGroupParameters().isShot) && (!isPlayByEditor_);
 }
