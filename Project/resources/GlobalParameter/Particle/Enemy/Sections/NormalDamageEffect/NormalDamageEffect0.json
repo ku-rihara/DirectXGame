@@ -33,7 +33,7 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 0.5199999809265137,
+        "LifeTime": 0.25,
         "Max Particle Num": 1000,
         "Particle Count": 23,
         "Position Base": [
@@ -80,17 +80,17 @@
         "Scale Max": 1.0,
         "Scale Min": 1.0,
         "ScaleV3 Max": [
-            1.0,
+            1.409999966621399,
             4.0,
             0.30000001192092896
         ],
         "ScaleV3 Min": [
-            0.699999988079071,
+            1.3200000524520874,
             3.0,
             0.30000001192092896
         ],
-        "Speed Max": 34.0,
-        "Speed Min": 34.0,
+        "Speed Max": 40.0,
+        "Speed Min": 35.0,
         "SpeedV3 Max": [
             0.0,
             0.0,
@@ -132,21 +132,21 @@
         "preBillBordType": 0,
         "primitiveTypeInt": 0,
         "scaleEaseParam.backRatio": 0.0,
-        "scaleEaseParam.easeTypeInt": 3,
+        "scaleEaseParam.easeTypeInt": 18,
         "scaleEaseParam.endValueF.max": 0.0,
         "scaleEaseParam.endValueF.min": 0.0,
         "scaleEaseParam.endValueV3.max": [
             0.23000000417232513,
-            0.0,
+            0.10000000149011612,
             0.0
         ],
         "scaleEaseParam.endValueV3.min": [
             0.07999999821186066,
-            0.0,
+            0.10000000149011612,
             0.0
         ],
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.4399999976158142,
+        "scaleEaseParam.maxTime": 0.2199999988079071,
         "scaleEaseParam.startValueF": 1.0,
         "scaleEaseParam.startValueV3": [
             1.0,

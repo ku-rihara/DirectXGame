@@ -31,25 +31,25 @@
             0.0,
             0.0
         ],
-        "Gravity": 0.0,
-        "IntervalTime": 0.1599999964237213,
-        "LifeTime": 0.3499999940395355,
+        "Gravity": 51.79999923706055,
+        "IntervalTime": 0.11999999731779099,
+        "LifeTime": 0.5899999737739563,
         "Max Particle Num": 1000,
         "Particle Count": 5,
         "Position Base": [
             0.0,
-            2.0,
+            0.0,
             0.0
         ],
         "Position Max": [
-            1.2000000476837158,
-            1.0,
-            1.0
+            4.5,
+            2.380000114440918,
+            4.5
         ],
         "Position Min": [
-            -1.0,
+            -4.5,
             0.0,
-            -1.0
+            -4.5
         ],
         "RailFileName": "",
         "Rotate Base": [
@@ -80,17 +80,17 @@
         "Scale Max": 0.0,
         "Scale Min": 0.0,
         "ScaleV3 Max": [
-            0.05000000074505806,
-            0.699999988079071,
-            0.05000000074505806
+            0.3499999940395355,
+            3.680000066757202,
+            1.0
         ],
         "ScaleV3 Min": [
-            0.05000000074505806,
-            0.699999988079071,
-            0.05000000074505806
+            0.30000001192092896,
+            3.869999885559082,
+            1.0
         ],
-        "Speed Max": 3.200000047683716,
-        "Speed Min": 0.6000000238418579,
+        "Speed Max": 17.510000228881836,
+        "Speed Min": 11.4399995803833,
         "SpeedV3 Max": [
             0.0,
             0.0,
@@ -119,8 +119,9 @@
         "UV isScroll": false,
         "UV isScrollEachPixel": false,
         "UseRail": false,
-        "afterDuration": 0.9399999976158142,
+        "afterDuration": 0.8600000143051147,
         "blendMode": 3,
+        "emitPositionMode": 2,
         "isAlphaNoMove": false,
         "isBillBord": true,
         "isFloatVelocity": true,
