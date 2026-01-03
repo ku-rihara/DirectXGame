@@ -125,6 +125,51 @@ void ParticleData::CheckAndPauseSectionsAfterDuration(float deltaTime) {
     afterPlayTime_ += deltaTime;
 }
 
+void ParticleData::ApplyParentParameters() {
+    // ParentTransform
+    if (parentParam_.transform_) {
+        for (auto& section : sectionElements_) {
+            section->GetSectionParam()->SetParentTransform(parentParam_.transform_);
+        }
+    }
+
+    // ParentJoint
+    if (parentParam_.modelAnimation) {
+        for (auto& section : sectionElements_) {
+            section->GetSectionParam()->SetParentJoint(parentParam_.modelAnimation, parentParam_.jointName);
+        }
+    }
+
+    // FollowPos
+    if (parentParam_.followPos_) {
+        for (auto& section : sectionElements_) {
+            section->GetSectionParam()->SetFollowingPos(parentParam_.followPos_);
+        }
+    }
+}
+
+void ParticleData::SetParentTransform(const WorldTransform* transform) {
+    parentParam_.transform_ = transform;
+    ApplyParentParameters();
+}
+
+void ParticleData::SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName) {
+    parentParam_.modelAnimation = modelAnimation;
+    parentParam_.jointName      = jointName;
+    ApplyParentParameters();
+}
+
+void ParticleData::SetFollowingPos(const Vector3* pos) {
+    parentParam_.followPos_ = pos;
+    ApplyParentParameters();
+}
+
+void ParticleData::SetTargetPosition(const Vector3& targetPos) {
+    for (auto& section : sectionElements_) {
+        section->GetSectionParam()->SetTargetPosition(targetPos);
+    }
+}
+
 void ParticleData::RegisterParams() {
     globalParameter_->Regist(groupName_, "playSpeed", &playSpeed_);
 }

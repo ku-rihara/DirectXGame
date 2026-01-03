@@ -7,7 +7,19 @@
 
 namespace KetaEngine {
 
+class Object3DAnimation;
+class WorldTransform;
+
 class ParticleData : public BaseSequenceEffectData<ParticleSection> {
+
+public:
+    // Parent parameter 
+    struct ParentParam {
+        const Vector3* followPos_               = nullptr;
+        const WorldTransform* transform_        = nullptr;
+        const Object3DAnimation* modelAnimation = nullptr;
+        std::string jointName;
+    };
 
 public:
     ParticleData()           = default;
@@ -28,6 +40,9 @@ public:
 
     //  再生継続時間チェック機能
     void CheckAndPauseSectionsAfterDuration(float deltaTime);
+
+    // Parent parameter application
+    void ApplyParentParameters();
 
 protected:
     void RegisterParams() override;
@@ -50,6 +65,9 @@ private:
 
     bool isPlayByEditor_ = false;
 
+    // Parent parameters
+    ParentParam parentParam_;
+
 public:
     const std::string& GetCategoryName() const { return categoryName_; }
 
@@ -62,6 +80,12 @@ public:
     }
 
     void SetIsPlayByEditor(bool is);
+
+    // Parent parameter 
+    void SetParentTransform(const WorldTransform* transform);
+    void SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName);
+    void SetFollowingPos(const Vector3* pos);
+    void SetTargetPosition(const Vector3& targetPos);
 };
 
 }

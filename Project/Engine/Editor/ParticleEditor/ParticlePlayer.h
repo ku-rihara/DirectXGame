@@ -41,12 +41,7 @@ public:
 
 private:
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
-
-    void AdaptParentTransform(const WorldTransform* transform);
-    void AdaptParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName);
-    void AdaptFollowingPos(const Vector3* pos);
-
-    void AdaptParentTransform();
+    void ApplyParentParametersToData(ParticleData* particleData);
 
 private:
     std::string currentCategoryName_;
