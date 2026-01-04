@@ -6,6 +6,9 @@
 ///==========================================================
 void PlayerEffects::Init(KetaEngine::WorldTransform* transform) {
 
+    particlePlayer_.Init();
+    particlePlayer_.SetFollowingPos(&transform->translation_);
+
    /* starSound_ = KetaEngine::Audio::GetInstance()->LoadWave("starEffect.wav");*/
 
     // debri
@@ -35,6 +38,10 @@ void PlayerEffects::Init(KetaEngine::WorldTransform* transform) {
 /// 　更新
 ///==========================================================
 void PlayerEffects::Update(const Vector3& position) {
+
+    particlePlayer_.SetTargetPosition(position);
+    particlePlayer_.Update();
+
     // ガレキパーティクル
     for (uint32_t i = 0; i < debriParticle_.size(); i++) {
         debriParticle_[i].emitter->SetTargetPosition(position);
@@ -88,4 +95,8 @@ void PlayerEffects::FallEffectRenditionInit() {
         debriParticle_[i].emitter->Emit();
     }
     fallCrack_->Emit();
+}
+
+void PlayerEffects::Emit(const std::string& name) {
+    particlePlayer_.Play("Player", name);
 }

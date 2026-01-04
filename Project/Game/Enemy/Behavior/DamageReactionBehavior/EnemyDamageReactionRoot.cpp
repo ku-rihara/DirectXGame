@@ -94,6 +94,9 @@ void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* react
     // コリジョンを無効化
     pBaseEnemy_->SetIsAdaptCollision(false);
 
+    // ダメージパーティクルエフェクトを再生
+    PlayDamageParticleEffect(reactionData);
+
     // Slammed状態の場合は、リアクションアクションに切り替え
     if (reactionData->GetReactionParam().intReactionState == static_cast<int>(EnemyDamageReactionAction::ReactionState::Slammed)) {
         pBaseEnemy_->ChangeDamageReactionBehavior(
@@ -103,5 +106,25 @@ void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* react
     else {
         pBaseEnemy_->ChangeDamageReactionBehavior(
             std::make_unique<EnemyDeath>(pBaseEnemy_));
+    }
+}
+
+void EnemyDamageReactionRoot::PlayDamageParticleEffect(EnemyDamageReactionData* reactionData) {
+    if (!reactionData) {
+        return;
+    }
+
+    // 演出データの取得
+    const EnemyDamageRenditionData* rendition = reactionData->GetRendition();
+    if (!rendition) {
+        return;
+    }
+
+    // パーティクルエフェクトの再生
+    const auto& particleParam = rendition->GetParticleEffectParam();
+    if (!particleParam.fileName.empty() && particleParam.fileName != "None") {
+        if (pBaseEnemy_->GetEnemyEffects()) {
+            pBaseEnemy_->GetEnemyEffects()->Emit(particleParam.fileName);
+        }
     }
 }

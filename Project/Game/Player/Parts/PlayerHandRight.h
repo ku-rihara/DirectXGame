@@ -18,17 +18,6 @@ public:
     void Init() override;
     void Update() override;
 
-    /// <summary>
-    /// 3コンボ目のレール更新
-    /// </summary>
-    /// <param name="speed">速度</param>
-    void RailThreeComboUpdate(float speed);
-
-    /// <summary>
-    /// 4コンボ目のレール更新
-    /// </summary>
-    /// <param name="speed">速度</param>
-    void RailForthComboUpdate(float speed);
 
     void AdjustParam() override; //< パラメータの調整
     void SaveAndLoad() override; //< セーブ・ロード
@@ -43,25 +32,15 @@ private:
     ///===========================================
     /// private variant
     ///=============================================
-    std::string threeComboName_;
-    std::string forthComboName_;
-
-    // 　移動用制御点
-    std::unique_ptr<KetaEngine::RailManager> threeComboRailManager_;
-    std::unique_ptr<KetaEngine::RailManager> stopPunchRailManager_;
-
-    Vector3 combo3MovePos_;
 
 public:
     ///===========================================
     /// getter method
     ///=============================================
-    KetaEngine::RailManager* GetThreeComboRailManager() { return threeComboRailManager_.get(); }
-    KetaEngine::RailManager* GetStopRailManager() { return stopPunchRailManager_.get(); }
-
+  
     ///===========================================
     /// setter method
     ///=============================================
-    void SetRailParent(KetaEngine::WorldTransform* parent) override;
+
     void SetParent(KetaEngine::WorldTransform* parent) override;
 };

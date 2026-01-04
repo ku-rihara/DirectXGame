@@ -2,7 +2,9 @@
 
 #include "BaseEnemyDamageReaction.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionData.h"
+#include "Enemy/Behavior/DamageReactionBehavior/EnemyDamageRendition.h"
 #include "Vector3.h"
+#include <memory>
 
 class PlayerCollisionInfo;
 class EnemyDamageRenditionData;
@@ -43,9 +45,6 @@ private:
 
     // バウンド処理
     void UpdateBounce(float basePosY, float gravity, float rotateSpeed);
-
-    // 演出更新
-    void UpdateRenditions();
 
     // リアクション終了判定
     bool IsReactionFinished() const;
@@ -94,6 +93,7 @@ private:
     float takeUpperFallLimit_;
 
     // 演出管理
+    EnemyDamageRendition damageRendition_;
     int32_t currentRenditionIndex_ = 0;
     bool hasPlayedRendition_       = false;
 

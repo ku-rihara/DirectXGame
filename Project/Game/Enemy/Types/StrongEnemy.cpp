@@ -30,6 +30,6 @@ void StrongEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection
 
 
 void StrongEnemy::SpawnRenditionInit() {
-    // ガレキパーティクル
-    pEnemyManager_->SpawnEmitByStrongEnemy(baseTransform_.translation_);
+   
+    GetEnemyEffects()->Emit("SpawnEffectStrong");
 }

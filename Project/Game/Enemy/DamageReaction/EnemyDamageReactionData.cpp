@@ -16,12 +16,16 @@ void EnemyDamageReactionData::Init(const std::string& reactionName) {
     globalParameter_->SyncParamForGroup(groupName_);
 
     reactionParam_.reactionState = static_cast<ReactionState>(reactionParam_.intReactionState);
+
+    // 演出データを生成
+    rendition_ = std::make_unique<EnemyDamageRenditionData>();
+    rendition_->Init(groupName_);
 }
 
 void EnemyDamageReactionData::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
     // 演出データをロード
-    LoadRenditions();
+    LoadRendition();
 
     globalParameter_->SyncParamForGroup(groupName_);
 }
@@ -29,105 +33,35 @@ void EnemyDamageReactionData::LoadData() {
 void EnemyDamageReactionData::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
 
-    // すべての演出データを保存
-    SaveAllRenditions();
+    // 演出データを保存
+    SaveRendition();
 }
 
 ///==========================================================
 /// 演出データ管理
 ///==========================================================
-void EnemyDamageReactionData::AddRendition() {
-    int32_t newIndex  = static_cast<int32_t>(renditions_.size());
-    auto newRendition = std::make_unique<EnemyDamageRenditionData>();
-    newRendition->Init(groupName_, newIndex);
-
-    renditions_.push_back(std::move(newRendition));
-    selectedRenditionIndex_ = newIndex;
-}
-
-void EnemyDamageReactionData::RemoveRendition(int32_t index) {
-    if (index >= 0 && index < static_cast<int32_t>(renditions_.size())) {
-        renditions_.erase(renditions_.begin() + index);
-
-        // 選択インデックスの調整
-        if (selectedRenditionIndex_ >= index) {
-            selectedRenditionIndex_--;
-            if (selectedRenditionIndex_ < 0 && !renditions_.empty()) {
-                selectedRenditionIndex_ = 0;
-            }
-        }
-
-        // インデックスの再設定
-        for (int32_t i = 0; i < static_cast<int32_t>(renditions_.size()); ++i) {
-            renditions_[i]->Init(groupName_, i);
-        }
+void EnemyDamageReactionData::InitRendition() {
+    if (rendition_) {
+        rendition_->Init(groupName_);
     }
 }
 
-void EnemyDamageReactionData::ClearRenditions() {
-    renditions_.clear();
-    selectedRenditionIndex_ = -1;
-}
-
-void EnemyDamageReactionData::InitRenditions() {
-    for (int32_t i = 0; i < static_cast<int32_t>(renditions_.size()); ++i) {
-        renditions_[i]->Init(groupName_, i);
+void EnemyDamageReactionData::SaveRendition() {
+    if (rendition_) {
+        rendition_->SaveData();
     }
 }
 
-void EnemyDamageReactionData::SaveAllRenditions() {
-    for (auto& rendition : renditions_) {
-        rendition->SaveData();
-    }
-}
-
-void EnemyDamageReactionData::LoadRenditions() {
+void EnemyDamageReactionData::LoadRendition() {
     // reactionName専用のフォルダパスを作成
-    std::string folderPath      = renditionFolderPath_ + groupName_ + "/";
-    std::string renditionPrefix = groupName_ + "_Rendition";
+    std::string folderPath    = renditionFolderPath_ + groupName_ + "/";
+    std::string renditionFile = groupName_ + "_Rendition.json";
+    std::string fullPath      = folderPath + renditionFile;
 
-    if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
-        std::vector<std::pair<int32_t, std::string>> renditionFiles;
-
-        // 演出ファイルを検索
-        for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
-            if (entry.is_regular_file() && entry.path().extension() == ".json") {
-                std::string fileName = entry.path().stem().string();
-
-                // ファイル名チェック
-                if (fileName.find(renditionPrefix) == 0) {
-                    // インデックス番号を抽出
-                    std::string indexStr = fileName.substr(renditionPrefix.length());
-                    int32_t index        = std::stoi(indexStr);
-                    renditionFiles.emplace_back(index, fileName);
-                }
-            }
-        }
-
-        // インデックス順にソート
-        std::sort(renditionFiles.begin(), renditionFiles.end());
-
-        CreateOrLoadRendition(renditionFiles);
-    }
-}
-
-void EnemyDamageReactionData::CreateOrLoadRendition(
-    const std::vector<std::pair<int32_t, std::string>>& renditionFiles) {
-
-    if (renditions_.size() == 0) {
-        // 既存の演出をクリア
-        ClearRenditions();
-        // 演出を作成してロード
-        for (const auto& [index, fileName] : renditionFiles) {
-            auto newRendition = std::make_unique<EnemyDamageRenditionData>();
-            newRendition->Init(groupName_, index);
-            newRendition->LoadData();
-            renditions_.push_back(std::move(newRendition));
-        }
-    } else {
-        // すべての演出をロード
-        for (auto& rendition : renditions_) {
-            rendition->LoadData();
+    if (std::filesystem::exists(fullPath)) {
+        // 演出データが存在する場合、ロード
+        if (rendition_) {
+            rendition_->LoadData();
         }
     }
 }
@@ -204,7 +138,7 @@ void EnemyDamageReactionData::AdjustParam() {
         ImGui::DragFloat("Rotate Speed", &reactionParam_.takeUpperParam.rotateSpeed, 0.01f);
     }
 
-     // SlammedまたはTakeUpperの時、バウンドパラメータを表示
+    // SlammedまたはTakeUpperの時、バウンドパラメータを表示
     if (reactionParam_.reactionState == ReactionState::Slammed || reactionParam_.reactionState == ReactionState::TakeUpper) {
 
         ImGui::SeparatorText("Bound Parameters");
@@ -213,42 +147,11 @@ void EnemyDamageReactionData::AdjustParam() {
         ImGui::DragFloat("Initial Bounce Rate", &reactionParam_.boundParam.initialBounceRate, 0.01f, 0.0f, 2.0f);
     }
 
-
     ImGui::Separator();
 
-    // 演出リスト
-    if (showRenditionList_) {
-        ImGui::SeparatorText("Renditions");
-        ImGui::Text("Renditions (%zu):", renditions_.size());
-
-        for (int32_t i = 0; i < static_cast<int32_t>(renditions_.size()); ++i) {
-            ImGui::PushID(i);
-
-            bool isSelected       = (selectedRenditionIndex_ == i);
-            std::string labelText = "Rendition " + std::to_string(i);
-
-            if (ImGui::Selectable(labelText.c_str(), isSelected, 0, ImVec2(0, 0))) {
-                selectedRenditionIndex_ = i;
-            }
-
-            ImGui::PopID();
-            ImGui::Spacing();
-        }
-
-        if (ImGui::Button("Add Rendition")) {
-            AddRendition();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Clear All Renditions")) {
-            ClearRenditions();
-        }
-    }
-
-    ImGui::Separator();
-
-    // 選択された演出の調整
-    if (selectedRenditionIndex_ >= 0 && selectedRenditionIndex_ < static_cast<int32_t>(renditions_.size())) {
-        renditions_[selectedRenditionIndex_]->AdjustParam();
+    // 演出の調整
+    if (rendition_) {
+        rendition_->AdjustParam();
     }
 
     ImGui::PopID();
@@ -263,17 +166,4 @@ void EnemyDamageReactionData::SelectTriggerAttack() {
         reactionParam_.triggerAttackName,
         groupName_,
         true);
-}
-
-const EnemyDamageRenditionData* EnemyDamageReactionData::GetSelectedRendition() const {
-    if (selectedRenditionIndex_ >= 0 && selectedRenditionIndex_ < static_cast<int32_t>(renditions_.size())) {
-        return renditions_[selectedRenditionIndex_].get();
-    }
-    return nullptr;
-}
-
-void EnemyDamageReactionData::SetSelectedRenditionIndex(int32_t index) {
-    if (index >= -1 && index < static_cast<int32_t>(renditions_.size())) {
-        selectedRenditionIndex_ = index;
-    }
 }

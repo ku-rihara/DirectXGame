@@ -5,17 +5,25 @@
 #include <string>
 #include <vector>
 
-/// <summary>
-/// パーティクルデータクラス - セクションベースのパーティクル管理
-/// </summary>
 namespace KetaEngine {
 
+class Object3DAnimation;
+class WorldTransform;
+
 class ParticleData : public BaseSequenceEffectData<ParticleSection> {
+
+public:
+    // Parent parameter 
+    struct ParentParam {
+        const Vector3* followPos_               = nullptr;
+        const WorldTransform* transform_        = nullptr;
+        const Object3DAnimation* modelAnimation = nullptr;
+        std::string jointName;
+    };
+
 public:
     ParticleData()           = default;
     ~ParticleData() override = default;
-
-    //*----------------------------- public Methods -----------------------------*//
 
     // BaseEffectDataからのオーバーライド
     void Update(float speedRate = 1.0f) override;
@@ -30,11 +38,13 @@ public:
     void LoadSequenceElements() override;
     void SaveSequenceElements() override;
 
-    // 全セクションの描画指示
-    void Draw();
+    //  再生継続時間チェック機能
+    void CheckAndPauseSectionsAfterDuration(float deltaTime);
+
+    // Parent parameter application
+    void ApplyParentParameters();
 
 protected:
-    //*----------------------------- protected Methods from Base -----------------------------*//
     void RegisterParams() override;
     void GetParams() override;
     void InitParams() override;
@@ -46,20 +56,20 @@ protected:
     std::string GeTSequenceElementFolderPath() const override;
 
 private:
-    //*---------------------------- private Methods ----------------------------*//
     void UpdateActiveSections(float speedRate);
 
 private:
-    //*---------------------------- private Variant ----------------------------*//
     const std::string baseFolderPath_ = "Particle/";
+    float playSpeed_;
+    float afterPlayTime_;
 
-    // 全体設定
-    bool drawAllSections_ = true; 
+    bool isPlayByEditor_ = false;
+
+    // Parent parameters
+    ParentParam parentParam_;
 
 public:
-    //*----------------------------- getter Methods -----------------------------*//
     const std::string& GetCategoryName() const { return categoryName_; }
-    bool GetDrawAllSections() const { return drawAllSections_; }
 
     // セクション要素へのアクセス
     std::vector<std::unique_ptr<ParticleSection>>& GetSectionElements() {
@@ -69,8 +79,13 @@ public:
         return sectionElements_;
     }
 
-    //*----------------------------- setter Methods -----------------------------*//
-    void SetDrawAllSections(bool value) { drawAllSections_ = value; }
+    void SetIsPlayByEditor(bool is);
+
+    // Parent parameter 
+    void SetParentTransform(const WorldTransform* transform);
+    void SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName);
+    void SetFollowingPos(const Vector3* pos);
+    void SetTargetPosition(const Vector3& targetPos);
 };
 
-}; // KetaEngine
+}

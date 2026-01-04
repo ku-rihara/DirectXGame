@@ -1,0 +1,160 @@
+{
+    "NormalDamageEffect3": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": true,
+        "BaseColor": [
+            0.953667938709259,
+            0.5070657134056091,
+            0.1215098425745964,
+            0.0
+        ],
+        "Color Max": [
+            0.35686275362968445,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 1.0,
+        "LifeTime": 0.3700000047683716,
+        "Max Particle Num": 1000,
+        "Particle Count": 14,
+        "Position Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RailFileName": "",
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            195.6999969482422
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            -36.900001525878906
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": 6.0,
+        "Scale Min": 6.0,
+        "ScaleV3 Max": [
+            0.6899999976158142,
+            24.260000228881836,
+            0.10000000149011612
+        ],
+        "ScaleV3 Min": [
+            0.5799999833106995,
+            9.529999732971191,
+            0.10000000149011612
+        ],
+        "Speed Max": 0.0,
+        "Speed Min": 0.0,
+        "SpeedV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "SpeedV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "StartTime": 0.0,
+        "UV IsLoop": false,
+        "UV NumOfFrame": 0,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScrollSpeed": 0.0,
+        "UV isFlipX": false,
+        "UV isFlipY": false,
+        "UV isScroll": false,
+        "UV isScrollEachPixel": false,
+        "UseRail": false,
+        "afterDuration": 0.0,
+        "blendMode": 1,
+        "emitPositionMode": 2,
+        "isAlphaNoMove": false,
+        "isBillBord": true,
+        "isFloatVelocity": false,
+        "isRotateForDirection": false,
+        "isScalerScale": false,
+        "isShot": true,
+        "modelFilePath": "",
+        "preBillBordType": 0,
+        "primitiveTypeInt": 0,
+        "scaleEaseParam.backRatio": 0.49000000953674316,
+        "scaleEaseParam.easeTypeInt": 21,
+        "scaleEaseParam.endValueF.max": 0.0,
+        "scaleEaseParam.endValueF.min": 0.0,
+        "scaleEaseParam.endValueV3.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scaleEaseParam.endValueV3.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scaleEaseParam.isScaleEase": true,
+        "scaleEaseParam.maxTime": 0.20000000298023224,
+        "scaleEaseParam.startValueF": 1.0,
+        "scaleEaseParam.startValueV3": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "selectedTexturePath": "Resources/texture/Particle/Triangle.png",
+        "timeMode": 1,
+        "useModel": false
+    }
+}

@@ -7,45 +7,51 @@
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 
-#include "ParticleEmitter.h"
+#include "Parameter/ParticleCommonParameters.h"
+#include "Primitive/IPrimitive.h"
 #include "struct/ParticleForGPU.h"
+
+// Easing
+#include "Easing/Easing.h"
 
 // math
 #include "Box.h"
 #include "MinMax.h"
 // std
+
 #include <list>
 #include <memory>
 #include <unordered_map>
 
 namespace KetaEngine {
 
-struct ParticleEmitter::GroupParamaters;
-struct ParticleEmitter::Parameters;
-struct ParticleEmitter::EaseParm;
-
 /// <summary>
 /// パーティクルマネージャー
 /// </summary>
 class ParticleManager {
+public:
+    // 共通パラメータの型エイリアス
+    using GroupParamaters = ParticleCommon::GroupParamaters;
+    using Parameters      = ParticleCommon::Parameters;
+    using EaseParm        = ParticleCommon::ScaleEaseParam;
 
-private:
+public:
     struct ScaleInFo {
         Vector3 tempScaleV3;
         Vector3 easeEndScale;
-        ParticleEmitter::EaseParm easeParam;
+        EaseParm easeParam;
     };
     struct UVInfo {
         Vector3 pos;
         Vector3 scale;
         Vector3 rotate;
         float frameDistance_;
-        float frameScroolSpeed;
+        float frameScrollSpeed;
         float uvStopPos_;
-        float currentScroolTime;
-        bool isScroolEachPixel;
-        bool isScrool;
-        bool isRoop;
+        float currentScrollTime;
+        bool isScrollEachPixel;
+        bool isScroll;
+        bool isLoop;
         bool isFlipX;
         bool isFlipY;
     };
@@ -55,7 +61,6 @@ private:
         float currentTime_;
         float gravity_;
         float speed_;
-        float easeTime;
         bool isFloatVelocity;
         Vector3 offSet;
         Vector3 direction_;
@@ -64,9 +69,12 @@ private:
         Vector3 rotateSpeed_;
         Vector4 color_;
         const Vector3* followPos = nullptr;
-        std::unique_ptr<WorldTransform> worldTransform_; 
+        std::unique_ptr<WorldTransform> worldTransform_;
         ScaleInFo scaleInfo;
         UVInfo uvInfo_;
+
+        bool isAdaptEasing = false;
+        std::unique_ptr<Easing<Vector3>> scaleEasing;
     };
 
     struct AccelerationField {
@@ -85,7 +93,7 @@ private:
         uint32_t textureHandle;
         ParticleFprGPU* instancingData;
         std::list<Particle> particles;
-        ParticleEmitter::GroupParamaters param;
+        GroupParamaters param;
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
     };
 
@@ -93,108 +101,25 @@ public:
     ParticleManager()  = default;
     ~ParticleManager() = default;
 
-    
     // 初期化、更新、描画
     void Init(SrvManager* srvManager);
     void Update();
     void Draw(const ViewProjection& viewProjection);
 
-    /// <summary>
-    /// インスタンシングデータのリセット
-    /// </summary>
-    /// <param name="name">パーティクルグループ名</param>
     void ResetInstancingData(const std::string& name);
-
-
-    /// <summary>
-    /// UV更新
-    /// </summary>
-    /// <param name="uvInfo">UV情報</param>
-    /// <param name="deltaTime">デルタタイム</param>
     void UpdateUV(UVInfo& uvInfo, float deltaTime);
-
-    /// <summary>
-    /// パーティクルグループの作成
-    /// </summary>
-    /// <param name="name">グループ名</param>
-    /// <param name="modelFilePath">モデルファイルパス</param>
-    /// <param name="maxnum">最大パーティクル数</param>
     void CreateParticleGroup(const std::string name, const std::string modelFilePath, uint32_t maxnum);
-
-    /// <summary>
-    /// プリミティブパーティクルの作成
-    /// </summary>
-    /// <param name="name">グループ名</param>
-    /// <param name="type">プリミティブタイプ</param>
-    /// <param name="maxnum">最大パーティクル数</param>
     void CreatePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum);
-
-    /// <summary>
-    /// モデルの設定
-    /// </summary>
-    /// <param name="name">グループ名</param>
-    /// <param name="modelName">モデル名</param>
     void SetModel(const std::string& name, const std::string& modelName);
-
-    /// <summary>
-    /// マテリアルリソースの作成
-    /// </summary>
-    /// <param name="name">グループ名</param>
     void CreateMaterialResource(const std::string& name);
-
-    /// <summary>
-    /// インスタンシングリソースの作成
-    /// </summary>
-    /// <param name="name">グループ名</param>
-    /// <param name="instanceNum">インスタンス数</param>
     void CreateInstancingResource(const std::string& name, uint32_t instanceNum);
+    void ResetAllParticles();
 
-    void ResetAllParticles(); //< 全パーティクルのリセット
+    Particle MakeParticle(const Parameters& paramaters);
+    void Emit(std::string name, const Parameters& paramaters,
+        const GroupParamaters& groupParamaters, int32_t count);
 
-    /// <summary>
-    /// パーティクルの生成
-    /// </summary>
-    /// <param name="paramaters">パラメータ</param>
-    /// <returns>生成されたパーティクル</returns>
-    Particle MakeParticle(const ParticleEmitter::Parameters& paramaters);
-
-    /// <summary>
-    /// パーティクルの放出
-    /// </summary>
-    /// <param name="name">グループ名</param>
-    /// <param name="paramaters">パラメータ</param>
-    /// <param name="groupParamaters">グループパラメータ</param>
-    /// <param name="count">放出数</param>
-    void Emit(std::string name, const ParticleEmitter::Parameters& paramaters,
-        const ParticleEmitter::GroupParamaters& groupParamaters, int32_t count);
-
-    /// <summary>
-    /// アルファ値の適用
-    /// </summary>
-    /// <param name="data">GPU用データ</param>
-    /// <param name="parm">パーティクルパラメータ</param>
-    /// <param name="group">パーティクルグループ</param>
     void AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group);
-
-    /// <summary>
-    /// スケールの適用
-    /// </summary>
-    /// <param name="time">経過時間</param>
-    /// <param name="parm">スケール情報</param>
-    /// <returns>適用後のスケール</returns>
-    Vector3 ScaleAdapt(float time, const ScaleInFo& parm);
-
-    /// <summary>
-    /// イージングの適用
-    /// </summary>
-    /// <param name="easetype">イージングタイプ</param>
-    /// <param name="start">開始値</param>
-    /// <param name="end">終了値</param>
-    /// <param name="time">経過時間</param>
-    /// <param name="maxTime">最大時間</param>
-    /// <returns>イージング後の値</returns>
-    Vector3 EaseAdapt(const ParticleEmitter::EaseType& easetype, const Vector3& start,
-        const Vector3& end, float time, float maxTime);
 
 private:
     SrvManager* pSrvManager_;

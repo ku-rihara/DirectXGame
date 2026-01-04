@@ -70,6 +70,10 @@ void PlayerAttackRendition::Update(float deltaTime) {
                 pPlayer_->GetAttackEffect()->PlayPostEffect(param.fileName);
                 break;
 
+            case PlayerAttackRenditionData::Type::ParticleEffect:
+                pPlayer_->GetEffects()->Emit(param.fileName);
+                break;
+
             default:
                 break;
             }
@@ -124,20 +128,11 @@ void PlayerAttackRendition::Update(float deltaTime) {
 }
 
 void PlayerAttackRendition::PlayRendition() {
-    // ごり押し演出追加処理(絶対消す)
+    // ごり押し演出追加処理(Editor適応に合わせ削除する)
     std::string name = playerComboAttackData_->GetGroupName();
-    bool usHit       = pPlayer_->GetPlayerCollisionInfo()->GetIsHit();
-
+ 
     if (name == "FallRandingAttack") {
         pPlayer_->GetEffects()->FallEffectRenditionInit();
-    }
-
-    if (name == "UpperAttack" && usHit) {
-        pPlayer_->GetEffects()->SpecialAttackRenditionInit();
-    }
-
-    if (name == "FallAntipation") {
-        pPlayer_->GetEffects()->SpecialAttackRenditionInit();
     }
 
     if (name == "RushAttack") {

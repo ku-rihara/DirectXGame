@@ -1,0 +1,160 @@
+{
+    "SpawnEffect0": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": false,
+        "BaseColor": [
+            0.04096541181206703,
+            0.88416987657547,
+            0.5618637800216675,
+            0.0
+        ],
+        "Color Max": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 1.0,
+        "LifeTime": 0.8399999737739563,
+        "Max Particle Num": 1000,
+        "Particle Count": 1,
+        "Position Base": [
+            0.0,
+            -0.5,
+            0.0
+        ],
+        "Position Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RailFileName": "",
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            13.100000381469727,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
+        "ScaleV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ScaleV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Speed Max": 0.0,
+        "Speed Min": 0.0,
+        "SpeedV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "SpeedV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "StartTime": 0.0,
+        "UV IsLoop": true,
+        "UV NumOfFrame": 0,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScrollSpeed": 0.12999999523162842,
+        "UV isFlipX": false,
+        "UV isFlipY": true,
+        "UV isScroll": true,
+        "UV isScrollEachPixel": true,
+        "UseRail": false,
+        "afterDuration": 0.0,
+        "blendMode": 3,
+        "emitPositionMode": 2,
+        "isAlphaNoMove": false,
+        "isBillBord": false,
+        "isFloatVelocity": false,
+        "isRotateForDirection": false,
+        "isScalerScale": false,
+        "isShot": true,
+        "modelFilePath": "",
+        "preBillBordType": 0,
+        "primitiveTypeInt": 2,
+        "scaleEaseParam.backRatio": 0.0,
+        "scaleEaseParam.easeTypeInt": 22,
+        "scaleEaseParam.endValueF.max": 1.0,
+        "scaleEaseParam.endValueF.min": 1.0,
+        "scaleEaseParam.endValueV3.max": [
+            4.5,
+            4.5,
+            4.5
+        ],
+        "scaleEaseParam.endValueV3.min": [
+            4.5,
+            4.5,
+            4.5
+        ],
+        "scaleEaseParam.isScaleEase": true,
+        "scaleEaseParam.maxTime": 0.27000001072883606,
+        "scaleEaseParam.startValueF": 1.0,
+        "scaleEaseParam.startValueV3": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "selectedTexturePath": "Resources/texture/gradationLine.png",
+        "timeMode": 1,
+        "useModel": false
+    }
+}

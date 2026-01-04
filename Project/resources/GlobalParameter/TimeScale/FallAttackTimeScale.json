@@ -1,6 +1,6 @@
 {
     "FallAttackTimeScale": {
-        "duration": 0.37299999594688416,
-        "timeScale": 0.20000000298023224
+        "duration": 0.0,
+        "timeScale": 1.0
     }
 }

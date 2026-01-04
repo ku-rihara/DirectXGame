@@ -199,12 +199,7 @@ void EnemyManager::DamageReactionCreate() {
 ///----------------------------------------------------------
 void EnemyManager::ParticleInit() {
 
-    // damage
-    damageEffect[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffectCenter", PrimitiveType::Plane, 300));
-    damageEffect[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffect", PrimitiveType::Plane, 300));
-    damageEffect[2].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffectWing", PrimitiveType::Plane, 300));
-    damageEffect[3].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffectStar", PrimitiveType::Plane, 300));
-
+  
     /// death
     deathParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathSmoke", PrimitiveType::Plane, 900));
     deathParticle_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathFireSmoke", PrimitiveType::Plane, 900));
@@ -229,12 +224,6 @@ void EnemyManager::ParticleInit() {
 /// Emit Init
 ///----------------------------------------------------------------------
 
-void EnemyManager::DamageEffectShot(const Vector3& pos) {
-    for (uint32_t i = 0; i < damageEffect.size(); i++) {
-        damageEffect[i].emitter->SetTargetPosition(pos);
-        damageEffect[i].emitter->Emit();
-    }
-}
 
 void EnemyManager::ThrustEmit(const Vector3& pos) {
     // ガレキパーティクル
@@ -274,10 +263,7 @@ void EnemyManager::SpawnEmitByStrongEnemy(const Vector3& pos) {
 /// Particle Update
 ///----------------------------------------------------------
 void EnemyManager::ParticleUpdate() {
-    // ダメージパーティクル
-    for (uint32_t i = 0; i < damageEffect.size(); i++) {
-        damageEffect[i].emitter->Update();
-    }
+    
 
     // スポーンパーティクル
     for (uint32_t i = 0; i < spawnEffectNormal_.size(); i++) {

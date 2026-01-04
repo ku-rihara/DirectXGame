@@ -16,6 +16,9 @@ void Audience::Init(int32_t index) {
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
+    
+    particlePlayer_ = std::make_unique<KetaEngine::ParticlePlayer>();
+    particlePlayer_->Init();
 
     // 列の適応
     seatSide_ = static_cast<SeatSide>(seatSideIndex_);
@@ -41,6 +44,9 @@ void Audience::Update() {
 
     behavior_->Update();
     behavior_->Debug();
+
+    particlePlayer_->Update();
+    particlePlayer_->SetTargetPosition(objAnimation_->transform_.GetWorldPos());
 
     objAnimation_->transform_.translation_.x = positionX_;
     // Y回転設定
@@ -80,6 +86,7 @@ void Audience::AppearByComboLevel(int32_t level) {
     }
 
     // スポーンモードに移行
+    particlePlayer_->Play("Audience", "AppearEffect");
     audienceRoot->ChangeAppearMode();
 }
 

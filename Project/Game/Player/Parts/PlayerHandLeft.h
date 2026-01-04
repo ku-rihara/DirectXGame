@@ -33,19 +33,17 @@ private:
     /// private variant
     ///=============================================
 
-    std::string railGroupName_;
-    std::unique_ptr<KetaEngine::RailManager> trustRailManager_;
+  
     KetaEngine::GPUParticlePlayer gpuParticlePlayer_;
 
 public:
     ///===========================================
     /// getter method
     ///=============================================
-    KetaEngine::RailManager* GetThrustRailManager() { return trustRailManager_.get(); }
-
+  
     ///===========================================
     /// setter method
     ///=============================================
-    void SetRailParent(KetaEngine::WorldTransform* parent) override;
+
     void SetParent(KetaEngine::WorldTransform* parent) override;
 };

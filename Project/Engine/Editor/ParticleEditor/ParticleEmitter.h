@@ -8,6 +8,7 @@
 #include "Line3D/Line3D.h"
 #include "Primitive/IPrimitive.h"
 
+#include "Parameter/ParticleCommonParameters.h"
 #include "ParticleParameter.h"
 #include <string>
 #include <vector>
@@ -20,6 +21,13 @@ class Object3DAnimation;
 /// パーティクルエミッター
 /// </summary>
 class ParticleEmitter : public ParticleParameter {
+public:
+    // 共通パラメータの型エイリアス
+    using GroupParamaters = ParticleCommon::GroupParamaters;
+    using Parameters      = ParticleCommon::Parameters;
+    using EaseParm        = ParticleCommon::ScaleEaseParam;
+    using UVParm          = ParticleCommon::UVParam;
+    using JointParent     = ParticleCommon::JointParent;
 
 public:
     ParticleEmitter()           = default;
@@ -62,17 +70,17 @@ public:
     /// <param name="viewProjection">ビュープロジェクション</param>
     void SetEmitLine();
 
-    void Init(); 
+    void Init();
     void Update();
-    void Emit(); 
+    void Emit();
     void StartRailEmit();
-    void StartRailPlayerEmit(const std::string& railFileName); 
+    void StartRailPlayerEmit(const std::string& railFileName);
     void StopRailPlayerEmit();
-    void UpdateEmitTransform(); 
-    void EditorUpdate() override; 
+    void UpdateEmitTransform();
+    void EditorUpdate() override;
 
 private:
-    void RailMoveUpdate(); 
+    void RailMoveUpdate();
     void RailPlayerUpdate();
 
 private:
@@ -82,7 +90,7 @@ private:
     bool isStartRailMove_;
     std::string editorMessage_;
 
-    // 旧システム用（互換性のため残す）
+    // 旧システム用
     std::unique_ptr<RailManager> railManager_;
 
     // 新システム用
@@ -103,7 +111,6 @@ public:
     void SetFollowingPos(const Vector3* pos);
     void SetBlendMode(const BlendMode& blendmode);
     void SetBillBordType(const BillboardType& billboardType);
-    void SetParentBasePos(WorldTransform* parent);
     void SetIsMoveForRail(bool isMoveForRail) { isMoveForRail_ = isMoveForRail; }
     void SetMoveSpeed(float moveSpeed) { moveSpeed_ = moveSpeed; }
     void SetTargetPosition(const Vector3& targetPos) { parameters_.targetPos = targetPos; }

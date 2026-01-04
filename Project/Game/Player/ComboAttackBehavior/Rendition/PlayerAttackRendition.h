@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Easing/Easing.h"
 #include "Editor/RailEditor/RailManager.h"
 #include "Player/ComboCreator/PlayerAttackRenditionData.h"
-#include "Easing/Easing.h"
+#include"Editor/ParticleEditor/ParticlePlayer.h"
 
 class Player;
 class PlayerComboAttackData;
@@ -33,6 +34,10 @@ public:
     bool isBlur_;
     KetaEngine::Easing<float> rushBlurEase_;
     float tempBlurParam_;
-    void PlayRendition();
 
+private:
+ 
+
+public:
+    void PlayRendition();
 };

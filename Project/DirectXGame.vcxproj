@@ -85,6 +85,7 @@
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleParameter.cpp" />
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticlePlayer.cpp" />
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSection.cpp" />
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.cpp" />
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectController.cpp" />
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectData.cpp" />
     <ClCompile Include="Engine\Editor\RailEditor\ControlPosManager.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
+    <ClCompile Include="Engine\Primitive\PrimitiveSphere.cpp" />
     <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp" />
     <ClCompile Include="Engine\Scene\Manager\SceneManager.cpp" />
     <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp" />
@@ -194,6 +196,7 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageRendition.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.cpp" />
@@ -203,6 +206,7 @@
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.cpp" />
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionData.cpp" />
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageRenditionData.cpp" />
+    <ClCompile Include="Game\Enemy\Effects\EnemyEffects.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp" />
     <ClCompile Include="Game\Enemy\SearchingSprite\FindSprite.cpp" />
@@ -348,6 +352,7 @@
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationPlayer.h" />
     <ClInclude Include="Engine\Editor\ParameterEditor\GlobalParameter.h" />
+    <ClInclude Include="Engine\Editor\ParticleEditor\Parameter\ParticleCommonParameters.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleData.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEditor.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEmitter.h" />
@@ -355,6 +360,7 @@
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleParameter.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticlePlayer.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSection.h" />
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.h" />
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectController.h" />
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectData.h" />
     <ClInclude Include="Engine\Editor\RailEditor\ControlPosManager.h" />
@@ -432,6 +438,7 @@
     <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
     <ClInclude Include="Engine\Primitive\PrimitivePlane.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h" />
+    <ClInclude Include="Engine\Primitive\PrimitiveSphere.h" />
     <ClInclude Include="Engine\Scene\Factory\AbstractSceneFactory.h" />
     <ClInclude Include="Engine\Scene\Factory\SceneFactory.h" />
     <ClInclude Include="Engine\Scene\Manager\SceneManager.h" />
@@ -477,6 +484,7 @@
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h" />
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageRendition.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.h" />
     <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.h" />
@@ -486,6 +494,7 @@
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.h" />
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionData.h" />
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageRenditionData.h" />
+    <ClInclude Include="Game\Enemy\Effects\EnemyEffects.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h" />
     <ClInclude Include="Game\Enemy\SearchingSprite\FindSprite.h" />

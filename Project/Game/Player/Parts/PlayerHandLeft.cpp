@@ -9,15 +9,11 @@ void PlayerHandLeft::Init() {
 
     // グループネーム
     groupName_     = "LeftHand";
-    railGroupName_ = "ThrustRail";
-
+ 
     obj3d_.reset(KetaEngine::Object3d::CreateModel("LHand.obj"));
     obj3d_->transform_.scale_                       = {2, 2, 2};
     obj3d_->material_.materialData_->enableLighting = 2;
     obj3d_->material_.SetEnvironmentCoefficient(0.15f);
-   
-    trustRailManager_ = std::make_unique<KetaEngine::RailManager>();
-    trustRailManager_->Init(railGroupName_);
 
     BasePlayerHand::Init();
 
@@ -29,6 +25,7 @@ void PlayerHandLeft::Init() {
 /// 　更新
 ///==========================================================
 void PlayerHandLeft::Update() {
+    BasePlayerHand::EffectEmit("DefaultFireAura");
     gpuParticlePlayer_.Play("Player", "LeftHandParticle");
     gpuParticlePlayer_.SetEmitPosition(GetWorldPosition());
     gpuParticlePlayer_.Update();
@@ -46,7 +43,6 @@ void PlayerHandLeft::AdjustParam() {
     if (ImGui::CollapsingHeader("LeftHand")) {
         ImGui::PushID("LeftHand");
         BasePlayerHand::AdjustParamBase();
-        trustRailManager_->ImGuiEdit();
         SaveAndLoad();
         ImGui::PopID();
     }
@@ -67,6 +63,3 @@ void PlayerHandLeft::SetParent(KetaEngine::WorldTransform* parent) {
     BasePlayerHand::SetParent(parent);
 }
 
-void PlayerHandLeft::SetRailParent(KetaEngine::WorldTransform* parent) {
-    trustRailManager_->SetParent(parent);
-}

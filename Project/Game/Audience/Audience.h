@@ -3,6 +3,7 @@
 #include "BaseObject/BaseObject.h"
 #include "Behavior/BaseAudienceBehavior.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParticleEditor/ParticlePlayer.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include <cstdint>
@@ -72,6 +73,9 @@ private:
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
     float positionX_;
 
+    // Particle
+    std::unique_ptr<KetaEngine::ParticlePlayer> particlePlayer_;
+
     float cheerAnimationTimer_;
 
     // behavior
@@ -81,6 +85,7 @@ public:
     KetaEngine::Object3DAnimation* GetObjAnimation() { return objAnimation_.get(); }
     int32_t GetSeatRowNum() const { return seatRowNum_; }
     AudienceRoot* GetAudienceRoot() const;
+    KetaEngine::ParticlePlayer* GetParticlePlayer() const { return particlePlayer_.get(); }
 
     void SetBaseScale(Vector3 scale);
     void SetCheerAnimationTimer(float timer) { cheerAnimationTimer_ = timer; }

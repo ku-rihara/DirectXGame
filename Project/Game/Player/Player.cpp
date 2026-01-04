@@ -65,10 +65,6 @@ void Player::Init() {
     leftHand_->SetParent(&baseTransform_);
     rightHand_->SetParent(&baseTransform_);
 
-    /// レールペアレント
-    rightHand_->SetRailParent(&baseTransform_);
-    leftHand_->SetRailParent(&baseTransform_);
-
     // JumpAttackUI
     jumpAttackUI_ = std::make_unique<JumpAttackUI>();
     jumpAttackUI_->Init();

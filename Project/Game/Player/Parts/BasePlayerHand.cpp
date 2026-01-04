@@ -14,9 +14,11 @@ void BasePlayerHand::Init() {
     AddParamGroup();
     ApplyGlobalParameter();
 
-    emitter_.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive(groupName_, PrimitiveType::Plane, 300));
-    uint32_t handle = KetaEngine::TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
-    emitter_->SetTextureHandle(handle);
+    particlePlayer_ = std::make_unique<KetaEngine::ParticlePlayer>();
+    particlePlayer_->Init();
+    particlePlayer_->SetFollowingPos(&effectFollowPos_);
+
+   
 }
 
 ///=========================================================
@@ -27,12 +29,10 @@ void BasePlayerHand::Update() {
     obj3d_->SetIsShadow(isShadow_);
 
     // エミッター更新
-    emitter_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
-    emitter_->Update();
-    emitter_->EditorUpdate();
-    if (isEmit_) {
-        emitter_->Emit();
-    }
+    particlePlayer_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
+    effectFollowPos_ = obj3d_->transform_.GetWorldPos();
+    particlePlayer_->Update();
+   
 
     BaseObject::Update();
 }
@@ -60,8 +60,7 @@ void BasePlayerHand::AddParamGroup() {
 
     // Position
     globalParameter_->AddItem(groupName_, "Translate", obj3d_->transform_.translation_);
-    globalParameter_->AddItem(groupName_, "RailRunSpeed", railRunSpeedThree_);
-    globalParameter_->AddItem(groupName_, "RailRunSpeedF", railRunSpeedForth_);
+ 
 }
 
 ///=================================================================================
@@ -74,8 +73,7 @@ void BasePlayerHand::SetValues() {
 
     // Position
     globalParameter_->SetValue(groupName_, "Translate", obj3d_->transform_.translation_);
-    globalParameter_->SetValue(groupName_, "RailRunSpeed", railRunSpeedThree_);
-    globalParameter_->SetValue(groupName_, "RailRunSpeedF", railRunSpeedForth_);
+  
 }
 
 ///=====================================================
@@ -84,8 +82,7 @@ void BasePlayerHand::SetValues() {
 void BasePlayerHand::ApplyGlobalParameter() {
     // Position
     obj3d_->transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-    railRunSpeedThree_              = globalParameter_->GetValue<float>(groupName_, "RailRunSpeed");
-    railRunSpeedForth_              = globalParameter_->GetValue<float>(groupName_, "RailRunSpeedF");
+   
 }
 
 ///=====================================================
@@ -106,17 +103,15 @@ void BasePlayerHand::DissolveAdapt(float dissolve) {
 void BasePlayerHand::AdjustParamBase() {
     ImGui::SeparatorText("Param");
     ImGui::DragFloat3("Position", &obj3d_->transform_.translation_.x, 0.1f);
-    ImGui::DragFloat("RailRunSpeedThree", &railRunSpeedThree_, 0.01f);
-    ImGui::DragFloat("RailRunSpeedForth", &railRunSpeedForth_, 0.01f);
+  
 }
 
 void BasePlayerHand::SetParent(KetaEngine::WorldTransform* parent) {
     obj3d_->transform_.parent_ = parent;
 }
 
-void BasePlayerHand::SetBlendModeSub() {
-    emitter_->SetBlendMode(BlendMode::Subtractive);
-}
-void BasePlayerHand::SetBlendModeAdd() {
-    emitter_->SetBlendMode(BlendMode::Add);
+void BasePlayerHand::EffectEmit(const std::string& effectName) {
+    if (isEmit_) {
+        particlePlayer_->Play("Player",effectName);
+    }
 }
