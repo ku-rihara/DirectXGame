@@ -130,8 +130,7 @@ void PlayerAttackRendition::Update(float deltaTime) {
 void PlayerAttackRendition::PlayRendition() {
     // ごり押し演出追加処理(Editor適応に合わせ削除する)
     std::string name = playerComboAttackData_->GetGroupName();
-    bool usHit       = pPlayer_->GetPlayerCollisionInfo()->GetIsHit();
-
+ 
     if (name == "FallRandingAttack") {
         pPlayer_->GetEffects()->FallEffectRenditionInit();
     }

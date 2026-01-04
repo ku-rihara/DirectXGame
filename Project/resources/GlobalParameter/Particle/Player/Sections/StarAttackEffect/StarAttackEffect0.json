@@ -37,9 +37,9 @@
         "Max Particle Num": 1000,
         "Particle Count": 16,
         "Position Base": [
+            0.5400000214576721,
             0.0,
-            0.0,
-            -1.0299999713897705
+            -1.4700000286102295
         ],
         "Position Max": [
             0.0,
@@ -70,12 +70,12 @@
         "RotateSpeed Max": [
             0.0,
             0.0,
-            0.0
+            6.0
         ],
         "RotateSpeed Min": [
             0.0,
             0.0,
-            0.0
+            6.0
         ],
         "Scale Max": 0.0,
         "Scale Min": 0.0,
@@ -133,8 +133,8 @@
         "primitiveTypeInt": 0,
         "scaleEaseParam.backRatio": 0.5400000214576721,
         "scaleEaseParam.easeTypeInt": 32,
-        "scaleEaseParam.endValueF.max": 7.0,
-        "scaleEaseParam.endValueF.min": 7.0,
+        "scaleEaseParam.endValueF.max": 9.0,
+        "scaleEaseParam.endValueF.min": 9.0,
         "scaleEaseParam.endValueV3.max": [
             0.0,
             0.0,
