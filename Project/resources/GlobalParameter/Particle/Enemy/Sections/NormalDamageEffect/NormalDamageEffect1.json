@@ -33,9 +33,9 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 0.25,
+        "LifeTime": 0.3199999928474426,
         "Max Particle Num": 1000,
-        "Particle Count": 23,
+        "Particle Count": 27,
         "Position Base": [
             0.0,
             0.0,
@@ -80,16 +80,16 @@
         "Scale Max": 0.0,
         "Scale Min": 0.0,
         "ScaleV3 Max": [
-            0.3100000023841858,
+            0.38999998569488525,
             5.0,
             0.10000000149011612
         ],
         "ScaleV3 Min": [
-            0.27000001072883606,
+            0.49000000953674316,
             4.0,
             0.10000000149011612
         ],
-        "Speed Max": 50.0,
+        "Speed Max": 58.9900016784668,
         "Speed Min": 40.0,
         "SpeedV3 Max": [
             0.0,
@@ -146,7 +146,7 @@
             0.0
         ],
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.23000000417232513,
+        "scaleEaseParam.maxTime": 0.36000001430511475,
         "scaleEaseParam.startValueF": 1.0,
         "scaleEaseParam.startValueV3": [
             1.0,
