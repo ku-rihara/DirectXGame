@@ -33,7 +33,5 @@ void NormalEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection
 }
 
 void NormalEnemy::SpawnRenditionInit() {
-    // ガレキパーティクル
-    pEnemyManager_->SpawnEmitByNormalEnemy(baseTransform_.translation_);
-    /* Audio::GetInstance()->PlayWave(thurstSound_, 0.2f);*/
+    GetEnemyEffects()->Emit("SpawnEffect");
 }

@@ -36,7 +36,7 @@ void EnemySpawn::Update() {
         /// 敵の生成アニメーション
         ///------------------------------------------------------------------
     case EnemySpawn::Step::EFFECTEMIT:
-        pBaseEnemy_->GetEnemyEffects()->Emit("SpawnEffect");
+        pBaseEnemy_->SpawnRenditionInit();
 
         step_ = Step::SPAWN; // 次のステップ
         break;

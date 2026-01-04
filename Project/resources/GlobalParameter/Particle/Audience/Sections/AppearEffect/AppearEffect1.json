@@ -32,13 +32,13 @@
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 1.0,
-        "LifeTime": 0.8899999856948853,
+        "IntervalTime": 1.840000033378601,
+        "LifeTime": 1.440000057220459,
         "Max Particle Num": 1000,
         "Particle Count": 2,
         "Position Base": [
             0.0,
-            16.030000686645508,
+            20.59000015258789,
             0.0
         ],
         "Position Max": [
@@ -122,7 +122,7 @@
         "afterDuration": 0.0,
         "blendMode": 0,
         "emitPositionMode": 2,
-        "isAlphaNoMove": false,
+        "isAlphaNoMove": true,
         "isBillBord": true,
         "isFloatVelocity": false,
         "isRotateForDirection": false,
@@ -133,8 +133,8 @@
         "primitiveTypeInt": 0,
         "scaleEaseParam.backRatio": 0.3499999940395355,
         "scaleEaseParam.easeTypeInt": 44,
-        "scaleEaseParam.endValueF.max": 8.0,
-        "scaleEaseParam.endValueF.min": 8.0,
+        "scaleEaseParam.endValueF.max": 6.0,
+        "scaleEaseParam.endValueF.min": 6.0,
         "scaleEaseParam.endValueV3.max": [
             0.0,
             0.0,
@@ -146,7 +146,7 @@
             0.0
         ],
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.9300000071525574,
+        "scaleEaseParam.maxTime": 1.4700000286102295,
         "scaleEaseParam.startValueF": 1.0,
         "scaleEaseParam.startValueV3": [
             1.0,

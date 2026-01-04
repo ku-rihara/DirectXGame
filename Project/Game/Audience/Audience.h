@@ -85,6 +85,7 @@ public:
     KetaEngine::Object3DAnimation* GetObjAnimation() { return objAnimation_.get(); }
     int32_t GetSeatRowNum() const { return seatRowNum_; }
     AudienceRoot* GetAudienceRoot() const;
+    KetaEngine::ParticlePlayer* GetParticlePlayer() const { return particlePlayer_.get(); }
 
     void SetBaseScale(Vector3 scale);
     void SetCheerAnimationTimer(float timer) { cheerAnimationTimer_ = timer; }

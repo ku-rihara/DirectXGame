@@ -1,8 +1,8 @@
 {
-  "StrongUpperDamage_Rendition": {
-    "ObjAnim_FileName": "",
-    "ObjAnim_StartTiming": 0.0,
-    "Particle_FileName": "",
-    "Particle_StartTiming": 0.0
-  }
+    "StrongUpperDamage_Rendition": {
+        "ObjAnim_FileName": "",
+        "ObjAnim_StartTiming": 0.0,
+        "Particle_FileName": "NormalDamageEffect",
+        "Particle_StartTiming": 0.0
+    }
 }

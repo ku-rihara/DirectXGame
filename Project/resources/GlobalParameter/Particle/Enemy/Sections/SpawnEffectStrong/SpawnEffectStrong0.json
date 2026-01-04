@@ -1,12 +1,12 @@
 {
-    "SlampSmokeEffect0": {
+    "SpawnEffectStrong0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
         "BaseColor": [
-            0.8918918967247009,
-            0.7438172101974487,
-            0.7438172101974487,
+            0.07349169999361038,
+            0.7799227833747864,
+            0.03312414139509201,
             0.0
         ],
         "Color Max": [
@@ -33,12 +33,12 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 0.5799999833106995,
+        "LifeTime": 0.8399999737739563,
         "Max Particle Num": 1000,
-        "Particle Count": 9,
+        "Particle Count": 1,
         "Position Base": [
             0.0,
-            0.0,
+            -0.5,
             0.0
         ],
         "Position Max": [
@@ -59,7 +59,7 @@
         ],
         "Rotate Max": [
             0.0,
-            0.0,
+            13.100000381469727,
             0.0
         ],
         "Rotate Min": [
@@ -77,8 +77,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 23.1200008392334,
-        "Scale Min": 15.729999542236328,
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -103,7 +103,7 @@
         ],
         "StartTime": 0.0,
         "UV IsLoop": true,
-        "UV NumOfFrame": 10,
+        "UV NumOfFrame": 0,
         "UV Pos": [
             0.0,
             0.0
@@ -113,47 +113,47 @@
             0.0,
             0.0
         ],
-        "UV ScrollSpeed": 0.3499999940395355,
+        "UV ScrollSpeed": 0.12999999523162842,
         "UV isFlipX": false,
-        "UV isFlipY": false,
+        "UV isFlipY": true,
         "UV isScroll": true,
-        "UV isScrollEachPixel": false,
+        "UV isScrollEachPixel": true,
         "UseRail": false,
         "afterDuration": 0.0,
-        "blendMode": 1,
+        "blendMode": 3,
         "emitPositionMode": 2,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillBord": false,
         "isFloatVelocity": false,
         "isRotateForDirection": false,
-        "isScalerScale": true,
-        "isShot": false,
+        "isScalerScale": false,
+        "isShot": true,
         "modelFilePath": "",
         "preBillBordType": 0,
-        "primitiveTypeInt": 0,
+        "primitiveTypeInt": 2,
         "scaleEaseParam.backRatio": 0.0,
-        "scaleEaseParam.easeTypeInt": 0,
-        "scaleEaseParam.endValueF.max": 0.0,
-        "scaleEaseParam.endValueF.min": 0.0,
+        "scaleEaseParam.easeTypeInt": 22,
+        "scaleEaseParam.endValueF.max": 1.0,
+        "scaleEaseParam.endValueF.min": 1.0,
         "scaleEaseParam.endValueV3.max": [
-            0.0,
-            0.0,
-            0.0
+            4.5,
+            4.5,
+            4.5
         ],
         "scaleEaseParam.endValueV3.min": [
-            0.0,
-            0.0,
-            0.0
+            4.5,
+            4.5,
+            4.5
         ],
-        "scaleEaseParam.isScaleEase": false,
-        "scaleEaseParam.maxTime": 1.0,
+        "scaleEaseParam.isScaleEase": true,
+        "scaleEaseParam.maxTime": 0.27000001072883606,
         "scaleEaseParam.startValueF": 1.0,
         "scaleEaseParam.startValueV3": [
             1.0,
             1.0,
             1.0
         ],
-        "selectedTexturePath": "Resources/texture/Particle/SmokeAnimation.png",
+        "selectedTexturePath": "Resources/texture/gradationLine.png",
         "timeMode": 1,
         "useModel": false
     }
