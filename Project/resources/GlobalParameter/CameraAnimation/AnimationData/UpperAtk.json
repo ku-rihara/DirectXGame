@@ -2,9 +2,9 @@
     "UpperAtk": {
         "autoReturnToInitial": true,
         "playbackSpeed": 1.0,
-        "resetFovEaseType": 1,
-        "resetPosEaseType": 1,
-        "resetRotateEaseType": 1,
+        "resetFovEaseType": 9,
+        "resetPosEaseType": 9,
+        "resetRotateEaseType": 9,
         "resetTimePoint": 0.3100000023841858,
         "returnDelayTime": 0.0,
         "timeMode": 1
