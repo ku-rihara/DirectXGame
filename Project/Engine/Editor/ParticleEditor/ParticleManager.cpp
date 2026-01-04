@@ -453,12 +453,16 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
         easingParam.endValue   = particle.scaleInfo.easeEndScale;
         easingParam.maxTime    = parameters.scaleEaseParam.maxTime;
         easingParam.backRatio  = parameters.scaleEaseParam.backRatio;
-        easingParam.finishType = EasingFinishValueType::End;
+        if (easingParam.backRatio == 0.0f) {
+            easingParam.finishType = EasingFinishValueType::End;
+        } else {
+            easingParam.finishType = EasingFinishValueType::Start;
+        }
 
         // Easingに設定
         particle.scaleEasing->SettingValue(easingParam);
 
-        // 修正：WorldTransformのscaleに直接適用
+        // WorldTransformのscaleに直接適用
         particle.scaleEasing->SetAdaptValue(&particle.worldTransform_->scale_);
     }
 
