@@ -10,21 +10,22 @@ void Line3DPipeline::Init(DirectXCommon* dxCommon) {
     BasePipeline::Init(dxCommon);
 }
 
-
 void Line3DPipeline::CreateRootSignature() {
-  
+
     D3D12_ROOT_SIGNATURE_DESC desc{};
     desc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
-    D3D12_ROOT_PARAMETER param{};
-    param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    param.ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
-    param.Descriptor.ShaderRegister = 0;
+    D3D12_ROOT_PARAMETER rootParameters[static_cast<UINT>(Line3DRootParameter::Count)] = {};
 
-    desc.pParameters   = &param;
-    desc.NumParameters = 1;
+    // TransformationMatrix (b0, Vertex)
+    rootParameters[static_cast<UINT>(Line3DRootParameter::TransformationMatrix)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(Line3DRootParameter::TransformationMatrix)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[static_cast<UINT>(Line3DRootParameter::TransformationMatrix)].Descriptor.ShaderRegister = 0;
 
-     // シリアライズしてバイナリにする
+    desc.pParameters   = rootParameters;
+    desc.NumParameters = static_cast<UINT>(Line3DRootParameter::Count);
+
+    // シリアライズしてバイナリにする
     SerializeAndCreateRootSignature(desc);
 }
 

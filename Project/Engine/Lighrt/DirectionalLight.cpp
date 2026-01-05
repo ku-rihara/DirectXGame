@@ -1,6 +1,7 @@
 #include "DirectionalLight.h"
 
 using namespace KetaEngine;
+#include"Pipeline/Object3D/Object3DPipeline.h"
 #include"Dx/DirectXCommon.h"
 #include <imgui.h>
 #include "Vector3.h"
@@ -35,5 +36,5 @@ void DirectionalLight::DebugImGui() {
 }
 
 void  DirectionalLight::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
-    commandList->SetGraphicsRootConstantBufferView(4, lightResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Object3DRootParameter::DirectionalLight), lightResource_->GetGPUVirtualAddress());
 }

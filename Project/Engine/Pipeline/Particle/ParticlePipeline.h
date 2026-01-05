@@ -11,6 +11,13 @@
 /// </summary>
 namespace KetaEngine {
 
+enum class ParticleRootParameter {
+    ParticleData,
+    Material,    
+    Texture,     
+    Count
+};
+
 class ParticlePipeline : public BasePipeline {
 public:
     ParticlePipeline()  = default;

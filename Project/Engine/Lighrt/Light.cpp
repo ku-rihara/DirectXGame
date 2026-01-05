@@ -5,6 +5,7 @@ using namespace KetaEngine;
 #include "AreaLightManager.h"
 #include "DirectionalLight.h"
 #include "Dx/DirectXCommon.h"
+#include "Pipeline/Object3D/Object3DPipeline.h"
 #include "PointLightManager.h"
 #include "SpotLightManager.h"
 #include <imgui.h>
@@ -51,10 +52,10 @@ void Light::InitAllLights() {
     directionalLight_->Init(dxCommon_->GetDevice().Get());
 
     pointLightManager_ = std::make_unique<PointLightManager>();
-    pointLightManager_->Init(dxCommon_->GetDevice().Get()); 
+    pointLightManager_->Init(dxCommon_->GetDevice().Get());
 
     spotLightManager_ = std::make_unique<SpotLightManager>();
-    spotLightManager_->Init(dxCommon_->GetDevice().Get()); 
+    spotLightManager_->Init(dxCommon_->GetDevice().Get());
 
     areaLightManager_ = std::make_unique<AreaLightManager>();
     ambientLight_     = std::make_unique<AmbientLight>();
@@ -82,14 +83,6 @@ void Light::DebugImGui() {
             AddSpotLight();
         }
 
-        /*ImGui::SeparatorText("Remove");
-       if (ImGui::Button("Remove Point Light")) {
-           RemovePointLight();
-       }
-       if (ImGui::Button("Remove Spot  Light")) {
-           RemoveSpotLight();
-       }*/
-
         // ライト数の表示
         ImGui::Text("Light Point Count: %zu", pointLightManager_->GetLightCount());
         ImGui::Text("Light Spot  Count: %zu", spotLightCoutMax_);
@@ -111,13 +104,13 @@ void Light::DebugImGui() {
 }
 
 void Light::RegisterParams() {
-    globalParameter_->Regist(groupName_,"spotLightCoutMax", &spotLightCoutMax_);
+    globalParameter_->Regist(groupName_, "spotLightCoutMax", &spotLightCoutMax_);
 }
 
 void Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {
     directionalLight_->SetLightCommand(commandList);
-    commandList->SetGraphicsRootConstantBufferView(5, cameraForGPUResource_->GetGPUVirtualAddress());
-    commandList->SetGraphicsRootConstantBufferView(10, lightCountResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Object3DRootParameter::Camera), cameraForGPUResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Object3DRootParameter::LightCountData), lightCountResource_->GetGPUVirtualAddress());
     pointLightManager_->SetLightCommand(commandList);
     spotLightManager_->SetLightCommand(commandList);
     areaLightManager_->SetLightCommand(commandList);
