@@ -15,14 +15,14 @@ void Object3DPipeline::Init(DirectXCommon* dxCommon) {
 void Object3DPipeline::CreateRootSignature() {
 
     // 通常のサンプラー
-    staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR; // バイリニアフィルタ
-    staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_WRAP; // 0~1の範囲外をリピート
+    staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+    staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
     staticSamplers_[0].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
     staticSamplers_[0].AddressW         = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-    staticSamplers_[0].ComparisonFunc   = D3D12_COMPARISON_FUNC_NEVER; // 比較しない
-    staticSamplers_[0].MaxLOD           = D3D12_FLOAT32_MAX; // ありったけのMipMapを使う
-    staticSamplers_[0].ShaderRegister   = 0; // レジスタ番号０
-    staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // pxelShaderで使う
+    staticSamplers_[0].ComparisonFunc   = D3D12_COMPARISON_FUNC_NEVER;
+    staticSamplers_[0].MaxLOD           = D3D12_FLOAT32_MAX;
+    staticSamplers_[0].ShaderRegister   = 0;
+    staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
     // シャドウマップ用比較サンプラー
     staticSamplers_[1].Filter           = D3D12_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
@@ -32,7 +32,7 @@ void Object3DPipeline::CreateRootSignature() {
     staticSamplers_[1].BorderColor      = D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE;
     staticSamplers_[1].ComparisonFunc   = D3D12_COMPARISON_FUNC_LESS_EQUAL;
     staticSamplers_[1].MaxLOD           = D3D12_FLOAT32_MAX;
-    staticSamplers_[1].ShaderRegister   = 1; // レジスタ番号1
+    staticSamplers_[1].ShaderRegister   = 1;
     staticSamplers_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
     staticSamplers_[1].MaxAnisotropy    = 1;
 
@@ -40,7 +40,7 @@ void Object3DPipeline::CreateRootSignature() {
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
     descriptionRootSignature.Flags             = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
     descriptionRootSignature.pStaticSamplers   = staticSamplers_;
-    descriptionRootSignature.NumStaticSamplers = 2; // 通常サンプラーとシャドウサンプラーの2個
+    descriptionRootSignature.NumStaticSamplers = 2;
 
     // DescriptorRangeの設定
     D3D12_DESCRIPTOR_RANGE descriptorRange[6] = {};
@@ -82,88 +82,88 @@ void Object3DPipeline::CreateRootSignature() {
     descriptorRange[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[14] = {};
+    D3D12_ROOT_PARAMETER rootParameters[static_cast<UINT>(Object3DRootParameter::Count)] = {};
 
-    // 0: Material
-    rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
-    rootParameters[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL; // PxelShaderを使う
-    rootParameters[0].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
+    // Material (b0, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Material)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Material)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Material)].Descriptor.ShaderRegister = 0;
 
-    // 1: TransformationMatrix
-    rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
-    rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX; // VertexShaderを使う
-    rootParameters[1].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
+    // TransformationMatrix (b0, Vertex)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::TransformationMatrix)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::TransformationMatrix)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::TransformationMatrix)].Descriptor.ShaderRegister = 0;
 
-    // 2: Texture2D
-    rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE; // DescriptorTableを使う
-    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
-    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
-    rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
+    // Texture2D (t0, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Texture2D)].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Texture2D)].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Texture2D)].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Texture2D)].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 3: TextureCube
-    rootParameters[3].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[3].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
-    rootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
+    // TextureCube (t1, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::TextureCube)].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::TextureCube)].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::TextureCube)].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
+    rootParameters[static_cast<UINT>(Object3DRootParameter::TextureCube)].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 4: DirectionalLight
-    rootParameters[4].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[4].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[4].Descriptor.ShaderRegister = 1;
+    // DirectionalLight (b1, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::DirectionalLight)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::DirectionalLight)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::DirectionalLight)].Descriptor.ShaderRegister = 1;
 
-    // 5: Camera
-    rootParameters[5].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[5].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[5].Descriptor.ShaderRegister = 2;
+    // Camera (b2, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Camera)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Camera)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Camera)].Descriptor.ShaderRegister = 2;
 
-    // 6: PointLights
-    rootParameters[6].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[6].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[6].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
-    rootParameters[6].DescriptorTable.NumDescriptorRanges = 1;
+    // PointLights (t2, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::PointLights)].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::PointLights)].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::PointLights)].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
+    rootParameters[static_cast<UINT>(Object3DRootParameter::PointLights)].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 7: SpotLights
-    rootParameters[7].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[7].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[7].DescriptorTable.pDescriptorRanges   = &descriptorRange[3];
-    rootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
+    // SpotLights (t3, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::SpotLights)].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::SpotLights)].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::SpotLights)].DescriptorTable.pDescriptorRanges   = &descriptorRange[3];
+    rootParameters[static_cast<UINT>(Object3DRootParameter::SpotLights)].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 8: AreaLight
-    rootParameters[8].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[8].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[8].Descriptor.ShaderRegister = 3;
+    // AreaLight (b3, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::AreaLight)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::AreaLight)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::AreaLight)].Descriptor.ShaderRegister = 3;
 
-    // 9: AmbientLight
-    rootParameters[9].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[9].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[9].Descriptor.ShaderRegister = 4;
+    // AmbientLight (b4, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::AmbientLight)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::AmbientLight)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::AmbientLight)].Descriptor.ShaderRegister = 4;
 
-    // 10: LightCountData
-    rootParameters[10].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[10].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[10].Descriptor.ShaderRegister = 5;
+    // LightCountData (b5, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::LightCountData)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::LightCountData)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::LightCountData)].Descriptor.ShaderRegister = 5;
 
-    // 11: ShadowMap
-    rootParameters[11].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[11].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[11].DescriptorTable.pDescriptorRanges   = &descriptorRange[4];
-    rootParameters[11].DescriptorTable.NumDescriptorRanges = 1;
+    // ShadowMap (t4, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::ShadowMap)].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::ShadowMap)].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::ShadowMap)].DescriptorTable.pDescriptorRanges   = &descriptorRange[4];
+    rootParameters[static_cast<UINT>(Object3DRootParameter::ShadowMap)].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 12: lightTransform
-    rootParameters[12].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[12].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
-    rootParameters[12].Descriptor.ShaderRegister = 1;
+    // LightTransform (b1, Vertex)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::LightTransform)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::LightTransform)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::LightTransform)].Descriptor.ShaderRegister = 1;
 
-    // 13: dissolve
-    rootParameters[13].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[13].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[13].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
-    rootParameters[13].DescriptorTable.NumDescriptorRanges = 1;
+    // Dissolve (t5, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Dissolve)].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Dissolve)].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Dissolve)].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
+    rootParameters[static_cast<UINT>(Object3DRootParameter::Dissolve)].DescriptorTable.NumDescriptorRanges = 1;
 
-    descriptionRootSignature.pParameters   = rootParameters; // ルートパラメーターの配列
-    descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ
+    descriptionRootSignature.pParameters   = rootParameters;
+    descriptionRootSignature.NumParameters = static_cast<UINT>(Object3DRootParameter::Count);
 
-     // シリアライズしてバイナリにする
+    // シリアライズしてバイナリにする
     SerializeAndCreateRootSignature(descriptionRootSignature);
 }
 

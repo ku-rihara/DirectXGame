@@ -1,6 +1,7 @@
 #include "PointLightManager.h"
 
 using namespace KetaEngine;
+#include"Pipeline/Object3D/Object3DPipeline.h"
 #include "Dx/DirectXCommon.h"
 #include "base/SrvManager.h"
 #include <imgui.h>
@@ -65,7 +66,7 @@ void PointLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) 
     UpdateStructuredBuffer();
 
     // SRVを設定
-    commandList->SetGraphicsRootDescriptorTable(6, SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_));
+    commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(Object3DRootParameter::PointLights), SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_));
 }
 
 void PointLightManager::DebugImGui() {

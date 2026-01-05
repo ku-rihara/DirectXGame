@@ -1,6 +1,7 @@
 #include "ModelMaterial.h"
 
 using namespace KetaEngine;
+#include"Pipeline/Object3D/Object3DPipeline.h"
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include <cassert>
@@ -41,8 +42,8 @@ void ModelMaterial::UpdateMaterialData(const Vector4& Color) {
 
 void ModelMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
     // シェーダーにマテリアルデータを送る
-    commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-    commandList->SetGraphicsRootDescriptorTable(13, TextureManager::GetInstance()->GetTextureHandle(dissolveTextureIndex_));
+    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Object3DRootParameter::Material), materialResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(Object3DRootParameter::Dissolve), TextureManager::GetInstance()->GetTextureHandle(dissolveTextureIndex_));
 }
 
 void ModelMaterial::DebugImGui() {

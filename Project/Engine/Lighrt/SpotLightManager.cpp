@@ -1,6 +1,7 @@
 #include "SpotLightManager.h"
 
 using namespace KetaEngine;
+#include"Pipeline/Object3D/Object3DPipeline.h"
 #include "Dx/DirectXCommon.h"
 #include "base/SrvManager.h"
 #include <imgui.h>
@@ -72,7 +73,7 @@ void SpotLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
     UpdateStructuredBuffer();
 
     // SRVを設定
-    commandList->SetGraphicsRootDescriptorTable(7,SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_));
+    commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(Object3DRootParameter::SpotLights), SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_));
 }
 
 void SpotLightManager::AdJustParams() {

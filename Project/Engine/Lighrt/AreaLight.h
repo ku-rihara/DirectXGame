@@ -48,7 +48,7 @@ public:
     /// </summary>
     /// <param name="commandList">コマンドリスト</param>
     /// <param name="index">インデックス</param>
-    void SetLightCommand(ID3D12GraphicsCommandList* commandList, const int& index);
+    void SetLightCommand(ID3D12GraphicsCommandList* commandList);
 
     void DebugImGui(); //< ImGuiデバッグ表示
 public:
