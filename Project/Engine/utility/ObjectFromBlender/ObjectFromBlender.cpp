@@ -1,14 +1,14 @@
-#include "PutObjForBlender.h"
+#include "ObjectFromBlender.h"
 
 using namespace KetaEngine;
 #include "3d/Model.h"
+#include "Frame/Frame.h"
 #include "mathFunction.h"
-#include"Frame/Frame.h"
 #include <cassert>
 #include <fstream>
 #include <unordered_set>
 
-void PutObjForBlender::LoadJsonFile(const std::string& _fileName) {
+void ObjectFromBlender::LoadJsonFile(const std::string& _fileName) {
     fileName_ = _fileName;
 
     // 　フルパスを取得
@@ -47,7 +47,7 @@ void PutObjForBlender::LoadJsonFile(const std::string& _fileName) {
     }
 }
 
-void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
+void ObjectFromBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
     assert(object.contains("type"));
 
@@ -102,25 +102,17 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
             if (!object["emitters"].empty()) {
                 for (const auto& emitter : object["emitters"]) {
 
-                    if (emitter.contains("particle_name") && emitter.contains("primitive_type")) {
-
-                        std::string name             = emitter["particle_name"].get<std::string>();
-                        std::string primitiveTypeStr = emitter["primitive_type"].get<std::string>();
-
-                        //  PrimitiveType変換
-                        PrimitiveType primitiveType = StringToPrimitiveType(primitiveTypeStr);
-
-                        //  エミッターを追加
-                        objectData.emitters.emplace_back(
-                            ParticleEmitter::CreateParticlePrimitive(name, primitiveType, 1600));
+                    if (emitter.contains("particle_name")) {
+                        objectData.particleName = emitter["particle_name"].get<std::string>();
                     }
                 }
             }
-            // Emitter位置をオブジェクトに
-            for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
-                emitter->SetTargetPosition(objectData.object3d->transform_.GetWorldPos());
-            }
         }
+
+        objectData.particlePlayer = std::make_unique<ParticlePlayer>();
+        objectData.particlePlayer->Init();
+        objectData.particlePlayer->SetFollowingPos(&objectData.object3d->transform_.translation_);
+        objectData.particlePlayer->SetParentTransform(&objectData.object3d->transform_);
 
         ///------------------------------Easing------------------------------
         if (object.contains("easing_groups") && object["easing_groups"].is_array()) {
@@ -136,7 +128,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
     }
 }
 
-void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData) {
+void ObjectFromBlender::LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData) {
 
     // 最大のGroup_idを見つける
     int32_t maxGroupId = -1;
@@ -156,7 +148,7 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
     }
 
     // 必要なサイズを一度に確保して初期化
-    size_t requiredSize = static_cast<size_t>(maxGroupId) + 1;
+    size_t requiredSize   = static_cast<size_t>(maxGroupId) + 1;
     objectData.groupCount = requiredSize;
 
     // 現在のサイズより大きい場合のみリサイズ
@@ -237,8 +229,8 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
                     continue;
                 }
 
-                std::string filename = file["filename"].get<std::string>();
-                std::string srtType  = file["srt_type"].get<std::string>();
+                std::string filename          = file["filename"].get<std::string>();
+                std::string TransformTypeType = file["TransformType_type"].get<std::string>();
 
                 if (srtType == "Scale" && objectData.scalingEasing[groupId]) {
 
@@ -262,32 +254,29 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
     }
 }
 
-void PutObjForBlender::EmitterAllUpdate() {
+void ObjectFromBlender::EmitterAllUpdate() {
 
     for (auto& objectData : levelData_->objects) {
-        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
-            emitter->Update();
-        }
+        objectData.particlePlayer->SetTargetPosition(objectData.object3d->transform_.GetWorldPos());
+        objectData.particlePlayer->Update();
     }
 }
 
-void PutObjForBlender::EmitAll() {
+void ObjectFromBlender::EmitAll(const std::string& particleName) {
+  
     for (auto& objectData : levelData_->objects) {
-        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
-            emitter->Emit();
+        // 使用するパーティクル名を決定
+        std::string useName = particleName.empty() ? objectData.particleName : particleName;
+
+        if (useName.empty()) {
+            continue; 
         }
+
+        objectData.particlePlayer->Play("ObjectFromBlender", objectData.particleName);
     }
 }
 
-void PutObjForBlender::StartRailEmitAll() {
-    for (auto& objectData : levelData_->objects) {
-        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
-            emitter->StartRailEmit();
-        }
-    }
-}
-
-void PutObjForBlender::EasingAllReset() {
+void ObjectFromBlender::EasingAllReset() {
     for (auto& objectData : levelData_->objects) {
         for (auto& easingSequence : objectData.scalingEasing) {
             if (easingSequence) {
@@ -312,7 +301,7 @@ void PutObjForBlender::EasingAllReset() {
     currentTime_ = 0.0f;
 }
 
-void PutObjForBlender::AdaptEasing(LevelData::ObjectData& objectData, int32_t groupNum) {
+void ObjectFromBlender::AdaptEasing(LevelData::ObjectData& objectData, int32_t groupNum) {
     // グループ番号が有効範囲内かチェック
     if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
         return;
@@ -334,25 +323,7 @@ void PutObjForBlender::AdaptEasing(LevelData::ObjectData& objectData, int32_t gr
     }
 }
 
-void PutObjForBlender::EmitterAllEdit() {
-    std::unordered_set<std::string> processedParticleNames;
-
-    for (auto& objectData : levelData_->objects) {
-        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
-            const std::string& name = emitter->GetParticleName();
-
-            if (processedParticleNames.count(name) > 0) {
-                continue;
-            }
-
-            emitter->EditorUpdate();
-            processedParticleNames.insert(name);
-        }
-    }
-}
-
-
-void PutObjForBlender::EasingUpdateSelectGroup(float deltaTime, int32_t groupNum) {
+void ObjectFromBlender::EasingUpdateSelectGroup(float deltaTime, int32_t groupNum) {
     currentTime_ += deltaTime;
 
     for (auto& objectData : levelData_->objects) {
@@ -380,7 +351,7 @@ void PutObjForBlender::EasingUpdateSelectGroup(float deltaTime, int32_t groupNum
     }
 }
 
-void PutObjForBlender::EasingResetSelectGroup(int32_t groupNum) {
+void ObjectFromBlender::EasingResetSelectGroup(int32_t groupNum) {
     for (auto& objectData : levelData_->objects) {
         // 指定されたグループが存在するかチェック
         if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
@@ -403,7 +374,7 @@ void PutObjForBlender::EasingResetSelectGroup(int32_t groupNum) {
     }
 }
 
-bool PutObjForBlender::GetIsEasingPlaying(int32_t groupNum) const {
+bool ObjectFromBlender::GetIsEasingPlaying(int32_t groupNum) const {
     if (!levelData_) {
         return false;
     }
@@ -438,7 +409,7 @@ bool PutObjForBlender::GetIsEasingPlaying(int32_t groupNum) const {
     return false;
 }
 
-bool PutObjForBlender::GetIsEasingFinish(int32_t groupNum) const {
+bool ObjectFromBlender::GetIsEasingFinish(int32_t groupNum) const {
     if (!levelData_) {
         return true;
     }
@@ -473,7 +444,7 @@ bool PutObjForBlender::GetIsEasingFinish(int32_t groupNum) const {
     return true;
 }
 
-void PutObjForBlender::SetLoopEndCallback(int32_t groupNum, const EasingAdaptTransform& transformType, const std::function<void()>& callback) {
+void ObjectFromBlender::SetLoopEndCallback(int32_t groupNum, const EasingAdaptTransform& transformType, const std::function<void()>& callback) {
     for (const auto& objectData : levelData_->objects) {
         // 指定されたグループが存在するかチェック
         if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
@@ -502,19 +473,18 @@ void PutObjForBlender::SetLoopEndCallback(int32_t groupNum, const EasingAdaptTra
             default:
                 break;
             }
-          
         }
     }
 }
 
-bool PutObjForBlender::IsAdaptEasing(const LevelData::ObjectData& objectData, int32_t groupNum, const EasingAdaptTransform& type) const {
+bool ObjectFromBlender::IsAdaptEasing(const LevelData::ObjectData& objectData, int32_t groupNum, const EasingAdaptTransform& type) const {
     if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
         return false;
     }
     return objectData.isAdaptEasing[groupNum][static_cast<int32_t>(type)];
 }
 
-PrimitiveType PutObjForBlender::StringToPrimitiveType(const std::string& typeStr) {
+PrimitiveType ObjectFromBlender::StringToPrimitiveType(const std::string& typeStr) {
     if (typeStr == "Plane") {
         return PrimitiveType::Plane;
     }

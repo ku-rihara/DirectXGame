@@ -3,7 +3,7 @@
 
 void BaseComboLevelBackObj::Init(const std::string& filename) {
     BaseBackGroundObject::Init(filename);
-    putObjForBlender_->EasingUpdateSelectGroup(0.0f, static_cast<int32_t>(ObjEffectMode::SPAWN));
+    ObjectFromBlender_->EasingUpdateSelectGroup(0.0f, static_cast<int32_t>(ObjEffectMode::SPAWN));
 }
 
 void BaseComboLevelBackObj::Update(float playSpeed) {
@@ -15,24 +15,24 @@ void BaseComboLevelBackObj::Update(float playSpeed) {
     if (effectMode_ == ObjEffectMode::SPAWN) {
 
         // クローズが終わってなかったらCLose優先
-        if (putObjForBlender_->GetIsEasingPlaying(static_cast<int32_t>(ObjEffectMode::CLOSE))) {
-            putObjForBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(ObjEffectMode::CLOSE));
+        if (ObjectFromBlender_->GetIsEasingPlaying(static_cast<int32_t>(ObjEffectMode::CLOSE))) {
+            ObjectFromBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(ObjEffectMode::CLOSE));
             return;
         }
 
         // スポーンが終わったらPULSEへ
-        if (putObjForBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::SPAWN))) {
-            putObjForBlender_->EasingAllReset();
+        if (ObjectFromBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::SPAWN))) {
+            ObjectFromBlender_->EasingAllReset();
             effectMode_ = ObjEffectMode::PULSE;
         }
     }
 
     if (effectMode_ == ObjEffectMode::CLOSE) {
         // クローズが終わったらNONEへ
-        if (putObjForBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::CLOSE))) {
-            putObjForBlender_->EasingAllReset();
+        if (ObjectFromBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::CLOSE))) {
+            ObjectFromBlender_->EasingAllReset();
             isPulseCycleStart_ = false;
-            putObjForBlender_->EasingUpdateSelectGroup(0.0f, static_cast<int32_t>(ObjEffectMode::SPAWN));
+            ObjectFromBlender_->EasingUpdateSelectGroup(0.0f, static_cast<int32_t>(ObjEffectMode::SPAWN));
             effectMode_ = ObjEffectMode::NONE;       
         }
     }
@@ -42,7 +42,7 @@ void BaseComboLevelBackObj::Update(float playSpeed) {
         return;
     }
 
-    putObjForBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(effectMode_));
+    ObjectFromBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(effectMode_));
 }
 
 int32_t BaseComboLevelBackObj::ConvertEffectModeToInt(const ObjEffectMode& mode) {
@@ -50,20 +50,20 @@ int32_t BaseComboLevelBackObj::ConvertEffectModeToInt(const ObjEffectMode& mode)
 }
 
 void BaseComboLevelBackObj::EasingResetSelectGroup(int32_t groupNum) {
-    if (putObjForBlender_) {
-        putObjForBlender_->EasingResetSelectGroup(groupNum);
+    if (ObjectFromBlender_) {
+        ObjectFromBlender_->EasingResetSelectGroup(groupNum);
     }
 }
 
 void BaseComboLevelBackObj::EasingAllReset() {
-    if (putObjForBlender_) {
-        putObjForBlender_->EasingAllReset();
+    if (ObjectFromBlender_) {
+        ObjectFromBlender_->EasingAllReset();
     }
 }
 
 bool BaseComboLevelBackObj::GetIsEasingFinish(int32_t groupNum) const {
-    if (putObjForBlender_) {
-        return putObjForBlender_->GetIsEasingFinish(groupNum);
+    if (ObjectFromBlender_) {
+        return ObjectFromBlender_->GetIsEasingFinish(groupNum);
     }
     return true;
 }

@@ -3,6 +3,7 @@
 #include "3d/WorldTransform.h"
 #include "Easing/EasingSequence.h"
 #include "Editor/ParticleEditor/ParticleEmitter.h"
+#include "Editor/ParticleEditor/ParticlePlayer.h"
 #include <array>
 #include <cstdint>
 #include <json.hpp>
@@ -22,7 +23,7 @@ enum class EasingAdaptTransform {
 /// </summary>
 namespace KetaEngine {
 
-class PutObjForBlender {
+class ObjectFromBlender {
 public:
     struct LevelData {
         struct ObjectData {
@@ -32,7 +33,8 @@ public:
             std::vector<std::unique_ptr<EasingSequence>> scalingEasing;
             std::vector<std::unique_ptr<EasingSequence>> rotationEasing;
             std::vector<std::unique_ptr<EasingSequence>> translationEasing;
-            std::vector<std::unique_ptr<ParticleEmitter>> emitters;
+            std::unique_ptr<ParticlePlayer> particlePlayer;
+            std::string particleName;
             std::vector<Vector3> preScale;
             std::vector<Vector3> preRotation;
             std::vector<Vector3> preTranslation;
@@ -44,8 +46,8 @@ public:
     };
 
 public:
-    PutObjForBlender()  = default;
-    ~PutObjForBlender() = default;
+    ObjectFromBlender()  = default;
+    ~ObjectFromBlender() = default;
 
     /// <summary>
     /// JSONファイルのロード
@@ -80,9 +82,8 @@ public:
     PrimitiveType StringToPrimitiveType(const std::string& typeStr);
 
     void EmitterAllUpdate(); //< 全エミッター更新
-    void EmitAll(); //< 全エミッター放出
-    void StartRailEmitAll(); //< 全レールエミッター開始
-    void EmitterAllEdit(); //< 全エミッターエディット
+    void EmitAll(const std::string& particleName = ""); //< 全エミッター放出
+  
     void EasingAllReset(); //< 全イージングリセット
 
 private:

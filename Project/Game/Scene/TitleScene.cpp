@@ -32,7 +32,7 @@ void TitleScene::Init() {
     skydome_          = std::make_unique<SkyDome>();
     titleRogo_        = std::make_unique<TitleRogo>();
     skyBox_           = std::make_unique<SkyBox>();
-    putObjForBlender_ = std::make_unique<KetaEngine::PutObjForBlender>();
+    ObjectFromBlender_ = std::make_unique<KetaEngine::ObjectFromBlender>();
 
     ///=======================================================================================
     /// 初期化
@@ -41,7 +41,7 @@ void TitleScene::Init() {
     skyBox_->Init();
     player_->Init();
     titleRogo_->Init();
-    putObjForBlender_->LoadJsonFile("gameScene.json");
+    ObjectFromBlender_->LoadJsonFile("gameScene.json");
 
     alpha_ = 0.0f;
 

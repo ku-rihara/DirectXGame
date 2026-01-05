@@ -166,7 +166,6 @@
     <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
     <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp" />
-    <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp" />
     <ClCompile Include="Game\AttackEffect\AttackEffect.cpp" />
     <ClCompile Include="Game\Audience\Audience.cpp" />
     <ClCompile Include="Game\Audience\AudienceController.cpp" />
@@ -191,6 +190,7 @@
     <ClCompile Include="Game\Combo\Combo.cpp" />
     <ClCompile Include="Game\Combo\ComboUI.cpp" />
     <ClCompile Include="Game\Combo\ComboUIController.cpp" />
+    <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp" />
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp" />
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp" />
@@ -453,7 +453,6 @@
     <ClInclude Include="Engine\struct\VertexData.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
     <ClInclude Include="Engine\utility\FileSelector\FileSelector.h" />
-    <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h" />
     <ClInclude Include="Game\AttackEffect\AttackEffect.h" />
     <ClInclude Include="Game\Audience\Audience.h" />
     <ClInclude Include="Game\Audience\AudienceController.h" />
@@ -479,6 +478,7 @@
     <ClInclude Include="Game\Combo\Combo.h" />
     <ClInclude Include="Game\Combo\ComboUI.h" />
     <ClInclude Include="Game\Combo\ComboUIController.h" />
+    <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h" />
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h" />
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h" />
