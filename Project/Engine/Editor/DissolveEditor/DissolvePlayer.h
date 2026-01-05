@@ -1,6 +1,7 @@
 #pragma once
 #include "DissolveData.h"
-#include "Vector3.h"
+#include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
+#include "Material/ModelMaterial.h"
 #include <memory>
 #include <string>
 
@@ -9,32 +10,30 @@
 /// </summary>
 namespace KetaEngine {
 
-class DissolvePlayer {
+class DissolvePlayer : public BaseEffectPlayer {
 public:
     DissolvePlayer()  = default;
     ~DissolvePlayer() = default;
 
-    void Init(); //< 初期化
-    void StopDissolve(); //< ディゾルブ停止
-
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void Update(float deltaTime);
+    void Init() override;
+    void Update(float speedRate = 1.0f) override;
 
     /// <summary>
     /// ディゾルブ再生
     /// </summary>
     /// <param name="dissolveName">ディゾルブ名</param>
-    void Play(const std::string& dissolveName);
+    void Play(const std::string& dissolveName) override;
+
+    /// マテリアルに適用
+    /// </summary>
+    /// <param name="material">適用先のマテリアル</param>
+    void ApplyToMaterial(ModelMaterial& material);
+
+protected:
+    std::unique_ptr<BaseEffectData> CreateEffectData() override;
 
 private:
-    std::unique_ptr<DissolveData> dissolveData_;
-
-public:
-    bool IsDissolveEnabled() const { return dissolveData_->IsDissolveEnabled(); }
-    bool IsPlaying() const { return dissolveData_ ? dissolveData_->IsPlaying() : false; }
+    DissolveData* GetDissolveData();
 };
 
 }; // KetaEngine

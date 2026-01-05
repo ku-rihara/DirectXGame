@@ -9,6 +9,7 @@ using namespace KetaEngine;
 #include"Editor/ShakeEditor/ShakeData.h"
 #include"Editor/GPUParticleEditor/GPUParticleData.h"
 #include "Editor/ParticleEditor/ParticleData.h"
+#include"Editor/DissolveEditor/DissolveData.h"
 // std
 #include <algorithm>
 #include <filesystem>
@@ -25,18 +26,18 @@ void BaseEffectEditor<TEffectData>::Init(const std::string& typeName, bool isUse
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::Update(float deltaTimeOrSpeedRate) {
+void BaseEffectEditor<TEffectData>::Update(float speedRate) {
     if (isUseCategorySystem_) {
         // 全カテゴリーの全エフェクトを更新
         for (auto& category : categories_) {
             for (auto& effect : category.effects) {
-                effect->Update(deltaTimeOrSpeedRate);
+                effect->Update(speedRate);
             }
         }
     } else {
         //  全エフェクトを更新
         for (auto& effect : effects_) {
-            effect->Update(deltaTimeOrSpeedRate);
+            effect->Update(speedRate);
         }
     }
 }
@@ -671,3 +672,4 @@ template class BaseEffectEditor<RailData>;
 template class BaseEffectEditor<ShakeData>;
 template class BaseEffectEditor<GPUParticleData>;
 template class BaseEffectEditor<ParticleData>;
+template class BaseEffectEditor<DissolveData>;

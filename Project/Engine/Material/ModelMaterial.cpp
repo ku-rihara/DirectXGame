@@ -29,7 +29,7 @@ void ModelMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     materialData_->dissolveEdgeWidth = 0.03f;
     materialData_->enableDissolve    = 0;
 
-    dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/noise0.png");
+    dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/Noise/noise0.png");
 }
 
 void ModelMaterial::SetDissolveNoizeTexture(const std::string& name) {
