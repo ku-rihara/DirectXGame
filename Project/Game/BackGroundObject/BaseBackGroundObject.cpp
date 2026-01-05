@@ -1,7 +1,7 @@
 #include"BaseBackGroundObject.h"
 
 void BaseBackGroundObject::Init(const std::string& filename) {
-    putObjForBlender_ = std::make_unique<KetaEngine::PutObjForBlender>();
-	putObjForBlender_->LoadJsonFile(filename);
-    putObjForBlender_->EasingAllReset();
+    ObjectFromBlender_ = std::make_unique<KetaEngine::ObjectFromBlender>();
+	ObjectFromBlender_->LoadJsonFile(filename);
+    ObjectFromBlender_->EasingAllReset();
 }

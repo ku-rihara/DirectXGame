@@ -5,9 +5,9 @@
 
 void FireInjectors::Init() {
 
-    putObjForBlender_ = std::make_unique<KetaEngine::PutObjForBlender>();
-    putObjForBlender_->LoadJsonFile("FireInjectors.json");
-    putObjForBlender_->EasingAllReset();
+    ObjectFromBlender_ = std::make_unique<KetaEngine::ObjectFromBlender>();
+    ObjectFromBlender_->LoadJsonFile("FireInjectors.json");
+    ObjectFromBlender_->EasingAllReset();
 
     // グローバルパラメータ
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
@@ -17,33 +17,33 @@ void FireInjectors::Init() {
 }
 
 void FireInjectors::Update() {
-    putObjForBlender_->EmitterAllUpdate();
-    putObjForBlender_->EmitAll();
-    putObjForBlender_->EmitterAllEdit();
+    ObjectFromBlender_->EmitterAllUpdate();
+    ObjectFromBlender_->EmitAll();
+   /* ObjectFromBlender_->EmitterAllEdit();*/
 
-    const int currentCombo = pCombo_->GetComboCount();
+    /*const int currentCombo = pCombo_->GetComboCount();*/
 
-    if (currentCombo == 0) {
-        prevComboCount_ = 0;
-        return;
-    }
+    //if (currentCombo == 0) {
+    //    prevComboCount_ = 0;
+    //    return;
+    //}
 
-    // 発射
-    for (int i = prevComboCount_ + 1; i <= currentCombo; ++i) {
-        if (i % fireShotComboNum_ == 0) {
-            putObjForBlender_->StartRailEmitAll();
-            break;
-        }
-    }
+    //// 発射
+    //for (int i = prevComboCount_ + 1; i <= currentCombo; ++i) {
+    //    if (i % fireShotComboNum_ == 0) {
+    //        ObjectFromBlender_->StartRailEmitAll();
+    //        break;
+    //    }
+    //}
 
-    prevComboCount_ = currentCombo;
+    //prevComboCount_ = currentCombo;
 }
 
 void FireInjectors::Spawn() {
-    putObjForBlender_->EasingUpdateSelectGroup(KetaEngine::Frame::DeltaTime(), 0);
+    ObjectFromBlender_->EasingUpdateSelectGroup(KetaEngine::Frame::DeltaTime(), 0);
 }
 void FireInjectors::Launch() {
-    putObjForBlender_->EasingUpdateSelectGroup(KetaEngine::Frame::DeltaTime(), 1);
+    ObjectFromBlender_->EasingUpdateSelectGroup(KetaEngine::Frame::DeltaTime(), 1);
 }
 
 

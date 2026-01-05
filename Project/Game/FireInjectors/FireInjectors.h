@@ -1,6 +1,6 @@
 #pragma once
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "utility/PutObjForBlender/PutObjForBlender.h"
+#include "utility/ObjectFromBlender/ObjectFromBlender.h"
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -24,7 +24,7 @@ public:
     void RegisterParams(); //< パラメータバインド
 
 private:
-    std::unique_ptr<KetaEngine::PutObjForBlender> putObjForBlender_ = nullptr;
+    std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_ = nullptr;
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "FireInjectors";
     Combo* pCombo_;

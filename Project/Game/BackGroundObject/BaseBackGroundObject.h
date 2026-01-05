@@ -1,5 +1,5 @@
 #pragma once
-#include "utility/PutObjForBlender/PutObjForBlender.h"
+#include "utility/ObjectFromBlender/ObjectFromBlender.h"
 #include <memory>
 #include <string>
 
@@ -24,5 +24,5 @@ public:
     virtual void Update(float playSpeed) = 0;
 
 protected:
-    std::unique_ptr<KetaEngine::PutObjForBlender> putObjForBlender_;
+    std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_;
 };

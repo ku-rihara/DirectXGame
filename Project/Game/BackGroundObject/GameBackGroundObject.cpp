@@ -8,6 +8,6 @@ void GameBackGroundObject::Init(const std::string& filename) {
 
 void GameBackGroundObject::Update(float playSpeed) {
   
-    putObjForBlender_->EasingUpdateSelectGroup(playSpeed, 0);
+    ObjectFromBlender_->EasingUpdateSelectGroup(playSpeed, 0);
 }
 
