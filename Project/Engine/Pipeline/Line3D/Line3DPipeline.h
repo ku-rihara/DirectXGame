@@ -4,11 +4,17 @@
 #include <d3dcommon.h>
 #include <dxcapi.h>
 #include <wrl/client.h>
+#include <Windows.h>
 
 /// <summary>
 /// 3Dライン描画パイプラインクラス
 /// </summary>
 namespace KetaEngine {
+
+enum class Line3DRootParameter : UINT {
+    TransformationMatrix,
+    Count
+};
 
 class Line3DPipeline : public BasePipeline {
 public:
@@ -20,13 +26,13 @@ public:
     /// </summary>
     /// <param name="dxCommon">DirectXCommon</param>
     void Init(DirectXCommon* dxCommon) override;
-    
+
     /// <summary>
     /// 描画前処理
     /// </summary>
     /// <param name="commandList">コマンドリスト</param>
     void PreDraw(ID3D12GraphicsCommandList* commandList) override;
-    
+
     /// <summary>
     /// ブレンドモード設定
     /// </summary>
@@ -35,7 +41,7 @@ public:
     void PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) override;
 
 protected:
-    void CreateRootSignature() override;    //< ルートシグネチャ作成
+    void CreateRootSignature() override; //< ルートシグネチャ作成
     void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
 
 private:

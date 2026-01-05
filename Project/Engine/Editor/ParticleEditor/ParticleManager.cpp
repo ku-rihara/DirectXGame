@@ -2,13 +2,13 @@
 
 using namespace KetaEngine;
 #include "3d/ModelManager.h"
-#include "Animation/ModelAnimation.h"
 #include "base/TextureManager.h"
+// pipeline
+#include"Pipeline/Particle/ParticlePipeline.h"
 #include "Pipeline/PipelineManager.h"
 // frame
 #include "Frame/Frame.h"
 // Function
-#include "Easing/EasingFunction.h"
 #include "Function/GetFile.h"
 #include "MathFunction.h"
 #include "random.h"
@@ -170,10 +170,10 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 
             // マテリアルのリソースを設定
             group.material.SetCommandList(commandList);
-            commandList->SetGraphicsRootDescriptorTable(0, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex));
+            commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(ParticleRootParameter::ParticleData), pSrvManager_->GetGPUDescriptorHandle(group.srvIndex));
 
             // テクスチャハンドルの設定
-            commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(group.textureHandle));
+            commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(ParticleRootParameter::Texture), TextureManager::GetInstance()->GetTextureHandle(group.textureHandle));
 
             // モデル描画
             if (group.model) {
