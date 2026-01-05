@@ -225,25 +225,25 @@ void ObjectFromBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Lev
             }
 
             for (const auto& file : step["files"]) {
-                if (!file.contains("filename") || !file.contains("srt_type")) {
+                if (!file.contains("filename") || !file.contains("TransformType_type")) {
                     continue;
                 }
 
                 std::string filename          = file["filename"].get<std::string>();
                 std::string TransformTypeType = file["TransformType_type"].get<std::string>();
 
-                if (srtType == "Scale" && objectData.scalingEasing[groupId]) {
+                if (TransformTypeType == "Scale" && objectData.scalingEasing[groupId]) {
 
                     objectData.scalingEasing[groupId]->AddStep(filename, &objectData.preScale[groupId]);
                     objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Scale)] = true;
 
-                } else if (srtType == "Rotation" && objectData.rotationEasing[groupId]) {
+                } else if (TransformTypeType == "Rotation" && objectData.rotationEasing[groupId]) {
 
                     objectData.rotationEasing[groupId]->AddStep(filename, &objectData.preRotation[groupId]);
                     objectData.rotationEasing[groupId]->SetBaseValue(objectData.object3d->transform_.rotation_);
                     objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Rotate)] = true;
 
-                } else if (srtType == "Transform" && objectData.translationEasing[groupId]) {
+                } else if (TransformTypeType == "Transform" && objectData.translationEasing[groupId]) {
 
                     objectData.translationEasing[groupId]->AddStep(filename, &objectData.preTranslation[groupId]);
                     objectData.translationEasing[groupId]->SetBaseValue(objectData.object3d->transform_.GetWorldPos());
@@ -263,13 +263,13 @@ void ObjectFromBlender::EmitterAllUpdate() {
 }
 
 void ObjectFromBlender::EmitAll(const std::string& particleName) {
-  
+
     for (auto& objectData : levelData_->objects) {
         // 使用するパーティクル名を決定
         std::string useName = particleName.empty() ? objectData.particleName : particleName;
 
         if (useName.empty()) {
-            continue; 
+            continue;
         }
 
         objectData.particlePlayer->Play("ObjectFromBlender", objectData.particleName);
