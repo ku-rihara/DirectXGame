@@ -8,7 +8,7 @@
 #include "SkyBox/SkyBox.h"
 // emitter
 
-#include "utility/PutObjForBlender/PutObjForBlender.h"
+#include "utility/ObjectFromBlender/ObjectFromBlender.h"
 
 #include "Editor/CameraEditor/CameraAnimation.h"
 
@@ -22,7 +22,7 @@ private:
     ///========================================================
 
     std::unique_ptr<SkyBox> skuBox_                                       = nullptr;
-    std::unique_ptr<KetaEngine::PutObjForBlender> putObjForBlender        = nullptr;
+    std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender        = nullptr;
     std::unique_ptr<KetaEngine::TimeScaleController> timeScaleController_ = nullptr;
     std::unique_ptr<KetaEngine::CameraAnimation> cameraPlayer_            = nullptr;
 

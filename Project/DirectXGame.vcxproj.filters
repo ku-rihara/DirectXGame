@@ -115,12 +115,6 @@
     <Filter Include="MyEngine\.h\Dx">
       <UniqueIdentifier>{5c4df9ce-5898-4e5a-904d-92a5d05b34f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\utility\PutObjForBlender">
-      <UniqueIdentifier>{5a7933a1-28a8-444f-a670-3cdef98bd738}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\PutObjForBlender">
-      <UniqueIdentifier>{62c9232b-f990-4975-bd38-e118668e5483}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\EasingTestObj">
       <UniqueIdentifier>{96300e85-6295-42ec-a337-bdd4de702a7c}</UniqueIdentifier>
     </Filter>
@@ -373,6 +367,12 @@
     <Filter Include="MyEngine\.cpp\Editor\ParticleEditor\Parameter">
       <UniqueIdentifier>{83c2fc1d-0567-448a-a7fa-56e40442d1b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\utility\ObjectFromBlender">
+      <UniqueIdentifier>{62c9232b-f990-4975-bd38-e118668e5483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\ObjectFromBlender">
+      <UniqueIdentifier>{5a7933a1-28a8-444f-a670-3cdef98bd738}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -552,9 +552,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Core\EngineCore.cpp">
       <Filter>MyEngine\.cpp\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp">
-      <Filter>MyEngine\.cpp\utility\PutObjForBlender</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\EditorScene.cpp">
       <Filter>Game\Scene</Filter>
@@ -898,6 +895,9 @@
     <ClCompile Include="Engine\Primitive\PrimitiveSphere.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp">
+      <Filter>MyEngine\.cpp\utility\ObjectFromBlender</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1103,9 +1103,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Core\EngineCore.h">
       <Filter>MyEngine\.h\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h">
-      <Filter>MyEngine\.h\utility\PutObjForBlender</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\EditorScene.h">
       <Filter>Game\Scene</Filter>
@@ -1472,6 +1469,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitiveSphere.h">
       <Filter>MyEngine\.h\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h">
+      <Filter>MyEngine\.h\utility\ObjectFromBlender</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

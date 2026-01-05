@@ -19,7 +19,7 @@ void GameScene::Init() {
     BaseScene::Init();
 
     skuBox_              = std::make_unique<SkyBox>();
-    putObjForBlender     = std::make_unique<KetaEngine::PutObjForBlender>();
+    ObjectFromBlender     = std::make_unique<KetaEngine::ObjectFromBlender>();
     timeScaleController_ = std::make_unique<KetaEngine::TimeScaleController>();
     cameraPlayer_        = std::make_unique<KetaEngine::CameraAnimation>();
 
@@ -31,8 +31,8 @@ void GameScene::Init() {
     cameraPlayer_->Init();
     cameraPlayer_->SetViewProjection(&viewProjection_);
 
-    putObjForBlender->LoadJsonFile("game.json");
-    putObjForBlender->EasingAllReset();
+    ObjectFromBlender->LoadJsonFile("game.json");
+    ObjectFromBlender->EasingAllReset();
 
     cameraMode_ = BaseScene::CameraMode::DEBUG;
 }
@@ -57,7 +57,7 @@ void GameScene::Update() {
 
     skuBox_->Update();
 
-    putObjForBlender->EasingUpdateSelectGroup(KetaEngine::Frame::DeltaTime(), 0);
+    ObjectFromBlender->EasingUpdateSelectGroup(KetaEngine::Frame::DeltaTime(), 0);
 
     // viewProjection 更新
     ViewProjectionUpdate();
