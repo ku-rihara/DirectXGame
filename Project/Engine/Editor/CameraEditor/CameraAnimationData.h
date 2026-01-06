@@ -56,7 +56,7 @@ public:
     void SaveSequenceElements() override;
 
     // ViewProjectionへの適用
-    void ApplyToViewProjection(ViewProjection& viewProjection, const Vector3& baseRotate = Vector3::ZeroVector());
+    void ApplyToViewProjection(ViewProjection& viewProjection);
 
     // エディター用
     void AdjustParam();
