@@ -1,11 +1,20 @@
 #include "ModelMaterial.h"
 
 using namespace KetaEngine;
-#include"Pipeline/Object3D/Object3DPipeline.h"
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
+#include "Editor/DissolveEditor/DissolvePlayer.h" 
+#include "Pipeline/Object3D/Object3DPipeline.h"
 #include <cassert>
 #include <imgui.h>
+
+ModelMaterial::ModelMaterial() {
+    // DissolvePlayer初期化
+    dissolvePlayer_ = std::make_unique<DissolvePlayer>();
+    dissolvePlayer_->Init();
+}
+
+ModelMaterial::~ModelMaterial() = default;
 
 void ModelMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     assert(dxCommon);
@@ -29,7 +38,7 @@ void ModelMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     materialData_->dissolveEdgeWidth = 0.03f;
     materialData_->enableDissolve    = 0;
 
-    dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/Noise/noise0.png");
+    dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/noise0.png");
 }
 
 void ModelMaterial::SetDissolveNoizeTexture(const std::string& name) {
@@ -44,6 +53,31 @@ void ModelMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
     // シェーダーにマテリアルデータを送る
     commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Object3DRootParameter::Material), materialResource_->GetGPUVirtualAddress());
     commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(Object3DRootParameter::Dissolve), TextureManager::GetInstance()->GetTextureHandle(dissolveTextureIndex_));
+}
+
+void ModelMaterial::UpdateDissolve(float speedRate) {
+    if (dissolvePlayer_) {
+        dissolvePlayer_->Update(speedRate);
+
+        // 自動的にマテリアルに適用
+        if (dissolvePlayer_->IsPlaying()) {
+            dissolvePlayer_->ApplyToMaterial(*this);
+        }
+    }
+}
+
+void ModelMaterial::PlayDissolve(const std::string& dissolveName) {
+    if (dissolvePlayer_) {
+        dissolvePlayer_->Play(dissolveName);
+    }
+}
+
+bool ModelMaterial::IsDissolveFinished() const {
+    return dissolvePlayer_ ? dissolvePlayer_->IsFinished() : true;
+}
+
+bool ModelMaterial::IsDissolvePlaying() const {
+    return dissolvePlayer_ ? dissolvePlayer_->IsPlaying() : false;
 }
 
 void ModelMaterial::DebugImGui() {
@@ -68,5 +102,6 @@ void ModelMaterial::DebugImGui() {
         ImGui::ColorEdit3("Dissolve Edge Color", reinterpret_cast<float*>(&materialData_->dissolveEdgeColor));
         ImGui::SliderFloat("Dissolve Edge Width", &materialData_->dissolveEdgeWidth, 0.01f, 0.1f);
     }
+
 #endif
 }

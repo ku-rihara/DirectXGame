@@ -4,6 +4,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include <d3d12.h>
+#include <memory>
 #include <string>
 #include <wrl.h>
 
@@ -18,14 +19,15 @@ enum class BlendMode {
 namespace KetaEngine {
 
 class DirectXCommon;
+class DissolvePlayer; // 前方宣言
 
 /// <summary>
 /// モデル用マテリアルクラス
 /// </summary>
 class ModelMaterial : public BaseMaterial {
 public:
-    ModelMaterial()  = default;
-    ~ModelMaterial() = default;
+    ModelMaterial();
+    ~ModelMaterial();
 
     /// <summary>
     /// マテリアルリソースの作成
@@ -53,6 +55,20 @@ public:
 
     void DebugImGui() override; //< ImGuiデバッグ
 
+    // ディゾルブプレイヤー関連
+    /// <summary>
+    /// ディゾルブ更新
+    /// </summary>
+    /// <param name="speedRate">速度倍率</param>
+    void UpdateDissolve(float speedRate = 1.0f);
+
+    /// <summary>
+    /// ディゾルブ再生
+    /// </summary>
+    /// <param name="dissolveName">ディゾルブ名</param>
+    void PlayDissolve(const std::string& dissolveName);
+
+
 private:
     struct MaterialData {
         Vector4 color;
@@ -72,6 +88,7 @@ public:
 
 private:
     int32_t dissolveTextureIndex_;
+    std::unique_ptr<DissolvePlayer> dissolvePlayer_; 
 
 public:
     void SetShininess(float shininess) override { materialData_->shininess = shininess; }
@@ -86,6 +103,10 @@ public:
     Vector3 GetDissolveEdgeColor() const { return materialData_->dissolveEdgeColor; }
     float GetDissolveEdgeWidth() const { return materialData_->dissolveEdgeWidth; }
     bool IsDissolveEnabled() const { return materialData_->enableDissolve != 0; }
+
+    // ディゾルブプレイヤー関連のgetter
+    bool IsDissolveFinished() const;
+    bool IsDissolvePlaying() const;
 };
 
 }; // KetaEngine
