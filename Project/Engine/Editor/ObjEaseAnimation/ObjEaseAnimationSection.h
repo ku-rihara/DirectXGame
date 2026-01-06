@@ -34,17 +34,18 @@ public:
 
     enum class TransformState {
         INACTIVE,
-        WAITING, 
-        PLAYING, 
-        RETURN_WAITING, 
-        RETURNING, 
-        FINISHED 
+        WAITING,
+        PLAYING,
+        RETURN_WAITING,
+        RETURNING,
+        FINISHED
     };
 
     struct TransformParam {
-        bool isActive         = false;
-        bool isReturnToOrigin = false;
-        bool useRail          = false;
+        bool isActive          = false;
+        bool isReturnToOrigin  = false;
+        bool useRail           = false;
+        bool isLookAtDirection = false;
 
         Vector3 endValue = Vector3::ZeroVector();
 
@@ -59,8 +60,9 @@ public:
         std::string railFileName;
 
         // 現在のオフセット値
-        Vector3 currentOffset = Vector3::ZeroVector();
-        Vector3 startValue    = Vector3::ZeroVector();
+        Vector3 currentOffset  = Vector3::ZeroVector();
+        Vector3 startValue     = Vector3::ZeroVector();
+        Vector3 previousOffset = Vector3::ZeroVector();
 
         // イージング
         Easing<Vector3> ease;
@@ -68,7 +70,7 @@ public:
 
         // 個別の状態管理
         TransformState state    = TransformState::INACTIVE;
-        float returnElapsedTime = 0.0f; 
+        float returnElapsedTime = 0.0f;
     };
 
     struct RailFileSelector {
@@ -155,6 +157,8 @@ public:
 
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const;
+    bool IsLookingAtDirection() const;
+    Vector3 GetMovementDirection() const;
 };
 
 }; // KetaEngine

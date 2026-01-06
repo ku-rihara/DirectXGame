@@ -48,6 +48,12 @@ private:
         Quaternion quaternion;
     };
 
+     struct DirectionSettings {
+        bool isLookAtDirection   = false;
+        Vector3 upVector         = Vector3::ToUp();
+        Vector3 previousPosition = Vector3::ZeroVector(); 
+    };
+
 public:
     WorldTransform();
     ~WorldTransform();
@@ -96,6 +102,12 @@ public:
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
     void UpdateObjEaseAnimation();
+
+    /// <summary>
+    /// 進行方向を向く処理を適用
+    /// </summary>
+    /// <param name="direction">方向ベクトル</param>
+    void ApplyLookAtDirection(const Vector3& direction);
 
 private:
     void UpdateAffineMatrix(); //< アフィン行列更新
