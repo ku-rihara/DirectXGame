@@ -1,21 +1,26 @@
 #include "DissolveData.h"
 
 using namespace KetaEngine;
+#include "base/TextureManager.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Frame/Frame.h"
 #include <algorithm>
+#include <filesystem>
 #include <imgui.h>
 #include <Windows.h>
 
-void DissolveData::Init(const std::string& dissolveName) {
+void DissolveData::Init(const std::string& name) {
     globalParameter_ = GlobalParameter::GetInstance();
+    groupName_       = name;
+    folderPath_      = "DissolveEditor";
 
-    // グループ名設定
-    groupName_ = dissolveName;
     globalParameter_->CreateGroup(groupName_);
-
     RegisterParams();
+    InitParams();
 
-    // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
+
+    LoadNoiseTextures();
 
     // イージング設定
     thresholdEase_.SetAdaptValue(&easedThreshold_);
@@ -23,45 +28,39 @@ void DissolveData::Init(const std::string& dissolveName) {
     thresholdEase_.SetEndValue(endThreshold_);
 
     thresholdEase_.SetOnFinishCallback([this]() {
-        Stop();
+        playState_ = PlayState::STOPPED;
         Reset();
     });
 
-    // 初期状態
     playState_        = PlayState::STOPPED;
     currentThreshold_ = startThreshold_;
     currentEnable_    = false;
 }
 
-void DissolveData::Update(float deltaTime) {
+void DissolveData::Update(float speedRate) {
     if (playState_ != PlayState::PLAYING) {
         return;
     }
 
+    float deltaTime = Frame::DeltaTimeRate() * speedRate;
     currentTime_ += deltaTime;
 
-    // オフセット時間をチェック
     if (currentTime_ < offsetTime_) {
-        // オフセット時間内
         currentThreshold_ = startThreshold_;
         currentEnable_    = (startThreshold_ < 1.0f);
         return;
     }
 
-    // イージング更新
     thresholdEase_.SetMaxTime(maxTime_);
     thresholdEase_.SetType(static_cast<EasingType>(easeType_));
     thresholdEase_.Update(deltaTime);
 
-    // ディゾルブ値計算
     UpdateDissolveValues();
 }
 
 void DissolveData::UpdateDissolveValues() {
     currentThreshold_ = easedThreshold_;
-
-    // ディゾルブが有効かどうかを判定
-    currentEnable_ = (currentThreshold_ < 1.0f);
+    currentEnable_    = (currentThreshold_ < 1.0f);
 }
 
 void DissolveData::Play() {
@@ -70,7 +69,6 @@ void DissolveData::Play() {
     playState_ = PlayState::PLAYING;
     totalTime_ = offsetTime_ + maxTime_;
 
-    // イージング初期化
     thresholdEase_.SetStartValue(startThreshold_);
     thresholdEase_.SetEndValue(endThreshold_);
     thresholdEase_.SetMaxTime(maxTime_);
@@ -78,15 +76,8 @@ void DissolveData::Play() {
     thresholdEase_.Reset();
     easedThreshold_ = startThreshold_;
 
-    // 初期値設定
     currentThreshold_ = startThreshold_;
     currentEnable_    = (startThreshold_ < 1.0f);
-}
-
-void DissolveData::Stop() {
-    playState_        = PlayState::STOPPED;
-    currentThreshold_ = startThreshold_;
-    currentEnable_    = false;
 }
 
 void DissolveData::Reset() {
@@ -94,17 +85,17 @@ void DissolveData::Reset() {
     easedThreshold_   = startThreshold_;
     currentThreshold_ = startThreshold_;
     currentEnable_    = false;
-
     thresholdEase_.Reset();
-}
-
-bool DissolveData::IsFinished() const {
-    return playState_ == PlayState::STOPPED;
 }
 
 void DissolveData::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
+    GetParams();
+
+    if (selectedTextureIndex_ >= 0 && selectedTextureIndex_ < static_cast<int32_t>(noiseTextureFiles_.size())) {
+        currentTexturePath_ = textureFilePath_ + "/" + noiseTextureFiles_[selectedTextureIndex_];
+    }
 }
 
 void DissolveData::SaveData() {
@@ -117,6 +108,48 @@ void DissolveData::RegisterParams() {
     globalParameter_->Regist(groupName_, "maxTime", &maxTime_);
     globalParameter_->Regist(groupName_, "offsetTime", &offsetTime_);
     globalParameter_->Regist(groupName_, "easeType", &easeType_);
+    globalParameter_->Regist(groupName_, "selectedTextureIndex", &selectedTextureIndex_);
+}
+
+void DissolveData::GetParams() {
+    // パラメータは既にSyncParamForGroupで同期されている
+}
+
+void DissolveData::InitParams() {
+    startThreshold_       = 1.0f;
+    endThreshold_         = 0.0f;
+    maxTime_              = 1.0f;
+    offsetTime_           = 0.0f;
+    easeType_             = 0;
+    selectedTextureIndex_ = 0;
+}
+
+void DissolveData::LoadNoiseTextures() {
+    noiseTextureFiles_.clear();
+
+    if (!std::filesystem::exists(textureFilePath_)) {
+        return;
+    }
+
+    for (const auto& entry : std::filesystem::directory_iterator(textureFilePath_)) {
+        if (entry.is_regular_file()) {
+      
+            noiseTextureFiles_.push_back(entry.path().filename().string());
+        }
+    }
+
+    std::sort(noiseTextureFiles_.begin(), noiseTextureFiles_.end());
+
+    if (!noiseTextureFiles_.empty() && selectedTextureIndex_ >= 0 && selectedTextureIndex_ < static_cast<int32_t>(noiseTextureFiles_.size())) {
+        currentTexturePath_ = textureFilePath_ + "/" + noiseTextureFiles_[selectedTextureIndex_];
+    }
+}
+
+void DissolveData::SetTextureIndex(int32_t index) {
+    if (index >= 0 && index < static_cast<int32_t>(noiseTextureFiles_.size())) {
+        selectedTextureIndex_ = index;
+        currentTexturePath_   = textureFilePath_ + "/" + noiseTextureFiles_[selectedTextureIndex_];
+    }
 }
 
 void DissolveData::AdjustParam() {
@@ -128,9 +161,6 @@ void DissolveData::AdjustParam() {
         // 再生制御
         if (ImGui::Button("Play"))
             Play();
-        ImGui::SameLine();
-        if (ImGui::Button("Stop"))
-            Stop();
         ImGui::SameLine();
         if (ImGui::Button("Reset"))
             Reset();
@@ -147,23 +177,25 @@ void DissolveData::AdjustParam() {
         case PlayState::PAUSED:
             stateText = "PAUSED";
             break;
+        case PlayState::RETURNING:
+            stateText = "RETURNING";
+            break;
         }
         ImGui::Text("State: %s", stateText);
 
-        // 進行状況を表示
+        // 進行状況
         float progress = 0.0f;
         if (totalTime_ > 0.0f) {
             progress = std::clamp(currentTime_ / totalTime_, 0.0f, 1.0f);
         }
         ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f), "Progress");
 
-        // 現在の値を表示
         ImGui::Text("Current Threshold: %.3f", currentThreshold_);
         ImGui::Text("Current Enabled: %s", currentEnable_ ? "TRUE" : "FALSE");
 
         ImGui::Separator();
 
-        // Threshold値設定
+        // Threshold設定
         ImGui::DragFloat("Start Threshold", &startThreshold_, 0.01f, 0.0f, 1.0f);
         ImGui::DragFloat("End Threshold", &endThreshold_, 0.01f, 0.0f, 1.0f);
 
@@ -175,6 +207,28 @@ void DissolveData::AdjustParam() {
 
         // イージングタイプ
         ImGuiEasingTypeSelector("Easing Type", easeType_);
+
+        ImGui::Separator();
+
+        // テクスチャ選択
+        if (!noiseTextureFiles_.empty()) {
+            ImGui::Text("Noise Texture:");
+            if (ImGui::BeginCombo("##NoiseTexture", noiseTextureFiles_[selectedTextureIndex_].c_str())) {
+                for (int32_t i = 0; i < static_cast<int32_t>(noiseTextureFiles_.size()); i++) {
+                    bool isSelected = (selectedTextureIndex_ == i);
+                    if (ImGui::Selectable(noiseTextureFiles_[i].c_str(), isSelected)) {
+                        SetTextureIndex(i);
+                    }
+                    if (isSelected) {
+                        ImGui::SetItemDefaultFocus();
+                    }
+                }
+                ImGui::EndCombo();
+            }
+            ImGui::Text("Current: %s", currentTexturePath_.c_str());
+        } else {
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "No noise textures found!");
+        }
 
         ImGui::Separator();
 
@@ -191,9 +245,5 @@ void DissolveData::AdjustParam() {
 
         ImGui::PopID();
     }
-#endif // _DEBUG
-}
-
-bool DissolveData::IsPlaying() const {
-    return playState_ == PlayState::PLAYING;
+#endif
 }

@@ -63,15 +63,28 @@ void ParticleManager::Update() {
             if ((*it).isAdaptEasing) {
                 (*it).scaleEasing->Update(Frame::DeltaTimeRate());
             }
-            ///------------------------------------------------------------------------
-            /// 回転させる
-            ///------------------------------------------------------------------------
-            it->worldTransform_->rotation_.x += it->rotateSpeed_.x * Frame::DeltaTimeRate();
-            it->worldTransform_->rotation_.y += it->rotateSpeed_.y * Frame::DeltaTimeRate();
-            it->worldTransform_->rotation_.z += it->rotateSpeed_.z * Frame::DeltaTimeRate();
 
             ///------------------------------------------------------------------------
-            /// 重力の適用
+            /// Translateイージング更新
+            ///------------------------------------------------------------------------
+            if (it->isAdaptTranslateEasing) {
+                it->translateEasing->Update(Frame::DeltaTimeRate());
+            }
+
+            ///------------------------------------------------------------------------
+            /// Rotateイージング更新
+            ///------------------------------------------------------------------------
+            if (it->isAdaptRotateEasing) {
+                it->rotateEasing->Update(Frame::DeltaTimeRate());
+            } else {
+                // イージングを使わない場合は通常の回転速度を適用
+                it->worldTransform_->rotation_.x += it->rotateSpeed_.x * Frame::DeltaTimeRate();
+                it->worldTransform_->rotation_.y += it->rotateSpeed_.y * Frame::DeltaTimeRate();
+                it->worldTransform_->rotation_.z += it->rotateSpeed_.z * Frame::DeltaTimeRate();
+            }
+
+            ///------------------------------------------------------------------------
+            /// 重力の適用 
             ///------------------------------------------------------------------------
             it->velocity_.y += it->gravity_ * Frame::DeltaTime();
 
@@ -81,27 +94,30 @@ void ParticleManager::Update() {
             if (it->followPos) {
                 it->worldTransform_->translation_ = *it->followPos + it->offSet;
             } else {
-                it->worldTransform_->translation_.y += it->velocity_.y * Frame::DeltaTime();
+                // Translateイージングを使用していない場合のみ通常の移動を適用
+                if (!it->isAdaptTranslateEasing) {
+                    it->worldTransform_->translation_.y += it->velocity_.y * Frame::DeltaTime();
 
-                if (it->isFloatVelocity) {
-                    // 方向ベクトル × スカラー速度
-                    it->worldTransform_->translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
-                } else {
-                    // ベクトル速度そのまま適用
-                    it->worldTransform_->translation_ += it->speedV3 * Frame::DeltaTime();
+                    if (it->isFloatVelocity) {
+                        // 方向ベクトル × スカラー速度
+                        it->worldTransform_->translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
+                    } else {
+                        // ベクトル速度そのまま適用
+                        it->worldTransform_->translation_ += it->speedV3 * Frame::DeltaTime();
+                    }
                 }
             }
 
             ///------------------------------------------------------------------------
-            /// UV更新
+            /// UV更新 
             ///------------------------------------------------------------------------
             if (it->uvInfo_.isScroll) {
                 UpdateUV(it->uvInfo_, Frame::DeltaTime());
             }
-            ///------------------------------------------------------------------------
-            /// ビルボードまたは通常の行列更新
-            ///------------------------------------------------------------------------
 
+            ///------------------------------------------------------------------------
+            /// ビルボードまたは通常の行列更新 
+            ///------------------------------------------------------------------------
             if (group.param.isBillBord) {
                 it->worldTransform_->BillboardUpdateMatrix(*viewProjection_, group.param.billBordType, group.param.adaptRotate_);
             } else {
@@ -294,7 +310,7 @@ void ParticleManager::SetModel(const std::string& name, const std::string& model
 }
 
 void ParticleManager::CreateMaterialResource(const std::string& name) {
-    particleGroups_[name].material.CreateMaterialResource(DirectXCommon::GetInstance());
+    particleGroups_[name].material.Init(DirectXCommon::GetInstance());
 }
 
 ///============================================================
@@ -437,22 +453,22 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
     }
 
     //  Easingパラメータを設定
-    particle.scaleInfo.easeParam.isScaleEase = parameters.scaleEaseParam.isScaleEase;
-    particle.scaleInfo.easeParam.maxTime     = parameters.scaleEaseParam.maxTime;
+    particle.scaleInfo.easeParam.baseParam.isEase = parameters.scaleEaseParam.baseParam.isEase;
+    particle.scaleInfo.easeParam.baseParam.maxTime = parameters.scaleEaseParam.baseParam.maxTime;
 
 
     //  Easingクラスのインスタンスを作成して設定
-    if (parameters.scaleEaseParam.isScaleEase) {
+    if (parameters.scaleEaseParam.baseParam.isEase) {
         particle.scaleEasing   = std::make_unique<Easing<Vector3>>();
         particle.isAdaptEasing = true;
 
         // Easingパラメータを構築
         EasingParameter<Vector3> easingParam;
-        easingParam.type       = static_cast<EasingType>(parameters.scaleEaseParam.easeTypeInt);
+        easingParam.type       = static_cast<EasingType>(parameters.scaleEaseParam.baseParam.easeTypeInt);
         easingParam.startValue = particle.scaleInfo.tempScaleV3;
         easingParam.endValue   = particle.scaleInfo.easeEndScale;
-        easingParam.maxTime    = parameters.scaleEaseParam.maxTime;
-        easingParam.backRatio  = parameters.scaleEaseParam.backRatio;
+        easingParam.maxTime    = parameters.scaleEaseParam.baseParam.maxTime;
+        easingParam.backRatio  = parameters.scaleEaseParam.baseParam.backRatio;
         if (easingParam.backRatio == 0.0f) {
             easingParam.finishType = EasingFinishValueType::End;
         } else {
@@ -464,6 +480,85 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
 
         // WorldTransformのscaleに直接適用
         particle.scaleEasing->SetAdaptValue(&particle.worldTransform_->scale_);
+    }
+
+    ///------------------------------------------------------------------------
+    ///  Translateイージング設定
+    ///------------------------------------------------------------------------
+    if (parameters.translateEaseParam.baseParam.isEase) {
+        particle.translateEasing        = std::make_unique<Easing<Vector3>>();
+        particle.isAdaptTranslateEasing = true;
+
+        // 終了位置をランダムで決定
+        Vector3 endTranslate = {
+            Random::Range(parameters.translateEaseParam.endValue.min.x, parameters.translateEaseParam.endValue.max.x),
+            Random::Range(parameters.translateEaseParam.endValue.min.y, parameters.translateEaseParam.endValue.max.y),
+            Random::Range(parameters.translateEaseParam.endValue.min.z, parameters.translateEaseParam.endValue.max.z)};
+
+        // 開始位置を保存
+        particle.translateInfo.startPosition = particle.worldTransform_->translation_;
+        particle.translateInfo.endPosition   = particle.worldTransform_->translation_ + endTranslate;
+
+        // Easingパラメータを構築
+        EasingParameter<Vector3> easingParam;
+        easingParam.type       = static_cast<EasingType>(parameters.translateEaseParam.baseParam.easeTypeInt);
+        easingParam.startValue = particle.translateInfo.startPosition;
+        easingParam.endValue   = particle.translateInfo.endPosition;
+        easingParam.maxTime    = parameters.translateEaseParam.baseParam.maxTime;
+        easingParam.backRatio  = parameters.translateEaseParam.baseParam.backRatio;
+
+        if (easingParam.backRatio == 0.0f) {
+            easingParam.finishType = EasingFinishValueType::End;
+        } else {
+            easingParam.finishType = EasingFinishValueType::Start;
+        }
+
+        // Easingに設定
+        particle.translateEasing->SettingValue(easingParam);
+
+        // WorldTransformのtranslationに直接適用
+        particle.translateEasing->SetAdaptValue(&particle.worldTransform_->translation_);
+    }
+
+    ///------------------------------------------------------------------------
+    ///  Rotateイージング設定
+    ///------------------------------------------------------------------------
+    if (parameters.rotateEaseParam.baseParam.isEase) {
+        particle.rotateEasing        = std::make_unique<Easing<Vector3>>();
+        particle.isAdaptRotateEasing = true;
+
+        // 終了回転をランダムで決定
+        Vector3 endRotate = {
+            Random::Range(parameters.rotateEaseParam.endValue.min.x, parameters.rotateEaseParam.endValue.max.x),
+            Random::Range(parameters.rotateEaseParam.endValue.min.y, parameters.rotateEaseParam.endValue.max.y),
+            Random::Range(parameters.rotateEaseParam.endValue.min.z, parameters.rotateEaseParam.endValue.max.z)};
+
+        // 度からラジアンに変換
+        endRotate = ToRadian(endRotate);
+
+        // 開始回転を保存
+        particle.rotateInfo.startRotation = particle.worldTransform_->rotation_;
+        particle.rotateInfo.endRotation   = particle.worldTransform_->rotation_ + endRotate;
+
+        // Easingパラメータを構築
+        EasingParameter<Vector3> easingParam;
+        easingParam.type       = static_cast<EasingType>(parameters.rotateEaseParam.baseParam.easeTypeInt);
+        easingParam.startValue = particle.rotateInfo.startRotation;
+        easingParam.endValue   = particle.rotateInfo.endRotation;
+        easingParam.maxTime    = parameters.rotateEaseParam.baseParam.maxTime;
+        easingParam.backRatio  = parameters.rotateEaseParam.baseParam.backRatio;
+
+        if (easingParam.backRatio == 0.0f) {
+            easingParam.finishType = EasingFinishValueType::End;
+        } else {
+            easingParam.finishType = EasingFinishValueType::Start;
+        }
+
+        // Easingに設定
+        particle.rotateEasing->SettingValue(easingParam);
+
+        // WorldTransformのrotationに直接適用
+        particle.rotateEasing->SetAdaptValue(&particle.worldTransform_->rotation_);
     }
 
     ///------------------------------------------------------------------------

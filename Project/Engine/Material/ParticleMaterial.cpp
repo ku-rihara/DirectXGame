@@ -6,7 +6,7 @@ using namespace KetaEngine;
 #include <cassert>
 #include <imgui.h>
 
-void ParticleMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
+void ParticleMaterial::Init(DirectXCommon* dxCommon) {
     assert(dxCommon);
 
     // マテリアルリソース作成

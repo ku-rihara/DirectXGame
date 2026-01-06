@@ -41,6 +41,18 @@ public:
         Vector3 easeEndScale;
         EaseParm easeParam;
     };
+
+ 
+    struct TranslateInfo {
+        Vector3 startPosition;
+        Vector3 endPosition;
+    };
+
+    struct RotateInfo {
+        Vector3 startRotation;
+        Vector3 endRotation;
+    };
+
     struct UVInfo {
         Vector3 pos;
         Vector3 scale;
@@ -70,11 +82,24 @@ public:
         Vector4 color_;
         const Vector3* followPos = nullptr;
         std::unique_ptr<WorldTransform> worldTransform_;
-        ScaleInFo scaleInfo;
-        UVInfo uvInfo_;
 
+        // スケール情報
+        ScaleInFo scaleInfo;
         bool isAdaptEasing = false;
         std::unique_ptr<Easing<Vector3>> scaleEasing;
+
+        // Translate情報 
+        TranslateInfo translateInfo;
+        bool isAdaptTranslateEasing = false;
+        std::unique_ptr<Easing<Vector3>> translateEasing;
+
+        // Rotate情報
+        RotateInfo rotateInfo;
+        bool isAdaptRotateEasing = false;
+        std::unique_ptr<Easing<Vector3>> rotateEasing;
+
+        // UV情報
+        UVInfo uvInfo_;
     };
 
     struct AccelerationField {

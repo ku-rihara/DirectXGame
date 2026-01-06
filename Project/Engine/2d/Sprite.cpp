@@ -109,8 +109,8 @@ void Sprite::CreateSprite(const std::string& textureName) {
     material_.CreateMaterialResource(directXCommon);
 
     // UVTransformは単位行列を書き込んでおく
-    material_.materialData_->uvTransform = MakeIdentity4x4();
-    uvTransform_.scale                   = {1.0f, 1.0f};
+    material_.GetMaterialData()->uvTransform = MakeIdentity4x4();
+    uvTransform_.scale                       = {1.0f, 1.0f};
 
     ///==========================================================================================
     //  WVP
@@ -126,12 +126,12 @@ void Sprite::CreateSprite(const std::string& textureName) {
     ///==========================================================================================
     //  変数初期化
     ///==========================================================================================
-    transform_.pos                 = parameter_.position_;
-    transform_.scale               = parameter_.scale_;
-    uvTransform_.scale             = parameter_.uvScale_;
-    material_.materialData_->color = parameter_.color_;
-    anchorPoint_                   = parameter_.startAnchorPoint_;
-    layerNum_                      = parameter_.startLayerNum_;
+    transform_.pos                     = parameter_.position_;
+    transform_.scale                   = parameter_.scale_;
+    uvTransform_.scale                 = parameter_.uvScale_;
+    material_.GetMaterialData()->color = parameter_.color_;
+    anchorPoint_                       = parameter_.startAnchorPoint_;
+    layerNum_                          = parameter_.startLayerNum_;
 
     // テクスチャ座標取得
     const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureIndex_);
@@ -197,7 +197,7 @@ void Sprite::Draw() {
     //  UVTransform
     ///==========================================================================================
 
-    material_.materialData_->uvTransform = MakeAffineMatrix(
+    material_.GetMaterialData()->uvTransform = MakeAffineMatrix(
         Vector3{uvTransform_.scale.x, uvTransform_.scale.y, 1.0f}, /// scale
         uvTransform_.rotate, /// rotate
         Vector3{uvTransform_.pos.x, uvTransform_.pos.y, 1.0f}); /// translate
@@ -252,11 +252,11 @@ void Sprite::AdjustParam() {
         ImGui::Checkbox("isAdaptStartParam", &isAdaptStartParam_);
         if (isAdaptStartParam_) {
             // 適応
-            transform_.pos                 = parameter_.position_;
-            transform_.scale               = parameter_.scale_;
-            uvTransform_.scale             = parameter_.uvScale_;
-            material_.materialData_->color = parameter_.color_;
-            anchorPoint_                   = parameter_.startAnchorPoint_;
+            transform_.pos                     = parameter_.position_;
+            transform_.scale                   = parameter_.scale_;
+            uvTransform_.scale                 = parameter_.uvScale_;
+            material_.GetMaterialData()->color = parameter_.color_;
+            anchorPoint_                       = parameter_.startAnchorPoint_;
         }
 
         // セーブ・ロード
@@ -269,11 +269,11 @@ void Sprite::AdjustParam() {
 }
 
 void Sprite::SetColor(const Vector3& color) {
-    material_.materialData_->color.x = color.x;
-    material_.materialData_->color.y = color.y;
-    material_.materialData_->color.z = color.z;
+    material_.GetMaterialData()->color.x = color.x;
+    material_.GetMaterialData()->color.y = color.y;
+    material_.GetMaterialData()->color.z = color.z;
 }
 
 void Sprite::SetAlpha(float alpha) {
-    material_.materialData_->color.w = alpha;
+    material_.GetMaterialData()->color.w = alpha;
 }
