@@ -1,4 +1,5 @@
 #include "DissolvePlayer.h"
+#include "Material/ModelMaterial.h"
 
 using namespace KetaEngine;
 
@@ -32,8 +33,8 @@ void DissolvePlayer::ApplyToMaterial(ModelMaterial& material) {
     }
 
     // ディゾルブ値を適用
-    material.SetDissolveThreshold(dissolveData->GetCurrentThreshold());
-    material.SetEnableDissolve(dissolveData->IsDissolveEnabled());
+    material.GetMaterialData()->dissolveThreshold = dissolveData->GetCurrentThreshold();
+    material.GetMaterialData()->enableDissolve    = dissolveData->IsDissolveEnabled();
 
     // テクスチャパスが設定されている場合は適用
     const std::string& texturePath = dissolveData->GetCurrentTexturePath();

@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseMaterial.h"
+#include "Editor/DissolveEditor/DissolvePlayer.h"
 #include "Matrix4x4.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -19,21 +20,21 @@ enum class BlendMode {
 namespace KetaEngine {
 
 class DirectXCommon;
-class DissolvePlayer; // 前方宣言
+class DissolvePlayer;
 
 /// <summary>
 /// モデル用マテリアルクラス
 /// </summary>
 class ModelMaterial : public BaseMaterial {
 public:
-    ModelMaterial();
-    ~ModelMaterial();
+    ModelMaterial()  = default;
+    ~ModelMaterial() = default;
 
     /// <summary>
     /// マテリアルリソースの作成
     /// </summary>
     /// <param name="dxCommon">DirectXCommon</param>
-    void CreateMaterialResource(DirectXCommon* dxCommon) override;
+    void Init(DirectXCommon* dxCommon) override;
 
     /// <summary>
     /// マテリアルデータの更新
@@ -55,19 +56,9 @@ public:
 
     void DebugImGui() override; //< ImGuiデバッグ
 
-    // ディゾルブプレイヤー関連
-    /// <summary>
-    /// ディゾルブ更新
-    /// </summary>
-    /// <param name="speedRate">速度倍率</param>
+    // ディゾルブ更新、再生
     void UpdateDissolve(float speedRate = 1.0f);
-
-    /// <summary>
-    /// ディゾルブ再生
-    /// </summary>
-    /// <param name="dissolveName">ディゾルブ名</param>
     void PlayDissolve(const std::string& dissolveName);
-
 
 private:
     struct MaterialData {
@@ -83,26 +74,26 @@ private:
         int32_t enableDissolve;
     };
 
-public:
-    MaterialData* materialData_ = nullptr;
-
 private:
+    MaterialData* materialData_                     = nullptr;
+    std::unique_ptr<DissolvePlayer> dissolvePlayer_ = nullptr;
     int32_t dissolveTextureIndex_;
-    std::unique_ptr<DissolvePlayer> dissolvePlayer_; 
 
 public:
-    void SetShininess(float shininess) override { materialData_->shininess = shininess; }
-    void SetEnvironmentCoefficient(float environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
+    MaterialData* GetMaterialData() const { return materialData_; }
 
-    void SetDissolveThreshold(float threshold) { materialData_->dissolveThreshold = threshold; }
-    void SetDissolveEdgeColor(const Vector3& color) { materialData_->dissolveEdgeColor = color; }
-    void SetDissolveEdgeWidth(float width) { materialData_->dissolveEdgeWidth = width; }
-    void SetEnableDissolve(bool enable) { materialData_->enableDissolve = enable ? 1 : 0; }
+    /* void SetShininess(float shininess) override { materialData_->shininess = shininess; }
+     void SetEnvironmentCoefficient(float environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
 
-    float GetDissolveThreshold() const { return materialData_->dissolveThreshold; }
-    Vector3 GetDissolveEdgeColor() const { return materialData_->dissolveEdgeColor; }
-    float GetDissolveEdgeWidth() const { return materialData_->dissolveEdgeWidth; }
-    bool IsDissolveEnabled() const { return materialData_->enableDissolve != 0; }
+     void SetDissolveThreshold(float threshold) { materialData_->dissolveThreshold = threshold; }
+     void SetDissolveEdgeColor(const Vector3& color) { materialData_->dissolveEdgeColor = color; }
+     void SetDissolveEdgeWidth(float width) { materialData_->dissolveEdgeWidth = width; }
+     void SetEnableDissolve(bool enable) { materialData_->enableDissolve = enable ? 1 : 0; }
+
+     float GetDissolveThreshold() const { return materialData_->dissolveThreshold; }
+     Vector3 GetDissolveEdgeColor() const { return materialData_->dissolveEdgeColor; }
+     float GetDissolveEdgeWidth() const { return materialData_->dissolveEdgeWidth; }
+     bool IsDissolveEnabled() const { return materialData_->enableDissolve != 0; }*/
 
     // ディゾルブプレイヤー関連のgetter
     bool IsDissolveFinished() const;

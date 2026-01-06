@@ -76,16 +76,14 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "isAlphaNoMove", &groupParameters_.isAlphaNoMove);
 
     // EaseParam
-    globalParam->Regist(groupName, "scaleEaseParam.isScaleEase", &parameters_.scaleEaseParam.isScaleEase);
-    globalParam->Regist(groupName, "scaleEaseParam.maxTime", &parameters_.scaleEaseParam.maxTime);
-    globalParam->Regist(groupName, "scaleEaseParam.easeTypeInt", &parameters_.scaleEaseParam.easeTypeInt);
-    globalParam->Regist(groupName, "scaleEaseParam.startValueF", &parameters_.scaleEaseParam.startValueF);
+    globalParam->Regist(groupName, "scaleEaseParam.isScaleEase", &parameters_.scaleEaseParam.baseParam.isEase);
+    globalParam->Regist(groupName, "scaleEaseParam.maxTime", &parameters_.scaleEaseParam.baseParam.maxTime);
+    globalParam->Regist(groupName, "scaleEaseParam.easeTypeInt", &parameters_.scaleEaseParam.baseParam.easeTypeInt);
     globalParam->Regist(groupName, "scaleEaseParam.endValueF.max", &parameters_.scaleEaseParam.endValueF.max);
     globalParam->Regist(groupName, "scaleEaseParam.endValueF.min", &parameters_.scaleEaseParam.endValueF.min);
-    globalParam->Regist(groupName, "scaleEaseParam.startValueV3", &parameters_.scaleEaseParam.startValueV3);
     globalParam->Regist(groupName, "scaleEaseParam.endValueV3.max", &parameters_.scaleEaseParam.endValueV3.max);
     globalParam->Regist(groupName, "scaleEaseParam.endValueV3.min", &parameters_.scaleEaseParam.endValueV3.min);
-    globalParam->Regist(groupName, "scaleEaseParam.backRatio", &parameters_.scaleEaseParam.backRatio);
+    globalParam->Regist(groupName, "scaleEaseParam.backRatio", &parameters_.scaleEaseParam.baseParam.backRatio);
 
     // Mode Setting
     globalParam->Regist(groupName, "preBillBordType", &billBordTypeInt_);
@@ -178,16 +176,14 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     groupParameters_.isAlphaNoMove    = globalParam->GetValue<bool>(groupName, "isAlphaNoMove");
 
     // EaseParam
-    parameters_.scaleEaseParam.isScaleEase    = globalParam->GetValue<bool>(groupName, "scaleEaseParam.isScaleEase");
-    parameters_.scaleEaseParam.maxTime        = globalParam->GetValue<float>(groupName, "scaleEaseParam.maxTime");
-    parameters_.scaleEaseParam.easeTypeInt    = globalParam->GetValue<int32_t>(groupName, "scaleEaseParam.easeTypeInt");
-    parameters_.scaleEaseParam.startValueF    = globalParam->GetValue<float>(groupName, "scaleEaseParam.startValueF");
-    parameters_.scaleEaseParam.endValueF.max  = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.max");
-    parameters_.scaleEaseParam.endValueF.min  = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.min");
-    parameters_.scaleEaseParam.startValueV3   = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.startValueV3");
-    parameters_.scaleEaseParam.endValueV3.max = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.max");
-    parameters_.scaleEaseParam.endValueV3.min = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.min");
-    parameters_.scaleEaseParam.backRatio      = globalParam->GetValue<float>(groupName, "scaleEaseParam.backRatio");
+    parameters_.scaleEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName, "scaleEaseParam.isScaleEase");
+    parameters_.scaleEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName, "scaleEaseParam.maxTime");
+    parameters_.scaleEaseParam.baseParam.easeTypeInt = globalParam->GetValue<int32_t>(groupName, "scaleEaseParam.easeTypeInt");
+    parameters_.scaleEaseParam.endValueF.max         = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.max");
+    parameters_.scaleEaseParam.endValueF.min         = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.min");
+    parameters_.scaleEaseParam.endValueV3.max        = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.max");
+    parameters_.scaleEaseParam.endValueV3.min        = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.min");
+    parameters_.scaleEaseParam.baseParam.backRatio   = globalParam->GetValue<float>(groupName, "scaleEaseParam.backRatio");
 
     // Mode
     billBordTypeInt_ = globalParam->GetValue<int>(groupName, "preBillBordType");
@@ -232,8 +228,7 @@ void ParticleSectionParameter::AdjustParam() {
     const char* PositionModeItems[] = {"None", "ParentTransform", "TargetPosition", "FollowingPosition", "ParentJoint"};
     if (ImGui::Combo("Emit Position Mode", &emitPositionModeInt_, PositionModeItems, IM_ARRAYSIZE(PositionModeItems))) {
         emitPositionMode_ = static_cast<EmitterPositionMode>(emitPositionModeInt_);
-        }
-    
+    }
 
     // Timing Parameters
     if (ImGui::CollapsingHeader("Timing Settings")) {
@@ -421,13 +416,13 @@ void ParticleSectionParameter::ScaleParamEditor() {
         }
 
         // Scale Easing
-        ImGui::Checkbox("Use Scale Easing", &parameters_.scaleEaseParam.isScaleEase);
+        ImGui::Checkbox("Use Scale Easing", &parameters_.scaleEaseParam.baseParam.isEase);
 
-        if (parameters_.scaleEaseParam.isScaleEase) {
+        if (parameters_.scaleEaseParam.baseParam.isEase) {
             auto& easeParam = parameters_.scaleEaseParam;
 
-            ImGui::DragFloat("Max Time", &easeParam.maxTime, 0.01f, 0.0f, 10.0f);
-            ImGuiEasingTypeSelector("Easing Type", easeParam.easeTypeInt);
+            ImGui::DragFloat("Max Time", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
+            ImGuiEasingTypeSelector("Easing Type", easeParam.baseParam.easeTypeInt);
 
             if (parameters_.isScalerScale) {
                 ImGui::DragFloat("End Scale Max", &easeParam.endValueF.max, 0.01f);
@@ -437,7 +432,7 @@ void ParticleSectionParameter::ScaleParamEditor() {
                 ImGui::DragFloat3("End Scale Min", &easeParam.endValueV3.min.x, 0.01f);
             }
 
-            ImGui::DragFloat("Back Ratio", &easeParam.backRatio, 0.01f, 0.0f, 5.0f);
+            ImGui::DragFloat("Back Ratio", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
         }
     }
 }

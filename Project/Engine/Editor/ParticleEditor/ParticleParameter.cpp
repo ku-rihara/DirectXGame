@@ -22,7 +22,7 @@ void ParticleParameter::ParameterInit() {
     particleCount_                   = 0;
     intervalTime_                    = 1.0f;
     groupParamaters_.isBillBord      = true;
-    parameters_.uvParam.numOfFrame    = 1;
+    parameters_.uvParam.numOfFrame   = 1;
     selectedTexturePath_             = "resources/Texture/uvChecker.png";
 }
 
@@ -38,10 +38,10 @@ void ParticleParameter::Init() {
     InitAdaptTexture();
 
     // セッティングしたもの適用
-    groupParamaters_.billBordType      = static_cast<BillboardType>(billBordType_);
-    groupParamaters_.isShot            = isShot_;
-    groupParamaters_.blendMode         = static_cast<BlendMode>(blendMode_);
-  /*  parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);*/
+    groupParamaters_.billBordType = static_cast<BillboardType>(billBordType_);
+    groupParamaters_.isShot       = isShot_;
+    groupParamaters_.blendMode    = static_cast<BlendMode>(blendMode_);
+    /*  parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);*/
 }
 
 void ParticleParameter::RegisterParams() {
@@ -110,16 +110,14 @@ void ParticleParameter::RegisterParams() {
     globalParameter_->Regist(particleName_, "moveSpeed", &moveSpeed_);
 
     // easeParm
-    globalParameter_->Regist(particleName_, "scaleEaseParm.isScaleEase", &parameters_.scaleEaseParam.isScaleEase);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.maxTime", &parameters_.scaleEaseParam.maxTime);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.easeTypeInt", &parameters_.scaleEaseParam.easeTypeInt);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.startValueF", &parameters_.scaleEaseParam.startValueF);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.isScaleEase", &parameters_.scaleEaseParam.baseParam.isEase);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.maxTime", &parameters_.scaleEaseParam.baseParam.maxTime);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.easeTypeInt", &parameters_.scaleEaseParam.baseParam.easeTypeInt);
     globalParameter_->Regist(particleName_, "scaleEaseParm.endValueF.max", &parameters_.scaleEaseParam.endValueF.max);
     globalParameter_->Regist(particleName_, "scaleEaseParm.endValueF.min", &parameters_.scaleEaseParam.endValueF.min);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.startValueV3", &parameters_.scaleEaseParam.startValueV3);
     globalParameter_->Regist(particleName_, "scaleEaseParm.endValueV3.max", &parameters_.scaleEaseParam.endValueV3.max);
     globalParameter_->Regist(particleName_, "scaleEaseParm.endValueV3.min", &parameters_.scaleEaseParam.endValueV3.min);
-    globalParameter_->Regist(particleName_, "scaleEaseParm.backRatio", &parameters_.scaleEaseParam.backRatio);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.backRatio", &parameters_.scaleEaseParam.baseParam.backRatio);
 
     // mode Setting
     globalParameter_->Regist(particleName_, "preBillBordType_", &billBordType_);
@@ -200,16 +198,14 @@ void ParticleParameter::GetParams() {
     moveSpeed_     = globalParameter_->GetValue<float>(particleName_, "moveSpeed");
 
     // EaseParam
-    parameters_.scaleEaseParam.isScaleEase    = globalParameter_->GetValue<bool>(particleName_, "scaleEaseParm.isScaleEase");
-    parameters_.scaleEaseParam.maxTime        = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.maxTime");
-    parameters_.scaleEaseParam.easeTypeInt    = globalParameter_->GetValue<int>(particleName_, "scaleEaseParm.easeTypeInt");
-    parameters_.scaleEaseParam.startValueF    = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.startValueF");
-    parameters_.scaleEaseParam.endValueF.max  = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.endValueF.max");
-    parameters_.scaleEaseParam.endValueF.min  = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.endValueF.min");
-    parameters_.scaleEaseParam.startValueV3   = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.startValueV3");
-    parameters_.scaleEaseParam.endValueV3.max = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.endValueV3.max");
-    parameters_.scaleEaseParam.endValueV3.min = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.endValueV3.min");
-    parameters_.scaleEaseParam.backRatio      = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.backRatio");
+    parameters_.scaleEaseParam.baseParam.isEase      = globalParameter_->GetValue<bool>(particleName_, "scaleEaseParm.isScaleEase");
+    parameters_.scaleEaseParam.baseParam.maxTime     = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.maxTime");
+    parameters_.scaleEaseParam.baseParam.easeTypeInt = globalParameter_->GetValue<int>(particleName_, "scaleEaseParm.easeTypeInt");
+    parameters_.scaleEaseParam.endValueF.max         = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.endValueF.max");
+    parameters_.scaleEaseParam.endValueF.min         = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.endValueF.min");
+    parameters_.scaleEaseParam.endValueV3.max        = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.endValueV3.max");
+    parameters_.scaleEaseParam.endValueV3.min        = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.endValueV3.min");
+    parameters_.scaleEaseParam.baseParam.backRatio   = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.backRatio");
 
     // Mode
     billBordType_ = globalParameter_->GetValue<int>(particleName_, "preBillBordType_");
@@ -383,7 +379,7 @@ void ParticleParameter::ScaleParmEditor() {
         ImGui::SeparatorText("Scale Mode");
 
         ImGui::Checkbox("IsScalerScale", &parameters_.isScalerScale);
-        ImGui::Checkbox("IsEasingMode", &parameters_.scaleEaseParam.isScaleEase);
+        ImGui::Checkbox("IsEasingMode", &parameters_.scaleEaseParam.baseParam.isEase);
 
         if (parameters_.isScalerScale) {
             ImGui::SeparatorText("Scaler Range");
@@ -395,30 +391,7 @@ void ParticleParameter::ScaleParmEditor() {
             ImGui::DragFloat3("ScaleV3 Min", reinterpret_cast<float*>(&parameters_.scaleDistV3.min), 0.1f);
         }
 
-        // EaseParam
-        if (parameters_.scaleEaseParam.isScaleEase) {
-
-            if (parameters_.isScalerScale) {
-                ImGui::SeparatorText("EaseRange Float");
-                ImGui::DragFloat("EaseValue Min", &parameters_.scaleEaseParam.endValueF.min, 0.1f);
-                ImGui::DragFloat("EaseValue Max", &parameters_.scaleEaseParam.endValueF.max, 0.1f);
-            } else {
-                ImGui::SeparatorText("EaseRange V3");
-                ImGui::DragFloat3("EaseValueV3 Max", reinterpret_cast<float*>(&parameters_.scaleEaseParam.endValueV3.max), 0.1f);
-                ImGui::DragFloat3("EaseValueV3 Min", reinterpret_cast<float*>(&parameters_.scaleEaseParam.endValueV3.min), 0.1f);
-            }
-            // イージングパラメータ
-            ImGui::SeparatorText("Ease Paramater");
-            ImGui::DragFloat("maxTime", &parameters_.scaleEaseParam.maxTime, 0.01f);
-            ImGui::SeparatorText("EaseType");
-            // イージング種類
-            const char* easeItems[] = {"InSine", "OutSine", "OutBack", "OutQuint"};
-
-            if (ImGui::Combo("Easing Type", &parameters_.scaleEaseParam.easeTypeInt, easeItems, IM_ARRAYSIZE(easeItems))) {
-
-             /*   parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);*/
-            }
-        }
+   
     }
 }
 

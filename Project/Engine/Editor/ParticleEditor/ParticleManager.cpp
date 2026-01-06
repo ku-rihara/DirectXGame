@@ -294,7 +294,7 @@ void ParticleManager::SetModel(const std::string& name, const std::string& model
 }
 
 void ParticleManager::CreateMaterialResource(const std::string& name) {
-    particleGroups_[name].material.CreateMaterialResource(DirectXCommon::GetInstance());
+    particleGroups_[name].material.Init(DirectXCommon::GetInstance());
 }
 
 ///============================================================
@@ -437,22 +437,22 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
     }
 
     //  Easingパラメータを設定
-    particle.scaleInfo.easeParam.isScaleEase = parameters.scaleEaseParam.isScaleEase;
-    particle.scaleInfo.easeParam.maxTime     = parameters.scaleEaseParam.maxTime;
+    particle.scaleInfo.easeParam.baseParam.isEase = parameters.scaleEaseParam.baseParam.isEase;
+    particle.scaleInfo.easeParam.baseParam.maxTime = parameters.scaleEaseParam.baseParam.maxTime;
 
 
     //  Easingクラスのインスタンスを作成して設定
-    if (parameters.scaleEaseParam.isScaleEase) {
+    if (parameters.scaleEaseParam.baseParam.isEase) {
         particle.scaleEasing   = std::make_unique<Easing<Vector3>>();
         particle.isAdaptEasing = true;
 
         // Easingパラメータを構築
         EasingParameter<Vector3> easingParam;
-        easingParam.type       = static_cast<EasingType>(parameters.scaleEaseParam.easeTypeInt);
+        easingParam.type       = static_cast<EasingType>(parameters.scaleEaseParam.baseParam.easeTypeInt);
         easingParam.startValue = particle.scaleInfo.tempScaleV3;
         easingParam.endValue   = particle.scaleInfo.easeEndScale;
-        easingParam.maxTime    = parameters.scaleEaseParam.maxTime;
-        easingParam.backRatio  = parameters.scaleEaseParam.backRatio;
+        easingParam.maxTime    = parameters.scaleEaseParam.baseParam.maxTime;
+        easingParam.backRatio  = parameters.scaleEaseParam.baseParam.backRatio;
         if (easingParam.backRatio == 0.0f) {
             easingParam.finishType = EasingFinishValueType::End;
         } else {

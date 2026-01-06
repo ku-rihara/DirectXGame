@@ -46,9 +46,10 @@ public:
 private:
     // GPUリソースへのポインタ
     Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
+    MaterialSprite* materialData_ = nullptr;
 
 public:
-    MaterialSprite* materialData_;
+    MaterialSprite* GetMaterialData() { return materialData_; }
 
 };
 

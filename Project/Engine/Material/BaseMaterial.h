@@ -22,7 +22,7 @@ public:
     /// マテリアルリソースの作成
     /// </summary>
     /// <param name="dxCommon">DirectXCommon</param>
-    virtual void CreateMaterialResource(DirectXCommon* dxCommon) = 0;
+    virtual void Init(DirectXCommon* dxCommon) = 0;
 
     /// <summary>
     /// マテリアルデータの更新
@@ -41,10 +41,6 @@ public:
 protected:
     // 共通リソース
     Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
-
-public:
-    virtual void SetShininess(float shininess)                           = 0;
-    virtual void SetEnvironmentCoefficient(float environmentCoefficient) = 0;
 };
 
 }; // KetaEngine

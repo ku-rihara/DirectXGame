@@ -3,20 +3,12 @@
 using namespace KetaEngine;
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
-#include "Editor/DissolveEditor/DissolvePlayer.h" 
 #include "Pipeline/Object3D/Object3DPipeline.h"
 #include <cassert>
 #include <imgui.h>
 
-ModelMaterial::ModelMaterial() {
-    // DissolvePlayer初期化
-    dissolvePlayer_ = std::make_unique<DissolvePlayer>();
-    dissolvePlayer_->Init();
-}
 
-ModelMaterial::~ModelMaterial() = default;
-
-void ModelMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
+void ModelMaterial::Init(DirectXCommon* dxCommon) {
     assert(dxCommon);
 
     // マテリアルリソース作成
@@ -38,11 +30,11 @@ void ModelMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     materialData_->dissolveEdgeWidth = 0.03f;
     materialData_->enableDissolve    = 0;
 
-    dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/noise0.png");
-}
+     // DissolvePlayer初期化
+    dissolvePlayer_ = std::make_unique<DissolvePlayer>();
+    dissolvePlayer_->Init();
 
-void ModelMaterial::SetDissolveNoizeTexture(const std::string& name) {
-    dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture(name);
+    dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/Noise/noise0.png");
 }
 
 void ModelMaterial::UpdateMaterialData(const Vector4& Color) {
@@ -104,4 +96,8 @@ void ModelMaterial::DebugImGui() {
     }
 
 #endif
+}
+
+void ModelMaterial::SetDissolveNoizeTexture(const std::string& name) {
+    dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture(name);
 }

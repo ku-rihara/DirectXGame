@@ -22,7 +22,7 @@ public:
     /// マテリアルリソースの作成
     /// </summary>
     /// <param name="dxCommon">DirectXCommon</param>
-    void CreateMaterialResource(DirectXCommon* dxCommon) override;
+    void Init(DirectXCommon* dxCommon) override;
 
     /// <summary>
     /// マテリアルデータの更新
@@ -48,12 +48,10 @@ private:
         float environmentCoefficient;
     };
 
-public:
+private:
     MaterialData* materialData_ = nullptr;
 
 public:
-    void SetShininess(float shininess) override { materialData_->shininess = shininess; }
-    void SetEnvironmentCoefficient(float environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
+    MaterialData* GetMaterialData() { return materialData_; }
 };
-
 }; // KetaEngine

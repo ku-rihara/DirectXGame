@@ -41,7 +41,7 @@ void Object3d::Update() {
     transform_.UpdateMatrix();
 
     // マテリアル色更新
-    material_.materialData_->color = objColor_.GetColor();
+    material_.GetMaterialData()->color = objColor_.GetColor();
 }
 
 ///============================================================
@@ -55,7 +55,7 @@ void Object3d::Draw(const ViewProjection& viewProjection) {
     UpdateWVPData(viewProjection);
 
     PipelineManager::GetInstance()->PreBlendSet(PipelineType::Object3D, DirectXCommon::GetInstance()->GetCommandList(), blendMode);
-    model_->Draw(wvpResource_, *shadowMap_, material_, textureIndex_);
+    model_->Draw(wvpResource_, *shadowMap_, &material_, textureIndex_);
 }
 
 void Object3d::ShadowDraw(const ViewProjection& viewProjection) {

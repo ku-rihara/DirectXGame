@@ -1,7 +1,6 @@
 #pragma once
 #include "DissolveData.h"
 #include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
-#include "Material/ModelMaterial.h"
 #include <memory>
 #include <string>
 
@@ -9,11 +8,11 @@
 /// ディゾルブ再生クラス
 /// </summary>
 namespace KetaEngine {
-
+class ModelMaterial;
 class DissolvePlayer : public BaseEffectPlayer {
 public:
-    DissolvePlayer()  = default;
-    ~DissolvePlayer() = default;
+    DissolvePlayer()           = default;
+    ~DissolvePlayer() override = default;
 
     void Init() override;
     void Update(float speedRate = 1.0f) override;

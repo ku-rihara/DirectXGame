@@ -37,21 +37,24 @@ struct JointParent {
     const Object3DAnimation* animation = nullptr;
 };
 
+struct EaseParam {
+    float maxTime       = 1.0f;
+    bool isEase        = false;
+    int32_t easeTypeInt = 0;
+    float backRatio     = 0.0f;
+};
+
 // スケールイージングパラメータ
 struct ScaleEaseParam {
-    float maxTime       = 1.0f;
-    bool isScaleEase    = false;
-    int32_t easeTypeInt = 0;
-
-    // スカラー値用
-    float startValueF = 1.0f;
+    EaseParam baseParam;
     FMinMax endValueF;
-
-    // Vector3値用
-    Vector3 startValueV3 = Vector3::OneVector();
     V3MinMax endValueV3;
+};
 
-    float backRatio = 0.0f;
+// トランスレートイージングパラメータ
+struct EasingParamV3 {
+    EaseParam baseParam;
+    V3MinMax endValue;
 };
 
 // パーティクルパラメータ
@@ -77,6 +80,8 @@ struct Parameters {
     bool isScalerScale;
     bool isRotateForDirection;
     ScaleEaseParam scaleEaseParam;
+    EasingParamV3 translateEaseParam;
+    EasingParamV3 rotateEaseParam;
     UVParam uvParam;
     JointParent jointParent;
 };

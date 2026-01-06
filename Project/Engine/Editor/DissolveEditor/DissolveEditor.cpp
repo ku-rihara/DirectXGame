@@ -17,8 +17,8 @@ void DissolveEditor::RenderSpecificUI() {
     if (preViewObj_) {
         auto* selectedDissolve = GetSelectedEffect();
         if (selectedDissolve && selectedDissolve->IsPlaying()) {
-            preViewObj_->material_.SetDissolveThreshold(selectedDissolve->GetCurrentThreshold());
-            preViewObj_->material_.SetEnableDissolve(selectedDissolve->IsDissolveEnabled());
+            preViewObj_->material_.GetMaterialData()->dissolveThreshold = selectedDissolve->GetCurrentThreshold();
+            preViewObj_->material_.GetMaterialData()->enableDissolve    = selectedDissolve->IsDissolveEnabled();
 
             // テクスチャも更新
             if (!selectedDissolve->GetCurrentTexturePath().empty()) {
@@ -37,8 +37,8 @@ void DissolveEditor::RenderSpecificUI() {
         static float manualThreshold = 1.0f;
         static bool manualEnable     = false;
 
-        preViewObj_->material_.SetDissolveThreshold(manualThreshold);
-        preViewObj_->material_.SetEnableDissolve(manualEnable);
+        preViewObj_->material_.GetMaterialData()->dissolveThreshold = manualThreshold;
+        preViewObj_->material_.GetMaterialData()->enableDissolve=manualEnable;
 
         ImGui::Checkbox("Manual Enable", &manualEnable);
         ImGui::DragFloat("Manual Threshold", &manualThreshold, 0.01f, 0.0f, 1.0f);
