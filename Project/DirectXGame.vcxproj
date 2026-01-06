@@ -85,7 +85,10 @@
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleParameter.cpp" />
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticlePlayer.cpp" />
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSection.cpp" />
-    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.cpp" />
+    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\BehaviorParameters.cpp" />
+    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.cpp" />
+    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\SRTParameters.cpp" />
+    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\VisualParameters.cpp" />
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectController.cpp" />
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectData.cpp" />
     <ClCompile Include="Engine\Editor\RailEditor\ControlPosManager.cpp" />
@@ -266,7 +269,10 @@
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleParameter.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticlePlayer.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSection.h" />
-    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.h" />
+    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\BehaviorParameters.h" />
+    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.h" />
+    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\SRTParameters.h" />
+    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\VisualParameters.h" />
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectController.h" />
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectData.h" />
     <ClInclude Include="Engine\Editor\RailEditor\ControlPosManager.h" />

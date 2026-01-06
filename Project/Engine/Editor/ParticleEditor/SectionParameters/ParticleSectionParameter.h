@@ -2,7 +2,7 @@
 #include "Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "MinMax.h"
-#include "Parameter/ParticleCommonParameters.h"
+#include "../Parameter/ParticleCommonParameters.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "Primitive/IPrimitive.h"
 #include "utility/FileSelector/FileSelector.h"

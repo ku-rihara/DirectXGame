@@ -364,14 +364,17 @@
     <Filter Include="MyEngine\.h\Editor\ParticleEditor\Parameter">
       <UniqueIdentifier>{eb7fc28f-f28e-49a3-b41a-7f24e507947a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\Editor\ParticleEditor\Parameter">
-      <UniqueIdentifier>{83c2fc1d-0567-448a-a7fa-56e40442d1b1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.h\utility\ObjectFromBlender">
       <UniqueIdentifier>{62c9232b-f990-4975-bd38-e118668e5483}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyEngine\.cpp\utility\ObjectFromBlender">
       <UniqueIdentifier>{5a7933a1-28a8-444f-a670-3cdef98bd738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\ParticleEditor\SectionParameters">
+      <UniqueIdentifier>{09b73346-fe6a-489b-84ae-0f9684180666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\ParticleEditor\SectionParameters">
+      <UniqueIdentifier>{f1c25686-c9ff-49ac-8f42-985ccef6443e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -889,14 +892,23 @@
     <ClCompile Include="Engine\Collider\SpatialGrid\SpatialGrid.cpp">
       <Filter>MyEngine\.cpp\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.cpp">
-      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitiveSphere.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
     </ClCompile>
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp">
       <Filter>MyEngine\.cpp\utility\ObjectFromBlender</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\BehaviorParameters.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\SRTParameters.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\VisualParameters.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1461,9 +1473,6 @@
     <ClInclude Include="Engine\Collider\SpatialGrid\SpatialGrid.h">
       <Filter>MyEngine\.h\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.h">
-      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Editor\ParticleEditor\Parameter\ParticleCommonParameters.h">
       <Filter>MyEngine\.h\Editor\ParticleEditor\Parameter</Filter>
     </ClInclude>
@@ -1472,6 +1481,18 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h">
       <Filter>MyEngine\.h\utility\ObjectFromBlender</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\SRTParameters.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\VisualParameters.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\BehaviorParameters.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

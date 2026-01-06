@@ -1,7 +1,7 @@
 #include "ParticleSectionParameter.h"
 #include "base/TextureManager.h"
 #include "Function/GetFile.h"
-#include "ParticleManager.h"
+#include "../ParticleManager.h"
 #include <imgui.h>
 
 using namespace KetaEngine;
@@ -84,6 +84,23 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "scaleEaseParam.endValueV3.max", &parameters_.scaleEaseParam.endValueV3.max);
     globalParam->Regist(groupName, "scaleEaseParam.endValueV3.min", &parameters_.scaleEaseParam.endValueV3.min);
     globalParam->Regist(groupName, "scaleEaseParam.backRatio", &parameters_.scaleEaseParam.baseParam.backRatio);
+
+    // ease Translate
+    globalParam->Regist(groupName, "TranslateEaseParam.isScaleEase", &parameters_.translateEaseParam.baseParam.isEase);
+    globalParam->Regist(groupName, "TranslateEaseParam.maxTime", &parameters_.translateEaseParam.baseParam.maxTime);
+    globalParam->Regist(groupName, "TranslateEaseParam.easeTypeInt", &parameters_.translateEaseParam.baseParam.easeTypeInt);
+    globalParam->Regist(groupName, "TranslateEaseParam.endValueV3.max", &parameters_.translateEaseParam.endValue.max);
+    globalParam->Regist(groupName, "TranslateEaseParam.endValueV3.min", &parameters_.translateEaseParam.endValue.min);
+    globalParam->Regist(groupName, "TranslateEaseParam.backRatio", &parameters_.translateEaseParam.baseParam.backRatio);
+
+    // ease Rotate
+    globalParam->Regist(groupName, "RotateEaseParam.isScaleEase", &parameters_.rotateEaseParam.baseParam.isEase);
+    globalParam->Regist(groupName, "RotateEaseParam.maxTime", &parameters_.rotateEaseParam.baseParam.maxTime);
+    globalParam->Regist(groupName, "RotateEaseParam.easeTypeInt", &parameters_.rotateEaseParam.baseParam.easeTypeInt);
+    globalParam->Regist(groupName, "RotateEaseParam.endValueV3.max", &parameters_.rotateEaseParam.endValue.max);
+    globalParam->Regist(groupName, "RotateEaseParam.endValueV3.min", &parameters_.rotateEaseParam.endValue.min);
+    globalParam->Regist(groupName, "RotateEaseParam.backRatio", &parameters_.rotateEaseParam.baseParam.backRatio);
+
 
     // Mode Setting
     globalParam->Regist(groupName, "preBillBordType", &billBordTypeInt_);
