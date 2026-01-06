@@ -898,16 +898,7 @@
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp">
       <Filter>MyEngine\.cpp\utility\ObjectFromBlender</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\BehaviorParameters.cpp">
-      <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.cpp">
-      <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\SRTParameters.cpp">
-      <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\VisualParameters.cpp">
       <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1483,15 +1474,6 @@
       <Filter>MyEngine\.h\utility\ObjectFromBlender</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.h">
-      <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\SRTParameters.h">
-      <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\VisualParameters.h">
-      <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\BehaviorParameters.h">
       <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
     </ClInclude>
   </ItemGroup>

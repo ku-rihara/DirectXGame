@@ -1,7 +1,7 @@
 #include "ParticleSectionParameter.h"
+#include "../ParticleManager.h"
 #include "base/TextureManager.h"
 #include "Function/GetFile.h"
-#include "../ParticleManager.h"
 #include <imgui.h>
 
 using namespace KetaEngine;
@@ -100,7 +100,6 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "RotateEaseParam.endValueV3.max", &parameters_.rotateEaseParam.endValue.max);
     globalParam->Regist(groupName, "RotateEaseParam.endValueV3.min", &parameters_.rotateEaseParam.endValue.min);
     globalParam->Regist(groupName, "RotateEaseParam.backRatio", &parameters_.rotateEaseParam.baseParam.backRatio);
-
 
     // Mode Setting
     globalParam->Regist(groupName, "preBillBordType", &billBordTypeInt_);
@@ -201,6 +200,21 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.scaleEaseParam.endValueV3.max        = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.max");
     parameters_.scaleEaseParam.endValueV3.min        = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.min");
     parameters_.scaleEaseParam.baseParam.backRatio   = globalParam->GetValue<float>(groupName, "scaleEaseParam.backRatio");
+
+    parameters_.translateEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName, "TranslateEaseParam.isScaleEase");
+    parameters_.translateEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName, "TranslateEaseParam.maxTime");
+    parameters_.translateEaseParam.baseParam.easeTypeInt = globalParam->GetValue<int32_t>(groupName, "TranslateEaseParam.easeTypeInt");
+    parameters_.translateEaseParam.endValue.max          = globalParam->GetValue<Vector3>(groupName, "TranslateEaseParam.endValueV3.max");
+    parameters_.translateEaseParam.endValue.min          = globalParam->GetValue<Vector3>(groupName, "TranslateEaseParam.endValueV3.min");
+    parameters_.translateEaseParam.baseParam.backRatio   = globalParam->GetValue<float>(groupName, "TranslateEaseParam.backRatio");
+
+    // ease Rotate
+    parameters_.rotateEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName, "RotateEaseParam.isScaleEase");
+    parameters_.rotateEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName, "RotateEaseParam.maxTime");
+    parameters_.rotateEaseParam.baseParam.easeTypeInt = globalParam->GetValue<int32_t>(groupName, "RotateEaseParam.easeTypeInt");
+    parameters_.rotateEaseParam.endValue.max          = globalParam->GetValue<Vector3>(groupName, "RotateEaseParam.endValueV3.max");
+    parameters_.rotateEaseParam.endValue.min          = globalParam->GetValue<Vector3>(groupName, "RotateEaseParam.endValueV3.min");
+    parameters_.rotateEaseParam.baseParam.backRatio   = globalParam->GetValue<float>(groupName, "RotateEaseParam.backRatio");
 
     // Mode
     billBordTypeInt_ = globalParam->GetValue<int>(groupName, "preBillBordType");
@@ -337,6 +351,8 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::SeparatorText("Direction Range:");
         ImGui::DragFloat3("Direction Max", &parameters_.directionDist.max.x, 0.01f, -1.0f, 1.0f);
         ImGui::DragFloat3("Direction Min", &parameters_.directionDist.min.x, 0.01f, -1.0f, 1.0f);
+
+        TranslateParamEditor();
     }
 
     // Scale
@@ -352,6 +368,7 @@ void ParticleSectionParameter::AdjustParam() {
     if (ImGui::CollapsingHeader("Rotate Speed(Degree)")) {
         ImGui::DragFloat3("Rotate Speed Max", &parameters_.rotateSpeedDist.max.x, 0.1f, 0, 720);
         ImGui::DragFloat3("Rotate Speed Min", &parameters_.rotateSpeedDist.min.x, 0.1f, 0, 720);
+        RotateParamEditor();
     }
 
     // UV
@@ -451,6 +468,44 @@ void ParticleSectionParameter::ScaleParamEditor() {
 
             ImGui::DragFloat("Back Ratio", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
         }
+    }
+}
+
+void ParticleSectionParameter::TranslateParamEditor() {
+
+    ImGui::Separator();
+    ImGui::Checkbox("Use Translate Easing", &parameters_.translateEaseParam.baseParam.isEase);
+
+    if (parameters_.translateEaseParam.baseParam.isEase) {
+        auto& easeParam = parameters_.translateEaseParam;
+
+        ImGui::DragFloat("Max Time##Translate", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
+        ImGuiEasingTypeSelector("Easing Type##Translate", easeParam.baseParam.easeTypeInt);
+
+        ImGui::SeparatorText("End Position Range");
+        ImGui::DragFloat3("End Translate Max", &easeParam.endValue.max.x, 0.01f);
+        ImGui::DragFloat3("End Translate Min", &easeParam.endValue.min.x, 0.01f);
+
+        ImGui::DragFloat("Back Ratio##Translate", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
+    }
+}
+
+void ParticleSectionParameter::RotateParamEditor() {
+    ImGui::Separator();
+
+    ImGui::Checkbox("Use Rotate Easing", &parameters_.rotateEaseParam.baseParam.isEase);
+
+    if (parameters_.rotateEaseParam.baseParam.isEase) {
+        auto& easeParam = parameters_.rotateEaseParam;
+
+        ImGui::DragFloat("Max Time##Rotate", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
+        ImGuiEasingTypeSelector("Easing Type##Rotate", easeParam.baseParam.easeTypeInt);
+
+        ImGui::SeparatorText("End Rotation Range (Degree)");
+        ImGui::DragFloat3("End Rotate Max", &easeParam.endValue.max.x, 0.1f, -360.0f, 360.0f);
+        ImGui::DragFloat3("End Rotate Min", &easeParam.endValue.min.x, 0.1f, -360.0f, 360.0f);
+
+        ImGui::DragFloat("Back Ratio##Rotate", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
     }
 }
 

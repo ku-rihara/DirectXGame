@@ -1,15 +1,10 @@
 #pragma once
-#include "Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "MinMax.h"
 #include "../Parameter/ParticleCommonParameters.h"
-#include "Pipeline/Particle/ParticlePipeline.h"
 #include "Primitive/IPrimitive.h"
 #include "utility/FileSelector/FileSelector.h"
 #include "utility/TimeModeSelector/TimeModeSelector.h"
-#include "Vector2.h"
 #include "Vector3.h"
-#include "Vector4.h"
 #include <cstdint>
 #include <functional>
 #include <string>
@@ -60,6 +55,8 @@ public:
 private:
     void SelectRailFile(const char* label, const std::string& directory, std::pair<std::string, FileSelector>* param);
     void ScaleParamEditor();
+    void TranslateParamEditor(); 
+    void RotateParamEditor(); 
     void AdaptIntToType();
 
 private:
