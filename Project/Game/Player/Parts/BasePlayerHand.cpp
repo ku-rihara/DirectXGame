@@ -17,8 +17,6 @@ void BasePlayerHand::Init() {
     particlePlayer_ = std::make_unique<KetaEngine::ParticlePlayer>();
     particlePlayer_->Init();
     particlePlayer_->SetFollowingPos(&effectFollowPos_);
-
-   
 }
 
 ///=========================================================
@@ -32,7 +30,6 @@ void BasePlayerHand::Update() {
     particlePlayer_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
     effectFollowPos_ = obj3d_->transform_.GetWorldPos();
     particlePlayer_->Update();
-   
 
     BaseObject::Update();
 }
@@ -60,7 +57,6 @@ void BasePlayerHand::AddParamGroup() {
 
     // Position
     globalParameter_->AddItem(groupName_, "Translate", obj3d_->transform_.translation_);
- 
 }
 
 ///=================================================================================
@@ -73,7 +69,6 @@ void BasePlayerHand::SetValues() {
 
     // Position
     globalParameter_->SetValue(groupName_, "Translate", obj3d_->transform_.translation_);
-  
 }
 
 ///=====================================================
@@ -82,7 +77,6 @@ void BasePlayerHand::SetValues() {
 void BasePlayerHand::ApplyGlobalParameter() {
     // Position
     obj3d_->transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-   
 }
 
 ///=====================================================
@@ -94,16 +88,15 @@ void BasePlayerHand::SaveAndLoad() {
     ParamLoadForImGui();
 }
 void BasePlayerHand::DissolveAdapt(float dissolve) {
-    obj3d_->material_.SetDissolveEdgeColor(Vector3(0.6706f, 0.8824f, 0.9804f));
-    obj3d_->material_.SetDissolveEdgeWidth(0.05f);
-    obj3d_->material_.SetEnableDissolve(true);
-    obj3d_->material_.SetDissolveThreshold(dissolve);
+    obj3d_->material_.GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
+    obj3d_->material_.GetMaterialData()->dissolveEdgeWidth = 0.05f;
+    obj3d_->material_.GetMaterialData()->enableDissolve    = true;
+    obj3d_->material_.GetMaterialData()->dissolveThreshold = dissolve;
 }
 
 void BasePlayerHand::AdjustParamBase() {
     ImGui::SeparatorText("Param");
     ImGui::DragFloat3("Position", &obj3d_->transform_.translation_.x, 0.1f);
-  
 }
 
 void BasePlayerHand::SetParent(KetaEngine::WorldTransform* parent) {
@@ -112,6 +105,6 @@ void BasePlayerHand::SetParent(KetaEngine::WorldTransform* parent) {
 
 void BasePlayerHand::EffectEmit(const std::string& effectName) {
     if (isEmit_) {
-        particlePlayer_->Play("Player",effectName);
+        particlePlayer_->Play("Player", effectName);
     }
 }
