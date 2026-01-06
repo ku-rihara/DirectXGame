@@ -1,11 +1,12 @@
 #include "ParticleMaterial.h"
 
 using namespace KetaEngine;
+#include"Pipeline/Particle/ParticlePipeline.h"
 #include "Dx/DirectXCommon.h"
 #include <cassert>
 #include <imgui.h>
 
-void ParticleMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
+void ParticleMaterial::Init(DirectXCommon* dxCommon) {
     assert(dxCommon);
 
     // マテリアルリソース作成
@@ -28,7 +29,7 @@ void ParticleMaterial::UpdateMaterialData(const Vector4& Color) {
 
 void ParticleMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
     // シェーダーにマテリアルデータを送る
-    commandList->SetGraphicsRootConstantBufferView(1, materialResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(ParticleRootParameter::Material), materialResource_->GetGPUVirtualAddress());
 }
 
 void ParticleMaterial::DebugImGui() {

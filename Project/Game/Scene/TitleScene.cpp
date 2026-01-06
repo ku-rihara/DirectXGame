@@ -113,10 +113,7 @@ void TitleScene::SkyBoxDraw() {
 
 void TitleScene::Debug() {
 #ifdef _DEBUG
-    ImGui::Begin("Camera");
-    ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
-    ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
-    ImGui::End();
+ 
 
     ImGui::Begin("Param");
     KetaEngine::Light::GetInstance()->DebugImGui();

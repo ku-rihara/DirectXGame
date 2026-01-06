@@ -82,7 +82,7 @@ public:
     /// <param name="material">マテリアル</param>
     /// <param name="textureHandle">テクスチャハンドル(オプション)</param>
     void Draw(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material,
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial* material,
         const std::optional<uint32_t>& textureHandle = std::nullopt);
 
     /// <summary>
@@ -94,7 +94,7 @@ public:
     /// <param name="skinCluster">スキンクラスター</param>
     /// <param name="textureHandle">テクスチャハンドル(オプション)</param>
     void DrawAnimation(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, const SkinCluster& skinCluster,
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial* material, const SkinCluster& skinCluster,
         const std::optional<uint32_t>& textureHandle = std::nullopt);
 
     /// <summary>

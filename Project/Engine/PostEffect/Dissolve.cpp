@@ -14,7 +14,7 @@ void Dissolve::Init(DirectXCommon* dxCommon) {
     psName_ = L"resources/Shader/PostEffect/Dissolve.PS.hlsl";
     BasePostEffect::Init(dxCommon);
 
-    textureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/noise0.png");
+    textureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/Noise/noise0.png");
 }
 
 void Dissolve::CreateGraphicsPipeline() {

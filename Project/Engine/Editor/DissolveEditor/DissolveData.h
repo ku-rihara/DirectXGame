@@ -1,22 +1,16 @@
 #pragma once
 #include "Easing/Easing.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/BaseEffectEditor/BaseEffectData.h"
 #include <cstdint>
 #include <string>
+#include <vector>
 
 /// <summary>
 /// ディゾルブデータクラス
 /// </summary>
 namespace KetaEngine {
 
-class DissolveData {
-public:
-    enum class PlayState {
-        STOPPED,
-        PLAYING,
-        PAUSED
-    };
-
+class DissolveData : public BaseEffectData {
 public:
     DissolveData()  = default;
     ~DissolveData() = default;
@@ -24,65 +18,63 @@ public:
     /// <summary>
     /// 初期化
     /// </summary>
-    /// <param name="dissolveName">ディゾルブ名</param>
-    void Init(const std::string& dissolveName);
+    /// <param name="name">ディゾルブ名</param>
+    void Init(const std::string& name) override;
 
     /// <summary>
     /// 更新
     /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void Update(float deltaTime);
+    /// <param name="speedRate">速度倍率</param>
+    void Update(float speedRate = 1.0f) override;
 
     void AdjustParam(); //< パラメータ調整
-    void Play();        //< 再生
-    void Stop();        //< 停止
-    void Reset();       //< リセット
+    void Play() override; //< 再生
+    void Reset() override; //< リセット
 
-    void LoadData(); //< データ読み込み
-    void SaveData(); //< データ保存
-
-    bool IsPlaying() const; //< 再生中判定
-    bool IsFinished() const; //< 終了判定
+    void LoadData() override; //< データ読み込み
+    void SaveData() override; //< データ保存
 
 private:
-    void RegisterParams();           //< パラメータバインド
-    void UpdateDissolveValues();     //< ディゾルブ値更新
+    void RegisterParams() override; //< パラメータバインド
+    void GetParams() override; //< パラメータ取得
+    void InitParams() override; //< パラメータ初期化
+    void UpdateDissolveValues(); //< ディゾルブ値更新
+    void LoadNoiseTextures(); //< ノイズテクスチャ読み込み
 
 private:
-    GlobalParameter* globalParameter_;
-    std::string groupName_;
-    std::string folderPath_ = "DissolveEditor";
-    float startThreshold_   = 1.0f;
-    float maxTime_          = 1.0f;
-    float endThreshold_;
-    float offsetTime_;
-    int32_t easeType_       = 0;
-    PlayState playState_    = PlayState::STOPPED;
+    // パラメータ
+    float startThreshold_         = 1.0f;
+    float endThreshold_           = 0.0f;
+    float maxTime_                = 1.0f;
+    float offsetTime_             = 0.0f;
+    int32_t easeType_             = 0;
+    int32_t selectedTextureIndex_ = 0;
+
+    // 状態
     float currentTime_      = 0.0f;
     float totalTime_        = 0.0f;
     float currentThreshold_ = 1.0f;
     bool currentEnable_     = false;
+
+    // イージング
     Easing<float> thresholdEase_;
     float easedThreshold_ = 1.0f;
-    bool showControls_    = true;
+
+    // テクスチャ管理
+    std::string textureFilePath_ = "Resources/EngineTexture/Noise";
+    std::vector<std::string> noiseTextureFiles_;
+    std::string currentTexturePath_;
 
 public:
-
     // getter
-    std::string GetGroupName() const { return groupName_; }
+
+    const std::string& GetCurrentTexturePath() const { return currentTexturePath_; }
     float GetCurrentThreshold() const { return currentThreshold_; }
     bool IsDissolveEnabled() const { return currentEnable_; }
-    float GetStartThreshold() const { return startThreshold_; }
-    float GetEndThreshold() const { return endThreshold_; }
-    float GetMaxTime() const { return maxTime_; }
-    float GetOffsetTime() const { return offsetTime_; }
+  
 
     // setter
-    void SetStartThreshold(float threshold) { startThreshold_ = threshold; }
-    void SetEndThreshold(float threshold) { endThreshold_ = threshold; }
-    void SetMaxTime(float time) { maxTime_ = time; }
-    void SetOffsetTime(float time) { offsetTime_ = time; }
-    void SetEaseType(int32_t type) { easeType_ = type; }
+    void SetTextureIndex(int32_t index);
 };
 
 }; // KetaEngine

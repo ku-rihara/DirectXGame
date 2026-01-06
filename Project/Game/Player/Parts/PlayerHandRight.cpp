@@ -8,13 +8,12 @@
 void PlayerHandRight::Init() {
 
     // グループネーム
-    groupName_      = "RightHand";
+    groupName_ = "RightHand";
 
-    obj3d_.reset(KetaEngine::Object3d::CreateModel("RHand.obj"));  
-    obj3d_->material_.materialData_->enableLighting = 2;
-    obj3d_->transform_.scale_                       = {2, 2, 2};
-    obj3d_->material_.SetEnvironmentCoefficient(0.15f);
-  
+    obj3d_.reset(KetaEngine::Object3d::CreateModel("RHand.obj"));
+    obj3d_->material_.GetMaterialData()->enableLighting         = 2;
+    obj3d_->transform_.scale_                                   = {2, 2, 2};
+    obj3d_->material_.GetMaterialData()->environmentCoefficient = 0.15f;
 
     BasePlayerHand::Init();
 }
@@ -26,7 +25,6 @@ void PlayerHandRight::Update() {
     BasePlayerHand::EffectEmit("DefaultFireAuraBlue");
     BasePlayerHand::Update();
 }
-
 
 void PlayerHandRight::AdjustParam() {
 
@@ -56,4 +54,3 @@ void PlayerHandRight::SaveAndLoad() {
 void PlayerHandRight::SetParent(KetaEngine::WorldTransform* parent) {
     BasePlayerHand::SetParent(parent);
 }
-

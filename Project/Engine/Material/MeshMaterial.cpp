@@ -5,7 +5,7 @@ using namespace KetaEngine;
 #include <cassert>
 #include <imgui.h>
 
-void MeshMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
+void MeshMaterial::Init(DirectXCommon* dxCommon) {
     assert(dxCommon);
 
     // マテリアルリソース作成

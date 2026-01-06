@@ -4,7 +4,7 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailPlayer.h"
 #include "Line3D/Line3D.h"
-#include "ParticleSectionParameter.h"
+#include "SectionParameters/ParticleSectionParameter.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "Primitive/IPrimitive.h"
 #include "utility/FileSelector/FileSelector.h"

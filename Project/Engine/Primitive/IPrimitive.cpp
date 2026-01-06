@@ -1,5 +1,5 @@
-#include"IPrimitive.h"
-#include"Dx/DirectXCommon.h"
+#include "IPrimitive.h"
+#include "Dx/DirectXCommon.h"
 using namespace KetaEngine;
 
 void IPrimitive::Init() {
@@ -26,7 +26,6 @@ void IPrimitive::CreateWVPResource() {
     wvpDate_->WorldInverseTranspose = MakeIdentity4x4();
 }
 
-
 ///============================================================
 /// 描画
 ///============================================================
@@ -37,7 +36,7 @@ void IPrimitive::Draw(const WorldTransform& worldTransform, const ViewProjection
     wvpDate_->World                 = worldTransform.matWorld_;
     wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
-    
+
     mesh_->Draw(wvpResource_, material_, textureHandle);
 }
 
@@ -45,8 +44,7 @@ void IPrimitive::SetTexture(const std::string& name) {
     mesh_->SetTexture(name);
 }
 
- void IPrimitive::CreateMaterialResource() {
-    material_.CreateMaterialResource(DirectXCommon::GetInstance());
-     material_.SetShininess(1.0f);
-
- }
+void IPrimitive::CreateMaterialResource() {
+    material_.Init(DirectXCommon::GetInstance());
+    material_.GetMaterialData()->shininess = 1.0f;
+}

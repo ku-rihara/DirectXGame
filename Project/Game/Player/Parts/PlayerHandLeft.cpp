@@ -8,12 +8,12 @@
 void PlayerHandLeft::Init() {
 
     // グループネーム
-    groupName_     = "LeftHand";
- 
+    groupName_ = "LeftHand";
+
     obj3d_.reset(KetaEngine::Object3d::CreateModel("LHand.obj"));
-    obj3d_->transform_.scale_                       = {2, 2, 2};
-    obj3d_->material_.materialData_->enableLighting = 2;
-    obj3d_->material_.SetEnvironmentCoefficient(0.15f);
+    obj3d_->transform_.scale_                                   = {2, 2, 2};
+    obj3d_->material_.GetMaterialData()->enableLighting         = 2;
+    obj3d_->material_.GetMaterialData()->environmentCoefficient = 0.15f;
 
     BasePlayerHand::Init();
 
@@ -31,7 +31,6 @@ void PlayerHandLeft::Update() {
     gpuParticlePlayer_.Update();
     BasePlayerHand::Update();
 }
-
 
 ///=====================================================
 ///  パラメータ調節
@@ -62,4 +61,3 @@ void PlayerHandLeft::SaveAndLoad() {
 void PlayerHandLeft::SetParent(KetaEngine::WorldTransform* parent) {
     BasePlayerHand::SetParent(parent);
 }
-

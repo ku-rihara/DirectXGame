@@ -30,7 +30,7 @@ void AreaLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
     // 全てのスポットライトに対して処理を行う
     for (size_t i = 0; i < areaLights_.size(); ++i){
         // 各スポットライトのデータを設定
-        areaLights_[i]->SetLightCommand(commandList,static_cast<int>(i));
+        areaLights_[i]->SetLightCommand(commandList);
     }
 }
 

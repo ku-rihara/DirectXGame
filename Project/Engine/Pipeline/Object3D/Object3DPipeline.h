@@ -6,11 +6,30 @@
 #include <d3dcommon.h>
 #include <dxcapi.h>
 #include <wrl/client.h>
+#include <Windows.h>
 
 /// <summary>
 /// 3Dオブジェクト描画パイプラインクラス
 /// </summary>
 namespace KetaEngine {
+
+enum class Object3DRootParameter : UINT{
+    Material,
+    TransformationMatrix,
+    Texture2D,
+    TextureCube,
+    DirectionalLight,
+    Camera,
+    PointLights,
+    SpotLights,
+    AreaLight,
+    AmbientLight,
+    LightCountData,
+    ShadowMap,
+    LightTransform,
+    Dissolve,
+    Count
+};
 
 class Object3DPipeline : public BasePipeline {
 public:

@@ -5,7 +5,7 @@ using namespace KetaEngine;
 #include <cassert>
 #include <imgui.h>
 
-void SkyBoxMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
+void SkyBoxMaterial::Init(DirectXCommon* dxCommon) {
     assert(dxCommon);
 
     // マテリアルリソース作成

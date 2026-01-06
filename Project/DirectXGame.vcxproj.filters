@@ -517,6 +517,12 @@
     <Filter Include="MyEngine\.cpp\utility\ObjectFromBlender">
       <UniqueIdentifier>{5a7933a1-28a8-444f-a670-3cdef98bd738}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\Editor\ParticleEditor\SectionParameters">
+      <UniqueIdentifier>{09b73346-fe6a-489b-84ae-0f9684180666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\ParticleEditor\SectionParameters">
+      <UniqueIdentifier>{f1c25686-c9ff-49ac-8f42-985ccef6443e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1323,6 +1329,9 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp">
       <Filter>MyEngine\.cpp\utility\ObjectFromBlender</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2186,6 +2195,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h">
       <Filter>MyEngine\.h\utility\ObjectFromBlender</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

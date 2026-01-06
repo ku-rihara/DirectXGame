@@ -11,8 +11,11 @@ using namespace KetaEngine;
 #include "Dx/DxRenderTarget.h"
 #include "Lighrt/Light.h"
 #include "Material/BaseMaterial.h"
+// pipeline
+#include"Pipeline/Object3D/Object3DPipeline.h"
 #include "Pipeline/PipelineManager.h"
 #include "Pipeline/SkyBox/SkyBoxPipeline.h"
+
 #include "ShadowMap/ShadowMap.h"
 #include <filesystem>
 
@@ -189,7 +192,7 @@ void Model::DebugImGui() {
 #endif
 }
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material,
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial* material,
     const std::optional<uint32_t>& textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
@@ -202,34 +205,34 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
     // 形状を設定
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    material.SetCommandList(commandList);
+    material->SetCommandList(commandList);
 
-    commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Object3DRootParameter::TransformationMatrix), wvpResource->GetGPUVirtualAddress());
 
     if (textureHandle.has_value()) {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
+        commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(Object3DRootParameter::Texture2D), TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
     } else {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureIndex_));
+        commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(Object3DRootParameter::Texture2D), TextureManager::GetInstance()->GetTextureHandle(textureIndex_));
     }
 
     // 環境マップ
     BasePipeline* skyBoxPipeline = PipelineManager::GetInstance()->GetPipeline(PipelineType::SkyBox);
     if (SkyBoxPipeline* skyBoxPipe = dynamic_cast<SkyBoxPipeline*>(skyBoxPipeline)) {
         uint32_t environmentalMapTexture = skyBoxPipe->GetEnvironmentalMapTextureHandle();
-        commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
+        commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(Object3DRootParameter::TextureCube), TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
     }
 
     Light::GetInstance()->SetLightCommands(commandList);
 
     // shadowTexture
-    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetShadowMapSrvGPUHandle());
-    commandList->SetGraphicsRootConstantBufferView(12, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(Object3DRootParameter::ShadowMap), shadowMap.GetShadowMapSrvGPUHandle());
+    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Object3DRootParameter::LightTransform), shadowMap.GetVertexResource()->GetGPUVirtualAddress());
 
     // 描画コール
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
-void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, const SkinCluster& skinCluster,
+void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial* material, const SkinCluster& skinCluster,
     const std::optional<uint32_t>& textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
@@ -239,7 +242,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
 
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    material.SetCommandList(commandList);
+    material->SetCommandList(commandList);
 
     // 定数バッファ
     commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());

@@ -3,6 +3,7 @@
 using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include "Line3DManager.h"
+#include"Pipeline/Line3D/Line3DPipeline.h"
 #include "Pipeline/PipelineManager.h"
 #include <cassert>
 #include <cmath>
@@ -100,7 +101,7 @@ void Line3D::Draw(const ViewProjection& viewProj) {
     *cBufferData_ = {viewProj.matView_ * viewProj.matProjection_};
 
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
-    commandList->SetGraphicsRootConstantBufferView(0, constantBufferResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Line3DRootParameter::TransformationMatrix), constantBufferResource_->GetGPUVirtualAddress());
     commandList->DrawInstanced(static_cast<UINT>(currentLineCount_ * kVerticesPerLine_), 1, 0, 0);
 
     Reset();

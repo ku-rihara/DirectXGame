@@ -13,7 +13,6 @@
 /// </summary>
 /// <typeParam name="T">イージング対象の型(float, Vector2, Vector3)</typeParam>
 namespace KetaEngine {
-
 template <typename T>
 class Easing {
 public:
