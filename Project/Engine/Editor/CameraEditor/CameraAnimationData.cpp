@@ -173,11 +173,11 @@ void CameraAnimationData::UpdateAdaptCurrentPos() {
     }
 }
 
-void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection, const Vector3& baseRotate) {
+void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) {
     // rotateのみオフセットを加算
     if (playState_ == PlayState::PLAYING) {
         viewProjection.positionOffset_ = currentCameraTransform_.position;
-        viewProjection.rotationOffset_ = currentCameraTransform_.rotation + baseRotate;
+        viewProjection.rotationOffset_ = currentCameraTransform_.rotation;
         viewProjection.fovAngleY_      = currentCameraTransform_.fov;
     } else if (isAllFinished_) {
         viewProjection.positionOffset_ = Vector3::ZeroVector();

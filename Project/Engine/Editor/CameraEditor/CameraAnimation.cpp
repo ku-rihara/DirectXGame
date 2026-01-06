@@ -66,7 +66,7 @@ void CameraAnimation::ApplyOffsetToViewProjection() {
 
     // アニメーションデータをViewProjectionに適用
     if (CameraAnimationData* cameraData = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
-        cameraData->ApplyToViewProjection(*pViewProjection_, rotateBase_);
+        cameraData->ApplyToViewProjection(*pViewProjection_);
     }
 }
 
