@@ -5,6 +5,7 @@ using namespace KetaEngine;
 #include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
 #include "SpriteRegistry.h"
+#include <algorithm>
 #include <imgui.h>
 
 Sprite::~Sprite() {
@@ -144,11 +145,11 @@ void Sprite::Draw() {
     DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 
     ///==========================================================================================
-    //  anchorPoint
+    //  anchorPoint + ゲージレート対応
     ///==========================================================================================
 
     float left   = 0.0f - anchorPoint_.x;
-    float right  = 1.0f - anchorPoint_.x;
+    float right  = (1.0f * gaugeRate_) - anchorPoint_.x; // ★ゲージレート適用
     float top    = 0.0f - anchorPoint_.y;
     float bottom = 1.0f - anchorPoint_.y;
 
@@ -169,11 +170,11 @@ void Sprite::Draw() {
     }
 
     ///==========================================================================================
-    //  TextureClip
+    //  TextureClip + ゲージレート対応
     ///==========================================================================================
 
     float texLeft   = textureLeftTop_.x / textureSize_.x;
-    float texRight  = (textureLeftTop_.x + textureSize_.x) / textureSize_.x;
+    float texRight  = (textureLeftTop_.x + textureSize_.x * gaugeRate_) / textureSize_.x; // ★ゲージレート適用
     float texTop    = textureLeftTop_.y / textureSize_.y;
     float texBottom = (textureLeftTop_.y + textureSize_.y) / textureSize_.y;
 
@@ -215,6 +216,13 @@ void Sprite::Draw() {
     directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture_);
     // 描画(DrawCall/ドローコール)
     directXCommon->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+}
+
+///=========================================================
+/// ゲージレート設定
+///==========================================================
+void Sprite::SetGaugeRate(float rate) {
+    gaugeRate_ = std::clamp(rate, 0.0f, 1.0f);
 }
 
 ///=========================================================
@@ -278,14 +286,4 @@ void Sprite::SetColor(const Vector3& color) {
 
 void Sprite::SetAlpha(float alpha) {
     material_.GetMaterialData()->color.w = alpha;
-}
-
-void Sprite::SetTextureDisplaySize(const Vector2& size) {
-  
-    Vector2 clampedSize;
-    clampedSize.x = std::clamp(size.x, 0.0f, textureSize_.x);
-    clampedSize.y = std::clamp(size.y, 0.0f, textureSize_.y);
-
-    // テクスチャ座標の右端と下端を計算
-    textureSize_ = clampedSize;
 }
