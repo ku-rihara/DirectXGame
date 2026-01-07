@@ -393,3 +393,41 @@ void WorldTransform::InitOffsetTransform() {
     offsetTransform_.rotation    = Vector3::ZeroVector();
     offsetTransform_.quaternion  = Quaternion::Identity();
 }
+
+
+void WorldTransform::ApplyLookAtDirection(const Vector3& direction) {
+    // 方向ベクトルが小さすぎる場合は処理しない
+    if (direction.Length() < 0.001f) {
+        return;
+    }
+
+    Vector3 normalizedDir = direction.Normalize();
+
+    if (rotateOder_ == RotateOder::Quaternion) {
+        // Quaternionモードの場合
+        Vector3 forward = Vector3::ToForward();
+
+        // 前方向から目標方向への回転を計算
+        Matrix4x4 rotationMatrix = DirectionToDirection(forward, normalizedDir);
+
+        // 行列からQuaternionに変換
+        Quaternion lookAtQuat = QuaternionFromMatrix(rotationMatrix);
+
+        // 現在の回転に適用
+        offsetTransform_.quaternion = lookAtQuat * quaternion_;
+
+    } else {
+      
+        // Y軸回転
+        float rotateY = std::atan2(normalizedDir.x, normalizedDir.z);
+
+        // X軸回転
+        float horizontalLength = std::sqrt(normalizedDir.x * normalizedDir.x + normalizedDir.z * normalizedDir.z);
+        float rotateX          = std::atan2(-normalizedDir.y, horizontalLength);
+
+        // オフセットとして設定
+        offsetTransform_.rotation.y = rotateY;
+        offsetTransform_.rotation.x = rotateX;
+     
+    }
+}

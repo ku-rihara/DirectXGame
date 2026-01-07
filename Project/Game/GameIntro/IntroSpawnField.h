@@ -41,12 +41,12 @@ public:
 
 private:
     // Step function
-    void Start();       //< 開始
-    void Wait();        //< 待機
-    void ObjSpawn();    //< オブジェクト生成
+    void Start(); //< 開始
+    void Wait(); //< 待機
+    void ObjSpawn(); //< オブジェクト生成
     void PlayerSpawn(); //< プレイヤー生成
-    void FinishWait();  //< 終了待機
-    void Finish();      //< 終了
+    void FinishWait(); //< 終了待機
+    void Finish(); //< 終了
 
     /// <summary>
     /// ステップ処理
@@ -66,6 +66,10 @@ private:
     float playerSpawnTime_;
     float finishWaitTime_;
     Step step_ = Step::START;
+
+    // テクスチャスケールイージング
+    Vector2 spriteEaseScale_;
+    KetaEngine::Easing<Vector2> scaleEasing_;
 
 public:
     const Step& GetCurrentStep() const { return step_; }

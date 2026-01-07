@@ -47,6 +47,9 @@ public:
         float elapsedTime     = 0.0f;
         Easing<float> timeEase;
         float adaptTime = 0.0f;
+
+        bool isLookAtDirection   = false;
+        Vector3 previousPosition = Vector3::ZeroVector();
     };
 
 public:
@@ -93,7 +96,7 @@ private:
     void StartReturn();
     void UpdateReturn(float speedRate);
     void OnReturnComplete();
-  
+
 private:
     //*---------------------------- private Variant ----------------------------*//
 
@@ -119,8 +122,11 @@ public:
 
     const Vector3& GetCurrentPosition() const { return currentPosition_; }
     WorldTransform* GetParentTransform() const { return parentTransform_; }
+    Vector3 GetMovementDirection() const;
 
     void SetParent(WorldTransform* parent) { parentTransform_ = parent; }
+
+
 };
 
 }; // KetaEngine

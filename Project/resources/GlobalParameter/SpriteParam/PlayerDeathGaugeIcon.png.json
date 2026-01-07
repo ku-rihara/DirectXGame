@@ -1,6 +1,6 @@
 {
-    "gamePurposeLine.png": {
-        "layerNum": 4,
+    "PlayerDeathGaugeIcon.png": {
+        "layerNum": 12,
         "startAnchorPoint": [
             0.5,
             0.5
@@ -12,8 +12,8 @@
             1.0
         ],
         "startPosition": [
-            640.0,
-            320.0
+            258.29998779296875,
+            112.5
         ],
         "startScale": [
             1.0,

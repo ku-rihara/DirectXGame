@@ -8,14 +8,12 @@
 /// <summary>
 /// タイトルロゴ管理クラス
 /// </summary>
-class TitleRogo {
+class TitleLogo {
 public:
     // 初期化、更新
     void Init();
     void Update();
-
-    void Draw();      //< 描画
-    void EasingSet(); //< イージングの設定
+    void EasingSet();
 private:
     enum class Step {
         PUNCH,

@@ -30,7 +30,7 @@ void TitleScene::Init() {
     field_            = std::make_unique<Field>();
     player_           = std::make_unique<Player>();
     skydome_          = std::make_unique<SkyDome>();
-    titleRogo_        = std::make_unique<TitleRogo>();
+    titleLogo_        = std::make_unique<TitleLogo>();
     skyBox_           = std::make_unique<SkyBox>();
     ObjectFromBlender_ = std::make_unique<KetaEngine::ObjectFromBlender>();
 
@@ -40,7 +40,7 @@ void TitleScene::Init() {
     field_->Init();
     skyBox_->Init();
     player_->Init();
-    titleRogo_->Init();
+    titleLogo_->Init();
     ObjectFromBlender_->LoadJsonFile("gameScene.json");
 
     alpha_ = 0.0f;
@@ -68,12 +68,12 @@ void TitleScene::Update() {
     skyBox_->Update();
 
     if (dynamic_cast<TitleRightPunch*>(player_->GetTitleBehavior())) {
-        if (!isTitleRogoUpdate) {
-            isTitleRogoUpdate = true;
+        if (!isTitleLogoUpdate) {
+            isTitleLogoUpdate = true;
         }
     }
-    if (isTitleRogoUpdate) {
-        titleRogo_->Update();
+    if (isTitleLogoUpdate) {
+        titleLogo_->Update();
     }
 
   

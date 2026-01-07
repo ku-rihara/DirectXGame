@@ -7,7 +7,7 @@
 #include <memory>
 
 constexpr int32_t kComboLevel = 5;
-
+class DeathTimer;
 /// <summary>
 /// コンボシステムの管理クラス
 /// </summary>
@@ -19,11 +19,11 @@ public:
     // 初期化、更新
     void Init();
     void Update();
-   
-    void ComboCountUP();        //< コンボカウント増加
+
+    void ComboCountUP(); //< コンボカウント増加
     void ComboTimerDecrement(); //< コンボタイマー減少
-    void LevelUp();             //< レベルアップ
-    void Reset();               //< リセット
+    void LevelUp(); //< レベルアップ
+    void Reset(); //< リセット
 
     void AdjustParam(); //< パラメータ調整
     void RegisterParams(); //< パラメータバインド
@@ -32,7 +32,8 @@ private:
 
 private:
     // UIコントローラ
-    std::unique_ptr<ComboUIController> uiController_;
+    std::unique_ptr<ComboUIController> uiController_ = nullptr;
+    DeathTimer* deathTimer_                          = nullptr;
 
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Combo";
@@ -47,7 +48,7 @@ private:
     bool isReset_ = false;
 
     // debug用
-    bool isStopComboTime_=false;
+    bool isStopComboTime_ = false;
 
 public:
     // Getter
@@ -55,4 +56,6 @@ public:
     int32_t GetCurrentLevel() const { return currentLevel_; }
     int32_t GetLevelUPNum(int32_t level) const { return LevelUpNum[level]; }
     const bool& GetIsReset() const { return isReset_; }
+
+    void SetDeathTimer(DeathTimer* deathTimer);
 };

@@ -175,6 +175,10 @@ void GameIntroManager::SetGameBackGroundObject(GameBackGroundObject* gameBackGro
     pGameBackGroundObject_ = gameBackGroundObject;
 }
 
+void GameIntroManager::SetDeathTimerGauge(DeathTimerGauge* deathTimerGauge) {
+    pDeathTimerGauge_ = deathTimerGauge;
+}
+
 void GameIntroManager::ClassisSet() {
     //  クラスセット
     for (auto& intro : introSequences_) {
@@ -183,5 +187,6 @@ void GameIntroManager::ClassisSet() {
         intro->SetPlayer(pPlayer_);
         intro->SetFireInjectors(pFireInjectors_);
         intro->SetGameBackGroundObject(pGameBackGroundObject_);
+        intro->SetDeathTimerGauge(pDeathTimerGauge_);
     }
 }

@@ -1,23 +1,26 @@
-#include "TitleRogo.h"
+#include "TitleLogo.h"
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
 #include <imgui.h>
 
-void TitleRogo::Init() {
+void TitleLogo::Init() {
   
     punchSprite_.reset(KetaEngine::Sprite::Create("TitleFontPunch.png", true));   
     rushSprite_.reset(KetaEngine::Sprite::Create("TitleFontRush.png", true));  
     bottomSprite_.reset(KetaEngine::Sprite::Create("StartBottomA.png", true));
    
+    punchSprite_->transform_.scale = Vector2::ZeroVector();
+    rushSprite_->transform_.scale  = Vector2::ZeroVector();
+    bottomSprite_->transform_.scale = Vector2::ZeroVector();
 
     EasingSet();
 
     step_ = Step::PUNCH;
 }
 
-void TitleRogo::Update() {
+void TitleLogo::Update() {
     switch (step_) {
-    case TitleRogo::Step::PUNCH:
+    case TitleLogo::Step::PUNCH:
         ///----------------------------------------------------
         /// パンチ
         ///----------------------------------------------------
@@ -25,7 +28,7 @@ void TitleRogo::Update() {
         punchSprite_->transform_.scale = punchSpriteScale_;
 
         break;
-    case TitleRogo::Step::RUSH:
+    case TitleLogo::Step::RUSH:
         ///----------------------------------------------------
         /// ラッシュ
         ///----------------------------------------------------
@@ -33,7 +36,7 @@ void TitleRogo::Update() {
         rushSprite_->transform_.scale = rushSpriteScale_;
 
         break;
-    case TitleRogo::Step::BOTTON:
+    case TitleLogo::Step::BOTTON:
         ///----------------------------------------------------
         /// ボタン
         ///----------------------------------------------------
@@ -41,7 +44,7 @@ void TitleRogo::Update() {
         bottomSprite_->transform_.scale = bottomSpriteScale_;
 
         break;
-    case TitleRogo::Step::END:
+    case TitleLogo::Step::END:
         ///----------------------------------------------------
         /// パンチ
         ///----------------------------------------------------
@@ -53,14 +56,7 @@ void TitleRogo::Update() {
 
 }
 
-void TitleRogo::Draw() {
-
-    punchSprite_->Draw();
-    rushSprite_->Draw();
-    bottomSprite_->Draw();
-}
-
-void TitleRogo::EasingSet() {
+void TitleLogo::EasingSet() {
     punchEase_.Init("punchSpriteScale.json");
     punchEase_.SetAdaptValue(&punchSpriteScale_);
     punchEase_.Reset();

@@ -9,13 +9,15 @@ class LockOn;
 
 /// <summary>
 /// ゲームカメラクラス
-/// プレイヤー追従とロックオンなどに対応
+/// 注視点ベースのカメラ制御
 /// </summary>
 class GameCamera {
 public:
     struct Parameter {
-        Vector3 offsetPos;
-        float rotate;
+        Vector3 offsetPos; // 注視点からのオフセット位置
+        float rotate; // 見下ろし角度
+        float distance; // 注視点からの距離
+        bool useLookAt; // 注視点モード使用フラグ
     };
 
 public:
@@ -23,34 +25,35 @@ public:
     void Init();
     void Update(float cameraPlaySpeed = 1.0f);
 
-    void MoveUpdate(); //< 移動更新
-    void Reset(); //< リセット
-    void GetIsCameraMove(); //< カメラ移動判定取得
-    void RotateAdapt(); //< 回転適用
-    void TranslateAdapt(); //< 位置適用
+    void MoveUpdate(); // 移動更新
+    void Reset(); // リセット
+    void GetIsCameraMove(); // カメラ移動判定取得
+    void RotateAdapt(); // 回転適用
+    void TranslateAdapt(); // 位置適用
+
+    /// <summary>
+    /// 注視点ベースでカメラ位置を計算
+    /// </summary>
+    void UpdateLookAtCamera();
 
     /// <summary>
     /// アニメーション再生
     /// </summary>
-    /// <param name="filename">アニメーションファイル名</param>
     void PlayAnimation(const std::string& filename);
 
     /// <summary>
     /// シェイク再生
     /// </summary>
-    /// <param name="filename">シェイクファイル名</param>
     void PlayShake(const std::string& filename);
 
     /// <summary>
     /// オフセット計算
     /// </summary>
-    /// <param name="offset">オフセット</param>
-    /// <returns>計算結果</returns>
     Vector3 OffsetCalc(const Vector3& offset) const;
 
     // Editor
-    void RegisterParams(); //< パラメータバインド
-    void AdjustParam(); //< パラメータ調整
+    void RegisterParams();
+    void AdjustParam();
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;
@@ -62,8 +65,9 @@ private:
     const KetaEngine::WorldTransform* target_ = nullptr;
 
     Vector3 stickInput_;
-    Vector3 interTarget_;
-    float destinationAngleY_;
+    Vector3 interTarget_; // 補間された注視点位置
+    Vector3 lookAtTarget_; // 実際の注視点位置
+    float destinationAngleY_; // 目標Y軸回転角
     int viewMoveTime_;
     Vector3 shakeOffsetPos_;
     Parameter parameter_;
@@ -71,8 +75,11 @@ private:
 public:
     // getter
     const KetaEngine::ViewProjection& GetViewProjection() { return viewProjection_; }
-     const Parameter& GetParameter() const { return parameter_; }
+    const Parameter& GetParameter() const { return parameter_; }
     Vector3 GetWorldPos() const;
+    const Vector3& GetLookAtTarget() const { return lookAtTarget_; }
+    const KetaEngine::WorldTransform* GetTarget() const { return target_; }
+
 
     // setter
     void SetTarget(const KetaEngine::WorldTransform* target);
@@ -81,4 +88,5 @@ public:
     void SetShakePosY(float shake) { shakeOffsetPos_.y = shake; }
     void SetDestinationAngleY_(float angle) { destinationAngleY_ = angle; }
     void SetViewProjectionPos(const Vector3& pos) { viewProjection_.translation_ = pos; }
+    void SetUseLookAtMode(bool use) { parameter_.useLookAt = use; }
 };

@@ -29,15 +29,18 @@ public:
     void Update(float speedRate = 1.0f) override;
 
     // 再生、リセット、初期値保存
-    void Play(const std::string& animationName)override;
-    void Reset()override;
+    void Play(const std::string& animationName) override;
+    void Reset() override;
     void SaveInitialValues();
+
+    // 注視点ターゲット設定
+    void SetLookAtTarget(const WorldTransform* target);
 
 private:
     //*---------------------------- private Methods ----------------------------*//
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
 
-    void ApplyOffsetToViewProjection(); 
+    void ApplyOffsetToViewProjection();
     void SetStartParam();
     void ResetOffsetParam();
 
@@ -52,14 +55,15 @@ private:
 
     bool isAdapt_ = true;
 
-public:
+    Vector3 rotateBase_;
 
+public:
     const Vector3& GetOffsetPosition() const { return currentOffsetPosition_; }
     const Vector3& GetOffsetRotation() const { return currentOffsetRotation_; }
     float GetOffsetFov() const { return currentOffsetFov_; }
 
     void SetAdapt(bool adapt) { isAdapt_ = adapt; }
     void SetViewProjection(ViewProjection* viewProjection);
+    void SetBaseRotate(const Vector3& offsetRotation) { rotateBase_ = offsetRotation; }
 };
-
 }; // KetaEngine

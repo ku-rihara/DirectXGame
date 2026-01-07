@@ -6,6 +6,8 @@
 // std
 #include <cstdint>
 #include <memory>
+#include <unordered_map>
+#include <functional>
 
 /// <summary>
 /// コンボ数値表示UI
@@ -52,9 +54,14 @@ public:
     void RegisterParams(); //< パラメータバインド
 
 private:
+    void InitDigitCalculators();
+private:
+
     ///* globalParameter *//
     KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
+
+    std::unordered_map<ComboDigit, std::function<void(int32_t)>> digitCalculators_;
 
     ///* parameter *//
     ComboDigit comboDigit_ = ComboDigit::ONE;

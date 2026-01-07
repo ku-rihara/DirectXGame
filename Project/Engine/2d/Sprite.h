@@ -5,9 +5,9 @@
 // base
 #include "base/SpriteMaterial.h"
 // struct
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "struct/ModelData.h"
 #include "struct/TransformationMatrix.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <cstdint>
 #include <string>
 
@@ -51,9 +51,17 @@ public:
     static Sprite* Create(const std::string& textureName, bool isAbleEdit = true);
     void CreateSprite(const std::string& textureName);
 
-    void AdjustParam(); //< パラメータ調整
-    void RegisterParams();  //< パラメータバインド 
-    void Draw();        //<描画
+    // パラメータ編集
+    void AdjustParam();   
+    void RegisterParams();
+
+    // 描画
+    void Draw();             
+
+    /// <summary>
+    /// 表示割合を設定（0.0f～1.0f）
+    /// <summary>
+    void SetGaugeRate(float rate);
 
 private:
     /// <summary>
@@ -65,15 +73,14 @@ private:
 
 public:
     // Transform
-    Transform transform_;     //< トランスフォーム
+    Transform transform_; //< トランスフォーム
     UVTransform uvTransform_; //< UVトランスフォーム
-    Vector2 textureLeftTop_;  //< テクスチャ左上
-    Vector2 anchorPoint_;     //< アンカーポイント
+    Vector2 textureLeftTop_; //< テクスチャ左上
+    Vector2 anchorPoint_; //< アンカーポイント
 
     // flip
     bool isFlipX_ = false;
     bool isFlipY_ = false;
-
 
 private:
     // パラメータ編集
@@ -87,6 +94,9 @@ private:
     bool isDraw_            = true;
     bool isAdaptStartParam_ = false;
 
+    // ゲージ用の表示割合（0.0f～1.0f）
+    float gaugeRate_ = 1.0f;
+
     // テクスチャ
     Vector2 textureSize_; //< テクスチャ自体のサイズ
     D3D12_GPU_DESCRIPTOR_HANDLE texture_;
@@ -98,8 +108,8 @@ private:
 
     // Resource
     Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_; //< 頂点リソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; //< wvpリソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_; //<indexリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;    //< wvpリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;  //<indexリソース
 
     // データ
     TransformationMatrix2D* wvpData_;
@@ -120,6 +130,7 @@ public:
     bool GetIsFlipX() const { return isFlipX_; }
     bool GetIsFlipY() const { return isFlipY_; }
     bool GetIsDraw() const { return isDraw_; };
+    float GetGaugeRate() const { return gaugeRate_; }
 
     ///=========================================================================================
     ///  setter

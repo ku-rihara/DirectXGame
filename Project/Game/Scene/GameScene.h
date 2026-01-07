@@ -24,6 +24,7 @@
 #include "SkyBox/SkyBox.h"
 #include "SkyDome/SkyDome.h"
 #include "UI/HowToOperate.h"
+#include "DeathTimer/DeathTimer.h"
 
 #include "GameSceneState/BaseGameSceneState.h"
 
@@ -82,6 +83,7 @@ private:
         std::unique_ptr<PlayerComboAttackController> playerComboAttackController_ = nullptr;
         std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
         std::unique_ptr<AudienceController> audienceController_                   = nullptr;
+        std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
     };
 
     std::unique_ptr<BaseGameSceneState> state_ = nullptr;

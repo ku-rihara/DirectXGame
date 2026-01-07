@@ -159,7 +159,9 @@ void ObjEaseAnimationSection::UpdateTransform(TransformParam& param, TransformTy
 void ObjEaseAnimationSection::UpdateTransformPlay(TransformParam& param, TransformType type, float deltaTime) {
     bool isFinished = false;
 
-    // レールの更新かイージング更新で分岐
+    // 前の値を保存
+    Vector3 previousOffset = param.currentOffset;
+
     if (type == TransformType::Translation && param.useRail) {
         railPlayer_->Update();
         param.currentOffset = railPlayer_->GetCurrentPosition();
@@ -170,14 +172,21 @@ void ObjEaseAnimationSection::UpdateTransformPlay(TransformParam& param, Transfo
         isFinished          = param.ease.IsFinished();
     }
 
-    // 再生が完了したら次の状態へ
+    // 進行方向の計算と保存
+    if (type == TransformType::Translation && param.isLookAtDirection) {
+        Vector3 moveDirection = param.currentOffset - previousOffset;
+        if (moveDirection.Length() > 0.001f) {
+            param.previousOffset = moveDirection;
+        }
+    }
+
+    param.previousOffset = previousOffset;
+
     if (isFinished) {
         if (param.isReturnToOrigin) {
-            // 戻り待機状態に遷移
             param.state             = TransformState::RETURN_WAITING;
             param.returnElapsedTime = 0.0f;
         } else {
-            // 戻りが不要なら完了
             param.state = TransformState::FINISHED;
         }
     }
@@ -277,6 +286,7 @@ void ObjEaseAnimationSection::RegisterParams() {
         if (i == static_cast<size_t>(TransformType::Translation)) {
             globalParameter_->Regist(groupName_, std::string(name) + "_UseRail", &param.useRail);
             globalParameter_->Regist(groupName_, std::string(name) + "_RailFileName", &param.railFileName);
+            globalParameter_->Regist(groupName_, std::string(name) + "_IsLookAtDirection", &param.isLookAtDirection); // 追加
         }
     }
 }
@@ -299,8 +309,9 @@ void ObjEaseAnimationSection::GetParams() {
         param.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_ReturnEaseType");
 
         if (i == static_cast<size_t>(TransformType::Translation)) {
-            param.useRail      = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
-            param.railFileName = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
+            param.useRail           = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
+            param.railFileName      = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
+            param.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection"); // 追加
         }
     }
 }
@@ -335,6 +346,7 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
     ImGui::Checkbox((std::string(label) + " Return To Origin").c_str(), &param.isReturnToOrigin);
 
     if (type == TransformType::Translation) {
+        ImGui::Checkbox("Look At Movement Direction", &param.isLookAtDirection);
         ImGui::Checkbox("Use Rail", &param.useRail);
 
         if (param.useRail) {
@@ -441,4 +453,20 @@ void ObjEaseAnimationSection::StartWaiting() {
             param.returnElapsedTime = 0.0f;
         }
     }
+}
+
+bool ObjEaseAnimationSection::IsLookingAtDirection() const {
+    const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
+    return transParam.isLookAtDirection && transParam.isActive;
+}
+
+Vector3 ObjEaseAnimationSection::GetMovementDirection() const {
+    const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
+    Vector3 direction      = transParam.currentOffset - transParam.previousOffset;
+
+    if (direction.Length() < 0.001f) {
+        return Vector3::ToForward();
+    }
+
+    return direction.Normalize();
 }

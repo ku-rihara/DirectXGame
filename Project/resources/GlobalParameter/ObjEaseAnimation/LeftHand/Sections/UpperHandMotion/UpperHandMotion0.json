@@ -24,6 +24,7 @@
         ],
         "Translation_EaseType": 0,
         "Translation_IsActive": true,
+        "Translation_IsLookAtDirection": true,
         "Translation_IsReturnToOrigin": false,
         "Translation_MaxTime": 1.0,
         "Translation_RailFileName": "UpperHandMoveRail",

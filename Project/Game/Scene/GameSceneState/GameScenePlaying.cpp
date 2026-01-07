@@ -32,6 +32,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.fireInjectors_->Update();
     obj.gameCamera_->Update();
     obj.comboLevelObjHolder_->Update(timeSpeed);
+    obj.deathTimer_->Update(timeSpeed);
 
     obj.enemyManager_->HpBarUpdate(pOwner_->GetViewProjection());
     obj.lockOnController_->Update(obj.player_.get(), pOwner_->GetViewProjection());

@@ -30,6 +30,12 @@ public:
     /// <param name="filename">シェイクファイル名</param>
     void ShakePlay(const std::string& filename);
 
+    /// <summary>
+    /// 注視点ターゲット設定
+    /// </summary>
+    /// <param name="target">ターゲットのWorldTransform</param>
+    void SetLookAtTarget(const KetaEngine::WorldTransform* target);
+
 private:
     GameCamera* pGameCamera_ = nullptr;
     std::unique_ptr<KetaEngine::ShakePlayer> shakePlayer_;

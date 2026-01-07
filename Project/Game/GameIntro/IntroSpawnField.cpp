@@ -1,5 +1,6 @@
 #include "IntroSpawnField.h"
 #include "BackGroundObject/GameBackGroundObject.h"
+#include "DeathTimer/DeathTimerGauge.h"
 #include "FireInjectors/FireInjectors.h"
 #include "GameCamera/GameCamera.h"
 #include "player/Player.h"
@@ -15,13 +16,17 @@ void IntroSpawnField::Init(const std::string& name) {
     isFinish_         = false;
     isAbleEnemySpawn_ = false;
     currentTime_      = 0.0f;
+
+    scaleEasing_.Init("IntroSpriteScaleUp.json");
+    spriteEaseScale_ = Vector2::ZeroVector();
+    scaleEasing_.SetAdaptValue(&spriteEaseScale_);
+    scaleEasing_.Reset();
 }
 
 void IntroSpawnField::Update(float playSpeed) {
     BaseGameIntro::Update(playSpeed);
     (this->*spFuncTable_[static_cast<size_t>(step_)])();
 }
-
 
 void IntroSpawnField::Start() {
     if (pGameCamera_) {
@@ -35,7 +40,7 @@ void IntroSpawnField::Wait() {
 }
 
 void IntroSpawnField::ObjSpawn() {
-   
+
     if (pGameBackGroundObject_) {
         pGameBackGroundObject_->Update(playSpeed_);
     }
@@ -55,7 +60,9 @@ void IntroSpawnField::PlayerSpawn() {
 
 void IntroSpawnField::FinishWait() {
     if (pHowToOperate_) {
-        pHowToOperate_->ScalingEasing();
+        scaleEasing_.Update(playSpeed_);
+        pHowToOperate_->SetScale(spriteEaseScale_);
+        pDeathTimerGauge_->SetSpriteScales(spriteEaseScale_);
     }
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
@@ -64,7 +71,8 @@ void IntroSpawnField::FinishWait() {
 }
 
 void IntroSpawnField::Finish() {
-    pHowToOperate_->SetScale();
+    pHowToOperate_->SetScale(Vector2::OneVector());
+    pDeathTimerGauge_->SetSpriteScales(Vector2::OneVector());
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }
@@ -102,7 +110,7 @@ void IntroSpawnField::AdjustUniqueParam() {
     ImGui::DragFloat("Obj Spawn Time", &objSpawnTime_, 0.01f, 0.0f);
     ImGui::DragFloat("Player Spawn Time", &playerSpawnTime_, 0.01f, 0.0f);
     ImGui::DragFloat("Finish Wait Time", &finishWaitTime_, 0.01f, 0.0f);
- }
+}
 
 void (IntroSpawnField::* IntroSpawnField::spFuncTable_[])() = {
     &IntroSpawnField::Start,

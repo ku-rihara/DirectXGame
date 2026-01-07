@@ -16,20 +16,18 @@ public:
     void Init();
     void Update();
 
-    void ScalingEasing(); //< スケールイージング
-    void Draw();          //< 描画
-    void Debug();         //< デバッグ
+    void Draw(); //< 描画
+    void Debug(); //< デバッグ
 
 private:
     // 座標
     Vector2 position_;
     // サイズ
     Vector2 size_;
-    Vector2 scale_;
     // スプライト
     std::unique_ptr<KetaEngine::Sprite> sprite_;
-    KetaEngine::Easing<Vector2> scaleEasing_;
 
-    public:
-    void SetScale();
+public:
+    void SetScale(const Vector2&scale);
+
 };

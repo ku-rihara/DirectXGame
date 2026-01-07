@@ -523,6 +523,9 @@
     <Filter Include="MyEngine\.cpp\Editor\ParticleEditor\SectionParameters">
       <UniqueIdentifier>{f1c25686-c9ff-49ac-8f42-985ccef6443e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\DeathTimer">
+      <UniqueIdentifier>{1f8b00d1-e724-4fe1-a34f-b8aa5abc03fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -685,7 +688,7 @@
     <ClCompile Include="Game\SkyDome\SkyDome.cpp">
       <Filter>Game\SkyDome</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\TitleRogo.cpp">
+    <ClCompile Include="Game\UI\TitleLogo.cpp">
       <Filter>Game\UI\TitleRogo</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\HowToOperate.cpp">
@@ -1315,9 +1318,6 @@
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneRoot.cpp">
       <Filter>Game\Scene\GameSceneState</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.cpp">
-      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitiveSphere.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
     </ClCompile>
@@ -1332,6 +1332,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.cpp">
       <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\DeathTimer\DeathTimer.cpp">
+      <Filter>Game\DeathTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp">
+      <Filter>Game\DeathTimer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1527,7 +1533,7 @@
     <ClInclude Include="Game\SkyDome\SkyDome.h">
       <Filter>Game\SkyDome</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\TitleRogo.h">
+    <ClInclude Include="Game\UI\TitleLogo.h">
       <Filter>Game\UI\TitleRogo</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\HowToOperate.h">
@@ -2178,9 +2184,6 @@
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneRoot.h">
       <Filter>Game\Scene\GameSceneState</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSectionParameter.h">
-      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Editor\ParticleEditor\Parameter\ParticleCommonParameters.h">
       <Filter>MyEngine\.h\Editor\ParticleEditor\ParticleCommonParam</Filter>
     </ClInclude>
@@ -2198,6 +2201,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.h">
       <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\DeathTimer\DeathTimer.h">
+      <Filter>Game\DeathTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h">
+      <Filter>Game\DeathTimer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

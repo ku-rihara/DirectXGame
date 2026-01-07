@@ -1,7 +1,7 @@
 #include "ComboScene.h"
 
+#include "Audience/AudienceController.h"
 #include "BackGroundObject/ComboLeve/ComboLevelObjHolder.h"
-#include"Audience/AudienceController.h"
 #include "Combo/Combo.h"
 #include "Player/Player.h"
 
@@ -63,10 +63,9 @@ void ComboScene::LevelReset() {
 }
 
 int32_t ComboScene::GetComboLevelZeroStart() {
-    // 例としてpCombo_->GetCurrentLevel()が1になったらindex[0]の演出が始まる
+
     return pCombo_->GetCurrentLevel() - levelOffset_;
 }
-
 
 ///--------------------------------------------------------------------------------
 /// class Set
@@ -75,8 +74,9 @@ void ComboScene::SetPlayer(Player* player) {
     pPlayer_ = player;
 }
 
-void ComboScene::SetCombo(Combo* combo) {
+void ComboScene::SetComboAndDeathTimer(Combo* combo, DeathTimer* deathTimer) {
     pCombo_ = combo;
+    pCombo_->SetDeathTimer(deathTimer);
 }
 
 void ComboScene::SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder) {
@@ -86,6 +86,7 @@ void ComboScene::SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder
 void ComboScene::SetAudienceController(AudienceController* audienceController) {
     audienceController_ = audienceController;
 }
+
 
 /// --------------------------------------------------------------------------------
 // メンバ関数のポインタ配列

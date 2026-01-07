@@ -76,6 +76,7 @@ void GameScene::Debug() {
     gameObj_.fireInjectors_->AdjustParam();
     gameObj_.gameIntroManager_->AdjustParam();
     gameObj_.audienceController_->AdjustParam();
+    gameObj_.deathTimer_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
@@ -133,6 +134,7 @@ void GameScene::ObjectInit() {
     gameObj_.playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
     gameObj_.sideRopeController_          = std::make_unique<SideRopeController>();
     gameObj_.audienceController_          = std::make_unique<AudienceController>();
+    gameObj_.deathTimer_                  = std::make_unique<DeathTimer>();
 
     // 初期化
     gameObj_.player_->InitInGameScene();
@@ -151,6 +153,7 @@ void GameScene::ObjectInit() {
     gameObj_.attackEffect_->Init();
     gameObj_.sideRopeController_->Init();
     gameObj_.audienceController_->Init();
+    gameObj_.deathTimer_->Init();
     viewProjection_.Init();
 
     gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");
@@ -179,12 +182,14 @@ void GameScene::SetClassPointer() {
     gameObj_.gameIntroManager_->SetPlayer(gameObj_.player_.get());
     gameObj_.gameIntroManager_->SetGameBackGroundObject(gameObj_.gameBackGroundObject_.get());
     gameObj_.gameIntroManager_->SetHowToOperate(gameObj_.howToOperate_.get());
+    gameObj_.gameIntroManager_->SetDeathTimerGauge(gameObj_.deathTimer_->GetDeathTimerGauge());
     gameObj_.gameIntroManager_->ClassisSet();
 
     gameObj_.comboScene_->SetPlayer(gameObj_.player_.get());
-    gameObj_.comboScene_->SetCombo(gameObj_.combo_.get());
+    gameObj_.comboScene_->SetComboAndDeathTimer(gameObj_.combo_.get(),gameObj_.deathTimer_.get());
     gameObj_.comboScene_->SetComboLevelObjHolder(gameObj_.comboLevelObjHolder_.get());
     gameObj_.comboScene_->SetAudienceController(gameObj_.audienceController_.get());
+
 
     gameObj_.player_->SetViewProjection(&viewProjection_);
     gameObj_.player_->SetLockOn(gameObj_.lockOnController_.get());

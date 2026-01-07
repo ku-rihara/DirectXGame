@@ -33,14 +33,14 @@ public:
     struct SpriteVariable {
         std::array<float, 2> sideAppearPosX;
         std::array<float, 2> sideBackPosX;
-        float appearScaleY;
-        float closeScaleY;
+        Vector2 appearScale;
+        Vector2 closeScale;
         Vector2 centerScale;
         std::array<std::unique_ptr<KetaEngine::Easing<float>>, 2> sideAppearEase;
         std::array<std::unique_ptr<KetaEngine::Easing<float>>, 2> sideBackEase;
         std::unique_ptr<KetaEngine::Easing<Vector2>> centerAppearEase;
-        std::unique_ptr<KetaEngine::Easing<float>> appearScaleEaseY;
-        std::unique_ptr<KetaEngine::Easing<float>> closeScaleEaseY;
+        std::unique_ptr<KetaEngine::Easing<Vector2>> appearScaleEase;
+        std::unique_ptr<KetaEngine::Easing<Vector2>> closeScaleEase;
         bool isBackSideUI = false;
     };
 
