@@ -43,16 +43,12 @@ private:
     float uvScrollSpeed_; // スクロール速度
     float uvOffset_;      // 現在のUVオフセット
 
-    // パラメータ
-    Vector2 gaugePosition_;
-    Vector2 gaugeScale_;
 
 public:
     // Getter
 
     float GetTimerRatio() const { return timerRatio_; }
 
-    void SetPosition(const Vector2& pos) { gaugePosition_ = pos; }
-    void SetScale(const Vector2& scale) { gaugeScale_ = scale; }
+   
     void SetTimer(float currentTimer, float maxTimer);
 };

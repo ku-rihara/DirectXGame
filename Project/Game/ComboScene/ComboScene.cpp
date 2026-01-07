@@ -74,8 +74,9 @@ void ComboScene::SetPlayer(Player* player) {
     pPlayer_ = player;
 }
 
-void ComboScene::SetCombo(Combo* combo) {
+void ComboScene::SetComboAndDeathTimer(Combo* combo, DeathTimer* deathTimer) {
     pCombo_ = combo;
+    pCombo_->SetDeathTimer(deathTimer);
 }
 
 void ComboScene::SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder) {
@@ -86,9 +87,6 @@ void ComboScene::SetAudienceController(AudienceController* audienceController) {
     audienceController_ = audienceController;
 }
 
-void ComboScene::SetDeathTimer(DeathTimer* deathTimer) {
-    deathTimer_ = deathTimer;
-}
 
 /// --------------------------------------------------------------------------------
 // メンバ関数のポインタ配列

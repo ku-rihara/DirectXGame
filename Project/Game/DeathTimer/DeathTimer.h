@@ -21,6 +21,7 @@ public:
 
     void AdjustParam();
     void RegisterParams();
+    void IncrementTimer();
 
 private:
     void DebugMode();
@@ -37,6 +38,13 @@ private:
     float incrementTime_;
     float incrementByComboLevelUP_;
     float maxTimer_;
+
+      // イージング関連
+    bool isIncrementing_        = false;
+    float incrementStartValue_  = 0.0f;
+    float incrementTargetValue_ = 0.0f;
+    float incrementTimer_       = 0.0f;
+    float incrementDuration_    = 0.0f;
 
 public:
     // Getter

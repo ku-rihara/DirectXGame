@@ -1,4 +1,5 @@
 #include "Combo.h"
+#include "DeathTimer/DeathTimer.h"
 #include "Frame/Frame.h"
 #include <imgui.h>
 
@@ -47,7 +48,7 @@ void Combo::AdjustParam() {
         ImGui::PopID();
     }
 
-     if (isStopComboTime_) {
+    if (isStopComboTime_) {
         comboTime_ = comboTimeMax_;
     }
 
@@ -57,7 +58,7 @@ void Combo::AdjustParam() {
 }
 
 void Combo::DebugMode() {
-   
+
     if (ImGui::TreeNode("DebugMode")) {
         if (ImGui::Button("CountUP")) {
             ComboCountUP();
@@ -65,7 +66,6 @@ void Combo::DebugMode() {
         ImGui::Checkbox("isStopComboTime", &isStopComboTime_);
         ImGui::TreePop();
     }
-
 }
 
 void Combo::RegisterParams() {
@@ -79,6 +79,8 @@ void Combo::ComboCountUP() {
     uiController_->ChangeCountUPAnimation();
     comboCount_++;
     comboTime_ = comboTimeMax_;
+
+    deathTimer_->IncrementTimer();
 }
 
 void Combo::LevelUp() {
@@ -106,4 +108,8 @@ void Combo::Reset() {
     comboCount_   = 0;
     currentLevel_ = 0;
     isReset_      = false;
+}
+
+void Combo::SetDeathTimer(DeathTimer* deathTimer) {
+    deathTimer_ = deathTimer;
 }

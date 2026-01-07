@@ -47,14 +47,12 @@ void DeathTimerGauge::SetTimer(float currentTimer, float maxTimer) {
 
         // ゲージスプライトのスケールを更新
         if (gaugeSprite_) {
-            gaugeSprite_->transform_.scale.x = timerRatio_ * gaugeScale_.x;
-            gaugeSprite_->transform_.scale.y = gaugeScale_.y;
+            gaugeSprite_->transform_.scale.x = timerRatio_;
         }
     } else {
         timerRatio_ = 0.0f;
         if (gaugeSprite_) {
             gaugeSprite_->transform_.scale.x = 0.0f;
-            gaugeSprite_->transform_.scale.y = gaugeScale_.y;
         }
     }
 }
@@ -67,10 +65,8 @@ void DeathTimerGauge::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::DragFloat2("Gauge Position", &gaugePosition_.x, 1.0f);
-        ImGui::DragFloat2("Gauge Scale", &gaugeScale_.x, 0.01f);
+
         ImGui::DragFloat("UV Scroll Speed", &uvScrollSpeed_, 0.01f, 0.0f, 2.0f);
-        ImGui::DragFloat("Timer Ratio", &timerRatio_, 0.01f, 0.0f, 1.0f);
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -82,7 +78,6 @@ void DeathTimerGauge::AdjustParam() {
 }
 
 void DeathTimerGauge::RegisterParams() {
-    globalParameter_->Regist(groupName_, "gaugePosition", &gaugePosition_);
-    globalParameter_->Regist(groupName_, "gaugeScale", &gaugeScale_);
+
     globalParameter_->Regist(groupName_, "uvScrollSpeed", &uvScrollSpeed_);
 }

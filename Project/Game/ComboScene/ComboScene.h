@@ -42,8 +42,7 @@ private:
     Combo* pCombo_                            = nullptr;
     ComboLevelObjHolder* comboLevelObjHolder_ = nullptr;
     AudienceController* audienceController_   = nullptr;
-    DeathTimer* deathTimer_                   = nullptr;
-
+   
     const int32_t levelOffset_ = 1;
 
     State state_ = State::CHECK;
@@ -51,8 +50,8 @@ private:
 public:
     // setter
     void SetPlayer(Player* player);
-    void SetCombo(Combo* combo);
+    void SetComboAndDeathTimer(Combo* combo, DeathTimer* deathTimer);
     void SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder);
     void SetAudienceController(AudienceController* audienceController);
-    void SetDeathTimer(DeathTimer* deathTimer);
+
 };

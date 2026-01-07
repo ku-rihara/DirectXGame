@@ -185,10 +185,10 @@ void GameScene::SetClassPointer() {
     gameObj_.gameIntroManager_->ClassisSet();
 
     gameObj_.comboScene_->SetPlayer(gameObj_.player_.get());
-    gameObj_.comboScene_->SetCombo(gameObj_.combo_.get());
+    gameObj_.comboScene_->SetComboAndDeathTimer(gameObj_.combo_.get(),gameObj_.deathTimer_.get());
     gameObj_.comboScene_->SetComboLevelObjHolder(gameObj_.comboLevelObjHolder_.get());
     gameObj_.comboScene_->SetAudienceController(gameObj_.audienceController_.get());
-    gameObj_.comboScene_->SetDeathTimer(gameObj_.deathTimer_.get());
+
 
     gameObj_.player_->SetViewProjection(&viewProjection_);
     gameObj_.player_->SetLockOn(gameObj_.lockOnController_.get());

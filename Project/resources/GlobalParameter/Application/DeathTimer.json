@@ -1,0 +1,9 @@
+{
+    "DeathTimer": {
+        "decrementSpeedRate": 1.0,
+        "incrementByComboLevelUP": 0.0,
+        "incrementDuration": 0.11999999731779099,
+        "incrementTime": 0.36000001430511475,
+        "maxTimer": 10.0
+    }
+}
