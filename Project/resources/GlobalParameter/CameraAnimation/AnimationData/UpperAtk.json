@@ -5,8 +5,8 @@
         "resetFovEaseType": 9,
         "resetPosEaseType": 9,
         "resetRotateEaseType": 9,
-        "resetTimePoint": 0.3100000023841858,
-        "returnDelayTime": 0.0,
+        "resetTimePoint": 0.6700000166893005,
+        "returnDelayTime": 0.4000000059604645,
         "timeMode": 1
     }
 }
