@@ -19,7 +19,7 @@ struct ConstBufferDataWorldTransform {
 
 enum class BillboardType {
     XYZ, //< XYZ軸ビルボード
-    Y, //< Y軸ビルボード
+    Y,   //< Y軸ビルボード
 };
 
 struct AdaptRotate {

@@ -6,6 +6,7 @@ class Player;
 class Combo;
 class ComboLevelObjHolder;
 class AudienceController;
+class DeathTimer;
 
 /// <summary>
 /// コンボシーンの制御クラス
@@ -28,7 +29,7 @@ public:
 
     void CheckIsLevelUp(); //< レベルアップチェック
     void LevelUp();        //< レベルアップ処理
-    void LevelReset();    //< レベルリセット
+    void LevelReset();     //< レベルリセット
 
 private:
     // メンバ関数のポインタ配列
@@ -41,6 +42,7 @@ private:
     Combo* pCombo_                            = nullptr;
     ComboLevelObjHolder* comboLevelObjHolder_ = nullptr;
     AudienceController* audienceController_   = nullptr;
+    DeathTimer* deathTimer_                   = nullptr;
 
     const int32_t levelOffset_ = 1;
 
@@ -52,4 +54,5 @@ public:
     void SetCombo(Combo* combo);
     void SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder);
     void SetAudienceController(AudienceController* audienceController);
+    void SetDeathTimer(DeathTimer* deathTimer);
 };

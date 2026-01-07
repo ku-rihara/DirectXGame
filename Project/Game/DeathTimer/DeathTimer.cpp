@@ -11,7 +11,8 @@ void DeathTimer::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
-void DeathTimer::Update() {
+void DeathTimer::Update(float timer) {
+    currentTimer_ -= timer;
 }
 
 ///==========================================================
@@ -23,6 +24,7 @@ void DeathTimer::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
+        ImGui::DragFloat("decrementSpeedRate", &decrementSpeedRate_, 0.01f);
         ImGui::DragFloat("Increment Time", &incrementTime_, 0.01f);
         ImGui::DragFloat("increment By ComboLevelUP", &incrementByComboLevelUP_, 0.01f);
         ImGui::DragFloat("startTimer", &startTimer_, 0.01f);
@@ -38,9 +40,8 @@ void DeathTimer::AdjustParam() {
 }
 
 void DeathTimer::RegisterParams() {
-
+    globalParameter_->Regist(groupName_, "decrementSpeedRate", &decrementSpeedRate_);
     globalParameter_->Regist(groupName_, "incrementTime", &incrementTime_);
     globalParameter_->Regist(groupName_, "incrementByComboLevelUP", &incrementByComboLevelUP_);
     globalParameter_->Regist(groupName_, "startTimer", &startTimer_);
 }
-

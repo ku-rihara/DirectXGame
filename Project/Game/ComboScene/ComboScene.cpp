@@ -1,7 +1,7 @@
 #include "ComboScene.h"
 
+#include "Audience/AudienceController.h"
 #include "BackGroundObject/ComboLeve/ComboLevelObjHolder.h"
-#include"Audience/AudienceController.h"
 #include "Combo/Combo.h"
 #include "Player/Player.h"
 
@@ -63,10 +63,9 @@ void ComboScene::LevelReset() {
 }
 
 int32_t ComboScene::GetComboLevelZeroStart() {
-    // 例としてpCombo_->GetCurrentLevel()が1になったらindex[0]の演出が始まる
+
     return pCombo_->GetCurrentLevel() - levelOffset_;
 }
-
 
 ///--------------------------------------------------------------------------------
 /// class Set
@@ -85,6 +84,10 @@ void ComboScene::SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder
 
 void ComboScene::SetAudienceController(AudienceController* audienceController) {
     audienceController_ = audienceController;
+}
+
+void ComboScene::SetDeathTimer(DeathTimer* deathTimer) {
+    deathTimer_ = deathTimer;
 }
 
 /// --------------------------------------------------------------------------------

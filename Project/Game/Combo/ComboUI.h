@@ -61,7 +61,6 @@ private:
     KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
 
-    // std::funciton
     std::unordered_map<ComboDigit, std::function<void(int32_t)>> digitCalculators_;
 
     ///* parameter *//

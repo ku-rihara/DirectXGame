@@ -133,6 +133,7 @@ void GameScene::ObjectInit() {
     gameObj_.playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
     gameObj_.sideRopeController_          = std::make_unique<SideRopeController>();
     gameObj_.audienceController_          = std::make_unique<AudienceController>();
+    gameObj_.deathTimer_                  = std::make_unique<DeathTimer>();
 
     // 初期化
     gameObj_.player_->InitInGameScene();
@@ -151,6 +152,7 @@ void GameScene::ObjectInit() {
     gameObj_.attackEffect_->Init();
     gameObj_.sideRopeController_->Init();
     gameObj_.audienceController_->Init();
+    gameObj_.deathTimer_->Init();
     viewProjection_.Init();
 
     gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");
@@ -185,6 +187,7 @@ void GameScene::SetClassPointer() {
     gameObj_.comboScene_->SetCombo(gameObj_.combo_.get());
     gameObj_.comboScene_->SetComboLevelObjHolder(gameObj_.comboLevelObjHolder_.get());
     gameObj_.comboScene_->SetAudienceController(gameObj_.audienceController_.get());
+    gameObj_.comboScene_->SetDeathTimer(gameObj_.deathTimer_.get());
 
     gameObj_.player_->SetViewProjection(&viewProjection_);
     gameObj_.player_->SetLockOn(gameObj_.lockOnController_.get());

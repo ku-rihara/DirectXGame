@@ -16,7 +16,7 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update();
+    void Update(float timer);
 
     void AdjustParam();
     void RegisterParams();
@@ -30,6 +30,7 @@ private:
 
     float currentTimer_ = 0.0f;
 
+    float decrementSpeedRate_      = 1.0f;
     float incrementTime_           = 0.0f;
     float incrementByComboLevelUP_ = 0.0f;
     float startTimer_              = 0.0f;

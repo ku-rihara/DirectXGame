@@ -688,7 +688,7 @@
     <ClCompile Include="Game\SkyDome\SkyDome.cpp">
       <Filter>Game\SkyDome</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\TitleRogo.cpp">
+    <ClCompile Include="Game\UI\TitleLogo.cpp">
       <Filter>Game\UI\TitleRogo</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\HowToOperate.cpp">
@@ -1336,6 +1336,9 @@
     <ClCompile Include="Game\DeathTimer\DeathTimer.cpp">
       <Filter>Game\DeathTimer</Filter>
     </ClCompile>
+    <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp">
+      <Filter>Game\DeathTimer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1530,7 +1533,7 @@
     <ClInclude Include="Game\SkyDome\SkyDome.h">
       <Filter>Game\SkyDome</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\TitleRogo.h">
+    <ClInclude Include="Game\UI\TitleLogo.h">
       <Filter>Game\UI\TitleRogo</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\HowToOperate.h">
@@ -2200,6 +2203,9 @@
       <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
     </ClInclude>
     <ClInclude Include="Game\DeathTimer\DeathTimer.h">
+      <Filter>Game\DeathTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h">
       <Filter>Game\DeathTimer</Filter>
     </ClInclude>
   </ItemGroup>
