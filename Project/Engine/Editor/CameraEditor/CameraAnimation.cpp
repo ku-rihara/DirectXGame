@@ -78,6 +78,14 @@ void CameraAnimation::SetViewProjection(ViewProjection* viewProjection) {
     pViewProjection_ = viewProjection;
 }
 
+void CameraAnimation::SetLookAtTarget(const WorldTransform* target) {
+    if (effectData_) {
+        if (CameraAnimationData* cameraData = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
+            cameraData->SetLookAtTarget(target);
+        }
+    }
+}
+
 void CameraAnimation::SetStartParam() {
     startParam_.position = pViewProjection_->positionOffset_;
     startParam_.rotation = pViewProjection_->rotationOffset_;

@@ -23,12 +23,14 @@ public:
     void EditorUpdate() override;
 
     // 選択アニメーション再生
-    void PlaySelectedAnimation()override;
-
+    void PlaySelectedAnimation() override;
 
     // ViewProjectionへの適用
     void ApplyToViewProjection();
     void ApplySelectedKeyFrameToViewProjection();
+
+    // 注視点ターゲット設定
+    void SetLookAtTarget();
 
 private:
     //*---------------------------- protected Methods ----------------------------*//
@@ -39,8 +41,8 @@ private:
     std::string GetFolderPath() const override;
 
 private:
-    ViewProjection* viewProjection_ = nullptr;
-
+    ViewProjection* viewProjection_     = nullptr;
+  
     std::unique_ptr<Object3d> preViewCameraObj_ = nullptr;
     std::unique_ptr<Object3d> preViewFollowObj_ = nullptr;
 
@@ -51,7 +53,6 @@ private:
     bool isPreViewDraw_             = false;
 
 public:
-   
     bool GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
     bool GetSequenceElementPreviewMode() const { return keyFramePreviewMode_; }
     CameraAnimationData* GetSelectedAnimation();

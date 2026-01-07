@@ -1,5 +1,6 @@
 #pragma once
 #include "3d/ViewProjection.h"
+#include "3d/WorldTransform.h"
 #include "CameraKeyFrame.h"
 #include "Easing/Easing.h"
 #include "Editor/BaseEffectEditor/BaseSequenceEffectData.h"
@@ -40,6 +41,11 @@ public:
         bool autoReturnToInitial  = true;
     };
 
+    struct LookAtParam {
+        bool useLookAt       = false; // 注視点モード使用フラグ
+        Vector3 lookAtTarget = {0, 0, 0}; // 注視点位置
+    };
+
 public:
     CameraAnimationData()           = default;
     ~CameraAnimationData() override = default;
@@ -64,6 +70,9 @@ public:
     // 初期値設定
     void SetInitialValues(const Vector3& position, const Vector3& rotation, float fov);
 
+    // 注視点設定
+    void SetLookAtTarget(const WorldTransform* target);
+
 protected:
     //*---------------------------- protected Methods ----------------------------*//
 
@@ -84,6 +93,10 @@ private:
     void StartReturnToInitial();
     void CheckIsReturnToInitial(float actualDeltaTime);
 
+    // 注視点モード用の更新
+    void UpdateLookAtMode();
+    void ApplyLookAtToViewProjection(ViewProjection& viewProjection);
+
 private:
     //*---------------------------- private Variant ----------------------------*//
 
@@ -102,6 +115,10 @@ private:
     ResetParam resetParam_;
     ReturnParam returnParam_;
 
+    // LookAt Params
+    LookAtParam lookAtParam_;
+    const WorldTransform* targetTransform_ = nullptr;
+
     bool showKeyFrameList_      = true;
     bool showAnimationControls_ = true;
 
@@ -113,6 +130,8 @@ public:
     //*----------------------------- getter Methods -----------------------------*//
 
     bool IsReturningToInitial() const { return returnParam_.isReturningToInitial; }
+    bool IsUseLookAt() const { return lookAtParam_.useLookAt; }
+    const Vector3& GetLookAtTarget() const { return lookAtParam_.lookAtTarget; }
 };
 
 }; // KetaEngine

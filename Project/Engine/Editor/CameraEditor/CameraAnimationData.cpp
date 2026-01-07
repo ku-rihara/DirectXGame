@@ -2,9 +2,12 @@
 
 using namespace KetaEngine;
 #include "Frame/Frame.h"
+#include "MathFunction.h"
+#include "Matrix4x4.h"
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
+#include <numbers>
 
 void CameraAnimationData::Init(const std::string& animationName) {
     BaseSequenceEffectData::Init(animationName);
@@ -40,6 +43,10 @@ void CameraAnimationData::RegisterParams() {
     globalParameter_->Regist(groupName_, "resetFovEaseType", &resetParam_.fovEaseType);
     globalParameter_->Regist(groupName_, "resetTimePoint", &resetParam_.timePoint);
     globalParameter_->Regist(groupName_, "returnDelayTime", &resetParam_.delayTime);
+
+    // 注視点モードのパラメータ
+    globalParameter_->Regist(groupName_, "useLookAt", &lookAtParam_.useLookAt);
+   
     timeModeSelector_.RegisterParam(groupName_, globalParameter_);
 }
 
@@ -50,6 +57,10 @@ void CameraAnimationData::GetParams() {
     resetParam_.fovEaseType          = globalParameter_->GetValue<int32_t>(groupName_, "resetFovEaseType");
     resetParam_.timePoint            = globalParameter_->GetValue<float>(groupName_, "resetTimePoint");
     resetParam_.delayTime            = globalParameter_->GetValue<float>(groupName_, "returnDelayTime");
+
+    // 注視点モードのパラメータ
+    lookAtParam_.useLookAt = globalParameter_->GetValue<bool>(groupName_, "useLookAt");
+  
     timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
 
@@ -64,6 +75,11 @@ void CameraAnimationData::Update(float speedRate) {
     UpdateActiveKeyFrames(speedRate);
     // 元の位置に戻る処理の更新
     UpdateAdaptCurrentPos();
+
+    // 注視点モードの場合、追加の更新処理
+    if (lookAtParam_.useLookAt) {
+        UpdateLookAtMode();
+    }
 }
 
 void CameraAnimationData::UpdateActiveKeyFrames(float speedRate) {
@@ -173,17 +189,80 @@ void CameraAnimationData::UpdateAdaptCurrentPos() {
     }
 }
 
+void CameraAnimationData::UpdateLookAtMode() {
+    // ターゲットが設定されている場合、注視点を更新
+    if (targetTransform_) {
+        lookAtParam_.lookAtTarget = targetTransform_->translation_;
+    }
+}
+
 void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) {
-    // rotateのみオフセットを加算
     if (playState_ == PlayState::PLAYING) {
-        viewProjection.positionOffset_ = currentCameraTransform_.position;
-        viewProjection.rotationOffset_ = currentCameraTransform_.rotation;
-        viewProjection.fovAngleY_      = currentCameraTransform_.fov;
+        if (lookAtParam_.useLookAt) {
+            // 注視点モードの場合
+            ApplyLookAtToViewProjection(viewProjection);
+        } else {
+            // 通常モードの場合
+            viewProjection.positionOffset_ = currentCameraTransform_.position;
+            viewProjection.rotationOffset_ = currentCameraTransform_.rotation;
+            viewProjection.fovAngleY_      = currentCameraTransform_.fov;
+        }
     } else if (isAllFinished_) {
         viewProjection.positionOffset_ = Vector3::ZeroVector();
         viewProjection.rotationOffset_ = Vector3::ZeroVector();
         viewProjection.fovAngleY_      = defaultFovAngle_;
     }
+}
+
+void CameraAnimationData::ApplyLookAtToViewProjection(ViewProjection& viewProjection) {
+    // 注視点位置を取得
+    Vector3 lookAtTarget = lookAtParam_.lookAtTarget;
+
+    // アニメーションからの回転値を取得
+    Vector3 animRotation = currentCameraTransform_.rotation;
+
+    // Y軸回転行列を作成
+    Matrix4x4 rotateY = MakeRotateYMatrix(animRotation.y);
+
+    // X軸回転（見下ろし角度）
+    Matrix4x4 rotateX = MakeRotateXMatrix(-animRotation.x);
+
+    // 回転を合成
+    Matrix4x4 rotateMatrix = rotateY * rotateX;
+
+    // アニメーションからの位置オフセット
+    Vector3 posOffset = currentCameraTransform_.position;
+
+    // 回転を適用してカメラオフセット位置を計算
+    Vector3 cameraOffset = TransformNormal(posOffset, rotateMatrix);
+
+    // 注視点からのオフセットでカメラ位置を決定
+    Vector3 cameraPos = lookAtTarget + cameraOffset;
+
+    // ViewProjectionに適用
+    viewProjection.translation_ = cameraPos;
+
+    // カメラから注視点への方向ベクトルを計算
+    Vector3 toTarget = lookAtTarget - cameraPos;
+
+    if (toTarget.Length() > 0.001f) {
+        toTarget = toTarget.Normalize();
+
+        // Y軸回転（水平方向）を計算
+        float actualYaw = std::atan2(toTarget.x, toTarget.z);
+
+        // X軸回転（垂直方向）を計算
+        float horizontalLength = std::sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
+        float actualPitch      = std::atan2(-toTarget.y, horizontalLength);
+
+        // 計算した回転を適用
+        viewProjection.rotation_.y = actualYaw;
+        viewProjection.rotation_.x = actualPitch;
+        viewProjection.rotation_.z = 0.0f;
+    }
+
+    // FOVを適用
+    viewProjection.fovAngleY_ = currentCameraTransform_.fov;
 }
 
 void CameraAnimationData::Reset() {
@@ -256,6 +335,13 @@ void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector
     initialCameraTransform_.fov      = fov;
 }
 
+void CameraAnimationData::SetLookAtTarget(const WorldTransform* target) {
+    targetTransform_ = target;
+    if (target) {
+        lookAtParam_.lookAtTarget = target->translation_;
+    }
+}
+
 std::unique_ptr<CameraKeyFrame> CameraAnimationData::CreateKeyFrame(int32_t index) {
     auto keyFrame = std::make_unique<CameraKeyFrame>();
     keyFrame->Init(groupName_, index);
@@ -273,6 +359,16 @@ void CameraAnimationData::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         ImGui::Checkbox("Auto Return to Initial", &returnParam_.autoReturnToInitial);
+
+        // 注視点モード設定
+        ImGui::Separator();
+        ImGui::Checkbox("Use LookAt Mode", &lookAtParam_.useLookAt);
+        if (lookAtParam_.useLookAt) {
+            ImGui::Text("LookAt Target: (%.2f, %.2f, %.2f)",
+                lookAtParam_.lookAtTarget.x,
+                lookAtParam_.lookAtTarget.y,
+                lookAtParam_.lookAtTarget.z);
+        }
 
         if (isAllKeyFramesFinished_) {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
