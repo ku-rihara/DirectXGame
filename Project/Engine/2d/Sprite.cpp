@@ -149,7 +149,7 @@ void Sprite::Draw() {
     ///==========================================================================================
 
     float left   = 0.0f - anchorPoint_.x;
-    float right  = (1.0f * gaugeRate_) - anchorPoint_.x; // ★ゲージレート適用
+    float right  = (1.0f * gaugeRate_) - anchorPoint_.x;
     float top    = 0.0f - anchorPoint_.y;
     float bottom = 1.0f - anchorPoint_.y;
 
@@ -174,7 +174,7 @@ void Sprite::Draw() {
     ///==========================================================================================
 
     float texLeft   = textureLeftTop_.x / textureSize_.x;
-    float texRight  = (textureLeftTop_.x + textureSize_.x * gaugeRate_) / textureSize_.x; // ★ゲージレート適用
+    float texRight  = (textureLeftTop_.x + textureSize_.x * gaugeRate_) / textureSize_.x; 
     float texTop    = textureLeftTop_.y / textureSize_.y;
     float texBottom = (textureLeftTop_.y + textureSize_.y) / textureSize_.y;
 
