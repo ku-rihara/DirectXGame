@@ -101,7 +101,7 @@ void CameraEditor::ApplySelectedKeyFrameToViewProjection() {
         // Y軸回転行列を作成
         Matrix4x4 rotateY = MakeRotateYMatrix(animRotation.y);
 
-        // X軸回転を作成（負の値で上から見下ろす）
+        // X軸回転を作成
         Matrix4x4 rotateX = MakeRotateXMatrix(-animRotation.x);
 
         // 回転を合成
