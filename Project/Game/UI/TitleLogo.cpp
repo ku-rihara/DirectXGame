@@ -9,6 +9,9 @@ void TitleLogo::Init() {
     rushSprite_.reset(KetaEngine::Sprite::Create("TitleFontRush.png", true));  
     bottomSprite_.reset(KetaEngine::Sprite::Create("StartBottomA.png", true));
    
+    punchSprite_->transform_.scale = Vector2::ZeroVector();
+    rushSprite_->transform_.scale  = Vector2::ZeroVector();
+    bottomSprite_->transform_.scale = Vector2::ZeroVector();
 
     EasingSet();
 

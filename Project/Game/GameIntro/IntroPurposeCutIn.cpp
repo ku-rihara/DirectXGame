@@ -9,9 +9,11 @@ void IntroPurposeCutIn::Init(const std::string& name) {
     // スプライト初期化
     for (size_t i = 0; i < sprites_.size(); ++i) {
         sprites_[i].reset(KetaEngine::Sprite::Create("PurposeUI/gamePurposeNo" + std::to_string(i + 1) + ".png"));
+        sprites_[i]->transform_.scale = Vector2::ZeroVector();
     }
 
     backLineSprite_.reset(KetaEngine::Sprite::Create("PurposeUI/gamePurposeLine.png"));
+    backLineSprite_->transform_.scale = Vector2::ZeroVector();
 
     // Easing 初期化
     EasingInit();
@@ -42,11 +44,11 @@ void IntroPurposeCutIn::SideAppear() {
     }
 
     // 　ScaleY
-    spriteVariable_.appearScaleEaseY->Update(KetaEngine::Frame::DeltaTime());
+    spriteVariable_.appearScaleEase->Update(KetaEngine::Frame::DeltaTime());
     for (size_t i = 0; i < spriteVariable_.sideAppearEase.size(); ++i) {
-        sprites_[i]->transform_.scale.y = spriteVariable_.appearScaleY;
+        sprites_[i]->transform_.scale = spriteVariable_.appearScale;
     }
-    backLineSprite_->transform_.scale.y = spriteVariable_.appearScaleY;
+    backLineSprite_->transform_.scale = spriteVariable_.appearScale;
 
     if (!spriteVariable_.isBackSideUI) {
         return;
@@ -82,11 +84,11 @@ void IntroPurposeCutIn::CloseWait() {
 void IntroPurposeCutIn::Close() {
 
     // 　ScaleY
-    spriteVariable_.closeScaleEaseY->Update(KetaEngine::Frame::DeltaTime());
+    spriteVariable_.closeScaleEase->Update(KetaEngine::Frame::DeltaTime());
     for (size_t i = 0; i < sprites_.size(); ++i) {
-        sprites_[i]->transform_.scale.y = spriteVariable_.closeScaleY;
+        sprites_[i]->transform_.scale = spriteVariable_.closeScale;
     }
-    backLineSprite_->transform_.scale.y = spriteVariable_.closeScaleY;
+    backLineSprite_->transform_.scale = spriteVariable_.closeScale;
 }
 
 void IntroPurposeCutIn::FinishWait() {
@@ -138,8 +140,8 @@ void IntroPurposeCutIn::EasingInit() {
     }
 
     spriteVariable_.centerAppearEase = std::make_unique<KetaEngine::Easing<Vector2>>();
-    spriteVariable_.appearScaleEaseY = std::make_unique<KetaEngine::Easing<float>>();
-    spriteVariable_.closeScaleEaseY  = std::make_unique<KetaEngine::Easing<float>>();
+    spriteVariable_.appearScaleEase  = std::make_unique<KetaEngine::Easing<Vector2>>();
+    spriteVariable_.closeScaleEase   = std::make_unique<KetaEngine::Easing<Vector2>>();
 
     // サイドUI出現Easing
     spriteVariable_.sideAppearEase[LEFT]->Init("leftAppearPosX.json");
@@ -153,10 +155,10 @@ void IntroPurposeCutIn::EasingInit() {
     spriteVariable_.centerAppearEase->Init("CenterAppearScale.json");
 
     // AppearScaleY
-    spriteVariable_.appearScaleEaseY->Init("PurposeScaleY.json");
+    spriteVariable_.appearScaleEase->Init("PurposeScaleXY.json");
 
     // CloseScaleY
-    spriteVariable_.closeScaleEaseY->Init("PurposeCloseScaleY.json");
+    spriteVariable_.closeScaleEase->Init("PurposeCloseScaleXY.json");
 
     // 適応値、スタート値セット(サイドUI出現Easing)
     for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideAppearEase.size()); ++i) {
@@ -182,13 +184,13 @@ void IntroPurposeCutIn::EasingInit() {
     spriteVariable_.centerAppearEase->Reset();
 
     // 適応値、スタート値セット(AppearScaleEaseY)
-    spriteVariable_.appearScaleEaseY->SetAdaptValue(&spriteVariable_.appearScaleY);
-    spriteVariable_.appearScaleEaseY->Reset();
+    spriteVariable_.appearScaleEase->SetAdaptValue(&spriteVariable_.appearScale);
+    spriteVariable_.appearScaleEase->Reset();
 
     // 適応値、スタート値セット(CloseScaleEaseY)
-    spriteVariable_.closeScaleEaseY->SetAdaptValue(&spriteVariable_.closeScaleY);
-    spriteVariable_.closeScaleEaseY->Reset();
-    spriteVariable_.closeScaleEaseY->SetOnFinishCallback([this] {
+    spriteVariable_.closeScaleEase->SetAdaptValue(&spriteVariable_.closeScale);
+    spriteVariable_.closeScaleEase->Reset();
+    spriteVariable_.closeScaleEase->SetOnFinishCallback([this] {
         isFinish_ = true;
     });
 }

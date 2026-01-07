@@ -76,6 +76,7 @@ void GameScene::Debug() {
     gameObj_.fireInjectors_->AdjustParam();
     gameObj_.gameIntroManager_->AdjustParam();
     gameObj_.audienceController_->AdjustParam();
+    gameObj_.deathTimer_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();

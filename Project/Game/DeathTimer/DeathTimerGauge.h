@@ -41,11 +41,11 @@ private:
 
     // UVスクロール関連
     float uvScrollSpeed_; // スクロール速度
-    float uvOffset_; // 現在のUVオフセット
+    float uvOffset_;      // 現在のUVオフセット
 
     // パラメータ
-    Vector2 gaugePosition_ = {100.0f, 50.0f};
-    Vector2 gaugeScale_    = {1.0f, 1.0f};
+    Vector2 gaugePosition_;
+    Vector2 gaugeScale_;
 
 public:
     // Getter

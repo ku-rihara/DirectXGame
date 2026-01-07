@@ -1,9 +1,9 @@
 {
-    "HowToOperate.png": {
-        "layerNum": 3,
+    "DeathGauge.png": {
+        "layerNum": 7,
         "startAnchorPoint": [
-            0.5,
-            0.5
+            0.0,
+            0.0
         ],
         "startColor": [
             1.0,
@@ -12,8 +12,8 @@
             1.0
         ],
         "startPosition": [
-            1033.0,
-            509.0
+            327.1000061035156,
+            80.69999694824219
         ],
         "startScale": [
             1.0,

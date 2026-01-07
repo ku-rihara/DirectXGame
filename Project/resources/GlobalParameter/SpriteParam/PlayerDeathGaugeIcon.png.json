@@ -1,6 +1,6 @@
 {
-    "HowToOperate.png": {
-        "layerNum": 3,
+    "PlayerDeathGaugeIcon.png": {
+        "layerNum": 0,
         "startAnchorPoint": [
             0.5,
             0.5
@@ -12,8 +12,8 @@
             1.0
         ],
         "startPosition": [
-            1033.0,
-            509.0
+            258.29998779296875,
+            112.5
         ],
         "startScale": [
             1.0,
