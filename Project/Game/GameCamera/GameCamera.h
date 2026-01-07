@@ -78,6 +78,8 @@ public:
     const Parameter& GetParameter() const { return parameter_; }
     Vector3 GetWorldPos() const;
     const Vector3& GetLookAtTarget() const { return lookAtTarget_; }
+    const KetaEngine::WorldTransform* GetTarget() const { return target_; }
+
 
     // setter
     void SetTarget(const KetaEngine::WorldTransform* target);

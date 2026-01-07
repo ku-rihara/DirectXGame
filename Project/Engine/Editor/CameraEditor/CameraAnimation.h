@@ -33,6 +33,9 @@ public:
     void Reset() override;
     void SaveInitialValues();
 
+    // 注視点ターゲット設定
+    void SetLookAtTarget(const WorldTransform* target);
+
 private:
     //*---------------------------- private Methods ----------------------------*//
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
