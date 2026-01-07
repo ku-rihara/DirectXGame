@@ -76,7 +76,7 @@ void CameraAnimationData::Update(float speedRate) {
     // 元の位置に戻る処理の更新
     UpdateAdaptCurrentPos();
 
-    // 注視点モードの場合、追加の更新処理
+    // 注視点モードの更新処理
     if (lookAtParam_.useLookAt) {
         UpdateLookAtMode();
     }
@@ -219,13 +219,13 @@ void CameraAnimationData::ApplyLookAtToViewProjection(ViewProjection& viewProjec
     Vector3 lookAtTarget = lookAtParam_.lookAtTarget;
 
     // アニメーションからの回転値を取得
-    Vector3 animRotation = currentCameraTransform_.rotation;
+    Vector3 animeRotation = currentCameraTransform_.rotation;
 
     // Y軸回転行列を作成
-    Matrix4x4 rotateY = MakeRotateYMatrix(animRotation.y);
+    Matrix4x4 rotateY = MakeRotateYMatrix(animeRotation.y);
 
-    // X軸回転（見下ろし角度）
-    Matrix4x4 rotateX = MakeRotateXMatrix(-animRotation.x);
+    // X軸回転
+    Matrix4x4 rotateX = MakeRotateXMatrix(-animeRotation.x);
 
     // 回転を合成
     Matrix4x4 rotateMatrix = rotateY * rotateX;
@@ -248,10 +248,10 @@ void CameraAnimationData::ApplyLookAtToViewProjection(ViewProjection& viewProjec
     if (toTarget.Length() > 0.001f) {
         toTarget = toTarget.Normalize();
 
-        // Y軸回転（水平方向）を計算
+        // Y軸回転を計算
         float actualYaw = std::atan2(toTarget.x, toTarget.z);
 
-        // X軸回転（垂直方向）を計算
+        // X軸回転を計算
         float horizontalLength = std::sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
         float actualPitch      = std::atan2(-toTarget.y, horizontalLength);
 
