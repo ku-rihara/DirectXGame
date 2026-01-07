@@ -38,7 +38,7 @@ void DeathTimer::Update(float timer) {
         }
     } else {
         // 通常の減少処理
-        currentTimer_ -= timer;
+        currentTimer_ -= timer * decrementSpeedRate_;
     }
 
     // maxTimerを超えないようにクランプ
