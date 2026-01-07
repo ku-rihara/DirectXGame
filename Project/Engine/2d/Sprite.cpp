@@ -127,11 +127,12 @@ void Sprite::CreateSprite(const std::string& textureName) {
     //  変数初期化
     ///==========================================================================================
     transform_.pos                     = parameter_.position_;
-    transform_.scale                   = parameter_.scale_;
+    transform_.scale                   = Vector2::OneVector();
     uvTransform_.scale                 = parameter_.uvScale_;
     material_.GetMaterialData()->color = parameter_.color_;
-    anchorPoint_                       = parameter_.startAnchorPoint_;
-    layerNum_                          = parameter_.startLayerNum_;
+
+    anchorPoint_ = parameter_.startAnchorPoint_;
+    layerNum_    = parameter_.startLayerNum_;
 
     // テクスチャ座標取得
     const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureIndex_);
@@ -162,7 +163,7 @@ void Sprite::Draw() {
         right = -right;
     }
 
-    if (isFlipX_) { /// 上下反転
+    if (isFlipY_) { /// 上下反転
         top    = -top;
         bottom = -bottom;
     }
@@ -176,7 +177,7 @@ void Sprite::Draw() {
     float texTop    = textureLeftTop_.y / textureSize_.y;
     float texBottom = (textureLeftTop_.y + textureSize_.y) / textureSize_.y;
 
-    // 頂点リソースにデータ書き込む
+    // 頂点リソースにデータ書込む
     vertexData_[0].texcoord = {texLeft, texBottom};
     vertexData_[1].texcoord = {texLeft, texTop};
     vertexData_[2].texcoord = {texRight, texBottom};
@@ -185,7 +186,8 @@ void Sprite::Draw() {
     ///==========================================================================================
     //  Transform
     ///==========================================================================================
-    Vector3 size      = Vector3(textureSize_.x, textureSize_.y, 0.0f) * Vector3(transform_.scale.x, transform_.scale.y, 0.0f);
+
+    Vector3 size      = Vector3(textureSize_.x, textureSize_.y, 0.0f) * Vector3(transform_.scale.x * parameter_.scale_.x, transform_.scale.y * parameter_.scale_.y, 0.0f);
     Vector3 translate = Vector3(transform_.pos.x, transform_.pos.y, 0.0f);
 
     // 行列変換
@@ -243,7 +245,7 @@ void Sprite::AdjustParam() {
 
         ImGui::SeparatorText("InitParam");
         ImGui::DragFloat2("StartPos", &parameter_.position_.x, 0.1f);
-        ImGui::DragFloat2("StartScale", &parameter_.scale_.x, 0.1f);
+        ImGui::DragFloat2("baseScale", &parameter_.scale_.x, 0.1f);
         ImGui::DragFloat2("StartAnchorPoint", &parameter_.startAnchorPoint_.x, 0.01f);
         ImGui::ColorEdit4("StartColor", &parameter_.color_.x);
         ImGui::SeparatorText("UVParam");
