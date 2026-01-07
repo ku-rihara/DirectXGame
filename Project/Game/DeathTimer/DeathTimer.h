@@ -47,4 +47,5 @@ private:
 
 public:
     // Getter
+    DeathTimerGauge* GetDeathTimerGauge() const { return deathTimerGauge_.get(); }
 };

@@ -16,6 +16,10 @@ void DeathTimerGauge::Init() {
     gaugeSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGauge.png", true));
     gaugeIcon_.reset(KetaEngine::Sprite::Create("DeathGauge/PlayerDeathGaugeIcon.png", true));
 
+    frameSprite_->transform_.scale = Vector2::ZeroVector();
+    gaugeSprite_->transform_.scale = Vector2::ZeroVector();
+    gaugeIcon_->transform_.scale   = Vector2::ZeroVector();
+
     // 初期色設定
     UpdateGaugeColor();
 }
@@ -103,14 +107,13 @@ void DeathTimerGauge::AdjustParam() {
         ImGui::DragFloat("UV Scroll Speed", &uvScrollSpeed_, 0.01f, 0.0f, 2.0f);
 
         ImGui::SeparatorText("Color Thresholds");
-        ImGui::DragFloat("Danger Threshold", &dangerThreshold_, 0.01f,0.0f,1.0f);
-        ImGui::DragFloat("Normal Threshold", &normalThreshold_, 0.01f,0.0f,1.0f);
+        ImGui::DragFloat("Danger Threshold", &dangerThreshold_, 0.01f, 0.0f, 1.0f);
+        ImGui::DragFloat("Normal Threshold", &normalThreshold_, 0.01f, 0.0f, 1.0f);
 
         ImGui::SeparatorText("Gauge Colors");
         ImGui::ColorEdit4("Safe Color", &safeColor_.x);
         ImGui::ColorEdit4("Normal Color", &normalColor_.x);
         ImGui::ColorEdit4("Danger Color", &dangerColor_.x);
-
 
         // 現在の状態表示
         const char* stateNames[] = {"Safe", "Normal", "Danger"};
@@ -132,4 +135,10 @@ void DeathTimerGauge::RegisterParams() {
     globalParameter_->Regist(groupName_, "safeColor", &safeColor_);
     globalParameter_->Regist(groupName_, "normalColor", &normalColor_);
     globalParameter_->Regist(groupName_, "dangerColor", &dangerColor_);
+}
+
+void DeathTimerGauge::SetSpriteScales(const Vector2& scale) {
+    frameSprite_->transform_.scale = scale;
+    gaugeSprite_->transform_.scale = scale;
+    gaugeIcon_->transform_.scale   = scale;
 }

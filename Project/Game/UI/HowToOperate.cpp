@@ -4,23 +4,16 @@
 #include <imgui.h>
 
 void HowToOperate::Init() {
-  
-    sprite_.reset(KetaEngine::Sprite::Create("HowToOperate.png", true));
 
-    scaleEasing_.Init("HowToOperatorEasing.json");
-    scale_ = Vector2::ZeroVector();
-    scaleEasing_.SetAdaptValue(&scale_);
-    scaleEasing_.Reset();
-   
+    sprite_.reset(KetaEngine::Sprite::Create("HowToOperate.png", true));
+    sprite_->transform_.scale = Vector2::ZeroVector();
 }
 
 void HowToOperate::Update() {
-   
-    sprite_->transform_.scale = scale_;
 }
 
-void HowToOperate::ScalingEasing() {
-    scaleEasing_.Update(KetaEngine::Frame::DeltaTime());
+void HowToOperate::SetScale(const Vector2& scale) {
+    sprite_->transform_.scale = scale;
 }
 
 void HowToOperate::Draw() {
@@ -31,8 +24,3 @@ void HowToOperate::Debug() {
     ImGui::SeparatorText("SpriteText");
     ImGui::DragFloat2("howtoope", &position_.x, 0.1f);
 }
-
-  void HowToOperate::SetScale() {
-    scale_ = Vector2::OneVector();
-      sprite_->transform_.scale = Vector2::OneVector();
-  }

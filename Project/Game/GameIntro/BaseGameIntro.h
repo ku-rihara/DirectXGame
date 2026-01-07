@@ -8,6 +8,7 @@ class FireInjectors;
 class GameBackGroundObject;
 class GameCamera;
 class HowToOperate;
+class DeathTimerGauge;
 
 /// <summary>
 /// ゲームイントロ基底クラス
@@ -37,11 +38,14 @@ public:
 protected:
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_;
+
     FireInjectors* pFireInjectors_               = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
     Player* pPlayer_                             = nullptr;
     HowToOperate* pHowToOperate_                 = nullptr;
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
+    DeathTimerGauge* pDeathTimerGauge_           = nullptr;
+
     bool isFinish_                               = false;
     bool isAbleEnemySpawn_                       = false;
     float currentTime_                           = 0.0f;
@@ -56,6 +60,7 @@ public:
     void SetHowToOperate(HowToOperate* howToOperate) { pHowToOperate_ = howToOperate; }
     void SetGameCamera(GameCamera* gameCamera) { pGameCamera_ = gameCamera; }
     void SetPlayer(Player* player) { pPlayer_ = player; }
+    void SetDeathTimerGauge(DeathTimerGauge* deathTimerGauge) { pDeathTimerGauge_ = deathTimerGauge; }
     void SetFireInjectors(FireInjectors* fireInjectors) { pFireInjectors_ = fireInjectors; }
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject) { pGameBackGroundObject_ = gameBackGroundObject; }
 };

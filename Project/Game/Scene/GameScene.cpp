@@ -182,6 +182,7 @@ void GameScene::SetClassPointer() {
     gameObj_.gameIntroManager_->SetPlayer(gameObj_.player_.get());
     gameObj_.gameIntroManager_->SetGameBackGroundObject(gameObj_.gameBackGroundObject_.get());
     gameObj_.gameIntroManager_->SetHowToOperate(gameObj_.howToOperate_.get());
+    gameObj_.gameIntroManager_->SetDeathTimerGauge(gameObj_.deathTimer_->GetDeathTimerGauge());
     gameObj_.gameIntroManager_->ClassisSet();
 
     gameObj_.comboScene_->SetPlayer(gameObj_.player_.get());

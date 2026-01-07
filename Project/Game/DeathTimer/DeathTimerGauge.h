@@ -69,5 +69,6 @@ public:
     float GetTimerRatio() const { return timerRatio_; }
     GaugeState GetCurrentState() const { return currentState_; }
 
+    void SetSpriteScales(const Vector2& scale);
     void SetTimer(float currentTimer, float maxTimer);
 };
