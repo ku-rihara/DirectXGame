@@ -15,8 +15,8 @@ void DeathTimerGauge::Init() {
     frameSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGaugeFrame.png", true));
     gaugeSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGauge.png", true));
     gaugeIcon_.reset(KetaEngine::Sprite::Create("DeathGauge/PlayerDeathGaugeIcon.png", true));
-    // 爆弾スクロールスプライト
-  /*  bombScrollSprite_.reset(KetaEngine::Sprite::Create("DeathTimerBombScroll.png", true));*/
+
+
 }
 
 void DeathTimerGauge::Update(float deltaTime) {
@@ -34,25 +34,24 @@ void DeathTimerGauge::UpdateGaugeUV(float deltaTime) {
     }
 
     // スプライトのUV位置を更新
-   /* if (bombScrollSprite_) {
-        bombScrollSprite_->uvTransform_.pos.x = uvOffset_;
-    }*/
+    if (gaugeSprite_) {
+        gaugeSprite_->uvTransform_.pos.x = uvOffset_;
+    }
 }
 
 void DeathTimerGauge::SetTimer(float currentTimer, float maxTimer) {
-  
+
     if (maxTimer > 0.0f) {
         timerRatio_ = currentTimer / maxTimer;
         timerRatio_ = std::clamp(timerRatio_, 0.0f, 1.0f);
 
-        // ゲージスプライトのスケールを更新
         if (gaugeSprite_) {
-            gaugeSprite_->transform_.scale.x = timerRatio_;
+            gaugeSprite_->SetGaugeRate(timerRatio_);
         }
     } else {
         timerRatio_ = 0.0f;
         if (gaugeSprite_) {
-            gaugeSprite_->transform_.scale.x = 0.0f;
+            gaugeSprite_->SetGaugeRate(0.0f);
         }
     }
 }
@@ -65,8 +64,15 @@ void DeathTimerGauge::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-
         ImGui::DragFloat("UV Scroll Speed", &uvScrollSpeed_, 0.01f, 0.0f, 2.0f);
+
+        // デバッグ用：ゲージレートを手動調整
+        if (gaugeSprite_) {
+            float debugRate = gaugeSprite_->GetGaugeRate();
+            if (ImGui::SliderFloat("Debug Gauge Rate", &debugRate, 0.0f, 1.0f)) {
+                gaugeSprite_->SetGaugeRate(debugRate);
+            }
+        }
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -78,6 +84,5 @@ void DeathTimerGauge::AdjustParam() {
 }
 
 void DeathTimerGauge::RegisterParams() {
-
     globalParameter_->Regist(groupName_, "uvScrollSpeed", &uvScrollSpeed_);
 }
