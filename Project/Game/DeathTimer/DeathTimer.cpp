@@ -42,9 +42,9 @@ void DeathTimer::Update(float timer) {
     }
 
     // maxTimerを超えないようにクランプ
-    currentTimer_ = (std::min)(currentTimer_, maxTimer_);
-    currentTimer_ = (std::max)(currentTimer_, 0.0f);
+    currentTimer_ = std::clamp(currentTimer_, 0.0f, maxTimer_);
 
+    // タイムセット
     deathTimerGauge_->SetTimer(currentTimer_, maxTimer_);
 }
 
@@ -76,7 +76,6 @@ void DeathTimer::AdjustParam() {
 
         ImGui::DragFloat("decrementSpeedRate", &decrementSpeedRate_, 0.01f);
         ImGui::DragFloat("Increment Time", &incrementTime_, 0.01f);
-        ImGui::DragFloat("increment By ComboLevelUP", &incrementByComboLevelUP_, 0.01f);
         ImGui::DragFloat("maxTimer", &maxTimer_, 0.01f);
         ImGui::DragFloat("incrementDuration", &incrementDuration_, 0.01f);
 
@@ -87,13 +86,14 @@ void DeathTimer::AdjustParam() {
         ImGui::PopID();
     }
 
+    deathTimerGauge_->AdjustParam();
+
 #endif // _DEBUG
 }
 
 void DeathTimer::RegisterParams() {
     globalParameter_->Regist(groupName_, "decrementSpeedRate", &decrementSpeedRate_);
     globalParameter_->Regist(groupName_, "incrementTime", &incrementTime_);
-    globalParameter_->Regist(groupName_, "incrementByComboLevelUP", &incrementByComboLevelUP_);
     globalParameter_->Regist(groupName_, "maxTimer", &maxTimer_);
     globalParameter_->Regist(groupName_, "incrementDuration", &incrementDuration_);
 }

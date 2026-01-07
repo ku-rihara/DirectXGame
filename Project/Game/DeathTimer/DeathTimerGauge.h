@@ -12,6 +12,14 @@
 /// </summary>
 class DeathTimerGauge {
 public:
+    // ゲージの状態
+    enum class GaugeState {
+        Safe,   
+        Normal, 
+        Danger  
+    };
+
+public:
     DeathTimerGauge()  = default;
     ~DeathTimerGauge() = default;
 
@@ -25,6 +33,7 @@ public:
 
 private:
     void UpdateGaugeUV(float deltaTime);
+    void UpdateGaugeColor();
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;
@@ -41,14 +50,24 @@ private:
 
     // UVスクロール関連
     float uvScrollSpeed_; // スクロール速度
-    float uvOffset_;      // 現在のUVオフセット
+    float uvOffset_; // 現在のUVオフセット
 
+    // 色変更関連
+    GaugeState currentState_ = GaugeState::Safe;
+
+    // 各段階の閾値
+    float dangerThreshold_ ; 
+    float normalThreshold_ ; 
+
+    // 各段階の色
+    Vector4 safeColor_;
+    Vector4 normalColor_;
+    Vector4 dangerColor_;
 
 public:
     // Getter
-
     float GetTimerRatio() const { return timerRatio_; }
+    GaugeState GetCurrentState() const { return currentState_; }
 
-   
     void SetTimer(float currentTimer, float maxTimer);
 };

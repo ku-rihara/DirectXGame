@@ -36,7 +36,6 @@ private:
 
     float decrementSpeedRate_ = 1.0f;
     float incrementTime_;
-    float incrementByComboLevelUP_;
     float maxTimer_;
 
       // イージング関連

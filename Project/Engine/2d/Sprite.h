@@ -108,8 +108,8 @@ private:
 
     // Resource
     Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_; //< 頂点リソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; //< wvpリソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_; //<indexリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;    //< wvpリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;  //<indexリソース
 
     // データ
     TransformationMatrix2D* wvpData_;
