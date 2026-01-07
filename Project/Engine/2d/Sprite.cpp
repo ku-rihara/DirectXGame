@@ -279,3 +279,13 @@ void Sprite::SetColor(const Vector3& color) {
 void Sprite::SetAlpha(float alpha) {
     material_.GetMaterialData()->color.w = alpha;
 }
+
+void Sprite::SetTextureDisplaySize(const Vector2& size) {
+  
+    Vector2 clampedSize;
+    clampedSize.x = std::clamp(size.x, 0.0f, textureSize_.x);
+    clampedSize.y = std::clamp(size.y, 0.0f, textureSize_.y);
+
+    // テクスチャ座標の右端と下端を計算
+    textureSize_ = clampedSize;
+}

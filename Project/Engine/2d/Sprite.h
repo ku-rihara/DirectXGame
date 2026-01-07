@@ -127,6 +127,7 @@ public:
 
     void SetAnchorPoint(const Vector2& anchorPoint) { anchorPoint_ = anchorPoint; }
     void SetTextureLeftTop(const Vector2& leftTop) { textureLeftTop_ = leftTop; }
+    void SetTextureDisplaySize(const Vector2& size);
 
     void SetIsFlipX(bool isFlip) { isFlipX_ = isFlip; }
     void SetIsFlipY(bool isFlip) { isFlipY_ = isFlip; }
