@@ -439,9 +439,6 @@
     <Filter Include="Game\Enemy\DamageReaction">
       <UniqueIdentifier>{af911319-e904-4cbb-9bea-7d13f61f8579}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\SearchingSprite\Spawner">
-      <UniqueIdentifier>{56719232-7938-486e-b2c4-15494f312b10}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\EasingTestObj">
       <UniqueIdentifier>{a383ecc6-f375-4bf7-9b58-7f4ba9f98f42}</UniqueIdentifier>
     </Filter>
@@ -525,6 +522,9 @@
     </Filter>
     <Filter Include="Game\DeathTimer">
       <UniqueIdentifier>{1f8b00d1-e724-4fe1-a34f-b8aa5abc03fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Spawner">
+      <UniqueIdentifier>{56719232-7938-486e-b2c4-15494f312b10}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -737,7 +737,7 @@
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp">
-      <Filter>Game\Enemy\SearchingSprite\Spawner</Filter>
+      <Filter>Game\Enemy\Spawner</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
@@ -1040,7 +1040,7 @@
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Spawner\ContinuousEnemySpawner.cpp">
-      <Filter>Game\Enemy\SearchingSprite\Spawner</Filter>
+      <Filter>Game\Enemy\Spawner</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
@@ -1339,6 +1339,9 @@
     <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp">
       <Filter>Game\DeathTimer</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Scene\ComboEditorScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1579,7 +1582,7 @@
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h">
-      <Filter>Game\Enemy\SearchingSprite\Spawner</Filter>
+      <Filter>Game\Enemy\Spawner</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitivePlane.h">
       <Filter>MyEngine\.h\Primitive</Filter>
@@ -1897,7 +1900,7 @@
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Spawner\ContinuousEnemySpawner.h">
-      <Filter>Game\Enemy\SearchingSprite\Spawner</Filter>
+      <Filter>Game\Enemy\Spawner</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h">
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
@@ -2207,6 +2210,9 @@
     </ClInclude>
     <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h">
       <Filter>Game\DeathTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\ComboEditorScene.h">
+      <Filter>Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
