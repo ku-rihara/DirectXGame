@@ -77,10 +77,6 @@ void GameScene::Debug() {
     skuBox_->Debug();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     ImGui::End();
-
-    ImGui::Begin("editor");
-    timeScaleController_->EditorUpdate();
-    ImGui::End();
 #endif
 }
 

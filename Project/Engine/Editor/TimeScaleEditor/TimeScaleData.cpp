@@ -24,26 +24,13 @@ void TimeScaleData::Init(const std::string& timeScaleName) {
     InitParams();
 }
 
-void TimeScaleData::Update(float speedRate) {
+void TimeScaleData::Update(float deltaTime) {
     if (playState_ != PlayState::PLAYING) {
         return;
     }
 
-    // 実際のデルタタイムを計算
-    float actualDeltaTime = 0.0f;
-    switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
-    case TimeMode::DELTA_TIME:
-        actualDeltaTime = Frame::DeltaTime() * speedRate;
-        break;
-    case TimeMode::DELTA_TIME_RATE:
-        actualDeltaTime = Frame::DeltaTimeRate() * speedRate;
-        break;
-    default:
-        break;
-    }
-
     // 経過時間更新
-    elapsedTime_ += actualDeltaTime;
+    elapsedTime_ += deltaTime;
 
     // 時間が経過したらTimeScaleを戻す
     if (elapsedTime_ >= duration_) {

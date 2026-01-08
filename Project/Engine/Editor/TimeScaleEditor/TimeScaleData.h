@@ -19,7 +19,7 @@ public:
 
     // BaseEffectDataからのオーバーライド
     void Init(const std::string& timeScaleName) override;
-    void Update(float speedRate = 1.0f) override;
+    void Update(float deltaTime) override;
     void Reset() override;
     void Play() override;
     void LoadData() override;
