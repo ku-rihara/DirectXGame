@@ -89,7 +89,7 @@ void Player::Update() {
     HeadLightSetting();
 
     /// 振る舞い処理
-    if (IsAbleAttack()) {
+    if (IsAbleBehavior()) {
         behavior_->Update();
     }
 
@@ -115,7 +115,7 @@ void Player::Update() {
 
 void Player::ChangeDeathMode() {
 
-    if (!dynamic_cast<PlayerDeath*>(comboBehavior_.get())) {
+    if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
         ChangeBehavior(std::make_unique<PlayerDeath>(this));
     }
 }
@@ -491,8 +491,8 @@ void Player::ResetHeadScale() {
     obj3d_->transform_.scale_ = Vector3::OneVector();
 }
 
-bool Player::IsAbleAttack() {
-    return dynamic_cast<ComboAttackRoot*>(comboBehavior_.get());
+bool Player::IsAbleBehavior() {
+    return (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get()))||(isDeath_);
 }
 
 void Player::InitInGameScene() {

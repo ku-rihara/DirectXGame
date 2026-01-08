@@ -1,14 +1,14 @@
 {
-    "screenChange.png": {
-        "layerNum": 100,
+    "GameOver.png": {
+        "layerNum": 18,
         "startAnchorPoint": [
             0.0,
             0.0
         ],
         "startColor": [
-            0.0,
-            0.0,
-            0.0,
+            1.0,
+            1.0,
+            1.0,
             1.0
         ],
         "startPosition": [

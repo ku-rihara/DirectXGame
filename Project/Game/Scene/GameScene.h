@@ -27,6 +27,7 @@
 #include "DeathTimer/DeathTimer.h"
 
 #include "GameSceneState/BaseGameSceneState.h"
+#include "2d/Sprite.h"
 
 /// <summary>
 /// ゲームシーン
@@ -84,6 +85,8 @@ private:
         std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
         std::unique_ptr<AudienceController> audienceController_                   = nullptr;
         std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
+       
+        std::unique_ptr<KetaEngine::Sprite> screenSprite_;
     };
 
     std::unique_ptr<BaseGameSceneState> state_ = nullptr;

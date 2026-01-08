@@ -111,7 +111,7 @@ public:
 
 private:
     void ChangeDeathMode();
-    bool IsAbleAttack();
+    bool IsAbleBehavior();
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;
@@ -154,6 +154,7 @@ private:
 
     //
     const bool* isDeath_;
+    bool isDeathRenditionFinish_ = false;
 
 public:
     // getter
@@ -170,6 +171,7 @@ public:
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
+    bool GetIsDeathRenditionFinish() const { return *isDeath_; }
 
     //*-- setter --*//
     // class Set
@@ -180,6 +182,7 @@ public:
     void SetHitStop(AttackEffect* hitStop);
     void SetComboAttackController(PlayerComboAttackController* playerComboAttackController);
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
+    void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
 
     void SetTitleBehavior();
     void RotateReset();

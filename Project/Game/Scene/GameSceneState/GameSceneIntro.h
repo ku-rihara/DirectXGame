@@ -20,5 +20,5 @@ private:
     // イントロステート固有の変数
     float alpha_        = 1.0f;
     bool isFirstChange_ = false;
-    std::unique_ptr<KetaEngine::Sprite> screenSprite_;
+
 };

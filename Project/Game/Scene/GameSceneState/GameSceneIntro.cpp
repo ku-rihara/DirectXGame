@@ -13,8 +13,7 @@ void GameSceneIntro::Init() {
     alpha_         = 1.0f;
     isFirstChange_ = false;
 
-    // スプライト初期化
-    screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.png"));
+  
 }
 
 void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
@@ -25,7 +24,7 @@ void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
     auto& obj = pOwner_->GetGameObj();
 
     // フェードイン処理
-    screenSprite_->SetAlpha(alpha_);
+    obj.screenSprite_->SetAlpha(alpha_);
 
     if (!isFirstChange_) {
         alpha_ -= KetaEngine::Frame::DeltaTime();

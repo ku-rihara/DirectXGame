@@ -24,7 +24,7 @@ private:
     bool isStartFadeOut_ = false;
     bool isGameEnd_      = false;
 
-    std::unique_ptr<KetaEngine::Sprite> screenSprite_;
+
     std::unique_ptr<KetaEngine::Sprite> clearSprite_;
 
     KetaEngine::Easing<Vector2> finishSpriteEase_;

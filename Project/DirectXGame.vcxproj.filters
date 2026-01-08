@@ -1554,9 +1554,6 @@
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerMove.h">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Player.h">
-      <Filter>Game\Player\core</Filter>
-    </ClInclude>
     <ClInclude Include="Game\LockOn\LockOn.h">
       <Filter>Game\LockOn</Filter>
     </ClInclude>
@@ -2225,6 +2222,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerDeath.h">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Player.h">
+      <Filter>Game\Player\Effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

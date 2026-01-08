@@ -136,6 +136,8 @@ void GameScene::ObjectInit() {
     gameObj_.audienceController_          = std::make_unique<AudienceController>();
     gameObj_.deathTimer_                  = std::make_unique<DeathTimer>();
 
+    gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.png"));
+
     // 初期化
     gameObj_.player_->InitInGameScene();
     gameObj_.lockOnController_->Init();
@@ -186,10 +188,9 @@ void GameScene::SetClassPointer() {
     gameObj_.gameIntroManager_->ClassisSet();
 
     gameObj_.comboScene_->SetPlayer(gameObj_.player_.get());
-    gameObj_.comboScene_->SetComboAndDeathTimer(gameObj_.combo_.get(),gameObj_.deathTimer_.get());
+    gameObj_.comboScene_->SetComboAndDeathTimer(gameObj_.combo_.get(), gameObj_.deathTimer_.get());
     gameObj_.comboScene_->SetComboLevelObjHolder(gameObj_.comboLevelObjHolder_.get());
     gameObj_.comboScene_->SetAudienceController(gameObj_.audienceController_.get());
-
 
     gameObj_.player_->SetViewProjection(&viewProjection_);
     gameObj_.player_->SetLockOn(gameObj_.lockOnController_.get());
@@ -198,7 +199,6 @@ void GameScene::SetClassPointer() {
     gameObj_.player_->SetCombo(gameObj_.combo_.get());
     gameObj_.player_->SetHitStop(gameObj_.attackEffect_.get());
     gameObj_.player_->SetDeathFragPointer(&gameObj_.deathTimer_->GetIsDeath());
-
 }
 
 void GameScene::ChangeState(std::unique_ptr<BaseGameSceneState> state) {
