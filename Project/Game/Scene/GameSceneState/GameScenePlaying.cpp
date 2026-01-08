@@ -17,7 +17,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     // Editor
     obj.attackEffect_->Update();
     obj.field_->Update();
-    obj.sideRopeController_->Update();
+   /* obj.sideRopeController_->Update();*/
     obj.audienceController_->Update();
 
     // 各クラス更新
