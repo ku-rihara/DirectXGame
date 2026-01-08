@@ -24,7 +24,8 @@ public:
     void IncrementTimer();
 
 private:
-    void DebugMode();
+   // イージング適応
+    void AdaptEasing(float timeSpeed);
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;

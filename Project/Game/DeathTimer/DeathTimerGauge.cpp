@@ -11,6 +11,14 @@ void DeathTimerGauge::Init() {
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
+    // スプライト初期化
+    SpriteInit();
+
+    // 初期色設定
+    UpdateGaugeColor();
+}
+
+void DeathTimerGauge::SpriteInit() {
     // 枠のスプライト
     frameSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGaugeFrame.png", true));
     gaugeSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGauge.png", true));
@@ -20,13 +28,20 @@ void DeathTimerGauge::Init() {
     gaugeSprite_->transform_.scale = Vector2::ZeroVector();
     gaugeIcon_->transform_.scale   = Vector2::ZeroVector();
 
-    // 初期色設定
-    UpdateGaugeColor();
+    heatBeat_.heatBeatEase.Init("UIHeatBeat.json");
+    heatBeat_.heatBeatEase.SetAdaptValue(&gaugeIcon_->transform_.scale);
+    heatBeat_.heatBeatEase.SetOnFinishCallback([this] {
+        heatBeat_.heatBeatEase.Reset();
+    });
 }
 
 void DeathTimerGauge::Update(float deltaTime) {
     // UVスクロール更新
     UpdateGaugeUV(deltaTime);
+
+    // ゲージアイコンの鼓動
+    float speedRate = heatBeat_.heatBeatSpeedRate[static_cast<int32_t>(currentState_)];
+    heatBeat_.heatBeatEase.Update(deltaTime * speedRate);
 }
 
 void DeathTimerGauge::UpdateGaugeUV(float deltaTime) {
@@ -115,6 +130,10 @@ void DeathTimerGauge::AdjustParam() {
         ImGui::ColorEdit4("Normal Color", &normalColor_.x);
         ImGui::ColorEdit4("Danger Color", &dangerColor_.x);
 
+        for (int32_t i = 0; i < heatBeat_.heatBeatSpeedRate.size(); ++i) {
+            ImGui::DragFloat(("heatBeatSpeedRate" + std::to_string(i)).c_str(), &heatBeat_.heatBeatSpeedRate[i], 0.01f);
+        }
+
         // 現在の状態表示
         const char* stateNames[] = {"Safe", "Normal", "Danger"};
         ImGui::Text("Current State: %s", stateNames[static_cast<int>(currentState_)]);
@@ -135,6 +154,9 @@ void DeathTimerGauge::RegisterParams() {
     globalParameter_->Regist(groupName_, "safeColor", &safeColor_);
     globalParameter_->Regist(groupName_, "normalColor", &normalColor_);
     globalParameter_->Regist(groupName_, "dangerColor", &dangerColor_);
+    for (int32_t i = 0; i < heatBeat_.heatBeatSpeedRate.size(); ++i) {
+        globalParameter_->Regist(groupName_, "heatBeatSpeedRate" + std::to_string(i), &heatBeat_.heatBeatSpeedRate[i]);
+    }
 }
 
 void DeathTimerGauge::SetSpriteScales(const Vector2& scale) {

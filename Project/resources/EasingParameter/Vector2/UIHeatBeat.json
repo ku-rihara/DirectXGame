@@ -1,0 +1,22 @@
+{
+    "UIHeatBeat": {
+        "StartTimeOffset": 0.0,
+        "adaptVec2AxisType": 0,
+        "amplitude": 0.0,
+        "backRatio": 0.44999998807907104,
+        "endValue": [
+            1.2999999523162842,
+            1.2999999523162842
+        ],
+        "finishOffsetTime": 0.0,
+        "finishType": 1,
+        "maxTime": 0.5299999713897705,
+        "period": 0.0,
+        "startValue": [
+            1.0,
+            1.0
+        ],
+        "type": 43,
+        "waitTime": 0.0
+    }
+}

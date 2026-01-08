@@ -19,32 +19,15 @@ void DeathTimer::Init() {
 }
 
 void DeathTimer::Update(float timer) {
-    // イージング中の処理
-    if (isIncrementing_) {
-        incrementTimer_ += KetaEngine::Frame::DeltaTimeRate();
-
-        // イージングでタイマーを増加
-        currentTimer_ = EaseOutQuad(
-            incrementStartValue_,
-            incrementTargetValue_,
-            incrementTimer_,
-            incrementDuration_);
-
-        // イージング完了
-        if (incrementTimer_ >= incrementDuration_) {
-            currentTimer_   = incrementTargetValue_;
-            isIncrementing_ = false;
-            incrementTimer_ = 0.0f;
-        }
-    } else {
-        // 通常の減少処理
-        currentTimer_ -= timer * decrementSpeedRate_;
-    }
+   
+    // イージング適応
+    AdaptEasing(timer);
 
     // maxTimerを超えないようにクランプ
     currentTimer_ = std::clamp(currentTimer_, 0.0f, maxTimer_);
 
     // タイムセット
+    deathTimerGauge_->Update(timer);
     deathTimerGauge_->SetTimer(currentTimer_, maxTimer_);
 }
 
@@ -96,4 +79,28 @@ void DeathTimer::RegisterParams() {
     globalParameter_->Regist(groupName_, "incrementTime", &incrementTime_);
     globalParameter_->Regist(groupName_, "maxTimer", &maxTimer_);
     globalParameter_->Regist(groupName_, "incrementDuration", &incrementDuration_);
+}
+
+void DeathTimer::AdaptEasing(float timeSpeed) {
+    // イージング中の処理
+    if (isIncrementing_) {
+        incrementTimer_ += KetaEngine::Frame::DeltaTimeRate();
+
+        // イージングでタイマーを増加
+        currentTimer_ = EaseOutQuad(
+            incrementStartValue_,
+            incrementTargetValue_,
+            incrementTimer_,
+            incrementDuration_);
+
+        // イージング完了
+        if (incrementTimer_ >= incrementDuration_) {
+            currentTimer_   = incrementTargetValue_;
+            isIncrementing_ = false;
+            incrementTimer_ = 0.0f;
+        }
+    } else {
+        // 通常の減少処理
+        currentTimer_ -= timeSpeed * decrementSpeedRate_;
+    }
 }
