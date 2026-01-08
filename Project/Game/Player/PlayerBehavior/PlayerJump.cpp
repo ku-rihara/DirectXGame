@@ -20,65 +20,67 @@ PlayerJump::PlayerJump(Player* player, const bool& skipJump)
     // ジャンプをスキップする場合は速度を0にして落下のみ
     if (skipJump_) {
         speed_ = 0.0f;
-        step_  = Step::FALL_ONLY;
+        ChangeState([this]() { FallOnlyState(); });
     } else {
         speed_ = pPlayerParameter_->GetParamaters().normalJump.jumpSpeed;
-        step_  = Step::START;
+        ChangeState([this]() { StartState(); });
     }
 }
 
-PlayerJump ::~PlayerJump() {
+PlayerJump::~PlayerJump() {
 }
 
 // 更新
 void PlayerJump::Update([[maybe_unused]] float timeSpeed) {
-
-    switch (step_) {
-    case PlayerJump::Step::START:
-        if (!skipJump_) {
-            pOwner_->GetGameCamera()->PlayAnimation("PlayerJunmp");
-            pOwner_->GetObject3D()->transform_.PlayObjEaseAnimation("Player", "JumpRotation");
-        }
-        step_ = Step::JUMP;
-        break;
-
-    case PlayerJump::Step::JUMP:
-        // ジャンプ中の移動
-        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
-
-        // ジャンプ処理
-        pOwner_->Jump(speed_, pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit, pPlayerParameter_->GetParamaters().normalJump.gravity);
-
-        // 着地、通常移動に戻る
-        if (pOwner_->GetBaseTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
-            return;
-        }
-
-        // behavior切り替え
-        pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
-        break;
-
-    case PlayerJump::Step::FALL_ONLY:
-        // 横方向の移動は可能
-        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
-
-        // 落下処理のみ
-        pOwner_->Fall(
-            speed_,
-            pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit,
-            pPlayerParameter_->GetParamaters().normalJump.gravity,
-            false);
-
-        // 着地、通常移動に戻る
-        if (pOwner_->GetBaseTransform().translation_.y <= pPlayerParameter_->GetParamaters().startPos_.y) {
-            pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
-        }
-        break;
-
-    default:
-        break;
+    if (currentState_) {
+        currentState_();
     }
 }
 
 void PlayerJump::Debug() {
+}
+
+void PlayerJump::ChangeState(std::function<void()> newState) {
+    currentState_ = newState;
+}
+
+void PlayerJump::StartState() {
+    if (!skipJump_) {
+        pOwner_->GetGameCamera()->PlayAnimation("PlayerJunmp");
+        pOwner_->GetObject3D()->transform_.PlayObjEaseAnimation("Player", "JumpRotation");
+    }
+    ChangeState([this]() { JumpState(); });
+}
+
+void PlayerJump::JumpState() {
+    // ジャンプ中の移動
+    pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+
+    // ジャンプ処理
+    pOwner_->Jump(
+        speed_,
+        pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit,
+        pPlayerParameter_->GetParamaters().normalJump.gravity);
+
+    // 着地、通常移動に戻る
+    if (pOwner_->GetBaseTransform().translation_.y <= pPlayerParameter_->GetParamaters().startPos_.y) {
+        pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
+    }
+}
+
+void PlayerJump::FallOnlyState() {
+    // 横方向の移動は可能
+    pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+
+    // 落下処理のみ
+    pOwner_->Fall(
+        speed_,
+        pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit,
+        pPlayerParameter_->GetParamaters().normalJump.gravity,
+        false);
+
+    // 着地、通常移動に戻る
+    if (pOwner_->GetBaseTransform().translation_.y <= pPlayerParameter_->GetParamaters().startPos_.y) {
+        pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
+    }
 }

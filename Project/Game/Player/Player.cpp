@@ -21,6 +21,7 @@
 
 /// behavior
 #include "ComboAttackBehavior/ComboAttackRoot.h"
+#include "PlayerBehavior/PlayerDeath.h"
 #include "PlayerBehavior/PlayerMove.h"
 #include "PlayerBehavior/PlayerSpawn.h"
 #include "TitleBehavior/TitleFirstFall.h"
@@ -72,11 +73,6 @@ void Player::Init() {
     // パラメータセット
     baseTransform_.translation_ = parameters_->GetParamaters().startPos_;
 
-    // 音
-    /* punchSoundID_ = KetaEngine::Audio::GetInstance()->LoadWave("punchAir.wav");
-     strongPunch_  = KetaEngine::Audio::GetInstance()->LoadWave("StrongPunch.wav");
-     fallSound_    = KetaEngine::Audio::GetInstance()->LoadWave("PlayerFall.wav");*/
-
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));
     ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
@@ -92,8 +88,8 @@ void Player::Update() {
     // ライト
     HeadLightSetting();
 
-    /// 振る舞い処理(コンボ攻撃中は中止)
-    if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
+    /// 振る舞い処理
+    if (IsAbleAttack()) {
         behavior_->Update();
     }
 
@@ -101,13 +97,28 @@ void Player::Update() {
 
     /// Particle
     effects_->Update(GetWorldPosition());
-
+  
     // コンボ更新
-    comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
+    if (!dynamic_cast<PlayerDeath*>(comboBehavior_.get())) {
+        comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
+    }
+
+    
+    // 死亡モード変更
+    if (isDeath_ && *isDeath_) {
+        ChangeDeathMode();
+    }
 
     // 移動制限
     MoveToLimit();
     UpdateMatrix();
+}
+
+void Player::ChangeDeathMode() {
+
+    if (!dynamic_cast<PlayerDeath*>(comboBehavior_.get())) {
+        ChangeBehavior(std::make_unique<PlayerDeath>(this));
+    }
 }
 
 // タイトル更新
@@ -481,6 +492,10 @@ void Player::ResetHeadScale() {
     obj3d_->transform_.scale_ = Vector3::OneVector();
 }
 
+bool Player::IsAbleAttack() {
+    return dynamic_cast<ComboAttackRoot*>(comboBehavior_.get());
+}
+
 void Player::InitInGameScene() {
     Init();
 
@@ -516,7 +531,7 @@ void Player::SetGameCamera(GameCamera* gameCamera) {
 }
 
 void Player::SetHitStop(AttackEffect* hitStop) {
-    pHitStop_ = hitStop;
+    pAttackEffect_ = hitStop;
 }
 
 void Player::SetViewProjection(const KetaEngine::ViewProjection* viewProjection) {
@@ -525,19 +540,6 @@ void Player::SetViewProjection(const KetaEngine::ViewProjection* viewProjection)
 
 void Player::SetComboAttackController(PlayerComboAttackController* playerComboAttackController) {
     comboAttackController_ = playerComboAttackController;
-}
-
-/// =======================================================================================
-/// Sound
-/// =======================================================================================
-void Player::SoundPunch() {
-    /*  KetaEngine::Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);*/
-}
-void Player::SoundStrongPunch() {
-    /* KetaEngine::Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);*/
-}
-void Player::FallSound() {
-    /*KetaEngine::Audio::GetInstance()->PlayWave(fallSound_, 0.2f);*/
 }
 
 bool Player::CheckIsChargeMax() const {

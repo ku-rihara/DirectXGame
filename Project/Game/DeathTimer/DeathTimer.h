@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Combo/ComboUIController.h"
-#include"DeathTimer/DeathTimerGauge.h"
+#include "DeathTimer/DeathTimerGauge.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // std
 #include <cstdint>
@@ -24,7 +24,7 @@ public:
     void IncrementTimer();
 
 private:
-   // イージング適応
+    // イージング適応
     void AdaptEasing(float timeSpeed);
 
 private:
@@ -39,14 +39,17 @@ private:
     float incrementTime_;
     float maxTimer_;
 
-      // イージング関連
+    // イージング関連
     bool isIncrementing_        = false;
     float incrementStartValue_  = 0.0f;
     float incrementTargetValue_ = 0.0f;
     float incrementTimer_       = 0.0f;
     float incrementDuration_    = 0.0f;
 
+    bool isDeath_ = false;
+
 public:
     // Getter
+   const bool& GetIsDeath() const { return isDeath_; }
     DeathTimerGauge* GetDeathTimerGauge() const { return deathTimerGauge_.get(); }
 };

@@ -1345,6 +1345,9 @@
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.cpp">
       <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBehavior\PlayerDeath.cpp">
+      <Filter>Game\Player\Behavior\NormalBehavior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -2219,6 +2222,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.h">
       <Filter>MyEngine\.h\Editor\TileScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBehavior\PlayerDeath.h">
+      <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
