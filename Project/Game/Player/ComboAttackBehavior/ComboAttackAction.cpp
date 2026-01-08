@@ -2,6 +2,7 @@
 #include "CollisionBox/PlayerCollisionInfo.h"
 #include "ComboAttackRoot.h"
 #include "Frame/Frame.h"
+#include "input/Input.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
 #include "Player/PlayerBehavior/PlayerJump.h"
@@ -131,7 +132,7 @@ void ComboAttackAction::ChangeNextAttack() {
 
     //  自動進行フラグがtrueの場合も次に進む
     bool shouldAdvance = isReserveNextCombo_ || isAttackCancel_ || attackData_->GetAttackParam().timingParam.isAutoAdvance;
-
+    KetaEngine::Input::SetVibration(0, 0.0f, 0.0f);
     // 次のコンボに移動する
     if (nextAttackData_ && shouldAdvance) {
 
@@ -163,7 +164,7 @@ void ComboAttackAction::PreOderNextComboForButton() {
         return;
     }
 
-    // ヒット状態を渡す 
+    // ヒット状態を渡す
     isReserveNextCombo_ = attackData_->IsReserveNextAttack(
         currentFrame_,
         nextAttackData_->GetAttackParam().triggerParam,

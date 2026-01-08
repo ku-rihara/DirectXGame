@@ -31,6 +31,12 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
         globalParam->Regist(groupName, std::string(info.name) + "_Volume", &param.volume);
         globalParam->Regist(groupName, std::string(info.name) + "_TriggerByHit", &param.triggerByHit);
     }
+
+    // 振動パラメータの登録
+    globalParam->Regist(groupName, "Vibration_StartTiming", &vibrationParam_.startTiming);
+    globalParam->Regist(groupName, "Vibration_Duration", &vibrationParam_.duration);
+    globalParam->Regist(groupName, "Vibration_Intensity", &vibrationParam_.intensity);
+    globalParam->Regist(groupName, "Vibration_TriggerByHit", &vibrationParam_.triggerByHit);
 }
 
 void PlayerAttackRenditionData::AdjustParam() {
@@ -88,6 +94,19 @@ void PlayerAttackRenditionData::AdjustParam() {
             ImGui::Checkbox("Trigger By Hit", &param.triggerByHit);
             ImGui::PopID();
         }
+
+        ImGui::PopID();
+    }
+
+    // 振動パラメータのUI（単一）
+    if (ImGui::CollapsingHeader("Vibration Parameters")) {
+        ImGui::PushID((groupName_ + "VibrationParams").c_str());
+
+        ImGui::SeparatorText("Vibration");
+        ImGui::DragFloat("Start Timing", &vibrationParam_.startTiming, 0.01f, 0.0f, 10.0f);
+        ImGui::DragFloat("Duration", &vibrationParam_.duration, 0.01f, 0.0f, 5.0f);
+        ImGui::SliderFloat("Intensity", &vibrationParam_.intensity, 0.0f, 1.0f);
+        ImGui::Checkbox("Trigger By Hit", &vibrationParam_.triggerByHit);
 
         ImGui::PopID();
     }

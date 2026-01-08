@@ -22,6 +22,11 @@ private:
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimPlayed_{};
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::AudioType::Count)> isAudioPlayed_{};
 
+    // 振動関連
+    bool isVibrationPlayed_ = false;
+    float vibrationTimer_   = 0.0f;
+    bool isVibrating_       = false;
+
 public:
     PlayerAttackRendition()  = default;
     ~PlayerAttackRendition() = default;

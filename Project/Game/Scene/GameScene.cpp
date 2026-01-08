@@ -16,7 +16,6 @@ void GameScene::Init() {
     //// グローバル変数の読み込み
     KetaEngine::GlobalParameter::GetInstance()->LoadFiles();
     BaseScene::Init();
-
     // オブジェクト生成
     ObjectInit();
 

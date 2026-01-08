@@ -3,6 +3,7 @@
 #include "Audio/Audio.h"
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
+#include "Input/Input.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
@@ -18,6 +19,17 @@ void PlayerAttackRendition::Reset() {
     isPlayed_.fill(false);
     isObjAnimPlayed_.fill(false);
     isAudioPlayed_.fill(false);
+
+    // 振動の状態をリセット
+    isVibrationPlayed_ = false;
+    vibrationTimer_    = 0.0f;
+    isVibrating_       = false;
+
+    // 振動を停止
+    size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
+    for (size_t padNo = 0; padNo < numGamepads; ++padNo) {
+        KetaEngine::Input::SetVibration(static_cast<int32_t>(padNo), 0.0f, 0.0f);
+    }
 }
 
 void PlayerAttackRendition::Update(float deltaTime) {
@@ -154,6 +166,40 @@ void PlayerAttackRendition::Update(float deltaTime) {
 
             // 再生済みに設定
             isAudioPlayed_[i] = true;
+        }
+    }
+
+    // 振動の更新
+    const auto& vibParam = renditionData.GetVibrationParam();
+
+    // トリガー条件がヒットの場合のcontinue処理
+    if (vibParam.triggerByHit && !pPlayer_->GetPlayerCollisionInfo()->GetIsHit()) {
+        // ヒット条件を満たさない場合は処理をスキップ
+    } else {
+        // すでに再生済みでない場合
+        if (!isVibrationPlayed_) {
+            // startTiming に達したら発動
+            if (currentTime_ >= vibParam.startTiming && vibParam.intensity > 0.0f) {
+
+                KetaEngine::Input::SetVibration(0, vibParam.intensity, vibParam.intensity);
+
+                // 再生済みに設定
+                isVibrationPlayed_ = true;
+                isVibrating_       = true;
+                vibrationTimer_    = 0.0f;
+            }
+        }
+    }
+
+    // 振動中の場合、タイマーを更新して停止判定
+    if (isVibrating_) {
+        vibrationTimer_ += deltaTime;
+
+        if (vibrationTimer_ >= vibParam.duration) {
+            // 振動を停止
+            KetaEngine::Input::SetVibration(0, 0.0f, 0.0f);
+
+            isVibrating_ = false;
         }
     }
 }

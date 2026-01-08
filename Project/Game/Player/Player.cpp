@@ -492,7 +492,8 @@ void Player::ResetHeadScale() {
 }
 
 bool Player::IsAbleBehavior() {
-    return (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get()))||(isDeath_);
+    bool isAttackRoot = (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get()));
+    return (isAttackRoot);
 }
 
 void Player::InitInGameScene() {
