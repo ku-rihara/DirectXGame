@@ -7,10 +7,10 @@ void TimeScaleEditor::Init(const std::string& editorName, bool isUseCategory) {
     BaseEffectEditor::Init(editorName, isUseCategory);
 }
 
-void TimeScaleEditor::Update(float speedRate) {
+void TimeScaleEditor::Update(float deltaTime) {
     // すべてのTimeScaleを更新
     for (auto& timeScale : effects_) {
-        timeScale->Update(speedRate);
+        timeScale->Update(deltaTime);
     }
 }
 

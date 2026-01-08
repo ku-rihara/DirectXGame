@@ -10,6 +10,7 @@ using namespace KetaEngine;
 #include"Editor/ParticleEditor/ParticleEditor.h"
 #include"Editor/DissolveEditor/DissolveEditor.h"
 #include"Editor/TimeScaleEditor/TimeScaleEditor.h"
+#include"Frame/Frame.h"
 
 
 EffectEditorSuite::EffectEditorSuite() = default;
@@ -25,7 +26,7 @@ void EffectEditorSuite::Init() {
     dissolveEditor_         = std::make_unique<DissolveEditor>();
     timeScaleEditor_        = std::make_unique<TimeScaleEditor>();
         
-    // 初期化:trueの場合カテゴリーシステムを使用
+    // 初期化
     objEaseAnimationEditor_->Init("ObjEaseAnimation", true);
     cameraEditor_->Init("CameraAnimation");
     shakeEditor_->Init("Shake");
@@ -46,7 +47,7 @@ void EffectEditorSuite::Update() {
     gpuParticleEditor_->Update();
     particleEditor_->Update();
     dissolveEditor_->Update();
-    timeScaleEditor_->Update();
+    timeScaleEditor_->Update(Frame::DeltaTime());
 }
 
 void EffectEditorSuite::EditorUpdate() {

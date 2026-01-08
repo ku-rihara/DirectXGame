@@ -18,7 +18,7 @@ public:
 
     // 初期化、更新
     void Init(const std::string& editorName, bool isUseCategory = false) override;
-    void Update(float speedRate = 1.0f) override;
+    void Update(float deltaTime) override;
     void EditorUpdate() override;
 
 private:
