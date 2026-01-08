@@ -97,13 +97,12 @@ void Player::Update() {
 
     /// Particle
     effects_->Update(GetWorldPosition());
-  
+
     // コンボ更新
-    if (!dynamic_cast<PlayerDeath*>(comboBehavior_.get())) {
+    if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
         comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
     }
 
-    
     // 死亡モード変更
     if (isDeath_ && *isDeath_) {
         ChangeDeathMode();

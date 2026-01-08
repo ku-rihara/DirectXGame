@@ -17,12 +17,19 @@ public:
     void Debug() override; //< デバッグ
 private:
    
-    void ChangeState(std::function<void()> newState);
+    void StartDeathRendition(float timeSpeed);
+    void PlayerTurningAround(float timeSpeed);
+
+    void ChangeState(std::function<void(float)> newState);
 private:
-    std::function<void()> currentState_;
+    std::function<void(float)> currentState_;
 
 private:
     /// ===================================================
     /// private variable
     /// ===================================================
+
+    // baseRotateYEase
+    float tempBaseRotateY_;
+    KetaEngine::Easing<float> baseRotateYEase_;
 };

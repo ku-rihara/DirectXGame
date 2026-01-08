@@ -1,7 +1,7 @@
 #include "DeathTimer.h"
+#include "Easing/EasingFunction.h"
 #include "Frame/Frame.h"
 #include <imgui.h>
-#include "Easing/EasingFunction.h"
 
 void DeathTimer::Init() {
 
@@ -14,17 +14,20 @@ void DeathTimer::Init() {
     deathTimerGauge_ = std::make_unique<DeathTimerGauge>();
     deathTimerGauge_->Init();
 
-    //タイマー初期化
+    // タイマー初期化
     currentTimer_ = maxTimer_;
 }
 
 void DeathTimer::Update(float timer) {
-   
+
     // イージング適応
     AdaptEasing(timer);
 
     // maxTimerを超えないようにクランプ
     currentTimer_ = std::clamp(currentTimer_, 0.0f, maxTimer_);
+    if (currentTimer_ <= 0.0f) {
+        isDeath_ = true;
+    }
 
     // タイムセット
     deathTimerGauge_->Update(timer);
@@ -46,7 +49,6 @@ void DeathTimer::IncrementTimer() {
     // maxTimerを超えないようにクランプ
     incrementTargetValue_ = (std::min)(incrementTargetValue_, maxTimer_);
 }
-
 
 ///==========================================================
 /// パラメータ調整

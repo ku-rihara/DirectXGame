@@ -3,6 +3,7 @@
 #include "PlayerMove.h"
 
 /// boss
+#include "GameCamera/GameCamera.h"
 #include "Player/Player.h"
 /// frame
 #include "Frame/Frame.h"
@@ -16,7 +17,13 @@ PlayerDeath::PlayerDeath(Player* player)
     /// ===================================================
     /// 変数初期化
     /// ===================================================
-   /* ChangeState([this]() { FallOnlyState(); });*/
+    ChangeState([this](float timeSpeed) { StartDeathRendition(timeSpeed); });
+
+    baseRotateYEase_.Init("PlayerDeathBaseRotateY.json");
+    baseRotateYEase_.SetStartValue(pOwner_->GetBaseTransform().rotation_.y);
+    baseRotateYEase_.SetAdaptValue(&tempBaseRotateY_);
+   
+    pOwner_->GetGameCamera()->Reset();
 }
 
 PlayerDeath ::~PlayerDeath() {
@@ -25,15 +32,26 @@ PlayerDeath ::~PlayerDeath() {
 // 更新
 void PlayerDeath::Update([[maybe_unused]] float timeSpeed) {
     if (currentState_) {
-        currentState_();
+        currentState_(KetaEngine::Frame::DeltaTime());
     }
-  
 }
 
-void PlayerDeath::ChangeState(std::function<void()> newState) {
+void PlayerDeath::StartDeathRendition(float timeSpeed) {
+  
+     timeSpeed;
+
+    pOwner_->GetGameCamera()->PlayAnimation("GameOverCamera");
+    ChangeState([this](float timeSpeed) { PlayerTurningAround(timeSpeed); });
+}
+
+void PlayerDeath::PlayerTurningAround(float timeSpeed) {
+    baseRotateYEase_.Update(timeSpeed);
+    pOwner_->SetRotationY(tempBaseRotateY_);
+}
+
+void PlayerDeath::ChangeState(std::function<void(float)> newState) {
     currentState_ = newState;
 }
 
 void PlayerDeath::Debug() {
-   
 }

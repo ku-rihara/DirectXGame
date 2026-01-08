@@ -31,10 +31,6 @@ public:
     void RotateAdapt(); // 回転適用
     void TranslateAdapt(); // 位置適用
 
-    /// <summary>
-    /// 注視点ベースでカメラ位置を計算
-    /// </summary>
-    void UpdateLookAtCamera();
 
     /// <summary>
     /// アニメーション再生

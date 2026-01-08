@@ -9,7 +9,7 @@ void AttackEffect::Init() {
 }
 
 void AttackEffect::Update() {
-    timeScalePlayer_->Update();
+    timeScalePlayer_->Update(KetaEngine::Frame::DeltaTime());
     postEffectController_->Update(KetaEngine::Frame::DeltaTime());
 }
 

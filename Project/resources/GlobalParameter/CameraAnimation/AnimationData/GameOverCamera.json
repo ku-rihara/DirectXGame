@@ -1,0 +1,12 @@
+{
+    "GameOverCamera": {
+        "autoReturnToInitial": false,
+        "resetFovEaseType": 0,
+        "resetPosEaseType": 0,
+        "resetRotateEaseType": 0,
+        "resetTimePoint": 1.0,
+        "returnDelayTime": 0.0,
+        "timeMode": 1,
+        "useLookAt": false
+    }
+}
