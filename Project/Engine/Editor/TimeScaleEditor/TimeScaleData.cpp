@@ -1,25 +1,73 @@
 #include "TimeScaleData.h"
 
 using namespace KetaEngine;
+#include "Frame/Frame.h"
 #include <imgui.h>
 #include <Windows.h>
 
 void TimeScaleData::Init(const std::string& timeScaleName) {
     globalParameter_ = GlobalParameter::GetInstance();
+    groupName_       = timeScaleName;
+    folderPath_      = "TimeScale";
 
-    // グループ名設定
-    groupName_ = timeScaleName;
-    globalParameter_->CreateGroup(groupName_);
+    if (!globalParameter_->HasRegisters(timeScaleName)) {
+        // 新規登録
+        globalParameter_->CreateGroup(groupName_);
+        RegisterParams();
+        globalParameter_->SyncParamForGroup(groupName_);
+    } else {
+        // 値取得
+        GetParams();
+    }
 
-    RegisterParams();
+    // 初期化
+    InitParams();
+}
 
-    // パラメータ同期
-    globalParameter_->SyncParamForGroup(groupName_);
+void TimeScaleData::Update(float speedRate) {
+    if (playState_ != PlayState::PLAYING) {
+        return;
+    }
+
+    // 実際のデルタタイムを計算
+    float actualDeltaTime = 0.0f;
+    switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
+    case TimeMode::DELTA_TIME:
+        actualDeltaTime = Frame::DeltaTime() * speedRate;
+        break;
+    case TimeMode::DELTA_TIME_RATE:
+        actualDeltaTime = Frame::DeltaTimeRate() * speedRate;
+        break;
+    default:
+        break;
+    }
+
+    // 経過時間更新
+    elapsedTime_ += actualDeltaTime;
+
+    // 時間が経過したらTimeScaleを戻す
+    if (elapsedTime_ >= duration_) {
+        playState_ = PlayState::STOPPED;
+        ResetTimeScale();
+    }
+}
+
+void TimeScaleData::Play() {
+    Reset();
+    playState_ = PlayState::PLAYING;
+    ApplyTimeScale();
+}
+
+void TimeScaleData::Reset() {
+    elapsedTime_ = 0.0f;
+    playState_   = PlayState::STOPPED;
+    ResetTimeScale();
 }
 
 void TimeScaleData::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
+    GetParams();
 }
 
 void TimeScaleData::SaveData() {
@@ -29,6 +77,26 @@ void TimeScaleData::SaveData() {
 void TimeScaleData::RegisterParams() {
     globalParameter_->Regist(groupName_, "timeScale", &timeScale_);
     globalParameter_->Regist(groupName_, "duration", &duration_);
+    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
+}
+
+void TimeScaleData::GetParams() {
+    timeScale_ = globalParameter_->GetValue<float>(groupName_, "timeScale");
+    duration_  = globalParameter_->GetValue<float>(groupName_, "duration");
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
+}
+
+void TimeScaleData::InitParams() {
+    elapsedTime_ = 0.0f;
+    playState_   = PlayState::STOPPED;
+}
+
+void TimeScaleData::ApplyTimeScale() {
+    Frame::SetTimeScale(timeScale_);
+}
+
+void TimeScaleData::ResetTimeScale() {
+    Frame::SetTimeScale(1.0f);
 }
 
 void TimeScaleData::AdjustParam() {
@@ -37,9 +105,43 @@ void TimeScaleData::AdjustParam() {
         ImGui::SeparatorText(("TimeScale Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());
 
-        // TimeScale調整
-        ImGui::DragFloat("TimeScale", &timeScale_, 0.001f);
-        ImGui::DragFloat("Duration", &duration_, 0.001f);
+        // 状態表示
+        const char* stateText = "";
+        switch (playState_) {
+        case PlayState::STOPPED:
+            stateText = "STOPPED";
+            break;
+        case PlayState::PLAYING:
+            stateText = "PLAYING";
+            break;
+        case PlayState::PAUSED:
+            stateText = "PAUSED";
+            break;
+        case PlayState::RETURNING:
+            stateText = "RETURNING";
+            break;
+        }
+        ImGui::Text("State: %s", stateText);
+
+        // 進行状況を表示
+        float progress = 0.0f;
+        if (duration_ > 0.0f) {
+            progress = elapsedTime_ / duration_;
+        }
+        ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f), "Progress");
+        ImGui::Text("Time: %.2f / %.2f (%.2fs remaining)",
+            elapsedTime_, duration_, GetRemainingTime());
+
+        ImGui::Separator();
+
+        // パラメータ調整
+        ImGui::DragFloat("TimeScale", &timeScale_, 0.01f, 0.0f, 10.0f);
+        ImGui::DragFloat("Duration", &duration_, 0.01f, 0.1f, 10.0f);
+
+        ImGui::Separator();
+
+        // タイムモード設定
+        timeModeSelector_.SelectTimeModeImGui("Time Mode");
 
         ImGui::Separator();
 
@@ -53,29 +155,6 @@ void TimeScaleData::AdjustParam() {
             SaveData();
             MessageBoxA(nullptr, "TimeScale data saved successfully.", "TimeScale Data", 0);
         }
-
-        ImGui::Separator();
-        ImGui::Text("File Operations:");
-
-        // Load ボタン
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
-        if (ImGui::Button("Load Data")) {
-            LoadData();
-            MessageBoxA(nullptr, "TimeScale data loaded successfully.", "TimeScale Data", 0);
-        }
-        ImGui::PopStyleColor(3);
-
-        // Save ボタン
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
-        if (ImGui::Button("Save Data")) {
-            SaveData();
-            MessageBoxA(nullptr, "TimeScale data saved successfully.", "TimeScale Data", 0);
-        }
-        ImGui::PopStyleColor(3);
 
         ImGui::PopID();
     }

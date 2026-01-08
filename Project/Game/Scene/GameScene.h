@@ -4,7 +4,6 @@
 #include "BaseScene.h"
 
 // Obj
-#include "Editor/TimeScaleEditor/TimeScaleController.h"
 #include "SkyBox/SkyBox.h"
 // emitter
 
@@ -23,7 +22,6 @@ private:
 
     std::unique_ptr<SkyBox> skuBox_                                       = nullptr;
     std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender        = nullptr;
-    std::unique_ptr<KetaEngine::TimeScaleController> timeScaleController_ = nullptr;
     std::unique_ptr<KetaEngine::CameraAnimation> cameraPlayer_            = nullptr;
 
 public:

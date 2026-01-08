@@ -832,7 +832,7 @@
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakePlayer.cpp">
       <Filter>MyEngine\.cpp\Editor\ShakeEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleController.cpp">
+    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.cpp">
       <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleData.cpp">
@@ -900,6 +900,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.cpp">
       <Filter>MyEngine\.cpp\Editor\ParticleEditor\SectionParameters</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1317,7 +1320,7 @@
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleData.h">
       <Filter>MyEngine\.h\Editor\TimeScaleEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleController.h">
+    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.h">
       <Filter>MyEngine\.h\Editor\TimeScaleEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakePlayer.h">
@@ -1475,6 +1478,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.h">
       <Filter>MyEngine\.h\Editor\ParticleEditor\SectionParameters</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.h">
+      <Filter>MyEngine\.h\Editor\TimeScaleEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

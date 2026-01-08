@@ -20,14 +20,12 @@ void GameScene::Init() {
 
     skuBox_              = std::make_unique<SkyBox>();
     ObjectFromBlender     = std::make_unique<KetaEngine::ObjectFromBlender>();
-    timeScaleController_ = std::make_unique<KetaEngine::TimeScaleController>();
-    cameraPlayer_        = std::make_unique<KetaEngine::CameraAnimation>();
+   cameraPlayer_        = std::make_unique<KetaEngine::CameraAnimation>();
 
     /*  monsterBall_->Init();*/
 
     skuBox_->Init();
-    timeScaleController_->Init();
-
+ 
     cameraPlayer_->Init();
     cameraPlayer_->SetViewProjection(&viewProjection_);
 
@@ -51,9 +49,6 @@ void GameScene::Update() {
     }
 
     cameraPlayer_->Update();
-
-    // 各クラス更新
-    timeScaleController_->Update(KetaEngine::Frame::DeltaTime());
 
     skuBox_->Update();
 
