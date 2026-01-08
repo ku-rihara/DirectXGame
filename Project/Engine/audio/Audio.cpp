@@ -2,8 +2,9 @@
 
 using namespace KetaEngine;
 #include <assert.h>
-#include <fstream>
 #include <cctype>
+#include <filesystem>
+#include <fstream>
 #define ATTENUATION_TIME_MS 50
 #define ATTENUATION_FACTOR 0.01f // 音量を0.5%にする
 #pragma comment(lib, "xaudio2.lib")
@@ -30,6 +31,30 @@ void Audio::Init() {
     if (SUCCEEDED(hr)) {
         isMediaFoundationInitialized_ = true;
     }
+
+    // 全ファイルをロード
+    LoadAllFilesInDirectory();
+}
+
+void Audio::LoadAllFilesInDirectory() {
+    if (!std::filesystem::exists(filePath_)) {
+        return; // ディレクトリが存在しない場合は何もしない
+    }
+
+    for (const auto& entry : std::filesystem::directory_iterator(filePath_)) {
+        if (entry.is_regular_file()) {
+            std::string filename  = entry.path().filename().string();
+            std::string extension = entry.path().extension().string();
+
+            // .mp3 または .wav ファイルのみロード
+            if (extension == ".mp3" || extension == ".wav") {
+                // 既にロード済みでない場合のみロード
+                if (soundIndexMap_.find(entry.path().string()) == soundIndexMap_.end()) {
+                    Load(filename);
+                }
+            }
+        }
+    }
 }
 
 int Audio::Load(const std::string& filename) {
@@ -41,7 +66,6 @@ int Audio::Load(const std::string& filename) {
         return it->second; // 既存のインデックスを返す
     }
 
-   
     // 拡張子で判定
     size_t dotPos = filename.rfind('.');
     if (dotPos != std::string::npos) {
@@ -61,7 +85,7 @@ int Audio::Load(const std::string& filename) {
 
 int Audio::LoadWaveFile(const std::string& fullPath) {
 
-     std::ifstream file;
+    std::ifstream file;
     file.open(fullPath, std::ios_base::binary);
     assert(file.is_open());
 
@@ -216,6 +240,7 @@ int Audio::LoadMP3File(const std::string& fullPath) {
 }
 
 void Audio::Play(const std::string& filename, float volume) {
+
     // ファイルパスを生成
     std::string fullPath = filePath_ + filename;
 
@@ -239,7 +264,6 @@ void Audio::Play(const std::string& filename, float volume) {
     PlayForID(soundId, volume);
 }
 
-
 void Audio::PlayForID(const int& soundId, float volume) {
     if (soundId < 0 || soundId >= soundDatas_.size()) {
         return;
@@ -254,13 +278,13 @@ void Audio::PlayForID(const int& soundId, float volume) {
     assert(SUCCEEDED(result));
 
     // ボリューム調整
-    float adjustedVolume = volume; 
+    float adjustedVolume = volume;
     auto now             = std::chrono::steady_clock::now();
 
     if (lastPlayTimes_.find(soundId) != lastPlayTimes_.end()) {
         auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastPlayTimes_[soundId]).count();
         if (elapsed < ATTENUATION_TIME_MS) {
-            //直前に同じ音が鳴った場合、ボリュームを下げる
+            // 直前に同じ音が鳴った場合、ボリュームを下げる
             float factor = 1.0f - (1.0f - ATTENUATION_FACTOR) * (1.0f - float(elapsed) / ATTENUATION_TIME_MS);
             adjustedVolume *= factor; // 重なり具合に応じてボリュームを調整
         }
@@ -280,6 +304,16 @@ void Audio::PlayForID(const int& soundId, float volume) {
 
     result = pSourceVoice->Start();
     assert(SUCCEEDED(result));
+}
+
+std::vector<std::string> Audio::GetAvailableSoundNames() const {
+    std::vector<std::string> names;
+    for (const auto& pair : soundIndexMap_) {
+        // フルパスからファイル名（拡張子付き）を抽出
+        std::filesystem::path p(pair.first);
+        names.push_back(p.filename().string());
+    }
+    return names;
 }
 
 void Audio::Unload(const int& soundId) {

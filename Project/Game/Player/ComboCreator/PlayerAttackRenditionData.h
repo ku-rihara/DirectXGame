@@ -25,6 +25,14 @@ public:
         float startTiming = 0.0f;
     };
 
+    // オーディオパラメータ
+    struct AudioParam {
+        std::string fileName;
+        float startTiming = 0.0f;
+        float volume      = 1.0f;
+        bool triggerByHit = false;
+    };
+
     enum class Type {
         CameraAction,
         HitStop,
@@ -42,6 +50,12 @@ public:
         Count
     };
 
+    enum class AudioType {
+        Attack,
+        Hit,
+        Count
+    };
+
 private:
     // 演出タイプ情報構造体
     struct RenditionTypeInfo {
@@ -54,6 +68,13 @@ private:
     // オブジェクトアニメーションタイプ情報構造体
     struct ObjAnimationTypeInfo {
         ObjAnimationType type;
+        const char* name;
+        const char* label;
+    };
+
+    // オーディオタイプ情報構造体
+    struct AudioTypeInfo {
+        AudioType type;
         const char* name;
         const char* label;
     };
@@ -75,6 +96,12 @@ private:
         {ObjAnimationType::MainHead, "Main_Head", "Main Head Animation"},
     };
 
+    // 静的なオーディオタイプ情報配列
+    static constexpr AudioTypeInfo kAudioTypeInfos[] = {
+        {AudioType::Attack, "Audio_Attack", "Attack Sound"},
+        {AudioType::Hit, "Audio_Hit", "Hit Sound"},
+    };
+
 public:
     PlayerAttackRenditionData()  = default;
     ~PlayerAttackRenditionData() = default;
@@ -88,6 +115,7 @@ private:
     //*-------------------------------- private Method --------------------------------*//
     void SelectRenditionFile(const char* label, const std::string& directory, std::pair<RenditionParam, KetaEngine::FileSelector>& param);
     void SelectObjAnimationFile(const char* label, const std::string& directory, std::pair<ObjAnimationParam, KetaEngine::FileSelector>& param);
+    void SelectAudioFile(const char* label, std::pair<AudioParam, KetaEngine::FileSelector>& param);
 
     // オブジェクトアニメーションタイプに応じたフォルダパスを取得
     std::string GetObjAnimationFolderPath(ObjAnimationType type) const;
@@ -95,7 +123,8 @@ private:
 private:
     //*-------------------------------- Private variants--------------------------------*//
     std::string groupName_;
-    const std::string folderPath_ = "Resources/GlobalParameter/";
+    const std::string folderPath_      = "Resources/GlobalParameter/";
+    const std::string audioFolderPath_ = "Resources/Audio/";
 
     // 各オブジェクトアニメーションタイプのフォルダパス
     const std::array<std::string, 4> objAnimationFolderPaths_ = {
@@ -110,6 +139,9 @@ private:
     // オブジェクトアニメーションパラメータ配列
     std::array<std::pair<ObjAnimationParam, KetaEngine::FileSelector>, static_cast<size_t>(ObjAnimationType::Count)> objAnimationParams_;
 
+    // オーディオパラメータ配列
+    std::array<std::pair<AudioParam, KetaEngine::FileSelector>, static_cast<size_t>(AudioType::Count)> audioParams_;
+
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const RenditionParam& GetRenditionParamFromIndex(int32_t index) const;
@@ -122,5 +154,12 @@ public:
     }
     const ObjAnimationParam& GetObjAnimationParamFromType(const ObjAnimationType& type) const {
         return objAnimationParams_[static_cast<size_t>(type)].first;
+    }
+
+    const AudioParam& GetAudioParamFromIndex(int32_t index) const {
+        return audioParams_[index].first;
+    }
+    const AudioParam& GetAudioParamFromType(const AudioType& type) const {
+        return audioParams_[static_cast<size_t>(type)].first;
     }
 };

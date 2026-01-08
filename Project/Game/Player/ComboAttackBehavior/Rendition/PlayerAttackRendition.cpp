@@ -1,5 +1,6 @@
 #include "PlayerAttackRendition.h"
 #include "AttackEffect/AttackEffect.h"
+#include "Audio/Audio.h"
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
@@ -16,6 +17,7 @@ void PlayerAttackRendition::Reset() {
     currentTime_ = 0.0f;
     isPlayed_.fill(false);
     isObjAnimPlayed_.fill(false);
+    isAudioPlayed_.fill(false);
 }
 
 void PlayerAttackRendition::Update(float deltaTime) {
@@ -125,12 +127,41 @@ void PlayerAttackRendition::Update(float deltaTime) {
             isObjAnimPlayed_[i] = true;
         }
     }
+
+    // オーディオの更新
+    for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::AudioType::Count); ++i) {
+        const auto& param = renditionData.GetAudioParamFromIndex(i);
+
+        // トリガー条件がヒットの場合のcontinue処理
+        if (param.triggerByHit && !pPlayer_->GetPlayerCollisionInfo()->GetIsHit()) {
+            continue;
+        }
+
+        // すでに再生済みならスキップ
+        if (isAudioPlayed_[i]) {
+            continue;
+        }
+
+        // ファイル名が空ならスキップ
+        if (param.fileName.empty() || param.fileName == "None") {
+            isAudioPlayed_[i] = true;
+            continue;
+        }
+
+        // startTiming に達したら発動
+        if (currentTime_ >= param.startTiming) {
+            KetaEngine::Audio::GetInstance()->Play(param.fileName + ".wav", param.volume);
+
+            // 再生済みに設定
+            isAudioPlayed_[i] = true;
+        }
+    }
 }
 
 void PlayerAttackRendition::PlayRendition() {
-    // ごり押し演出追加処理(Editor適応に合わせ削除する)
+    // ごり押し演出追加処理
     std::string name = playerComboAttackData_->GetGroupName();
- 
+
     if (name == "FallRandingAttack") {
         pPlayer_->GetEffects()->FallEffectRenditionInit();
     }
