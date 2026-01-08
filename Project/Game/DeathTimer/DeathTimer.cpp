@@ -1,7 +1,7 @@
 #include "DeathTimer.h"
+#include "Easing/EasingFunction.h"
 #include "Frame/Frame.h"
 #include <imgui.h>
-#include "Easing/EasingFunction.h"
 
 void DeathTimer::Init() {
 
@@ -14,37 +14,23 @@ void DeathTimer::Init() {
     deathTimerGauge_ = std::make_unique<DeathTimerGauge>();
     deathTimerGauge_->Init();
 
-    //タイマー初期化
+    // タイマー初期化
     currentTimer_ = maxTimer_;
 }
 
 void DeathTimer::Update(float timer) {
-    // イージング中の処理
-    if (isIncrementing_) {
-        incrementTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
-        // イージングでタイマーを増加
-        currentTimer_ = EaseOutQuad(
-            incrementStartValue_,
-            incrementTargetValue_,
-            incrementTimer_,
-            incrementDuration_);
-
-        // イージング完了
-        if (incrementTimer_ >= incrementDuration_) {
-            currentTimer_   = incrementTargetValue_;
-            isIncrementing_ = false;
-            incrementTimer_ = 0.0f;
-        }
-    } else {
-        // 通常の減少処理
-        currentTimer_ -= timer * decrementSpeedRate_;
-    }
+    // イージング適応
+    AdaptEasing(timer);
 
     // maxTimerを超えないようにクランプ
     currentTimer_ = std::clamp(currentTimer_, 0.0f, maxTimer_);
+    if (currentTimer_ <= 0.0f) {
+        isDeath_ = true;
+    }
 
     // タイムセット
+    deathTimerGauge_->Update(timer);
     deathTimerGauge_->SetTimer(currentTimer_, maxTimer_);
 }
 
@@ -63,7 +49,6 @@ void DeathTimer::IncrementTimer() {
     // maxTimerを超えないようにクランプ
     incrementTargetValue_ = (std::min)(incrementTargetValue_, maxTimer_);
 }
-
 
 ///==========================================================
 /// パラメータ調整
@@ -96,4 +81,28 @@ void DeathTimer::RegisterParams() {
     globalParameter_->Regist(groupName_, "incrementTime", &incrementTime_);
     globalParameter_->Regist(groupName_, "maxTimer", &maxTimer_);
     globalParameter_->Regist(groupName_, "incrementDuration", &incrementDuration_);
+}
+
+void DeathTimer::AdaptEasing(float timeSpeed) {
+    // イージング中の処理
+    if (isIncrementing_) {
+        incrementTimer_ += KetaEngine::Frame::DeltaTimeRate();
+
+        // イージングでタイマーを増加
+        currentTimer_ = EaseOutQuad(
+            incrementStartValue_,
+            incrementTargetValue_,
+            incrementTimer_,
+            incrementDuration_);
+
+        // イージング完了
+        if (incrementTimer_ >= incrementDuration_) {
+            currentTimer_   = incrementTargetValue_;
+            isIncrementing_ = false;
+            incrementTimer_ = 0.0f;
+        }
+    } else {
+        // 通常の減少処理
+        currentTimer_ -= timeSpeed * decrementSpeedRate_;
+    }
 }

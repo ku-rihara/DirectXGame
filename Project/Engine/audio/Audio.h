@@ -59,6 +59,9 @@ private:
     int LoadMP3File(const std::string& fullPath);
     void PlayForID(const int& soundId, float volume);
 
+    // 全ファイルロード用
+    void LoadAllFilesInDirectory();
+
 public:
     static Audio* GetInstance();
 
@@ -72,6 +75,9 @@ public:
     void Finalize();
 
     IXAudio2* GetXAudio2() const { return xAudio2_.Get(); }
+
+    // 利用可能な音声ファイル名一覧を取得
+    std::vector<std::string> GetAvailableSoundNames() const;
 };
 
 }; // KetaEngine

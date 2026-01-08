@@ -9,6 +9,8 @@ using namespace KetaEngine;
 #include"Editor/GPUParticleEditor/GPUParticleEditor.h"
 #include"Editor/ParticleEditor/ParticleEditor.h"
 #include"Editor/DissolveEditor/DissolveEditor.h"
+#include"Editor/TimeScaleEditor/TimeScaleEditor.h"
+#include"Frame/Frame.h"
 
 
 EffectEditorSuite::EffectEditorSuite() = default;
@@ -22,8 +24,9 @@ void EffectEditorSuite::Init() {
     gpuParticleEditor_      = std::make_unique<GPUParticleEditor>();
     particleEditor_         = std::make_unique<ParticleEditor>();
     dissolveEditor_         = std::make_unique<DissolveEditor>();
+    timeScaleEditor_        = std::make_unique<TimeScaleEditor>();
         
-    // 初期化:trueの場合カテゴリーシステムを使用
+    // 初期化
     objEaseAnimationEditor_->Init("ObjEaseAnimation", true);
     cameraEditor_->Init("CameraAnimation");
     shakeEditor_->Init("Shake");
@@ -31,6 +34,7 @@ void EffectEditorSuite::Init() {
     gpuParticleEditor_->Init("GPUParticle", true);
     particleEditor_->Init("Particle", true);
     dissolveEditor_->Init("Dissolve");
+    timeScaleEditor_->Init("TimeScale");
 }
 
 
@@ -43,6 +47,7 @@ void EffectEditorSuite::Update() {
     gpuParticleEditor_->Update();
     particleEditor_->Update();
     dissolveEditor_->Update();
+    timeScaleEditor_->Update(Frame::DeltaTime());
 }
 
 void EffectEditorSuite::EditorUpdate() {
@@ -53,6 +58,7 @@ void EffectEditorSuite::EditorUpdate() {
     railEditor_->EditorUpdate();
     gpuParticleEditor_->EditorUpdate();
     particleEditor_->EditorUpdate();
+    timeScaleEditor_->EditorUpdate();
 }
 
 void EffectEditorSuite::SetViewProjection(ViewProjection* viewProjection) {

@@ -23,8 +23,7 @@ public:
     ComboUIController()  = default;
     ~ComboUIController() = default;
 
-   
-    void Init();//<初期化
+    void Init(); //<初期化
     void ChangeCountUPAnimation(); //< カウントアップアニメーション変更
 
     /// <summary>
@@ -50,11 +49,13 @@ public:
     void RegisterParams(); //< パラメータバインド
 
 private:
-    KetaEngine::GlobalParameter* globalParameter_;  // グローバルパラメータ
-    const std::string groupName_ = "ComboUI";       // グループ名
+    KetaEngine::GlobalParameter* globalParameter_; 
+    const std::string groupName_ = "ComboUI";      
 
     // parameter
     ScalingParameter parameter_;
+    Vector2 basePosition_; // 基準座標
+    Vector2 digitOffset_; // 桁間のオフセット
 
     // Variants
     Vector2 baseScale_;
@@ -67,7 +68,9 @@ private:
 public:
     ///* getter *//
     const ScalingParameter& GetScalingParameter() const { return parameter_; }
+    const Vector2& GetBasePosition() const { return basePosition_; }
 
     ///* setter *//
     void SetBaseScale(const Vector2& pos) { baseScale_ = pos; }
+    void SetBasePosition(const Vector2& pos) { basePosition_ = pos; }
 };

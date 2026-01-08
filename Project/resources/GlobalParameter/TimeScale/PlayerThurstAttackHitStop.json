@@ -1,6 +1,7 @@
 {
     "PlayerThurstAttackHitStop": {
-        "duration": 0.382999986410141,
-        "timeScale": 0.0010000000474974513
+        "duration": 0.31299999356269836,
+        "timeMode": 1,
+        "timeScale": 0.07999999821186066
     }
 }

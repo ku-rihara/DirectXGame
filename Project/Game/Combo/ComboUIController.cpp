@@ -29,8 +29,12 @@ void ComboUIController::Update(int32_t comboNum) {
 
     // 各桁のuvを更新
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
+        // 基準座標 + 桁ごとのオフセットを適用
+        Vector2 digitPosition = basePosition_ + Vector2(digitOffset_.x * i, digitOffset_.y * i);
+
         comboSprites_[i]->Update(baseScale_, alpha_);
         comboSprites_[i]->CalculateNumber(comboNum);
+        comboSprites_[i]->SetPosition(digitPosition);
     }
 }
 
@@ -50,6 +54,11 @@ void ComboUIController::AdjustParam() {
 
         ImGui::SeparatorText("Parameter"); // パラメータ
 
+        // 基準座標の調整
+        ImGui::DragFloat2("Base Position", &basePosition_.x, 0.1f);
+        // 桁間オフセットの調整
+        ImGui::DragFloat2("Digit Offset", &digitOffset_.x, 0.1f);
+
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
@@ -68,6 +77,8 @@ void ComboUIController::AdjustParam() {
 /// パラメータBind
 ///==========================================================
 void ComboUIController::RegisterParams() {
+    globalParameter_->Regist(groupName_, "basePosition", &basePosition_);
+    globalParameter_->Regist(groupName_, "digitOffset", &digitOffset_);
 }
 
 void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior) {

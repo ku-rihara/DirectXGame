@@ -17,7 +17,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     // Editor
     obj.attackEffect_->Update();
     obj.field_->Update();
-    obj.sideRopeController_->Update();
+   /* obj.sideRopeController_->Update();*/
     obj.audienceController_->Update();
 
     // 各クラス更新
@@ -38,7 +38,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.lockOnController_->Update(obj.player_.get(), pOwner_->GetViewProjection());
 
     // クリア判定
-    if (obj.enemyManager_->GetIsAllCleared() && obj.enemySpawner_->GetAllGroupsCompleted()) {
+    if (obj.enemyManager_->GetIsAllCleared() && obj.enemySpawner_->GetAllGroupsCompleted()||obj.player_->GetIsDeathRenditionFinish()) {
         pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
     }
 }

@@ -1,5 +1,13 @@
 {
     "FallAntipation": {
+        "Audio_Attack_FileName": "starEffect",
+        "Audio_Attack_StartTiming": 0.0,
+        "Audio_Attack_TriggerByHit": false,
+        "Audio_Attack_Volume": 0.12399999797344208,
+        "Audio_Hit_FileName": "",
+        "Audio_Hit_StartTiming": 0.0,
+        "Audio_Hit_TriggerByHit": false,
+        "Audio_Hit_Volume": 1.0,
         "CameraAction_FileName": "FallAttackPreAction",
         "CameraAction_StartTiming": 0.0,
         "CameraAction_TriggerByHit": false,

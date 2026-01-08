@@ -98,8 +98,9 @@
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakeData.cpp" />
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakeEditor.cpp" />
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakePlayer.cpp" />
-    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleController.cpp" />
+    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.cpp" />
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleData.cpp" />
+    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.cpp" />
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
@@ -247,6 +248,7 @@
     <ClCompile Include="Game\Player\Parts\PlayerHandRight.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp" />
+    <ClCompile Include="Game\Player\PlayerBehavior\PlayerDeath.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerMove.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerSpawn.cpp" />
@@ -257,6 +259,7 @@
     <ClCompile Include="Game\Player\TitleBehavior\TitleLeftPunch.cpp" />
     <ClCompile Include="Game\Player\TitleBehavior\TitleWait.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
+    <ClCompile Include="Game\Scene\ComboEditorScene.cpp" />
     <ClCompile Include="Game\Scene\EditorScene.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\BaseGameSceneState.cpp" />
@@ -375,8 +378,9 @@
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakeData.h" />
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakeEditor.h" />
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakePlayer.h" />
-    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleController.h" />
+    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.h" />
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleData.h" />
+    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.h" />
     <ClInclude Include="Engine\Frame\Frame.h" />
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\GetFile.h" />
@@ -538,6 +542,7 @@
     <ClInclude Include="Game\Player\Parts\PlayerHandRight.h" />
     <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h" />
+    <ClInclude Include="Game\Player\PlayerBehavior\PlayerDeath.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerMove.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerSpawn.h" />
@@ -548,6 +553,7 @@
     <ClInclude Include="Game\Player\TitleBehavior\TitleLeftPunch.h" />
     <ClInclude Include="Game\Player\TitleBehavior\TitleWait.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
+    <ClInclude Include="Game\Scene\ComboEditorScene.h" />
     <ClInclude Include="Game\Scene\EditorScene.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\Scene\GameSceneState\BaseGameSceneState.h" />

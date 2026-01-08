@@ -82,4 +82,5 @@ public:
 
     ///* Setter *//
     void SetComboDigit(const ComboDigit& digit) { comboDigit_ = digit; }
+    void SetPosition(const Vector2& pos) { position_ = pos; }
 };

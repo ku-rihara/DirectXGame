@@ -1,6 +1,6 @@
 #pragma once
 #include "Editor/PostEffectEditor/PostEffectController.h"
-#include "Editor/TimeScaleEditor/TimeScaleController.h"
+#include "Editor/TimeScaleEditor/TimeScalePlayer.h"
 #include <memory>
 
 /// <summary>
@@ -28,6 +28,6 @@ public:
     void PlayPostEffect(const std::string& effectName);
 
 private:
-    std::unique_ptr<KetaEngine::TimeScaleController> timeScaleController_;
+    std::unique_ptr<KetaEngine::TimeScalePlayer> timeScalePlayer_;
     std::unique_ptr<KetaEngine::PostEffectController> postEffectController_;
 };

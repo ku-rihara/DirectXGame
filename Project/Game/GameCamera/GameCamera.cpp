@@ -111,7 +111,7 @@ void GameCamera::Reset() {
     if (target_) {
         // 追従座標・角度の初期化
         interTarget_                = target_->translation_;
-        viewProjection_.rotation_.y = LerpShortAngle(viewProjection_.rotation_.y, target_->rotation_.y, 0.3f);
+        viewProjection_.rotation_.y = LerpShortAngle(viewProjection_.rotation_.y, 0.0f, 0.3f);
     }
     destinationAngleY_ = viewProjection_.rotation_.y;
     // 追従対象からのオフセット

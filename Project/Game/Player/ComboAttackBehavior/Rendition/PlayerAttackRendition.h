@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Easing/Easing.h"
+#include "Editor/ParticleEditor/ParticlePlayer.h"
 #include "Editor/RailEditor/RailManager.h"
 #include "Player/ComboCreator/PlayerAttackRenditionData.h"
-#include"Editor/ParticleEditor/ParticlePlayer.h"
 
 class Player;
 class PlayerComboAttackData;
@@ -20,6 +20,12 @@ private:
 
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayed_{};
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimPlayed_{};
+    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::AudioType::Count)> isAudioPlayed_{};
+
+    // 振動関連
+    bool isVibrationPlayed_ = false;
+    float vibrationTimer_   = 0.0f;
+    bool isVibrating_       = false;
 
 public:
     PlayerAttackRendition()  = default;
@@ -36,8 +42,6 @@ public:
     float tempBlurParam_;
 
 private:
- 
-
 public:
     void PlayRendition();
 };

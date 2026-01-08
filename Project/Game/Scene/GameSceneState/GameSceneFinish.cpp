@@ -15,8 +15,11 @@ void GameSceneFinish::Init() {
     isStartFadeOut_ = false;
 
     // スプライト初期化
-    screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.png"));
-    clearSprite_.reset(KetaEngine::Sprite::Create("Clear.png"));
+    if (pOwner_->GetGameObj().player_->GetIsDeathRenditionFinish()) {
+        clearSprite_.reset(KetaEngine::Sprite::Create("GameOver.png"));
+    } else {
+      clearSprite_.reset(KetaEngine::Sprite::Create("Clear.png"));
+    }
     clearSprite_->transform_.pos = Vector2(640, -720);
 
     // イージング初期化
@@ -31,7 +34,7 @@ void GameSceneFinish::Init() {
 
 void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
     // スプライト更新
-    screenSprite_->SetAlpha(alpha_);
+    pOwner_->GetGameObj().screenSprite_->SetAlpha(alpha_);
 
     finishSpriteEase_.Update(timeSpeed);
     clearSprite_->transform_.pos = tempSpritePos_;

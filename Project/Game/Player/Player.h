@@ -4,6 +4,8 @@
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/PlayerCollisionInfo.h"
 #include "ComboAttackBehavior/BaseComboAttackBehavior.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParticleEditor/ParticleEmitter.h"
 #include "Effect/PlayerEffects.h"
 #include "JumpAttackUI/JumpAttackUI.h"
 #include "Parameter/PlayerParameter.h"
@@ -11,8 +13,6 @@
 #include "Parts/PlayerHandRight.h"
 #include "PlayerBehavior/BasePlayerBehavior.h"
 #include "TitleBehavior/BaseTitleBehavior.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
-#include "Editor/ParticleEditor/ParticleEmitter.h"
 #include <memory>
 #include <string>
 
@@ -42,7 +42,7 @@ public:
     void Update() override;
 
     void InitInGameScene(); //< ゲームシーンでの初期化
-    void TitleUpdate();     //< タイトル更新
+    void TitleUpdate(); //< タイトル更新
     void GameIntroUpdate(); //< ゲームイントロ更新
 
     /// <summary>
@@ -57,16 +57,15 @@ public:
     /// <param name="speed">移動速度</param>
     void Move(float speed);
 
-    bool CheckIsMoving();         //< 移動中判定
-    void MoveToLimit();           //< 移動制限
-    Vector3 GetInputDirection();  //< 入力方向取得
-    void UpdateMatrix();          //< 行列更新
+    bool CheckIsMoving(); //< 移動中判定
+    void MoveToLimit(); //< 移動制限
+    Vector3 GetInputDirection(); //< 入力方向取得
+    void UpdateMatrix(); //< 行列更新
 
     // reset
     void ResetPositionY(); //< Y座標リセット
     void ResetHeadScale(); //< 頭スケールリセット
-  
-  
+
     /// <summary>
     /// ディゾルブ更新
     /// </summary>
@@ -101,18 +100,18 @@ public:
     /// <param name="other">衝突相手</param>
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
-    void ChangeCombBoRoot();                  //< コンボルート変更
-    void FaceToTarget();                      //< ターゲット方向を向く
-    void AdaptRotate();                       //< 回転適用
-    bool CheckIsChargeMax() const;            //< チャージ最大判定
-    void AdjustParam();                       //< パラメータ調整
+    void ChangeCombBoRoot(); //< コンボルート変更
+    void FaceToTarget(); //< ターゲット方向を向く
+    void AdaptRotate(); //< 回転適用
+    bool CheckIsChargeMax() const; //< チャージ最大判定
+    void AdjustParam(); //< パラメータ調整
     Vector3 GetCollisionPos() const override; //< 衝突位置取得
 
-    void SoundPunch();        //< パンチ音再生
-    void SoundStrongPunch();  //< 強パンチ音再生
-    void FallSound();         //< 落下音再生
-
     void MainHeadAnimationStart(const std::string& name);
+
+private:
+    void ChangeDeathMode();
+    bool IsAbleBehavior();
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;
@@ -122,7 +121,7 @@ private:
     LockOnController* pLockOn_                          = nullptr;
     GameCamera* pGameCamera_                            = nullptr;
     Combo* pCombo_                                      = nullptr;
-    AttackEffect* pHitStop_                             = nullptr;
+    AttackEffect* pAttackEffect_                        = nullptr;
     PlayerComboAttackController* comboAttackController_ = nullptr;
 
     const KetaEngine::ViewProjection* viewProjection_ = nullptr;
@@ -135,9 +134,9 @@ private:
     std::unique_ptr<JumpAttackUI> jumpAttackUI_;
 
     /// behavior
-    std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
+    std::unique_ptr<BasePlayerBehavior> behavior_           = nullptr;
     std::unique_ptr<BaseComboAttackBehavior> comboBehavior_ = nullptr;
-    std::unique_ptr<BaseTitleBehavior> titleBehavior_        = nullptr;
+    std::unique_ptr<BaseTitleBehavior> titleBehavior_       = nullptr;
 
 private:
     /// ===================================================
@@ -145,13 +144,17 @@ private:
     /// ===================================================
 
     // move
-    float objectiveAngle_; //< 目標角度
-    Vector3 direction_;    //< 速度
-    Vector3 prePos_;       //< 移動前座標
-    float moveSpeed_;      //< 移動速度
+    float objectiveAngle_;
+    Vector3 direction_;
+    Vector3 prePos_;
+    float moveSpeed_;
 
     // attackCharge
     float currentUpperChargeTime_;
+
+    //
+    const bool* isDeath_;
+    bool isDeathRenditionFinish_ = false;
 
 public:
     // getter
@@ -162,12 +165,13 @@ public:
     PlayerEffects* GetEffects() const { return effects_.get(); }
     LockOnController* GetLockOn() const { return pLockOn_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
-    AttackEffect* GetAttackEffect() const { return pHitStop_; }
+    AttackEffect* GetAttackEffect() const { return pAttackEffect_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }
     PlayerCollisionInfo* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
+    bool GetIsDeathRenditionFinish() const { return *isDeath_; }
 
     //*-- setter --*//
     // class Set
@@ -177,6 +181,8 @@ public:
     void SetCombo(Combo* combo);
     void SetHitStop(AttackEffect* hitStop);
     void SetComboAttackController(PlayerComboAttackController* playerComboAttackController);
+    void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
+    void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
 
     void SetTitleBehavior();
     void RotateReset();

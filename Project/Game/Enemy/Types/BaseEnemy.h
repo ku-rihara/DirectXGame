@@ -148,6 +148,7 @@ private:
     /*  int deathSound_;
       int thrustSound_;*/
     int32_t groupId_;
+    void MoveToLimit();
 
 protected:
     // structure
