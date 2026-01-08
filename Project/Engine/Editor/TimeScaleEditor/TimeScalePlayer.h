@@ -18,7 +18,7 @@ public:
 
     // BaseEffectPlayerからのオーバーライド
     void Init() override;
-    void Update(float speedRate = 1.0f) override;
+    void Update(float deltaTime) override;
     void Play(const std::string& timeScaleName) override;
 
     // TimeScale固有

@@ -7,9 +7,9 @@ void TimeScalePlayer::Init() {
     BaseEffectPlayer::Init();
 }
 
-void TimeScalePlayer::Update(float speedRate) {
+void TimeScalePlayer::Update(float deltaTime) {
     if (effectData_) {
-        effectData_->Update(speedRate);
+        effectData_->Update(deltaTime);
     }
 }
 
