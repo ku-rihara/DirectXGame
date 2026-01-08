@@ -33,6 +33,14 @@ public:
         bool triggerByHit = false;
     };
 
+    // 振動パラメータ
+    struct VibrationParam {
+        float startTiming;
+        float duration;
+        float intensity;
+        bool triggerByHit = false;
+    };
+
     enum class Type {
         CameraAction,
         HitStop,
@@ -57,7 +65,7 @@ public:
     };
 
 private:
-    // 演出タイプ情報構造体
+    // 演出タイプ
     struct RenditionTypeInfo {
         Type type;
         const char* name;
@@ -65,21 +73,21 @@ private:
         const char* dir;
     };
 
-    // オブジェクトアニメーションタイプ情報構造体
+    // オブジェクトアニメーションタイプ
     struct ObjAnimationTypeInfo {
         ObjAnimationType type;
         const char* name;
         const char* label;
     };
 
-    // オーディオタイプ情報構造体
+    // オーディオタイプ
     struct AudioTypeInfo {
         AudioType type;
         const char* name;
         const char* label;
     };
 
-    // 静的な演出タイプ情報配列
+    // 静的な演出タイプ配列
     static constexpr RenditionTypeInfo kRenditionTypeInfos[] = {
         {Type::CameraAction, "CameraAction", "Camera Action", "CameraAnimation/AnimationData"},
         {Type::HitStop, "HitStop", "Hit Stop", "TimeScale"},
@@ -88,7 +96,7 @@ private:
         {Type::ParticleEffect, "ParticleEffectParam", "ParticleEffect", "Particle/Player/Dates"},
     };
 
-    // 静的なオブジェクトアニメーションタイプ情報配列
+    // 静的なオブジェクトアニメーションタイプ配列
     static constexpr ObjAnimationTypeInfo kObjAnimationTypeInfos[] = {
         {ObjAnimationType::Head, "ObjAnim_Head", "Head Animation"},
         {ObjAnimationType::RightHand, "ObjAnim_RightHand", "Right Hand Animation"},
@@ -96,7 +104,7 @@ private:
         {ObjAnimationType::MainHead, "Main_Head", "Main Head Animation"},
     };
 
-    // 静的なオーディオタイプ情報配列
+    // 静的なオーディオタイプ配列
     static constexpr AudioTypeInfo kAudioTypeInfos[] = {
         {AudioType::Attack, "Audio_Attack", "Attack Sound"},
         {AudioType::Hit, "Audio_Hit", "Hit Sound"},
@@ -142,6 +150,9 @@ private:
     // オーディオパラメータ配列
     std::array<std::pair<AudioParam, KetaEngine::FileSelector>, static_cast<size_t>(AudioType::Count)> audioParams_;
 
+    // 振動パラメータ
+    VibrationParam vibrationParam_;
+
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const RenditionParam& GetRenditionParamFromIndex(int32_t index) const;
@@ -161,5 +172,10 @@ public:
     }
     const AudioParam& GetAudioParamFromType(const AudioType& type) const {
         return audioParams_[static_cast<size_t>(type)].first;
+    }
+
+    // 振動パラメータの取得（単一）
+    const VibrationParam& GetVibrationParam() const {
+        return vibrationParam_;
     }
 };
