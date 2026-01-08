@@ -10,6 +10,7 @@ using namespace KetaEngine;
 #include"Editor/GPUParticleEditor/GPUParticleData.h"
 #include "Editor/ParticleEditor/ParticleData.h"
 #include"Editor/DissolveEditor/DissolveData.h"
+#include"Editor/TimeScaleEditor/TimeScaleData.h"
 // std
 #include <algorithm>
 #include <filesystem>
@@ -670,6 +671,7 @@ template class BaseEffectEditor<CameraAnimationData>;
 template class BaseEffectEditor<ObjEaseAnimationData>;
 template class BaseEffectEditor<RailData>;
 template class BaseEffectEditor<ShakeData>;
+template class BaseEffectEditor<TimeScaleData>;
 template class BaseEffectEditor<GPUParticleData>;
 template class BaseEffectEditor<ParticleData>;
 template class BaseEffectEditor<DissolveData>;

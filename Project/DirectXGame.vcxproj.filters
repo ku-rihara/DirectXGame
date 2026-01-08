@@ -1078,9 +1078,6 @@
     <ClCompile Include="Engine\Line3D\Line3DManager.cpp">
       <Filter>MyEngine\.cpp\Line3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleController.cpp">
-      <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleData.cpp">
       <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
     </ClCompile>
@@ -1341,6 +1338,12 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\ComboEditorScene.cpp">
       <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2028,9 +2031,6 @@
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleData.h">
       <Filter>MyEngine\.h\Editor\TileScaleEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleController.h">
-      <Filter>MyEngine\.h\Editor\TileScaleEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\Types\BaseEnemy.h">
       <Filter>Game\Enemy\type</Filter>
     </ClInclude>
@@ -2213,6 +2213,12 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\ComboEditorScene.h">
       <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.h">
+      <Filter>MyEngine\.h\Editor\TileScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.h">
+      <Filter>MyEngine\.h\Editor\TileScaleEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
