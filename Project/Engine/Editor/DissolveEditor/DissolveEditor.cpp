@@ -6,6 +6,7 @@ using namespace KetaEngine;
 void DissolveEditor::Init(const std::string& name, bool isUseCategory) {
     BaseEffectEditor::Init(name, isUseCategory);
     preViewObj_.reset(Object3d::CreateModel("DebugCube.obj"));
+    preViewObj_->SetIsDraw(false);
 }
 
 std::unique_ptr<DissolveData> DissolveEditor::CreateEffectData() {
@@ -31,7 +32,9 @@ void DissolveEditor::RenderSpecificUI() {
     ImGui::SeparatorText("Preview Control");
     if (preViewObj_) {
         ImGui::Text("Preview Object: Active");
-
+        static bool isDraw = false;
+        ImGui::Checkbox("Is Draw", &isDraw);
+        preViewObj_->SetIsDraw(isDraw);
         ImGui::DragFloat3("Position", &preViewObj_->transform_.translation_.x, 0.1f);
 
         static float manualThreshold = 1.0f;
