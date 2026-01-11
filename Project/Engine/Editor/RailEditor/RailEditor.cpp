@@ -19,7 +19,7 @@ void RailEditor::Update(float speedRate) {
     for (auto& rail : effects_) {
         rail->Update(speedRate);
 
-        if ( preViewObj_) {
+        if (preViewObj_) {
             preViewObj_->transform_.translation_ = basePos_ + rail->GetCurrentPosition();
         }
     }
@@ -32,15 +32,17 @@ void RailEditor::DebugLineSet() {
     if (debugLine3D_) {
         debugLine3D_->Reset();
 
-        for (auto& rail : effects_) {
-            Vector4 lineColor = Vector4(1.0f, 1.0f, 0.0f, 1.0f);
-
-            if (rail->IsPlaying()) {
-                lineColor = Vector4::kGREEN();
-            }
-
-            rail->SetControlPointLines(debugLine3D_.get(), lineColor);
+        if (selectedIndex_ < 0 || selectedIndex_ >= static_cast<int>(effects_.size())) {
+            return;
         }
+
+        Vector4 lineColor = Vector4(1.0f, 1.0f, 0.0f, 1.0f);
+
+        if (effects_[selectedIndex_]->IsPlaying()) {
+            lineColor = Vector4::kGREEN();
+        }
+
+        effects_[selectedIndex_]->SetControlPointLines(debugLine3D_.get(), lineColor);
     }
 }
 
