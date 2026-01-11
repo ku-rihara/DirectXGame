@@ -411,23 +411,38 @@ void RailData::SetControlPointLines(Line3D* line3d, const Vector4& color) {
         return;
     }
 
-    for (size_t i = 0; i < sectionElements_.size() - 1; ++i) {
-        Vector3 start = sectionElements_[i]->GetPosition() * direction_;
-        Vector3 end   = sectionElements_[i + 1]->GetPosition() * direction_;
+    // 制御点の座標を取得
+    std::vector<Vector3> positions;
+    for (const auto& keyFrame : sectionElements_) {
+        Vector3 pos = keyFrame->GetPosition() * direction_;
 
         if (parentTransform_ != nullptr) {
             Matrix4x4 parentMatrix = parentTransform_->matWorld_;
-            start                  = TransformMatrix(start, parentMatrix);
-            end                    = TransformMatrix(end, parentMatrix);
+            Vector3 worldPos       = TransformMatrix(pos, parentMatrix);
+            positions.push_back(worldPos);
+        } else {
+            positions.push_back(pos);
         }
+    }
 
-        start = startPosition_ + start;
-        end   = startPosition_ + end;
+    // Catmull-Rom曲線に沿ってラインを描画
+    const size_t lineSegments = 20; // 各区間の分割数
+    for (size_t i = 0; i < positions.size() - 1; ++i) {
+        for (size_t j = 0; j < lineSegments; ++j) {
+            float t1 = static_cast<float>(j) / static_cast<float>(lineSegments);
+            float t2 = static_cast<float>(j + 1) / static_cast<float>(lineSegments);
 
-        line3d->SetLine(start, end, color);
+            // 全体の進行度を計算
+            float globalT1 = (static_cast<float>(i) + t1) / static_cast<float>(positions.size() - 1);
+            float globalT2 = (static_cast<float>(i) + t2) / static_cast<float>(positions.size() - 1);
+
+            Vector3 start = startPosition_ + CatmullRomPosition(positions, globalT1);
+            Vector3 end   = startPosition_ + CatmullRomPosition(positions, globalT2);
+
+            line3d->SetLine(start, end, color);
+        }
     }
 }
-
 Vector3 RailData::GetMovementDirection() const {
     Vector3 direction = currentPosition_ - railMoveParam_.previousPosition;
 
