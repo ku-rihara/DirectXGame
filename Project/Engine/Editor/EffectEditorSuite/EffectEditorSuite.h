@@ -38,7 +38,9 @@ private:
 
 public:
     CameraEditor* GetCameraEditor() const { return cameraEditor_.get(); }
+
     void SetViewProjection(ViewProjection* viewProjection);
+    void SetCameraPreViewPos(const Vector3& pos);
 };
 
 }; // KetaEngine

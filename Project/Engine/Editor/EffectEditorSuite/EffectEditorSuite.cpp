@@ -64,3 +64,7 @@ void EffectEditorSuite::EditorUpdate() {
 void EffectEditorSuite::SetViewProjection(ViewProjection* viewProjection) {
     cameraEditor_->SetViewProjection(viewProjection);
  }
+
+void EffectEditorSuite::SetCameraPreViewPos(const Vector3& pos) {
+     cameraEditor_->SetPreviewObjPos(pos);
+ }
