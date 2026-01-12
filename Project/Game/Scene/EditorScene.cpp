@@ -72,6 +72,10 @@ void EditorScene::Debug() {
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 
+    ImGui::Begin("EnemySpawn");
+    enemyManager_->DebugEnemySpawn();
+    ImGui::End();
+
     ImGui::Begin("Rendition");
     attackEffect_->EditorUpdate();
     ImGui::End();
