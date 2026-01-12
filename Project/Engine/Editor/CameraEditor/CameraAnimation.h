@@ -31,7 +31,6 @@ public:
     // 再生、リセット、初期値保存
     void Play(const std::string& animationName) override;
     void Reset() override;
-    void SaveInitialValues();
 
     // 注視点ターゲット設定
     void SetLookAtTarget(const WorldTransform* target);
@@ -41,7 +40,7 @@ private:
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
 
     void ApplyOffsetToViewProjection();
-    void SetStartParam();
+    void SaveInitialValues();
     void ResetOffsetParam();
 
 private:
@@ -49,21 +48,22 @@ private:
 
     CameraParam startParam_;
 
+    // offset
     Vector3 currentOffsetPosition_;
     Vector3 currentOffsetRotation_;
     float currentOffsetFov_ = 0.0f;
 
     bool isAdapt_ = true;
 
-    Vector3 rotateBase_;
+    Vector3 rotateBase_=Vector3::ZeroVector();
 
 public:
     const Vector3& GetOffsetPosition() const { return currentOffsetPosition_; }
     const Vector3& GetOffsetRotation() const { return currentOffsetRotation_; }
     float GetOffsetFov() const { return currentOffsetFov_; }
 
+    void SetBaseRotate(const Vector3& baseRotate) { rotateBase_ = baseRotate; }
     void SetAdapt(bool adapt) { isAdapt_ = adapt; }
     void SetViewProjection(ViewProjection* viewProjection);
-    void SetBaseRotate(const Vector3& offsetRotation) { rotateBase_ = offsetRotation; }
 };
-}; // KetaEngine
+} // KetaEngine

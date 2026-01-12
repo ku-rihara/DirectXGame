@@ -42,7 +42,7 @@ public:
     };
 
     struct LookAtParam {
-        bool useLookAt       = false;    
+        bool useLookAt       = false;
         Vector3 lookAtTarget = {0, 0, 0};
     };
 
@@ -95,7 +95,6 @@ private:
 
     // 注視点モード用の更新
     void UpdateLookAtMode();
-    void ApplyLookAtToViewProjection(ViewProjection& viewProjection);
 
 private:
     //*---------------------------- private Variant ----------------------------*//
@@ -122,7 +121,7 @@ private:
     // frags
     bool showKeyFrameList_      = true;
     bool showAnimationControls_ = true;
-    bool isOffsetAdapt_         = false;
+    bool isAddBaseRotate_       = false;
 
     TimeModeSelector timeModeSelector_;
 
@@ -134,6 +133,7 @@ public:
     bool IsReturningToInitial() const { return returnParam_.isReturningToInitial; }
     bool IsUseLookAt() const { return lookAtParam_.useLookAt; }
     const Vector3& GetLookAtTarget() const { return lookAtParam_.lookAtTarget; }
+    bool GetIsAddBaseRotate() const { return isAddBaseRotate_; }
 };
 
 }; // KetaEngine

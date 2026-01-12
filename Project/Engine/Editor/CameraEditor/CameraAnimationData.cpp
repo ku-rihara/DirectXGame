@@ -202,10 +202,12 @@ void CameraAnimationData::Reset() {
         keyframe->Reset();
     }
 
+    // イージングリセット
     returnParam_.positionEase.Reset();
     returnParam_.rotationEase.Reset();
     returnParam_.fovEase.Reset();
 
+    // スタート位置セット
     if (!sectionElements_.empty() && activeKeyFrameIndex_ == 0) {
         sectionElements_[0]->SetStartEasing(
             initialCameraTransform_.position,
@@ -213,10 +215,12 @@ void CameraAnimationData::Reset() {
             initialCameraTransform_.fov);
     }
 
+    // フラグリセット
     isAllKeyFramesFinished_           = false;
     returnParam_.isReturningToInitial = false;
     returnParam_.isWaitingForReturn   = false;
     isAllFinished_                    = false;
+
     activeKeyFrameIndex_              = 0;
     resetParam_.currentDelayTimer     = 0.0f;
     playState_                        = PlayState::STOPPED;
@@ -284,7 +288,7 @@ void CameraAnimationData::RegisterParams() {
 
     // frags
     globalParameter_->Regist(groupName_, "useLookAt", &lookAtParam_.useLookAt);
-    globalParameter_->Regist(groupName_, "isOffsetAdapt", &isOffsetAdapt_);
+    globalParameter_->Regist(groupName_, "isAddBaseRotate", &isAddBaseRotate_);
 
     timeModeSelector_.RegisterParam(groupName_, globalParameter_);
 }
@@ -300,7 +304,7 @@ void CameraAnimationData::GetParams() {
 
     // frags
     lookAtParam_.useLookAt = globalParameter_->GetValue<bool>(groupName_, "useLookAt");
-    isOffsetAdapt_         = globalParameter_->GetValue<bool>(groupName_, "isOffsetAdapt");
+    isAddBaseRotate_         = globalParameter_->GetValue<bool>(groupName_, "isAddBaseRotate");
 
     timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
@@ -317,7 +321,7 @@ void CameraAnimationData::AdjustParam() {
         // 注視点モード設定
         ImGui::Separator();
         ImGui::Checkbox("Use LookAt Mode", &lookAtParam_.useLookAt);
-        ImGui::Checkbox("isOffsetAdapt", &isOffsetAdapt_);
+        ImGui::Checkbox("isAddBaseRotate", &isAddBaseRotate_);
       
 
         if (isAllKeyFramesFinished_) {
