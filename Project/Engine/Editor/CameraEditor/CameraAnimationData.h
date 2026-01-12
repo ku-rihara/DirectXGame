@@ -121,7 +121,10 @@ private:
     // frags
     bool showKeyFrameList_      = true;
     bool showAnimationControls_ = true;
-    bool isAddBaseRotate_       = false;
+
+    // baseRotate
+    Vector3 baseRotate_   = Vector3::ZeroVector();
+    bool isAddBaseRotate_ = false;
 
     TimeModeSelector timeModeSelector_;
 
@@ -134,6 +137,9 @@ public:
     bool IsUseLookAt() const { return lookAtParam_.useLookAt; }
     const Vector3& GetLookAtTarget() const { return lookAtParam_.lookAtTarget; }
     bool GetIsAddBaseRotate() const { return isAddBaseRotate_; }
+
+    //*----------------------------- setter Methods -----------------------------*//
+    void SetBaseRotate(const Vector3& baseRotate) { baseRotate_ = baseRotate; }
 };
 
 }; // KetaEngine

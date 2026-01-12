@@ -29,12 +29,12 @@ void CameraKeyFrame::Init(const std::string& groupName, int32_t keyNumber) {
     AdaptEaseParam();
 }
 
-void CameraKeyFrame::Reset() {
+void CameraKeyFrame::Reset(const Vector3& baseRotate) {
     positionEase_.Reset();
     rotationEase_.Reset();
     fovEase_.Reset();
     AdaptValueSetting();
-    AdaptEaseParam();
+    AdaptEaseParam(baseRotate);
 }
 
 void CameraKeyFrame::LoadData() {
@@ -136,14 +136,14 @@ void CameraKeyFrame::AdjustParam() {
 #endif // _DEBUG
 }
 
-void CameraKeyFrame::AdaptEaseParam() {
+void CameraKeyFrame::AdaptEaseParam(const Vector3&baseRotate) {
     // parameterをEasingに適応
     positionEase_.SetMaxTime(timePoint_);
     rotationEase_.SetMaxTime(timePoint_);
     fovEase_.SetMaxTime(timePoint_);
 
     positionEase_.SetEndValue(keyFrameParam_.position);
-    rotationEase_.SetEndValue(keyFrameParam_.rotation);
+    rotationEase_.SetEndValue(keyFrameParam_.rotation + baseRotate);
     fovEase_.SetEndValue(keyFrameParam_.fov);
 
     positionEase_.SetType(static_cast<EasingType>(positionEaseType_));
