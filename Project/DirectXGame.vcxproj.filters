@@ -1336,9 +1336,6 @@
     <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp">
       <Filter>Game\DeathTimer</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scene\ComboEditorScene.cpp">
-      <Filter>Game\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.cpp">
       <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
     </ClCompile>
@@ -2210,9 +2207,6 @@
     </ClInclude>
     <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h">
       <Filter>Game\DeathTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Scene\ComboEditorScene.h">
-      <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.h">
       <Filter>MyEngine\.h\Editor\TileScaleEditor</Filter>
