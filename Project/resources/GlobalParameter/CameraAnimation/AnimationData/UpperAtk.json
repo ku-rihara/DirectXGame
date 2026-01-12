@@ -9,6 +9,6 @@
         "resetTimePoint": 0.44999998807907104,
         "returnDelayTime": 0.3100000023841858,
         "timeMode": 1,
-        "useLookAt": true
+        "useLookAt": false
     }
 }
