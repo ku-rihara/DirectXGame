@@ -55,14 +55,12 @@ private:
 
     bool isAdapt_ = true;
 
-    Vector3 rotateBase_=Vector3::ZeroVector();
-
 public:
     const Vector3& GetOffsetPosition() const { return currentOffsetPosition_; }
     const Vector3& GetOffsetRotation() const { return currentOffsetRotation_; }
     float GetOffsetFov() const { return currentOffsetFov_; }
 
-    void SetBaseRotate(const Vector3& baseRotate) { rotateBase_ = baseRotate; }
+   
     void SetAdapt(bool adapt) { isAdapt_ = adapt; }
     void SetViewProjection(ViewProjection* viewProjection);
 };
