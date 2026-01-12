@@ -36,7 +36,6 @@ void CameraAnimationData::InitParams() {
     returnParam_.fovEase.SetAdaptValue(&returnCameraTransform_.fov);
 }
 
-
 void CameraAnimationData::Update(float speedRate) {
     if (playState_ != PlayState::PLAYING) {
         return;
@@ -198,8 +197,12 @@ void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) 
 }
 
 void CameraAnimationData::Reset() {
+    Vector3 baseRotate = Vector3::ZeroVector();
+    if (isAddBaseRotate_) {
+        baseRotate = baseRotate_;
+    }
     for (auto& keyframe : sectionElements_) {
-        keyframe->Reset();
+        keyframe->Reset(baseRotate);
     }
 
     // イージングリセット
@@ -221,9 +224,9 @@ void CameraAnimationData::Reset() {
     returnParam_.isWaitingForReturn   = false;
     isAllFinished_                    = false;
 
-    activeKeyFrameIndex_              = 0;
-    resetParam_.currentDelayTimer     = 0.0f;
-    playState_                        = PlayState::STOPPED;
+    activeKeyFrameIndex_          = 0;
+    resetParam_.currentDelayTimer = 0.0f;
+    playState_                    = PlayState::STOPPED;
 }
 
 void CameraAnimationData::Play() {
@@ -275,7 +278,6 @@ std::string CameraAnimationData::GeTSequenceElementFolderPath() const {
     return keyFrameFolderPath_ + groupName_ + "/";
 }
 
-
 void CameraAnimationData::RegisterParams() {
 
     // return Param
@@ -304,11 +306,10 @@ void CameraAnimationData::GetParams() {
 
     // frags
     lookAtParam_.useLookAt = globalParameter_->GetValue<bool>(groupName_, "useLookAt");
-    isAddBaseRotate_         = globalParameter_->GetValue<bool>(groupName_, "isAddBaseRotate");
+    isAddBaseRotate_       = globalParameter_->GetValue<bool>(groupName_, "isAddBaseRotate");
 
     timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
-
 
 void CameraAnimationData::AdjustParam() {
 #ifdef _DEBUG
@@ -322,7 +323,6 @@ void CameraAnimationData::AdjustParam() {
         ImGui::Separator();
         ImGui::Checkbox("Use LookAt Mode", &lookAtParam_.useLookAt);
         ImGui::Checkbox("isAddBaseRotate", &isAddBaseRotate_);
-      
 
         if (isAllKeyFramesFinished_) {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
@@ -411,7 +411,6 @@ void CameraAnimationData::SetLookAtTarget(const WorldTransform* target) {
         lookAtParam_.lookAtTarget = target->translation_;
     }
 }
-
 
 void CameraAnimationData::LoadSequenceElements() {
     BaseSequenceEffectData::LoadSequenceElements();

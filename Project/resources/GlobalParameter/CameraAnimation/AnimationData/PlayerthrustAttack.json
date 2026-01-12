@@ -1,6 +1,7 @@
 {
     "PlayerthrustAttack": {
         "autoReturnToInitial": true,
+        "isAddBaseRotate": true,
         "playbackSpeed": 1.0,
         "resetFovEaseType": 6,
         "resetPosEaseType": 6,

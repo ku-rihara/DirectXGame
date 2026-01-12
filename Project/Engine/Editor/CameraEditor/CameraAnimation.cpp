@@ -49,11 +49,8 @@ void CameraAnimation::SaveInitialValues() {
 
     if (CameraAnimationData* date = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
 
-        Vector3 baseRotate = Vector3::ZeroVector();
-        if (date->GetIsAddBaseRotate()) {
-            baseRotate = rotateBase_;
-        }
-        date->SetInitialValues(startParam_.position, startParam_.rotation + baseRotate, startParam_.fov);
+        date->SetBaseRotate(rotateBase_);
+        date->SetInitialValues(startParam_.position, startParam_.rotation, startParam_.fov);
     }
 }
 
@@ -88,7 +85,6 @@ void CameraAnimation::SetLookAtTarget(const WorldTransform* target) {
     }
 }
 
-
 void CameraAnimation::Reset() {
     if (effectData_) {
         effectData_->Reset();
@@ -97,7 +93,6 @@ void CameraAnimation::Reset() {
     // オフセット値をリセット
     ResetOffsetParam();
 }
-
 
 void CameraAnimation::ResetOffsetParam() {
     currentOffsetPosition_ = {0.0f, 0.0f, 0.0f};

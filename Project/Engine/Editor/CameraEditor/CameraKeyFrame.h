@@ -32,11 +32,11 @@ public:
     // パラメータ調整、登録、適応
     void AdjustParam();           
     void RegisterParams();        
-    void AdaptEaseParam();   
+    void AdaptEaseParam(const Vector3& baseRotate=Vector3::ZeroVector());   
 
-    void AdaptValueSetting(); //< 値設定適用
-    void Reset();             //< リセット
-    bool IsFinished() const;  //< 終了判定
+    void AdaptValueSetting();              //< 値設定適用
+    void Reset(const Vector3& baseRotate); //< リセット
+    bool IsFinished() const;               //< 終了判定
 
     void LoadData(); //< データ読み込み
     void SaveData(); //< データ保存
