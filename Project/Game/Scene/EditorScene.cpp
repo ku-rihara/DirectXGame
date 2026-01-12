@@ -120,6 +120,7 @@ void EditorScene::ObjectInit() {
     sideRopeController_          = std::make_unique<SideRopeController>();
     audienceController_          = std::make_unique<AudienceController>();
     ObjectFromBlender_           = std::make_unique<KetaEngine::ObjectFromBlender>();
+    deathTimer_                  = std::make_unique<DeathTimer>();
 
     // 初期化
     player_->InitInGameScene();
@@ -133,6 +134,7 @@ void EditorScene::ObjectInit() {
     attackEffect_->Init();
     sideRopeController_->Init();
     audienceController_->Init();
+    deathTimer_->Init();
     viewProjection_.Init();
 
     ObjectFromBlender_->LoadJsonFile("gameScene.json");
@@ -157,4 +159,6 @@ void EditorScene::SetClassPointer() {
     player_->SetComboAttackController(playerComboAttackController_.get());
     player_->SetCombo(combo_.get());
     player_->SetHitStop(attackEffect_.get());
+
+    combo_->SetDeathTimer(deathTimer_.get());
 }

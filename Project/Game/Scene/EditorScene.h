@@ -17,6 +17,7 @@
 #include "Player/Player.h"
 #include "SkyBox/SkyBox.h"
 #include "SkyDome/SkyDome.h"
+#include"DeathTimer/DeathTimer.h"
 
 #include "utility/ObjectFromBlender/ObjectFromBlender.h"
 
@@ -65,6 +66,7 @@ private:
     std::unique_ptr<PlayerComboAttackController> playerComboAttackController_ = nullptr;
     std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
     std::unique_ptr<AudienceController> audienceController_                   = nullptr;
+    std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
 
     std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_ = nullptr;
 
