@@ -24,6 +24,8 @@ void EditorScene::Init() {
 void EditorScene::Update() {
     BaseScene::Update();
 
+    effectEditorSuite_->SetCameraPreViewPos(player_->GetWorldPosition());
+
     // Editor
     attackEffect_->Update();
     field_->Update();
