@@ -42,8 +42,8 @@ public:
     };
 
     struct LookAtParam {
-        bool useLookAt       = false; // 注視点モード使用フラグ
-        Vector3 lookAtTarget = {0, 0, 0}; // 注視点位置
+        bool useLookAt       = false;    
+        Vector3 lookAtTarget = {0, 0, 0};
     };
 
 public:
@@ -119,8 +119,10 @@ private:
     LookAtParam lookAtParam_;
     const WorldTransform* targetTransform_ = nullptr;
 
+    // frags
     bool showKeyFrameList_      = true;
     bool showAnimationControls_ = true;
+    bool isOffsetAdapt_         = false;
 
     TimeModeSelector timeModeSelector_;
 
