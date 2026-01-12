@@ -41,8 +41,8 @@ private:
     std::string GetFolderPath() const override;
 
 private:
-    ViewProjection* viewProjection_     = nullptr;
-  
+    ViewProjection* viewProjection_ = nullptr;
+
     std::unique_ptr<Object3d> preViewCameraObj_ = nullptr;
     std::unique_ptr<Object3d> preViewFollowObj_ = nullptr;
 
@@ -57,6 +57,7 @@ public:
     bool GetSequenceElementPreviewMode() const { return keyFramePreviewMode_; }
     CameraAnimationData* GetSelectedAnimation();
 
+    void SetPreviewObjPos(const Vector3& pos);
     void SetAutoApplyToViewProjection(bool enable) { autoApplyToViewProjection_ = enable; }
     void SetSequenceElementPreviewMode(bool enable) { keyFramePreviewMode_ = enable; }
     void SetViewProjection(ViewProjection* vp);

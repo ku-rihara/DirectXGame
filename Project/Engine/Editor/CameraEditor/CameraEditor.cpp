@@ -164,3 +164,7 @@ void CameraEditor::EditorUpdate() {
 std::string CameraEditor::GetFolderPath() const {
     return folderName_;
 }
+
+void CameraEditor::SetPreviewObjPos(const Vector3& pos) {
+    preViewFollowObj_->transform_.translation_ = pos;
+}
