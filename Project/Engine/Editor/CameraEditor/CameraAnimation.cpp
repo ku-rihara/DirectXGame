@@ -48,8 +48,6 @@ void CameraAnimation::SaveInitialValues() {
     startParam_.fov      = pViewProjection_->fovAngleY_;
 
     if (CameraAnimationData* date = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
-
-        date->SetBaseRotate(rotateBase_);
         date->SetInitialValues(startParam_.position, startParam_.rotation, startParam_.fov);
     }
 }

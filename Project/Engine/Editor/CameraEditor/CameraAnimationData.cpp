@@ -197,12 +197,9 @@ void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) 
 }
 
 void CameraAnimationData::Reset() {
-    Vector3 baseRotate = Vector3::ZeroVector();
-    if (isAddBaseRotate_) {
-        baseRotate = baseRotate_;
-    }
+  
     for (auto& keyframe : sectionElements_) {
-        keyframe->Reset(baseRotate);
+        keyframe->Reset();
     }
 
     // イージングリセット
@@ -290,8 +287,7 @@ void CameraAnimationData::RegisterParams() {
 
     // frags
     globalParameter_->Regist(groupName_, "useLookAt", &lookAtParam_.useLookAt);
-    globalParameter_->Regist(groupName_, "isAddBaseRotate", &isAddBaseRotate_);
-
+   
     timeModeSelector_.RegisterParam(groupName_, globalParameter_);
 }
 
@@ -306,8 +302,7 @@ void CameraAnimationData::GetParams() {
 
     // frags
     lookAtParam_.useLookAt = globalParameter_->GetValue<bool>(groupName_, "useLookAt");
-    isAddBaseRotate_       = globalParameter_->GetValue<bool>(groupName_, "isAddBaseRotate");
-
+  
     timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
 
@@ -322,9 +317,6 @@ void CameraAnimationData::AdjustParam() {
         // 注視点モード設定
         ImGui::Separator();
         ImGui::Checkbox("Use LookAt Mode", &lookAtParam_.useLookAt);
-        if (lookAtParam_.useLookAt) {
-            ImGui::Checkbox("isAddBaseRotate", &isAddBaseRotate_);
-        }
 
         if (isAllKeyFramesFinished_) {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
