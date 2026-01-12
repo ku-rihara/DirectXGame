@@ -48,6 +48,9 @@ public:
     // ペアレント解除
     void ClearParent();
 
+    // 注視点モード適用
+    void ApplyLookAtMode(const Vector3& lookAtTarget, const Vector3& rotationOffset, const Vector3& positionOffset);
+
 private:
     const WorldTransform* parent_ = nullptr;
 
@@ -70,9 +73,9 @@ public:
     float orthoWidth_  = 150.0f; //< 平行投影の幅
     float orthoHeight_ = 150.0f; //< 平行投影の高さ
 
-    Matrix4x4 matView_; //< ビュー行列
-    Matrix4x4 matProjection_; //< プロジェクション行列
-    Matrix4x4 cameraMatrix_; //< カメラ行列
+    Matrix4x4 matView_;         //< ビュー行列
+    Matrix4x4 matProjection_;   //< プロジェクション行列
+    Matrix4x4 cameraMatrix_;    //< カメラ行列
 
 public:
     Vector3 GetWorldPos() const;
