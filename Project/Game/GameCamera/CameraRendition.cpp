@@ -28,7 +28,6 @@ void CameraRendition::AnimationPlay(const std::string& filename) {
     // GameCameraからターゲットを取得して設定
     if (pGameCamera_ && pGameCamera_->GetTarget()) {
         cameraAnimation_->SetLookAtTarget(pGameCamera_->GetTarget());
-        cameraAnimation_->SetBaseRotate(pGameCamera_->GetTarget()->rotation_);
     }
 }
 
