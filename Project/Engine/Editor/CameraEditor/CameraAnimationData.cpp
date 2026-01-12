@@ -322,7 +322,9 @@ void CameraAnimationData::AdjustParam() {
         // 注視点モード設定
         ImGui::Separator();
         ImGui::Checkbox("Use LookAt Mode", &lookAtParam_.useLookAt);
-        ImGui::Checkbox("isAddBaseRotate", &isAddBaseRotate_);
+        if (lookAtParam_.useLookAt) {
+            ImGui::Checkbox("isAddBaseRotate", &isAddBaseRotate_);
+        }
 
         if (isAllKeyFramesFinished_) {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");

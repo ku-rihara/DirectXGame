@@ -36,7 +36,7 @@ void CameraAnimation::Play(const std::string& animationName) {
 
     effectData_->Play();
 }
-
+ 
 void CameraAnimation::SaveInitialValues() {
 
     if (!pViewProjection_) {
