@@ -18,9 +18,17 @@ private:
 
     float currentTime_ = 0.0f;
 
+    // 通常演出の再生フラグ
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayed_{};
+
+    // ヒット時演出の再生フラグ
+    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayedOnHit_{};
+
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimPlayed_{};
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::AudioType::Count)> isAudioPlayed_{};
+
+    // ヒットエフェクトがトリガーされたかどうか
+    bool hasTriggeredHitEffects_ = false;
 
     // 振動関連
     bool isVibrationPlayed_ = false;
@@ -42,6 +50,13 @@ public:
     float tempBlurParam_;
 
 private:
+    void UpdateNormalRenditions(const PlayerAttackRenditionData& renditionData);
+    void UpdateHitRenditions(const PlayerAttackRenditionData& renditionData);
+    void PlayRenditionEffect(PlayerAttackRenditionData::Type type, const PlayerAttackRenditionData::RenditionParam& param);
+    void UpdateObjectAnimations(const PlayerAttackRenditionData& renditionData);
+    void UpdateAudio(const PlayerAttackRenditionData& renditionData);
+    void UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit,float deltaTime);
+
 public:
     void PlayRendition();
 };

@@ -17,8 +17,10 @@ void PlayerAttackRendition::Init(Player* player, PlayerComboAttackData* playerCo
 void PlayerAttackRendition::Reset() {
     currentTime_ = 0.0f;
     isPlayed_.fill(false);
+    isPlayedOnHit_.fill(false);
     isObjAnimPlayed_.fill(false);
     isAudioPlayed_.fill(false);
+    hasTriggeredHitEffects_ = false;
 
     // 振動の状態をリセット
     isVibrationPlayed_ = false;
@@ -50,15 +52,30 @@ void PlayerAttackRendition::Update(float deltaTime) {
     currentTime_ += deltaTime;
 
     auto& renditionData = playerComboAttackData_->GetRenditionData();
+    bool hasHit         = pPlayer_->GetPlayerCollisionInfo()->GetIsHit();
 
     // 通常演出の更新
+    UpdateNormalRenditions(renditionData);
+
+    // ヒット時演出の更新
+    if (hasHit && !hasTriggeredHitEffects_) {
+        UpdateHitRenditions(renditionData);
+        hasTriggeredHitEffects_ = true;
+    }
+
+    // オブジェクトアニメーションの更新
+    UpdateObjectAnimations(renditionData);
+
+    // オーディオの更新
+    UpdateAudio(renditionData);
+
+    // 振動の更新
+    UpdateVibration(renditionData, hasHit,deltaTime);
+}
+
+void PlayerAttackRendition::UpdateNormalRenditions(const PlayerAttackRenditionData& renditionData) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
         const auto& param = renditionData.GetRenditionParamFromIndex(i);
-
-        // トリガー条件がヒットの場合のcontinue処理
-        if (param.triggerByHit && !pPlayer_->GetPlayerCollisionInfo()->GetIsHit()) {
-            continue;
-        }
 
         // すでに再生済みならスキップ
         if (isPlayed_[i]) {
@@ -67,37 +84,57 @@ void PlayerAttackRendition::Update(float deltaTime) {
 
         // startTiming に達したら発動
         if (currentTime_ >= param.startTiming && param.fileName != "" && param.fileName != "None") {
-            switch (static_cast<PlayerAttackRenditionData::Type>(i)) {
-            case PlayerAttackRenditionData::Type::CameraAction:
-                pPlayer_->GetGameCamera()->PlayAnimation(param.fileName);
-                break;
-
-            case PlayerAttackRenditionData::Type::HitStop:
-                pPlayer_->GetAttackEffect()->PlayHitStop(param.fileName);
-                break;
-
-            case PlayerAttackRenditionData::Type::ShakeAction:
-                pPlayer_->GetGameCamera()->PlayShake(param.fileName);
-                break;
-
-            case PlayerAttackRenditionData::Type::PostEffect:
-                pPlayer_->GetAttackEffect()->PlayPostEffect(param.fileName);
-                break;
-
-            case PlayerAttackRenditionData::Type::ParticleEffect:
-                pPlayer_->GetEffects()->Emit(param.fileName);
-                break;
-
-            default:
-                break;
-            }
-
-            // 再生済みに設定
+            PlayRenditionEffect(static_cast<PlayerAttackRenditionData::Type>(i), param);
             isPlayed_[i] = true;
         }
     }
+}
 
-    // オブジェクトアニメーションの更新
+void PlayerAttackRendition::UpdateHitRenditions(const PlayerAttackRenditionData& renditionData) {
+    for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
+        const auto& param = renditionData.GetRenditionParamOnHitFromIndex(i);
+
+        // すでに再生済みならスキップ
+        if (isPlayedOnHit_[i]) {
+            continue;
+        }
+
+        // startTiming に達したら発動
+        if (currentTime_ >= param.startTiming && param.fileName != "" && param.fileName != "None") {
+            PlayRenditionEffect(static_cast<PlayerAttackRenditionData::Type>(i), param);
+            isPlayedOnHit_[i] = true;
+        }
+    }
+}
+
+void PlayerAttackRendition::PlayRenditionEffect(PlayerAttackRenditionData::Type type, const PlayerAttackRenditionData::RenditionParam& param) {
+    switch (type) {
+    case PlayerAttackRenditionData::Type::CameraAction:
+        pPlayer_->GetGameCamera()->PlayAnimation(param.fileName);
+        break;
+
+    case PlayerAttackRenditionData::Type::HitStop:
+        pPlayer_->GetAttackEffect()->PlayHitStop(param.fileName);
+        break;
+
+    case PlayerAttackRenditionData::Type::ShakeAction:
+        pPlayer_->GetGameCamera()->PlayShake(param.fileName);
+        break;
+
+    case PlayerAttackRenditionData::Type::PostEffect:
+        pPlayer_->GetAttackEffect()->PlayPostEffect(param.fileName);
+        break;
+
+    case PlayerAttackRenditionData::Type::ParticleEffect:
+        pPlayer_->GetEffects()->Emit(param.fileName);
+        break;
+
+    default:
+        break;
+    }
+}
+
+void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionData& renditionData) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::Count); ++i) {
         const auto& param = renditionData.GetObjAnimationParamFromIndex(i);
 
@@ -139,15 +176,11 @@ void PlayerAttackRendition::Update(float deltaTime) {
             isObjAnimPlayed_[i] = true;
         }
     }
+}
 
-    // オーディオの更新
+void PlayerAttackRendition::UpdateAudio(const PlayerAttackRenditionData& renditionData) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::AudioType::Count); ++i) {
         const auto& param = renditionData.GetAudioParamFromIndex(i);
-
-        // トリガー条件がヒットの場合のcontinue処理
-        if (param.triggerByHit && !pPlayer_->GetPlayerCollisionInfo()->GetIsHit()) {
-            continue;
-        }
 
         // すでに再生済みならスキップ
         if (isAudioPlayed_[i]) {
@@ -168,26 +201,28 @@ void PlayerAttackRendition::Update(float deltaTime) {
             isAudioPlayed_[i] = true;
         }
     }
+}
 
-    // 振動の更新
+void PlayerAttackRendition::UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit, float deltaTime) {
     const auto& vibParam = renditionData.GetVibrationParam();
 
-    // トリガー条件がヒットの場合のcontinue処理
-    if (vibParam.triggerByHit && !pPlayer_->GetPlayerCollisionInfo()->GetIsHit()) {
-        // ヒット条件を満たさない場合は処理をスキップ
-    } else {
-        // すでに再生済みでない場合
-        if (!isVibrationPlayed_) {
-            // startTiming に達したら発動
-            if (currentTime_ >= vibParam.startTiming && vibParam.intensity > 0.0f) {
+    // トリガー条件のチェック
+    bool shouldTrigger = !vibParam.triggerByHit || (vibParam.triggerByHit && hasHit);
 
-                KetaEngine::Input::SetVibration(0, vibParam.intensity, vibParam.intensity);
+    if (!shouldTrigger) {
+        return;
+    }
 
-                // 再生済みに設定
-                isVibrationPlayed_ = true;
-                isVibrating_       = true;
-                vibrationTimer_    = 0.0f;
-            }
+    // すでに再生済みでない場合
+    if (!isVibrationPlayed_) {
+        // startTiming に達したら発動
+        if (currentTime_ >= vibParam.startTiming && vibParam.intensity > 0.0f) {
+            KetaEngine::Input::SetVibration(0, vibParam.intensity, vibParam.intensity);
+
+            // 再生済みに設定
+            isVibrationPlayed_ = true;
+            isVibrating_       = true;
+            vibrationTimer_    = 0.0f;
         }
     }
 
@@ -198,7 +233,6 @@ void PlayerAttackRendition::Update(float deltaTime) {
         if (vibrationTimer_ >= vibParam.duration) {
             // 振動を停止
             KetaEngine::Input::SetVibration(0, 0.0f, 0.0f);
-
             isVibrating_ = false;
         }
     }
