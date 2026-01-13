@@ -163,6 +163,22 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat2("HPBarOffsetPos", &parameters_[static_cast<size_t>(type)].hpBarPosOffset.x, 0.01f);
 }
 
+void EnemyManager::DebugEnemySpawn() {
+#ifdef _DEBUG
+    if (ImGui::CollapsingHeader("Enemy Spawn")) {
+        ImGui::DragFloat3("SpawnPosition", &spawnPosition_.x,0.1f);
+
+         const char* enemyType[] = {"Normal", "Strong"};
+        ImGui::Combo("SpawnType", &selectedEnemyTypeIndex_, enemyType, IM_ARRAYSIZE(enemyType));
+
+        if (ImGui::Button("Spawn Enemy")) {
+            SpawnEnemy(enemyTypes_[selectedEnemyTypeIndex_], spawnPosition_, 0);
+        }
+    }
+    ImGui::Separator();
+#endif
+}
+
 void EnemyManager::AdjustParam() {
 #ifdef _DEBUG
 
@@ -199,7 +215,6 @@ void EnemyManager::DamageReactionCreate() {
 ///----------------------------------------------------------
 void EnemyManager::ParticleInit() {
 
-  
     /// death
     deathParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathSmoke", PrimitiveType::Plane, 900));
     deathParticle_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathFireSmoke", PrimitiveType::Plane, 900));
@@ -223,7 +238,6 @@ void EnemyManager::ParticleInit() {
 ///----------------------------------------------------------------------
 /// Emit Init
 ///----------------------------------------------------------------------
-
 
 void EnemyManager::ThrustEmit(const Vector3& pos) {
     // ガレキパーティクル
@@ -263,7 +277,6 @@ void EnemyManager::SpawnEmitByStrongEnemy(const Vector3& pos) {
 /// Particle Update
 ///----------------------------------------------------------
 void EnemyManager::ParticleUpdate() {
-    
 
     // スポーンパーティクル
     for (uint32_t i = 0; i < spawnEffectNormal_.size(); i++) {

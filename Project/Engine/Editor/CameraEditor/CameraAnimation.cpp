@@ -36,23 +36,20 @@ void CameraAnimation::Play(const std::string& animationName) {
 
     effectData_->Play();
 }
-
-void CameraAnimation::Reset() {
-    if (effectData_) {
-        effectData_->Reset();
-    }
-
-    // オフセット値をリセット
-    ResetOffsetParam();
-}
-
+ 
 void CameraAnimation::SaveInitialValues() {
 
     if (!pViewProjection_) {
         return;
     }
 
-    SetStartParam();
+    startParam_.position = pViewProjection_->positionOffset_;
+    startParam_.rotation = pViewProjection_->rotationOffset_;
+    startParam_.fov      = pViewProjection_->fovAngleY_;
+
+    if (CameraAnimationData* date = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
+        date->SetInitialValues(startParam_.position, startParam_.rotation, startParam_.fov);
+    }
 }
 
 void CameraAnimation::ApplyOffsetToViewProjection() {
@@ -86,14 +83,13 @@ void CameraAnimation::SetLookAtTarget(const WorldTransform* target) {
     }
 }
 
-void CameraAnimation::SetStartParam() {
-    startParam_.position = pViewProjection_->positionOffset_;
-    startParam_.rotation = pViewProjection_->rotationOffset_;
-    startParam_.fov      = pViewProjection_->fovAngleY_;
-
-    if (CameraAnimationData* date = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
-        date->SetInitialValues(startParam_.position, startParam_.rotation, startParam_.fov);
+void CameraAnimation::Reset() {
+    if (effectData_) {
+        effectData_->Reset();
     }
+
+    // オフセット値をリセット
+    ResetOffsetParam();
 }
 
 void CameraAnimation::ResetOffsetParam() {

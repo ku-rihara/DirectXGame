@@ -4,6 +4,7 @@
 #include "MathFunction.h"
 #include "WorldTransform.h"
 #include <cassert>
+#include <cmath>
 
 namespace KetaEngine {
 
@@ -91,6 +92,45 @@ void ViewProjection::UpdateProjectionMatrix() {
     } else {
         // 平行投影
         matProjection_ = MakeOrthographicMatrix(-orthoWidth_ / 2.0f, orthoHeight_ / 2.0f, orthoWidth_ / 2.0f, -orthoHeight_ / 2.0f, 1.0f, 100.0f);
+    }
+}
+
+void ViewProjection::ApplyLookAtMode(const Vector3& lookAtTarget, const Vector3& rotateOffset, const Vector3& posOffset) {
+    // Y軸回転行列を作成
+    Matrix4x4 rotateY = MakeRotateYMatrix(rotateOffset.y);
+
+    // X軸回転
+    Matrix4x4 rotateX = MakeRotateXMatrix(-rotateOffset.x);
+
+    // 回転を合成
+    Matrix4x4 rotateMatrix = rotateY * rotateX;
+
+    // 回転を適用してカメラオフセット位置を計算
+    Vector3 cameraOffset = TransformNormal(posOffset, rotateMatrix);
+
+    // 注視点からのオフセットでカメラ位置を決定
+    Vector3 cameraPos = lookAtTarget + cameraOffset;
+
+    // ViewProjectionに適用
+    translation_ = cameraPos;
+
+    // カメラから注視点への方向ベクトルを計算
+    Vector3 toTarget = lookAtTarget - cameraPos;
+
+    if (toTarget.Length() > 0.001f) {
+        toTarget = toTarget.Normalize();
+
+        // Y軸回転を計算
+        float actualYaw = std::atan2(toTarget.x, toTarget.z);
+
+        // X軸回転を計算
+        float horizontalLength = std::sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
+        float actualPitch      = std::atan2(-toTarget.y, horizontalLength);
+
+        // 計算した回転を適用
+        rotation_.y = actualYaw;
+        rotation_.x = actualPitch;
+        rotation_.z = 0.0f;
     }
 }
 

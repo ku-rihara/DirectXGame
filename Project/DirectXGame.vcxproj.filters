@@ -526,6 +526,9 @@
     <Filter Include="Game\Enemy\Spawner">
       <UniqueIdentifier>{56719232-7938-486e-b2c4-15494f312b10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameCamera\Behavior">
+      <UniqueIdentifier>{de98c009-790e-4143-af65-eed3931a100c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1336,9 +1339,6 @@
     <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp">
       <Filter>Game\DeathTimer</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scene\ComboEditorScene.cpp">
-      <Filter>Game\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.cpp">
       <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
     </ClCompile>
@@ -1347,6 +1347,15 @@
     </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerDeath.cpp">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\Behavior\CameraFollowBehavior.cpp">
+      <Filter>Game\GameCamera\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\Behavior\CameraResetBehavior.cpp">
+      <Filter>Game\GameCamera\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\Behavior\BaseCameraBehavior.cpp">
+      <Filter>Game\GameCamera\Behavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2211,9 +2220,6 @@
     <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h">
       <Filter>Game\DeathTimer</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Scene\ComboEditorScene.h">
-      <Filter>Game\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.h">
       <Filter>MyEngine\.h\Editor\TileScaleEditor</Filter>
     </ClInclude>
@@ -2225,6 +2231,15 @@
     </ClInclude>
     <ClInclude Include="Game\Player\Player.h">
       <Filter>Game\Player\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\Behavior\CameraFollowBehavior.h">
+      <Filter>Game\GameCamera\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\Behavior\CameraResetBehavior.h">
+      <Filter>Game\GameCamera\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\Behavior\BaseCameraBehavior.h">
+      <Filter>Game\GameCamera\Behavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

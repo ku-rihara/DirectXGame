@@ -14,6 +14,9 @@
             -35.54999923706055
         ],
         "firstRotate_": 5.515240669250488,
+        "interpolationRotateYTime": 0.2800000011920929,
+        "interpolationTargetTime": 0.9399999976158142,
+        "rotateYSpeed": 0.10000000149011612,
         "useLookAt_": true,
         "zoomORotate_": 5.699999809265137,
         "zoomOffset_": [

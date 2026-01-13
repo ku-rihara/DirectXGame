@@ -7,116 +7,69 @@
 #include "input/Input.h"
 // class
 #include "LockOn/LockOn.h"
+// Behavior
+#include "Behavior/CameraFollowBehavior.h"
+#include"Behavior/CameraResetBehavior.h"
 
 /// std
 #include <imgui.h>
-#include <numbers>
 
 void GameCamera::Init() {
     viewProjection_.Init();
 
-    ///* グローバルパラメータ
+    // グローバルパラメータ
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    /*  rotate_ = parameter_.rotate;
-      offset_ = parameter_.offsetPos; */
-
     rendition_ = std::make_unique<CameraRendition>();
     rendition_->Init();
     rendition_->SetGameCamera(this);
     rendition_->SetViewProjection(&viewProjection_);
+
+    // 初期Behaviorを追従に設定
+    ChangeBehavior(std::make_unique<CameraFollowBehavior>(this));
 }
 
 void GameCamera::Update(float speedRate) {
-
     rendition_->Update(speedRate);
     shakeOffsetPos_ = rendition_->GetShakeOffset();
 
-    // カメラの基本移動処理
-    MoveUpdate();
+    // Behavior更新
+    if (behavior_) {
+        behavior_->Update();
+    }
 
     // ビュー行列の更新
     viewProjection_.UpdateMatrix();
 }
 
-void GameCamera::MoveUpdate() {
-
-    // 入力処理
-    KetaEngine::Input* input = KetaEngine::Input::GetInstance();
-    const float rotateSpeed = 0.08f;
-    Vector2 stickInput      = {0.0f, 0.0f};
-
-    // ================================= keyBord ================================= //
-    if (input->PushKey(KeyboardKey::Right) || input->PushKey(KeyboardKey::Left)) {
-
-        // 右回転
-        if (input->PushKey(KeyboardKey::Right)) {
-            stickInput.x = 1.0f;
-
-        } else if (input->PushKey(KeyboardKey::Left)) {
-            // 左回転
-            stickInput.x = -1.0f;
-        }
-
-    } else {
-        // ================================= GamePad ================================= //
-        stickInput = KetaEngine::Input::GetPadStick(0, 1);
-    }
-
-    ///============================================================
-    // 入力に対する回転処理
-    ///============================================================
-    if (stickInput.Length() > 0.1f) {
-        stickInput = stickInput.Normalize();
-        destinationAngleY_ += stickInput.x * rotateSpeed;
-    }
-
-    // reset
-    if (input->TriggerKey(KeyboardKey::R) || KetaEngine::Input::IsTriggerPad(0, GamepadButton::RS)) {
-        Reset();
-    }
-
-    // Y軸の回転補間処理
-    viewProjection_.rotation_.y = LerpShortAngle(viewProjection_.rotation_.y, destinationAngleY_, 0.3f);
-
-    ///============================================================
-    // 回転、変位の適応
-    ///============================================================
-    TranslateAdapt(); //< 変位適応
-    RotateAdapt(); //< 回転適応
-}
-
 void GameCamera::RotateAdapt() {
     // Y軸の回転補間処理
-    viewProjection_.rotation_.y = LerpShortAngle(viewProjection_.rotation_.y, destinationAngleY_, 0.3f);
+    RotateYInterpolation(destinationAngleY_);
 
     // 見下ろし角度の固定
-    const float fixedPitchAngle = parameter_.rotate * std::numbers::pi_v<float> / 180.0f;
+    const float fixedPitchAngle = ToRadian(parameter_.rotate);
     viewProjection_.rotation_.x = fixedPitchAngle;
 }
 
 void GameCamera::TranslateAdapt() {
-    if (!target_)
+    if (!target_) {
         return;
-    interTarget_                 = Lerp(interTarget_, target_->translation_, 1.0f);
+    }
+
+    interTarget_                 = SLerp(interTarget_, target_->translation_, parameter_.interpolationTime.target);
     Vector3 offset               = OffsetCalc(parameter_.offsetPos);
     viewProjection_.translation_ = interTarget_ + offset;
 }
 
-void GameCamera::Reset() {
-    // 追従対象がいれば
-    if (target_) {
-        // 追従座標・角度の初期化
-        interTarget_                = target_->translation_;
-        viewProjection_.rotation_.y = LerpShortAngle(viewProjection_.rotation_.y, 0.0f, 0.3f);
-    }
-    destinationAngleY_ = viewProjection_.rotation_.y;
-    // 追従対象からのオフセット
-    Vector3 offset               = OffsetCalc(parameter_.offsetPos);
-    viewProjection_.translation_ = interTarget_ + offset;
+void GameCamera::RotateYInterpolation(float targetAngle) {
+    // Y軸の回転補間処理
+    viewProjection_.rotation_.y = LerpShortAngle(
+        viewProjection_.rotation_.y,
+        targetAngle,
+        parameter_.interpolationTime.rotateY);
 }
 
 Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
@@ -126,9 +79,25 @@ Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
     return resultOffset;
 }
 
+void GameCamera::ChangeBehavior(std::unique_ptr<BaseCameraBehavior> behavior) {
+    // 引数で受け取った状態を次の状態としてセット
+    behavior_ = std::move(behavior);
+}
+
+void GameCamera::Reset() {
+    // 追従対象がいれば
+    if (target_) {
+        // ResetBehaviorに切り替え
+        ChangeBehavior(std::make_unique<CameraResetBehavior>(this));
+    }
+}
+
 void GameCamera::RegisterParams() {
     globalParameter_->Regist(groupName_, "firstRotate_", &parameter_.rotate);
     globalParameter_->Regist(groupName_, "firstOffset_", &parameter_.offsetPos);
+    globalParameter_->Regist(groupName_, "rotateYSpeed", &parameter_.rotateYSpeed);
+    globalParameter_->Regist(groupName_, "interpolationRotateYTime", &parameter_.interpolationTime.rotateY);
+    globalParameter_->Regist(groupName_, "interpolationTargetTime", &parameter_.interpolationTime.target);
 }
 
 void GameCamera::AdjustParam() {
@@ -137,8 +106,13 @@ void GameCamera::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         /// 変数の調整
-        ImGui::SliderAngle("First Rotate", &parameter_.rotate, 0, 1000);
-        ImGui::DragFloat3("firstOffset", &parameter_.offsetPos.x, 0.01f);
+        ImGui::SliderAngle("カメラ見下ろし角度", &parameter_.rotate, 0, 1000);
+        ImGui::DragFloat3("オフセット位置", &parameter_.offsetPos.x, 0.01f);
+        ImGui::SeparatorText("回転スピード");
+        ImGui::DragFloat("Y回転スピード", &parameter_.rotateYSpeed, 0.01f);
+        ImGui::SeparatorText("補間タイム");
+        ImGui::DragFloat("Y回転", &parameter_.interpolationTime.rotateY, 0.01f);
+        ImGui::DragFloat("ターゲット補間", &parameter_.interpolationTime.target, 0.01f);
 
         /// セーブとロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -172,9 +146,10 @@ void GameCamera::SetTarget(const KetaEngine::WorldTransform* target) {
     Reset();
 }
 
-void GameCamera::PlayAnimation(const std::string& filename) {
-    rendition_->AnimationPlay(filename);
+void GameCamera::PlayAnimation(const std::string& filename,bool isReset) {
+    rendition_->AnimationPlay(filename,isReset);
 }
+
 void GameCamera::PlayShake(const std::string& filename) {
     rendition_->ShakePlay(filename);
 }

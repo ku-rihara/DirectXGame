@@ -36,34 +36,6 @@ void CameraAnimationData::InitParams() {
     returnParam_.fovEase.SetAdaptValue(&returnCameraTransform_.fov);
 }
 
-void CameraAnimationData::RegisterParams() {
-    globalParameter_->Regist(groupName_, "autoReturnToInitial", &returnParam_.autoReturnToInitial);
-    globalParameter_->Regist(groupName_, "resetPosEaseType", &resetParam_.posEaseType);
-    globalParameter_->Regist(groupName_, "resetRotateEaseType", &resetParam_.rotateEaseType);
-    globalParameter_->Regist(groupName_, "resetFovEaseType", &resetParam_.fovEaseType);
-    globalParameter_->Regist(groupName_, "resetTimePoint", &resetParam_.timePoint);
-    globalParameter_->Regist(groupName_, "returnDelayTime", &resetParam_.delayTime);
-
-    // 注視点モードのパラメータ
-    globalParameter_->Regist(groupName_, "useLookAt", &lookAtParam_.useLookAt);
-   
-    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
-}
-
-void CameraAnimationData::GetParams() {
-    returnParam_.autoReturnToInitial = globalParameter_->GetValue<bool>(groupName_, "autoReturnToInitial");
-    resetParam_.posEaseType          = globalParameter_->GetValue<int32_t>(groupName_, "resetPosEaseType");
-    resetParam_.rotateEaseType       = globalParameter_->GetValue<int32_t>(groupName_, "resetRotateEaseType");
-    resetParam_.fovEaseType          = globalParameter_->GetValue<int32_t>(groupName_, "resetFovEaseType");
-    resetParam_.timePoint            = globalParameter_->GetValue<float>(groupName_, "resetTimePoint");
-    resetParam_.delayTime            = globalParameter_->GetValue<float>(groupName_, "returnDelayTime");
-
-    // 注視点モードのパラメータ
-    lookAtParam_.useLookAt = globalParameter_->GetValue<bool>(groupName_, "useLookAt");
-  
-    timeModeSelector_.GetParam(groupName_, globalParameter_);
-}
-
 void CameraAnimationData::Update(float speedRate) {
     if (playState_ != PlayState::PLAYING) {
         return;
@@ -197,83 +169,45 @@ void CameraAnimationData::UpdateLookAtMode() {
 }
 
 void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) {
-    if (playState_ == PlayState::PLAYING) {
-        if (lookAtParam_.useLookAt) {
-            // 注視点モードの場合
-            ApplyLookAtToViewProjection(viewProjection);
-        } else {
-            // 通常モードの場合
-            viewProjection.positionOffset_ = currentCameraTransform_.position;
-            viewProjection.rotationOffset_ = currentCameraTransform_.rotation;
-            viewProjection.fovAngleY_      = currentCameraTransform_.fov;
+    if (playState_ != PlayState::PLAYING) {
+        // 終了時
+        if (isAllFinished_) {
+            viewProjection.positionOffset_ = Vector3::ZeroVector();
+            viewProjection.rotationOffset_ = Vector3::ZeroVector();
+            viewProjection.fovAngleY_      = defaultFovAngle_;
         }
-    } else if (isAllFinished_) {
-        viewProjection.positionOffset_ = Vector3::ZeroVector();
-        viewProjection.rotationOffset_ = Vector3::ZeroVector();
-        viewProjection.fovAngleY_      = defaultFovAngle_;
-    }
-}
-
-void CameraAnimationData::ApplyLookAtToViewProjection(ViewProjection& viewProjection) {
-    // 注視点位置を取得
-    Vector3 lookAtTarget = lookAtParam_.lookAtTarget;
-
-    // アニメーションからの回転値を取得
-    Vector3 animeRotation = currentCameraTransform_.rotation;
-
-    // Y軸回転行列を作成
-    Matrix4x4 rotateY = MakeRotateYMatrix(animeRotation.y);
-
-    // X軸回転
-    Matrix4x4 rotateX = MakeRotateXMatrix(-animeRotation.x);
-
-    // 回転を合成
-    Matrix4x4 rotateMatrix = rotateY * rotateX;
-
-    // アニメーションからの位置オフセット
-    Vector3 posOffset = currentCameraTransform_.position;
-
-    // 回転を適用してカメラオフセット位置を計算
-    Vector3 cameraOffset = TransformNormal(posOffset, rotateMatrix);
-
-    // 注視点からのオフセットでカメラ位置を決定
-    Vector3 cameraPos = lookAtTarget + cameraOffset;
-
-    // ViewProjectionに適用
-    viewProjection.translation_ = cameraPos;
-
-    // カメラから注視点への方向ベクトルを計算
-    Vector3 toTarget = lookAtTarget - cameraPos;
-
-    if (toTarget.Length() > 0.001f) {
-        toTarget = toTarget.Normalize();
-
-        // Y軸回転を計算
-        float actualYaw = std::atan2(toTarget.x, toTarget.z);
-
-        // X軸回転を計算
-        float horizontalLength = std::sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
-        float actualPitch      = std::atan2(-toTarget.y, horizontalLength);
-
-        // 計算した回転を適用
-        viewProjection.rotation_.y = actualYaw;
-        viewProjection.rotation_.x = actualPitch;
-        viewProjection.rotation_.z = 0.0f;
+        return;
     }
 
+    if (!lookAtParam_.useLookAt) {
+        // 通常モードの場合
+        viewProjection.positionOffset_ = currentCameraTransform_.position;
+        viewProjection.rotationOffset_ = currentCameraTransform_.rotation;
+        viewProjection.fovAngleY_      = currentCameraTransform_.fov;
+        return;
+    }
+
+    // 注視点モードの場合
+    viewProjection.ApplyLookAtMode(
+        lookAtParam_.lookAtTarget,
+        currentCameraTransform_.rotation,
+        currentCameraTransform_.position);
     // FOVを適用
     viewProjection.fovAngleY_ = currentCameraTransform_.fov;
 }
 
 void CameraAnimationData::Reset() {
+  
     for (auto& keyframe : sectionElements_) {
         keyframe->Reset();
     }
 
+    // イージングリセット
     returnParam_.positionEase.Reset();
     returnParam_.rotationEase.Reset();
     returnParam_.fovEase.Reset();
 
+    // スタート位置セット
     if (!sectionElements_.empty() && activeKeyFrameIndex_ == 0) {
         sectionElements_[0]->SetStartEasing(
             initialCameraTransform_.position,
@@ -281,13 +215,15 @@ void CameraAnimationData::Reset() {
             initialCameraTransform_.fov);
     }
 
+    // フラグリセット
     isAllKeyFramesFinished_           = false;
     returnParam_.isReturningToInitial = false;
     returnParam_.isWaitingForReturn   = false;
     isAllFinished_                    = false;
-    activeKeyFrameIndex_              = 0;
-    resetParam_.currentDelayTimer     = 0.0f;
-    playState_                        = PlayState::STOPPED;
+
+    activeKeyFrameIndex_          = 0;
+    resetParam_.currentDelayTimer = 0.0f;
+    playState_                    = PlayState::STOPPED;
 }
 
 void CameraAnimationData::Play() {
@@ -329,19 +265,6 @@ void CameraAnimationData::StartReturnToInitial() {
     returnParam_.fovEase.Reset();
 }
 
-void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector3& rotation, float fov) {
-    initialCameraTransform_.position = position;
-    initialCameraTransform_.rotation = rotation;
-    initialCameraTransform_.fov      = fov;
-}
-
-void CameraAnimationData::SetLookAtTarget(const WorldTransform* target) {
-    targetTransform_ = target;
-    if (target) {
-        lookAtParam_.lookAtTarget = target->translation_;
-    }
-}
-
 std::unique_ptr<CameraKeyFrame> CameraAnimationData::CreateKeyFrame(int32_t index) {
     auto keyFrame = std::make_unique<CameraKeyFrame>();
     keyFrame->Init(groupName_, index);
@@ -350,6 +273,37 @@ std::unique_ptr<CameraKeyFrame> CameraAnimationData::CreateKeyFrame(int32_t inde
 
 std::string CameraAnimationData::GeTSequenceElementFolderPath() const {
     return keyFrameFolderPath_ + groupName_ + "/";
+}
+
+void CameraAnimationData::RegisterParams() {
+
+    // return Param
+    globalParameter_->Regist(groupName_, "autoReturnToInitial", &returnParam_.autoReturnToInitial);
+    globalParameter_->Regist(groupName_, "resetPosEaseType", &resetParam_.posEaseType);
+    globalParameter_->Regist(groupName_, "resetRotateEaseType", &resetParam_.rotateEaseType);
+    globalParameter_->Regist(groupName_, "resetFovEaseType", &resetParam_.fovEaseType);
+    globalParameter_->Regist(groupName_, "resetTimePoint", &resetParam_.timePoint);
+    globalParameter_->Regist(groupName_, "returnDelayTime", &resetParam_.delayTime);
+
+    // frags
+    globalParameter_->Regist(groupName_, "useLookAt", &lookAtParam_.useLookAt);
+   
+    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
+}
+
+void CameraAnimationData::GetParams() {
+    // return Param
+    returnParam_.autoReturnToInitial = globalParameter_->GetValue<bool>(groupName_, "autoReturnToInitial");
+    resetParam_.posEaseType          = globalParameter_->GetValue<int32_t>(groupName_, "resetPosEaseType");
+    resetParam_.rotateEaseType       = globalParameter_->GetValue<int32_t>(groupName_, "resetRotateEaseType");
+    resetParam_.fovEaseType          = globalParameter_->GetValue<int32_t>(groupName_, "resetFovEaseType");
+    resetParam_.timePoint            = globalParameter_->GetValue<float>(groupName_, "resetTimePoint");
+    resetParam_.delayTime            = globalParameter_->GetValue<float>(groupName_, "returnDelayTime");
+
+    // frags
+    lookAtParam_.useLookAt = globalParameter_->GetValue<bool>(groupName_, "useLookAt");
+  
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
 
 void CameraAnimationData::AdjustParam() {
@@ -363,12 +317,6 @@ void CameraAnimationData::AdjustParam() {
         // 注視点モード設定
         ImGui::Separator();
         ImGui::Checkbox("Use LookAt Mode", &lookAtParam_.useLookAt);
-        if (lookAtParam_.useLookAt) {
-            ImGui::Text("LookAt Target: (%.2f, %.2f, %.2f)",
-                lookAtParam_.lookAtTarget.x,
-                lookAtParam_.lookAtTarget.y,
-                lookAtParam_.lookAtTarget.z);
-        }
 
         if (isAllKeyFramesFinished_) {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
@@ -443,6 +391,19 @@ void CameraAnimationData::AdjustParam() {
         currentCameraTransform_.rotation.z);
     ImGui::Text("FOV: %.2f", currentCameraTransform_.fov);
 #endif
+}
+
+void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector3& rotation, float fov) {
+    initialCameraTransform_.position = position;
+    initialCameraTransform_.rotation = rotation;
+    initialCameraTransform_.fov      = fov;
+}
+
+void CameraAnimationData::SetLookAtTarget(const WorldTransform* target) {
+    targetTransform_ = target;
+    if (target) {
+        lookAtParam_.lookAtTarget = target->translation_;
+    }
 }
 
 void CameraAnimationData::LoadSequenceElements() {

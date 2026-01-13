@@ -224,6 +224,9 @@
     <ClCompile Include="Game\Field\SideRope\SideRopeController.cpp" />
     <ClCompile Include="Game\Field\SideRope\SideRopeReboundSystem.cpp" />
     <ClCompile Include="Game\FireInjectors\FireInjectors.cpp" />
+    <ClCompile Include="Game\GameCamera\Behavior\BaseCameraBehavior.cpp" />
+    <ClCompile Include="Game\GameCamera\Behavior\CameraFollowBehavior.cpp" />
+    <ClCompile Include="Game\GameCamera\Behavior\CameraResetBehavior.cpp" />
     <ClCompile Include="Game\GameCamera\CameraRendition.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
     <ClCompile Include="Game\GameIntro\BaseGameIntro.cpp" />
@@ -259,7 +262,6 @@
     <ClCompile Include="Game\Player\TitleBehavior\TitleLeftPunch.cpp" />
     <ClCompile Include="Game\Player\TitleBehavior\TitleWait.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
-    <ClCompile Include="Game\Scene\ComboEditorScene.cpp" />
     <ClCompile Include="Game\Scene\EditorScene.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\BaseGameSceneState.cpp" />
@@ -518,6 +520,9 @@
     <ClInclude Include="Game\Field\SideRope\SideRopeController.h" />
     <ClInclude Include="Game\Field\SideRope\SideRopeReboundSystem.h" />
     <ClInclude Include="Game\FireInjectors\FireInjectors.h" />
+    <ClInclude Include="Game\GameCamera\Behavior\BaseCameraBehavior.h" />
+    <ClInclude Include="Game\GameCamera\Behavior\CameraFollowBehavior.h" />
+    <ClInclude Include="Game\GameCamera\Behavior\CameraResetBehavior.h" />
     <ClInclude Include="Game\GameCamera\CameraRendition.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
     <ClInclude Include="Game\GameIntro\BaseGameIntro.h" />
@@ -553,7 +558,6 @@
     <ClInclude Include="Game\Player\TitleBehavior\TitleLeftPunch.h" />
     <ClInclude Include="Game\Player\TitleBehavior\TitleWait.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
-    <ClInclude Include="Game\Scene\ComboEditorScene.h" />
     <ClInclude Include="Game\Scene\EditorScene.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\Scene\GameSceneState\BaseGameSceneState.h" />

@@ -1,45 +1,44 @@
-/// scene
 #include "EditorScene.h"
-#include "GameScene.h"
-#include "Scene/Manager/SceneManager.h"
-
+// base
 #include "base/TextureManager.h"
-// class
-#include "3d/Object3DRegistry.h"
-#include "Editor/ParticleEditor/ParticleManager.h"
-#include "GPUParticle/GPUParticleManager.h"
-#include "Pipeline/PipelineManager.h"
-
 // math
+#include "2d/SpriteRegistry.h"
 #include "Frame/Frame.h"
+#include "Lighrt/Light.h"
+#include "Scene/Manager/SceneManager.h"
 #include <imgui.h>
 
-EditorScene::EditorScene() {}
-
-EditorScene::~EditorScene() {
-}
-
 void EditorScene::Init() {
-
+    //// グローバル変数の読み込み
+    KetaEngine::GlobalParameter::GetInstance()->LoadFiles();
     BaseScene::Init();
+    // オブジェクト生成
+    ObjectInit();
 
-    easingTestObject_ = std::make_unique<EasingTestObj>();
-    easingTestObject_->Init();
+    // クラスポインタセット
+    SetClassPointer();
 
-    easingEditor_.Init();
-    easingEditor_.SetVector3Target(&easingTestObject_->GetEasingData());
-
-   
+    KetaEngine::Frame::ResetDeltaTime();
 }
 
 void EditorScene::Update() {
-
     BaseScene::Update();
 
-    easingEditor_.Edit();
-    easingTestObject_->Update();
+    effectEditorSuite_->SetCameraPreViewPos(player_->GetWorldPosition());
 
-  
+    // Editor
+    attackEffect_->Update();
+    field_->Update();
+    /*sideRopeController_->Update();*/
+    audienceController_->Update();
+
+    // 各クラス更新
+    player_->Update();
+    skyBox_->Update();
+    enemyManager_->Update();
+    combo_->Update();
+    gameCamera_->Update();
+
     ViewProjectionUpdate();
 
     if (input_->TriggerKey(KeyboardKey::Enter)) {
@@ -51,28 +50,117 @@ void EditorScene::Update() {
 /// SkyBox描画
 /// ===================================================
 void EditorScene::SkyBoxDraw() {
+    skyBox_->Draw(viewProjection_);
 }
 
 void EditorScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Camera");
-    ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
-    ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
+    gameCamera_->AdjustParam();
     ImGui::End();
 
     BaseScene::Debug();
 
-    easingTestObject_->Debug();
+    KetaEngine::Light::GetInstance()->DebugImGui();
 
-  
+    ImGui::Begin("ParameterEditor");
+    player_->AdjustParam();
+    sideRopeController_->AdjustParam();
+    enemyManager_->AdjustParam();
+    enemySpawner_->AdjustParam();
+    combo_->AdjustParam();
+    audienceController_->AdjustParam();
+    KetaEngine::ShadowMap::GetInstance()->DebugImGui();
+    KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
+    ImGui::End();
+
+    ImGui::Begin("EnemySpawn");
+    enemyManager_->DebugEnemySpawn();
+    ImGui::End();
+
+    ImGui::Begin("Rendition");
+    attackEffect_->EditorUpdate();
+    ImGui::End();
+
+    ImGui::Begin("PlayerAttack");
+    playerComboAttackController_->EditorUpdate();
+    ImGui::End();
+
+    ImGui::Begin("EnemyDamageReaction");
+    enemyManager_->DamageReactionCreate();
+    ImGui::End();
 
 #endif
 }
 
+// ビュープロジェクション更新
 void EditorScene::ViewProjectionUpdate() {
     BaseScene::ViewProjectionUpdate();
 }
 
 void EditorScene::ViewProcess() {
-    viewProjection_.UpdateMatrix();
+    viewProjection_.matView_       = gameCamera_->GetViewProjection().matView_;
+    viewProjection_.matProjection_ = gameCamera_->GetViewProjection().matProjection_;
+    viewProjection_.cameraMatrix_  = gameCamera_->GetViewProjection().cameraMatrix_;
+    viewProjection_.rotation_      = gameCamera_->GetViewProjection().rotation_;
+    viewProjection_.TransferMatrix();
+}
+
+void EditorScene::ObjectInit() {
+    // gameObj_のメンバを初期化
+    field_                       = std::make_unique<Field>();
+    lockOnController_            = std::make_unique<LockOnController>();
+    player_                      = std::make_unique<Player>();
+    gameCamera_                  = std::make_unique<GameCamera>();
+    enemyManager_                = std::make_unique<EnemyManager>();
+    enemySpawner_                = std::make_unique<EnemySpawner>();
+    skyDome_                     = std::make_unique<SkyDome>();
+    skyBox_                      = std::make_unique<SkyBox>();
+    combo_                       = std::make_unique<Combo>();
+    attackEffect_                = std::make_unique<AttackEffect>();
+    playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
+    sideRopeController_          = std::make_unique<SideRopeController>();
+    audienceController_          = std::make_unique<AudienceController>();
+    ObjectFromBlender_           = std::make_unique<KetaEngine::ObjectFromBlender>();
+    deathTimer_                  = std::make_unique<DeathTimer>();
+
+    // 初期化
+    player_->InitInGameScene();
+    lockOnController_->Init();
+    skyBox_->Init();
+    combo_->Init();
+    enemyManager_->Init();
+    enemySpawner_->Init("enemySpawner.json");
+    gameCamera_->Init();
+    playerComboAttackController_->Init();
+    attackEffect_->Init();
+    sideRopeController_->Init();
+    audienceController_->Init();
+    deathTimer_->Init();
+    viewProjection_.Init();
+
+    ObjectFromBlender_->LoadJsonFile("gameScene.json");
+}
+
+void EditorScene::SetClassPointer() {
+    gameCamera_->SetTarget(&player_->GetBaseTransform());
+
+    enemyManager_->SetPlayer(player_.get());
+    enemyManager_->SetCombo(combo_.get());
+    enemyManager_->SetGameCamera(gameCamera_.get());
+    enemyManager_->SetEnemySpawner(enemySpawner_.get());
+    enemyManager_->SetAttackEffect(attackEffect_.get());
+
+    enemySpawner_->SetEnemyManager(enemyManager_.get());
+
+    lockOnController_->SetEnemyManager(enemyManager_.get());
+
+    player_->SetViewProjection(&viewProjection_);
+    player_->SetLockOn(lockOnController_.get());
+    player_->SetGameCamera(gameCamera_.get());
+    player_->SetComboAttackController(playerComboAttackController_.get());
+    player_->SetCombo(combo_.get());
+    player_->SetHitStop(attackEffect_.get());
+
+    combo_->SetDeathTimer(deathTimer_.get());
 }

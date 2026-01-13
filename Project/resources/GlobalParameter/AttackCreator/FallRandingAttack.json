@@ -12,7 +12,7 @@
         "CameraAction_StartTiming": 0.0,
         "CameraAction_TriggerByHit": false,
         "Condition": 0,
-        "HitStop_FileName": "FallAttackTimeScale",
+        "HitStop_FileName": "None",
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
         "IsFirstAttack": false,

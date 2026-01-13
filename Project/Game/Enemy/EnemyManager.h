@@ -55,6 +55,9 @@ public:
     void DamageReactionCreate();
     void DrawEnemyParamUI(BaseEnemy::Type type);
 
+    // debugSpawn
+    void DebugEnemySpawn();
+
 private: // struct
     struct ParticleEffect {
         std::string name;
@@ -95,6 +98,9 @@ private:
 
     // 敵がすべていなくなったことを示すフラグ
     bool areAllEnemiesCleared_;
+
+    // debugSpawn用
+    int32_t selectedEnemyTypeIndex_;
 
 private: // Particle
     std::array<ParticleEffect, 4> deathParticle_;

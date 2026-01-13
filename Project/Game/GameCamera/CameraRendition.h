@@ -22,7 +22,7 @@ public:
     /// アニメーション再生
     /// </summary>
     /// <param name="filename">アニメーションファイル名</param>
-    void AnimationPlay(const std::string& filename);
+    void AnimationPlay(const std::string& filename, bool isReset);
 
     /// <summary>
     /// シェイク再生

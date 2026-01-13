@@ -5,13 +5,30 @@
 void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName) {
     groupName_ = groupName;
 
-    // 演出パラメータの登録
+    // 通常演出パラメータの登録
     for (const auto& info : kRenditionTypeInfos) {
         auto& param = renditionParams_[static_cast<size_t>(info.type)].first;
 
         globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
         globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
-        globalParam->Regist(groupName, std::string(info.name) + "_TriggerByHit", &param.triggerByHit);
+
+        // CameraActionの場合のみisCameraResetを登録
+        if (info.type == Type::CameraAction) {
+            globalParam->Regist(groupName, std::string(info.name) + "_IsCameraReset", &param.isCameraReset);
+        }
+    }
+
+    // ヒット時演出パラメータの登録
+    for (const auto& info : kRenditionTypeInfos) {
+        auto& param = renditionParamsOnHit_[static_cast<size_t>(info.type)].first;
+
+        globalParam->Regist(groupName, std::string(info.name) + "_OnHit_FileName", &param.fileName);
+        globalParam->Regist(groupName, std::string(info.name) + "_OnHit_StartTiming", &param.startTiming);
+
+        // CameraActionの場合のみisCameraResetを登録
+        if (info.type == Type::CameraAction) {
+            globalParam->Regist(groupName, std::string(info.name) + "_OnHit_IsCameraReset", &param.isCameraReset);
+        }
     }
 
     // オブジェクトアニメーションパラメータの登録
@@ -29,7 +46,6 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
         globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
         globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
         globalParam->Regist(groupName, std::string(info.name) + "_Volume", &param.volume);
-        globalParam->Regist(groupName, std::string(info.name) + "_TriggerByHit", &param.triggerByHit);
     }
 
     // 振動パラメータの登録
@@ -41,10 +57,10 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
 
 void PlayerAttackRenditionData::AdjustParam() {
 #ifdef _DEBUG
-    if (ImGui::CollapsingHeader("Rendition Parameters")) {
+    // 通常演出パラメータのUI
+    if (ImGui::CollapsingHeader("Rendition Parameters (Normal)")) {
         ImGui::PushID((groupName_ + "RenditionParams").c_str());
 
-        // 演出パラメータのUI
         for (const auto& info : kRenditionTypeInfos) {
             ImGui::PushID(static_cast<int>(info.type));
             auto& paramPair = renditionParams_[static_cast<size_t>(info.type)];
@@ -53,7 +69,36 @@ void PlayerAttackRenditionData::AdjustParam() {
             ImGui::SeparatorText(info.label);
             SelectRenditionFile(info.label, folderPath_ + info.dir, paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
-            ImGui::Checkbox("Trigger By Hit", &param.triggerByHit);
+
+            // CameraActionの場合のみチェックボックスを表示
+            if (info.type == Type::CameraAction) {
+                ImGui::Checkbox("Is Camera Reset", &param.isCameraReset);
+            }
+
+            ImGui::PopID();
+        }
+
+        ImGui::PopID();
+    }
+
+    // ヒット時演出パラメータのUI
+    if (ImGui::CollapsingHeader("Rendition Parameters (On Hit)")) {
+        ImGui::PushID((groupName_ + "RenditionParamsOnHit").c_str());
+
+        for (const auto& info : kRenditionTypeInfos) {
+            ImGui::PushID(static_cast<int>(info.type));
+            auto& paramPair = renditionParamsOnHit_[static_cast<size_t>(info.type)];
+            auto& param     = paramPair.first;
+
+            ImGui::SeparatorText((std::string(info.label) + " (On Hit)").c_str());
+            SelectRenditionFile(info.label, folderPath_ + info.dir, paramPair);
+            ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
+
+            // CameraActionの場合のみチェックボックスを表示
+            if (info.type == Type::CameraAction) {
+                ImGui::Checkbox("Is Camera Reset", &param.isCameraReset);
+            }
+
             ImGui::PopID();
         }
 
@@ -91,14 +136,13 @@ void PlayerAttackRenditionData::AdjustParam() {
             SelectAudioFile(info.label, paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
             ImGui::SliderFloat("Volume", &param.volume, 0.0f, 1.0f);
-            ImGui::Checkbox("Trigger By Hit", &param.triggerByHit);
             ImGui::PopID();
         }
 
         ImGui::PopID();
     }
 
-    // 振動パラメータのUI（単一）
+    // 振動パラメータのUI
     if (ImGui::CollapsingHeader("Vibration Parameters")) {
         ImGui::PushID((groupName_ + "VibrationParams").c_str());
 
@@ -138,9 +182,4 @@ void PlayerAttackRenditionData::SelectAudioFile(
 
 std::string PlayerAttackRenditionData::GetObjAnimationFolderPath(ObjAnimationType type) const {
     return objAnimationFolderPaths_[static_cast<int32_t>(type)];
-}
-
-const PlayerAttackRenditionData::RenditionParam& PlayerAttackRenditionData::GetRenditionParamFromIndex(int32_t index) const {
-    assert(index >= 0 && index < static_cast<int32_t>(Type::Count) && "Invalid Rendition Type Index");
-    return GetRenditionParamFromType(static_cast<Type>(index));
 }

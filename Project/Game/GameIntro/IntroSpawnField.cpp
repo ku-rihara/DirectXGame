@@ -30,7 +30,7 @@ void IntroSpawnField::Update(float playSpeed) {
 
 void IntroSpawnField::Start() {
     if (pGameCamera_) {
-        pGameCamera_->PlayAnimation("IntroOverLook");
+        pGameCamera_->PlayAnimation("IntroOverLook",false);
     }
     step_ = Step::WAIT;
 }

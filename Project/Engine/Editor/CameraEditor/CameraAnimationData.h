@@ -42,8 +42,8 @@ public:
     };
 
     struct LookAtParam {
-        bool useLookAt       = false; // 注視点モード使用フラグ
-        Vector3 lookAtTarget = {0, 0, 0}; // 注視点位置
+        bool useLookAt       = false;
+        Vector3 lookAtTarget = {0, 0, 0};
     };
 
 public:
@@ -95,7 +95,6 @@ private:
 
     // 注視点モード用の更新
     void UpdateLookAtMode();
-    void ApplyLookAtToViewProjection(ViewProjection& viewProjection);
 
 private:
     //*---------------------------- private Variant ----------------------------*//
@@ -119,6 +118,7 @@ private:
     LookAtParam lookAtParam_;
     const WorldTransform* targetTransform_ = nullptr;
 
+    // frags
     bool showKeyFrameList_      = true;
     bool showAnimationControls_ = true;
 
@@ -132,6 +132,9 @@ public:
     bool IsReturningToInitial() const { return returnParam_.isReturningToInitial; }
     bool IsUseLookAt() const { return lookAtParam_.useLookAt; }
     const Vector3& GetLookAtTarget() const { return lookAtParam_.lookAtTarget; }
+ 
+    //*----------------------------- setter Methods -----------------------------*//
+  
 };
 
 }; // KetaEngine
