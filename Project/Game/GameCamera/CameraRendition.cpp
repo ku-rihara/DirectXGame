@@ -24,6 +24,7 @@ void CameraRendition::Update(float speedRate) {
 // play呼び出し
 void CameraRendition::AnimationPlay(const std::string& filename) {
     cameraAnimation_->Play(filename);
+    pGameCamera_->Reset();
 
     // GameCameraからターゲットを取得して設定
     if (pGameCamera_ && pGameCamera_->GetTarget()) {
