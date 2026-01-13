@@ -18,7 +18,7 @@ void PlayerAttackRendition::Reset() {
     currentTime_ = 0.0f;
     isPlayed_.fill(false);
     isPlayedOnHit_.fill(false);
-    isObjAnimPlayed_.fill(false);
+    isObjAnimePlayed_.fill(false);
     isAudioPlayed_.fill(false);
     hasTriggeredHitEffects_ = false;
 
@@ -139,13 +139,13 @@ void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionDa
         const auto& param = renditionData.GetObjAnimationParamFromIndex(i);
 
         // すでに再生済みならスキップ
-        if (isObjAnimPlayed_[i]) {
+        if (isObjAnimePlayed_[i]) {
             continue;
         }
 
         // ファイル名が空ならスキップ
         if (param.fileName.empty() || param.fileName == "None") {
-            isObjAnimPlayed_[i] = true;
+            isObjAnimePlayed_[i] = true;
             continue;
         }
 
@@ -173,7 +173,7 @@ void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionDa
             }
 
             // 再生済みに設定
-            isObjAnimPlayed_[i] = true;
+            isObjAnimePlayed_[i] = true;
         }
     }
 }

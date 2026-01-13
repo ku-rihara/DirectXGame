@@ -4,7 +4,7 @@
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 /// frame
 #include "Frame/Frame.h"
-/// imgui
+/// imGui
 #include <imgui.h>
 
 // 初期化

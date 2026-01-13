@@ -11,6 +11,11 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
 
         globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
         globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
+
+        // CameraActionの場合のみisCameraResetを登録
+        if (info.type == Type::CameraAction) {
+            globalParam->Regist(groupName, std::string(info.name) + "_IsCameraReset", &param.isCameraReset);
+        }
     }
 
     // ヒット時演出パラメータの登録
@@ -19,6 +24,11 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
 
         globalParam->Regist(groupName, std::string(info.name) + "_OnHit_FileName", &param.fileName);
         globalParam->Regist(groupName, std::string(info.name) + "_OnHit_StartTiming", &param.startTiming);
+
+        // CameraActionの場合のみisCameraResetを登録
+        if (info.type == Type::CameraAction) {
+            globalParam->Regist(groupName, std::string(info.name) + "_OnHit_IsCameraReset", &param.isCameraReset);
+        }
     }
 
     // オブジェクトアニメーションパラメータの登録
@@ -59,6 +69,12 @@ void PlayerAttackRenditionData::AdjustParam() {
             ImGui::SeparatorText(info.label);
             SelectRenditionFile(info.label, folderPath_ + info.dir, paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
+
+            // CameraActionの場合のみチェックボックスを表示
+            if (info.type == Type::CameraAction) {
+                ImGui::Checkbox("Is Camera Reset", &param.isCameraReset);
+            }
+
             ImGui::PopID();
         }
 
@@ -77,6 +93,12 @@ void PlayerAttackRenditionData::AdjustParam() {
             ImGui::SeparatorText((std::string(info.label) + " (On Hit)").c_str());
             SelectRenditionFile(info.label, folderPath_ + info.dir, paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
+
+            // CameraActionの場合のみチェックボックスを表示
+            if (info.type == Type::CameraAction) {
+                ImGui::Checkbox("Is Camera Reset", &param.isCameraReset);
+            }
+
             ImGui::PopID();
         }
 

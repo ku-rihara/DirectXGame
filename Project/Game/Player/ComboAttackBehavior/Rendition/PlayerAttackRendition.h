@@ -24,7 +24,7 @@ private:
     // ヒット時演出の再生フラグ
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayedOnHit_{};
 
-    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimPlayed_{};
+    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimePlayed_{};
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::AudioType::Count)> isAudioPlayed_{};
 
     // ヒットエフェクトがトリガーされたかどうか

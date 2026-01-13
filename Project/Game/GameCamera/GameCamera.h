@@ -10,7 +10,6 @@ class LockOn;
 
 /// <summary>
 /// ゲームカメラクラス
-/// 注視点ベースのカメラ制御
 /// </summary>
 class GameCamera {
 public:
@@ -31,10 +30,10 @@ public:
     void Init();
     void Update(float cameraPlaySpeed = 1.0f);
 
-    void Reset(); // リセット
+    void Reset();           // リセット
     void GetIsCameraMove(); // カメラ移動判定取得
-    void RotateAdapt(); // 回転適用
-    void TranslateAdapt(); // 位置適用
+    void RotateAdapt();     // 回転適用
+    void TranslateAdapt();  // 位置適用
 
     /// <summary>
     /// アニメーション再生

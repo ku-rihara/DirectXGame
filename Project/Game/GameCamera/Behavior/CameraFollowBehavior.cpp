@@ -56,7 +56,7 @@ void CameraFollowBehavior::MoveUpdate() {
 
     //--------------------------- 回転、変位の適応 ---------------------------//
     pOwner_->TranslateAdapt(); //< 変位適応
-    pOwner_->RotateAdapt(); //< 回転適応
+    pOwner_->RotateAdapt();    //< 回転適応
 }
 
 void CameraFollowBehavior::Debug() {

@@ -16,6 +16,7 @@ public:
         std::string fileName;
         float startTiming = 0.0f;
         float currentTime_;
+        bool isCameraReset = false;
     };
 
     // オブジェクトアニメーションパラメータ
