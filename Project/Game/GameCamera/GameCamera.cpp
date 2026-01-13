@@ -146,8 +146,8 @@ void GameCamera::SetTarget(const KetaEngine::WorldTransform* target) {
     Reset();
 }
 
-void GameCamera::PlayAnimation(const std::string& filename) {
-    rendition_->AnimationPlay(filename);
+void GameCamera::PlayAnimation(const std::string& filename,bool isReset) {
+    rendition_->AnimationPlay(filename,isReset);
 }
 
 void GameCamera::PlayShake(const std::string& filename) {

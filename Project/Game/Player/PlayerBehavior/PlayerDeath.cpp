@@ -40,7 +40,7 @@ void PlayerDeath::StartDeathRendition(float timeSpeed) {
   
      timeSpeed;
 
-    pOwner_->GetGameCamera()->PlayAnimation("GameOverCamera");
+    pOwner_->GetGameCamera()->PlayAnimation("GameOverCamera",false);
     ChangeState([this](float timeSpeed) { PlayerTurningAround(timeSpeed); });
 }
 

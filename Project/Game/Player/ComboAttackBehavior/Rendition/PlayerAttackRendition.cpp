@@ -110,7 +110,7 @@ void PlayerAttackRendition::UpdateHitRenditions(const PlayerAttackRenditionData&
 void PlayerAttackRendition::PlayRenditionEffect(PlayerAttackRenditionData::Type type, const PlayerAttackRenditionData::RenditionParam& param) {
     switch (type) {
     case PlayerAttackRenditionData::Type::CameraAction:
-        pPlayer_->GetGameCamera()->PlayAnimation(param.fileName);
+        pPlayer_->GetGameCamera()->PlayAnimation(param.fileName,param.isCameraReset);
         break;
 
     case PlayerAttackRenditionData::Type::HitStop:

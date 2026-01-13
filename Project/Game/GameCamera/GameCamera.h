@@ -38,7 +38,7 @@ public:
     /// <summary>
     /// アニメーション再生
     /// </summary>
-    void PlayAnimation(const std::string& filename);
+    void PlayAnimation(const std::string& filename, bool isReset);
 
     /// <summary>
     /// シェイク再生
