@@ -16,7 +16,6 @@ public:
         std::string fileName;
         float startTiming = 0.0f;
         float currentTime_;
-        bool triggerByHit = false;
     };
 
     // オブジェクトアニメーションパラメータ
@@ -30,7 +29,6 @@ public:
         std::string fileName;
         float startTiming = 0.0f;
         float volume      = 1.0f;
-        bool triggerByHit = false;
     };
 
     // 振動パラメータ
@@ -141,8 +139,9 @@ private:
         "Resources/GlobalParameter/ObjEaseAnimation/LeftHand/Dates/",
         "Resources/GlobalParameter/ObjEaseAnimation/MainHead/Dates/"};
 
-    // 演出パラメータ配列
+    // 演出パラメータ配列（通常とヒット時）
     std::array<std::pair<RenditionParam, KetaEngine::FileSelector>, static_cast<size_t>(Type::Count)> renditionParams_;
+    std::array<std::pair<RenditionParam, KetaEngine::FileSelector>, static_cast<size_t>(Type::Count)> renditionParamsOnHit_;
 
     // オブジェクトアニメーションパラメータ配列
     std::array<std::pair<ObjAnimationParam, KetaEngine::FileSelector>, static_cast<size_t>(ObjAnimationType::Count)> objAnimationParams_;
@@ -155,9 +154,23 @@ private:
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
-    const RenditionParam& GetRenditionParamFromIndex(int32_t index) const;
+    const RenditionParam& GetRenditionParamFromIndex(int32_t index) const {
+        assert(index >= 0 && index < static_cast<int32_t>(Type::Count) && "Invalid Rendition Type Index");
+        return GetRenditionParamFromType(static_cast<Type>(index));
+    }
+
     const RenditionParam& GetRenditionParamFromType(const Type& type) const {
         return renditionParams_[static_cast<size_t>(type)].first;
+    }
+
+    // ヒット時用のゲッター
+    const RenditionParam& GetRenditionParamOnHitFromIndex(int32_t index) const {
+        assert(index >= 0 && index < static_cast<int32_t>(Type::Count) && "Invalid Rendition Type Index");
+        return GetRenditionParamOnHitFromType(static_cast<Type>(index));
+    }
+
+    const RenditionParam& GetRenditionParamOnHitFromType(const Type& type) const {
+        return renditionParamsOnHit_[static_cast<size_t>(type)].first;
     }
 
     const ObjAnimationParam& GetObjAnimationParamFromIndex(int32_t index) const {
