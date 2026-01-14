@@ -52,14 +52,14 @@ public:
     void CreateSprite(const std::string& textureName);
 
     // パラメータ編集
-    void AdjustParam();   
+    void AdjustParam();
     void RegisterParams();
 
     // 描画
-    void Draw();             
+    void Draw();
 
     /// <summary>
-    /// 表示割合を設定（0.0f～1.0f）
+    /// 表示割合を設定(0.0f~1.0f)
     /// <summary>
     void SetGaugeRate(float rate);
 
@@ -73,7 +73,10 @@ private:
 
 public:
     // Transform
-    Transform transform_; //< トランスフォーム
+    Transform transform_;
+
+private:
+    // UVTransform
     UVTransform uvTransform_; //< UVトランスフォーム
     Vector2 textureLeftTop_; //< テクスチャ左上
     Vector2 anchorPoint_; //< アンカーポイント
@@ -82,7 +85,6 @@ public:
     bool isFlipX_ = false;
     bool isFlipY_ = false;
 
-private:
     // パラメータ編集
     GlobalParameter* globalParameter_;
     std::string groupName_;
@@ -94,7 +96,7 @@ private:
     bool isDraw_            = true;
     bool isAdaptStartParam_ = false;
 
-    // ゲージ用の表示割合（0.0f～1.0f）
+    // ゲージ用の表示割合(0.0f~1.0f)
     float gaugeRate_ = 1.0f;
 
     // テクスチャ
@@ -132,6 +134,10 @@ public:
     bool GetIsDraw() const { return isDraw_; };
     float GetGaugeRate() const { return gaugeRate_; }
 
+    // UVTransform
+    UVTransform& GetUVTransform() { return uvTransform_; }
+    const UVTransform& GetUVTransform() const { return uvTransform_; }
+
     ///=========================================================================================
     ///  setter
     ///=========================================================================================
@@ -147,6 +153,12 @@ public:
 
     void SetLayerNum(int32_t layerNum) { layerNum_ = layerNum; }
     void SetIsDraw(bool isDraw) { isDraw_ = isDraw; }
+
+    // UVTransform
+    void SetUVTransform(const UVTransform& uvTransform) { uvTransform_ = uvTransform; }
+    void SetUVScale(const Vector2& scale) { uvTransform_.scale = scale; }
+    void SetUVRotate(const Vector3& rotate) { uvTransform_.rotate = rotate; }
+    void SetUVPosition(const Vector2& pos) { uvTransform_.pos = pos; }
 };
 
 }; // KetaEngine
