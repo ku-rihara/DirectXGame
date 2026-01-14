@@ -55,7 +55,7 @@ void DeathTimerGauge::UpdateGaugeUV(float deltaTime) {
 
     // スプライトのUV位置を更新
     if (gaugeSprite_) {
-        gaugeSprite_->uvTransform_.pos.x = uvOffset_;
+        gaugeSprite_->SetUVPosition(Vector2(uvOffset_,0.0f));
     }
 }
 
