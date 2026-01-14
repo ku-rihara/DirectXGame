@@ -71,7 +71,7 @@ public:
     Model* GetModel() const { return model_; }
     int32_t GetTextureIndex() const { return textureIndex_; }
     bool GetIsAutoUpdate() const { return isAutoUpdate_; }
-    ModelMaterial* GtModelMaterial() const { return material_.get(); }
+    ModelMaterial* GetModelMaterial() const { return material_.get(); }
     //*----------------------  Setter Methods ----------------------*//
     void SetIsDraw(bool is) { isDraw_ = is; }
     void SetIsAutoUpdate(bool is) { isAutoUpdate_ = is; }
