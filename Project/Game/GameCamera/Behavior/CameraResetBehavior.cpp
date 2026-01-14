@@ -56,7 +56,7 @@ void CameraResetBehavior::Reset() {
 
     // 許容範囲
     const float PermissibleOffset = 2.0f;
-    const float threshold         = ToRadian(PermissibleOffset); // 2度以内
+    const float threshold         = ToRadian(PermissibleOffset); // 2度以内の差分が許容
 
     if (rotationDifference < threshold) {
         // リセット完了後、追従Behaviorに戻る
