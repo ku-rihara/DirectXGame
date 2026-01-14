@@ -16,7 +16,7 @@ void EasingTestObj::Init() {
 
     easing_.Init("testEasing");
     easing_.SetAdaptValue(&object3D_->transform_.scale_);
-    object3D_->GtModelMaterial()->GetMaterialData()->enableLighting = 3;
+    object3D_->GetModelMaterial()->GetMaterialData()->enableLighting = 3;
 }
 
 void EasingTestObj::Update() {
