@@ -12,7 +12,7 @@ void NormalEnemy::Init(const Vector3& spownPos) {
     obj3d_.reset(KetaEngine::Object3d::CreateModel("NormalEnemy.obj"));
     obj3d_->transform_.Init();
     obj3d_->transform_.SetParent(&baseTransform_);
-    obj3d_->GtModelMaterial()->GetMaterialData()->enableLighting = 2;
+    obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting = 2;
 }
 
 ///========================================================

@@ -418,7 +418,7 @@ void BaseEnemy::SetParameter(const Type& type, const Parameter& parameter) {
     parameter_ = parameter;
 }
 void BaseEnemy::SetBodyColor(const Vector4& color) {
-    obj3d_->GtModelMaterial()->GetMaterialData()->color = color;
+    obj3d_->GetModelMaterial()->GetMaterialData()->color = color;
 }
 
 void BaseEnemy::RotateInit() {

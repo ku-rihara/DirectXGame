@@ -47,8 +47,8 @@ void Player::Init() {
 
     // Playerのモデル
     obj3d_.reset(KetaEngine::Object3d::CreateModel("Player.obj"));
-    obj3d_->GtModelMaterial()->GetMaterialData()->enableLighting         = 7;
-    obj3d_->GtModelMaterial()->GetMaterialData()->environmentCoefficient = 0.05f;
+    obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = 7;
+    obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.05f;
 
     // Playerの攻撃クラス
     playerCollisionInfo_ = std::make_unique<PlayerCollisionInfo>();
@@ -449,10 +449,10 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 }
 
 void Player::DissolveUpdate(float dissolve) {
-    obj3d_->GtModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
-    obj3d_->GtModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.09f;
-    obj3d_->GtModelMaterial()->GetMaterialData()->enableDissolve    = true;
-    obj3d_->GtModelMaterial()->GetMaterialData()->dissolveThreshold = dissolve;
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.09f;
+    obj3d_->GetModelMaterial()->GetMaterialData()->enableDissolve    = true;
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = dissolve;
 }
 
 Vector3 Player::GetCollisionPos() const {
