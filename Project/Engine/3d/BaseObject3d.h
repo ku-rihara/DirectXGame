@@ -40,13 +40,12 @@ public:
     void SetModelByName(const std::string& modelName);
 
 public:
-    ModelMaterial material_;    //< モデルのマテリアル
-    ObjectColor objColor_;      //< オブジェクトの色
-    WorldTransform transform_;  //< ワールド変換
+    WorldTransform transform_; //< ワールド変換
 protected:
-
     //*----------------------  protected variant ----------------------*//
-    
+
+    std::unique_ptr<ModelMaterial> material_; //< モデルのマテリアル
+
     // WVP
     Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
     TransformationMatrix* wvpDate_;
@@ -69,9 +68,10 @@ protected:
 
 public:
     //*----------------------  Getter Methods ----------------------*//
-    Model* GetModelPtr() { return model_; }
+    Model* GetModel() const { return model_; }
     int32_t GetTextureIndex() const { return textureIndex_; }
     bool GetIsAutoUpdate() const { return isAutoUpdate_; }
+    ModelMaterial* GtModelMaterial() const { return material_.get(); }
     //*----------------------  Setter Methods ----------------------*//
     void SetIsDraw(bool is) { isDraw_ = is; }
     void SetIsAutoUpdate(bool is) { isAutoUpdate_ = is; }

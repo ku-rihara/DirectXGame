@@ -121,7 +121,7 @@ void Object3DRegistry::DebugImGui() {
             if (obj != nullptr) {
                 ImGui::PushID(index);
 
-                if (ImGui::CollapsingHeader(("Object " +obj->GetModelPtr()->GetModelName()).c_str())) {
+                if (ImGui::CollapsingHeader(("Object " +obj->GetModel()->GetModelName()).c_str())) {
                     ImGui::Text("Object Address: %p", static_cast<void*>(obj));
 
                     // オブジェクトのデバッグ情報を表示
