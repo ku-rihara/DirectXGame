@@ -1,7 +1,7 @@
 #include "ObjectColor.h"
 
 using namespace KetaEngine;
-#include"Dx/DirectXCommon.h"
+#include "Dx/DirectXCommon.h"
 #include <cassert>
 #include <intsafe.h>
 
@@ -10,7 +10,7 @@ void ObjectColor::Init() {
     // 定数バッファの生成
     CreateConstBuffer();
 
-    // マッピングして、定数バッファのアドレスを取得
+    // マッピング
     Map();
 
     // 初期色を転送する
@@ -23,7 +23,7 @@ void ObjectColor::CreateConstBuffer() {
     DirectXCommon* dxCommon = DirectXCommon::GetInstance();
     assert(dxCommon);
 
-    // 定数バッファのサイズは 256 バイトの倍数である必要がある
+    // 定数バッファのサイズ
     size_t sizeCB = (sizeof(ConstBufferDataObjectColor) + 0xff) & ~0xff;
 
     // 定数バッファのリソースを生成
@@ -46,7 +46,6 @@ void ObjectColor::Map() {
     // 初期色の転送
     constMap_->color_ = color_;
 }
-
 
 // 行列を転送する
 void ObjectColor::TransferMatrix() {

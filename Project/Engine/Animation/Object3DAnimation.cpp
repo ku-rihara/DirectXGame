@@ -134,9 +134,6 @@ void Object3DAnimation::Update(float deltaTime) {
 
     // Transform更新
     transform_.UpdateMatrix();
-
-    // Object3dの更新処理
-    material_.GetMaterialData()->color = objColor_.GetColor();
 }
 
 ///============================================================
@@ -323,7 +320,7 @@ void Object3DAnimation::Draw(const ViewProjection& viewProjection) {
     // アニメーション描画
     PipelineManager::GetInstance()->PreDraw(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList());
     PipelineManager::GetInstance()->PreBlendSet(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList(), blendMode);
-    model_->DrawAnimation(wvpResource_, *shadowMap_, &material_, skinCluster_);
+    model_->DrawAnimation(wvpResource_, *shadowMap_, material_.get(), skinCluster_);
 
     // 通常パイプラインに戻す
     PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, DirectXCommon::GetInstance()->GetCommandList());
