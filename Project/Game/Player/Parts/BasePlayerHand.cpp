@@ -88,10 +88,10 @@ void BasePlayerHand::SaveAndLoad() {
     ParamLoadForImGui();
 }
 void BasePlayerHand::DissolveAdapt(float dissolve) {
-    obj3d_->material_.GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
-    obj3d_->material_.GetMaterialData()->dissolveEdgeWidth = 0.05f;
-    obj3d_->material_.GetMaterialData()->enableDissolve    = true;
-    obj3d_->material_.GetMaterialData()->dissolveThreshold = dissolve;
+    obj3d_->GtModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
+    obj3d_->GtModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.05f;
+    obj3d_->GtModelMaterial()->GetMaterialData()->enableDissolve    = true;
+    obj3d_->GtModelMaterial()->GetMaterialData()->dissolveThreshold = dissolve;
 }
 
 void BasePlayerHand::AdjustParamBase() {

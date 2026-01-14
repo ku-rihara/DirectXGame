@@ -10,7 +10,7 @@ void StrongEnemy::Init(const Vector3& spownPos) {
     obj3d_.reset(KetaEngine::Object3d::CreateModel("StrongEnemy.obj"));
 	obj3d_->transform_.Init();
 	obj3d_->transform_.SetParent(&baseTransform_);   
-	obj3d_->material_.GetMaterialData()->enableLighting = 2;
+	obj3d_->GtModelMaterial()->GetMaterialData()->enableLighting = 2;
 }
 
 ///========================================================

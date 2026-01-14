@@ -11,9 +11,9 @@ void PlayerHandRight::Init() {
     groupName_ = "RightHand";
 
     obj3d_.reset(KetaEngine::Object3d::CreateModel("RHand.obj"));
-    obj3d_->material_.GetMaterialData()->enableLighting         = 2;
+    obj3d_->GtModelMaterial()->GetMaterialData()->enableLighting         = 2;
     obj3d_->transform_.scale_                                   = {2, 2, 2};
-    obj3d_->material_.GetMaterialData()->environmentCoefficient = 0.15f;
+    obj3d_->GtModelMaterial()->GetMaterialData()->environmentCoefficient = 0.15f;
 
     BasePlayerHand::Init();
 }
