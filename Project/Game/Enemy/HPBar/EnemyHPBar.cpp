@@ -8,8 +8,8 @@ void EnemyHPBar::Init(float hpMax) {
     sprite_.reset(KetaEngine::Sprite::Create("boss_Hpbar01.png", false));
     hpSprite_.reset(KetaEngine::Sprite::Create("boss_Hpbar02.png", false));
 
-    hpSprite_->anchorPoint_ = Vector2::ZeroVector();
-    sprite_->anchorPoint_   = Vector2::ZeroVector();
+    hpSprite_->SetAnchorPoint(Vector2::ZeroVector());
+    sprite_->SetAnchorPoint(Vector2::ZeroVector());
     // レイヤー番号セット
     hpSprite_->SetLayerNum(1);
     sprite_->SetLayerNum(2);

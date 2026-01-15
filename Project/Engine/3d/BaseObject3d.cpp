@@ -12,7 +12,8 @@ void BaseObject3d::SetModelByName(const std::string& modelName) {
 }
 
 void BaseObject3d::CreateMaterialResource() {
-    material_.Init(DirectXCommon::GetInstance());
+    material_ = std::make_unique<ModelMaterial>();
+    material_->Init(DirectXCommon::GetInstance());
 }
 
 ///============================================================
@@ -45,7 +46,7 @@ void BaseObject3d::CreateShadowMap() {
 
 void BaseObject3d::DebugImGui() {
 #ifdef _DEBUG
-    material_.DebugImGui();
+    material_->DebugImGui();
 #endif
 }
 
