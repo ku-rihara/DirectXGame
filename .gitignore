@@ -80,6 +80,9 @@ ipch/
 # Visual Studio Trace Files
 *.e2e
 
+# PDB files (Debug symbols)
+*.pdb
+
 # TFS 2012 Local Workspace
 $tf/
 
@@ -320,7 +323,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/Project/Engine/base/DirectXCommon.cpp
 
 # ImGui settings file
 imgui.ini
