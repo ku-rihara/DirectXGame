@@ -57,8 +57,12 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
     // ImGui用のSRVインデックスを確保
     int srvIndex = pSrvManager_->Allocate();
 
+    // Darkテーマに設定
     ImGui::StyleColorsDark();
     ImGui_ImplWin32_Init(winApp->GetHwnd());
+
+     io.Fonts->Build();
+
     ImGui_ImplDX12_Init(
         dxCommon_->GetDevice().Get(),
         dxCommon_->GetDxSwapChain()->GetDesc().BufferCount,
