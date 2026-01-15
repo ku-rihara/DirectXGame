@@ -23,7 +23,6 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
     dxCommon_    = dxCommon;
     pSrvManager_ = srvManager;
 #ifdef _DEBUG
-    HRESULT result;
     // ImGuiの初期化
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -55,22 +54,21 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
 
     io.Fonts->AddFontFromFileTTF("Resources/Font/MPLUS1p-Medium.ttf", 18.0f, &config, ranges);
 
-    // デスクリプタヒープ設定
-    D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-    desc.Type                       = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-    desc.NumDescriptors             = 1;
-    desc.Flags                      = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-    // デスクリプタヒープ生成
-    result = dxCommon_->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&srvHeap_));
-    assert(SUCCEEDED(result));
+    // ImGui用のSRVインデックスを確保
+    int srvIndex = pSrvManager_->Allocate();
+
     ImGui::StyleColorsDark();
     ImGui_ImplWin32_Init(winApp->GetHwnd());
-    ImGui_ImplDX12_Init(dxCommon_->GetDevice().Get(), dxCommon_->GetDxSwapChain()->GetDesc().BufferCount,
-        dxCommon_->GetDxSwapChain()->GetRTVDesc().Format, srvHeap_.Get(),
-        srvHeap_->GetCPUDescriptorHandleForHeapStart(),
-        srvHeap_->GetGPUDescriptorHandleForHeapStart());
+    ImGui_ImplDX12_Init(
+        dxCommon_->GetDevice().Get(),
+        dxCommon_->GetDxSwapChain()->GetDesc().BufferCount,
+        dxCommon_->GetDxSwapChain()->GetRTVDesc().Format,
+        pSrvManager_->GetDescriptorHeap(),
+        pSrvManager_->GetCPUDescriptorHandle(srvIndex),
+        pSrvManager_->GetGPUDescriptorHandle(srvIndex));
 #endif
 }
+
 ///===========================================================
 /// 開始
 ///===========================================================
@@ -80,7 +78,6 @@ void ImGuiManager::Begin() {
     ImGui_ImplDX12_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
-
 #endif
 }
 
@@ -89,7 +86,6 @@ void ImGuiManager::Begin() {
 ///===========================================================
 void ImGuiManager::preDraw() {
 #ifdef _DEBUG
-
     ImGui::Render();
 #endif
 }
@@ -102,17 +98,15 @@ void ImGuiManager::Finalizer() {
     ImGui_ImplDX12_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
-
 #endif
 }
 
 void ImGuiManager::Draw() {
-
 #ifdef _DEBUG
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
     // デスクリプタヒープの配列をセットするコマンド
-    ID3D12DescriptorHeap* ppHeaps[] = {srvHeap_.Get()};
+    ID3D12DescriptorHeap* ppHeaps[] = {pSrvManager_->GetDescriptorHeap()};
     commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
     // 描画コマンドを発行
     ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);

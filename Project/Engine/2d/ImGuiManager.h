@@ -38,8 +38,8 @@ private:
     /// other class
     DirectXCommon* dxCommon_;
     SrvManager* pSrvManager_;
-    // SRV用デスクリプタヒープ
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
+    //// SRV用デスクリプタヒープ
+    //Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
 };
 
 }; // KetaEngine

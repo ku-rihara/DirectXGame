@@ -137,7 +137,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
     textureData.srvCPUHandle = pSrvManager_->GetCPUDescriptorHandle(textureData.srvIndex);
     textureData.srvGPUHandle = pSrvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
 
-    // medaDataを基にSRVの設定
+    // metaDataを基にSRVの設定
     D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
     srvDesc.Format                  = textureData.metadata.format;
     srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
