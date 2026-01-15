@@ -80,9 +80,8 @@ private:
     int32_t dissolveTextureIndex_;
 
 public:
+    // getter
     MaterialData* GetMaterialData() const { return materialData_; }
-
-    // ディゾルブプレイヤー関連のgetter
     bool IsDissolveFinished() const;
     bool IsDissolvePlaying() const;
 };
