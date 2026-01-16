@@ -88,7 +88,7 @@ void SceneManager::ChangeScene(const std::string& sceneName) {
     GlobalParameter::GetInstance()->ResetAllRegister();
     GlobalParameter::GetInstance()->LoadFiles();
 
-     // コリジョン
+    // コリジョン
     collisionManager_ = std::make_unique<CollisionManager>();
     collisionManager_->Init();
 
@@ -99,5 +99,4 @@ void SceneManager::ChangeScene(const std::string& sceneName) {
 
     // パーティクルリセット
     ParticleManager::GetInstance()->ResetAllParticles();
-   
 }
