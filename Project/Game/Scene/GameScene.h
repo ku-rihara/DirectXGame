@@ -7,9 +7,9 @@
 #include "SkyBox/SkyBox.h"
 // emitter
 
-#include "utility/ObjectFromBlender/ObjectFromBlender.h"
-
 #include "Editor/CameraEditor/CameraAnimation.h"
+#include "utility/ObjectFromBlender/ObjectFromBlender.h"
+#include "utility/TimeLine/TimeLine.h"
 
 /// <summary>
 /// ゲームシーン
@@ -20,12 +20,12 @@ private:
     /// Private variants
     ///========================================================
 
-    std::unique_ptr<SkyBox> skuBox_                                       = nullptr;
-    std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender        = nullptr;
-    std::unique_ptr<KetaEngine::CameraAnimation> cameraPlayer_            = nullptr;
+    std::unique_ptr<SkyBox> skuBox_                                  = nullptr;
+    std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender = nullptr;
+    std::unique_ptr<KetaEngine::CameraAnimation> cameraPlayer_       = nullptr;
+    std::unique_ptr<KetaEngine::TimeLine> timeLine_                  = nullptr;
 
-public:
-    GameScene();
+    public : GameScene();
     ~GameScene() override;
 
     ///========================================================

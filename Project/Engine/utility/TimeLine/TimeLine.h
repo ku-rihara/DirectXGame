@@ -1,4 +1,5 @@
 #pragma once
+#include"Vector2.h"
 #include <cstdint>
 #include <functional>
 #include <string>
@@ -21,8 +22,6 @@ struct TimeLineTrack {
     bool isExpanded = true;
     std::function<void(float)> onValueChanged;
 };
-
-struct ImVec2;
 
 class TimeLine {
 public:
@@ -71,7 +70,7 @@ private:
     /// <summary>
     /// キーフレームのドラッグ&ドロップ処理
     /// </summary>
-    void HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, const ImVec2& keyPos);
+    void HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, const Vector2& keyPos);
 
     /// <summary>
     /// 2つのキーフレーム間で補間
