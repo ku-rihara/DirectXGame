@@ -529,6 +529,12 @@
     <Filter Include="Game\GameCamera\Behavior">
       <UniqueIdentifier>{de98c009-790e-4143-af65-eed3931a100c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\utility\TimeLine">
+      <UniqueIdentifier>{2cbce628-08fd-4e33-812e-88641148e06e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\TimeLine">
+      <UniqueIdentifier>{e2f3a444-8e3d-4d0b-bcfa-61452d6506c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1356,6 +1362,9 @@
     </ClCompile>
     <ClCompile Include="Game\GameCamera\Behavior\BaseCameraBehavior.cpp">
       <Filter>Game\GameCamera\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\TimeLine\TimeLine.cpp">
+      <Filter>MyEngine\.cpp\utility\TimeLine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
