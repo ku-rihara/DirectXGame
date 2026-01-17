@@ -28,6 +28,7 @@
 
 #include "GameSceneState/BaseGameSceneState.h"
 #include "2d/Sprite.h"
+#include "utility/TimeLine/TimeLine.h"
 
 /// <summary>
 /// ゲームシーン

@@ -192,6 +192,7 @@
     <ClCompile Include="Game\Combo\ComboUI.cpp" />
     <ClCompile Include="Game\Combo\ComboUIController.cpp" />
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp" />
+    <ClCompile Include="Engine\utility\TimeLine\TimeLine.cpp" />
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp" />
     <ClCompile Include="Game\DeathTimer\DeathTimer.cpp" />
     <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp" />
@@ -487,6 +488,7 @@
     <ClInclude Include="Game\Combo\ComboUI.h" />
     <ClInclude Include="Game\Combo\ComboUIController.h" />
     <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h" />
+    <ClInclude Include="Engine\utility\TimeLine\TimeLine.h" />
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h" />
     <ClInclude Include="Game\DeathTimer\DeathTimer.h" />
     <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h" />

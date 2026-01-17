@@ -2241,6 +2241,9 @@
     <ClInclude Include="Game\GameCamera\Behavior\BaseCameraBehavior.h">
       <Filter>Game\GameCamera\Behavior</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\utility\TimeLine\TimeLine.h">
+      <Filter>MyEngine\.h\utility\TimeLine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
