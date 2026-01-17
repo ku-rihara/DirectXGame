@@ -1366,6 +1366,9 @@
     <ClCompile Include="Engine\utility\TimeLine\TimeLine.cpp">
       <Filter>MyEngine\.cpp\utility\TimeLine</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackTimeLine.cpp">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -2252,6 +2255,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\TimeLine\TimeLine.h">
       <Filter>MyEngine\.h\utility\TimeLine</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackTimeLine.h">
+      <Filter>Game\Player\ComboCreator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
