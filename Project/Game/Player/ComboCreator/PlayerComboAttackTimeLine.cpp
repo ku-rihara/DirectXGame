@@ -1,4 +1,5 @@
 #include "PlayerComboAttackTimeline.h"
+#include"Frame/Frame.h"
 #include <imgui.h>
 
 void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
@@ -17,7 +18,7 @@ void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
     // トラックインデックスを初期化
     defaultTrackIndices_.fill(-1);
     renditionTrackIndices_.clear();
-    objAnimTrackIndices_.clear();
+    objAnimeTrackIndices_.clear();
     audioTrackIndices_.clear();
 
     // デフォルトトラックのセットアップ
@@ -95,14 +96,14 @@ void PlayerComboAttackTimeline::ApplyToParameters() {
     int32_t cancelTrackIdx = defaultTrackIndices_[static_cast<size_t>(DefaultTrack::CANCEL_START)];
     if (cancelTrackIdx >= 0) {
         float cancelTime                   = timeline_.GetValueAtFrame(cancelTrackIdx, timeline_.GetCurrentFrame());
-        attackParam.timingParam.cancelTime = FrameToTime(static_cast<int32_t>(cancelTime));
+        attackParam.timingParam.cancelTime = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(cancelTime));
     }
 
     // 先行入力開始時間
     int32_t precedeTrackIdx = defaultTrackIndices_[static_cast<size_t>(DefaultTrack::PRECEDE_INPUT_START)];
     if (precedeTrackIdx >= 0) {
         float precedeTime                        = timeline_.GetValueAtFrame(precedeTrackIdx, timeline_.GetCurrentFrame());
-        attackParam.timingParam.precedeInputTime = FrameToTime(static_cast<int32_t>(precedeTime));
+        attackParam.timingParam.precedeInputTime = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(precedeTime));
     }
 }
 
@@ -118,7 +119,7 @@ void PlayerComboAttackTimeline::SetupDefaultTracks() {
         timeline_.AddKeyFrame(trackIdx, 0, 0.0f);
 
         // 終了位置(イージング時間)
-        int32_t endFrame = TimeToFrame(attackParam.moveParam.easeTime);
+        int32_t endFrame = KetaEngine::Frame::TimeToFrame(attackParam.moveParam.easeTime);
         timeline_.AddKeyFrame(trackIdx, endFrame, 1.0f);
     }
 
@@ -127,7 +128,7 @@ void PlayerComboAttackTimeline::SetupDefaultTracks() {
         int32_t trackIdx                                                      = timeline_.AddTrack("Cancel Start");
         defaultTrackIndices_[static_cast<size_t>(DefaultTrack::CANCEL_START)] = trackIdx;
 
-        int32_t cancelFrame = TimeToFrame(attackParam.timingParam.cancelTime);
+        int32_t cancelFrame = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.cancelTime);
         timeline_.AddKeyFrame(trackIdx, cancelFrame, 1.0f, 1.0f);
     }
 
@@ -136,7 +137,7 @@ void PlayerComboAttackTimeline::SetupDefaultTracks() {
         int32_t trackIdx                                                             = timeline_.AddTrack("Precede Input Start");
         defaultTrackIndices_[static_cast<size_t>(DefaultTrack::PRECEDE_INPUT_START)] = trackIdx;
 
-        int32_t precedeFrame = TimeToFrame(attackParam.timingParam.precedeInputTime);
+        int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.precedeInputTime);
         timeline_.AddKeyFrame(trackIdx, precedeFrame, 1.0f, 1.0f);
     }
 }
@@ -159,7 +160,7 @@ void PlayerComboAttackTimeline::SetupRenditionTracks() {
         renditionTrackIndices_.push_back(trackIdx);
 
         // キーフレーム追加
-        int32_t frame = TimeToFrame(param.startTiming);
+        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
         timeline_.AddKeyFrame(trackIdx, frame, 1.0f, 1.0f);
     }
 
@@ -176,7 +177,7 @@ void PlayerComboAttackTimeline::SetupRenditionTracks() {
         int32_t trackIdx = timeline_.AddTrack(trackName);
         renditionTrackIndices_.push_back(trackIdx);
 
-        int32_t frame = TimeToFrame(param.startTiming);
+        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
         timeline_.AddKeyFrame(trackIdx, frame, 1.0f, 1.0f);
     }
 }
@@ -194,9 +195,9 @@ void PlayerComboAttackTimeline::SetupObjectAnimationTracks() {
         std::string trackName = PlayerAttackRenditionData::kObjAnimationTypeInfos[i].label;
 
         int32_t trackIdx = timeline_.AddTrack(trackName);
-        objAnimTrackIndices_.push_back(trackIdx);
+        objAnimeTrackIndices_.push_back(trackIdx);
 
-        int32_t frame = TimeToFrame(param.startTiming);
+        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
         timeline_.AddKeyFrame(trackIdx, frame, 1.0f, 1.0f);
     }
 }
@@ -216,7 +217,7 @@ void PlayerComboAttackTimeline::SetupAudioTracks() {
         int32_t trackIdx = timeline_.AddTrack(trackName);
         audioTrackIndices_.push_back(trackIdx);
 
-        int32_t frame = TimeToFrame(param.startTiming);
+        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
         timeline_.AddKeyFrame(trackIdx, frame, 1.0f, 1.0f);
     }
 }
@@ -231,7 +232,7 @@ int32_t PlayerComboAttackTimeline::CalculateTotalFrames() const {
     // イージング時間 + 終了待機時間 + 移動完了時間オフセット
     float totalTime = attackParam.moveParam.easeTime + attackParam.timingParam.finishWaitTime + attackParam.moveParam.finishTimeOffset;
 
-    return TimeToFrame(totalTime) + 60; // 余裕を持たせる
+    return KetaEngine::Frame::TimeToFrame(totalTime);
 }
 
 void PlayerComboAttackTimeline::AdvanceToNextAttack() {

@@ -3,6 +3,9 @@
 #include "utility/TimeLine/TimeLine.h"
 #include "PlayerComboAttackData.h"
 #include <memory>
+#include <array>
+#include <vector>
+#include <cstdint>
 
 /// <summary>
 /// プレイヤー攻撃用タイムラインエディタ
@@ -28,7 +31,7 @@ private:
     // トラックインデックス管理
     std::array<int32_t, static_cast<size_t>(DefaultTrack::COUNT)> defaultTrackIndices_;
     std::vector<int32_t> renditionTrackIndices_;
-    std::vector<int32_t> objAnimTrackIndices_;
+    std::vector<int32_t> objAnimeTrackIndices_;
     std::vector<int32_t> audioTrackIndices_;
 
     PlayMode playMode_  = PlayMode::SINGLE;
@@ -77,20 +80,7 @@ private:
     /// </summary>
     void SetupAudioTracks();
 
-    /// <summary>
-    /// 秒からフレームに変換
-    /// </summary>
-    int32_t TimeToFrame(float seconds) const {
-        return static_cast<int32_t>(seconds * kFPS);
-    }
-
-    /// <summary>
-    /// フレームから秒に変換
-    /// </summary>
-    float FrameToTime(int32_t frame) const {
-        return static_cast<float>(frame) / kFPS;
-    }
-
+ 
     /// <summary>
     /// 攻撃の総フレーム数を計算
     /// </summary>
