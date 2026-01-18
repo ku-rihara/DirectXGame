@@ -24,6 +24,9 @@ struct TimeLineTrack {
 
     // 右クリックコンテキストメニュー用コールバック
     std::function<void(int32_t trackIndex)> onRightClick;
+
+    // トラック固有ID（削除時の再インデックスに対応）
+    uint32_t id;
 };
 
 class TimeLine {
@@ -45,7 +48,7 @@ public:
     /// <summary>
     /// トラック削除
     /// </summary>
-    void RemoveTrack(uint32_t trackIndex);
+    bool RemoveTrack(uint32_t trackIndex);
 
     /// <summary>
     /// キーフレーム追加
@@ -54,9 +57,19 @@ public:
         float duration = 1.0f);
 
     /// <summary>
+    /// キーフレーム削除
+    /// </summary>
+    bool RemoveKeyFrame(uint32_t trackIndex, uint32_t keyIndex);
+
+    /// <summary>
     /// 指定フレームの値を取得
     /// </summary>
     float GetValueAtFrame(uint32_t trackIndex, int32_t frame) const;
+
+    /// <summary>
+    /// 指定トラックの最初のキーフレームのフレーム番号を取得
+    /// </summary>
+    int32_t GetFirstKeyFrameFrame(uint32_t trackIndex) const;
 
     /// <summary>
     /// 現在のフレームの値を全トラックに適用
@@ -69,17 +82,22 @@ public:
     void SetTrackRightClickCallback(uint32_t trackIndex,
         std::function<void(int32_t)> callback);
 
+    /// <summary>
+    /// トラック数を取得
+    /// </summary>
+    size_t GetTrackCount() const { return tracks_.size(); }
+
 private:
     //*---------------------------- private Methods ----------------------------*//
 
     void HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex,
         const Vector2& keyPos);
+
     float InterpolateValue(const TimeLineKeyFrame& key1,
         const TimeLineKeyFrame& key2, int32_t frame) const;
 
     // トラック右クリック処理
-    void HandleTrackRightClick(uint32_t trackIndex, const Vector2& trackStart,
-        const Vector2& trackEnd);
+    void HandleTrackRightClick(uint32_t trackIndex, float trackY);
 
 private:
     //*---------------------------- private Variant ----------------------------*//
@@ -105,6 +123,9 @@ private:
 
     // 右クリックされたトラック
     int rightClickedTrackIndex_ = -1;
+
+    // トラックID生成用
+    uint32_t nextTrackId_ = 0;
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
