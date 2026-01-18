@@ -7,78 +7,120 @@ using namespace KetaEngine;
 
 void TimeLine::Init() {
     tracks_.clear();
-    currentFrame_       = 0;
-    scrollOffset_       = 0;
-    isPlaying_          = false;
-    draggingTrackIndex_ = -1;
-    draggingKeyIndex_   = -1;
+    currentFrame_           = 0;
+    scrollOffset_           = 0;
+    isPlaying_              = false;
+    draggingTrackIndex_     = -1;
+    draggingKeyIndex_       = -1;
+    rightClickedTrackIndex_ = -1;
+    nextTrackId_            = 0;
 }
 
 uint32_t TimeLine::AddTrack(const std::string& trackName, std::function<void(float)> callback) {
     TimeLineTrack newTrack;
-
-    // トラック情報設定
     newTrack.name           = trackName;
     newTrack.onValueChanged = callback;
+    newTrack.id             = nextTrackId_++;
 
-    // tracksに追加
     tracks_.push_back(newTrack);
     return static_cast<uint32_t>(tracks_.size() - 1);
 }
 
-void TimeLine::AddKeyFrame(uint32_t trackIndex, int32_t frame, float value, float duration) {
+bool TimeLine::RemoveTrack(uint32_t trackIndex) {
+    if (trackIndex >= tracks_.size()) {
+        return false;
+    }
 
-    // 範囲外チェック
+    tracks_.erase(tracks_.begin() + trackIndex);
+
+    // ドラッグ中のインデックスを調整
+    if (draggingTrackIndex_ == static_cast<int>(trackIndex)) {
+        draggingTrackIndex_ = -1;
+        draggingKeyIndex_   = -1;
+    } else if (draggingTrackIndex_ > static_cast<int>(trackIndex)) {
+        draggingTrackIndex_--;
+    }
+
+    // 右クリックインデックスを調整
+    if (rightClickedTrackIndex_ == static_cast<int>(trackIndex)) {
+        rightClickedTrackIndex_ = -1;
+    } else if (rightClickedTrackIndex_ > static_cast<int>(trackIndex)) {
+        rightClickedTrackIndex_--;
+    }
+
+    return true;
+}
+
+void TimeLine::AddKeyFrame(uint32_t trackIndex, int32_t frame, float value, float duration) {
     if (trackIndex >= tracks_.size()) {
         return;
     }
 
-    // キーフレーム作成
     TimeLineKeyFrame newKeyFrame;
-    newKeyFrame.frame    = frame;
-    newKeyFrame.value    = value;
-    newKeyFrame.duration = duration;
+    newKeyFrame.frame      = frame;
+    newKeyFrame.value      = value;
+    newKeyFrame.duration   = duration;
+    newKeyFrame.isSelected = false;
 
-    // tracks_.keyFramesに追加
     tracks_[trackIndex].keyframes.push_back(newKeyFrame);
 
-    // フレーム順にソート
     std::sort(tracks_[trackIndex].keyframes.begin(), tracks_[trackIndex].keyframes.end(),
         [](const TimeLineKeyFrame& a, const TimeLineKeyFrame& b) { return a.frame < b.frame; });
 }
 
-float TimeLine::GetValueAtFrame(uint32_t trackIndex, int32_t frame) const {
+bool TimeLine::RemoveKeyFrame(uint32_t trackIndex, uint32_t keyIndex) {
+    if (trackIndex >= tracks_.size()) {
+        return false;
+    }
 
-    // 範囲外チェック
+    if (keyIndex >= tracks_[trackIndex].keyframes.size()) {
+        return false;
+    }
+
+    tracks_[trackIndex].keyframes.erase(tracks_[trackIndex].keyframes.begin() + keyIndex);
+    return true;
+}
+
+float TimeLine::GetValueAtFrame(uint32_t trackIndex, int32_t frame) const {
     if (trackIndex >= tracks_.size()) {
         return 0.0f;
     }
 
-    // キーフレームが存在しない場合は0を返す
     const auto& keyframes = tracks_[trackIndex].keyframes;
     if (keyframes.empty()) {
         return 0.0f;
     }
 
-    // フレームがキーフレームより前の場合
     if (frame <= keyframes.front().frame) {
         return keyframes.front().value;
     }
 
-    // 2つのキーフレーム間で補間
-    for (size_t i = 0; i < keyframes.size() - 1; ++i) { 
+    for (size_t i = 0; i < keyframes.size() - 1; ++i) {
         if (frame >= keyframes[i].frame && frame <= keyframes[i + 1].frame) {
             return InterpolateValue(keyframes[i], keyframes[i + 1], frame);
         }
     }
 
-    return 0.0f;
+    return keyframes.back().value;
 }
 
-float TimeLine::InterpolateValue(const TimeLineKeyFrame& key1, const TimeLineKeyFrame& key2, int frame) const {
+int32_t TimeLine::GetFirstKeyFrameFrame(uint32_t trackIndex) const {
+    if (trackIndex >= tracks_.size()) {
+        return 0;
+    }
+
+    const auto& keyframes = tracks_[trackIndex].keyframes;
+    if (keyframes.empty()) {
+        return 0;
+    }
+
+    return keyframes.front().frame;
+}
+
+float TimeLine::InterpolateValue(const TimeLineKeyFrame& key1, const TimeLineKeyFrame& key2, int32_t frame) const {
     float t = static_cast<float>(frame - key1.frame) / static_cast<float>(key2.frame - key1.frame);
     t       = std::clamp(t, 0.0f, 1.0f);
-    return key1.value + (key2.value - key1.value) * t; // 線形補間
+    return key1.value + (key2.value - key1.value) * t;
 }
 
 void TimeLine::ApplyCurrentFrame() {
@@ -90,8 +132,15 @@ void TimeLine::ApplyCurrentFrame() {
     }
 }
 
+void TimeLine::SetTrackRightClickCallback(uint32_t trackIndex, std::function<void(int32_t)> callback) {
+    if (trackIndex >= tracks_.size()) {
+        return;
+    }
+
+    tracks_[trackIndex].onRightClick = callback;
+}
+
 void TimeLine::HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, const Vector2& keyPos) {
-    // ドラッグ開始
     if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImVec2(keyPos.x - 8, keyPos.y - 8), ImVec2(keyPos.x + 8, keyPos.y + 8))) {
 
         draggingTrackIndex_                                = trackIndex;
@@ -101,15 +150,34 @@ void TimeLine::HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, co
     }
 }
 
-void TimeLine::Draw() {
+void TimeLine::HandleTrackRightClick(uint32_t trackIndex, float trackY) {
+    ImVec2 mousePos   = ImGui::GetMousePos();
+    ImVec2 canvas_pos = ImGui::GetCursorScreenPos();
 
+    // トラック領域の判定
+    ImVec2 trackStart = ImVec2(canvas_pos.x, trackY);
+    ImVec2 trackEnd   = ImVec2(canvas_pos.x + ImGui::GetContentRegionAvail().x, trackY + trackHeight_);
+
+    if (ImGui::IsMouseClicked(1) && mousePos.x >= trackStart.x && mousePos.x <= trackEnd.x && mousePos.y >= trackStart.y && mousePos.y <= trackEnd.y) {
+
+        rightClickedTrackIndex_ = trackIndex;
+
+        // コールバックが設定されていれば呼び出す
+        if (tracks_[trackIndex].onRightClick) {
+            tracks_[trackIndex].onRightClick(trackIndex);
+        }
+
+        ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIndex)).c_str());
+    }
+}
+
+void TimeLine::Draw() {
     ImGui::Begin("TimeLine Editor", nullptr, ImGuiWindowFlags_NoScrollbar);
 
     // ツールバー
     ImGui::Text("Frame: %d / %d", currentFrame_, endFrame_);
     ImGui::SameLine();
 
-    //
     if (ImGui::Button(isPlaying_ ? "Pause" : "Play")) {
         isPlaying_ = !isPlaying_;
     }
@@ -122,7 +190,6 @@ void TimeLine::Draw() {
     }
     ImGui::SameLine();
 
-    //
     ImGui::SetNextItemWidth(100);
     ImGui::SliderFloat("Zoom", &zoom_, 0.1f, 5.0f);
 
@@ -169,7 +236,7 @@ void TimeLine::Draw() {
         }
     }
 
-     // 現在フレームインジケーター
+    // 現在フレームインジケーター
     float currentFrameX = canvas_pos.x + headerWidth_ + (currentFrame_ - scrollOffset_) * frameWidth;
     draw_list->AddLine(
         ImVec2(currentFrameX, canvas_pos.y),
@@ -199,6 +266,9 @@ void TimeLine::Draw() {
             ImVec2(canvas_pos.x + canvas_size.x, trackY + trackHeight_),
             IM_COL32(50, 50, 50, 255));
 
+        // 右クリック処理
+        HandleTrackRightClick(i, trackY);
+
         // キーフレーム描画
         for (uint32_t j = 0; j < track.keyframes.size(); j++) {
             TimeLineKeyFrame& kf = track.keyframes[j];
@@ -207,7 +277,7 @@ void TimeLine::Draw() {
                 float kfX = canvas_pos.x + headerWidth_ + (kf.frame - scrollOffset_) * frameWidth;
                 float kfY = trackY + trackHeight_ / 2;
 
-                // 持続時間の表示（横バー）
+                // 持続時間の表示
                 if (kf.duration > 1.0f) {
                     float durationWidth = kf.duration * frameWidth;
                     draw_list->AddRectFilled(
@@ -229,6 +299,19 @@ void TimeLine::Draw() {
 
                 // ドラッグ&ドロップ処理
                 HandleKeyFrameDragDrop(i, j, Vector2(kfX, kfY));
+
+                // キーフレーム右クリックで削除
+                if (ImGui::IsMouseClicked(1) && ImGui::IsMouseHoveringRect(ImVec2(kfX - 8, kfY - 8), ImVec2(kfX + 8, kfY + 8))) {
+                    ImGui::OpenPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str());
+                }
+
+                // キーフレームコンテキストメニュー
+                if (ImGui::BeginPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str())) {
+                    if (ImGui::MenuItem("Delete KeyFrame")) {
+                        RemoveKeyFrame(i, j);
+                    }
+                    ImGui::EndPopup();
+                }
             }
         }
 
@@ -250,7 +333,6 @@ void TimeLine::Draw() {
     // ドラッグ終了
     if (ImGui::IsMouseReleased(0)) {
         if (draggingTrackIndex_ >= 0 && draggingKeyIndex_ >= 0) {
-            // キーフレームを再ソート
             std::sort(tracks_[draggingTrackIndex_].keyframes.begin(),
                 tracks_[draggingTrackIndex_].keyframes.end(),
                 [](const TimeLineKeyFrame& a, const TimeLineKeyFrame& b) { return a.frame < b.frame; });
