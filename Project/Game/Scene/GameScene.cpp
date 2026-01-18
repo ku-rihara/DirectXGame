@@ -96,7 +96,7 @@ void GameScene::Debug() {
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     ImGui::End();
 
-     timeLine_->Draw();
+     timeLine_->Draw("test");
 #endif
 }
 

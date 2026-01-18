@@ -37,7 +37,7 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     void Init();
-    void Draw();
+    void Draw(const std::string& name);
 
     /// <summary>
     /// トラック追加
@@ -102,7 +102,10 @@ private:
 private:
     //*---------------------------- private Variant ----------------------------*//
 
+    // トラック
     std::vector<TimeLineTrack> tracks_;
+
+    std::function<void()> originalItemDrawCallBack_ = nullptr;
 
     int32_t currentFrame_ = 0;
     int32_t startFrame_   = 0;
@@ -140,6 +143,7 @@ public:
     void SetEndFrame(int frame) { endFrame_ = frame; }
     void SetPlaying(bool playing) { isPlaying_ = playing; }
     void SetZoom(float zoom) { zoom_ = zoom; }
+    void SetOriginalItemDrawCallBack(std::function<void()> callback) { originalItemDrawCallBack_ = callback; }
 };
 
 }; // KetaEngine

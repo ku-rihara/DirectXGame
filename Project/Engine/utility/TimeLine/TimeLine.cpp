@@ -171,8 +171,15 @@ void TimeLine::HandleTrackRightClick(uint32_t trackIndex, float trackY) {
     }
 }
 
-void TimeLine::Draw() {
-    ImGui::Begin("TimeLine Editor", nullptr, ImGuiWindowFlags_NoScrollbar);
+void TimeLine::Draw(const std::string& name) {
+
+    ImGui::Begin(name.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar);
+
+     if (originalItemDrawCallBack_) {
+        ImGui::SameLine();
+        ImGui::Separator();
+        originalItemDrawCallBack_();
+    }
 
     // ツールバー
     ImGui::Text("Frame: %d / %d", currentFrame_, endFrame_);
