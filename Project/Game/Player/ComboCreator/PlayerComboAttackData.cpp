@@ -97,36 +97,38 @@ void PlayerComboAttackData::AdjustParam() {
     // 　タイムライン描画
     timeLine_.Draw();
 
+    ImGui::PopID();
+
 #endif // _DEBUG
 }
 
 void PlayerComboAttackData::ShowParameters() {
     // ===== 常に表示するパラメータ =====
 
-    ImGui::SeparatorText("Basic Settings");
+    ImGui::SeparatorText("parameters");
 
-    ImGui::Checkbox("Motion Only", &attackParam_.isMotionOnly);
+    ImGui::Checkbox("モーションのみ有効", &attackParam_.isMotionOnly);
 
     ImGui::SeparatorText("Trigger Conditions");
 
     // TriggerParam（常に表示）
-    ImGui::Checkbox("First Attack", &attackParam_.triggerParam.isFirstAttack);
-    ImGui::Checkbox("Require Hit", &attackParam_.triggerParam.requireHit);
-    ImGuiKeyboardKeySelector("Keyboard Button", attackParam_.triggerParam.keyBordBottom);
-    ImGuiGamepadButtonSelector("Gamepad Button", attackParam_.triggerParam.gamePadBottom);
+    ImGui::Checkbox("最初の攻撃", &attackParam_.triggerParam.isFirstAttack);
+    ImGui::Checkbox("前の攻撃がヒットした時が発動条件", &attackParam_.triggerParam.requireHit);
+    ImGuiKeyboardKeySelector("キーボード:ボタン", attackParam_.triggerParam.keyBordBottom);
+    ImGuiGamepadButtonSelector("パッド:ボタン", attackParam_.triggerParam.gamePadBottom);
 
     // 発動条件
-    const char* conditionItems[] = {"Ground", "Air", "Both"};
+    const char* conditionItems[] = {"地面", "空中", "両方"};
     triggerConditionInt_         = static_cast<int>(attackParam_.triggerParam.condition);
-    if (ImGui::Combo("Trigger Condition", &triggerConditionInt_,
+    if (ImGui::Combo("発動できる状況", &triggerConditionInt_,
             conditionItems, IM_ARRAYSIZE(conditionItems))) {
         attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
     }
 
     ImGui::SeparatorText("Flow Control");
 
-    ImGui::Checkbox("Auto Advance", &attackParam_.timingParam.isAutoAdvance);
-    ImGui::Checkbox("Enable Fall", &attackParam_.fallParam.enableFall);
+    ImGui::Checkbox("自動で次の攻撃に進む", &attackParam_.timingParam.isAutoAdvance);
+    ImGui::Checkbox("攻撃終了時に落ちる", &attackParam_.fallParam.enableFall);
 
     ImGui::SeparatorText("Next Attack");
     SelectNextAttack();

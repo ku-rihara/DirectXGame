@@ -69,7 +69,7 @@ void PlayerComboAttackTimeline::Draw() {
         Init(attackData_);
     }
 
-    ImGui::PopID();
+    ImGui::PopID(); // ← ここで必ずPopIDが呼ばれることを保証
 
     // 連続再生モード処理
     if (playMode_ == PlayMode::CONTINUOUS && timeline_.IsPlaying() && timeline_.GetCurrentFrame() >= timeline_.GetEndFrame()) {
@@ -626,38 +626,6 @@ void PlayerComboAttackTimeline::ApplyToParameters() {
     }
 }
 
-void PlayerComboAttackTimeline::ApplyTrackToRendition(const TrackInfo& trackInfo, float timing) {
-    auto& renditionData = const_cast<PlayerAttackRenditionData&>(attackData_->GetRenditionData());
-
-    int typeInt = static_cast<int>(trackInfo.type);
-
-    // 通常演出
-    if (typeInt >= static_cast<int>(AddableTrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(AddableTrackType::PARTICLE_EFFECT)) {
-
-        auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
-            renditionData.GetRenditionParamFromIndex(typeInt));
-        param.fileName    = trackInfo.fileName;
-        param.startTiming = timing;
-    }
-    // ヒット時演出
-    else if (typeInt >= static_cast<int>(AddableTrackType::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(AddableTrackType::PARTICLE_EFFECT_ON_HIT)) {
-
-        int baseIndex = typeInt - static_cast<int>(AddableTrackType::OBJ_ANIM_HEAD);
-        auto& param   = const_cast<PlayerAttackRenditionData::ObjAnimationParam&>(
-            renditionData.GetObjAnimationParamFromIndex(baseIndex));
-        param.fileName    = trackInfo.fileName;
-        param.startTiming = timing;
-    }
-    // オーディオ
-    else if (typeInt >= static_cast<int>(AddableTrackType::AUDIO_ATTACK) && typeInt <= static_cast<int>(AddableTrackType::AUDIO_HIT)) {
-
-        int baseIndex = typeInt - static_cast<int>(AddableTrackType::AUDIO_ATTACK);
-        auto& param   = const_cast<PlayerAttackRenditionData::AudioParam&>(
-            renditionData.GetAudioParamFromIndex(baseIndex));
-        param.fileName    = trackInfo.fileName;
-        param.startTiming = timing;
-    }
-}
 
 int32_t PlayerComboAttackTimeline::CalculateTotalFrames() const {
     if (!attackData_) {
@@ -759,13 +727,44 @@ PlayerComboAttackTimeline::GetTrackTypeFromIndex(int32_t trackIndex) {
 
     return AddableTrackType::COUNT;
 }
-<int>(AddableTrackType::CAMERA_ACTION_ON_HIT);
-auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
-    renditionData.GetRenditionParamOnHitFromIndex(baseIndex));
-param.fileName    = trackInfo.fileName;
-param.startTiming = timing;
-}
-// オブジェクトアニメーション
-else if (typeInt >= static_cast<int>(AddableTrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(AddableTrackType::OBJ_ANIM_MAIN_HEAD)) {
+void PlayerComboAttackTimeline::ApplyTrackToRendition(const TrackInfo& trackInfo, float timing) {
+    auto& renditionData = const_cast<PlayerAttackRenditionData&>(attackData_->GetRenditionData());
 
-    int baseIndex = typeInt - static_cast
+    int typeInt = static_cast<int>(trackInfo.type);
+
+    // 通常演出
+    if (typeInt >= static_cast<int>(AddableTrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(AddableTrackType::PARTICLE_EFFECT)) {
+
+        auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
+            renditionData.GetRenditionParamFromIndex(typeInt));
+        param.fileName    = trackInfo.fileName;
+        param.startTiming = timing;
+    }
+    // ヒット時演出
+    else if (typeInt >= static_cast<int>(AddableTrackType::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(AddableTrackType::PARTICLE_EFFECT_ON_HIT)) {
+
+        int baseIndex = typeInt - static_cast<int>(AddableTrackType::CAMERA_ACTION_ON_HIT);
+        auto& param   = const_cast<PlayerAttackRenditionData::RenditionParam&>(
+            renditionData.GetRenditionParamOnHitFromIndex(baseIndex));
+        param.fileName    = trackInfo.fileName;
+        param.startTiming = timing;
+    }
+    // オブジェクトアニメーション
+    else if (typeInt >= static_cast<int>(AddableTrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(AddableTrackType::OBJ_ANIM_MAIN_HEAD)) {
+
+        int baseIndex = typeInt - static_cast<int>(AddableTrackType::OBJ_ANIM_HEAD);
+        auto& param   = const_cast<PlayerAttackRenditionData::ObjAnimationParam&>(
+            renditionData.GetObjAnimationParamFromIndex(baseIndex));
+        param.fileName    = trackInfo.fileName;
+        param.startTiming = timing;
+    }
+    // オーディオ
+    else if (typeInt >= static_cast<int>(AddableTrackType::AUDIO_ATTACK) && typeInt <= static_cast<int>(AddableTrackType::AUDIO_HIT)) {
+
+        int baseIndex = typeInt - static_cast<int>(AddableTrackType::AUDIO_ATTACK);
+        auto& param   = const_cast<PlayerAttackRenditionData::AudioParam&>(
+            renditionData.GetAudioParamFromIndex(baseIndex));
+        param.fileName    = trackInfo.fileName;
+        param.startTiming = timing;
+    }
+}
