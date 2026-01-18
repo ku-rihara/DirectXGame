@@ -37,22 +37,25 @@ void PlayerComboAttackTimeline::Draw() {
 
     ImGui::PushID("AttackTimeline");
 
-    // 再生モード選択
-    ImGui::Text("Play Mode:");
-    ImGui::SameLine();
-    if (ImGui::RadioButton("Single", playMode_ == PlayMode::SINGLE)) {
-        playMode_ = PlayMode::SINGLE;
-    }
-    ImGui::SameLine();
-    if (ImGui::RadioButton("Continuous", playMode_ == PlayMode::CONTINUOUS)) {
-        playMode_ = PlayMode::CONTINUOUS;
-    }
+    timeline_.SetOriginalItemDrawCallBack([this]() {
+        // 再生モード選択
+        ImGui::Text("Play Mode:");
+        ImGui::SameLine();
+        if (ImGui::RadioButton("Single", playMode_ == PlayMode::SINGLE)) {
+            playMode_ = PlayMode::SINGLE;
+        }
+        ImGui::SameLine();
+        if (ImGui::RadioButton("Continuous", playMode_ == PlayMode::CONTINUOUS)) {
+            playMode_ = PlayMode::CONTINUOUS;
+        }
 
-    // トラック追加ボタン
-    DrawAddTrackButton();
+          // トラック追加ボタン
+        DrawAddTrackButton();
+    });
+
 
     // タイムライン描画
-    timeline_.Draw();
+    timeline_.Draw("攻撃タイムライン");
 
     // 各トラックのコンテキストメニュー処理
     for (size_t i = 0; i < timeline_.GetTrackCount(); ++i) {
@@ -69,7 +72,7 @@ void PlayerComboAttackTimeline::Draw() {
         Init(attackData_);
     }
 
-    ImGui::PopID(); // ← ここで必ずPopIDが呼ばれることを保証
+    ImGui::PopID(); 
 
     // 連続再生モード処理
     if (playMode_ == PlayMode::CONTINUOUS && timeline_.IsPlaying() && timeline_.GetCurrentFrame() >= timeline_.GetEndFrame()) {
