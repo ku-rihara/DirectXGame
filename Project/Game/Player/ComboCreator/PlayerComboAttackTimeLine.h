@@ -80,14 +80,21 @@ private:
     void DrawAddTrackButton();
     void DrawAddTrackPopup();
 
+    // パラメータ編集ボタン
+    void DrawParamEditButtons();
+
     // トラック右クリックメニュー
     void DrawTrackContextMenu(int32_t trackIndex);
 
-    // パラメータ編集UI（右クリックで表示）
+    // キーフレーム右クリックメニュー
+    void DrawKeyFrameContextMenu(int32_t trackIndex, int32_t keyIndex);
+
+    // パラメータ編集UI
     void DrawCollisionParamUI();
     void DrawMoveParamUI();
     void DrawTimingParamUI(AddableTrackType type);
     void DrawRenditionFileSelector(AddableTrackType type, TrackInfo& info);
+    void DrawRenditionKeyFrameEditor(int32_t trackIndex, int32_t keyIndex);
 
     // ヘルパー関数
     int32_t CalculateTotalFrames() const;
@@ -116,4 +123,7 @@ private:
     // UI状態
     PlayMode playMode_  = PlayMode::SINGLE;
     bool isInitialized_ = false;
+
+    // 選択中のパラメータ編集タイプ
+    int32_t selectedParamEditType_ = -1; 
 };
