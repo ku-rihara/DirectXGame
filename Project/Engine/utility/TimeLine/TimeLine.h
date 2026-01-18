@@ -25,7 +25,7 @@ struct TimeLineTrack {
     // 右クリックコンテキストメニュー用コールバック
     std::function<void(int32_t trackIndex)> onRightClick;
 
-    // トラック固有ID（削除時の再インデックスに対応）
+    // トラック固有ID
     uint32_t id;
 };
 
