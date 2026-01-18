@@ -1,4 +1,4 @@
-#include "TImeLine.h"
+#include "TimeLine.h"
 
 using namespace KetaEngine;
 #include <algorithm>
@@ -175,7 +175,7 @@ void TimeLine::Draw(const std::string& name) {
 
     ImGui::Begin(name.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar);
 
-     if (originalItemDrawCallBack_) {
+    if (originalItemDrawCallBack_) {
         ImGui::SameLine();
         ImGui::Separator();
         originalItemDrawCallBack_();
@@ -223,13 +223,15 @@ void TimeLine::Draw(const std::string& name) {
     int visibleFrameStart = scrollOffset_;
     int visibleFrameEnd   = scrollOffset_ + static_cast<int>((canvas_size.x - headerWidth_) / frameWidth) + 1;
 
+    float trackAreaHeight = rulerHeight_ + tracks_.size() * trackHeight_;
+
     for (int frame = visibleFrameStart; frame <= visibleFrameEnd && frame <= endFrame_; frame++) {
         float x = canvas_pos.x + headerWidth_ + (frame - scrollOffset_) * frameWidth;
 
         if (frame % 5 == 0) {
             draw_list->AddLine(
                 ImVec2(x, canvas_pos.y + rulerHeight_),
-                ImVec2(x, canvas_pos.y + canvas_size.y),
+                ImVec2(x, canvas_pos.y + trackAreaHeight),
                 IM_COL32(60, 60, 60, 255), 1.0f);
 
             char frameText[8];
@@ -238,17 +240,10 @@ void TimeLine::Draw(const std::string& name) {
         } else {
             draw_list->AddLine(
                 ImVec2(x, canvas_pos.y + rulerHeight_),
-                ImVec2(x, canvas_pos.y + canvas_size.y),
+                ImVec2(x, canvas_pos.y + trackAreaHeight),
                 IM_COL32(45, 45, 45, 255), 1.0f);
         }
     }
-
-    // 現在フレームインジケーター
-    float currentFrameX = canvas_pos.x + headerWidth_ + (currentFrame_ - scrollOffset_) * frameWidth;
-    draw_list->AddLine(
-        ImVec2(currentFrameX, canvas_pos.y),
-        ImVec2(currentFrameX, canvas_pos.y + canvas_size.y),
-        IM_COL32(255, 100, 100, 255), 2.0f);
 
     // トラック描画
     float trackY = canvas_pos.y + rulerHeight_;
@@ -354,7 +349,8 @@ void TimeLine::Draw(const std::string& name) {
     ImGui::SetCursorScreenPos(canvas_pos);
     ImGui::InvisibleButton("timeline_canvas", canvas_size);
 
-    if (ImGui::IsItemClicked()) {
+    // マウス長押しでフレームを移動
+    if (ImGui::IsItemActive() && ImGui::IsMouseDown(0)) {
         ImVec2 mouse_pos = ImGui::GetMousePos();
         if (mouse_pos.x > canvas_pos.x + headerWidth_) {
             int clickedFrame = scrollOffset_ + (int)((mouse_pos.x - canvas_pos.x - headerWidth_) / frameWidth);
@@ -364,6 +360,13 @@ void TimeLine::Draw(const std::string& name) {
             }
         }
     }
+
+    // 現在フレームインジケーター（最前面に描画）
+    float currentFrameX = canvas_pos.x + headerWidth_ + (currentFrame_ - scrollOffset_) * frameWidth;
+    draw_list->AddLine(
+        ImVec2(currentFrameX, canvas_pos.y),
+        ImVec2(currentFrameX, canvas_pos.y + trackAreaHeight),
+        IM_COL32(255, 100, 100, 255), 2.0f);
 
     // スクロール
     if (ImGui::IsItemHovered()) {
