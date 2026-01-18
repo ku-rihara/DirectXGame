@@ -63,7 +63,6 @@ public:
         Count
     };
 
-private:
     // 演出タイプ
     struct RenditionTypeInfo {
         Type type;
