@@ -1,4 +1,5 @@
 #include "PlayerComboAttackData.h"
+#include "Easing/Easing.h"
 #include "Function/GetFile.h"
 #include "input/Input.h"
 #include "input/InputData.h"
@@ -9,16 +10,17 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     // グローバルパラメータ
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
 
-    // グループ名設定
+    // グループ作成、パラメータ登録、同期
     groupName_ = attackName;
     globalParameter_->CreateGroup(groupName_);
-
-    // バインド
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    // condition適応
-    attackParam_.triggerParam.condition = static_cast<TriggerCondition>(tempCondition_);
+    // conditionをIntから適応
+    attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
+
+    // タイムラインの初期化
+    timeLine_.Init(this);
 }
 
 void PlayerComboAttackData::LoadData() {
@@ -59,7 +61,7 @@ void PlayerComboAttackData::RegisterParams() {
     // TriggerParam
     globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
     globalParameter_->Regist(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
-    globalParameter_->Regist(groupName_, "Condition", &tempCondition_);
+    globalParameter_->Regist(groupName_, "Condition", &triggerConditionInt_);
     globalParameter_->Regist(groupName_, "IsFirstAttack", &attackParam_.triggerParam.isFirstAttack);
     globalParameter_->Regist(groupName_, "RequireHit", &attackParam_.triggerParam.requireHit);
     globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance);
@@ -88,6 +90,17 @@ void PlayerComboAttackData::AdjustParam() {
 
     ImGui::PushID(groupName_.c_str());
     ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), (groupName_ + " Editing").c_str());
+
+    ImGui::SeparatorText("攻撃編集");
+
+    ShowParameters();
+    // 　タイムライン描画
+    timeLine_.Draw();
+
+#endif // _DEBUG
+}
+
+void PlayerComboAttackData::ShowParameters() {
     ImGui::Checkbox("モーションのみ有効", &attackParam_.isMotionOnly);
     ImGui::Separator();
 
@@ -99,9 +112,9 @@ void PlayerComboAttackData::AdjustParam() {
 
     // 発動条件
     const char* conditionItems[] = {"地面", "空中", "両方"};
-    tempCondition_               = static_cast<int>(attackParam_.triggerParam.condition);
-    if (ImGui::Combo("発動できる状況", &tempCondition_, conditionItems, IM_ARRAYSIZE(conditionItems))) {
-        attackParam_.triggerParam.condition = static_cast<TriggerCondition>(tempCondition_);
+    triggerConditionInt_         = static_cast<int>(attackParam_.triggerParam.condition);
+    if (ImGui::Combo("発動できる状況", &triggerConditionInt_, conditionItems, IM_ARRAYSIZE(conditionItems))) {
+        attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
     }
 
     // Simple Parameter
@@ -116,7 +129,7 @@ void PlayerComboAttackData::AdjustParam() {
         ImGui::DragFloat3("サイズ", &attackParam_.collisionParam.size.x, 0.01f);
         ImGui::DragFloat3("オフセット位置", &attackParam_.collisionParam.offsetPos.x, 0.01f);
         ImGui::DragFloat("適応時間", &attackParam_.collisionParam.adaptTime, 0.01f);
-     
+
         ImGui::InputInt("ループ回数", &attackParam_.collisionParam.loopNum);
         if (attackParam_.collisionParam.loopNum > 0) {
             ImGui::DragFloat("ループ待機時間", &attackParam_.collisionParam.loopWaitTime, 0.01f);
@@ -161,8 +174,6 @@ void PlayerComboAttackData::AdjustParam() {
     globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
 
     ImGui::PopID();
-
-#endif // _DEBUG
 }
 
 void PlayerComboAttackData::SelectNextAttack() {

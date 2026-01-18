@@ -1,12 +1,12 @@
 #pragma once
 
 #include "utility/TimeLine/TimeLine.h"
-#include "PlayerComboAttackData.h"
-#include <memory>
 #include <array>
-#include <vector>
 #include <cstdint>
+#include <memory>
+#include <vector>
 
+class PlayerComboAttackData;
 /// <summary>
 /// プレイヤー攻撃用タイムラインエディタ
 /// </summary>
@@ -23,22 +23,6 @@ public:
         PRECEDE_INPUT_START,
         COUNT
     };
-
-private:
-    PlayerComboAttackData* attackData_ = nullptr;
-    KetaEngine::TimeLine timeline_;
-
-    // トラックインデックス管理
-    std::array<int32_t, static_cast<size_t>(DefaultTrack::COUNT)> defaultTrackIndices_;
-    std::vector<int32_t> renditionTrackIndices_;
-    std::vector<int32_t> objAnimeTrackIndices_;
-    std::vector<int32_t> audioTrackIndices_;
-
-    PlayMode playMode_  = PlayMode::SINGLE;
-    bool isInitialized_ = false;
-
-    // 60FPS基準
-    static constexpr float kFPS = 60.0f;
 
 public:
     PlayerComboAttackTimeline()  = default;
@@ -80,7 +64,6 @@ private:
     /// </summary>
     void SetupAudioTracks();
 
- 
     /// <summary>
     /// 攻撃の総フレーム数を計算
     /// </summary>
@@ -90,4 +73,17 @@ private:
     /// 次の攻撃へ進む
     /// </summary>
     void AdvanceToNextAttack();
+
+private:
+    PlayerComboAttackData* attackData_ = nullptr;
+    KetaEngine::TimeLine timeline_;
+
+    // トラックインデックス管理
+    std::array<int32_t, static_cast<size_t>(DefaultTrack::COUNT)> defaultTrackIndices_;
+    std::vector<int32_t> renditionTrackIndices_;
+    std::vector<int32_t> objAnimeTrackIndices_;
+    std::vector<int32_t> audioTrackIndices_;
+
+    PlayMode playMode_  = PlayMode::SINGLE;
+    bool isInitialized_ = false;
 };

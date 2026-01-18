@@ -1,10 +1,15 @@
 #pragma once
 
-#include "Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+
+//
 #include "PlayerAttackRenditionData.h"
+#include "PlayerComboAttackTimeline.h"
+// utility
 #include "utility/FileSelector/FileSelector.h"
+// math
 #include "Vector3.h"
+// std
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -107,23 +112,33 @@ private:
 
     // 次の攻撃の選択
     void SelectNextAttack();
+    void ShowParameters();
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
 
+    // global Parameter
     KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_ = "AttackCreator";
 
+    // 包含
     PlayerAttackRenditionData renditionData_;
+    PlayerComboAttackTimeline timeLine_;
+
+    // file Selector
     KetaEngine::FileSelector fileSelector_;
 
     // 攻撃パラメータ
     AttackParameter attackParam_;
-    bool needsRefresh_ = true;
     std::vector<std::string> attackFileNames_;
 
-    int32_t tempCondition_;
+    // frags
+    bool needsRefresh_ = true;
+    bool useTimeline_  = true;
+
+    // enum class Int
+    int32_t triggerConditionInt_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//

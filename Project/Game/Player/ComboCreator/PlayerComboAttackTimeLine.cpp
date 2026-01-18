@@ -1,4 +1,6 @@
 #include "PlayerComboAttackTimeline.h"
+#include "PlayerComboAttackData.h"
+#include"PlayerAttackRenditionData.h"
 #include"Frame/Frame.h"
 #include <imgui.h>
 
