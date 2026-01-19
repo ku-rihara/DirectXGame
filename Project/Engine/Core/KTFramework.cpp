@@ -28,8 +28,8 @@ void KTFramework::Init() {
     // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
 
-    /// ウィンドウ初期化
-    engineCore_->Initialize(kWindowTitle, 1280, 720);
+    /// エンジン初期化
+    engineCore_->Initialize(kWindowTitle, KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight);
 
     LoadAllTexture();
 }

@@ -33,7 +33,6 @@ bool TimeLine::RemoveTrack(uint32_t trackIndex) {
 
     tracks_.erase(tracks_.begin() + trackIndex);
 
-    // ドラッグ中のインデックスを調整
     if (draggingTrackIndex_ == static_cast<int>(trackIndex)) {
         draggingTrackIndex_ = -1;
         draggingKeyIndex_   = -1;
@@ -41,7 +40,6 @@ bool TimeLine::RemoveTrack(uint32_t trackIndex) {
         draggingTrackIndex_--;
     }
 
-    // 右クリックインデックスを調整
     if (rightClickedTrackIndex_ == static_cast<int>(trackIndex)) {
         rightClickedTrackIndex_ = -1;
     } else if (rightClickedTrackIndex_ > static_cast<int>(trackIndex)) {
@@ -154,7 +152,6 @@ void TimeLine::HandleTrackRightClick(uint32_t trackIndex, float trackY) {
     ImVec2 mousePos   = ImGui::GetMousePos();
     ImVec2 canvas_pos = ImGui::GetCursorScreenPos();
 
-    // トラック領域の判定
     ImVec2 trackStart = ImVec2(canvas_pos.x, trackY);
     ImVec2 trackEnd   = ImVec2(canvas_pos.x + ImGui::GetContentRegionAvail().x, trackY + trackHeight_);
 
@@ -162,7 +159,6 @@ void TimeLine::HandleTrackRightClick(uint32_t trackIndex, float trackY) {
 
         rightClickedTrackIndex_ = trackIndex;
 
-        // コールバックが設定されていれば呼び出す
         if (tracks_[trackIndex].onRightClick) {
             tracks_[trackIndex].onRightClick(trackIndex);
         }
@@ -279,25 +275,37 @@ void TimeLine::Draw(const std::string& name) {
                 float kfX = canvas_pos.x + headerWidth_ + (kf.frame - scrollOffset_) * frameWidth;
                 float kfY = trackY + trackHeight_ / 2;
 
+                // キーフレームが現在フレームライン上にあるかチェック
+                bool isOnCurrentFrame = (currentFrame_ >= kf.frame && currentFrame_ <= kf.frame + static_cast<int32_t>(kf.duration));
+
+                ImU32 color;
+                ImU32 durationUIColor;
+                if (isOnCurrentFrame) {
+                    // 現在フレーム上にある場合は明るく光らせる
+                    color           = IM_COL32(70, 255, 70, 255);
+                    durationUIColor = IM_COL32(100, 255, 200, 128);
+                } else {
+                    color           = IM_COL32(255, 200, 50, 255);
+                    durationUIColor = IM_COL32(100, 150, 200, 128);
+                }
+
                 // 持続時間の表示
                 if (kf.duration > 1.0f) {
                     float durationWidth = kf.duration * frameWidth;
                     draw_list->AddRectFilled(
                         ImVec2(kfX, kfY - 3),
                         ImVec2(kfX + durationWidth, kfY + 3),
-                        IM_COL32(100, 150, 200, 128));
+                        durationUIColor);
                 }
 
-                // キーフレームマーカー（ダイヤモンド）
+                // キーフレームマーカー(ダイヤモンド)
                 ImVec2 diamond[4] = {
                     ImVec2(kfX, kfY - 6),
                     ImVec2(kfX + 6, kfY),
                     ImVec2(kfX, kfY + 6),
                     ImVec2(kfX - 6, kfY)};
 
-                ImU32 color = kf.isSelected ? IM_COL32(255, 255, 100, 255) : IM_COL32(255, 200, 50, 255);
                 draw_list->AddConvexPolyFilled(diamond, 4, color);
-                draw_list->AddPolyline(diamond, 4, IM_COL32(255, 255, 100, 255), ImDrawFlags_Closed, 1.5f);
 
                 // ドラッグ&ドロップ処理
                 HandleKeyFrameDragDrop(i, j, Vector2(kfX, kfY));
@@ -361,7 +369,7 @@ void TimeLine::Draw(const std::string& name) {
         }
     }
 
-    // 現在フレームインジケーター（最前面に描画）
+    // 現在フレームインジケーター
     float currentFrameX = canvas_pos.x + headerWidth_ + (currentFrame_ - scrollOffset_) * frameWidth;
     draw_list->AddLine(
         ImVec2(currentFrameX, canvas_pos.y),
