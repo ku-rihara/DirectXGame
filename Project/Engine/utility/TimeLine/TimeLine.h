@@ -13,7 +13,7 @@ struct TimeLineKeyFrame {
     float value;
     float duration;
     bool isSelected;
-    std::string label; // キーフレームのラベル
+    std::string label;
 };
 
 // タイムライントラック
@@ -25,6 +25,9 @@ struct TimeLineTrack {
 
     // 右クリックコンテキストメニュー用コールバック
     std::function<void(int32_t trackIndex)> onRightClick;
+
+    // キーフレーム右クリックコールバック
+    std::function<void(int32_t trackIndex, int32_t keyIndex)> onKeyFrameRightClick;
 
     // トラック固有ID
     uint32_t id;
@@ -89,6 +92,12 @@ public:
         std::function<void(int32_t)> callback);
 
     /// <summary>
+    /// キーフレームの右クリックコールバックを設定
+    /// </summary>
+    void SetKeyFrameRightClickCallback(uint32_t trackIndex,
+        std::function<void(int32_t, int32_t)> callback);
+
+    /// <summary>
     /// トラック数を取得
     /// </summary>
     size_t GetTrackCount() const { return tracks_.size(); }
@@ -151,6 +160,7 @@ public:
     bool IsPlaying() const { return isPlaying_; }
     float GetZoom() const { return zoom_; }
     const std::vector<TimeLineTrack>& GetTracks() const { return tracks_; }
+    std::vector<TimeLineTrack>& GetTracks() { return tracks_; }
 
     //*----------------------------- setter Methods -----------------------------*//
     void SetCurrentFrame(int frame) { currentFrame_ = frame; }
