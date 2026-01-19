@@ -26,7 +26,7 @@ void KTFramework::Init() {
     GlobalParameter::GetInstance()->LoadFiles();
 
     /// エンジン初期化
-    engineCore_->Initialize(kWindowTitle, 1280, 720);
+    engineCore_->Initialize(kWindowTitle, KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight);
 
 }
 
@@ -102,7 +102,7 @@ void KTFramework::DisplayFPS() {
     ImGuiIO& io = ImGui::GetIO();
 
     // 位置
-    ImGui::SetNextWindowPos(ImVec2(1230, 0), ImGuiCond_Always);
+    ImGui::SetNextWindowPos(ImVec2(1550, 0), ImGuiCond_Always);
     ImGui::SetNextWindowBgAlpha(0.0f); // 背景を完全透明に設定
 
     // ウィンドウフラグを設定

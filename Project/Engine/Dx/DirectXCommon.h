@@ -57,7 +57,7 @@ public:
     /// <param name="win">WinApp</param>
     /// <param name="backBufferWidth">バックバッファ幅</param>
     /// <param name="backBufferHeight">バックバッファ高さ</param>
-    void Init(WinApp* win, int32_t backBufferWidth = 1280, int32_t backBufferHeight = 720);
+    void Init(WinApp* win, int32_t backBufferWidth, int32_t backBufferHeight);
 
     /// <summary>
     /// リソースの作成
