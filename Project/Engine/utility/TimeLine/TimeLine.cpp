@@ -161,15 +161,6 @@ void TimeLine::SetKeyFrameRightClickCallback(uint32_t trackIndex, std::function<
     tracks_[trackIndex].onKeyFrameRightClick = callback;
 }
 
-void TimeLine::SetKeyFrameDragConstraintCallback(uint32_t trackIndex,
-    std::function<int32_t(int32_t, int32_t, int32_t)> callback) {
-    if (trackIndex >= tracks_.size()) {
-        return;
-    }
-
-    tracks_[trackIndex].onKeyFrameDragConstraint = callback;
-}
-
 void TimeLine::HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, const Vector2& keyPos) {
     if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImVec2(keyPos.x - 8, keyPos.y - 8), ImVec2(keyPos.x + 8, keyPos.y + 8))) {
 
@@ -392,11 +383,6 @@ void TimeLine::Draw(const std::string& name) {
         int newFrame     = dragStartFrame_ + deltaFrame;
 
         if (newFrame >= 0 && newFrame <= endFrame_) {
-            // 制約コールバックがある場合は適用
-            if (tracks_[draggingTrackIndex_].onKeyFrameDragConstraint) {
-                newFrame = tracks_[draggingTrackIndex_].onKeyFrameDragConstraint(
-                    draggingTrackIndex_, draggingKeyIndex_, newFrame);
-            }
 
             tracks_[draggingTrackIndex_].keyframes[draggingKeyIndex_].frame = newFrame;
         }
