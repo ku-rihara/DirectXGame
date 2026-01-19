@@ -4,7 +4,7 @@
 
 //
 #include "PlayerAttackRenditionData.h"
-#include "PlayerComboAttackTimeline.h"
+#include "Timeline/PlayerComboAttackTimeline.h"
 // utility
 #include "utility/FileSelector/FileSelector.h"
 // math
