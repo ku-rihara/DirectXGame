@@ -1,7 +1,9 @@
 #pragma once
 
 #include "PlayerComboAttackTimelineManager.h"
+#include "utility/FileSelector/FileSelector.h"
 #include <cstdint>
+#include <unordered_map>
 
 class PlayerComboAttackData;
 namespace KetaEngine {
@@ -48,8 +50,6 @@ public:
 private:
     void DrawAddTrackPopup();
     void DrawRenditionKeyFrameEditor(int32_t trackIndex, int32_t keyIndex);
-    void DrawRenditionFileSelector(PlayerComboAttackTimelineManager::TrackType type,
-        PlayerComboAttackTimelineManager::TrackInfo& info);
 
     // トラックメニューアイテム描画のヘルパー関数
     void DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::TrackType trackType);
@@ -62,4 +62,7 @@ private:
     PlayerComboAttackTimelineManager::PlayMode playMode_ =
         PlayerComboAttackTimelineManager::PlayMode::SINGLE;
     ParamEditType selectedParamEditType_ = ParamEditType::NONE;
+
+    // 各キーフレーム用のFileSelector
+    std::unordered_map<std::string, KetaEngine::FileSelector> fileSelectorMap_;
 };

@@ -10,6 +10,9 @@ void PlayerComboAttackTimelineUI::Init(PlayerComboAttackData* attackData,
     attackData_ = attackData;
     timeline_   = timeline;
     manager_    = manager;
+
+    // FileSelector の初期化
+    fileSelectorMap_.clear();
 }
 
 void PlayerComboAttackTimelineUI::DrawParamEditButtons() {
@@ -107,7 +110,7 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
         ImGui::SeparatorText("タイミング");
 
         DrawTrackMenuItem("キャンセルタイム", TrackType::CANCEL_TIME);
-    
+
         ImGui::EndPopup();
     }
 }
@@ -184,16 +187,34 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
         return;
     }
 
-    keyIndex; // 未使用
-
     ImGui::SeparatorText("ファイル選択");
 
     // ディレクトリパスを取得
     std::string directory = manager_->GetDirectoryForTrackType(trackInfo->type);
 
+    // FileSelectorのキー（トラック+キーフレーム単位で管理）
+    std::string fileSelectorKey = std::to_string(trackIndex) + "_" + std::to_string(keyIndex);
+
+    // FileSelectorが存在しない場合は作成
+    if (fileSelectorMap_.find(fileSelectorKey) == fileSelectorMap_.end()) {
+        fileSelectorMap_[fileSelectorKey] = KetaEngine::FileSelector();
+    }
+
+    // 現在のファイル名を保持
+    std::string previousFileName = trackInfo->fileName;
+
     // FileSelectorを使ってファイル選択
-    static KetaEngine::FileSelector fileSelector;
-    fileSelector.SelectFile("ファイル名", directory, trackInfo->fileName, "", true);
+    fileSelectorMap_[fileSelectorKey].SelectFile(
+        "ファイル名",
+        directory,
+        trackInfo->fileName,
+        "",
+        true);
+
+    // ファイル名が変更された場合、キーフレームのラベルも更新
+    if (previousFileName != trackInfo->fileName) {
+        timeline_->SetKeyFrameLabel(trackIndex, keyIndex, trackInfo->fileName);
+    }
 
     // カメラアクションの場合のみチェックボックスを表示
     if (trackInfo->type == PlayerComboAttackTimelineManager::TrackType::CAMERA_ACTION || trackInfo->type == PlayerComboAttackTimelineManager::TrackType::CAMERA_ACTION_ON_HIT) {
@@ -264,47 +285,4 @@ void PlayerComboAttackTimelineUI::DrawTimingParamUI() {
 
     ImGui::DragFloat("先行入力開始タイム", &timingParam.precedeInputTime, 0.01f, 0.0f, 10.0f);
     ImGui::DragFloat("攻撃終了時の待機時間", &timingParam.finishWaitTime, 0.01f, 0.0f, 10.0f);
-}
-
-void PlayerComboAttackTimelineUI::DrawRenditionFileSelector(
-    PlayerComboAttackTimelineManager::TrackType type,
-    PlayerComboAttackTimelineManager::TrackInfo& info) {
-
-    ImGui::SeparatorText("ファイル選択");
-
-    // ファイル名表示
-    ImGui::Text("現在のファイル: %s", info.fileName.empty() ? "なし" : info.fileName.c_str());
-
-    // ディレクトリパスを取得
-    std::string directory = manager_->GetDirectoryForTrackType(type);
-
-    // FileSelector統合
-    static KetaEngine::FileSelector fileSelector;
-
-    char buffer[256];
-    strncpy_s(buffer, info.fileName.c_str(), sizeof(buffer) - 1);
-    buffer[sizeof(buffer) - 1] = '\0';
-
-    if (ImGui::InputText("ファイル名", buffer, sizeof(buffer))) {
-        info.fileName = buffer;
-    }
-
-    // ファイルブラウザボタン
-    if (ImGui::Button("参照...")) {
-        ImGui::OpenPopup("FileSelectPopup");
-    }
-
-    if (ImGui::BeginPopup("FileSelectPopup")) {
-        fileSelector.SelectFile("ファイル選択", directory, info.fileName, "", true);
-        ImGui::EndPopup();
-    }
-
-    // キーフレーム追加位置
-    ImGui::Separator();
-    static int keyFramePosition = 0;
-    ImGui::InputInt("キーフレーム位置", &keyFramePosition);
-
-    if (ImGui::Button("キーフレームを追加")) {
-        timeline_->AddKeyFrame(info.trackIndex, keyFramePosition, 1.0f, 1.0f);
-    }
 }
