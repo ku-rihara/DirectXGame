@@ -535,6 +535,9 @@
     <Filter Include="MyEngine\.cpp\utility\TimeLine">
       <UniqueIdentifier>{e2f3a444-8e3d-4d0b-bcfa-61452d6506c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\ComboCreator\Timeline">
+      <UniqueIdentifier>{13a2a749-a208-4e73-a70e-d63c43e23309}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1366,8 +1369,14 @@
     <ClCompile Include="Engine\utility\TimeLine\TimeLine.cpp">
       <Filter>MyEngine\.cpp\utility\TimeLine</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackTimeLine.cpp">
-      <Filter>Game\Player\ComboCreator</Filter>
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.cpp">
+      <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineManager.cpp">
+      <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.cpp">
+      <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2256,8 +2265,14 @@
     <ClInclude Include="Engine\utility\TimeLine\TimeLine.h">
       <Filter>MyEngine\.h\utility\TimeLine</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackTimeLine.h">
-      <Filter>Game\Player\ComboCreator</Filter>
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.h">
+      <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.h">
+      <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineManager.h">
+      <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

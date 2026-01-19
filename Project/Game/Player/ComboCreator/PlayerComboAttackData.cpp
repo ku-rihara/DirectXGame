@@ -1,9 +1,8 @@
 #include "PlayerComboAttackData.h"
-#include "Easing/Easing.h"
-#include "Function/GetFile.h"
+// input
 #include "input/Input.h"
 #include "input/InputData.h"
-#include <algorithm>
+// imGui
 #include <imgui.h>
 
 void PlayerComboAttackData::Init(const std::string& attackName) {
