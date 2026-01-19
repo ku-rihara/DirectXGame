@@ -53,7 +53,6 @@ void PlayerComboAttackTimelineUI::DrawParamEditButtons() {
     }
 }
 
-
 void PlayerComboAttackTimelineUI::DrawAddTrackButton() {
     if (ImGui::Button("トラック追加")) {
         ImGui::OpenPopup("AddTrackPopup");
@@ -62,78 +61,54 @@ void PlayerComboAttackTimelineUI::DrawAddTrackButton() {
     DrawAddTrackPopup();
 }
 
+void PlayerComboAttackTimelineUI::DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::AddableTrackType trackType) {
+    bool exists = manager_->IsTrackTypeAlreadyAdded(trackType);
+    if (exists)
+        ImGui::BeginDisabled();
+    if (ImGui::MenuItem(label)) {
+        manager_->AddTrack(trackType);
+    }
+    if (exists)
+        ImGui::EndDisabled();
+}
+
 void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
     using TrackType = PlayerComboAttackTimelineManager::AddableTrackType;
 
     if (ImGui::BeginPopup("AddTrackPopup")) {
         ImGui::SeparatorText("演出 (通常)");
 
-        if (ImGui::MenuItem("カメラアクション")) {
-            manager_->AddTrack(TrackType::CAMERA_ACTION);
-        }
-        if (ImGui::MenuItem("ヒットストップ")) {
-            manager_->AddTrack(TrackType::HIT_STOP);
-        }
-        if (ImGui::MenuItem("シェイクアクション")) {
-            manager_->AddTrack(TrackType::SHAKE_ACTION);
-        }
-        if (ImGui::MenuItem("ポストエフェクト")) {
-            manager_->AddTrack(TrackType::POST_EFFECT);
-        }
-        if (ImGui::MenuItem("パーティクルエフェクト")) {
-            manager_->AddTrack(TrackType::PARTICLE_EFFECT);
-        }
+        DrawTrackMenuItem("カメラアクション", TrackType::CAMERA_ACTION);
+        DrawTrackMenuItem("ヒットストップ", TrackType::HIT_STOP);
+        DrawTrackMenuItem("シェイクアクション", TrackType::SHAKE_ACTION);
+        DrawTrackMenuItem("ポストエフェクト", TrackType::POST_EFFECT);
+        DrawTrackMenuItem("パーティクルエフェクト", TrackType::PARTICLE_EFFECT);
 
         ImGui::SeparatorText("演出 (ヒット時)");
 
-        if (ImGui::MenuItem("カメラアクション (ヒット時)")) {
-            manager_->AddTrack(TrackType::CAMERA_ACTION_ON_HIT);
-        }
-        if (ImGui::MenuItem("ヒットストップ (ヒット時)")) {
-            manager_->AddTrack(TrackType::HIT_STOP_ON_HIT);
-        }
-        if (ImGui::MenuItem("シェイクアクション (ヒット時)")) {
-            manager_->AddTrack(TrackType::SHAKE_ACTION_ON_HIT);
-        }
-        if (ImGui::MenuItem("ポストエフェクト (ヒット時)")) {
-            manager_->AddTrack(TrackType::POST_EFFECT_ON_HIT);
-        }
-        if (ImGui::MenuItem("パーティクルエフェクト (ヒット時)")) {
-            manager_->AddTrack(TrackType::PARTICLE_EFFECT_ON_HIT);
-        }
+        DrawTrackMenuItem("カメラアクション (ヒット時)", TrackType::CAMERA_ACTION_ON_HIT);
+        DrawTrackMenuItem("ヒットストップ (ヒット時)", TrackType::HIT_STOP_ON_HIT);
+        DrawTrackMenuItem("シェイクアクション (ヒット時)", TrackType::SHAKE_ACTION_ON_HIT);
+        DrawTrackMenuItem("ポストエフェクト (ヒット時)", TrackType::POST_EFFECT_ON_HIT);
+        DrawTrackMenuItem("パーティクルエフェクト (ヒット時)", TrackType::PARTICLE_EFFECT_ON_HIT);
 
         ImGui::SeparatorText("オブジェクトアニメーション");
 
-        if (ImGui::MenuItem("頭アニメーション")) {
-            manager_->AddTrack(TrackType::OBJ_ANIM_HEAD);
-        }
-        if (ImGui::MenuItem("右手アニメーション")) {
-            manager_->AddTrack(TrackType::OBJ_ANIM_RIGHT_HAND);
-        }
-        if (ImGui::MenuItem("左手アニメーション")) {
-            manager_->AddTrack(TrackType::OBJ_ANIM_LEFT_HAND);
-        }
-        if (ImGui::MenuItem("メイン頭アニメーション")) {
-            manager_->AddTrack(TrackType::OBJ_ANIM_MAIN_HEAD);
-        }
+        DrawTrackMenuItem("頭アニメーション", TrackType::OBJ_ANIM_HEAD);
+        DrawTrackMenuItem("右手アニメーション", TrackType::OBJ_ANIM_RIGHT_HAND);
+        DrawTrackMenuItem("左手アニメーション", TrackType::OBJ_ANIM_LEFT_HAND);
+        DrawTrackMenuItem("メイン頭アニメーション", TrackType::OBJ_ANIM_MAIN_HEAD);
 
         ImGui::SeparatorText("オーディオ");
 
-        if (ImGui::MenuItem("攻撃音")) {
-            manager_->AddTrack(TrackType::AUDIO_ATTACK);
-        }
-        if (ImGui::MenuItem("ヒット音")) {
-            manager_->AddTrack(TrackType::AUDIO_HIT);
-        }
+        DrawTrackMenuItem("攻撃音", TrackType::AUDIO_ATTACK);
+        DrawTrackMenuItem("ヒット音", TrackType::AUDIO_HIT);
 
         ImGui::SeparatorText("タイミング");
 
-        if (ImGui::MenuItem("キャンセルタイム")) {
-            manager_->AddTrack(TrackType::CANCEL_TIME);
-        }
-        if (ImGui::MenuItem("先行入力")) {
-            manager_->AddTrack(TrackType::PRECEDE_INPUT);
-        }
+        DrawTrackMenuItem("キャンセルタイム", TrackType::CANCEL_TIME);
+        DrawTrackMenuItem("先行入力", TrackType::PRECEDE_INPUT);
+        DrawTrackMenuItem("攻撃終了待機", TrackType::FINISH_WAIT_TIME);
 
         ImGui::EndPopup();
     }
@@ -186,7 +161,7 @@ void PlayerComboAttackTimelineUI::DrawKeyFrameContextMenu(int32_t trackIndex, in
         // 演出系トラックの場合
         int typeInt      = static_cast<int>(trackType);
         bool isRendition = (typeInt >= static_cast<int>(TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(TrackType::PARTICLE_EFFECT_ON_HIT));
-        bool isObjAnime   = (typeInt >= static_cast<int>(TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TrackType::OBJ_ANIM_MAIN_HEAD));
+        bool isObjAnime  = (typeInt >= static_cast<int>(TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TrackType::OBJ_ANIM_MAIN_HEAD));
         bool isAudio     = (typeInt >= static_cast<int>(TrackType::AUDIO_ATTACK) && typeInt <= static_cast<int>(TrackType::AUDIO_HIT));
 
         if (isRendition || isObjAnime || isAudio) {
@@ -255,6 +230,7 @@ void PlayerComboAttackTimelineUI::DrawCollisionParamUI() {
 
     ImGui::DragFloat3("サイズ", &collisionParam.size.x, 0.01f);
     ImGui::DragFloat3("オフセット位置", &collisionParam.offsetPos.x, 0.01f);
+    ImGui::DragFloat("開始時間", &collisionParam.startTime, 0.01f);
     ImGui::DragFloat("適応時間", &collisionParam.adaptTime, 0.01f);
     ImGui::InputInt("ループ回数", &collisionParam.loopNum);
 
@@ -280,13 +256,13 @@ void PlayerComboAttackTimelineUI::DrawMoveParamUI() {
     ImGui::SeparatorText("移動パラメータ");
 
     ImGui::Checkbox("攻撃中入力による移動ができる", &moveParam.isAbleInputMoving);
+    ImGui::DragFloat("開始時間", &moveParam.startTime, 0.01f);
     ImGui::DragFloat("イージングタイム", &moveParam.easeTime, 0.01f);
     ImGui::Checkbox("Yの位置を直接指定する", &moveParam.isPositionYSelect);
     ImGui::DragFloat3("移動量", &moveParam.value.x, 0.01f);
     ImGui::DragFloat("終了タイムオフセット", &moveParam.finishTimeOffset, 0.01f);
 
     // Easing Type
-
     ImGuiEasingTypeSelector("イージング", moveParam.easeType);
 }
 

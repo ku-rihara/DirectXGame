@@ -51,9 +51,12 @@ private:
     void DrawRenditionFileSelector(PlayerComboAttackTimelineManager::AddableTrackType type,
         PlayerComboAttackTimelineManager::TrackInfo& info);
 
+    // トラックメニューアイテム描画のヘルパー関数
+    void DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::AddableTrackType trackType);
+
 private:
-    PlayerComboAttackData* attackData_   = nullptr;
-    KetaEngine::TimeLine* timeline_      = nullptr;
+    PlayerComboAttackData* attackData_         = nullptr;
+    KetaEngine::TimeLine* timeline_            = nullptr;
     PlayerComboAttackTimelineManager* manager_ = nullptr;
 
     PlayerComboAttackTimelineManager::PlayMode playMode_ =

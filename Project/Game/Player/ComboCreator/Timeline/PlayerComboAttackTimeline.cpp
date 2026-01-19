@@ -12,9 +12,6 @@ void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
 
     timeline_.Init();
 
-    int32_t totalFrames = manager_.CalculateTotalFrames();
-    timeline_.SetEndFrame(totalFrames);
-
     // Managerの初期化
     manager_.Init(attackData_, &timeline_);
 
@@ -86,15 +83,8 @@ void PlayerComboAttackTimeline::Draw() {
         }
     }
 
-    // 適用・リセットボタン
-    if (ImGui::Button("パラメータに適用")) {
-        ApplyToParameters();
-    }
-    ImGui::SameLine();
-
-    if (ImGui::Button("パラメータから再読み込み")) {
-        Init(attackData_);
-    }
+    // タイムライン変更を毎フレームパラメータに自動適用
+    ApplyToParameters();
 
     ImGui::PopID();
 

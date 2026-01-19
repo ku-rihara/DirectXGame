@@ -80,8 +80,14 @@ void ComboAttackAction::Update(float atkSpeed) {
 
 void ComboAttackAction::InitializeAttack() {
 
-    SetupCollision();
-    order_ = Order::ATTACK;
+    // コリジョン開始時間をチェック
+    float collisionStartTime = attackData_->GetAttackParam().collisionParam.startTime;
+
+    // 開始時間が0より大きい場合は遅延させる
+    if (currentFrame_ >= collisionStartTime) {
+        SetupCollision();
+        order_ = Order::ATTACK;
+    }
 }
 
 void ComboAttackAction::UpdateAttack(float atkSpeed) {
@@ -94,9 +100,19 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
     // キャンセル処理
     AttackCancel();
 
+    // コリジョン開始時間のチェック
+    float collisionStartTime = attackData_->GetAttackParam().collisionParam.startTime;
+
+    // まだコリジョンが有効化されていない場合
+    if (!isCollisionActive_ && currentFrame_ >= collisionStartTime) {
+        SetupCollision();
+    }
+
     // コリジョン判定
-    pCollisionInfo_->TimerUpdate(atkSpeed);
-    pCollisionInfo_->Update();
+    if (isCollisionActive_) {
+        pCollisionInfo_->TimerUpdate(atkSpeed);
+        pCollisionInfo_->Update();
+    }
 
     // 敵にヒットしたかをチェック
     if (pCollisionInfo_->GetHasHitEnemy()) {
@@ -245,6 +261,9 @@ void ComboAttackAction::SetMoveEasing() {
     moveEasing_.SetMaxTime(moveParam.easeTime);
     moveEasing_.SetAdaptValue(&currentMoveValue_);
     moveEasing_.SetFinishTimeOffset(moveParam.finishTimeOffset);
+
+    // 開始時間を設定
+    moveEasing_.SetStartTime(moveParam.startTime);
 }
 
 void ComboAttackAction::Debug() {

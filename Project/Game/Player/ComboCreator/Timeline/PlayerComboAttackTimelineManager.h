@@ -23,6 +23,7 @@ public:
         MOVE_EASING,
         CANCEL_START,
         PRECEDE_INPUT_START,
+        FINISH_WAIT,
         COUNT
     };
 
@@ -50,6 +51,7 @@ public:
         // Timing系
         CANCEL_TIME,
         PRECEDE_INPUT,
+        FINISH_WAIT_TIME,
         COUNT
     };
 
@@ -82,6 +84,9 @@ public:
     AddableTrackType GetTrackTypeFromIndex(int32_t trackIndex) const;
     std::string GetDirectoryForTrackType(AddableTrackType type) const;
     int32_t CalculateTotalFrames() const;
+
+    // トラック存在チェック
+    bool IsTrackTypeAlreadyAdded(AddableTrackType type) const;
 
     // ゲッター
     const std::vector<TrackInfo>& GetAddedTracks() const { return addedTracks_; }
