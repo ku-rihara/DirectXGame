@@ -38,8 +38,8 @@ public:
     int ProcessMessage(); //< メッセージ処理
 
 public: // 静的メンバ変数
-    static const int kWindowWidth  = 1600; //< 横幅
-    static const int kWindowHeight = 900; //< 縦幅
+    static const int kWindowWidth  = 1280; //< 横幅
+    static const int kWindowHeight = 720; //< 縦幅
 
     // ウィンドウクラス名
     static const wchar_t kWindowClassName[];
