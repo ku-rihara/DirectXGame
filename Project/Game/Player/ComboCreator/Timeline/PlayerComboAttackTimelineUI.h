@@ -19,7 +19,9 @@ public:
         NONE,
         COLLISION,
         MOVE,
-        TIMING
+        TRIGGER,
+        FLAGS,
+        NEXT_ATTACK
     };
 
 public:
@@ -38,11 +40,6 @@ public:
     void DrawTrackContextMenu(int32_t trackIndex);
     void DrawKeyFrameMenuItems(int32_t trackIndex, int32_t keyIndex);
 
-    // パラメータ編集UI
-    void DrawCollisionParamUI();
-    void DrawMoveParamUI();
-    void DrawTimingParamUI();
-
     // 再生モード
     PlayerComboAttackTimelineManager::PlayMode GetPlayMode() const { return playMode_; }
     void SetPlayMode(PlayerComboAttackTimelineManager::PlayMode mode) { playMode_ = mode; }
@@ -53,6 +50,9 @@ private:
 
     // トラックメニューアイテム描画のヘルパー関数
     void DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::TrackType trackType);
+
+    // パラメータUI描画関数を登録
+    void RegisterParamUIFunctions();
 
 private:
     PlayerComboAttackData* attackData_         = nullptr;
@@ -65,4 +65,7 @@ private:
 
     // 各キーフレーム用のFileSelector
     std::unordered_map<std::string, KetaEngine::FileSelector> fileSelectorMap_;
+
+    // パラメータUI描画関数マップ
+    std::unordered_map<ParamEditType, std::function<void()>> paramUIDrawFunctions_;
 };

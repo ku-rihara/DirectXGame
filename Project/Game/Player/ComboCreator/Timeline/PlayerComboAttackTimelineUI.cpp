@@ -13,6 +13,34 @@ void PlayerComboAttackTimelineUI::Init(PlayerComboAttackData* attackData,
 
     // FileSelector の初期化
     fileSelectorMap_.clear();
+
+    // パラメータUI描画関数を登録
+    RegisterParamUIFunctions();
+}
+
+void PlayerComboAttackTimelineUI::RegisterParamUIFunctions() {
+    if (!attackData_)
+        return;
+
+    paramUIDrawFunctions_[ParamEditType::COLLISION] = [this]() {
+        attackData_->DrawCollisionParamUI();
+    };
+
+    paramUIDrawFunctions_[ParamEditType::MOVE] = [this]() {
+        attackData_->DrawMoveParamUI();
+    };
+
+    paramUIDrawFunctions_[ParamEditType::TRIGGER] = [this]() {
+        attackData_->DrawTriggerParamUI();
+    };
+
+    paramUIDrawFunctions_[ParamEditType::FLAGS] = [this]() {
+        attackData_->DrawFlagsParamUI();
+    };
+
+    paramUIDrawFunctions_[ParamEditType::NEXT_ATTACK] = [this]() {
+        attackData_->SelectNextAttack();
+    };
 }
 
 void PlayerComboAttackTimelineUI::DrawParamEditButtons() {
@@ -33,27 +61,36 @@ void PlayerComboAttackTimelineUI::DrawParamEditButtons() {
     }
     ImGui::SameLine();
 
-    if (ImGui::RadioButton("タイミング", selectedParamEditType_ == ParamEditType::TIMING)) {
-        selectedParamEditType_ = (selectedParamEditType_ == ParamEditType::TIMING)
+    if (ImGui::RadioButton("攻撃発動", selectedParamEditType_ == ParamEditType::TRIGGER)) {
+        selectedParamEditType_ = (selectedParamEditType_ == ParamEditType::TRIGGER)
                                      ? ParamEditType::NONE
-                                     : ParamEditType::TIMING;
+                                     : ParamEditType::TRIGGER;
+    }
+    ImGui::SameLine();
+
+    if (ImGui::RadioButton("フラグ設定", selectedParamEditType_ == ParamEditType::FLAGS)) {
+        selectedParamEditType_ = (selectedParamEditType_ == ParamEditType::FLAGS)
+                                     ? ParamEditType::NONE
+                                     : ParamEditType::FLAGS;
+    }
+    ImGui::SameLine();
+
+    if (ImGui::RadioButton("次の攻撃", selectedParamEditType_ == ParamEditType::NEXT_ATTACK)) {
+        selectedParamEditType_ = (selectedParamEditType_ == ParamEditType::NEXT_ATTACK)
+                                     ? ParamEditType::NONE
+                                     : ParamEditType::NEXT_ATTACK;
     }
 
-    // 選択されたパラメータのUIを表示
-    switch (selectedParamEditType_) {
-    case ParamEditType::COLLISION:
-        DrawCollisionParamUI();
-        break;
-    case ParamEditType::MOVE:
-        DrawMoveParamUI();
-        break;
-    case ParamEditType::TIMING:
-        DrawTimingParamUI();
-        break;
-    case ParamEditType::NONE:
-    default:
-        break;
+    // 選択されたパラメータのUIを描画
+    auto it = paramUIDrawFunctions_.find(selectedParamEditType_);
+    if (it != paramUIDrawFunctions_.end()) {
+        it->second(); // 関数を呼び出し
     }
+
+    // セーブ・ロードボタン
+    ImGui::Separator();
+    attackData_->DrawSaveLoadUI();
+    ImGui::Separator();
 }
 
 void PlayerComboAttackTimelineUI::DrawAddTrackButton() {
@@ -66,13 +103,19 @@ void PlayerComboAttackTimelineUI::DrawAddTrackButton() {
 
 void PlayerComboAttackTimelineUI::DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::TrackType trackType) {
     bool exists = manager_->IsTrackTypeAlreadyAdded(trackType);
-    if (exists)
+    if (exists) {
         ImGui::BeginDisabled();
+    }
     if (ImGui::MenuItem(label)) {
         manager_->AddTrack(trackType);
+
+        if (trackType == PlayerComboAttackTimelineManager::TrackType::CANCEL_TIME) {
+            attackData_->GetAttackParam().timingParam.isCancel = true;
+        }
     }
-    if (exists)
+    if (exists) {
         ImGui::EndDisabled();
+    }
 }
 
 void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
@@ -177,7 +220,7 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
     // ディレクトリパスを取得
     std::string directory = manager_->GetDirectoryForTrackType(trackInfo->type);
 
-    // FileSelectorのキー（トラック+キーフレーム単位で管理）
+    // FileSelectorのキー
     std::string fileSelectorKey = std::to_string(trackIndex) + "_" + std::to_string(keyIndex);
 
     // FileSelectorが存在しない場合は作成
@@ -198,76 +241,11 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
 
     // ファイル名が変更された場合、キーフレームのラベルも更新
     if (previousFileName != trackInfo->fileName) {
-        timeline_->SetKeyFrameLabel(trackIndex, keyIndex, trackInfo->fileName);
+        timeline_->SetKeyFrameLabel(trackIndex, keyIndex, "使用ファイル:" + trackInfo->fileName);
     }
 
     // カメラアクションの場合のみチェックボックスを表示
     if (trackInfo->type == PlayerComboAttackTimelineManager::TrackType::CAMERA_ACTION || trackInfo->type == PlayerComboAttackTimelineManager::TrackType::CAMERA_ACTION_ON_HIT) {
-        ImGui::Checkbox("Is Camera Reset", &trackInfo->isCameraReset);
+        ImGui::Checkbox("攻撃時にカメラをリセットする", &trackInfo->isCameraReset);
     }
-}
-
-void PlayerComboAttackTimelineUI::DrawCollisionParamUI() {
-    if (!attackData_) {
-        return;
-    }
-
-    auto& collisionParam = attackData_->GetAttackParam().collisionParam;
-    auto& attackParam    = attackData_->GetAttackParam();
-
-    ImGui::SeparatorText("コライダーパラメータ");
-
-    ImGui::DragFloat3("サイズ", &collisionParam.size.x, 0.01f);
-    ImGui::DragFloat3("オフセット位置", &collisionParam.offsetPos.x, 0.01f);
-    ImGui::DragFloat("開始時間", &collisionParam.startTime, 0.01f);
-    ImGui::DragFloat("適応時間", &collisionParam.adaptTime, 0.01f);
-    ImGui::InputInt("ループ回数", &collisionParam.loopNum);
-
-    if (collisionParam.loopNum > 0) {
-        ImGui::DragFloat("ループ待機時間", &collisionParam.loopWaitTime, 0.01f);
-    }
-
-    ImGui::Checkbox("プレイヤーに追従する", &collisionParam.isAlwaysFollowing);
-
-    ImGui::Separator();
-    ImGui::DragFloat("攻撃力", &attackParam.power, 0.01f);
-    ImGui::DragFloat("正面のノックバック力", &attackParam.knockBackPower, 0.01f);
-    ImGui::DragFloat("Y方向のノックバック力", &attackParam.blowYPower, 0.01f);
-}
-
-void PlayerComboAttackTimelineUI::DrawMoveParamUI() {
-    if (!attackData_) {
-        return;
-    }
-
-    auto& moveParam = attackData_->GetAttackParam().moveParam;
-
-    ImGui::SeparatorText("移動パラメータ");
-
-    ImGui::Checkbox("攻撃中入力による移動ができる", &moveParam.isAbleInputMoving);
-    ImGui::DragFloat("開始時間", &moveParam.startTime, 0.01f);
-    ImGui::DragFloat("イージングタイム", &moveParam.easeTime, 0.01f);
-    ImGui::Checkbox("Yの位置を直接指定する", &moveParam.isPositionYSelect);
-    ImGui::DragFloat3("移動量", &moveParam.value.x, 0.01f);
-    ImGui::DragFloat("終了タイムオフセット", &moveParam.finishTimeOffset, 0.01f);
-
-    // Easing Type
-    ImGuiEasingTypeSelector("イージング", moveParam.easeType);
-}
-
-void PlayerComboAttackTimelineUI::DrawTimingParamUI() {
-    if (!attackData_)
-        return;
-
-    auto& timingParam = attackData_->GetAttackParam().timingParam;
-
-    ImGui::SeparatorText("タイミングパラメータ");
-
-    ImGui::Checkbox("キャンセルタイムを使う", &timingParam.isCancel);
-    if (timingParam.isCancel) {
-        ImGui::DragFloat("キャンセル開始タイム", &timingParam.cancelTime, 0.01f, 0.0f, 10.0f);
-    }
-
-    ImGui::DragFloat("先行入力開始タイム", &timingParam.precedeInputTime, 0.01f, 0.0f, 10.0f);
-    ImGui::DragFloat("攻撃終了時の待機時間", &timingParam.finishWaitTime, 0.01f, 0.0f, 10.0f);
 }

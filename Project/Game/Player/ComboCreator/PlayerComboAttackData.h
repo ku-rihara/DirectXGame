@@ -109,12 +109,19 @@ public:
     bool IsWaitFinish(float currentTime);
     bool IsCancelAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
 
-private:
-    //*-------------------------------- private Method --------------------------------*//
-
     // 次の攻撃の選択
     void SelectNextAttack();
-    void ShowParameters();
+    void DrawCollisionParamUI();
+    void DrawMoveParamUI();
+    void DrawTriggerParamUI();
+    void DrawFlagsParamUI();
+
+    void DrawSelectedParamUI(int paramEditType);
+
+    void DrawSaveLoadUI();
+
+private:
+    //*-------------------------------- private Method --------------------------------*//
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
@@ -142,10 +149,14 @@ private:
     // enum class Int
     int32_t triggerConditionInt_;
 
+
+
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
     const AttackParameter& GetAttackParam() const { return attackParam_; }
     AttackParameter& GetAttackParam() { return attackParam_; }
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
+    KetaEngine::GlobalParameter* GetGlobalParameter() const { return globalParameter_; }
+    const std::string& GetFolderPath() const { return folderPath_; }
 };

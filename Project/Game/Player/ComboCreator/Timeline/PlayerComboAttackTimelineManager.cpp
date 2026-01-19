@@ -125,8 +125,7 @@ void PlayerComboAttackTimelineManager::SetupRenditionTracks() {
         addedTracks_.push_back(info);
 
         int32_t frame     = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        std::string label = param.fileName.empty() ? trackName : param.fileName;
-        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, label);
+        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());
@@ -152,8 +151,7 @@ void PlayerComboAttackTimelineManager::SetupRenditionTracks() {
         addedTracks_.push_back(info);
 
         int32_t frame     = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        std::string label = param.fileName.empty() ? trackName : param.fileName;
-        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, label);
+        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());
@@ -185,7 +183,7 @@ void PlayerComboAttackTimelineManager::SetupObjectAnimationTracks() {
         addedTracks_.push_back(info);
 
         int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f);
+        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());
@@ -194,8 +192,9 @@ void PlayerComboAttackTimelineManager::SetupObjectAnimationTracks() {
 }
 
 void PlayerComboAttackTimelineManager::SetupAudioTracks() {
-    if (!attackData_ || !timeline_)
+    if (!attackData_ || !timeline_) {
         return;
+    }
 
     auto& renditionData = attackData_->GetRenditionData();
 
@@ -217,7 +216,7 @@ void PlayerComboAttackTimelineManager::SetupAudioTracks() {
         addedTracks_.push_back(info);
 
         int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f);
+        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());
@@ -249,8 +248,9 @@ bool PlayerComboAttackTimelineManager::IsTrackTypeAlreadyAdded(TrackType type) c
 }
 
 void PlayerComboAttackTimelineManager::AddTrack(TrackType type) {
-    if (!timeline_)
+    if (!timeline_) {
         return;
+    }
 
     // 既に追加されているかチェック
     if (IsTrackTypeAlreadyAdded(type)) {
@@ -509,7 +509,7 @@ std::string PlayerComboAttackTimelineManager::GetDirectoryForTrackType(TrackType
 
 int32_t PlayerComboAttackTimelineManager::CalculateTotalFrames() const {
     if (!attackData_) {
-        return 300;
+        return 0;
     }
 
     auto& attackParam = attackData_->GetAttackParam();
