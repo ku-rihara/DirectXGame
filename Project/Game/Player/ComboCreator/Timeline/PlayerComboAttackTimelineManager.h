@@ -21,9 +21,9 @@ public:
     enum class DefaultTrack {
         COLLISION,
         MOVE_EASING,
+        FINISH_WAIT,
         CANCEL_START,
         PRECEDE_INPUT_START,
-        FINISH_WAIT,
         COUNT
     };
 
@@ -89,13 +89,8 @@ public:
     // トラック存在チェック
     bool IsTrackTypeAlreadyAdded(TrackType type) const;
 
-    // ゲッター
-    const std::vector<TrackInfo>& GetAddedTracks() const { return addedTracks_; }
-    const std::array<int32_t, static_cast<size_t>(DefaultTrack::COUNT)>& GetDefaultTrackIndices() const {
-        return defaultTrackIndices_;
-    }
-
-    TrackInfo* FindTrackInfo(int32_t trackIndex);
+    // 終了待機時間の位置を更新
+    void UpdateFinishWaitKeyFramePosition();
 
 private:
     void ApplyTrackToRendition(const TrackInfo& trackInfo, float timing);
@@ -108,4 +103,13 @@ private:
 
     std::array<int32_t, static_cast<size_t>(DefaultTrack::COUNT)> defaultTrackIndices_;
     std::vector<TrackInfo> addedTracks_;
+
+public:
+    // ゲッター
+    const std::vector<TrackInfo>& GetAddedTracks() const { return addedTracks_; }
+    const std::array<int32_t, static_cast<size_t>(DefaultTrack::COUNT)>& GetDefaultTrackIndices() const {
+        return defaultTrackIndices_;
+    }
+
+    TrackInfo* FindTrackInfo(int32_t trackIndex);
 };
