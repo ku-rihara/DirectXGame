@@ -26,9 +26,6 @@ struct TimeLineTrack {
     // キーフレーム右クリックコールバック
     std::function<void(int32_t trackIndex, int32_t keyIndex)> onKeyFrameRightClick;
 
-    // キーフレーム位置ドラッグ制約コールバック
-    std::function<int32_t(int32_t trackIndex, int32_t keyIndex, int32_t newFrame)> onKeyFrameDragConstraint;
-
     // トラック固有ID
     uint32_t id;
 };
@@ -91,12 +88,7 @@ public:
     void SetKeyFrameRightClickCallback(uint32_t trackIndex,
         std::function<void(int32_t, int32_t)> callback);
 
-    /// <summary>
-    /// キーフレームドラッグ制約コールバックを設定
-    /// </summary>
-    void SetKeyFrameDragConstraintCallback(uint32_t trackIndex,
-        std::function<int32_t(int32_t, int32_t, int32_t)> callback);
-
+  
     /// <summary>
     /// トラック数を取得
     /// </summary>
@@ -113,9 +105,6 @@ private:
 
     float InterpolateValue(const TimeLineKeyFrame& key1,
         const TimeLineKeyFrame& key2, int32_t frame) const;
-
-    // トラック右クリック処理
-    void HandleTrackRightClick(uint32_t trackIndex, float trackY);
 
 private:
     //*---------------------------- private Variant ----------------------------*//
