@@ -27,7 +27,7 @@ public:
         COUNT
     };
 
-    enum class AddableTrackType {
+    enum class TrackType {
         // Rendition系
         CAMERA_ACTION,
         HIT_STOP,
@@ -56,7 +56,7 @@ public:
     };
 
     struct TrackInfo {
-        AddableTrackType type;
+        TrackType type;
         int32_t trackIndex;
         std::string fileName;
     };
@@ -73,20 +73,20 @@ public:
     void SetupObjectAnimationTracks();
     void SetupAudioTracks();
 
-    void AddTrack(AddableTrackType type);
+    void AddTrack(TrackType type);
     void RemoveTrack(int32_t trackIndex);
 
     // パラメータ適用
     void ApplyToParameters();
 
     // ヘルパー
-    const char* GetTrackTypeName(AddableTrackType type) const;
-    AddableTrackType GetTrackTypeFromIndex(int32_t trackIndex) const;
-    std::string GetDirectoryForTrackType(AddableTrackType type) const;
+    const char* GetTrackTypeName(TrackType type) const;
+    TrackType GetTrackTypeFromIndex(int32_t trackIndex) const;
+    std::string GetDirectoryForTrackType(TrackType type) const;
     int32_t CalculateTotalFrames() const;
 
     // トラック存在チェック
-    bool IsTrackTypeAlreadyAdded(AddableTrackType type) const;
+    bool IsTrackTypeAlreadyAdded(TrackType type) const;
 
     // ゲッター
     const std::vector<TrackInfo>& GetAddedTracks() const { return addedTracks_; }

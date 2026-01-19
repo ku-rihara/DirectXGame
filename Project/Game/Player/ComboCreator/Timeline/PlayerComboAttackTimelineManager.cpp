@@ -27,7 +27,7 @@ void PlayerComboAttackTimelineManager::SetupDefaultTracks() {
     int32_t totalFrames = CalculateTotalFrames();
     timeline_->SetEndFrame(totalFrames);
 
-    // コライダートラック（キーフレーム1つ、開始時間から適応時間分の長さ）
+    // コライダートラック
     {
         int32_t trackIdx                                                   = timeline_->AddTrack("コライダー");
         defaultTrackIndices_[static_cast<size_t>(DefaultTrack::COLLISION)] = trackIdx;
@@ -42,7 +42,7 @@ void PlayerComboAttackTimelineManager::SetupDefaultTracks() {
         });
     }
 
-    // 移動イージングトラック（キーフレーム1つ、開始時間からイージング時間分の長さ）
+    // 移動イージングトラック
     {
         int32_t trackIdx                                                     = timeline_->AddTrack("移動イージング");
         defaultTrackIndices_[static_cast<size_t>(DefaultTrack::MOVE_EASING)] = trackIdx;
@@ -118,7 +118,7 @@ void PlayerComboAttackTimelineManager::SetupRenditionTracks() {
         int32_t trackIdx      = timeline_->AddTrack(trackName);
 
         TrackInfo info;
-        info.type       = static_cast<AddableTrackType>(i);
+        info.type       = static_cast<TrackType>(i);
         info.trackIndex = trackIdx;
         info.fileName   = param.fileName;
         addedTracks_.push_back(info);
@@ -143,7 +143,7 @@ void PlayerComboAttackTimelineManager::SetupRenditionTracks() {
         int32_t trackIdx      = timeline_->AddTrack(trackName);
 
         TrackInfo info;
-        info.type       = static_cast<AddableTrackType>(static_cast<int>(AddableTrackType::CAMERA_ACTION_ON_HIT) + i);
+        info.type       = static_cast<TrackType>(static_cast<int>(TrackType::CAMERA_ACTION_ON_HIT) + i);
         info.trackIndex = trackIdx;
         info.fileName   = param.fileName;
         addedTracks_.push_back(info);
@@ -174,8 +174,8 @@ void PlayerComboAttackTimelineManager::SetupObjectAnimationTracks() {
         int32_t trackIdx      = timeline_->AddTrack(trackName);
 
         TrackInfo info;
-        info.type = static_cast<AddableTrackType>(
-            static_cast<int>(AddableTrackType::OBJ_ANIM_HEAD) + i);
+        info.type = static_cast<TrackType>(
+            static_cast<int>(TrackType::OBJ_ANIM_HEAD) + i);
         info.trackIndex = trackIdx;
         info.fileName   = param.fileName;
         addedTracks_.push_back(info);
@@ -206,8 +206,8 @@ void PlayerComboAttackTimelineManager::SetupAudioTracks() {
         int32_t trackIdx      = timeline_->AddTrack(trackName);
 
         TrackInfo info;
-        info.type = static_cast<AddableTrackType>(
-            static_cast<int>(AddableTrackType::AUDIO_ATTACK) + i);
+        info.type = static_cast<TrackType>(
+            static_cast<int>(TrackType::AUDIO_ATTACK) + i);
         info.trackIndex = trackIdx;
         info.fileName   = param.fileName;
         addedTracks_.push_back(info);
@@ -221,14 +221,14 @@ void PlayerComboAttackTimelineManager::SetupAudioTracks() {
     }
 }
 
-bool PlayerComboAttackTimelineManager::IsTrackTypeAlreadyAdded(AddableTrackType type) const {
+bool PlayerComboAttackTimelineManager::IsTrackTypeAlreadyAdded(TrackType type) const {
     // デフォルトトラックのチェック
     switch (type) {
-    case AddableTrackType::CANCEL_TIME:
+    case TrackType::CANCEL_TIME:
         return defaultTrackIndices_[static_cast<size_t>(DefaultTrack::CANCEL_START)] >= 0;
-    case AddableTrackType::PRECEDE_INPUT:
+    case TrackType::PRECEDE_INPUT:
         return defaultTrackIndices_[static_cast<size_t>(DefaultTrack::PRECEDE_INPUT_START)] >= 0;
-    case AddableTrackType::FINISH_WAIT_TIME:
+    case TrackType::FINISH_WAIT_TIME:
         return defaultTrackIndices_[static_cast<size_t>(DefaultTrack::FINISH_WAIT)] >= 0;
     default:
         break;
@@ -244,7 +244,7 @@ bool PlayerComboAttackTimelineManager::IsTrackTypeAlreadyAdded(AddableTrackType 
     return false;
 }
 
-void PlayerComboAttackTimelineManager::AddTrack(AddableTrackType type) {
+void PlayerComboAttackTimelineManager::AddTrack(TrackType type) {
     if (!timeline_)
         return;
 
@@ -368,25 +368,25 @@ void PlayerComboAttackTimelineManager::ApplyTrackToRendition(const TrackInfo& tr
     auto& renditionData = const_cast<PlayerAttackRenditionData&>(attackData_->GetRenditionData());
     int typeInt         = static_cast<int>(trackInfo.type);
 
-    if (typeInt >= static_cast<int>(AddableTrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(AddableTrackType::PARTICLE_EFFECT)) {
+    if (typeInt >= static_cast<int>(TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(TrackType::PARTICLE_EFFECT)) {
         auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
             renditionData.GetRenditionParamFromIndex(typeInt));
         param.fileName    = trackInfo.fileName;
         param.startTiming = timing;
-    } else if (typeInt >= static_cast<int>(AddableTrackType::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(AddableTrackType::PARTICLE_EFFECT_ON_HIT)) {
-        int baseIndex = typeInt - static_cast<int>(AddableTrackType::CAMERA_ACTION_ON_HIT);
+    } else if (typeInt >= static_cast<int>(TrackType::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(TrackType::PARTICLE_EFFECT_ON_HIT)) {
+        int baseIndex = typeInt - static_cast<int>(TrackType::CAMERA_ACTION_ON_HIT);
         auto& param   = const_cast<PlayerAttackRenditionData::RenditionParam&>(
             renditionData.GetRenditionParamOnHitFromIndex(baseIndex));
         param.fileName    = trackInfo.fileName;
         param.startTiming = timing;
-    } else if (typeInt >= static_cast<int>(AddableTrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(AddableTrackType::OBJ_ANIM_MAIN_HEAD)) {
-        int baseIndex = typeInt - static_cast<int>(AddableTrackType::OBJ_ANIM_HEAD);
+    } else if (typeInt >= static_cast<int>(TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TrackType::OBJ_ANIM_MAIN_HEAD)) {
+        int baseIndex = typeInt - static_cast<int>(TrackType::OBJ_ANIM_HEAD);
         auto& param   = const_cast<PlayerAttackRenditionData::ObjAnimationParam&>(
             renditionData.GetObjAnimationParamFromIndex(baseIndex));
         param.fileName    = trackInfo.fileName;
         param.startTiming = timing;
-    } else if (typeInt >= static_cast<int>(AddableTrackType::AUDIO_ATTACK) && typeInt <= static_cast<int>(AddableTrackType::AUDIO_HIT)) {
-        int baseIndex = typeInt - static_cast<int>(AddableTrackType::AUDIO_ATTACK);
+    } else if (typeInt >= static_cast<int>(TrackType::AUDIO_ATTACK) && typeInt <= static_cast<int>(TrackType::AUDIO_HIT)) {
+        int baseIndex = typeInt - static_cast<int>(TrackType::AUDIO_ATTACK);
         auto& param   = const_cast<PlayerAttackRenditionData::AudioParam&>(
             renditionData.GetAudioParamFromIndex(baseIndex));
         param.fileName    = trackInfo.fileName;
@@ -394,62 +394,62 @@ void PlayerComboAttackTimelineManager::ApplyTrackToRendition(const TrackInfo& tr
     }
 }
 
-const char* PlayerComboAttackTimelineManager::GetTrackTypeName(AddableTrackType type) const {
+const char* PlayerComboAttackTimelineManager::GetTrackTypeName(TrackType type) const {
     switch (type) {
-    case AddableTrackType::CAMERA_ACTION:
+    case TrackType::CAMERA_ACTION:
         return "カメラアクション";
-    case AddableTrackType::HIT_STOP:
+    case TrackType::HIT_STOP:
         return "ヒットストップ";
-    case AddableTrackType::SHAKE_ACTION:
+    case TrackType::SHAKE_ACTION:
         return "シェイクアクション";
-    case AddableTrackType::POST_EFFECT:
+    case TrackType::POST_EFFECT:
         return "ポストエフェクト";
-    case AddableTrackType::PARTICLE_EFFECT:
+    case TrackType::PARTICLE_EFFECT:
         return "パーティクルエフェクト";
-    case AddableTrackType::CAMERA_ACTION_ON_HIT:
+    case TrackType::CAMERA_ACTION_ON_HIT:
         return "カメラアクション (ヒット時)";
-    case AddableTrackType::HIT_STOP_ON_HIT:
+    case TrackType::HIT_STOP_ON_HIT:
         return "ヒットストップ (ヒット時)";
-    case AddableTrackType::SHAKE_ACTION_ON_HIT:
+    case TrackType::SHAKE_ACTION_ON_HIT:
         return "シェイクアクション (ヒット時)";
-    case AddableTrackType::POST_EFFECT_ON_HIT:
+    case TrackType::POST_EFFECT_ON_HIT:
         return "ポストエフェクト (ヒット時)";
-    case AddableTrackType::PARTICLE_EFFECT_ON_HIT:
+    case TrackType::PARTICLE_EFFECT_ON_HIT:
         return "パーティクルエフェクト (ヒット時)";
-    case AddableTrackType::OBJ_ANIM_HEAD:
+    case TrackType::OBJ_ANIM_HEAD:
         return "頭アニメーション";
-    case AddableTrackType::OBJ_ANIM_RIGHT_HAND:
+    case TrackType::OBJ_ANIM_RIGHT_HAND:
         return "右手アニメーション";
-    case AddableTrackType::OBJ_ANIM_LEFT_HAND:
+    case TrackType::OBJ_ANIM_LEFT_HAND:
         return "左手アニメーション";
-    case AddableTrackType::OBJ_ANIM_MAIN_HEAD:
+    case TrackType::OBJ_ANIM_MAIN_HEAD:
         return "メイン頭アニメーション";
-    case AddableTrackType::AUDIO_ATTACK:
+    case TrackType::AUDIO_ATTACK:
         return "攻撃音";
-    case AddableTrackType::AUDIO_HIT:
+    case TrackType::AUDIO_HIT:
         return "ヒット音";
-    case AddableTrackType::CANCEL_TIME:
+    case TrackType::CANCEL_TIME:
         return "キャンセルタイム";
-    case AddableTrackType::PRECEDE_INPUT:
+    case TrackType::PRECEDE_INPUT:
         return "先行入力";
-    case AddableTrackType::FINISH_WAIT_TIME:
+    case TrackType::FINISH_WAIT_TIME:
         return "攻撃終了待機";
     default:
         return "不明";
     }
 }
 
-PlayerComboAttackTimelineManager::AddableTrackType
+PlayerComboAttackTimelineManager::TrackType
 PlayerComboAttackTimelineManager::GetTrackTypeFromIndex(int32_t trackIndex) const {
     for (size_t i = 0; i < defaultTrackIndices_.size(); ++i) {
         if (defaultTrackIndices_[i] == trackIndex) {
             switch (static_cast<DefaultTrack>(i)) {
             case DefaultTrack::CANCEL_START:
-                return AddableTrackType::CANCEL_TIME;
+                return TrackType::CANCEL_TIME;
             case DefaultTrack::PRECEDE_INPUT_START:
-                return AddableTrackType::PRECEDE_INPUT;
+                return TrackType::PRECEDE_INPUT;
             case DefaultTrack::FINISH_WAIT:
-                return AddableTrackType::FINISH_WAIT_TIME;
+                return TrackType::FINISH_WAIT_TIME;
             default:
                 break;
             }
@@ -465,38 +465,38 @@ PlayerComboAttackTimelineManager::GetTrackTypeFromIndex(int32_t trackIndex) cons
         return it->type;
     }
 
-    return AddableTrackType::COUNT;
+    return TrackType::COUNT;
 }
 
-std::string PlayerComboAttackTimelineManager::GetDirectoryForTrackType(AddableTrackType type) const {
+std::string PlayerComboAttackTimelineManager::GetDirectoryForTrackType(TrackType type) const {
     const std::string basePath = "Resources/GlobalParameter/";
 
     switch (type) {
-    case AddableTrackType::CAMERA_ACTION:
-    case AddableTrackType::CAMERA_ACTION_ON_HIT:
+    case TrackType::CAMERA_ACTION:
+    case TrackType::CAMERA_ACTION_ON_HIT:
         return basePath + "CameraAnimation/AnimationData";
-    case AddableTrackType::HIT_STOP:
-    case AddableTrackType::HIT_STOP_ON_HIT:
+    case TrackType::HIT_STOP:
+    case TrackType::HIT_STOP_ON_HIT:
         return basePath + "TimeScale";
-    case AddableTrackType::SHAKE_ACTION:
-    case AddableTrackType::SHAKE_ACTION_ON_HIT:
+    case TrackType::SHAKE_ACTION:
+    case TrackType::SHAKE_ACTION_ON_HIT:
         return basePath + "ShakeEditor";
-    case AddableTrackType::POST_EFFECT:
-    case AddableTrackType::POST_EFFECT_ON_HIT:
+    case TrackType::POST_EFFECT:
+    case TrackType::POST_EFFECT_ON_HIT:
         return basePath + "PostEffect";
-    case AddableTrackType::PARTICLE_EFFECT:
-    case AddableTrackType::PARTICLE_EFFECT_ON_HIT:
+    case TrackType::PARTICLE_EFFECT:
+    case TrackType::PARTICLE_EFFECT_ON_HIT:
         return basePath + "Particle/Player/Dates";
-    case AddableTrackType::OBJ_ANIM_HEAD:
+    case TrackType::OBJ_ANIM_HEAD:
         return basePath + "ObjEaseAnimation/Player/Dates/";
-    case AddableTrackType::OBJ_ANIM_RIGHT_HAND:
+    case TrackType::OBJ_ANIM_RIGHT_HAND:
         return basePath + "ObjEaseAnimation/RightHand/Dates/";
-    case AddableTrackType::OBJ_ANIM_LEFT_HAND:
+    case TrackType::OBJ_ANIM_LEFT_HAND:
         return basePath + "ObjEaseAnimation/LeftHand/Dates/";
-    case AddableTrackType::OBJ_ANIM_MAIN_HEAD:
+    case TrackType::OBJ_ANIM_MAIN_HEAD:
         return basePath + "ObjEaseAnimation/MainHead/Dates/";
-    case AddableTrackType::AUDIO_ATTACK:
-    case AddableTrackType::AUDIO_HIT:
+    case TrackType::AUDIO_ATTACK:
+    case TrackType::AUDIO_HIT:
         return "Resources/Audio/";
     default:
         return basePath;

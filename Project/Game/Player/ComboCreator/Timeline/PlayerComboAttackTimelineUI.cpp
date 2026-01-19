@@ -61,7 +61,7 @@ void PlayerComboAttackTimelineUI::DrawAddTrackButton() {
     DrawAddTrackPopup();
 }
 
-void PlayerComboAttackTimelineUI::DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::AddableTrackType trackType) {
+void PlayerComboAttackTimelineUI::DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::TrackType trackType) {
     bool exists = manager_->IsTrackTypeAlreadyAdded(trackType);
     if (exists)
         ImGui::BeginDisabled();
@@ -73,7 +73,7 @@ void PlayerComboAttackTimelineUI::DrawTrackMenuItem(const char* label, PlayerCom
 }
 
 void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
-    using TrackType = PlayerComboAttackTimelineManager::AddableTrackType;
+    using TrackType = PlayerComboAttackTimelineManager::TrackType;
 
     if (ImGui::BeginPopup("AddTrackPopup")) {
         ImGui::SeparatorText("演出 (通常)");
@@ -107,9 +107,7 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
         ImGui::SeparatorText("タイミング");
 
         DrawTrackMenuItem("キャンセルタイム", TrackType::CANCEL_TIME);
-        DrawTrackMenuItem("先行入力", TrackType::PRECEDE_INPUT);
-        DrawTrackMenuItem("攻撃終了待機", TrackType::FINISH_WAIT_TIME);
-
+    
         ImGui::EndPopup();
     }
 }
@@ -146,7 +144,7 @@ void PlayerComboAttackTimelineUI::DrawTrackContextMenu(int32_t trackIndex) {
 }
 
 void PlayerComboAttackTimelineUI::DrawKeyFrameContextMenu(int32_t trackIndex, int32_t keyIndex) {
-    using TrackType = PlayerComboAttackTimelineManager::AddableTrackType;
+    using TrackType = PlayerComboAttackTimelineManager::TrackType;
 
     ImGui::PushID(("KeyContext_" + std::to_string(trackIndex) + "_" + std::to_string(keyIndex)).c_str());
 
@@ -284,7 +282,7 @@ void PlayerComboAttackTimelineUI::DrawTimingParamUI() {
 }
 
 void PlayerComboAttackTimelineUI::DrawRenditionFileSelector(
-    PlayerComboAttackTimelineManager::AddableTrackType type,
+    PlayerComboAttackTimelineManager::TrackType type,
     PlayerComboAttackTimelineManager::TrackInfo& info) {
 
     ImGui::SeparatorText("ファイル選択");

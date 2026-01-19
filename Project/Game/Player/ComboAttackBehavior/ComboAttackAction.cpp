@@ -263,7 +263,7 @@ void ComboAttackAction::SetMoveEasing() {
     moveEasing_.SetFinishTimeOffset(moveParam.finishTimeOffset);
 
     // 開始時間を設定
-    moveEasing_.SetStartTime(moveParam.startTime);
+    moveEasing_.SetStartTimeOffset(moveParam.startTime);
 }
 
 void ComboAttackAction::Debug() {

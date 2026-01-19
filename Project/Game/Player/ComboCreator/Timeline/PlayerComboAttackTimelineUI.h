@@ -48,11 +48,11 @@ public:
 private:
     void DrawAddTrackPopup();
     void DrawRenditionKeyFrameEditor(int32_t trackIndex, int32_t keyIndex);
-    void DrawRenditionFileSelector(PlayerComboAttackTimelineManager::AddableTrackType type,
+    void DrawRenditionFileSelector(PlayerComboAttackTimelineManager::TrackType type,
         PlayerComboAttackTimelineManager::TrackInfo& info);
 
     // トラックメニューアイテム描画のヘルパー関数
-    void DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::AddableTrackType trackType);
+    void DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::TrackType trackType);
 
 private:
     PlayerComboAttackData* attackData_         = nullptr;
