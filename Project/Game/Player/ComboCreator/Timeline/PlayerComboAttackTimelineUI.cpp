@@ -146,38 +146,23 @@ void PlayerComboAttackTimelineUI::DrawTrackContextMenu(int32_t trackIndex) {
     ImGui::PopID();
 }
 
-void PlayerComboAttackTimelineUI::DrawKeyFrameContextMenu(int32_t trackIndex, int32_t keyIndex) {
+void PlayerComboAttackTimelineUI::DrawKeyFrameMenuItems(int32_t trackIndex, int32_t keyIndex) {
     using TrackType = PlayerComboAttackTimelineManager::TrackType;
 
-    ImGui::PushID(("KeyContext_" + std::to_string(trackIndex) + "_" + std::to_string(keyIndex)).c_str());
+    auto trackType = manager_->GetTrackTypeFromIndex(trackIndex);
 
-    std::string popupId = "KeyFrameContextMenu_" + std::to_string(trackIndex) + "_" + std::to_string(keyIndex);
+    // 演出系トラックの場合
+    int typeInt      = static_cast<int>(trackType);
+    bool isRendition = (typeInt >= static_cast<int>(TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(TrackType::PARTICLE_EFFECT_ON_HIT));
+    bool isObjAnime  = (typeInt >= static_cast<int>(TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TrackType::OBJ_ANIM_MAIN_HEAD));
+    bool isAudio     = (typeInt >= static_cast<int>(TrackType::AUDIO_ATTACK) && typeInt <= static_cast<int>(TrackType::AUDIO_HIT));
 
-    if (ImGui::BeginPopup(popupId.c_str())) {
-        auto trackType = manager_->GetTrackTypeFromIndex(trackIndex);
-
+    if (isRendition || isObjAnime || isAudio) {
         ImGui::Text("キーフレーム編集");
         ImGui::Separator();
-
-        // 演出系トラックの場合
-        int typeInt      = static_cast<int>(trackType);
-        bool isRendition = (typeInt >= static_cast<int>(TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(TrackType::PARTICLE_EFFECT_ON_HIT));
-        bool isObjAnime  = (typeInt >= static_cast<int>(TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TrackType::OBJ_ANIM_MAIN_HEAD));
-        bool isAudio     = (typeInt >= static_cast<int>(TrackType::AUDIO_ATTACK) && typeInt <= static_cast<int>(TrackType::AUDIO_HIT));
-
-        if (isRendition || isObjAnime || isAudio) {
-            DrawRenditionKeyFrameEditor(trackIndex, keyIndex);
-        }
-
+        DrawRenditionKeyFrameEditor(trackIndex, keyIndex);
         ImGui::Separator();
-        if (ImGui::MenuItem("キーフレームを削除")) {
-            timeline_->RemoveKeyFrame(trackIndex, keyIndex);
-        }
-
-        ImGui::EndPopup();
     }
-
-    ImGui::PopID();
 }
 
 void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex, int32_t keyIndex) {

@@ -36,7 +36,7 @@ public:
 
     // コンテキストメニュー
     void DrawTrackContextMenu(int32_t trackIndex);
-    void DrawKeyFrameContextMenu(int32_t trackIndex, int32_t keyIndex);
+    void DrawKeyFrameMenuItems(int32_t trackIndex, int32_t keyIndex);
 
     // パラメータ編集UI
     void DrawCollisionParamUI();

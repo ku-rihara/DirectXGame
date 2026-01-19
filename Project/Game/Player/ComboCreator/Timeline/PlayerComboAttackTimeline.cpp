@@ -24,9 +24,16 @@ void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
     manager_.SetupObjectAnimationTracks();
     manager_.SetupAudioTracks();
 
+    // キーフレームコールバックを設定
+    for (uint32_t i = 0; i < timeline_.GetTrackCount(); ++i) {
+        timeline_.SetKeyFrameRightClickCallback(i, [this](int32_t trackIdx, int32_t keyIdx) {
+            // ポップアップ内でカスタムメニュー項目を描画
+            ui_.DrawKeyFrameMenuItems(trackIdx, keyIdx);
+        });
+    }
+
     isInitialized_ = true;
 }
-
 void PlayerComboAttackTimeline::Draw() {
     if (!isInitialized_ || !attackData_) {
         ImGui::Text("Timeline not initialized");
@@ -71,16 +78,6 @@ void PlayerComboAttackTimeline::Draw() {
     // 各トラックのコンテキストメニュー処理
     for (size_t i = 0; i < timeline_.GetTrackCount(); ++i) {
         ui_.DrawTrackContextMenu(static_cast<int32_t>(i));
-    }
-
-    // キーフレーム右クリックメニュー処理
-    for (size_t i = 0; i < timeline_.GetTrackCount(); ++i) {
-        const auto& tracks = timeline_.GetTracks();
-        if (i < tracks.size()) {
-            for (size_t j = 0; j < tracks[i].keyframes.size(); ++j) {
-                ui_.DrawKeyFrameContextMenu(static_cast<int32_t>(i), static_cast<int32_t>(j));
-            }
-        }
     }
 
     // タイムライン変更を毎フレームパラメータに自動適用
