@@ -85,27 +85,27 @@ public:
         const char* label;
     };
 
-    // 静的な演出タイプ配列
+    // 静的な演出タイプ配列 
     static constexpr RenditionTypeInfo kRenditionTypeInfos[] = {
-        {Type::CameraAction, "CameraAction", "Camera Action", "CameraAnimation/AnimationData"},
-        {Type::HitStop, "HitStop", "Hit Stop", "TimeScale"},
-        {Type::ShakeAction, "ShakeAction", "Shake Action", "ShakeEditor"},
-        {Type::PostEffect, "PostEffectParam", "PostEffect", "PostEffect"},
-        {Type::ParticleEffect, "ParticleEffectParam", "ParticleEffect", "Particle/Player/Dates"},
+        {Type::CameraAction, "CameraAction", "カメラアクション", "CameraAnimation/AnimationData"},
+        {Type::HitStop, "HitStop", "ヒットストップ", "TimeScale"},
+        {Type::ShakeAction, "ShakeAction", "シェイクアクション", "ShakeEditor"},
+        {Type::PostEffect, "PostEffectParam", "ポストエフェクト", "PostEffect"},
+        {Type::ParticleEffect, "ParticleEffectParam", "パーティクルエフェクト", "Particle/Player/Dates"},
     };
 
     // 静的なオブジェクトアニメーションタイプ配列
     static constexpr ObjAnimationTypeInfo kObjAnimationTypeInfos[] = {
-        {ObjAnimationType::Head, "ObjAnim_Head", "Head Animation"},
-        {ObjAnimationType::RightHand, "ObjAnim_RightHand", "Right Hand Animation"},
-        {ObjAnimationType::LeftHand, "ObjAnim_LeftHand", "Left Hand Animation"},
-        {ObjAnimationType::MainHead, "Main_Head", "Main Head Animation"},
+        {ObjAnimationType::Head, "ObjAnim_Head", "頭アニメーション"},
+        {ObjAnimationType::RightHand, "ObjAnim_RightHand", "右手アニメーション"},
+        {ObjAnimationType::LeftHand, "ObjAnim_LeftHand", "左手アニメーション"},
+        {ObjAnimationType::MainHead, "Main_Head", "メイン頭アニメーション"},
     };
 
-    // 静的なオーディオタイプ配列
+    // 静的なオーディオタイプ配列 
     static constexpr AudioTypeInfo kAudioTypeInfos[] = {
-        {AudioType::Attack, "Audio_Attack", "Attack Sound"},
-        {AudioType::Hit, "Audio_Hit", "Hit Sound"},
+        {AudioType::Attack, "Audio_Attack", "攻撃音"},
+        {AudioType::Hit, "Audio_Hit", "ヒット音"},
     };
 
 public:
@@ -139,7 +139,7 @@ private:
         "Resources/GlobalParameter/ObjEaseAnimation/LeftHand/Dates/",
         "Resources/GlobalParameter/ObjEaseAnimation/MainHead/Dates/"};
 
-    // 演出パラメータ配列（通常とヒット時）
+    // 演出パラメータ配列(通常とヒット時)
     std::array<std::pair<RenditionParam, KetaEngine::FileSelector>, static_cast<size_t>(Type::Count)> renditionParams_;
     std::array<std::pair<RenditionParam, KetaEngine::FileSelector>, static_cast<size_t>(Type::Count)> renditionParamsOnHit_;
 
@@ -155,7 +155,6 @@ private:
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const RenditionParam& GetRenditionParamFromIndex(int32_t index) const {
-        assert(index >= 0 && index < static_cast<int32_t>(Type::Count) && "Invalid Rendition Type Index");
         return GetRenditionParamFromType(static_cast<Type>(index));
     }
 
@@ -165,7 +164,6 @@ public:
 
     // ヒット時用のゲッター
     const RenditionParam& GetRenditionParamOnHitFromIndex(int32_t index) const {
-        assert(index >= 0 && index < static_cast<int32_t>(Type::Count) && "Invalid Rendition Type Index");
         return GetRenditionParamOnHitFromType(static_cast<Type>(index));
     }
 
@@ -187,7 +185,7 @@ public:
         return audioParams_[static_cast<size_t>(type)].first;
     }
 
-    // 振動パラメータの取得（単一）
+    // 振動パラメータの取得
     const VibrationParam& GetVibrationParam() const {
         return vibrationParam_;
     }
