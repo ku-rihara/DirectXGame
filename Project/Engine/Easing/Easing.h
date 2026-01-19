@@ -145,6 +145,7 @@ public:
     /// Setter methods
     /// -------------------------------------------------------------------------
     void SetStartValue(const T& value) { startValue_ = value; }
+    void SetStartTimeOffset(float time) { startTimeOffset_ = time; }
     void SetEndValue(const T& value) { endValue_ = value; }
     void SetCurrentOffset(const T& value);
     void SetBaseValue(const T& value) { baseValue_ = value; }
