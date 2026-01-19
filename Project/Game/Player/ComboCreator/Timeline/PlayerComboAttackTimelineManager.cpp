@@ -35,6 +35,10 @@ void PlayerComboAttackTimelineManager::SetupDefaultTracks() {
         int32_t startFrame     = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.startTime);
         int32_t durationFrames = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.adaptTime);
 
+        // 最小値を保証
+        if (durationFrames < 1)
+            durationFrames = 1;
+
         timeline_->AddKeyFrame(trackIdx, startFrame, 1.0f, static_cast<float>(durationFrames), "コライダー適応時間");
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
@@ -49,6 +53,10 @@ void PlayerComboAttackTimelineManager::SetupDefaultTracks() {
 
         int32_t startFrame     = KetaEngine::Frame::TimeToFrame(attackParam.moveParam.startTime);
         int32_t durationFrames = KetaEngine::Frame::TimeToFrame(attackParam.moveParam.easeTime);
+
+        // 最小値を保証
+        if (durationFrames < 1)
+            durationFrames = 1;
 
         timeline_->AddKeyFrame(trackIdx, startFrame, 1.0f, static_cast<float>(durationFrames), "移動イージング時間");
 
@@ -92,6 +100,10 @@ void PlayerComboAttackTimelineManager::SetupDefaultTracks() {
         int32_t waitStartFrame = KetaEngine::Frame::TimeToFrame(waitStartTime);
         int32_t waitDuration   = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.finishWaitTime);
 
+        // 最小値を保証
+        if (waitDuration < 1)
+            waitDuration = 1;
+
         timeline_->AddKeyFrame(trackIdx, waitStartFrame, 1.0f, static_cast<float>(waitDuration), "終了待機時間");
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
@@ -124,7 +136,7 @@ void PlayerComboAttackTimelineManager::SetupRenditionTracks() {
         info.isCameraReset = param.isCameraReset;
         addedTracks_.push_back(info);
 
-        int32_t frame     = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
         timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
@@ -150,7 +162,7 @@ void PlayerComboAttackTimelineManager::SetupRenditionTracks() {
         info.isCameraReset = param.isCameraReset;
         addedTracks_.push_back(info);
 
-        int32_t frame     = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
         timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
@@ -362,6 +374,33 @@ void PlayerComboAttackTimelineManager::ApplyToParameters() {
         float timing  = KetaEngine::Frame::FrameToTime(frame);
         ApplyTrackToRendition(trackInfo, timing);
     }
+
+    // タイムラインの終了フレームを再計算して更新
+    UpdateTimelineEndFrame();
+}
+
+void PlayerComboAttackTimelineManager::UpdateTimelineEndFrame() {
+    if (!attackData_ || !timeline_)
+        return;
+
+    int32_t totalFrames = CalculateTotalFrames();
+    timeline_->SetEndFrame(totalFrames);
+}
+
+int32_t PlayerComboAttackTimelineManager::GetFinishWaitStartFrame() const {
+    if (!attackData_)
+        return 0;
+
+    auto& attackParam = attackData_->GetAttackParam();
+
+    // コライダーと移動のどちらか遅い方を取得
+    int32_t collisionEndFrame = KetaEngine::Frame::TimeToFrame(
+        attackParam.collisionParam.startTime + attackParam.collisionParam.adaptTime);
+
+    int32_t moveEndFrame = KetaEngine::Frame::TimeToFrame(
+        attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset);
+
+    return std::max(collisionEndFrame, moveEndFrame);
 }
 
 void PlayerComboAttackTimelineManager::ApplyTrackToRendition(const TrackInfo& trackInfo, float timing) {
@@ -517,7 +556,9 @@ int32_t PlayerComboAttackTimelineManager::CalculateTotalFrames() const {
     // 攻撃終了待機時間が終わるまでを計算
     float totalTime = attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset + attackParam.timingParam.finishWaitTime;
 
-    return KetaEngine::Frame::TimeToFrame(totalTime);
+    int32_t frames = KetaEngine::Frame::TimeToFrame(totalTime);
+
+    return frames; 
 }
 
 PlayerComboAttackTimelineManager::TrackInfo*

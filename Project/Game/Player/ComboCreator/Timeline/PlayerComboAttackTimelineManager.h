@@ -99,6 +99,8 @@ public:
 
 private:
     void ApplyTrackToRendition(const TrackInfo& trackInfo, float timing);
+    void UpdateTimelineEndFrame();
+    int32_t GetFinishWaitStartFrame() const;
 
 private:
     PlayerComboAttackData* attackData_ = nullptr;
