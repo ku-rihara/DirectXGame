@@ -161,6 +161,14 @@ void TimeLine::SetTrackRightClickCallback(uint32_t trackIndex, std::function<voi
     tracks_[trackIndex].onRightClick = callback;
 }
 
+void TimeLine::SetKeyFrameRightClickCallback(uint32_t trackIndex, std::function<void(int32_t, int32_t)> callback) {
+    if (trackIndex >= tracks_.size()) {
+        return;
+    }
+
+    tracks_[trackIndex].onKeyFrameRightClick = callback;
+}
+
 void TimeLine::HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, const Vector2& keyPos) {
     if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImVec2(keyPos.x - 8, keyPos.y - 8), ImVec2(keyPos.x + 8, keyPos.y + 8))) {
 
@@ -368,15 +376,21 @@ void TimeLine::Draw(const std::string& name) {
 
                 // キーフレーム右クリックで削除
                 if (ImGui::IsMouseClicked(1) && ImGui::IsMouseHoveringRect(ImVec2(kfX - 8, kfY - 8), ImVec2(kfX + 8, kfY + 8))) {
+                    // カスタムコールバックがあれば呼び出す
+                    if (track.onKeyFrameRightClick) {
+                        track.onKeyFrameRightClick(i, j);
+                    }
                     ImGui::OpenPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str());
                 }
 
-                // キーフレームコンテキストメニュー（ラベル編集機能を削除）
-                if (ImGui::BeginPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str())) {
-                    if (ImGui::MenuItem("Delete KeyFrame")) {
-                        RemoveKeyFrame(i, j);
+                // デフォルトのキーフレームコンテキストメニュー（コールバックがない場合のみ）
+                if (!track.onKeyFrameRightClick) {
+                    if (ImGui::BeginPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str())) {
+                        if (ImGui::MenuItem("Delete KeyFrame")) {
+                            RemoveKeyFrame(i, j);
+                        }
+                        ImGui::EndPopup();
                     }
-                    ImGui::EndPopup();
                 }
             }
         }
