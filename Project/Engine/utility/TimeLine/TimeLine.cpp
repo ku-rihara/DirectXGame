@@ -7,13 +7,15 @@ using namespace KetaEngine;
 
 void TimeLine::Init() {
     tracks_.clear();
-    currentFrame_           = 0;
-    scrollOffset_           = 0;
-    isPlaying_              = false;
-    draggingTrackIndex_     = -1;
-    draggingKeyIndex_       = -1;
-    rightClickedTrackIndex_ = -1;
-    nextTrackId_            = 0;
+    currentFrame_               = 0;
+    scrollOffset_               = 0;
+    isPlaying_                  = false;
+    draggingTrackIndex_         = -1;
+    draggingKeyIndex_           = -1;
+    draggingDurationTrackIndex_ = -1;
+    draggingDurationKeyIndex_   = -1;
+    rightClickedTrackIndex_     = -1;
+    nextTrackId_                = 0;
 }
 
 uint32_t TimeLine::AddTrack(const std::string& trackName, std::function<void(float)> callback) {
@@ -40,6 +42,13 @@ bool TimeLine::RemoveTrack(uint32_t trackIndex) {
         draggingTrackIndex_--;
     }
 
+    if (draggingDurationTrackIndex_ == static_cast<int>(trackIndex)) {
+        draggingDurationTrackIndex_ = -1;
+        draggingDurationKeyIndex_   = -1;
+    } else if (draggingDurationTrackIndex_ > static_cast<int>(trackIndex)) {
+        draggingDurationTrackIndex_--;
+    }
+
     if (rightClickedTrackIndex_ == static_cast<int>(trackIndex)) {
         rightClickedTrackIndex_ = -1;
     } else if (rightClickedTrackIndex_ > static_cast<int>(trackIndex)) {
@@ -49,7 +58,7 @@ bool TimeLine::RemoveTrack(uint32_t trackIndex) {
     return true;
 }
 
-void TimeLine::AddKeyFrame(uint32_t trackIndex, int32_t frame, float value, float duration) {
+void TimeLine::AddKeyFrame(uint32_t trackIndex, int32_t frame, float value, float duration, const std::string& label) {
     if (trackIndex >= tracks_.size()) {
         return;
     }
@@ -59,6 +68,7 @@ void TimeLine::AddKeyFrame(uint32_t trackIndex, int32_t frame, float value, floa
     newKeyFrame.value      = value;
     newKeyFrame.duration   = duration;
     newKeyFrame.isSelected = false;
+    newKeyFrame.label      = label;
 
     tracks_[trackIndex].keyframes.push_back(newKeyFrame);
 
@@ -145,6 +155,22 @@ void TimeLine::HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, co
         draggingKeyIndex_                                  = keyIndex;
         dragStartFrame_                                    = tracks_[trackIndex].keyframes[keyIndex].frame;
         tracks_[trackIndex].keyframes[keyIndex].isSelected = true;
+    }
+}
+
+void TimeLine::HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex, float durationBarX, float trackY) {
+    const float barHeight     = trackHeight_ * 0.8f;
+    const float barTopY       = trackY + (trackHeight_ - barHeight) / 2.0f;
+    const float dragZoneWidth = 8.0f;
+
+    // duration バーの右端付近をドラッグ開始判定
+    ImVec2 dragZoneMin = ImVec2(durationBarX - dragZoneWidth, barTopY);
+    ImVec2 dragZoneMax = ImVec2(durationBarX + dragZoneWidth, barTopY + barHeight);
+
+    if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(dragZoneMin, dragZoneMax)) {
+        draggingDurationTrackIndex_ = trackIndex;
+        draggingDurationKeyIndex_   = keyIndex;
+        dragStartDuration_          = tracks_[trackIndex].keyframes[keyIndex].duration;
     }
 }
 
@@ -283,19 +309,34 @@ void TimeLine::Draw(const std::string& name) {
                 if (isOnCurrentFrame) {
                     // 現在フレーム上にある場合は明るく光らせる
                     color           = IM_COL32(70, 255, 70, 255);
-                    durationUIColor = IM_COL32(100, 255, 200, 128);
+                    durationUIColor = IM_COL32(100, 255, 200, 180);
                 } else {
                     color           = IM_COL32(255, 200, 50, 255);
-                    durationUIColor = IM_COL32(100, 150, 200, 128);
+                    durationUIColor = IM_COL32(100, 150, 200, 180);
                 }
 
-                // 持続時間の表示
+                // 持続時間の表示（80%の高さ）
                 if (kf.duration > 1.0f) {
                     float durationWidth = kf.duration * frameWidth;
+                    float barHeight     = trackHeight_ * 0.8f;
+                    float barTopY       = trackY + (trackHeight_ - barHeight) / 2.0f;
+
                     draw_list->AddRectFilled(
-                        ImVec2(kfX, kfY - 3),
-                        ImVec2(kfX + durationWidth, kfY + 3),
+                        ImVec2(kfX, barTopY),
+                        ImVec2(kfX + durationWidth, barTopY + barHeight),
                         durationUIColor);
+
+                    // ラベル表示（横棒上）
+                    if (!kf.label.empty()) {
+                        draw_list->AddText(
+                            ImVec2(kfX + 5, barTopY + 2),
+                            IM_COL32(255, 255, 255, 255),
+                            kf.label.c_str());
+                    }
+
+                    // duration ドラッグハンドル処理
+                    float durationEndX = kfX + durationWidth;
+                    HandleDurationDrag(i, j, durationEndX, trackY);
                 }
 
                 // キーフレームマーカー(ダイヤモンド)
@@ -307,6 +348,11 @@ void TimeLine::Draw(const std::string& name) {
 
                 draw_list->AddConvexPolyFilled(diamond, 4, color);
 
+                // ホバー時のラベル表示
+                if (!kf.label.empty() && ImGui::IsMouseHoveringRect(ImVec2(kfX - 8, kfY - 8), ImVec2(kfX + 8, kfY + 8))) {
+                    ImGui::SetTooltip("%s", kf.label.c_str());
+                }
+
                 // ドラッグ&ドロップ処理
                 HandleKeyFrameDragDrop(i, j, Vector2(kfX, kfY));
 
@@ -317,6 +363,17 @@ void TimeLine::Draw(const std::string& name) {
 
                 // キーフレームコンテキストメニュー
                 if (ImGui::BeginPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str())) {
+                    // ラベル編集
+                    char labelBuffer[128];
+                    strncpy_s(labelBuffer, kf.label.c_str(), sizeof(labelBuffer) - 1);
+                    labelBuffer[sizeof(labelBuffer) - 1] = '\0';
+
+                    if (ImGui::InputText("Label", labelBuffer, sizeof(labelBuffer))) {
+                        kf.label = labelBuffer;
+                    }
+
+                    ImGui::Separator();
+
                     if (ImGui::MenuItem("Delete KeyFrame")) {
                         RemoveKeyFrame(i, j);
                     }
@@ -328,7 +385,7 @@ void TimeLine::Draw(const std::string& name) {
         trackY += trackHeight_;
     }
 
-    // ドラッグ中の処理
+    // ドラッグ中の処理（キーフレーム位置）
     if (draggingTrackIndex_ >= 0 && draggingKeyIndex_ >= 0 && ImGui::IsMouseDragging(0)) {
         ImVec2 mouse_pos = ImGui::GetMousePos();
         float deltaX     = mouse_pos.x - (canvas_pos.x + headerWidth_ + (dragStartFrame_ - scrollOffset_) * frameWidth);
@@ -337,6 +394,19 @@ void TimeLine::Draw(const std::string& name) {
 
         if (newFrame >= 0 && newFrame <= endFrame_) {
             tracks_[draggingTrackIndex_].keyframes[draggingKeyIndex_].frame = newFrame;
+        }
+    }
+
+    // ドラッグ中の処理（duration）
+    if (draggingDurationTrackIndex_ >= 0 && draggingDurationKeyIndex_ >= 0 && ImGui::IsMouseDragging(0)) {
+        ImVec2 mouse_pos  = ImGui::GetMousePos();
+        auto& kf          = tracks_[draggingDurationTrackIndex_].keyframes[draggingDurationKeyIndex_];
+        float kfX         = canvas_pos.x + headerWidth_ + (kf.frame - scrollOffset_) * frameWidth;
+        float deltaX      = mouse_pos.x - kfX;
+        float newDuration = deltaX / frameWidth;
+
+        if (newDuration >= 1.0f) {
+            kf.duration = newDuration;
         }
     }
 
@@ -349,8 +419,33 @@ void TimeLine::Draw(const std::string& name) {
 
             tracks_[draggingTrackIndex_].keyframes[draggingKeyIndex_].isSelected = false;
         }
-        draggingTrackIndex_ = -1;
-        draggingKeyIndex_   = -1;
+        draggingTrackIndex_         = -1;
+        draggingKeyIndex_           = -1;
+        draggingDurationTrackIndex_ = -1;
+        draggingDurationKeyIndex_   = -1;
+    }
+
+    // 終端ライン描画 (赤い点線)
+    float endFrameX = canvas_pos.x + headerWidth_ + (endFrame_ - scrollOffset_) * frameWidth;
+    if (endFrameX >= canvas_pos.x + headerWidth_ && endFrameX <= canvas_pos.x + canvas_size.x) {
+        // 点線を描画
+        float dashLength = 5.0f;
+        float gapLength  = 3.0f;
+        float currentY   = canvas_pos.y;
+
+        while (currentY < canvas_pos.y + trackAreaHeight) {
+            float nextY = currentY + dashLength;
+            if (nextY > canvas_pos.y + trackAreaHeight) {
+                nextY = canvas_pos.y + trackAreaHeight;
+            }
+
+            draw_list->AddLine(
+                ImVec2(endFrameX, currentY),
+                ImVec2(endFrameX, nextY),
+                IM_COL32(255, 50, 50, 255), 2.0f);
+
+            currentY = nextY + gapLength;
+        }
     }
 
     // インタラクション

@@ -13,6 +13,7 @@ struct TimeLineKeyFrame {
     float value;
     float duration;
     bool isSelected;
+    std::string label; // キーフレームのラベル
 };
 
 // タイムライントラック
@@ -54,7 +55,7 @@ public:
     /// キーフレーム追加
     /// </summary>
     void AddKeyFrame(uint32_t trackIndex, int32_t frame, float value,
-        float duration = 1.0f);
+        float duration = 1.0f, const std::string& label = "");
 
     /// <summary>
     /// キーフレーム削除
@@ -93,6 +94,9 @@ private:
     void HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex,
         const Vector2& keyPos);
 
+    void HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex,
+        float durationBarX, float trackY);
+
     float InterpolateValue(const TimeLineKeyFrame& key1,
         const TimeLineKeyFrame& key2, int32_t frame) const;
 
@@ -123,6 +127,11 @@ private:
     int draggingTrackIndex_ = -1;
     int draggingKeyIndex_   = -1;
     int dragStartFrame_     = 0;
+
+    // duration ドラッグ用
+    int draggingDurationTrackIndex_ = -1;
+    int draggingDurationKeyIndex_   = -1;
+    float dragStartDuration_        = 0.0f;
 
     // 右クリックされたトラック
     int rightClickedTrackIndex_ = -1;
