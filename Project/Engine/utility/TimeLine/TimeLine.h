@@ -23,14 +23,8 @@ struct TimeLineTrack {
     bool isExpanded = true;
     std::function<void(float)> onValueChanged;
 
-    // 右クリックコンテキストメニュー用コールバック
-    std::function<void(int32_t trackIndex)> onRightClick;
-
     // キーフレーム右クリックコールバック
     std::function<void(int32_t trackIndex, int32_t keyIndex)> onKeyFrameRightClick;
-
-    // キーフレーム位置ドラッグ制約コールバック(戻り値: 許可されるフレーム位置)
-    std::function<int32_t(int32_t trackIndex, int32_t keyIndex, int32_t newFrame)> onKeyFrameDragConstraint;
 
     // トラック固有ID
     uint32_t id;
@@ -89,22 +83,12 @@ public:
     void ApplyCurrentFrame();
 
     /// <summary>
-    /// トラックの右クリックコールバックを設定
-    /// </summary>
-    void SetTrackRightClickCallback(uint32_t trackIndex,
-        std::function<void(int32_t)> callback);
-
-    /// <summary>
     /// キーフレームの右クリックコールバックを設定
     /// </summary>
     void SetKeyFrameRightClickCallback(uint32_t trackIndex,
         std::function<void(int32_t, int32_t)> callback);
 
-    /// <summary>
-    /// キーフレームドラッグ制約コールバックを設定
-    /// </summary>
-    void SetKeyFrameDragConstraintCallback(uint32_t trackIndex,
-        std::function<int32_t(int32_t, int32_t, int32_t)> callback);
+    void HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex, float durationBarX, float trackY);
 
     /// <summary>
     /// トラック数を取得
@@ -117,15 +101,10 @@ private:
     void HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex,
         const Vector2& keyPos);
 
-    void HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex,
-        float durationBarX, float trackY, float keyFrameX);
-
     float InterpolateValue(const TimeLineKeyFrame& key1,
         const TimeLineKeyFrame& key2, int32_t frame) const;
 
-    // トラック右クリック処理
-    void HandleTrackRightClick(uint32_t trackIndex, float trackY);
-
+   
 private:
     //*---------------------------- private Variant ----------------------------*//
 
@@ -178,5 +157,4 @@ public:
     void SetZoom(float zoom) { zoom_ = zoom; }
     void SetOriginalItemDrawCallBack(std::function<void()> callback) { originalItemDrawCallBack_ = callback; }
 };
-
-}; // KetaEngine
+}
