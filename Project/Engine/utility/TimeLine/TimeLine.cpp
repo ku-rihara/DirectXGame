@@ -374,23 +374,23 @@ void TimeLine::Draw(const std::string& name) {
                 // ドラッグ&ドロップ処理
                 HandleKeyFrameDragDrop(i, j, Vector2(kfX, kfY));
 
-                // キーフレーム右クリックで削除
+                // キーフレーム右クリック
                 if (ImGui::IsMouseClicked(1) && ImGui::IsMouseHoveringRect(ImVec2(kfX - 8, kfY - 8), ImVec2(kfX + 8, kfY + 8))) {
-                    // カスタムコールバックがあれば呼び出す
-                    if (track.onKeyFrameRightClick) {
-                        track.onKeyFrameRightClick(i, j);
-                    }
                     ImGui::OpenPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str());
                 }
 
-                // デフォルトのキーフレームコンテキストメニュー（コールバックがない場合のみ）
-                if (!track.onKeyFrameRightClick) {
-                    if (ImGui::BeginPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str())) {
-                        if (ImGui::MenuItem("Delete KeyFrame")) {
-                            RemoveKeyFrame(i, j);
-                        }
-                        ImGui::EndPopup();
+                // キーフレームコンテキストメニュー
+                if (ImGui::BeginPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str())) {
+                    // カスタムコールバックがある場合は、それを呼び出して描画
+                    if (track.onKeyFrameRightClick) {
+                        track.onKeyFrameRightClick(i, j);
                     }
+
+                    // 削除メニュー
+                    if (ImGui::MenuItem("Delete KeyFrame")) {
+                        RemoveKeyFrame(i, j);
+                    }
+                    ImGui::EndPopup();
                 }
             }
         }
