@@ -31,6 +31,7 @@ public:
         Vector3 value;
         int32_t easeType = 0;
         float easeTime;
+        float startTime;
         bool isAbleInputMoving;
         bool isPositionYSelect;
         float finishTimeOffset;
@@ -40,6 +41,7 @@ public:
     struct CollisionParam {
         Vector3 size;
         Vector3 offsetPos;
+        float startTime;
         float adaptTime;
         float loopWaitTime;
         int32_t loopNum;
