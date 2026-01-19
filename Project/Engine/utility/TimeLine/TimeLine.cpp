@@ -102,6 +102,15 @@ bool TimeLine::SetKeyFrameLabel(uint32_t trackIndex, uint32_t keyIndex, const st
     return true;
 }
 
+void TimeLine::SetKeyFrameDragConstraintCallback(uint32_t trackIndex,
+    std::function<int32_t(int32_t, int32_t, int32_t)> callback) {
+    if (trackIndex >= tracks_.size()) {
+        return;
+    }
+
+    tracks_[trackIndex].onKeyFrameDragConstraint = callback;
+}
+
 float TimeLine::GetValueAtFrame(uint32_t trackIndex, int32_t frame) const {
     if (trackIndex >= tracks_.size()) {
         return 0.0f;
@@ -179,13 +188,19 @@ void TimeLine::HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, co
     }
 }
 
-void TimeLine::HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex, float durationBarX, float trackY) {
+void TimeLine::HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex, float durationBarX, float trackY, float keyFrameX) {
     const float barHeight     = trackHeight_ * 0.8f;
     const float barTopY       = trackY + (trackHeight_ - barHeight) / 2.0f;
     const float dragZoneWidth = 8.0f;
 
-    ImVec2 dragZoneMin = ImVec2(durationBarX - dragZoneWidth, barTopY);
-    ImVec2 dragZoneMax = ImVec2(durationBarX + dragZoneWidth, barTopY + barHeight);
+    // durationが0または小さい場合は、キーフレーム位置から右側にドラッグゾーンを配置
+    float effectiveDurationBarX = durationBarX;
+    if (tracks_[trackIndex].keyframes[keyIndex].duration < 1.0f) {
+        effectiveDurationBarX = keyFrameX + 20.0f; // キーフレームから20px右に配置
+    }
+
+    ImVec2 dragZoneMin = ImVec2(effectiveDurationBarX - dragZoneWidth, barTopY);
+    ImVec2 dragZoneMax = ImVec2(effectiveDurationBarX + dragZoneWidth, barTopY + barHeight);
 
     if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(dragZoneMin, dragZoneMax)) {
         draggingDurationTrackIndex_ = trackIndex;
@@ -334,8 +349,8 @@ void TimeLine::Draw(const std::string& name) {
                 }
 
                 // 持続時間の表示
-                if (kf.duration > 1.0f) {
-                    float durationWidth = kf.duration * frameWidth;
+                if (kf.duration > 0.0f) {
+                    float durationWidth = std::max(kf.duration * frameWidth, 1.0f);
                     float barHeight     = trackHeight_ * 0.8f;
                     float barTopY       = trackY + (trackHeight_ - barHeight) / 2.0f;
 
@@ -352,9 +367,47 @@ void TimeLine::Draw(const std::string& name) {
                             kf.label.c_str());
                     }
 
-                    // duration ドラッグハンドル処理
+                    // duration ドラッグハンドル処理と視覚的表示
                     float durationEndX = kfX + durationWidth;
-                    HandleDurationDrag(i, j, durationEndX, trackY);
+
+                    // リサイズハンドルを描画（縦線3本）
+                    float handleCenterX = durationEndX;
+                    draw_list->AddLine(
+                        ImVec2(handleCenterX - 3, barTopY + 4),
+                        ImVec2(handleCenterX - 3, barTopY + barHeight - 4),
+                        IM_COL32(200, 200, 200, 200), 1.5f);
+                    draw_list->AddLine(
+                        ImVec2(handleCenterX, barTopY + 4),
+                        ImVec2(handleCenterX, barTopY + barHeight - 4),
+                        IM_COL32(255, 255, 255, 255), 2.0f);
+                    draw_list->AddLine(
+                        ImVec2(handleCenterX + 3, barTopY + 4),
+                        ImVec2(handleCenterX + 3, barTopY + barHeight - 4),
+                        IM_COL32(200, 200, 200, 200), 1.5f);
+
+                    HandleDurationDrag(i, j, durationEndX, trackY, kfX);
+                } else {
+                    // durationが0の場合でもドラッグハンドルを表示
+                    float barHeight = trackHeight_ * 0.8f;
+                    float barTopY   = trackY + (trackHeight_ - barHeight) / 2.0f;
+                    float handleX   = kfX + 20.0f; // キーフレームから20px右
+
+                    // リサイズハンドルを描画（縦線3本）
+                    draw_list->AddLine(
+                        ImVec2(handleX - 3, barTopY + 4),
+                        ImVec2(handleX - 3, barTopY + barHeight - 4),
+                        IM_COL32(150, 150, 150, 150), 1.5f);
+                    draw_list->AddLine(
+                        ImVec2(handleX, barTopY + 4),
+                        ImVec2(handleX, barTopY + barHeight - 4),
+                        IM_COL32(180, 180, 180, 180), 2.0f);
+                    draw_list->AddLine(
+                        ImVec2(handleX + 3, barTopY + 4),
+                        ImVec2(handleX + 3, barTopY + barHeight - 4),
+                        IM_COL32(150, 150, 150, 150), 1.5f);
+
+                    // ドラッグハンドル処理
+                    HandleDurationDrag(i, j, handleX, trackY, kfX);
                 }
 
                 // キーフレームマーカー(ダイヤモンド)
@@ -398,7 +451,7 @@ void TimeLine::Draw(const std::string& name) {
         trackY += trackHeight_;
     }
 
-    // ドラッグ中の処理（キーフレーム位置）
+    // ドラッグ中の処理(キーフレーム位置)
     if (draggingTrackIndex_ >= 0 && draggingKeyIndex_ >= 0 && ImGui::IsMouseDragging(0)) {
         ImVec2 mouse_pos = ImGui::GetMousePos();
         float deltaX     = mouse_pos.x - (canvas_pos.x + headerWidth_ + (dragStartFrame_ - scrollOffset_) * frameWidth);
@@ -406,19 +459,29 @@ void TimeLine::Draw(const std::string& name) {
         int newFrame     = dragStartFrame_ + deltaFrame;
 
         if (newFrame >= 0 && newFrame <= endFrame_) {
+            // 制約コールバックがある場合は適用
+            if (tracks_[draggingTrackIndex_].onKeyFrameDragConstraint) {
+                newFrame = tracks_[draggingTrackIndex_].onKeyFrameDragConstraint(
+                    draggingTrackIndex_, draggingKeyIndex_, newFrame);
+            }
+
             tracks_[draggingTrackIndex_].keyframes[draggingKeyIndex_].frame = newFrame;
         }
     }
 
-    // ドラッグ中の処理（duration）
+    // ドラッグ中の処理(duration)
     if (draggingDurationTrackIndex_ >= 0 && draggingDurationKeyIndex_ >= 0 && ImGui::IsMouseDragging(0)) {
+        // ドラッグ中もカーソルを変更
+        ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+
         ImVec2 mouse_pos  = ImGui::GetMousePos();
         auto& kf          = tracks_[draggingDurationTrackIndex_].keyframes[draggingDurationKeyIndex_];
         float kfX         = canvas_pos.x + headerWidth_ + (kf.frame - scrollOffset_) * frameWidth;
         float deltaX      = mouse_pos.x - kfX;
         float newDuration = deltaX / frameWidth;
 
-        if (newDuration >= 1.0f) {
+        // 0以上であれば設定可能（最小値制限なし）
+        if (newDuration >= 0.0f) {
             kf.duration = newDuration;
         }
     }
