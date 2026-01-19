@@ -188,31 +188,16 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
 
     ImGui::SeparatorText("ファイル選択");
 
-    // ファイル名表示
-    ImGui::Text("現在のファイル: %s", trackInfo->fileName.empty() ? "なし" : trackInfo->fileName.c_str());
-
     // ディレクトリパスを取得
     std::string directory = manager_->GetDirectoryForTrackType(trackInfo->type);
 
-    // FileSelector統合
+    // FileSelectorを使ってファイル選択
     static KetaEngine::FileSelector fileSelector;
+    fileSelector.SelectFile("ファイル名", directory, trackInfo->fileName, "", true);
 
-    char buffer[256];
-    strncpy_s(buffer, trackInfo->fileName.c_str(), sizeof(buffer) - 1);
-    buffer[sizeof(buffer) - 1] = '\0';
-
-    if (ImGui::InputText("ファイル名", buffer, sizeof(buffer))) {
-        trackInfo->fileName = buffer;
-    }
-
-    // ファイルブラウザボタン
-    if (ImGui::Button("参照...")) {
-        ImGui::OpenPopup("FileSelectPopup");
-    }
-
-    if (ImGui::BeginPopup("FileSelectPopup")) {
-        fileSelector.SelectFile("ファイル選択", directory, trackInfo->fileName, "", true);
-        ImGui::EndPopup();
+    // カメラアクションの場合のみチェックボックスを表示
+    if (trackInfo->type == PlayerComboAttackTimelineManager::TrackType::CAMERA_ACTION || trackInfo->type == PlayerComboAttackTimelineManager::TrackType::CAMERA_ACTION_ON_HIT) {
+        ImGui::Checkbox("Is Camera Reset", &trackInfo->isCameraReset);
     }
 }
 

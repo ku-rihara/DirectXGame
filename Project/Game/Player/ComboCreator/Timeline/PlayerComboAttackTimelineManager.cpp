@@ -35,7 +35,7 @@ void PlayerComboAttackTimelineManager::SetupDefaultTracks() {
         int32_t startFrame     = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.startTime);
         int32_t durationFrames = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.adaptTime);
 
-        timeline_->AddKeyFrame(trackIdx, startFrame, 1.0f, static_cast<float>(durationFrames));
+        timeline_->AddKeyFrame(trackIdx, startFrame, 1.0f, static_cast<float>(durationFrames), "コライダー適応時間");
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());
@@ -50,7 +50,7 @@ void PlayerComboAttackTimelineManager::SetupDefaultTracks() {
         int32_t startFrame     = KetaEngine::Frame::TimeToFrame(attackParam.moveParam.startTime);
         int32_t durationFrames = KetaEngine::Frame::TimeToFrame(attackParam.moveParam.easeTime);
 
-        timeline_->AddKeyFrame(trackIdx, startFrame, 1.0f, static_cast<float>(durationFrames));
+        timeline_->AddKeyFrame(trackIdx, startFrame, 1.0f, static_cast<float>(durationFrames), "移動イージング時間");
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());
@@ -63,7 +63,7 @@ void PlayerComboAttackTimelineManager::SetupDefaultTracks() {
         defaultTrackIndices_[static_cast<size_t>(DefaultTrack::CANCEL_START)] = trackIdx;
 
         int32_t cancelFrame = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.cancelTime);
-        timeline_->AddKeyFrame(trackIdx, cancelFrame, 1.0f, static_cast<float>(totalFrames - cancelFrame));
+        timeline_->AddKeyFrame(trackIdx, cancelFrame, 1.0f, static_cast<float>(totalFrames - cancelFrame), "キャンセル可能範囲");
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());
@@ -76,7 +76,7 @@ void PlayerComboAttackTimelineManager::SetupDefaultTracks() {
         defaultTrackIndices_[static_cast<size_t>(DefaultTrack::PRECEDE_INPUT_START)] = trackIdx;
 
         int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.precedeInputTime);
-        timeline_->AddKeyFrame(trackIdx, precedeFrame, 1.0f, static_cast<float>(totalFrames - precedeFrame));
+        timeline_->AddKeyFrame(trackIdx, precedeFrame, 1.0f, static_cast<float>(totalFrames - precedeFrame), "先行入力可能範囲");
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());
@@ -92,7 +92,7 @@ void PlayerComboAttackTimelineManager::SetupDefaultTracks() {
         int32_t waitStartFrame = KetaEngine::Frame::TimeToFrame(waitStartTime);
         int32_t waitDuration   = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.finishWaitTime);
 
-        timeline_->AddKeyFrame(trackIdx, waitStartFrame, 1.0f, static_cast<float>(waitDuration));
+        timeline_->AddKeyFrame(trackIdx, waitStartFrame, 1.0f, static_cast<float>(waitDuration), "終了待機時間");
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());
@@ -118,13 +118,15 @@ void PlayerComboAttackTimelineManager::SetupRenditionTracks() {
         int32_t trackIdx      = timeline_->AddTrack(trackName);
 
         TrackInfo info;
-        info.type       = static_cast<TrackType>(i);
-        info.trackIndex = trackIdx;
-        info.fileName   = param.fileName;
+        info.type          = static_cast<TrackType>(i);
+        info.trackIndex    = trackIdx;
+        info.fileName      = param.fileName;
+        info.isCameraReset = param.isCameraReset;
         addedTracks_.push_back(info);
 
-        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f);
+        int32_t frame     = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        std::string label = param.fileName.empty() ? trackName : param.fileName;
+        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, label);
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());
@@ -143,13 +145,15 @@ void PlayerComboAttackTimelineManager::SetupRenditionTracks() {
         int32_t trackIdx      = timeline_->AddTrack(trackName);
 
         TrackInfo info;
-        info.type       = static_cast<TrackType>(static_cast<int>(TrackType::CAMERA_ACTION_ON_HIT) + i);
-        info.trackIndex = trackIdx;
-        info.fileName   = param.fileName;
+        info.type          = static_cast<TrackType>(static_cast<int>(TrackType::CAMERA_ACTION_ON_HIT) + i);
+        info.trackIndex    = trackIdx;
+        info.fileName      = param.fileName;
+        info.isCameraReset = param.isCameraReset;
         addedTracks_.push_back(info);
 
-        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f);
+        int32_t frame     = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        std::string label = param.fileName.empty() ? trackName : param.fileName;
+        timeline_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, label);
 
         timeline_->SetTrackRightClickCallback(trackIdx, [this, trackIdx](int32_t) {
             ImGui::OpenPopup(("TrackContextMenu_" + std::to_string(trackIdx)).c_str());

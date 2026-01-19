@@ -59,6 +59,7 @@ public:
         TrackType type;
         int32_t trackIndex;
         std::string fileName;
+        bool isCameraReset = false;
     };
 
 public:
