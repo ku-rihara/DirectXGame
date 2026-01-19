@@ -89,6 +89,19 @@ bool TimeLine::RemoveKeyFrame(uint32_t trackIndex, uint32_t keyIndex) {
     return true;
 }
 
+bool TimeLine::SetKeyFrameLabel(uint32_t trackIndex, uint32_t keyIndex, const std::string& label) {
+    if (trackIndex >= tracks_.size()) {
+        return false;
+    }
+
+    if (keyIndex >= tracks_[trackIndex].keyframes.size()) {
+        return false;
+    }
+
+    tracks_[trackIndex].keyframes[keyIndex].label = label;
+    return true;
+}
+
 float TimeLine::GetValueAtFrame(uint32_t trackIndex, int32_t frame) const {
     if (trackIndex >= tracks_.size()) {
         return 0.0f;
@@ -163,7 +176,6 @@ void TimeLine::HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex, float 
     const float barTopY       = trackY + (trackHeight_ - barHeight) / 2.0f;
     const float dragZoneWidth = 8.0f;
 
-    // duration バーの右端付近をドラッグ開始判定
     ImVec2 dragZoneMin = ImVec2(durationBarX - dragZoneWidth, barTopY);
     ImVec2 dragZoneMax = ImVec2(durationBarX + dragZoneWidth, barTopY + barHeight);
 
@@ -301,13 +313,11 @@ void TimeLine::Draw(const std::string& name) {
                 float kfX = canvas_pos.x + headerWidth_ + (kf.frame - scrollOffset_) * frameWidth;
                 float kfY = trackY + trackHeight_ / 2;
 
-                // キーフレームが現在フレームライン上にあるかチェック
                 bool isOnCurrentFrame = (currentFrame_ >= kf.frame && currentFrame_ <= kf.frame + static_cast<int32_t>(kf.duration));
 
                 ImU32 color;
                 ImU32 durationUIColor;
                 if (isOnCurrentFrame) {
-                    // 現在フレーム上にある場合は明るく光らせる
                     color           = IM_COL32(70, 255, 70, 255);
                     durationUIColor = IM_COL32(100, 255, 200, 180);
                 } else {
@@ -315,7 +325,7 @@ void TimeLine::Draw(const std::string& name) {
                     durationUIColor = IM_COL32(100, 150, 200, 180);
                 }
 
-                // 持続時間の表示（80%の高さ）
+                // 持続時間の表示
                 if (kf.duration > 1.0f) {
                     float durationWidth = kf.duration * frameWidth;
                     float barHeight     = trackHeight_ * 0.8f;
@@ -326,7 +336,7 @@ void TimeLine::Draw(const std::string& name) {
                         ImVec2(kfX + durationWidth, barTopY + barHeight),
                         durationUIColor);
 
-                    // ラベル表示（横棒上）
+                    // ラベル表示
                     if (!kf.label.empty()) {
                         draw_list->AddText(
                             ImVec2(kfX + 5, barTopY + 2),
@@ -361,19 +371,8 @@ void TimeLine::Draw(const std::string& name) {
                     ImGui::OpenPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str());
                 }
 
-                // キーフレームコンテキストメニュー
+                // キーフレームコンテキストメニュー（ラベル編集機能を削除）
                 if (ImGui::BeginPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str())) {
-                    // ラベル編集
-                    char labelBuffer[128];
-                    strncpy_s(labelBuffer, kf.label.c_str(), sizeof(labelBuffer) - 1);
-                    labelBuffer[sizeof(labelBuffer) - 1] = '\0';
-
-                    if (ImGui::InputText("Label", labelBuffer, sizeof(labelBuffer))) {
-                        kf.label = labelBuffer;
-                    }
-
-                    ImGui::Separator();
-
                     if (ImGui::MenuItem("Delete KeyFrame")) {
                         RemoveKeyFrame(i, j);
                     }
@@ -425,10 +424,9 @@ void TimeLine::Draw(const std::string& name) {
         draggingDurationKeyIndex_   = -1;
     }
 
-    // 終端ライン描画 (赤い点線)
+    // 終端ライン描画
     float endFrameX = canvas_pos.x + headerWidth_ + (endFrame_ - scrollOffset_) * frameWidth;
     if (endFrameX >= canvas_pos.x + headerWidth_ && endFrameX <= canvas_pos.x + canvas_size.x) {
-        // 点線を描画
         float dashLength = 5.0f;
         float gapLength  = 3.0f;
         float currentY   = canvas_pos.y;

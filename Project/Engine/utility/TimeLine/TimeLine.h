@@ -63,6 +63,11 @@ public:
     bool RemoveKeyFrame(uint32_t trackIndex, uint32_t keyIndex);
 
     /// <summary>
+    /// キーフレームのラベルを設定
+    /// </summary>
+    bool SetKeyFrameLabel(uint32_t trackIndex, uint32_t keyIndex, const std::string& label);
+
+    /// <summary>
     /// 指定フレームの値を取得
     /// </summary>
     float GetValueAtFrame(uint32_t trackIndex, int32_t frame) const;
