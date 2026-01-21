@@ -1,6 +1,5 @@
 #include "PlayerComboAttackTimeline.h"
 #include "../PlayerComboAttackData.h"
-#include "Frame/Frame.h"
 #include <imgui.h>
 
 void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
@@ -12,28 +11,32 @@ void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
 
     timeline_.Init();
 
-    // Managerの初期化
-    manager_.Init(attackData_, &timeline_);
-
-    // UIの初期化
-    ui_.Init(attackData_, &timeline_, &manager_);
+    // 各コンポーネントの初期化
+    data_.Init();
+    trackBuilder_.Init(attackData_, &timeline_, &data_);
+    parameterApplier_.Init(attackData_, &timeline_, &data_);
+    ui_.Init(attackData_, &timeline_, &data_, &trackBuilder_);
 
     // トラックのセットアップ
-    manager_.SetupDefaultTracks();
-    manager_.SetupRenditionTracks();
-    manager_.SetupObjectAnimationTracks();
-    manager_.SetupAudioTracks();
+    trackBuilder_.SetupDefaultTracks();
+    trackBuilder_.SetupRenditionTracks();
+    trackBuilder_.SetupObjectAnimationTracks();
+    trackBuilder_.SetupAudioTracks();
 
-    // キーフレームコールバックを設定
-    for (uint32_t i = 0; i < timeline_.GetTrackCount(); ++i) {
-        timeline_.SetKeyFrameRightClickCallback(i, [this](int32_t trackIdx, int32_t keyIdx) {
-            // ポップアップ内でカスタムメニュー項目を描画
-            ui_.DrawKeyFrameMenuItems(trackIdx, keyIdx);
-        });
-    }
+    // すべてのトラックにキーフレームコールバックを設定
+    SetupKeyFrameCallbacks();
 
     isInitialized_ = true;
 }
+
+void PlayerComboAttackTimeline::SetupKeyFrameCallbacks() {
+    for (uint32_t i = 0; i < timeline_.GetTrackCount(); ++i) {
+        timeline_.SetKeyFrameRightClickCallback(i, [this](int32_t trackIdx, int32_t keyIdx) {
+            ui_.DrawKeyFrameMenuItems(trackIdx, keyIdx);
+        });
+    }
+}
+
 void PlayerComboAttackTimeline::Draw() {
     if (!isInitialized_ || !attackData_) {
         ImGui::Text("Timeline not initialized");
@@ -49,12 +52,12 @@ void PlayerComboAttackTimeline::Draw() {
         ImGui::SameLine();
 
         auto currentMode = ui_.GetPlayMode();
-        if (ImGui::RadioButton("単体", currentMode == PlayerComboAttackTimelineManager::PlayMode::SINGLE)) {
-            ui_.SetPlayMode(PlayerComboAttackTimelineManager::PlayMode::SINGLE);
+        if (ImGui::RadioButton("単体", currentMode == PlayerComboAttackTimelineData::PlayMode::SINGLE)) {
+            ui_.SetPlayMode(PlayerComboAttackTimelineData::PlayMode::SINGLE);
         }
         ImGui::SameLine();
-        if (ImGui::RadioButton("連続", currentMode == PlayerComboAttackTimelineManager::PlayMode::CONTINUOUS)) {
-            ui_.SetPlayMode(PlayerComboAttackTimelineManager::PlayMode::CONTINUOUS);
+        if (ImGui::RadioButton("連続", currentMode == PlayerComboAttackTimelineData::PlayMode::CONTINUOUS)) {
+            ui_.SetPlayMode(PlayerComboAttackTimelineData::PlayMode::CONTINUOUS);
         }
 
         ImGui::SameLine();
@@ -86,13 +89,13 @@ void PlayerComboAttackTimeline::Draw() {
     ImGui::PopID();
 
     // 連続再生モード処理
-    if (ui_.GetPlayMode() == PlayerComboAttackTimelineManager::PlayMode::CONTINUOUS && timeline_.IsPlaying() && timeline_.GetCurrentFrame() >= timeline_.GetEndFrame()) {
+    if (ui_.GetPlayMode() == PlayerComboAttackTimelineData::PlayMode::CONTINUOUS && timeline_.IsPlaying() && timeline_.GetCurrentFrame() >= timeline_.GetEndFrame()) {
         AdvanceToNextAttack();
     }
 }
 
 void PlayerComboAttackTimeline::ApplyToParameters() {
-    manager_.ApplyToParameters();
+    parameterApplier_.ApplyToParameters();
 }
 
 void PlayerComboAttackTimeline::AdvanceToNextAttack() {

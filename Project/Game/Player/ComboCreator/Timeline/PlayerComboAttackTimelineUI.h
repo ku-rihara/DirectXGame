@@ -1,11 +1,14 @@
 #pragma once
 
-#include "PlayerComboAttackTimelineManager.h"
+#include "PlayerComboAttackTimelineData.h"
 #include "utility/FileSelector/FileSelector.h"
 #include <cstdint>
 #include <unordered_map>
+#include <functional>
 
 class PlayerComboAttackData;
+class PlayerComboAttackTimelineTrackBuilder;
+
 namespace KetaEngine {
 class TimeLine;
 }
@@ -30,7 +33,8 @@ public:
 
     void Init(PlayerComboAttackData* attackData,
         KetaEngine::TimeLine* timeline,
-        PlayerComboAttackTimelineManager* manager);
+        PlayerComboAttackTimelineData* data,
+        PlayerComboAttackTimelineTrackBuilder* trackBuilder);
 
     // メインUI描画
     void DrawParamEditButtons();
@@ -41,26 +45,27 @@ public:
     void DrawKeyFrameMenuItems(int32_t trackIndex, int32_t keyIndex);
 
     // 再生モード
-    PlayerComboAttackTimelineManager::PlayMode GetPlayMode() const { return playMode_; }
-    void SetPlayMode(PlayerComboAttackTimelineManager::PlayMode mode) { playMode_ = mode; }
+    PlayerComboAttackTimelineData::PlayMode GetPlayMode() const { return playMode_; }
+    void SetPlayMode(PlayerComboAttackTimelineData::PlayMode mode) { playMode_ = mode; }
 
 private:
     void DrawAddTrackPopup();
     void DrawRenditionKeyFrameEditor(int32_t trackIndex, int32_t keyIndex);
 
     // トラックメニューアイテム描画のヘルパー関数
-    void DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::TrackType trackType);
+    void DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineData::TrackType trackType);
 
     // パラメータUI描画関数を登録
     void RegisterParamUIFunctions();
 
 private:
-    PlayerComboAttackData* attackData_         = nullptr;
-    KetaEngine::TimeLine* timeline_            = nullptr;
-    PlayerComboAttackTimelineManager* manager_ = nullptr;
+    PlayerComboAttackData* attackData_                   = nullptr;
+    KetaEngine::TimeLine* timeline_                      = nullptr;
+    PlayerComboAttackTimelineData* data_                 = nullptr;
+    PlayerComboAttackTimelineTrackBuilder* trackBuilder_ = nullptr;
 
-    PlayerComboAttackTimelineManager::PlayMode playMode_ =
-        PlayerComboAttackTimelineManager::PlayMode::SINGLE;
+    PlayerComboAttackTimelineData::PlayMode playMode_ =
+        PlayerComboAttackTimelineData::PlayMode::SINGLE;
     ParamEditType selectedParamEditType_ = ParamEditType::NONE;
 
     // 各キーフレーム用のFileSelector

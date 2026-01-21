@@ -245,7 +245,9 @@
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.cpp" />
-    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineManager.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineTrackBuilder.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.cpp" />
     <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp" />
     <ClCompile Include="Game\Player\JumpAttackUI\JumpAttackUI.cpp" />
@@ -544,9 +546,11 @@
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h" />
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.h" />
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineTrackBuilder.h" />
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.h" />
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.h" />
-    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineManager.h" />
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.h" />
     <ClInclude Include="Game\Player\Effect\PlayerEffects.h" />
     <ClInclude Include="Game\Player\JumpAttackUI\JumpAttackUI.h" />
     <ClInclude Include="Game\Player\Parameter\PlayerParameter.h" />

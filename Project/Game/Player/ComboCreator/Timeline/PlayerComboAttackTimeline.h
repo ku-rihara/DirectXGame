@@ -1,6 +1,8 @@
 #pragma once
 
-#include "PlayerComboAttackTimelineManager.h"
+#include "PlayerComboAttackTimelineData.h"
+#include "PlayerComboAttackTimelineParameterApplier.h"
+#include "PlayerComboAttackTimelineTrackBuilder.h"
 #include "PlayerComboAttackTimelineUI.h"
 #include "utility/TimeLine/TimeLine.h"
 #include <memory>
@@ -21,12 +23,16 @@ public:
 
 private:
     void AdvanceToNextAttack();
+    void SetupKeyFrameCallbacks();
 
 private:
     PlayerComboAttackData* attackData_ = nullptr;
     KetaEngine::TimeLine timeline_;
 
-    PlayerComboAttackTimelineManager manager_;
+    // 各責務を持つクラス
+    PlayerComboAttackTimelineData data_;
+    PlayerComboAttackTimelineTrackBuilder trackBuilder_;
+    PlayerComboAttackTimelineParameterApplier parameterApplier_;
     PlayerComboAttackTimelineUI ui_;
 
     bool isInitialized_ = false;

@@ -1,17 +1,14 @@
 #pragma once
 
-#include "utility/TimeLine/TimeLine.h"
 #include <array>
 #include <cstdint>
 #include <string>
 #include <vector>
 
-class PlayerComboAttackData;
-
 /// <summary>
-/// タイムラインのトラック情報を管理するクラス
+/// タイムラインのトラック情報とデータ構造を管理するクラス
 /// </summary>
-class PlayerComboAttackTimelineManager {
+class PlayerComboAttackTimelineData {
 public:
     enum class PlayMode {
         SINGLE,
@@ -63,53 +60,33 @@ public:
     };
 
 public:
-    PlayerComboAttackTimelineManager()  = default;
-    ~PlayerComboAttackTimelineManager() = default;
+    PlayerComboAttackTimelineData()  = default;
+    ~PlayerComboAttackTimelineData() = default;
 
-    void Init(PlayerComboAttackData* attackData, KetaEngine::TimeLine* timeline);
+    void Init();
 
-    // トラック管理
-    void SetupDefaultTracks();
-    void SetupRenditionTracks();
-    void SetupObjectAnimationTracks();
-    void SetupAudioTracks();
-
-    void AddTrack(TrackType type);
-    void RemoveTrack(int32_t trackIndex);
-
-    // パラメータ適用
-    void ApplyToParameters();
+    // トラック情報管理
+    void AddTrackInfo(const TrackInfo& info);
+    void RemoveTrackInfo(int32_t trackIndex);
+    TrackInfo* FindTrackInfo(int32_t trackIndex);
+    bool IsTrackTypeAlreadyAdded(TrackType type) const;
 
     // ヘルパー
     const char* GetTrackTypeName(TrackType type) const;
     TrackType GetTrackTypeFromIndex(int32_t trackIndex) const;
     std::string GetDirectoryForTrackType(TrackType type) const;
-    int32_t CalculateTotalFrames() const;
 
-    // トラック存在チェック
-    bool IsTrackTypeAlreadyAdded(TrackType type) const;
-
-    // 終了待機時間の位置を更新
-    void UpdateFinishWaitKeyFramePosition();
+    // デフォルトトラックインデックス管理
+    void SetDefaultTrackIndex(DefaultTrack track, int32_t index);
+    int32_t GetDefaultTrackIndex(DefaultTrack track) const;
 
 private:
-    void ApplyTrackToRendition(const TrackInfo& trackInfo, float timing);
-    void UpdateTimelineEndFrame();
-    int32_t GetFinishWaitStartFrame() const;
-
-private:
-    PlayerComboAttackData* attackData_ = nullptr;
-    KetaEngine::TimeLine* timeline_    = nullptr;
-
     std::array<int32_t, static_cast<size_t>(DefaultTrack::COUNT)> defaultTrackIndices_;
     std::vector<TrackInfo> addedTracks_;
 
 public:
-    // ゲッター
+    // getter
     const std::vector<TrackInfo>& GetAddedTracks() const { return addedTracks_; }
-    const std::array<int32_t, static_cast<size_t>(DefaultTrack::COUNT)>& GetDefaultTrackIndices() const {
-        return defaultTrackIndices_;
-    }
-
-    TrackInfo* FindTrackInfo(int32_t trackIndex);
+    const std::array<int32_t, static_cast<size_t>(DefaultTrack::COUNT)>&
+    GetDefaultTrackIndices() const { return defaultTrackIndices_; }
 };

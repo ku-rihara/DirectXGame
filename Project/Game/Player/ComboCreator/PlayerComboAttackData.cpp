@@ -26,9 +26,6 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
 void PlayerComboAttackData::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
-
-    // タイムラインを再初期化
-    timeLine_.Init(this);
 }
 
 void PlayerComboAttackData::SaveData() {
@@ -57,7 +54,7 @@ void PlayerComboAttackData::RegisterParams() {
     // MoveParam
     globalParameter_->Regist(groupName_, "moveValue", &attackParam_.moveParam.value);
     globalParameter_->Regist(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
-    globalParameter_->Regist(groupName_, "moveStartTime", &attackParam_.moveParam.startTime); // 追加
+    globalParameter_->Regist(groupName_, "moveStartTime", &attackParam_.moveParam.startTime);
     globalParameter_->Regist(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
     globalParameter_->Regist(groupName_, "isAbleInputMoving", &attackParam_.moveParam.isAbleInputMoving);
     globalParameter_->Regist(groupName_, "isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);

@@ -1,20 +1,21 @@
 #include "PlayerComboAttackTimelineUI.h"
 #include "../PlayerComboAttackData.h"
-#include "Easing/Easing.h"
+#include "PlayerComboAttackTimelineTrackBuilder.h"
 #include "utility/FileSelector/FileSelector.h"
 #include <imgui.h>
 
-void PlayerComboAttackTimelineUI::Init(PlayerComboAttackData* attackData,
+void PlayerComboAttackTimelineUI::Init(
+    PlayerComboAttackData* attackData,
     KetaEngine::TimeLine* timeline,
-    PlayerComboAttackTimelineManager* manager) {
-    attackData_ = attackData;
-    timeline_   = timeline;
-    manager_    = manager;
+    PlayerComboAttackTimelineData* data,
+    PlayerComboAttackTimelineTrackBuilder* trackBuilder) {
 
-    // FileSelector の初期化
+    attackData_   = attackData;
+    timeline_     = timeline;
+    data_         = data;
+    trackBuilder_ = trackBuilder;
+
     fileSelectorMap_.clear();
-
-    // パラメータUI描画関数を登録
     RegisterParamUIFunctions();
 }
 
@@ -84,7 +85,7 @@ void PlayerComboAttackTimelineUI::DrawParamEditButtons() {
     // 選択されたパラメータのUIを描画
     auto it = paramUIDrawFunctions_.find(selectedParamEditType_);
     if (it != paramUIDrawFunctions_.end()) {
-        it->second(); // 関数を呼び出し
+        it->second();
     }
 
     // セーブ・ロードボタン
@@ -101,25 +102,37 @@ void PlayerComboAttackTimelineUI::DrawAddTrackButton() {
     DrawAddTrackPopup();
 }
 
-void PlayerComboAttackTimelineUI::DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineManager::TrackType trackType) {
-    bool exists = manager_->IsTrackTypeAlreadyAdded(trackType);
+void PlayerComboAttackTimelineUI::DrawTrackMenuItem(
+    const char* label,
+    PlayerComboAttackTimelineData::TrackType trackType) {
+
+    bool exists = data_->IsTrackTypeAlreadyAdded(trackType);
     if (exists) {
         ImGui::BeginDisabled();
     }
-    if (ImGui::MenuItem(label)) {
-        manager_->AddTrack(trackType);
 
-        if (trackType == PlayerComboAttackTimelineManager::TrackType::CANCEL_TIME) {
+    if (ImGui::MenuItem(label)) {
+        trackBuilder_->AddTrack(trackType);
+
+        if (trackType == PlayerComboAttackTimelineData::TrackType::CANCEL_TIME) {
             attackData_->GetAttackParam().timingParam.isCancel = true;
         }
+
+        // 新しく追加されたトラックにコールバックを設定
+        uint32_t newTrackIndex = static_cast<uint32_t>(timeline_->GetTrackCount() - 1);
+        timeline_->SetKeyFrameRightClickCallback(newTrackIndex,
+            [this](int32_t trackIdx, int32_t keyIdx) {
+                DrawKeyFrameMenuItems(trackIdx, keyIdx);
+            });
     }
+
     if (exists) {
         ImGui::EndDisabled();
     }
 }
 
 void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
-    using TrackType = PlayerComboAttackTimelineManager::TrackType;
+    using TrackType = PlayerComboAttackTimelineData::TrackType;
 
     if (ImGui::BeginPopup("AddTrackPopup")) {
         ImGui::SeparatorText("演出 (通常)");
@@ -164,14 +177,14 @@ void PlayerComboAttackTimelineUI::DrawTrackContextMenu(int32_t trackIndex) {
     std::string popupId = "TrackContextMenu_" + std::to_string(trackIndex);
 
     if (ImGui::BeginPopup(popupId.c_str())) {
-        auto trackType = manager_->GetTrackTypeFromIndex(trackIndex);
+        auto trackType = data_->GetTrackTypeFromIndex(trackIndex);
 
-        ImGui::Text("トラック: %s", manager_->GetTrackTypeName(trackType));
+        ImGui::Text("トラック: %s", data_->GetTrackTypeName(trackType));
         ImGui::Separator();
 
         // デフォルトトラック以外は削除可能
         bool isDefaultTrack        = false;
-        const auto& defaultIndices = manager_->GetDefaultTrackIndices();
+        const auto& defaultIndices = data_->GetDefaultTrackIndices();
         for (size_t i = 0; i < defaultIndices.size(); ++i) {
             if (trackIndex == defaultIndices[i]) {
                 isDefaultTrack = true;
@@ -180,7 +193,7 @@ void PlayerComboAttackTimelineUI::DrawTrackContextMenu(int32_t trackIndex) {
         }
 
         if (!isDefaultTrack && ImGui::MenuItem("トラックを削除")) {
-            manager_->RemoveTrack(trackIndex);
+            trackBuilder_->RemoveTrack(trackIndex);
         }
 
         ImGui::EndPopup();
@@ -190,9 +203,9 @@ void PlayerComboAttackTimelineUI::DrawTrackContextMenu(int32_t trackIndex) {
 }
 
 void PlayerComboAttackTimelineUI::DrawKeyFrameMenuItems(int32_t trackIndex, int32_t keyIndex) {
-    using TrackType = PlayerComboAttackTimelineManager::TrackType;
+    using TrackType = PlayerComboAttackTimelineData::TrackType;
 
-    auto trackType = manager_->GetTrackTypeFromIndex(trackIndex);
+    auto trackType = data_->GetTrackTypeFromIndex(trackIndex);
 
     // 演出系トラックの場合
     int typeInt      = static_cast<int>(trackType);
@@ -209,7 +222,7 @@ void PlayerComboAttackTimelineUI::DrawKeyFrameMenuItems(int32_t trackIndex, int3
 }
 
 void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex, int32_t keyIndex) {
-    auto* trackInfo = manager_->FindTrackInfo(trackIndex);
+    auto* trackInfo = data_->FindTrackInfo(trackIndex);
 
     if (!trackInfo) {
         return;
@@ -218,7 +231,7 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
     ImGui::SeparatorText("ファイル選択");
 
     // ディレクトリパスを取得
-    std::string directory = manager_->GetDirectoryForTrackType(trackInfo->type);
+    std::string directory = data_->GetDirectoryForTrackType(trackInfo->type);
 
     // FileSelectorのキー
     std::string fileSelectorKey = std::to_string(trackIndex) + "_" + std::to_string(keyIndex);
@@ -245,7 +258,7 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
     }
 
     // カメラアクションの場合のみチェックボックスを表示
-    if (trackInfo->type == PlayerComboAttackTimelineManager::TrackType::CAMERA_ACTION || trackInfo->type == PlayerComboAttackTimelineManager::TrackType::CAMERA_ACTION_ON_HIT) {
+    if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION || trackInfo->type == PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION_ON_HIT) {
         ImGui::Checkbox("攻撃時にカメラをリセットする", &trackInfo->isCameraReset);
     }
 }

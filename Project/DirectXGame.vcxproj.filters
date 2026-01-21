@@ -1372,10 +1372,16 @@
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.cpp">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineManager.cpp">
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.cpp">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.cpp">
+      <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.cpp">
+      <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineTrackBuilder.cpp">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2271,7 +2277,13 @@
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.h">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineManager.h">
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.h">
+      <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.h">
+      <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineTrackBuilder.h">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClInclude>
   </ItemGroup>
