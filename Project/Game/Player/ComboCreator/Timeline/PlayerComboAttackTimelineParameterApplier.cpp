@@ -9,20 +9,20 @@ void PlayerComboAttackTimelineParameterApplier::Init(
     KetaEngine::TimeLine* timeline,
     PlayerComboAttackTimelineData* data) {
 
-    attackData_ = attackData;
-    timeline_   = timeline;
-    data_       = data;
+    attackData_   = attackData;
+    timeline_     = timeline;
+    timeLineData_ = data;
 }
 
 void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
-    if (!attackData_ || !timeline_ || !data_) {
+    if (!attackData_ || !timeline_ || !timeLineData_) {
         return;
     }
 
     auto& attackParam = attackData_->GetAttackParam();
 
     // コライダー適用
-    int32_t collisionTrackIdx = data_->GetDefaultTrackIndex(
+    int32_t collisionTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::COLLISION);
 
     if (collisionTrackIdx >= 0) {
@@ -40,7 +40,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     }
 
     // 移動イージング時間の適用
-    int32_t moveTrackIdx = data_->GetDefaultTrackIndex(
+    int32_t moveTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING);
 
     if (moveTrackIdx >= 0) {
@@ -59,7 +59,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     }
 
     // 終了待機時間の適用
-    int32_t finishWaitTrackIdx = data_->GetDefaultTrackIndex(
+    int32_t finishWaitTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT);
 
     if (finishWaitTrackIdx >= 0) {
@@ -86,7 +86,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     }
 
     // キャンセル時間適用
-    int32_t cancelTrackIdx = data_->GetDefaultTrackIndex(
+    int32_t cancelTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::CANCEL_START);
 
     if (cancelTrackIdx >= 0) {
@@ -95,7 +95,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     }
 
     // 先行入力時間適用
-    int32_t precedeTrackIdx = data_->GetDefaultTrackIndex(
+    int32_t precedeTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::PRECEDE_INPUT_START);
 
     if (precedeTrackIdx >= 0) {
@@ -104,7 +104,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     }
 
     // 演出系の適用
-    for (const auto& trackInfo : data_->GetAddedTracks()) {
+    for (const auto& trackInfo : timeLineData_->GetAddedTracks()) {
         int32_t frame = timeline_->GetFirstKeyFrameFrame(trackInfo.trackIndex);
         float timing  = KetaEngine::Frame::FrameToTime(frame);
         ApplyTrackToRendition(trackInfo, timing);
@@ -118,13 +118,13 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
 }
 
 void PlayerComboAttackTimelineParameterApplier::UpdateFinishWaitKeyFramePosition() {
-    if (!timeline_ || !data_) {
+    if (!timeline_ || !timeLineData_) {
         return;
     }
 
-    int32_t finishWaitTrackIdx = data_->GetDefaultTrackIndex(
+    int32_t finishWaitTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT);
-    int32_t moveTrackIdx = data_->GetDefaultTrackIndex(
+    int32_t moveTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING);
 
     if (finishWaitTrackIdx < 0 || moveTrackIdx < 0)

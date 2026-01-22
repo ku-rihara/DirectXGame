@@ -41,15 +41,6 @@ void PlayerComboAttackController::AllLoadFile() {
     }
 }
 
-void PlayerComboAttackController::Update(float deltaTime) {
-    // すべての攻撃データを更新
-    for (auto& attack : attacks_) {
-        // 必要に応じて更新処理
-        attack;
-        deltaTime;
-    }
-}
-
 void PlayerComboAttackController::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("攻撃作成エディター")) {
@@ -363,6 +354,10 @@ float PlayerComboAttackController::GetPowerRate() const {
 
     float rate = attackValueForLevel_[pCombo_->GetCurrentLevel()].powerRate;
     return rate;
+}
+
+void PlayerComboAttackController::SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite) {
+    pEditorSuite_ = editorSuite;
 }
 
 void PlayerComboAttackController::SetCombo(Combo* combo) {

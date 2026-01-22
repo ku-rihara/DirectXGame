@@ -34,5 +34,5 @@ private:
 private:
     PlayerComboAttackData* attackData_   = nullptr;
     KetaEngine::TimeLine* timeline_      = nullptr;
-    PlayerComboAttackTimelineData* data_ = nullptr;
+    PlayerComboAttackTimelineData* timeLineData_ = nullptr;
 };

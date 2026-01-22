@@ -9,6 +9,10 @@
 
 class Combo;
 
+namespace KetaEngine {
+class EffectEditorSuite;
+}
+
 /// <summary>
 /// コンボアタック制御
 /// </summary>
@@ -27,22 +31,21 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(float deltaTime);
-
+   
     // 攻撃データの追加、削除
     void AddAttack(const std::string& attackName);
     void RemoveAttack(const int& index);
 
     void EditorUpdate(); //< エディタ更新
-    void AllLoadFile(); //< 全ファイルロード
-    void AllSaveFile(); //< 全ファイルセーブ
+    void AllLoadFile();  //< 全ファイルロード
+    void AllSaveFile();  //< 全ファイルセーブ
 
     float GetRealAttackSpeed(float baseTimeSpeed) const;
     float GetPowerRate() const;
 
 private:
     //*-------------------------------- private Method --------------------------------*//
-    void BindCommonParams(); //< 共通パラメータバインド
+    void BindCommonParams();  //< 共通パラメータバインド
     void AdjustCommonParam(); //< 共通パラメータ調整
 
     // コンボフロー可視化、チェーン構築
@@ -63,6 +66,8 @@ private:
 
     // 共通パラメータ
     KetaEngine::GlobalParameter* globalParameter_;
+    KetaEngine::EffectEditorSuite* pEditorSuite_;
+
     const std::string commonGroupName_      = "ComboCommonParam";
     const std::string AttackDataFolderPath_ = "Resources/GlobalParameter/AttackCreator/";
 
@@ -78,5 +83,7 @@ public:
     PlayerComboAttackData* GetAttackByName(const std::string& name);
     const std::vector<std::unique_ptr<PlayerComboAttackData>>& GetAllAttacks() const { return attacks_; }
     const int& GetAttackCount() const { return static_cast<int>(attacks_.size()); }
+
+    void SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite);
     void SetCombo(Combo* combo);
 };

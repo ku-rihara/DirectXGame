@@ -116,8 +116,7 @@ public:
     void DrawTriggerParamUI();
     void DrawFlagsParamUI();
 
-    void DrawSelectedParamUI(int paramEditType);
-
+    // セーブ、ロードのUI描画
     void DrawSaveLoadUI();
 
 private:
@@ -148,8 +147,6 @@ private:
 
     // enum class Int
     int32_t triggerConditionInt_;
-
-
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
