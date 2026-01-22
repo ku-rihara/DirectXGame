@@ -168,7 +168,7 @@
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
     <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp" />
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp" />
-    <ClCompile Include="Engine\utility\TimeLine\TimeLine.cpp" />
+    <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp" />
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp" />
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
@@ -363,7 +363,7 @@
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
     <ClInclude Include="Engine\utility\FileSelector\FileSelector.h" />
     <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h" />
-    <ClInclude Include="Engine\utility\TimeLine\TimeLine.h" />
+    <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h" />
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h" />
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />

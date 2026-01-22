@@ -30,10 +30,10 @@ struct TimeLineTrack {
     uint32_t id;
 };
 
-class TimeLine {
+class TimelineDrawer {
 public:
-    TimeLine()  = default;
-    ~TimeLine() = default;
+    TimelineDrawer()  = default;
+    ~TimelineDrawer() = default;
 
     //*----------------------------- public Methods -----------------------------*//
 

@@ -21,7 +21,7 @@ void GameScene::Init() {
     skuBox_           = std::make_unique<SkyBox>();
     ObjectFromBlender = std::make_unique<KetaEngine::ObjectFromBlender>();
     cameraPlayer_     = std::make_unique<KetaEngine::CameraAnimation>();
-    timeLine_         = std::make_unique<KetaEngine::TimeLine>();
+    timeLine_         = std::make_unique<KetaEngine::TimelineDrawer>();
 
     /*  monsterBall_->Init();*/
 

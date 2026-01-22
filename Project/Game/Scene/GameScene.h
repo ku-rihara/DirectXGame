@@ -9,7 +9,7 @@
 
 #include "Editor/CameraEditor/CameraAnimation.h"
 #include "utility/ObjectFromBlender/ObjectFromBlender.h"
-#include "utility/TimeLine/TimeLine.h"
+#include "utility/TimeLine/TimelineDrawer.h"
 
 /// <summary>
 /// ゲームシーン
@@ -23,7 +23,7 @@ private:
     std::unique_ptr<SkyBox> skuBox_                                  = nullptr;
     std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender = nullptr;
     std::unique_ptr<KetaEngine::CameraAnimation> cameraPlayer_       = nullptr;
-    std::unique_ptr<KetaEngine::TimeLine> timeLine_                  = nullptr;
+    std::unique_ptr<KetaEngine::TimelineDrawer> timeLine_            = nullptr;
 
     public : GameScene();
     ~GameScene() override;

@@ -376,11 +376,11 @@
     <Filter Include="MyEngine\.cpp\Editor\ParticleEditor\SectionParameters">
       <UniqueIdentifier>{f1c25686-c9ff-49ac-8f42-985ccef6443e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.h\utility\TimeLine">
-      <UniqueIdentifier>{025901b2-1c7b-4b85-8cea-7260f96092a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\utility\TimeLine">
       <UniqueIdentifier>{15600419-14aa-453a-83fe-007a03ddf4a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\Timeline">
+      <UniqueIdentifier>{025901b2-1c7b-4b85-8cea-7260f96092a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -910,7 +910,7 @@
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.cpp">
       <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\TimeLine\TimeLine.cpp">
+    <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp">
       <Filter>MyEngine\.cpp\utility\TimeLine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1491,8 +1491,8 @@
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.h">
       <Filter>MyEngine\.h\Editor\TimeScaleEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\TimeLine\TimeLine.h">
-      <Filter>MyEngine\.h\utility\TimeLine</Filter>
+    <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h">
+      <Filter>MyEngine\.h\utility\Timeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
