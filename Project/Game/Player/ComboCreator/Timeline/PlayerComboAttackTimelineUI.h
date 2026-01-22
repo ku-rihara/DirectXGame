@@ -10,7 +10,7 @@ class PlayerComboAttackData;
 class PlayerComboAttackTimelineTrackBuilder;
 
 namespace KetaEngine {
-class TimeLine;
+class TimelineDrawer;
 }
 
 /// <summary>
@@ -32,7 +32,7 @@ public:
     ~PlayerComboAttackTimelineUI() = default;
 
     void Init(PlayerComboAttackData* attackData,
-        KetaEngine::TimeLine* timeline,
+        KetaEngine::TimelineDrawer* timeline,
         PlayerComboAttackTimelineData* data,
         PlayerComboAttackTimelineTrackBuilder* trackBuilder);
 
@@ -60,7 +60,7 @@ private:
 
 private:
     PlayerComboAttackData* attackData_                   = nullptr;
-    KetaEngine::TimeLine* timeline_                      = nullptr;
+    KetaEngine::TimelineDrawer* timeline_                = nullptr;
     PlayerComboAttackTimelineData* data_                 = nullptr;
     PlayerComboAttackTimelineTrackBuilder* trackBuilder_ = nullptr;
 

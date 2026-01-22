@@ -6,7 +6,7 @@
 
 void PlayerComboAttackTimelineParameterApplier::Init(
     PlayerComboAttackData* attackData,
-    KetaEngine::TimeLine* timeline,
+    KetaEngine::TimelineDrawer* timeline,
     PlayerComboAttackTimelineData* data) {
 
     attackData_   = attackData;

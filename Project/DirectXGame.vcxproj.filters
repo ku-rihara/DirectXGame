@@ -538,6 +538,9 @@
     <Filter Include="Game\Player\ComboCreator\Timeline">
       <UniqueIdentifier>{13a2a749-a208-4e73-a70e-d63c43e23309}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\utility\Timeline">
+      <UniqueIdentifier>{025901b2-1c7b-4b85-8cea-7260f96092a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1366,9 +1369,6 @@
     <ClCompile Include="Game\GameCamera\Behavior\BaseCameraBehavior.cpp">
       <Filter>Game\GameCamera\Behavior</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\TimeLine\TimeLine.cpp">
-      <Filter>MyEngine\.cpp\utility\TimeLine</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.cpp">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClCompile>
@@ -1383,6 +1383,9 @@
     </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineTrackBuilder.cpp">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp">
+      <Filter>MyEngine\.cpp\utility\TimeLine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2268,8 +2271,8 @@
     <ClInclude Include="Game\GameCamera\Behavior\BaseCameraBehavior.h">
       <Filter>Game\GameCamera\Behavior</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\TimeLine\TimeLine.h">
-      <Filter>MyEngine\.h\utility\TimeLine</Filter>
+    <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h">
+      <Filter>MyEngine\.h\utility\Timeline</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.h">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PlayerComboAttackTimelineData.h"
-#include "utility/TimeLine/TimeLine.h"
+#include "utility/TimeLine/TimelineDrawer.h"
 
 class PlayerComboAttackData;
 
@@ -14,7 +14,7 @@ public:
     ~PlayerComboAttackTimelineParameterApplier() = default;
 
     void Init(PlayerComboAttackData* attackData,
-        KetaEngine::TimeLine* timeline,
+        KetaEngine::TimelineDrawer* timeline,
         PlayerComboAttackTimelineData* data);
 
     // パラメータ適用
@@ -32,7 +32,7 @@ private:
     int32_t CalculateTotalFrames() const;
 
 private:
-    PlayerComboAttackData* attackData_   = nullptr;
-    KetaEngine::TimeLine* timeline_      = nullptr;
+    PlayerComboAttackData* attackData_           = nullptr;
+    KetaEngine::TimelineDrawer* timeline_        = nullptr;
     PlayerComboAttackTimelineData* timeLineData_ = nullptr;
 };

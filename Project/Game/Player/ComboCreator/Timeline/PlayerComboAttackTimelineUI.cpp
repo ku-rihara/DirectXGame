@@ -6,7 +6,7 @@
 
 void PlayerComboAttackTimelineUI::Init(
     PlayerComboAttackData* attackData,
-    KetaEngine::TimeLine* timeline,
+    KetaEngine::TimelineDrawer* timeline,
     PlayerComboAttackTimelineData* data,
     PlayerComboAttackTimelineTrackBuilder* trackBuilder) {
 

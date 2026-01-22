@@ -1,11 +1,11 @@
-#include "TimeLine.h"
+#include "TimelineDrawer.h"
 
 using namespace KetaEngine;
 #include <algorithm>
 #include <cstdio>
 #include <imgui.h>
 
-void TimeLine::Init() {
+void TimelineDrawer::Init() {
     tracks_.clear();
     currentFrame_               = 0;
     scrollOffset_               = 0;
@@ -18,7 +18,7 @@ void TimeLine::Init() {
     nextTrackId_                = 0;
 }
 
-uint32_t TimeLine::AddTrack(const std::string& trackName, std::function<void(float)> callback) {
+uint32_t TimelineDrawer::AddTrack(const std::string& trackName, std::function<void(float)> callback) {
     TimeLineTrack newTrack;
     newTrack.name           = trackName;
     newTrack.onValueChanged = callback;
@@ -28,7 +28,7 @@ uint32_t TimeLine::AddTrack(const std::string& trackName, std::function<void(flo
     return static_cast<uint32_t>(tracks_.size() - 1);
 }
 
-bool TimeLine::RemoveTrack(uint32_t trackIndex) {
+bool TimelineDrawer::RemoveTrack(uint32_t trackIndex) {
     if (trackIndex >= tracks_.size()) {
         return false;
     }
@@ -58,7 +58,7 @@ bool TimeLine::RemoveTrack(uint32_t trackIndex) {
     return true;
 }
 
-void TimeLine::AddKeyFrame(uint32_t trackIndex, int32_t frame, float value, float duration, const std::string& label) {
+void TimelineDrawer::AddKeyFrame(uint32_t trackIndex, int32_t frame, float value, float duration, const std::string& label) {
     if (trackIndex >= tracks_.size()) {
         return;
     }
@@ -76,7 +76,7 @@ void TimeLine::AddKeyFrame(uint32_t trackIndex, int32_t frame, float value, floa
         [](const TimeLineKeyFrame& a, const TimeLineKeyFrame& b) { return a.frame < b.frame; });
 }
 
-bool TimeLine::RemoveKeyFrame(uint32_t trackIndex, uint32_t keyIndex) {
+bool TimelineDrawer::RemoveKeyFrame(uint32_t trackIndex, uint32_t keyIndex) {
     if (trackIndex >= tracks_.size()) {
         return false;
     }
@@ -89,7 +89,7 @@ bool TimeLine::RemoveKeyFrame(uint32_t trackIndex, uint32_t keyIndex) {
     return true;
 }
 
-bool TimeLine::SetKeyFrameLabel(uint32_t trackIndex, uint32_t keyIndex, const std::string& label) {
+bool TimelineDrawer::SetKeyFrameLabel(uint32_t trackIndex, uint32_t keyIndex, const std::string& label) {
     if (trackIndex >= tracks_.size()) {
         return false;
     }
@@ -102,7 +102,7 @@ bool TimeLine::SetKeyFrameLabel(uint32_t trackIndex, uint32_t keyIndex, const st
     return true;
 }
 
-float TimeLine::GetValueAtFrame(uint32_t trackIndex, int32_t frame) const {
+float TimelineDrawer::GetValueAtFrame(uint32_t trackIndex, int32_t frame) const {
     if (trackIndex >= tracks_.size()) {
         return 0.0f;
     }
@@ -125,7 +125,7 @@ float TimeLine::GetValueAtFrame(uint32_t trackIndex, int32_t frame) const {
     return keyframes.back().value;
 }
 
-int32_t TimeLine::GetFirstKeyFrameFrame(uint32_t trackIndex) const {
+int32_t TimelineDrawer::GetFirstKeyFrameFrame(uint32_t trackIndex) const {
     if (trackIndex >= tracks_.size()) {
         return 0;
     }
@@ -138,13 +138,13 @@ int32_t TimeLine::GetFirstKeyFrameFrame(uint32_t trackIndex) const {
     return keyframes.front().frame;
 }
 
-float TimeLine::InterpolateValue(const TimeLineKeyFrame& key1, const TimeLineKeyFrame& key2, int32_t frame) const {
+float TimelineDrawer::InterpolateValue(const TimeLineKeyFrame& key1, const TimeLineKeyFrame& key2, int32_t frame) const {
     float t = static_cast<float>(frame - key1.frame) / static_cast<float>(key2.frame - key1.frame);
     t       = std::clamp(t, 0.0f, 1.0f);
     return key1.value + (key2.value - key1.value) * t;
 }
 
-void TimeLine::ApplyCurrentFrame() {
+void TimelineDrawer::ApplyCurrentFrame() {
     for (uint32_t i = 0; i < tracks_.size(); i++) {
         if (tracks_[i].onValueChanged) {
             float value = GetValueAtFrame(i, currentFrame_);
@@ -153,7 +153,7 @@ void TimeLine::ApplyCurrentFrame() {
     }
 }
 
-void TimeLine::SetKeyFrameRightClickCallback(uint32_t trackIndex, std::function<void(int32_t, int32_t)> callback) {
+void TimelineDrawer::SetKeyFrameRightClickCallback(uint32_t trackIndex, std::function<void(int32_t, int32_t)> callback) {
     if (trackIndex >= tracks_.size()) {
         return;
     }
@@ -161,7 +161,7 @@ void TimeLine::SetKeyFrameRightClickCallback(uint32_t trackIndex, std::function<
     tracks_[trackIndex].onKeyFrameRightClick = callback;
 }
 
-void TimeLine::HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, const Vector2& keyPos) {
+void TimelineDrawer::HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, const Vector2& keyPos) {
     if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImVec2(keyPos.x - 8, keyPos.y - 8), ImVec2(keyPos.x + 8, keyPos.y + 8))) {
 
         draggingTrackIndex_                                = trackIndex;
@@ -171,7 +171,7 @@ void TimeLine::HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, co
     }
 }
 
-void TimeLine::HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex, float durationBarX, float trackY) {
+void TimelineDrawer::HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex, float durationBarX, float trackY) {
     const float barHeight     = trackHeight_ * 0.8f;
     const float barTopY       = trackY + (trackHeight_ - barHeight) / 2.0f;
     const float dragZoneWidth = 8.0f;
@@ -186,7 +186,7 @@ void TimeLine::HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex, float 
     }
 }
 
-void TimeLine::Draw(const std::string& name) {
+void TimelineDrawer::Draw(const std::string& name) {
 
     ImGui::Begin(name.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar);
 

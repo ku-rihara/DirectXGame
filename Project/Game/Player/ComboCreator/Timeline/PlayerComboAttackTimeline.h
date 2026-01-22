@@ -4,7 +4,7 @@
 #include "PlayerComboAttackTimelineParameterApplier.h"
 #include "PlayerComboAttackTimelineTrackBuilder.h"
 #include "PlayerComboAttackTimelineUI.h"
-#include "utility/TimeLine/TimeLine.h"
+#include "utility/TimeLine/TimelineDrawer.h"
 #include <memory>
 
 class PlayerComboAttackData;
@@ -27,7 +27,7 @@ private:
 
 private:
     PlayerComboAttackData* attackData_ = nullptr;
-    KetaEngine::TimeLine timeline_;
+    KetaEngine::TimelineDrawer timeline_;
 
     // 各責務を持つクラス
     PlayerComboAttackTimelineData data_;
