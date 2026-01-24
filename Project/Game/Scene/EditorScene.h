@@ -4,8 +4,8 @@
 #include "BaseScene.h"
 
 #include "Easing/Easing.h"
+#include "Easing/EasingCreator/Easingeditor.h"
 #include "EasingTestObj/EasingTestObj.h"
-#include "Editor/EasingCreator/Easingeditor.h"
 #include <memory>
 
 /// <summary>

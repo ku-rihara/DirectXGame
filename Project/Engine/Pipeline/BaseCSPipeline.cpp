@@ -1,8 +1,8 @@
 #include "BaseCSPipeline.h"
 
 using namespace KetaEngine;
-#include "Dx/DirectXCommon.h"
-#include "Dx/DxCompiler.h"
+#include "Base/Dx/DirectXCommon.h"
+#include "Base/Dx/DxCompiler.h"
 #include "function/Log.h"
 #include <cassert>
 

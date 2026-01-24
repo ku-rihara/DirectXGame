@@ -1,10 +1,10 @@
-#include "base/TextureManager.h"
+#include "Base/TextureManager.h"
 
 using namespace KetaEngine;
 #include "2d/ImGuiManager.h"
 #include "Dx/DxCommand.h"
 /// srv
-#include "SrvManager.h"
+#include "Base/Descriptors/SrvManager.h"
 // function
 #include "function/Convert.h"
 #include <cstdlib>
@@ -55,7 +55,7 @@ DirectX::ScratchImage TextureManager::LoadTextureFile(const std::string& filePat
         hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
     }
     if (FAILED(hr)) {
-        throw std::runtime_error("MiniMap Generate Faild: " + filePath);
+        throw std::runtime_error("MiniMap Generate Failed: " + filePath);
     }
 
     // ミニマップ付きのデータを返す

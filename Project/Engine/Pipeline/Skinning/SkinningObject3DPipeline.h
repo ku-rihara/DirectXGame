@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../BasePipeline.h"
-#include "Dx/DirectXCommon.h"
-#include "Material/ModelMaterial.h"
+#include "Base/Dx/DirectXCommon.h"
+#include "Base/Material/ModelMaterial.h"
 #include <d3dcommon.h>
 #include <dxcapi.h>
 #include <wrl/client.h>

@@ -1,8 +1,8 @@
 #include "LuminanceBasedOutline.h"
 
 using namespace KetaEngine;
-#include "Dx/DirectXCommon.h"
-#include "Dx/DxRenderTarget.h"
+#include "Base/Dx/DirectXCommon.h"
+#include "Base/Dx/DxRenderTarget.h"
 #include "function/Log.h"
 #include <cassert>
 #include <imgui.h>

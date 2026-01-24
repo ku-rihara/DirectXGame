@@ -3,17 +3,17 @@
 using namespace KetaEngine;
 // editor
 #include "Editor/CameraEditor/CameraEditor.h"
+#include "Editor/DissolveEditor/DissolveEditor.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationEditor.h"
-#include"Editor/ShakeEditor/ShakeEditor.h"
-#include"Editor/RailEditor/RailEditor.h"
-#include"Editor/GPUParticleEditor/GPUParticleEditor.h"
-#include"Editor/ParticleEditor/ParticleEditor.h"
-#include"Editor/DissolveEditor/DissolveEditor.h"
-#include"Editor/TimeScaleEditor/TimeScaleEditor.h"
-#include"Frame/Frame.h"
+#include "Editor/RailEditor/RailEditor.h"
+#include "Editor/ShakeEditor/ShakeEditor.h"
+#include "Editor/TimeScaleEditor/TimeScaleEditor.h"
+#include "Particle/CPUParticle/Editor/ParticleEditor.h"
+#include "Particle/GPUParticle/Editor/GPUParticleEditor.h"
+// frame
+#include "Frame/Frame.h"
 
-
-EffectEditorSuite::EffectEditorSuite() = default;
+EffectEditorSuite::EffectEditorSuite()  = default;
 EffectEditorSuite::~EffectEditorSuite() = default;
 
 void EffectEditorSuite::Init() {
@@ -25,7 +25,7 @@ void EffectEditorSuite::Init() {
     particleEditor_         = std::make_unique<ParticleEditor>();
     dissolveEditor_         = std::make_unique<DissolveEditor>();
     timeScaleEditor_        = std::make_unique<TimeScaleEditor>();
-        
+
     // 初期化
     objEaseAnimationEditor_->Init("ObjEaseAnimation", true);
     cameraEditor_->Init("CameraAnimation");
@@ -36,7 +36,6 @@ void EffectEditorSuite::Init() {
     dissolveEditor_->Init("Dissolve");
     timeScaleEditor_->Init("TimeScale");
 }
-
 
 void EffectEditorSuite::Update() {
 
@@ -63,8 +62,8 @@ void EffectEditorSuite::EditorUpdate() {
 
 void EffectEditorSuite::SetViewProjection(ViewProjection* viewProjection) {
     cameraEditor_->SetViewProjection(viewProjection);
- }
+}
 
 void EffectEditorSuite::SetCameraPreViewPos(const Vector3& pos) {
-     cameraEditor_->SetPreviewObjPos(pos);
- }
+    cameraEditor_->SetPreviewObjPos(pos);
+}

@@ -1,5 +1,5 @@
 #include "BaseScene.h"
-#include "base/WinApp.h"
+#include "Base/WinApp.h"
 #include "Frame/Frame.h"
 #include "Lighrt/Light.h"
 #include "PostEffect/PostEffectRenderer.h"
@@ -8,8 +8,8 @@
 #include "Editor/CameraEditor/CameraEditor.h"
 
 // Particle
-#include "Editor/ParticleEditor/ParticleManager.h"
-#include "GPUParticle/GPUParticleManager.h"
+#include "Particle/CPUParticle/ParticleManager.h"
+#include "Particle/GPUParticle/GPUParticleManager.h"
 
 #include <imgui.h>
 
@@ -131,5 +131,5 @@ void BaseScene::ViewProjectionUpdate() {
         break;
     }
 
-   KetaEngine::Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
+    KetaEngine::Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }

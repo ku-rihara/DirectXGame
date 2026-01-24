@@ -3,14 +3,14 @@
 using namespace KetaEngine;
 // editor
 #include "Editor/CameraEditor/CameraAnimationData.h"
+#include "Editor/DissolveEditor/DissolveData.h"
+#include "Particle/GPUParticle/Editor/GPUParticleData.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationData.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Particle/CPUParticle/Editor/ParticleData.h"
 #include "Editor/RailEditor/RailData.h"
-#include"Editor/ShakeEditor/ShakeData.h"
-#include"Editor/GPUParticleEditor/GPUParticleData.h"
-#include "Editor/ParticleEditor/ParticleData.h"
-#include"Editor/DissolveEditor/DissolveData.h"
-#include"Editor/TimeScaleEditor/TimeScaleData.h"
+#include "Editor/ShakeEditor/ShakeData.h"
+#include "Editor/TimeScaleEditor/TimeScaleData.h"
 // std
 #include <algorithm>
 #include <filesystem>
@@ -474,7 +474,6 @@ void BaseEffectEditor<TEffectData>::RemoveEffectFromCategory(int32_t categoryInd
     }
 }
 
-
 template <typename TEffectData>
 TEffectData* BaseEffectEditor<TEffectData>::GetEffectByName(const std::string& name) {
     auto it = std::find_if(effects_.begin(), effects_.end(),
@@ -665,7 +664,6 @@ TEffectData* BaseEffectEditor<TEffectData>::GetSelectedEffect() {
     }
     return nullptr;
 }
-
 
 template class BaseEffectEditor<CameraAnimationData>;
 template class BaseEffectEditor<ObjEaseAnimationData>;

@@ -1,10 +1,10 @@
 #include "ParticlePipeline.h"
 
 using namespace KetaEngine;
-#include "Dx/DxCompiler.h"
+#include "Base/Dx/DxCompiler.h"
 // Function
 #include "function/Log.h"
-#include "Material/ModelMaterial.h"
+#include "Base/Material/ModelMaterial.h"
 #include <cassert>
 #include <string>
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Line3D/Line3D.h"
+#include "3D/Line3D/Line3D.h"
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 #include "Vector3.h"

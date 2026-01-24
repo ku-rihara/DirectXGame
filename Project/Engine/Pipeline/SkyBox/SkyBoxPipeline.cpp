@@ -1,10 +1,10 @@
 #include "SkyBoxPipeline.h"
 
 using namespace KetaEngine;
-#include "Dx/DxCompiler.h"
+#include "Base/Dx/DxCompiler.h"
 #include "function/Log.h"
-#include "Material/ModelMaterial.h"
-#include "base/TextureManager.h"
+#include "Base/Material/ModelMaterial.h"
+#include "Base/TextureManager.h"
 #include <cassert>
 #include <string>
 

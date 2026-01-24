@@ -3,11 +3,11 @@
 #include "GameScene.h"
 #include "Scene/Manager/SceneManager.h"
 
-#include "base/TextureManager.h"
+#include "Base/TextureManager.h"
 // class
-#include "3d/Object3DRegistry.h"
-#include "Editor/ParticleEditor/ParticleManager.h"
-#include "GPUParticle/GPUParticleManager.h"
+#include "3d/Object3D/Object3DRegistry.h"
+#include "Particle/CPUParticle/ParticleManager.h"
+#include "Particle/GPUParticle/GPUParticleManager.h"
 #include "Pipeline/PipelineManager.h"
 
 // math

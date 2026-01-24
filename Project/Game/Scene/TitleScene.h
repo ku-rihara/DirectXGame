@@ -3,9 +3,8 @@
 /// baseScene
 #include "BaseScene.h"
 
-#include "Editor/GPUParticleEditor/GPUParticlePlayer.h"
-#include "Editor/ParticleEditor/ParticleEmitter.h"
-#include "Editor/ParticleEditor/ParticlePlayer.h"
+#include "Particle/CPUParticle/ParticlePlayer.h"
+#include "Particle/GPUParticle/GPUParticlePlayer.h"
 #include <array>
 #include <string>
 
@@ -14,8 +13,6 @@
 /// </summary>
 class TitleScene : public BaseScene {
 private:
-    std::array<std::unique_ptr<KetaEngine::ParticleEmitter>, 3> EnemydamageEffect_;
-    std::array<std::unique_ptr<KetaEngine::ParticleEmitter>, 1> afterGlowEffect_;
     KetaEngine::GPUParticlePlayer test;
     KetaEngine::ParticlePlayer particleTestPlayer_;
 

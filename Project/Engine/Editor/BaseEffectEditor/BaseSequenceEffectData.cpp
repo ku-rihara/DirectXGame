@@ -5,8 +5,8 @@ using namespace KetaEngine;
 #include "Editor/CameraEditor/CameraKeyFrame.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationSection.h"
 #include "Editor/RailEditor/RailControlPoint.h"
-#include"Editor/GPUParticleEditor/GPUParticleSection.h"
-#include"Editor/ParticleEditor/ParticleSection.h"
+#include"Particle/GPUParticle/Editor/GPUParticleSection.h"
+#include"Particle/CPUParticle/Editor/ParticleSection.h"
 // std
 #include <algorithm>
 #include <filesystem>

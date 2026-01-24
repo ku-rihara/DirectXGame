@@ -2,7 +2,7 @@
 
 #include"3d/WorldTransform.h"
 #include"3d/ViewProjection.h"
-#include"3d/Object3d.h"
+#include"3d/Object3d/Object3d.h"
 #include<memory>
 
 class Player {

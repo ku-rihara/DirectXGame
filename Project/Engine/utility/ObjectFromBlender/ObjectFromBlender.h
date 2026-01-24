@@ -1,9 +1,8 @@
 #pragma once
-#include "3d/object3d.h"
+#include "3d/Object3d/Object3d.h"
 #include "3d/WorldTransform.h"
 #include "Easing/EasingSequence.h"
-#include "Editor/ParticleEditor/ParticleEmitter.h"
-#include "Editor/ParticleEditor/ParticlePlayer.h"
+#include "Particle/CPUParticle/ParticlePlayer.h"
 #include <array>
 #include <cstdint>
 #include <json.hpp>

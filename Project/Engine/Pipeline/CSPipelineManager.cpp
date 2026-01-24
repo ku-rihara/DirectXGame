@@ -8,7 +8,7 @@ using namespace KetaEngine;
 #include"Pipeline/Particle/CS/InitParticlePipeline.h"
 #include"Pipeline/Particle/CS/UpdateParticlePipeline.h"
 
-#include "Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include <cassert>
 
 CSPipelineManager* CSPipelineManager::GetInstance() {
