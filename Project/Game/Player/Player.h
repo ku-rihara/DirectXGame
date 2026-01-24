@@ -24,7 +24,7 @@ class AttackEffect;
 class PlayerComboAttackController;
 
 /// <summary>
-/// プレイヤークラス
+/// �v���C���[�N���X
 /// </summary>
 class Player : public BaseObject, public KetaEngine::AABBCollider {
 private:
@@ -37,67 +37,67 @@ public:
     Player()  = default;
     ~Player() = default;
 
-    // 初期化、更新
+    // �������A�X�V
     void Init() override;
     void Update() override;
 
-    void InitInGameScene(); //< ゲームシーンでの初期化
-    void TitleUpdate(); //< タイトル更新
-    void GameIntroUpdate(); //< ゲームイントロ更新
+    void InitInGameScene(); //< �Q�[���V�[���ł̏�����
+    void TitleUpdate(); //< �^�C�g���X�V
+    void GameIntroUpdate(); //< �Q�[���C���g���X�V
 
     /// <summary>
-    /// 影フラグ設定
+    /// �e�t���O�ݒ�
     /// </summary>
-    /// <param name="isShadow">影の有効/無効</param>
+    /// <param name="isShadow">�e�̗L��/����</param>
     void SetShadowFrag(const bool& isShadow);
 
     /// <summary>
-    /// 移動
+    /// �ړ�
     /// </summary>
-    /// <param name="speed">移動速度</param>
+    /// <param name="speed">�ړ����x</param>
     void Move(float speed);
 
-    bool CheckIsMoving(); //< 移動中判定
-    void MoveToLimit(); //< 移動制限
-    Vector3 GetInputDirection(); //< 入力方向取得
-    void UpdateMatrix(); //< 行列更新
+    bool CheckIsMoving(); //< �ړ�������
+    void MoveToLimit(); //< �ړ�����
+    Vector3 GetInputDirection(); //< ���͕����擾
+    void UpdateMatrix(); //< �s��X�V
 
     // reset
-    void ResetPositionY(); //< Y座標リセット
-    void ResetHeadScale(); //< 頭スケールリセット
+    void ResetPositionY(); //< Y���W���Z�b�g
+    void ResetHeadScale(); //< ���X�P�[�����Z�b�g
 
     /// <summary>
-    /// ディゾルブ更新
+    /// �f�B�]���u�X�V
     /// </summary>
-    /// <param name="dissolve">ディゾルブ値</param>
+    /// <param name="dissolve">�f�B�]���u�l</param>
     void DissolveUpdate(float dissolve);
 
     /// <summary>
-    /// ジャンプ
+    /// �W�����v
     /// </summary>
-    /// <param name="speed">速度</param>
-    /// <param name="fallSpeedLimit">落下速度制限</param>
-    /// <param name="gravity">重力</param>
+    /// <param name="speed">���x</param>
+    /// <param name="fallSpeedLimit">�������x����</param>
+    /// <param name="gravity">�d��</param>
     void Jump(float& speed, float fallSpeedLimit, float gravity);
 
     /// <summary>
-    /// 落下
+    /// ����
     /// </summary>
-    /// <param name="speed">速度</param>
-    /// <param name="fallSpeedLimit">落下速度制限</param>
-    /// <param name="gravity">重力</param>
-    /// <param name="isJump">ジャンプ中か</param>
+    /// <param name="speed">���x</param>
+    /// <param name="fallSpeedLimit">�������x����</param>
+    /// <param name="gravity">�d��</param>
+    /// <param name="isJump">�W�����v����</param>
     void Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump = false);
 
-    // 各Behavior切り替え処理
+    // �eBehavior�؂�ւ�����
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);
     void ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior);
     void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior> behavior);
 
     /// <summary>
-    /// 衝突継続時の処理
+    /// �Փˌp�����̏���
     /// </summary>
-    /// <param name="other">衝突相手</param>
+    /// <param name="other">�Փˑ���</param>
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
     void ChangeCombBoRoot(); //< コンボルート変更

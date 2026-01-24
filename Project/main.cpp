@@ -1,4 +1,4 @@
-#include "base/WinApp.h"
+#include "Base/WinApp.h"
 #include "Core/KTGame.h"
 
 // windowアプリでのエントリーポイント(main関数)

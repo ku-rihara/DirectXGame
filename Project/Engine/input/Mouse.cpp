@@ -2,7 +2,7 @@
 using namespace KetaEngine;
 #include <cmath>
 #include<assert.h>
-#include"base/WinApp.h"
+#include"Base/WinApp.h"
 
 
 void Mouse::Init(Microsoft::WRL::ComPtr<IDirectInput8>directInput,HWND hWnd) {

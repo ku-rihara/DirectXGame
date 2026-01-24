@@ -2,8 +2,8 @@
 
 using namespace KetaEngine;
 #include"Pipeline/Object3D/Object3DPipeline.h"
-#include "Dx/DirectXCommon.h"
-#include "base/SrvManager.h"
+#include "Base/Dx/DirectXCommon.h"
+#include "Base/Descriptors/SrvManager.h"
 #include <imgui.h>
 #include <string>
 

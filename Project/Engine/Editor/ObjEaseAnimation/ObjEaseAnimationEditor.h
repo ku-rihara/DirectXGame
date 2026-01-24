@@ -1,5 +1,5 @@
 #pragma once
-#include "3d/Object3d.h"
+#include "3d/Object3d/Object3d.h"
 #include "Editor/BaseEffectEditor/BaseEffectEditor.h"
 #include "ObjEaseAnimationData.h"
 #include <memory>

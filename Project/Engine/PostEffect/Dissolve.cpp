@@ -1,9 +1,9 @@
 #include "Dissolve.h"
 
 using namespace KetaEngine;
-#include "base/TextureManager.h"
-#include "Dx/DirectXCommon.h"
-#include "Dx/DxRenderTarget.h"
+#include "Base/TextureManager.h"
+#include "Base/Dx/DirectXCommon.h"
+#include "Base/Dx/DxRenderTarget.h"
 #include "Function/Log.h"
 #include <cassert>
 #include <imgui.h>

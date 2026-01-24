@@ -1,8 +1,8 @@
 #include "Mesh.h"
 
 using namespace KetaEngine;
-#include"Dx/DirectXCommon.h"
-#include "base/TextureManager.h"
+#include"Base/Dx/DirectXCommon.h"
+#include "Base/TextureManager.h"
 
 void Mesh::Init(DirectXCommon* directXCommon, uint32_t vertexNum) {
     directXCommon_ = directXCommon;

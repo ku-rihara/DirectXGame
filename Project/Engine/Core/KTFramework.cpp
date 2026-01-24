@@ -3,17 +3,11 @@
 using namespace KetaEngine;
 
 // dx
-#include "Dx/DxReleaseChecker.h"
-// dx
-#include "Dx/DxReleaseChecker.h"
 #include "ShadowMap/ShadowMap.h"
 
-/// utility
+// utility
 #include "Editor/ParameterEditor/GlobalParameter.h"
-
-#include "Frame/Frame.h"
-/// imgui
-#include "base/TextureManager.h"
+// imGui
 #include <imgui.h>
 
 const char kWindowTitle[] = "LE3A_11_クリハラ_ケイタ";

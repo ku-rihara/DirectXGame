@@ -1,6 +1,6 @@
 #include "ViewProjection.h"
 
-#include "Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "MathFunction.h"
 #include "WorldTransform.h"
 #include <cassert>

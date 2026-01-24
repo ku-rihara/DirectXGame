@@ -1,7 +1,7 @@
 #include "DissolveData.h"
 
 using namespace KetaEngine;
-#include "base/TextureManager.h"
+#include "Base/TextureManager.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Frame/Frame.h"
 #include <algorithm>

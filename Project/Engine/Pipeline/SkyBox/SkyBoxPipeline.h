@@ -1,6 +1,6 @@
 #pragma once
 #include "../BasePipeline.h"
-#include "Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include <cstdint>
 #include <dxcapi.h>
 #include <string>

@@ -3,7 +3,7 @@
 using namespace KetaEngine;
 #include "Easing/EasingFunction.h"
 #include "Function/GetFile.h"
-#include "Editor/EasingCreator/EasingCreator.h"
+#include "Easing/EasingCreator/EasingCreator.h"
 #include <fstream>
 #include <imGui.h>
 #include <Windows.h>
