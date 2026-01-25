@@ -58,9 +58,6 @@
     <Filter Include="Engine\ShadowMap">
       <UniqueIdentifier>{E1BD0A82-599F-4A26-B872-C13BBE285F58}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\base">
-      <UniqueIdentifier>{D5378956-80FF-4563-B01D-6D6CB95B3389}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\input">
       <UniqueIdentifier>{3B826E08-FC7F-4D41-9BA2-291518397FBB}</UniqueIdentifier>
     </Filter>
@@ -160,15 +157,6 @@
     <Filter Include="Engine\Scene\Manager">
       <UniqueIdentifier>{FE30660A-2E42-4832-B940-2953A0B68525}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\base\Descriptors">
-      <UniqueIdentifier>{CBA46CE2-C61F-4B62-9617-62A56B2D6FBC}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\base\Dx">
-      <UniqueIdentifier>{1BFBF612-AAE4-4AF0-BFB0-4A2F56524287}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\base\Material">
-      <UniqueIdentifier>{0A55A0C5-CE43-441E-885F-A187CC4F43DD}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\utility\Debug">
       <UniqueIdentifier>{DA736F8A-A0EE-4CD7-AB25-81BEA84EE794}</UniqueIdentifier>
     </Filter>
@@ -228,6 +216,18 @@
     </Filter>
     <Filter Include="Engine\3d\Animation3D">
       <UniqueIdentifier>{109C49F3-B0F8-4602-B2AD-6045067BB85E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base">
+      <UniqueIdentifier>{D5378956-80FF-4563-B01D-6D6CB95B3389}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\Descriptors">
+      <UniqueIdentifier>{CBA46CE2-C61F-4B62-9617-62A56B2D6FBC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\Dx">
+      <UniqueIdentifier>{1BFBF612-AAE4-4AF0-BFB0-4A2F56524287}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\Material">
+      <UniqueIdentifier>{0A55A0C5-CE43-441E-885F-A187CC4F43DD}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -304,67 +304,67 @@
       <Filter>Engine\Audio</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Descriptors\DsvManager.cpp">
-      <Filter>Engine\base\Descriptors</Filter>
+      <Filter>Engine\Base\Descriptors</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Descriptors\RtvManager.cpp">
-      <Filter>Engine\base\Descriptors</Filter>
+      <Filter>Engine\Base\Descriptors</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Descriptors\SrvManager.cpp">
-      <Filter>Engine\base\Descriptors</Filter>
+      <Filter>Engine\Base\Descriptors</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Dx\DirectXCommon.cpp">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Dx\DxCommand.cpp">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Dx\DxCompiler.cpp">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Dx\DxDepthBuffer.cpp">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Dx\DxDevice.cpp">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Dx\DxReleaseChecker.cpp">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Dx\DxRenderTarget.cpp">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Dx\DxResourceBarrier.cpp">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Dx\DxSwapChain.cpp">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Material\BaseMaterial.cpp">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Material\GPUParticleMaterial.cpp">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Material\MeshMaterial.cpp">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Material\ModelMaterial.cpp">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Material\ParticleMaterial.cpp">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Material\SkyBoxMaterial.cpp">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Material\SpriteMaterial.cpp">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\TextureManager.cpp">
-      <Filter>Engine\base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\WinApp.cpp">
-      <Filter>Engine\base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Collider\AABBCollider.cpp">
       <Filter>Engine\Collider</Filter>
@@ -845,67 +845,67 @@
       <Filter>Engine\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Descriptors\DsvManager.h">
-      <Filter>Engine\base\Descriptors</Filter>
+      <Filter>Engine\Base\Descriptors</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Descriptors\RtvManager.h">
-      <Filter>Engine\base\Descriptors</Filter>
+      <Filter>Engine\Base\Descriptors</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Descriptors\SrvManager.h">
-      <Filter>Engine\base\Descriptors</Filter>
+      <Filter>Engine\Base\Descriptors</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Dx\DirectXCommon.h">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Dx\DxCommand.h">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Dx\DxCompiler.h">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Dx\DxDepthBuffer.h">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Dx\DxDevice.h">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Dx\DxReleaseChecker.h">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Dx\DxRenderTarget.h">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Dx\DxResourceBarrier.h">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Dx\DxSwapChain.h">
-      <Filter>Engine\base\Dx</Filter>
+      <Filter>Engine\Base\Dx</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Material\BaseMaterial.h">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Material\GPUParticleMaterial.h">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Material\MeshMaterial.h">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Material\ModelMaterial.h">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Material\ParticleMaterial.h">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Material\SkyBoxMaterial.h">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Material\SpriteMaterial.h">
-      <Filter>Engine\base\Material</Filter>
+      <Filter>Engine\Base\Material</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\TextureManager.h">
-      <Filter>Engine\base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\WinApp.h">
-      <Filter>Engine\base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collider\AABBCollider.h">
       <Filter>Engine\Collider</Filter>
