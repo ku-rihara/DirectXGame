@@ -32,7 +32,7 @@ public:
     /// <summary>
     /// パーティクルをEmitする
     /// </summary>
-    void Play(const std::string& categoryName, const std::string& particleName) override;
+    void Play(const std::string& particleName, const std::string& categoryName = "default") override;
 
     /// <summary>
     /// 再生状況
