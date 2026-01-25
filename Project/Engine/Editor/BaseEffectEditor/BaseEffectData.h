@@ -24,13 +24,14 @@ public:
     //*---------------------------- public Methods ----------------------------*//
 
     // 純粋仮想関数
-    virtual void Init(const std::string& name)  = 0;
     virtual void Update(float speedRate = 1.0f) = 0;
     virtual void Reset()                        = 0;
     virtual void Play()                         = 0;
-    virtual void InitWithCategory(const std::string& name, const std::string& categoryName);
-    // 共通実装
 
+    // カテゴリー初期化
+    virtual void Init(const std::string& name, const std::string& categoryName);
+
+    // 共通実装
     virtual void Pause();
     virtual bool IsPlaying() const;
     virtual bool IsFinished() const;
@@ -52,6 +53,7 @@ protected:
 
     GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_;
+    std::string categoryName_;
     std::string folderPath_;
     PlayState playState_ = PlayState::STOPPED;
     bool showControls_   = true;
@@ -60,6 +62,7 @@ public:
     //*---------------------------- getter Methods ----------------------------*//
 
     const std::string& GetGroupName() const { return groupName_; }
+    const std::string& GetCategoryName() const { return categoryName_; }
     PlayState GetPlayState() const { return playState_; }
 };
 
