@@ -16,10 +16,11 @@ public:
     ~DissolveData() = default;
 
     /// <summary>
-    /// 初期化
+    /// カテゴリー対応初期化
     /// </summary>
-    /// <param name="name">ディゾルブ名</param>
-    void Init(const std::string& name) override;
+    /// <param name="dissolveName">ディゾルブ名</param>
+    /// <param name="categoryName">カテゴリー名</param>
+    void Init(const std::string& dissolveName, const std::string& categoryName) override;
 
     /// <summary>
     /// 更新
@@ -61,17 +62,16 @@ private:
     float easedThreshold_ = 1.0f;
 
     // テクスチャ管理
-    std::string textureFilePath_ = "Resources/EngineTexture/Noise";
+    const std::string baseFolderPath_ = "DissolveEditor/";
+    std::string textureFilePath_      = "Resources/EngineTexture/Noise";
     std::vector<std::string> noiseTextureFiles_;
     std::string currentTexturePath_;
 
 public:
     // getter
-
     const std::string& GetCurrentTexturePath() const { return currentTexturePath_; }
     float GetCurrentThreshold() const { return currentThreshold_; }
     bool IsDissolveEnabled() const { return currentEnable_; }
-  
 
     // setter
     void SetTextureIndex(int32_t index);

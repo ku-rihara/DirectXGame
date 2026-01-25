@@ -16,7 +16,7 @@ public:
 
     //*----------------------------- public Methods -----------------------------*//
 
-    void Init(const std::string& typeName, bool isUseCategory = false) override;
+    void Init(const std::string& typeName) override;
     void Update(float speedRate = 1.0f) override;
     void EditorUpdate() override;
     void PlaySelectedAnimation() override;
@@ -26,15 +26,13 @@ protected:
 
     std::unique_ptr<GPUParticleData> CreateEffectData() override;
     void RenderSpecificUI() override;
-    std::string GetFolderPath() const override;
+    std::string GetFolderName() const override;
 
-    std::string GetCategoryFolderName() const override { return particleFolderName_; }
-    std::string GetDataFolderName() const override { return dateFolderName_; }
 
 private:
     //*---------------------------- private Variant ----------------------------*//
     const std::string particleFolderName_ = "GPUParticle/";
-    const std::string dateFolderName_     = "Dates/";
+   
 };
 
 }; // KetaEngine

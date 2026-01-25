@@ -37,7 +37,7 @@ protected:
 
 private:
     //*---------------------------- private Variant ----------------------------*//
-    std::string currentCategoryName_;
+    
     bool isInitialized_          = false;
     bool playRequestedThisFrame_ = false;
 

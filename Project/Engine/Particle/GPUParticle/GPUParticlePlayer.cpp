@@ -14,7 +14,7 @@ void GPUParticlePlayer::InitEffect(const std::string& categoryName, const std::s
 
     auto* particleData = dynamic_cast<GPUParticleData*>(effectData_.get());
     if (particleData) {
-        particleData->InitWithCategory(particleName, categoryName);
+        particleData->Init(particleName, categoryName);
         particleData->LoadData();
 
         currentCategoryName_ = categoryName;

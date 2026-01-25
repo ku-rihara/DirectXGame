@@ -6,14 +6,15 @@ using namespace KetaEngine;
 #include <imgui.h>
 #include <iostream>
 
-void CameraKeyFrame::Init(const std::string& groupName, int32_t keyNumber) {
+void CameraKeyFrame::Init(const std::string& groupName, const std::string& categoryName, int32_t keyNumber) {
     // グローバルパラメータ
-    globalParameter_         = GlobalParameter::GetInstance();
-    currenTSequenceElementIndex     = keyNumber;
-    std::string newGroupName = groupName + std::to_string(currenTSequenceElementIndex);
-    groupName_               = newGroupName;
+    globalParameter_            = GlobalParameter::GetInstance();
+    currenTSequenceElementIndex = keyNumber;
+    categoryName_               = categoryName;
+    std::string newGroupName    = groupName + std::to_string(currenTSequenceElementIndex);
+    groupName_                  = newGroupName;
 
-    folderPath_ += groupName;
+    folderPath_ = "CameraAnimation/" + categoryName_ + "/KeyFrames/" + groupName;
 
     if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録
@@ -38,7 +39,6 @@ void CameraKeyFrame::Reset() {
 }
 
 void CameraKeyFrame::LoadData() {
-
     // パラメータファイルから読み込み
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
@@ -76,8 +76,7 @@ void CameraKeyFrame::RegisterParams() {
     globalParameter_->Regist(groupName_, "positionEaseType", &positionEaseType_);
     globalParameter_->Regist(groupName_, "rotationEaseType", &rotationEaseType_);
     globalParameter_->Regist(groupName_, "fovEaseType", &fovEaseType_);
-    timeModeSelector_.RegisterParam(groupName_,globalParameter_);
- 
+    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
 }
 
 void CameraKeyFrame::GetParams() {
@@ -111,7 +110,6 @@ void CameraKeyFrame::AdjustParam() {
     Vector3 rotationDegrees = ToDegree(keyFrameParam_.rotation);
 
     if (ImGui::DragFloat3("Rotation (Degrees)", &rotationDegrees.x, 1.0f)) {
-
         keyFrameParam_.rotation = ToRadian(rotationDegrees);
     }
 
@@ -158,9 +156,7 @@ void CameraKeyFrame::AdaptValueSetting() {
     fovEase_.SetAdaptValue(&currenTSequenceElementParam_.fov);
 }
 
-
 bool CameraKeyFrame::IsFinished() const {
-
     return positionEase_.IsFinished() && rotationEase_.IsFinished() && fovEase_.IsFinished();
 }
 

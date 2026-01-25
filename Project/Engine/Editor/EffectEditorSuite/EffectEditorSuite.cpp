@@ -27,12 +27,12 @@ void EffectEditorSuite::Init() {
     timeScaleEditor_        = std::make_unique<TimeScaleEditor>();
 
     // 初期化
-    objEaseAnimationEditor_->Init("ObjEaseAnimation", true);
+    objEaseAnimationEditor_->Init("ObjEaseAnimation");
     cameraEditor_->Init("CameraAnimation");
     shakeEditor_->Init("Shake");
     railEditor_->Init("Rail");
-    gpuParticleEditor_->Init("GPUParticle", true);
-    particleEditor_->Init("Particle", true);
+    gpuParticleEditor_->Init("GPUParticle");
+    particleEditor_->Init("Particle");
     dissolveEditor_->Init("Dissolve");
     timeScaleEditor_->Init("TimeScale");
 }

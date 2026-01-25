@@ -44,7 +44,7 @@ private:
     void ApplyParentParametersToData(ParticleData* particleData);
 
 private:
-    std::string currentCategoryName_;
+    
     std::string currentParticleName_;
     bool isInitialized_          = false;
     bool wasPlayCalledThisFrame_ = false;

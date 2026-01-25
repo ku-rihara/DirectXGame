@@ -15,7 +15,7 @@ public:
     ~RailControlPoint() = default;
 
     // 初期化
-    void Init(const std::string& railName, int32_t keyNumber);
+    void Init(const std::string& railName, const std::string& categoryName, int32_t keyNumber);
 
     void AdjustParam(); //< パラメータ調整
     void RegisterParams(); //< パラメータバインド
@@ -30,7 +30,8 @@ private:
 private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    std::string folderPath_             = "RailEditor/ControlPoints/";
+    std::string categoryName_;
+    std::string folderPath_;
     int32_t currenTSequenceElementIndex = -1;
 
     Vector3 position_ = {0.0f, 0.0f, 0.0f};

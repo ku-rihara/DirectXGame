@@ -16,9 +16,9 @@ void BaseEffectData::Pause() {
     }
 }
 
-void BaseEffectData::InitWithCategory(const std::string& name, const std::string& categoryName) {
-    name;
-    categoryName;
+void BaseEffectData::Init(const std::string& name, const std::string& categoryName) {
+    groupName_    = name;
+    categoryName_ = categoryName;
 }
 
 bool BaseEffectData::IsPlaying() const {
@@ -30,7 +30,7 @@ bool BaseEffectData::IsFinished() const {
 }
 
 bool BaseEffectData::IsReturning() const {
-  return  playState_ == PlayState::RETURNING;
+    return playState_ == PlayState::RETURNING;
 }
 
 void BaseEffectData::LoadData() {

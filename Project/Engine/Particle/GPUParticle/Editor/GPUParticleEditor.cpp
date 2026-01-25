@@ -4,8 +4,8 @@ using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 
-void GPUParticleEditor::Init(const std::string& typeName, bool isUseCategory) {
-    BaseEffectEditor::Init(typeName, isUseCategory);
+void GPUParticleEditor::Init(const std::string& typeName) {
+    BaseEffectEditor::Init(typeName);
 }
 
 void GPUParticleEditor::Update(float speedRate) {
@@ -22,7 +22,7 @@ void GPUParticleEditor::RenderSpecificUI() {
     BaseEffectEditor::RenderPlayBack();
 }
 
-std::string GPUParticleEditor::GetFolderPath() const {
+std::string GPUParticleEditor::GetFolderName() const {
     return particleFolderName_;
 }
 

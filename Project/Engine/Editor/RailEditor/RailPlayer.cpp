@@ -24,15 +24,22 @@ void RailPlayer::UpdateWithDirection(float speedRate, const RailData::PositionMo
     }
 }
 
-void RailPlayer::Play(const std::string& railName) {
-    currentEffectName_ = railName;
+void RailPlayer::Play(const std::string& railName, const std::string& categoryName) {
+    if (effectData_) {
+        effectData_->Pause();
+    }
 
     effectData_.reset();
     effectData_ = CreateEffectData();
 
-    effectData_->Init(railName);
-    effectData_->LoadData();
-    effectData_->Play();
+    currentCategoryName_ = categoryName;
+    currentEffectName_   = railName;
+
+    if (RailData* railData = dynamic_cast<RailData*>(effectData_.get())) {
+        railData->Init(railName, categoryName);
+        railData->LoadData();
+        railData->Play();
+    }
 }
 
 void RailPlayer::SetParent(WorldTransform* parent) {
