@@ -1,0 +1,14 @@
+{
+    "UpperAtk": {
+        "autoReturnToInitial": true,
+        "lookAtDistance": 10.0,
+        "playbackSpeed": 1.0,
+        "resetFovEaseType": 9,
+        "resetPosEaseType": 9,
+        "resetRotateEaseType": 9,
+        "resetTimePoint": 0.44999998807907104,
+        "returnDelayTime": 0.3100000023841858,
+        "timeMode": 1,
+        "useLookAt": false
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "UpperAtk0": {
+        "fov": 51.099998474121094,
+        "fovEaseType": 22,
+        "position": [
+            0.0,
+            -13.300000190734863,
+            10.699999809265137
+        ],
+        "positionEaseType": 22,
+        "rotation": [
+            -0.22689279913902283,
+            0.0,
+            0.0
+        ],
+        "rotationEaseType": 22,
+        "timeMode": 0,
+        "timePoint": 0.5099999904632568
+    }
+}

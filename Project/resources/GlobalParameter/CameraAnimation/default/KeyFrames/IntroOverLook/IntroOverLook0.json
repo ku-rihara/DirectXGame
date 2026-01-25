@@ -1,0 +1,20 @@
+{
+    "IntroOverLook0": {
+        "fov": 66.58999633789063,
+        "fovEaseType": 0,
+        "position": [
+            -33.0,
+            35.70000076293945,
+            -290.20001220703125
+        ],
+        "positionEaseType": 0,
+        "rotation": [
+            0.0872664675116539,
+            0.3839724659919739,
+            0.0
+        ],
+        "rotationEaseType": 0,
+        "timeMode": 1,
+        "timePoint": 0.0
+    }
+}

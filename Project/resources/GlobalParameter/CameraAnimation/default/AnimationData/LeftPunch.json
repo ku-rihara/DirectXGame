@@ -1,0 +1,11 @@
+{
+    "LeftPunch": {
+        "autoReturnToInitial": true,
+        "playbackSpeed": 1.0,
+        "resetFovEaseType": 1,
+        "resetPosEaseType": 1,
+        "resetRotateEaseType": 1,
+        "resetTimePoint": 0.10000000149011612,
+        "timeMode": 1
+    }
+}

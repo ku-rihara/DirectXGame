@@ -1,0 +1,20 @@
+{
+    "PlayerRush0": {
+        "fov": 80.01000213623047,
+        "fovEaseType": 6,
+        "position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "positionEaseType": 6,
+        "rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "rotationEaseType": 6,
+        "timeMode": 1,
+        "timePoint": 0.2199999988079071
+    }
+}
