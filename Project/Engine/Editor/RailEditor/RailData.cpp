@@ -1,21 +1,22 @@
 #include "RailData.h"
 
 using namespace KetaEngine;
-#include "Frame/Frame.h"
 #include "3D/Line3D/Line3D.h"
+#include "Frame/Frame.h"
 #include "MathFunction.h"
 #include <algorithm>
 #include <imgui.h>
 
-void RailData::Init(const std::string& railName) {
-    BaseSequenceEffectData::Init(railName);
+void RailData::Init(const std::string& railName, const std::string& categoryName) {
+    BaseSequenceEffectData::Init(railName, categoryName);
 
-    folderPath_ = dateFolderPath_;
+    groupName_  = railName;
+    folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
 
     rail_ = std::make_unique<Rail>();
     rail_->Init(5);
 
-    if (!globalParameter_->HasRegisters(railName)) {
+    if (!globalParameter_->HasRegisters(groupName_)) {
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
@@ -84,13 +85,12 @@ void RailData::UpdateWithDirection(float speedRate, const PositionMode& mode, co
 
     currentPosition_ = startPosition_ + rail_->GetPositionOnRail(railMoveParam_.adaptTime);
 
-     if (railMoveParam_.isLookAtDirection && parentTransform_) {
+    if (railMoveParam_.isLookAtDirection && parentTransform_) {
         Vector3 moveDirection = currentPosition_ - previousPos;
         if (moveDirection.Length() > 0.001f) {
             parentTransform_->ApplyLookAtDirection(moveDirection);
         }
     }
-
 
     CheckAndHandleFinish();
 }
@@ -119,7 +119,6 @@ void RailData::StartReturn() {
     railMoveParam_.timeEase.Reset();
 
     if (railMoveParam_.returnMode == ReturnMode::DIRECT_RETURN) {
-
         directReturnParam_.easeAdaptPos = Vector3::ZeroVector();
         directReturnParam_.ease.SetAdaptValue(&directReturnParam_.easeAdaptPos);
 
@@ -134,7 +133,6 @@ void RailData::StartReturn() {
 
         currentPosition_ = endPosition;
     } else if (railMoveParam_.returnMode == ReturnMode::REVERSE_RAIL) {
-
         railMoveParam_.adaptTime = 1.0f;
         railMoveParam_.timeEase.SetAdaptValue(&railMoveParam_.adaptTime);
 
@@ -258,6 +256,7 @@ void RailData::GetParams() {
     railMoveParam_.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, "isLookAtDirection");
     timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
+
 void RailData::InitParams() {
     playState_                 = PlayState::STOPPED;
     currentPosition_           = Vector3::ZeroVector();
@@ -280,18 +279,18 @@ void RailData::UpdateKeyFrameProgression() {
     // Railはキーフレーム進行を使用しない
 }
 
-void RailData::AdvanceToNexTSequenceElement() {
+void RailData::AdvanceToNextSequenceElement() {
     // Railはキーフレーム進行を使用しない
 }
 
 std::unique_ptr<RailControlPoint> RailData::CreateKeyFrame(int32_t index) {
     auto keyFrame = std::make_unique<RailControlPoint>();
-    keyFrame->Init(groupName_, index);
+    keyFrame->Init(groupName_, categoryName_, index);
     return keyFrame;
 }
 
-std::string RailData::GeTSequenceElementFolderPath() const {
-    return keyFramePath_ + groupName_ + "/";
+std::string RailData::GetSequenceElementFolderPath() const {
+    return baseFolderPath_ + categoryName_ + "/" + "ControlPoints/" + groupName_ + "/";
 }
 
 void RailData::LoadSequenceElements() {
@@ -319,6 +318,8 @@ void RailData::AdjustParam() {
     if (showControls_) {
         ImGui::SeparatorText(("Rail Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());
+
+        ImGui::Text("Category: %s", categoryName_.c_str());
 
         const char* stateText = "";
         switch (playState_) {
@@ -376,7 +377,7 @@ void RailData::AdjustParam() {
         }
 
         ImGui::Separator();
-      
+
         if (showControlPointLines_) {
             ImGui::SeparatorText("Control Points");
 
@@ -443,11 +444,12 @@ void RailData::SetControlPointLines(Line3D* line3d, const Vector4& color) {
         }
     }
 }
+
 Vector3 RailData::GetMovementDirection() const {
     Vector3 direction = currentPosition_ - railMoveParam_.previousPosition;
 
     if (direction.Length() < 0.001f) {
-        return Vector3::ToForward(); 
+        return Vector3::ToForward();
     }
 
     return direction.Normalize();

@@ -50,7 +50,7 @@ void ParticlePlayer::Play(const std::string& categoryName, const std::string& pa
 
         auto* particleData = dynamic_cast<ParticleData*>(effectData_.get());
         if (particleData) {
-            particleData->InitWithCategory(particleName, categoryName);
+            particleData->Init(particleName, categoryName);
 
             // ロード、ペアレント設定、再生
             particleData->LoadData();

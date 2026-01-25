@@ -4,8 +4,8 @@ using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 
-void ParticleEditor::Init(const std::string& typeName, bool isUseCategory) {
-    BaseEffectEditor::Init(typeName, isUseCategory);
+void ParticleEditor::Init(const std::string& typeName) {
+    BaseEffectEditor::Init(typeName);
 
     // 初期化後、全てのパーティクルグループを生成
     InitializeAllParticleGroups();
@@ -162,7 +162,7 @@ void ParticleEditor::StopAllSections(ParticleData* particleData) {
     particleData->Pause();
 }
 
-std::string ParticleEditor::GetFolderPath() const {
+std::string ParticleEditor::GetFolderName() const {
     return particleFolderName_;
 }
 

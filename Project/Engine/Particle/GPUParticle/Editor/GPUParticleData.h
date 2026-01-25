@@ -23,7 +23,7 @@ public:
     void Play() override;
 
     // カテゴリー対応初期化
-    void InitWithCategory(const std::string& name, const std::string& categoryName) override;
+    void Init(const std::string& name, const std::string& categoryName) override;
 
     // 編集用メソッド
     void AdjustParam();
@@ -41,9 +41,9 @@ protected:
 
     // BaseSequenceEffectDataからのオーバーライド
     void UpdateKeyFrameProgression() override;
-    void AdvanceToNexTSequenceElement() override;
+    void AdvanceToNextSequenceElement() override;
     std::unique_ptr<GPUParticleSection> CreateKeyFrame(int32_t index) override;
-    std::string GeTSequenceElementFolderPath() const override;
+    std::string GetSequenceElementFolderPath() const override;
 
 private:
     //*---------------------------- private Methods ----------------------------*//

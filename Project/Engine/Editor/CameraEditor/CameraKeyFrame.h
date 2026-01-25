@@ -10,6 +10,7 @@
 
 /// <summary>
 /// カメラキーフレームクラス
+/// カテゴリーシステム対応
 /// </summary>
 namespace KetaEngine {
 
@@ -26,7 +27,7 @@ public:
     ~CameraKeyFrame() = default;
 
     // 初期化、更新
-    void Init(const std::string& groupName, int32_t keyNumber);
+    void Init(const std::string& groupName, const std::string& categoryName, int32_t keyNumber);
     void Update(float speedRate);
 
     // パラメータ調整、登録、適応
@@ -40,6 +41,7 @@ public:
 
     void LoadData(); //< データ読み込み
     void SaveData(); //< データ保存
+
 private:
     void GetParams();
 
@@ -47,7 +49,8 @@ private:
     // GlobalParam
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    std::string folderPath_ = "CameraAnimation/KeyFrames/";
+    std::string categoryName_;
+    std::string folderPath_;
 
     int32_t currenTSequenceElementIndex = -1;
 

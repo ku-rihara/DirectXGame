@@ -9,12 +9,13 @@ using namespace KetaEngine;
 #include <imgui.h>
 #include <numbers>
 
-void CameraAnimationData::Init(const std::string& animationName) {
-    BaseSequenceEffectData::Init(animationName);
+void CameraAnimationData::Init(const std::string& animationName, const std::string& categoryName) {
+    BaseSequenceEffectData::Init(animationName, categoryName);
 
-    folderPath_ = dateFolderPath_;
+    groupName_  = animationName;
+    folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
 
-    if (!globalParameter_->HasRegisters(animationName)) {
+    if (!globalParameter_->HasRegisters(groupName_)) {
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
@@ -126,12 +127,12 @@ void CameraAnimationData::UpdateKeyFrameProgression() {
                 playState_ = PlayState::STOPPED;
             }
         } else {
-            AdvanceToNexTSequenceElement();
+            AdvanceToNextSequenceElement();
         }
     }
 }
 
-void CameraAnimationData::AdvanceToNexTSequenceElement() {
+void CameraAnimationData::AdvanceToNextSequenceElement() {
     if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size()) - 1) {
         activeKeyFrameIndex_++;
 
@@ -197,7 +198,6 @@ void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) 
 }
 
 void CameraAnimationData::Reset() {
-  
     for (auto& keyframe : sectionElements_) {
         keyframe->Reset();
     }
@@ -267,16 +267,15 @@ void CameraAnimationData::StartReturnToInitial() {
 
 std::unique_ptr<CameraKeyFrame> CameraAnimationData::CreateKeyFrame(int32_t index) {
     auto keyFrame = std::make_unique<CameraKeyFrame>();
-    keyFrame->Init(groupName_, index);
+    keyFrame->Init(groupName_, categoryName_, index);
     return keyFrame;
 }
 
-std::string CameraAnimationData::GeTSequenceElementFolderPath() const {
-    return keyFrameFolderPath_ + groupName_ + "/";
+std::string CameraAnimationData::GetSequenceElementFolderPath() const {
+    return baseFolderPath_ + categoryName_ + "/" + "KeyFrames/" + groupName_ + "/";
 }
 
 void CameraAnimationData::RegisterParams() {
-
     // return Param
     globalParameter_->Regist(groupName_, "autoReturnToInitial", &returnParam_.autoReturnToInitial);
     globalParameter_->Regist(groupName_, "resetPosEaseType", &resetParam_.posEaseType);
@@ -287,7 +286,7 @@ void CameraAnimationData::RegisterParams() {
 
     // frags
     globalParameter_->Regist(groupName_, "useLookAt", &lookAtParam_.useLookAt);
-   
+
     timeModeSelector_.RegisterParam(groupName_, globalParameter_);
 }
 
@@ -302,7 +301,7 @@ void CameraAnimationData::GetParams() {
 
     // frags
     lookAtParam_.useLookAt = globalParameter_->GetValue<bool>(groupName_, "useLookAt");
-  
+
     timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
 
@@ -312,6 +311,7 @@ void CameraAnimationData::AdjustParam() {
         ImGui::SeparatorText(("Camera Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());
 
+        ImGui::Text("Category: %s", categoryName_.c_str());
         ImGui::Checkbox("Auto Return to Initial", &returnParam_.autoReturnToInitial);
 
         // 注視点モード設定
@@ -409,6 +409,7 @@ void CameraAnimationData::SetLookAtTarget(const WorldTransform* target) {
 void CameraAnimationData::LoadSequenceElements() {
     BaseSequenceEffectData::LoadSequenceElements();
 }
+
 void CameraAnimationData::SaveSequenceElements() {
     BaseSequenceEffectData::SaveSequenceElements();
 }

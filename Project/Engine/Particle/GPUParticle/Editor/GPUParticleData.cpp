@@ -9,8 +9,8 @@ using namespace KetaEngine;
 // imGui
 #include <imgui.h>
 
-void GPUParticleData::InitWithCategory(const std::string& name, const std::string& categoryName) {
-    BaseSequenceEffectData::InitWithCategory(name, categoryName);
+void GPUParticleData::Init(const std::string& name, const std::string& categoryName) {
+    BaseSequenceEffectData::Init(name, categoryName);
 
     groupName_  = name;
     folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
@@ -86,12 +86,12 @@ void GPUParticleData::UpdateKeyFrameProgression() {
             isAllKeyFramesFinished_ = true;
             playState_              = PlayState::STOPPED;
         } else {
-            AdvanceToNexTSequenceElement();
+            AdvanceToNextSequenceElement();
         }
     }
 }
 
-void GPUParticleData::AdvanceToNexTSequenceElement() {
+void GPUParticleData::AdvanceToNextSequenceElement() {
     if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size()) - 1) {
         activeKeyFrameIndex_++;
     }
@@ -153,7 +153,7 @@ std::unique_ptr<GPUParticleSection> GPUParticleData::CreateKeyFrame(int32_t inde
     return section;
 }
 
-std::string GPUParticleData::GeTSequenceElementFolderPath() const {
+std::string GPUParticleData::GetSequenceElementFolderPath() const {
     return baseFolderPath_ + categoryName_ + "/" + "Sections/" + groupName_ + "/";
 }
 

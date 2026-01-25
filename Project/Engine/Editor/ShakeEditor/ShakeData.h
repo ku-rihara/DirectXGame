@@ -37,7 +37,7 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     // BaseEffectDataからのオーバーライド
-    void Init(const std::string& shakeName) override;
+    void Init(const std::string& shakeName, const std::string& categoryName) override;
     void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
@@ -62,6 +62,8 @@ private:
 
 private:
     //*---------------------------- private Variant ----------------------------*//
+
+    const std::string baseFolderPath_ = "ShakeEditor/";
 
     float shakeLength_ = 1.0f;
     float maxTime_     = 1.0f;

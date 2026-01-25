@@ -12,7 +12,7 @@ public:
     ParticleEditor()  = default;
     ~ParticleEditor() = default;
 
-    void Init(const std::string& typeName, bool isUseCategory = false) override;
+    void Init(const std::string& typeName) override;
     void Update(float speedRate = 1.0f) override;
     void EditorUpdate() override;
     void PlaySelectedAnimation() override;
@@ -49,13 +49,10 @@ private:
 
 private:
     const std::string particleFolderName_ = "Particle/";
-    const std::string dateFolderName_     = "Dates/";
-
+  
 public:
-    std::string GetFolderPath() const override;
+    std::string GetFolderName() const override;
 
-    std::string GetCategoryFolderName() const override { return particleFolderName_; }
-    std::string GetDataFolderName() const override { return dateFolderName_; }
 };
 
 }

@@ -13,13 +13,14 @@ void TimeScalePlayer::Update(float deltaTime) {
     }
 }
 
-void TimeScalePlayer::Play(const std::string& timeScaleName) {
-    currentEffectName_ = timeScaleName;
+void TimeScalePlayer::Play(const std::string& timeScaleName, const std::string& categoryName) {
+    currentEffectName_   = timeScaleName;
+    currentCategoryName_ = categoryName;
 
     effectData_.reset();
     effectData_ = CreateEffectData();
 
-    effectData_->Init(timeScaleName);
+    effectData_->Init(timeScaleName, categoryName);
     effectData_->LoadData();
     effectData_->Play();
 }

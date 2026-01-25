@@ -4,8 +4,8 @@ using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 
-void ParticleData::InitWithCategory(const std::string& name, const std::string& categoryName) {
-    BaseSequenceEffectData::InitWithCategory(name, categoryName);
+void ParticleData::Init(const std::string& name, const std::string& categoryName) {
+    BaseSequenceEffectData::Init(name, categoryName);
 
     groupName_  = name;
     folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
@@ -61,7 +61,7 @@ void ParticleData::UpdateKeyFrameProgression() {
     }
 }
 
-void ParticleData::AdvanceToNexTSequenceElement() {
+void ParticleData::AdvanceToNextSequenceElement() {
     if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size()) - 1) {
         activeKeyFrameIndex_++;
     }
@@ -190,7 +190,7 @@ std::unique_ptr<ParticleSection> ParticleData::CreateKeyFrame(int32_t index) {
     return section;
 }
 
-std::string ParticleData::GeTSequenceElementFolderPath() const {
+std::string ParticleData::GetSequenceElementFolderPath() const {
     return baseFolderPath_ + categoryName_ + "/" + "Sections/" + groupName_ + "/";
 }
 

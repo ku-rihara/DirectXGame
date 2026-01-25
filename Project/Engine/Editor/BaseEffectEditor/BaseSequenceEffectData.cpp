@@ -5,21 +5,15 @@ using namespace KetaEngine;
 #include "Editor/CameraEditor/CameraKeyFrame.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationSection.h"
 #include "Editor/RailEditor/RailControlPoint.h"
-#include"Particle/GPUParticle/Editor/GPUParticleSection.h"
-#include"Particle/CPUParticle/Editor/ParticleSection.h"
+// particle
+#include "Particle/CPUParticle/Editor/ParticleSection.h"
+#include "Particle/GPUParticle/Editor/GPUParticleSection.h"
 // std
 #include <algorithm>
 #include <filesystem>
 
 template <typename TSequenceElement>
-void BaseSequenceEffectData<TSequenceElement>::Init(const std::string& name) {
-    groupName_       = name;
-    globalParameter_ = GlobalParameter::GetInstance();
-    categoryName_    = "";
-}
-
-template <typename TSequenceElement>
-void BaseSequenceEffectData<TSequenceElement>::InitWithCategory(const std::string& name, const std::string& categoryName) {
+void BaseSequenceEffectData<TSequenceElement>::Init(const std::string& name, const std::string& categoryName) {
     groupName_       = name;
     categoryName_    = categoryName;
     globalParameter_ = GlobalParameter::GetInstance();
@@ -96,7 +90,7 @@ void BaseSequenceEffectData<TSequenceElement>::UpdateKeyFrameIndices() {
 
 template <typename TSequenceElement>
 void BaseSequenceEffectData<TSequenceElement>::LoadSequenceElements() {
-    std::string folderPath = globalParameter_->GetDirectoryPath() + GeTSequenceElementFolderPath();
+    std::string folderPath = globalParameter_->GetDirectoryPath() + GetSequenceElementFolderPath();
 
     if (!std::filesystem::exists(folderPath) || !std::filesystem::is_directory(folderPath)) {
         return;

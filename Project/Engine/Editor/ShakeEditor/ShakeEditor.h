@@ -7,6 +7,7 @@
 
 /// <summary>
 /// シェイクエディター
+/// カテゴリーシステムを使用
 /// </summary>
 namespace KetaEngine {
 
@@ -17,32 +18,37 @@ public:
 
     //*----------------------------- public Methods -----------------------------*//
 
-    // 初期化、更新
-    void Init(const std::string& editorName, bool isUseCategory = false) override;
+    // BaseEffectEditorからのオーバーライド
+    void Init(const std::string& typeName) override;
     void Update(float speedRate = 1.0f) override;
     void EditorUpdate() override;
+
+protected:
+    //*---------------------------- protected Methods ----------------------------*//
+
+    std::unique_ptr<ShakeData> CreateEffectData() override;
+    void RenderSpecificUI() override;
+    void PlaySelectedAnimation() override;
 
 private:
     //*---------------------------- private Methods ----------------------------*//
 
-    // 純粋仮想関数の実装
-    std::unique_ptr<ShakeData> CreateEffectData() override;
-    void RenderSpecificUI() override;
-    std::string GetFolderPath() const override;
-    void PlaySelectedAnimation() override;
+    // プレビュー更新
+    void UpdatePreviewObject(float speedRate);
 
 private:
     //*---------------------------- private Variant ----------------------------*//
 
     std::unique_ptr<Object3d> preViewObj_;
     const std::string folderName_ = "ShakeEditor/";
-    Vector3 basePos_              = Vector3::ZeroVector();
-    bool isPreViewDraw_           = false;
+
+    // プレビュー設定
+    bool showPreview_ = false;
+    Vector3 basePos_  = Vector3::ZeroVector();
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
-
-    int GetShakeCount() const { return static_cast<int>(effects_.size()); }
+    std::string GetFolderName() const override;
 };
 
 }; // KetaEngine
