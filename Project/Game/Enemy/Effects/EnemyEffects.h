@@ -1,7 +1,7 @@
 #pragma once
 
 #include "3d/ViewProjection.h"
-#include "Editor/ParticleEditor/ParticlePlayer.h"
+#include "Particle/CPUParticle/ParticlePlayer.h"
 #include <memory>
 #include <string>
 

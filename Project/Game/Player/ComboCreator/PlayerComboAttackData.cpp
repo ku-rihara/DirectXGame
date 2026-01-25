@@ -1,5 +1,6 @@
 #include "PlayerComboAttackData.h"
-#include "Editor/EasingCreator/EasingParameterData.h"
+// Easing
+#include "Easing/EasingCreator/EasingParameterData.h"
 // input
 #include "input/Input.h"
 #include "input/InputData.h"

@@ -278,6 +278,8 @@
     <ClCompile Include="Game\Scene\GameSceneState\GameScenePose.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneRoot.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
+    <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneController.cpp" />
+    <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneTransition.cpp" />
     <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Game\SkyDome\SkyDome.cpp" />
     <ClCompile Include="Game\UI\HowToOperate.cpp" />
@@ -579,6 +581,8 @@
     <ClInclude Include="Game\Scene\GameSceneState\GameScenePose.h" />
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneRoot.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
+    <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneController.h" />
+    <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneTransition.h" />
     <ClInclude Include="Game\SkyBox\SkyBox.h" />
     <ClInclude Include="Game\SkyDome\SkyDome.h" />
     <ClInclude Include="Game\UI\HowToOperate.h" />
@@ -828,21 +832,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>
-			(SolutionDir)DirectXTex;(SolutionDir)DirectXTex;
-			(SolutionDir)DirectXTex;(SolutionDir)externals\Imgui;(SolutionDir)externals\nlohmann;(SolutionDir)externals\nlohmann;
-			(SolutionDir)externals\nlohmann;(IncludePath)
-		</IncludePath>
+    <IncludePath>$(SolutionDir)DirectXTex;$(SolutionDir)externals\Imgui;$(SolutionDir)externals\nlohmann;(IncludePath)</IncludePath>
     <IntDir>$(SolutionDir)..\generated\obj$(ProjectName)$(Configuration)</IntDir>
     <OutDir>$(SolutionDir)..\generated\outputs$(Configuration)</OutDir>
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>
-			(SolutionDir)DirectXTex;(SolutionDir)DirectXTex;
-			(SolutionDir)DirectXTex;(SolutionDir)externals\Imgui;(SolutionDir)externals\nlohmann;(SolutionDir)externals\nlohmann;
-			(SolutionDir)externals\nlohmann;(IncludePath)
-		</IncludePath>
+    <IncludePath>$(SolutionDir)DirectXTex;$(SolutionDir)externals\Imgui;$(SolutionDir)externals\nlohmann;(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\generated\outputs$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)..\generated\obj$(ProjectName)$(Configuration)</IntDir>
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>

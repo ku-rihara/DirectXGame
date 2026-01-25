@@ -1,18 +1,28 @@
 #pragma once
-#include "3d/ViewProjection.h"
+// 3D
+#include "3D/ViewProjection.h"
+// Base
 #include "BaseObject/BaseObject.h"
+// Collider
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/PlayerCollisionInfo.h"
+// Behavior
 #include "ComboAttackBehavior/BaseComboAttackBehavior.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
-#include "Editor/ParticleEditor/ParticleEmitter.h"
-#include "Effect/PlayerEffects.h"
-#include "JumpAttackUI/JumpAttackUI.h"
-#include "Parameter/PlayerParameter.h"
-#include "Parts/PlayerHandLeft.h"
-#include "Parts/PlayerHandRight.h"
 #include "PlayerBehavior/BasePlayerBehavior.h"
 #include "TitleBehavior/BaseTitleBehavior.h"
+// Editor
+#include "Editor/ParameterEditor/GlobalParameter.h"
+// Particle,Effect
+#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
+#include "Effect/PlayerEffects.h"
+// UI
+#include "JumpAttackUI/JumpAttackUI.h"
+// Parameter
+#include "Parameter/PlayerParameter.h"
+// Parts
+#include "Parts/PlayerHandLeft.h"
+#include "Parts/PlayerHandRight.h"
+// std
 #include <memory>
 #include <string>
 
@@ -24,7 +34,7 @@ class AttackEffect;
 class PlayerComboAttackController;
 
 /// <summary>
-/// �v���C���[�N���X
+/// プレイヤークラス
 /// </summary>
 class Player : public BaseObject, public KetaEngine::AABBCollider {
 private:
@@ -37,74 +47,68 @@ public:
     Player()  = default;
     ~Player() = default;
 
-    // �������A�X�V
+    // 初期化、更新
     void Init() override;
     void Update() override;
 
-    void InitInGameScene(); //< �Q�[���V�[���ł̏�����
-    void TitleUpdate(); //< �^�C�g���X�V
-    void GameIntroUpdate(); //< �Q�[���C���g���X�V
+    void InitInGameScene(); //< ゲームシーンでの初期化
+    void TitleUpdate();     //< タイトル更新処理
+    void GameIntroUpdate(); //< イントロシーン更新
 
-    /// <summary>
-    /// �e�t���O�ݒ�
-    /// </summary>
-    /// <param name="isShadow">�e�̗L��/����</param>
+    // 影適応するかのフラグセット
     void SetShadowFrag(const bool& isShadow);
 
     /// <summary>
-    /// �ړ�
+    /// 移動
     /// </summary>
-    /// <param name="speed">�ړ����x</param>
+    /// <param name="speed">移動スピード</param>
     void Move(float speed);
 
-    bool CheckIsMoving(); //< �ړ�������
-    void MoveToLimit(); //< �ړ�����
-    Vector3 GetInputDirection(); //< ���͕����擾
-    void UpdateMatrix(); //< �s��X�V
+    bool CheckIsMoving();        //< 移動中かチェック
+    void MoveToLimit();          //< 移動範囲制限
+    Vector3 GetInputDirection(); //< 入力による方向決定
+    void UpdateMatrix();         //< 行列更新
 
     // reset
-    void ResetPositionY(); //< Y���W���Z�b�g
-    void ResetHeadScale(); //< ���X�P�[�����Z�b�g
+    void ResetPositionY(); //< Y座標リセット
+    void ResetHeadScale(); //< 頭のスケールリセット
 
     /// <summary>
-    /// �f�B�]���u�X�V
+    /// ディゾルブ処理更新
     /// </summary>
-    /// <param name="dissolve">�f�B�]���u�l</param>
+    /// <param name="dissolve">Dissolve</param>
     void DissolveUpdate(float dissolve);
 
     /// <summary>
-    /// �W�����v
+    /// ジャンプ
     /// </summary>
-    /// <param name="speed">���x</param>
-    /// <param name="fallSpeedLimit">�������x����</param>
-    /// <param name="gravity">�d��</param>
+    /// <param name="speed">ジャンプスピード</param>
+    /// <param name="fallSpeedLimit">落下速度上限</param>
+    /// <param name="gravity">重力</param>
     void Jump(float& speed, float fallSpeedLimit, float gravity);
 
     /// <summary>
-    /// ����
+    /// 落ちる
     /// </summary>
-    /// <param name="speed">���x</param>
-    /// <param name="fallSpeedLimit">�������x����</param>
-    /// <param name="gravity">�d��</param>
-    /// <param name="isJump">�W�����v����</param>
+    /// <param name="speed">落下速度</param>
+    /// <param name="fallSpeedLimit">落下速度上限</param>
+    /// <param name="gravity">重力</param>
+    /// <param name="isJump">ジャンプによる落下か</param>
     void Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump = false);
 
-    // �eBehavior�؂�ւ�����
+    // Behavior
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);
     void ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior);
     void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior> behavior);
 
-    /// <summary>
-    /// �Փˌp�����̏���
-    /// </summary>
-    /// <param name="other">�Փˑ���</param>
+    // 衝突コールバック
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
-    void ChangeCombBoRoot(); //< コンボルート変更
-    void FaceToTarget(); //< ターゲット方向を向く
-    void AdaptRotate(); //< 回転適用
-    bool CheckIsChargeMax() const; //< チャージ最大判定
-    void AdjustParam(); //< パラメータ調整
+    void ChangeCombBoRoot();                  //< コンボルート変更
+    void FaceToTarget();                      //< ターゲット方向を向く
+    void AdaptRotate();                       //< 回転適用
+    bool CheckIsChargeMax() const;            //< チャージ最大判定
+    void AdjustParam();                       //< パラメータ調整
     Vector3 GetCollisionPos() const override; //< 衝突位置取得
 
     void MainHeadAnimationStart(const std::string& name);

@@ -5,7 +5,7 @@
 #include "Editor/RailEditor/RailManager.h"
 
 #include "BaseObject/BaseObject.h"
-#include "Editor/ParticleEditor/ParticlePlayer.h"
+#include "Particle/CPUParticle/ParticlePlayer.h"
 #include <string>
 
 /// <summary>
