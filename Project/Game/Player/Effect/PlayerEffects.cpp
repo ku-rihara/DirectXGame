@@ -98,5 +98,5 @@ void PlayerEffects::FallEffectRenditionInit() {
 }
 
 void PlayerEffects::Emit(const std::string& name) {
-    particlePlayer_.Play("Player", name);
+    particlePlayer_.Play(name,"Player");
 }

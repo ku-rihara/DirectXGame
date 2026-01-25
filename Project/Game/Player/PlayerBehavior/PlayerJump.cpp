@@ -47,7 +47,7 @@ void PlayerJump::ChangeState(std::function<void()> newState) {
 void PlayerJump::StartState() {
     if (!skipJump_) {
         pOwner_->GetGameCamera()->PlayAnimation("PlayerJunmp",false);
-        pOwner_->GetObject3D()->transform_.PlayObjEaseAnimation("Player", "JumpRotation");
+        pOwner_->GetObject3D()->transform_.PlayObjEaseAnimation("JumpRotation", "Player");
     }
     ChangeState([this]() { JumpState(); });
 }

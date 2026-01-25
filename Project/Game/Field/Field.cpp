@@ -11,10 +11,10 @@ void Field::Init() {
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.35f;
 
     gpuParticlePlayer_.Init();
-    gpuParticlePlayer_.InitEffect("Field", "fire");
+    gpuParticlePlayer_.InitEffect("fire", "Field");
 }
 
 void Field::Update() {
-    gpuParticlePlayer_.Play("Field", "fire");
+    gpuParticlePlayer_.Play("fire", "Field");
     gpuParticlePlayer_.Update();
 }

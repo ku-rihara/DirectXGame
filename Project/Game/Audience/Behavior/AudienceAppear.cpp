@@ -42,7 +42,7 @@ void AudienceAppear::Init() {
 
 void AudienceAppear::Start() {
 
-    pOwner_->GetObjAnimation()->transform_.PlayObjEaseAnimation("Audience", "AudienceAppear");
+    pOwner_->GetObjAnimation()->transform_.PlayObjEaseAnimation("AudienceAppear", "Audience");
 
     currentPhase_ = [this]() {
         Playing();
