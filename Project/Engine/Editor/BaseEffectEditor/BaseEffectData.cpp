@@ -19,6 +19,7 @@ void BaseEffectData::Pause() {
 void BaseEffectData::Init(const std::string& name, const std::string& categoryName) {
     groupName_    = name;
     categoryName_ = categoryName;
+    globalParameter_ = GlobalParameter::GetInstance();
 }
 
 bool BaseEffectData::IsPlaying() const {

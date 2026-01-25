@@ -32,7 +32,7 @@ void ParticlePlayer::UpdatePlayState() {
     }
 }
 
-void ParticlePlayer::Play(const std::string& categoryName, const std::string& particleName) {
+void ParticlePlayer::Play(const std::string& particleName, const std::string& categoryName) {
     // このフレームでPlayが呼ばれたことを記録
     wasPlayCalledThisFrame_ = true;
 

@@ -20,9 +20,9 @@ public:
     void Init() override;
 
    
-    void InitEffect(const std::string& categoryName, const std::string& particleName);
+    void InitEffect(const std::string& particleName, const std::string& categoryName = "default");
     void Update(float speedRate = 1.0f) override;
-    void Play(const std::string& categoryName, const std::string& particleName) override;
+    void Play(const std::string& particleName, const std::string& categoryName = "default") override;
  
     void Reset();
     void Draw();

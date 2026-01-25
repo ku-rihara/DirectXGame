@@ -8,7 +8,7 @@ void GPUParticlePlayer::Init() {
     playRequestedThisFrame_ = false;
 }
 
-void GPUParticlePlayer::InitEffect(const std::string& categoryName, const std::string& particleName) {
+void GPUParticlePlayer::InitEffect(const std::string& particleName, const std::string& categoryName) {
     // エフェクトデータを作成してロード
     effectData_ = CreateEffectData();
 
@@ -47,7 +47,7 @@ void GPUParticlePlayer::Update(float speedRate) {
     effectData_->Update(speedRate);
 }
 
-void GPUParticlePlayer::Play(const std::string& categoryName, const std::string& particleName) {
+void GPUParticlePlayer::Play(const std::string& particleName, const std::string& categoryName) {
     // 今フレームにPlay()が呼ばれたことをマーク
     playRequestedThisFrame_ = true;
 
