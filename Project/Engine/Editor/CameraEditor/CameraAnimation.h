@@ -7,6 +7,7 @@
 
 /// <summary>
 /// カメラアニメーション制御クラス
+/// カテゴリーシステム対応
 /// </summary>
 namespace KetaEngine {
 
@@ -29,7 +30,7 @@ public:
     void Update(float speedRate = 1.0f) override;
 
     // 再生、リセット、初期値保存
-    void Play(const std::string& animationName) override;
+    void Play(const std::string& animationName, const std::string& categoryName = "default") override;
     void Reset() override;
 
     // 注視点ターゲット設定
@@ -55,12 +56,14 @@ private:
 
     bool isAdapt_ = true;
 
+    
+
 public:
     const Vector3& GetOffsetPosition() const { return currentOffsetPosition_; }
     const Vector3& GetOffsetRotation() const { return currentOffsetRotation_; }
     float GetOffsetFov() const { return currentOffsetFov_; }
+    const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
 
-   
     void SetAdapt(bool adapt) { isAdapt_ = adapt; }
     void SetViewProjection(ViewProjection* viewProjection);
 };

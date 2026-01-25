@@ -1,7 +1,7 @@
 #include "SpotLight.h"
 
 using namespace KetaEngine;
-#include "Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include <imgui.h>
 
 void SpotLight::Init(ID3D12Device* device, const std::string& groupName) {

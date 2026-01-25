@@ -20,7 +20,7 @@ public:
     // BaseEffectPlayerからのオーバーライド
     void Init() override;
     void Update(float speedRate = 1.0f) override;
-    void Play(const std::string& categoryName, const std::string& animationName) override;
+    void Play(const std::string& animationName, const std::string& categoryName = "default") override;
 
 protected:
     //*---------------------------- protected Methods ----------------------------*//
@@ -28,7 +28,7 @@ protected:
 
 private:
     //*---------------------------- private Variant ----------------------------*//
-    std::string currentCategoryName_;
+    
 
 public:
     //*----------------------------- getter Methods -----------------------------*//

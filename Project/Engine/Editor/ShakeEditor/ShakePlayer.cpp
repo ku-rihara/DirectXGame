@@ -20,13 +20,14 @@ void ShakePlayer::UpdateTotalShakeOffset() {
     }
 }
 
-void ShakePlayer::Play(const std::string& shakeName) {
+void ShakePlayer::Play(const std::string& shakeName, const std::string& categoryName) {
     currentEffectName_ = shakeName;
+    currentCategoryName_ = categoryName;
 
     effectData_.reset();
     effectData_ = CreateEffectData();
 
-    effectData_->Init(shakeName);
+    effectData_->Init(shakeName, categoryName);
     effectData_->LoadData();
     effectData_->Play();
 }

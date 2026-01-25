@@ -1,5 +1,5 @@
 #pragma once
-#include "3d/Object3D.h"
+#include "3d/Object3d/Object3d.h"
 #include "3d/ViewProjection.h"
 #include "CameraAnimationData.h"
 #include "Editor/BaseEffectEditor/BaseEffectEditor.h"
@@ -9,6 +9,7 @@
 
 /// <summary>
 /// カメラアニメーションエディタクラス
+/// カテゴリーシステム対応
 /// </summary>
 namespace KetaEngine {
 
@@ -18,7 +19,7 @@ public:
     ~CameraEditor() = default;
 
     // 初期化、更新
-    void Init(const std::string& animationName, bool isUseCategory = false) override;
+    void Init(const std::string& animationName) override;
     void Update(float speedRate = 1.0f) override;
     void EditorUpdate() override;
 
@@ -38,7 +39,7 @@ private:
     // 純粋仮想関数の実装
     std::unique_ptr<CameraAnimationData> CreateEffectData() override;
     void RenderSpecificUI() override;
-    std::string GetFolderPath() const override;
+    std::string GetFolderName() const override;
 
 private:
     ViewProjection* viewProjection_ = nullptr;
@@ -46,7 +47,7 @@ private:
     std::unique_ptr<Object3d> preViewCameraObj_ = nullptr;
     std::unique_ptr<Object3d> preViewFollowObj_ = nullptr;
 
-    const std::string folderName_ = "CameraAnimation/AnimationData/";
+    const std::string folderName_ = "CameraAnimation/";
 
     bool autoApplyToViewProjection_ = true;
     bool keyFramePreviewMode_       = false;

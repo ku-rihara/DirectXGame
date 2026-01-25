@@ -1,8 +1,12 @@
 #pragma once
 
-#include "3d/ViewProjection.h"
+// 3D
+#include "3D/ViewProjection.h"
+// DamageReaction
 #include "DamageReaction/EnemyDamageReactionController.h"
-#include "Editor/ParticleEditor/ParticleEmitter.h"
+// Particle
+#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
+//BaseEnemy
 #include "Types/BaseEnemy.h"
 
 /// std

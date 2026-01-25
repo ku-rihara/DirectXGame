@@ -3,17 +3,11 @@
 using namespace KetaEngine;
 
 // dx
-#include "Dx/DxReleaseChecker.h"
-// dx
-#include "Dx/DxReleaseChecker.h"
 #include "ShadowMap/ShadowMap.h"
 
-/// utility
+// utility
 #include "Editor/ParameterEditor/GlobalParameter.h"
-
-#include "Frame/Frame.h"
-/// imgui
-#include "base/TextureManager.h"
+// imGui
 #include <imgui.h>
 
 const char kWindowTitle[] = "LE3A_11_クリハラ_ケイタ";
@@ -28,8 +22,8 @@ void KTFramework::Init() {
     // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
 
-    /// ウィンドウ初期化
-    engineCore_->Initialize(kWindowTitle, 1280, 720);
+    /// エンジン初期化
+    engineCore_->Initialize(kWindowTitle, KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight);
 
     LoadAllTexture();
 }

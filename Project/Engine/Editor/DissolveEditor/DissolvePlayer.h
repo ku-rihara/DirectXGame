@@ -21,7 +21,7 @@ public:
     /// ディゾルブ再生
     /// </summary>
     /// <param name="dissolveName">ディゾルブ名</param>
-    void Play(const std::string& dissolveName) override;
+    void Play(const std::string& dissolveName, const std::string& category = "default") override;
 
     /// マテリアルに適用
     /// </summary>

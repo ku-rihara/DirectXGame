@@ -18,7 +18,7 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     // BaseEffectDataからのオーバーライド
-    void Init(const std::string& timeScaleName) override;
+    void Init(const std::string& timeScaleName, const std::string& categoryName) override;
     void Update(float deltaTime) override;
     void Reset() override;
     void Play() override;
@@ -42,6 +42,8 @@ private:
 
 private:
     //*---------------------------- private Variant ----------------------------*//
+
+    const std::string baseFolderPath_ = "TimeScale/";
 
     float timeScale_   = 1.0f;
     float duration_    = 1.0f;

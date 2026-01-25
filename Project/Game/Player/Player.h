@@ -1,18 +1,28 @@
 #pragma once
-#include "3d/ViewProjection.h"
+// 3D
+#include "3D/ViewProjection.h"
+// Base
 #include "BaseObject/BaseObject.h"
+// Collider
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/PlayerCollisionInfo.h"
+// Behavior
 #include "ComboAttackBehavior/BaseComboAttackBehavior.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
-#include "Editor/ParticleEditor/ParticleEmitter.h"
-#include "Effect/PlayerEffects.h"
-#include "JumpAttackUI/JumpAttackUI.h"
-#include "Parameter/PlayerParameter.h"
-#include "Parts/PlayerHandLeft.h"
-#include "Parts/PlayerHandRight.h"
 #include "PlayerBehavior/BasePlayerBehavior.h"
 #include "TitleBehavior/BaseTitleBehavior.h"
+// Editor
+#include "Editor/ParameterEditor/GlobalParameter.h"
+// Particle,Effect
+#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
+#include "Effect/PlayerEffects.h"
+// UI
+#include "JumpAttackUI/JumpAttackUI.h"
+// Parameter
+#include "Parameter/PlayerParameter.h"
+// Parts
+#include "Parts/PlayerHandLeft.h"
+#include "Parts/PlayerHandRight.h"
+// std
 #include <memory>
 #include <string>
 
@@ -42,69 +52,63 @@ public:
     void Update() override;
 
     void InitInGameScene(); //< ゲームシーンでの初期化
-    void TitleUpdate(); //< タイトル更新
-    void GameIntroUpdate(); //< ゲームイントロ更新
+    void TitleUpdate();     //< タイトル更新処理
+    void GameIntroUpdate(); //< イントロシーン更新
 
-    /// <summary>
-    /// 影フラグ設定
-    /// </summary>
-    /// <param name="isShadow">影の有効/無効</param>
+    // 影適応するかのフラグセット
     void SetShadowFrag(const bool& isShadow);
 
     /// <summary>
     /// 移動
     /// </summary>
-    /// <param name="speed">移動速度</param>
+    /// <param name="speed">移動スピード</param>
     void Move(float speed);
 
-    bool CheckIsMoving(); //< 移動中判定
-    void MoveToLimit(); //< 移動制限
-    Vector3 GetInputDirection(); //< 入力方向取得
-    void UpdateMatrix(); //< 行列更新
+    bool CheckIsMoving();        //< 移動中かチェック
+    void MoveToLimit();          //< 移動範囲制限
+    Vector3 GetInputDirection(); //< 入力による方向決定
+    void UpdateMatrix();         //< 行列更新
 
     // reset
     void ResetPositionY(); //< Y座標リセット
-    void ResetHeadScale(); //< 頭スケールリセット
+    void ResetHeadScale(); //< 頭のスケールリセット
 
     /// <summary>
-    /// ディゾルブ更新
+    /// ディゾルブ処理更新
     /// </summary>
-    /// <param name="dissolve">ディゾルブ値</param>
+    /// <param name="dissolve">Dissolve</param>
     void DissolveUpdate(float dissolve);
 
     /// <summary>
     /// ジャンプ
     /// </summary>
-    /// <param name="speed">速度</param>
-    /// <param name="fallSpeedLimit">落下速度制限</param>
+    /// <param name="speed">ジャンプスピード</param>
+    /// <param name="fallSpeedLimit">落下速度上限</param>
     /// <param name="gravity">重力</param>
     void Jump(float& speed, float fallSpeedLimit, float gravity);
 
     /// <summary>
-    /// 落下
+    /// 落ちる
     /// </summary>
-    /// <param name="speed">速度</param>
-    /// <param name="fallSpeedLimit">落下速度制限</param>
+    /// <param name="speed">落下速度</param>
+    /// <param name="fallSpeedLimit">落下速度上限</param>
     /// <param name="gravity">重力</param>
-    /// <param name="isJump">ジャンプ中か</param>
+    /// <param name="isJump">ジャンプによる落下か</param>
     void Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump = false);
 
-    // 各Behavior切り替え処理
+    // Behavior
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);
     void ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior);
     void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior> behavior);
 
-    /// <summary>
-    /// 衝突継続時の処理
-    /// </summary>
-    /// <param name="other">衝突相手</param>
+    // 衝突コールバック
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
-    void ChangeCombBoRoot(); //< コンボルート変更
-    void FaceToTarget(); //< ターゲット方向を向く
-    void AdaptRotate(); //< 回転適用
-    bool CheckIsChargeMax() const; //< チャージ最大判定
-    void AdjustParam(); //< パラメータ調整
+    void ChangeCombBoRoot();                  //< コンボルート変更
+    void FaceToTarget();                      //< ターゲット方向を向く
+    void AdaptRotate();                       //< 回転適用
+    bool CheckIsChargeMax() const;            //< チャージ最大判定
+    void AdjustParam();                       //< パラメータ調整
     Vector3 GetCollisionPos() const override; //< 衝突位置取得
 
     void MainHeadAnimationStart(const std::string& name);

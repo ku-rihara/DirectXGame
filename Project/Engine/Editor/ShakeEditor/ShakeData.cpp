@@ -7,12 +7,13 @@ using namespace KetaEngine;
 #include <imgui.h>
 #include <Windows.h>
 
-void ShakeData::Init(const std::string& shakeName) {
-    globalParameter_ = GlobalParameter::GetInstance();
-    groupName_       = shakeName;
-    folderPath_      = "ShakeEditor";
+void ShakeData::Init(const std::string& shakeName, const std::string& categoryName) {
+    BaseEffectData::Init(shakeName, categoryName);
 
-    if (!globalParameter_->HasRegisters(shakeName)) {
+    groupName_  = shakeName;
+    folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
+
+    if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();

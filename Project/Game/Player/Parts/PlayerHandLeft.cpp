@@ -17,8 +17,7 @@ void PlayerHandLeft::Init() {
 
     BasePlayerHand::Init();
 
-    gpuParticlePlayer_.Init();
-    gpuParticlePlayer_.InitEffect("Player", "LeftHandParticle");
+  
 }
 
 ///=========================================================
@@ -26,9 +25,6 @@ void PlayerHandLeft::Init() {
 ///==========================================================
 void PlayerHandLeft::Update() {
     BasePlayerHand::EffectEmit("DefaultFireAura");
-    gpuParticlePlayer_.Play("Player", "LeftHandParticle");
-    gpuParticlePlayer_.SetEmitPosition(GetWorldPosition());
-    gpuParticlePlayer_.Update();
     BasePlayerHand::Update();
 }
 

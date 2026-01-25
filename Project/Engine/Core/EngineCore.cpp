@@ -6,11 +6,11 @@ using namespace KetaEngine;
 /// 3d
 #include "3d/ModelManager.h"
 /// base
-#include "base/DsvManager.h"
-#include "base/RtvManager.h"
-#include "base/SrvManager.h"
-#include "base/TextureManager.h"
-#include "Dx/DirectXCommon.h"
+#include "Base/Descriptors/DsvManager.h"
+#include "Base/Descriptors/RtvManager.h"
+#include "Base/Descriptors/SrvManager.h"
+#include "Base/TextureManager.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "Lighrt/Light.h"
 #include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/PipelineManager.h"
@@ -20,8 +20,8 @@ using namespace KetaEngine;
 #include "audio/Audio.h"
 #include "input/Input.h"
 /// particle
-#include "GPUParticle/GPUParticleManager.h"
-#include "Editor/ParticleEditor/ParticleManager.h"
+#include "Particle/GPUParticle/GPUParticleManager.h"
+#include "Particle/CPUParticle/ParticleManager.h"
 /// imGui,function
 #include "function/Convert.h"
 #include <imgui_impl_dx12.h>

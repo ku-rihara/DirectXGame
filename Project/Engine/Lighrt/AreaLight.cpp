@@ -1,7 +1,7 @@
 #include "AreaLight.h"
 
 using namespace KetaEngine;
-#include "Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "Pipeline/Object3D/Object3DPipeline.h"
 #include <imgui.h>
 #include <numbers>

@@ -3,7 +3,7 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 // base
-#include "base/SpriteMaterial.h"
+#include "Base/Material/SpriteMaterial.h"
 // struct
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "struct/ModelData.h"

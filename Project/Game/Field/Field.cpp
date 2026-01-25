@@ -6,15 +6,15 @@ void Field::Init() {
 
     obj3d_.reset(KetaEngine::Object3d::CreateModel("Field.obj"));
 
-    obj3d_->transform_.scale_                                   = {1, 1, 1};
+    obj3d_->transform_.scale_                                             = {1, 1, 1};
     obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = 5;
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.35f;
 
     gpuParticlePlayer_.Init();
-    gpuParticlePlayer_.InitEffect("Field", "fire");
+    gpuParticlePlayer_.InitEffect("fire", "Field");
 }
 
 void Field::Update() {
-    gpuParticlePlayer_.Play("Field", "fire");
+    gpuParticlePlayer_.Play("fire", "Field");
     gpuParticlePlayer_.Update();
 }

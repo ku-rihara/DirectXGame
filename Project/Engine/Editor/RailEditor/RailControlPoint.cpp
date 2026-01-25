@@ -3,13 +3,15 @@
 using namespace KetaEngine;
 #include <imgui.h>
 
-void RailControlPoint::Init(const std::string& railName, int32_t keyNumber) {
+void RailControlPoint::Init(const std::string& railName, const std::string& categoryName, int32_t keyNumber) {
     // グローバルパラメータ
-    globalParameter_         = GlobalParameter::GetInstance();
-    currenTSequenceElementIndex     = keyNumber;
+    globalParameter_            = GlobalParameter::GetInstance();
+    currenTSequenceElementIndex = keyNumber;
+    categoryName_               = categoryName;
     std::string newGroupName    = railName + std::to_string(currenTSequenceElementIndex);
-    groupName_               = newGroupName;
-    folderPath_ += railName;
+    groupName_                  = newGroupName;
+
+    folderPath_ = "RailEditor/" + categoryName_ + "/ControlPoints/" + railName;
 
     if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録

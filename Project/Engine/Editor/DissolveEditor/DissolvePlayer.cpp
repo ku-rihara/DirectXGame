@@ -1,5 +1,5 @@
 #include "DissolvePlayer.h"
-#include "Material/ModelMaterial.h"
+#include "Base/Material/ModelMaterial.h"
 
 using namespace KetaEngine;
 
@@ -13,12 +13,12 @@ void DissolvePlayer::Update(float speedRate) {
     }
 }
 
-void DissolvePlayer::Play(const std::string& dissolveName) {
+void DissolvePlayer::Play(const std::string& dissolveName, const std::string& category) {
     effectData_.reset();
     effectData_ = CreateEffectData();
 
     if (effectData_) {
-        effectData_->Init(dissolveName);
+        effectData_->Init(dissolveName, category);
         effectData_->LoadData();
         effectData_->Play();
         currentEffectName_ = dissolveName;

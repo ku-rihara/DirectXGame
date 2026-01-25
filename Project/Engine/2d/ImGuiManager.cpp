@@ -1,10 +1,10 @@
-#include "2d/ImGuiManager.h"
-#include "base/WinApp.h"
-#include "Dx/DirectXCommon.h"
-#include "Dx/DxSwapChain.h"
+#include "ImGuiManager.h"
 
 using namespace KetaEngine;
-#include "base/SrvManager.h"
+#include "Base/WinApp.h"
+#include "Base/Dx/DirectXCommon.h"
+#include "Base/Dx/DxSwapChain.h"
+#include "Base/Descriptors/SrvManager.h"
 
 #include <d3d12.h>
 #include <imgui_impl_dx12.h>

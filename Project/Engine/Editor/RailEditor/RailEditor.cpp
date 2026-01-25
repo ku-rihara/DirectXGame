@@ -1,14 +1,14 @@
 #include "RailEditor.h"
 
 using namespace KetaEngine;
-#include "Line3D/Line3d.h"
+#include "3D/Line3D/Line3D.h"
 #include <imgui.h>
 
-RailEditor::RailEditor()   = default;
-RailEditor ::~RailEditor() = default;
+RailEditor::RailEditor()  = default;
+RailEditor::~RailEditor() = default;
 
-void RailEditor::Init(const std::string& editorName, bool isUseCategory) {
-    BaseEffectEditor::Init(editorName, isUseCategory);
+void RailEditor::Init(const std::string& editorName) {
+    BaseEffectEditor::Init(editorName);
 
     preViewObj_.reset(Object3d::CreateModel("DebugCube.obj"));
     preViewObj_->SetIsDraw(false);
@@ -16,11 +16,19 @@ void RailEditor::Init(const std::string& editorName, bool isUseCategory) {
 }
 
 void RailEditor::Update(float speedRate) {
-    for (auto& rail : effects_) {
-        rail->Update(speedRate);
+    // 全カテゴリーの全レールを更新
+    for (auto& category : categories_) {
+        for (auto& rail : category.effects) {
+            rail->Update(speedRate);
 
-        if (preViewObj_) {
-            preViewObj_->transform_.translation_ = basePos_ + rail->GetCurrentPosition();
+            if (preViewObj_ && selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
+                auto& selectedCategory = categories_[selectedCategoryIndex_];
+                if (selectedCategory.selectedEffectIndex >= 0 && selectedCategory.selectedEffectIndex < static_cast<int>(selectedCategory.effects.size())) {
+                    if (rail.get() == selectedCategory.effects[selectedCategory.selectedEffectIndex].get()) {
+                        preViewObj_->transform_.translation_ = basePos_ + rail->GetCurrentPosition();
+                    }
+                }
+            }
         }
     }
 
@@ -32,17 +40,22 @@ void RailEditor::DebugLineSet() {
     if (debugLine3D_) {
         debugLine3D_->Reset();
 
-        if (selectedIndex_ < 0 || selectedIndex_ >= static_cast<int>(effects_.size())) {
+        if (selectedCategoryIndex_ < 0 || selectedCategoryIndex_ >= static_cast<int>(categories_.size())) {
+            return;
+        }
+
+        auto& category = categories_[selectedCategoryIndex_];
+        if (category.selectedEffectIndex < 0 || category.selectedEffectIndex >= static_cast<int>(category.effects.size())) {
             return;
         }
 
         Vector4 lineColor = Vector4(1.0f, 1.0f, 0.0f, 1.0f);
 
-        if (effects_[selectedIndex_]->IsPlaying()) {
+        if (category.effects[category.selectedEffectIndex]->IsPlaying()) {
             lineColor = Vector4::kGREEN();
         }
 
-        effects_[selectedIndex_]->SetControlPointLines(debugLine3D_.get(), lineColor);
+        category.effects[category.selectedEffectIndex]->SetControlPointLines(debugLine3D_.get(), lineColor);
     }
 }
 
@@ -61,18 +74,29 @@ std::unique_ptr<RailData> RailEditor::CreateEffectData() {
     return std::make_unique<RailData>();
 }
 
-std::string RailEditor::GetFolderPath() const {
-    return folderName_;
-}
-
 void RailEditor::RenderSpecificUI() {
     ImGui::SeparatorText("Rail Editor Settings");
 
     ImGui::Checkbox("Show Preview Object", &isPreViewDraw_);
     ImGui::DragFloat3("Base Position", &basePos_.x, 0.1f);
 
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        ImGui::Separator();
-        BaseEffectEditor::RenderPlayBack();
+    if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
+        auto& category = categories_[selectedCategoryIndex_];
+        if (category.selectedEffectIndex >= 0 && category.selectedEffectIndex < static_cast<int>(category.effects.size())) {
+            ImGui::Separator();
+            BaseEffectEditor::RenderPlayBack();
+        }
     }
+}
+
+int RailEditor::GetRailCount() const {
+    int count = 0;
+    for (const auto& category : categories_) {
+        count += static_cast<int>(category.effects.size());
+    }
+    return count;
+}
+
+std::string RailEditor::GetFolderName() const {
+    return folderName_;
 }

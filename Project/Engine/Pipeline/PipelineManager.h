@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Material/ModelMaterial.h"
+#include "Base/Material/ModelMaterial.h"
 #include <array>
 #include <d3d12.h>
 #include <functional>

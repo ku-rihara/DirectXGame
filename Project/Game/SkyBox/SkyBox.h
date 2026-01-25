@@ -1,6 +1,6 @@
 #pragma once
 #include "3d/WorldTransform.h"
-#include "Primitive/PrimitiveBox.h"
+#include "3D/Primitive/PrimitiveBox.h"
 #include <memory>
 
 /// <summary>

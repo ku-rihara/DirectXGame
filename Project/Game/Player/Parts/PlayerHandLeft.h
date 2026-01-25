@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Player/Parts/BasePlayerHand.h"
-#include"Editor/GPUParticleEditor/GPUParticlePlayer.h"
+#include"Particle/GPUParticle/GPUParticlePlayer.h"
 
 /// <summary>
 /// プレイヤーの左手クラス

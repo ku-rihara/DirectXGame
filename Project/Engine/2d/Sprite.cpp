@@ -1,9 +1,9 @@
 #include "Sprite.h"
 
 using namespace KetaEngine;
-#include "base/TextureManager.h"
-#include "base/WinApp.h"
-#include "Dx/DirectXCommon.h"
+#include "Base/TextureManager.h"
+#include "Base/WinApp.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "SpriteRegistry.h"
 #include <algorithm>
 #include <imgui.h>

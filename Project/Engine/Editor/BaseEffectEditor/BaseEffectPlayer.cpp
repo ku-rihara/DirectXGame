@@ -7,11 +7,7 @@ void BaseEffectPlayer::Init() {
     effectData_ = CreateEffectData();
 }
 
-void BaseEffectPlayer::Play([[maybe_unused]] const std::string& effectName) {
-
-}
-void BaseEffectPlayer::Play([[maybe_unused]] const std::string& categoryName, [[maybe_unused]] const std::string& effectName) {
-
+void BaseEffectPlayer::Play([[maybe_unused]] const std::string& effectName, [[maybe_unused]] const std::string& categoryName) {
 }
 
 void BaseEffectPlayer::Stop() {

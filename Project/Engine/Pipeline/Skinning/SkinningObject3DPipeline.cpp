@@ -1,7 +1,7 @@
 #include "SkinningObject3DPipeline.h"
 
 using namespace KetaEngine;
-#include "Dx/DxCompiler.h"
+#include "Base/Dx/DxCompiler.h"
 // Function
 #include "function/Log.h"
 #include <cassert>

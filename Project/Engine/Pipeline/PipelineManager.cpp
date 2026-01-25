@@ -12,7 +12,7 @@ using namespace KetaEngine;
 #include "Pipeline/Sprite/SpritePipeline.h"
 #include"Pipeline/SkyBox/SkyBoxPipeline.h"
 
-#include "Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include <cassert>
 
 PipelineManager* PipelineManager::GetInstance() {

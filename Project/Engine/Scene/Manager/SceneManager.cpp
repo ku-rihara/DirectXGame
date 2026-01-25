@@ -2,15 +2,15 @@
 using namespace KetaEngine;
 
 // 3d
-#include "3d/Object3DRegistry.h"
-#include "Animation/AnimationRegistry.h"
+#include "3d/Object3D/Object3DRegistry.h"
+#include "3D/AnimationObject3D/AnimationRegistry.h"
 // base
-#include "Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "Frame/Frame.h"
 #include "Pipeline/PipelineManager.h"
 // particle
-#include "Editor/ParticleEditor/ParticleManager.h"
-#include "GPUParticle/GPUParticleManager.h"
+#include "Particle/CPUParticle/ParticleManager.h"
+#include "Particle/GPUParticle/GPUParticleManager.h"
 // input
 #include "input/Input.h"
 // global parameter
@@ -88,7 +88,7 @@ void SceneManager::ChangeScene(const std::string& sceneName) {
     GlobalParameter::GetInstance()->ResetAllRegister();
     GlobalParameter::GetInstance()->LoadFiles();
 
-     // コリジョン
+    // コリジョン
     collisionManager_ = std::make_unique<CollisionManager>();
     collisionManager_->Init();
 
@@ -99,5 +99,4 @@ void SceneManager::ChangeScene(const std::string& sceneName) {
 
     // パーティクルリセット
     ParticleManager::GetInstance()->ResetAllParticles();
-   
 }

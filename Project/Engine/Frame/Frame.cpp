@@ -5,31 +5,32 @@ using namespace KetaEngine;
 #include <thread>
 
 std::chrono::steady_clock::time_point Frame::reference_ = std::chrono::steady_clock::now();
-std::chrono::steady_clock::time_point Frame::lastTime_ = std::chrono::steady_clock::now();
-float Frame::deltaTime_ = 0.0f;
-float Frame::deltaTimeRate_ = 0.0f;
-float Frame::timeScale_ = 1.0f;
+std::chrono::steady_clock::time_point Frame::lastTime_  = std::chrono::steady_clock::now();
+float Frame::deltaTime_                                 = 0.0f;
+float Frame::deltaTimeRate_                             = 0.0f;
+float Frame::timeScale_                                 = 1.0f;
+const float Frame::kFPS                                 = 60.0f;
 
 void Frame::Init() {
     reference_ = std::chrono::steady_clock::now();
-    lastTime_ = reference_;
+    lastTime_  = reference_;
     deltaTime_ = 0.0f;
     timeScale_ = 1.0f;
 }
 
 void Frame::Update() {
-    FixFPS(); 
+    FixFPS();
 
     // 経過時間（秒）を計算
-    auto currentTime = std::chrono::steady_clock::now();
+    auto currentTime                       = std::chrono::steady_clock::now();
     std::chrono::duration<float> frameTime = currentTime - lastTime_;
-    deltaTime_ = frameTime.count();  
-    deltaTimeRate_ = deltaTime_ * timeScale_;
-    lastTime_ = currentTime;
+    deltaTime_                             = frameTime.count();
+    deltaTimeRate_                         = deltaTime_ * timeScale_;
+    lastTime_                              = currentTime;
 }
 
 float Frame::DeltaTime() {
-    return deltaTime_; 
+    return deltaTime_;
 }
 
 float Frame::DeltaTimeRate() {
@@ -51,7 +52,7 @@ void Frame::FixFPS() {
     if (elapsed < kMinCheckTime) {
         // 1/60秒経過するまで微小なスリープを繰り返す
         while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
-            std::this_thread::sleep_for(std::chrono::microseconds(1)); 
+            std::this_thread::sleep_for(std::chrono::microseconds(1));
         }
     }
 
@@ -59,9 +60,22 @@ void Frame::FixFPS() {
     reference_ = std::chrono::steady_clock::now();
 }
 
+/// <summary>
+/// 秒からフレームに変換
+/// </summary>
+int32_t Frame::TimeToFrame(float seconds) {
+    return static_cast<int32_t>(seconds * kFPS);
+}
+
+/// <summary>
+/// フレームから秒に変換
+/// </summary>
+float Frame::FrameToTime(int32_t frame) {
+    return static_cast<float>(frame) / kFPS;
+}
 
 void Frame::SetTimeScale(float scale) {
-   
+
     timeScale_ = scale;
 }
 

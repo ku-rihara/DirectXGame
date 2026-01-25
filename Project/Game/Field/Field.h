@@ -1,9 +1,8 @@
 #pragma once
-#include "3d/Object3d.h"
+#include "3d/Object3d/Object3d.h"
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
-#include "Editor/GPUParticleEditor/GPUParticlePlayer.h"
-#include "Editor/ParticleEditor/ParticleEmitter.h"
+#include "Particle/GPUParticle/GPUParticlePlayer.h"
 #include <array>
 
 /// <summary>
@@ -21,6 +20,6 @@ public:
     void Update();
 
 private:
-    std::unique_ptr<KetaEngine::Object3d> obj3d_                      = nullptr;
-   KetaEngine::GPUParticlePlayer gpuParticlePlayer_;
+    std::unique_ptr<KetaEngine::Object3d> obj3d_ = nullptr;
+    KetaEngine::GPUParticlePlayer gpuParticlePlayer_;
 };

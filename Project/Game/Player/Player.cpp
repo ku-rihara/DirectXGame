@@ -475,7 +475,7 @@ void Player::HeadLightSetting() {
 }
 
 void Player::MainHeadAnimationStart(const std::string& name) {
-    baseTransform_.PlayObjEaseAnimation("MainHead", name);
+    baseTransform_.PlayObjEaseAnimation(name, "MainHead");
 }
 
 void Player::RotateReset() {

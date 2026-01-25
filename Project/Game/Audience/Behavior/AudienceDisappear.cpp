@@ -58,8 +58,8 @@ void AudienceDisappear::AnimationPlaying() {
         return;
     }
 
-    pOwner_->GetParticlePlayer()->Play("Audience","DisAppearEffect");
-    pOwner_->GetObjAnimation()->transform_.PlayObjEaseAnimation("Audience", "AudienceDisAppear");
+    pOwner_->GetParticlePlayer()->Play("DisAppearEffect", "Audience");
+    pOwner_->GetObjAnimation()->transform_.PlayObjEaseAnimation("AudienceDisAppear", "Audience");
 
     // 次のフェーズへ
     currentPhase_ = [this]() {

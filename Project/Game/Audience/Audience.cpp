@@ -86,7 +86,7 @@ void Audience::AppearByComboLevel(int32_t level) {
     }
 
     // スポーンモードに移行
-    particlePlayer_->Play("Audience", "AppearEffect");
+    particlePlayer_->Play("AppearEffect", "Audience");
     audienceRoot->ChangeAppearMode();
 }
 

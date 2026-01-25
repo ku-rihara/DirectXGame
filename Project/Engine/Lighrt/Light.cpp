@@ -4,7 +4,7 @@ using namespace KetaEngine;
 #include "AmbientLight.h"
 #include "AreaLightManager.h"
 #include "DirectionalLight.h"
-#include "Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "Pipeline/Object3D/Object3DPipeline.h"
 #include "PointLightManager.h"
 #include "SpotLightManager.h"

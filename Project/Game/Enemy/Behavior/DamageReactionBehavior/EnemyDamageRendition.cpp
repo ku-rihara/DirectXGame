@@ -40,7 +40,7 @@ void EnemyDamageRendition::Update(
     const auto& animParam = rendition->GetObjAnimationParam();
     if (reactionTimer >= animParam.startTiming && !animParam.fileName.empty() && animParam.fileName != "None") {
         if (pBaseEnemy_->GetObject3D()) {
-            pBaseEnemy_->GetObject3D()->transform_.PlayObjEaseAnimation("Enemy", animParam.fileName);
+            pBaseEnemy_->GetObject3D()->transform_.PlayObjEaseAnimation(animParam.fileName, "Enemy");
         }
     }
 

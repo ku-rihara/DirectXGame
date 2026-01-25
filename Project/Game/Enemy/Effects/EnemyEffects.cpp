@@ -13,5 +13,5 @@ void EnemyEffects::Update(const Vector3& position) {
 }
 
 void EnemyEffects::Emit(const std::string& name) {
-    particlePlayer_->Play("Enemy", name);
+    particlePlayer_->Play(name, "Enemy");
 }

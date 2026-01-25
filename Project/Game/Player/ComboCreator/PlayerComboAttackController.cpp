@@ -41,15 +41,6 @@ void PlayerComboAttackController::AllLoadFile() {
     }
 }
 
-void PlayerComboAttackController::Update(float deltaTime) {
-    // すべての攻撃データを更新
-    for (auto& attack : attacks_) {
-        // 必要に応じて更新処理
-        attack;
-        deltaTime;
-    }
-}
-
 void PlayerComboAttackController::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("攻撃作成エディター")) {
@@ -76,37 +67,6 @@ void PlayerComboAttackController::EditorUpdate() {
             attacks_[selectedIndex_]->AdjustParam();
         }
 
-        ImGui::Separator();
-        ImGui::Text("File Operations:");
-
-        // 選択中の攻撃データ個別のセーブ/ロード
-        if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
-            ImGui::SeparatorText("Selected Attack File Operations");
-
-            auto* selectedAttack   = attacks_[selectedIndex_].get();
-            std::string attackName = selectedAttack->GetGroupName();
-
-            // 個別Load
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
-            if (ImGui::Button(("Load " + attackName).c_str())) {
-                selectedAttack->LoadData();
-                MessageBoxA(nullptr, (attackName + " loaded successfully.").c_str(), "Attack Creator", 0);
-            }
-            ImGui::PopStyleColor(3);
-            ImGui::SameLine();
-
-            // 個別Save
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
-            if (ImGui::Button(("Save " + attackName).c_str())) {
-                selectedAttack->SaveData();
-                MessageBoxA(nullptr, (attackName + " saved successfully.").c_str(), "Attack Creator", 0);
-            }
-            ImGui::PopStyleColor(3);
-        }
         ImGui::SeparatorText("All File Save/Load");
 
         // Load ボタン
@@ -394,6 +354,10 @@ float PlayerComboAttackController::GetPowerRate() const {
 
     float rate = attackValueForLevel_[pCombo_->GetCurrentLevel()].powerRate;
     return rate;
+}
+
+void PlayerComboAttackController::SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite) {
+    pEditorSuite_ = editorSuite;
 }
 
 void PlayerComboAttackController::SetCombo(Combo* combo) {

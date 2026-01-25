@@ -8,8 +8,8 @@ using namespace KetaEngine;
 #include <filesystem>
 #include <imgui.h>
 
-void ObjEaseAnimationData::InitWithCategory(const std::string& animationName, const std::string& categoryName) {
-    BaseSequenceEffectData::InitWithCategory(animationName, categoryName);
+void ObjEaseAnimationData::Init(const std::string& animationName, const std::string& categoryName) {
+    BaseSequenceEffectData::Init(animationName, categoryName);
 
     groupName_  = animationName;
     folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
@@ -60,12 +60,12 @@ void ObjEaseAnimationData::UpdateKeyFrameProgression() {
             isAllKeyFramesFinished_ = true;
             playState_              = PlayState::STOPPED;
         } else {
-            AdvanceToNexTSequenceElement();
+            AdvanceToNextSequenceElement();
         }
     }
 }
 
-void ObjEaseAnimationData::AdvanceToNexTSequenceElement() {
+void ObjEaseAnimationData::AdvanceToNextSequenceElement() {
     if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size()) - 1) {
         // 前のセクションの最終値を取得
         Vector3 startScale       = sectionElements_[activeKeyFrameIndex_]->GetCurrentScale();
@@ -134,7 +134,7 @@ std::unique_ptr<ObjEaseAnimationSection> ObjEaseAnimationData::CreateKeyFrame(in
     return keyFrame;
 }
 
-std::string ObjEaseAnimationData::GeTSequenceElementFolderPath() const {
+std::string ObjEaseAnimationData::GetSequenceElementFolderPath() const {
     return baseFolderPath_ + categoryName_ + "/" + "Sections/" + groupName_ + "/";
 }
 
