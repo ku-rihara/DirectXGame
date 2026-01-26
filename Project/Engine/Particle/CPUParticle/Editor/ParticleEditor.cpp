@@ -166,9 +166,6 @@ std::string ParticleEditor::GetFolderName() const {
     return particleFolderName_;
 }
 
-void ParticleEditor::EditorUpdate() {
-    BaseEffectEditor::EditorUpdate();
-}
 
 void ParticleEditor::PlaySelectedAnimation() {
     BaseEffectEditor::PlaySelectedAnimation();

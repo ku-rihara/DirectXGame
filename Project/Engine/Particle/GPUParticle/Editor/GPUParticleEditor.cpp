@@ -26,10 +26,6 @@ std::string GPUParticleEditor::GetFolderName() const {
     return particleFolderName_;
 }
 
-void GPUParticleEditor::EditorUpdate() {
-    BaseEffectEditor::EditorUpdate();
-}
-
 void GPUParticleEditor::PlaySelectedAnimation() {
     BaseEffectEditor::PlaySelectedAnimation();
 }

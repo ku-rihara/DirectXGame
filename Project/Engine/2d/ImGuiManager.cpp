@@ -1,14 +1,15 @@
 #include "ImGuiManager.h"
 
 using namespace KetaEngine;
-#include "Base/WinApp.h"
+#include "Base/Descriptors/SrvManager.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Dx/DxSwapChain.h"
-#include "Base/Descriptors/SrvManager.h"
+#include "Base/WinApp.h"
 
 #include <d3d12.h>
 #include <imgui_impl_dx12.h>
 #include <imgui_impl_win32.h>
+#include <imgui_internal.h>
 
 ImGuiManager* ImGuiManager::GetInstance() {
     static ImGuiManager instance;
@@ -61,7 +62,7 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
     ImGui::StyleColorsDark();
     ImGui_ImplWin32_Init(winApp->GetHwnd());
 
-     io.Fonts->Build();
+    io.Fonts->Build();
 
     ImGui_ImplDX12_Init(
         dxCommon_->GetDevice().Get(),
@@ -82,6 +83,77 @@ void ImGuiManager::Begin() {
     ImGui_ImplDX12_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+
+    // ドッキングスペースを作成
+    SetupDockSpace();
+#endif
+}
+
+///===========================================================
+/// ドッキングスペース設定
+///===========================================================
+void ImGuiManager::SetupDockSpace() {
+#ifdef _DEBUG
+    // フルスクリーンのドッキングスペースを作成
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->Pos);
+    ImGui::SetNextWindowSize(viewport->Size);
+    ImGui::SetNextWindowViewport(viewport->ID);
+
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
+    window_flags |= ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+    ImGui::Begin("DockSpace", nullptr, window_flags);
+    ImGui::PopStyleVar(3);
+
+    // メニューバー(オプション)
+    if (ImGui::BeginMenuBar()) {
+        if (ImGui::BeginMenu("File")) {
+            if (ImGui::MenuItem("Exit")) {
+                // 終了処理
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Window")) {
+            if (ImGui::MenuItem("Reset Layout")) {
+                // レイアウトリセット処理を追加可能
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenuBar();
+    }
+
+    // ドッキングスペースを有効化
+    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+
+    // 初回のみレイアウトを設定
+    static bool first_time = true;
+    if (first_time) {
+        first_time = false;
+
+        ImGui::DockBuilderRemoveNode(dockspace_id);
+        ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
+        ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
+
+        // レイアウト分割
+        ImGuiID dock_main_id = dockspace_id;
+        ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
+        ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.25f, nullptr, &dock_main_id);
+        ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.25f, nullptr, &dock_main_id);
+
+        // 各ウィンドウを配置
+        ImGui::DockBuilderDockWindow("Game View", dock_main_id);
+        ImGui::DockBuilderFinish(dockspace_id);
+    }
+
+    ImGui::End();
 #endif
 }
 

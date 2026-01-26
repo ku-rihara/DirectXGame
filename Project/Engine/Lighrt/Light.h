@@ -57,13 +57,13 @@ public:
     /// スポットライトを削除
     /// </summary>
     /// <param name="num">番号</param>
-    void RemoveSpotLight(const int& num);
+    void RemoveSpotLight(int num);
 
     /// <summary>
     /// ポイントライトを削除
     /// </summary>
     /// <param name="num">番号</param>
-    void RemovePointLight(const int& num);
+    void RemovePointLight(int num);
 
     void Update(); //< 更新処理
     void InitAllLights(); //< 全ライト初期化

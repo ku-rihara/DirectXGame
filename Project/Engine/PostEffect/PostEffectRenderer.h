@@ -85,6 +85,7 @@ private:
 
 public:
    // getter
+
     RadialBlur* GetRadialBlur() {
         return GetEffect<RadialBlur>(PostEffectMode::RADIALBLUR);
     }

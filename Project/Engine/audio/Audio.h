@@ -57,7 +57,7 @@ private:
     // 内部ヘルパー関数
     int LoadWaveFile(const std::string& fullPath);
     int LoadMP3File(const std::string& fullPath);
-    void PlayForID(const int& soundId, float volume);
+    void PlayForID(int soundId, float volume);
 
     // 全ファイルロード用
     void LoadAllFilesInDirectory();
@@ -70,7 +70,7 @@ public:
 
     void Init();
     int Load(const std::string& filename);
-    void Unload(const int& soundId);
+    void Unload(int soundId);
     void Play(const std::string& soundName, float volume);
     void Finalize();
 

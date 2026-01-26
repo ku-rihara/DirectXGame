@@ -21,8 +21,7 @@ public:
     // BaseEffectEditorからのオーバーライド
     void Init(const std::string& typeName) override;
     void Update(float speedRate = 1.0f) override;
-    void EditorUpdate() override;
-
+  
 protected:
     //*---------------------------- protected Methods ----------------------------*//
 

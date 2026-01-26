@@ -40,7 +40,7 @@ public:
     /// <param name="title">ウィンドウタイトル</param>
     /// <param name="width">ウィンドウ幅</param>
     /// <param name="height">ウィンドウ高さ</param>
-    void Initialize(const char* title, const int& width, const int& height);
+    void Initialize(const char* title, int width, int height);
 
     int ProcessMessage();     //< Windowsのメッセージを処理
     void BeginFrame();        //< フレーム開始処理
