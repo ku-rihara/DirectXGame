@@ -105,6 +105,6 @@ void BasePlayerHand::SetParent(KetaEngine::WorldTransform* parent) {
 
 void BasePlayerHand::EffectEmit(const std::string& effectName) {
     if (isEmit_) {
-        particlePlayer_->Play("Player", effectName);
+        particlePlayer_->Play(effectName,"Player");
     }
 }

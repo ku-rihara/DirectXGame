@@ -1,6 +1,6 @@
 #include "Matrix4x4.h"
 #include "3d/ViewProjection.h"
-#include "base/WinApp.h"
+#include "Base/WinApp.h"
 #include "Quaternion.h"
 #include"Vector2.h"
 #include <assert.h>
@@ -356,7 +356,7 @@ Vector2 ScreenTransform(const Vector3& worldPos, const KetaEngine::ViewProjectio
 }
 
 
-Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, const int& row) {
+Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row) {
     Matrix4x4 result = matrix; // 元の行列をコピー
 
     // 行のベクトルを取り出す（X, Y, Z 成分）

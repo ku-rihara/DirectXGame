@@ -1,10 +1,15 @@
 #pragma once
 
-#include "Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+
+//
 #include "PlayerAttackRenditionData.h"
+#include "Timeline/PlayerComboAttackTimeline.h"
+// utility
 #include "utility/FileSelector/FileSelector.h"
+// math
 #include "Vector3.h"
+// std
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -26,6 +31,7 @@ public:
         Vector3 value;
         int32_t easeType = 0;
         float easeTime;
+        float startTime;
         bool isAbleInputMoving;
         bool isPositionYSelect;
         float finishTimeOffset;
@@ -35,6 +41,7 @@ public:
     struct CollisionParam {
         Vector3 size;
         Vector3 offsetPos;
+        float startTime;
         float adaptTime;
         float loopWaitTime;
         int32_t loopNum;
@@ -102,28 +109,44 @@ public:
     bool IsWaitFinish(float currentTime);
     bool IsCancelAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
 
-private:
-    //*-------------------------------- private Method --------------------------------*//
-
     // 次の攻撃の選択
     void SelectNextAttack();
+    void DrawCollisionParamUI();
+    void DrawMoveParamUI();
+    void DrawTriggerParamUI();
+    void DrawFlagsParamUI();
+
+    // セーブ、ロードのUI描画
+    void DrawSaveLoadUI();
+
+private:
+    //*-------------------------------- private Method --------------------------------*//
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
 
+    // global Parameter
     KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_ = "AttackCreator";
 
+    // 包含
     PlayerAttackRenditionData renditionData_;
+    PlayerComboAttackTimeline timeLine_;
+
+    // file Selector
     KetaEngine::FileSelector fileSelector_;
 
     // 攻撃パラメータ
     AttackParameter attackParam_;
-    bool needsRefresh_ = true;
     std::vector<std::string> attackFileNames_;
 
-    int32_t tempCondition_;
+    // frags
+    bool needsRefresh_ = true;
+    bool useTimeline_  = true;
+
+    // enum class Int
+    int32_t triggerConditionInt_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
@@ -131,4 +154,6 @@ public:
     const AttackParameter& GetAttackParam() const { return attackParam_; }
     AttackParameter& GetAttackParam() { return attackParam_; }
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
+    KetaEngine::GlobalParameter* GetGlobalParameter() const { return globalParameter_; }
+    const std::string& GetFolderPath() const { return folderPath_; }
 };

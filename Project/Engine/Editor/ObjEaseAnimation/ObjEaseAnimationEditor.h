@@ -1,5 +1,5 @@
 #pragma once
-#include "3d/Object3d.h"
+#include "3d/Object3d/Object3d.h"
 #include "Editor/BaseEffectEditor/BaseEffectEditor.h"
 #include "ObjEaseAnimationData.h"
 #include <memory>
@@ -7,6 +7,7 @@
 
 /// <summary>
 /// オブジェクトイージングアニメーションエディター
+/// カテゴリーシステムを使用
 /// </summary>
 namespace KetaEngine {
 
@@ -25,21 +26,13 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     // BaseEffectEditorからのオーバーライド
-    void Init(const std::string& typeName, bool isUseCategory = false) override;
+    void Init(const std::string& typeName) override;
     void Update(float speedRate = 1.0f) override;
-    void EditorUpdate() override;
     void PlaySelectedAnimation() override;
 
-protected:
-    //*---------------------------- protected Methods ----------------------------*//
 
     std::unique_ptr<ObjEaseAnimationData> CreateEffectData() override;
     void RenderSpecificUI() override;
-    std::string GetFolderPath() const override;
-
-    // カテゴリーシステムを使用
-    std::string GetCategoryFolderName() const override { return animationFolderName_; }
-    std::string GetDataFolderName() const override { return dateFolderName_; }
 
 private:
     //*---------------------------- private Methods ----------------------------*//
@@ -53,9 +46,7 @@ private:
     //*---------------------------- private Variant ----------------------------*//
 
     std::unique_ptr<Object3d> previewObject_ = nullptr;
-
-    const std::string animationFolderName_ = "ObjEaseAnimation/";
-    const std::string dateFolderName_      = "Dates/";
+    const std::string folderName_            = "ObjEaseAnimation/";
 
     // プレビュー設定
     bool showPreview_                 = true;
@@ -64,7 +55,8 @@ private:
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
-
+    std::string GetFolderName() const override;
+    
 };
 
 }; // KetaEngine

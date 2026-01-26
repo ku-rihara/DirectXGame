@@ -52,8 +52,10 @@ public:
 
     //*----------------------------- public Methods -----------------------------*//
 
+    // カテゴリー対応初期化
+    void Init(const std::string& animationName, const std::string& categoryName) override;
+
     // BaseEffectDataからのオーバーライド
-    void Init(const std::string& animationName) override;
     void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
@@ -81,9 +83,9 @@ protected:
     void InitParams() override;
 
     void UpdateKeyFrameProgression() override;
-    void AdvanceToNexTSequenceElement() override;
+    void AdvanceToNextSequenceElement() override;
     std::unique_ptr<CameraKeyFrame> CreateKeyFrame(int32_t index) override;
-    std::string GeTSequenceElementFolderPath() const override;
+    std::string GetSequenceElementFolderPath() const override;
 
 private:
     //*---------------------------- private Methods ----------------------------*//
@@ -99,8 +101,7 @@ private:
 private:
     //*---------------------------- private Variant ----------------------------*//
 
-    std::string dateFolderPath_           = "CameraAnimation/AnimationData";
-    const std::string keyFrameFolderPath_ = "CameraAnimation/KeyFrames/";
+    const std::string baseFolderPath_ = "CameraAnimation/";
 
     int32_t finalKeyFrameIndex_ = -1;
     bool isAllFinished_         = false;
@@ -132,9 +133,6 @@ public:
     bool IsReturningToInitial() const { return returnParam_.isReturningToInitial; }
     bool IsUseLookAt() const { return lookAtParam_.useLookAt; }
     const Vector3& GetLookAtTarget() const { return lookAtParam_.lookAtTarget; }
- 
-    //*----------------------------- setter Methods -----------------------------*//
-  
 };
 
 }; // KetaEngine

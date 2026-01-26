@@ -3,8 +3,8 @@
 #include "3d/ViewProjection.h"
 
 /// utility
-#include "Editor/ParticleEditor/ParticleEmitter.h"
-#include "Editor/ParticleEditor/ParticlePlayer.h"
+#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
+#include "Particle/CPUParticle/ParticlePlayer.h"
 
 /// std
 #include <array>

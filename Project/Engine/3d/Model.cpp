@@ -6,11 +6,10 @@ using namespace KetaEngine;
 #include <assimp/postprocess.h>
 //
 // class
-#include "base/TextureManager.h"
-#include "Dx/DirectXCommon.h"
-#include "Dx/DxRenderTarget.h"
+#include "Base/TextureManager.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "Lighrt/Light.h"
-#include "Material/BaseMaterial.h"
+#include "Base/Material/BaseMaterial.h"
 // pipeline
 #include"Pipeline/Object3D/Object3DPipeline.h"
 #include "Pipeline/PipelineManager.h"

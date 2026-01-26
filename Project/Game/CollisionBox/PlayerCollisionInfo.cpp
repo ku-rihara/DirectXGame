@@ -120,13 +120,13 @@ void PlayerCollisionInfo::AttackStart(const PlayerComboAttackData* comboAttackDa
 }
 
 void PlayerCollisionInfo::UpdateOffset() {
-    Vector3 offSetValue        = comboAttackData_->GetAttackParam().collisionParam.offsetPos;
+    Vector3 offSetValue = comboAttackData_->GetAttackParam().collisionParam.offsetPos;
     SetOffset(offSetValue);
 }
 
 void PlayerCollisionInfo::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     if (dynamic_cast<BaseEnemy*>(other)) {
-        isHit_ = true;
+        isHit_       = true;
         hasHitEnemy_ = true;
     }
 }

@@ -1,24 +1,30 @@
 #include "DissolveData.h"
 
 using namespace KetaEngine;
-#include "base/TextureManager.h"
+// Parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
+// Frame
 #include "Frame/Frame.h"
+// std
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
-#include <Windows.h>
 
-void DissolveData::Init(const std::string& name) {
-    globalParameter_ = GlobalParameter::GetInstance();
-    groupName_       = name;
-    folderPath_      = "DissolveEditor";
+void DissolveData::Init(const std::string& dissolveName, const std::string& categoryName) {
+    BaseEffectData::Init(dissolveName, categoryName);
 
-    globalParameter_->CreateGroup(groupName_);
-    RegisterParams();
+    groupName_  = dissolveName;
+    folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
+
+    if (!globalParameter_->HasRegisters(groupName_)) {
+        globalParameter_->CreateGroup(groupName_);
+        RegisterParams();
+        globalParameter_->SyncParamForGroup(groupName_);
+    } else {
+        GetParams();
+    }
+
     InitParams();
-
-    globalParameter_->SyncParamForGroup(groupName_);
 
     LoadNoiseTextures();
 
@@ -133,7 +139,6 @@ void DissolveData::LoadNoiseTextures() {
 
     for (const auto& entry : std::filesystem::directory_iterator(textureFilePath_)) {
         if (entry.is_regular_file()) {
-      
             noiseTextureFiles_.push_back(entry.path().filename().string());
         }
     }
@@ -228,19 +233,6 @@ void DissolveData::AdjustParam() {
             ImGui::Text("Current: %s", currentTexturePath_.c_str());
         } else {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "No noise textures found!");
-        }
-
-        ImGui::Separator();
-
-        // セーブ・ロード
-        if (ImGui::Button("Load Data")) {
-            LoadData();
-            MessageBoxA(nullptr, "Dissolve data loaded successfully.", "Dissolve Data", 0);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Save Data")) {
-            SaveData();
-            MessageBoxA(nullptr, "Dissolve data saved successfully.", "Dissolve Data", 0);
         }
 
         ImGui::PopID();

@@ -24,44 +24,27 @@ public:
     virtual ~BaseEffectEditor() = default;
 
     //*----------------------------- public Methods -----------------------------*//
+public:
+    // 初期化、更新
+    virtual void Init(const std::string& typeName);
+    virtual void Update(float speedRate = 1.0f);
 
-    virtual void Init(const std::string& typeName, bool isUseCategory = false);
-    virtual void Update(float speedRate=1.0f);
-    virtual void EditorUpdate();
+    // Editor Update
+    void EditorUpdate();
+    void SelectFileEdit([[maybe_unused]] const std::string& fileName, [[maybe_unused]] const std::string& categoryName);
 
-    // 共通操作
-    void AddEffect(const std::string& name);
-    void RemoveEffect(int32_t index);
-
-    // カテゴリー操作
-    void AddCategory(const std::string& categoryName);
-    void RemoveCategory(int32_t index);
-    void AddEffectToCategory(int32_t categoryIndex, const std::string& effectName);
-    void RemoveEffectFromCategory(int32_t categoryIndex, int32_t effectIndex);
-
-    // セーブ、ロード
-    void AllLoadFile();
-    void AllSaveFile();
-    void SaveCategory(int32_t categoryIndex);
-    void LoadCategory(const std::string& categoryName);
-    void RenderPlayBack();
-
-protected:
     //*---------------------------- protected Methods ----------------------------*//
 
     // 派生クラスで実装必須
     virtual std::unique_ptr<TEffectData> CreateEffectData() = 0;
     virtual void RenderSpecificUI()                         = 0;
     virtual void PlaySelectedAnimation()                    = 0;
-    virtual std::string GetFolderPath() const               = 0;
+    virtual std::string GetFolderName() const               = 0;
 
-    // カテゴリー機能を使用するかどうか
-    virtual std::string GetCategoryFolderName() const { return ""; }
-    virtual std::string GetDataFolderName() const { return ""; }
+    void RenderPlayBack();
 
 private:
     // 共通UIレンダリング
-    void RenderEffectList();
     void RenderFileOperations();
     void RenderCategoryUI();
     void RenderCategoryEffectListUI();
@@ -74,38 +57,46 @@ private:
     bool IsSelectedAnimationPlaying() const;
     bool IsSelectedAnimationFinished() const;
 
+    // セーブ、ロード
+    void AllLoadFile();
+    void AllSaveFile();
+    void SaveCategory(int32_t categoryIndex);
+    void LoadCategory(const std::string& categoryName);
+
+    // カテゴリー追加、削除
+    void AddCategory(const std::string& categoryName);
+    void RemoveCategory(int32_t index);
+
+    // エフェクト追加、削除
+    void AddEffect(int32_t categoryIndex, const std::string& effectName);
+    void RemoveEffect(int32_t categoryIndex, int32_t effectIndex);
+
 protected:
     //*---------------------------- protected Variant ----------------------------*//
-
-    // 非カテゴリーモード用
-    std::vector<std::unique_ptr<TEffectData>> effects_;
-    int32_t selectedIndex_ = -1;
 
     // カテゴリーモード用
     std::vector<Category> categories_;
     int32_t selectedCategoryIndex_ = -1;
 
-    // 共通
+    // Name
     char nameBuffer_[128]         = "";
     char categoryNameBuffer_[128] = "";
-    std::string baseFolderPath_;
+    std::string effectFolderName_;
     std::string effectTypeName_;
 
+    // 編集中フラグ
     bool isEditing_ = false;
 
 private:
-    bool isUseCategorySystem_ = false;
+    const std::string datesFolderName_ = "Dates/";
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
 
     TEffectData* GetSelectedEffect();
-    TEffectData* GetEffectByName(const std::string& name);
-
-    bool GetIsEditing() const {return isEditing_; }
-
-    // カテゴリーモード用getter
     TEffectData* GetEffectByName(const std::string& categoryName, const std::string& effectName);
+
+    bool GetIsEditing() const { return isEditing_; }
     const std::vector<Category>& GetCategories() const { return categories_; }
     int32_t GetCategoryCount() const { return static_cast<int32_t>(categories_.size()); }
 };

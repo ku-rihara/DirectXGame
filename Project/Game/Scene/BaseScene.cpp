@@ -1,5 +1,5 @@
 #include "BaseScene.h"
-#include "base/WinApp.h"
+#include "Base/WinApp.h"
 #include "Frame/Frame.h"
 #include "Lighrt/Light.h"
 #include "PostEffect/PostEffectRenderer.h"
@@ -8,8 +8,8 @@
 #include "Editor/CameraEditor/CameraEditor.h"
 
 // Particle
-#include "Editor/ParticleEditor/ParticleManager.h"
-#include "GPUParticle/GPUParticleManager.h"
+#include "Particle/CPUParticle/ParticleManager.h"
+#include "Particle/GPUParticle/GPUParticleManager.h"
 
 #include <imgui.h>
 
@@ -21,7 +21,7 @@ void BaseScene::Init() {
     textureManager_ = KetaEngine::TextureManager::GetInstance();
 
     // 生成
-    debugCamera_       = std::make_unique<KetaEngine::DebugCamera>(KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight);
+    debugCamera_       = std::make_unique<KetaEngine::DebugCamera>();
     effectEditorSuite_ = std::make_unique<KetaEngine::EffectEditorSuite>();
 
     // 初期化
@@ -63,6 +63,8 @@ void BaseScene::Debug() {
     ImGui::Begin("Effect Editor Suite");
     effectEditorSuite_->EditorUpdate();
     ImGui::End();
+
+    KetaEngine::PostEffectRenderer::GetInstance()->DrawImGui();
 #endif
 }
 
@@ -131,5 +133,5 @@ void BaseScene::ViewProjectionUpdate() {
         break;
     }
 
-   KetaEngine::Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
+    KetaEngine::Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }

@@ -38,8 +38,11 @@ public:
     int ProcessMessage(); //< メッセージ処理
 
 public: // 静的メンバ変数
-    static const int kWindowWidth  = 1280; //< 横幅
-    static const int kWindowHeight = 720; //< 縦幅
+    static constexpr int kWindowWidth = 1280; //< 横幅
+    static constexpr int kWindowHeight = 720; //< 縦幅
+
+    // アスペクト比
+    static constexpr float aspectRatio = static_cast<float>(kWindowWidth) / kWindowHeight;
 
     // ウィンドウクラス名
     static const wchar_t kWindowClassName[];

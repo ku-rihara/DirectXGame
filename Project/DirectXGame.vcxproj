@@ -14,25 +14,48 @@
     <ClCompile Include="Engine\2d\ImGuiManager.cpp" />
     <ClCompile Include="Engine\2d\Sprite.cpp" />
     <ClCompile Include="Engine\2d\SpriteRegistry.cpp" />
-    <ClCompile Include="Engine\3d\BaseObject3d.cpp" />
-    <ClCompile Include="Engine\3d\Object3DRegistry.cpp" />
+    <ClCompile Include="Engine\3d\AnimationObject3D\AnimationRegistry.cpp" />
+    <ClCompile Include="Engine\3d\AnimationObject3D\ModelAnimation.cpp" />
+    <ClCompile Include="Engine\3d\AnimationObject3D\Object3DAnimation.cpp" />
+    <ClCompile Include="Engine\3d\Line3D\Line3d.cpp" />
+    <ClCompile Include="Engine\3d\Line3D\Line3DManager.cpp" />
     <ClCompile Include="Engine\3d\Mesh.cpp" />
     <ClCompile Include="Engine\3d\Model.cpp" />
     <ClCompile Include="Engine\3d\ModelManager.cpp" />
-    <ClCompile Include="Engine\3d\Object3d.cpp" />
-    <ClCompile Include="Engine\3d\ObjectColor.cpp" />
+    <ClCompile Include="Engine\3d\Object3D\BaseObject3d.cpp" />
+    <ClCompile Include="Engine\3d\Object3D\Object3d.cpp" />
+    <ClCompile Include="Engine\3d\Object3D\Object3DRegistry.cpp" />
+    <ClCompile Include="Engine\3d\Object3D\ObjectColor.cpp" />
+    <ClCompile Include="Engine\3d\Primitive\IPrimitive.cpp" />
+    <ClCompile Include="Engine\3d\Primitive\PrimitiveBox.cpp" />
+    <ClCompile Include="Engine\3d\Primitive\PrimitiveCylinder.cpp" />
+    <ClCompile Include="Engine\3d\Primitive\PrimitivePlane.cpp" />
+    <ClCompile Include="Engine\3d\Primitive\PrimitiveRing.cpp" />
+    <ClCompile Include="Engine\3d\Primitive\PrimitiveSphere.cpp" />
     <ClCompile Include="Engine\3d\ViewProjection.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
-    <ClCompile Include="Engine\Animation\AnimationRegistry.cpp" />
-    <ClCompile Include="Engine\Animation\ModelAnimation.cpp" />
-    <ClCompile Include="Engine\Animation\Object3DAnimation.cpp" />
-    <ClCompile Include="Engine\audio\Audio.cpp" />
-    <ClCompile Include="Engine\base\DsvManager.cpp" />
-    <ClCompile Include="Engine\base\RtvManager.cpp" />
-    <ClCompile Include="Engine\base\SpriteMaterial.cpp" />
-    <ClCompile Include="Engine\base\SrvManager.cpp" />
-    <ClCompile Include="Engine\base\TextureManager.cpp" />
-    <ClCompile Include="Engine\base\WinApp.cpp" />
+    <ClCompile Include="Engine\Audio\Audio.cpp" />
+    <ClCompile Include="Engine\Base\Descriptors\DsvManager.cpp" />
+    <ClCompile Include="Engine\Base\Descriptors\RtvManager.cpp" />
+    <ClCompile Include="Engine\Base\Descriptors\SrvManager.cpp" />
+    <ClCompile Include="Engine\Base\Dx\DirectXCommon.cpp" />
+    <ClCompile Include="Engine\Base\Dx\DxCommand.cpp" />
+    <ClCompile Include="Engine\Base\Dx\DxCompiler.cpp" />
+    <ClCompile Include="Engine\Base\Dx\DxDepthBuffer.cpp" />
+    <ClCompile Include="Engine\Base\Dx\DxDevice.cpp" />
+    <ClCompile Include="Engine\Base\Dx\DxReleaseChecker.cpp" />
+    <ClCompile Include="Engine\Base\Dx\DxRenderTarget.cpp" />
+    <ClCompile Include="Engine\Base\Dx\DxResourceBarrier.cpp" />
+    <ClCompile Include="Engine\Base\Dx\DxSwapChain.cpp" />
+    <ClCompile Include="Engine\Base\Material\BaseMaterial.cpp" />
+    <ClCompile Include="Engine\Base\Material\GPUParticleMaterial.cpp" />
+    <ClCompile Include="Engine\Base\Material\MeshMaterial.cpp" />
+    <ClCompile Include="Engine\Base\Material\ModelMaterial.cpp" />
+    <ClCompile Include="Engine\Base\Material\ParticleMaterial.cpp" />
+    <ClCompile Include="Engine\Base\Material\SkyBoxMaterial.cpp" />
+    <ClCompile Include="Engine\Base\Material\SpriteMaterial.cpp" />
+    <ClCompile Include="Engine\Base\TextureManager.cpp" />
+    <ClCompile Include="Engine\Base\WinApp.cpp" />
     <ClCompile Include="Engine\Collider\AABBCollider.cpp" />
     <ClCompile Include="Engine\Collider\BaseCollider.cpp" />
     <ClCompile Include="Engine\Collider\CollisionManager.cpp" />
@@ -41,16 +64,10 @@
     <ClCompile Include="Engine\Core\EngineCore.cpp" />
     <ClCompile Include="Engine\Core\KTFramework.cpp" />
     <ClCompile Include="Engine\Core\KTGame.cpp" />
-    <ClCompile Include="Engine\Dx\DirectXCommon.cpp" />
-    <ClCompile Include="Engine\Dx\DxCommand.cpp" />
-    <ClCompile Include="Engine\Dx\DxCompiler.cpp" />
-    <ClCompile Include="Engine\Dx\DxDepthBuffer.cpp" />
-    <ClCompile Include="Engine\Dx\DxDevice.cpp" />
-    <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp" />
-    <ClCompile Include="Engine\Dx\DxRenderTarget.cpp" />
-    <ClCompile Include="Engine\Dx\DxResourceBarrier.cpp" />
-    <ClCompile Include="Engine\Dx\DxSwapChain.cpp" />
     <ClCompile Include="Engine\Easing\Easing.cpp" />
+    <ClCompile Include="Engine\Easing\EasingCreator\EasingCreator.cpp" />
+    <ClCompile Include="Engine\Easing\EasingCreator\EasingEditor.cpp" />
+    <ClCompile Include="Engine\Easing\EasingCreator\EasingParameterData.cpp" />
     <ClCompile Include="Engine\Easing\EasingFunction.cpp" />
     <ClCompile Include="Engine\Easing\EasingSequence.cpp" />
     <ClCompile Include="Engine\Easing\EasingStep.cpp" />
@@ -65,27 +82,12 @@
     <ClCompile Include="Engine\Editor\DissolveEditor\DissolveData.cpp" />
     <ClCompile Include="Engine\Editor\DissolveEditor\DissolveEditor.cpp" />
     <ClCompile Include="Engine\Editor\DissolveEditor\DissolvePlayer.cpp" />
-    <ClCompile Include="Engine\Editor\EasingCreator\EasingCreator.cpp" />
-    <ClCompile Include="Engine\Editor\EasingCreator\EasingEditor.cpp" />
-    <ClCompile Include="Engine\Editor\EasingCreator\EasingParameterData.cpp" />
     <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.cpp" />
-    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleData.cpp" />
-    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleEditor.cpp" />
-    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticlePlayer.cpp" />
-    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationPlayer.cpp" />
     <ClCompile Include="Engine\Editor\ParameterEditor\GlobalParameter.cpp" />
-    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleData.cpp" />
-    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleEditor.cpp" />
-    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleEmitter.cpp" />
-    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleManager.cpp" />
-    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleParameter.cpp" />
-    <ClCompile Include="Engine\Editor\ParticleEditor\ParticlePlayer.cpp" />
-    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSection.cpp" />
-    <ClCompile Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.cpp" />
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectController.cpp" />
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectData.cpp" />
     <ClCompile Include="Engine\Editor\RailEditor\ControlPosManager.cpp" />
@@ -104,9 +106,6 @@
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
-    <ClCompile Include="Engine\GPUParticle\GPUParticleManager.cpp" />
-    <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp" />
-    <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.cpp" />
     <ClCompile Include="Engine\input\GamePad.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\input\InputData.cpp" />
@@ -120,14 +119,22 @@
     <ClCompile Include="Engine\Lighrt\PointLightManager.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
-    <ClCompile Include="Engine\Line3D\Line3d.cpp" />
-    <ClCompile Include="Engine\Line3D\Line3DManager.cpp" />
-    <ClCompile Include="Engine\Material\BaseMaterial.cpp" />
-    <ClCompile Include="Engine\Material\GPUParticleMaterial.cpp" />
-    <ClCompile Include="Engine\Material\ModelMaterial.cpp" />
-    <ClCompile Include="Engine\Material\MeshMaterial.cpp" />
-    <ClCompile Include="Engine\Material\ParticleMaterial.cpp" />
-    <ClCompile Include="Engine\Material\SkyBoxMaterial.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\Editor\Parameter\ParticleCommonParameters.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleData.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleEditor.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleEmitter.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleParameter.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleSection.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\Editor\SectionParameters\ParticleSectionParameter.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\ParticleManager.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\ParticlePlayer.cpp" />
+    <ClCompile Include="Engine\Particle\GPUParticle\Editor\GPUParticleData.cpp" />
+    <ClCompile Include="Engine\Particle\GPUParticle\Editor\GPUParticleEditor.cpp" />
+    <ClCompile Include="Engine\Particle\GPUParticle\Editor\GPUParticleSection.cpp" />
+    <ClCompile Include="Engine\Particle\GPUParticle\GPUParticleManager.cpp" />
+    <ClCompile Include="Engine\Particle\GPUParticle\GPUParticlePlayer.cpp" />
+    <ClCompile Include="Engine\Particle\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp" />
+    <ClCompile Include="Engine\Particle\GPUParticle\ResourceData\GPUParticleResourceData.cpp" />
     <ClCompile Include="Engine\Pipeline\BaseCSPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\BasePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\CSPipelineManager.cpp" />
@@ -156,12 +163,6 @@
     <ClCompile Include="Engine\PostEffect\RadialBlur.cpp" />
     <ClCompile Include="Engine\PostEffect\RandomNoize.cpp" />
     <ClCompile Include="Engine\PostEffect\Vignette.cpp" />
-    <ClCompile Include="Engine\Primitive\IPrimitive.cpp" />
-    <ClCompile Include="Engine\Primitive\PrimitiveBox.cpp" />
-    <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
-    <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
-    <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
-    <ClCompile Include="Engine\Primitive\PrimitiveSphere.cpp" />
     <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp" />
     <ClCompile Include="Engine\Scene\Manager\SceneManager.cpp" />
     <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp" />
@@ -192,6 +193,7 @@
     <ClCompile Include="Game\Combo\ComboUI.cpp" />
     <ClCompile Include="Game\Combo\ComboUIController.cpp" />
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp" />
+    <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp" />
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp" />
     <ClCompile Include="Game\DeathTimer\DeathTimer.cpp" />
     <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp" />
@@ -243,6 +245,11 @@
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineTrackBuilder.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.cpp" />
     <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp" />
     <ClCompile Include="Game\Player\JumpAttackUI\JumpAttackUI.cpp" />
     <ClCompile Include="Game\Player\Parameter\PlayerParameter.cpp" />
@@ -271,6 +278,8 @@
     <ClCompile Include="Game\Scene\GameSceneState\GameScenePose.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneRoot.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
+    <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneController.cpp" />
+    <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneTransition.cpp" />
     <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Game\SkyDome\SkyDome.cpp" />
     <ClCompile Include="Game\UI\HowToOperate.cpp" />
@@ -292,28 +301,51 @@
     <ClInclude Include="Engine\2d\ImGuiManager.h" />
     <ClInclude Include="Engine\2d\Sprite.h" />
     <ClInclude Include="Engine\2d\SpriteRegistry.h" />
-    <ClInclude Include="Engine\3d\BaseObject3d.h" />
-    <ClInclude Include="Engine\3d\Object3DRegistry.h" />
+    <ClInclude Include="Engine\3d\AnimationObject3D\AnimationData.h" />
+    <ClInclude Include="Engine\3d\AnimationObject3D\AnimationRegistry.h" />
+    <ClInclude Include="Engine\3d\AnimationObject3D\ModelAnimation.h" />
+    <ClInclude Include="Engine\3d\AnimationObject3D\Object3DAnimation.h" />
+    <ClInclude Include="Engine\3d\AnimationObject3D\SkeletonData.h" />
+    <ClInclude Include="Engine\3d\AnimationObject3D\SkinCluster.h" />
+    <ClInclude Include="Engine\3d\Line3D\Line3d.h" />
+    <ClInclude Include="Engine\3d\Line3D\Line3DManager.h" />
     <ClInclude Include="Engine\3d\Mesh.h" />
     <ClInclude Include="Engine\3d\Model.h" />
     <ClInclude Include="Engine\3d\ModelManager.h" />
-    <ClInclude Include="Engine\3d\Object3d.h" />
-    <ClInclude Include="Engine\3d\ObjectColor.h" />
+    <ClInclude Include="Engine\3d\Object3D\BaseObject3d.h" />
+    <ClInclude Include="Engine\3d\Object3D\Object3d.h" />
+    <ClInclude Include="Engine\3d\Object3D\Object3DRegistry.h" />
+    <ClInclude Include="Engine\3d\Object3D\ObjectColor.h" />
+    <ClInclude Include="Engine\3d\Primitive\IPrimitive.h" />
+    <ClInclude Include="Engine\3d\Primitive\PrimitiveBox.h" />
+    <ClInclude Include="Engine\3d\Primitive\PrimitiveCylinder.h" />
+    <ClInclude Include="Engine\3d\Primitive\PrimitivePlane.h" />
+    <ClInclude Include="Engine\3d\Primitive\PrimitiveRing.h" />
+    <ClInclude Include="Engine\3d\Primitive\PrimitiveSphere.h" />
     <ClInclude Include="Engine\3d\ViewProjection.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
-    <ClInclude Include="Engine\Animation\AnimationData.h" />
-    <ClInclude Include="Engine\Animation\AnimationRegistry.h" />
-    <ClInclude Include="Engine\Animation\ModelAnimation.h" />
-    <ClInclude Include="Engine\Animation\Object3DAnimation.h" />
-    <ClInclude Include="Engine\Animation\SkeletonData.h" />
-    <ClInclude Include="Engine\Animation\SkinCluster.h" />
-    <ClInclude Include="Engine\audio\Audio.h" />
-    <ClInclude Include="Engine\base\DsvManager.h" />
-    <ClInclude Include="Engine\base\RtvManager.h" />
-    <ClInclude Include="Engine\base\SpriteMaterial.h" />
-    <ClInclude Include="Engine\base\SrvManager.h" />
-    <ClInclude Include="Engine\base\TextureManager.h" />
-    <ClInclude Include="Engine\base\WinApp.h" />
+    <ClInclude Include="Engine\Audio\Audio.h" />
+    <ClInclude Include="Engine\Base\Descriptors\DsvManager.h" />
+    <ClInclude Include="Engine\Base\Descriptors\RtvManager.h" />
+    <ClInclude Include="Engine\Base\Descriptors\SrvManager.h" />
+    <ClInclude Include="Engine\Base\Dx\DirectXCommon.h" />
+    <ClInclude Include="Engine\Base\Dx\DxCommand.h" />
+    <ClInclude Include="Engine\Base\Dx\DxCompiler.h" />
+    <ClInclude Include="Engine\Base\Dx\DxDepthBuffer.h" />
+    <ClInclude Include="Engine\Base\Dx\DxDevice.h" />
+    <ClInclude Include="Engine\Base\Dx\DxReleaseChecker.h" />
+    <ClInclude Include="Engine\Base\Dx\DxRenderTarget.h" />
+    <ClInclude Include="Engine\Base\Dx\DxResourceBarrier.h" />
+    <ClInclude Include="Engine\Base\Dx\DxSwapChain.h" />
+    <ClInclude Include="Engine\Base\Material\BaseMaterial.h" />
+    <ClInclude Include="Engine\Base\Material\GPUParticleMaterial.h" />
+    <ClInclude Include="Engine\Base\Material\MeshMaterial.h" />
+    <ClInclude Include="Engine\Base\Material\ModelMaterial.h" />
+    <ClInclude Include="Engine\Base\Material\ParticleMaterial.h" />
+    <ClInclude Include="Engine\Base\Material\SkyBoxMaterial.h" />
+    <ClInclude Include="Engine\Base\Material\SpriteMaterial.h" />
+    <ClInclude Include="Engine\Base\TextureManager.h" />
+    <ClInclude Include="Engine\Base\WinApp.h" />
     <ClInclude Include="Engine\Collider\AABBCollider.h" />
     <ClInclude Include="Engine\Collider\BaseCollider.h" />
     <ClInclude Include="Engine\Collider\CollisionManager.h" />
@@ -322,20 +354,13 @@
     <ClInclude Include="Engine\Core\EngineCore.h" />
     <ClInclude Include="Engine\Core\KTFramework.h" />
     <ClInclude Include="Engine\Core\KTGame.h" />
-    <ClInclude Include="Engine\Dx\DirectXCommon.h" />
-    <ClInclude Include="Engine\Dx\DxCommand.h" />
-    <ClInclude Include="Engine\Dx\DxCompiler.h" />
-    <ClInclude Include="Engine\Dx\DxDepthBuffer.h" />
-    <ClInclude Include="Engine\Dx\DxDevice.h" />
-    <ClInclude Include="Engine\Dx\DxReleaseChecker.h" />
-    <ClInclude Include="Engine\Dx\DxRenderTarget.h" />
-    <ClInclude Include="Engine\Dx\DxResourceBarrier.h" />
-    <ClInclude Include="Engine\Dx\DxSwapChain.h" />
     <ClInclude Include="Engine\Easing\Easing.h" />
+    <ClInclude Include="Engine\Easing\EasingCreator\EasingCreator.h" />
+    <ClInclude Include="Engine\Easing\EasingCreator\EasingEditor.h" />
+    <ClInclude Include="Engine\Easing\EasingCreator\EasingParameterData.h" />
     <ClInclude Include="Engine\Easing\EasingFunction.h" />
     <ClInclude Include="Engine\Easing\EasingSequence.h" />
     <ClInclude Include="Engine\Easing\EasingStep.h" />
-    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectData.h" />
     <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectEditor.h" />
     <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectPlayer.h" />
     <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseSequenceEffectData.h" />
@@ -346,28 +371,12 @@
     <ClInclude Include="Engine\Editor\DissolveEditor\DissolveData.h" />
     <ClInclude Include="Engine\Editor\DissolveEditor\DissolveEditor.h" />
     <ClInclude Include="Engine\Editor\DissolveEditor\DissolvePlayer.h" />
-    <ClInclude Include="Engine\Editor\EasingCreator\EasingCreator.h" />
-    <ClInclude Include="Engine\Editor\EasingCreator\EasingEditor.h" />
-    <ClInclude Include="Engine\Editor\EasingCreator\EasingParameterData.h" />
     <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.h" />
-    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleData.h" />
-    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleEditor.h" />
-    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticlePlayer.h" />
-    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationPlayer.h" />
     <ClInclude Include="Engine\Editor\ParameterEditor\GlobalParameter.h" />
-    <ClInclude Include="Engine\Editor\ParticleEditor\Parameter\ParticleCommonParameters.h" />
-    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleData.h" />
-    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEditor.h" />
-    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEmitter.h" />
-    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleManager.h" />
-    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleParameter.h" />
-    <ClInclude Include="Engine\Editor\ParticleEditor\ParticlePlayer.h" />
-    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSection.h" />
-    <ClInclude Include="Engine\Editor\ParticleEditor\SectionParameters\ParticleSectionParameter.h" />
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectController.h" />
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectData.h" />
     <ClInclude Include="Engine\Editor\RailEditor\ControlPosManager.h" />
@@ -387,11 +396,6 @@
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\GetFile.h" />
     <ClInclude Include="Engine\Function\Log.h" />
-    <ClInclude Include="Engine\GPUParticle\Data\GPUParticleEmitterData.h" />
-    <ClInclude Include="Engine\GPUParticle\Data\ParticleCSData.h" />
-    <ClInclude Include="Engine\GPUParticle\GPUParticleManager.h" />
-    <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h" />
-    <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.h" />
     <ClInclude Include="Engine\input\GamePad.h" />
     <ClInclude Include="Engine\input\Input.h" />
     <ClInclude Include="Engine\input\InputData.h" />
@@ -405,14 +409,24 @@
     <ClInclude Include="Engine\Lighrt\PointLightManager.h" />
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
-    <ClInclude Include="Engine\Line3D\Line3d.h" />
-    <ClInclude Include="Engine\Line3D\Line3DManager.h" />
-    <ClInclude Include="Engine\Material\BaseMaterial.h" />
-    <ClInclude Include="Engine\Material\GPUParticleMaterial.h" />
-    <ClInclude Include="Engine\Material\ModelMaterial.h" />
-    <ClInclude Include="Engine\Material\MeshMaterial.h" />
-    <ClInclude Include="Engine\Material\ParticleMaterial.h" />
-    <ClInclude Include="Engine\Material\SkyBoxMaterial.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\Editor\Parameter\ParticleCommonParameters.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleData.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleEditor.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleEmitter.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleParameter.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleSection.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\Editor\SectionParameters\ParticleSectionParameter.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\ParticleManager.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\ParticlePlayer.h" />
+    <ClInclude Include="Engine\Particle\GPUParticle\Data\GPUParticleEmitterData.h" />
+    <ClInclude Include="Engine\Particle\GPUParticle\Data\ParticleCSData.h" />
+    <ClInclude Include="Engine\Particle\GPUParticle\Editor\GPUParticleData.h" />
+    <ClInclude Include="Engine\Particle\GPUParticle\Editor\GPUParticleEditor.h" />
+    <ClInclude Include="Engine\Particle\GPUParticle\Editor\GPUParticleSection.h" />
+    <ClInclude Include="Engine\Particle\GPUParticle\GPUParticleManager.h" />
+    <ClInclude Include="Engine\Particle\GPUParticle\GPUParticlePlayer.h" />
+    <ClInclude Include="Engine\Particle\GPUParticle\ResourceData\GPUParticleCommandExecutor.h" />
+    <ClInclude Include="Engine\Particle\GPUParticle\ResourceData\GPUParticleResourceData.h" />
     <ClInclude Include="Engine\Pipeline\BaseCSPipeline.h" />
     <ClInclude Include="Engine\Pipeline\BasePipeline.h" />
     <ClInclude Include="Engine\Pipeline\CSPipelineManager.h" />
@@ -441,12 +455,6 @@
     <ClInclude Include="Engine\PostEffect\RadialBlur.h" />
     <ClInclude Include="Engine\PostEffect\RandomNoize.h" />
     <ClInclude Include="Engine\PostEffect\Vignette.h" />
-    <ClInclude Include="Engine\Primitive\IPrimitive.h" />
-    <ClInclude Include="Engine\Primitive\PrimitiveBox.h" />
-    <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
-    <ClInclude Include="Engine\Primitive\PrimitivePlane.h" />
-    <ClInclude Include="Engine\Primitive\PrimitiveRing.h" />
-    <ClInclude Include="Engine\Primitive\PrimitiveSphere.h" />
     <ClInclude Include="Engine\Scene\Factory\AbstractSceneFactory.h" />
     <ClInclude Include="Engine\Scene\Factory\SceneFactory.h" />
     <ClInclude Include="Engine\Scene\Manager\SceneManager.h" />
@@ -487,6 +495,7 @@
     <ClInclude Include="Game\Combo\ComboUI.h" />
     <ClInclude Include="Game\Combo\ComboUIController.h" />
     <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h" />
+    <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h" />
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h" />
     <ClInclude Include="Game\DeathTimer\DeathTimer.h" />
     <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h" />
@@ -539,6 +548,11 @@
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h" />
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.h" />
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineTrackBuilder.h" />
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.h" />
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.h" />
+    <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.h" />
     <ClInclude Include="Game\Player\Effect\PlayerEffects.h" />
     <ClInclude Include="Game\Player\JumpAttackUI\JumpAttackUI.h" />
     <ClInclude Include="Game\Player\Parameter\PlayerParameter.h" />
@@ -567,6 +581,8 @@
     <ClInclude Include="Game\Scene\GameSceneState\GameScenePose.h" />
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneRoot.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
+    <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneController.h" />
+    <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneTransition.h" />
     <ClInclude Include="Game\SkyBox\SkyBox.h" />
     <ClInclude Include="Game\SkyDome\SkyDome.h" />
     <ClInclude Include="Game\UI\HowToOperate.h" />
@@ -806,10 +822,8 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -818,13 +832,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)DirectXTex;$(SolutionDir)externals\Imgui;$(SolutionDir)externals\nlohmann;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)DirectXTex;$(SolutionDir)externals\Imgui;$(SolutionDir)externals\nlohmann;(IncludePath)</IncludePath>
     <IntDir>$(SolutionDir)..\generated\obj\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)..\generated\outputs\$(Configuration)\</OutDir>
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)DirectXTex;$(SolutionDir)externals\Imgui;$(SolutionDir)externals\nlohmann;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)DirectXTex;$(SolutionDir)externals\Imgui;$(SolutionDir)externals\nlohmann;(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\generated\outputs\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\generated\obj\$(ProjectName)\$(Configuration)\</IntDir>
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
@@ -867,9 +881,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)\d
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)Game;$(ProjectDir)math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SupportJustMyCode>false</SupportJustMyCode>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -885,6 +896,5 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)\d
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

@@ -1,7 +1,7 @@
 #include "WorldTransform.h"
 
 using namespace KetaEngine;
-#include "Animation/Object3DAnimation.h"
+#include "3D/AnimationObject3D/Object3DAnimation.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 
 WorldTransform::WorldTransform()  = default;
@@ -307,13 +307,13 @@ Vector3 WorldTransform::ScaleCalc(bool isDirectScale) {
 ///============================================================
 /// オブジェクトイージングアニメーション再生
 ///============================================================
-void WorldTransform::PlayObjEaseAnimation(const std::string& categoryName, const std::string& animationName) {
+void WorldTransform::PlayObjEaseAnimation(const std::string& animationName, const std::string& categoryName) {
     if (!objEaseAnimationPlayer_) {
         objEaseAnimationPlayer_ = std::make_unique<ObjEaseAnimationPlayer>();
         objEaseAnimationPlayer_->Init();
     }
 
-    objEaseAnimationPlayer_->Play(categoryName, animationName);
+    objEaseAnimationPlayer_->Play(animationName, categoryName);
 
     // Rail使用時、親を設定
     if (objEaseAnimationPlayer_->GetAnimationData() && objEaseAnimationPlayer_->GetAnimationData()->GetIsUseRailActiveKeyFrame()) {

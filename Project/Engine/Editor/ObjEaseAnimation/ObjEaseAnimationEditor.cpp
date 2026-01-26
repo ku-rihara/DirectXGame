@@ -5,10 +5,9 @@ using namespace KetaEngine;
 #include <imgui.h>
 #include <Windows.h>
 
-void ObjEaseAnimationEditor::Init(const std::string& typeName, bool isUseCategory) {
-    BaseEffectEditor::Init(typeName, isUseCategory);
+void ObjEaseAnimationEditor::Init(const std::string& typeName) {
+    BaseEffectEditor::Init(typeName);
     InitPreviewObject();
-
 }
 
 void ObjEaseAnimationEditor::InitPreviewObject() {
@@ -101,18 +100,15 @@ void ObjEaseAnimationEditor::RenderSpecificUI() {
     BaseEffectEditor::RenderPlayBack();
 }
 
-std::string ObjEaseAnimationEditor::GetFolderPath() const {
-    return animationFolderName_;
-}
-
 void ObjEaseAnimationEditor::ChangePreviewModel(const std::string& modelName) {
     previewObject_->SetModelByName(modelName);
-}
-
-void ObjEaseAnimationEditor::EditorUpdate() {
-    BaseEffectEditor::EditorUpdate();
 }
 
 void ObjEaseAnimationEditor::PlaySelectedAnimation() {
     BaseEffectEditor::PlaySelectedAnimation();
 }
+
+std::string ObjEaseAnimationEditor::GetFolderName() const {
+    return folderName_;
+}
+

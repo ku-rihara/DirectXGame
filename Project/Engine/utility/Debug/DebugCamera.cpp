@@ -1,28 +1,22 @@
 #include "DebugCamera.h"
+#include "Base/WinApp.h"
 
 using namespace KetaEngine;
 #include <numbers>
 
-DebugCamera::DebugCamera(const int& window_width, const int& window_height) {
-
+void DebugCamera::Init() {
     input_ = Input::GetInstance();
     // ビュープロジェクションの初期化
     viewProjection_.Init();
-    matRot_ = MakeIdentity4x4();
-    SetAspectRatio(static_cast<float>(window_width) / window_height);
-    // 初期行列の更新
-    UpdateMatrix();
-}
 
-void DebugCamera::Init() {
-    // ビュープロジェクションの初期化
-    viewProjection_.Init();
-    // カメラの初期位置を設定
-    viewProjection_.translation_ = {7, 30, -100};
-    viewProjection_.rotation_    = {0, 0, 0};
-    matRot_                      = MakeIdentity4x4();
-    yaw_                         = 0.0f;
-    pitch_                       = 0.0f;
+    // カメラの設定
+    viewProjection_.translation_ = {0.0f, 30, -100};
+    viewProjection_.aspectRatio_ = WinApp::aspectRatio;
+
+    matRot_ = MakeIdentity4x4();
+    yaw_    = 0.0f;
+    pitch_  = 0.0f;
+
     // 初期行列の更新
     UpdateMatrix();
 }
@@ -39,7 +33,7 @@ void DebugCamera::Update() {
         viewProjection_.translation_ += up * (mouseMove.lY * 0.02f); // Y軸方向の移動
     }
 
-    if (input_->GetWheel()&&input_->PushKey(KeyboardKey::LeftShift)) {
+    if (input_->GetWheel() && input_->PushKey(KeyboardKey::LeftShift)) {
         // カメラの前方向に基づいた移動
         Vector3 forward = TransformNormal({0, 0, 1}, matRot_);
         viewProjection_.translation_ += forward * (mouseMove.lZ * 0.02f);

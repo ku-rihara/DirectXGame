@@ -8,8 +8,8 @@ using namespace KetaEngine;
 #include <imgui.h>
 #include <numbers>
 
-void CameraEditor::Init(const std::string& animationName, bool isUseCategory) {
-    BaseEffectEditor::Init(animationName, isUseCategory);
+void CameraEditor::Init(const std::string& animationName) {
+    BaseEffectEditor::Init(animationName);
 
     preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));
     preViewFollowObj_.reset(Object3d::CreateModel("debugCube.obj"));
@@ -19,9 +19,6 @@ void CameraEditor::Init(const std::string& animationName, bool isUseCategory) {
 }
 
 void CameraEditor::Update(float speedRate) {
-    // 未使用
-    speedRate;
-
     if (!viewProjection_) {
         return;
     }
@@ -46,21 +43,26 @@ void CameraEditor::Update(float speedRate) {
 }
 
 void CameraEditor::PlaySelectedAnimation() {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        // ViewProjectionの初期値を保存
-        if (viewProjection_) {
-            effects_[selectedIndex_]->SetInitialValues(
-                viewProjection_->positionOffset_,
-                viewProjection_->rotationOffset_,
-                viewProjection_->fovAngleY_);
-        }
+    if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
+        auto& category = categories_[selectedCategoryIndex_];
+        if (category.selectedEffectIndex >= 0 && category.selectedEffectIndex < static_cast<int>(category.effects.size())) {
+            auto* animation = category.effects[category.selectedEffectIndex].get();
 
-        // 注視点ターゲットを設定
-        if (preViewFollowObj_) {
-            effects_[selectedIndex_]->SetLookAtTarget(&preViewFollowObj_->transform_);
-        }
+            // ViewProjectionの初期値を保存
+            if (viewProjection_) {
+                animation->SetInitialValues(
+                    viewProjection_->positionOffset_,
+                    viewProjection_->rotationOffset_,
+                    viewProjection_->fovAngleY_);
+            }
 
-        effects_[selectedIndex_]->Play();
+            // 注視点ターゲットを設定
+            if (preViewFollowObj_) {
+                animation->SetLookAtTarget(&preViewFollowObj_->transform_);
+            }
+
+            animation->Play();
+        }
     }
 }
 
@@ -73,18 +75,25 @@ void CameraEditor::ApplyToViewProjection() {
         return;
     }
 
-    // 再生中のアニメーションがあれば適用
-    for (auto& animation : effects_) {
-        animation->ApplyToViewProjection(*viewProjection_);
+    // 全カテゴリーの全アニメーションに適用
+    for (auto& category : categories_) {
+        for (auto& animation : category.effects) {
+            animation->ApplyToViewProjection(*viewProjection_);
+        }
     }
 }
 
 void CameraEditor::ApplySelectedKeyFrameToViewProjection() {
-    if (!viewProjection_ || selectedIndex_ < 0 || selectedIndex_ >= static_cast<int>(effects_.size())) {
+    if (!viewProjection_ || selectedCategoryIndex_ < 0 || selectedCategoryIndex_ >= static_cast<int>(categories_.size())) {
         return;
     }
 
-    auto* selectedAnime     = effects_[selectedIndex_].get();
+    auto& category = categories_[selectedCategoryIndex_];
+    if (category.selectedEffectIndex < 0 || category.selectedEffectIndex >= static_cast<int>(category.effects.size())) {
+        return;
+    }
+
+    auto* selectedAnime    = category.effects[category.selectedEffectIndex].get();
     auto* selectedKeyFrame = selectedAnime->GetSelectedKeyFrame();
 
     if (!selectedKeyFrame) {
@@ -112,8 +121,11 @@ void CameraEditor::ApplySelectedKeyFrameToViewProjection() {
 }
 
 CameraAnimationData* CameraEditor::GetSelectedAnimation() {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        return effects_[selectedIndex_].get();
+    if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
+        auto& category = categories_[selectedCategoryIndex_];
+        if (category.selectedEffectIndex >= 0 && category.selectedEffectIndex < static_cast<int>(category.effects.size())) {
+            return category.effects[category.selectedEffectIndex].get();
+        }
     }
     return nullptr;
 }
@@ -123,10 +135,11 @@ void CameraEditor::SetViewProjection(ViewProjection* vp) {
 }
 
 void CameraEditor::SetLookAtTarget() {
-  
-    // 既存の全アニメーションにもターゲットを設定
-    for (auto& animation : effects_) {
-        animation->SetLookAtTarget(&preViewFollowObj_->transform_);
+    // 全カテゴリーの全アニメーションにターゲットを設定
+    for (auto& category : categories_) {
+        for (auto& animation : category.effects) {
+            animation->SetLookAtTarget(&preViewFollowObj_->transform_);
+        }
     }
 }
 
@@ -149,19 +162,16 @@ void CameraEditor::RenderSpecificUI() {
     ImGui::Checkbox("KeyFrame Preview Mode", &keyFramePreviewMode_);
     ImGui::Checkbox("Show Preview Objects", &isPreViewDraw_);
 
-
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        ImGui::Separator();
-
-        BaseEffectEditor::RenderPlayBack();
+    if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
+        auto& category = categories_[selectedCategoryIndex_];
+        if (category.selectedEffectIndex >= 0 && category.selectedEffectIndex < static_cast<int>(category.effects.size())) {
+            ImGui::Separator();
+            BaseEffectEditor::RenderPlayBack();
+        }
     }
 }
 
-void CameraEditor::EditorUpdate() {
-    BaseEffectEditor::EditorUpdate();
-}
-
-std::string CameraEditor::GetFolderPath() const {
+std::string CameraEditor::GetFolderName() const {
     return folderName_;
 }
 

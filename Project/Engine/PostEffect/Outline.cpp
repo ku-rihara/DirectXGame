@@ -2,14 +2,14 @@
 
 using namespace KetaEngine;
 #include "3d/ViewProjection.h"
-#include "Dx/DirectXCommon.h"
-#include "Dx/DxCompiler.h"
-#include "Dx/DxRenderTarget.h"
-#include"Dx/DxDepthBuffer.h"
+#include "Base/Dx/DirectXCommon.h"
+#include "Base/Dx/DxCompiler.h"
+#include "Base/Dx/DxDepthBuffer.h"
+#include "Base/Dx/DxRenderTarget.h"
 #include "function/Log.h"
 #include <cassert>
 #include <d3dx12.h>
-#include<imgui.h>
+#include <imgui.h>
 
 void Outline::Init(DirectXCommon* dxCommon) {
 
@@ -131,7 +131,7 @@ void Outline::CreateConstantBuffer() {
 
     // param (b0)
     paramDataResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(ParamData));
-    hr              = paramDataResource_->Map(0, &readRange, reinterpret_cast<void**>(&paramData_));
+    hr                 = paramDataResource_->Map(0, &readRange, reinterpret_cast<void**>(&paramData_));
     if (FAILED(hr)) {
         // エラー処理
         OutputDebugStringA("ConstBuffer Map failed.\n");
@@ -146,7 +146,7 @@ void Outline::CreateConstantBuffer() {
     }
 
     outlineMaterialData_->projectionInverse = MakeIdentity4x4();
-    paramData_->wightRate                  = 0.2f;
+    paramData_->wightRate                   = 0.2f;
 }
 
 void Outline::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {

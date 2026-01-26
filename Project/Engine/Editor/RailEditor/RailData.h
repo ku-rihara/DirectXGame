@@ -58,8 +58,10 @@ public:
 
     //*----------------------------- public Methods -----------------------------*//
 
+    // カテゴリー対応初期化
+    void Init(const std::string& railName, const std::string& categoryName) override;
+
     // BaseEffectDataからのオーバーライド
-    void Init(const std::string& railName) override;
     void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
@@ -85,9 +87,9 @@ protected:
     void InitParams() override;
 
     void UpdateKeyFrameProgression() override;
-    void AdvanceToNexTSequenceElement() override;
+    void AdvanceToNextSequenceElement() override;
     std::unique_ptr<RailControlPoint> CreateKeyFrame(int32_t index) override;
-    std::string GeTSequenceElementFolderPath() const override;
+    std::string GetSequenceElementFolderPath() const override;
 
 private:
     //*---------------------------- private Methods ----------------------------*//
@@ -100,8 +102,7 @@ private:
 private:
     //*---------------------------- private Variant ----------------------------*//
 
-    std::string dateFolderPath_     = "RailEditor/Dates";
-    const std::string keyFramePath_ = "RailEditor/ControlPoints/";
+    const std::string baseFolderPath_ = "RailEditor/";
     std::unique_ptr<Rail> rail_;
 
     Vector3 currentPosition_ = Vector3::ZeroVector();
@@ -125,8 +126,6 @@ public:
     Vector3 GetMovementDirection() const;
 
     void SetParent(WorldTransform* parent) { parentTransform_ = parent; }
-
-
 };
 
 }; // KetaEngine

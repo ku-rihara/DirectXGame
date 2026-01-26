@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Line3D/Line3D.h"
+#include "3D/Line3D/Line3D.h"
 #include "Vector3.h"
 #include <memory>
 #include <unordered_map>

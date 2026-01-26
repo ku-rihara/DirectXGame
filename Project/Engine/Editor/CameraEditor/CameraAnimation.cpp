@@ -3,7 +3,6 @@
 using namespace KetaEngine;
 
 void CameraAnimation::Init() {
-
     BaseEffectPlayer::Init();
     // オフセット値を初期化
     ResetOffsetParam();
@@ -17,28 +16,30 @@ void CameraAnimation::Update(float speedRate) {
     }
 }
 
-void CameraAnimation::Play(const std::string& animationName) {
-    if (!effectData_) {
-        return;
+void CameraAnimation::Play(const std::string& animationName, const std::string& categoryName) {
+    if (effectData_) {
+        effectData_->Pause();
     }
 
-    currentEffectName_ = animationName;
-
     effectData_.reset();
-    effectData_ = std::make_unique<CameraAnimationData>();
+    effectData_ = CreateEffectData();
+
+    currentCategoryName_ = categoryName;
+    currentEffectName_   = animationName;
 
     // アニメーションデータの初期化とロード
-    effectData_->Init(currentEffectName_);
-    effectData_->LoadData();
+    if (CameraAnimationData* cameraData = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
+        cameraData->Init(animationName, categoryName);
+        cameraData->LoadData();
 
-    // 現在の値を初期値として保存
-    SaveInitialValues();
+        // 現在の値を初期値として保存
+        SaveInitialValues();
 
-    effectData_->Play();
+        cameraData->Play();
+    }
 }
- 
-void CameraAnimation::SaveInitialValues() {
 
+void CameraAnimation::SaveInitialValues() {
     if (!pViewProjection_) {
         return;
     }

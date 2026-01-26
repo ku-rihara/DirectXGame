@@ -4,7 +4,7 @@ using namespace KetaEngine;
 #include "AmbientLight.h"
 #include "AreaLightManager.h"
 #include "DirectionalLight.h"
-#include "Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "Pipeline/Object3D/Object3DPipeline.h"
 #include "PointLightManager.h"
 #include "SpotLightManager.h"
@@ -132,11 +132,11 @@ void Light::AddPointLight() {
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }
 
-void Light::RemoveSpotLight(const int& num) {
+void Light::RemoveSpotLight(int num) {
     pointLightManager_->Remove(num);
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }
-void Light::RemovePointLight(const int& num) {
+void Light::RemovePointLight(int num) {
     pointLightManager_->Remove(num);
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }

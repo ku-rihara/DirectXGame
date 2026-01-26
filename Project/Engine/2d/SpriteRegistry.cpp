@@ -2,7 +2,7 @@
 
 using namespace KetaEngine;
 #include "2d/Sprite.h"
-#include "Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "Pipeline/PipelineManager.h"
 #include <algorithm>
 #include <cstdlib>

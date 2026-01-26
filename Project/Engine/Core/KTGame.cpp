@@ -2,14 +2,14 @@
 
 using namespace KetaEngine;
 /// Scene
-#include "2d/SpriteRegistry.h"
-#include "3d/Object3DRegistry.h"
-#include "Animation/AnimationRegistry.h"
+#include "2D/SpriteRegistry.h"
+#include "3D/Object3D/Object3DRegistry.h"
+#include "3D/AnimationObject3D/AnimationRegistry.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include "Scene/Factory/SceneFactory.h"
-#include "Editor/ParticleEditor/ParticleManager.h"
-#include"Line3D/Line3DManager.h"
-#include"GPUParticle/GPUParticleManager.h"
+#include "Particle/CPUParticle/ParticleManager.h"
+#include "3D/Line3D/Line3DManager.h"
+#include "Particle/GPUParticle/GPUParticleManager.h"
 
 // utility
 #include "Collider/CollisionManager.h"
@@ -86,8 +86,6 @@ void KTGame::DrawPostEffect() {
 
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-
-    PostEffectRenderer::GetInstance()->DrawImGui();
     PostEffectRenderer::GetInstance()->Draw(commandList);
 }
 

@@ -1,14 +1,10 @@
 #include "ShadowMap.h"
 
 using namespace KetaEngine;
-#include "3d/Model.h"
 #include "3d/ViewProjection.h"
-#include "3d/WorldTransform.h"
-#include "base/DsvManager.h"
-#include "base/SrvManager.h"
-#include "base/WinApp.h"
-#include "Dx/DirectXCommon.h"
-#include "Dx/DxDepthBuffer.h"
+#include "Base/Descriptors/DsvManager.h"
+#include "Base/Descriptors/SrvManager.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "Lighrt/DirectionalLight.h"
 #include "Lighrt/Light.h"
 #include "Pipeline/ShadowMap/ShadowMapPipeline.h"
@@ -32,7 +28,7 @@ void ShadowMap::Init(DirectXCommon* dxCommon) {
 
     lightViewProjection_ = std::make_unique<ViewProjection>();
     lightViewProjection_->Init();
-    lightViewProjection_->translation_ = Vector3::ZeroVector();
+    lightViewProjection_->translation_    = Vector3::ZeroVector();
     lightViewProjection_->projectionType_ = ViewProjection::ProjectionType::ORTHOGRAPHIC;
 
     // パイプライン初期化
@@ -186,7 +182,6 @@ void ShadowMap::SetLightOrientation(const Vector3& lightDirection) {
     lightViewProjection_->rotation_.z = 0.0f;
 }
 
-
 void ShadowMap::PreDraw() {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
@@ -216,7 +211,7 @@ void ShadowMap::PostDraw() {
 
 void ShadowMap::DebugImGui() {
     if (ImGui::TreeNode("ShadowMap Debug")) {
-        ImGui::DragFloat3("targetPos", &targetPos_.x,0.5f);
+        ImGui::DragFloat3("targetPos", &targetPos_.x, 0.5f);
         ImGui::DragFloat("lightDistance", &lightDistance_, 1.0f, 1.0f, 100.0f);
 
         ImGui::TreePop();

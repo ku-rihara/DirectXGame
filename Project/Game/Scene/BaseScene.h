@@ -1,8 +1,8 @@
 #pragma once
 
 // DirectX
-#include "base/TextureManager.h"
-#include "Dx/DirectXCommon.h"
+#include "Base/TextureManager.h"
+#include "Base/Dx/DirectXCommon.h"
 
 // Transform
 #include "3d/ViewProjection.h"

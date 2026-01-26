@@ -1,8 +1,13 @@
 #pragma once
-#include "Animation/Object3DAnimation.h"
+
+// Audience
 #include "Audience.h"
+// Parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
+// math
 #include "Vector2.h"
+#include "Vector3.h"
+// std
 #include <array>
 #include <cstdint>
 #include <memory>
@@ -35,16 +40,19 @@ private:
     Vector2 GetSeatsRowZYPos(int32_t row) const;
 
 private:
+    // 観客の最大数
     const int32_t audienceMaxNum_ = 50;
 
+    // global parameter
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_                  = "AudienceController";
 
+    // 観客の配列
     std::array<std::unique_ptr<Audience>, 50> audiences_;
 
     // 列の設定
-    Vector2 baseSeatsZYPos_{0.0f, 0.0f}; 
-    Vector2 seatsRowZYOffset_{0.0f, 2.0f};
+    Vector2 baseSeatsZYPos_   = {0.0f, 0.0f};
+    Vector2 seatsRowZYOffset_ = {0.0f, 2.0f};
 
     float cheerAnimationTimer_;
 

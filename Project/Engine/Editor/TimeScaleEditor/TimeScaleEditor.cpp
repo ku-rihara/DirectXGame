@@ -3,19 +3,13 @@
 using namespace KetaEngine;
 #include <imgui.h>
 
-void TimeScaleEditor::Init(const std::string& editorName, bool isUseCategory) {
-    BaseEffectEditor::Init(editorName, isUseCategory);
+void TimeScaleEditor::Init(const std::string& typeName) {
+    BaseEffectEditor::Init(typeName);
 }
 
 void TimeScaleEditor::Update(float deltaTime) {
-    // すべてのTimeScaleを更新
-    for (auto& timeScale : effects_) {
-        timeScale->Update(deltaTime);
-    }
-}
-
-void TimeScaleEditor::EditorUpdate() {
-    BaseEffectEditor::EditorUpdate();
+    // 基底クラスのUpdate呼び出し
+    BaseEffectEditor::Update(deltaTime);
 }
 
 void TimeScaleEditor::PlaySelectedAnimation() {
@@ -29,15 +23,13 @@ std::unique_ptr<TimeScaleData> TimeScaleEditor::CreateEffectData() {
     return std::make_unique<TimeScaleData>();
 }
 
-std::string TimeScaleEditor::GetFolderPath() const {
-    return folderName_;
+std::string TimeScaleEditor::GetFolderName() const {
+    return "TimeScale/";
 }
 
 void TimeScaleEditor::RenderSpecificUI() {
     ImGui::SeparatorText("TimeScale Editor Settings");
 
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        ImGui::Separator();
-        BaseEffectEditor::RenderPlayBack();
-    }
+    ImGui::Separator();
+    BaseEffectEditor::RenderPlayBack();
 }

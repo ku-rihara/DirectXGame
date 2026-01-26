@@ -1,6 +1,6 @@
 #pragma once
-#include "Animation/SkinCluster.h"
-#include "Material/ModelMaterial.h"
+#include "3D/AnimationObject3D/SkinCluster.h"
+#include "Base/Material/ModelMaterial.h"
 #include "struct/ModelData.h"
 #include <assimp/scene.h>
 #include <d3d12.h>

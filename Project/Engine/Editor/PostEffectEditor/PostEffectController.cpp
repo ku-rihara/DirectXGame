@@ -176,7 +176,7 @@ void PostEffectController::AddPostEffect(const std::string& postEffectName) {
     selectedIndex_ = static_cast<int>(postEffects_.size()) - 1;
 }
 
-void PostEffectController::RemovePostEffect(const int& index) {
+void PostEffectController::RemovePostEffect(int index) {
     if (index >= 0 && index < static_cast<int>(postEffects_.size())) {
         postEffects_.erase(postEffects_.begin() + index);
 
