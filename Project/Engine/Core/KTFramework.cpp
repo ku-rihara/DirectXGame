@@ -3,13 +3,14 @@
 using namespace KetaEngine;
 
 // dx
+#include "Base/Dx/DxRenderTarget.h"
 #include "PostEffect/PostEffectRenderer.h"
-#include"Base/Dx/DxRenderTarget.h"
 #include "ShadowMap/ShadowMap.h"
 
 // utility
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // imGui
+#include "2D/ImGuiManager.h"
 #include <imgui.h>
 
 const char kWindowTitle[] = "LE3A_11_クリハラ_ケイタ";
@@ -68,14 +69,9 @@ void KTFramework::Run() {
 // 更新処理
 // ========================================================
 void KTFramework::Update() {
-    /// FPS表示
-    DisplayFPS();
+
     /// グローバル変数の更新
     GlobalParameter::GetInstance()->SyncAll();
-
-    /// ゲームビューウィンドウを表示
-    DisplayGameView();
-
     // デバッグ処理
     Debug();
     /// ゲームシーンの毎フレーム処理
@@ -83,6 +79,17 @@ void KTFramework::Update() {
 }
 
 void KTFramework::Debug() {
+    ImGuiManager* imGuiManager = ImGuiManager::GetInstance();
+
+    // フルスクリーンモードの場合
+    if (imGuiManager->IsFullScreenMode()) {
+        return;
+    }
+
+    /// FPS表示
+    DisplayFPS();
+    /// ゲームビューウィンドウを表示
+    DisplayGameView();
     pSceneManager_->Debug();
 }
 
@@ -116,17 +123,19 @@ void KTFramework::DisplayFPS() {
 // ========================================================
 void KTFramework::DisplayGameView() {
 #ifdef _DEBUG
-    ImGui::Begin("Game View");
-
+   
     // レンダーテクスチャのSRVを取得
     D3D12_GPU_DESCRIPTOR_HANDLE srvHandle =
         DirectXCommon::GetInstance()->GetDxRenderTarget()->GetRenderTextureSRVHandle();
+
+    // 通常モード
+    ImGui::Begin("Game View");
 
     // ウィンドウのコンテンツ領域サイズを取得
     ImVec2 windowSize = ImGui::GetContentRegionAvail();
 
     // アスペクト比を維持してテクスチャを表示
-    float aspectRatio = WinApp::aspectRatio; 
+    float aspectRatio = WinApp::aspectRatio; // ゲーム画面のアスペクト比
     ImVec2 imageSize  = windowSize;
 
     if (windowSize.x / windowSize.y > aspectRatio) {
@@ -147,4 +156,3 @@ void KTFramework::DisplayGameView() {
     ImGui::End();
 #endif
 }
-

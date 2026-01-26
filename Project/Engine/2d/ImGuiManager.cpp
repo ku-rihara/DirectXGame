@@ -30,6 +30,9 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+    // レイアウトファイルのパス設定
+    io.IniFilename = "imgui_layout.ini";
+
     // 矢印記号を含む範囲を追加
     ImFontConfig config;
     config.MergeMode = false;
@@ -71,6 +74,8 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
         pSrvManager_->GetDescriptorHeap(),
         pSrvManager_->GetCPUDescriptorHandle(srvIndex),
         pSrvManager_->GetGPUDescriptorHandle(srvIndex));
+
+
 #endif
 }
 
@@ -105,6 +110,11 @@ void ImGuiManager::SetupDockSpace() {
     window_flags |= ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
     window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
+    // フルスクリーンモードの場合は背景を透明にする
+    if (isFullScreenMode_) {
+        window_flags |= ImGuiWindowFlags_NoBackground;
+    }
+
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -112,46 +122,19 @@ void ImGuiManager::SetupDockSpace() {
     ImGui::Begin("DockSpace", nullptr, window_flags);
     ImGui::PopStyleVar(3);
 
-    // メニューバー(オプション)
+    // メニューバー
     if (ImGui::BeginMenuBar()) {
-        if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("Exit")) {
-                // 終了処理
-            }
-            ImGui::EndMenu();
-        }
         if (ImGui::BeginMenu("Window")) {
-            if (ImGui::MenuItem("Reset Layout")) {
-                // レイアウトリセット処理を追加可能
-            }
+            ImGui::Separator();
+            ImGui::Checkbox("フルスクリーンモード", &isFullScreenMode_);
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
     }
 
     // ドッキングスペースを有効化
-    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
-
-    // 初回のみレイアウトを設定
-    static bool first_time = true;
-    if (first_time) {
-        first_time = false;
-
-        ImGui::DockBuilderRemoveNode(dockspace_id);
-        ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
-        ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
-
-        // レイアウト分割
-        ImGuiID dock_main_id = dockspace_id;
-        ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
-        ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.25f, nullptr, &dock_main_id);
-        ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.25f, nullptr, &dock_main_id);
-
-        // 各ウィンドウを配置
-        ImGui::DockBuilderDockWindow("Game View", dock_main_id);
-        ImGui::DockBuilderFinish(dockspace_id);
-    }
+    ImGuiID dockSpace_id = ImGui::GetID("MyDockSpace");
+    ImGui::DockSpace(dockSpace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
 
     ImGui::End();
 #endif

@@ -31,7 +31,7 @@ public:
 
     // Editor Update
     void EditorUpdate();
-    void SelectFileEdit(const std::string&fileName,const std::string&categoryName);
+    void SelectFileEdit([[maybe_unused]] const std::string& fileName, [[maybe_unused]] const std::string& categoryName);
 
     //*---------------------------- protected Methods ----------------------------*//
 

@@ -25,8 +25,8 @@ public:
     void Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager);
     void Draw();
 
-    void Begin(); //< 開始
-    void preDraw(); //< 終わり
+    void Begin();     //< 開始
+    void preDraw();   //< 終わり
     void Finalizer(); //< 解放
 
 private:
@@ -42,6 +42,13 @@ private:
     /// other class
     DirectXCommon* dxCommon_;
     SrvManager* pSrvManager_;
+
+    bool isFullScreenMode_ = false;
+
+public:
+    // フルスクリーンモード
+    bool IsFullScreenMode() const { return isFullScreenMode_; }
+    void SetFullScreenMode(bool enable) { isFullScreenMode_ = enable; }
 };
 
 }; // KetaEngine
