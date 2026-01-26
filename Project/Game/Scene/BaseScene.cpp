@@ -63,6 +63,8 @@ void BaseScene::Debug() {
     ImGui::Begin("Effect Editor Suite");
     effectEditorSuite_->EditorUpdate();
     ImGui::End();
+
+    KetaEngine::PostEffectRenderer::GetInstance()->DrawImGui();
 #endif
 }
 

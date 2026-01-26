@@ -267,7 +267,7 @@ void BaseEffectEditor<TEffectData>::RenderPlayBack() {
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::SelectFileEdit(const std::string& fileName, const std::string& categoryName) {
+void BaseEffectEditor<TEffectData>::SelectFileEdit([[maybe_unused]] const std::string& fileName, [[maybe_unused]] const std::string& categoryName) {
 #ifdef _DEBUG
     // カテゴリーを検索
     auto catIt = std::find_if(categories_.begin(), categories_.end(),
