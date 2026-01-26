@@ -1,10 +1,14 @@
 #pragma once
 
+
+// Timeline
 #include "PlayerComboAttackTimelineData.h"
 #include "PlayerComboAttackTimelineParameterApplier.h"
 #include "PlayerComboAttackTimelineTrackBuilder.h"
 #include "PlayerComboAttackTimelineUI.h"
+// utility
 #include "utility/TimeLine/TimelineDrawer.h"
+// std
 #include <memory>
 
 class PlayerComboAttackData;
@@ -29,11 +33,14 @@ private:
     PlayerComboAttackData* attackData_ = nullptr;
     KetaEngine::TimelineDrawer timeline_;
 
-    // 各責務を持つクラス
     PlayerComboAttackTimelineData data_;
     PlayerComboAttackTimelineTrackBuilder trackBuilder_;
     PlayerComboAttackTimelineParameterApplier parameterApplier_;
     PlayerComboAttackTimelineUI ui_;
 
     bool isInitialized_ = false;
+
+public:
+    // プレビュー状態の確認用
+    bool IsPreviewPlaying() const;
 };

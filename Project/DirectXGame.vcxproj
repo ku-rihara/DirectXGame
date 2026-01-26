@@ -240,6 +240,7 @@
     <ClCompile Include="Game\LockOn\LockOnController.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackAction.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\PreView\PlayerComboAttackPreview.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp" />
@@ -543,6 +544,7 @@
     <ClInclude Include="Game\LockOn\LockOnController.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackAction.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\PreView\PlayerComboAttackPreview.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />

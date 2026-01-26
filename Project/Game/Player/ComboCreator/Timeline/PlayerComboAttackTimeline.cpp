@@ -1,5 +1,7 @@
 #include "PlayerComboAttackTimeline.h"
 #include "../PlayerComboAttackData.h"
+#include "Player/ComboAttackBehavior/PreView/PlayerComboAttackPreview.h"
+#include "Player/Player.h"
 #include <imgui.h>
 
 void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
@@ -11,7 +13,7 @@ void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
 
     timeline_.Init();
 
-    // 各コンポーネントの初期化
+    // 各クラスの初期化
     data_.Init();
     trackBuilder_.Init(attackData_, &timeline_, &data_);
     parameterApplier_.Init(attackData_, &timeline_, &data_);
@@ -45,53 +47,95 @@ void PlayerComboAttackTimeline::Draw() {
 
     ImGui::PushID("AttackTimeline");
 
-    // タイムライン描画前の追加UI
     timeline_.SetOriginalItemDrawCallBack([this]() {
-        // 再生モード選択
         ImGui::Text("再生モード:");
         ImGui::SameLine();
+        ImGui::Separator();
 
-        auto currentMode = ui_.GetPlayMode();
-        if (ImGui::RadioButton("単体", currentMode == PlayerComboAttackTimelineData::PlayMode::SINGLE)) {
-            ui_.SetPlayMode(PlayerComboAttackTimelineData::PlayMode::SINGLE);
-        }
-        ImGui::SameLine();
-        if (ImGui::RadioButton("連続", currentMode == PlayerComboAttackTimelineData::PlayMode::CONTINUOUS)) {
-            ui_.SetPlayMode(PlayerComboAttackTimelineData::PlayMode::CONTINUOUS);
+        // プレビューボタン
+        if (!IsPreviewPlaying()) {
+            if (ImGui::Button("単体プレビュー")) {
+                auto* player = attackData_->GetPlayer();
+                if (player) {
+                    player->ChangeComboBehavior(
+                        std::make_unique<PlayerComboAttackPreview>(
+                            player,
+                            attackData_,
+                            PlayerComboAttackPreview::PreviewMode::SINGLE,
+                            &timeline_));
+                }
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("連続プレビュー")) {
+                auto* player = attackData_->GetPlayer();
+                if (player) {
+                    player->ChangeComboBehavior(
+                        std::make_unique<PlayerComboAttackPreview>(
+                            player,
+                            attackData_,
+                            PlayerComboAttackPreview::PreviewMode::CHAIN,
+                            &timeline_));
+                }
+            }
+        } else {
+            // プレビュー停止ボタン
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
+
+            if (ImGui::Button("プレビュー停止", ImVec2(-1, 0))) {
+                auto* player = attackData_->GetPlayer();
+                if (player) {
+                    auto* preview = dynamic_cast<PlayerComboAttackPreview*>(player->GetComboBehavior());
+                    if (preview) {
+                        preview->RequestStop();
+                    }
+                }
+            }
+
+            ImGui::PopStyleColor(3);
         }
 
         ImGui::SameLine();
         ImGui::Separator();
 
-        // パラメータ編集ボタン
-        ImGui::Separator();
         ui_.DrawParamEditButtons();
         ImGui::Separator();
 
         ImGui::SameLine();
         ImGui::Separator();
 
-        // トラック追加ボタン
         ui_.DrawAddTrackButton();
     });
 
-    // タイムライン描画
     timeline_.Draw("攻撃タイムライン");
 
-    // 各トラックのコンテキストメニュー処理
     for (size_t i = 0; i < timeline_.GetTrackCount(); ++i) {
         ui_.DrawTrackContextMenu(static_cast<int32_t>(i));
     }
 
-    // タイムライン変更を毎フレームパラメータに自動適用
     ApplyToParameters();
 
     ImGui::PopID();
 
-    // 連続再生モード処理
     if (ui_.GetPlayMode() == PlayerComboAttackTimelineData::PlayMode::CONTINUOUS && timeline_.IsPlaying() && timeline_.GetCurrentFrame() >= timeline_.GetEndFrame()) {
         AdvanceToNextAttack();
     }
+}
+
+bool PlayerComboAttackTimeline::IsPreviewPlaying() const {
+    if (!attackData_) {
+        return false;
+    }
+
+    auto* player = attackData_->GetPlayer();
+    if (!player) {
+        return false;
+    }
+
+    // ComboBehaviorがPlayerComboAttackPreviewかチェック
+    auto* comboBehavior = player->GetComboBehavior();
+    return dynamic_cast<PlayerComboAttackPreview*>(comboBehavior) != nullptr;
 }
 
 void PlayerComboAttackTimeline::ApplyToParameters() {

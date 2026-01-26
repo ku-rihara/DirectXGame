@@ -363,3 +363,10 @@ void PlayerComboAttackController::SetEditorSuite(KetaEngine::EffectEditorSuite* 
 void PlayerComboAttackController::SetCombo(Combo* combo) {
     pCombo_ = combo;
 }
+
+void PlayerComboAttackController::SetPlayer(Player* player) {
+  
+    for (auto& attack : attacks_) {
+        attack->SetPlayer(player);
+    }
+ }

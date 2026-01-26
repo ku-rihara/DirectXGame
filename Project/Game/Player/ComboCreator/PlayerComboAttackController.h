@@ -8,6 +8,7 @@
 #include <vector>
 
 class Combo;
+class Player;
 
 namespace KetaEngine {
 class EffectEditorSuite;
@@ -86,4 +87,5 @@ public:
 
     void SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite);
     void SetCombo(Combo* combo);
+    void SetPlayer(Player* player);
 };

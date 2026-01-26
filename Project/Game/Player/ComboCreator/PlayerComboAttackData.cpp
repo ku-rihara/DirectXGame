@@ -241,3 +241,7 @@ bool PlayerComboAttackData::IsWaitFinish(float currentTime) {
         return false;
     }
 }
+
+ void PlayerComboAttackData::SetPlayer(Player* player) {
+     pPlayer_ = player;
+ }

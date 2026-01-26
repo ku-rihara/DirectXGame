@@ -364,6 +364,9 @@
     <Filter Include="Game\Scene\TitleSceneController">
       <UniqueIdentifier>{380a5fad-d5ce-43c1-bc10-7072cf9f090b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\ComboAttackBehavior\PreView">
+      <UniqueIdentifier>{c425a0d7-1865-461d-82ab-fea10893b5d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -2258,6 +2261,9 @@
     <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneTransition.cpp">
       <Filter>Game\Scene\TitleSceneController</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\PreView\PlayerComboAttackPreview.cpp">
+      <Filter>Game\Player\ComboAttackBehavior\PreView</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneController.h">
@@ -2265,6 +2271,9 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneTransition.h">
       <Filter>Game\Scene\TitleSceneController</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\PreView\PlayerComboAttackPreview.h">
+      <Filter>Game\Player\ComboAttackBehavior\PreView</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
