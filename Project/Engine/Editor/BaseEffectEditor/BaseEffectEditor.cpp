@@ -19,14 +19,15 @@ using namespace KetaEngine;
 
 template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::Init(const std::string& typeName) {
-    baseFolderPath_ = GetFolderName();
+    // 「Resources/GlobalParameter/ファイル名」までの
+    effecrtFolderName_ = GetFolderName();
     effectTypeName_ = typeName;
 
     AllLoadFile();
 
     // デフォルトカテゴリーが存在しない場合は作成
     if (categories_.empty()) {
-        AddCategory("default");
+        AddCategory("Common");
     }
 
     isEditing_ = false;
@@ -285,7 +286,7 @@ void BaseEffectEditor<TEffectData>::AddCategory(const std::string& categoryName)
     selectedCategoryIndex_ = static_cast<int32_t>(categories_.size()) - 1;
 
     // フォルダ作成
-    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + baseFolderPath_ + categoryName;
+    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + effecrtFolderName_ + categoryName;
     std::filesystem::create_directories(folderPath);
 }
 
@@ -377,7 +378,7 @@ TEffectData* BaseEffectEditor<TEffectData>::GetEffectByName(const std::string& c
 template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::AllLoadFile() {
   
-    std::string basePath = GlobalParameter::GetInstance()->GetDirectoryPath() + baseFolderPath_;
+    std::string basePath = GlobalParameter::GetInstance()->GetDirectoryPath() + effecrtFolderName_;
 
     if (!std::filesystem::exists(basePath) || !std::filesystem::is_directory(basePath)) {
         std::filesystem::create_directories(basePath);
@@ -396,7 +397,7 @@ void BaseEffectEditor<TEffectData>::AllLoadFile() {
 
     // カテゴリーが1つもない場合はデフォルトカテゴリーを作成
     if (categories_.empty()) {
-        AddCategory("default");
+        AddCategory("Common");
     }
 }
 
@@ -423,7 +424,7 @@ void BaseEffectEditor<TEffectData>::SaveCategory(int32_t categoryIndex) {
 
 template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::LoadCategory(const std::string& categoryName) {
-   const std::string& categoryPath = GlobalParameter::GetInstance()->GetDirectoryPath() + baseFolderPath_ + categoryName + "/" + datesFolderName_;
+   const std::string& categoryPath = GlobalParameter::GetInstance()->GetDirectoryPath() + effecrtFolderName_ + categoryName + "/" + datesFolderName_;
 
     if (!std::filesystem::exists(categoryPath) || !std::filesystem::is_directory(categoryPath)) {
         return;

@@ -21,7 +21,7 @@ public:
     virtual void Update(float speedRate = 1.0f) = 0;
 
     // 再生、ストップ、リセット
-    virtual void Play([[maybe_unused]] const std::string& effectName, [[maybe_unused]] const std::string& categoryName = "default");
+    virtual void Play([[maybe_unused]] const std::string& effectName, [[maybe_unused]] const std::string& categoryName = "Common");
     virtual void Stop();
     virtual void Reset();
 
