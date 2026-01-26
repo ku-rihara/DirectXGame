@@ -59,7 +59,7 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 Vector2 ScreenTransform(const Vector3& worldPos, const KetaEngine::ViewProjection& viewProjection);
 
 
-Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, const int& row);
+Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row);
 
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
 

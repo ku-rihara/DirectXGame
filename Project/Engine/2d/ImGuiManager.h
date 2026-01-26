@@ -25,12 +25,16 @@ public:
     void Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager);
     void Draw();
 
-    void Begin();     //< 開始
-    void preDraw();   //< 終わり
+    void Begin(); //< 開始
+    void preDraw(); //< 終わり
     void Finalizer(); //< 解放
-  
 
 private:
+    ///===========================================================
+    /// private method
+    ///===========================================================
+    void SetupDockSpace(); //< ドッキングスペース設定
+
     ///===========================================================
     /// private variants
     ///============================================================
@@ -38,8 +42,6 @@ private:
     /// other class
     DirectXCommon* dxCommon_;
     SrvManager* pSrvManager_;
-    //// SRV用デスクリプタヒープ
-    //Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
 };
 
 }; // KetaEngine

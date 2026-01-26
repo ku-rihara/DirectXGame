@@ -12,10 +12,6 @@ void TimeScaleEditor::Update(float deltaTime) {
     BaseEffectEditor::Update(deltaTime);
 }
 
-void TimeScaleEditor::EditorUpdate() {
-    BaseEffectEditor::EditorUpdate();
-}
-
 void TimeScaleEditor::PlaySelectedAnimation() {
     auto* selectedTimeScale = GetSelectedEffect();
     if (selectedTimeScale) {

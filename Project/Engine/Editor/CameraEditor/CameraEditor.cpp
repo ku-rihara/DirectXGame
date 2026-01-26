@@ -171,10 +171,6 @@ void CameraEditor::RenderSpecificUI() {
     }
 }
 
-void CameraEditor::EditorUpdate() {
-    BaseEffectEditor::EditorUpdate();
-}
-
 std::string CameraEditor::GetFolderName() const {
     return folderName_;
 }

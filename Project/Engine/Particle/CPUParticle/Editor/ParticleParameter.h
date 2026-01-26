@@ -98,7 +98,7 @@ public:
     // setter
     void SetParameter(const Parameters& param) { parameters_ = param; }
     void SetGroupParameter(const GroupParamaters& groupParam) { groupParamaters_ = groupParam; }
-    void SetPreBillBordType(const int& preBillBordType) { billBordType_ = preBillBordType; }
+    void SetPreBillBordType(int preBillBordType) { billBordType_ = preBillBordType; }
     void SetPreIsShot(bool preIsShot) { isShot_ = preIsShot; }
 };
 

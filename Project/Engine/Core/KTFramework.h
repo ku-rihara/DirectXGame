@@ -17,16 +17,17 @@ public:
     ///=======================================================
     /// public method
     ///=======================================================
-    virtual void Init();               //< 初期化
-    virtual void Update();             //< 更新
+    virtual void Init(); //< 初期化
+    virtual void Update(); //< 更新
     virtual void Draw()           = 0; //< 描画
     virtual void DrawPostEffect() = 0; //< ポストエフェクト描画
     virtual void DrawShadow()     = 0; //< シャドウ描画
-    virtual void Finalize();           //< 終了処理
+    virtual void Finalize(); //< 終了処理
 
-    void Debug();      //< デバッグ
+    void Debug(); //< デバッグ
     void DisplayFPS(); //< FPS表示
-    void Run();        //< 実行
+    void DisplayGameView(); //< ゲームビュー表示
+    void Run(); //< 実行
 
 protected:
     /// other class

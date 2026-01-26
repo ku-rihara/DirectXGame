@@ -132,11 +132,11 @@ void Light::AddPointLight() {
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }
 
-void Light::RemoveSpotLight(const int& num) {
+void Light::RemoveSpotLight(int num) {
     pointLightManager_->Remove(num);
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }
-void Light::RemovePointLight(const int& num) {
+void Light::RemovePointLight(int num) {
     pointLightManager_->Remove(num);
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }

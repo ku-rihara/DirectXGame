@@ -21,7 +21,7 @@ void BaseScene::Init() {
     textureManager_ = KetaEngine::TextureManager::GetInstance();
 
     // 生成
-    debugCamera_       = std::make_unique<KetaEngine::DebugCamera>(KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight);
+    debugCamera_       = std::make_unique<KetaEngine::DebugCamera>();
     effectEditorSuite_ = std::make_unique<KetaEngine::EffectEditorSuite>();
 
     // 初期化

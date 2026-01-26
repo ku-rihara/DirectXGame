@@ -20,8 +20,7 @@ public:
     // 初期化、更新
     void Init(const std::string& editorName) override;
     void Update(float speedRate = 1.0f) override;
-    void EditorUpdate() override;
-
+  
 private:
     std::unique_ptr<RailData> CreateEffectData() override;
     void RenderSpecificUI() override;
