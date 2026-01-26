@@ -14,7 +14,6 @@ public:
 
     void Init(const std::string& typeName) override;
     void Update(float speedRate = 1.0f) override;
-    void EditorUpdate() override;
     void PlaySelectedAnimation() override;
 
 protected:

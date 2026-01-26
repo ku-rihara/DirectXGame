@@ -19,7 +19,7 @@ public:
     // BaseEffectPlayerからのオーバーライド
     void Init() override;
     void Update(float deltaTime) override;
-    void Play(const std::string& timeScaleName, const std::string& categoryName = "default") override;
+    void Play(const std::string& timeScaleName, const std::string& categoryName = "Common") override;
 
     // TimeScale固有
     void SetTimeScaleImmediate(float timeScale);

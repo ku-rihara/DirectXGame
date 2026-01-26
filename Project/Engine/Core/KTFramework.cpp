@@ -3,11 +3,14 @@
 using namespace KetaEngine;
 
 // dx
+#include "Base/Dx/DxRenderTarget.h"
+#include "PostEffect/PostEffectRenderer.h"
 #include "ShadowMap/ShadowMap.h"
 
 // utility
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // imGui
+#include "2D/ImGuiManager.h"
 #include <imgui.h>
 
 const char kWindowTitle[] = "LE3A_11_クリハラ_ケイタ";
@@ -68,18 +71,27 @@ void KTFramework::Run() {
 // 更新処理
 // ========================================================
 void KTFramework::Update() {
-    /// FPS表示
-    DisplayFPS();
+
     /// グローバル変数の更新
     GlobalParameter::GetInstance()->SyncAll();
     // デバッグ処理
     Debug();
     /// ゲームシーンの毎フレーム処理
     pSceneManager_->Update();
-
 }
 
 void KTFramework::Debug() {
+    ImGuiManager* imGuiManager = ImGuiManager::GetInstance();
+
+    // フルスクリーンモードの場合
+    if (imGuiManager->IsFullScreenMode()) {
+        return;
+    }
+
+    /// FPS表示
+    DisplayFPS();
+    /// ゲームビューウィンドウを表示
+    DisplayGameView();
     pSceneManager_->Debug();
 }
 
@@ -95,28 +107,53 @@ void KTFramework::Finalize() {
 // FPS表示
 // ========================================================
 void KTFramework::DisplayFPS() {
-
 #ifdef _DEBUG
     ImGuiIO& io = ImGui::GetIO();
 
-    // 位置
-    ImGui::SetNextWindowPos(ImVec2(1230, 0), ImGuiCond_Always);
-    ImGui::SetNextWindowBgAlpha(0.0f); // 背景を完全透明に設定
-
-    // ウィンドウフラグを設定
-    ImGui::Begin("FPS Overlay", nullptr,
-        ImGuiWindowFlags_NoTitleBar |           // タイトルバーを非表示
-            ImGuiWindowFlags_NoResize |         // リサイズを禁止
-            ImGuiWindowFlags_NoMove |           // ウィンドウの移動を禁止
-            ImGuiWindowFlags_NoScrollbar |      // スクロールバーを非表示
-            ImGuiWindowFlags_NoCollapse |       // 折りたたみボタンを非表示
-            ImGuiWindowFlags_AlwaysAutoResize | // 必要なサイズに自動調整
-            ImGuiWindowFlags_NoBackground       // 背景を非表示
-    );
-
-    ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 100, 255)); /// 色設定（緑）
-    ImGui::Text("%.1f", io.Framerate);
+    // FPSウィンドウ
+    ImGui::Begin("FPS");
+    ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 100, 255));
+    ImGui::Text("FPS: %.1f", io.Framerate);
+    ImGui::Text("Frame Time: %.3f ms", 1000.0f / io.Framerate);
     ImGui::PopStyleColor();
+    ImGui::End();
+#endif
+}
+
+// ========================================================
+// ゲームビュー表示
+// ========================================================
+void KTFramework::DisplayGameView() {
+#ifdef _DEBUG
+   
+    // レンダーテクスチャのSRVを取得
+    D3D12_GPU_DESCRIPTOR_HANDLE srvHandle =
+        DirectXCommon::GetInstance()->GetDxRenderTarget()->GetRenderTextureSRVHandle();
+
+    // 通常モード
+    ImGui::Begin("Game View");
+
+    // ウィンドウのコンテンツ領域サイズを取得
+    ImVec2 windowSize = ImGui::GetContentRegionAvail();
+
+    // アスペクト比を維持してテクスチャを表示
+    float aspectRatio = WinApp::aspectRatio; // ゲーム画面のアスペクト比
+    ImVec2 imageSize  = windowSize;
+
+    if (windowSize.x / windowSize.y > aspectRatio) {
+        imageSize.x = windowSize.y * aspectRatio;
+    } else {
+        imageSize.y = windowSize.x / aspectRatio;
+    }
+
+    // 中央寄せ
+    ImVec2 cursorPos = ImGui::GetCursorPos();
+    cursorPos.x += (windowSize.x - imageSize.x) * 0.5f;
+    cursorPos.y += (windowSize.y - imageSize.y) * 0.5f;
+    ImGui::SetCursorPos(cursorPos);
+
+    // ゲーム画面を表示
+    ImGui::Image((ImTextureID)srvHandle.ptr, imageSize);
 
     ImGui::End();
 #endif

@@ -1,14 +1,15 @@
 #include "ImGuiManager.h"
 
 using namespace KetaEngine;
-#include "Base/WinApp.h"
+#include "Base/Descriptors/SrvManager.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Dx/DxSwapChain.h"
-#include "Base/Descriptors/SrvManager.h"
+#include "Base/WinApp.h"
 
 #include <d3d12.h>
 #include <imgui_impl_dx12.h>
 #include <imgui_impl_win32.h>
+#include <imgui_internal.h>
 
 ImGuiManager* ImGuiManager::GetInstance() {
     static ImGuiManager instance;
@@ -28,6 +29,9 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+    // レイアウトファイルのパス設定
+    io.IniFilename = "imgui_layout.ini";
 
     // 矢印記号を含む範囲を追加
     ImFontConfig config;
@@ -61,7 +65,7 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
     ImGui::StyleColorsDark();
     ImGui_ImplWin32_Init(winApp->GetHwnd());
 
-     io.Fonts->Build();
+    io.Fonts->Build();
 
     ImGui_ImplDX12_Init(
         dxCommon_->GetDevice().Get(),
@@ -70,6 +74,8 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
         pSrvManager_->GetDescriptorHeap(),
         pSrvManager_->GetCPUDescriptorHandle(srvIndex),
         pSrvManager_->GetGPUDescriptorHandle(srvIndex));
+
+
 #endif
 }
 
@@ -82,6 +88,55 @@ void ImGuiManager::Begin() {
     ImGui_ImplDX12_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+
+    // ドッキングスペースを作成
+    SetupDockSpace();
+#endif
+}
+
+///===========================================================
+/// ドッキングスペース設定
+///===========================================================
+void ImGuiManager::SetupDockSpace() {
+#ifdef _DEBUG
+    // フルスクリーンのドッキングスペースを作成
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->Pos);
+    ImGui::SetNextWindowSize(viewport->Size);
+    ImGui::SetNextWindowViewport(viewport->ID);
+
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
+    window_flags |= ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+    // フルスクリーンモードの場合は背景を透明にする
+    if (isFullScreenMode_) {
+        window_flags |= ImGuiWindowFlags_NoBackground;
+    }
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+    ImGui::Begin("DockSpace", nullptr, window_flags);
+    ImGui::PopStyleVar(3);
+
+    // メニューバー
+    if (ImGui::BeginMenuBar()) {
+        if (ImGui::BeginMenu("Window")) {
+            ImGui::Separator();
+            ImGui::Checkbox("フルスクリーンモード", &isFullScreenMode_);
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenuBar();
+    }
+
+    // ドッキングスペースを有効化
+    ImGuiID dockSpace_id = ImGui::GetID("MyDockSpace");
+    ImGui::DockSpace(dockSpace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+
+    ImGui::End();
 #endif
 }
 

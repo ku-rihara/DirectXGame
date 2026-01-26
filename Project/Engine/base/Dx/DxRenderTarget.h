@@ -32,17 +32,15 @@ public:
     /// <param name="height">レンダーターゲット高さ</param>
     void Init(Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height);
 
-   
-    void PreRenderTexture();          //< レンダーテクスチャへの描画準備
-    void PreDraw();                   //< バックバッファへの描画準備
+    void PreRenderTexture(); //< レンダーテクスチャへの描画準備
+    void PreDraw(); //< バックバッファへの描画準備
     void PostDrawTransitionBarrier(); //< 描画終了後のバリア設定
-    void SetupViewportAndScissor();   //< ビューポートとシザー矩形設定
-    void Finalize();                  //< 終了処理
+    void SetupViewportAndScissor(); //< ビューポートとシザー矩形設定
+    void Finalize(); //< 終了処理
 
 private:
-    
-    void CreateRenderTextureRTV();//< レンダーテクスチャRTV作成
-    void CreateRenderTextureSRV();//< レンダーテクスチャSRV作成
+    void CreateRenderTextureRTV(); //< レンダーテクスチャRTV作成
+    void CreateRenderTextureSRV(); //< レンダーテクスチャSRV作成
 
     /// <summary>
     /// レンダーテクスチャリソース作成
@@ -82,8 +80,8 @@ public:
     Microsoft::WRL::ComPtr<ID3D12Resource> GetRenderTextureResource() const { return renderTextureResource_; }
     const D3D12_GPU_DESCRIPTOR_HANDLE& GetRenderTextureGPUSrvHandle() const { return renderTextureGPUSrvHandle_; }
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetRenderTextureCPUSrvHandle() const { return renderTextureCPUSrvHandle_; }
+    D3D12_GPU_DESCRIPTOR_HANDLE GetRenderTextureSRVHandle() const { return renderTextureGPUSrvHandle_; }
     const D3D12_CLEAR_VALUE& GetClearValue() const { return clearValue_; }
-
     /// <summary>
     /// 使用するクラスを設定
     /// </summary>

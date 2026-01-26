@@ -11,7 +11,7 @@ namespace KetaEngine {
 
 class DebugCamera {
 public:
-    DebugCamera(const int& window_width, const int& window_height);
+    DebugCamera()  = default;
     ~DebugCamera() = default;
 
     void Init(); //< 初期化

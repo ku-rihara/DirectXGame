@@ -20,7 +20,7 @@ public:
     // BaseEffectPlayerからのオーバーライド
     void Init() override;
     void Update(float speedRate = 1.0f) override;
-    void Play(const std::string& shakeName, const std::string& categoryName = "default") override;
+    void Play(const std::string& shakeName, const std::string& categoryName = "Common") override;
 
 private:
     //*---------------------------- private Methods ----------------------------*//

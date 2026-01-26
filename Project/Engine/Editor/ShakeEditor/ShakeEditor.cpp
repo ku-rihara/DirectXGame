@@ -44,10 +44,6 @@ void ShakeEditor::UpdatePreviewObject(float speedRate) {
     preViewObj_->Update();
 }
 
-void ShakeEditor::EditorUpdate() {
-    BaseEffectEditor::EditorUpdate();
-}
-
 void ShakeEditor::PlaySelectedAnimation() {
     auto* selectedShake = GetSelectedEffect();
     if (selectedShake) {

@@ -18,7 +18,7 @@ public:
     // 初期化、更新、再生
     void Init() override;
     void Update(float speedRate = 1.0f) override;
-    void Play(const std::string& railName, const std::string& categoryName = "default") override;
+    void Play(const std::string& railName, const std::string& categoryName = "Common") override;
 
     void UpdateWithDirection(float speedRate, const RailData::PositionMode& mode = RailData::PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
 

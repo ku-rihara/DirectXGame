@@ -86,8 +86,6 @@ void KTGame::DrawPostEffect() {
 
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-
-    PostEffectRenderer::GetInstance()->DrawImGui();
     PostEffectRenderer::GetInstance()->Draw(commandList);
 }
 

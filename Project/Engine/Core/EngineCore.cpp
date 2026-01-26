@@ -9,8 +9,8 @@ using namespace KetaEngine;
 #include "Base/Descriptors/DsvManager.h"
 #include "Base/Descriptors/RtvManager.h"
 #include "Base/Descriptors/SrvManager.h"
-#include "Base/TextureManager.h"
 #include "Base/Dx/DirectXCommon.h"
+#include "Base/TextureManager.h"
 #include "Lighrt/Light.h"
 #include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/PipelineManager.h"
@@ -20,8 +20,8 @@ using namespace KetaEngine;
 #include "audio/Audio.h"
 #include "input/Input.h"
 /// particle
-#include "Particle/GPUParticle/GPUParticleManager.h"
 #include "Particle/CPUParticle/ParticleManager.h"
+#include "Particle/GPUParticle/GPUParticleManager.h"
 /// imGui,function
 #include "function/Convert.h"
 #include <imgui_impl_dx12.h>
@@ -31,7 +31,7 @@ using namespace KetaEngine;
 ///=======================================================================
 /// 初期化
 ///========================================================================
-void EngineCore::Initialize(const char* title, const int& width, const int& height) {
+void EngineCore::Initialize(const char* title, int width, int height) {
     // ゲームウィンドウの作成
     std::string windowTitle = std::string(title);
     auto&& titleString      = ConvertString(windowTitle);

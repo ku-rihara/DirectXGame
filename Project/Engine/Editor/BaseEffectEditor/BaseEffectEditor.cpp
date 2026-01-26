@@ -19,15 +19,12 @@ using namespace KetaEngine;
 
 template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::Init(const std::string& typeName) {
-    baseFolderPath_ = GetFolderName();
+    // 演出のフォルダ名を取得
+    effectFolderName_ = GetFolderName();
     effectTypeName_ = typeName;
 
+    // フォルダ内の全ファイルロード
     AllLoadFile();
-
-    // デフォルトカテゴリーが存在しない場合は作成
-    if (categories_.empty()) {
-        AddCategory("default");
-    }
 
     isEditing_ = false;
 }
@@ -93,6 +90,7 @@ void BaseEffectEditor<TEffectData>::RenderCategoryUI() {
         bool isSelected       = (selectedCategoryIndex_ == i);
         std::string labelText = categories_[i].name + " (" + std::to_string(categories_[i].effects.size()) + " effects)";
 
+        // セレクトインデックを更新
         if (ImGui::Selectable(labelText.c_str(), isSelected)) {
             selectedCategoryIndex_ = i;
         }
@@ -118,14 +116,14 @@ void BaseEffectEditor<TEffectData>::RenderCategoryEffectListUI() {
     ImGui::InputText("New Effect Name", nameBuffer_, IM_ARRAYSIZE(nameBuffer_));
     if (ImGui::Button("Add Effect")) {
         if (strlen(nameBuffer_) > 0) {
-            AddEffectToCategory(selectedCategoryIndex_, nameBuffer_);
+            AddEffect(selectedCategoryIndex_, nameBuffer_);
             nameBuffer_[0] = '\0';
         }
     }
     ImGui::SameLine();
     if (ImGui::Button("Delete Selected Effect")) {
         if (selectedCategory.selectedEffectIndex >= 0 && selectedCategory.selectedEffectIndex < static_cast<int>(selectedCategory.effects.size())) {
-            RemoveEffectFromCategory(selectedCategoryIndex_, selectedCategory.selectedEffectIndex);
+            RemoveEffect(selectedCategoryIndex_, selectedCategory.selectedEffectIndex);
         }
     }
 
@@ -269,6 +267,34 @@ void BaseEffectEditor<TEffectData>::RenderPlayBack() {
 }
 
 template <typename TEffectData>
+void BaseEffectEditor<TEffectData>::SelectFileEdit([[maybe_unused]] const std::string& fileName, [[maybe_unused]] const std::string& categoryName) {
+#ifdef _DEBUG
+    // カテゴリーを検索
+    auto catIt = std::find_if(categories_.begin(), categories_.end(),
+        [&categoryName](const Category& cat) {
+            return cat.name == categoryName;
+        });
+
+    if (catIt == categories_.end()) {
+        return;
+    }
+
+    // エフェクトを検索
+    auto effectIt = std::find_if(catIt->effects.begin(), catIt->effects.end(),
+        [&fileName](const std::unique_ptr<TEffectData>& effect) {
+            return effect->GetGroupName() == fileName;
+        });
+
+    if (effectIt == catIt->effects.end()) {
+        return;
+    }
+
+    // 指定されたエフェクトのAdjustParamを呼び出し
+    (*effectIt)->AdjustParam();
+#endif
+}
+
+template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::AddCategory(const std::string& categoryName) {
     auto it = std::find_if(categories_.begin(), categories_.end(),
         [&categoryName](const Category& cat) {
@@ -285,7 +311,7 @@ void BaseEffectEditor<TEffectData>::AddCategory(const std::string& categoryName)
     selectedCategoryIndex_ = static_cast<int32_t>(categories_.size()) - 1;
 
     // フォルダ作成
-    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + baseFolderPath_ + categoryName;
+    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + effectFolderName_ + categoryName;
     std::filesystem::create_directories(folderPath);
 }
 
@@ -306,7 +332,7 @@ void BaseEffectEditor<TEffectData>::RemoveCategory(int32_t index) {
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::AddEffectToCategory(int32_t categoryIndex, const std::string& effectName) {
+void BaseEffectEditor<TEffectData>::AddEffect(int32_t categoryIndex, const std::string& effectName) {
     if (categoryIndex < 0 || categoryIndex >= static_cast<int>(categories_.size())) {
         return;
     }
@@ -330,7 +356,7 @@ void BaseEffectEditor<TEffectData>::AddEffectToCategory(int32_t categoryIndex, c
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::RemoveEffectFromCategory(int32_t categoryIndex, int32_t effectIndex) {
+void BaseEffectEditor<TEffectData>::RemoveEffect(int32_t categoryIndex, int32_t effectIndex) {
     if (categoryIndex < 0 || categoryIndex >= static_cast<int>(categories_.size())) {
         return;
     }
@@ -377,7 +403,7 @@ TEffectData* BaseEffectEditor<TEffectData>::GetEffectByName(const std::string& c
 template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::AllLoadFile() {
   
-    std::string basePath = GlobalParameter::GetInstance()->GetDirectoryPath() + baseFolderPath_;
+    std::string basePath = GlobalParameter::GetInstance()->GetDirectoryPath() + effectFolderName_;
 
     if (!std::filesystem::exists(basePath) || !std::filesystem::is_directory(basePath)) {
         std::filesystem::create_directories(basePath);
@@ -394,9 +420,9 @@ void BaseEffectEditor<TEffectData>::AllLoadFile() {
         }
     }
 
-    // カテゴリーが1つもない場合はデフォルトカテゴリーを作成
+    // カテゴリーが1つもない場合はCommonカテゴリーを作成
     if (categories_.empty()) {
-        AddCategory("default");
+        AddCategory("Common");
     }
 }
 
@@ -423,7 +449,7 @@ void BaseEffectEditor<TEffectData>::SaveCategory(int32_t categoryIndex) {
 
 template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::LoadCategory(const std::string& categoryName) {
-   const std::string& categoryPath = GlobalParameter::GetInstance()->GetDirectoryPath() + baseFolderPath_ + categoryName + "/" + datesFolderName_;
+   const std::string& categoryPath = GlobalParameter::GetInstance()->GetDirectoryPath() + effectFolderName_ + categoryName + "/" + datesFolderName_;
 
     if (!std::filesystem::exists(categoryPath) || !std::filesystem::is_directory(categoryPath)) {
         return;

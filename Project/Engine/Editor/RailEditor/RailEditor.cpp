@@ -59,9 +59,6 @@ void RailEditor::DebugLineSet() {
     }
 }
 
-void RailEditor::EditorUpdate() {
-    BaseEffectEditor::EditorUpdate();
-}
 
 void RailEditor::PlaySelectedAnimation() {
     auto* selectedRail = GetSelectedEffect();

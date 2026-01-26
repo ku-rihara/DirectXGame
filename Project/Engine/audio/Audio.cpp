@@ -264,7 +264,7 @@ void Audio::Play(const std::string& filename, float volume) {
     PlayForID(soundId, volume);
 }
 
-void Audio::PlayForID(const int& soundId, float volume) {
+void Audio::PlayForID(int soundId, float volume) {
     if (soundId < 0 || soundId >= soundDatas_.size()) {
         return;
     }
@@ -316,7 +316,7 @@ std::vector<std::string> Audio::GetAvailableSoundNames() const {
     return names;
 }
 
-void Audio::Unload(const int& soundId) {
+void Audio::Unload(int soundId) {
     if (soundId >= 0 && soundId < soundDatas_.size()) {
         SoundData& soundData = soundDatas_[soundId];
         delete[] soundData.pBuffer;

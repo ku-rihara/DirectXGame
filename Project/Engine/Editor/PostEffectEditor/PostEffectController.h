@@ -41,7 +41,7 @@ public:
     /// ポストエフェクトの削除
     /// </summary>
     /// <param name="index">インデックス</param>
-    void RemovePostEffect(const int& index);
+    void RemovePostEffect(int index);
 
     /// <summary>
     /// 名前からポストエフェクトデータを取得

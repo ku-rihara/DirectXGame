@@ -24,25 +24,15 @@ public:
     virtual ~BaseEffectEditor() = default;
 
     //*----------------------------- public Methods -----------------------------*//
-
+public:
+    // 初期化、更新
     virtual void Init(const std::string& typeName);
     virtual void Update(float speedRate = 1.0f);
-    virtual void EditorUpdate();
 
-    // カテゴリー操作
-    void AddCategory(const std::string& categoryName);
-    void RemoveCategory(int32_t index);
-    void AddEffectToCategory(int32_t categoryIndex, const std::string& effectName);
-    void RemoveEffectFromCategory(int32_t categoryIndex, int32_t effectIndex);
+    // Editor Update
+    void EditorUpdate();
+    void SelectFileEdit([[maybe_unused]] const std::string& fileName, [[maybe_unused]] const std::string& categoryName);
 
-    // セーブ、ロード
-    void AllLoadFile();
-    void AllSaveFile();
-    void SaveCategory(int32_t categoryIndex);
-    void LoadCategory(const std::string& categoryName);
-    void RenderPlayBack();
-
-protected:
     //*---------------------------- protected Methods ----------------------------*//
 
     // 派生クラスで実装必須
@@ -50,7 +40,9 @@ protected:
     virtual void RenderSpecificUI()                         = 0;
     virtual void PlaySelectedAnimation()                    = 0;
     virtual std::string GetFolderName() const               = 0;
- 
+
+    void RenderPlayBack();
+
 private:
     // 共通UIレンダリング
     void RenderFileOperations();
@@ -65,6 +57,20 @@ private:
     bool IsSelectedAnimationPlaying() const;
     bool IsSelectedAnimationFinished() const;
 
+    // セーブ、ロード
+    void AllLoadFile();
+    void AllSaveFile();
+    void SaveCategory(int32_t categoryIndex);
+    void LoadCategory(const std::string& categoryName);
+
+    // カテゴリー追加、削除
+    void AddCategory(const std::string& categoryName);
+    void RemoveCategory(int32_t index);
+
+    // エフェクト追加、削除
+    void AddEffect(int32_t categoryIndex, const std::string& effectName);
+    void RemoveEffect(int32_t categoryIndex, int32_t effectIndex);
+
 protected:
     //*---------------------------- protected Variant ----------------------------*//
 
@@ -72,12 +78,13 @@ protected:
     std::vector<Category> categories_;
     int32_t selectedCategoryIndex_ = -1;
 
-    // 共通
+    // Name
     char nameBuffer_[128]         = "";
     char categoryNameBuffer_[128] = "";
-    std::string baseFolderPath_;
+    std::string effectFolderName_;
     std::string effectTypeName_;
 
+    // 編集中フラグ
     bool isEditing_ = false;
 
 private:

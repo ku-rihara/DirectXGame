@@ -63,7 +63,7 @@ public:
     ///  getter  method
     ///=========================================================================================
 
-    SpotLight* GetSpotLight(const int& num) { return spotLights_[num].get(); }
+    SpotLight* GetSpotLight(int num) { return spotLights_[num].get(); }
     size_t GetLightCount() const { return spotLights_.size(); }
     uint32_t GetSrvIndex() const { return srvIndex_; }
     std::vector<SpotLight*> GetLights();
