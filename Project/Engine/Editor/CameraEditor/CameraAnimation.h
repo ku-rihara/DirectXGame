@@ -30,7 +30,7 @@ public:
     void Update(float speedRate = 1.0f) override;
 
     // 再生、リセット、初期値保存
-    void Play(const std::string& animationName, const std::string& categoryName = "default") override;
+    void Play(const std::string& animationName, const std::string& categoryName = "Common") override;
     void Reset() override;
 
     // 注視点ターゲット設定

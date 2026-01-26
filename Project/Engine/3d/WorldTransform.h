@@ -90,7 +90,7 @@ public:
     /// </summary>
     /// <param name="categoryName">カテゴリー名</param>
     /// <param name="animationName">アニメーション名</param>
-    void PlayObjEaseAnimation(const std::string& animationName, const std::string& categoryName = "default");
+    void PlayObjEaseAnimation(const std::string& animationName, const std::string& categoryName = "Common");
 
     /// <summary>
     /// オブジェクトイージングアニメーション停止

@@ -75,7 +75,7 @@ protected:
     // 共通
     char nameBuffer_[128]         = "";
     char categoryNameBuffer_[128] = "";
-    std::string baseFolderPath_;
+    std::string effecrtFolderName_;
     std::string effectTypeName_;
 
     bool isEditing_ = false;
