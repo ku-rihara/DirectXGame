@@ -240,12 +240,12 @@
     <ClCompile Include="Game\LockOn\LockOnController.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackAction.cpp" />
-    <ClCompile Include="Game\Player\ComboAttackBehavior\PreView\PlayerComboAttackPreview.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\PreView\PlayerComboAttackPreview.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.cpp" />
@@ -544,12 +544,12 @@
     <ClInclude Include="Game\LockOn\LockOnController.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackAction.h" />
-    <ClInclude Include="Game\Player\ComboAttackBehavior\PreView\PlayerComboAttackPreview.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h" />
+    <ClInclude Include="Game\Player\ComboCreator\PreView\PlayerComboAttackPreview.h" />
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.h" />
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineTrackBuilder.h" />
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.h" />

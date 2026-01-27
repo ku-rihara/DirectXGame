@@ -94,7 +94,7 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::PushID(groupName_.c_str());
     ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), (groupName_ + " Editing").c_str());
 
-    // 　タイムライン描画
+    // タイムライン描画
     timeLine_.Draw();
 
     ImGui::PopID();
@@ -242,6 +242,10 @@ bool PlayerComboAttackData::IsWaitFinish(float currentTime) {
     }
 }
 
- void PlayerComboAttackData::SetPlayer(Player* player) {
-     pPlayer_ = player;
- }
+void PlayerComboAttackData::SetPlayer(Player* player) {
+    pPlayer_ = player;
+}
+
+KetaEngine::TimelineDrawer* PlayerComboAttackData::GetTimeline() {
+    return timeLine_.GetTimeline();
+}

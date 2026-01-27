@@ -2261,7 +2261,7 @@
     <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneTransition.cpp">
       <Filter>Game\Scene\TitleSceneController</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\PreView\PlayerComboAttackPreview.cpp">
+    <ClCompile Include="Game\Player\ComboCreator\PreView\PlayerComboAttackPreview.cpp">
       <Filter>Game\Player\ComboAttackBehavior\PreView</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2272,7 +2272,7 @@
     <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneTransition.h">
       <Filter>Game\Scene\TitleSceneController</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\PreView\PlayerComboAttackPreview.h">
+    <ClInclude Include="Game\Player\ComboCreator\PreView\PlayerComboAttackPreview.h">
       <Filter>Game\Player\ComboAttackBehavior\PreView</Filter>
     </ClInclude>
   </ItemGroup>

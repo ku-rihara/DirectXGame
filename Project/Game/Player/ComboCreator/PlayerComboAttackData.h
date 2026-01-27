@@ -161,7 +161,7 @@ public:
     KetaEngine::GlobalParameter* GetGlobalParameter() const { return globalParameter_; }
     const std::string& GetFolderPath() const { return folderPath_; }
     Player* GetPlayer() const { return pPlayer_; };
+    KetaEngine::TimelineDrawer* GetTimeline();
 
     void SetPlayer(Player* player);
-
 };

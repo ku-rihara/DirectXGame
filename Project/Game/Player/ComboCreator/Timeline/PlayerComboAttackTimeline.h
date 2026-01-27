@@ -1,7 +1,6 @@
 #pragma once
 
-
-// Timeline
+// timeline
 #include "PlayerComboAttackTimelineData.h"
 #include "PlayerComboAttackTimelineParameterApplier.h"
 #include "PlayerComboAttackTimelineTrackBuilder.h"
@@ -22,18 +21,19 @@ public:
     ~PlayerComboAttackTimeline() = default;
 
     void Init(PlayerComboAttackData* attackData);
+    void Update(float deltaTime);
     void Draw();
     void ApplyToParameters();
 
 private:
-    void AdvanceToNextAttack();
     void SetupKeyFrameCallbacks();
 
 private:
     PlayerComboAttackData* attackData_ = nullptr;
     KetaEngine::TimelineDrawer timeline_;
 
-    PlayerComboAttackTimelineData data_;
+    // 各責務を持つクラス
+    PlayerComboAttackTimelineData timelineData_;
     PlayerComboAttackTimelineTrackBuilder trackBuilder_;
     PlayerComboAttackTimelineParameterApplier parameterApplier_;
     PlayerComboAttackTimelineUI ui_;
@@ -41,6 +41,6 @@ private:
     bool isInitialized_ = false;
 
 public:
-    // プレビュー状態の確認用
-    bool IsPreviewPlaying() const;
+    // Getter
+    KetaEngine::TimelineDrawer* GetTimeline();
 };

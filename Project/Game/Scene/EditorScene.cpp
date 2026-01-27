@@ -163,4 +163,7 @@ void EditorScene::SetClassPointer() {
     player_->SetHitStop(attackEffect_.get());
 
     combo_->SetDeathTimer(deathTimer_.get());
+
+    playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
+    playerComboAttackController_->SetPlayer(player_.get());
 }
