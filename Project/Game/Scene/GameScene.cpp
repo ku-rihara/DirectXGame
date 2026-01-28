@@ -168,8 +168,7 @@ void GameScene::SetClassPointer() {
     gameObj_.enemyManager_->SetCombo(gameObj_.combo_.get());
     gameObj_.enemyManager_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.enemyManager_->SetEnemySpawner(gameObj_.enemySpawner_.get());
-    gameObj_.enemyManager_->SetAttackEffect(gameObj_.attackEffect_.get());
-
+  
     gameObj_.enemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
     gameObj_.continuousEnemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
     gameObj_.continuousEnemySpawner_->SetPlayer(gameObj_.player_.get());

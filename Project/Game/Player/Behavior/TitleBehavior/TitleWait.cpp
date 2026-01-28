@@ -2,7 +2,7 @@
 #include"TitleWait.h"
 #include"TitleRightPunch.h"
 
-#include"Player/PlayerBehavior/PlayerMove.h"
+#include"Player/Behavior/PlayerBehavior/PlayerMove.h"
 
 /// Player
 #include"Player/Player.h"

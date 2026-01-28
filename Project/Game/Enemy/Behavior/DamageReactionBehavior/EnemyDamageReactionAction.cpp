@@ -116,8 +116,6 @@ void EnemyDamageReactionAction::InitNormalReaction(const EnemyDamageReactionData
     knockBackTimer_    = 0.0f;
     totalReactionTime_ = param.knockBackTime;
 
-    // 演出初期化
-    pBaseEnemy_->DamageRenditionInit();
 }
 
 void EnemyDamageReactionAction::InitSlammedReaction(
@@ -138,9 +136,6 @@ void EnemyDamageReactionAction::InitSlammedReaction(
     // Slammed固有のパラメータ
     slammedGravity_     = param.gravity;
     slammedRotateSpeed_ = param.rotateSpeed;
-
-    // 演出初期化
-    pBaseEnemy_->DamageRenditionInit();
 }
 
 void EnemyDamageReactionAction::InitTakeUpperReaction(
@@ -168,9 +163,6 @@ void EnemyDamageReactionAction::InitTakeUpperReaction(
     takeUpperGravity_     = param.gravity;
     takeUpperRotateSpeed_ = param.rotateSpeed;
     takeUpperFallLimit_   = param.fallSpeedLimit;
-
-    // 演出初期化
-    pBaseEnemy_->DamageRenditionInit();
 }
 
 void EnemyDamageReactionAction::UpdateNormal() {

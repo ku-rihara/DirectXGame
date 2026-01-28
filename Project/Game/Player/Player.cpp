@@ -1,7 +1,7 @@
 #include "Player.h"
 
 /// Enemy
-#include "Enemy/CollisionBox/EnemyCollisionBox.h"
+#include "Enemy/CollisionBox/EnemyAttackCollisionBox.h"
 #include "Enemy/Types/BaseEnemy.h"
 
 /// Behavior

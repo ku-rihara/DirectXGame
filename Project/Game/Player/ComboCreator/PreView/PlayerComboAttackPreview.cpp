@@ -1,12 +1,20 @@
 #include "PlayerComboAttackPreview.h"
+// attackData
 #include "../PlayerComboAttackData.h"
+// Frame
 #include "Frame/Frame.h"
-#include "Player/ComboAttackBehavior/ComboAttackAction.h"
-#include "Player/ComboAttackBehavior/ComboAttackRoot.h"
+// Behavior
+#include "Player/Behavior/ComboAttackBehavior/ComboAttackAction.h"
+#include "Player/Behavior/ComboAttackBehavior/ComboAttackRoot.h"
+// AttackController
 #include "Player/ComboCreator/PlayerComboAttackController.h"
+// Player
 #include "Player/Player.h"
+// utility
 #include "utility/TimeLine/TimelineDrawer.h"
+// imGui
 #include <imgui.h>
+// std
 #include <unordered_set>
 
 void PlayerComboAttackPreview::Init(
@@ -47,7 +55,7 @@ void PlayerComboAttackPreview::Update(float deltaTime) {
 }
 
 void PlayerComboAttackPreview::UpdateSingleMode() {
-    
+
     if (!currentAttackData_ || !timeline_) {
         return;
     }
@@ -180,7 +188,7 @@ PlayerComboAttackData* PlayerComboAttackPreview::FindFirstAttackInChain(PlayerCo
         // このattackから辿って現在の攻撃に到達できるかチェック
         while (current && visited.find(current->GetGroupName()) == visited.end()) {
             if (current->GetGroupName() == targetName) {
-                // このチェーンに属している = attackが最初
+                // このチェーンに属しているattackが最初
                 return attack.get();
             }
 
@@ -329,10 +337,10 @@ void PlayerComboAttackPreview::DrawUI() {
     ImGui::PopID();
 }
 
- std::string PlayerComboAttackPreview::GetCurrentAttackName() const {
+std::string PlayerComboAttackPreview::GetCurrentAttackName() const {
     // 現在の攻撃名を取得
     if (currentAttackData_) {
-       return currentAttackData_->GetGroupName();
+        return currentAttackData_->GetGroupName();
     } else {
         return "";
     }

@@ -1,6 +1,7 @@
 // behavior
 #include "EnemyChasePlayer.h"
 #include "EnemyWait.h"
+#include "EnemyAttack.h"
 // math
 #include "MathFunction.h"
 // Enemy
@@ -23,6 +24,7 @@ EnemyChasePlayer::EnemyChasePlayer(BaseEnemy* boss)
 
     scaleEasing_.Init("EnemyFindScaling.json");
     scaleEasing_.SetAdaptValue(&tempEnemyScale_);
+    scaleEasing_.SetStartValue(pBaseEnemy_->GetParameter().baseScale_);
     scaleEasing_.Reset();
 
     // 追従時間管理の初期化
@@ -81,8 +83,10 @@ void EnemyChasePlayer::Update() {
         return;
     }
 
-    // 近すぎる場合の早期リターン
-    if (distance_ <= pBaseEnemy_->GetParameter().chaseLimitDistance) {
+    // 攻撃範囲内に入ったら攻撃開始
+    if (distance_ <= pBaseEnemy_->GetParameter().attackStartDistance) {
+        // 攻撃ビヘイビアに遷移
+        pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyAttack>(pBaseEnemy_));
         return;
     }
 
@@ -100,7 +104,6 @@ void EnemyChasePlayer::Update() {
     if (finalDirection.Length() > 0.001f) {
         finalDirection.Normalize();
     } else {
-
         return;
     }
 
@@ -166,6 +169,11 @@ void EnemyChasePlayer::UpdateChaseTime(float deltaTime) {
 
 void EnemyChasePlayer::Debug() {
 #ifdef _DEBUG
-
+    if (ImGui::TreeNode("EnemyChasePlayer")) {
+        ImGui::Text("Distance: %.2f", distance_);
+        ImGui::Text("Chase Time: %.2f / %.2f", currentChaseTime_, pBaseEnemy_->GetParameter().maxChaseTime);
+        ImGui::Text("Is Chase Time Over: %s", isChaseTimeOver_ ? "true" : "false");
+        ImGui::TreePop();
+    }
 #endif
 }

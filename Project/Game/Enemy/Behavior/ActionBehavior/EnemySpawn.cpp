@@ -19,6 +19,7 @@ EnemySpawn::EnemySpawn(BaseEnemy* boss)
 
     spawnEasing_.Init("SpawnScaling.json");
     spawnEasing_.SetAdaptValue(&tempEnemyScale_);
+    spawnEasing_.SetEndValue(pBaseEnemy_->GetParameter().baseScale_);
     spawnEasing_.Reset();
 
     spawnEasing_.SetOnFinishCallback([this]() {

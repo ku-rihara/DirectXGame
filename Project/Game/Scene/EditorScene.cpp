@@ -148,8 +148,7 @@ void EditorScene::SetClassPointer() {
     enemyManager_->SetCombo(combo_.get());
     enemyManager_->SetGameCamera(gameCamera_.get());
     enemyManager_->SetEnemySpawner(enemySpawner_.get());
-    enemyManager_->SetAttackEffect(attackEffect_.get());
-
+   
     enemySpawner_->SetEnemyManager(enemyManager_.get());
 
     lockOnController_->SetEnemyManager(enemyManager_.get());

@@ -32,8 +32,8 @@ void ComboAttackAction::Init() {
     // タイミングのリセット
     currentFrame_      = 0.0f;
     waitTime_          = 0.0f;
-    isCollisionActive_ = false;
     collisionTimer_    = 0.0f;
+    isCollisionActive_ = false;
     hasHitEnemy_       = false;
 
     // 次の攻撃データを取得
