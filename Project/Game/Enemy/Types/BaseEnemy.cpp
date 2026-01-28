@@ -1,27 +1,26 @@
 #include "BaseEnemy.h"
 
+// Manager
+#include "Enemy/EnemyManager.h"
 // behavior
+#include "../Behavior/ActionBehavior/EnemySpawn.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionAction.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
-#include "../Behavior/DamageReactionBehavior/EnemyRopeBoundReaction.h"
-#include "../Behavior/NormalBehavior/EnemySpawn.h"
-#include "Enemy/EnemyManager.h"
-
-#include "Combo/Combo.h"
-
-/// collisionBox
-#include "CollisionBox/PlayerCollisionInfo.h"
-#include "Player/ComboCreator/PlayerComboAttackData.h"
-
-#include "AttackEffect/AttackEffect.h"
-#include "audio/Audio.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
-#include "Field/Field.h"
-#include "Field/SideRope/SideRope.h"
-#include "Frame/Frame.h"
-#include "GameCamera/GameCamera.h"
-#include "Matrix4x4.h"
+// Player
+#include "Player/CollisionBox/PlayerAttackCollisionBox.h"
+#include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
+// Combo
+#include "Combo/Combo.h"
+// Field
+#include "Field/Field.h"
+// Camera
+#include "GameCamera/GameCamera.h"
+// Frame
+#include "Frame/Frame.h"
+// Math
+#include "Matrix4x4.h"
 
 ///========================================================
 ///  初期化
@@ -44,19 +43,9 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     collisionBox_->Init();
     collisionBox_->SetSize(Vector3(3.2f, 3.2f, 3.2f));
 
-    findSprite_    = std::make_unique<FindSprite>();
-    notFindSprite_ = std::make_unique<NotFindSprite>();
-
-    findSprite_->Init();
-    notFindSprite_->Init();
-
     // エフェクト初期化
     enemyEffects_ = std::make_unique<EnemyEffects>();
     enemyEffects_->Init(&baseTransform_);
-
-    // audio
-    /*deathSound_  = KetaEngine::Audio::GetInstance()->LoadWave("EnemyDeath.wav");
-    thrustSound_ = KetaEngine::Audio::GetInstance()->LoadWave("Enemythurst.wav");*/
 
     // 振る舞い初期化
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
@@ -105,20 +94,6 @@ void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) 
     // Hpバー更新
     hpBar_->Update(hp_);
 
-    Vector2 findPos(positionScreen.x, positionScreen.y - 100.0f);
-
-    // HPBarスプライト
-    findSprite_->SetPosition(findPos);
-    // Hpバー更新
-    findSprite_->Update();
-
-    // HPBarスプライト
-    notFindSprite_->SetPosition(findPos);
-    // Hpバー更新
-    notFindSprite_->Update();
-
-    findSprite_->SetIsDraw(IsInView(viewProjection));
-    notFindSprite_->SetIsDraw(IsInView(viewProjection));
     hpBar_->SetIsDraw(IsInView(viewProjection));
 }
 
@@ -138,21 +113,13 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    if (SideRope* sideRope = dynamic_cast<SideRope*>(other)) {
-
-        if (EnemyDamageReactionAction* action = dynamic_cast<EnemyDamageReactionAction*>(damageBehavior_.get())) {
-            Vector3 velocity = action->GetKnockBackVelocity();
-            ChangeDamageReactionBehavior(std::make_unique<EnemyRopeBoundReaction>(this, velocity, sideRope));
-            return;
-        }
-
-    } else if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
+    if (PlayerAttackCollisionBox* attackController = dynamic_cast<PlayerAttackCollisionBox*>(other)) {
         // プレイヤーとの攻撃コリジョン判定
         ChangeDamageReactionByPlayerAttack(attackController);
         return;
     }
 
-     if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+    if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
         // 敵の中心座標を取得
         const Vector3& enemyPosition = enemy->GetCollisionPos();
 
@@ -208,6 +175,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 }
 
+
 void BaseEnemy::MoveToLimit() {
 
     // フィールドの中心とスケールを取得
@@ -248,7 +216,7 @@ void BaseEnemy::MoveToLimit() {
     }
 }
 
-void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController) {
+void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerAttackCollisionBox* attackController) {
 
     if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
         return;
@@ -357,18 +325,15 @@ void BaseEnemy::DamageCollingUpdate(float deltaTime) {
 }
 
 void BaseEnemy::DamageRenditionInit() {
-  
 }
 
 void BaseEnemy::ThrustRenditionInit() {
     // ガレキパーティクル
     pEnemyManager_->ThrustEmit(GetWorldPosition());
-    /*  KetaEngine::Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);*/
 }
 
 void BaseEnemy::DeathRenditionInit() {
     pEnemyManager_->DeathEmit(GetWorldPosition());
-    /* KetaEngine::Audio::GetInstance()->PlayWave(deathSound_, 0.5f);*/
 }
 
 /// ===================================================

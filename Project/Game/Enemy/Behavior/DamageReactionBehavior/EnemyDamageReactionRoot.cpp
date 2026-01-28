@@ -1,19 +1,20 @@
 /// behavior
 #include "EnemyDamageReactionRoot.h"
 #include "EnemyDamageReactionAction.h"
-#include "EnemyRopeBoundReaction.h"
-/// obj
-#include "CollisionBox/PlayerCollisionInfo.h"
+#include "EnemyDeath.h"
+/// Enemy
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Types/BaseEnemy.h"
+// Field
 #include "Field/SideRope/SideRope.h"
+// Player
+#include "Player/CollisionBox/PlayerAttackCollisionBox.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
 /// data
 #include "Enemy/DamageReaction/EnemyDamageReactionController.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionData.h"
 /// math
-#include "EnemyDeath.h"
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 
@@ -35,7 +36,7 @@ void EnemyDamageReactionRoot::Update(float deltaTime) {
 void EnemyDamageReactionRoot::Debug() {
 }
 
-void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerCollisionInfo* playerCollisionInfo) {
+void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerAttackCollisionBox* playerCollisionInfo) {
     if (!playerCollisionInfo) {
         return;
     }

@@ -1,12 +1,14 @@
 #include "EnemyManager.h"
+// Types
 #include "Types/NormalEnemy.h"
 #include "Types/StrongEnemy.h"
-
-#include "AttackEffect/AttackEffect.h"
+// Combo
 #include "Combo/Combo.h"
+// LockOn
 #include "LockOn/LockOn.h"
+// Spawner
 #include "Spawner/EnemySpawner.h"
-
+// imGui
 #include <imgui.h>
 
 ///========================================================================================

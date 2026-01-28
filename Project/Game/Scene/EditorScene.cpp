@@ -114,7 +114,6 @@ void EditorScene::ObjectInit() {
     gameCamera_                  = std::make_unique<GameCamera>();
     enemyManager_                = std::make_unique<EnemyManager>();
     enemySpawner_                = std::make_unique<EnemySpawner>();
-    skyDome_                     = std::make_unique<SkyDome>();
     skyBox_                      = std::make_unique<SkyBox>();
     combo_                       = std::make_unique<Combo>();
     attackEffect_                = std::make_unique<AttackEffect>();

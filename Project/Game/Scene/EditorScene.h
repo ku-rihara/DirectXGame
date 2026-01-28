@@ -2,23 +2,29 @@
 
 /// base
 #include "BaseScene.h"
-
-// object
-#include "AttackEffect/AttackEffect.h"
+// Audience
 #include "Audience/AudienceController.h"
+// Combo
 #include "Combo/Combo.h"
+// DeathTimer
+#include "DeathTimer/DeathTimer.h"
+// Enemy
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Spawner/EnemySpawner.h"
+// Field
 #include "Field/Field.h"
 #include "Field/SideRope/SideRopeController.h"
+// Camera
 #include "GameCamera/GameCamera.h"
+// LockOn
 #include "LockOn/LockOnController.h"
+// Player
+#include "Player/Effect/AttackEffect/AttackEffect.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
+// SkyBox
 #include "SkyBox/SkyBox.h"
-#include "SkyDome/SkyDome.h"
-#include"DeathTimer/DeathTimer.h"
-
+// utility
 #include "utility/ObjectFromBlender/ObjectFromBlender.h"
 
 /// <summary>
@@ -57,7 +63,6 @@ private:
     std::unique_ptr<Field> field_                                             = nullptr;
     std::unique_ptr<LockOnController> lockOnController_                       = nullptr;
     std::unique_ptr<Player> player_                                           = nullptr;
-    std::unique_ptr<SkyDome> skyDome_                                         = nullptr;
     std::unique_ptr<SkyBox> skyBox_                                           = nullptr;
     std::unique_ptr<Combo> combo_                                             = nullptr;
     std::unique_ptr<EnemyManager> enemyManager_                               = nullptr;

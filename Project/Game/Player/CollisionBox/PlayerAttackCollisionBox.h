@@ -1,8 +1,12 @@
 #pragma once
 
-#include "BaseAABBCollisionBox.h"
+// BaseCollisionBox
+#include "CollisionBox/BaseAABBCollisionBox.h"
+// Combo
 #include "Combo/Combo.h"
+//Parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
+// std
 #include <array>
 #include <string>
 
@@ -10,12 +14,12 @@ class PlayerComboAttackData;
 /// <summary>
 /// プレイヤー攻撃の制御クラス
 /// </summary>
-class PlayerCollisionInfo : public BaseAABBCollisionBox {
+class PlayerAttackCollisionBox : public BaseAABBCollisionBox {
 
 
 public:
-    PlayerCollisionInfo()           = default;
-    ~PlayerCollisionInfo() override = default;
+    PlayerAttackCollisionBox()           = default;
+    ~PlayerAttackCollisionBox() override = default;
 
     // 初期化、更新、描画
     void Init() override;

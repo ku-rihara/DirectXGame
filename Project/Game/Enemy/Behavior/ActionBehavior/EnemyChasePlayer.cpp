@@ -1,36 +1,29 @@
-/// behavior
+// behavior
 #include "EnemyChasePlayer.h"
 #include "EnemyWait.h"
-
-/// math
+// math
 #include "MathFunction.h"
-/// obj
+// Enemy
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Types/BaseEnemy.h"
-#include "Player/Player.h" 
-/// frame
+// Player
+#include "Player/Player.h"
+// frame
 #include "Frame/Frame.h"
-/// imGui
-#include <imgui.h>
-/// std
+// std
 #include <cmath>
+// imGui
+#include <imgui.h>
 
 // 初期化
 EnemyChasePlayer::EnemyChasePlayer(BaseEnemy* boss)
     : BaseEnemyBehavior("EnemyChasePlayer", boss) {
 
-    pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
-    pBaseEnemy_->GetFindSprite()->SetScale(Vector2(0, 0));
-
-    spriteEasing_.Init("EnemyFindSpriteScaling.json");
-    spriteEasing_.SetAdaptValue(&tempSpriteScale_);
-    spriteEasing_.Reset();
+    isChase_ = true; // デバッグ用
 
     scaleEasing_.Init("EnemyFindScaling.json");
     scaleEasing_.SetAdaptValue(&tempEnemyScale_);
     scaleEasing_.Reset();
-
-    isChase_ = true; // デバッグ用
 
     // 追従時間管理の初期化
     currentChaseTime_ = 0.0f;
@@ -42,9 +35,6 @@ EnemyChasePlayer::~EnemyChasePlayer() {
 }
 
 void EnemyChasePlayer::Update() {
-
-    spriteEasing_.Update(KetaEngine::Frame::DeltaTimeRate());
-    pBaseEnemy_->GetFindSprite()->SetScale(tempSpriteScale_);
 
     // Enemy AmplitudeScaling
     scaleEasing_.Update(KetaEngine::Frame::DeltaTimeRate());
@@ -91,11 +81,10 @@ void EnemyChasePlayer::Update() {
         return;
     }
 
-     // 近すぎる場合の早期リターン
+    // 近すぎる場合の早期リターン
     if (distance_ <= pBaseEnemy_->GetParameter().chaseLimitDistance) {
         return;
     }
-
 
     // 正規化
     direction.y = 0.0f;
@@ -111,7 +100,7 @@ void EnemyChasePlayer::Update() {
     if (finalDirection.Length() > 0.001f) {
         finalDirection.Normalize();
     } else {
-    
+
         return;
     }
 
@@ -153,7 +142,7 @@ Vector3 EnemyChasePlayer::CalculateAvoidanceVector() {
 
         // 回避範囲内にいる場合
         if (distance < avoidanceRadius && distance > 0.001f) {
-  
+
             float avoidanceStrength = (avoidanceRadius - distance) / avoidanceRadius;
             Vector3 avoidDirection  = -toOther.Normalize();
             avoidanceVector += avoidDirection * avoidanceStrength;
@@ -162,7 +151,7 @@ Vector3 EnemyChasePlayer::CalculateAvoidanceVector() {
 
     // 回避ベクトルを正規化して適切な強度にする
     if (avoidanceVector.Length() > 0.001f) {
-        avoidanceVector = avoidanceVector.Normalize() * 0.8f; 
+        avoidanceVector = avoidanceVector.Normalize() * 0.8f;
     }
 
     return avoidanceVector;

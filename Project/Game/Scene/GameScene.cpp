@@ -119,7 +119,6 @@ void GameScene::ObjectInit() {
     gameObj_.gameCamera_                  = std::make_unique<GameCamera>();
     gameObj_.enemyManager_                = std::make_unique<EnemyManager>();
     gameObj_.enemySpawner_                = std::make_unique<EnemySpawner>();
-    gameObj_.skyDome_                     = std::make_unique<SkyDome>();
     gameObj_.howToOperate_                = std::make_unique<HowToOperate>();
     gameObj_.skyBox_                      = std::make_unique<SkyBox>();
     gameObj_.combo_                       = std::make_unique<Combo>();

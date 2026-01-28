@@ -2,33 +2,42 @@
 
 /// base
 #include "BaseScene.h"
+#include "GameSceneState/BaseGameSceneState.h"
 
-// object
-#include "AttackEffect/AttackEffect.h"
+// Audience
 #include "Audience/AudienceController.h"
+// BackGroundObj
 #include "BackGroundObject/ComboLeve/ComboLevelObjHolder.h"
 #include "BackGroundObject/GameBackGroundObject.h"
+// Combo
 #include "Combo/Combo.h"
 #include "ComboScene/ComboScene.h"
+// DeathTimer
+#include "DeathTimer/DeathTimer.h"
+// Enemy
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Spawner/ContinuousEnemySpawner.h"
 #include "Enemy/Spawner/EnemySpawner.h"
+// Field
 #include "Field/Field.h"
 #include "Field/SideRope/SideRopeController.h"
 #include "FireInjectors/FireInjectors.h"
+// Camera
 #include "GameCamera/GameCamera.h"
+// Intro
 #include "GameIntro/GameIntroManager.h"
+// LockOn
 #include "LockOn/LockOnController.h"
+// Player
 #include "Player/ComboCreator/PlayerComboAttackController.h"
+#include "Player/Effect/AttackEffect/AttackEffect.h"
 #include "Player/Player.h"
+// SkyBox
 #include "SkyBox/SkyBox.h"
-#include "SkyDome/SkyDome.h"
+// UI
 #include "UI/HowToOperate.h"
-#include "DeathTimer/DeathTimer.h"
-
-#include "GameSceneState/BaseGameSceneState.h"
-#include "2d/Sprite.h"
-
+// Sprite
+#include "2D/Sprite.h"
 
 /// <summary>
 /// ゲームシーン
@@ -69,7 +78,6 @@ private:
         std::unique_ptr<Field> field_                                             = nullptr;
         std::unique_ptr<LockOnController> lockOnController_                       = nullptr;
         std::unique_ptr<Player> player_                                           = nullptr;
-        std::unique_ptr<SkyDome> skyDome_                                         = nullptr;
         std::unique_ptr<SkyBox> skyBox_                                           = nullptr;
         std::unique_ptr<Combo> combo_                                             = nullptr;
         std::unique_ptr<EnemyManager> enemyManager_                               = nullptr;
@@ -86,7 +94,7 @@ private:
         std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
         std::unique_ptr<AudienceController> audienceController_                   = nullptr;
         std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
-       
+
         std::unique_ptr<KetaEngine::Sprite> screenSprite_;
     };
 
@@ -95,5 +103,4 @@ private:
 
 public:
     GameObj& GetGameObj() { return gameObj_; }
-   /* const ViewProjection& GetViewProjection() const { return viewProjection_; }*/
 };

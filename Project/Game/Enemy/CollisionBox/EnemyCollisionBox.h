@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BaseAABBCollisionBox.h"
+#include "CollisionBox/BaseAABBCollisionBox.h"
 #include <array>
 
 /// <summary>

@@ -1,12 +1,17 @@
 #pragma once
 
+// BaseReactionBehavior
 #include "BaseEnemyDamageReaction.h"
+// ReactionData
 #include "Enemy/DamageReaction/EnemyDamageReactionData.h"
-#include "Enemy/Behavior/DamageReactionBehavior/EnemyDamageRendition.h"
+// EnemyDamageRendition
+#include "Rendition/EnemyDamageRendition.h"
+// math
 #include "Vector3.h"
+// std
 #include <memory>
 
-class PlayerCollisionInfo;
+class PlayerAttackCollisionBox;
 class EnemyDamageRenditionData;
 
 class EnemyDamageReactionAction : public BaseEnemyDamageReaction {
@@ -20,7 +25,7 @@ public:
 
 public:
     // コンストラクタ
-    EnemyDamageReactionAction(BaseEnemy* boss, EnemyDamageReactionData* reactionData, const PlayerCollisionInfo* playerCollisionInfo);
+    EnemyDamageReactionAction(BaseEnemy* boss, EnemyDamageReactionData* reactionData, const PlayerAttackCollisionBox* playerCollisionInfo);
     ~EnemyDamageReactionAction() override;
 
     void Update(float deltaTime) override;
@@ -54,7 +59,7 @@ private:
 
 private:
     EnemyDamageReactionData* pReactionData_          = nullptr;
-    const PlayerCollisionInfo* pPlayerCollisionInfo_ = nullptr;
+    const PlayerAttackCollisionBox* pPlayerCollisionInfo_ = nullptr;
 
     ReactionState currentState_ = ReactionState::Normal;
 

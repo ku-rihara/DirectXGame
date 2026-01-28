@@ -1,11 +1,14 @@
-#include "PlayerCollisionInfo.h"
-#include "Frame/Frame.h"
+#include "PlayerAttackCollisionBox.h"
+// ComboData
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 // enemy
 #include "Enemy/Types/BaseEnemy.h"
+// Frame
+#include "Frame/Frame.h"
+// imGui
 #include <imgui.h>
 
-void PlayerCollisionInfo::Init() {
+void PlayerAttackCollisionBox::Init() {
     SetIsAbleCollision(false);
     currentLoopCount_ = 0;
     isInLoopWait_     = false;
@@ -13,7 +16,7 @@ void PlayerCollisionInfo::Init() {
     BaseAABBCollisionBox::Init();
 }
 
-void PlayerCollisionInfo::Update() {
+void PlayerAttackCollisionBox::Update() {
     if (!comboAttackData_) {
         BaseAABBCollisionBox::Update();
         return;
@@ -28,7 +31,7 @@ void PlayerCollisionInfo::Update() {
     BaseAABBCollisionBox::Update();
 }
 
-void PlayerCollisionInfo::TimerUpdate(float timeSpeed) {
+void PlayerAttackCollisionBox::TimerUpdate(float timeSpeed) {
     if (!comboAttackData_) {
         return;
     }
@@ -63,7 +66,7 @@ void PlayerCollisionInfo::TimerUpdate(float timeSpeed) {
     }
 }
 
-void PlayerCollisionInfo::LoopWaiting(float timeSpeed) {
+void PlayerAttackCollisionBox::LoopWaiting(float timeSpeed) {
     // ループ待機中の処理
     if (!isInLoopWait_) {
         return;
@@ -84,7 +87,7 @@ void PlayerCollisionInfo::LoopWaiting(float timeSpeed) {
     LoopStart();
 }
 
-void PlayerCollisionInfo::LoopStart() {
+void PlayerAttackCollisionBox::LoopStart() {
     // コリジョンパラメータ取得
     const auto& collisionParam = comboAttackData_->GetAttackParam().collisionParam;
 
@@ -94,7 +97,7 @@ void PlayerCollisionInfo::LoopStart() {
     UpdateOffset();
 }
 
-void PlayerCollisionInfo::AttackStart(const PlayerComboAttackData* comboAttackData) {
+void PlayerAttackCollisionBox::AttackStart(const PlayerComboAttackData* comboAttackData) {
     comboAttackData_ = comboAttackData;
 
     // collision情報を取得
@@ -119,26 +122,26 @@ void PlayerCollisionInfo::AttackStart(const PlayerComboAttackData* comboAttackDa
     SetIsAbleCollision(true);
 }
 
-void PlayerCollisionInfo::UpdateOffset() {
+void PlayerAttackCollisionBox::UpdateOffset() {
     Vector3 offSetValue = comboAttackData_->GetAttackParam().collisionParam.offsetPos;
     SetOffset(offSetValue);
 }
 
-void PlayerCollisionInfo::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
+void PlayerAttackCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     if (dynamic_cast<BaseEnemy*>(other)) {
         isHit_       = true;
         hasHitEnemy_ = true;
     }
 }
 
-void PlayerCollisionInfo::SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform) {
+void PlayerAttackCollisionBox::SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform) {
     baseTransform_ = playerBaseTransform;
 }
 
-Vector3 PlayerCollisionInfo::GetCollisionPos() const {
+Vector3 PlayerAttackCollisionBox::GetCollisionPos() const {
     return BaseAABBCollisionBox::GetCollisionPos();
 }
 
-void PlayerCollisionInfo::SetParentTransform(KetaEngine::WorldTransform* transform) {
+void PlayerAttackCollisionBox::SetParentTransform(KetaEngine::WorldTransform* transform) {
     BaseAABBCollisionBox::SetParentTransform(transform);
 }

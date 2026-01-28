@@ -1,9 +1,12 @@
 #include "ComboAttackRoot.h"
+// behavior
 #include "ComboAttackAction.h"
+// Input
 #include "input/Input.h"
+// Player
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
-#include "Player/PlayerBehavior/PlayerJump.h"
+#include "Player/Behavior/PlayerBehavior/PlayerJump.h"
 
 // 初期化
 ComboAttackRoot::ComboAttackRoot(Player* player)

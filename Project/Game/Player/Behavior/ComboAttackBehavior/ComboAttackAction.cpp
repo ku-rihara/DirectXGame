@@ -1,13 +1,19 @@
 #include "ComboAttackAction.h"
-#include "CollisionBox/PlayerCollisionInfo.h"
+// Behavior
 #include "ComboAttackRoot.h"
+// Frame
 #include "Frame/Frame.h"
+// Input
 #include "input/Input.h"
+// Player
+#include "Player/CollisionBox/PlayerAttackCollisionBox.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
-#include "Player/PlayerBehavior/PlayerJump.h"
-#include "Player/PlayerBehavior/PlayerMove.h"
-#include <PostEffect/PostEffectRenderer.h>
+// ActionBehavior
+#include "Player/Behavior/PlayerBehavior/PlayerJump.h"
+#include "Player/Behavior/PlayerBehavior/PlayerMove.h"
+// PostEffect
+#include "PostEffect/PostEffectRenderer.h"
 
 ComboAttackAction::ComboAttackAction(Player* player, PlayerComboAttackData* attackData)
     : BaseComboAttackBehavior(attackData->GetGroupName(), player) {

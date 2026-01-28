@@ -1,19 +1,18 @@
 #pragma once
 
+// 3D
 #include "3d/ViewProjection.h"
-// function
-
-// class
-#include "../Behavior/DamageReactionBehavior/BaseEnemyDamageReaction.h"
-#include "../Behavior/NormalBehavior/BaseEnemyBehavior.h"
+// BaseObject
 #include "BaseObject/BaseObject.h"
+// Behavior
+#include "../Behavior/ActionBehavior/BaseEnemyBehavior.h"
+#include "../Behavior/DamageReactionBehavior/BaseEnemyDamageReaction.h"
+// Collision
+#include "../CollisionBox/EnemyCollisionBox.h"
 #include "Collider/AABBCollider.h"
-#include "CollisionBox/EnemyCollisionBox.h"
 #include "Enemy/Effects/EnemyEffects.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
-
-#include "../SearchingSprite/FindSprite.h"
-#include "../SearchingSprite/NotFindSprite.h"
+// std
 #include <cstdint>
 #include <memory>
 
@@ -22,7 +21,7 @@ class GameCamera;
 class EnemyManager;
 class Combo;
 class AttackEffect;
-class PlayerCollisionInfo;
+class PlayerAttackCollisionBox;
 /// <summary>
 /// 敵の基底クラス
 /// </summary>
@@ -142,7 +141,7 @@ private:
     void DamageCollingUpdate(float deltaTime);
 
     // ダメージリアクション変更処理
-    void ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController);
+    void ChangeDamageReactionByPlayerAttack(PlayerAttackCollisionBox* attackController);
 
 private:
     /*  int deathSound_;
@@ -162,8 +161,6 @@ protected:
     EnemyManager* pEnemyManager_;
     AttackEffect* pAttackEffect_;
 
-    std::unique_ptr<FindSprite> findSprite_;
-    std::unique_ptr<NotFindSprite> notFindSprite_;
     std::unique_ptr<EnemyCollisionBox> collisionBox_;
     std::unique_ptr<EnemyHPBar> hpBar_;
     std::unique_ptr<EnemyEffects> enemyEffects_;
@@ -201,8 +198,6 @@ public:
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return damageBehavior_.get(); }
-    FindSprite* GetFindSprite() const { return findSprite_.get(); }
-    NotFindSprite* GetNotFindSprite() const { return notFindSprite_.get(); }
     EnemyManager* GetManager() const { return pEnemyManager_; }
     EnemyEffects* GetEnemyEffects() const { return enemyEffects_.get(); }
 
