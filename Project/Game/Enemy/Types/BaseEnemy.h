@@ -1,19 +1,20 @@
 #pragma once
 
+// 3D
 #include "3d/ViewProjection.h"
-// function
-
-// class
-#include "../Behavior/DamageReactionBehavior/BaseEnemyDamageReaction.h"
-#include "../Behavior/NormalBehavior/BaseEnemyBehavior.h"
+// BaseObject
 #include "BaseObject/BaseObject.h"
+// 3D
+#include "3D/AnimationObject3D/Object3DAnimation.h"
+// Behavior
+#include "../Behavior/ActionBehavior/BaseEnemyBehavior.h"
+#include "../Behavior/DamageReactionBehavior/BaseEnemyDamageReaction.h"
+// Collision
+#include "../CollisionBox/EnemyAttackCollisionBox.h"
 #include "Collider/AABBCollider.h"
-#include "CollisionBox/EnemyCollisionBox.h"
 #include "Enemy/Effects/EnemyEffects.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
-
-#include "../SearchingSprite/FindSprite.h"
-#include "../SearchingSprite/NotFindSprite.h"
+// std
 #include <cstdint>
 #include <memory>
 
@@ -21,8 +22,8 @@ class Player;
 class GameCamera;
 class EnemyManager;
 class Combo;
-class AttackEffect;
-class PlayerCollisionInfo;
+class PlayerAttackCollisionBox;
+
 /// <summary>
 /// 敵の基底クラス
 /// </summary>
@@ -34,8 +35,17 @@ public:
         COUNT,
     };
 
+    struct AttackParam {
+        float startTime;
+        float attackValue;
+        Vector3 collisionSize;
+        Vector3 collisionOffset;
+        float adaptTime;
+    };
+
     struct Parameter {
-        Vector3 initScale_;
+        AttackParam attackParam;
+        Vector3 baseScale_;
         Vector2 hpBarPosOffset;
         float chaseDistance;
         float chaseSpeed;
@@ -45,16 +55,16 @@ public:
         float maxChaseTime;
         float chaseResetTime;
         float chaseLimitDistance;
-
+        // attackParam
+        float attackStartDistance;
+        float attackCooldownTime;
+        float attackAnticipationTime;
+        // death Param
         float deathBlowValue;
         float deathBlowValueY;
         float deathGravity;
         float deathRotateSpeed;
         float deathBurstTime;
-
-        float ropeReboundJumpValue;
-        float ropeReboundGravity;
-        float ropeReboundFallSpeedLimit;
     };
 
 public:
@@ -69,15 +79,45 @@ public:
     virtual void Init(const Vector3& spownPos);
     virtual void Update();
 
+    // 振る舞い個別処理
+    virtual void SpawnRenditionInit() = 0;
+
+    /// <summary>
+    /// 攻撃予備動作
+    /// </summary>
+    virtual void AttackAnticipation() = 0;
+
+    /// <summary>
+    /// 攻撃予備動作が完了したか
+    /// </summary>
+    virtual bool IsAttackAnticipationFinished() = 0;
+
+    /// <summary>
+    /// 攻撃開始処理
+    /// </summary>
+    virtual void AttackStart() = 0;
+
+    /// <summary>
+    /// 攻撃更新処理
+    /// </summary>
+    virtual void AttackUpdate() = 0;
+
+    /// <summary>
+    /// 攻撃が完了したか
+    /// </summary>
+    virtual bool IsAttackFinished() = 0;
+
+    /// <summary>
+    /// 攻撃終了処理
+    /// </summary>
+    virtual void AttackFinish() = 0;
+
     /// <summary>
     /// スプライトUIの表示
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
     virtual void DisplaySprite(const KetaEngine::ViewProjection& viewProjection);
 
-    virtual void SpawnRenditionInit() = 0; //< スポーン演出初期化
-
-    void DamageRenditionInit(); //< ダメージ演出初期化
     void ThrustRenditionInit(); //< 突き飛ばし演出初期化
     void DeathRenditionInit(); //< 死亡演出初期化
     void ScaleReset(); //< スケールリセット
@@ -142,50 +182,60 @@ private:
     void DamageCollingUpdate(float deltaTime);
 
     // ダメージリアクション変更処理
-    void ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController);
+    void ChangeDamageReactionByPlayerAttack(PlayerAttackCollisionBox* attackController);
 
 private:
-    /*  int deathSound_;
-      int thrustSound_;*/
-    int32_t groupId_;
     void MoveToLimit();
 
-protected:
-    // structure
-    Type type_;
-    Parameter parameter_;
+private:
+    // 敵グループのID
+    int32_t groupId_;
 
-    /// other class
+    // HPバーのサイズ
+    Vector2 hpBarSize_;
+
+    // other class
     Player* pPlayer_;
     Combo* pCombo_;
     GameCamera* pGameCamera_;
     EnemyManager* pEnemyManager_;
-    AttackEffect* pAttackEffect_;
+  
 
-    std::unique_ptr<FindSprite> findSprite_;
-    std::unique_ptr<NotFindSprite> notFindSprite_;
-    std::unique_ptr<EnemyCollisionBox> collisionBox_;
-    std::unique_ptr<EnemyHPBar> hpBar_;
-    std::unique_ptr<EnemyEffects> enemyEffects_;
-
-    // parameter
-    float hp_;
-    float HPMax_;
-    Vector2 hpBarSize_;
-
-    // frags
+    // flags
     bool isDeathPending_ = false;
     bool isDamageColling_;
     bool isDeath_;
     bool isCollisionRope_;
 
-    // hitParam
+    // damageInfo
     float damageCollTime_;
     std::string lastReceivedAttackName_;
+
+protected:
+ 
+    std::unique_ptr<KetaEngine::Object3d> obj3d_;
+    std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
+
+    std::unique_ptr<EnemyAttackCollisionBox> attackCollisionBox_;
+    std::unique_ptr<EnemyHPBar> hpBar_;
+    std::unique_ptr<EnemyEffects> enemyEffects_;
+
+    // flags
+    bool isReturningFromAttack_;
 
     /// behavior
     std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_ = nullptr;
     std::unique_ptr<BaseEnemyBehavior> moveBehavior_         = nullptr;
+
+    // パラメータ
+    Parameter parameter_;
+
+    // Type
+    Type type_;
+
+    // HP
+    float hp_;
+    float HPMax_;
 
 public:
     /// ========================================================================================
@@ -201,10 +251,11 @@ public:
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return damageBehavior_.get(); }
-    FindSprite* GetFindSprite() const { return findSprite_.get(); }
-    NotFindSprite* GetNotFindSprite() const { return notFindSprite_.get(); }
     EnemyManager* GetManager() const { return pEnemyManager_; }
     EnemyEffects* GetEnemyEffects() const { return enemyEffects_.get(); }
+    EnemyAttackCollisionBox* GetAttackCollisionBox() const { return attackCollisionBox_.get(); }
+    KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
+    bool GetIsReturningFromAttack() const { return isReturningFromAttack_; }
 
     /// ========================================================================================
     ///  setter method
@@ -213,12 +264,12 @@ public:
     void SetGameCamera(GameCamera* gamecamera);
     void SetManager(EnemyManager* manager);
     void SetCombo(Combo* combo);
-    void SetAttackEffect(AttackEffect* attackEffect);
     void SetParameter(const Type& type, const Parameter& paramater);
-    void SetBodyRotateX(float r) { obj3d_->transform_.rotation_.x = r; }
+    void SetBodyRotateX(float rotate) { obj3d_->transform_.rotation_.x = rotate; }
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
     void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
-    void SetWorldPositionY(float y) { baseTransform_.translation_.y = y; }
+    void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
+    void SetIsReturningFromAttack(bool is) { isReturningFromAttack_ = is; }
 };

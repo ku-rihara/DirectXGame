@@ -1,6 +1,6 @@
 #include "EnemyDamageReactionAction.h"
 /// obj
-#include "CollisionBox/PlayerCollisionInfo.h"
+#include "Player/CollisionBox/PlayerAttackCollisionBox.h"
 #include "Enemy/Types/BaseEnemy.h"
 #include "Player/Player.h"
 /// data
@@ -14,7 +14,7 @@
 EnemyDamageReactionAction::EnemyDamageReactionAction(
     BaseEnemy* boss,
     EnemyDamageReactionData* reactionData,
-    const PlayerCollisionInfo* playerCollisionInfo)
+    const PlayerAttackCollisionBox* playerCollisionInfo)
     : BaseEnemyDamageReaction("EnemyDamageReactionAction", boss) {
 
     pReactionData_        = reactionData;
@@ -24,7 +24,6 @@ EnemyDamageReactionAction::EnemyDamageReactionAction(
     InitReaction();
 
     // 演出の初期化
-    /*   damageRendition_ = std::make_unique<EnemyDamageRendition>();*/
     damageRendition_.Init(pBaseEnemy_, pReactionData_);
 }
 
@@ -117,8 +116,6 @@ void EnemyDamageReactionAction::InitNormalReaction(const EnemyDamageReactionData
     knockBackTimer_    = 0.0f;
     totalReactionTime_ = param.knockBackTime;
 
-    // 演出初期化
-    pBaseEnemy_->DamageRenditionInit();
 }
 
 void EnemyDamageReactionAction::InitSlammedReaction(
@@ -139,9 +136,6 @@ void EnemyDamageReactionAction::InitSlammedReaction(
     // Slammed固有のパラメータ
     slammedGravity_     = param.gravity;
     slammedRotateSpeed_ = param.rotateSpeed;
-
-    // 演出初期化
-    pBaseEnemy_->DamageRenditionInit();
 }
 
 void EnemyDamageReactionAction::InitTakeUpperReaction(
@@ -169,9 +163,6 @@ void EnemyDamageReactionAction::InitTakeUpperReaction(
     takeUpperGravity_     = param.gravity;
     takeUpperRotateSpeed_ = param.rotateSpeed;
     takeUpperFallLimit_   = param.fallSpeedLimit;
-
-    // 演出初期化
-    pBaseEnemy_->DamageRenditionInit();
 }
 
 void EnemyDamageReactionAction::UpdateNormal() {

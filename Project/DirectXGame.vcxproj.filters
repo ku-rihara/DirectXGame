@@ -2,370 +2,373 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Engine">
-      <UniqueIdentifier>{32A59001-96B9-4983-BF90-1F0EB98D8459}</UniqueIdentifier>
+      <UniqueIdentifier>{77108229-65D2-4F33-9F59-141B81B63A80}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game">
-      <UniqueIdentifier>{CC266678-CF09-4176-99C4-3827C4F75A26}</UniqueIdentifier>
+      <UniqueIdentifier>{436ED88D-DCE4-4521-96EE-A7D931A25FE4}</UniqueIdentifier>
     </Filter>
     <Filter Include="math">
-      <UniqueIdentifier>{31C9E7D3-209C-4146-B0A4-4D5E280582EC}</UniqueIdentifier>
+      <UniqueIdentifier>{519FF06F-823A-44D9-B16B-FC35F51D565A}</UniqueIdentifier>
     </Filter>
     <Filter Include="resources">
-      <UniqueIdentifier>{135C5848-2906-462D-889E-4A1F1A732A63}</UniqueIdentifier>
+      <UniqueIdentifier>{6265B8D7-96BA-4722-ACC9-D747209053E8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\2d">
-      <UniqueIdentifier>{4D7B301C-2E76-41F3-A51E-8AFDF8FDC51C}</UniqueIdentifier>
+      <UniqueIdentifier>{682C78CA-F402-44C7-A078-2C5C26005E4E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\3d">
-      <UniqueIdentifier>{7E78778C-49F8-45B3-A691-5AFA76F6782C}</UniqueIdentifier>
+      <UniqueIdentifier>{BE866421-5B6F-4DF4-8B78-2E2CE8C2C89E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Audio">
-      <UniqueIdentifier>{FD3460B8-242D-44BB-9885-8FE78A728488}</UniqueIdentifier>
+      <UniqueIdentifier>{7BA2A81A-2FC0-4665-9E76-95F0C8203628}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Base">
-      <UniqueIdentifier>{562FC8A1-C6FC-47B8-A715-3AC1991C270C}</UniqueIdentifier>
+      <UniqueIdentifier>{1F61011F-B4C1-4E64-BA1E-05DAEF61DD71}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Collider">
-      <UniqueIdentifier>{7D81BAE5-9099-4322-8ED1-1D955F4766A7}</UniqueIdentifier>
+      <UniqueIdentifier>{C3709234-40A3-47B3-9061-03D6CB416297}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Core">
-      <UniqueIdentifier>{A0E12B61-EA09-40D4-B60A-1877A68A6141}</UniqueIdentifier>
+      <UniqueIdentifier>{368A5385-3FC4-4E47-B5AB-D22B251D3C52}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Easing">
-      <UniqueIdentifier>{14FD5C46-6A32-47E3-AAA6-0E8E9EEF3CF8}</UniqueIdentifier>
+      <UniqueIdentifier>{44E83ACF-4A0D-44F9-85AB-FDD3B9AB39B0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor">
-      <UniqueIdentifier>{CCCBE781-0E7C-4A45-AE98-A6CB21411413}</UniqueIdentifier>
+      <UniqueIdentifier>{953A6FA6-B42F-47A1-81A5-C983683C8516}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Frame">
-      <UniqueIdentifier>{8E81D137-0069-432E-BF09-492335A4328E}</UniqueIdentifier>
+      <UniqueIdentifier>{745E23F3-7CCA-476C-A6ED-C4503FA8ABF4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Function">
-      <UniqueIdentifier>{205D769F-8692-44E2-ABE4-31A6808D5354}</UniqueIdentifier>
+      <UniqueIdentifier>{7A486E1B-295D-4FDE-8C4B-EA0C0D782961}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Lighrt">
-      <UniqueIdentifier>{20510778-B968-4529-B5EC-131FBC4AFF88}</UniqueIdentifier>
+      <UniqueIdentifier>{F91AC9E5-FDAB-456E-AF9E-79F12E7FE1B9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Particle">
-      <UniqueIdentifier>{B6DD9E7B-3FD8-4263-86A3-AD781E9FB3EC}</UniqueIdentifier>
+      <UniqueIdentifier>{1B936C75-88FB-4624-8AED-CBB398B73E65}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Pipeline">
-      <UniqueIdentifier>{A67CA6F3-54B1-427D-A399-270574FBACDF}</UniqueIdentifier>
+      <UniqueIdentifier>{18BB74C2-89AB-4B40-B53B-45FD97E1F547}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\PostEffect">
-      <UniqueIdentifier>{96C43145-B0AB-4BF9-9ECF-96E807FA6DCC}</UniqueIdentifier>
+      <UniqueIdentifier>{EAD30C7F-E8C2-47D6-A786-D799C8383BAE}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Scene">
-      <UniqueIdentifier>{D58ABCEE-4E3A-49E8-9AF5-E13C3BD18D41}</UniqueIdentifier>
+      <UniqueIdentifier>{79F6C6CA-D648-4949-8A4F-E4E9E8A53265}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\ShadowMap">
-      <UniqueIdentifier>{A395BE95-05A8-4AD1-99A3-A1C2577EA975}</UniqueIdentifier>
+      <UniqueIdentifier>{B23AF614-A397-4D75-861D-C1CB5092FF6B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\input">
-      <UniqueIdentifier>{CBC1AA82-B4E4-4D0F-96CF-E84A4D6BEDD6}</UniqueIdentifier>
+      <UniqueIdentifier>{1EA007FD-6213-4F0B-9D9F-35E6E98027BA}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\struct">
-      <UniqueIdentifier>{3EF47CD6-0262-488A-99D9-2433CC657DC4}</UniqueIdentifier>
+      <UniqueIdentifier>{D601AC67-AF3A-459E-AF66-A2E18FA0E6E7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\utility">
-      <UniqueIdentifier>{176B574F-F024-4274-A091-C7BBBC014734}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\AttackEffect">
-      <UniqueIdentifier>{E3ADF10F-2F02-4A00-8792-1A4896971A2D}</UniqueIdentifier>
+      <UniqueIdentifier>{8E2DA3CC-8730-4C2D-9952-5DC8D138EBB2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Audience">
-      <UniqueIdentifier>{C27F4442-90E9-47B9-8A8E-FBD3958ED6B9}</UniqueIdentifier>
+      <UniqueIdentifier>{B2910424-C985-4CD5-AB42-C0353EA14DFF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\BackGroundObject">
-      <UniqueIdentifier>{01BFA633-D4BD-487A-B67D-1CEF68F91F99}</UniqueIdentifier>
+      <UniqueIdentifier>{E39BD93B-8224-4E07-B140-16301F7D25C8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\BaseBehavior">
-      <UniqueIdentifier>{DE5DCE8D-FD4E-44AE-919D-F13C50433315}</UniqueIdentifier>
+      <UniqueIdentifier>{BD78EC5A-D7B4-4D2B-8871-921CECB11107}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\BaseObject">
-      <UniqueIdentifier>{6330F4BA-1C3A-4742-AAFB-67DCAF81E7AE}</UniqueIdentifier>
+      <UniqueIdentifier>{414B9BAB-0CB8-4C8E-9750-BBD227A3B648}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\CollisionBox">
-      <UniqueIdentifier>{D54FECC0-489D-43E7-9408-FA90AD6BAC5A}</UniqueIdentifier>
+      <UniqueIdentifier>{EEF6024E-0852-40B0-B5A3-6C508215CBA9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Combo">
-      <UniqueIdentifier>{8DF02C62-74DF-427F-9E94-FC880E3F0992}</UniqueIdentifier>
+      <UniqueIdentifier>{3A88AF52-BE51-4F8D-A9CE-38707B909424}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\ComboScene">
-      <UniqueIdentifier>{073AE40C-B17E-4852-A437-E46A43D69178}</UniqueIdentifier>
+      <UniqueIdentifier>{317D84EF-129D-49E6-BC38-FF527416FBD6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\DeathTimer">
-      <UniqueIdentifier>{EBFB16EF-A96C-4EBB-B404-071EC887DABB}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\EasingTestObj">
-      <UniqueIdentifier>{CE81F8A0-01AC-4B2C-AF05-CCF3BCCCA9CF}</UniqueIdentifier>
+      <UniqueIdentifier>{20A86A75-8F3C-4511-941A-039895D82CE5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy">
-      <UniqueIdentifier>{A674D475-C558-4E55-A9FD-B303E95A15BB}</UniqueIdentifier>
+      <UniqueIdentifier>{B9314031-5D86-4936-89F7-36E7FD19BB2C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Field">
-      <UniqueIdentifier>{F02B1A4C-A08B-4001-9342-71BEB15E48A9}</UniqueIdentifier>
+      <UniqueIdentifier>{CFDAB12F-7AEA-4972-B335-F1EBC0A9018E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\FireInjectors">
-      <UniqueIdentifier>{0A73131D-758B-45B2-AD37-056630CB5056}</UniqueIdentifier>
+      <UniqueIdentifier>{4BDE6C15-9D36-4AF6-9656-2DE4143E367A}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\GameCamera">
-      <UniqueIdentifier>{3233E17F-B9EF-4A2F-A033-EEA128F43559}</UniqueIdentifier>
+      <UniqueIdentifier>{606F6E7B-2327-45B7-A446-6A618857D250}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\GameIntro">
-      <UniqueIdentifier>{BA851F61-A479-4D37-9FD7-7DE2DD725EFD}</UniqueIdentifier>
+      <UniqueIdentifier>{155006AA-AE33-4424-AACE-AABCF5AFB547}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\LockOn">
-      <UniqueIdentifier>{F50162F5-5761-41C5-BBBE-B68AC3923CC4}</UniqueIdentifier>
+      <UniqueIdentifier>{CF098B13-FC64-4CFE-9BF7-18C566388640}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player">
-      <UniqueIdentifier>{78C2AA77-466F-436E-87CA-2E81614A2A20}</UniqueIdentifier>
+      <UniqueIdentifier>{301DBECA-7A82-4EC8-AF26-0FB546BB8996}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Scene">
-      <UniqueIdentifier>{63C3C983-B6D5-447D-A4E2-FA80BDB0F29B}</UniqueIdentifier>
+      <UniqueIdentifier>{446AA4EA-A620-4CCF-939B-4EA691076AEB}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\SkyBox">
-      <UniqueIdentifier>{39C9ED80-A830-44E8-BD27-EA2271454F44}</UniqueIdentifier>
+      <UniqueIdentifier>{B998A657-EDF8-400A-B678-2EEC8E07B9F0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\SkyDome">
-      <UniqueIdentifier>{E59D316C-8432-440B-BC1A-AE625F5B6660}</UniqueIdentifier>
+      <UniqueIdentifier>{2E1591CC-D8E9-4E9F-B53A-98B87CAD45BF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\UI">
-      <UniqueIdentifier>{9B5445BB-E6D1-4781-A7DF-3C04007C81A3}</UniqueIdentifier>
+      <UniqueIdentifier>{1CEF3B67-0AF2-4593-96E3-70D32C49FA07}</UniqueIdentifier>
     </Filter>
     <Filter Include="resources\Shader">
-      <UniqueIdentifier>{A4D2386D-3591-46F3-B6BE-329502C4DDE1}</UniqueIdentifier>
+      <UniqueIdentifier>{95AEF063-1501-40EB-973C-D89C4B768F91}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\3d\AnimationObject3D">
-      <UniqueIdentifier>{E765C139-4A9A-456E-B6EF-209D9A172424}</UniqueIdentifier>
+      <UniqueIdentifier>{457EEE13-6EEB-4DB5-A93C-1C44573B2838}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\3d\Line3D">
-      <UniqueIdentifier>{AB84F1DB-AC14-4282-937B-7873EC9DF8B5}</UniqueIdentifier>
+      <UniqueIdentifier>{F1F05792-4348-4772-965A-175EE0F02746}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\3d\Object3D">
-      <UniqueIdentifier>{9FAA720D-62C8-47D6-9688-18398981D3EC}</UniqueIdentifier>
+      <UniqueIdentifier>{8C43FFD9-3869-4274-96B4-737C46FFB134}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\3d\Primitive">
-      <UniqueIdentifier>{2CEE970D-ABA8-470C-A4BA-7E870EC08525}</UniqueIdentifier>
+      <UniqueIdentifier>{74136FF5-0E4D-4B0C-B475-DC6E5C2F79F4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Base\Descriptors">
-      <UniqueIdentifier>{AB7B16B4-BF6B-4D63-9E06-7B761B795D6D}</UniqueIdentifier>
+      <UniqueIdentifier>{5E9EB2DF-7358-4B32-928C-57A878246083}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Base\Dx">
-      <UniqueIdentifier>{7268011E-418E-41F2-BC1F-75429A526925}</UniqueIdentifier>
+      <UniqueIdentifier>{CFD6F44A-0C86-480F-9831-09C0DAA54492}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Base\Material">
-      <UniqueIdentifier>{BEB2C059-C9BB-42E0-811E-ACE28FABE628}</UniqueIdentifier>
+      <UniqueIdentifier>{0D058F88-C82A-41F8-BB1A-AFF0772FEDC7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Collider\SpatialGrid">
-      <UniqueIdentifier>{32AF6D2A-E67F-4326-BD74-7C8BCB0DF022}</UniqueIdentifier>
+      <UniqueIdentifier>{97BB980A-531C-448E-A937-61EEDD407207}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Easing\EasingCreator">
-      <UniqueIdentifier>{F8F910FB-D517-438A-9194-CC963BDAF5BC}</UniqueIdentifier>
+      <UniqueIdentifier>{5771133F-B9EA-4AF3-985F-C0D0EF852FA6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\BaseEffectEditor">
-      <UniqueIdentifier>{003536BF-839D-4393-BE65-FEBB15A53C0A}</UniqueIdentifier>
+      <UniqueIdentifier>{1CBF7194-71D2-4AA4-AB8C-D8E892ADD09B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\CameraEditor">
-      <UniqueIdentifier>{1F8F1AAC-0329-497F-8531-AA877A5C19FE}</UniqueIdentifier>
+      <UniqueIdentifier>{EC35A1F2-B378-441D-9FE9-D670813D0CC6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\DissolveEditor">
-      <UniqueIdentifier>{8EAA06CA-FA83-47DE-9137-78E8C971402F}</UniqueIdentifier>
+      <UniqueIdentifier>{7490475B-DF3C-49B9-8F56-4B9E1A82B678}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\EffectEditorSuite">
-      <UniqueIdentifier>{1C5823A1-498D-45F9-A403-22EF699A4C6B}</UniqueIdentifier>
+      <UniqueIdentifier>{53AE431C-0096-4C4F-B6B9-FE423702F2BD}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\ObjEaseAnimation">
-      <UniqueIdentifier>{4842916E-92B7-4B00-9BA5-B72CA2CC93B6}</UniqueIdentifier>
+      <UniqueIdentifier>{791D463F-1129-4E52-A271-4CA51D3DD84E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\ParameterEditor">
-      <UniqueIdentifier>{2B1A5B85-F643-4C2B-9531-1D44695293B3}</UniqueIdentifier>
+      <UniqueIdentifier>{85612057-2FF3-48BB-A521-674824265441}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\PostEffectEditor">
-      <UniqueIdentifier>{4D9E9325-BF33-49E9-BE89-3CB59AE73F4D}</UniqueIdentifier>
+      <UniqueIdentifier>{26BFF1A9-B9A6-4D7B-9CFB-7F81EF9B95FF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\RailEditor">
-      <UniqueIdentifier>{F38AC802-7EC5-44CF-A5A8-53A6F16AAC6B}</UniqueIdentifier>
+      <UniqueIdentifier>{FBE7532E-53E4-4447-BB35-4EE04B6B945E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\ShakeEditor">
-      <UniqueIdentifier>{A0C7BFD9-73EB-4342-89B3-8AE62D320F71}</UniqueIdentifier>
+      <UniqueIdentifier>{673E87E8-C11F-4C11-A15F-11B723C00C95}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\TimeScaleEditor">
-      <UniqueIdentifier>{71C852F5-34EA-4FE3-ADF4-25A31AABF744}</UniqueIdentifier>
+      <UniqueIdentifier>{2E675C90-EBF0-4BA3-9767-BCA156A98CCF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Particle\CPUParticle">
-      <UniqueIdentifier>{241EA97F-DBC6-4311-8470-E7A5936FDCB7}</UniqueIdentifier>
+      <UniqueIdentifier>{48431E6C-DF01-4A12-BED5-4934C30265D1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Particle\GPUParticle">
-      <UniqueIdentifier>{7176CCE4-B78D-44CF-AF8D-890786B849C0}</UniqueIdentifier>
+      <UniqueIdentifier>{1588A767-24F6-46C9-A5D0-15ECEC421EAE}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Pipeline\Line3D">
-      <UniqueIdentifier>{5C331612-3922-4BBD-A8FA-E3C0780423F1}</UniqueIdentifier>
+      <UniqueIdentifier>{8BF7FFFF-E6CF-4929-9E09-246940D867C6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Pipeline\Object3D">
-      <UniqueIdentifier>{6865D14A-DDE9-4F96-91C1-9C76B5252E8F}</UniqueIdentifier>
+      <UniqueIdentifier>{D88A1847-2A11-4B5D-96F3-B72DAE5D8AFF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Pipeline\Particle">
-      <UniqueIdentifier>{0D1DA7F0-9B29-423E-B6AE-37C489890D48}</UniqueIdentifier>
+      <UniqueIdentifier>{4EE18795-488B-4FE1-A9C7-2ED3BC0CBBA9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Pipeline\ShadowMap">
-      <UniqueIdentifier>{F66122D5-C9B6-4590-830F-AFDF55F7E09E}</UniqueIdentifier>
+      <UniqueIdentifier>{95F22EB7-81E0-4B83-A707-239C240F4413}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Pipeline\Skinning">
-      <UniqueIdentifier>{33B5EC7F-B180-4D77-94C6-7A85E0E1572D}</UniqueIdentifier>
+      <UniqueIdentifier>{C7E70A5C-457A-4A8A-8941-B556164C4E2C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Pipeline\SkyBox">
-      <UniqueIdentifier>{9934077E-0691-49DD-A910-3405F398BD4B}</UniqueIdentifier>
+      <UniqueIdentifier>{B0E0450B-E80E-4B1C-9B65-9F28724F7869}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Pipeline\Sprite">
-      <UniqueIdentifier>{9CF9C3BC-263F-485C-8E72-0E4E834C10C7}</UniqueIdentifier>
+      <UniqueIdentifier>{FFB2162C-6475-41C8-8969-35C61C03878C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Scene\Factory">
-      <UniqueIdentifier>{E4532ECB-39C2-4F09-BF7C-BBCABB57D49D}</UniqueIdentifier>
+      <UniqueIdentifier>{0425A3EA-A8AF-4BC3-8A9E-E375680FA938}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Scene\Manager">
-      <UniqueIdentifier>{EE445AC0-D708-4101-A1EB-E31C43538B81}</UniqueIdentifier>
+      <UniqueIdentifier>{E08D3E91-05FA-4F6C-B623-44CC9D5A3656}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\utility\Debug">
-      <UniqueIdentifier>{8B15F530-2BF0-406B-9799-4F48888AB9F2}</UniqueIdentifier>
+      <UniqueIdentifier>{F05D8CF0-AEB9-4C4F-9321-0E960A0A4147}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\utility\FileSelector">
-      <UniqueIdentifier>{E86600B7-D7ED-4295-A5CC-13994F38C3B9}</UniqueIdentifier>
+      <UniqueIdentifier>{2EA58CAC-7DF5-4249-9438-29CA929A2A74}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\utility\ObjectFromBlender">
-      <UniqueIdentifier>{856377E8-EF89-439A-9714-75D515E23DE7}</UniqueIdentifier>
+      <UniqueIdentifier>{110CC84A-293A-48E8-B2D6-7BA2042D139B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\utility\TimeLine">
-      <UniqueIdentifier>{4A12B837-2ED2-4D28-9BFA-D52635535A51}</UniqueIdentifier>
+      <UniqueIdentifier>{ADF4B221-B5FE-433B-A628-A8A2562D5D33}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\utility\TimeModeSelector">
-      <UniqueIdentifier>{B7FFBAA8-812C-41F0-8EC0-7E8CD78B2EC6}</UniqueIdentifier>
+      <UniqueIdentifier>{585DBA2E-9DF5-49DB-96C4-96919B868C82}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Audience\Behavior">
-      <UniqueIdentifier>{00C28659-096D-4CBE-A244-D87012A867EE}</UniqueIdentifier>
+      <UniqueIdentifier>{5A66A41C-3C93-43F3-8E88-3C78F7438AF0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\BackGroundObject\ComboLeve">
-      <UniqueIdentifier>{D43DE33C-6F0F-45CD-99BC-D8DB405230AD}</UniqueIdentifier>
+      <UniqueIdentifier>{8300F174-D5A8-4D96-BBEB-70C2DE213036}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Combo\Behavior">
-      <UniqueIdentifier>{1150978C-FAAC-4B49-AD57-E9ADA09607BE}</UniqueIdentifier>
+      <UniqueIdentifier>{1726857C-BE95-416A-80D0-DE4EED4E80EF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\Behavior">
-      <UniqueIdentifier>{BC0F2543-F0FE-4317-9614-EF6AF18F4C75}</UniqueIdentifier>
+      <UniqueIdentifier>{78CD5EDF-9C3B-48C8-9F31-52C2E6EB531A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\CollisionBox">
+      <UniqueIdentifier>{342E6945-1CA5-4CCA-9E46-4B760DFFD212}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\DamageReaction">
-      <UniqueIdentifier>{5DAB3664-EFBC-4D02-BD10-67576CB018E0}</UniqueIdentifier>
+      <UniqueIdentifier>{950F15BC-1844-4A7D-9B49-7C4DDF0F9358}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\Effects">
-      <UniqueIdentifier>{FE9F2C7E-824C-4BE3-9898-A69F257CD4E0}</UniqueIdentifier>
+      <UniqueIdentifier>{CC14023C-72FA-45CF-A1F2-C996D57391B4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\HPBar">
-      <UniqueIdentifier>{F41B148B-3B4E-4E40-BA0B-0A02E7211B0E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy\SearchingSprite">
-      <UniqueIdentifier>{7153B865-56EA-4909-AB83-1B23A1864CD0}</UniqueIdentifier>
+      <UniqueIdentifier>{FF371678-B4E0-4D54-9BD1-385F64847002}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\Spawner">
-      <UniqueIdentifier>{7DA86C80-A560-4716-AF57-D69D5A75A4CF}</UniqueIdentifier>
+      <UniqueIdentifier>{BEA68036-3022-46BC-9515-E9418DC45477}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\Types">
-      <UniqueIdentifier>{0A92B8BF-C6D9-4CE8-AD6B-27ADDED8041A}</UniqueIdentifier>
+      <UniqueIdentifier>{184B491A-05DF-401B-BCC7-A5833586BB94}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Field\SideRope">
-      <UniqueIdentifier>{55DB00AC-9546-4136-9AE8-E36604F13949}</UniqueIdentifier>
+      <UniqueIdentifier>{AC31472C-751C-4313-8108-67FF926935ED}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\GameCamera\Behavior">
-      <UniqueIdentifier>{74D45596-5FD1-46EA-9B47-84F0808EE695}</UniqueIdentifier>
+      <UniqueIdentifier>{B149493B-EF3D-4D3C-89B3-97D47CEA8FF9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\ComboAttackBehavior">
-      <UniqueIdentifier>{75BC24AC-68E2-4EE1-AB4C-67112DB5EFBA}</UniqueIdentifier>
+    <Filter Include="Game\Player\Behavior">
+      <UniqueIdentifier>{C6E2BDB3-4C2E-4B5C-BA6B-140F4CD58601}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\CollisionBox">
+      <UniqueIdentifier>{B7080C69-9FF5-43E4-977E-8B9C82F233A8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player\ComboCreator">
-      <UniqueIdentifier>{F7F82B7D-D117-4951-9F9F-CE3B49732BD1}</UniqueIdentifier>
+      <UniqueIdentifier>{86D21B67-72E2-42BC-8548-9638CF4C5EC5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player\Effect">
-      <UniqueIdentifier>{9BB30A6E-232C-4759-962C-0644DB1BFF01}</UniqueIdentifier>
+      <UniqueIdentifier>{14220EFC-F77D-48A7-A673-4A2B5B81D8D0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player\JumpAttackUI">
-      <UniqueIdentifier>{D8BAF5AF-08D6-4D60-BC64-F6C4726AFF1E}</UniqueIdentifier>
+      <UniqueIdentifier>{B3E0ACAA-D314-424F-BCD8-0A0A62FB2602}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player\Parameter">
-      <UniqueIdentifier>{4C2C4CD8-DAA7-452A-A3E3-2C5272BE4F6C}</UniqueIdentifier>
+      <UniqueIdentifier>{ED2541CF-E927-4019-9612-F63AD385DBD0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player\Parts">
-      <UniqueIdentifier>{9545E8BE-A008-4401-B4D9-CB0F2A1B108B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\PlayerBehavior">
-      <UniqueIdentifier>{9D236FE8-84D6-4FB8-8187-CB772CD8D9EC}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\SpecialAttackGauge">
-      <UniqueIdentifier>{B92F6985-EC28-4DAC-B2C6-F4CF6A7BE026}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\TitleBehavior">
-      <UniqueIdentifier>{B9F9E2D5-EE25-4C49-A479-29A1BD053994}</UniqueIdentifier>
+      <UniqueIdentifier>{172795D2-C28F-4ABB-86E9-96E4B18BAAD1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Scene\GameSceneState">
-      <UniqueIdentifier>{6CE1DF16-D073-47A6-B860-B280BFCF02B9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resources\Shader\Library">
-      <UniqueIdentifier>{6519B86B-7D02-4FF1-8B6E-7C63919011B7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resources\Shader\Lighting">
-      <UniqueIdentifier>{B3B99CC1-ECF1-4F8E-B289-17EF813532AE}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resources\Shader\Particle">
-      <UniqueIdentifier>{9308F794-19E0-4535-ACB2-F02E2F32FFE7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resources\Shader\PostEffect">
-      <UniqueIdentifier>{B37625F2-5358-47D8-9B78-CCABCB51BEEA}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resources\Shader\ShadowMap">
-      <UniqueIdentifier>{D9690C15-560A-4F5F-939D-8966C34B7853}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resources\Shader\Skinning">
-      <UniqueIdentifier>{ED7AD052-1F2D-4D67-8905-1F9CFFF87B28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Particle\CPUParticle\Editor">
-      <UniqueIdentifier>{9AFF5D40-20BB-4F1B-B183-BC667892D516}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Particle\GPUParticle\Data">
-      <UniqueIdentifier>{E98FF608-7CEA-4CA9-BBCB-399E389B0DED}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Particle\GPUParticle\Editor">
-      <UniqueIdentifier>{A2FFAA1F-B4DC-483F-921E-EDC5712F2EC6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Particle\GPUParticle\ResourceData">
-      <UniqueIdentifier>{5DA81F1F-7C03-4B33-8DDC-CBF2D7D1279A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Pipeline\Particle\CS">
-      <UniqueIdentifier>{8B4712D8-0FFB-4D8C-A56E-1085694FB12F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy\Behavior\DamageReactionBehavior">
-      <UniqueIdentifier>{CD9C7C79-4AEE-4D38-BF60-C6203E657697}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy\Behavior\NormalBehavior">
-      <UniqueIdentifier>{760E1BDB-52FE-4009-8F45-BBB9BA258193}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\ComboAttackBehavior\Rendition">
-      <UniqueIdentifier>{47CD89BC-4038-4586-A687-31632CA1A9F2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\ComboCreator\Timeline">
-      <UniqueIdentifier>{84984A9E-9F41-4EE4-81F0-054D130803F2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resources\Shader\Particle\CS">
-      <UniqueIdentifier>{9029A984-D9D8-464F-B41A-32417CEF7CED}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Particle\CPUParticle\Editor\Parameter">
-      <UniqueIdentifier>{D02E3B5C-FED1-46F8-86B4-F96CDD4E2EF6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Particle\CPUParticle\Editor\SectionParameters">
-      <UniqueIdentifier>{E790E31C-99E0-4527-BEB8-7AEF719E2497}</UniqueIdentifier>
+      <UniqueIdentifier>{F30A916A-1291-467D-9D0A-74ACCC04D761}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Scene\TitleSceneController">
-      <UniqueIdentifier>{380a5fad-d5ce-43c1-bc10-7072cf9f090b}</UniqueIdentifier>
+      <UniqueIdentifier>{573DAB99-5A00-46D5-88FE-3628ED21002B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\Shader\Library">
+      <UniqueIdentifier>{445B4B0A-AD62-4BCF-83B0-178D40EEBF45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\Shader\Lighting">
+      <UniqueIdentifier>{52EA51E7-556E-4216-8BBA-08C26B330CE6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\Shader\Particle">
+      <UniqueIdentifier>{167EA294-3C0C-4B27-AA59-29CAFD2D3B03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\Shader\PostEffect">
+      <UniqueIdentifier>{E211ECA6-F666-4AA6-A1CB-D7009985103A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\Shader\ShadowMap">
+      <UniqueIdentifier>{D69B26D2-149F-4BCD-AFDF-FB566A8E04D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\Shader\Skinning">
+      <UniqueIdentifier>{ABE0C42E-5215-4FFD-B64F-AA867DC90EBB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle\CPUParticle\Editor">
+      <UniqueIdentifier>{BE893520-722A-4984-83FF-FCAD44AA570E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle\GPUParticle\Data">
+      <UniqueIdentifier>{F2360A69-134A-47CE-A445-1F360FB73FD5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle\GPUParticle\Editor">
+      <UniqueIdentifier>{9B65C160-6799-4FA4-9B35-2D0C2D2C00D0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle\GPUParticle\ResourceData">
+      <UniqueIdentifier>{0F0156D2-D646-4517-8942-9CE9D32127B4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Pipeline\Particle\CS">
+      <UniqueIdentifier>{081833A1-B666-495C-8C18-C8479C460C48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behavior\ActionBehavior">
+      <UniqueIdentifier>{AFAA9C6E-5CE3-4159-92FC-93ECE4DC91C6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behavior\DamageReactionBehavior">
+      <UniqueIdentifier>{1C054DB9-5C0B-4F83-8DCE-5F76FC1B62C5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\ComboAttackBehavior">
+      <UniqueIdentifier>{C82A6944-B8F2-4F10-8F0F-BAE8EE01A28E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\PlayerBehavior">
+      <UniqueIdentifier>{83C7F1F8-B9C3-4B15-904D-77C901EE76E8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\TitleBehavior">
+      <UniqueIdentifier>{7202E04A-36FF-482C-9E34-9AC58E145C70}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player\ComboCreator\PreView">
-      <UniqueIdentifier>{c425a0d7-1865-461d-82ab-fea10893b5d9}</UniqueIdentifier>
+      <UniqueIdentifier>{D95290FF-D321-4A2C-B02A-13C5D4D804BC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\ComboCreator\Timeline">
+      <UniqueIdentifier>{EE4A3EED-BA22-414B-9DFA-C2AB81C61149}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Effect\AttackEffect">
+      <UniqueIdentifier>{F0D5DC15-4D19-43AB-8267-5A91AA50E035}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\Shader\Particle\CS">
+      <UniqueIdentifier>{CBFF106E-8EBA-498D-8848-B7725F45EAA6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle\CPUParticle\Editor\Parameter">
+      <UniqueIdentifier>{6F397718-6119-40D2-8DE5-043FB0A6ED76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle\CPUParticle\Editor\SectionParameters">
+      <UniqueIdentifier>{41B748E4-A1E7-4B47-BE29-C7A298263595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behavior\DamageReactionBehavior\Rendition">
+      <UniqueIdentifier>{8EDD687F-2419-4305-A0A3-EFE7C2767166}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\ComboAttackBehavior\Rendition">
+      <UniqueIdentifier>{E30A6B65-0BB9-4737-BF14-101E576EC3BC}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -840,9 +843,6 @@
     <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp">
       <Filter>Engine\utility\FileSelector</Filter>
     </ClCompile>
-    <ClCompile Include="Game\AttackEffect\AttackEffect.cpp">
-      <Filter>Game\AttackEffect</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Audience\Audience.cpp">
       <Filter>Game\Audience</Filter>
     </ClCompile>
@@ -885,12 +885,6 @@
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp">
-      <Filter>Game\CollisionBox</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CollisionBox\PlayerCollisionInfo.cpp">
-      <Filter>Game\CollisionBox</Filter>
-    </ClCompile>
     <ClCompile Include="Game\ComboScene\ComboScene.cpp">
       <Filter>Game\ComboScene</Filter>
     </ClCompile>
@@ -927,8 +921,17 @@
     <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp">
       <Filter>Game\DeathTimer</Filter>
     </ClCompile>
-    <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp">
-      <Filter>Game\EasingTestObj</Filter>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyChasePlayer.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemySpawn.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyWait.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
@@ -939,26 +942,14 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageRendition.cpp">
-      <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.cpp">
-      <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\Rendition\EnemyDamageRendition.cpp">
+      <Filter>Game\Enemy\Behavior\DamageReactionBehavior\Rendition</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.cpp">
-      <Filter>Game\Enemy\Behavior\NormalBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemyChasePlayer.cpp">
-      <Filter>Game\Enemy\Behavior\NormalBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemySpawn.cpp">
-      <Filter>Game\Enemy\Behavior\NormalBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemyWait.cpp">
-      <Filter>Game\Enemy\Behavior\NormalBehavior</Filter>
+    <ClCompile Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.cpp">
+      <Filter>Game\Enemy\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.cpp">
       <Filter>Game\Enemy\DamageReaction</Filter>
@@ -977,12 +968,6 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp">
       <Filter>Game\Enemy\HPBar</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\SearchingSprite\FindSprite.cpp">
-      <Filter>Game\Enemy\SearchingSprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\SearchingSprite\NotFindSprite.cpp">
-      <Filter>Game\Enemy\SearchingSprite</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Spawner\ContinuousEnemySpawner.cpp">
       <Filter>Game\Enemy\Spawner</Filter>
@@ -1050,17 +1035,50 @@
     <ClCompile Include="Game\LockOn\LockOnController.cpp">
       <Filter>Game\LockOn</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.cpp">
-      <Filter>Game\Player\ComboAttackBehavior</Filter>
+    <ClCompile Include="Game\Player\Behavior\ComboAttackBehavior\BaseComboAttackBehavior.cpp">
+      <Filter>Game\Player\Behavior\ComboAttackBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackAction.cpp">
-      <Filter>Game\Player\ComboAttackBehavior</Filter>
+    <ClCompile Include="Game\Player\Behavior\ComboAttackBehavior\ComboAttackAction.cpp">
+      <Filter>Game\Player\Behavior\ComboAttackBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.cpp">
-      <Filter>Game\Player\ComboAttackBehavior\Rendition</Filter>
+    <ClCompile Include="Game\Player\Behavior\ComboAttackBehavior\ComboAttackRoot.cpp">
+      <Filter>Game\Player\Behavior\ComboAttackBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
-      <Filter>Game\Player\ComboAttackBehavior</Filter>
+    <ClCompile Include="Game\Player\Behavior\ComboAttackBehavior\Rendition\PlayerAttackRendition.cpp">
+      <Filter>Game\Player\Behavior\ComboAttackBehavior\Rendition</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\PlayerBehavior\BasePlayerBehavior.cpp">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerDeath.cpp">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerJump.cpp">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerMove.cpp">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerSpawn.cpp">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.cpp">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleFirstFall.cpp">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleLeftPunch.cpp">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleRightPunch.cpp">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleWait.cpp">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\CollisionBox\PlayerAttackCollisionBox.cpp">
+      <Filter>Game\Player\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp">
       <Filter>Game\Player\ComboCreator</Filter>
@@ -1070,6 +1088,9 @@
     </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp">
       <Filter>Game\Player\ComboCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\PreView\PlayerComboAttackPreview.cpp">
+      <Filter>Game\Player\ComboCreator\PreView</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.cpp">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
@@ -1085,6 +1106,9 @@
     </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.cpp">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Effect\AttackEffect\AttackEffect.cpp">
+      <Filter>Game\Player\Effect\AttackEffect</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp">
       <Filter>Game\Player\Effect</Filter>
@@ -1106,39 +1130,6 @@
     </ClCompile>
     <ClCompile Include="Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp">
-      <Filter>Game\Player\PlayerBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\PlayerBehavior\PlayerDeath.cpp">
-      <Filter>Game\Player\PlayerBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
-      <Filter>Game\Player\PlayerBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\PlayerBehavior\PlayerMove.cpp">
-      <Filter>Game\Player\PlayerBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\PlayerBehavior\PlayerSpawn.cpp">
-      <Filter>Game\Player\PlayerBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\SpecialAttackGauge\SpecialAttackGauge.cpp">
-      <Filter>Game\Player\SpecialAttackGauge</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\TitleBehavior\BaseTitleBehavior.cpp">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\TitleBehavior\TitleFirstFall.cpp">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\TitleBehavior\TitleRightPunch.cpp">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\TitleBehavior\TitleLeftPunch.cpp">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\TitleBehavior\TitleWait.cpp">
-      <Filter>Game\Player\TitleBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\BaseScene.cpp">
       <Filter>Game\Scene</Filter>
@@ -1169,6 +1160,12 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\TitleScene.cpp">
       <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneController.cpp">
+      <Filter>Game\Scene\TitleSceneController</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneTransition.cpp">
+      <Filter>Game\Scene\TitleSceneController</Filter>
     </ClCompile>
     <ClCompile Include="Game\SkyBox\SkyBox.cpp">
       <Filter>Game\SkyBox</Filter>
@@ -1729,9 +1726,6 @@
     <ClInclude Include="Engine\utility\FileSelector\FileSelector.h">
       <Filter>Engine\utility\FileSelector</Filter>
     </ClInclude>
-    <ClInclude Include="Game\AttackEffect\AttackEffect.h">
-      <Filter>Game\AttackEffect</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Audience\Audience.h">
       <Filter>Game\Audience</Filter>
     </ClInclude>
@@ -1777,12 +1771,6 @@
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h">
-      <Filter>Game\CollisionBox</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\CollisionBox\PlayerCollisionInfo.h">
-      <Filter>Game\CollisionBox</Filter>
-    </ClInclude>
     <ClInclude Include="Game\ComboScene\ComboScene.h">
       <Filter>Game\ComboScene</Filter>
     </ClInclude>
@@ -1819,8 +1807,17 @@
     <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h">
       <Filter>Game\DeathTimer</Filter>
     </ClInclude>
-    <ClInclude Include="Game\EasingTestObj\EasingTestObj.h">
-      <Filter>Game\EasingTestObj</Filter>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyChasePlayer.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemySpawn.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyWait.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
@@ -1831,26 +1828,14 @@
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageRendition.h">
-      <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.h">
-      <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\Rendition\EnemyDamageRendition.h">
+      <Filter>Game\Enemy\Behavior\DamageReactionBehavior\Rendition</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.h">
-      <Filter>Game\Enemy\Behavior\NormalBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemyChasePlayer.h">
-      <Filter>Game\Enemy\Behavior\NormalBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemySpawn.h">
-      <Filter>Game\Enemy\Behavior\NormalBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemyWait.h">
-      <Filter>Game\Enemy\Behavior\NormalBehavior</Filter>
+    <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h">
+      <Filter>Game\Enemy\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.h">
       <Filter>Game\Enemy\DamageReaction</Filter>
@@ -1869,12 +1854,6 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h">
       <Filter>Game\Enemy\HPBar</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\SearchingSprite\FindSprite.h">
-      <Filter>Game\Enemy\SearchingSprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\SearchingSprite\NotFindSprite.h">
-      <Filter>Game\Enemy\SearchingSprite</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Spawner\ContinuousEnemySpawner.h">
       <Filter>Game\Enemy\Spawner</Filter>
@@ -1945,17 +1924,50 @@
     <ClInclude Include="Game\LockOn\LockOnController.h">
       <Filter>Game\LockOn</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.h">
-      <Filter>Game\Player\ComboAttackBehavior</Filter>
+    <ClInclude Include="Game\Player\Behavior\ComboAttackBehavior\BaseComboAttackBehavior.h">
+      <Filter>Game\Player\Behavior\ComboAttackBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackAction.h">
-      <Filter>Game\Player\ComboAttackBehavior</Filter>
+    <ClInclude Include="Game\Player\Behavior\ComboAttackBehavior\ComboAttackAction.h">
+      <Filter>Game\Player\Behavior\ComboAttackBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.h">
-      <Filter>Game\Player\ComboAttackBehavior\Rendition</Filter>
+    <ClInclude Include="Game\Player\Behavior\ComboAttackBehavior\ComboAttackRoot.h">
+      <Filter>Game\Player\Behavior\ComboAttackBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
-      <Filter>Game\Player\ComboAttackBehavior</Filter>
+    <ClInclude Include="Game\Player\Behavior\ComboAttackBehavior\Rendition\PlayerAttackRendition.h">
+      <Filter>Game\Player\Behavior\ComboAttackBehavior\Rendition</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\PlayerBehavior\BasePlayerBehavior.h">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerDeath.h">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerJump.h">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerMove.h">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerSpawn.h">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.h">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleFirstFall.h">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleLeftPunch.h">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleRightPunch.h">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleWait.h">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\CollisionBox\PlayerAttackCollisionBox.h">
+      <Filter>Game\Player\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h">
       <Filter>Game\Player\ComboCreator</Filter>
@@ -1965,6 +1977,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h">
       <Filter>Game\Player\ComboCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\PreView\PlayerComboAttackPreview.h">
+      <Filter>Game\Player\ComboCreator\PreView</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.h">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
@@ -1980,6 +1995,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.h">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Effect\AttackEffect\AttackEffect.h">
+      <Filter>Game\Player\Effect\AttackEffect</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\Effect\PlayerEffects.h">
       <Filter>Game\Player\Effect</Filter>
@@ -2001,39 +2019,6 @@
     </ClInclude>
     <ClInclude Include="Game\Player\Player.h">
       <Filter>Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h">
-      <Filter>Game\Player\PlayerBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\PlayerBehavior\PlayerDeath.h">
-      <Filter>Game\Player\PlayerBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
-      <Filter>Game\Player\PlayerBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\PlayerBehavior\PlayerMove.h">
-      <Filter>Game\Player\PlayerBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\PlayerBehavior\PlayerSpawn.h">
-      <Filter>Game\Player\PlayerBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\SpecialAttackGauge\SpecialAttackGauge.h">
-      <Filter>Game\Player\SpecialAttackGauge</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\TitleBehavior\BaseTitleBehavior.h">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\TitleBehavior\TitleFirstFall.h">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\TitleBehavior\TitleRightPunch.h">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\TitleBehavior\TitleLeftPunch.h">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\TitleBehavior\TitleWait.h">
-      <Filter>Game\Player\TitleBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\BaseScene.h">
       <Filter>Game\Scene</Filter>
@@ -2064,6 +2049,12 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\TitleScene.h">
       <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneController.h">
+      <Filter>Game\Scene\TitleSceneController</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneTransition.h">
+      <Filter>Game\Scene\TitleSceneController</Filter>
     </ClInclude>
     <ClInclude Include="Game\SkyBox\SkyBox.h">
       <Filter>Game\SkyBox</Filter>
@@ -2255,25 +2246,13 @@
     <FxCompile Include="resources\Shader\Sprite.VS.hlsl">
       <Filter>resources\Shader</Filter>
     </FxCompile>
-    <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneController.cpp">
-      <Filter>Game\Scene\TitleSceneController</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneTransition.cpp">
-      <Filter>Game\Scene\TitleSceneController</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboCreator\PreView\PlayerComboAttackPreview.cpp">
-      <Filter>Game\Player\ComboCreator\PreView</Filter>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyAttack.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneController.h">
-      <Filter>Game\Scene\TitleSceneController</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneTransition.h">
-      <Filter>Game\Scene\TitleSceneController</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboCreator\PreView\PlayerComboAttackPreview.h">
-      <Filter>Game\Player\ComboCreator\PreView</Filter>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyAttack.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,15 +1,16 @@
 #pragma once
 // 3D
 #include "3D/ViewProjection.h"
+#include "3d/Object3D/Object3d.h"
 // Base
 #include "BaseObject/BaseObject.h"
 // Collider
 #include "Collider/AABBCollider.h"
-#include "CollisionBox/PlayerCollisionInfo.h"
+#include "CollisionBox/PlayerAttackCollisionBox.h"
 // Behavior
-#include "ComboAttackBehavior/BaseComboAttackBehavior.h"
-#include "PlayerBehavior/BasePlayerBehavior.h"
-#include "TitleBehavior/BaseTitleBehavior.h"
+#include "Behavior/ComboAttackBehavior/BaseComboAttackBehavior.h"
+#include "Behavior/PlayerBehavior/BasePlayerBehavior.h"
+#include "Behavior/TitleBehavior/BaseTitleBehavior.h"
 // Editor
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Particle,Effect
@@ -130,11 +131,12 @@ private:
 
     const KetaEngine::ViewProjection* viewProjection_ = nullptr;
 
+    std::unique_ptr<KetaEngine::Object3d> obj3d_;
     std::unique_ptr<PlayerHandLeft> leftHand_;
     std::unique_ptr<PlayerHandRight> rightHand_;
     std::unique_ptr<PlayerEffects> effects_;
     std::unique_ptr<PlayerParameter> parameters_;
-    std::unique_ptr<PlayerCollisionInfo> playerCollisionInfo_;
+    std::unique_ptr<PlayerAttackCollisionBox> playerCollisionInfo_;
     std::unique_ptr<JumpAttackUI> jumpAttackUI_;
 
     /// behavior
@@ -172,9 +174,10 @@ public:
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     AttackEffect* GetAttackEffect() const { return pAttackEffect_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }
-    PlayerCollisionInfo* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
+    PlayerAttackCollisionBox* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
+    KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
     bool GetIsDeathRenditionFinish() const { return *isDeath_; }
 

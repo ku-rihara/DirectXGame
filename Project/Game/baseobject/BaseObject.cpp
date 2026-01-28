@@ -17,7 +17,3 @@ Vector3 BaseObject::GetWorldPosition() const {
 
     return worldPos;
 }
-
-void BaseObject::SetColor(const Vector4& color) {
-    obj3d_->GetModelMaterial()->GetMaterialData()->color = color;
-}

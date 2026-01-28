@@ -15,6 +15,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <array>
 
 enum class Type;
 struct BaseEnemy::Parameter;
@@ -23,7 +24,6 @@ class LockOn;
 class Combo;
 class GameCamera;
 class EnemySpawner;
-class AttackEffect;
 
 class EnemyManager {
 public:
@@ -49,8 +49,6 @@ public:
     // Particle Effect
     void ThrustEmit(const Vector3& pos);
     void DeathEmit(const Vector3& pos);
-    void SpawnEmitByNormalEnemy(const Vector3& pos);
-    void SpawnEmitByStrongEnemy(const Vector3& pos);
     void ParticleUpdate();
     
     // Param Edit
@@ -62,19 +60,23 @@ public:
     // debugSpawn
     void DebugEnemySpawn();
 
-private: // struct
+private: 
+    // struct
     struct ParticleEffect {
         std::string name;
         std::unique_ptr<KetaEngine::ParticleEmitter> emitter;
     };
 
-private: // json
+private: 
+    // json
     using json = nlohmann::json;
 
 private:
     // globalParameter
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Enemies";
+
+    // パラメータ
     std::array<BaseEnemy::Parameter, 2> parameters_;
 
     // ohter class
@@ -82,8 +84,7 @@ private:
     GameCamera* pGameCamera_;
     Combo* pCombo_;
     EnemySpawner* pEnemySpawner_;
-    AttackEffect* pAttackEffect_;
-
+  
     // damageReaction
     std::unique_ptr<EnemyDamageReactionController> damageReactionController_;
 
@@ -109,8 +110,6 @@ private:
 private: // Particle
     std::array<ParticleEffect, 4> deathParticle_;
     std::array<ParticleEffect, 1> debriParticle_;
-    std::array<ParticleEffect, 2> spawnEffectNormal_;
-    std::array<ParticleEffect, 2> spawnEffectStrong_;
     std::unique_ptr<KetaEngine::ParticleEmitter> fallCrack_;
 
 public:
@@ -128,5 +127,4 @@ public:
     void SetGameCamera(GameCamera* gameCamera);
     void SetCombo(Combo* combo);
     void SetEnemySpawner(EnemySpawner* enemySpawner);
-    void SetAttackEffect(AttackEffect* effect);
 };

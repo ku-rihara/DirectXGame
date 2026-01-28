@@ -160,7 +160,7 @@ void Audience::AdaptPosition(const Vector2& ZYBasePos) {
 }
 
 void Audience::ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior) {
-    // Behabior切り替え
+    // Behavior切り替え
     behavior_ = std::move(behavior);
 }
 

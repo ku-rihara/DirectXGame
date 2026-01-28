@@ -11,13 +11,11 @@ void PlayerHandLeft::Init() {
     groupName_ = "LeftHand";
 
     obj3d_.reset(KetaEngine::Object3d::CreateModel("LHand.obj"));
-    obj3d_->transform_.scale_                                   = {2, 2, 2};
+    obj3d_->transform_.scale_                                             = {2, 2, 2};
     obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = 2;
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.15f;
 
     BasePlayerHand::Init();
-
-  
 }
 
 ///=========================================================

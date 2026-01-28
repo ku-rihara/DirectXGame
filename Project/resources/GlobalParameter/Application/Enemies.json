@@ -1,7 +1,37 @@
 {
     "Enemies": {
+        "AttackCollisionOffset1": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "AttackCollisionOffset2": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "AttackCollisionSize1": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "AttackCollisionSize2": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "ChaseLimitDistance1": 14.0,
         "ChaseLimitDistance2": 14.0,
+        "adaptTime1": 0.0,
+        "adaptTime2": 0.0,
+        "attackAnticipationTime1": 0.0,
+        "attackAnticipationTime2": 0.0,
+        "attackCooldownTime1": 0.0,
+        "attackCooldownTime2": 0.0,
+        "attackStartDistance1": 0.0,
+        "attackStartDistance2": 0.0,
+        "attackValue1": 0.0,
+        "attackValue2": 0.0,
         "avoidanceRadius1": 20.0,
         "avoidanceRadius2": 20.0,
         "basePosY_1": 1.5,
@@ -49,9 +79,9 @@
             99.29000091552734
         ],
         "initScale1": [
-            1.399999976158142,
-            1.399999976158142,
-            1.399999976158142
+            3.0,
+            3.0,
+            3.0
         ],
         "initScale2": [
             1.399999976158142,
@@ -66,6 +96,8 @@
         "ropeReboundGravity2": 33.0,
         "ropeReboundJumpValue1": 15.0,
         "ropeReboundJumpValue2": 15.0,
+        "startTime1": 0.0,
+        "startTime2": 0.0,
         "thrustRotateSpeed1": 43.560001373291016,
         "thrustRotateSpeed2": 20.0,
         "upperFallSpeedLimit1": 1.2000000476837158,

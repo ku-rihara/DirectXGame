@@ -114,7 +114,6 @@ void EditorScene::ObjectInit() {
     gameCamera_                  = std::make_unique<GameCamera>();
     enemyManager_                = std::make_unique<EnemyManager>();
     enemySpawner_                = std::make_unique<EnemySpawner>();
-    skyDome_                     = std::make_unique<SkyDome>();
     skyBox_                      = std::make_unique<SkyBox>();
     combo_                       = std::make_unique<Combo>();
     attackEffect_                = std::make_unique<AttackEffect>();
@@ -149,8 +148,7 @@ void EditorScene::SetClassPointer() {
     enemyManager_->SetCombo(combo_.get());
     enemyManager_->SetGameCamera(gameCamera_.get());
     enemyManager_->SetEnemySpawner(enemySpawner_.get());
-    enemyManager_->SetAttackEffect(attackEffect_.get());
-
+   
     enemySpawner_->SetEnemyManager(enemyManager_.get());
 
     lockOnController_->SetEnemyManager(enemyManager_.get());

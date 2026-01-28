@@ -1,12 +1,14 @@
 #include "EnemyManager.h"
+// Types
 #include "Types/NormalEnemy.h"
 #include "Types/StrongEnemy.h"
-
-#include "AttackEffect/AttackEffect.h"
+// Combo
 #include "Combo/Combo.h"
+// LockOn
 #include "LockOn/LockOn.h"
+// Spawner
 #include "Spawner/EnemySpawner.h"
-
+// imGui
 #include <imgui.h>
 
 ///========================================================================================
@@ -52,7 +54,6 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     enemy->SetGameCamera(pGameCamera_);
     enemy->SetManager(this);
     enemy->SetCombo(pCombo_);
-    enemy->SetAttackEffect(pAttackEffect_);
     enemy->SetGroupId(groupID);
     enemy->Init(position);
     enemies_.push_back(std::move(enemy));
@@ -108,67 +109,81 @@ void EnemyManager::HpBarUpdate(const KetaEngine::ViewProjection& viewProjection)
 void EnemyManager::RegisterParams() {
 
     for (uint32_t i = 0; i < parameters_.size(); ++i) {
-        globalParameter_->Regist(groupName_, "chaseDistance" + std::to_string(int(i + 1)), &parameters_[i].chaseDistance);
-        globalParameter_->Regist(groupName_, "chaseSpeed" + std::to_string(int(i + 1)), &parameters_[i].chaseSpeed);
-        globalParameter_->Regist(groupName_, "basePosY_" + std::to_string(int(i + 1)), &parameters_[i].basePosY);
-        globalParameter_->Regist(groupName_, "burstTime" + std::to_string(int(i + 1)), &parameters_[i].burstTime);
-        globalParameter_->Regist(groupName_, "initScale" + std::to_string(int(i + 1)), &parameters_[i].initScale_);
-        globalParameter_->Regist(groupName_, "hpBarPosOffset" + std::to_string(int(i + 1)), &parameters_[i].hpBarPosOffset);
-        globalParameter_->Regist(groupName_, "avoidanceRadius" + std::to_string(int(i + 1)), &parameters_[i].avoidanceRadius);
-        globalParameter_->Regist(groupName_, "maxChaseTime" + std::to_string(int(i + 1)), &parameters_[i].maxChaseTime);
-        globalParameter_->Regist(groupName_, "chaseResetTime" + std::to_string(int(i + 1)), &parameters_[i].chaseResetTime);
-        globalParameter_->Regist(groupName_, "ChaseLimitDistance" + std::to_string(int(i + 1)), &parameters_[i].chaseLimitDistance);
+        const std::string& indexString = std::to_string(static_cast<int>(i + 1));
 
-        // ロープパラメータ
-        globalParameter_->Regist(groupName_, "ropeReboundJumpValue" + std::to_string(int(i + 1)), &parameters_[i].ropeReboundJumpValue);
-        globalParameter_->Regist(groupName_, "ropeReboundGravity" + std::to_string(int(i + 1)), &parameters_[i].ropeReboundGravity);
-        globalParameter_->Regist(groupName_, "ropeReboundFallSpeedLimit" + std::to_string(int(i + 1)), &parameters_[i].ropeReboundFallSpeedLimit);
+        // 基本パラメータ
+        globalParameter_->Regist(groupName_, "chaseDistance" + indexString, &parameters_[i].chaseDistance);
+        globalParameter_->Regist(groupName_, "chaseSpeed" + indexString, &parameters_[i].chaseSpeed);
+        globalParameter_->Regist(groupName_, "basePosY_" + indexString, &parameters_[i].basePosY);
+        globalParameter_->Regist(groupName_, "burstTime" + indexString, &parameters_[i].burstTime);
+        globalParameter_->Regist(groupName_, "initScale" + indexString, &parameters_[i].baseScale_);
+        globalParameter_->Regist(groupName_, "hpBarPosOffset" + indexString, &parameters_[i].hpBarPosOffset);
+        globalParameter_->Regist(groupName_, "avoidanceRadius" + indexString, &parameters_[i].avoidanceRadius);
+        globalParameter_->Regist(groupName_, "maxChaseTime" + indexString, &parameters_[i].maxChaseTime);
+        globalParameter_->Regist(groupName_, "chaseResetTime" + indexString, &parameters_[i].chaseResetTime);
+        globalParameter_->Regist(groupName_, "ChaseLimitDistance" + indexString, &parameters_[i].chaseLimitDistance);
+
+        // 攻撃パラメータ
+        globalParameter_->Regist(groupName_, "attackStartDistance" + indexString, &parameters_[i].attackStartDistance);
+        globalParameter_->Regist(groupName_, "attackCooldownTime" + indexString, &parameters_[i].attackCooldownTime);
+        globalParameter_->Regist(groupName_, "attackAnticipationTime" + indexString, &parameters_[i].attackAnticipationTime);
+        globalParameter_->Regist(groupName_, "AttackCollisionSize" + indexString, &parameters_[i].attackParam.collisionSize);
+        globalParameter_->Regist(groupName_, "AttackCollisionOffset" + indexString, &parameters_[i].attackParam.collisionOffset);
+        globalParameter_->Regist(groupName_, "startTime" + indexString, &parameters_[i].attackParam.startTime);
+        globalParameter_->Regist(groupName_, "attackValue" + indexString, &parameters_[i].attackParam.attackValue);
+        globalParameter_->Regist(groupName_, "adaptTime" + indexString, &parameters_[i].attackParam.adaptTime);
 
         // 死亡パラメータ
-        globalParameter_->Regist(groupName_, "deathBlowValue" + std::to_string(int(i + 1)), &parameters_[i].deathBlowValue);
-        globalParameter_->Regist(groupName_, "deathBlowValueY" + std::to_string(int(i + 1)), &parameters_[i].deathBlowValueY);
-        globalParameter_->Regist(groupName_, "deathGravity" + std::to_string(int(i + 1)), &parameters_[i].deathGravity);
-        globalParameter_->Regist(groupName_, "deathRotateSpeed" + std::to_string(int(i + 1)), &parameters_[i].deathRotateSpeed);
-        globalParameter_->Regist(groupName_, "deathBurstTime" + std::to_string(int(i + 1)), &parameters_[i].deathBurstTime);
+        globalParameter_->Regist(groupName_, "deathBlowValue" + indexString, &parameters_[i].deathBlowValue);
+        globalParameter_->Regist(groupName_, "deathBlowValueY" + indexString, &parameters_[i].deathBlowValueY);
+        globalParameter_->Regist(groupName_, "deathGravity" + indexString, &parameters_[i].deathGravity);
+        globalParameter_->Regist(groupName_, "deathRotateSpeed" + indexString, &parameters_[i].deathRotateSpeed);
+        globalParameter_->Regist(groupName_, "deathBurstTime" + indexString, &parameters_[i].deathBurstTime);
     }
 }
 
 void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
+    const size_t typeIndex = static_cast<size_t>(type);
 
-    ImGui::DragFloat3("initScale", &parameters_[static_cast<size_t>(type)].initScale_.x, 0.01f);
-    ImGui::DragFloat("ChaseSpeed", &parameters_[static_cast<size_t>(type)].chaseSpeed, 0.01f);
-    ImGui::DragFloat("ChaseDistance", &parameters_[static_cast<size_t>(type)].chaseDistance, 0.01f);
-    ImGui::DragFloat("basePosY", &parameters_[static_cast<size_t>(type)].basePosY, 0.01f);
-    ImGui::DragFloat("burstTime", &parameters_[static_cast<size_t>(type)].burstTime, 0.01f);
+    ImGui::SeparatorText("基本パラメータ");
+    ImGui::DragFloat3("initScale", &parameters_[typeIndex].baseScale_.x, 0.01f);
+    ImGui::DragFloat("ChaseSpeed", &parameters_[typeIndex].chaseSpeed, 0.01f);
+    ImGui::DragFloat("ChaseDistance", &parameters_[typeIndex].chaseDistance, 0.01f);
+    ImGui::DragFloat("basePosY", &parameters_[typeIndex].basePosY, 0.01f);
+    ImGui::DragFloat("burstTime", &parameters_[typeIndex].burstTime, 0.01f);
 
-    ImGui::SeparatorText("Chase Settings");
-    ImGui::DragFloat("AvoidanceRadius", &parameters_[static_cast<size_t>(type)].avoidanceRadius, 0.1f);
-    ImGui::DragFloat("MaxChaseTime", &parameters_[static_cast<size_t>(type)].maxChaseTime, 0.1f, 0.0f, 30.0f);
-    ImGui::DragFloat("ChaseResetTime", &parameters_[static_cast<size_t>(type)].chaseResetTime, 0.1f, 0.0f, 10.0f);
-    ImGui::DragFloat("ChaseLimitDistance", &parameters_[static_cast<size_t>(type)].chaseLimitDistance, 0.1f);
+    ImGui::SeparatorText("攻撃に関するパラメータ");
+    ImGui::DragFloat3("攻撃コリジョンサイズ", &parameters_[typeIndex].attackParam.collisionSize.x, 0.01f);
+    ImGui::DragFloat3("攻撃コリジョンオフセット", &parameters_[typeIndex].attackParam.collisionOffset.x, 0.01f);
+    ImGui::DragFloat("攻撃量", &parameters_[typeIndex].attackParam.attackValue, 0.1f);
+    ImGui::DragFloat("攻撃開始時間", &parameters_[typeIndex].attackParam.startTime, 0.01f);
+    ImGui::DragFloat("攻撃判定持続時間", &parameters_[typeIndex].attackParam.adaptTime, 0.01f);
+    ImGui::DragFloat("攻撃開始距離", &parameters_[typeIndex].attackStartDistance, 0.1f);
+    ImGui::DragFloat("攻撃後待機時間", &parameters_[typeIndex].attackCooldownTime, 0.1f, 0.0f, 10.0f);
+    ImGui::DragFloat("攻撃予備動作時間", &parameters_[typeIndex].attackAnticipationTime, 0.01f, 0.0f, 5.0f);
 
-    ImGui::SeparatorText("Death Settings");
-    ImGui::DragFloat("DeathBlowValue", &parameters_[static_cast<size_t>(type)].deathBlowValue, 0.1f);
-    ImGui::DragFloat("DeathBlowValueY", &parameters_[static_cast<size_t>(type)].deathBlowValueY, 0.1f);
-    ImGui::DragFloat("DeathGravity", &parameters_[static_cast<size_t>(type)].deathGravity, 0.1f);
-    ImGui::DragFloat("DeathRotateSpeed", &parameters_[static_cast<size_t>(type)].deathRotateSpeed, 0.01f);
-    ImGui::DragFloat("DeathBurstTime", &parameters_[static_cast<size_t>(type)].deathBurstTime, 0.01f);
+    ImGui::SeparatorText("追従パラメータ");
+    ImGui::DragFloat("AvoidanceRadius", &parameters_[typeIndex].avoidanceRadius, 0.1f);
+    ImGui::DragFloat("MaxChaseTime", &parameters_[typeIndex].maxChaseTime, 0.1f, 0.0f, 30.0f);
+    ImGui::DragFloat("ChaseResetTime", &parameters_[typeIndex].chaseResetTime, 0.1f, 0.0f, 10.0f);
+    ImGui::DragFloat("ChaseLimitDistance", &parameters_[typeIndex].chaseLimitDistance, 0.1f);
 
-    ImGui::SeparatorText("Rope Settings");
-    ImGui::DragFloat("ropeReboundJumpValue", &parameters_[static_cast<size_t>(type)].ropeReboundJumpValue, 0.01f);
-    ImGui::DragFloat("ropeReboundGravity", &parameters_[static_cast<size_t>(type)].ropeReboundGravity, 0.01f);
-    ImGui::DragFloat("ropeReboundFallSpeedLimit", &parameters_[static_cast<size_t>(type)].ropeReboundFallSpeedLimit, 0.01f);
+    ImGui::SeparatorText("死亡に関するパラメータ");
+    ImGui::DragFloat("DeathBlowValue", &parameters_[typeIndex].deathBlowValue, 0.1f);
+    ImGui::DragFloat("DeathBlowValueY", &parameters_[typeIndex].deathBlowValueY, 0.1f);
+    ImGui::DragFloat("DeathGravity", &parameters_[typeIndex].deathGravity, 0.1f);
+    ImGui::DragFloat("DeathRotateSpeed", &parameters_[typeIndex].deathRotateSpeed, 0.01f);
+    ImGui::DragFloat("DeathBurstTime", &parameters_[typeIndex].deathBurstTime, 0.01f);
 
-    ImGui::SeparatorText("UI");
-    ImGui::DragFloat2("HPBarOffsetPos", &parameters_[static_cast<size_t>(type)].hpBarPosOffset.x, 0.01f);
+    ImGui::SeparatorText("スプライト関連");
+    ImGui::DragFloat2("HPBarOffsetPos", &parameters_[typeIndex].hpBarPosOffset.x, 0.01f);
 }
-
 void EnemyManager::DebugEnemySpawn() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Enemy Spawn")) {
-        ImGui::DragFloat3("SpawnPosition", &spawnPosition_.x,0.1f);
+        ImGui::DragFloat3("SpawnPosition", &spawnPosition_.x, 0.1f);
 
-         const char* enemyType[] = {"Normal", "Strong"};
+        const char* enemyType[] = {"Normal", "Strong"};
         ImGui::Combo("SpawnType", &selectedEnemyTypeIndex_, enemyType, IM_ARRAYSIZE(enemyType));
 
         if (ImGui::Button("Spawn Enemy")) {
@@ -221,15 +236,8 @@ void EnemyManager::ParticleInit() {
     deathParticle_[2].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathSpark", PrimitiveType::Plane, 900));
     deathParticle_[3].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathMiniSpark", PrimitiveType::Plane, 900));
 
-    // debri
+    // ガレキ
     debriParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("DebriName", "debri.obj", 500));
-
-    // EnemySpawn
-    spawnEffectNormal_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnCircle", PrimitiveType::Cylinder, 200));
-    spawnEffectNormal_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnSpark", PrimitiveType::Plane, 500));
-
-    spawnEffectStrong_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnCircle", PrimitiveType::Cylinder, 200));
-    spawnEffectStrong_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnSpark", PrimitiveType::Plane, 500));
 
     // crack
     fallCrack_.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
@@ -257,36 +265,10 @@ void EnemyManager::DeathEmit(const Vector3& pos) {
     }
 }
 
-void EnemyManager::SpawnEmitByNormalEnemy(const Vector3& pos) {
-    // ガレキパーティクル
-    for (uint32_t i = 0; i < spawnEffectNormal_.size(); i++) {
-        spawnEffectNormal_[i].emitter->SetTargetPosition(pos);
-        spawnEffectNormal_[i].emitter->Emit();
-    }
-}
-
-void EnemyManager::SpawnEmitByStrongEnemy(const Vector3& pos) {
-    // ガレキパーティクル
-    for (uint32_t i = 0; i < spawnEffectStrong_.size(); i++) {
-        spawnEffectStrong_[i].emitter->SetTargetPosition(pos);
-        spawnEffectStrong_[i].emitter->Emit();
-    }
-}
-
 ///---------------------------------------------------------
 /// Particle Update
 ///----------------------------------------------------------
 void EnemyManager::ParticleUpdate() {
-
-    // スポーンパーティクル
-    for (uint32_t i = 0; i < spawnEffectNormal_.size(); i++) {
-        spawnEffectNormal_[i].emitter->Update();
-    }
-
-    // スポーンパーティクル(strong)
-    for (uint32_t i = 0; i < spawnEffectStrong_.size(); i++) {
-        spawnEffectStrong_[i].emitter->Update();
-    }
 
     // ひび
     fallCrack_->Update();
@@ -320,10 +302,6 @@ void EnemyManager::SetGameCamera(GameCamera* gameCamera) {
 
 void EnemyManager::SetEnemySpawner(EnemySpawner* enemySpawner) {
     pEnemySpawner_ = enemySpawner;
-}
-
-void EnemyManager::SetAttackEffect(AttackEffect* effect) {
-    pAttackEffect_ = effect;
 }
 
 void EnemyManager::CheckIsEnemiesCleared() {

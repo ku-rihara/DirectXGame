@@ -1,30 +1,31 @@
 #include "Player.h"
-#include "audio/Audio.h"
 
-/// input
-#include "input/Input.h"
+/// Enemy
+#include "Enemy/CollisionBox/EnemyAttackCollisionBox.h"
+#include "Enemy/Types/BaseEnemy.h"
 
-/// frame
-#include "Frame/Frame.h"
+/// Behavior
+#include "Behavior/ComboAttackBehavior/ComboAttackRoot.h"
+#include "Behavior/PlayerBehavior/PlayerDeath.h"
+#include "Behavior/PlayerBehavior/PlayerMove.h"
+#include "Behavior/PlayerBehavior/PlayerSpawn.h"
+#include "Behavior/TitleBehavior/TitleFirstFall.h"
 
 // light
 #include "Lighrt/AmbientLight.h"
 #include "Lighrt/Light.h"
-/// math
-#include "MathFunction.h"
-
-/// object
-#include "CollisionBox/EnemyCollisionBox.h"
-#include "ComboCreator/PlayerComboAttackController.h"
+// Field
 #include "Field/Field.h"
+// LockOn
 #include "LockOn/LockOnController.h"
-
-/// behavior
-#include "ComboAttackBehavior/ComboAttackRoot.h"
-#include "PlayerBehavior/PlayerDeath.h"
-#include "PlayerBehavior/PlayerMove.h"
-#include "PlayerBehavior/PlayerSpawn.h"
-#include "TitleBehavior/TitleFirstFall.h"
+// ComboCreator
+#include "ComboCreator/PlayerComboAttackController.h"
+// input
+#include "input/Input.h"
+// Frame
+#include "Frame/Frame.h"
+// Math
+#include "MathFunction.h"
 
 ///=========================================================
 /// 　初期化
@@ -51,7 +52,7 @@ void Player::Init() {
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.05f;
 
     // Playerの攻撃クラス
-    playerCollisionInfo_ = std::make_unique<PlayerCollisionInfo>();
+    playerCollisionInfo_ = std::make_unique<PlayerAttackCollisionBox>();
     playerCollisionInfo_->Init();
     playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
     playerCollisionInfo_->SetParentTransform(&baseTransform_);
@@ -388,11 +389,7 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    /* if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
-         return;*/
-    // 突進などの攻撃は、敵を貫通するようにする
-
-    if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
+    if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
         // 敵の中心座標を取得
         const Vector3& enemyPosition = enemy->GetCollisionPos();
 
