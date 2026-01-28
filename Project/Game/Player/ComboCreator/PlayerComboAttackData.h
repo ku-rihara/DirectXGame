@@ -14,6 +14,8 @@
 #include <string>
 #include <vector>
 
+class Player;
+
 /// <summary>
 /// プレイヤー攻撃データクラス
 /// </summary>
@@ -130,6 +132,8 @@ private:
     std::string groupName_;
     const std::string folderPath_ = "AttackCreator";
 
+    Player* pPlayer_ = nullptr;
+
     // 包含
     PlayerAttackRenditionData renditionData_;
     PlayerComboAttackTimeline timeLine_;
@@ -156,4 +160,8 @@ public:
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
     KetaEngine::GlobalParameter* GetGlobalParameter() const { return globalParameter_; }
     const std::string& GetFolderPath() const { return folderPath_; }
+    Player* GetPlayer() const { return pPlayer_; };
+    KetaEngine::TimelineDrawer* GetTimeline();
+
+    void SetPlayer(Player* player);
 };

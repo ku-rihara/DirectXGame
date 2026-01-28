@@ -31,20 +31,19 @@ public:
         SHAKE_ACTION,
         POST_EFFECT,
         PARTICLE_EFFECT,
+        AUDIO_ATTACK,
         // Rendition On Hit系
         CAMERA_ACTION_ON_HIT,
         HIT_STOP_ON_HIT,
         SHAKE_ACTION_ON_HIT,
         POST_EFFECT_ON_HIT,
         PARTICLE_EFFECT_ON_HIT,
+        AUDIO_ATTACK_ON_HIT,
         // Object Animation系
         OBJ_ANIM_HEAD,
         OBJ_ANIM_RIGHT_HAND,
         OBJ_ANIM_LEFT_HAND,
         OBJ_ANIM_MAIN_HEAD,
-        // Audio系
-        AUDIO_ATTACK,
-        AUDIO_HIT,
         // Timing系
         CANCEL_TIME,
         PRECEDE_INPUT,
@@ -57,6 +56,7 @@ public:
         int32_t trackIndex;
         std::string fileName;
         bool isCameraReset = false;
+        float volume       = 1.0f;
     };
 
 public:

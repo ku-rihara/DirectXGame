@@ -19,7 +19,6 @@ void PlayerAttackRendition::Reset() {
     isPlayed_.fill(false);
     isPlayedOnHit_.fill(false);
     isObjAnimePlayed_.fill(false);
-    isAudioPlayed_.fill(false);
     hasTriggeredHitEffects_ = false;
 
     // 振動の状態をリセット
@@ -66,11 +65,8 @@ void PlayerAttackRendition::Update(float deltaTime) {
     // オブジェクトアニメーションの更新
     UpdateObjectAnimations(renditionData);
 
-    // オーディオの更新
-    UpdateAudio(renditionData);
-
     // 振動の更新
-    UpdateVibration(renditionData, hasHit,deltaTime);
+    UpdateVibration(renditionData, hasHit, deltaTime);
 }
 
 void PlayerAttackRendition::UpdateNormalRenditions(const PlayerAttackRenditionData& renditionData) {
@@ -110,7 +106,7 @@ void PlayerAttackRendition::UpdateHitRenditions(const PlayerAttackRenditionData&
 void PlayerAttackRendition::PlayRenditionEffect(PlayerAttackRenditionData::Type type, const PlayerAttackRenditionData::RenditionParam& param) {
     switch (type) {
     case PlayerAttackRenditionData::Type::CameraAction:
-        pPlayer_->GetGameCamera()->PlayAnimation(param.fileName,param.isCameraReset);
+        pPlayer_->GetGameCamera()->PlayAnimation(param.fileName, param.isCameraReset);
         break;
 
     case PlayerAttackRenditionData::Type::HitStop:
@@ -127,6 +123,11 @@ void PlayerAttackRendition::PlayRenditionEffect(PlayerAttackRenditionData::Type 
 
     case PlayerAttackRenditionData::Type::ParticleEffect:
         pPlayer_->GetEffects()->Emit(param.fileName);
+        break;
+
+    case PlayerAttackRenditionData::Type::AudioAttack:
+    case PlayerAttackRenditionData::Type::AudioHit:
+        KetaEngine::Audio::GetInstance()->Play(param.fileName + ".wav", param.volume);
         break;
 
     default:
@@ -174,31 +175,6 @@ void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionDa
 
             // 再生済みに設定
             isObjAnimePlayed_[i] = true;
-        }
-    }
-}
-
-void PlayerAttackRendition::UpdateAudio(const PlayerAttackRenditionData& renditionData) {
-    for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::AudioType::Count); ++i) {
-        const auto& param = renditionData.GetAudioParamFromIndex(i);
-
-        // すでに再生済みならスキップ
-        if (isAudioPlayed_[i]) {
-            continue;
-        }
-
-        // ファイル名が空ならスキップ
-        if (param.fileName.empty() || param.fileName == "None") {
-            isAudioPlayed_[i] = true;
-            continue;
-        }
-
-        // startTiming に達したら発動
-        if (currentTime_ >= param.startTiming) {
-            KetaEngine::Audio::GetInstance()->Play(param.fileName + ".wav", param.volume);
-
-            // 再生済みに設定
-            isAudioPlayed_[i] = true;
         }
     }
 }

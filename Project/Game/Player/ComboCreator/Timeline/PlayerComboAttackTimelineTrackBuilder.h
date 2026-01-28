@@ -31,7 +31,15 @@ public:
     int32_t CalculateTotalFrames() const;
 
 private:
-    PlayerComboAttackData* attackData_   = nullptr;
-    KetaEngine::TimelineDrawer* timeline_ = nullptr;
-    PlayerComboAttackTimelineData* data_ = nullptr;
+    // 共通のトラック追加処理
+    template <typename ParamType, typename InfoArrayType>
+    void SetupTracksGeneric(
+        const InfoArrayType& typeInfos,
+        int32_t count,
+        PlayerComboAttackTimelineData::TrackType baseTrackType,
+        const char* suffix = nullptr);
+
+    PlayerComboAttackData* attackData_          = nullptr;
+    KetaEngine::TimelineDrawer* timelineDrawer_ = nullptr;
+    PlayerComboAttackTimelineData* data_        = nullptr;
 };

@@ -1,7 +1,10 @@
 #pragma once
 
+// paremeter
 #include "Editor/ParameterEditor/GlobalParameter.h"
+// utility
 #include "utility/FileSelector/FileSelector.h"
+// std
 #include <array>
 #include <cstdint>
 #include <string>
@@ -17,19 +20,13 @@ public:
         float startTiming = 0.0f;
         float currentTime_;
         bool isCameraReset = false;
+        float volume       = 1.0f; 
     };
 
     // オブジェクトアニメーションパラメータ
     struct ObjAnimationParam {
         std::string fileName;
         float startTiming = 0.0f;
-    };
-
-    // オーディオパラメータ
-    struct AudioParam {
-        std::string fileName;
-        float startTiming = 0.0f;
-        float volume      = 1.0f;
     };
 
     // 振動パラメータ
@@ -46,6 +43,8 @@ public:
         ShakeAction,
         PostEffect,
         ParticleEffect,
+        AudioAttack,
+        AudioHit,
         Count
     };
 
@@ -54,12 +53,6 @@ public:
         RightHand,
         LeftHand,
         MainHead,
-        Count
-    };
-
-    enum class AudioType {
-        Attack,
-        Hit,
         Count
     };
 
@@ -78,20 +71,15 @@ public:
         const char* label;
     };
 
-    // オーディオタイプ
-    struct AudioTypeInfo {
-        AudioType type;
-        const char* name;
-        const char* label;
-    };
-
-    // 静的な演出タイプ配列 
+    // 静的な演出タイプ配列
     static constexpr RenditionTypeInfo kRenditionTypeInfos[] = {
         {Type::CameraAction, "CameraAction", "カメラアクション", "CameraAnimation/AnimationData"},
         {Type::HitStop, "HitStop", "ヒットストップ", "TimeScale"},
         {Type::ShakeAction, "ShakeAction", "シェイクアクション", "ShakeEditor"},
         {Type::PostEffect, "PostEffectParam", "ポストエフェクト", "PostEffect"},
         {Type::ParticleEffect, "ParticleEffectParam", "パーティクルエフェクト", "Particle/Player/Dates"},
+        {Type::AudioAttack, "Audio_Attack", "攻撃音", "Audio"},
+        {Type::AudioHit, "Audio_Hit", "ヒット音", "Audio"},
     };
 
     // 静的なオブジェクトアニメーションタイプ配列
@@ -100,12 +88,6 @@ public:
         {ObjAnimationType::RightHand, "ObjAnim_RightHand", "右手アニメーション"},
         {ObjAnimationType::LeftHand, "ObjAnim_LeftHand", "左手アニメーション"},
         {ObjAnimationType::MainHead, "Main_Head", "メイン頭アニメーション"},
-    };
-
-    // 静的なオーディオタイプ配列 
-    static constexpr AudioTypeInfo kAudioTypeInfos[] = {
-        {AudioType::Attack, "Audio_Attack", "攻撃音"},
-        {AudioType::Hit, "Audio_Hit", "ヒット音"},
     };
 
 public:
@@ -121,7 +103,6 @@ private:
     //*-------------------------------- private Method --------------------------------*//
     void SelectRenditionFile(const char* label, const std::string& directory, std::pair<RenditionParam, KetaEngine::FileSelector>& param);
     void SelectObjAnimationFile(const char* label, const std::string& directory, std::pair<ObjAnimationParam, KetaEngine::FileSelector>& param);
-    void SelectAudioFile(const char* label, std::pair<AudioParam, KetaEngine::FileSelector>& param);
 
     // オブジェクトアニメーションタイプに応じたフォルダパスを取得
     std::string GetObjAnimationFolderPath(ObjAnimationType type) const;
@@ -145,9 +126,6 @@ private:
 
     // オブジェクトアニメーションパラメータ配列
     std::array<std::pair<ObjAnimationParam, KetaEngine::FileSelector>, static_cast<size_t>(ObjAnimationType::Count)> objAnimationParams_;
-
-    // オーディオパラメータ配列
-    std::array<std::pair<AudioParam, KetaEngine::FileSelector>, static_cast<size_t>(AudioType::Count)> audioParams_;
 
     // 振動パラメータ
     VibrationParam vibrationParam_;
@@ -176,13 +154,6 @@ public:
     }
     const ObjAnimationParam& GetObjAnimationParamFromType(const ObjAnimationType& type) const {
         return objAnimationParams_[static_cast<size_t>(type)].first;
-    }
-
-    const AudioParam& GetAudioParamFromIndex(int32_t index) const {
-        return audioParams_[index].first;
-    }
-    const AudioParam& GetAudioParamFromType(const AudioType& type) const {
-        return audioParams_[static_cast<size_t>(type)].first;
     }
 
     // 振動パラメータの取得

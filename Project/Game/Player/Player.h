@@ -166,6 +166,7 @@ public:
     PlayerHandRight* GetRightHand() const { return rightHand_.get(); }
     BasePlayerBehavior* GetBehavior() const { return behavior_.get(); }
     BaseTitleBehavior* GetTitleBehavior() const { return titleBehavior_.get(); }
+    BaseComboAttackBehavior* GetComboBehavior() const { return comboBehavior_.get(); }
     PlayerEffects* GetEffects() const { return effects_.get(); }
     LockOnController* GetLockOn() const { return pLockOn_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }

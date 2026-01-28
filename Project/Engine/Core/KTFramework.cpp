@@ -137,7 +137,7 @@ void KTFramework::DisplayGameView() {
     ImVec2 windowSize = ImGui::GetContentRegionAvail();
 
     // アスペクト比を維持してテクスチャを表示
-    float aspectRatio = WinApp::aspectRatio; // ゲーム画面のアスペクト比
+    float aspectRatio = WinApp::aspectRatio; 
     ImVec2 imageSize  = windowSize;
 
     if (windowSize.x / windowSize.y > aspectRatio) {

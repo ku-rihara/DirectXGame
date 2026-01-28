@@ -200,6 +200,7 @@ void GameScene::SetClassPointer() {
     gameObj_.player_->SetDeathFragPointer(&gameObj_.deathTimer_->GetIsDeath());
 
     gameObj_.playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
+    gameObj_.playerComboAttackController_->SetPlayer(gameObj_.player_.get());
 }
 
 void GameScene::ChangeState(std::unique_ptr<BaseGameSceneState> state) {

@@ -3,8 +3,8 @@
 #include "PlayerComboAttackTimelineData.h"
 #include "utility/FileSelector/FileSelector.h"
 #include <cstdint>
-#include <unordered_map>
 #include <functional>
+#include <unordered_map>
 
 class PlayerComboAttackData;
 class PlayerComboAttackTimelineTrackBuilder;
@@ -44,10 +44,6 @@ public:
     void DrawTrackContextMenu(int32_t trackIndex);
     void DrawKeyFrameMenuItems(int32_t trackIndex, int32_t keyIndex);
 
-    // 再生モード
-    PlayerComboAttackTimelineData::PlayMode GetPlayMode() const { return playMode_; }
-    void SetPlayMode(PlayerComboAttackTimelineData::PlayMode mode) { playMode_ = mode; }
-
 private:
     void DrawAddTrackPopup();
     void DrawRenditionKeyFrameEditor(int32_t trackIndex, int32_t keyIndex);
@@ -64,8 +60,6 @@ private:
     PlayerComboAttackTimelineData* data_                 = nullptr;
     PlayerComboAttackTimelineTrackBuilder* trackBuilder_ = nullptr;
 
-    PlayerComboAttackTimelineData::PlayMode playMode_ =
-        PlayerComboAttackTimelineData::PlayMode::SINGLE;
     ParamEditType selectedParamEditType_ = ParamEditType::NONE;
 
     // 各キーフレーム用のFileSelector

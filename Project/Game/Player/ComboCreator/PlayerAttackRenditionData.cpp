@@ -16,6 +16,11 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
         if (info.type == Type::CameraAction) {
             globalParam->Regist(groupName, std::string(info.name) + "_IsCameraReset", &param.isCameraReset);
         }
+
+        // オーディオの場合のみvolumeを登録
+        if (info.type == Type::AudioAttack || info.type == Type::AudioHit) {
+            globalParam->Regist(groupName, std::string(info.name) + "_Volume", &param.volume);
+        }
     }
 
     // ヒット時演出パラメータの登録
@@ -29,6 +34,11 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
         if (info.type == Type::CameraAction) {
             globalParam->Regist(groupName, std::string(info.name) + "_OnHit_IsCameraReset", &param.isCameraReset);
         }
+
+        // オーディオの場合のみvolumeを登録
+        if (info.type == Type::AudioAttack || info.type == Type::AudioHit) {
+            globalParam->Regist(groupName, std::string(info.name) + "_OnHit_Volume", &param.volume);
+        }
     }
 
     // オブジェクトアニメーションパラメータの登録
@@ -37,15 +47,6 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
 
         globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
         globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
-    }
-
-    // オーディオパラメータの登録
-    for (const auto& info : kAudioTypeInfos) {
-        auto& param = audioParams_[static_cast<size_t>(info.type)].first;
-
-        globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
-        globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
-        globalParam->Regist(groupName, std::string(info.name) + "_Volume", &param.volume);
     }
 
     // 振動パラメータの登録
@@ -67,12 +68,26 @@ void PlayerAttackRenditionData::AdjustParam() {
             auto& param     = paramPair.first;
 
             ImGui::SeparatorText(info.label);
-            SelectRenditionFile(info.label, folderPath_ + info.dir, paramPair);
+
+            // オーディオの場合は専用のフォルダパスを使用
+            std::string directory;
+            if (info.type == Type::AudioAttack || info.type == Type::AudioHit) {
+                directory = audioFolderPath_;
+            } else {
+                directory = folderPath_ + info.dir;
+            }
+
+            SelectRenditionFile(info.label, directory, paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
 
             // CameraActionの場合のみチェックボックスを表示
             if (info.type == Type::CameraAction) {
                 ImGui::Checkbox("Is Camera Reset", &param.isCameraReset);
+            }
+
+            // オーディオの場合のみボリュームスライダーを表示
+            if (info.type == Type::AudioAttack || info.type == Type::AudioHit) {
+                ImGui::SliderFloat("Volume", &param.volume, 0.0f, 1.0f);
             }
 
             ImGui::PopID();
@@ -91,12 +106,26 @@ void PlayerAttackRenditionData::AdjustParam() {
             auto& param     = paramPair.first;
 
             ImGui::SeparatorText((std::string(info.label) + " (On Hit)").c_str());
-            SelectRenditionFile(info.label, folderPath_ + info.dir, paramPair);
+
+            // オーディオの場合は専用のフォルダパスを使用
+            std::string directory;
+            if (info.type == Type::AudioAttack || info.type == Type::AudioHit) {
+                directory = audioFolderPath_;
+            } else {
+                directory = folderPath_ + info.dir;
+            }
+
+            SelectRenditionFile(info.label, directory, paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
 
             // CameraActionの場合のみチェックボックスを表示
             if (info.type == Type::CameraAction) {
                 ImGui::Checkbox("Is Camera Reset", &param.isCameraReset);
+            }
+
+            // オーディオの場合のみボリュームスライダーを表示
+            if (info.type == Type::AudioAttack || info.type == Type::AudioHit) {
+                ImGui::SliderFloat("Volume", &param.volume, 0.0f, 1.0f);
             }
 
             ImGui::PopID();
@@ -117,25 +146,6 @@ void PlayerAttackRenditionData::AdjustParam() {
             ImGui::SeparatorText(info.label);
             SelectObjAnimationFile(info.label, GetObjAnimationFolderPath(info.type), paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
-            ImGui::PopID();
-        }
-
-        ImGui::PopID();
-    }
-
-    // オーディオパラメータのUI
-    if (ImGui::CollapsingHeader("Audio Parameters")) {
-        ImGui::PushID((groupName_ + "AudioParams").c_str());
-
-        for (const auto& info : kAudioTypeInfos) {
-            ImGui::PushID(static_cast<int>(info.type));
-            auto& paramPair = audioParams_[static_cast<size_t>(info.type)];
-            auto& param     = paramPair.first;
-
-            ImGui::SeparatorText(info.label);
-            SelectAudioFile(info.label, paramPair);
-            ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
-            ImGui::SliderFloat("Volume", &param.volume, 0.0f, 1.0f);
             ImGui::PopID();
         }
 
@@ -171,13 +181,6 @@ void PlayerAttackRenditionData::SelectObjAnimationFile(
     std::pair<ObjAnimationParam, KetaEngine::FileSelector>& param) {
 
     param.second.SelectFile(label, directory, param.first.fileName, "", true);
-}
-
-void PlayerAttackRenditionData::SelectAudioFile(
-    const char* label,
-    std::pair<AudioParam, KetaEngine::FileSelector>& param) {
-
-    param.second.SelectFile(label, audioFolderPath_, param.first.fileName, "", true);
 }
 
 std::string PlayerAttackRenditionData::GetObjAnimationFolderPath(ObjAnimationType type) const {

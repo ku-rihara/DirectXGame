@@ -1,4 +1,6 @@
 #include "PlayerComboAttackController.h"
+#include "Frame/Frame.h"
+// std
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
@@ -62,6 +64,9 @@ void PlayerComboAttackController::EditorUpdate() {
         VisualizeComboFlow();
         ImGui::Separator();
 
+        // プレビューUI
+        DrawPreviewUI();
+
         // 選択された攻撃データの編集
         if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
             attacks_[selectedIndex_]->AdjustParam();
@@ -94,7 +99,58 @@ void PlayerComboAttackController::EditorUpdate() {
         // 共通パラメータの調整
         AdjustCommonParam();
     }
+
+    // プレビューの更新(常に実行)
+    preview_.Update(KetaEngine::Frame::DeltaTime());
 #endif
+}
+
+void PlayerComboAttackController::DrawPreviewUI() {
+    if (!ImGui::CollapsingHeader("プレビュー設定")) {
+        return;
+    }
+
+    ImGui::PushID("PreviewControl");
+
+    // 再生モード選択
+    ImGui::Text("再生モード:");
+    ImGui::SameLine();
+
+    auto currentMode = preview_.GetCurrentMode();
+    if (ImGui::RadioButton("単体", currentMode == AttackPreviewMode::SINGLE)) {
+        preview_.SetPlayMode(AttackPreviewMode::SINGLE);
+    }
+    ImGui::SameLine();
+    if (ImGui::RadioButton("連続", currentMode == AttackPreviewMode::CONTINUOUS)) {
+        preview_.SetPlayMode(AttackPreviewMode::CONTINUOUS);
+    }
+
+    ImGui::Separator();
+
+    // 選択された攻撃があればプレビュー開始ボタンを表示
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
+        PlayerComboAttackData* selectedAttack = attacks_[selectedIndex_].get();
+
+        if (!preview_.IsPlaying()) {
+            // プレビュー開始ボタン
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.8f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 1.0f, 0.3f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.6f, 0.1f, 1.0f));
+
+            if (ImGui::Button("プレビュー開始", ImVec2(-1, 0))) {
+                preview_.StartPreview(selectedAttack, currentMode);
+            }
+
+            ImGui::PopStyleColor(3);
+        }
+    } else {
+        ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "攻撃を選択してください");
+    }
+
+    // プレビューUIを描画
+    preview_.DrawUI();
+
+    ImGui::PopID();
 }
 
 void PlayerComboAttackController::AddAttack(const std::string& attackName) {
@@ -162,14 +218,14 @@ void PlayerComboAttackController::VisualizeComboFlow() {
 
                 ImGui::PushID(static_cast<int>(i));
                 // 攻撃名を表示
-                ImGui::Text("%d:",i);
+                ImGui::Text("%d:", i);
                 ImGui::SameLine();
                 if (attack->GetAttackParam().isMotionOnly) {
                     ImGui::TextColored(ImVec4(1.0f, 0.55f, 0.0f, 1.0f), "%s (Motion Only)", attackName.c_str());
                 } else {
                     ImGui::TextColored(ImVec4(0.85f, 0.15f, 0.15f, 1.0f), attackName.c_str());
                 }
-              
+
                 // 選択中の攻撃を強調表示
                 if (IsValidIndex(selectedIndex_) && attacks_[selectedIndex_]->GetGroupName() == attackName) {
                     ImGui::SameLine();
@@ -362,4 +418,15 @@ void PlayerComboAttackController::SetEditorSuite(KetaEngine::EffectEditorSuite* 
 
 void PlayerComboAttackController::SetCombo(Combo* combo) {
     pCombo_ = combo;
+}
+
+void PlayerComboAttackController::SetPlayer(Player* player) {
+    pPlayer_ = player;
+
+    // プレビューにプレイヤーとコントローラーを設定
+    preview_.Init(player, this, nullptr);
+
+    for (auto& attack : attacks_) {
+        attack->SetPlayer(player);
+    }
 }

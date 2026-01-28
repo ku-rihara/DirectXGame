@@ -190,6 +190,7 @@ void TimelineDrawer::Draw(const std::string& name) {
 
     ImGui::Begin(name.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar);
 
+    // オリジナルのUIを描画
     if (originalItemDrawCallBack_) {
         ImGui::SameLine();
         ImGui::Separator();
