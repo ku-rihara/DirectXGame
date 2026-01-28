@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Easing/Easing.h"
-#include "Particle/CPUParticle/ParticlePlayer.h"
 #include "Editor/RailEditor/RailManager.h"
+#include "Particle/CPUParticle/ParticlePlayer.h"
 #include "Player/ComboCreator/PlayerAttackRenditionData.h"
 
 class Player;
@@ -25,7 +25,6 @@ private:
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayedOnHit_{};
 
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimePlayed_{};
-    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::AudioType::Count)> isAudioPlayed_{};
 
     // ヒットエフェクトがトリガーされたかどうか
     bool hasTriggeredHitEffects_ = false;
@@ -54,8 +53,7 @@ private:
     void UpdateHitRenditions(const PlayerAttackRenditionData& renditionData);
     void PlayRenditionEffect(PlayerAttackRenditionData::Type type, const PlayerAttackRenditionData::RenditionParam& param);
     void UpdateObjectAnimations(const PlayerAttackRenditionData& renditionData);
-    void UpdateAudio(const PlayerAttackRenditionData& renditionData);
-    void UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit,float deltaTime);
+    void UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit, float deltaTime);
 
 public:
     void PlayRendition();

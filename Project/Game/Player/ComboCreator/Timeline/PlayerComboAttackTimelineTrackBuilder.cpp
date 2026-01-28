@@ -82,91 +82,100 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
     }
 }
 
-template <typename ParamType, typename InfoArrayType>
-void PlayerComboAttackTimelineTrackBuilder::SetupTracksGeneric(
-    const InfoArrayType& typeInfos,
-    int32_t count,
-    PlayerComboAttackTimelineData::TrackType baseTrackType,
-    const char* suffix) {
+void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
+    if (!attackData_ || !timelineDrawer_ || !data_) {
+        return;
+    }
 
+    // 演出データを取得
+    auto& renditionData = attackData_->GetRenditionData();
+
+    // 通常演出
+    for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
+        const auto& param = renditionData.GetRenditionParamFromIndex(i);
+
+        if (param.fileName.empty() || param.fileName == "None") {
+            continue;
+        }
+
+        // トラック名を取得
+        std::string trackName = PlayerAttackRenditionData::kRenditionTypeInfos[i].label;
+        // タイムラインに追加したトラックindexを取得
+        int32_t trackIdx = timelineDrawer_->AddTrack(trackName);
+
+        // トラックの情報をセット
+        PlayerComboAttackTimelineData::TrackInfo info;
+        info.type          = static_cast<PlayerComboAttackTimelineData::TrackType>(i);
+        info.trackIndex    = trackIdx;
+        info.fileName      = param.fileName;
+        info.isCameraReset = param.isCameraReset;
+        info.volume        = param.volume;
+        // トラックに追加
+        data_->AddTrackInfo(info);
+
+        // 開始秒数をフレーム換算してキーフレームを配置
+        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
+    }
+
+    // ヒット時演出
+    for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
+        const auto& param = renditionData.GetRenditionParamOnHitFromIndex(i);
+
+        if (param.fileName.empty() || param.fileName == "None") {
+            continue;
+        }
+
+        std::string trackName = std::string(PlayerAttackRenditionData::kRenditionTypeInfos[i].label) + " (ヒット時)";
+        int32_t trackIdx      = timelineDrawer_->AddTrack(trackName);
+
+        PlayerComboAttackTimelineData::TrackInfo info;
+        info.type = static_cast<PlayerComboAttackTimelineData::TrackType>(
+            static_cast<int>(PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION_ON_HIT) + i);
+        info.trackIndex    = trackIdx;
+        info.fileName      = param.fileName;
+        info.isCameraReset = param.isCameraReset;
+        info.volume        = param.volume;
+        data_->AddTrackInfo(info);
+
+        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f,
+            "使用ファイル:" + param.fileName);
+    }
+}
+
+void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
     if (!attackData_ || !timelineDrawer_ || !data_)
         return;
 
     auto& renditionData = attackData_->GetRenditionData();
 
-    for (int32_t i = 0; i < count; ++i) {
-        // パラメータ取得
-        const ParamType* param = nullptr;
-        if constexpr (std::is_same_v<ParamType, PlayerAttackRenditionData::RenditionParam>) {
-            param = suffix ? &renditionData.GetRenditionParamOnHitFromIndex(i)
-                           : &renditionData.GetRenditionParamFromIndex(i);
-        } else if constexpr (std::is_same_v<ParamType, PlayerAttackRenditionData::ObjAnimationParam>) {
-            param = &renditionData.GetObjAnimationParamFromIndex(i);
-        } else if constexpr (std::is_same_v<ParamType, PlayerAttackRenditionData::AudioParam>) {
-            param = &renditionData.GetAudioParamFromIndex(i);
-        }
+    for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::Count); ++i) {
+        const auto& param = renditionData.GetObjAnimationParamFromIndex(i);
 
-        if (!param || param->fileName.empty() || param->fileName == "None") {
+        if (param.fileName.empty() || param.fileName == "None") {
             continue;
         }
 
-        // トラック名作成
-        std::string trackName = typeInfos[i].label;
-        if (suffix) {
-            trackName += suffix;
-        }
+        std::string trackName = PlayerAttackRenditionData::kObjAnimationTypeInfos[i].label;
+        int32_t trackIdx      = timelineDrawer_->AddTrack(trackName);
 
-        int32_t trackIdx = timelineDrawer_->AddTrack(trackName);
-
-        // トラック情報設定
         PlayerComboAttackTimelineData::TrackInfo info;
-        info.type       = static_cast<PlayerComboAttackTimelineData::TrackType>(static_cast<int>(baseTrackType) + i);
+        info.type = static_cast<PlayerComboAttackTimelineData::TrackType>(
+            static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD) + i);
         info.trackIndex = trackIdx;
-        info.fileName   = param->fileName;
-
-        // isCameraResetはRenditionParamの場合のみ
-        if constexpr (std::is_same_v<ParamType, PlayerAttackRenditionData::RenditionParam>) {
-            info.isCameraReset = param->isCameraReset;
-        }
-
+        info.fileName   = param.fileName;
         data_->AddTrackInfo(info);
 
-        // キーフレーム追加
-        int32_t frame = KetaEngine::Frame::TimeToFrame(param->startTiming);
-        timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param->fileName);
+        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f,
+            "使用ファイル:" + param.fileName);
     }
 }
 
-void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
-    // 通常演出
-    SetupTracksGeneric<PlayerAttackRenditionData::RenditionParam>(
-        PlayerAttackRenditionData::kRenditionTypeInfos,
-        static_cast<int32_t>(PlayerAttackRenditionData::Type::Count),
-        PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION,
-        nullptr);
-
-    // ヒット時演出
-    SetupTracksGeneric<PlayerAttackRenditionData::RenditionParam>(
-        PlayerAttackRenditionData::kRenditionTypeInfos,
-        static_cast<int32_t>(PlayerAttackRenditionData::Type::Count),
-        PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION_ON_HIT,
-        " (ヒット時)");
-}
-
-void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
-    SetupTracksGeneric<PlayerAttackRenditionData::ObjAnimationParam>(
-        PlayerAttackRenditionData::kObjAnimationTypeInfos,
-        static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::Count),
-        PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD,
-        nullptr);
-}
-
 void PlayerComboAttackTimelineTrackBuilder::SetupAudioTracks() {
-    SetupTracksGeneric<PlayerAttackRenditionData::AudioParam>(
-        PlayerAttackRenditionData::kAudioTypeInfos,
-        static_cast<int32_t>(PlayerAttackRenditionData::AudioType::Count),
-        PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK,
-        nullptr);
+    // オーディオはSetupRenditionTracksで処理されるため、この関数は空にする
+    // 後方互換性のために残しておく
 }
 
 void PlayerComboAttackTimelineTrackBuilder::AddTrack(PlayerComboAttackTimelineData::TrackType type) {

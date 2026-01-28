@@ -142,6 +142,7 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
         DrawTrackMenuItem("シェイクアクション", TrackType::SHAKE_ACTION);
         DrawTrackMenuItem("ポストエフェクト", TrackType::POST_EFFECT);
         DrawTrackMenuItem("パーティクルエフェクト", TrackType::PARTICLE_EFFECT);
+        DrawTrackMenuItem("攻撃音", TrackType::AUDIO_ATTACK);
 
         ImGui::SeparatorText("演出 (ヒット時)");
 
@@ -150,6 +151,7 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
         DrawTrackMenuItem("シェイクアクション (ヒット時)", TrackType::SHAKE_ACTION_ON_HIT);
         DrawTrackMenuItem("ポストエフェクト (ヒット時)", TrackType::POST_EFFECT_ON_HIT);
         DrawTrackMenuItem("パーティクルエフェクト (ヒット時)", TrackType::PARTICLE_EFFECT_ON_HIT);
+        DrawTrackMenuItem("攻撃ヒット音", TrackType::AUDIO_ATTACK_ON_HIT);
 
         ImGui::SeparatorText("オブジェクトアニメーション");
 
@@ -157,11 +159,6 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
         DrawTrackMenuItem("右手アニメーション", TrackType::OBJ_ANIM_RIGHT_HAND);
         DrawTrackMenuItem("左手アニメーション", TrackType::OBJ_ANIM_LEFT_HAND);
         DrawTrackMenuItem("メイン頭アニメーション", TrackType::OBJ_ANIM_MAIN_HEAD);
-
-        ImGui::SeparatorText("オーディオ");
-
-        DrawTrackMenuItem("攻撃音", TrackType::AUDIO_ATTACK);
-        DrawTrackMenuItem("ヒット音", TrackType::AUDIO_HIT);
 
         ImGui::SeparatorText("タイミング");
 
@@ -209,11 +206,10 @@ void PlayerComboAttackTimelineUI::DrawKeyFrameMenuItems(int32_t trackIndex, int3
 
     // 演出系トラックの場合
     int typeInt      = static_cast<int>(trackType);
-    bool isRendition = (typeInt >= static_cast<int>(TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(TrackType::PARTICLE_EFFECT_ON_HIT));
+    bool isRendition = (typeInt >= static_cast<int>(TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(TrackType::AUDIO_ATTACK_ON_HIT));
     bool isObjAnime  = (typeInt >= static_cast<int>(TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TrackType::OBJ_ANIM_MAIN_HEAD));
-    bool isAudio     = (typeInt >= static_cast<int>(TrackType::AUDIO_ATTACK) && typeInt <= static_cast<int>(TrackType::AUDIO_HIT));
 
-    if (isRendition || isObjAnime || isAudio) {
+    if (isRendition || isObjAnime) {
         ImGui::Text("キーフレーム編集");
         ImGui::Separator();
         DrawRenditionKeyFrameEditor(trackIndex, keyIndex);
@@ -260,5 +256,10 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
     // カメラアクションの場合のみチェックボックスを表示
     if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION || trackInfo->type == PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION_ON_HIT) {
         ImGui::Checkbox("攻撃時にカメラをリセットする", &trackInfo->isCameraReset);
+    }
+
+    // オーディオの場合のみボリュームスライダーを表示
+    if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK  || trackInfo->type == PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK_ON_HIT ) {
+        ImGui::SliderFloat("ボリューム", &trackInfo->volume, 0.0f, 1.0f);
     }
 }

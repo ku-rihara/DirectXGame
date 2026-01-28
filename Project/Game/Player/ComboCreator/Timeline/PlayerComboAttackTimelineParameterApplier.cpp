@@ -9,9 +9,9 @@ void PlayerComboAttackTimelineParameterApplier::Init(
     KetaEngine::TimelineDrawer* timeline,
     PlayerComboAttackTimelineData* data) {
 
-    attackData_   = attackData;
-    timelineDrawer_     = timeline;
-    timeLineData_ = data;
+    attackData_     = attackData;
+    timelineDrawer_ = timeline;
+    timeLineData_   = data;
 }
 
 ///==========================================================
@@ -90,7 +90,6 @@ void ApplyIfPresent(const std::optional<int32_t>& opt, Func&& func) {
     }
 }
 
-
 ///==========================================================
 /// パラメータ適用
 ///==========================================================
@@ -103,42 +102,42 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     auto& attackParam = attackData_->GetAttackParam();
 
     // コライダー適用
-    ApplyIfPresent(GetKeyFrameInfo(PlayerComboAttackTimelineData::DefaultTrack::COLLISION),[&](const KeyFrameInfo& info) {
-            attackParam.collisionParam.startTime = KetaEngine::Frame::FrameToTime(info.startFrame);
-            attackParam.collisionParam.adaptTime = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(info.duration));
-        });
+    ApplyIfPresent(GetKeyFrameInfo(PlayerComboAttackTimelineData::DefaultTrack::COLLISION), [&](const KeyFrameInfo& info) {
+        attackParam.collisionParam.startTime = KetaEngine::Frame::FrameToTime(info.startFrame);
+        attackParam.collisionParam.adaptTime = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(info.duration));
+    });
 
     // 移動イージング適用
-    ApplyIfPresent(GetKeyFrameInfo(PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING),[&](const KeyFrameInfo& info) {
-            attackParam.moveParam.startTime = KetaEngine::Frame::FrameToTime(info.startFrame);
-            attackParam.moveParam.easeTime  = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(info.duration));
-        });
+    ApplyIfPresent(GetKeyFrameInfo(PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING), [&](const KeyFrameInfo& info) {
+        attackParam.moveParam.startTime = KetaEngine::Frame::FrameToTime(info.startFrame);
+        attackParam.moveParam.easeTime  = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(info.duration));
+    });
 
     // 終了待機時間の適用
-    ApplyIfPresent(GetKeyFrameInfo(PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT),[&](const KeyFrameInfo& info) {
-            attackParam.timingParam.finishWaitTime = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(info.duration));
+    ApplyIfPresent(GetKeyFrameInfo(PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT), [&](const KeyFrameInfo& info) {
+        attackParam.timingParam.finishWaitTime = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(info.duration));
 
-            // 終了待機の開始位置から移動終了位置を引いてfinishTimeOffsetを計算
-            ApplyIfPresent(GetKeyFrameInfo(PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING),
-                [&](const KeyFrameInfo& moveInfo) {
-                    int32_t waitStartFrame                 = info.startFrame;
-                    int32_t moveEndFrame                   = moveInfo.startFrame + static_cast<int32_t>(moveInfo.duration);
-                    int32_t offsetFrames                   = waitStartFrame - moveEndFrame;
-                    attackParam.moveParam.finishTimeOffset = KetaEngine::Frame::FrameToTime(offsetFrames);
-                });
-        });
+        // 終了待機の開始位置から移動終了位置を引いてfinishTimeOffsetを計算
+        ApplyIfPresent(GetKeyFrameInfo(PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING),
+            [&](const KeyFrameInfo& moveInfo) {
+                int32_t waitStartFrame                 = info.startFrame;
+                int32_t moveEndFrame                   = moveInfo.startFrame + static_cast<int32_t>(moveInfo.duration);
+                int32_t offsetFrames                   = waitStartFrame - moveEndFrame;
+                attackParam.moveParam.finishTimeOffset = KetaEngine::Frame::FrameToTime(offsetFrames);
+            });
+    });
 
     // キャンセル時間適用
-    ApplyIfPresent(GetSingleFrameValue(PlayerComboAttackTimelineData::DefaultTrack::CANCEL_START),[&](int32_t frame) {
-            attackParam.timingParam.cancelTime = KetaEngine::Frame::FrameToTime(frame);
-        });
+    ApplyIfPresent(GetSingleFrameValue(PlayerComboAttackTimelineData::DefaultTrack::CANCEL_START), [&](int32_t frame) {
+        attackParam.timingParam.cancelTime = KetaEngine::Frame::FrameToTime(frame);
+    });
 
     // 先行入力時間適用
-    ApplyIfPresent(GetSingleFrameValue(PlayerComboAttackTimelineData::DefaultTrack::PRECEDE_INPUT_START),[&](int32_t frame) {
-            attackParam.timingParam.precedeInputTime = KetaEngine::Frame::FrameToTime(frame);
-        });
+    ApplyIfPresent(GetSingleFrameValue(PlayerComboAttackTimelineData::DefaultTrack::PRECEDE_INPUT_START), [&](int32_t frame) {
+        attackParam.timingParam.precedeInputTime = KetaEngine::Frame::FrameToTime(frame);
+    });
 
-    // 演出系の適用
+    // 演出系の適用（オーディオを含む）
     for (const auto& trackInfo : timeLineData_->GetAddedTracks()) {
         int32_t frame = timelineDrawer_->GetFirstKeyFrameFrame(trackInfo.trackIndex);
         float timing  = KetaEngine::Frame::FrameToTime(frame);
@@ -215,34 +214,35 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
     auto& renditionData = const_cast<PlayerAttackRenditionData&>(attackData_->GetRenditionData());
     int typeInt         = static_cast<int>(trackInfo.type);
 
-    if (typeInt >= static_cast<int>(PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(PlayerComboAttackTimelineData::TrackType::PARTICLE_EFFECT)) {
+    // 通常演出
+    if (typeInt >= static_cast<int>(PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK)) {
 
         auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
             renditionData.GetRenditionParamFromIndex(typeInt));
-        param.fileName    = trackInfo.fileName;
-        param.startTiming = timing;
+        param.fileName      = trackInfo.fileName;
+        param.startTiming   = timing;
+        param.isCameraReset = trackInfo.isCameraReset;
+        param.volume        = trackInfo.volume;
 
-    } else if (typeInt >= static_cast<int>(PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(PlayerComboAttackTimelineData::TrackType::PARTICLE_EFFECT_ON_HIT)) {
+    }
+    // ヒット時演出
+    else if (typeInt >= static_cast<int>(PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK_ON_HIT)) {
 
         int baseIndex = typeInt - static_cast<int>(PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION_ON_HIT);
         auto& param   = const_cast<PlayerAttackRenditionData::RenditionParam&>(
             renditionData.GetRenditionParamOnHitFromIndex(baseIndex));
-        param.fileName    = trackInfo.fileName;
-        param.startTiming = timing;
+        param.fileName      = trackInfo.fileName;
+        param.startTiming   = timing;
+        param.isCameraReset = trackInfo.isCameraReset;
+        param.volume        = trackInfo.volume;
 
-    } else if (typeInt >= static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_MAIN_HEAD)) {
+    }
+    // オブジェクトアニメーション
+    else if (typeInt >= static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_MAIN_HEAD)) {
 
         int baseIndex = typeInt - static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD);
         auto& param   = const_cast<PlayerAttackRenditionData::ObjAnimationParam&>(
             renditionData.GetObjAnimationParamFromIndex(baseIndex));
-        param.fileName    = trackInfo.fileName;
-        param.startTiming = timing;
-
-    } else if (typeInt >= static_cast<int>(PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK) && typeInt <= static_cast<int>(PlayerComboAttackTimelineData::TrackType::AUDIO_HIT)) {
-
-        int baseIndex = typeInt - static_cast<int>(PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK);
-        auto& param   = const_cast<PlayerAttackRenditionData::AudioParam&>(
-            renditionData.GetAudioParamFromIndex(baseIndex));
         param.fileName    = trackInfo.fileName;
         param.startTiming = timing;
     }

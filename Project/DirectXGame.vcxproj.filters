@@ -364,7 +364,7 @@
     <Filter Include="Game\Scene\TitleSceneController">
       <UniqueIdentifier>{380a5fad-d5ce-43c1-bc10-7072cf9f090b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\ComboAttackBehavior\PreView">
+    <Filter Include="Game\Player\ComboCreator\PreView">
       <UniqueIdentifier>{c425a0d7-1865-461d-82ab-fea10893b5d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -2262,7 +2262,7 @@
       <Filter>Game\Scene\TitleSceneController</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\PreView\PlayerComboAttackPreview.cpp">
-      <Filter>Game\Player\ComboAttackBehavior\PreView</Filter>
+      <Filter>Game\Player\ComboCreator\PreView</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2273,7 +2273,7 @@
       <Filter>Game\Scene\TitleSceneController</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\PreView\PlayerComboAttackPreview.h">
-      <Filter>Game\Player\ComboAttackBehavior\PreView</Filter>
+      <Filter>Game\Player\ComboCreator\PreView</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

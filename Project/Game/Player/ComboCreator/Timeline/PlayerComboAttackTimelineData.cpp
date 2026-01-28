@@ -75,6 +75,8 @@ const char* PlayerComboAttackTimelineData::GetTrackTypeName(TrackType type) cons
         return "ポストエフェクト";
     case TrackType::PARTICLE_EFFECT:
         return "パーティクルエフェクト";
+    case TrackType::AUDIO_ATTACK:
+        return "攻撃音";
     case TrackType::CAMERA_ACTION_ON_HIT:
         return "カメラアクション (ヒット時)";
     case TrackType::HIT_STOP_ON_HIT:
@@ -85,6 +87,8 @@ const char* PlayerComboAttackTimelineData::GetTrackTypeName(TrackType type) cons
         return "ポストエフェクト (ヒット時)";
     case TrackType::PARTICLE_EFFECT_ON_HIT:
         return "パーティクルエフェクト (ヒット時)";
+    case TrackType::AUDIO_ATTACK_ON_HIT:
+        return "攻撃ヒット音";
     case TrackType::OBJ_ANIM_HEAD:
         return "頭アニメーション";
     case TrackType::OBJ_ANIM_RIGHT_HAND:
@@ -93,10 +97,6 @@ const char* PlayerComboAttackTimelineData::GetTrackTypeName(TrackType type) cons
         return "左手アニメーション";
     case TrackType::OBJ_ANIM_MAIN_HEAD:
         return "メイン頭アニメーション";
-    case TrackType::AUDIO_ATTACK:
-        return "攻撃音";
-    case TrackType::AUDIO_HIT:
-        return "ヒット音";
     case TrackType::CANCEL_TIME:
         return "キャンセルタイム";
     case TrackType::PRECEDE_INPUT:
@@ -132,7 +132,6 @@ PlayerComboAttackTimelineData::GetTrackTypeFromIndex(int32_t trackIndex) const {
         }
     }
 
-
     //  -------------------------追加トラックから検索------------------------- //
 
     // addedTracks_配列から、trackIndexが一致するものを探す
@@ -146,7 +145,6 @@ PlayerComboAttackTimelineData::GetTrackTypeFromIndex(int32_t trackIndex) const {
         return it->type;
     }
 
-
     return TrackType::COUNT; // エラー値として使用
 }
 
@@ -156,19 +154,22 @@ std::string PlayerComboAttackTimelineData::GetDirectoryForTrackType(TrackType ty
     switch (type) {
     case TrackType::CAMERA_ACTION:
     case TrackType::CAMERA_ACTION_ON_HIT:
-        return basePath + "CameraAnimation/AnimationData";
+        return basePath + "CameraAnimation/Common/Dates";
     case TrackType::HIT_STOP:
     case TrackType::HIT_STOP_ON_HIT:
-        return basePath + "TimeScale";
+        return basePath + "TimeScale/Common/Dates";
     case TrackType::SHAKE_ACTION:
     case TrackType::SHAKE_ACTION_ON_HIT:
-        return basePath + "ShakeEditor";
+        return basePath + "ShakeEditor/Common/Dates";
     case TrackType::POST_EFFECT:
     case TrackType::POST_EFFECT_ON_HIT:
         return basePath + "PostEffect";
     case TrackType::PARTICLE_EFFECT:
     case TrackType::PARTICLE_EFFECT_ON_HIT:
         return basePath + "Particle/Player/Dates";
+    case TrackType::AUDIO_ATTACK:
+    case TrackType::AUDIO_ATTACK_ON_HIT:
+        return "Resources/Audio/";
     case TrackType::OBJ_ANIM_HEAD:
         return basePath + "ObjEaseAnimation/Player/Dates/";
     case TrackType::OBJ_ANIM_RIGHT_HAND:
@@ -177,9 +178,6 @@ std::string PlayerComboAttackTimelineData::GetDirectoryForTrackType(TrackType ty
         return basePath + "ObjEaseAnimation/LeftHand/Dates/";
     case TrackType::OBJ_ANIM_MAIN_HEAD:
         return basePath + "ObjEaseAnimation/MainHead/Dates/";
-    case TrackType::AUDIO_ATTACK:
-    case TrackType::AUDIO_HIT:
-        return "Resources/Audio/";
     default:
         return basePath;
     }
