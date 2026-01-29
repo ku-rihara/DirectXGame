@@ -263,9 +263,3 @@ std::string ObjEaseAnimationData::GetSRTName(const TransformType& type) const {
     }
 }
 
-void ObjEaseAnimationData::LoadSequenceElements() {
-    BaseSequenceEffectData::LoadSequenceElements();
-}
-void ObjEaseAnimationData::SaveSequenceElements() {
-    BaseSequenceEffectData::SaveSequenceElements();
-}

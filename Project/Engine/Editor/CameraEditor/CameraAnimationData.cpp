@@ -15,6 +15,7 @@ void CameraAnimationData::Init(const std::string& animationName, const std::stri
     groupName_  = animationName;
     folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
 
+    // グローバルパラメータ登録
     if (!globalParameter_->HasRegisters(groupName_)) {
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
@@ -23,15 +24,19 @@ void CameraAnimationData::Init(const std::string& animationName, const std::stri
         GetParams();
     }
 
+    // パラメータ初期化
     InitParams();
 }
 
 void CameraAnimationData::InitParams() {
+
+    // リセット
     activeKeyFrameIndex_            = 0;
     isAllKeyFramesFinished_         = false;
     returnParam_.isWaitingForReturn = false;
     resetParam_.currentDelayTimer   = 0.0f;
 
+    // 戻り時のイージングセット
     returnParam_.positionEase.SetAdaptValue(&returnCameraTransform_.position);
     returnParam_.rotationEase.SetAdaptValue(&returnCameraTransform_.rotation);
     returnParam_.fovEase.SetAdaptValue(&returnCameraTransform_.fov);
@@ -406,10 +411,3 @@ void CameraAnimationData::SetLookAtTarget(const WorldTransform* target) {
     }
 }
 
-void CameraAnimationData::LoadSequenceElements() {
-    BaseSequenceEffectData::LoadSequenceElements();
-}
-
-void CameraAnimationData::SaveSequenceElements() {
-    BaseSequenceEffectData::SaveSequenceElements();
-}

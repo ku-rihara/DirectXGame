@@ -31,10 +31,6 @@ public:
     void AdjustParam(); //< パラメータ調整
     void Play() override; //< 再生
     void Reset() override; //< リセット
-
-    void LoadData() override; //< データ読み込み
-    void SaveData() override; //< データ保存
-
 private:
     void RegisterParams() override; //< パラメータバインド
     void GetParams() override; //< パラメータ取得

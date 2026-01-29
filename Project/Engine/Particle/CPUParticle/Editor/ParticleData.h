@@ -35,9 +35,7 @@ public:
 
     // 編集用メソッド
     void AdjustParam();
-    void LoadSequenceElements() override;
-    void SaveSequenceElements() override;
-
+  
     //  再生継続時間チェック機能
     void CheckAndPauseSectionsAfterDuration(float deltaTime);
 

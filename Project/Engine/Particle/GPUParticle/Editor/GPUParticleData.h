@@ -27,8 +27,6 @@ public:
 
     // 編集用メソッド
     void AdjustParam();
-    void LoadSequenceElements() override;
-    void SaveSequenceElements() override;
 
     // 全セクションの描画指示
     void Draw();

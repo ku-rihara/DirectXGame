@@ -40,9 +40,7 @@ public:
 
     // 編集用メソッド
     void AdjustParam();
-    void LoadSequenceElements() override;
-    void SaveSequenceElements() override;
-
+ 
     //*----------------------------- protected Methods from Base -----------------------------*//
 protected:
     void RegisterParams() override;
