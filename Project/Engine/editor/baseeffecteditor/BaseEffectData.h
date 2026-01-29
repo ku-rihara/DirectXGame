@@ -31,15 +31,17 @@ public:
     // カテゴリー初期化
     virtual void Init(const std::string& name, const std::string& categoryName);
 
-    // 共通実装
-    virtual void Pause();
-    virtual bool IsPlaying() const;
-    virtual bool IsFinished() const;
-    virtual bool IsReturning() const;
+    // ポーズ
+    void Pause();
+
+    // 再生状態取得
+    bool IsPlaying() const;
+    bool IsFinished() const;
+    bool IsReturning() const;
 
     // ファイル操作
-    virtual void LoadData() = 0;
-    virtual void SaveData() = 0;
+    virtual void LoadData();
+    virtual void SaveData();
 
 protected:
     //*---------------------------- protected Methods ----------------------------*//
