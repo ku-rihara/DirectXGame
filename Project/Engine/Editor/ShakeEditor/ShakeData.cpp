@@ -109,16 +109,6 @@ void ShakeData::Reset() {
     playState_ = PlayState::STOPPED;
 }
 
-void ShakeData::LoadData() {
-    globalParameter_->LoadFile(groupName_, folderPath_);
-    globalParameter_->SyncParamForGroup(groupName_);
-    GetParams();
-}
-
-void ShakeData::SaveData() {
-    globalParameter_->SaveFile(groupName_, folderPath_);
-}
-
 void ShakeData::RegisterParams() {
     globalParameter_->Regist(groupName_, "shakeLength", &shakeLength_);
     globalParameter_->Regist(groupName_, "maxTime", &maxTime_);

@@ -94,20 +94,6 @@ void DissolveData::Reset() {
     thresholdEase_.Reset();
 }
 
-void DissolveData::LoadData() {
-    globalParameter_->LoadFile(groupName_, folderPath_);
-    globalParameter_->SyncParamForGroup(groupName_);
-    GetParams();
-
-    if (selectedTextureIndex_ >= 0 && selectedTextureIndex_ < static_cast<int32_t>(noiseTextureFiles_.size())) {
-        currentTexturePath_ = textureFilePath_ + "/" + noiseTextureFiles_[selectedTextureIndex_];
-    }
-}
-
-void DissolveData::SaveData() {
-    globalParameter_->SaveFile(groupName_, folderPath_);
-}
-
 void DissolveData::RegisterParams() {
     globalParameter_->Regist(groupName_, "startThreshold", &startThreshold_);
     globalParameter_->Regist(groupName_, "endThreshold", &endThreshold_);
@@ -118,7 +104,10 @@ void DissolveData::RegisterParams() {
 }
 
 void DissolveData::GetParams() {
-    // パラメータは既にSyncParamForGroupで同期されている
+
+    if (selectedTextureIndex_ >= 0 && selectedTextureIndex_ < static_cast<int32_t>(noiseTextureFiles_.size())) {
+        currentTexturePath_ = textureFilePath_ + "/" + noiseTextureFiles_[selectedTextureIndex_];
+    }
 }
 
 void DissolveData::InitParams() {

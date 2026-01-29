@@ -60,9 +60,6 @@ public:
     void Reset() override;
     void Play() override;
 
-    void LoadSequenceElements() override;
-    void SaveSequenceElements() override;
-
     // ViewProjectionへの適用
     void ApplyToViewProjection(ViewProjection& viewProjection);
 
