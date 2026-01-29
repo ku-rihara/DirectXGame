@@ -31,6 +31,7 @@ EnemyChasePlayer::EnemyChasePlayer(BaseEnemy* boss)
     currentChaseTime_ = 0.0f;
     chaseResetTimer_  = 0.0f;
     isChaseTimeOver_  = false;
+    isChaseStarted_   = false; // 追跡開始フラグ初期化
 }
 
 EnemyChasePlayer::~EnemyChasePlayer() {
@@ -38,9 +39,18 @@ EnemyChasePlayer::~EnemyChasePlayer() {
 
 void EnemyChasePlayer::Update() {
 
+    // 追跡開始時のアニメーション初期化（一度だけ実行）
+    if (!isChaseStarted_) {
+        pBaseEnemy_->InitChaseAnimation();
+        isChaseStarted_ = true;
+    }
+
     // Enemy AmplitudeScaling
     scaleEasing_.Update(KetaEngine::Frame::DeltaTimeRate());
     pBaseEnemy_->SetScale(tempEnemyScale_);
+
+    // 追跡中のアニメーション更新
+    pBaseEnemy_->UpdateChaseAnimation(KetaEngine::Frame::DeltaTimeRate());
 
     // ターゲットへのベクトル
     Vector3 direction = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());

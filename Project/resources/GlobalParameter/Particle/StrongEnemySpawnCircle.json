@@ -1,4 +1,4 @@
-{
+﻿{
     "StrongEnemySpawnCircle": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -107,11 +107,11 @@
         "UV isScroolEachPixel": true,
         "blendMode": 1,
         "isAlphaNoMove": false,
-        "isBillBord": false,
+        "isBillboard": false,
         "isRotateforDirection": false,
         "isScalerScale": false,
         "isShot": true,
-        "preBillBordType_": 0,
+        "preBillboardType_": 0,
         "scaleEaseParm.easeTypeInt": 3,
         "scaleEaseParm.endValueF.max": 4.0,
         "scaleEaseParm.endValueF.min": 4.0,

@@ -57,7 +57,7 @@ void ComboAttackAction::Update(float atkSpeed) {
 
     // 通常移動
     if (attackData_->GetAttackParam().moveParam.isAbleInputMoving) {
-        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+        pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed);
     }
 
     currentFrame_ += atkSpeed;

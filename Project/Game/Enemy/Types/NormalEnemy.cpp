@@ -22,12 +22,16 @@ void NormalEnemy::Init(const Vector3& spownPos) {
     objAnimation_->transform_.scale_ = Vector3::OneVector();
 
     // ライティング番号
-    objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = 2;
+    objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = 3;
 
     // 攻撃ステート初期化
     attackAnticipationTimer_      = 0.0f;
     isAttackAnticipationFinished_ = false;
     isAttackFinished_             = false;
+
+    // 追跡アニメーション状態初期化
+    chaseAnimState_    = ChaseAnimationState::NONE;
+    isPreDashFinished_ = false;
 }
 
 ///========================================================
@@ -130,4 +134,58 @@ void NormalEnemy::AttackFinish() {
 ///========================================================
 void NormalEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
     BaseEnemy::DisplaySprite(viewProjection);
+}
+
+///========================================================
+/// 追跡開始時のアニメーション初期化
+///========================================================
+void NormalEnemy::InitChaseAnimation() {
+    if (!objAnimation_ && chaseAnimState_ == ChaseAnimationState::NONE) {
+        return;
+    }
+
+    // ダッシュ予備動作アニメーションに切り替え
+    chaseAnimState_    = ChaseAnimationState::PRE_DASH;
+    isPreDashFinished_ = false;
+    objAnimation_->ChangeAnimation("BoxerEnemyPreDashMotion");
+    objAnimation_->SetLoop(false); // 予備動作はループしない
+
+    // アニメーション終了時のコールバックを設定
+    objAnimation_->SetAnimationEndCallback([this](const std::string& animationName) {
+        if (animationName == "BoxerEnemyPreDashMotion") {
+            isPreDashFinished_ = true;
+        }
+    });
+}
+
+///========================================================
+/// 追跡中のアニメーション更新
+///========================================================
+void NormalEnemy::UpdateChaseAnimation(float deltaTime) {
+    if (!objAnimation_) {
+        return;
+    }
+    deltaTime;
+    // 予備動作が終了したらダッシュアニメーションに切り替え
+    if (chaseAnimState_ == ChaseAnimationState::PRE_DASH && isPreDashFinished_) {
+        chaseAnimState_ = ChaseAnimationState::DASHING;
+        objAnimation_->ChangeAnimation("BoxerEnemyDash");
+        objAnimation_->SetLoop(true); // ダッシュはループ
+    }
+
+}
+
+///========================================================
+/// 待機アニメーションにリセット
+///========================================================
+void NormalEnemy::ResetToWaitAnimation() {
+    if (!objAnimation_) {
+        return;
+    }
+
+    // 待機アニメーションに戻す
+    chaseAnimState_    = ChaseAnimationState::NONE;
+    isPreDashFinished_ = false;
+    objAnimation_->ChangeAnimation("BoxerEnemyWait.gltf");
+    objAnimation_->SetLoop(true); // 待機アニメーションはループ
 }

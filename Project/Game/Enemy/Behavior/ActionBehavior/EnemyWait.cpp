@@ -18,6 +18,9 @@
 EnemyWait::EnemyWait(BaseEnemy* boss)
     : BaseEnemyBehavior("EnemyWait", boss) {
 
+    // 待機アニメーションにリセット
+    pBaseEnemy_->ResetToWaitAnimation();
+
     spriteEase_.Init("EnemyOverLookSpriteScaling.json");
     spriteEase_.SetAdaptValue(&tempSpriteScale_);
     spriteEase_.Reset();

@@ -27,7 +27,7 @@ void ParticleParameter::ParameterInit() {
     parameters_.isRotateForDirection = false;
     particleCount_                   = 0;
     intervalTime_                    = 1.0f;
-    groupParamaters_.isBillBord      = true;
+    groupParameters_.isBillboard      = true;
     parameters_.uvParam.numOfFrame   = 1;
     selectedTexturePath_             = "resources/Texture/uvChecker.png";
 }
@@ -44,9 +44,9 @@ void ParticleParameter::Init() {
     InitAdaptTexture();
 
     // セッティングしたもの適用
-    groupParamaters_.billBordType = static_cast<BillboardType>(billBordType_);
-    groupParamaters_.isShot       = isShot_;
-    groupParamaters_.blendMode    = static_cast<BlendMode>(blendMode_);
+    groupParameters_.billboardType = static_cast<BillboardType>(billboardType_);
+    groupParameters_.isShot       = isShot_;
+    groupParameters_.blendMode    = static_cast<BlendMode>(blendMode_);
     /*  parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);*/
 }
 
@@ -104,12 +104,12 @@ void ParticleParameter::RegisterParams() {
     // frag
     globalParameter_->Regist(particleName_, "isScalerScale", &parameters_.isScalerScale);
     globalParameter_->Regist(particleName_, "isRotateforDirection", &parameters_.isRotateForDirection);
-    globalParameter_->Regist(particleName_, "isBillBord", &groupParamaters_.isBillBord);
-    globalParameter_->Regist(particleName_, "AdaptRotateIsX", &groupParamaters_.adaptRotate_.isX);
-    globalParameter_->Regist(particleName_, "AdaptRotateIsY", &groupParamaters_.adaptRotate_.isY);
-    globalParameter_->Regist(particleName_, "AdaptRotateIsZ", &groupParamaters_.adaptRotate_.isZ);
+    globalParameter_->Regist(particleName_, "isBillboard", &groupParameters_.isBillboard);
+    globalParameter_->Regist(particleName_, "AdaptRotateIsX", &groupParameters_.adaptRotate_.isX);
+    globalParameter_->Regist(particleName_, "AdaptRotateIsY", &groupParameters_.adaptRotate_.isY);
+    globalParameter_->Regist(particleName_, "AdaptRotateIsZ", &groupParameters_.adaptRotate_.isZ);
     globalParameter_->Regist(particleName_, "isShot", &isShot_);
-    globalParameter_->Regist(particleName_, "isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
+    globalParameter_->Regist(particleName_, "isAlphaNoMove", &groupParameters_.isAlphaNoMove);
 
     globalParameter_->Regist(particleName_, "isRailRoop", &isRailRoop_);
     globalParameter_->Regist(particleName_, "isMoveForRail", &isMoveForRail_);
@@ -126,7 +126,7 @@ void ParticleParameter::RegisterParams() {
     globalParameter_->Regist(particleName_, "scaleEaseParm.backRatio", &parameters_.scaleEaseParam.baseParam.backRatio);
 
     // mode Setting
-    globalParameter_->Regist(particleName_, "preBillBordType_", &billBordType_);
+    globalParameter_->Regist(particleName_, "preBillboardType_", &billboardType_);
     globalParameter_->Regist(particleName_, "blendMode", &blendMode_);
 
     // テクスチャ
@@ -192,12 +192,12 @@ void ParticleParameter::GetParams() {
     // Flag
     parameters_.isScalerScale         = globalParameter_->GetValue<bool>(particleName_, "isScalerScale");
     parameters_.isRotateForDirection  = globalParameter_->GetValue<bool>(particleName_, "isRotateforDirection");
-    groupParamaters_.isBillBord       = globalParameter_->GetValue<bool>(particleName_, "isBillBord");
-    groupParamaters_.adaptRotate_.isX = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsX");
-    groupParamaters_.adaptRotate_.isY = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsY");
-    groupParamaters_.adaptRotate_.isZ = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsZ");
+    groupParameters_.isBillboard       = globalParameter_->GetValue<bool>(particleName_, "isBillboard");
+    groupParameters_.adaptRotate_.isX = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsX");
+    groupParameters_.adaptRotate_.isY = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsY");
+    groupParameters_.adaptRotate_.isZ = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsZ");
     isShot_                           = globalParameter_->GetValue<bool>(particleName_, "isShot");
-    groupParamaters_.isAlphaNoMove    = globalParameter_->GetValue<bool>(particleName_, "isAlphaNoMove");
+    groupParameters_.isAlphaNoMove    = globalParameter_->GetValue<bool>(particleName_, "isAlphaNoMove");
 
     isMoveForRail_ = globalParameter_->GetValue<bool>(particleName_, "isRailRoop");
     isRailRoop_    = globalParameter_->GetValue<bool>(particleName_, "isMoveForRail");
@@ -214,7 +214,7 @@ void ParticleParameter::GetParams() {
     parameters_.scaleEaseParam.baseParam.backRatio   = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.backRatio");
 
     // Mode
-    billBordType_ = globalParameter_->GetValue<int>(particleName_, "preBillBordType_");
+    billboardType_ = globalParameter_->GetValue<int>(particleName_, "preBillboardType_");
     blendMode_    = globalParameter_->GetValue<int>(particleName_, "blendMode");
 
     // Texture
@@ -247,7 +247,7 @@ void ParticleParameter::EditorUpdate() {
 
     /// rail
     if (ImGui::CollapsingHeader("MoveForRail")) {
-        ImGui::SeparatorText("Paramater");
+        ImGui::SeparatorText("Parameter");
         ImGui::Checkbox("isRailRoop", &isRailRoop_);
         ImGui::Checkbox("isMoveForRail", &isMoveForRail_);
         ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.1f);
@@ -319,7 +319,7 @@ void ParticleParameter::EditorUpdate() {
     }
 
     // その他のパラメータ
-    if (ImGui::CollapsingHeader("etcParamater")) {
+    if (ImGui::CollapsingHeader("etcParameter")) {
         ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
         ImGui::DragFloat("Gravity", &parameters_.gravity, 0.1f);
         ImGui::DragFloat("LifeTime", &parameters_.lifeTime, 0.01f);
@@ -329,20 +329,20 @@ void ParticleParameter::EditorUpdate() {
     // Billbord
     if (ImGui::CollapsingHeader("BillBoard")) {
 
-        ImGui::Checkbox("IsBillBoard", &groupParamaters_.isBillBord);
+        ImGui::Checkbox("IsBillBoard", &groupParameters_.isBillboard);
 
         ImGui::SeparatorText("IsRotateAdapt");
-        ImGui::Checkbox("IsX", &groupParamaters_.adaptRotate_.isX);
-        ImGui::Checkbox("IsY", &groupParamaters_.adaptRotate_.isY);
-        ImGui::Checkbox("IsZ", &groupParamaters_.adaptRotate_.isZ);
+        ImGui::Checkbox("IsX", &groupParameters_.adaptRotate_.isX);
+        ImGui::Checkbox("IsY", &groupParameters_.adaptRotate_.isY);
+        ImGui::Checkbox("IsZ", &groupParameters_.adaptRotate_.isZ);
 
         ImGui::SeparatorText("BillBordType");
 
         const char* billBordItems[] = {"XYZ", "X", "Y", "Z"}; // ビルボードの種類
 
-        if (ImGui::Combo("Billboard Type", &billBordType_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
+        if (ImGui::Combo("Billboard Type", &billboardType_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
 
-            groupParamaters_.billBordType = static_cast<BillboardType>(billBordType_);
+            groupParameters_.billboardType = static_cast<BillboardType>(billboardType_);
         }
     }
 
@@ -353,7 +353,7 @@ void ParticleParameter::EditorUpdate() {
         // ビルボードの種類を選択するコンボボックス
         if (ImGui::Combo("Blend Mode", &blendMode_, blendModeItems, IM_ARRAYSIZE(blendModeItems))) {
             // 選択した値を反映
-            groupParamaters_.blendMode = static_cast<BlendMode>(blendMode_);
+            groupParameters_.blendMode = static_cast<BlendMode>(blendMode_);
         }
     }
 
@@ -363,7 +363,7 @@ void ParticleParameter::EditorUpdate() {
         // IsRotateforDirection のチェックボックス
         ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateForDirection);
         ImGui::Checkbox("IsShot", &isShot_);
-        ImGui::Checkbox("isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
+        ImGui::Checkbox("isAlphaNoMove", &groupParameters_.isAlphaNoMove);
     }
 
     ImGuiTextureSelection();

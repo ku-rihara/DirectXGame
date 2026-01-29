@@ -22,7 +22,7 @@ PlayerJump::PlayerJump(Player* player, const bool& skipJump)
         speed_ = 0.0f;
         ChangeState([this]() { FallOnlyState(); });
     } else {
-        speed_ = pPlayerParameter_->GetParamaters().normalJump.jumpSpeed;
+        speed_ = pPlayerParameter_->GetParameters().normalJump.jumpSpeed;
         ChangeState([this]() { StartState(); });
     }
 }
@@ -54,33 +54,33 @@ void PlayerJump::StartState() {
 
 void PlayerJump::JumpState() {
     // ジャンプ中の移動
-    pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+    pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed);
 
     // ジャンプ処理
     pOwner_->Jump(
         speed_,
-        pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit,
-        pPlayerParameter_->GetParamaters().normalJump.gravity);
+        pPlayerParameter_->GetParameters().normalJump.fallSpeedLimit,
+        pPlayerParameter_->GetParameters().normalJump.gravity);
 
     // 着地、通常移動に戻る
-    if (pOwner_->GetBaseTransform().translation_.y <= pPlayerParameter_->GetParamaters().startPos_.y) {
+    if (pOwner_->GetBaseTransform().translation_.y <= pPlayerParameter_->GetParameters().startPos_.y) {
         pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
     }
 }
 
 void PlayerJump::FallOnlyState() {
     // 横方向の移動は可能
-    pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+    pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed);
 
     // 落下処理のみ
     pOwner_->Fall(
         speed_,
-        pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit,
-        pPlayerParameter_->GetParamaters().normalJump.gravity,
+        pPlayerParameter_->GetParameters().normalJump.fallSpeedLimit,
+        pPlayerParameter_->GetParameters().normalJump.gravity,
         false);
 
     // 着地、通常移動に戻る
-    if (pOwner_->GetBaseTransform().translation_.y <= pPlayerParameter_->GetParamaters().startPos_.y) {
+    if (pOwner_->GetBaseTransform().translation_.y <= pPlayerParameter_->GetParameters().startPos_.y) {
         pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
     }
 }

@@ -1,4 +1,4 @@
-{
+﻿{
     "SpawnEffect0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -123,13 +123,13 @@
         "blendMode": 3,
         "emitPositionMode": 2,
         "isAlphaNoMove": false,
-        "isBillBord": false,
+        "isBillboard": false,
         "isFloatVelocity": false,
         "isRotateForDirection": false,
         "isScalerScale": false,
         "isShot": true,
         "modelFilePath": "",
-        "preBillBordType": 0,
+        "preBillboardType": 0,
         "primitiveTypeInt": 2,
         "scaleEaseParam.backRatio": 0.0,
         "scaleEaseParam.easeTypeInt": 22,

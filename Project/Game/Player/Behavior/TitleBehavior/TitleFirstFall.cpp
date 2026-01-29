@@ -75,12 +75,12 @@ void TitleFirstFall::Update() {
         boundSpeed_ = max(boundSpeed_ - (gravity_ * KetaEngine::Frame::DeltaTimeRate()), boundFallSpeedLimit_);
 
         // 次の振る舞い
-        if (pPlayer_->GetBaseTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
+        if (pPlayer_->GetBaseTransform().translation_.y > pPlayerParameter_->GetParameters().startPos_.y) {
             break;
         }
 
         pPlayer_->SetRotation(initRotate_);
-        pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
+        pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParameters().startPos_.y);
         step_ = STEP::WAIT;
         break;
     case STEP::WAIT:
@@ -90,7 +90,7 @@ void TitleFirstFall::Update() {
 
         waitTime_ += KetaEngine::Frame::DeltaTime();
 
-        if (waitTime_ >= pPlayerParameter_->GetJumpComboParm(FIRST).waitTime) {
+        if (waitTime_ >= pPlayerParameter_->GetJumpComboParam(FIRST).waitTime) {
             step_ = STEP::RETURNROOT;
         }
         break;
@@ -119,7 +119,7 @@ void TitleFirstFall::EasingInit() {
         pPlayer_->SetRotation(initRotate_);
         pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
         pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
-        pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
+        pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParameters().startPos_.y);
         pPlayer_->GetEffects()->FallEffectRenditionInit();
         step_ = STEP::LANDING;
     });

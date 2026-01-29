@@ -1427,7 +1427,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"STEP",
+					"interpolation":"LINEAR",
 					"output":11
 				},
 				{
@@ -1457,7 +1457,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":17
 				},
 				{
@@ -1487,7 +1487,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":23
 				},
 				{
@@ -1502,7 +1502,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":26
 				},
 				{
@@ -1532,7 +1532,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":32
 				},
 				{
@@ -1547,7 +1547,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":35
 				},
 				{
@@ -1562,7 +1562,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"STEP",
+					"interpolation":"LINEAR",
 					"output":38
 				},
 				{
@@ -1622,7 +1622,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":50
 				},
 				{
@@ -1667,7 +1667,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"STEP",
+					"interpolation":"LINEAR",
 					"output":59
 				},
 				{
@@ -1682,7 +1682,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"STEP",
+					"interpolation":"LINEAR",
 					"output":62
 				},
 				{
@@ -1742,7 +1742,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":74
 				},
 				{
@@ -1817,7 +1817,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"STEP",
+					"interpolation":"LINEAR",
 					"output":89
 				},
 				{
@@ -1847,7 +1847,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":95
 				},
 				{
@@ -1877,7 +1877,7 @@
 				},
 				{
 					"input":10,
-					"interpolation":"LINEAR",
+					"interpolation":"STEP",
 					"output":101
 				},
 				{
@@ -2041,10 +2041,10 @@
 			"componentType":5126,
 			"count":12,
 			"max":[
-				0.4
+				0.5
 			],
 			"min":[
-				0.03333333333333333
+				0.13333333333333333
 			],
 			"type":"SCALAR"
 		},
@@ -2065,10 +2065,10 @@
 			"componentType":5126,
 			"count":2,
 			"max":[
-				0.4
+				0.5
 			],
 			"min":[
-				0.03333333333333333
+				0.13333333333333333
 			],
 			"type":"SCALAR"
 		},

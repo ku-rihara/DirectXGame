@@ -119,8 +119,8 @@ void ParticleManager::Update() {
             ///------------------------------------------------------------------------
             /// ビルボードまたは通常の行列更新
             ///------------------------------------------------------------------------
-            if (group.param.isBillBord) {
-                it->worldTransform_->BillboardUpdateMatrix(*viewProjection_, group.param.billBordType, group.param.adaptRotate_);
+            if (group.param.isBillboard) {
+                it->worldTransform_->BillboardUpdateMatrix(*viewProjection_, group.param.billboardType, group.param.adaptRotate_);
             } else {
                 it->worldTransform_->UpdateMatrix();
             }
@@ -605,19 +605,19 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
 /// エミット
 ///======================================================================
 void ParticleManager::Emit(
-    std::string name, const Parameters& paramaters, const GroupParamaters& groupParamaters, int32_t count) {
+    std::string name, const Parameters& parameters, const GroupParameters& groupParameters, int32_t count) {
 
     // パーティクルグループが存在するか確認
     assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
 
     // 指定されたパーティクルグループを取得
     ParticleGroup& particleGroup = particleGroups_[name];
-    particleGroup.param          = groupParamaters;
+    particleGroup.param          = groupParameters;
 
     // 生成、グループ追加
     std::list<Particle> particles;
     for (uint32_t i = 0; i < uint32_t(count); ++i) {
-        particles.emplace_back(MakeParticle(paramaters));
+        particles.emplace_back(MakeParticle(parameters));
     }
 
     // グループに追加

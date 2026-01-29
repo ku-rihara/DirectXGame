@@ -76,7 +76,7 @@ void SpotLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(Object3DRootParameter::SpotLights), SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_));
 }
 
-void SpotLightManager::AdJustParams() {
+void SpotLightManager::AdjustParams() {
     if (ImGui::CollapsingHeader("SpotLights")) {
         const auto& spotLights = GetLights();
         for (size_t i = 0; i < spotLights.size(); ++i) {

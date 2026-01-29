@@ -124,6 +124,22 @@ public:
     void RotateInit(); //< 回転初期化
 
     /// <summary>
+    /// 追跡開始時のアニメーション初期化
+    /// </summary>
+    virtual void InitChaseAnimation() = 0;
+
+    /// <summary>
+    /// 追跡中のアニメーション更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
+    virtual void UpdateChaseAnimation(float deltaTime) = 0;
+
+    /// <summary>
+    /// 待機アニメーションにリセット
+    /// </summary>
+    virtual void ResetToWaitAnimation() = 0;
+
+    /// <summary>
     /// ジャンプ処理
     /// </summary>
     /// <param name="speed">速度</param>

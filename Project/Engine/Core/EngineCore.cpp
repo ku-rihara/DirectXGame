@@ -11,7 +11,7 @@ using namespace KetaEngine;
 #include "Base/Descriptors/SrvManager.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/TextureManager.h"
-#include "Lighrt/Light.h"
+#include "Light/Light.h"
 #include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/PipelineManager.h"
 #include "PostEffect/PostEffectRenderer.h"

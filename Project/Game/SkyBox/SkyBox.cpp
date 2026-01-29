@@ -1,6 +1,6 @@
 #include "SkyBox.h"
 #include "assert.h"
-#include"Lighrt/Light.h"
+#include"Light/Light.h"
 #include<imgui.h>
 
 SkyBox::SkyBox() {}

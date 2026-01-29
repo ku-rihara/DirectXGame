@@ -1,4 +1,4 @@
-{
+﻿{
     "RingParticl": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -107,11 +107,11 @@
         "UV isScroolEachPixel": true,
         "blendMode": 1,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillboard": true,
         "isRotateforDirection": false,
         "isScalerScale": true,
         "isShot": false,
-        "preBillBordType_": 0,
+        "preBillboardType_": 0,
         "scaleEaseParm.easeTypeInt": 0,
         "scaleEaseParm.endValueF.max": 0.0,
         "scaleEaseParm.endValueF.min": 0.0,

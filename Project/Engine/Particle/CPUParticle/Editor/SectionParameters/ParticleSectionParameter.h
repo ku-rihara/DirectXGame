@@ -20,7 +20,7 @@ class ParticleSectionParameter {
 public:
     // 共通パラメータの型エイリアス
     using Parameters      = ParticleCommon::Parameters;
-    using GroupParamaters = ParticleCommon::GroupParamaters;
+    using GroupParameters = ParticleCommon::GroupParameters;
     using ScaleEaseParm   = ParticleCommon::ScaleEaseParam;
     using UVParm          = ParticleCommon::UVParam;
     using JointParent     = ParticleCommon::JointParent;
@@ -68,7 +68,7 @@ private:
 
     // Parameters
     Parameters parameters_;
-    GroupParamaters groupParameters_;
+    GroupParameters groupParameters_;
     TimingParam timingParam_;
     TimeModeSelector timeModeSelector_;
     EmitterPositionMode emitPositionMode_ = EmitterPositionMode::None;
@@ -79,7 +79,7 @@ private:
 
     // TypeInt
     int32_t primitiveTypeInt_    = 0;
-    int32_t billBordTypeInt_     = 0;
+    int32_t billboardTypeInt_     = 0;
     int32_t blendModeInt_        = 0;
     int32_t emitPositionModeInt_ = 0;
 
@@ -107,7 +107,7 @@ public:
     // Getter
     const TimingParam& GetTimingParam() const { return timingParam_; }
     const TimeModeSelector& GetTimeModeSelector() const { return timeModeSelector_; }
-    const GroupParamaters& GetGroupParameters() const { return groupParameters_; }
+    const GroupParameters& GetGroupParameters() const { return groupParameters_; }
     const Parameters& GetParticleParameters() const { return parameters_; }
     float GetIntervalTime() const { return intervalTime_; }
     int32_t GetParticleCount() const { return particleCount_; }

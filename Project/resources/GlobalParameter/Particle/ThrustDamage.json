@@ -1,4 +1,4 @@
-{
+﻿{
   "ThrustDamage": {
     "AdaptRotateIsX": false,
     "AdaptRotateIsY": false,
@@ -87,7 +87,7 @@
       29.100000381469727,
       -12.800000190734863
     ],
-    "isBillBord": false,
+    "isBillboard": false,
     "isMoveForRail": false,
     "isRotateforDirection": false,
     "isScalerScale": true,
