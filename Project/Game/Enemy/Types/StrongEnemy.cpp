@@ -124,3 +124,24 @@ void StrongEnemy::AttackFinish() {
 void StrongEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
     BaseEnemy::DisplaySprite(viewProjection);
 }
+
+///========================================================
+/// 追跡開始時のアニメーション初期化（StrongEnemy用）
+///========================================================
+void StrongEnemy::InitChaseAnimation() {
+    
+}
+
+///========================================================
+/// 追跡中のアニメーション更新（StrongEnemy用）
+///========================================================
+void StrongEnemy::UpdateChaseAnimation(float deltaTime) {
+    deltaTime;
+}
+
+///========================================================
+/// 待機アニメーションにリセット（StrongEnemy用）
+///========================================================
+void StrongEnemy::ResetToWaitAnimation() {
+   
+}

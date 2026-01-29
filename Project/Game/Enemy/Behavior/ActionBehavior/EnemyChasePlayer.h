@@ -16,6 +16,7 @@ private:
     float currentChaseTime_; // 現在の追従時間
     float chaseResetTimer_; // 追従リセットタイマー
     bool isChaseTimeOver_; // 追従時間超過フラグ
+    bool isChaseStarted_; // 追跡開始フラグ（アニメーション制御用）
 
     KetaEngine::Easing<Vector3> scaleEasing_;
     Vector3 tempEnemyScale_;
