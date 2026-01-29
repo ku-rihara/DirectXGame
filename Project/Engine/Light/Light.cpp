@@ -43,7 +43,7 @@ void Light::Init(DirectXCommon* dxCommon) {
 
 void Light::Update() {
     spotLightManager_->Update();
-    spotLightCoutMax_ = int32_t(spotLightManager_->GetLightCount());
+    spotLightCountMax_ = int32_t(spotLightManager_->GetLightCount());
 }
 
 void Light::InitAllLights() {
@@ -85,18 +85,18 @@ void Light::DebugImGui() {
 
         // ライト数の表示
         ImGui::Text("Light Point Count: %zu", pointLightManager_->GetLightCount());
-        ImGui::Text("Light Spot  Count: %zu", spotLightCoutMax_);
+        ImGui::Text("Light Spot  Count: %zu", spotLightCountMax_);
 
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
     }
 
-    ImGui::SeparatorText("Paramater");
+    ImGui::SeparatorText("Parameter");
 
     ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
     directionalLight_->DebugImGui();
     pointLightManager_->DebugImGui();
-    spotLightManager_->AdJustParams();
+    spotLightManager_->AdjustParams();
     areaLightManager_->DebugImGui();
     ambientLight_->DebugImGui();
 
@@ -104,7 +104,7 @@ void Light::DebugImGui() {
 }
 
 void Light::RegisterParams() {
-    globalParameter_->Regist(groupName_, "spotLightCoutMax", &spotLightCoutMax_);
+    globalParameter_->Regist(groupName_, "spotLightCountMax", &spotLightCountMax_);
 }
 
 void Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {
@@ -125,7 +125,7 @@ void Light::AddSpotLight() {
     spotLightManager_->Add(dxCommon_->GetDevice().Get(), int32_t(spotLightManager_->GetLightCount()));
 
     // データを合わせる
-    lightCountData_->spotLightCount = int(spotLightCoutMax_);
+    lightCountData_->spotLightCount = int(spotLightCountMax_);
 }
 void Light::AddPointLight() {
     pointLightManager_->Add(dxCommon_->GetDevice().Get());

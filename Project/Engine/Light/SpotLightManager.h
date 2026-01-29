@@ -46,7 +46,7 @@ public:
 
     void Update(); //< 更新処理
     void UpdateStructuredBuffer(); //< StructuredBufferの更新
-    void AdJustParams(); //< パラメータ調整
+    void AdjustParams(); //< パラメータ調整
 
 private:
     std::vector<std::unique_ptr<SpotLight>> spotLights_;

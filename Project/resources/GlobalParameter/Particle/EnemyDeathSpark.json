@@ -1,4 +1,4 @@
-{
+﻿{
     "EnemyDeathSpark": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -127,14 +127,14 @@
         ],
         "blendMode": 1,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillboard": true,
         "isFloatVelocity": true,
         "isMoveForRail": false,
         "isRotateforDirection": true,
         "isScalerScale": false,
         "isShot": true,
         "moveSpeed": 0.0,
-        "preBillBordType_": 0,
+        "preBillboardType_": 0,
         "scaleEaseParm.easeSpeed": 0.6700000166893005,
         "scaleEaseParm.easeTypeInt": 0,
         "scaleEaseParm.endValueF.max": 0.0,

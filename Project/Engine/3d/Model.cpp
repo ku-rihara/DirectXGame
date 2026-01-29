@@ -8,7 +8,7 @@ using namespace KetaEngine;
 // class
 #include "Base/TextureManager.h"
 #include "Base/Dx/DirectXCommon.h"
-#include "Lighrt/Light.h"
+#include "Light/Light.h"
 #include "Base/Material/BaseMaterial.h"
 // pipeline
 #include"Pipeline/Object3D/Object3DPipeline.h"

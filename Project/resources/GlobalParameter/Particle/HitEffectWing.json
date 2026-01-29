@@ -1,4 +1,4 @@
-{
+﻿{
   "HitEffectWing": {
     "AdaptRotateIsX": false,
     "AdaptRotateIsY": false,
@@ -105,11 +105,11 @@
     "UV isScroolEachPixel": false,
     "blendMode": 1,
     "isAlphaNoMove": false,
-    "isBillBord": true,
+    "isBillboard": true,
     "isRotateforDirection": false,
     "isScalerScale": true,
     "isShot": true,
-    "preBillBordType_": 0,
+    "preBillboardType_": 0,
     "scaleEaseParm.easeTypeInt": 0,
     "scaleEaseParm.endValueF.max": 20.0,
     "scaleEaseParm.endValueF.min": 20.0,

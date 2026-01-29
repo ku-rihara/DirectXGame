@@ -1,4 +1,4 @@
-{
+﻿{
     "Crack": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -127,14 +127,14 @@
         ],
         "blendMode": 0,
         "isAlphaNoMove": false,
-        "isBillBord": false,
+        "isBillboard": false,
         "isFloatVelocity": true,
         "isMoveForRail": false,
         "isRotateforDirection": false,
         "isScalerScale": true,
         "isShot": true,
         "moveSpeed": 0.0,
-        "preBillBordType_": 2,
+        "preBillboardType_": 2,
         "scaleEaseParm.easeTypeInt": 3,
         "scaleEaseParm.endValueF.max": 0.0,
         "scaleEaseParm.endValueF.min": 0.0,

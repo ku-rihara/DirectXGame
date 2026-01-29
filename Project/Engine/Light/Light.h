@@ -77,7 +77,7 @@ private:
     GlobalParameter* globalParameter_;
     const std::string groupName_ = "LightCount";
 
-    int32_t spotLightCoutMax_;
+    int32_t spotLightCountMax_;
     int32_t current;
 
     // Lights

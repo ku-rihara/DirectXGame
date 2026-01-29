@@ -72,7 +72,7 @@ void TitleLeftPunch::Update() {
         waitTine_ += KetaEngine::Frame::DeltaTime();
 
         /// コンボ途切れ
-        if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(SECOND).waitTime) {
+        if (waitTine_ >= pPlayerParameter_->GetNormalComboParam(SECOND).waitTime) {
             pPlayer_->ChangeTitleBehavior(std::make_unique<TitleWait>(pPlayer_));
         }
 

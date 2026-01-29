@@ -1,4 +1,4 @@
-{
+﻿{
   "comboFireNozzleRigth": {
     "AdaptRotateIsX": false,
     "AdaptRotateIsY": false,
@@ -117,7 +117,7 @@
     "UV isScroolEachPixel": false,
     "blendMode": 1,
     "isAlphaNoMove": true,
-    "isBillBord": true,
+    "isBillboard": true,
     "isFloatVelocity": false,
     "isMoveForRail": true,
     "isRailRoop": false,
@@ -125,7 +125,7 @@
     "isScalerScale": false,
     "isShot": false,
     "moveSpeed": 91.0,
-    "preBillBordType_": 0,
+    "preBillboardType_": 0,
     "scaleEaseParm.easeTypeInt": 3,
     "scaleEaseParm.endValueF.max": 1.7999999523162842,
     "scaleEaseParm.endValueF.min": 1.2999999523162842,

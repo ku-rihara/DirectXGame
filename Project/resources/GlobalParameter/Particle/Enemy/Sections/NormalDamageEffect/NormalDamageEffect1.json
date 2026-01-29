@@ -1,4 +1,4 @@
-{
+﻿{
     "NormalDamageEffect1": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -123,13 +123,13 @@
         "blendMode": 1,
         "emitPositionMode": 2,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillboard": true,
         "isFloatVelocity": true,
         "isRotateForDirection": true,
         "isScalerScale": false,
         "isShot": true,
         "modelFilePath": "",
-        "preBillBordType": 0,
+        "preBillboardType": 0,
         "primitiveTypeInt": 0,
         "scaleEaseParam.backRatio": 0.0,
         "scaleEaseParam.easeTypeInt": 6,

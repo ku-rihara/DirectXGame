@@ -30,7 +30,7 @@ void PlayerParameter::AdjustParam() {
         ImGui::DragFloat("spawnParamWaitTime", &playerParams_.spawnParam.waitTime_, 0.01f);
 
         /// 　Floatのパラメータ
-        ImGui::SeparatorText("FloatParamater");
+        ImGui::SeparatorText("FloatParameter");
         ImGui::SeparatorText("Normal");
         ImGui::DragFloat("jumpSpeed", &playerParams_.normalJump.jumpSpeed, 0.01f);
         ImGui::DragFloat("MoveSpeed", &playerParams_.moveSpeed, 0.01f);

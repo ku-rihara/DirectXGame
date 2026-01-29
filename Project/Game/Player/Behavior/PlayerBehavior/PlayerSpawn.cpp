@@ -33,7 +33,7 @@ PlayerSpawn::PlayerSpawn(Player* player)
         step_ = Step::END;
     });
 
-    speed_ = pPlayerParameter_->GetParamaters().moveSpeed;
+    speed_ = pPlayerParameter_->GetParameters().moveSpeed;
 
     step_ = Step::WAIT;
 }
@@ -53,7 +53,7 @@ void PlayerSpawn::Update([[maybe_unused]] float timeSpeed) {
 
        
         startWaitTime_ += KetaEngine::Frame::DeltaTime();
-        if (startWaitTime_ < pPlayerParameter_->GetParamaters().spawnParam.waitTime_) {
+        if (startWaitTime_ < pPlayerParameter_->GetParameters().spawnParam.waitTime_) {
             break;
         }
         pOwner_->SetShadowFrag(true);

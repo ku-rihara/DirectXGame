@@ -31,7 +31,7 @@ namespace KetaEngine {
 class ParticleManager {
 public:
     // 共通パラメータの型エイリアス
-    using GroupParamaters = ParticleCommon::GroupParamaters;
+    using GroupParameters = ParticleCommon::GroupParameters;
     using Parameters      = ParticleCommon::Parameters;
     using EaseParm        = ParticleCommon::ScaleEaseParam;
 
@@ -118,7 +118,7 @@ public:
         uint32_t textureHandle;
         ParticleFprGPU* instancingData;
         std::list<Particle> particles;
-        GroupParamaters param;
+        GroupParameters param;
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
     };
 
@@ -140,9 +140,9 @@ public:
     void CreateInstancingResource(const std::string& name, uint32_t instanceNum);
     void ResetAllParticles();
 
-    Particle MakeParticle(const Parameters& paramaters);
-    void Emit(std::string name, const Parameters& paramaters,
-        const GroupParamaters& groupParamaters, int32_t count);
+    Particle MakeParticle(const Parameters& parameters);
+    void Emit(std::string name, const Parameters& parameters,
+        const GroupParameters& groupParameters, int32_t count);
 
     void AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group);
 

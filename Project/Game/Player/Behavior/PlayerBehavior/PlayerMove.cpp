@@ -33,7 +33,7 @@ PlayerMove::PlayerMove(Player* player)
     moveEase_->AddStep("PlayerLandingScale.json", &tempScale_);
     moveEase_->SetLoop(true);
 
-    speed_ = pPlayerParameter_->GetParamaters().moveSpeed;
+    speed_ = pPlayerParameter_->GetParameters().moveSpeed;
 
     animationStep_ = AnimationStep::INIT;
 }
@@ -49,9 +49,9 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
     WaitAnimation();
 
     if ((KetaEngine::Input::IsPressPad(0, GamepadButton::B))) {
-        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed * 2.4f);
+        pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed * 2.4f);
     } else {
-        pOwner_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+        pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed);
     }
 
     // 　ジャンプに切り替え

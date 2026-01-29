@@ -4,7 +4,7 @@
 // math
 #include "2d/SpriteRegistry.h"
 #include "Frame/Frame.h"
-#include "Lighrt/Light.h"
+#include "Light/Light.h"
 #include "Scene/Manager/SceneManager.h"
 #include <imgui.h>
 

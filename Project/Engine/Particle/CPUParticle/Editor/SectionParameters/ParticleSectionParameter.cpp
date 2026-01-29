@@ -8,7 +8,7 @@ using namespace KetaEngine;
 
 void ParticleSectionParameter::AdaptIntToType() {
     groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
-    groupParameters_.billBordType = static_cast<BillboardType>(groupParameters_.billBordType);
+    groupParameters_.billboardType = static_cast<BillboardType>(groupParameters_.billboardType);
     emitPositionMode_             = static_cast<EmitterPositionMode>(emitPositionModeInt_);
 }
 
@@ -68,7 +68,7 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     // Flag
     globalParam->Regist(groupName, "isScalerScale", &parameters_.isScalerScale);
     globalParam->Regist(groupName, "isRotateForDirection", &parameters_.isRotateForDirection);
-    globalParam->Regist(groupName, "isBillBord", &groupParameters_.isBillBord);
+    globalParam->Regist(groupName, "isBillboard", &groupParameters_.isBillboard);
     globalParam->Regist(groupName, "AdaptRotateIsX", &groupParameters_.adaptRotate_.isX);
     globalParam->Regist(groupName, "AdaptRotateIsY", &groupParameters_.adaptRotate_.isY);
     globalParam->Regist(groupName, "AdaptRotateIsZ", &groupParameters_.adaptRotate_.isZ);
@@ -102,7 +102,7 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "RotateEaseParam.backRatio", &parameters_.rotateEaseParam.baseParam.backRatio);
 
     // Mode Setting
-    globalParam->Regist(groupName, "preBillBordType", &billBordTypeInt_);
+    globalParam->Regist(groupName, "preBillboardType", &billboardTypeInt_);
     globalParam->Regist(groupName, "blendMode", &blendModeInt_);
 
     // Texture
@@ -184,7 +184,7 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     // Flag
     parameters_.isScalerScale         = globalParam->GetValue<bool>(groupName, "isScalerScale");
     parameters_.isRotateForDirection  = globalParam->GetValue<bool>(groupName, "isRotateForDirection");
-    groupParameters_.isBillBord       = globalParam->GetValue<bool>(groupName, "isBillBord");
+    groupParameters_.isBillboard       = globalParam->GetValue<bool>(groupName, "isBillboard");
     groupParameters_.adaptRotate_.isX = globalParam->GetValue<bool>(groupName, "AdaptRotateIsX");
     groupParameters_.adaptRotate_.isY = globalParam->GetValue<bool>(groupName, "AdaptRotateIsY");
     groupParameters_.adaptRotate_.isZ = globalParam->GetValue<bool>(groupName, "AdaptRotateIsZ");
@@ -217,7 +217,7 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.rotateEaseParam.baseParam.backRatio   = globalParam->GetValue<float>(groupName, "RotateEaseParam.backRatio");
 
     // Mode
-    billBordTypeInt_ = globalParam->GetValue<int>(groupName, "preBillBordType");
+    billboardTypeInt_ = globalParam->GetValue<int>(groupName, "preBillboardType");
     blendModeInt_    = globalParam->GetValue<int>(groupName, "blendMode");
 
     // Texture
@@ -244,7 +244,7 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
 
     // Apply loaded values
     groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
-    groupParameters_.billBordType = static_cast<BillboardType>(billBordTypeInt_);
+    groupParameters_.billboardType = static_cast<BillboardType>(billboardTypeInt_);
     groupParameters_.isShot       = isShot_;
 
     AdaptIntToType();
@@ -399,7 +399,7 @@ void ParticleSectionParameter::AdjustParam() {
 
     // BillBord
     if (ImGui::CollapsingHeader("BillBoard")) {
-        ImGui::Checkbox("IsBillBoard", &groupParameters_.isBillBord);
+        ImGui::Checkbox("IsBillBoard", &groupParameters_.isBillboard);
 
         ImGui::SeparatorText("IsRotateAdapt");
         ImGui::Checkbox("IsX", &groupParameters_.adaptRotate_.isX);
@@ -408,8 +408,8 @@ void ParticleSectionParameter::AdjustParam() {
 
         ImGui::SeparatorText("BillBordType");
         const char* billBordItems[] = {"XYZ", "Y"};
-        if (ImGui::Combo("Billboard Type", &billBordTypeInt_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
-            groupParameters_.billBordType = static_cast<BillboardType>(billBordTypeInt_);
+        if (ImGui::Combo("Billboard Type", &billboardTypeInt_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
+            groupParameters_.billboardType = static_cast<BillboardType>(billboardTypeInt_);
         }
     }
 
@@ -572,8 +572,8 @@ void ParticleSectionParameter::SetBlendMode(BlendMode mode) {
 }
 
 void ParticleSectionParameter::SetBillboardType(BillboardType type) {
-    billBordTypeInt_              = static_cast<int32_t>(type);
-    groupParameters_.billBordType = type;
+    billboardTypeInt_              = static_cast<int32_t>(type);
+    groupParameters_.billboardType = type;
 }
 
 void ParticleSectionParameter::SetParentTransform(const WorldTransform* transform) {

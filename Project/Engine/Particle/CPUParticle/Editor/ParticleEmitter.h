@@ -23,7 +23,7 @@ class Object3DAnimation;
 class ParticleEmitter : public ParticleParameter {
 public:
     // 共通パラメータの型エイリアス
-    using GroupParamaters = ParticleCommon::GroupParamaters;
+    using GroupParameters = ParticleCommon::GroupParameters;
     using Parameters      = ParticleCommon::Parameters;
     using EaseParm        = ParticleCommon::ScaleEaseParam;
     using UVParm          = ParticleCommon::UVParam;

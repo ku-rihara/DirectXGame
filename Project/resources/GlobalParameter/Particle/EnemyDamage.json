@@ -1,4 +1,4 @@
-{
+﻿{
     "EnemyDamage": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -90,13 +90,13 @@
         "Speed Max": 31.700000762939453,
         "Speed Min": 18.700000762939453,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillboard": true,
         "isMoveForRail": false,
         "isRotateforDirection": true,
         "isScalerScale": false,
         "isShot": true,
         "moveSpeed": 0.0,
-        "preBillBordType_": 0,
+        "preBillboardType_": 0,
         "scaleEaseParm.easeTypeInt": 0,
         "scaleEaseParm.endValueF.max": 0.0,
         "scaleEaseParm.endValueF.min": 0.0,

@@ -1,4 +1,4 @@
-{
+﻿{
     "RushEffectRing": {
         "AdaptRotateIsX": true,
         "AdaptRotateIsY": true,
@@ -117,12 +117,12 @@
         "UV isScroolEachPixel": true,
         "blendMode": 1,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillboard": true,
         "isFloatVelocity": true,
         "isRotateforDirection": false,
         "isScalerScale": true,
         "isShot": true,
-        "preBillBordType_": 2,
+        "preBillboardType_": 2,
         "scaleEaseParm.easeTypeInt": 0,
         "scaleEaseParm.endValueF.max": 5.5,
         "scaleEaseParm.endValueF.min": 7.0,

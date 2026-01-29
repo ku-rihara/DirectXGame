@@ -12,8 +12,8 @@
 #include "Behavior/TitleBehavior/TitleFirstFall.h"
 
 // light
-#include "Lighrt/AmbientLight.h"
-#include "Lighrt/Light.h"
+#include "Light/AmbientLight.h"
+#include "Light/Light.h"
 // Field
 #include "Field/Field.h"
 // LockOn
@@ -72,7 +72,7 @@ void Player::Init() {
     jumpAttackUI_->Init();
 
     // パラメータセット
-    baseTransform_.translation_ = parameters_->GetParamaters().startPos_;
+    baseTransform_.translation_ = parameters_->GetParameters().startPos_;
 
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));
@@ -325,10 +325,10 @@ void Player::Fall(float& speed, float fallSpeedLimit, float gravity, const bool&
     speed = max(speed - (gravity * KetaEngine::Frame::DeltaTimeRate()), -fallSpeedLimit);
 
     // 着地
-    if (baseTransform_.translation_.y <= parameters_->GetParamaters().startPos_.y) {
+    if (baseTransform_.translation_.y <= parameters_->GetParameters().startPos_.y) {
 
         speed                         = 0.0f;
-        baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+        baseTransform_.translation_.y = parameters_->GetParameters().startPos_.y;
     }
 }
 
@@ -481,7 +481,7 @@ void Player::RotateReset() {
 }
 
 void Player::ResetPositionY() {
-    baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+    baseTransform_.translation_.y = parameters_->GetParameters().startPos_.y;
 }
 
 void Player::ResetHeadScale() {
@@ -540,5 +540,5 @@ void Player::SetComboAttackController(PlayerComboAttackController* playerComboAt
 }
 
 bool Player::CheckIsChargeMax() const {
-    return currentUpperChargeTime_ >= parameters_->GetParamaters().upperParam.chargeTime;
+    return currentUpperChargeTime_ >= parameters_->GetParameters().upperParam.chargeTime;
 }

@@ -79,10 +79,10 @@ void ParticleEmitter::Emit() {
 
     currentTime_ += Frame::DeltaTime(); // 時間加算
 
-    if (currentTime_ >= intervalTime_ || groupParamaters_.isShot) { //  間隔ごとに発動
+    if (currentTime_ >= intervalTime_ || groupParameters_.isShot) { //  間隔ごとに発動
 
         ParticleManager::GetInstance()->Emit(
-            particleName_, parameters_, groupParamaters_, particleCount_);
+            particleName_, parameters_, groupParameters_, particleCount_);
         currentTime_ = 0.0f;
     }
 }
@@ -183,11 +183,11 @@ void ParticleEmitter::SetTextureHandle(uint32_t handle) {
 /// ========================================================================================
 
 void ParticleEmitter::SetBlendMode(const BlendMode& blendmode) {
-    groupParamaters_.blendMode = blendmode;
+    groupParameters_.blendMode = blendmode;
 }
 
 void ParticleEmitter::SetBillBordType(const BillboardType& billboardType) {
-    groupParamaters_.billBordType = billboardType;
+    groupParameters_.billboardType = billboardType;
 }
 
 void ParticleEmitter::SetParentTransform(const WorldTransform* transform) {

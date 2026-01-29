@@ -1,4 +1,4 @@
-{
+﻿{
     "fallParticle": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -92,7 +92,7 @@
             13.100000381469727,
             -20.0
         ],
-        "isBillBord": false,
+        "isBillboard": false,
         "isMoveForRail": false,
         "isRotateforDirection": false,
         "isScalerScale": true,
