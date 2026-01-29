@@ -41,8 +41,6 @@ public:
     void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
-    void LoadData() override;
-    void SaveData() override;
 
     // シェイク固有
     void AdjustParam();

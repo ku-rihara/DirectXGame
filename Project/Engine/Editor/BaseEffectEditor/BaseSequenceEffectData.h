@@ -30,9 +30,7 @@ public:
     // キーフレームファイル操作
     void LoadData() override;
     void SaveData() override;
-    virtual void LoadSequenceElements() = 0;
-    virtual void SaveSequenceElements() = 0;
-
+   
 protected:
     //*---------------------------- protected Methods ----------------------------*//
 
@@ -40,6 +38,11 @@ protected:
     virtual void AdvanceToNextSequenceElement()                             = 0;
     virtual std::unique_ptr<TSequenceElement> CreateKeyFrame(int32_t index) = 0;
     virtual std::string GetSequenceElementFolderPath() const                = 0;
+
+private:
+    //*---------------------------- private Methods ----------------------------*//
+    void LoadSequenceElements();
+    void SaveSequenceElements();
 
 protected:
     //*---------------------------- protected Variant ----------------------------*//

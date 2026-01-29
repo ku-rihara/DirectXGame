@@ -246,14 +246,6 @@ void ParticleData::AdjustParam() {
 #endif
 }
 
-void ParticleData::LoadSequenceElements() {
-    BaseSequenceEffectData::LoadSequenceElements();
-}
-
-void ParticleData::SaveSequenceElements() {
-    BaseSequenceEffectData::SaveSequenceElements();
-}
-
 void ParticleData::SetIsPlayByEditor(bool is) {
 
     // セクションが空の場合は何もしない
