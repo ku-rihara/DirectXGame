@@ -1,4 +1,5 @@
 #include "NormalEnemy.h"
+#include "../Behavior/AttackStrategy/NormalEnemyAttackStrategy.h"
 #include "audio/Audio.h"
 #include "Enemy/EnemyManager.h"
 #include "Frame/Frame.h"
@@ -24,10 +25,8 @@ void NormalEnemy::Init(const Vector3& spownPos) {
     // ライティング番号
     objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = 3;
 
-    // 攻撃ステート初期化
-    attackAnticipationTimer_      = 0.0f;
-    isAttackAnticipationFinished_ = false;
-    isAttackFinished_             = false;
+    // 攻撃戦略を設定
+    SetAttackStrategy(std::make_unique<NormalEnemyAttackStrategy>(this));
 
     // 追跡アニメーション状態初期化
     chaseAnimState_    = ChaseAnimationState::NONE;
@@ -43,90 +42,6 @@ void NormalEnemy::Update() {
 
 void NormalEnemy::SpawnRenditionInit() {
     GetEnemyEffects()->Emit("SpawnEffect");
-}
-
-///========================================================
-/// 攻撃予備動作
-///========================================================
-void NormalEnemy::AttackAnticipation() {
-    // タイマー更新
-    attackAnticipationTimer_ += KetaEngine::Frame::DeltaTimeRate();
-
-    // 予備動作時間が経過したら完了フラグを立てる
-    if (attackAnticipationTimer_ >= parameter_.attackAnticipationTime) {
-        isAttackAnticipationFinished_ = true;
-    }
-}
-
-///========================================================
-/// 攻撃予備動作完了判定
-///========================================================
-bool NormalEnemy::IsAttackAnticipationFinished() {
-    return isAttackAnticipationFinished_;
-}
-
-///========================================================
-/// 攻撃開始処理
-///========================================================
-void NormalEnemy::AttackStart() {
-    // 攻撃フラグリセット
-    isAttackFinished_ = false;
-
-    // スケールを元に戻す
-    SetScale(parameter_.baseScale_);
-
-    // 攻撃コリジョンを設定して開始
-    const auto& attackParam = parameter_.attackParam;
-    attackCollisionBox_->AttackStart(
-        attackParam.attackValue,
-        attackParam.collisionSize,
-        attackParam.collisionOffset,
-        attackParam.adaptTime);
-
-    // 攻撃エフェクト再生
-    if (enemyEffects_) {
-        enemyEffects_->Emit("AttackEffect");
-    }
-
-    // 攻撃音再生
-    // KetaEngine::Audio::GetInstance()->PlaySE("EnemyAttack.wav", 0.5f);
-}
-
-///========================================================
-/// 攻撃更新処理
-///========================================================
-void NormalEnemy::AttackUpdate() {
-    // コリジョンが終了したか確認
-    if (attackCollisionBox_->GetIsFinish()) {
-        isAttackFinished_ = true;
-    }
-
-    // プレイヤーにヒットした場合の処理
-    if (attackCollisionBox_->GetIsHit()) {
-
-        // ヒットフラグをリセット
-        attackCollisionBox_->SetIsHit(false);
-    }
-}
-
-///========================================================
-/// 攻撃完了判定
-///========================================================
-bool NormalEnemy::IsAttackFinished() {
-    return isAttackFinished_;
-}
-
-///========================================================
-/// 攻撃終了処理
-///========================================================
-void NormalEnemy::AttackFinish() {
-    // 攻撃ステートをリセット
-    attackAnticipationTimer_      = 0.0f;
-    isAttackAnticipationFinished_ = false;
-    isAttackFinished_             = false;
-
-    // 攻撃から戻ってきたフラグを立てる
-    SetIsReturningFromAttack(true);
 }
 
 ///========================================================

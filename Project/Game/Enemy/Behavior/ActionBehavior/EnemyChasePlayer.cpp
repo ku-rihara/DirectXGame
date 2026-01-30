@@ -39,7 +39,7 @@ EnemyChasePlayer::~EnemyChasePlayer() {
 
 void EnemyChasePlayer::Update() {
 
-    // 追跡開始時のアニメーション初期化（一度だけ実行）
+    // 追跡開始時のアニメーション初期化
     if (!isChaseStarted_) {
         pBaseEnemy_->InitChaseAnimation();
         isChaseStarted_ = true;
