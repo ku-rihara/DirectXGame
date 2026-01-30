@@ -199,6 +199,8 @@
         <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyChasePlayer.cpp"/>
         <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemySpawn.cpp"/>
         <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyWait.cpp"/>
+        <ClCompile Include="Game\Enemy\Behavior\AttackStrategy\NormalEnemyAttackStrategy.cpp"/>
+        <ClCompile Include="Game\Enemy\Behavior\AttackStrategy\StrongEnemyAttackStrategy.cpp"/>
         <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp"/>
         <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.cpp"/>
         <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp"/>
@@ -499,6 +501,9 @@
         <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyChasePlayer.h"/>
         <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemySpawn.h"/>
         <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyWait.h"/>
+        <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\IEnemyAttackStrategy.h"/>
+        <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\NormalEnemyAttackStrategy.h"/>
+        <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\StrongEnemyAttackStrategy.h"/>
         <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h"/>
         <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.h"/>
         <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h"/>

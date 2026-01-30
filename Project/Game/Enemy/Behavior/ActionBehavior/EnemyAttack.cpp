@@ -33,12 +33,14 @@ void EnemyAttack::ChangeState(AttackState newState) {
             // 予備動作処理
             stateTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
-            // BaseEnemyの派生クラスの予備動作を実行
-            pBaseEnemy_->AttackAnticipation();
+            // 攻撃戦略の予備動作を実行
+            if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
+                strategy->Anticipation();
 
-            // 予備動作完了チェック
-            if (pBaseEnemy_->IsAttackAnticipationFinished()) {
-                ChangeState(AttackState::START);
+                // 予備動作完了チェック
+                if (strategy->IsAnticipationFinished()) {
+                    ChangeState(AttackState::START);
+                }
             }
         };
         break;
@@ -46,7 +48,9 @@ void EnemyAttack::ChangeState(AttackState newState) {
     case AttackState::START:
         currentStateFunction_ = [this]() {
             // 攻撃開始処理
-            pBaseEnemy_->AttackStart();
+            if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
+                strategy->Start();
+            }
 
             // すぐに更新ステートへ
             ChangeState(AttackState::UPDATE);
@@ -58,12 +62,14 @@ void EnemyAttack::ChangeState(AttackState newState) {
             // 攻撃更新処理
             stateTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
-            // BaseEnemyの派生クラスの攻撃更新を実行
-            pBaseEnemy_->AttackUpdate();
+            // 攻撃戦略の攻撃更新を実行
+            if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
+                strategy->Update();
 
-            // 攻撃完了チェック
-            if (pBaseEnemy_->IsAttackFinished()) {
-                ChangeState(AttackState::FINISH);
+                // 攻撃完了チェック
+                if (strategy->IsFinished()) {
+                    ChangeState(AttackState::FINISH);
+                }
             }
         };
         break;
@@ -71,9 +77,11 @@ void EnemyAttack::ChangeState(AttackState newState) {
     case AttackState::FINISH:
         currentStateFunction_ = [this]() {
             // 終了処理
-            pBaseEnemy_->AttackFinish();
+            if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
+                strategy->Finish();
+            }
 
-            // Waitステートに戻る（攻撃後待機時間は自動的にWaitで管理される）
+            // Waitステートに戻る
             pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
         };
         break;

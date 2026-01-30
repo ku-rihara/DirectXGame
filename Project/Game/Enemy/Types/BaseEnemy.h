@@ -14,6 +14,8 @@
 #include "Collider/AABBCollider.h"
 #include "Enemy/Effects/EnemyEffects.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
+// AttackStrategy
+#include "../Behavior/AttackStrategy/IEnemyAttackStrategy.h"
 // std
 #include <cstdint>
 #include <memory>
@@ -83,34 +85,16 @@ public:
     virtual void SpawnRenditionInit() = 0;
 
     /// <summary>
-    /// 攻撃予備動作
+    /// 攻撃戦略を設定
     /// </summary>
-    virtual void AttackAnticipation() = 0;
+    void SetAttackStrategy(std::unique_ptr<IEnemyAttackStrategy> strategy) {
+        attackStrategy_ = std::move(strategy);
+    }
 
     /// <summary>
-    /// 攻撃予備動作が完了したか
+    /// 攻撃戦略を取得
     /// </summary>
-    virtual bool IsAttackAnticipationFinished() = 0;
-
-    /// <summary>
-    /// 攻撃開始処理
-    /// </summary>
-    virtual void AttackStart() = 0;
-
-    /// <summary>
-    /// 攻撃更新処理
-    /// </summary>
-    virtual void AttackUpdate() = 0;
-
-    /// <summary>
-    /// 攻撃が完了したか
-    /// </summary>
-    virtual bool IsAttackFinished() = 0;
-
-    /// <summary>
-    /// 攻撃終了処理
-    /// </summary>
-    virtual void AttackFinish() = 0;
+    IEnemyAttackStrategy* GetAttackStrategy() const { return attackStrategy_.get(); }
 
     /// <summary>
     /// スプライトUIの表示
@@ -126,18 +110,18 @@ public:
     /// <summary>
     /// 追跡開始時のアニメーション初期化
     /// </summary>
-    virtual void InitChaseAnimation() = 0;
+    virtual void InitChaseAnimation() {}
 
     /// <summary>
     /// 追跡中のアニメーション更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    virtual void UpdateChaseAnimation(float deltaTime) = 0;
+    virtual void UpdateChaseAnimation([[maybe_unused]] float deltaTime) {}
 
     /// <summary>
     /// 待機アニメーションにリセット
     /// </summary>
-    virtual void ResetToWaitAnimation() = 0;
+    virtual void ResetToWaitAnimation() {}
 
     /// <summary>
     /// ジャンプ処理
@@ -228,7 +212,9 @@ private:
     std::string lastReceivedAttackName_;
 
 protected:
- 
+    // 攻撃戦略
+    std::unique_ptr<IEnemyAttackStrategy> attackStrategy_;
+
     std::unique_ptr<KetaEngine::Object3d> obj3d_;
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
 

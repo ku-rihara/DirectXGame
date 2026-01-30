@@ -334,6 +334,9 @@
         <Filter Include="Game\Enemy\Behavior\ActionBehavior">
             <UniqueIdentifier>{5C7F70ED-ABE7-464C-84F2-F5DC4D04632A}</UniqueIdentifier>
         </Filter>
+        <Filter Include="Game\Enemy\Behavior\AttackStrategy">
+            <UniqueIdentifier>{E8F3A1B2-C4D5-6E7F-8901-23456789ABCD}</UniqueIdentifier>
+        </Filter>
         <Filter Include="Game\Enemy\Behavior\DamageReactionBehavior">
             <UniqueIdentifier>{A1313281-189E-4EA3-8109-2404243112A2}</UniqueIdentifier>
         </Filter>
@@ -935,6 +938,12 @@
         </ClCompile>
         <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyWait.cpp">
             <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
+        </ClCompile>
+        <ClCompile Include="Game\Enemy\Behavior\AttackStrategy\NormalEnemyAttackStrategy.cpp">
+            <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
+        </ClCompile>
+        <ClCompile Include="Game\Enemy\Behavior\AttackStrategy\StrongEnemyAttackStrategy.cpp">
+            <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
         </ClCompile>
         <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp">
             <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
@@ -1827,6 +1836,15 @@
         </ClInclude>
         <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyWait.h">
             <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
+        </ClInclude>
+        <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\IEnemyAttackStrategy.h">
+            <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
+        </ClInclude>
+        <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\NormalEnemyAttackStrategy.h">
+            <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
+        </ClInclude>
+        <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\StrongEnemyAttackStrategy.h">
+            <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
         </ClInclude>
         <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h">
             <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
