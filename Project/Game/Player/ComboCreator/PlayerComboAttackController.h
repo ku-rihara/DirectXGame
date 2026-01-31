@@ -93,6 +93,12 @@ public:
     const std::vector<std::unique_ptr<PlayerComboAttackData>>& GetAllAttacks() const { return attacks_; }
     const int& GetAttackCount() const { return static_cast<int>(attacks_.size()); }
 
+    /// <summary>
+    /// 指定した攻撃が最初の攻撃かどうかを判定
+    /// 他の攻撃のcomboBranchesから参照されていなければ最初の攻撃
+    /// </summary>
+    bool IsFirstAttack(const std::string& attackName) const;
+
     void SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite);
     void SetCombo(Combo* combo);
     void SetPlayer(Player* player);

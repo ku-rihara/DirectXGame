@@ -19,11 +19,9 @@
         "HitStop_OnHit_StartTiming": 0.0,
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": true,
-        "IsFirstAttack": false,
         "KnockBackPower": 37.189998626708984,
         "Main_Head_FileName": "",
         "Main_Head_StartTiming": 0.0,
-        "NextAttackType": "",
         "ObjAnim_Head_FileName": "StrongUpper",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "UpperHandMotion",
@@ -40,7 +38,6 @@
         "PostEffectParam_OnHit_StartTiming": 0.0,
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
-        "RequireHit": false,
         "ShakeAction_FileName": "None",
         "ShakeAction_OnHit_FileName": "ThurstAttackCamera",
         "ShakeAction_OnHit_StartTiming": 0.0,
@@ -52,7 +49,6 @@
         "Vibration_TriggerByHit": true,
         "adaptTime": 0.15000000596046448,
         "blowYPower": 40.54999923706055,
-        "cancelFrame": 0.0,
         "collisionOffsetPos": [
             0.0,
             0.0,
@@ -70,7 +66,6 @@
         "isAbleInputMoving": false,
         "isAlwaysFollowing": false,
         "isAutoAdvance": false,
-        "isCancel": false,
         "isMotionOnly": false,
         "isPositionYSelect": false,
         "keyBordBottom": 37,
@@ -84,6 +79,6 @@
             0.0
         ],
         "power": 15.0,
-        "precedeInputFrame": 0.0
+        "ComboBranchCount": 0
     }
 }

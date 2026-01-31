@@ -569,6 +569,22 @@ int32_t ToDIKCode(KeyboardKey key) {
     }
 }
 
+const char* GetKeyboardKeyName(int32_t keyValue) {
+    int32_t index = GetKeyboardKeyIndex(keyValue);
+    if (index >= 0 && index < static_cast<int32_t>(KeyboardKeyLabels.size())) {
+        return KeyboardKeyLabels[index];
+    }
+    return "Unknown";
+}
+
+const char* GetGamepadButtonName(int32_t buttonValue) {
+    int32_t index = GetGamepadButtonIndex(buttonValue);
+    if (index >= 0 && index < static_cast<int32_t>(GamepadButtonLabels.size())) {
+        return GamepadButtonLabels[index];
+    }
+    return "Unknown";
+}
+
 KeyboardKey FromDIKCode(int32_t dikCode) {
     switch (dikCode) {
     // 文字キー

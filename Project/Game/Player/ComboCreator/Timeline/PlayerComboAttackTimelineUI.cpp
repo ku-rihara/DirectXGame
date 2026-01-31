@@ -1,7 +1,9 @@
 #include "PlayerComboAttackTimelineUI.h"
 #include "../PlayerComboAttackData.h"
+#include "../PlayerComboAttackController.h"
 #include "PlayerComboAttackTimelineTrackBuilder.h"
 #include "utility/FileSelector/FileSelector.h"
+#include "Player/Player.h"
 #include <imgui.h>
 
 void PlayerComboAttackTimelineUI::Init(
@@ -32,7 +34,15 @@ void PlayerComboAttackTimelineUI::RegisterParamUIFunctions() {
     };
 
     paramUIDrawFunctions_[ParamEditType::TRIGGER] = [this]() {
-        attackData_->DrawTriggerParamUI();
+        // コントローラーからIsFirstAttackを取得
+        bool isFirstAttack = true;  // デフォルトはtrue
+        if (attackData_->GetPlayer()) {
+            auto* controller = attackData_->GetPlayer()->GetComboAttackController();
+            if (controller) {
+                isFirstAttack = controller->IsFirstAttack(attackData_->GetGroupName());
+            }
+        }
+        attackData_->DrawTriggerParamUI(isFirstAttack);
     };
 
     paramUIDrawFunctions_[ParamEditType::FLAGS] = [this]() {
@@ -40,7 +50,7 @@ void PlayerComboAttackTimelineUI::RegisterParamUIFunctions() {
     };
 
     paramUIDrawFunctions_[ParamEditType::NEXT_ATTACK] = [this]() {
-        attackData_->SelectNextAttack();
+        attackData_->DrawComboBranchesUI();
     };
 }
 
@@ -76,7 +86,7 @@ void PlayerComboAttackTimelineUI::DrawParamEditButtons() {
     }
     ImGui::SameLine();
 
-    if (ImGui::RadioButton("次の攻撃", selectedParamEditType_ == ParamEditType::NEXT_ATTACK)) {
+    if (ImGui::RadioButton("コンボ分岐", selectedParamEditType_ == ParamEditType::NEXT_ATTACK)) {
         selectedParamEditType_ = (selectedParamEditType_ == ParamEditType::NEXT_ATTACK)
                                      ? ParamEditType::NONE
                                      : ParamEditType::NEXT_ATTACK;
@@ -113,10 +123,6 @@ void PlayerComboAttackTimelineUI::DrawTrackMenuItem(
 
     if (ImGui::MenuItem(label)) {
         trackBuilder_->AddTrack(trackType);
-
-        if (trackType == PlayerComboAttackTimelineData::TrackType::CANCEL_TIME) {
-            attackData_->GetAttackParam().timingParam.isCancel = true;
-        }
 
         // 新しく追加されたトラックにコールバックを設定
         uint32_t newTrackIndex = static_cast<uint32_t>(timeline_->GetTrackCount() - 1);
@@ -160,9 +166,7 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
         DrawTrackMenuItem("左手アニメーション", TrackType::OBJ_ANIM_LEFT_HAND);
         DrawTrackMenuItem("メイン頭アニメーション", TrackType::OBJ_ANIM_MAIN_HEAD);
 
-        ImGui::SeparatorText("タイミング");
-
-        DrawTrackMenuItem("キャンセルタイム", TrackType::CANCEL_TIME);
+        // 注: キャンセルタイムと先行入力は「コンボ分岐」で各分岐ごとに設定されます
 
         ImGui::EndPopup();
     }

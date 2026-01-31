@@ -7,11 +7,9 @@
         "HitStop_FileName": "",
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
-        "IsFirstAttack": false,
         "KnockBackPower": 0.0,
         "Main_Head_FileName": "",
         "Main_Head_StartTiming": 0.0,
-        "NextAttackType": "PlayerSlamAttack",
         "ObjAnim_Head_FileName": "UpperRushMotion",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
@@ -24,13 +22,11 @@
         "PostEffectParam_FileName": "",
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
-        "RequireHit": true,
         "ShakeAction_FileName": "",
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": false,
         "adaptTime": 0.0,
         "blowYPower": 0.0,
-        "cancelFrame": 0.12999999523162842,
         "collisionOffsetPos": [
             0.0,
             0.0,
@@ -41,6 +37,7 @@
             0.0,
             0.0
         ],
+        "collisionStartTime": 0.0,
         "enableFall": true,
         "finishTimeOffset": 0.0,
         "finishWaitTime": 0.0,
@@ -48,7 +45,6 @@
         "isAbleInputMoving": false,
         "isAlwaysFollowing": false,
         "isAutoAdvance": true,
-        "isCancel": false,
         "isMotionOnly": true,
         "isPositionYSelect": true,
         "keyBordBottom": 35,
@@ -56,12 +52,19 @@
         "loopWaitTime": 0.0,
         "moveEaseTime": 0.17000000178813934,
         "moveEaseType": 0,
+        "moveStartTime": 0.0,
         "moveValue": [
             0.0,
             17.09000015258789,
             7.369999885559082
         ],
         "power": 0.0,
-        "precedeInputFrame": 0.05000000074505806
+        "ComboBranchCount": 1,
+        "Branch_0_nextAttackName": "PlayerSlamAttack",
+        "Branch_0_keyboardButton": 0,
+        "Branch_0_gamepadButton": 0,
+        "Branch_0_cancelTime": 0.0,
+        "Branch_0_precedeInputTime": 0.0,
+        "Branch_0_requireHit": false
     }
 }

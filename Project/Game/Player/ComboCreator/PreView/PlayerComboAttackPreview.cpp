@@ -111,11 +111,11 @@ bool PlayerComboAttackPreview::ShouldTriggerNextAttack() {
     }
 
     const auto& attackParam = currentAttackData_->GetAttackParam();
-
-    // 先行入力時間に達しているかチェック
-    if (attackElapsedTime_ < attackParam.timingParam.precedeInputTime) {
-        return false;
-    }
+    attackParam;
+    //// 先行入力時間に達しているかチェック
+    //if (attackElapsedTime_ < attackParam.timingParam.precedeInputTime) {
+    //    return false;
+    //}
 
     // ボタン連打間隔をチェック
     int32_t currentFrame = static_cast<int32_t>(buttonInputTimer_ / KetaEngine::Frame::DeltaTime());
@@ -149,7 +149,7 @@ void PlayerComboAttackPreview::ExecuteAttack(PlayerComboAttackData* attackData) 
     currentAttackData_ = attackData;
 
     // 次の攻撃名を取得
-    nextAttackName_ = attackData->GetAttackParam().nextAttackType;
+    nextAttackName_ = ""; /* = current->GetAttackParam().nextAttackType;*/
 
     // プレイヤーのコンボビヘイビアを攻撃アクションに変更
     player_->ChangeComboBehavior(
@@ -194,7 +194,7 @@ PlayerComboAttackData* PlayerComboAttackPreview::FindFirstAttackInChain(PlayerCo
 
             visited.insert(current->GetGroupName());
 
-            std::string nextName = current->GetAttackParam().nextAttackType;
+            std::string nextName = ""; /* = current->GetAttackParam().nextAttackType;*/
             if (nextName.empty() || nextName == "None") {
                 break;
             }

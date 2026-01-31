@@ -28,6 +28,23 @@ uint32_t TimelineDrawer::AddTrack(const std::string& trackName, std::function<vo
     return static_cast<uint32_t>(tracks_.size() - 1);
 }
 
+uint32_t TimelineDrawer::InsertTrack(uint32_t position, const std::string& trackName, std::function<void(float)> callback) {
+    TimeLineTrack newTrack;
+    newTrack.name           = trackName;
+    newTrack.onValueChanged = callback;
+    newTrack.id             = nextTrackId_++;
+
+    // 位置が範囲外の場合は末尾に追加
+    if (position >= tracks_.size()) {
+        tracks_.push_back(newTrack);
+        return static_cast<uint32_t>(tracks_.size() - 1);
+    }
+
+    // 指定位置に挿入
+    tracks_.insert(tracks_.begin() + position, newTrack);
+    return position;
+}
+
 bool TimelineDrawer::RemoveTrack(uint32_t trackIndex) {
     if (trackIndex >= tracks_.size()) {
         return false;

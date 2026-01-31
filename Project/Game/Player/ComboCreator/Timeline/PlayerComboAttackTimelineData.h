@@ -19,8 +19,6 @@ public:
         COLLISION,
         MOVE_EASING,
         FINISH_WAIT,
-        CANCEL_START,
-        PRECEDE_INPUT_START,
         COUNT
     };
 
@@ -54,6 +52,7 @@ public:
     struct TrackInfo {
         TrackType type;
         int32_t trackIndex;
+        int32_t branchIndex = -1;  // どの分岐のトラックか（-1は分岐と関係ない）
         std::string fileName;
         bool isCameraReset = false;
         float volume       = 1.0f;
@@ -70,6 +69,7 @@ public:
     void RemoveTrackInfo(int32_t trackIndex);
     TrackInfo* FindTrackInfo(int32_t trackIndex);
     bool IsTrackTypeAlreadyAdded(TrackType type) const;
+    void UpdateTrackIndicesAfterInsert(int32_t insertPosition, int32_t count);
 
     // ヘルパー
     const char* GetTrackTypeName(TrackType type) const;

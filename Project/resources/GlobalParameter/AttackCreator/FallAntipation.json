@@ -15,11 +15,9 @@
         "HitStop_FileName": "",
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
-        "IsFirstAttack": true,
         "KnockBackPower": 0.0,
         "Main_Head_FileName": "None",
         "Main_Head_StartTiming": 0.0,
-        "NextAttackType": "FallAttack",
         "ObjAnim_Head_FileName": "FallPreActionMove",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
@@ -32,13 +30,11 @@
         "PostEffectParam_FileName": "",
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
-        "RequireHit": false,
         "ShakeAction_FileName": "",
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": false,
         "adaptTime": 0.0,
         "blowYPower": 0.0,
-        "cancelFrame": 1.399999976158142,
         "collisionOffsetPos": [
             0.0,
             0.0,
@@ -56,7 +52,6 @@
         "isAbleInputMoving": false,
         "isAlwaysFollowing": false,
         "isAutoAdvance": true,
-        "isCancel": true,
         "isMotionOnly": true,
         "isPositionYSelect": false,
         "keyBordBottom": 35,
@@ -70,6 +65,12 @@
             0.0
         ],
         "power": 0.0,
-        "precedeInputFrame": 0.0
+        "ComboBranchCount": 1,
+        "Branch_0_nextAttackName": "FallAttack",
+        "Branch_0_keyboardButton": 35,
+        "Branch_0_gamepadButton": 16384,
+        "Branch_0_cancelTime": 1.399999976158142,
+        "Branch_0_precedeInputTime": 0.0,
+        "Branch_0_requireHit": false
     }
 }

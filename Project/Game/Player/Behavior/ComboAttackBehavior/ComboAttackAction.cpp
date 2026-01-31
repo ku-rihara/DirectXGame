@@ -35,20 +35,31 @@ void ComboAttackAction::Init() {
     collisionTimer_    = 0.0f;
     isCollisionActive_ = false;
     hasHitEnemy_       = false;
+    isReserveNextCombo_ = false;
+    isAttackCancel_ = false;
+    selectedBranchIndex_ = -1;
 
-    // 次の攻撃データを取得
-    nextAttackName_ = attackData_->GetAttackParam().nextAttackType;
-    if (nextAttackName_ != "None" && !nextAttackName_.empty()) {
-        nextAttackData_ = pOwner_->GetComboAttackController()->GetAttackByName(nextAttackName_);
+    // 次の攻撃候補リストを構築
+    nextAttackCandidates_.clear();
+    const auto& branches = attackData_->GetAttackParam().comboBranches;
+    PlayerComboAttackController* controller = pOwner_->GetComboAttackController();
+
+    for (const auto& branch : branches) {
+        if (!branch.nextAttackName.empty() && branch.nextAttackName != "None") {
+            PlayerComboAttackData* nextAttack = controller->GetAttackByName(branch.nextAttackName);
+            if (nextAttack) {
+                NextAttackCandidate candidate;
+                candidate.branch = &branch;
+                candidate.attackData = nextAttack;
+                nextAttackCandidates_.push_back(candidate);
+            }
+        }
     }
 
     attackRendition_ = std::make_unique<PlayerAttackRendition>();
     attackRendition_->Init(pOwner_, attackData_);
 
     SetMoveEasing();
-
-    //// サウンド再生
-    // pOwner_->SoundPunch();
 
     order_ = Order::INIT;
 }
@@ -152,14 +163,25 @@ void ComboAttackAction::UpdateWait(float atkSpeed) {
 
 void ComboAttackAction::ChangeNextAttack() {
 
-    //  自動進行フラグがtrueの場合も次に進む
+    // 自動進行フラグがtrueの場合も次に進む（最初の分岐を選択）
     bool shouldAdvance = isReserveNextCombo_ || isAttackCancel_ || attackData_->GetAttackParam().timingParam.isAutoAdvance;
     KetaEngine::Input::SetVibration(0, 0.0f, 0.0f);
+
     // 次のコンボに移動する
-    if (nextAttackData_ && shouldAdvance) {
+    if (shouldAdvance && selectedBranchIndex_ >= 0 && selectedBranchIndex_ < static_cast<int32_t>(nextAttackCandidates_.size())) {
+        PlayerComboAttackData* nextAttackData = nextAttackCandidates_[selectedBranchIndex_].attackData;
 
         BaseComboAttackBehavior::ChangeNextCombo(
-            std::make_unique<ComboAttackAction>(pOwner_, nextAttackData_));
+            std::make_unique<ComboAttackAction>(pOwner_, nextAttackData));
+
+        return;
+
+    } else if (shouldAdvance && attackData_->GetAttackParam().timingParam.isAutoAdvance && !nextAttackCandidates_.empty()) {
+        // 自動進行の場合は最初の分岐を使用
+        PlayerComboAttackData* nextAttackData = nextAttackCandidates_[0].attackData;
+
+        BaseComboAttackBehavior::ChangeNextCombo(
+            std::make_unique<ComboAttackAction>(pOwner_, nextAttackData));
 
         return;
 
@@ -181,37 +203,43 @@ void ComboAttackAction::ChangeNextAttack() {
 ///  コンボ移動フラグ処理
 void ComboAttackAction::PreOderNextComboForButton() {
 
-    if (!nextAttackData_) {
+    if (nextAttackCandidates_.empty()) {
         isReserveNextCombo_ = false;
         return;
     }
 
-    // ヒット状態を渡す
-    isReserveNextCombo_ = attackData_->IsReserveNextAttack(
-        currentFrame_,
-        nextAttackData_->GetAttackParam().triggerParam,
-        hasHitEnemy_);
+    // 全ての分岐をチェック
+    for (size_t i = 0; i < nextAttackCandidates_.size(); ++i) {
+        const auto& candidate = nextAttackCandidates_[i];
+
+        // ヒット状態を渡して先行入力をチェック
+        if (attackData_->IsReserveNextAttack(currentFrame_, *candidate.branch, hasHitEnemy_)) {
+            isReserveNextCombo_ = true;
+            selectedBranchIndex_ = static_cast<int32_t>(i);
+            return;
+        }
+    }
+
+    isReserveNextCombo_ = false;
 }
 
 void ComboAttackAction::AttackCancel() {
 
-    // タイミング
-    const float cancelStartFrame = attackData_->GetAttackParam().timingParam.cancelTime;
-
-    // 先行入力受付
-    if (currentFrame_ <= cancelStartFrame) {
+    if (nextAttackCandidates_.empty()) {
         return;
     }
 
-    // ヒット状態を渡す
-    isAttackCancel_ = attackData_->IsCancelAttack(
-        currentFrame_,
-        nextAttackData_->GetAttackParam().triggerParam,
-        hasHitEnemy_);
+    // 全ての分岐をチェック
+    for (size_t i = 0; i < nextAttackCandidates_.size(); ++i) {
+        const auto& candidate = nextAttackCandidates_[i];
 
-    if (isAttackCancel_) {
-        // 次の攻撃
-        order_ = Order::CHANGE;
+        // キャンセル時間をチェック
+        if (attackData_->IsCancelAttack(currentFrame_, *candidate.branch, hasHitEnemy_)) {
+            isAttackCancel_ = true;
+            selectedBranchIndex_ = static_cast<int32_t>(i);
+            order_ = Order::CHANGE;
+            return;
+        }
     }
 }
 

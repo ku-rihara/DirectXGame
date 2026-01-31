@@ -15,11 +15,9 @@
         "HitStop_FileName": "None",
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
-        "IsFirstAttack": false,
         "KnockBackPower": 16.219999313354492,
         "Main_Head_FileName": "",
         "Main_Head_StartTiming": 0.0,
-        "NextAttackType": "RushAttack",
         "ObjAnim_Head_FileName": "FallRandingMotion",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
@@ -32,7 +30,6 @@
         "PostEffectParam_FileName": "",
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
-        "RequireHit": false,
         "ShakeAction_FileName": "FallAttackCamera",
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": false,
@@ -42,7 +39,6 @@
         "Vibration_TriggerByHit": false,
         "adaptTime": 0.25999999046325684,
         "blowYPower": 43.529998779296875,
-        "cancelFrame": 0.05999999865889549,
         "collisionOffsetPos": [
             0.0,
             0.0,
@@ -60,7 +56,6 @@
         "isAbleInputMoving": false,
         "isAlwaysFollowing": false,
         "isAutoAdvance": false,
-        "isCancel": true,
         "isMotionOnly": false,
         "isPositionYSelect": false,
         "keyBordBottom": 35,
@@ -74,6 +69,12 @@
             0.0
         ],
         "power": 21.030000686645508,
-        "precedeInputFrame": 0.10999999940395355
+        "ComboBranchCount": 1,
+        "Branch_0_nextAttackName": "RushAttack",
+        "Branch_0_keyboardButton": 35,
+        "Branch_0_gamepadButton": 16384,
+        "Branch_0_cancelTime": 0.05999999865889549,
+        "Branch_0_precedeInputTime": 0.10999999940395355,
+        "Branch_0_requireHit": false
     }
 }

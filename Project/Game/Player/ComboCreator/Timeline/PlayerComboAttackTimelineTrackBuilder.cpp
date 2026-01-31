@@ -2,6 +2,10 @@
 #include "../PlayerAttackRenditionData.h"
 #include "../PlayerComboAttackData.h"
 #include "Frame/Frame.h"
+#include "input/InputData.h"
+#include <algorithm>
+#include <functional>
+
 
 void PlayerComboAttackTimelineTrackBuilder::Init(
     PlayerComboAttackData* attackData,
@@ -61,24 +65,50 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
             static_cast<float>(waitDuration), "終了待機時間");
     }
 
-    // キャンセル開始トラック
-    if (attackParam.timingParam.isCancel) {
-        int32_t trackIdx = timelineDrawer_->AddTrack("キャンセル開始");
-        data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::CANCEL_START, trackIdx);
-
-        int32_t cancelFrame = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.cancelTime);
-        timelineDrawer_->AddKeyFrame(trackIdx, cancelFrame, 1.0f,
-            static_cast<float>(totalFrames - cancelFrame), "キャンセル可能範囲");
+    // totalFramesが0以下の場合は最小値を設定
+    if (totalFrames <= 0) {
+        totalFrames = 1;
     }
 
-    // 先行入力開始トラック
-    {
-        int32_t trackIdx = timelineDrawer_->AddTrack("先行入力開始");
-        data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::PRECEDE_INPUT_START, trackIdx);
+    // コンボ分岐ごとのトラックを作成
+    const auto& branches = attackParam.comboBranches;
+    for (size_t i = 0; i < branches.size(); ++i) {
+        const auto& branch = branches[i];
+        std::string buttonName = GetButtonDisplayName(branch.keyboardButton, branch.gamepadButton);
 
-        int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.precedeInputTime);
-        timelineDrawer_->AddKeyFrame(trackIdx, precedeFrame, 1.0f,
-            static_cast<float>(totalFrames - precedeFrame), "先行入力可能範囲");
+        // キャンセル開始トラック
+        {
+            std::string trackName = "キャンセル開始（" + buttonName + "）";
+            int32_t trackIdx = timelineDrawer_->AddTrack(trackName);
+
+            PlayerComboAttackTimelineData::TrackInfo info;
+            info.type = PlayerComboAttackTimelineData::TrackType::CANCEL_TIME;
+            info.trackIndex = trackIdx;
+            info.branchIndex = static_cast<int32_t>(i);
+            data_->AddTrackInfo(info);
+
+            int32_t cancelFrame = KetaEngine::Frame::TimeToFrame(branch.cancelTime);
+            // durationが負にならないように安全チェック
+            float duration = static_cast<float>((std::max)(0, totalFrames - cancelFrame));
+            timelineDrawer_->AddKeyFrame(trackIdx, cancelFrame, 1.0f, duration, "キャンセル可能範囲");
+        }
+
+        // 先行入力開始トラック
+        {
+            std::string trackName = "先行入力開始（" + buttonName + "）";
+            int32_t trackIdx = timelineDrawer_->AddTrack(trackName);
+
+            PlayerComboAttackTimelineData::TrackInfo info;
+            info.type = PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT;
+            info.trackIndex = trackIdx;
+            info.branchIndex = static_cast<int32_t>(i);
+            data_->AddTrackInfo(info);
+
+            int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(branch.precedeInputTime);
+            // durationが負にならないように安全チェック
+            float duration = static_cast<float>((std::max)(0, totalFrames - precedeFrame));
+            timelineDrawer_->AddKeyFrame(trackIdx, precedeFrame, 1.0f, duration, "先行入力可能範囲");
+        }
     }
 }
 
@@ -178,6 +208,89 @@ void PlayerComboAttackTimelineTrackBuilder::SetupAudioTracks() {
     // 後方互換性のために残しておく
 }
 
+void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
+    if (!attackData_ || !timelineDrawer_ || !data_) {
+        return;
+    }
+
+    // 既存の分岐トラックを削除（後ろから削除して index のずれを防ぐ）
+    std::vector<int32_t> trackIndicesToRemove;
+    for (const auto& trackInfo : data_->GetAddedTracks()) {
+        if (trackInfo.type == PlayerComboAttackTimelineData::TrackType::CANCEL_TIME ||
+            trackInfo.type == PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT) {
+            trackIndicesToRemove.push_back(trackInfo.trackIndex);
+        }
+    }
+
+    // インデックスを降順でソートして後ろから削除
+    std::sort(trackIndicesToRemove.begin(), trackIndicesToRemove.end(), std::greater<int32_t>());
+    for (int32_t trackIdx : trackIndicesToRemove) {
+        data_->RemoveTrackInfo(trackIdx);
+        timelineDrawer_->RemoveTrack(trackIdx);
+    }
+
+    // 挿入位置を計算（終了待機時間トラックの直後）
+    int32_t finishWaitTrackIdx = data_->GetDefaultTrackIndex(
+        PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT);
+    int32_t insertPosition = finishWaitTrackIdx + 1;
+
+    // 新しい分岐トラックを追加
+    const auto& branches = attackData_->GetAttackParam().comboBranches;
+    int32_t totalFrames = CalculateTotalFrames();
+
+    // totalFramesが0以下の場合は最小値を設定
+    if (totalFrames <= 0) {
+        totalFrames = 1;
+    }
+
+    for (size_t i = 0; i < branches.size(); ++i) {
+        const auto& branch = branches[i];
+        std::string buttonName = GetButtonDisplayName(branch.keyboardButton, branch.gamepadButton);
+
+        // キャンセル開始トラック
+        {
+            std::string trackName = "キャンセル開始（" + buttonName + "）";
+            int32_t trackIdx = timelineDrawer_->InsertTrack(insertPosition, trackName);
+
+            PlayerComboAttackTimelineData::TrackInfo info;
+            info.type = PlayerComboAttackTimelineData::TrackType::CANCEL_TIME;
+            info.trackIndex = trackIdx;
+            info.branchIndex = static_cast<int32_t>(i);
+            data_->AddTrackInfo(info);
+
+            int32_t cancelFrame = KetaEngine::Frame::TimeToFrame(branch.cancelTime);
+            // durationが負にならないように安全チェック
+            float duration = static_cast<float>((std::max)(0, totalFrames - cancelFrame));
+            timelineDrawer_->AddKeyFrame(trackIdx, cancelFrame, 1.0f, duration, "キャンセル可能範囲");
+
+            insertPosition++;
+        }
+
+        // 先行入力開始トラック
+        {
+            std::string trackName = "先行入力開始（" + buttonName + "）";
+            int32_t trackIdx = timelineDrawer_->InsertTrack(insertPosition, trackName);
+
+            PlayerComboAttackTimelineData::TrackInfo info;
+            info.type = PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT;
+            info.trackIndex = trackIdx;
+            info.branchIndex = static_cast<int32_t>(i);
+            data_->AddTrackInfo(info);
+
+            int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(branch.precedeInputTime);
+            // durationが負にならないように安全チェック
+            float duration = static_cast<float>((std::max)(0, totalFrames - precedeFrame));
+            timelineDrawer_->AddKeyFrame(trackIdx, precedeFrame, 1.0f, duration, "先行入力可能範囲");
+
+            insertPosition++;
+        }
+    }
+
+    // トラックインデックスの更新（挿入によりずれた分を調整）
+    data_->UpdateTrackIndicesAfterInsert(finishWaitTrackIdx + 1,
+        static_cast<int32_t>(branches.size() * 2));
+}
+
 void PlayerComboAttackTimelineTrackBuilder::AddTrack(PlayerComboAttackTimelineData::TrackType type) {
     if (!timelineDrawer_ || !data_) {
         return;
@@ -219,4 +332,30 @@ int32_t PlayerComboAttackTimelineTrackBuilder::CalculateTotalFrames() const {
     float totalTime = attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset + attackParam.timingParam.finishWaitTime;
 
     return KetaEngine::Frame::TimeToFrame(totalTime);
+}
+
+
+
+// ボタン名取得用ヘルパー
+std::string PlayerComboAttackTimelineTrackBuilder::GetButtonDisplayName(int32_t keyboardButton, int32_t gamepadButton) {
+    std::string name;
+
+    // キーボードボタン名
+    if (keyboardButton > 0) {
+        name = GetKeyboardKeyName(keyboardButton);
+    }
+
+    // ゲームパッドボタン名も追加
+    if (gamepadButton > 0) {
+        if (!name.empty()) {
+            name += "/";
+        }
+        name += GetGamepadButtonName(gamepadButton);
+    }
+
+    if (name.empty()) {
+        name = "未設定";
+    }
+
+    return name;
 }

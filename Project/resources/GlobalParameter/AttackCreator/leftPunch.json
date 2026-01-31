@@ -21,11 +21,9 @@
         "HitStop_OnHit_StartTiming": 0.0,
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
-        "IsFirstAttack": true,
         "KnockBackPower": 5.0,
         "Main_Head_FileName": "",
         "Main_Head_StartTiming": 0.0,
-        "NextAttackType": "RightPunch",
         "ObjAnim_Head_FileName": "leftPunchMove",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "leftHandPunch",
@@ -57,7 +55,6 @@
         "PostEffectParam_OnHit_StartTiming": 0.0,
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
-        "RequireHit": false,
         "Rotation_EaseType": 0,
         "Rotation_EndValue": [
             1.0,
@@ -123,7 +120,6 @@
         "Vibration_TriggerByHit": true,
         "adaptTime": 0.10000000149011612,
         "blowYPower": 48.849998474121094,
-        "cancelFrame": 0.10000000149011612,
         "collisionOffsetPos": [
             0.0,
             0.0,
@@ -141,7 +137,6 @@
         "isAbleInputMoving": true,
         "isAlwaysFollowing": false,
         "isAutoAdvance": false,
-        "isCancel": true,
         "isMotionOnly": false,
         "isPositionYSelect": false,
         "keyBordBottom": 35,
@@ -155,6 +150,12 @@
             2.0
         ],
         "power": 25.0,
-        "precedeInputFrame": 0.27000001072883606
+        "ComboBranchCount": 1,
+        "Branch_0_nextAttackName": "RightPunch",
+        "Branch_0_keyboardButton": 35,
+        "Branch_0_gamepadButton": 16384,
+        "Branch_0_cancelTime": 0.10000000149011612,
+        "Branch_0_precedeInputTime": 0.27000001072883606,
+        "Branch_0_requireHit": false
     }
 }

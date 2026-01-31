@@ -127,21 +127,24 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
             });
     });
 
-    // キャンセル時間適用
-    ApplyIfPresent(GetSingleFrameValue(PlayerComboAttackTimelineData::DefaultTrack::CANCEL_START), [&](int32_t frame) {
-        attackParam.timingParam.cancelTime = KetaEngine::Frame::FrameToTime(frame);
-    });
-
-    // 先行入力時間適用
-    ApplyIfPresent(GetSingleFrameValue(PlayerComboAttackTimelineData::DefaultTrack::PRECEDE_INPUT_START), [&](int32_t frame) {
-        attackParam.timingParam.precedeInputTime = KetaEngine::Frame::FrameToTime(frame);
-    });
-
-    // 演出系の適用（オーディオを含む）
+    // 演出系とコンボ分岐タイミングの適用
     for (const auto& trackInfo : timeLineData_->GetAddedTracks()) {
         int32_t frame = timelineDrawer_->GetFirstKeyFrameFrame(trackInfo.trackIndex);
         float timing  = KetaEngine::Frame::FrameToTime(frame);
-        ApplyTrackToRendition(trackInfo, timing);
+
+        // コンボ分岐のタイミング
+        if (trackInfo.branchIndex >= 0 && trackInfo.branchIndex < static_cast<int32_t>(attackParam.comboBranches.size())) {
+            auto& branch = attackParam.comboBranches[trackInfo.branchIndex];
+
+            if (trackInfo.type == PlayerComboAttackTimelineData::TrackType::CANCEL_TIME) {
+                branch.cancelTime = timing;
+            } else if (trackInfo.type == PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT) {
+                branch.precedeInputTime = timing;
+            }
+        } else {
+            // 演出系の適用
+            ApplyTrackToRendition(trackInfo, timing);
+        }
     }
 
     // 終了待機時間のキーフレーム位置を更新

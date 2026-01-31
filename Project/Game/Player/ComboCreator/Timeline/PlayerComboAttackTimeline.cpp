@@ -89,6 +89,17 @@ void PlayerComboAttackTimeline::ApplyToParameters() {
     parameterApplier_.ApplyToParameters();
 }
 
+void PlayerComboAttackTimeline::RebuildBranchTracks() {
+    if (!isInitialized_) {
+        return;
+    }
+
+    trackBuilder_.RebuildBranchTracks();
+
+    // 新しいトラックにコールバックを再設定
+    SetupKeyFrameCallbacks();
+}
+
 KetaEngine::TimelineDrawer* PlayerComboAttackTimeline::GetTimeline() {
     return &timeline_;
 }

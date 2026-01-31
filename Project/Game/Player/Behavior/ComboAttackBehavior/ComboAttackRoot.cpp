@@ -42,13 +42,13 @@ void ComboAttackRoot::Update(float atkSpeed) {
             continue;
         }
 
-        auto& attackParam  = attackPtr->GetAttackParam();
-        auto& triggerParam = attackParam.triggerParam;
-
-        // isFirstAttackがtrueの攻撃のみ対象
-        if (!triggerParam.isFirstAttack) {
+        // 最初の攻撃かどうかを自動判定
+        if (!controller->IsFirstAttack(attackPtr->GetGroupName())) {
             continue;
         }
+
+        auto& attackParam  = attackPtr->GetAttackParam();
+        auto& triggerParam = attackParam.triggerParam;
 
         // 状態条件のチェック
         if (!CheckConditionMuch(triggerParam.condition)) {
