@@ -54,7 +54,7 @@ protected:
     WorldTransform cTransform_;
     uint32_t typeID_ = 0u;
 
-    // デバックライン
+    // デバッグライン
     std::unique_ptr<Line3D> debugLine_;
     Vector4 lineColor_ = Vector4::kWHITE();
 
