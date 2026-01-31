@@ -29,19 +29,26 @@ using namespace KetaEngine;
 #include <string>
 
 ///=======================================================================
-/// 初期化
+/// 初期化（ウィンドウサイズ = 描画サイズ）
 ///========================================================================
 void EngineCore::Initialize(const char* title, int width, int height) {
+    Initialize(title, width, height, width, height);
+}
+
+///=======================================================================
+/// 初期化（ウィンドウサイズと描画サイズを分離）
+///========================================================================
+void EngineCore::Initialize(const char* title, int windowWidth, int windowHeight, int renderWidth, int renderHeight) {
     // ゲームウィンドウの作成
     std::string windowTitle = std::string(title);
     auto&& titleString      = ConvertString(windowTitle);
 
     winApp_ = std::make_unique<WinApp>();
-    winApp_->MakeWindow(titleString.c_str(), width, height);
+    winApp_->MakeWindow(titleString.c_str(), windowWidth, windowHeight);
 
-    // DirectX初期化
+    // DirectX初期化（ウィンドウサイズとレンダーサイズを分離）
     directXCommon_ = DirectXCommon::GetInstance();
-    directXCommon_->Init(winApp_.get(), width, height);
+    directXCommon_->Init(winApp_.get(), windowWidth, windowHeight, renderWidth, renderHeight);
 
     // rtvManager
     rtvManager_ = RtvManager::GetInstance();

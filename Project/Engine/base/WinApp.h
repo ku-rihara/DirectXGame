@@ -38,11 +38,18 @@ public:
     int ProcessMessage(); //< メッセージ処理
 
 public: // 静的メンバ変数
+    // ゲーム描画サイズ
     static constexpr int kWindowWidth = 1280; //< 横幅
     static constexpr int kWindowHeight = 720; //< 縦幅
 
     // アスペクト比
     static constexpr float aspectRatio = static_cast<float>(kWindowWidth) / kWindowHeight;
+
+#ifdef _DEBUG
+    // Debug時のウィンドウサイズ（ImGui含む画面全体）
+    static inline int kDebugWindowWidth = 1920;
+    static inline int kDebugWindowHeight = 1080;
+#endif
 
     // ウィンドウクラス名
     static const wchar_t kWindowClassName[];

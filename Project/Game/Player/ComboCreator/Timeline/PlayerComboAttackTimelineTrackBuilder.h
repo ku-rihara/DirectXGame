@@ -35,13 +35,7 @@ public:
     int32_t CalculateTotalFrames() const;
 
 private:
-    // 共通のトラック追加処理
-    template <typename ParamType, typename InfoArrayType>
-    void SetupTracksGeneric(
-        const InfoArrayType& typeInfos,
-        int32_t count,
-        PlayerComboAttackTimelineData::TrackType baseTrackType,
-        const char* suffix = nullptr);
+
 
     std::string GetButtonDisplayName(int32_t keyboardButton, int32_t gamepadButton);
 

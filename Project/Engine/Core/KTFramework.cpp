@@ -25,8 +25,18 @@ void KTFramework::Init() {
     // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
 
-    /// エンジン初期化
+#ifdef _DEBUG
+    // Debug時：ウィンドウは大きく、ゲーム描画は1280x720
+    engineCore_->Initialize(
+        kWindowTitle,
+        KetaEngine::WinApp::kDebugWindowWidth,
+        KetaEngine::WinApp::kDebugWindowHeight,
+        KetaEngine::WinApp::kWindowWidth,
+        KetaEngine::WinApp::kWindowHeight);
+#else
+    // Release時：ウィンドウもゲーム描画も1280x720
     engineCore_->Initialize(kWindowTitle, KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight);
+#endif
 
     LoadAllTexture();
 }

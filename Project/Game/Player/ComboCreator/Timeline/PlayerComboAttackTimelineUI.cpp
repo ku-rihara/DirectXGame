@@ -97,11 +97,6 @@ void PlayerComboAttackTimelineUI::DrawParamEditButtons() {
     if (it != paramUIDrawFunctions_.end()) {
         it->second();
     }
-
-    // セーブ・ロードボタン
-    ImGui::Separator();
-    attackData_->DrawSaveLoadUI();
-    ImGui::Separator();
 }
 
 void PlayerComboAttackTimelineUI::DrawAddTrackButton() {

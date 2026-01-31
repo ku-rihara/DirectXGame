@@ -42,6 +42,16 @@ public:
     /// <param name="height">ウィンドウ高さ</param>
     void Initialize(const char* title, int width, int height);
 
+    /// <summary>
+    /// システム全体の初期化（ウィンドウサイズと描画サイズを分離）
+    /// </summary>
+    /// <param name="title">ウィンドウタイトル</param>
+    /// <param name="windowWidth">ウィンドウ幅</param>
+    /// <param name="windowHeight">ウィンドウ高さ</param>
+    /// <param name="renderWidth">描画幅</param>
+    /// <param name="renderHeight">描画高さ</param>
+    void Initialize(const char* title, int windowWidth, int windowHeight, int renderWidth, int renderHeight);
+
     int ProcessMessage();     //< Windowsのメッセージを処理
     void BeginFrame();        //< フレーム開始処理
     void PreRenderTexture();  //< レンダーテクスチャ描画前処理
