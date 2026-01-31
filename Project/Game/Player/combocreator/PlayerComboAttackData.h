@@ -3,6 +3,7 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 
 //
+#include "ComboBranchParameter.h"
 #include "PlayerAttackRenditionData.h"
 #include "Timeline/PlayerComboAttackTimeline.h"
 // utility
@@ -11,11 +12,13 @@
 #include "Vector3.h"
 // std
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
 
 class Player;
 class PlayerComboAttackController;
+class EnemyManager;
 
 /// <summary>
 /// プレイヤー攻撃データクラス
@@ -25,20 +28,12 @@ public:
     enum class TriggerCondition {
         GROUND, // 地上のみ
         AIR, // 空中のみ
-        BOTH // 両方
+        BOTH, // 両方
+        DASH, // ダッシュ
+        JUSTACTION // ジャスト回避とかのアクション
     };
 
 public:
-    // コンボ分岐パラメータ
-    struct ComboBranch {
-        std::string nextAttackName; // 次の攻撃名
-        int32_t keyboardButton = 0; // キーボードボタン
-        int32_t gamepadButton  = 0; // ゲームパッドボタン
-        float cancelTime       = 0.0f; // キャンセル開始時間
-        float precedeInputTime = 0.0f; // 先行入力開始時間
-        bool requireHit        = false; // ヒット必須フラグ
-    };
-
     // 移動パラメータ
     struct MoveParam {
         Vector3 value;
@@ -67,7 +62,7 @@ public:
         bool isAutoAdvance;
     };
 
-    // 攻撃発動に関するパラメータ（最初の攻撃用）
+    // 攻撃発動に関するパラメータ
     struct TriggerParam {
         TriggerCondition condition;
         int32_t keyBordBottom;
@@ -90,7 +85,6 @@ public:
         float power;
         float blowYPower;
         bool isMotionOnly = false;
-        std::vector<ComboBranch> comboBranches; // コンボ分岐リスト
     };
 
 public:
@@ -113,9 +107,16 @@ public:
     void LoadData();
     void SaveData();
 
-    bool IsReserveNextAttack(float currentTime, const ComboBranch& branch, bool hasHitEnemy);
+    bool IsReserveNextAttack(float currentTime, const ComboBranchParameter& branch, bool hasHitEnemy);
     bool IsWaitFinish(float currentTime);
-    bool IsCancelAttack(float currentTime, const ComboBranch& branch, bool hasHitEnemy);
+    bool IsCancelAttack(float currentTime, const ComboBranchParameter& branch, bool hasHitEnemy);
+
+    // コンボ分岐の初期化
+    void InitComboBranches();
+
+    // コンボ分岐リストへのアクセス
+    const std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() const { return comboBranches_; }
+    std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() { return comboBranches_; }
 
     // コンボ分岐UI
     void DrawComboBranchesUI();
@@ -131,9 +132,8 @@ public:
     void DrawSaveLoadUI();
 
 private:
-    //*-------------------------------- private Method --------------------------------*//
-    void LoadComboBranches();
-    void SaveComboBranches();
+    // TriggerConditionのチェック
+    bool CheckTriggerCondition(TriggerCondition condition) const;
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
@@ -145,13 +145,14 @@ private:
 
     Player* pPlayer_                          = nullptr;
     PlayerComboAttackController* pController_ = nullptr;
+    EnemyManager* pEnemyManager_              = nullptr;
+
+    // コンボ分岐リスト
+    std::vector<std::unique_ptr<ComboBranchParameter>> comboBranches_;
 
     // 包含
     PlayerAttackRenditionData renditionData_;
     PlayerComboAttackTimeline timeLine_;
-
-    // file Selector（コンボ分岐用）
-    std::vector<KetaEngine::FileSelector> branchFileSelectors_;
 
     // 攻撃パラメータ
     AttackParameter attackParam_;
@@ -178,4 +179,5 @@ public:
 
     void SetPlayer(Player* player);
     void SetController(PlayerComboAttackController* controller) { pController_ = controller; }
+    void SetEnemyManager(EnemyManager* enemyManager) { pEnemyManager_ = enemyManager; }
 };
