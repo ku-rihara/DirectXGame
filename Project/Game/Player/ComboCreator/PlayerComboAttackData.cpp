@@ -2,6 +2,10 @@
 #include "PlayerComboAttackController.h"
 // Easing
 #include "Easing/EasingCreator/EasingParameterData.h"
+// Enemy
+#include "Enemy/EnemyManager.h"
+// Player
+#include "Player/Player.h"
 // input
 #include "input/Input.h"
 #include "input/InputData.h"
@@ -21,73 +25,75 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     // conditionをIntから適応
     attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
 
-    // コンボ分岐データをロード（Registを使わない）
-    LoadComboBranches();
+    // コンボ分岐データを初期化
+    InitComboBranches();
 
     // タイムラインの初期化
     timeLine_.Init(this);
 }
 
 void PlayerComboAttackData::LoadData() {
+    // JSONファイルからロードして同期
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
 
     // conditionをIntから適応
     attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
-
-    // コンボ分岐データをロード（Registを使わない）
-    LoadComboBranches();
 }
 
 void PlayerComboAttackData::SaveData() {
-    // コンボ分岐データをセーブ（Registを使わない）
-    SaveComboBranches();
+    // branchCount_を更新
+    branchCount_ = static_cast<int32_t>(comboBranches_.size());
 
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
 ///==========================================================
-/// コンボ分岐データのロード（GetValueを使用）
+/// コンボ分岐データの初期化
 ///==========================================================
-void PlayerComboAttackData::LoadComboBranches() {
-    // branchCount_はRegistでバインド済みなので、そのまま使用
-    // 分岐配列をリサイズ
-    attackParam_.comboBranches.resize(branchCount_);
-    branchFileSelectors_.resize(branchCount_);
+void PlayerComboAttackData::InitComboBranches() {
 
-    // 各分岐のデータを読み込み
+    comboBranches_.clear();
+
+    if (branchCount_ == 0) {
+        return;
+    }
+
+    comboBranches_.reserve(branchCount_);
+
+    // 各分岐のComboBranchParameterを初期化
     for (int32_t i = 0; i < branchCount_; ++i) {
-        std::string prefix = "Branch_" + std::to_string(i) + "_";
-        auto& branch = attackParam_.comboBranches[i];
-
-        branch.nextAttackName = globalParameter_->GetValue<std::string>(groupName_, prefix + "nextAttackName");
-        branch.keyboardButton = globalParameter_->GetValue<int32_t>(groupName_, prefix + "keyboardButton");
-        branch.gamepadButton = globalParameter_->GetValue<int32_t>(groupName_, prefix + "gamepadButton");
-        branch.cancelTime = globalParameter_->GetValue<float>(groupName_, prefix + "cancelTime");
-        branch.precedeInputTime = globalParameter_->GetValue<float>(groupName_, prefix + "precedeInputTime");
-        branch.requireHit = globalParameter_->GetValue<bool>(groupName_, prefix + "requireHit");
+        auto branch = std::make_unique<ComboBranchParameter>();
+        branch->Init(groupName_, i);
+        comboBranches_.push_back(std::move(branch));
     }
 }
 
 ///==========================================================
-/// コンボ分岐データのセーブ（SetValueを使用）
+/// TriggerConditionのチェック
 ///==========================================================
-void PlayerComboAttackData::SaveComboBranches() {
-    // 分岐数を更新
-    branchCount_ = static_cast<int32_t>(attackParam_.comboBranches.size());
-    globalParameter_->SetValue(groupName_, "ComboBranchCount", branchCount_);
+bool PlayerComboAttackData::CheckTriggerCondition(TriggerCondition condition) const {
+    switch (condition) {
+    case TriggerCondition::GROUND:
+    case TriggerCondition::AIR:
+    case TriggerCondition::BOTH:
 
-    // 各分岐のデータを書き込み
-    for (int32_t i = 0; i < branchCount_; ++i) {
-        std::string prefix = "Branch_" + std::to_string(i) + "_";
-        const auto& branch = attackParam_.comboBranches[i];
+        return true;
 
-        globalParameter_->SetValue(groupName_, prefix + "nextAttackName", branch.nextAttackName);
-        globalParameter_->SetValue(groupName_, prefix + "keyboardButton", branch.keyboardButton);
-        globalParameter_->SetValue(groupName_, prefix + "gamepadButton", branch.gamepadButton);
-        globalParameter_->SetValue(groupName_, prefix + "cancelTime", branch.cancelTime);
-        globalParameter_->SetValue(groupName_, prefix + "precedeInputTime", branch.precedeInputTime);
-        globalParameter_->SetValue(groupName_, prefix + "requireHit", branch.requireHit);
+    case TriggerCondition::DASH:
+        if (pPlayer_) {
+            return pPlayer_->IsDashing();
+        }
+        return false;
+
+    case TriggerCondition::JUSTACTION:
+        if (pEnemyManager_) {
+            return pEnemyManager_->IsAnyEnemyInAnticipation();
+        }
+        return false;
+
+    default:
+        return true;
     }
 }
 
@@ -131,7 +137,7 @@ void PlayerComboAttackData::RegisterParams() {
     // FallParam
     globalParameter_->Regist(groupName_, "enableFall", &attackParam_.fallParam.enableFall);
 
-    // コンボ分岐数（読み込み用にRegistしておく）
+    // コンボ分岐数
     globalParameter_->Regist(groupName_, "ComboBranchCount", &branchCount_);
 
     // 演出のパラメータバインド
@@ -200,7 +206,7 @@ void PlayerComboAttackData::DrawTriggerParamUI(bool isFirstAttack) {
 
     ImGui::SeparatorText("攻撃発動パラメータ");
 
-    // 最初の攻撃かどうかを表示（自動判定）
+    // 最初の攻撃かどうかを表示
     if (isFirstAttack) {
         ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "これは最初の攻撃です");
     } else {
@@ -213,7 +219,7 @@ void PlayerComboAttackData::DrawTriggerParamUI(bool isFirstAttack) {
         ImGuiGamepadButtonSelector("パッド:ボタン", triggerParam.gamePadBottom);
 
         // 発動条件
-        const char* conditionItems[] = {"地面", "空中", "両方"};
+        const char* conditionItems[] = {"地上", "空中", "両方", "ダッシュ", "ジャストアクション"};
         triggerConditionInt_         = static_cast<int>(triggerParam.condition);
         if (ImGui::Combo("発動できる状況", &triggerConditionInt_,
                 conditionItems, IM_ARRAYSIZE(conditionItems))) {
@@ -233,81 +239,32 @@ void PlayerComboAttackData::DrawFlagsParamUI() {
 void PlayerComboAttackData::DrawComboBranchesUI() {
     ImGui::SeparatorText("コンボ分岐設定");
 
-    auto& branches = attackParam_.comboBranches;
-
     // 分岐がない場合
-    if (branches.empty()) {
+    if (comboBranches_.empty()) {
         ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "コンボ分岐がありません");
     }
 
-    // 削除対象のインデックス（-1なら削除しない）
+    // 削除対象のインデックス
     int32_t removeIndex = -1;
 
-    // 各分岐を表示
-    for (size_t i = 0; i < branches.size(); ++i) {
-        auto& branch = branches[i];
+    // 各分岐のUIを描画（ComboBranchParameterに委譲）
+    for (size_t i = 0; i < comboBranches_.size(); ++i) {
+        auto& branch = comboBranches_[i];
         ImGui::PushID(static_cast<int>(i));
 
-        // 分岐ヘッダー
-        std::string header = "分岐 " + std::to_string(i + 1);
-        if (!branch.nextAttackName.empty()) {
-            header += " -> " + branch.nextAttackName;
-        }
-
-        if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-            ImGui::Indent();
-
-            // FileSelector が足りなければ追加
-            while (branchFileSelectors_.size() <= i) {
-                branchFileSelectors_.push_back(KetaEngine::FileSelector());
-            }
-
-            // 次の攻撃名選択
-            branchFileSelectors_[i].SelectFile(
-                "次の攻撃名",
-                "Resources/GlobalParameter/AttackCreator",
-                branch.nextAttackName,
-                groupName_ + "_branch_" + std::to_string(i),
-                true);
-
-            // ボタン設定
-            ImGui::Separator();
-            ImGui::Text("入力ボタン:");
-            ImGuiKeyboardKeySelector("キーボード", branch.keyboardButton);
-            ImGuiGamepadButtonSelector("ゲームパッド", branch.gamepadButton);
-
-            // タイミング設定
-            ImGui::Separator();
-            ImGui::Text("タイミング:");
-            ImGui::DragFloat("キャンセル開始時間", &branch.cancelTime, 0.01f, 0.0f, 10.0f);
-            ImGui::DragFloat("先行入力開始時間", &branch.precedeInputTime, 0.01f, 0.0f, 10.0f);
-
-            // 条件設定
-            ImGui::Separator();
-            ImGui::Checkbox("ヒット必須", &branch.requireHit);
-
-            // 削除ボタン
-            ImGui::Separator();
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
-            if (ImGui::Button("この分岐を削除")) {
-                removeIndex = static_cast<int32_t>(i);
-            }
-            ImGui::PopStyleColor(3);
-
-            ImGui::Unindent();
+        // 分岐のパラメータUIを描画（削除要求があればremoveIndexに設定）
+        if (branch->DrawParameterUI("Resources/GlobalParameter/AttackCreator", groupName_)) {
+            removeIndex = static_cast<int32_t>(i);
         }
 
         ImGui::PopID();
     }
 
     // 削除処理
-    if (removeIndex >= 0 && removeIndex < static_cast<int32_t>(branches.size())) {
-        branches.erase(branches.begin() + removeIndex);
-        if (removeIndex < static_cast<int32_t>(branchFileSelectors_.size())) {
-            branchFileSelectors_.erase(branchFileSelectors_.begin() + removeIndex);
-        }
+    if (removeIndex >= 0 && removeIndex < static_cast<int32_t>(comboBranches_.size())) {
+        comboBranches_.erase(comboBranches_.begin() + removeIndex);
+        // branchCount_を更新
+        branchCount_ = static_cast<int32_t>(comboBranches_.size());
         // タイムラインの分岐トラックを再構築
         RebuildBranchTracks();
     }
@@ -318,16 +275,19 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
     if (ImGui::Button("+ コンボ分岐を追加")) {
-        ComboBranch newBranch;
-        branches.push_back(newBranch);
-        branchFileSelectors_.push_back(KetaEngine::FileSelector());
+        int32_t newIndex = static_cast<int32_t>(comboBranches_.size());
+        auto newBranch   = std::make_unique<ComboBranchParameter>();
+        newBranch->Init(groupName_, newIndex);
+        comboBranches_.push_back(std::move(newBranch));
+        // branchCount_を更新
+        branchCount_ = static_cast<int32_t>(comboBranches_.size());
         // タイムラインの分岐トラックを再構築
         RebuildBranchTracks();
     }
     ImGui::PopStyleColor(3);
 
     // トラック名更新ボタン（ボタン設定変更後に使用）
-    if (!branches.empty()) {
+    if (!comboBranches_.empty()) {
         ImGui::SameLine();
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.4f, 0.4f, 0.8f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.5f, 0.5f, 1.0f, 1.0f));
@@ -349,50 +309,60 @@ void PlayerComboAttackData::RebuildBranchTracks() {
     timeLine_.RebuildBranchTracks();
 }
 
-bool PlayerComboAttackData::IsReserveNextAttack(float currentTime, const ComboBranch& branch, bool hasHitEnemy) {
+bool PlayerComboAttackData::IsReserveNextAttack(float currentTime, const ComboBranchParameter& branch, bool hasHitEnemy) {
 
     // 先行入力受付時間チェック
-    if (currentTime < branch.precedeInputTime && !IsWaitFinish(currentTime)) {
+    if (currentTime < branch.GetPrecedeInputTime() && !IsWaitFinish(currentTime)) {
         return false;
     }
 
     // ヒット条件チェック
-    if (branch.requireHit && !hasHitEnemy) {
+    if (branch.GetRequireHit() && !hasHitEnemy) {
+        return false;
+    }
+
+    // 発動条件チェック
+    if (!CheckTriggerCondition(static_cast<TriggerCondition>(triggerConditionInt_))) {
         return false;
     }
 
     // キーボード入力チェック
-    if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(branch.keyboardButton))) {
+    if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(branch.GetKeyboardButton()))) {
         return true;
     }
 
     // ゲームパッド入力チェック
-    if (KetaEngine::Input::IsTriggerPad(0, FromXInputButtonFlag(branch.gamepadButton))) {
+    if (KetaEngine::Input::IsTriggerPad(0, FromXInputButtonFlag(branch.GetGamepadButton()))) {
         return true;
     }
 
     return false;
 }
 
-bool PlayerComboAttackData::IsCancelAttack(float currentTime, const ComboBranch& branch, bool hasHitEnemy) {
+bool PlayerComboAttackData::IsCancelAttack(float currentTime, const ComboBranchParameter& branch, bool hasHitEnemy) {
 
     // キャンセル時間チェック
-    if (currentTime < branch.cancelTime) {
+    if (currentTime < branch.GetCancelTime()) {
         return false;
     }
 
     // ヒット条件チェック
-    if (branch.requireHit && !hasHitEnemy) {
+    if (branch.GetRequireHit() && !hasHitEnemy) {
+        return false;
+    }
+
+    // 発動条件チェック
+    if (!CheckTriggerCondition(static_cast<TriggerCondition>(triggerConditionInt_))) {
         return false;
     }
 
     // キーボード入力チェック
-    if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(branch.keyboardButton))) {
+    if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(branch.GetKeyboardButton()))) {
         return true;
     }
 
     // ゲームパッド入力チェック
-    if (KetaEngine::Input::IsTriggerPad(0, FromXInputButtonFlag(branch.gamepadButton))) {
+    if (KetaEngine::Input::IsTriggerPad(0, FromXInputButtonFlag(branch.GetGamepadButton()))) {
         return true;
     }
 

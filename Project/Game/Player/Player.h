@@ -114,6 +114,11 @@ public:
 
     void MainHeadAnimationStart(const std::string& name);
 
+    /// <summary>
+    /// ダッシュ中かどうかを取得
+    /// </summary>
+    bool IsDashing() const;
+
 private:
     void ChangeDeathMode();
     bool IsAbleBehavior();

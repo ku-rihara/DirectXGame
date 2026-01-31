@@ -34,6 +34,7 @@ void PlayerParameter::AdjustParam() {
         ImGui::SeparatorText("Normal");
         ImGui::DragFloat("jumpSpeed", &playerParams_.normalJump.jumpSpeed, 0.01f);
         ImGui::DragFloat("MoveSpeed", &playerParams_.moveSpeed, 0.01f);
+        ImGui::DragFloat("DashSpeedMultiplier", &playerParams_.dashSpeedMultiplier, 0.01f);
         ImGui::DragFloat("Gravity", &playerParams_.normalJump.gravity, 0.01f);
         ImGui::DragFloat("FallSpeed", &playerParams_.fallSpeed, 0.01f);
         ImGui::DragFloat("fallSpeedLimit", &playerParams_.normalJump.fallSpeedLimit, 0.1f);
@@ -111,6 +112,7 @@ void PlayerParameter::RegisterParams() {
     globalParameter_->Regist(groupName_, "rushDistance", &playerParams_.rushDistance);
     globalParameter_->Regist(groupName_, "UpperPosY", &playerParams_.upperPosY);
     globalParameter_->Regist(groupName_, "MoveSpeed", &playerParams_.moveSpeed);
+    globalParameter_->Regist(groupName_, "DashSpeedMultiplier", &playerParams_.dashSpeedMultiplier);
     globalParameter_->Regist(groupName_, "Gravity", &playerParams_.normalJump.gravity);
     globalParameter_->Regist(groupName_, "FallSpeed", &playerParams_.fallSpeed);
     globalParameter_->Regist(groupName_, "FallSpeedLimit", &playerParams_.normalJump.fallSpeedLimit);

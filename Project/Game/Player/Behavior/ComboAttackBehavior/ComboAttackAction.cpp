@@ -41,15 +41,15 @@ void ComboAttackAction::Init() {
 
     // 次の攻撃候補リストを構築
     nextAttackCandidates_.clear();
-    const auto& branches = attackData_->GetAttackParam().comboBranches;
+    auto& branches = attackData_->GetComboBranches();
     PlayerComboAttackController* controller = pOwner_->GetComboAttackController();
 
-    for (const auto& branch : branches) {
-        if (!branch.nextAttackName.empty() && branch.nextAttackName != "None") {
-            PlayerComboAttackData* nextAttack = controller->GetAttackByName(branch.nextAttackName);
+    for (auto& branch : branches) {
+        if (!branch->GetNextAttackName().empty() && branch->GetNextAttackName() != "None") {
+            PlayerComboAttackData* nextAttack = controller->GetAttackByName(branch->GetNextAttackName());
             if (nextAttack) {
                 NextAttackCandidate candidate;
-                candidate.branch = &branch;
+                candidate.branch = branch.get();
                 candidate.attackData = nextAttack;
                 nextAttackCandidates_.push_back(candidate);
             }

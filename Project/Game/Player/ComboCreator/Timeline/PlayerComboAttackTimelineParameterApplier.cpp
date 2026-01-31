@@ -1,4 +1,5 @@
 #include "PlayerComboAttackTimelineParameterApplier.h"
+#include "../ComboBranchParameter.h"
 #include "../PlayerAttackRenditionData.h"
 #include "../PlayerComboAttackData.h"
 #include "Frame/Frame.h"
@@ -128,18 +129,19 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     });
 
     // 演出系とコンボ分岐タイミングの適用
+    auto& branches = attackData_->GetComboBranches();
     for (const auto& trackInfo : timeLineData_->GetAddedTracks()) {
         int32_t frame = timelineDrawer_->GetFirstKeyFrameFrame(trackInfo.trackIndex);
         float timing  = KetaEngine::Frame::FrameToTime(frame);
 
         // コンボ分岐のタイミング
-        if (trackInfo.branchIndex >= 0 && trackInfo.branchIndex < static_cast<int32_t>(attackParam.comboBranches.size())) {
-            auto& branch = attackParam.comboBranches[trackInfo.branchIndex];
+        if (trackInfo.branchIndex >= 0 && trackInfo.branchIndex < static_cast<int32_t>(branches.size())) {
+            auto& branch = branches[trackInfo.branchIndex];
 
             if (trackInfo.type == PlayerComboAttackTimelineData::TrackType::CANCEL_TIME) {
-                branch.cancelTime = timing;
+                branch->SetCancelTime(timing);
             } else if (trackInfo.type == PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT) {
-                branch.precedeInputTime = timing;
+                branch->SetPrecedeInputTime(timing);
             }
         } else {
             // 演出系の適用

@@ -1,4 +1,5 @@
 #include "PlayerComboAttackTimelineTrackBuilder.h"
+#include "../ComboBranchParameter.h"
 #include "../PlayerAttackRenditionData.h"
 #include "../PlayerComboAttackData.h"
 #include "Frame/Frame.h"
@@ -71,10 +72,10 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
     }
 
     // コンボ分岐ごとのトラックを作成
-    const auto& branches = attackParam.comboBranches;
+    const auto& branches = attackData_->GetComboBranches();
     for (size_t i = 0; i < branches.size(); ++i) {
         const auto& branch = branches[i];
-        std::string buttonName = GetButtonDisplayName(branch.keyboardButton, branch.gamepadButton);
+        std::string buttonName = GetButtonDisplayName(branch->GetKeyboardButton(), branch->GetGamepadButton());
 
         // キャンセル開始トラック
         {
@@ -87,7 +88,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
             info.branchIndex = static_cast<int32_t>(i);
             data_->AddTrackInfo(info);
 
-            int32_t cancelFrame = KetaEngine::Frame::TimeToFrame(branch.cancelTime);
+            int32_t cancelFrame = KetaEngine::Frame::TimeToFrame(branch->GetCancelTime());
             // durationが負にならないように安全チェック
             float duration = static_cast<float>((std::max)(0, totalFrames - cancelFrame));
             timelineDrawer_->AddKeyFrame(trackIdx, cancelFrame, 1.0f, duration, "キャンセル可能範囲");
@@ -104,7 +105,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
             info.branchIndex = static_cast<int32_t>(i);
             data_->AddTrackInfo(info);
 
-            int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(branch.precedeInputTime);
+            int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(branch->GetPrecedeInputTime());
             // durationが負にならないように安全チェック
             float duration = static_cast<float>((std::max)(0, totalFrames - precedeFrame));
             timelineDrawer_->AddKeyFrame(trackIdx, precedeFrame, 1.0f, duration, "先行入力可能範囲");
@@ -235,7 +236,7 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
     int32_t insertPosition = finishWaitTrackIdx + 1;
 
     // 新しい分岐トラックを追加
-    const auto& branches = attackData_->GetAttackParam().comboBranches;
+    const auto& branches = attackData_->GetComboBranches();
     int32_t totalFrames = CalculateTotalFrames();
 
     // totalFramesが0以下の場合は最小値を設定
@@ -245,7 +246,7 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
 
     for (size_t i = 0; i < branches.size(); ++i) {
         const auto& branch = branches[i];
-        std::string buttonName = GetButtonDisplayName(branch.keyboardButton, branch.gamepadButton);
+        std::string buttonName = GetButtonDisplayName(branch->GetKeyboardButton(), branch->GetGamepadButton());
 
         // キャンセル開始トラック
         {
@@ -258,7 +259,7 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
             info.branchIndex = static_cast<int32_t>(i);
             data_->AddTrackInfo(info);
 
-            int32_t cancelFrame = KetaEngine::Frame::TimeToFrame(branch.cancelTime);
+            int32_t cancelFrame = KetaEngine::Frame::TimeToFrame(branch->GetCancelTime());
             // durationが負にならないように安全チェック
             float duration = static_cast<float>((std::max)(0, totalFrames - cancelFrame));
             timelineDrawer_->AddKeyFrame(trackIdx, cancelFrame, 1.0f, duration, "キャンセル可能範囲");
@@ -277,7 +278,7 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
             info.branchIndex = static_cast<int32_t>(i);
             data_->AddTrackInfo(info);
 
-            int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(branch.precedeInputTime);
+            int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(branch->GetPrecedeInputTime());
             // durationが負にならないように安全チェック
             float duration = static_cast<float>((std::max)(0, totalFrames - precedeFrame));
             timelineDrawer_->AddKeyFrame(trackIdx, precedeFrame, 1.0f, duration, "先行入力可能範囲");

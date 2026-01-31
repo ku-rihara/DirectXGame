@@ -276,9 +276,9 @@ std::vector<std::vector<std::string>> PlayerComboAttackController::BuildComboCha
     std::unordered_set<std::string> referencedAttacks;
     for (const auto& attack : attacks_) {
         // 全てのコンボ分岐から参照されている攻撃を収集
-        for (const auto& branch : attack->GetAttackParam().comboBranches) {
-            if (!branch.nextAttackName.empty()) {
-                referencedAttacks.insert(branch.nextAttackName);
+        for (const auto& branch : attack->GetComboBranches()) {
+            if (!branch->GetNextAttackName().empty()) {
+                referencedAttacks.insert(branch->GetNextAttackName());
             }
         }
     }
@@ -333,9 +333,9 @@ void PlayerComboAttackController::BuildChainRecursive(
     visited.insert(attackName);
 
     // 全てのコンボ分岐から次の攻撃を再帰的に追加
-    for (const auto& branch : attack->GetAttackParam().comboBranches) {
-        if (!branch.nextAttackName.empty()) {
-            BuildChainRecursive(branch.nextAttackName, chain, visited);
+    for (const auto& branch : attack->GetComboBranches()) {
+        if (!branch->GetNextAttackName().empty()) {
+            BuildChainRecursive(branch->GetNextAttackName(), chain, visited);
         }
     }
 }
@@ -343,8 +343,8 @@ void PlayerComboAttackController::BuildChainRecursive(
 bool PlayerComboAttackController::IsFirstAttack(const std::string& attackName) const {
     // 他の攻撃のcomboBranchesから参照されていなければ最初の攻撃
     for (const auto& attack : attacks_) {
-        for (const auto& branch : attack->GetAttackParam().comboBranches) {
-            if (branch.nextAttackName == attackName) {
+        for (const auto& branch : attack->GetComboBranches()) {
+            if (branch->GetNextAttackName() == attackName) {
                 return false; // 他から参照されている
             }
         }

@@ -202,10 +202,11 @@ private:
   
 
     // flags
-    bool isDeathPending_ = false;
+    bool isDeathPending_    = false;
     bool isDamageColling_;
     bool isDeath_;
     bool isCollisionRope_;
+    bool isInAnticipation_ = false; // 現在前隙中かどうか
 
     // damageInfo
     float damageCollTime_;
@@ -258,6 +259,7 @@ public:
     EnemyAttackCollisionBox* GetAttackCollisionBox() const { return attackCollisionBox_.get(); }
     KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     bool GetIsReturningFromAttack() const { return isReturningFromAttack_; }
+    bool IsInAnticipation() const { return isInAnticipation_; }
 
     /// ========================================================================================
     ///  setter method
@@ -274,4 +276,5 @@ public:
     void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
     void SetIsReturningFromAttack(bool is) { isReturningFromAttack_ = is; }
+    void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }
 };

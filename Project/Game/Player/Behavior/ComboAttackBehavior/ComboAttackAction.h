@@ -1,4 +1,5 @@
 #pragma once
+#include "../../ComboCreator/ComboBranchParameter.h"
 #include "../../ComboCreator/PlayerAttackRenditionData.h"
 #include "BaseComboAttackBehavior.h"
 #include "Easing/Easing.h"
@@ -24,7 +25,7 @@ public:
 
     // 次の攻撃候補（分岐と攻撃データのペア）
     struct NextAttackCandidate {
-        const PlayerComboAttackData::ComboBranch* branch;
+        ComboBranchParameter* branch;
         PlayerComboAttackData* attackData;
     };
 

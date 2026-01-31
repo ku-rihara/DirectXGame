@@ -475,6 +475,13 @@ void Player::MainHeadAnimationStart(const std::string& name) {
     baseTransform_.PlayObjEaseAnimation(name, "MainHead");
 }
 
+bool Player::IsDashing() const {
+    if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
+        return moveState->IsDashing();
+    }
+    return false;
+}
+
 void Player::RotateReset() {
     obj3d_->transform_.rotation_      = {0, 0, 0};
     obj3d_->transform_.translation_.y = 0.0f;

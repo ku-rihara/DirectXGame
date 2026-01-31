@@ -30,6 +30,9 @@ void EnemyAttack::ChangeState(AttackState newState) {
     switch (currentState_) {
     case AttackState::ANTICIPATION:
         currentStateFunction_ = [this]() {
+            // 前隙開始
+            pBaseEnemy_->SetIsInAnticipation(true);
+
             // 予備動作処理
             stateTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
@@ -39,6 +42,8 @@ void EnemyAttack::ChangeState(AttackState newState) {
 
                 // 予備動作完了チェック
                 if (strategy->IsAnticipationFinished()) {
+                    // 前隙終了
+                    pBaseEnemy_->SetIsInAnticipation(false);
                     ChangeState(AttackState::START);
                 }
             }
@@ -76,6 +81,9 @@ void EnemyAttack::ChangeState(AttackState newState) {
 
     case AttackState::FINISH:
         currentStateFunction_ = [this]() {
+            // 念のため前隙フラグをオフ
+            pBaseEnemy_->SetIsInAnticipation(false);
+
             // 終了処理
             if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
                 strategy->Finish();

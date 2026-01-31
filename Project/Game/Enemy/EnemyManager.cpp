@@ -307,3 +307,12 @@ void EnemyManager::SetEnemySpawner(EnemySpawner* enemySpawner) {
 void EnemyManager::CheckIsEnemiesCleared() {
     areAllEnemiesCleared_ = enemies_.empty();
 }
+
+bool EnemyManager::IsAnyEnemyInAnticipation() const {
+    for (const auto& enemy : enemies_) {
+        if (enemy->IsInAnticipation()) {
+            return true;
+        }
+    }
+    return false;
+}
