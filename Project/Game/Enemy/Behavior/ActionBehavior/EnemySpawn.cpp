@@ -38,6 +38,7 @@ void EnemySpawn::Update() {
         ///------------------------------------------------------------------
     case EnemySpawn::Step::EFFECTEMIT:
         pBaseEnemy_->SpawnRenditionInit();
+        pBaseEnemy_->PlaySpawnAnimation(); // スポーンアニメーション再生
 
         step_ = Step::SPAWN; // 次のステップ
         break;

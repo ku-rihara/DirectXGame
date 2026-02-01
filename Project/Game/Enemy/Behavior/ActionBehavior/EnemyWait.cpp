@@ -15,7 +15,7 @@
 #include <cmath>
 
 // 初期化
-EnemyWait::EnemyWait(BaseEnemy* boss)
+EnemyWait::EnemyWait(BaseEnemy* boss, bool skipDiscoveryDelay)
     : BaseEnemyBehavior("EnemyWait", boss) {
 
     // 待機アニメーションにリセット
@@ -37,6 +37,17 @@ EnemyWait::EnemyWait(BaseEnemy* boss)
     } else {
         isInAttackCooldown_ = false;
         attackCooldownTimer_ = 0.0f;
+    }
+
+    // プレイヤー発見状態の初期化
+    // skipDiscoveryDelayがtrueの場合（攻撃後やChaseから戻った場合）は
+    // 発見済みとして遅延をスキップ
+    if (skipDiscoveryDelay) {
+        hasDiscoveredPlayer_ = true;
+        discoveryDelayTimer_ = pBaseEnemy_->GetParameter().discoveryDelayTime; // 遅延完了状態に
+    } else {
+        hasDiscoveredPlayer_ = false;
+        discoveryDelayTimer_ = 0.0f;
     }
 }
 
@@ -68,10 +79,41 @@ void EnemyWait::Update() {
     // 距離
     distance_ = std::sqrt(direction.x * direction.x + direction.z * direction.z);
 
-    // 近すぎる場合は追従を開始
+    // プレイヤーが追跡範囲内に入った場合
     if (distance_ < pBaseEnemy_->GetParameter().chaseDistance) {
-        pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
+        // プレイヤーを初めて発見した場合
+        if (!hasDiscoveredPlayer_) {
+            hasDiscoveredPlayer_ = true;
+            discoveryDelayTimer_ = 0.0f;
+
+            // 発見時のアニメーション（予備動作）を開始
+            pBaseEnemy_->InitChaseAnimation();
+
+            // 発見エフェクトを再生
+            if (pBaseEnemy_->GetEnemyEffects()) {
+                pBaseEnemy_->GetEnemyEffects()->Emit("DiscoveryEffect");
+            }
+        }
+
+        // 発見後の遅延時間をカウント
+        discoveryDelayTimer_ += KetaEngine::Frame::DeltaTimeRate();
+
+        // 遅延時間が経過したら追跡開始
+        if (discoveryDelayTimer_ >= pBaseEnemy_->GetParameter().discoveryDelayTime) {
+            pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
+            return;
+        }
+
+        // 遅延中はプレイヤーの方を向くのみ
+        direction.y = 0.0f;
+        direction.Normalize();
+        float objectiveAngle = std::atan2(-direction.x, -direction.z);
+        pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetBaseTransform().rotation_.y, objectiveAngle, 0.3f));
         return;
+    } else {
+        // プレイヤーが範囲外に出たらリセット
+        hasDiscoveredPlayer_ = false;
+        discoveryDelayTimer_ = 0.0f;
     }
 
     // 正規化
@@ -102,8 +144,23 @@ void EnemyWait::Debug() {
 #ifdef _DEBUG
     if (ImGui::TreeNode("EnemyWait")) {
         ImGui::Text("Distance: %.2f", distance_);
+        ImGui::Text("Chase Distance: %.2f", pBaseEnemy_->GetParameter().chaseDistance);
         ImGui::Text("Is in Attack Cooldown: %s", isInAttackCooldown_ ? "true" : "false");
         ImGui::Text("Attack Cooldown Timer: %.2f", attackCooldownTimer_);
+        ImGui::Separator();
+        ImGui::Text("Has Discovered Player: %s", hasDiscoveredPlayer_ ? "true" : "false");
+        ImGui::Text("Discovery Delay Timer: %.2f / %.2f", discoveryDelayTimer_, pBaseEnemy_->GetParameter().discoveryDelayTime);
+
+        // 状態表示
+        if (distance_ < pBaseEnemy_->GetParameter().chaseDistance) {
+            if (discoveryDelayTimer_ < pBaseEnemy_->GetParameter().discoveryDelayTime) {
+                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "State: Waiting (Discovery Delay)");
+            } else {
+                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "State: Ready to Chase");
+            }
+        } else {
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "State: Player out of range");
+        }
         ImGui::TreePop();
     }
 #endif

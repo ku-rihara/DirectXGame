@@ -9,10 +9,26 @@
 ///========================================================
 void StrongEnemy::Init(const Vector3& spawnPos) {
     BaseEnemy::Init(spawnPos);
-    obj3d_.reset(KetaEngine::Object3d::CreateModel("StrongEnemy.obj"));
-    obj3d_->transform_.Init();
-    obj3d_->transform_.SetParent(&baseTransform_);
-    obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting = 2;
+
+    // アニメーション名を設定
+    SetAnimationName(AnimationType::Wait, "NormalEnemyWaiting");
+    SetAnimationName(AnimationType::Spawn, "NormalEnemySpawn");
+    SetAnimationName(AnimationType::PreDash, "BoxerEnemyPreDashMotion");
+    SetAnimationName(AnimationType::Dash, "BoxerEnemyDash");
+    SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
+
+    // アニメーションオブジェクトの作成
+    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(GetAnimationName(AnimationType::Wait) + ".gltf"));
+    objAnimation_->Init();
+    objAnimation_->Add(GetAnimationName(AnimationType::Spawn) + ".gltf");
+    objAnimation_->Add(GetAnimationName(AnimationType::PreDash) + ".gltf");
+    objAnimation_->Add(GetAnimationName(AnimationType::PreDash) + ".gltf");
+    objAnimation_->Add(GetAnimationName(AnimationType::Attack) + ".gltf");
+    objAnimation_->Add(GetAnimationName(AnimationType::Dash) + ".gltf");
+    objAnimation_->transform_.Init();
+    objAnimation_->transform_.SetParent(&baseTransform_);
+    objAnimation_->transform_.scale_ = Vector3::OneVector();
+    objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = 3;
 
     // 攻撃戦略を設定
     SetAttackStrategy(std::make_unique<StrongEnemyAttackStrategy>(this));

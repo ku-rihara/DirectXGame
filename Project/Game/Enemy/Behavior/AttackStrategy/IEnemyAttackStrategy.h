@@ -47,6 +47,7 @@ public:
         anticipationTimer_ = 0.0f;
         isAnticipationFinished_ = false;
         isAttackFinished_ = false;
+        hasPlayedAnticipationEffect_ = false;
     }
 
 protected:
@@ -54,4 +55,5 @@ protected:
     float anticipationTimer_ = 0.0f;
     bool isAnticipationFinished_ = false;
     bool isAttackFinished_ = false;
+    bool hasPlayedAnticipationEffect_ = false;
 };

@@ -60,6 +60,9 @@ public:
     // debugSpawn
     void DebugEnemySpawn();
 
+    // エディター用にアニメーションリストを更新
+    void UpdateAvailableAnimationsForEditor(BaseEnemy* enemy);
+
 private: 
     // struct
     struct ParticleEffect {

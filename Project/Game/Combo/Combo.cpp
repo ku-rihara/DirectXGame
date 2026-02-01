@@ -79,8 +79,6 @@ void Combo::ComboCountUP() {
     uiController_->ChangeCountUPAnimation();
     comboCount_++;
     comboTime_ = comboTimeMax_;
-
-    deathTimer_->IncrementTimer();
 }
 
 void Combo::LevelUp() {
@@ -88,6 +86,11 @@ void Combo::LevelUp() {
         return;
     }
     currentLevel_++; // レベルアップ
+
+    // コンボレベルアップ時にHP回復
+    if (deathTimer_) {
+        deathTimer_->RecoverHP();
+    }
 }
 
 void Combo::ComboTimerDecrement() {

@@ -216,7 +216,8 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
 
     // 既存の分岐トラックを削除（後ろから削除して index のずれを防ぐ）
     std::vector<int32_t> trackIndicesToRemove;
-    for (const auto& trackInfo : data_->GetAddedTracks()) {
+    const auto& addedTracks = data_->GetAddedTracks();
+    for (const auto& trackInfo : addedTracks) {
         if (trackInfo.type == PlayerComboAttackTimelineData::TrackType::CANCEL_TIME ||
             trackInfo.type == PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT) {
             trackIndicesToRemove.push_back(trackInfo.trackIndex);
@@ -225,18 +226,38 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
 
     // インデックスを降順でソートして後ろから削除
     std::sort(trackIndicesToRemove.begin(), trackIndicesToRemove.end(), std::greater<int32_t>());
+
+    // 削除前に有効なインデックスかチェック
+    size_t trackCount = timelineDrawer_->GetTrackCount();
     for (int32_t trackIdx : trackIndicesToRemove) {
+        // 範囲外チェック
+        if (trackIdx < 0 || trackIdx >= static_cast<int32_t>(trackCount)) {
+            continue;
+        }
         data_->RemoveTrackInfo(trackIdx);
         timelineDrawer_->RemoveTrack(trackIdx);
+        trackCount--; // 削除後のトラック数を更新
     }
 
     // 挿入位置を計算（終了待機時間トラックの直後）
     int32_t finishWaitTrackIdx = data_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT);
+
+    // 安全チェック：finishWaitTrackIdxが有効か確認
+    if (finishWaitTrackIdx < 0) {
+        return;
+    }
+
     int32_t insertPosition = finishWaitTrackIdx + 1;
 
     // 新しい分岐トラックを追加
     const auto& branches = attackData_->GetComboBranches();
+
+    // 分岐がない場合は早期リターン
+    if (branches.empty()) {
+        return;
+    }
+
     int32_t totalFrames = CalculateTotalFrames();
 
     // totalFramesが0以下の場合は最小値を設定
@@ -244,8 +265,13 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
         totalFrames = 1;
     }
 
+    int32_t insertedCount = 0;
     for (size_t i = 0; i < branches.size(); ++i) {
         const auto& branch = branches[i];
+        if (!branch) {
+            continue; // nullチェック
+        }
+
         std::string buttonName = GetButtonDisplayName(branch->GetKeyboardButton(), branch->GetGamepadButton());
 
         // キャンセル開始トラック
@@ -265,6 +291,7 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
             timelineDrawer_->AddKeyFrame(trackIdx, cancelFrame, 1.0f, duration, "キャンセル可能範囲");
 
             insertPosition++;
+            insertedCount++;
         }
 
         // 先行入力開始トラック
@@ -284,12 +311,14 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
             timelineDrawer_->AddKeyFrame(trackIdx, precedeFrame, 1.0f, duration, "先行入力可能範囲");
 
             insertPosition++;
+            insertedCount++;
         }
     }
 
     // トラックインデックスの更新（挿入によりずれた分を調整）
-    data_->UpdateTrackIndicesAfterInsert(finishWaitTrackIdx + 1,
-        static_cast<int32_t>(branches.size() * 2));
+    if (insertedCount > 0) {
+        data_->UpdateTrackIndicesAfterInsert(finishWaitTrackIdx + 1, insertedCount);
+    }
 }
 
 void PlayerComboAttackTimelineTrackBuilder::AddTrack(PlayerComboAttackTimelineData::TrackType type) {

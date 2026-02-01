@@ -185,6 +185,9 @@ private:
     int draggingDurationKeyIndex_   = -1;
     float dragStartDuration_        = 0.0f;
 
+    // 再生ヘッド（縦線）ドラッグ用
+    bool isDraggingPlayhead_        = false;
+
     // 右クリックされたトラック
     int rightClickedTrackIndex_ = -1;
 

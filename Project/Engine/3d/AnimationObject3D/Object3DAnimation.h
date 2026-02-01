@@ -190,6 +190,17 @@ public:
     bool IsAnimationTransitioning() const { return isChange_; }
     bool IsLoop() const { return isLoop_; }
 
+    /// <summary>
+    /// 登録されている全アニメーション名を取得
+    /// </summary>
+    std::vector<std::string> GetAnimationNames() const {
+        std::vector<std::string> names;
+        for (const auto& anim : animations_) {
+            names.push_back(anim.name);
+        }
+        return names;
+    }
+
     void SetTransitionDuration(float duration) { transitionDuration_ = duration; }
     void SetLoop(bool loop) { isLoop_ = loop; }
     void SetAnimationEndCallback(std::function<void(const std::string& animationName)> callback) { onAnimationEnd_ = callback; }

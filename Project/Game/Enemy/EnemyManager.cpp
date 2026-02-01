@@ -8,6 +8,8 @@
 #include "LockOn/LockOn.h"
 // Spawner
 #include "Spawner/EnemySpawner.h"
+// DamageReaction
+#include "DamageReaction/EnemyDamageReactionData.h"
 // imGui
 #include <imgui.h>
 
@@ -56,6 +58,10 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     enemy->SetCombo(pCombo_);
     enemy->SetGroupId(groupID);
     enemy->Init(position);
+
+    // エディター用にアニメーションリストを更新
+    UpdateAvailableAnimationsForEditor(enemy.get());
+
     enemies_.push_back(std::move(enemy));
 }
 
@@ -112,16 +118,15 @@ void EnemyManager::RegisterParams() {
         const std::string& indexString = std::to_string(static_cast<int>(i + 1));
 
         // 基本パラメータ
-        globalParameter_->Regist(groupName_, "chaseDistance" + indexString, &parameters_[i].chaseDistance);
-        globalParameter_->Regist(groupName_, "chaseSpeed" + indexString, &parameters_[i].chaseSpeed);
         globalParameter_->Regist(groupName_, "basePosY_" + indexString, &parameters_[i].basePosY);
         globalParameter_->Regist(groupName_, "burstTime" + indexString, &parameters_[i].burstTime);
         globalParameter_->Regist(groupName_, "initScale" + indexString, &parameters_[i].baseScale_);
         globalParameter_->Regist(groupName_, "hpBarPosOffset" + indexString, &parameters_[i].hpBarPosOffset);
-        globalParameter_->Regist(groupName_, "avoidanceRadius" + indexString, &parameters_[i].avoidanceRadius);
-        globalParameter_->Regist(groupName_, "maxChaseTime" + indexString, &parameters_[i].maxChaseTime);
-        globalParameter_->Regist(groupName_, "chaseResetTime" + indexString, &parameters_[i].chaseResetTime);
-        globalParameter_->Regist(groupName_, "ChaseLimitDistance" + indexString, &parameters_[i].chaseLimitDistance);
+
+        // 追従パラメータ
+        globalParameter_->Regist(groupName_, "chaseDistance" + indexString, &parameters_[i].chaseDistance);
+        globalParameter_->Regist(groupName_, "chaseSpeed" + indexString, &parameters_[i].chaseSpeed);
+        globalParameter_->Regist(groupName_, "discoveryDelayTime" + indexString, &parameters_[i].discoveryDelayTime);
 
         // 攻撃パラメータ
         globalParameter_->Regist(groupName_, "attackStartDistance" + indexString, &parameters_[i].attackStartDistance);
@@ -129,9 +134,10 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "attackAnticipationTime" + indexString, &parameters_[i].attackAnticipationTime);
         globalParameter_->Regist(groupName_, "AttackCollisionSize" + indexString, &parameters_[i].attackParam.collisionSize);
         globalParameter_->Regist(groupName_, "AttackCollisionOffset" + indexString, &parameters_[i].attackParam.collisionOffset);
-        globalParameter_->Regist(groupName_, "startTime" + indexString, &parameters_[i].attackParam.startTime);
         globalParameter_->Regist(groupName_, "attackValue" + indexString, &parameters_[i].attackParam.attackValue);
         globalParameter_->Regist(groupName_, "adaptTime" + indexString, &parameters_[i].attackParam.adaptTime);
+        globalParameter_->Regist(groupName_, "attackMoveDistance" + indexString, &parameters_[i].attackParam.attackMoveDistance);
+        globalParameter_->Regist(groupName_, "attackMoveSpeed" + indexString, &parameters_[i].attackParam.attackMoveSpeed);
 
         // 死亡パラメータ
         globalParameter_->Regist(groupName_, "deathBlowValue" + indexString, &parameters_[i].deathBlowValue);
@@ -147,28 +153,38 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
     ImGui::SeparatorText("基本パラメータ");
     ImGui::DragFloat3("initScale", &parameters_[typeIndex].baseScale_.x, 0.01f);
-    ImGui::DragFloat("ChaseSpeed", &parameters_[typeIndex].chaseSpeed, 0.01f);
-    ImGui::DragFloat("ChaseDistance", &parameters_[typeIndex].chaseDistance, 0.01f);
     ImGui::DragFloat("basePosY", &parameters_[typeIndex].basePosY, 0.01f);
     ImGui::DragFloat("burstTime", &parameters_[typeIndex].burstTime, 0.01f);
 
-    ImGui::SeparatorText("攻撃に関するパラメータ");
-    ImGui::DragFloat3("攻撃コリジョンサイズ", &parameters_[typeIndex].attackParam.collisionSize.x, 0.01f);
-    ImGui::DragFloat3("攻撃コリジョンオフセット", &parameters_[typeIndex].attackParam.collisionOffset.x, 0.01f);
-    ImGui::DragFloat("攻撃量", &parameters_[typeIndex].attackParam.attackValue, 0.1f);
-    ImGui::DragFloat("攻撃開始時間", &parameters_[typeIndex].attackParam.startTime, 0.01f);
-    ImGui::DragFloat("攻撃判定持続時間", &parameters_[typeIndex].attackParam.adaptTime, 0.01f);
-    ImGui::DragFloat("攻撃開始距離", &parameters_[typeIndex].attackStartDistance, 0.1f);
-    ImGui::DragFloat("攻撃後待機時間", &parameters_[typeIndex].attackCooldownTime, 0.1f, 0.0f, 10.0f);
-    ImGui::DragFloat("攻撃予備動作時間", &parameters_[typeIndex].attackAnticipationTime, 0.01f, 0.0f, 5.0f);
-
     ImGui::SeparatorText("追従パラメータ");
-    ImGui::DragFloat("AvoidanceRadius", &parameters_[typeIndex].avoidanceRadius, 0.1f);
-    ImGui::DragFloat("MaxChaseTime", &parameters_[typeIndex].maxChaseTime, 0.1f, 0.0f, 30.0f);
-    ImGui::DragFloat("ChaseResetTime", &parameters_[typeIndex].chaseResetTime, 0.1f, 0.0f, 10.0f);
-    ImGui::DragFloat("ChaseLimitDistance", &parameters_[typeIndex].chaseLimitDistance, 0.1f);
+    ImGui::DragFloat("追従速度", &parameters_[typeIndex].chaseSpeed, 0.01f);
+    ImGui::DragFloat("追従距離", &parameters_[typeIndex].chaseDistance, 0.01f);
+    ImGui::DragFloat("発見後遅延時間", &parameters_[typeIndex].discoveryDelayTime, 0.01f, 0.0f, 3.0f);
 
-    ImGui::SeparatorText("死亡に関するパラメータ");
+    ImGui::SeparatorText("攻撃パラメータ");
+    // コリジョン
+    ImGui::Separator();
+    ImGui::Text("コリジョン");
+    ImGui::DragFloat3("コリジョンサイズ", &parameters_[typeIndex].attackParam.collisionSize.x, 0.01f);
+    ImGui::DragFloat3("コリジョンオフセット", &parameters_[typeIndex].attackParam.collisionOffset.x, 0.01f);
+    // 時間系
+    ImGui::Separator();
+    ImGui::Text("時間");
+    ImGui::DragFloat("予備動作時間", &parameters_[typeIndex].attackAnticipationTime, 0.01f, 0.0f, 5.0f);
+    ImGui::DragFloat("判定持続時間", &parameters_[typeIndex].attackParam.adaptTime, 0.01f);
+    ImGui::DragFloat("攻撃後待機時間", &parameters_[typeIndex].attackCooldownTime, 0.1f, 0.0f, 10.0f);
+    // 距離系
+    ImGui::Separator();
+    ImGui::Text("距離・移動");
+    ImGui::DragFloat("攻撃開始距離", &parameters_[typeIndex].attackStartDistance, 0.1f);
+    ImGui::DragFloat("攻撃時移動距離", &parameters_[typeIndex].attackParam.attackMoveDistance, 0.1f, 0.0f, 20.0f);
+    ImGui::DragFloat("攻撃時移動速度", &parameters_[typeIndex].attackParam.attackMoveSpeed, 0.1f, 0.0f, 50.0f);
+    // その他
+    ImGui::Separator();
+    ImGui::Text("その他");
+    ImGui::DragFloat("攻撃量", &parameters_[typeIndex].attackParam.attackValue, 0.1f);
+
+    ImGui::SeparatorText("死亡パラメータ");
     ImGui::DragFloat("DeathBlowValue", &parameters_[typeIndex].deathBlowValue, 0.1f);
     ImGui::DragFloat("DeathBlowValueY", &parameters_[typeIndex].deathBlowValueY, 0.1f);
     ImGui::DragFloat("DeathGravity", &parameters_[typeIndex].deathGravity, 0.1f);
@@ -302,6 +318,20 @@ void EnemyManager::SetGameCamera(GameCamera* gameCamera) {
 
 void EnemyManager::SetEnemySpawner(EnemySpawner* enemySpawner) {
     pEnemySpawner_ = enemySpawner;
+}
+
+void EnemyManager::UpdateAvailableAnimationsForEditor(BaseEnemy* enemy) {
+    if (!enemy) {
+        return;
+    }
+
+    // 敵のアニメーションリストを取得
+    auto animeNames = enemy->GetAnimationNames();
+
+    // エディター用に利用可能なアニメーションリストを設定
+    if (!animeNames.empty()) {
+        EnemyDamageReactionData::SetAvailableAnimations(animeNames);
+    }
 }
 
 void EnemyManager::CheckIsEnemiesCleared() {

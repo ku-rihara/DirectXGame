@@ -17,8 +17,10 @@
 // AttackStrategy
 #include "../Behavior/AttackStrategy/IEnemyAttackStrategy.h"
 // std
+#include <array>
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 class Player;
 class GameCamera;
@@ -38,35 +40,54 @@ public:
     };
 
     struct AttackParam {
-        float startTime;
         float attackValue;
         Vector3 collisionSize;
         Vector3 collisionOffset;
         float adaptTime;
+        float attackMoveDistance; // 攻撃時の正面方向への移動量
+        float attackMoveSpeed;    // 攻撃時の移動スピード
     };
 
     struct Parameter {
         AttackParam attackParam;
         Vector3 baseScale_;
         Vector2 hpBarPosOffset;
-        float chaseDistance;
-        float chaseSpeed;
         float basePosY;
         float burstTime;
-        float avoidanceRadius;
-        float maxChaseTime;
-        float chaseResetTime;
-        float chaseLimitDistance;
-        // attackParam
+        // 追従パラメータ
+        float chaseDistance;
+        float chaseSpeed;
+        float discoveryDelayTime = 0.5f;
+        // 攻撃パラメータ
         float attackStartDistance;
         float attackCooldownTime;
         float attackAnticipationTime;
-        // death Param
+        // 死亡パラメータ
         float deathBlowValue;
         float deathBlowValueY;
         float deathGravity;
         float deathRotateSpeed;
         float deathBurstTime;
+    };
+
+    // アニメーションタイプ（今後追加可能）
+    enum class AnimationType {
+        Wait,           // 待機
+        Spawn,          // スポーン
+        PreDash,        // ダッシュ予備動作
+        Dash,           // ダッシュ
+        Attack,         // 攻撃
+        DamageReaction, // ダメージリアクション
+        Death,          // 死亡
+        // 今後追加するアニメーションはここに追加
+        Count           // 総数（配列サイズ用）
+    };
+
+    // 追跡アニメーション状態
+    enum class ChaseAnimationState {
+        NONE,      // アニメーションなし
+        PRE_DASH,  // ダッシュ予備動作
+        DASHING    // ダッシュ中
     };
 
 public:
@@ -108,20 +129,40 @@ public:
     void RotateInit(); //< 回転初期化
 
     /// <summary>
+    /// スポーンアニメーションを再生
+    /// </summary>
+    void PlaySpawnAnimation();
+
+    /// <summary>
     /// 追跡開始時のアニメーション初期化
     /// </summary>
-    virtual void InitChaseAnimation() {}
+    void InitChaseAnimation();
 
     /// <summary>
     /// 追跡中のアニメーション更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    virtual void UpdateChaseAnimation([[maybe_unused]] float deltaTime) {}
+    void UpdateChaseAnimation(float deltaTime);
 
     /// <summary>
     /// 待機アニメーションにリセット
     /// </summary>
-    virtual void ResetToWaitAnimation() {}
+    void ResetToWaitAnimation();
+
+    /// <summary>
+    /// 指定したアニメーションを再生
+    /// </summary>
+    /// <param name="type">アニメーションタイプ</param>
+    /// <param name="isLoop">ループするか</param>
+    void PlayAnimation(AnimationType type, bool isLoop = false);
+
+    /// <summary>
+    /// アニメーション名で直接再生
+    /// </summary>
+    /// <param name="animationName">アニメーション名</param>
+    /// <param name="isLoop">ループするか</param>
+    /// <returns>再生成功したらtrue</returns>
+    bool PlayAnimationByName(const std::string& animationName, bool isLoop = false);
 
     /// <summary>
     /// ジャンプ処理
@@ -207,16 +248,31 @@ private:
     bool isDeath_;
     bool isCollisionRope_;
     bool isInAnticipation_ = false; // 現在前隙中かどうか
+    bool isAttacking_ = false;      // 攻撃中かどうか（押し戻し無効用）
 
     // damageInfo
     float damageCollTime_;
     std::string lastReceivedAttackName_;
 
 protected:
+    /// <summary>
+    /// アニメーション名を設定
+    /// </summary>
+    void SetAnimationName(AnimationType type, const std::string& name) {
+        animationNames_[static_cast<size_t>(type)] = name;
+    }
+
+    /// <summary>
+    /// アニメーション名を取得
+    /// </summary>
+    const std::string& GetAnimationName(AnimationType type) const {
+        return animationNames_[static_cast<size_t>(type)];
+    }
+
+protected:
     // 攻撃戦略
     std::unique_ptr<IEnemyAttackStrategy> attackStrategy_;
 
-    std::unique_ptr<KetaEngine::Object3d> obj3d_;
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
 
     std::unique_ptr<EnemyAttackCollisionBox> attackCollisionBox_;
@@ -225,6 +281,11 @@ protected:
 
     // flags
     bool isReturningFromAttack_;
+
+    // アニメーション関連
+    std::array<std::string, static_cast<size_t>(AnimationType::Count)> animationNames_;
+    ChaseAnimationState chaseAnimState_ = ChaseAnimationState::NONE;
+    bool isPreDashFinished_ = false;
 
     /// behavior
     std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_ = nullptr;
@@ -250,16 +311,19 @@ public:
     const Parameter& GetParameter() const { return parameter_; }
     int32_t GetGroupId() const { return groupId_; }
     float GetHP() const { return hp_; }
-    Vector3 GetBodyRotation() const { return obj3d_->transform_.rotation_; }
+    Vector3 GetBodyRotation() const { return objAnimation_->transform_.rotation_;}
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return damageBehavior_.get(); }
     EnemyManager* GetManager() const { return pEnemyManager_; }
     EnemyEffects* GetEnemyEffects() const { return enemyEffects_.get(); }
     EnemyAttackCollisionBox* GetAttackCollisionBox() const { return attackCollisionBox_.get(); }
-    KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
+    KetaEngine::Object3DAnimation* GetAnimationObject() const { return objAnimation_.get(); }
     bool GetIsReturningFromAttack() const { return isReturningFromAttack_; }
     bool IsInAnticipation() const { return isInAnticipation_; }
+    bool IsAttacking() const { return isAttacking_; }
+    ChaseAnimationState GetChaseAnimState() const { return chaseAnimState_; }
+    std::vector<std::string> GetAnimationNames() const;
 
     /// ========================================================================================
     ///  setter method
@@ -269,7 +333,7 @@ public:
     void SetManager(EnemyManager* manager);
     void SetCombo(Combo* combo);
     void SetParameter(const Type& type, const Parameter& paramater);
-    void SetBodyRotateX(float rotate) { obj3d_->transform_.rotation_.x = rotate; }
+    void SetBodyRotateX(float rotate) { objAnimation_->transform_.rotation_.x = rotate; }
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
@@ -277,4 +341,5 @@ public:
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
     void SetIsReturningFromAttack(bool is) { isReturningFromAttack_ = is; }
     void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }
+    void SetIsAttacking(bool value) { isAttacking_ = value; }
 };

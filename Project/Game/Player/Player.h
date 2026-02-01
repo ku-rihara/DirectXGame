@@ -33,6 +33,7 @@ class GameCamera;
 class Combo;
 class AttackEffect;
 class PlayerComboAttackController;
+class DeathTimer;
 
 /// <summary>
 /// プレイヤークラス
@@ -133,6 +134,7 @@ private:
     Combo* pCombo_                                      = nullptr;
     AttackEffect* pAttackEffect_                        = nullptr;
     PlayerComboAttackController* comboAttackController_ = nullptr;
+    DeathTimer* pDeathTimer_                            = nullptr;
 
     const KetaEngine::ViewProjection* viewProjection_ = nullptr;
 
@@ -167,6 +169,11 @@ private:
     const bool* isDeath_;
     bool isDeathRenditionFinish_ = false;
 
+    // ダメージクールダウン
+    bool isDamageColling_ = false;
+    float damageCollTime_ = 0.0f;
+    float damageCollDuration_ = 1.0f; // ダメージ無敵時間
+
 public:
     // getter
     PlayerHandLeft* GetLeftHand() const { return leftHand_.get(); }
@@ -194,6 +201,7 @@ public:
     void SetCombo(Combo* combo);
     void SetHitStop(AttackEffect* hitStop);
     void SetComboAttackController(PlayerComboAttackController* playerComboAttackController);
+    void SetDeathTimer(DeathTimer* deathTimer) { pDeathTimer_ = deathTimer; }
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
 

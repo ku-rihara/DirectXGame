@@ -248,8 +248,13 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
     int32_t removeIndex = -1;
 
     // 各分岐のUIを描画（ComboBranchParameterに委譲）
-    for (size_t i = 0; i < comboBranches_.size(); ++i) {
+    size_t branchSize = comboBranches_.size();
+    for (size_t i = 0; i < branchSize; ++i) {
         auto& branch = comboBranches_[i];
+        if (!branch) {
+            continue; // nullチェック
+        }
+
         ImGui::PushID(static_cast<int>(i));
 
         // 分岐のパラメータUIを描画（削除要求があればremoveIndexに設定）
@@ -260,11 +265,15 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
         ImGui::PopID();
     }
 
-    // 削除処理
+    // 削除処理（ループ終了後に安全に削除）
     if (removeIndex >= 0 && removeIndex < static_cast<int32_t>(comboBranches_.size())) {
-        comboBranches_.erase(comboBranches_.begin() + removeIndex);
-        // branchCount_を更新
-        branchCount_ = static_cast<int32_t>(comboBranches_.size());
+        // 削除前にbranchCount_を更新
+        branchCount_ = static_cast<int32_t>(comboBranches_.size()) - 1;
+
+        // イテレータを使って安全に削除
+        auto it = comboBranches_.begin() + removeIndex;
+        comboBranches_.erase(it);
+
         // タイムラインの分岐トラックを再構築
         RebuildBranchTracks();
     }
@@ -321,10 +330,7 @@ bool PlayerComboAttackData::IsReserveNextAttack(float currentTime, const ComboBr
         return false;
     }
 
-    // 発動条件チェック
-    if (!CheckTriggerCondition(static_cast<TriggerCondition>(triggerConditionInt_))) {
-        return false;
-    }
+    // 発動条件は最初の攻撃開始時のみチェックされるため、コンボ継続時はチェックしない
 
     // キーボード入力チェック
     if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(branch.GetKeyboardButton()))) {
@@ -351,10 +357,7 @@ bool PlayerComboAttackData::IsCancelAttack(float currentTime, const ComboBranchP
         return false;
     }
 
-    // 発動条件チェック
-    if (!CheckTriggerCondition(static_cast<TriggerCondition>(triggerConditionInt_))) {
-        return false;
-    }
+    // 発動条件は最初の攻撃開始時のみチェックされるため、コンボ継続時はチェックしない
 
     // キーボード入力チェック
     if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(branch.GetKeyboardButton()))) {

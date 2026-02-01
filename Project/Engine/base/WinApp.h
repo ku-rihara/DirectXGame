@@ -47,8 +47,8 @@ public: // 静的メンバ変数
 
 #ifdef _DEBUG
     // Debug時のウィンドウサイズ（ImGui含む画面全体）
-    static inline int kDebugWindowWidth = 1920;
-    static inline int kDebugWindowHeight = 1080;
+    static inline int kDebugWindowWidth = 1850;
+    static inline int kDebugWindowHeight = 950;
 #endif
 
     // ウィンドウクラス名

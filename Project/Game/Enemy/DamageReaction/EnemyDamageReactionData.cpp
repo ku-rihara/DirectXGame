@@ -71,6 +71,7 @@ void EnemyDamageReactionData::LoadRendition() {
 ///==========================================================
 void EnemyDamageReactionData::RegisterParams() {
     globalParameter_->Regist(groupName_, "TriggerAttackName", &reactionParam_.triggerAttackName);
+    globalParameter_->Regist(groupName_, "DamageAnimationName", &reactionParam_.damageAnimationName);
     globalParameter_->Regist(groupName_, "ReactionState", &reactionParam_.intReactionState);
     globalParameter_->Regist(groupName_, "damageCollingTime", &reactionParam_.damageCollingTime);
     globalParameter_->Regist(groupName_, "isPriorityReaction", &reactionParam_.isPriorityReaction);
@@ -106,6 +107,51 @@ void EnemyDamageReactionData::AdjustParam() {
     // Trigger Attack
     ImGui::SeparatorText("Trigger Attack");
     SelectTriggerAttack();
+
+    // Damage Animation
+    ImGui::SeparatorText("Damage Animation");
+
+    // 利用可能なアニメーションがある場合はドロップダウン表示
+    if (!availableAnimations_.empty()) {
+        // 現在選択されているインデックスを検索
+        int currentIndex = 0; // 0 = "None"
+        for (size_t i = 0; i < availableAnimations_.size(); ++i) {
+            if (availableAnimations_[i] == reactionParam_.damageAnimationName) {
+                currentIndex = static_cast<int>(i + 1); // +1 because 0 is "None"
+                break;
+            }
+        }
+
+        // ドロップダウン用のアイテムリスト作成
+        std::vector<const char*> items;
+        items.push_back("None"); // 最初に"None"オプション
+        for (const auto& anim : availableAnimations_) {
+            items.push_back(anim.c_str());
+        }
+
+        if (ImGui::Combo("Animation", &currentIndex, items.data(), static_cast<int>(items.size()))) {
+            if (currentIndex == 0) {
+                reactionParam_.damageAnimationName.clear(); // None選択時はクリア
+            } else {
+                reactionParam_.damageAnimationName = availableAnimations_[currentIndex - 1];
+            }
+        }
+    } else {
+        // アニメーションリストがない場合はテキスト入力
+        char buffer[256] = {};
+        strncpy_s(buffer, reactionParam_.damageAnimationName.c_str(), sizeof(buffer) - 1);
+        if (ImGui::InputText("Animation Name", buffer, sizeof(buffer))) {
+            reactionParam_.damageAnimationName = buffer;
+        }
+        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Tip: Set enemy animations to enable dropdown");
+    }
+
+    // 現在設定されているアニメーション名を表示
+    if (!reactionParam_.damageAnimationName.empty()) {
+        ImGui::Text("Current: %s", reactionParam_.damageAnimationName.c_str());
+    } else {
+        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "No animation set");
+    }
 
     ImGui::Separator();
 

@@ -11,9 +11,9 @@
             0.0
         ],
         "AttackCollisionSize1": [
-            0.0,
-            0.0,
-            0.0
+            7.0,
+            7.0,
+            7.0
         ],
         "AttackCollisionSize2": [
             0.0,
@@ -22,15 +22,19 @@
         ],
         "ChaseLimitDistance1": 14.0,
         "ChaseLimitDistance2": 14.0,
-        "adaptTime1": 0.0,
+        "adaptTime1": 0.8500000238418579,
         "adaptTime2": 0.0,
         "attackAnticipationTime1": 0.0,
         "attackAnticipationTime2": 0.0,
-        "attackCooldownTime1": 0.0,
+        "attackCooldownTime1": 1.100000023841858,
         "attackCooldownTime2": 0.0,
-        "attackStartDistance1": 0.0,
+        "attackMoveDistance1": 5.699999809265137,
+        "attackMoveDistance2": 0.0,
+        "attackMoveSpeed1": 8.600000381469727,
+        "attackMoveSpeed2": 0.0,
+        "attackStartDistance1": 6.599999904632568,
         "attackStartDistance2": 0.0,
-        "attackValue1": 0.0,
+        "attackValue1": 10.0,
         "attackValue2": 0.0,
         "avoidanceRadius1": 20.0,
         "avoidanceRadius2": 20.0,
@@ -52,18 +56,20 @@
         "chaseDistance2": 34.52000045776367,
         "chaseResetTime1": 2.0,
         "chaseResetTime2": 2.0,
-        "chaseSpeed1": 0.3499999940395355,
+        "chaseSpeed1": 1.8899999856948853,
         "chaseSpeed2": 0.3700000047683716,
         "deathBlowValue1": 2.2699999809265137,
         "deathBlowValue2": 2.2699999809265137,
         "deathBlowValueY1": 50.0,
         "deathBlowValueY2": 50.0,
-        "deathBurstTime1": 0.5,
+        "deathBurstTime1": 0.5299999713897705,
         "deathBurstTime2": 0.5,
         "deathGravity1": 100.0,
         "deathGravity2": 100.0,
         "deathRotateSpeed1": 23.0,
         "deathRotateSpeed2": 23.0,
+        "discoveryDelayTime1": 1.5800000429153442,
+        "discoveryDelayTime2": 0.5,
         "hitbackRotateBackRatio1": 0.800000011920929,
         "hitbackRotateBackRatio2": 0.800000011920929,
         "hitbackRotateTime1": 0.5400000214576721,
@@ -79,14 +85,14 @@
             99.29000091552734
         ],
         "initScale1": [
-            3.0,
-            3.0,
-            3.0
+            4.0,
+            4.0,
+            4.0
         ],
         "initScale2": [
-            1.399999976158142,
-            1.399999976158142,
-            1.399999976158142
+            4.0,
+            4.0,
+            4.0
         ],
         "maxChaseTime1": 5.0,
         "maxChaseTime2": 5.0,

@@ -13,17 +13,33 @@ void PlayerComboAttackTimelineData::AddTrackInfo(const TrackInfo& info) {
 }
 
 void PlayerComboAttackTimelineData::RemoveTrackInfo(int32_t trackIndex) {
+    // 無効なインデックスの場合は早期リターン
+    if (trackIndex < 0) {
+        return;
+    }
+
     // 選択したトラックを削除
     auto it = std::remove_if(addedTracks_.begin(), addedTracks_.end(),
         [trackIndex](const TrackInfo& info) {
             return info.trackIndex == trackIndex;
         });
-    addedTracks_.erase(it, addedTracks_.end());
+
+    // 削除対象が見つかった場合のみerase
+    if (it != addedTracks_.end()) {
+        addedTracks_.erase(it, addedTracks_.end());
+    }
 
     // 削除後のインデックスを調整
     for (auto& track : addedTracks_) {
         if (track.trackIndex > trackIndex) {
             track.trackIndex--;
+        }
+    }
+
+    // デフォルトトラックのインデックスも調整（削除されたトラックより大きいインデックスを持つ場合）
+    for (auto& defaultIdx : defaultTrackIndices_) {
+        if (defaultIdx > trackIndex) {
+            defaultIdx--;
         }
     }
 }
@@ -192,6 +208,11 @@ int32_t PlayerComboAttackTimelineData::GetDefaultTrackIndex(DefaultTrack track) 
 }
 
 void PlayerComboAttackTimelineData::UpdateTrackIndicesAfterInsert(int32_t insertPosition, int32_t count) {
+    // countが0以下の場合は処理不要
+    if (count <= 0) {
+        return;
+    }
+
     // 挿入位置以降のトラックインデックスをcountだけ増加
     for (auto& track : addedTracks_) {
         // 新しく追加された分岐トラック以外で、挿入位置以降のものを調整
@@ -199,6 +220,13 @@ void PlayerComboAttackTimelineData::UpdateTrackIndicesAfterInsert(int32_t insert
             if (track.trackIndex >= insertPosition) {
                 track.trackIndex += count;
             }
+        }
+    }
+
+    // デフォルトトラックのインデックスも調整（通常は挿入位置より前なので変更されない）
+    for (auto& defaultIdx : defaultTrackIndices_) {
+        if (defaultIdx >= insertPosition) {
+            defaultIdx += count;
         }
     }
 }

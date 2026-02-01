@@ -52,6 +52,9 @@ void EnemyAttack::ChangeState(AttackState newState) {
 
     case AttackState::START:
         currentStateFunction_ = [this]() {
+            // 攻撃中フラグをオン（押し戻し無効用）
+            pBaseEnemy_->SetIsAttacking(true);
+
             // 攻撃開始処理
             if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
                 strategy->Start();
@@ -83,6 +86,8 @@ void EnemyAttack::ChangeState(AttackState newState) {
         currentStateFunction_ = [this]() {
             // 念のため前隙フラグをオフ
             pBaseEnemy_->SetIsInAnticipation(false);
+            // 攻撃中フラグをオフ
+            pBaseEnemy_->SetIsAttacking(false);
 
             // 終了処理
             if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {

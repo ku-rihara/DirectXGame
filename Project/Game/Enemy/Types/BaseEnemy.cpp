@@ -1,5 +1,7 @@
 #include "BaseEnemy.h"
 
+// std
+#include <algorithm>
 // Manager
 #include "Enemy/EnemyManager.h"
 // behavior
@@ -151,6 +153,11 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 
     if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+        // 攻撃中は押し戻し無効
+        if (isAttacking_ || enemy->IsAttacking()) {
+            return;
+        }
+
         // 敵の中心座標を取得
         const Vector3& enemyPosition = enemy->GetCollisionPos();
 
@@ -385,13 +392,146 @@ void BaseEnemy::SetParameter(const Type& type, const Parameter& parameter) {
 }
 
 void BaseEnemy::SetBodyColor(const Vector4& color) {
-    obj3d_->GetModelMaterial()->GetMaterialData()->color = color;
+    if (objAnimation_) {
+        objAnimation_->GetModelMaterial()->GetMaterialData()->color = color;
+    }
 }
 
 void BaseEnemy::RotateInit() {
-    obj3d_->transform_.rotation_ = Vector3::ZeroVector();
+    if (objAnimation_) {
+        objAnimation_->transform_.rotation_ = Vector3::ZeroVector();
+    }
 }
 
 void BaseEnemy::ScaleReset() {
     baseTransform_.scale_ = parameter_.baseScale_;
+}
+
+///========================================================
+/// スポーンアニメーションを再生
+///========================================================
+void BaseEnemy::PlaySpawnAnimation() {
+    if (!objAnimation_) {
+        return;
+    }
+
+    const std::string& spawnAnim = GetAnimationName(AnimationType::Spawn);
+    if (spawnAnim.empty()) {
+        return;
+    }
+
+    objAnimation_->ChangeAnimation(spawnAnim);
+    objAnimation_->SetLoop(false); 
+}
+
+///========================================================
+/// 指定したアニメーションを再生
+///========================================================
+void BaseEnemy::PlayAnimation(AnimationType type, bool isLoop) {
+    if (!objAnimation_) {
+        return;
+    }
+
+    const std::string& animeName = GetAnimationName(type);
+    if (animeName.empty()) {
+        return; 
+    }
+
+    objAnimation_->ChangeAnimation(animeName);
+    objAnimation_->SetLoop(isLoop);
+}
+
+///========================================================
+/// アニメーション名で直接再生
+///========================================================
+bool BaseEnemy::PlayAnimationByName(const std::string& animationName, bool isLoop) {
+    if (!objAnimation_ || animationName.empty()) {
+        return false;
+    }
+
+    // 利用可能なアニメーションリストを取得して確認
+    auto animeNames = objAnimation_->GetAnimationNames();
+    auto it = std::find(animeNames.begin(), animeNames.end(), animationName);
+
+    if (it != animeNames.end()) {
+        objAnimation_->ChangeAnimation(animationName);
+        objAnimation_->SetLoop(isLoop);
+        return true;
+    }
+
+    return false; // アニメーションが見つからない
+}
+
+///========================================================
+/// 追跡開始時のアニメーション初期化
+///========================================================
+void BaseEnemy::InitChaseAnimation() {
+    if (!objAnimation_) {
+        return;
+    }
+
+    const std::string& dashAnim    = GetAnimationName(AnimationType::Dash);
+    const std::string& preDashAnim = GetAnimationName(AnimationType::PreDash);
+
+    // 既にダッシュ中、または予備動作が終了している場合は直接ダッシュアニメーションへ
+    if (chaseAnimState_ == ChaseAnimationState::DASHING ||
+        (chaseAnimState_ == ChaseAnimationState::PRE_DASH && isPreDashFinished_)) {
+        chaseAnimState_ = ChaseAnimationState::DASHING;
+        objAnimation_->ChangeAnimation(dashAnim);
+        objAnimation_->SetLoop(true);
+        return;
+    }
+
+    // まだ予備動作を開始していない場合のみ開始
+    if (chaseAnimState_ == ChaseAnimationState::NONE) {
+        chaseAnimState_    = ChaseAnimationState::PRE_DASH;
+        isPreDashFinished_ = false;
+        objAnimation_->ChangeAnimation(preDashAnim);
+        objAnimation_->SetLoop(false); // 予備動作はループしない
+
+        // アニメーション終了時のコールバックを設定
+        objAnimation_->SetAnimationEndCallback([this, preDashAnim](const std::string& animationName) {
+            if (animationName == preDashAnim) {
+                isPreDashFinished_ = true;
+            }
+        });
+    }
+}
+
+///========================================================
+/// 追跡中のアニメーション更新
+///========================================================
+void BaseEnemy::UpdateChaseAnimation([[maybe_unused]] float deltaTime) {
+    if (!objAnimation_) {
+        return;
+    }
+
+    // 予備動作が終了したらダッシュアニメーションに切り替え
+    if (chaseAnimState_ == ChaseAnimationState::PRE_DASH && isPreDashFinished_) {
+        chaseAnimState_ = ChaseAnimationState::DASHING;
+        objAnimation_->ChangeAnimation(GetAnimationName(AnimationType::Dash));
+        objAnimation_->SetLoop(true); // ダッシュはループ
+    }
+}
+
+///========================================================
+/// 待機アニメーションにリセット
+///========================================================
+void BaseEnemy::ResetToWaitAnimation() {
+    if (!objAnimation_) {
+        return;
+    }
+
+    // 待機アニメーションに戻す
+    chaseAnimState_    = ChaseAnimationState::NONE;
+    isPreDashFinished_ = false;
+    objAnimation_->ChangeAnimation(GetAnimationName(AnimationType::Wait));
+    objAnimation_->SetLoop(true); // 待機アニメーションはループ
+}
+
+std::vector<std::string> BaseEnemy::GetAnimationNames() const {
+    if (objAnimation_) {
+        return objAnimation_->GetAnimationNames();
+    }
+    return {};
 }

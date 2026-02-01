@@ -6,7 +6,8 @@
 class EnemyWait : public BaseEnemyBehavior {
 public:
     // コンストラクタ
-    EnemyWait(BaseEnemy* boss);
+    // skipDiscoveryDelay: trueの場合、発見遅延をスキップして即座に追跡可能
+    EnemyWait(BaseEnemy* boss, bool skipDiscoveryDelay = false);
     ~EnemyWait();
 
     void Update() override;
@@ -25,6 +26,10 @@ private:
     // 攻撃後待機時間
     float attackCooldownTimer_;
     bool isInAttackCooldown_;
+
+    // プレイヤー発見後の遅延
+    bool hasDiscoveredPlayer_;
+    float discoveryDelayTimer_;
 
     KetaEngine::Easing<Vector2> spriteEase_;
     Vector2 tempSpriteScale_;

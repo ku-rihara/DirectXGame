@@ -1,5 +1,6 @@
 #pragma once
 #include "IEnemyAttackStrategy.h"
+#include "Vector3.h"
 
 class StrongEnemy;
 
@@ -17,4 +18,11 @@ public:
     void Update() override;
     bool IsFinished() const override;
     void Finish() override;
+    void Reset() override;
+
+private:
+    // 攻撃時の移動
+    Vector3 attackDirection_;      // 攻撃方向
+    float currentMoveDistance_;    // 現在の移動距離
+    float targetMoveDistance_;     // 目標移動距離
 };

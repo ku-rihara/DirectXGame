@@ -16,6 +16,7 @@ void TimelineDrawer::Init() {
     draggingDurationKeyIndex_   = -1;
     rightClickedTrackIndex_     = -1;
     nextTrackId_                = 0;
+    isDraggingPlayhead_         = false;
 }
 
 uint32_t TimelineDrawer::AddTrack(const std::string& trackName, std::function<void(float)> callback) {
@@ -516,8 +517,21 @@ void TimelineDrawer::HandleCanvasInteraction(const Vector2& canvasPos, const Vec
     ImGui::SetCursorScreenPos(ImVec2(canvasPos.x, canvasPos.y));
     ImGui::InvisibleButton("timeline_canvas", ImVec2(canvasSize.x, canvasSize.y));
 
-    // マウス長押しでフレームを移動
-    if (ImGui::IsItemActive() && ImGui::IsMouseDown(0)) {
+    // 再生ヘッド（縦線）の現在位置を計算
+    float currentFrameX = canvasPos.x + headerWidth_ + (currentFrame_ - scrollOffset_) * frameWidth;
+    const float playheadHitWidth = 8.0f; // 縦線をクリックできる範囲（片側ピクセル数）
+
+    // マウスクリック時：縦線の近くをクリックした場合のみドラッグ開始
+    if (ImGui::IsMouseClicked(0) && ImGui::IsItemHovered()) {
+        ImVec2 mousePos = ImGui::GetMousePos();
+        // 縦線の近くかどうかをチェック
+        if (mousePos.x >= currentFrameX - playheadHitWidth && mousePos.x <= currentFrameX + playheadHitWidth) {
+            isDraggingPlayhead_ = true;
+        }
+    }
+
+    // ドラッグ中：縦線を移動
+    if (isDraggingPlayhead_ && ImGui::IsMouseDown(0)) {
         ImVec2 mousePos = ImGui::GetMousePos();
         if (mousePos.x > canvasPos.x + headerWidth_) {
             int clickedFrame = scrollOffset_ + static_cast<int>((mousePos.x - canvasPos.x - headerWidth_) / frameWidth);
@@ -526,6 +540,11 @@ void TimelineDrawer::HandleCanvasInteraction(const Vector2& canvasPos, const Vec
                 ApplyCurrentFrame();
             }
         }
+    }
+
+    // マウスリリース時：ドラッグ終了
+    if (ImGui::IsMouseReleased(0)) {
+        isDraggingPlayhead_ = false;
     }
 
     // スクロール
