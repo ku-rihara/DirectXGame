@@ -77,9 +77,9 @@
             2.009999990463257
         ],
         "collisionSize": [
-            7.0,
-            7.0,
-            7.0
+            5.0,
+            5.0,
+            5.0
         ],
         "collisionStartTime": 0.0,
         "enableFall": false,
@@ -92,7 +92,7 @@
         "isMotionOnly": false,
         "isPositionYSelect": false,
         "keyBordBottom": 35,
-        "loopNum": 5,
+        "loopNum": 0,
         "loopWaitTime": 0.10000000149011612,
         "moveEaseTime": 0.1666666716337204,
         "moveEaseType": 0,
@@ -103,7 +103,7 @@
             2.0
         ],
         "playbackSpeed": 1.0,
-        "power": 7.599999904632568,
+        "power": 25.0,
         "resetFovEaseType": 1,
         "resetPosEaseType": 1,
         "resetRotateEaseType": 1,
