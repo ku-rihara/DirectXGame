@@ -413,6 +413,11 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 
     if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+        // 敵が攻撃中は押し戻し無効
+        if (enemy->IsAttacking()) {
+            return;
+        }
+
         // 敵の中心座標を取得
         const Vector3& enemyPosition = enemy->GetCollisionPos();
 

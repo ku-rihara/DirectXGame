@@ -159,7 +159,7 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::SeparatorText("追従パラメータ");
     ImGui::DragFloat("追従速度", &parameters_[typeIndex].chaseSpeed, 0.01f);
     ImGui::DragFloat("追従距離", &parameters_[typeIndex].chaseDistance, 0.01f);
-    ImGui::DragFloat("発見後遅延時間", &parameters_[typeIndex].discoveryDelayTime, 0.01f, 0.0f, 3.0f);
+    ImGui::DragFloat("PreDash後の遅延時間", &parameters_[typeIndex].discoveryDelayTime, 0.01f, 0.0f, 3.0f);
 
     ImGui::SeparatorText("攻撃パラメータ");
     // コリジョン

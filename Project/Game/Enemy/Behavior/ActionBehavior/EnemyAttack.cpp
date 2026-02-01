@@ -55,6 +55,9 @@ void EnemyAttack::ChangeState(AttackState newState) {
             // 攻撃中フラグをオン（押し戻し無効用）
             pBaseEnemy_->SetIsAttacking(true);
 
+            // 攻撃アニメーション再生
+            pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Attack, false);
+
             // 攻撃開始処理
             if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
                 strategy->Start();

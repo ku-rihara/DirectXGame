@@ -323,6 +323,7 @@ public:
     bool IsInAnticipation() const { return isInAnticipation_; }
     bool IsAttacking() const { return isAttacking_; }
     ChaseAnimationState GetChaseAnimState() const { return chaseAnimState_; }
+    bool IsPreDashFinished() const { return isPreDashFinished_; }
     std::vector<std::string> GetAnimationNames() const;
 
     /// ========================================================================================

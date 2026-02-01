@@ -1,22 +1,22 @@
 {
-    "JumpRotation0": {
+    "StrongLastPunch1": {
         "Rotation_EaseType": 22,
         "Rotation_IsActive": true,
-        "Rotation_IsReturnToOrigin": false,
-        "Rotation_MaxTime": 0.5299999713897705,
+        "Rotation_IsReturnToOrigin": true,
+        "Rotation_MaxTime": 0.38999998569488525,
         "Rotation_ReturnEaseType": 0,
-        "Rotation_ReturnMaxTime": 1.0,
+        "Rotation_ReturnMaxTime": 0.12999999523162842,
         "Rotation_endValue": [
-            6.2831854820251465,
-            0.05235987901687622,
+            0.1780235320329666,
+            0.0,
             0.0
         ],
         "Scale_EaseType": 0,
-        "Scale_IsActive": true,
-        "Scale_IsReturnToOrigin": true,
+        "Scale_IsActive": false,
+        "Scale_IsReturnToOrigin": false,
         "Scale_MaxTime": 1.0,
         "Scale_ReturnEaseType": 0,
-        "Scale_ReturnMaxTime": 0.0,
+        "Scale_ReturnMaxTime": 1.0,
         "Scale_endValue": [
             1.0,
             1.0,
@@ -36,8 +36,8 @@
             0.0,
             0.0
         ],
-        "returnStartTime": 0.0,
-        "startTime": 0.38999998569488525,
+        "returnStartTime": 0.6100000143051147,
+        "startTime": 0.0,
         "timeMode": 1
     }
 }

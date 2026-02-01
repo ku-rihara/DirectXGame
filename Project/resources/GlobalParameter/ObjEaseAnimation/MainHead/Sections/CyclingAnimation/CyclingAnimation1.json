@@ -1,32 +1,32 @@
 {
-    "JumpRotation0": {
-        "Rotation_EaseType": 22,
+    "CyclingAnimation1": {
+        "Rotation_EaseType": 0,
         "Rotation_IsActive": true,
         "Rotation_IsReturnToOrigin": false,
-        "Rotation_MaxTime": 0.5299999713897705,
+        "Rotation_MaxTime": 0.6700000166893005,
         "Rotation_ReturnEaseType": 0,
         "Rotation_ReturnMaxTime": 1.0,
         "Rotation_endValue": [
-            6.2831854820251465,
-            0.05235987901687622,
-            0.0
+            0.0,
+            13.784558296203613,
+            -1.5707963705062866
         ],
         "Scale_EaseType": 0,
-        "Scale_IsActive": true,
-        "Scale_IsReturnToOrigin": true,
+        "Scale_IsActive": false,
+        "Scale_IsReturnToOrigin": false,
         "Scale_MaxTime": 1.0,
         "Scale_ReturnEaseType": 0,
-        "Scale_ReturnMaxTime": 0.0,
+        "Scale_ReturnMaxTime": 1.0,
         "Scale_endValue": [
             1.0,
             1.0,
             1.0
         ],
-        "Translation_EaseType": 0,
-        "Translation_IsActive": false,
+        "Translation_EaseType": 22,
+        "Translation_IsActive": true,
         "Translation_IsLookAtDirection": false,
         "Translation_IsReturnToOrigin": false,
-        "Translation_MaxTime": 1.0,
+        "Translation_MaxTime": 0.7200000286102295,
         "Translation_RailFileName": "",
         "Translation_ReturnEaseType": 0,
         "Translation_ReturnMaxTime": 1.0,
@@ -37,7 +37,7 @@
             0.0
         ],
         "returnStartTime": 0.0,
-        "startTime": 0.38999998569488525,
+        "startTime": 0.0,
         "timeMode": 1
     }
 }

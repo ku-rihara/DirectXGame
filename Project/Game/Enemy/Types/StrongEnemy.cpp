@@ -22,9 +22,8 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     objAnimation_->Init();
     objAnimation_->Add(GetAnimationName(AnimationType::Spawn) + ".gltf");
     objAnimation_->Add(GetAnimationName(AnimationType::PreDash) + ".gltf");
-    objAnimation_->Add(GetAnimationName(AnimationType::PreDash) + ".gltf");
-    objAnimation_->Add(GetAnimationName(AnimationType::Attack) + ".gltf");
     objAnimation_->Add(GetAnimationName(AnimationType::Dash) + ".gltf");
+    objAnimation_->Add(GetAnimationName(AnimationType::Attack) + ".gltf");
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
     objAnimation_->transform_.scale_ = Vector3::OneVector();

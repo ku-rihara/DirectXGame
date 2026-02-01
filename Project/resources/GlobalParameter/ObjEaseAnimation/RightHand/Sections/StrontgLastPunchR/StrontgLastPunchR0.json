@@ -1,40 +1,40 @@
 {
-    "AudienceDisAppear0": {
+    "StrontgLastPunchR0": {
         "Rotation_EaseType": 0,
-        "Rotation_IsActive": true,
+        "Rotation_IsActive": false,
         "Rotation_IsReturnToOrigin": false,
-        "Rotation_MaxTime": 0.5199999809265137,
+        "Rotation_MaxTime": 1.0,
         "Rotation_ReturnEaseType": 0,
         "Rotation_ReturnMaxTime": 1.0,
         "Rotation_endValue": [
             0.0,
-            -12.566370964050293,
+            0.0,
             0.0
         ],
-        "Scale_EaseType": 21,
+        "Scale_EaseType": 22,
         "Scale_IsActive": true,
         "Scale_IsReturnToOrigin": false,
-        "Scale_MaxTime": 0.5299999713897705,
-        "Scale_ReturnEaseType": 0,
-        "Scale_ReturnMaxTime": 1.0,
+        "Scale_MaxTime": 0.20000000298023224,
+        "Scale_ReturnEaseType": 6,
+        "Scale_ReturnMaxTime": 0.09000000357627869,
         "Scale_endValue": [
-            0.0,
-            0.0,
-            0.0
+            1.399999976158142,
+            1.399999976158142,
+            1.399999976158142
         ],
-        "Translation_EaseType": 0,
-        "Translation_IsActive": false,
+        "Translation_EaseType": 22,
+        "Translation_IsActive": true,
         "Translation_IsLookAtDirection": false,
         "Translation_IsReturnToOrigin": false,
-        "Translation_MaxTime": 1.0,
+        "Translation_MaxTime": 0.30000001192092896,
         "Translation_RailFileName": "",
         "Translation_ReturnEaseType": 0,
         "Translation_ReturnMaxTime": 1.0,
         "Translation_UseRail": false,
         "Translation_endValue": [
+            0.8100000023841858,
             0.0,
-            0.0,
-            0.0
+            -1.809999942779541
         ],
         "returnStartTime": 0.0,
         "startTime": 0.0,

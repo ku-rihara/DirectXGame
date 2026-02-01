@@ -29,7 +29,8 @@ private:
 
     // プレイヤー発見後の遅延
     bool hasDiscoveredPlayer_;
-    float discoveryDelayTimer_;
+    bool isPreDashAnimFinished_;  // PreDashアニメーション終了フラグ
+    float discoveryDelayTimer_;   // アニメーション終了後の遅延タイマー
 
     KetaEngine::Easing<Vector2> spriteEase_;
     Vector2 tempSpriteScale_;

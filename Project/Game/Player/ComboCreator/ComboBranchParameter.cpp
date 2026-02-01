@@ -25,6 +25,8 @@ void ComboBranchParameter::RegisterParams() {
 }
 
 bool ComboBranchParameter::DrawParameterUI(const std::string& attackFolderPath, const std::string& parentGroupName) {
+    attackFolderPath;
+    parentGroupName;
 #ifdef _DEBUG
     bool requestDelete = false;
 

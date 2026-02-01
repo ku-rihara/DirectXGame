@@ -58,14 +58,24 @@ private:
     std::string GetSRTName(const TransformType& type) const;
     void CreateOrLoadSections(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
     void UpdateActiveSection(float speedRate);
-   
+
+    // SRT独立進行用メソッド
+    void UpdateIndependentSRTProgression();
+    void AdvanceTransformToNextSection(TransformType type);
+    bool AreAllSRTFinished() const;
+
 private:
     //*---------------------------- private Variant ----------------------------*//
-   
+
     const std::string baseFolderPath_ = "ObjEaseAnimation/";
 
     // originParam
     std::array<Vector3, static_cast<size_t>(TransformType::Count)> originalValues_;
+
+    // SRT独立進行用 - 各TransformTypeごとのアクティブセクションインデックス
+    std::array<int32_t, static_cast<size_t>(TransformType::Count)> activeSectionIndices_ = {0, 0, 0};
+    // 各TransformTypeが全セクション完了したかどうか
+    std::array<bool, static_cast<size_t>(TransformType::Count)> srtAllSectionsFinished_ = {false, false, false};
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
@@ -76,6 +86,9 @@ public:
     Vector3 GetActiveKeyFrameValue(const TransformType& type) const;
     bool GetIsUseRailActiveKeyFrame() const;
     RailPlayer* GetCurrentRailPlayer() const;
+
+    // アニメーション開始前のオフセット値を設定
+    void SetPreAnimationOffsets(const Vector3& scale, const Vector3& rotation, const Vector3& translation);
 };
 
 }; // KetaEngine

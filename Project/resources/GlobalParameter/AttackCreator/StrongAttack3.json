@@ -1,18 +1,27 @@
 {
     "StrongAttack3": {
         "Audio_Attack_FileName": "",
+        "Audio_Attack_OnHit_FileName": "",
+        "Audio_Attack_OnHit_StartTiming": 0.0,
+        "Audio_Attack_OnHit_Volume": 1.0,
         "Audio_Attack_StartTiming": 0.0,
         "Audio_Attack_TriggerByHit": false,
         "Audio_Attack_Volume": 1.0,
         "Audio_Hit_FileName": "StrongPunch1",
+        "Audio_Hit_OnHit_FileName": "",
+        "Audio_Hit_OnHit_StartTiming": 0.0,
+        "Audio_Hit_OnHit_Volume": 1.0,
         "Audio_Hit_StartTiming": 0.0,
         "Audio_Hit_TriggerByHit": true,
         "Audio_Hit_Volume": 0.28700000047683716,
         "CameraAction_FileName": "None",
+        "CameraAction_IsCameraReset": false,
         "CameraAction_OnHit_FileName": "PlayerthrustAttack",
+        "CameraAction_OnHit_IsCameraReset": false,
         "CameraAction_OnHit_StartTiming": 0.0,
         "CameraAction_StartTiming": 0.0,
         "CameraAction_TriggerByHit": true,
+        "ComboBranchCount": 0,
         "Condition": 0,
         "HitStop_FileName": "None",
         "HitStop_OnHit_FileName": "StrongUpperHitStop",
@@ -22,11 +31,11 @@
         "KnockBackPower": 37.189998626708984,
         "Main_Head_FileName": "",
         "Main_Head_StartTiming": 0.0,
-        "ObjAnim_Head_FileName": "StrongUpper",
+        "ObjAnim_Head_FileName": "StrongLastPunch",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "UpperHandMotion",
         "ObjAnim_LeftHand_StartTiming": 0.0,
-        "ObjAnim_RightHand_FileName": "",
+        "ObjAnim_RightHand_FileName": "StrontgLastPunchR",
         "ObjAnim_RightHand_StartTiming": 0.0,
         "ParticleEffectParam_FileName": "",
         "ParticleEffectParam_OnHit_FileName": "",
@@ -59,6 +68,7 @@
             6.0,
             6.0
         ],
+        "collisionStartTime": 0.0,
         "enableFall": false,
         "finishTimeOffset": 0.0,
         "finishWaitTime": 0.15000000596046448,
@@ -73,12 +83,12 @@
         "loopWaitTime": 0.0,
         "moveEaseTime": 0.0,
         "moveEaseType": 6,
+        "moveStartTime": 0.0,
         "moveValue": [
             0.0,
             0.0,
             0.0
         ],
-        "power": 15.0,
-        "ComboBranchCount": 0
+        "power": 15.0
     }
 }

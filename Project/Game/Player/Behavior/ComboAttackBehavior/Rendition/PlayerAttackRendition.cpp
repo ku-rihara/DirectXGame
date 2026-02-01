@@ -20,6 +20,7 @@ void PlayerAttackRendition::Reset() {
     isPlayedOnHit_.fill(false);
     isObjAnimePlayed_.fill(false);
     hasTriggeredHitEffects_ = false;
+    previousHasHit_         = false;
 
     // 振動の状態をリセット
     isVibrationPlayed_ = false;
@@ -56,11 +57,17 @@ void PlayerAttackRendition::Update(float deltaTime) {
     // 通常演出の更新
     UpdateNormalRenditions(renditionData);
 
-    // ヒット時演出の更新
-    if (hasHit && !hasTriggeredHitEffects_) {
+    // ヒット時演出の更新（新しいヒットを検出したら毎回発動）
+    // 前フレームでヒットしていなくて、今フレームでヒットした場合 = 新しいヒット
+    bool isNewHit = hasHit && !previousHasHit_;
+    if (isNewHit) {
+        // ヒット時演出のフラグをリセットして再度発動可能にする
+        isPlayedOnHit_.fill(false);
         UpdateHitRenditions(renditionData);
         hasTriggeredHitEffects_ = true;
     }
+    // 前フレームのヒット状態を更新
+    previousHasHit_ = hasHit;
 
     // オブジェクトアニメーションの更新
     UpdateObjectAnimations(renditionData);

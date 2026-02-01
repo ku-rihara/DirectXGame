@@ -288,6 +288,9 @@ void ComboAttackAction::SetMoveEasing() {
         targetPosition_.y = moveParam.value.y;
     }
 
+    // 待機中のために現在の位置で初期化
+    currentMoveValue_ = startPosition_;
+
     // イージングのセットアップ
     moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
     moveEasing_.SetStartValue(startPosition_);

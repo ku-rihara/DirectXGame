@@ -44,9 +44,11 @@ EnemyWait::EnemyWait(BaseEnemy* boss, bool skipDiscoveryDelay)
     // 発見済みとして遅延をスキップ
     if (skipDiscoveryDelay) {
         hasDiscoveredPlayer_ = true;
+        isPreDashAnimFinished_ = true;
         discoveryDelayTimer_ = pBaseEnemy_->GetParameter().discoveryDelayTime; // 遅延完了状態に
     } else {
         hasDiscoveredPlayer_ = false;
+        isPreDashAnimFinished_ = false;
         discoveryDelayTimer_ = 0.0f;
     }
 }
@@ -84,6 +86,7 @@ void EnemyWait::Update() {
         // プレイヤーを初めて発見した場合
         if (!hasDiscoveredPlayer_) {
             hasDiscoveredPlayer_ = true;
+            isPreDashAnimFinished_ = false;
             discoveryDelayTimer_ = 0.0f;
 
             // 発見時のアニメーション（予備動作）を開始
@@ -95,16 +98,24 @@ void EnemyWait::Update() {
             }
         }
 
-        // 発見後の遅延時間をカウント
-        discoveryDelayTimer_ += KetaEngine::Frame::DeltaTimeRate();
-
-        // 遅延時間が経過したら追跡開始
-        if (discoveryDelayTimer_ >= pBaseEnemy_->GetParameter().discoveryDelayTime) {
-            pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
-            return;
+        // PreDashアニメーションが終了したかチェック
+        if (!isPreDashAnimFinished_ && pBaseEnemy_->IsPreDashFinished()) {
+            isPreDashAnimFinished_ = true;
+            discoveryDelayTimer_ = 0.0f; // アニメーション終了後から遅延タイマー開始
         }
 
-        // 遅延中はプレイヤーの方を向くのみ
+        // アニメーション終了後の遅延時間をカウント
+        if (isPreDashAnimFinished_) {
+            discoveryDelayTimer_ += KetaEngine::Frame::DeltaTimeRate();
+
+            // 遅延時間が経過したら追跡開始
+            if (discoveryDelayTimer_ >= pBaseEnemy_->GetParameter().discoveryDelayTime) {
+                pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
+                return;
+            }
+        }
+
+        // PreDash中/遅延中はプレイヤーの方を向くのみ
         direction.y = 0.0f;
         direction.Normalize();
         float objectiveAngle = std::atan2(-direction.x, -direction.z);
@@ -113,6 +124,7 @@ void EnemyWait::Update() {
     } else {
         // プレイヤーが範囲外に出たらリセット
         hasDiscoveredPlayer_ = false;
+        isPreDashAnimFinished_ = false;
         discoveryDelayTimer_ = 0.0f;
     }
 
@@ -149,12 +161,15 @@ void EnemyWait::Debug() {
         ImGui::Text("Attack Cooldown Timer: %.2f", attackCooldownTimer_);
         ImGui::Separator();
         ImGui::Text("Has Discovered Player: %s", hasDiscoveredPlayer_ ? "true" : "false");
-        ImGui::Text("Discovery Delay Timer: %.2f / %.2f", discoveryDelayTimer_, pBaseEnemy_->GetParameter().discoveryDelayTime);
+        ImGui::Text("PreDash Anim Finished: %s", isPreDashAnimFinished_ ? "true" : "false");
+        ImGui::Text("Post-Anim Delay Timer: %.2f / %.2f", discoveryDelayTimer_, pBaseEnemy_->GetParameter().discoveryDelayTime);
 
         // 状態表示
         if (distance_ < pBaseEnemy_->GetParameter().chaseDistance) {
-            if (discoveryDelayTimer_ < pBaseEnemy_->GetParameter().discoveryDelayTime) {
-                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "State: Waiting (Discovery Delay)");
+            if (!isPreDashAnimFinished_) {
+                ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "State: Playing PreDash Animation");
+            } else if (discoveryDelayTimer_ < pBaseEnemy_->GetParameter().discoveryDelayTime) {
+                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "State: Post-Animation Delay");
             } else {
                 ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "State: Ready to Chase");
             }

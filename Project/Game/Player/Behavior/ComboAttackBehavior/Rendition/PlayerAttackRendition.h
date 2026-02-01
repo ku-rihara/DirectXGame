@@ -28,6 +28,8 @@ private:
 
     // ヒットエフェクトがトリガーされたかどうか
     bool hasTriggeredHitEffects_ = false;
+    // 前フレームのヒット状態（マルチヒット検出用）
+    bool previousHasHit_ = false;
 
     // 振動関連
     bool isVibrationPlayed_ = false;

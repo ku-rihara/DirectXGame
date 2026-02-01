@@ -11,7 +11,6 @@ void NormalEnemy::Init(const Vector3& spownPos) {
     BaseEnemy::Init(spownPos);
 
     // アニメーション名を設定
-    // アニメーション名を設定
     SetAnimationName(AnimationType::Wait, "NormalEnemyWaiting");
     SetAnimationName(AnimationType::Spawn, "NormalEnemySpawn");
     SetAnimationName(AnimationType::PreDash, "NormalEnemyDiscovery");
@@ -23,9 +22,8 @@ void NormalEnemy::Init(const Vector3& spownPos) {
     objAnimation_->Init();
     objAnimation_->Add(GetAnimationName(AnimationType::Spawn) + ".gltf");
     objAnimation_->Add(GetAnimationName(AnimationType::PreDash) + ".gltf");
-    objAnimation_->Add(GetAnimationName(AnimationType::PreDash) + ".gltf");
-    objAnimation_->Add(GetAnimationName(AnimationType::Attack) + ".gltf");
     objAnimation_->Add(GetAnimationName(AnimationType::Dash) + ".gltf");
+    objAnimation_->Add(GetAnimationName(AnimationType::Attack) + ".gltf");
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
     objAnimation_->transform_.scale_ = Vector3::OneVector();
