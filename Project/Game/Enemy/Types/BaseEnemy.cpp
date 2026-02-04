@@ -5,7 +5,7 @@
 // Manager
 #include "Enemy/EnemyManager.h"
 // behavior
-#include "../Behavior/ActionBehavior/EnemySpawn.h"
+#include "../Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionAction.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
@@ -22,6 +22,7 @@
 // Frame
 #include "Frame/Frame.h"
 // Math
+#include "MathFunction.h"
 #include "Matrix4x4.h"
 
 ///========================================================
@@ -53,9 +54,6 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     // 振る舞い初期化
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
     ChangeBehavior(std::make_unique<EnemySpawn>(this));
-
-    // 攻撃から戻ってきたフラグ
-    isReturningFromAttack_ = false;
 }
 
 ///========================================================
@@ -421,7 +419,7 @@ void BaseEnemy::PlaySpawnAnimation() {
     }
 
     objAnimation_->ChangeAnimation(spawnAnim);
-    objAnimation_->SetLoop(false); 
+    objAnimation_->SetLoop(false);
 }
 
 ///========================================================
@@ -434,7 +432,7 @@ void BaseEnemy::PlayAnimation(AnimationType type, bool isLoop) {
 
     const std::string& animeName = GetAnimationName(type);
     if (animeName.empty()) {
-        return; 
+        return;
     }
 
     objAnimation_->ChangeAnimation(animeName);
@@ -451,7 +449,7 @@ bool BaseEnemy::PlayAnimationByName(const std::string& animationName, bool isLoo
 
     // 利用可能なアニメーションリストを取得して確認
     auto animeNames = objAnimation_->GetAnimationNames();
-    auto it = std::find(animeNames.begin(), animeNames.end(), animationName);
+    auto it         = std::find(animeNames.begin(), animeNames.end(), animationName);
 
     if (it != animeNames.end()) {
         objAnimation_->ChangeAnimation(animationName);
@@ -471,11 +469,10 @@ void BaseEnemy::InitChaseAnimation() {
     }
 
     const std::string& dashAnim    = GetAnimationName(AnimationType::Dash);
-    const std::string& preDashAnim = GetAnimationName(AnimationType::PreDash);
+    const std::string& preDashAnim = GetAnimationName(AnimationType::AttackAnticipation);
 
     // 既にダッシュ中、または予備動作が終了している場合は直接ダッシュアニメーションへ
-    if (chaseAnimState_ == ChaseAnimationState::DASHING ||
-        (chaseAnimState_ == ChaseAnimationState::PRE_DASH && isPreDashFinished_)) {
+    if (chaseAnimState_ == ChaseAnimationState::DASHING || (chaseAnimState_ == ChaseAnimationState::PRE_DASH && isPreDashFinished_)) {
         chaseAnimState_ = ChaseAnimationState::DASHING;
         objAnimation_->ChangeAnimation(dashAnim);
         objAnimation_->SetLoop(true);
@@ -534,4 +531,24 @@ std::vector<std::string> BaseEnemy::GetAnimationNames() const {
         return objAnimation_->GetAnimationNames();
     }
     return {};
+}
+
+void BaseEnemy::DirectionToPlayer() {
+    // プレイヤーへの方向
+    Vector3 directionToPlayer = GetDirectionToTarget(pPlayer_->GetWorldPosition());
+    // 目標角度を計算
+    float objectiveAngle = std::atan2(-directionToPlayer.x, -directionToPlayer.z);
+    // 正規化
+    directionToPlayer.y = 0.0f;
+    directionToPlayer.Normalize();
+
+    // 最短角度補間でプレイヤーの回転を更新
+    baseTransform_.rotation_.y = LerpShortAngle(baseTransform_.rotation_.y, objectiveAngle, 0.8f);
+}
+
+float BaseEnemy::CalcDistanceToPlayer() {
+    // プレイヤーへの方向
+    Vector3 directionToPlayer = GetDirectionToTarget(pPlayer_->GetWorldPosition());
+    float distance            = std::sqrt(directionToPlayer.x * directionToPlayer.x + directionToPlayer.z * directionToPlayer.z);
+    return distance;
 }

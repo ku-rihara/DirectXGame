@@ -13,7 +13,7 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     // アニメーション名を設定
     SetAnimationName(AnimationType::Wait, "NormalEnemyWaiting");
     SetAnimationName(AnimationType::Spawn, "NormalEnemySpawn");
-    SetAnimationName(AnimationType::PreDash, "BoxerEnemyPreDashMotion");
+    SetAnimationName(AnimationType::AttackAnticipation, "BoxerEnemyPreDashMotion");
     SetAnimationName(AnimationType::Dash, "BoxerEnemyDash");
     SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
 
@@ -21,7 +21,7 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(GetAnimationName(AnimationType::Wait) + ".gltf"));
     objAnimation_->Init();
     objAnimation_->Add(GetAnimationName(AnimationType::Spawn) + ".gltf");
-    objAnimation_->Add(GetAnimationName(AnimationType::PreDash) + ".gltf");
+    objAnimation_->Add(GetAnimationName(AnimationType::AttackAnticipation) + ".gltf");
     objAnimation_->Add(GetAnimationName(AnimationType::Dash) + ".gltf");
     objAnimation_->Add(GetAnimationName(AnimationType::Attack) + ".gltf");
     objAnimation_->transform_.Init();

@@ -1,5 +1,5 @@
 {
-    "AttackEffect0": {
+    "AttackEffect1": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
@@ -39,7 +39,7 @@
         "Position Base": [
             -0.949999988079071,
             6.059999942779541,
-            -1.8899999856948853
+            -2.069999933242798
         ],
         "Position Max": [
             0.0,
@@ -55,7 +55,7 @@
         "Rotate Base": [
             0.0,
             0.0,
-            0.0
+            90.0
         ],
         "Rotate Max": [
             0.0,
@@ -72,12 +72,12 @@
         "RotateEaseParam.endValueV3.max": [
             0.0,
             0.0,
-            45.0
+            0.0
         ],
         "RotateEaseParam.endValueV3.min": [
             0.0,
             0.0,
-            45.0
+            0.0
         ],
         "RotateEaseParam.isScaleEase": false,
         "RotateEaseParam.maxTime": 0.6200000047683716,
@@ -164,12 +164,12 @@
         "scaleEaseParam.endValueF.max": 5.0,
         "scaleEaseParam.endValueF.min": 5.0,
         "scaleEaseParam.endValueV3.max": [
-            0.4000000059604645,
+            0.12999999523162842,
             12.0,
             1.0
         ],
         "scaleEaseParam.endValueV3.min": [
-            0.4000000059604645,
+            0.12999999523162842,
             12.0,
             1.0
         ],

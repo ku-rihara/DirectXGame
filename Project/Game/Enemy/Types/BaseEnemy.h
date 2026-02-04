@@ -44,8 +44,8 @@ public:
         Vector3 collisionSize;
         Vector3 collisionOffset;
         float adaptTime;
-        float attackMoveDistance; // 攻撃時の正面方向への移動量
-        float attackMoveSpeed;    // 攻撃時の移動スピード
+        float attackMoveDistance;
+        float attackMoveSpeed;
     };
 
     struct Parameter {
@@ -57,11 +57,18 @@ public:
         // 追従パラメータ
         float chaseDistance;
         float chaseSpeed;
-        float discoveryDelayTime = 0.5f;
+        float discoveryDelayTime;
         // 攻撃パラメータ
         float attackStartDistance;
         float attackCooldownTime;
         float attackAnticipationTime;
+        // NormalEnemy専用パラメータ
+        float attackRangeMin;
+        float attackRangeMax;
+        float retreatSpeed;
+        float attackCycleInterval;
+        float waitReactionDelay;
+        float preAttackWaitTime;
         // 死亡パラメータ
         float deathBlowValue;
         float deathBlowValueY;
@@ -70,24 +77,23 @@ public:
         float deathBurstTime;
     };
 
-    // アニメーションタイプ（今後追加可能）
+    // アニメーションタイプ
     enum class AnimationType {
-        Wait,           // 待機
-        Spawn,          // スポーン
-        PreDash,        // ダッシュ予備動作
-        Dash,           // ダッシュ
-        Attack,         // 攻撃
-        DamageReaction, // ダメージリアクション
-        Death,          // 死亡
-        // 今後追加するアニメーションはここに追加
-        Count           // 総数（配列サイズ用）
+        Wait,
+        Spawn,
+        AttackAnticipation,
+        Dash,
+        Attack,
+        DamageReaction,
+        Death,
+        Count
     };
 
     // 追跡アニメーション状態
     enum class ChaseAnimationState {
-        NONE,      // アニメーションなし
-        PRE_DASH,  // ダッシュ予備動作
-        DASHING    // ダッシュ中
+        NONE, // アニメーションなし
+        PRE_DASH, // ダッシュ予備動作
+        DASHING // ダッシュ中
     };
 
 public:
@@ -123,10 +129,10 @@ public:
     /// <param name="viewProjection">ビュープロジェクション</param>
     virtual void DisplaySprite(const KetaEngine::ViewProjection& viewProjection);
 
-    void ThrustRenditionInit(); //< 突き飛ばし演出初期化
+    void ThrustRenditionInit();//< 突き飛ばし演出初期化
     void DeathRenditionInit(); //< 死亡演出初期化
-    void ScaleReset(); //< スケールリセット
-    void RotateInit(); //< 回転初期化
+    void ScaleReset();         //< スケールリセット
+    void RotateInit();         //< 回転初期化
 
     /// <summary>
     /// スポーンアニメーションを再生
@@ -201,7 +207,13 @@ public:
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
 
     void BackToDamageRoot(); //< ダメージルートに戻る
+    
+    /// <summary>
+    /// プレイヤーの方向を向く
+    /// </summary>
+    void DirectionToPlayer();
 
+    float CalcDistanceToPlayer();
     /// ====================================================================
     /// Collision
     /// ====================================================================
@@ -240,15 +252,14 @@ private:
     Combo* pCombo_;
     GameCamera* pGameCamera_;
     EnemyManager* pEnemyManager_;
-  
 
     // flags
-    bool isDeathPending_    = false;
+    bool isDeathPending_ = false;
     bool isDamageColling_;
     bool isDeath_;
     bool isCollisionRope_;
     bool isInAnticipation_ = false; // 現在前隙中かどうか
-    bool isAttacking_ = false;      // 攻撃中かどうか（押し戻し無効用）
+    bool isAttacking_      = false; // 攻撃中かどうか
 
     // damageInfo
     float damageCollTime_;
@@ -279,13 +290,10 @@ protected:
     std::unique_ptr<EnemyHPBar> hpBar_;
     std::unique_ptr<EnemyEffects> enemyEffects_;
 
-    // flags
-    bool isReturningFromAttack_;
-
     // アニメーション関連
     std::array<std::string, static_cast<size_t>(AnimationType::Count)> animationNames_;
     ChaseAnimationState chaseAnimState_ = ChaseAnimationState::NONE;
-    bool isPreDashFinished_ = false;
+    bool isPreDashFinished_             = false;
 
     /// behavior
     std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_ = nullptr;
@@ -311,7 +319,7 @@ public:
     const Parameter& GetParameter() const { return parameter_; }
     int32_t GetGroupId() const { return groupId_; }
     float GetHP() const { return hp_; }
-    Vector3 GetBodyRotation() const { return objAnimation_->transform_.rotation_;}
+    Vector3 GetBodyRotation() const { return objAnimation_->transform_.rotation_; }
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return damageBehavior_.get(); }
@@ -319,7 +327,6 @@ public:
     EnemyEffects* GetEnemyEffects() const { return enemyEffects_.get(); }
     EnemyAttackCollisionBox* GetAttackCollisionBox() const { return attackCollisionBox_.get(); }
     KetaEngine::Object3DAnimation* GetAnimationObject() const { return objAnimation_.get(); }
-    bool GetIsReturningFromAttack() const { return isReturningFromAttack_; }
     bool IsInAnticipation() const { return isInAnticipation_; }
     bool IsAttacking() const { return isAttacking_; }
     ChaseAnimationState GetChaseAnimState() const { return chaseAnimState_; }
@@ -340,7 +347,6 @@ public:
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
     void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
-    void SetIsReturningFromAttack(bool is) { isReturningFromAttack_ = is; }
     void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }
     void SetIsAttacking(bool value) { isAttacking_ = value; }
 };

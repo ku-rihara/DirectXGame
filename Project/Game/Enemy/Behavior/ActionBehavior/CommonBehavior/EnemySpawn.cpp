@@ -25,7 +25,6 @@ EnemySpawn::EnemySpawn(BaseEnemy* boss)
     spawnEasing_.SetOnFinishCallback([this]() {
         step_ = Step::ChangeNextBehavior; // 次のステップ
     });
-
 }
 
 EnemySpawn::~EnemySpawn() {
@@ -50,12 +49,14 @@ void EnemySpawn::Update() {
         spawnEasing_.Update(KetaEngine::Frame::DeltaTimeRate());
         pBaseEnemy_->SetScale(tempEnemyScale_);
 
-            break;
+        break;
         ///------------------------------------------------------------------
         ///  移動Behaviorに切り替え
         ///------------------------------------------------------------------
     case EnemySpawn::Step::ChangeNextBehavior:
+
         pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
+
         break;
     default:
         break;

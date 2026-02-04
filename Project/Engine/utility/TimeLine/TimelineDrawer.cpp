@@ -517,9 +517,9 @@ void TimelineDrawer::HandleCanvasInteraction(const Vector2& canvasPos, const Vec
     ImGui::SetCursorScreenPos(ImVec2(canvasPos.x, canvasPos.y));
     ImGui::InvisibleButton("timeline_canvas", ImVec2(canvasSize.x, canvasSize.y));
 
-    // 再生ヘッド（縦線）の現在位置を計算
+    // 再生ヘッドの現在位置を計算
     float currentFrameX = canvasPos.x + headerWidth_ + (currentFrame_ - scrollOffset_) * frameWidth;
-    const float playheadHitWidth = 8.0f; // 縦線をクリックできる範囲（片側ピクセル数）
+    const float playheadHitWidth = 8.0f; // 縦線をクリックできる範囲
 
     // マウスクリック時：縦線の近くをクリックした場合のみドラッグ開始
     if (ImGui::IsMouseClicked(0) && ImGui::IsItemHovered()) {

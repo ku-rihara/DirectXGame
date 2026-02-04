@@ -1,12 +1,12 @@
 #pragma once
 
-#include "BaseEnemyBehavior.h"
+#include "../BaseEnemyBehavior.h"
 #include "Easing/Easing.h"
+#include <Vector3.h>
 
 class EnemyWait : public BaseEnemyBehavior {
 public:
     // コンストラクタ
-    // skipDiscoveryDelay: trueの場合、発見遅延をスキップして即座に追跡可能
     EnemyWait(BaseEnemy* boss, bool skipDiscoveryDelay = false);
     ~EnemyWait();
 
@@ -21,17 +21,16 @@ private:
 
 private:
     float distance_;
-    bool isChase_;
 
     // 攻撃後待機時間
-    float attackCooldownTimer_;
-    bool isInAttackCooldown_;
+    float moveCollTimer_;
+    bool isMoveCollTime_;
 
     // プレイヤー発見後の遅延
     bool hasDiscoveredPlayer_;
-    bool isPreDashAnimFinished_;  // PreDashアニメーション終了フラグ
-    float discoveryDelayTimer_;   // アニメーション終了後の遅延タイマー
+    bool isPreDashAnimFinished_;
+    float discoveryDelayTimer_;
 
-    KetaEngine::Easing<Vector2> spriteEase_;
-    Vector2 tempSpriteScale_;
+    Vector3 directionToPlayer_;
+    float objectiveAngle_;
 };

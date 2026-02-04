@@ -1,6 +1,6 @@
 #pragma once
 
-#include"BaseEnemyBehavior.h"
+#include"../BaseEnemyBehavior.h"
 
 #include"Easing/Easing.h"
 

@@ -334,9 +334,6 @@
     <Filter Include="Game\Enemy\Behavior\ActionBehavior">
       <UniqueIdentifier>{5C7F70ED-ABE7-464C-84F2-F5DC4D04632A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\Behavior\AttackStrategy">
-      <UniqueIdentifier>{E8F3A1B2-C4D5-6E7F-8901-23456789ABCD}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Enemy\Behavior\DamageReactionBehavior">
       <UniqueIdentifier>{A1313281-189E-4EA3-8109-2404243112A2}</UniqueIdentifier>
     </Filter>
@@ -372,6 +369,18 @@
     </Filter>
     <Filter Include="Game\Player\Behavior\ComboAttackBehavior\Rendition">
       <UniqueIdentifier>{C1A92309-EB61-4472-9151-AA3CEBCBD05C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behavior\AttackStrategy">
+      <UniqueIdentifier>{E8F3A1B2-C4D5-6E7F-8901-23456789ABCD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior">
+      <UniqueIdentifier>{27cf85d0-90af-49e6-a9ce-8b5635df6205}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior">
+      <UniqueIdentifier>{fb773601-35bd-496d-bfa4-143597c56d7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior">
+      <UniqueIdentifier>{a1b2c3d4-e5f6-7890-abcd-ef1234567890}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -925,18 +934,6 @@
       <Filter>Game\DeathTimer</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyAttack.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyChasePlayer.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemySpawn.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyWait.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\AttackStrategy\NormalEnemyAttackStrategy.cpp">
@@ -1825,18 +1822,6 @@
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyAttack.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyChasePlayer.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemySpawn.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyWait.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\IEnemyAttackStrategy.h">
       <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
     </ClInclude>
@@ -2276,10 +2261,46 @@
     <ClCompile Include="Game\Player\ComboCreator\ComboBranchParameter.cpp">
       <Filter>Game\Player\ComboCreator</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyRetreat.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyAttack.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemySpawn.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyWait.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
       <Filter>Game\Player\ComboCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyRetreat.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyAttack.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemySpawn.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyWait.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -145,6 +145,14 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "deathGravity" + indexString, &parameters_[i].deathGravity);
         globalParameter_->Regist(groupName_, "deathRotateSpeed" + indexString, &parameters_[i].deathRotateSpeed);
         globalParameter_->Regist(groupName_, "deathBurstTime" + indexString, &parameters_[i].deathBurstTime);
+
+        // NormalEnemy専用パラメータ
+        globalParameter_->Regist(groupName_, "attackRangeMin" + indexString, &parameters_[i].attackRangeMin);
+        globalParameter_->Regist(groupName_, "attackRangeMax" + indexString, &parameters_[i].attackRangeMax);
+        globalParameter_->Regist(groupName_, "retreatSpeed" + indexString, &parameters_[i].retreatSpeed);
+        globalParameter_->Regist(groupName_, "attackCycleInterval" + indexString, &parameters_[i].attackCycleInterval);
+        globalParameter_->Regist(groupName_, "waitReactionDelay" + indexString, &parameters_[i].waitReactionDelay);
+        globalParameter_->Regist(groupName_, "preAttackWaitTime" + indexString, &parameters_[i].preAttackWaitTime);
     }
 }
 
@@ -158,8 +166,6 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
     ImGui::SeparatorText("追従パラメータ");
     ImGui::DragFloat("追従速度", &parameters_[typeIndex].chaseSpeed, 0.01f);
-    ImGui::DragFloat("追従距離", &parameters_[typeIndex].chaseDistance, 0.01f);
-    ImGui::DragFloat("PreDash後の遅延時間", &parameters_[typeIndex].discoveryDelayTime, 0.01f, 0.0f, 3.0f);
 
     ImGui::SeparatorText("攻撃パラメータ");
     // コリジョン
@@ -183,6 +189,22 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::Separator();
     ImGui::Text("その他");
     ImGui::DragFloat("攻撃量", &parameters_[typeIndex].attackParam.attackValue, 0.1f);
+
+    // NormalEnemy専用パラメータ
+    if (type == BaseEnemy::Type::NORMAL) {
+        ImGui::SeparatorText("NormalEnemy専用（後退攻撃型）");
+        ImGui::Text("距離パラメータ");
+        ImGui::DragFloat("攻撃範囲（最小）", &parameters_[typeIndex].attackRangeMin, 0.1f, 0.0f, 50.0f);
+        ImGui::DragFloat("攻撃範囲（最大）", &parameters_[typeIndex].attackRangeMax, 0.1f, 0.0f, 50.0f);
+        ImGui::Separator();
+        ImGui::Text("速度パラメータ");
+        ImGui::DragFloat("後退速度", &parameters_[typeIndex].retreatSpeed, 0.01f, 0.0f, 2.0f);
+        ImGui::Separator();
+        ImGui::Text("時間パラメータ");
+        ImGui::DragFloat("攻撃サイクル間隔", &parameters_[typeIndex].attackCycleInterval, 0.1f, 0.0f, 10.0f);
+        ImGui::DragFloat("Wait時の反応遅延", &parameters_[typeIndex].waitReactionDelay, 0.01f, 0.0f, 3.0f);
+        ImGui::DragFloat("PreDash前の待機時間", &parameters_[typeIndex].preAttackWaitTime, 0.01f, 0.0f, 3.0f);
+    }
 
     ImGui::SeparatorText("死亡パラメータ");
     ImGui::DragFloat("DeathBlowValue", &parameters_[typeIndex].deathBlowValue, 0.1f);

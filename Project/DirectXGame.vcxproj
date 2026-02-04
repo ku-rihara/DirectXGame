@@ -195,10 +195,12 @@
     <ClCompile Include="Game\DeathTimer\DeathTimer.cpp" />
     <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.cpp" />
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyAttack.cpp" />
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyChasePlayer.cpp" />
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemySpawn.cpp" />
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EnemyWait.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyAttack.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemySpawn.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyWait.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyRetreat.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\AttackStrategy\NormalEnemyAttackStrategy.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\AttackStrategy\StrongEnemyAttackStrategy.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp" />
@@ -498,10 +500,12 @@
     <ClInclude Include="Game\DeathTimer\DeathTimer.h" />
     <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.h" />
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyAttack.h" />
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyChasePlayer.h" />
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemySpawn.h" />
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EnemyWait.h" />
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyAttack.h" />
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemySpawn.h" />
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyWait.h" />
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.h" />
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyRetreat.h" />
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.h" />
     <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\IEnemyAttackStrategy.h" />
     <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\NormalEnemyAttackStrategy.h" />
     <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\StrongEnemyAttackStrategy.h" />
@@ -863,6 +867,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)externals\assimp\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)\dxcompiler.dll"
@@ -891,6 +896,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)\d
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)externals\assimp\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)\dxcompiler.dll"

@@ -104,9 +104,6 @@ bool StrongEnemyAttackStrategy::IsFinished() const {
 void StrongEnemyAttackStrategy::Finish() {
     // 攻撃ステートをリセット
     Reset();
-
-    // 攻撃から戻ってきたフラグを立てる
-    pEnemy_->SetIsReturningFromAttack(true);
 }
 
 void StrongEnemyAttackStrategy::Reset() {

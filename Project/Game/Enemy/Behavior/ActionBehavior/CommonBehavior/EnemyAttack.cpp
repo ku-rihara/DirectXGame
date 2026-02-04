@@ -97,8 +97,12 @@ void EnemyAttack::ChangeState(AttackState newState) {
                 strategy->Finish();
             }
 
-            // Waitステートに戻る
-            pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
+            // Waitステートに戻る（NormalEnemyの場合は専用のWaitビヘイビア）
+            if (pBaseEnemy_->GetType() == BaseEnemy::Type::NORMAL) {
+                pBaseEnemy_->ChangeBehavior(std::make_unique<NormalEnemyWait>(pBaseEnemy_));
+            } else {
+                pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
+            }
         };
         break;
     }
@@ -111,12 +115,5 @@ void EnemyAttack::ExecuteCurrentState() {
 }
 
 void EnemyAttack::Debug() {
-#ifdef _DEBUG
-    if (ImGui::TreeNode("EnemyAttack")) {
-        const char* stateNames[] = {"ANTICIPATION", "START", "UPDATE", "FINISH"};
-        ImGui::Text("Current State: %s", stateNames[static_cast<int>(currentState_)]);
-        ImGui::Text("State Timer: %.2f", stateTimer_);
-        ImGui::TreePop();
-    }
-#endif
+
 }
