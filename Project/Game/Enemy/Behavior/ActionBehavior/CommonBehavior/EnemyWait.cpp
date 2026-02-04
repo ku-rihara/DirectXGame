@@ -11,7 +11,7 @@
 #include <cmath>
 
 // 初期化
-EnemyWait::EnemyWait(BaseEnemy* boss, bool skipDiscoveryDelay)
+EnemyWait::EnemyWait(BaseEnemy* boss)
     : BaseEnemyBehavior("EnemyWait", boss) {
 
     // 待機アニメーションにリセット
@@ -20,6 +20,8 @@ EnemyWait::EnemyWait(BaseEnemy* boss, bool skipDiscoveryDelay)
     //
     isMoveCollTime_ = true;
     moveCollTimer_  = pBaseEnemy_->GetParameter().attackCooldownTime;
+
+
 }
 
 EnemyWait::~EnemyWait() {
@@ -32,6 +34,7 @@ void EnemyWait::Update() {
 
     // 距離
     float distance = pBaseEnemy_->CalcDistanceToPlayer();
+    distance;
     // プレイヤーの方向を向く
     pBaseEnemy_->DirectionToPlayer();
 
@@ -40,13 +43,12 @@ void EnemyWait::Update() {
         return;
     }
 
-    // NormalEnemyはプレイヤーと一定以上近づいてたら距離を置く
 
-    // NormalEnemyは一定以上離れてたら攻撃を開始する
+    // プレイヤーが離れた時の行動切り替え
+    pBaseEnemy_->OnPlayerDistantAction();
 
-    // StrongEnemyは一定以上離れてたら近づく
-
-    // StrongEnemyは一定以上近づいてたら攻撃を開始する
+     // プレイヤーが近づいた時の行動切り替え
+    pBaseEnemy_->OnPlayerApproachAction();
 }
 
 void EnemyWait::UpdateAttackCooldown() {

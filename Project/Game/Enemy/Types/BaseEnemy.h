@@ -14,8 +14,7 @@
 #include "Collider/AABBCollider.h"
 #include "Enemy/Effects/EnemyEffects.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
-// AttackStrategy
-#include "../Behavior/AttackStrategy/IEnemyAttackStrategy.h"
+
 // std
 #include <array>
 #include <cstdint>
@@ -109,19 +108,9 @@ public:
     virtual void Update();
 
     // 振る舞い個別処理
-    virtual void SpawnRenditionInit() = 0;
-
-    /// <summary>
-    /// 攻撃戦略を設定
-    /// </summary>
-    void SetAttackStrategy(std::unique_ptr<IEnemyAttackStrategy> strategy) {
-        attackStrategy_ = std::move(strategy);
-    }
-
-    /// <summary>
-    /// 攻撃戦略を取得
-    /// </summary>
-    IEnemyAttackStrategy* GetAttackStrategy() const { return attackStrategy_.get(); }
+    virtual void SpawnRenditionInit()     = 0;
+    virtual void OnPlayerApproachAction() = 0;
+    virtual void OnPlayerDistantAction()  = 0;
 
     /// <summary>
     /// スプライトUIの表示
@@ -129,20 +118,10 @@ public:
     /// <param name="viewProjection">ビュープロジェクション</param>
     virtual void DisplaySprite(const KetaEngine::ViewProjection& viewProjection);
 
-    void ThrustRenditionInit();//< 突き飛ばし演出初期化
+    void ThrustRenditionInit(); //< 突き飛ばし演出初期化
     void DeathRenditionInit(); //< 死亡演出初期化
-    void ScaleReset();         //< スケールリセット
-    void RotateInit();         //< 回転初期化
-
-    /// <summary>
-    /// スポーンアニメーションを再生
-    /// </summary>
-    void PlaySpawnAnimation();
-
-    /// <summary>
-    /// 追跡開始時のアニメーション初期化
-    /// </summary>
-    void InitChaseAnimation();
+    void ScaleReset(); //< スケールリセット
+    void RotateInit(); //< 回転初期化
 
     /// <summary>
     /// 追跡中のアニメーション更新
@@ -205,14 +184,16 @@ public:
     // behavior変更
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
+    void BackToDamageRoot();
 
-    void BackToDamageRoot(); //< ダメージルートに戻る
-    
     /// <summary>
     /// プレイヤーの方向を向く
     /// </summary>
-    void DirectionToPlayer();
-
+    void DirectionToPlayer(bool isOpposite = false);
+    /// <summary>
+    /// プレイヤーとの距離を計算
+    /// </summary>
+    /// <returns></returns>
     float CalcDistanceToPlayer();
     /// ====================================================================
     /// Collision
@@ -266,24 +247,6 @@ private:
     std::string lastReceivedAttackName_;
 
 protected:
-    /// <summary>
-    /// アニメーション名を設定
-    /// </summary>
-    void SetAnimationName(AnimationType type, const std::string& name) {
-        animationNames_[static_cast<size_t>(type)] = name;
-    }
-
-    /// <summary>
-    /// アニメーション名を取得
-    /// </summary>
-    const std::string& GetAnimationName(AnimationType type) const {
-        return animationNames_[static_cast<size_t>(type)];
-    }
-
-protected:
-    // 攻撃戦略
-    std::unique_ptr<IEnemyAttackStrategy> attackStrategy_;
-
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
 
     std::unique_ptr<EnemyAttackCollisionBox> attackCollisionBox_;
@@ -333,6 +296,10 @@ public:
     bool IsPreDashFinished() const { return isPreDashFinished_; }
     std::vector<std::string> GetAnimationNames() const;
 
+    const std::string& GetAnimationName(AnimationType type) const {
+        return animationNames_[static_cast<size_t>(type)];
+    }
+
     /// ========================================================================================
     ///  setter method
     /// ========================================================================================
@@ -349,4 +316,8 @@ public:
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
     void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }
     void SetIsAttacking(bool value) { isAttacking_ = value; }
+
+    void SetAnimationName(AnimationType type, const std::string& name) {
+        animationNames_[static_cast<size_t>(type)] = name;
+    }
 };

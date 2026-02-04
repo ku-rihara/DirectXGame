@@ -1,8 +1,5 @@
 #include "StrongEnemy.h"
-#include "../Behavior/AttackStrategy/StrongEnemyAttackStrategy.h"
-#include "audio/Audio.h"
-#include "Enemy/EnemyManager.h"
-#include "Frame/Frame.h"
+#include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 
 ///========================================================
 ///  初期化
@@ -29,8 +26,7 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     objAnimation_->transform_.scale_ = Vector3::OneVector();
     objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = 3;
 
-    // 攻撃戦略を設定
-    SetAttackStrategy(std::make_unique<StrongEnemyAttackStrategy>(this));
+     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
 
 ///========================================================
@@ -43,6 +39,14 @@ void StrongEnemy::Update() {
 void StrongEnemy::SpawnRenditionInit() {
     GetEnemyEffects()->Emit("SpawnEffectStrong");
 }
+
+
+void StrongEnemy::OnPlayerApproachAction() {
+}
+
+void StrongEnemy::OnPlayerDistantAction() {
+}
+
 
 ///========================================================
 /// HpBar表示

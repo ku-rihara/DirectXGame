@@ -30,9 +30,6 @@ private:
     float preAttackWaitTimer_;
     bool isWaitingForPreAttack_;
 
-    // PreDash状態管理
-    bool isPreDashStarted_;
-
     // スケールイージング
     KetaEngine::Easing<Vector3> scaleEasing_;
     Vector3 tempEnemyScale_;

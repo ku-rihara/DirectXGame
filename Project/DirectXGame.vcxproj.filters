@@ -370,9 +370,6 @@
     <Filter Include="Game\Player\Behavior\ComboAttackBehavior\Rendition">
       <UniqueIdentifier>{C1A92309-EB61-4472-9151-AA3CEBCBD05C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\Behavior\AttackStrategy">
-      <UniqueIdentifier>{E8F3A1B2-C4D5-6E7F-8901-23456789ABCD}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior">
       <UniqueIdentifier>{27cf85d0-90af-49e6-a9ce-8b5635df6205}</UniqueIdentifier>
     </Filter>
@@ -935,12 +932,6 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\AttackStrategy\NormalEnemyAttackStrategy.cpp">
-      <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\AttackStrategy\StrongEnemyAttackStrategy.cpp">
-      <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
@@ -1821,15 +1812,6 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\IEnemyAttackStrategy.h">
-      <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\NormalEnemyAttackStrategy.h">
-      <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\AttackStrategy\StrongEnemyAttackStrategy.h">
-      <Filter>Game\Enemy\Behavior\AttackStrategy</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>

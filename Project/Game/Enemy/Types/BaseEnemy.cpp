@@ -53,7 +53,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // 振る舞い初期化
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
-    ChangeBehavior(std::make_unique<EnemySpawn>(this));
+  
 }
 
 ///========================================================
@@ -406,23 +406,6 @@ void BaseEnemy::ScaleReset() {
 }
 
 ///========================================================
-/// スポーンアニメーションを再生
-///========================================================
-void BaseEnemy::PlaySpawnAnimation() {
-    if (!objAnimation_) {
-        return;
-    }
-
-    const std::string& spawnAnim = GetAnimationName(AnimationType::Spawn);
-    if (spawnAnim.empty()) {
-        return;
-    }
-
-    objAnimation_->ChangeAnimation(spawnAnim);
-    objAnimation_->SetLoop(false);
-}
-
-///========================================================
 /// 指定したアニメーションを再生
 ///========================================================
 void BaseEnemy::PlayAnimation(AnimationType type, bool isLoop) {
@@ -460,40 +443,6 @@ bool BaseEnemy::PlayAnimationByName(const std::string& animationName, bool isLoo
     return false; // アニメーションが見つからない
 }
 
-///========================================================
-/// 追跡開始時のアニメーション初期化
-///========================================================
-void BaseEnemy::InitChaseAnimation() {
-    if (!objAnimation_) {
-        return;
-    }
-
-    const std::string& dashAnim    = GetAnimationName(AnimationType::Dash);
-    const std::string& preDashAnim = GetAnimationName(AnimationType::AttackAnticipation);
-
-    // 既にダッシュ中、または予備動作が終了している場合は直接ダッシュアニメーションへ
-    if (chaseAnimState_ == ChaseAnimationState::DASHING || (chaseAnimState_ == ChaseAnimationState::PRE_DASH && isPreDashFinished_)) {
-        chaseAnimState_ = ChaseAnimationState::DASHING;
-        objAnimation_->ChangeAnimation(dashAnim);
-        objAnimation_->SetLoop(true);
-        return;
-    }
-
-    // まだ予備動作を開始していない場合のみ開始
-    if (chaseAnimState_ == ChaseAnimationState::NONE) {
-        chaseAnimState_    = ChaseAnimationState::PRE_DASH;
-        isPreDashFinished_ = false;
-        objAnimation_->ChangeAnimation(preDashAnim);
-        objAnimation_->SetLoop(false); // 予備動作はループしない
-
-        // アニメーション終了時のコールバックを設定
-        objAnimation_->SetAnimationEndCallback([this, preDashAnim](const std::string& animationName) {
-            if (animationName == preDashAnim) {
-                isPreDashFinished_ = true;
-            }
-        });
-    }
-}
 
 ///========================================================
 /// 追跡中のアニメーション更新
@@ -533,16 +482,23 @@ std::vector<std::string> BaseEnemy::GetAnimationNames() const {
     return {};
 }
 
-void BaseEnemy::DirectionToPlayer() {
+void BaseEnemy::DirectionToPlayer(bool isOpposite) {
+    
     // プレイヤーへの方向
     Vector3 directionToPlayer = GetDirectionToTarget(pPlayer_->GetWorldPosition());
-    // 目標角度を計算
-    float objectiveAngle = std::atan2(-directionToPlayer.x, -directionToPlayer.z);
+
+    if (isOpposite) {
+        directionToPlayer *= -1.0f;
+    }
     // 正規化
     directionToPlayer.y = 0.0f;
     directionToPlayer.Normalize();
 
-    // 最短角度補間でプレイヤーの回転を更新
+    // 目標角度を計算
+    float objectiveAngle = std::atan2(-directionToPlayer.x, -directionToPlayer.z);
+
+
+    // 最短角度補間で回転を更新
     baseTransform_.rotation_.y = LerpShortAngle(baseTransform_.rotation_.y, objectiveAngle, 0.8f);
 }
 

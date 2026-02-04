@@ -1,9 +1,9 @@
 #include "EnemyAttack.h"
-#include "EnemyWait.h"
 #include "Enemy/Types/BaseEnemy.h"
-#include "Player/Player.h"
+#include "EnemyWait.h"
 #include "Frame/Frame.h"
 #include "MathFunction.h"
+#include "Player/Player.h"
 #include <imgui.h>
 
 // 初期化
@@ -24,7 +24,7 @@ void EnemyAttack::Update() {
 
 void EnemyAttack::ChangeState(AttackState newState) {
     currentState_ = newState;
-    stateTimer_ = 0.0f;
+    stateTimer_   = 0.0f;
 
     // ステートに応じた処理関数を設定
     switch (currentState_) {
@@ -36,17 +36,17 @@ void EnemyAttack::ChangeState(AttackState newState) {
             // 予備動作処理
             stateTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
-            // 攻撃戦略の予備動作を実行
-            if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
-                strategy->Anticipation();
+            //// 攻撃戦略の予備動作を実行
+            //if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
+            //    strategy->Anticipation();
 
-                // 予備動作完了チェック
-                if (strategy->IsAnticipationFinished()) {
-                    // 前隙終了
-                    pBaseEnemy_->SetIsInAnticipation(false);
-                    ChangeState(AttackState::START);
-                }
-            }
+            //    // 予備動作完了チェック
+            //    if (strategy->IsAnticipationFinished()) {
+            //        // 前隙終了
+            //        pBaseEnemy_->SetIsInAnticipation(false);
+            //        ChangeState(AttackState::START);
+            //    }
+            //}
         };
         break;
 
@@ -58,10 +58,10 @@ void EnemyAttack::ChangeState(AttackState newState) {
             // 攻撃アニメーション再生
             pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Attack, false);
 
-            // 攻撃開始処理
-            if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
-                strategy->Start();
-            }
+            //// 攻撃開始処理
+            //if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
+            //    strategy->Start();
+            //}
 
             // すぐに更新ステートへ
             ChangeState(AttackState::UPDATE);
@@ -73,15 +73,15 @@ void EnemyAttack::ChangeState(AttackState newState) {
             // 攻撃更新処理
             stateTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
-            // 攻撃戦略の攻撃更新を実行
-            if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
-                strategy->Update();
+            //// 攻撃戦略の攻撃更新を実行
+            //if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
+            //    strategy->Update();
 
-                // 攻撃完了チェック
-                if (strategy->IsFinished()) {
-                    ChangeState(AttackState::FINISH);
-                }
-            }
+            //    // 攻撃完了チェック
+            //    if (strategy->IsFinished()) {
+            //        ChangeState(AttackState::FINISH);
+            //    }
+            //}
         };
         break;
 
@@ -92,17 +92,12 @@ void EnemyAttack::ChangeState(AttackState newState) {
             // 攻撃中フラグをオフ
             pBaseEnemy_->SetIsAttacking(false);
 
-            // 終了処理
-            if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
-                strategy->Finish();
-            }
+            //// 終了処理
+            //if (auto* strategy = pBaseEnemy_->GetAttackStrategy()) {
+            //    strategy->Finish();
+            //}
 
-            // Waitステートに戻る（NormalEnemyの場合は専用のWaitビヘイビア）
-            if (pBaseEnemy_->GetType() == BaseEnemy::Type::NORMAL) {
-                pBaseEnemy_->ChangeBehavior(std::make_unique<NormalEnemyWait>(pBaseEnemy_));
-            } else {
-                pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
-            }
+            pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
         };
         break;
     }
@@ -115,5 +110,4 @@ void EnemyAttack::ExecuteCurrentState() {
 }
 
 void EnemyAttack::Debug() {
-
 }

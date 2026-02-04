@@ -11,6 +11,7 @@
 #include <memory>
 #include <Quaternion.h>
 #include <string>
+#include <unordered_map>
 #include <Vector3.h>
 #include <vector>
 
@@ -174,8 +175,8 @@ private:
     bool isLoop_             = true;
     bool hasLoopedThisFrame_ = false;
 
-    // コールバック
-    std::function<void(const std::string& animationName)> onAnimationEnd_;
+    // コールバック - アニメーション名をキーとしたマップ
+    std::unordered_map<std::string, std::function<void()>> animationEndCallbacks_;
 
 public:
     /// ============================================================
@@ -189,21 +190,34 @@ public:
     const std::string& GetCurrentAnimationName() const;
     bool IsAnimationTransitioning() const { return isChange_; }
     bool IsLoop() const { return isLoop_; }
-
-    /// <summary>
-    /// 登録されている全アニメーション名を取得
-    /// </summary>
-    std::vector<std::string> GetAnimationNames() const {
-        std::vector<std::string> names;
-        for (const auto& anim : animations_) {
-            names.push_back(anim.name);
-        }
-        return names;
-    }
+    std::vector<std::string> GetAnimationNames() const;
 
     void SetTransitionDuration(float duration) { transitionDuration_ = duration; }
     void SetLoop(bool loop) { isLoop_ = loop; }
-    void SetAnimationEndCallback(std::function<void(const std::string& animationName)> callback) { onAnimationEnd_ = callback; }
+    
+    /// <summary>
+    /// 特定のアニメーション終了時のコールバックを設定
+    /// </summary>
+    /// <param name="animationName">アニメーション名</param>
+    /// <param name="callback">コールバック関数</param>
+    void SetAnimationEndCallback(const std::string& animationName, std::function<void()> callback) {
+        animationEndCallbacks_[animationName] = callback;
+    }
+
+    /// <summary>
+    /// 特定のアニメーションのコールバックを削除
+    /// </summary>
+    /// <param name="animationName">アニメーション名</param>
+    void RemoveAnimationEndCallback(const std::string& animationName) {
+        animationEndCallbacks_.erase(animationName);
+    }
+
+    /// <summary>
+    /// 全てのアニメーション終了コールバックをクリア
+    /// </summary>
+    void ClearAllAnimationEndCallbacks() {
+        animationEndCallbacks_.clear();
+    }
 };
 
 } // KetaEngine

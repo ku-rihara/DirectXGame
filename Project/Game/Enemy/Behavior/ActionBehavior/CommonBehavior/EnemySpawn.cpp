@@ -22,7 +22,9 @@ EnemySpawn::EnemySpawn(BaseEnemy* boss)
     spawnEasing_.SetEndValue(pBaseEnemy_->GetParameter().baseScale_);
     spawnEasing_.Reset();
 
-    spawnEasing_.SetOnFinishCallback([this]() {
+   
+
+    pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(pBaseEnemy_->GetAnimationName(BaseEnemy::AnimationType::Spawn), [this]() {
         step_ = Step::ChangeNextBehavior; // 次のステップ
     });
 }
@@ -37,7 +39,7 @@ void EnemySpawn::Update() {
         ///------------------------------------------------------------------
     case EnemySpawn::Step::EFFECTEMIT:
         pBaseEnemy_->SpawnRenditionInit();
-        pBaseEnemy_->PlaySpawnAnimation(); // スポーンアニメーション再生
+        pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Spawn,false); // スポーンアニメーション再生
 
         step_ = Step::SPAWN; // 次のステップ
         break;
@@ -48,7 +50,6 @@ void EnemySpawn::Update() {
 
         spawnEasing_.Update(KetaEngine::Frame::DeltaTimeRate());
         pBaseEnemy_->SetScale(tempEnemyScale_);
-
         break;
         ///------------------------------------------------------------------
         ///  移動Behaviorに切り替え
@@ -61,7 +62,7 @@ void EnemySpawn::Update() {
     default:
         break;
     }
-    /// 生成処理
+  
 }
 
 void EnemySpawn::Debug() {

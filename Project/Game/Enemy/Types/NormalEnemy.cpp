@@ -1,14 +1,11 @@
 #include "NormalEnemy.h"
-#include "../Behavior/AttackStrategy/NormalEnemyAttackStrategy.h"
-#include "audio/Audio.h"
-#include "Enemy/EnemyManager.h"
-#include "Frame/Frame.h"
+#include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 
 ///========================================================
 ///  初期化
 ///========================================================
-void NormalEnemy::Init(const Vector3& spownPos) {
-    BaseEnemy::Init(spownPos);
+void NormalEnemy::Init(const Vector3& spawnPos) {
+    BaseEnemy::Init(spawnPos);
 
     // アニメーション名を設定
     SetAnimationName(AnimationType::Wait, "NormalEnemyWaiting");
@@ -26,11 +23,10 @@ void NormalEnemy::Init(const Vector3& spownPos) {
     objAnimation_->Add(GetAnimationName(AnimationType::Attack) + ".gltf");
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
-    objAnimation_->transform_.scale_ = Vector3::OneVector();
+    objAnimation_->transform_.scale_                                     = Vector3::OneVector();
     objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = 3;
 
-    // 攻撃戦略を設定
-    SetAttackStrategy(std::make_unique<NormalEnemyAttackStrategy>(this));
+    BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
 
 ///========================================================
@@ -44,10 +40,21 @@ void NormalEnemy::SpawnRenditionInit() {
     GetEnemyEffects()->Emit("SpawnEffect");
 }
 
+void NormalEnemy::OnPlayerApproachAction() {
+}
+
+void NormalEnemy::OnPlayerDistantAction() {
+
+    //  // 攻撃範囲より遠い場合はWaitに戻る
+    // if (distance_ > param.attackRangeMax) {
+    //    pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
+    //    return;
+    //}
+}
+
 ///========================================================
 /// HpBar表示
 ///========================================================
 void NormalEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
     BaseEnemy::DisplaySprite(viewProjection);
 }
-

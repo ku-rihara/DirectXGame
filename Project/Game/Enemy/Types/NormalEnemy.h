@@ -23,6 +23,10 @@ public:
     // スポーン演出
     void SpawnRenditionInit() override;
 
+    // 近づいた時、離れた時の処理
+    void OnPlayerApproachAction() override;
+    void OnPlayerDistantAction() override;
+
     /// <summary>
     /// スプライト表示
     /// </summary>

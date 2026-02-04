@@ -7,7 +7,7 @@
 class EnemyWait : public BaseEnemyBehavior {
 public:
     // コンストラクタ
-    EnemyWait(BaseEnemy* boss, bool skipDiscoveryDelay = false);
+    EnemyWait(BaseEnemy* boss);
     ~EnemyWait();
 
     void Update() override;
