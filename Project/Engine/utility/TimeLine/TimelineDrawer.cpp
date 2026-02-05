@@ -16,6 +16,7 @@ void TimelineDrawer::Init() {
     draggingDurationKeyIndex_   = -1;
     rightClickedTrackIndex_     = -1;
     nextTrackId_                = 0;
+    isDraggingPlayhead_         = false;
 }
 
 uint32_t TimelineDrawer::AddTrack(const std::string& trackName, std::function<void(float)> callback) {
@@ -26,6 +27,23 @@ uint32_t TimelineDrawer::AddTrack(const std::string& trackName, std::function<vo
 
     tracks_.push_back(newTrack);
     return static_cast<uint32_t>(tracks_.size() - 1);
+}
+
+uint32_t TimelineDrawer::InsertTrack(uint32_t position, const std::string& trackName, std::function<void(float)> callback) {
+    TimeLineTrack newTrack;
+    newTrack.name           = trackName;
+    newTrack.onValueChanged = callback;
+    newTrack.id             = nextTrackId_++;
+
+    // 位置が範囲外の場合は末尾に追加
+    if (position >= tracks_.size()) {
+        tracks_.push_back(newTrack);
+        return static_cast<uint32_t>(tracks_.size() - 1);
+    }
+
+    // 指定位置に挿入
+    tracks_.insert(tracks_.begin() + position, newTrack);
+    return position;
 }
 
 bool TimelineDrawer::RemoveTrack(uint32_t trackIndex) {
@@ -499,8 +517,21 @@ void TimelineDrawer::HandleCanvasInteraction(const Vector2& canvasPos, const Vec
     ImGui::SetCursorScreenPos(ImVec2(canvasPos.x, canvasPos.y));
     ImGui::InvisibleButton("timeline_canvas", ImVec2(canvasSize.x, canvasSize.y));
 
-    // マウス長押しでフレームを移動
-    if (ImGui::IsItemActive() && ImGui::IsMouseDown(0)) {
+    // 再生ヘッドの現在位置を計算
+    float currentFrameX = canvasPos.x + headerWidth_ + (currentFrame_ - scrollOffset_) * frameWidth;
+    const float playheadHitWidth = 8.0f; // 縦線をクリックできる範囲
+
+    // マウスクリック時：縦線の近くをクリックした場合のみドラッグ開始
+    if (ImGui::IsMouseClicked(0) && ImGui::IsItemHovered()) {
+        ImVec2 mousePos = ImGui::GetMousePos();
+        // 縦線の近くかどうかをチェック
+        if (mousePos.x >= currentFrameX - playheadHitWidth && mousePos.x <= currentFrameX + playheadHitWidth) {
+            isDraggingPlayhead_ = true;
+        }
+    }
+
+    // ドラッグ中：縦線を移動
+    if (isDraggingPlayhead_ && ImGui::IsMouseDown(0)) {
         ImVec2 mousePos = ImGui::GetMousePos();
         if (mousePos.x > canvasPos.x + headerWidth_) {
             int clickedFrame = scrollOffset_ + static_cast<int>((mousePos.x - canvasPos.x - headerWidth_) / frameWidth);
@@ -509,6 +540,11 @@ void TimelineDrawer::HandleCanvasInteraction(const Vector2& canvasPos, const Vec
                 ApplyCurrentFrame();
             }
         }
+    }
+
+    // マウスリリース時：ドラッグ終了
+    if (ImGui::IsMouseReleased(0)) {
+        isDraggingPlayhead_ = false;
     }
 
     // スクロール

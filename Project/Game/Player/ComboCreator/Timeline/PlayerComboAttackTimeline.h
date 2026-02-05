@@ -24,6 +24,7 @@ public:
     void Update(float deltaTime);
     void Draw();
     void ApplyToParameters();
+    void RebuildBranchTracks();
 
 private:
     void SetupKeyFrameCallbacks();

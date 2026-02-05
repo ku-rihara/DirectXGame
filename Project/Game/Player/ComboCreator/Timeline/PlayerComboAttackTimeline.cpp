@@ -55,18 +55,16 @@ void PlayerComboAttackTimeline::Draw() {
 
     ImGui::PushID("AttackTimeline");
 
+    // 攻撃パラメータウィンドウ（独立したウィンドウとして描画）
+    if (ImGui::Begin("攻撃パラメータ")) {
+        ui_.DrawParamEditButtons();
+    }
+    ImGui::End();
+
     ImGui::Separator();
 
-    // タイムライン描画前の追加UI
+    // タイムライン描画前の追加UI（トラック追加のみ）
     timeline_.SetOriginalItemDrawCallBack([this]() {
-        // パラメータ編集ボタン
-        ImGui::Separator();
-        ui_.DrawParamEditButtons();
-        ImGui::Separator();
-
-        ImGui::SameLine();
-        ImGui::Separator();
-
         // トラック追加ボタン
         ui_.DrawAddTrackButton();
     });
@@ -87,6 +85,17 @@ void PlayerComboAttackTimeline::Draw() {
 
 void PlayerComboAttackTimeline::ApplyToParameters() {
     parameterApplier_.ApplyToParameters();
+}
+
+void PlayerComboAttackTimeline::RebuildBranchTracks() {
+    if (!isInitialized_) {
+        return;
+    }
+
+    trackBuilder_.RebuildBranchTracks();
+
+    // 新しいトラックにコールバックを再設定
+    SetupKeyFrameCallbacks();
 }
 
 KetaEngine::TimelineDrawer* PlayerComboAttackTimeline::GetTimeline() {

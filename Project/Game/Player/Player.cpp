@@ -3,6 +3,8 @@
 /// Enemy
 #include "Enemy/CollisionBox/EnemyAttackCollisionBox.h"
 #include "Enemy/Types/BaseEnemy.h"
+// DeathTimer
+#include "DeathTimer/DeathTimer.h"
 
 /// Behavior
 #include "Behavior/ComboAttackBehavior/ComboAttackRoot.h"
@@ -98,6 +100,14 @@ void Player::Update() {
 
     /// Particle
     effects_->Update(GetWorldPosition());
+
+    // ダメージクールダウン更新
+    if (isDamageColling_) {
+        damageCollTime_ -= KetaEngine::Frame::DeltaTimeRate();
+        if (damageCollTime_ <= 0.0f) {
+            isDamageColling_ = false;
+        }
+    }
 
     // コンボ更新
     if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
@@ -389,7 +399,25 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
+    // 敵の攻撃コリジョンとの衝突判定
+    if (EnemyAttackCollisionBox* attackBox = dynamic_cast<EnemyAttackCollisionBox*>(other)) {
+        // ダメージクールダウン中はスキップ
+        if (!isDamageColling_ && pDeathTimer_) {
+            // ダメージを受ける
+            pDeathTimer_->TakeDamage(attackBox->GetAttackValue());
+            // クールダウン開始
+            isDamageColling_ = true;
+            damageCollTime_ = damageCollDuration_;
+        }
+        return;
+    }
+
     if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+        // 敵が攻撃中は押し戻し無効
+        if (enemy->IsAttacking()) {
+            return;
+        }
+
         // 敵の中心座標を取得
         const Vector3& enemyPosition = enemy->GetCollisionPos();
 
@@ -473,6 +501,13 @@ void Player::HeadLightSetting() {
 
 void Player::MainHeadAnimationStart(const std::string& name) {
     baseTransform_.PlayObjEaseAnimation(name, "MainHead");
+}
+
+bool Player::IsDashing() const {
+    if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
+        return moveState->IsDashing();
+    }
+    return false;
 }
 
 void Player::RotateReset() {

@@ -8,7 +8,7 @@
 #include <memory>
 
 /// <summary>
-/// デスタイマー
+/// プレイヤーHP管理クラス
 /// </summary>
 class DeathTimer {
 public:
@@ -21,11 +21,21 @@ public:
 
     void AdjustParam();
     void RegisterParams();
-    void IncrementTimer();
+
+    /// <summary>
+    /// ダメージを受ける
+    /// </summary>
+    /// <param name="damage">ダメージ量</param>
+    void TakeDamage(float damage);
+
+    /// <summary>
+    /// HPを回復する（コンボレベルアップ時）
+    /// </summary>
+    void RecoverHP();
 
 private:
     // イージング適応
-    void AdaptEasing(float timeSpeed);
+    void AdaptEasing();
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;
@@ -33,23 +43,25 @@ private:
 
     std::unique_ptr<DeathTimerGauge> deathTimerGauge_;
 
-    float currentTimer_ = 0.0f;
+    float currentHP_ = 0.0f;
+    float maxHP_;
 
-    float decrementSpeedRate_ = 1.0f;
-    float incrementTime_;
-    float maxTimer_;
+    // 回復量（コンボレベルアップ時）
+    float levelUpRecoveryAmount_;
 
     // イージング関連
-    bool isIncrementing_        = false;
-    float incrementStartValue_  = 0.0f;
-    float incrementTargetValue_ = 0.0f;
-    float incrementTimer_       = 0.0f;
-    float incrementDuration_    = 0.0f;
+    bool isRecovering_        = false;
+    float recoveryStartValue_  = 0.0f;
+    float recoveryTargetValue_ = 0.0f;
+    float recoveryTimer_       = 0.0f;
+    float recoveryDuration_    = 0.0f;
 
     bool isDeath_ = false;
 
 public:
     // Getter
-   const bool& GetIsDeath() const { return isDeath_; }
+    const bool& GetIsDeath() const { return isDeath_; }
+    float GetCurrentHP() const { return currentHP_; }
+    float GetMaxHP() const { return maxHP_; }
     DeathTimerGauge* GetDeathTimerGauge() const { return deathTimerGauge_.get(); }
 };

@@ -39,8 +39,8 @@ void EnemyDamageRendition::Update(
     // オブジェクトアニメーションの再生
     const auto& animParam = rendition->GetObjAnimationParam();
     if (reactionTimer >= animParam.startTiming && !animParam.fileName.empty() && animParam.fileName != "None") {
-        if (pBaseEnemy_->GetObject3D()) {
-            pBaseEnemy_->GetObject3D()->transform_.PlayObjEaseAnimation(animParam.fileName, "Enemy");
+        if (pBaseEnemy_->GetAnimationObject()) {
+            pBaseEnemy_->GetAnimationObject()->transform_.PlayObjEaseAnimation(animParam.fileName, "Enemy");
         }
     }
 

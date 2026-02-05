@@ -13,17 +13,33 @@ void PlayerComboAttackTimelineData::AddTrackInfo(const TrackInfo& info) {
 }
 
 void PlayerComboAttackTimelineData::RemoveTrackInfo(int32_t trackIndex) {
+    // 無効なインデックスの場合は早期リターン
+    if (trackIndex < 0) {
+        return;
+    }
+
     // 選択したトラックを削除
     auto it = std::remove_if(addedTracks_.begin(), addedTracks_.end(),
         [trackIndex](const TrackInfo& info) {
             return info.trackIndex == trackIndex;
         });
-    addedTracks_.erase(it, addedTracks_.end());
+
+    // 削除対象が見つかった場合のみerase
+    if (it != addedTracks_.end()) {
+        addedTracks_.erase(it, addedTracks_.end());
+    }
 
     // 削除後のインデックスを調整
     for (auto& track : addedTracks_) {
         if (track.trackIndex > trackIndex) {
             track.trackIndex--;
+        }
+    }
+
+    // デフォルトトラックのインデックスも調整（削除されたトラックより大きいインデックスを持つ場合）
+    for (auto& defaultIdx : defaultTrackIndices_) {
+        if (defaultIdx > trackIndex) {
+            defaultIdx--;
         }
     }
 }
@@ -43,14 +59,10 @@ PlayerComboAttackTimelineData::FindTrackInfo(int32_t trackIndex) {
 }
 
 bool PlayerComboAttackTimelineData::IsTrackTypeAlreadyAdded(TrackType type) const {
-    // デフォルトトラックのチェック
-    switch (type) {
-    case TrackType::CANCEL_TIME:
-        return defaultTrackIndices_[static_cast<size_t>(DefaultTrack::CANCEL_START)] >= 0;
-    case TrackType::PRECEDE_INPUT:
-        return defaultTrackIndices_[static_cast<size_t>(DefaultTrack::PRECEDE_INPUT_START)] >= 0;
-    default:
-        break;
+    // キャンセルタイムと先行入力は各分岐ごとに複数追加可能なので、
+    // ここでは常にfalseを返す
+    if (type == TrackType::CANCEL_TIME || type == TrackType::PRECEDE_INPUT) {
+        return false;
     }
 
     // 追加されたトラックのチェック
@@ -123,12 +135,14 @@ PlayerComboAttackTimelineData::GetTrackTypeFromIndex(int32_t trackIndex) const {
 
         // 一致したindexがどのトラックか判定
         switch (static_cast<DefaultTrack>(i)) {
-            // キャンセル開始を取得
-        case DefaultTrack::CANCEL_START:
-            return TrackType::CANCEL_TIME;
-            // 先行入力開始を取得
-        case DefaultTrack::PRECEDE_INPUT_START:
-            return TrackType::PRECEDE_INPUT;
+        case DefaultTrack::COLLISION:
+            return TrackType::COUNT; // コリジョンは特定のTrackTypeを持たない
+        case DefaultTrack::MOVE_EASING:
+            return TrackType::COUNT; // 移動イージングは特定のTrackTypeを持たない
+        case DefaultTrack::FINISH_WAIT:
+            return TrackType::FINISH_WAIT_TIME;
+        default:
+            break;
         }
     }
 
@@ -191,4 +205,28 @@ void PlayerComboAttackTimelineData::SetDefaultTrackIndex(DefaultTrack track, int
 int32_t PlayerComboAttackTimelineData::GetDefaultTrackIndex(DefaultTrack track) const {
     // デフォルトトラックのindexを取得
     return defaultTrackIndices_[static_cast<size_t>(track)];
+}
+
+void PlayerComboAttackTimelineData::UpdateTrackIndicesAfterInsert(int32_t insertPosition, int32_t count) {
+    // countが0以下の場合は処理不要
+    if (count <= 0) {
+        return;
+    }
+
+    // 挿入位置以降のトラックインデックスをcountだけ増加
+    for (auto& track : addedTracks_) {
+        // 新しく追加された分岐トラック以外で、挿入位置以降のものを調整
+        if (track.type != TrackType::CANCEL_TIME && track.type != TrackType::PRECEDE_INPUT) {
+            if (track.trackIndex >= insertPosition) {
+                track.trackIndex += count;
+            }
+        }
+    }
+
+    // デフォルトトラックのインデックスも調整（通常は挿入位置より前なので変更されない）
+    for (auto& defaultIdx : defaultTrackIndices_) {
+        if (defaultIdx >= insertPosition) {
+            defaultIdx += count;
+        }
+    }
 }

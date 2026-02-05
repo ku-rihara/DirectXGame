@@ -93,6 +93,8 @@ void PlayerAttackCollisionBox::LoopStart() {
 
     isInLoopWait_ = false;
     adaptTimer_   = collisionParam.adaptTime;
+    // ループ開始時にヒットフラグをリセット（マルチヒット用）
+    isHit_ = false;
     SetIsAbleCollision(true);
     UpdateOffset();
 }

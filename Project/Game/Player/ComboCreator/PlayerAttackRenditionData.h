@@ -1,6 +1,6 @@
 #pragma once
 
-// paremeter
+// Parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // utility
 #include "utility/FileSelector/FileSelector.h"

@@ -134,10 +134,10 @@ Node Model::ReadNode(aiNode* node) {
     result.localMatrix         = MakeAffineMatrixQuaternion(result.transform.scale, result.transform.rotate, result.transform.translate);
     result.name                = node->mName.C_Str(); // Node名を格納
 
-    result.cihldren.resize(node->mNumChildren); // 子供の数だけ確保
+    result.children.resize(node->mNumChildren); // 子供の数だけ確保
     for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
         // 再帰的に読んで階層構造を作っていく
-        result.cihldren[childIndex] = ReadNode(node->mChildren[childIndex]);
+        result.children[childIndex] = ReadNode(node->mChildren[childIndex]);
     }
     return result;
 }

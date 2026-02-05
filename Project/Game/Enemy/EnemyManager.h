@@ -60,6 +60,9 @@ public:
     // debugSpawn
     void DebugEnemySpawn();
 
+    // エディター用にアニメーションリストを更新
+    void UpdateAvailableAnimationsForEditor(BaseEnemy* enemy);
+
 private: 
     // struct
     struct ParticleEffect {
@@ -119,6 +122,11 @@ public:
     const bool& GetIsAllCleared() const { return areAllEnemiesCleared_; }
     const std::vector<std::unique_ptr<BaseEnemy>>& GetEnemies() const { return enemies_; }
     EnemyDamageReactionController* GetDamageReactionController() const { return damageReactionController_.get(); }
+
+    /// <summary>
+    /// いずれかの敵が前隙中かどうかを確認
+    /// </summary>
+    bool IsAnyEnemyInAnticipation() const;
     ///========================================================
     /// setter method
     ///========================================================

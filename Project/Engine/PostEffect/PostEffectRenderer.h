@@ -17,7 +17,7 @@ enum class PostEffectMode {
     GAUS,
     BOXFILTER,
     RADIALBLUR,
-    RANDOMNOIZE,
+    RANDOMNOISE,
     DISSOLVE,
     OUTLINE,
     LUMINANCEOUTLINE,

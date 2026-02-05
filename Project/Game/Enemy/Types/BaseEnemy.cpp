@@ -1,9 +1,11 @@
 #include "BaseEnemy.h"
 
+// std
+#include <algorithm>
 // Manager
 #include "Enemy/EnemyManager.h"
 // behavior
-#include "../Behavior/ActionBehavior/EnemySpawn.h"
+#include "../Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionAction.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
@@ -20,6 +22,7 @@
 // Frame
 #include "Frame/Frame.h"
 // Math
+#include "MathFunction.h"
 #include "Matrix4x4.h"
 
 ///========================================================
@@ -50,10 +53,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // 振る舞い初期化
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
-    ChangeBehavior(std::make_unique<EnemySpawn>(this));
-
-    // 攻撃から戻ってきたフラグ
-    isReturningFromAttack_ = false;
+  
 }
 
 ///========================================================
@@ -151,6 +151,11 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 
     if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+        // 攻撃中は押し戻し無効
+        if (isAttacking_ || enemy->IsAttacking()) {
+            return;
+        }
+
         // 敵の中心座標を取得
         const Vector3& enemyPosition = enemy->GetCollisionPos();
 
@@ -385,13 +390,121 @@ void BaseEnemy::SetParameter(const Type& type, const Parameter& parameter) {
 }
 
 void BaseEnemy::SetBodyColor(const Vector4& color) {
-    obj3d_->GetModelMaterial()->GetMaterialData()->color = color;
+    if (objAnimation_) {
+        objAnimation_->GetModelMaterial()->GetMaterialData()->color = color;
+    }
 }
 
 void BaseEnemy::RotateInit() {
-    obj3d_->transform_.rotation_ = Vector3::ZeroVector();
+    if (objAnimation_) {
+        objAnimation_->transform_.rotation_ = Vector3::ZeroVector();
+    }
 }
 
 void BaseEnemy::ScaleReset() {
     baseTransform_.scale_ = parameter_.baseScale_;
+}
+
+///========================================================
+/// 指定したアニメーションを再生
+///========================================================
+void BaseEnemy::PlayAnimation(AnimationType type, bool isLoop) {
+    if (!objAnimation_) {
+        return;
+    }
+
+    const std::string& animeName = GetAnimationName(type);
+    if (animeName.empty()) {
+        return;
+    }
+
+    objAnimation_->ChangeAnimation(animeName);
+    objAnimation_->SetLoop(isLoop);
+}
+
+///========================================================
+/// アニメーション名で直接再生
+///========================================================
+bool BaseEnemy::PlayAnimationByName(const std::string& animationName, bool isLoop) {
+    if (!objAnimation_ || animationName.empty()) {
+        return false;
+    }
+
+    // 利用可能なアニメーションリストを取得して確認
+    auto animeNames = objAnimation_->GetAnimationNames();
+    auto it         = std::find(animeNames.begin(), animeNames.end(), animationName);
+
+    if (it != animeNames.end()) {
+        objAnimation_->ChangeAnimation(animationName);
+        objAnimation_->SetLoop(isLoop);
+        return true;
+    }
+
+    return false; // アニメーションが見つからない
+}
+
+
+///========================================================
+/// 追跡中のアニメーション更新
+///========================================================
+void BaseEnemy::UpdateChaseAnimation([[maybe_unused]] float deltaTime) {
+    if (!objAnimation_) {
+        return;
+    }
+
+    // 予備動作が終了したらダッシュアニメーションに切り替え
+    if (chaseAnimState_ == ChaseAnimationState::PRE_DASH && isPreDashFinished_) {
+        chaseAnimState_ = ChaseAnimationState::DASHING;
+        objAnimation_->ChangeAnimation(GetAnimationName(AnimationType::Dash));
+        objAnimation_->SetLoop(true); // ダッシュはループ
+    }
+}
+
+///========================================================
+/// 待機アニメーションにリセット
+///========================================================
+void BaseEnemy::ResetToWaitAnimation() {
+    if (!objAnimation_) {
+        return;
+    }
+
+    // 待機アニメーションに戻す
+    chaseAnimState_    = ChaseAnimationState::NONE;
+    isPreDashFinished_ = false;
+    objAnimation_->ChangeAnimation(GetAnimationName(AnimationType::Wait));
+    objAnimation_->SetLoop(true); // 待機アニメーションはループ
+}
+
+std::vector<std::string> BaseEnemy::GetAnimationNames() const {
+    if (objAnimation_) {
+        return objAnimation_->GetAnimationNames();
+    }
+    return {};
+}
+
+void BaseEnemy::DirectionToPlayer(bool isOpposite) {
+    
+    // プレイヤーへの方向
+    Vector3 directionToPlayer = GetDirectionToTarget(pPlayer_->GetWorldPosition());
+
+    if (isOpposite) {
+        directionToPlayer *= -1.0f;
+    }
+    // 正規化
+    directionToPlayer.y = 0.0f;
+    directionToPlayer.Normalize();
+
+    // 目標角度を計算
+    float objectiveAngle = std::atan2(-directionToPlayer.x, -directionToPlayer.z);
+
+
+    // 最短角度補間で回転を更新
+    baseTransform_.rotation_.y = LerpShortAngle(baseTransform_.rotation_.y, objectiveAngle, 0.8f);
+}
+
+float BaseEnemy::CalcDistanceToPlayer() {
+    // プレイヤーへの方向
+    Vector3 directionToPlayer = GetDirectionToTarget(pPlayer_->GetWorldPosition());
+    float distance            = std::sqrt(directionToPlayer.x * directionToPlayer.x + directionToPlayer.z * directionToPlayer.z);
+    return distance;
 }

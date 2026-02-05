@@ -15,11 +15,9 @@
         "HitStop_FileName": "",
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
-        "IsFirstAttack": false,
         "KnockBackPower": 42.45000076293945,
         "Main_Head_FileName": "",
         "Main_Head_StartTiming": 0.0,
-        "NextAttackType": "",
         "ObjAnim_Head_FileName": "",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
@@ -32,7 +30,6 @@
         "PostEffectParam_FileName": "",
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
-        "RequireHit": false,
         "ShakeAction_FileName": "",
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": false,
@@ -42,7 +39,6 @@
         "Vibration_TriggerByHit": false,
         "adaptTime": 0.1599999964237213,
         "blowYPower": 33.79999923706055,
-        "cancelFrame": 0.0,
         "collisionOffsetPos": [
             0.0,
             0.0,
@@ -60,7 +56,6 @@
         "isAbleInputMoving": false,
         "isAlwaysFollowing": true,
         "isAutoAdvance": false,
-        "isCancel": false,
         "isMotionOnly": false,
         "isPositionYSelect": false,
         "keyBordBottom": 35,
@@ -74,6 +69,6 @@
             22.1299991607666
         ],
         "power": 14.130000114440918,
-        "precedeInputFrame": 0.0
+        "ComboBranchCount": 0
     }
 }

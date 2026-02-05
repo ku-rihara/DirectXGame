@@ -253,6 +253,8 @@ void ObjEaseAnimationSection::StartPlay() {
     // 全てのイージングをリセットして開始
     for (auto& param : transformParams_) {
         if (param.isActive) {
+            // 再生開始時にstartValueをcurrentOffsetに設定
+            param.currentOffset = param.startValue;
             param.ease.Reset();
             param.state             = TransformState::PLAYING;
             param.returnElapsedTime = 0.0f;
@@ -424,6 +426,50 @@ bool ObjEaseAnimationSection::IsFinished() const {
     return AreAllTransformsFinished();
 }
 
+bool ObjEaseAnimationSection::IsTransformFinished(TransformType type) const {
+    const auto& param = transformParams_[static_cast<size_t>(type)];
+    // 非アクティブな場合は完了扱い
+    if (!param.isActive) {
+        return true;
+    }
+    return param.state == TransformState::FINISHED;
+}
+
+void ObjEaseAnimationSection::SetStartValueForTransform(TransformType type, const Vector3& value) {
+    auto& param = transformParams_[static_cast<size_t>(type)];
+    param.ease.SetStartValue(value);
+    param.startValue    = value;
+    param.currentOffset = value;
+}
+
+void ObjEaseAnimationSection::StartWaitingForTransform(TransformType type) {
+    auto& param = transformParams_[static_cast<size_t>(type)];
+    if (param.isActive) {
+        param.state             = TransformState::WAITING;
+        param.returnElapsedTime = 0.0f;
+        param.currentOffset     = param.preAnimationOffset;
+    }
+}
+
+void ObjEaseAnimationSection::StartPlayingForTransform(TransformType type) {
+    auto& param = transformParams_[static_cast<size_t>(type)];
+    if (param.isActive) {
+        // セクション全体をPLAYING状態にする（Update()が処理を行うため）
+        playState_ = PlayState::PLAYING;
+
+        // この特定のTransformをPLAYING状態にする
+        param.currentOffset = param.startValue;
+        param.ease.Reset();
+        param.state             = TransformState::PLAYING;
+        param.returnElapsedTime = 0.0f;
+
+        // Rail使用時はRailを再生
+        if (type == TransformType::Translation && param.useRail && !param.railFileName.empty()) {
+            railPlayer_->Play(param.railFileName);
+        }
+    }
+}
+
 bool ObjEaseAnimationSection::IsUsingRail() const {
     const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
     return transParam.useRail && transParam.isActive;
@@ -451,8 +497,16 @@ void ObjEaseAnimationSection::StartWaiting() {
         if (param.isActive) {
             param.state             = TransformState::WAITING;
             param.returnElapsedTime = 0.0f;
+            // 待機中は開始前のオフセットを使用
+            param.currentOffset = param.preAnimationOffset;
         }
     }
+}
+
+void ObjEaseAnimationSection::SetPreAnimationOffsets(const Vector3& scale, const Vector3& rotation, const Vector3& translation) {
+    transformParams_[static_cast<size_t>(TransformType::Scale)].preAnimationOffset       = scale;
+    transformParams_[static_cast<size_t>(TransformType::Rotation)].preAnimationOffset    = rotation;
+    transformParams_[static_cast<size_t>(TransformType::Translation)].preAnimationOffset = translation;
 }
 
 bool ObjEaseAnimationSection::IsLookingAtDirection() const {
@@ -469,4 +523,8 @@ Vector3 ObjEaseAnimationSection::GetMovementDirection() const {
     }
 
     return direction.Normalize();
+}
+
+bool ObjEaseAnimationSection::IsTransformActive(TransformType type) const {
+    return transformParams_[static_cast<size_t>(type)].isActive;
 }

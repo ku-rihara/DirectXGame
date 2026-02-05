@@ -48,6 +48,7 @@ public:
     // リアクションパラメータ
     struct ReactionParameter {
         std::string triggerAttackName;
+        std::string damageAnimationName; // ダメージアニメーション名
         int32_t intReactionState = 0;
         ReactionState reactionState;
         NormalParam normalParam;
@@ -66,6 +67,17 @@ public:
 
     // 初期化
     void Init(const std::string& reactionName);
+
+    // 利用可能なアニメーション名リストを設定（エディター用）
+    static void SetAvailableAnimations(const std::vector<std::string>& animations) {
+        availableAnimations_ = animations;
+    }
+
+private:
+    // 利用可能なアニメーション名リスト（静的、エディター用）
+    static inline std::vector<std::string> availableAnimations_;
+
+public:
 
     // パラメータバインド、調節
     void AdjustParam();

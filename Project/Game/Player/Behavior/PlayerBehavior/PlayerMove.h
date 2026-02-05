@@ -27,10 +27,18 @@ private:
         COOLING,
     };
 
+public:
+    /// <summary>
+    /// ダッシュ中かどうかを取得
+    /// </summary>
+    bool IsDashing() const { return isDashing_; }
+
 private:
     /// ===================================================
     /// private variable
     /// ===================================================
+
+    bool isDashing_ = false; // ダッシュ中フラグ
 
     AnimationStep animationStep_;
     float speed_;

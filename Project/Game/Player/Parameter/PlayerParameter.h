@@ -39,6 +39,7 @@ struct Parameters {
     JumpParam upperJump;
     SpawnParam spawnParam;
     float moveSpeed;
+    float dashSpeedMultiplier;
     float fallSpeed;
     float attackRotate;
     float attackRotateAnit;

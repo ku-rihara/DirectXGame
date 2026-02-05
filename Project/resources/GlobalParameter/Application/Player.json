@@ -1,5 +1,6 @@
 {
     "Player": {
+        "DashSpeedMultiplier": 2.359999895095825,
         "FallSpeed": 0.0,
         "FallSpeedLimit": 80.0,
         "Gravity": 116.80000305175781,

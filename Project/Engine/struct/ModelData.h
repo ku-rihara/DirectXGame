@@ -13,7 +13,7 @@ struct Node {
     QuaternionTransform transform;
 	Matrix4x4 localMatrix;
 	std::string name;
-	std::vector<Node>cihldren;
+	std::vector<Node>children;
 };
 
 struct VertexWeightData {

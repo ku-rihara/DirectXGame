@@ -76,6 +76,11 @@ void EnemyDamageReactionAction::InitReaction() {
     // リアクションパラメータの取得
     const auto& reactionParam = pReactionData_->GetReactionParam();
 
+    // ダメージアニメーションを再生（設定されている場合）
+    if (!reactionParam.damageAnimationName.empty()) {
+        pBaseEnemy_->PlayAnimationByName(reactionParam.damageAnimationName, false);
+    }
+
     // プレイヤー攻撃からパワーを取得
     blowYPower_     = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
     knockBackPower_ = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().knockBackPower;

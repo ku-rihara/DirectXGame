@@ -24,6 +24,7 @@
         ],
         "Translation_EaseType": 0,
         "Translation_IsActive": true,
+        "Translation_IsLookAtDirection": false,
         "Translation_IsReturnToOrigin": true,
         "Translation_MaxTime": 0.18000000715255737,
         "Translation_RailFileName": "",

@@ -48,6 +48,12 @@ public:
         std::function<void(float)> callback = nullptr);
 
     /// <summary>
+    /// トラック挿入（指定位置に挿入）
+    /// </summary>
+    uint32_t InsertTrack(uint32_t position, const std::string& trackName,
+        std::function<void(float)> callback = nullptr);
+
+    /// <summary>
     /// トラック削除
     /// </summary>
     bool RemoveTrack(uint32_t trackIndex);
@@ -178,6 +184,9 @@ private:
     int draggingDurationTrackIndex_ = -1;
     int draggingDurationKeyIndex_   = -1;
     float dragStartDuration_        = 0.0f;
+
+    // 再生ヘッド（縦線）ドラッグ用
+    bool isDraggingPlayhead_        = false;
 
     // 右クリックされたトラック
     int rightClickedTrackIndex_ = -1;

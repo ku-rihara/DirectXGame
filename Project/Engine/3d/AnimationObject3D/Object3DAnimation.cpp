@@ -153,9 +153,11 @@ void Object3DAnimation::UpdateAnimation(float deltaTime) {
             animationTime_      = std::fmod(animationTime_, duration);
             hasLoopedThisFrame_ = true;
 
-            // コールバック実行
-            if (onAnimationEnd_) {
-                onAnimationEnd_(animations_[currentAnimationIndex_].name);
+            // 現在のアニメーションに対応するコールバック実行
+            const std::string& currentAnimName = animations_[currentAnimationIndex_].name;
+            auto it = animationEndCallbacks_.find(currentAnimName);
+            if (it != animationEndCallbacks_.end() && it->second) {
+                it->second();
             }
         } else {
             // ループしない場合、最後のフレームで停止
@@ -164,8 +166,11 @@ void Object3DAnimation::UpdateAnimation(float deltaTime) {
                 animationTime_      = duration;
                 hasLoopedThisFrame_ = true;
 
-                if (onAnimationEnd_) {
-                    onAnimationEnd_(animations_[currentAnimationIndex_].name);
+                // 現在のアニメーションに対応するコールバック実行
+                const std::string& currentAnimName = animations_[currentAnimationIndex_].name;
+                auto it = animationEndCallbacks_.find(currentAnimName);
+                if (it != animationEndCallbacks_.end() && it->second) {
+                    it->second();
                 }
             } else {
                 // すでに終端にいる場合はそのまま
@@ -418,4 +423,12 @@ void Object3DAnimation::CreateMaterialResource() {
 
 void Object3DAnimation::CreateShadowMap() {
     BaseObject3d::CreateShadowMap();
+}
+
+std::vector<std::string> Object3DAnimation::GetAnimationNames() const {
+    std::vector<std::string> names;
+    for (const auto& anime : animations_) {
+        names.push_back(anime.name);
+    }
+    return names;
 }
