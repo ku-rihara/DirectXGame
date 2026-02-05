@@ -5,6 +5,7 @@ using namespace KetaEngine;
 // dx
 #include "Base/Dx/DxRenderTarget.h"
 #include "PostEffect/PostEffectRenderer.h"
+#include"3d/ModelManager.h"
 #include "ShadowMap/ShadowMap.h"
 
 // utility
@@ -124,7 +125,6 @@ void KTFramework::DisplayFPS() {
     ImGui::Begin("FPS");
     ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 100, 255));
     ImGui::Text("FPS: %.1f", io.Framerate);
-    ImGui::Text("Frame Time: %.3f ms", 1000.0f / io.Framerate);
     ImGui::PopStyleColor();
     ImGui::End();
 #endif
@@ -180,4 +180,11 @@ void KTFramework::LoadAllTexture() {
     TextureManager::GetInstance()->LoadTexture("Resources/Texture/HowToOperate.png");
     TextureManager::GetInstance()->LoadTexture("Resources/Model/AudienceSeats/audienceSeats.png");
     TextureManager::GetInstance()->LoadTexture("Resources/Model/FieldSide/SideFiend.png");
+
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyWaiting.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemySpawn.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyDiscovery.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyRun.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyAttack.gltf");
+
 }

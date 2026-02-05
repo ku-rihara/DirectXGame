@@ -21,7 +21,6 @@ EnemyWait::EnemyWait(BaseEnemy* boss)
     isMoveCollTime_ = true;
     moveCollTimer_  = pBaseEnemy_->GetParameter().attackCooldownTime;
 
-
 }
 
 EnemyWait::~EnemyWait() {
@@ -45,6 +44,7 @@ void EnemyWait::Update() {
 
 
     // プレイヤーが離れた時の行動切り替え
+     
     pBaseEnemy_->OnPlayerDistantAction();
 
      // プレイヤーが近づいた時の行動切り替え
