@@ -25,7 +25,7 @@ TitleLeftPunch::TitleLeftPunch(Player* player)
 
     /// パンチ座標セット
     lHandStartPos_  = pPlayer_->GetLeftHand()->GetObjTransform().translation_;
-    lHandTargetPos_ = pPlayer_->GetLeftHand()->GetObjTransform().LookAt(Vector3::ToForward()) * 2.0f;
+    lHandTargetPos_ = pPlayer_->GetLeftHand()->GetObjTransform().GetLookAt(Vector3::ToForward()) * 2.0f;
 
     /// land
   

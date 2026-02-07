@@ -230,7 +230,7 @@ void EnemyDamageReactionAction::UpdateSlammed() {
     }
 
     if (hasReachedGround_) {
-        UpdateBounce(enemyParam.basePosY, slammedGravity_, slammedRotateSpeed_);
+        UpdateBounce(enemyParam.basePosY, slammedGravity_);
     }
 }
 
@@ -247,8 +247,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
         pBaseEnemy_->Jump(jumpSpeed_, takeUpperFallLimit_, takeUpperGravity_);
 
         // 回転演出
-        float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * KetaEngine::Frame::DeltaTimeRate());
+        RotationUpdate();
 
         // 速度が0以下になったら頂点到達
         if (jumpSpeed_ <= 0.0f) {
@@ -262,8 +261,8 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
         floatingTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
         // 回転演出
-        float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * KetaEngine::Frame::DeltaTimeRate());
+        RotationUpdate();
+
     }
     // 浮遊時間終了後、落下
     else {
@@ -271,8 +270,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
         pBaseEnemy_->Fall(jumpSpeed_, takeUpperFallLimit_, takeUpperGravity_, false);
 
         // 回転継続
-        float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * KetaEngine::Frame::DeltaTimeRate());
+        RotationUpdate();
 
         // 地面に着地したらバウンド処理へ
         if (pBaseEnemy_->GetWorldPosition().y < enemyParam.basePosY) {
@@ -289,11 +287,11 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
 
     // 地面到達後のバウンド処理
     if (hasReachedGround_) {
-        UpdateBounce(enemyParam.basePosY, takeUpperGravity_, takeUpperRotateSpeed_);
+        UpdateBounce(enemyParam.basePosY, takeUpperGravity_);
     }
 }
 
-void EnemyDamageReactionAction::UpdateBounce(float basePosY, float gravity, float rotateSpeed) {
+void EnemyDamageReactionAction::UpdateBounce(float basePosY, float gravity) {
     if (currentBoundCount_ >= maxBoundCount_) {
         return;
     }
@@ -306,9 +304,8 @@ void EnemyDamageReactionAction::UpdateBounce(float basePosY, float gravity, floa
     currentPos.y += bounceSpeed_ * KetaEngine::Frame::DeltaTimeRate();
     pBaseEnemy_->SetWorldPositionY(currentPos.y);
 
-    // 回転
-    float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-    pBaseEnemy_->SetBodyRotateX(currentRotation + rotateSpeed * KetaEngine::Frame::DeltaTime());
+    // 回転（Vector3で各軸に適用）
+    RotationUpdate();
 
     // 地面に着地したら次のバウンド
     if (currentPos.y <= basePosY) {
@@ -363,4 +360,10 @@ void EnemyDamageReactionAction::OnReactionEnd() {
     // 位置を正確に地面に設定
     const auto& enemyParam = pBaseEnemy_->GetParameter();
     pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
+}
+
+void EnemyDamageReactionAction::RotationUpdate() {
+    // 回転演出
+    Vector3 currentRotation = pBaseEnemy_->GetBodyRotation();
+    pBaseEnemy_->SetBodyRotate(currentRotation + takeUpperRotateSpeed_ * KetaEngine::Frame::DeltaTimeRate());
 }

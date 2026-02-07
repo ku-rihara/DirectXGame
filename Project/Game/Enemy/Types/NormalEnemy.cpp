@@ -10,7 +10,7 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     // アニメーション名を設定
     SetAnimationName(AnimationType::Wait, "NormalEnemyWaiting");
     SetAnimationName(AnimationType::Spawn, "NormalEnemySpawn");
-    SetAnimationName(AnimationType::AttackAnticipation, "NormalEnemyDiscovery");
+    SetAnimationName(AnimationType::Discovery, "NormalEnemyDiscovery");
     SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
     SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
 
@@ -18,13 +18,16 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(GetAnimationName(AnimationType::Wait) + ".gltf"));
     objAnimation_->Init();
     objAnimation_->Add(GetAnimationName(AnimationType::Spawn) + ".gltf");
-    objAnimation_->Add(GetAnimationName(AnimationType::AttackAnticipation) + ".gltf");
+    objAnimation_->Add(GetAnimationName(AnimationType::Discovery) + ".gltf");
     objAnimation_->Add(GetAnimationName(AnimationType::Dash) + ".gltf");
     objAnimation_->Add(GetAnimationName(AnimationType::Attack) + ".gltf");
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
     objAnimation_->transform_.scale_                                     = Vector3::OneVector();
     objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = 3;
+
+    // ダメージリアクション用アニメーションを追加
+    // AddDamageReactionAnimation("DamageReactionAnimationName");
 
     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
@@ -44,12 +47,6 @@ void NormalEnemy::OnPlayerApproachAction() {
 }
 
 void NormalEnemy::OnPlayerDistantAction() {
-
-    //  // 攻撃範囲より遠い場合はWaitに戻る
-    // if (distance_ > param.attackRangeMax) {
-    //    pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
-    //    return;
-    //}
 }
 
 ///========================================================

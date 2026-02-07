@@ -348,8 +348,8 @@ void BaseEnemy::DeathRenditionInit() {
 }
 
 Vector3 BaseEnemy::GetCollisionPos() const {
-    // ローカル座標でのオフセット
-    const Vector3 offset = Vector3::ZeroVector();
+    // パラメータからオフセットを取得
+    const Vector3& offset = parameter_.collisionOffset;
     // ワールド座標に変換
     Vector3 worldPos = TransformMatrix(offset, baseTransform_.matWorld_);
     return worldPos;
@@ -387,6 +387,8 @@ void BaseEnemy::BackToDamageRoot() {
 void BaseEnemy::SetParameter(const Type& type, const Parameter& parameter) {
     type_      = type;
     parameter_ = parameter;
+    // コリジョンサイズを適用
+    SetCollisionScale(parameter_.collisionSize);
 }
 
 void BaseEnemy::SetBodyColor(const Vector4& color) {

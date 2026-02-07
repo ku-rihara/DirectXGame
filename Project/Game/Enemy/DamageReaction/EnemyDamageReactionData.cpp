@@ -87,13 +87,13 @@ void EnemyDamageReactionData::RegisterParams() {
 
     // SlammedParam
     globalParameter_->Regist(groupName_, "Slammed_Gravity", &reactionParam_.slammedParam.gravity);
-    globalParameter_->Regist(groupName_, "Slammed_ThrustRotateSpeed", &reactionParam_.slammedParam.rotateSpeed);
+    globalParameter_->Regist(groupName_, "Slammed_RotateSpeed", &reactionParam_.slammedParam.rotateSpeed);
 
     // TakeUpperParam
     globalParameter_->Regist(groupName_, "TakeUpper_FloatingTime", &reactionParam_.takeUpperParam.floatingTime);
     globalParameter_->Regist(groupName_, "TakeUpper_FallSpeedLimit", &reactionParam_.takeUpperParam.fallSpeedLimit);
     globalParameter_->Regist(groupName_, "TakeUpper_Gravity", &reactionParam_.takeUpperParam.gravity);
-    globalParameter_->Regist(groupName_, "TakeUpper_ThrustRotateSpeed", &reactionParam_.takeUpperParam.rotateSpeed);
+    globalParameter_->Regist(groupName_, "TakeUpper_RotateSpeed", &reactionParam_.takeUpperParam.rotateSpeed);
 }
 
 ///==========================================================
@@ -175,13 +175,13 @@ void EnemyDamageReactionData::AdjustParam() {
     if (reactionParam_.reactionState == ReactionState::Slammed) {
         ImGui::SeparatorText("Slammed Parameters");
         ImGui::DragFloat("Gravity", &reactionParam_.slammedParam.gravity, 0.1f, 0.0f);
-        ImGui::DragFloat("Rotate Speed", &reactionParam_.slammedParam.rotateSpeed, 0.01f);
+        ImGui::DragFloat3("Rotate Speed", &reactionParam_.slammedParam.rotateSpeed.x, 0.01f);
     } else if (reactionParam_.reactionState == ReactionState::TakeUpper) {
         ImGui::SeparatorText("Take Upper Parameters");
         ImGui::DragFloat("Floating Time", &reactionParam_.takeUpperParam.floatingTime, 0.01f);
         ImGui::DragFloat("Fall Speed Limit", &reactionParam_.takeUpperParam.fallSpeedLimit, 0.1f);
         ImGui::DragFloat("Gravity", &reactionParam_.takeUpperParam.gravity, 0.1f);
-        ImGui::DragFloat("Rotate Speed", &reactionParam_.takeUpperParam.rotateSpeed, 0.01f);
+        ImGui::DragFloat3("Rotate Speed", &reactionParam_.takeUpperParam.rotateSpeed.x, 0.01f);
     }
 
     // SlammedまたはTakeUpperの時、バウンドパラメータを表示

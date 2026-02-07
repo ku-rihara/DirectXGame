@@ -16,14 +16,12 @@ EnemySpawn::EnemySpawn(BaseEnemy* boss)
     : BaseEnemyBehavior("EnemySpawn", boss) {
 
     /// spawn
-
     spawnEasing_.Init("SpawnScaling.json");
     spawnEasing_.SetAdaptValue(&tempEnemyScale_);
     spawnEasing_.SetEndValue(pBaseEnemy_->GetParameter().baseScale_);
     spawnEasing_.Reset();
 
-   
-
+ 
     pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(pBaseEnemy_->GetAnimationName(BaseEnemy::AnimationType::Spawn), [this]() {
         step_ = Step::ChangeNextBehavior; // 次のステップ
     });
@@ -33,6 +31,11 @@ EnemySpawn::~EnemySpawn() {
 }
 
 void EnemySpawn::Update() {
+
+
+    // プレイヤーの方向を向く
+    pBaseEnemy_->DirectionToPlayer();
+
     switch (step_) {
         ///------------------------------------------------------------------
         /// 敵の生成アニメーション

@@ -49,13 +49,16 @@ private:
     void UpdateTakeUpper();
 
     // バウンド処理
-    void UpdateBounce(float basePosY, float gravity, float rotateSpeed);
+    void UpdateBounce(float basePosY, float gravity);
 
     // リアクション終了判定
     bool IsReactionFinished() const;
 
     // リアクション終了時の処理
     void OnReactionEnd();
+
+    // 回転更新
+    void RotationUpdate();
 
 private:
     EnemyDamageReactionData* pReactionData_          = nullptr;
@@ -85,7 +88,7 @@ private:
 
     // Slammed固有パラメータ
     float slammedGravity_;
-    float slammedRotateSpeed_;
+    Vector3 slammedRotateSpeed_;
 
     // TakeUpper固有パラメータ
     float floatingTime_ = 0.0f;
@@ -94,7 +97,7 @@ private:
     bool hasReachedPeak_ = false;
     float floatingTimer_ = 0.0f;
     float takeUpperGravity_;
-    float takeUpperRotateSpeed_;
+    Vector3 takeUpperRotateSpeed_;
     float takeUpperFallLimit_;
 
     // 演出管理
