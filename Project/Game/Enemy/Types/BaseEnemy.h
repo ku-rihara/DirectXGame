@@ -89,9 +89,12 @@ public:
     virtual void Update();
 
     // 振る舞い個別処理
-    virtual void SpawnRenditionInit()     = 0;
-    virtual void OnPlayerApproachAction() = 0;
-    virtual void OnPlayerDistantAction()  = 0;
+    virtual void SpawnRenditionInit() = 0;
+
+    void ThrustRenditionInit(); //< 突き飛ばし演出初期化
+    void DeathRenditionInit(); //< 死亡演出初期化
+    void ScaleReset(); //< スケールリセット
+    void RotateInit(); //< 回転初期化
 
     /// <summary>
     /// スプライトUIの表示
@@ -99,10 +102,11 @@ public:
     /// <param name="viewProjection">ビュープロジェクション</param>
     virtual void DisplaySprite(const KetaEngine::ViewProjection& viewProjection);
 
-    void ThrustRenditionInit(); //< 突き飛ばし演出初期化
-    void DeathRenditionInit(); //< 死亡演出初期化
-    void ScaleReset(); //< スケールリセット
-    void RotateInit(); //< 回転初期化
+    /// <summary>
+    /// ダメージリアクション用アニメーションを追加
+    /// </summary>
+    /// <param name="name">アニメーション名</param>
+    void AddDamageReactionAnimation(const std::string& name);
 
     /// <summary>
     /// 追跡中のアニメーション更新
@@ -237,8 +241,8 @@ protected:
     // アニメーション関連
     std::array<std::string, static_cast<size_t>(AnimationType::Count)> animationNames_;
     std::vector<std::string> damageReactionAnimationNames_; // ダメージリアクション用アニメーション
-    ChaseAnimationState chaseAnimState_ = ChaseAnimationState::NONE;
-    bool isPreDashFinished_             = false;
+    ChaseAnimationState chaseAnimeState_ = ChaseAnimationState::NONE;
+    bool isPreDashFinished_              = false;
 
     /// behavior
     std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_ = nullptr;
@@ -275,7 +279,7 @@ public:
     KetaEngine::Object3DAnimation* GetAnimationObject() const { return objAnimation_.get(); }
     bool IsInAnticipation() const { return isInAnticipation_; }
     bool IsAttacking() const { return isAttacking_; }
-    ChaseAnimationState GetChaseAnimState() const { return chaseAnimState_; }
+    ChaseAnimationState GetChaseAnimState() const { return chaseAnimeState_; }
     bool IsPreDashFinished() const { return isPreDashFinished_; }
     std::vector<std::string> GetAnimationNames() const;
 
@@ -307,15 +311,5 @@ public:
     void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }
     void SetIsAttacking(bool value) { isAttacking_ = value; }
 
-    void SetAnimationName(AnimationType type, const std::string& name) {
-        animationNames_[static_cast<size_t>(type)] = name;
-    }
-
-    /// <summary>
-    /// ダメージリアクション用アニメーションを追加
-    /// </summary>
-    /// <param name="name">アニメーション名</param>
-    void AddDamageReactionAnimation(const std::string& name) {
-        damageReactionAnimationNames_.push_back(name);
-    }
+    void SetAnimationName(AnimationType type, const std::string& name);
 };

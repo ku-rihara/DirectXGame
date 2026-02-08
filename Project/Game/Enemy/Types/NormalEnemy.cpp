@@ -15,20 +15,13 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
     SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
 
-    // アニメーションオブジェクトの作成
-    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(GetAnimationName(AnimationType::Wait) + ".gltf"));
-    objAnimation_->Init();
-    objAnimation_->Add(GetAnimationName(AnimationType::Spawn) + ".gltf");
-    objAnimation_->Add(GetAnimationName(AnimationType::Discovery) + ".gltf");
-    objAnimation_->Add(GetAnimationName(AnimationType::Dash) + ".gltf");
-    objAnimation_->Add(GetAnimationName(AnimationType::Attack) + ".gltf");
+     // ダメージリアクション用アニメーションを追加
+    AddDamageReactionAnimation("EnemyNormalDamage");
+    
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
     objAnimation_->transform_.scale_                                     = Vector3::OneVector();
     objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
-
-    // ダメージリアクション用アニメーションを追加
-    // AddDamageReactionAnimation("DamageReactionAnimationName");
 
     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
@@ -42,12 +35,6 @@ void NormalEnemy::Update() {
 
 void NormalEnemy::SpawnRenditionInit() {
     GetEnemyEffects()->Emit("SpawnEffect");
-}
-
-void NormalEnemy::OnPlayerApproachAction() {
-}
-
-void NormalEnemy::OnPlayerDistantAction() {
 }
 
 ///========================================================
