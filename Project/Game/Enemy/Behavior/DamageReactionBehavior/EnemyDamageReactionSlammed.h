@@ -10,7 +10,7 @@ class PlayerAttackCollisionBox;
 
 /// <summary>
 /// Slammed ダメージリアクション
-/// 叩きつけ + バウンド
+/// 叩きつけ → バウンド
 /// </summary>
 class EnemyDamageReactionSlammed : public BaseEnemyDamageReaction {
 public:

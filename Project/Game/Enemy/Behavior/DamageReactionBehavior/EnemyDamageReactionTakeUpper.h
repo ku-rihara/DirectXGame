@@ -72,7 +72,7 @@ private:
     float initialBounceRate_;
     bool hasReachedGround_ = false;
 
-    // TakeUpper固有パラメータ
+    // Upperパラメータ
     float floatingTime_ = 0.0f;
     float jumpSpeed_ = 0.0f;
     Vector3 initialPosition_;
