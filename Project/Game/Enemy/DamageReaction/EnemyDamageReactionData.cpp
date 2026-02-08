@@ -114,10 +114,10 @@ void EnemyDamageReactionData::AdjustParam() {
     // 利用可能なアニメーションがある場合はドロップダウン表示
     if (!availableAnimations_.empty()) {
         // 現在選択されているインデックスを検索
-        int currentIndex = 0; // 0 = "None"
+        int currentIndex = 0; 
         for (size_t i = 0; i < availableAnimations_.size(); ++i) {
             if (availableAnimations_[i] == reactionParam_.damageAnimationName) {
-                currentIndex = static_cast<int>(i + 1); // +1 because 0 is "None"
+                currentIndex = static_cast<int>(i + 1);
                 break;
             }
         }
@@ -143,15 +143,12 @@ void EnemyDamageReactionData::AdjustParam() {
         if (ImGui::InputText("Animation Name", buffer, sizeof(buffer))) {
             reactionParam_.damageAnimationName = buffer;
         }
-        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Tip: Set enemy animations to enable dropdown");
     }
 
     // 現在設定されているアニメーション名を表示
     if (!reactionParam_.damageAnimationName.empty()) {
         ImGui::Text("Current: %s", reactionParam_.damageAnimationName.c_str());
-    } else {
-        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "No animation set");
-    }
+    } 
 
     ImGui::Separator();
 

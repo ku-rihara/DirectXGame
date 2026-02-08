@@ -1,5 +1,6 @@
 #include "NormalEnemy.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
+#include "Light/LightingType.h"
 
 ///========================================================
 ///  初期化
@@ -24,7 +25,7 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
     objAnimation_->transform_.scale_                                     = Vector3::OneVector();
-    objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = 3;
+    objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
 
     // ダメージリアクション用アニメーションを追加
     // AddDamageReactionAnimation("DamageReactionAnimationName");

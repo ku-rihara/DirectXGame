@@ -936,9 +936,6 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.cpp">
-      <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionNormal.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClCompile>
@@ -1823,9 +1820,6 @@
       <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h">
-      <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.h">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionNormal.h">

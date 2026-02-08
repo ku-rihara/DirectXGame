@@ -2,6 +2,7 @@
 
 using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
+#include "Light/LightingType.h"
 #include <cassert>
 #include <imgui.h>
 
@@ -18,7 +19,7 @@ void SkyBoxMaterial::Init(DirectXCommon* dxCommon) {
     materialData_->color                  = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
     materialData_->shininess              = 9.5f;
     materialData_->uvMatrix               = MakeIdentity4x4();
-    materialData_->enableLighting         = 1;
+    materialData_->enableLighting         = static_cast<int32_t>(LightingType::Lambert);
     materialData_->environmentCoefficient = 0.0f;
 }
 

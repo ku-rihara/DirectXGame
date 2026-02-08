@@ -6,7 +6,6 @@
 #include "Enemy/EnemyManager.h"
 // behavior
 #include "../Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
-#include "../Behavior/DamageReactionBehavior/EnemyDamageReactionAction.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 // Player

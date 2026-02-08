@@ -21,7 +21,9 @@ EnemyDamageReactionSlammed::EnemyDamageReactionSlammed(
     damageRendition_.Init(pBaseEnemy_, pReactionData_);
 
     // 初期フェーズを設定
-    currentPhase_ = [this]() { UpdatePhase(); };
+    currentPhase_ = [this]() {
+        UpdatePhase();
+    };
 }
 
 EnemyDamageReactionSlammed::~EnemyDamageReactionSlammed() {
@@ -46,8 +48,10 @@ void EnemyDamageReactionSlammed::UpdatePhase() {
 
     if (IsReactionFinished()) {
         OnReactionEnd();
-        endType_ = EndType::BackToRoot;
-        currentPhase_ = [this]() { EndPhase(); };
+        endType_      = EndType::BackToRoot;
+        currentPhase_ = [this]() {
+            EndPhase();
+        };
     }
 }
 
@@ -148,8 +152,10 @@ void EnemyDamageReactionSlammed::UpdateSlammed() {
 
             // HPが0以下の場合、1バウンド目で死亡処理
             if (pBaseEnemy_->GetIsDeathPending()) {
-                endType_ = EndType::Death;
-                currentPhase_ = [this]() { EndPhase(); };
+                endType_      = EndType::Death;
+                currentPhase_ = [this]() {
+                    EndPhase();
+                };
                 return;
             }
 
