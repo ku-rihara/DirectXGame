@@ -35,14 +35,14 @@ public:
 
     struct SlammedParam {
         float gravity;
-        float rotateSpeed;
+        Vector3 rotateSpeed;
     };
 
     struct TakeUpperParam {
         float floatingTime;
         float fallSpeedLimit;
         float gravity;
-        float rotateSpeed;
+        Vector3 rotateSpeed;
     };
 
     // リアクションパラメータ

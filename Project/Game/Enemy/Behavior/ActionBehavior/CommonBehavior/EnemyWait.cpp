@@ -1,8 +1,11 @@
 /// behavior
 #include "EnemyWait.h"
+#include "EnemyEscape.h"
 /// obj
 #include "Enemy/Types/BaseEnemy.h"
 #include "Player/Player.h"
+/// animation
+#include "3D/AnimationObject3D/Object3DAnimation.h"
 /// frame
 #include "Frame/Frame.h"
 /// imGui
@@ -17,51 +20,68 @@ EnemyWait::EnemyWait(BaseEnemy* boss)
     // 待機アニメーションにリセット
     pBaseEnemy_->ResetToWaitAnimation();
 
-    //
-    isMoveCollTime_ = true;
-    moveCollTimer_  = pBaseEnemy_->GetParameter().attackCooldownTime;
+    // 初期フェーズを待機に設定
+    currentPhase_ = [this]() {
+        UpdateWaiting();
+    };
 
+    // アニメーション終了時のコールバックを設定
+    const std::string& animeName = pBaseEnemy_->GetAnimationName(BaseEnemy::AnimationType::Discovery);
+    pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(animeName, [this]() {
+        currentPhase_ = [this]() {
+            UpdateEnd();
+        };
+    });
+
+    escapeDirection_ = Vector3::ZeroVector();
 }
 
 EnemyWait::~EnemyWait() {
+    // コールバックをクリア
+    pBaseEnemy_->GetAnimationObject()->ClearAllAnimationEndCallbacks();
 }
 
 void EnemyWait::Update() {
+    // 距離を計算
+    distance_ = pBaseEnemy_->CalcDistanceToPlayer();
 
-    // 攻撃後待機時間の更新
-    UpdateAttackCooldown();
+    // 現在のフェーズを実行
+    if (currentPhase_) {
+        currentPhase_();
+    }
+}
 
-    // 距離
-    float distance = pBaseEnemy_->CalcDistanceToPlayer();
-    distance;
+void EnemyWait::UpdateWaiting() {
+    const auto& param = pBaseEnemy_->GetParameter();
+
     // プレイヤーの方向を向く
     pBaseEnemy_->DirectionToPlayer();
 
-    // アクションを起こすまでクールタイムを設ける
-    if (isMoveCollTime_) {
-        return;
+    // プレイヤーが発見範囲内にいるか
+    if (distance_ <= param.escapeDistance) {
+        // 逃げる方向を計算（プレイヤーと反対方向）
+        Vector3 direction = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
+        direction.y       = 0.0f;
+        direction.Normalize();
+        escapeDirection_ = -direction; // 反対方向
+
+        // 発見モーションを再生
+        pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Discovery, false);
+
+        //
+        currentPhase_ = [this]() {
+            UpdateDiscovery();
+        };
     }
-
-
-    // プレイヤーが離れた時の行動切り替え
-     
-    pBaseEnemy_->OnPlayerDistantAction();
-
-     // プレイヤーが近づいた時の行動切り替え
-    pBaseEnemy_->OnPlayerApproachAction();
 }
 
-void EnemyWait::UpdateAttackCooldown() {
-    if (!isMoveCollTime_) {
-        return;
-    }
+void EnemyWait::UpdateDiscovery() {
+   
+}
 
-    moveCollTimer_ -= KetaEngine::Frame::DeltaTimeRate();
-
-    if (moveCollTimer_ <= 0.0f) {
-        isMoveCollTime_ = false;
-        moveCollTimer_  = 0.0f;
-    }
+void EnemyWait::UpdateEnd() {
+    // EnemyEscapeに遷移
+    pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyEscape>(pBaseEnemy_, escapeDirection_));
 }
 
 void EnemyWait::Debug() {

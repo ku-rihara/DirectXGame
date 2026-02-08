@@ -936,10 +936,16 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.cpp">
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionNormal.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp">
+      <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionSlammed.cpp">
+      <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionTakeUpper.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp">
@@ -1816,10 +1822,16 @@
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.h">
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionNormal.h">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h">
+      <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionSlammed.h">
+      <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionTakeUpper.h">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h">
@@ -2246,13 +2258,10 @@
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyRetreat.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyAttack.cpp">
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyEscape.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemySpawn.cpp">
@@ -2269,13 +2278,10 @@
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyRetreat.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyAttack.h">
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyEscape.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemySpawn.h">

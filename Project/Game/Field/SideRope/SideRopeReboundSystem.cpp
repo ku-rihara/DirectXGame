@@ -95,8 +95,6 @@ Vector3 SideRopeReboundSystem::UpdateRebound(float deltaTime) {
         return Vector3::ZeroVector();
     }
 
-    // === 修正: 跳ね返りを継続的に処理 ===
-
     // 伸び率が高いほど強く跳ね返る
     float stretchRatio = stretchDistance_ / ropeParam_.maxStretch;
     float reboundSpeed = stretchRatio * ropeParam_.reboundRate;

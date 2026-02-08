@@ -38,36 +38,17 @@ public:
         COUNT,
     };
 
-    struct AttackParam {
-        float attackValue;
+    struct Parameter {
+        Vector3 baseScale_;
         Vector3 collisionSize;
         Vector3 collisionOffset;
-        float adaptTime;
-        float attackMoveDistance;
-        float attackMoveSpeed;
-    };
-
-    struct Parameter {
-        AttackParam attackParam;
-        Vector3 baseScale_;
         Vector2 hpBarPosOffset;
         float basePosY;
         float burstTime;
-        // 追従パラメータ
-        float chaseDistance;
-        float chaseSpeed;
-        float discoveryDelayTime;
-        // 攻撃パラメータ
-        float attackStartDistance;
-        float attackCooldownTime;
-        float attackAnticipationTime;
-        // NormalEnemy専用パラメータ
-        float attackRangeMin;
-        float attackRangeMax;
-        float retreatSpeed;
-        float attackCycleInterval;
-        float waitReactionDelay;
-        float preAttackWaitTime;
+        // 逃走パラメータ
+        float escapeDistance;
+        float escapeTime;
+        float escapeSpeed;
         // 死亡パラメータ
         float deathBlowValue;
         float deathBlowValueY;
@@ -80,7 +61,7 @@ public:
     enum class AnimationType {
         Wait,
         Spawn,
-        AttackAnticipation,
+        Discovery,
         Dash,
         Attack,
         DamageReaction,
@@ -255,6 +236,7 @@ protected:
 
     // アニメーション関連
     std::array<std::string, static_cast<size_t>(AnimationType::Count)> animationNames_;
+    std::vector<std::string> damageReactionAnimationNames_; // ダメージリアクション用アニメーション
     ChaseAnimationState chaseAnimState_ = ChaseAnimationState::NONE;
     bool isPreDashFinished_             = false;
 
@@ -283,6 +265,7 @@ public:
     int32_t GetGroupId() const { return groupId_; }
     float GetHP() const { return hp_; }
     Vector3 GetBodyRotation() const { return objAnimation_->transform_.rotation_; }
+    float GetBaseRotationY() const { return baseTransform_.rotation_.y; }
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return damageBehavior_.get(); }
@@ -300,6 +283,13 @@ public:
         return animationNames_[static_cast<size_t>(type)];
     }
 
+    /// <summary>
+    /// ダメージリアクション用アニメーション名リストを取得
+    /// </summary>
+    const std::vector<std::string>& GetDamageReactionAnimationNames() const {
+        return damageReactionAnimationNames_;
+    }
+
     /// ========================================================================================
     ///  setter method
     /// ========================================================================================
@@ -308,7 +298,7 @@ public:
     void SetManager(EnemyManager* manager);
     void SetCombo(Combo* combo);
     void SetParameter(const Type& type, const Parameter& paramater);
-    void SetBodyRotateX(float rotate) { objAnimation_->transform_.rotation_.x = rotate; }
+    void SetBodyRotate(Vector3 rotate) { objAnimation_->transform_.rotation_ = rotate; }
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
@@ -319,5 +309,13 @@ public:
 
     void SetAnimationName(AnimationType type, const std::string& name) {
         animationNames_[static_cast<size_t>(type)] = name;
+    }
+
+    /// <summary>
+    /// ダメージリアクション用アニメーションを追加
+    /// </summary>
+    /// <param name="name">アニメーション名</param>
+    void AddDamageReactionAnimation(const std::string& name) {
+        damageReactionAnimationNames_.push_back(name);
     }
 };

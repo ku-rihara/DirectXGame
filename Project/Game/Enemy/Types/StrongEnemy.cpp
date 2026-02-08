@@ -1,5 +1,6 @@
 #include "StrongEnemy.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
+#include "Light/LightingType.h"
 
 ///========================================================
 ///  初期化
@@ -10,23 +11,26 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     // アニメーション名を設定
     SetAnimationName(AnimationType::Wait, "NormalEnemyWaiting");
     SetAnimationName(AnimationType::Spawn, "NormalEnemySpawn");
-    SetAnimationName(AnimationType::AttackAnticipation, "BoxerEnemyPreDashMotion");
-    SetAnimationName(AnimationType::Dash, "BoxerEnemyDash");
+    SetAnimationName(AnimationType::Discovery, "NormalEnemyDiscovery");
+    SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
     SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
 
     // アニメーションオブジェクトの作成
     objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(GetAnimationName(AnimationType::Wait) + ".gltf"));
     objAnimation_->Init();
     objAnimation_->Add(GetAnimationName(AnimationType::Spawn) + ".gltf");
-    objAnimation_->Add(GetAnimationName(AnimationType::AttackAnticipation) + ".gltf");
+    objAnimation_->Add(GetAnimationName(AnimationType::Discovery) + ".gltf");
     objAnimation_->Add(GetAnimationName(AnimationType::Dash) + ".gltf");
     objAnimation_->Add(GetAnimationName(AnimationType::Attack) + ".gltf");
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
     objAnimation_->transform_.scale_ = Vector3::OneVector();
-    objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = 3;
+    objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
 
-     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
+    // ダメージリアクション用アニメーションを追加
+    // AddDamageReactionAnimation("DamageReactionAnimationName");
+
+    BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
 
 ///========================================================

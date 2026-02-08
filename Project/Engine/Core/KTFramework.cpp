@@ -186,5 +186,6 @@ void KTFramework::LoadAllTexture() {
     KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyDiscovery.gltf");
     KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyRun.gltf");
     KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyAttack.gltf");
-
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyAttack.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyAttack.gltf");
 }

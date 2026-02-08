@@ -16,6 +16,7 @@
 // light
 #include "Light/AmbientLight.h"
 #include "Light/Light.h"
+#include "Light/LightingType.h"
 // Field
 #include "Field/Field.h"
 // LockOn
@@ -50,7 +51,7 @@ void Player::Init() {
 
     // Playerのモデル
     obj3d_.reset(KetaEngine::Object3d::CreateModel("Player.obj"));
-    obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = 7;
+    obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = static_cast<int32_t>(KetaEngine::LightingType::Ambient);
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.05f;
 
     // Playerの攻撃クラス

@@ -1,12 +1,11 @@
 #pragma once
 
 #include "../BaseEnemyBehavior.h"
-#include "Easing/Easing.h"
 #include <Vector3.h>
+#include <functional>
 
 class EnemyWait : public BaseEnemyBehavior {
 public:
-    // コンストラクタ
     EnemyWait(BaseEnemy* boss);
     ~EnemyWait();
 
@@ -15,22 +14,24 @@ public:
 
 private:
     /// <summary>
-    /// 攻撃後待機時間を更新
+    /// 待機状態の処理
     /// </summary>
-    void UpdateAttackCooldown();
+    void UpdateWaiting();
+
+    /// <summary>
+    /// 発見モーション中の処理
+    /// </summary>
+    void UpdateDiscovery();
+
+    /// <summary>
+    /// 終了状態の処理（次のBehaviorへ遷移）
+    /// </summary>
+    void UpdateEnd();
 
 private:
+    std::function<void()> currentPhase_;
     float distance_;
 
-    // 攻撃後待機時間
-    float moveCollTimer_;
-    bool isMoveCollTime_;
-
-    // プレイヤー発見後の遅延
-    bool hasDiscoveredPlayer_;
-    bool isPreDashAnimFinished_;
-    float discoveryDelayTimer_;
-
-    Vector3 directionToPlayer_;
-    float objectiveAngle_;
+    // プレイヤーからの方向（逃げる方向）
+    Vector3 escapeDirection_;
 };

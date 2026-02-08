@@ -87,13 +87,13 @@ void EnemyDamageReactionData::RegisterParams() {
 
     // SlammedParam
     globalParameter_->Regist(groupName_, "Slammed_Gravity", &reactionParam_.slammedParam.gravity);
-    globalParameter_->Regist(groupName_, "Slammed_ThrustRotateSpeed", &reactionParam_.slammedParam.rotateSpeed);
+    globalParameter_->Regist(groupName_, "Slammed_RotateSpeed", &reactionParam_.slammedParam.rotateSpeed);
 
     // TakeUpperParam
     globalParameter_->Regist(groupName_, "TakeUpper_FloatingTime", &reactionParam_.takeUpperParam.floatingTime);
     globalParameter_->Regist(groupName_, "TakeUpper_FallSpeedLimit", &reactionParam_.takeUpperParam.fallSpeedLimit);
     globalParameter_->Regist(groupName_, "TakeUpper_Gravity", &reactionParam_.takeUpperParam.gravity);
-    globalParameter_->Regist(groupName_, "TakeUpper_ThrustRotateSpeed", &reactionParam_.takeUpperParam.rotateSpeed);
+    globalParameter_->Regist(groupName_, "TakeUpper_RotateSpeed", &reactionParam_.takeUpperParam.rotateSpeed);
 }
 
 ///==========================================================
@@ -114,10 +114,10 @@ void EnemyDamageReactionData::AdjustParam() {
     // 利用可能なアニメーションがある場合はドロップダウン表示
     if (!availableAnimations_.empty()) {
         // 現在選択されているインデックスを検索
-        int currentIndex = 0; // 0 = "None"
+        int currentIndex = 0; 
         for (size_t i = 0; i < availableAnimations_.size(); ++i) {
             if (availableAnimations_[i] == reactionParam_.damageAnimationName) {
-                currentIndex = static_cast<int>(i + 1); // +1 because 0 is "None"
+                currentIndex = static_cast<int>(i + 1);
                 break;
             }
         }
@@ -143,15 +143,12 @@ void EnemyDamageReactionData::AdjustParam() {
         if (ImGui::InputText("Animation Name", buffer, sizeof(buffer))) {
             reactionParam_.damageAnimationName = buffer;
         }
-        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Tip: Set enemy animations to enable dropdown");
     }
 
     // 現在設定されているアニメーション名を表示
     if (!reactionParam_.damageAnimationName.empty()) {
         ImGui::Text("Current: %s", reactionParam_.damageAnimationName.c_str());
-    } else {
-        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "No animation set");
-    }
+    } 
 
     ImGui::Separator();
 
@@ -175,13 +172,13 @@ void EnemyDamageReactionData::AdjustParam() {
     if (reactionParam_.reactionState == ReactionState::Slammed) {
         ImGui::SeparatorText("Slammed Parameters");
         ImGui::DragFloat("Gravity", &reactionParam_.slammedParam.gravity, 0.1f, 0.0f);
-        ImGui::DragFloat("Rotate Speed", &reactionParam_.slammedParam.rotateSpeed, 0.01f);
+        ImGui::DragFloat3("Rotate Speed", &reactionParam_.slammedParam.rotateSpeed.x, 0.01f);
     } else if (reactionParam_.reactionState == ReactionState::TakeUpper) {
         ImGui::SeparatorText("Take Upper Parameters");
         ImGui::DragFloat("Floating Time", &reactionParam_.takeUpperParam.floatingTime, 0.01f);
         ImGui::DragFloat("Fall Speed Limit", &reactionParam_.takeUpperParam.fallSpeedLimit, 0.1f);
         ImGui::DragFloat("Gravity", &reactionParam_.takeUpperParam.gravity, 0.1f);
-        ImGui::DragFloat("Rotate Speed", &reactionParam_.takeUpperParam.rotateSpeed, 0.01f);
+        ImGui::DragFloat3("Rotate Speed", &reactionParam_.takeUpperParam.rotateSpeed.x, 0.01f);
     }
 
     // SlammedまたはTakeUpperの時、バウンドパラメータを表示

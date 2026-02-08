@@ -67,7 +67,7 @@ public:
     /// </summary>
     /// <param name="direction">方向ベクトル</param>
     /// <returns>ワールド方向ベクトル</returns>
-    Vector3 LookAt(const Vector3& direction) const;
+    Vector3 GetLookAt(const Vector3& direction) const;
 
     /// <summary>
     /// ビルボード行列更新
@@ -110,10 +110,10 @@ public:
     void ApplyLookAtDirection(const Vector3& direction);
 
 private:
-    void UpdateAffineMatrix(); //< アフィン行列更新
-    void ClearParentJoint(); //< ペアレントジョイントクリア
+    void UpdateAffineMatrix();    //< アフィン行列更新
+    void ClearParentJoint();      //< ペアレントジョイントクリア
     void UpdateMatrixWithJoint(); //< ジョイントで行列更新
-    bool HasParentJoint() const; //< ペアレントジョイントを持つか
+    bool HasParentJoint() const;  //< ペアレントジョイントを持つか
 
     void ApplyAnimationToTransform();
     void InitOffsetTransform();
@@ -128,7 +128,7 @@ public:
 
     Transform offsetTransform_;
 
-    Matrix4x4 matWorld_; //< ワールド行列
+    Matrix4x4 matWorld_; 
 
     const WorldTransform* parent_ = nullptr;
     RotateOder rotateOder_        = RotateOder::XYZ;
@@ -161,11 +161,11 @@ public:
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
     void SetIsAdaptDirectScale(bool is) { isAdaptDirectScale_ = is; }
 
-    Vector3 GetLocalPos() const; //< ローカル座標取得
-    Vector3 GetWorldPos() const; //< ワールド座標取得
+    Vector3 GetLocalPos() const;      //< ローカル座標取得
+    Vector3 GetWorldPos() const;      //< ワールド座標取得
 
-    Vector3 GetRightVector() const; //< 右方向ベクトル取得
-    Vector3 GetUpVector() const; //< 上方向ベクトル取得
+    Vector3 GetRightVector() const;   //< 右方向ベクトル取得
+    Vector3 GetUpVector() const;      //< 上方向ベクトル取得
     Vector3 GetForwardVector() const; //< 前方向ベクトル取得
 
     /// <summary>

@@ -25,7 +25,7 @@ TitleRightPunch::TitleRightPunch(Player* player)
     waitTine_       = 0.0f;
 
     rHandStartPos_  = pPlayer_->GetRightHand()->GetObjTransform().translation_;
-    rHandTargetPos_ = pPlayer_->GetRightHand()->GetObjTransform().LookAt(Vector3::ToForward()) * 2.0f;
+    rHandTargetPos_ = pPlayer_->GetRightHand()->GetObjTransform().GetLookAt(Vector3::ToForward()) * 2.0f;
 
     EasingInit();
 

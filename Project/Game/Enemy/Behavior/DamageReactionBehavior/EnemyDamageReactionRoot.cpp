@@ -1,6 +1,8 @@
 /// behavior
 #include "EnemyDamageReactionRoot.h"
-#include "EnemyDamageReactionAction.h"
+#include "EnemyDamageReactionNormal.h"
+#include "EnemyDamageReactionSlammed.h"
+#include "EnemyDamageReactionTakeUpper.h"
 #include "EnemyDeath.h"
 /// Enemy
 #include "Enemy/EnemyManager.h"
@@ -82,9 +84,19 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
         // 死亡リアクションに変更
         ChangeDeathReaction(reactionData);
     } else {
-        // 通常のダメージアクションに切り替え
-        pBaseEnemy_->ChangeDamageReactionBehavior(
-            std::make_unique<EnemyDamageReactionAction>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+        // リアクション状態に応じたBehaviorに切り替え
+        int reactionState = reactionData->GetReactionParam().intReactionState;
+
+        if (reactionState == static_cast<int>(ReactionState::Normal)) {
+            pBaseEnemy_->ChangeDamageReactionBehavior(
+                std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+        } else if (reactionState == static_cast<int>(ReactionState::Slammed)) {
+            pBaseEnemy_->ChangeDamageReactionBehavior(
+                std::make_unique<EnemyDamageReactionSlammed>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+        } else if (reactionState == static_cast<int>(ReactionState::TakeUpper)) {
+            pBaseEnemy_->ChangeDamageReactionBehavior(
+                std::make_unique<EnemyDamageReactionTakeUpper>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+        }
     }
 }
 
@@ -98,10 +110,17 @@ void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* react
     // ダメージパーティクルエフェクトを再生
     PlayDamageParticleEffect(reactionData);
 
-    // Slammed状態の場合は、リアクションアクションに切り替え
-    if (reactionData->GetReactionParam().intReactionState == static_cast<int>(EnemyDamageReactionAction::ReactionState::Slammed)) {
+    int reactionState = reactionData->GetReactionParam().intReactionState;
+
+    // Slammed状態の場合は、Slammedリアクションに切り替え
+    if (reactionState == static_cast<int>(ReactionState::Slammed)) {
         pBaseEnemy_->ChangeDamageReactionBehavior(
-            std::make_unique<EnemyDamageReactionAction>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+            std::make_unique<EnemyDamageReactionSlammed>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+    }
+    // TakeUpper状態の場合は、TakeUpperリアクションに切り替え
+    else if (reactionState == static_cast<int>(ReactionState::TakeUpper)) {
+        pBaseEnemy_->ChangeDamageReactionBehavior(
+            std::make_unique<EnemyDamageReactionTakeUpper>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
     }
     // それ以外の場合は即座に死亡Behaviorに切り替え
     else {

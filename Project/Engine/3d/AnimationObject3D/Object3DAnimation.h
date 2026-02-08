@@ -170,6 +170,7 @@ private:
     float preAnimationTime_        = 0.0f;
     bool isChange_                 = false;
     float transitionDuration_      = 0.3f;
+    bool wasPreAnimationFinished_  = false; // 前のアニメーションが終了状態だったか
 
     // ループ関連
     bool isLoop_             = true;

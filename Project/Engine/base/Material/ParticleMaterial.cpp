@@ -1,6 +1,7 @@
 #include "ParticleMaterial.h"
 
 using namespace KetaEngine;
+#include "Light/LightingType.h"
 #include"Pipeline/Particle/ParticlePipeline.h"
 #include "Base/Dx/DirectXCommon.h"
 #include <cassert>
@@ -19,7 +20,7 @@ void ParticleMaterial::Init(DirectXCommon* dxCommon) {
     materialData_->color                  = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
     materialData_->shininess              = 9.5f;
     materialData_->uvMatrix               = MakeIdentity4x4();
-    materialData_->enableLighting         = 1;
+    materialData_->enableLighting         = static_cast<int32_t>(LightingType::Lambert);
     materialData_->environmentCoefficient = 0.0f;
 }
 
