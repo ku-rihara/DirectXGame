@@ -1,6 +1,6 @@
 {
     "RushDamage_Rendition": {
-        "ObjAnim_FileName": "",
+        "ObjAnim_FileName": "None",
         "ObjAnim_StartTiming": 0.0,
         "Particle_FileName": "NormalDamageEffect",
         "Particle_StartTiming": 0.0
