@@ -1,0 +1,188 @@
+{
+    "DiscoveryEffect0": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": false,
+        "BaseColor": [
+            0.876447856426239,
+            0.7935405969619751,
+            0.2131899893283844,
+            0.0
+        ],
+        "Color Max": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Max": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "Direction Min": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 1.0,
+        "LifeTime": 0.5,
+        "Max Particle Num": 100,
+        "Particle Count": 11,
+        "Position Base": [
+            0.0,
+            2.5,
+            0.0
+        ],
+        "Position Max": [
+            0.30000001192092896,
+            0.30000001192092896,
+            0.30000001192092896
+        ],
+        "Position Min": [
+            -0.30000001192092896,
+            0.0,
+            -0.30000001192092896
+        ],
+        "RailFileName": "",
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateEaseParam.backRatio": 0.0,
+        "RotateEaseParam.easeTypeInt": 0,
+        "RotateEaseParam.endValueV3.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateEaseParam.endValueV3.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateEaseParam.isScaleEase": false,
+        "RotateEaseParam.maxTime": 1.0,
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
+        "ScaleV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ScaleV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Speed Max": 2.0,
+        "Speed Min": 1.5,
+        "SpeedV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "SpeedV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "StartTime": 0.0,
+        "TranslateEaseParam.backRatio": 0.0,
+        "TranslateEaseParam.easeTypeInt": 0,
+        "TranslateEaseParam.endValueV3.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "TranslateEaseParam.endValueV3.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "TranslateEaseParam.isScaleEase": false,
+        "TranslateEaseParam.maxTime": 1.0,
+        "UV IsLoop": false,
+        "UV NumOfFrame": 0,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScrollSpeed": 0.0,
+        "UV isFlipX": false,
+        "UV isFlipY": false,
+        "UV isScroll": false,
+        "UV isScrollEachPixel": false,
+        "UseRail": false,
+        "afterDuration": 0.0,
+        "blendMode": 1,
+        "emitPositionMode": 2,
+        "isAlphaNoMove": false,
+        "isBillboard": false,
+        "isFloatVelocity": false,
+        "isRotateForDirection": false,
+        "isScalerScale": true,
+        "isShot": true,
+        "modelFilePath": "",
+        "preBillboardType": 0,
+        "primitiveTypeInt": 0,
+        "scaleEaseParam.backRatio": 0.0,
+        "scaleEaseParam.easeTypeInt": 1,
+        "scaleEaseParam.endValueF.max": 6.0,
+        "scaleEaseParam.endValueF.min": 6.0,
+        "scaleEaseParam.endValueV3.max": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "scaleEaseParam.endValueV3.min": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "scaleEaseParam.isScaleEase": true,
+        "scaleEaseParam.maxTime": 0.5,
+        "scaleEaseParam.startValueF": 0.800000011920929,
+        "scaleEaseParam.startValueV3": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "selectedTexturePath": "Resources/texture/circle.png",
+        "timeMode": 1,
+        "useModel": false
+    }
+}
