@@ -544,12 +544,12 @@ void ParticleSectionParameter::ImGuiTextureSelection() {
 }
 
 void ParticleSectionParameter::ApplyTexture(const std::string& textureName) {
-    selectedTexturePath_ = textureFilePath_ + "/" + textureName + ".png";
+    selectedTexturePath_ = textureFilePath_ + "/" + textureName + ".dds";
 }
 
 void ParticleSectionParameter::InitAdaptTexture() {
     if (selectedTexturePath_.empty()) {
-        selectedTexturePath_ = textureFilePath_ + "/" + "uvChecker" + ".png";
+        selectedTexturePath_ = textureFilePath_ + "/" + "uvChecker" + ".dds";
     }
 }
 

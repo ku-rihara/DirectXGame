@@ -1,0 +1,27 @@
+﻿{
+    "Clear.dds": {
+        "layerNum": 18,
+        "startAnchorPoint": [
+            0.0,
+            0.0
+        ],
+        "startColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "startPosition": [
+            0.0,
+            0.0
+        ],
+        "startScale": [
+            1.0,
+            1.0
+        ],
+        "startUVScale": [
+            1.0,
+            1.0
+        ]
+    }
+}

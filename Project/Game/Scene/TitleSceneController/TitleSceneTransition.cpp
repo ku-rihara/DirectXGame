@@ -3,7 +3,7 @@
 #include "Frame/Frame.h"
 
 void TitleSceneTransition::Init() {
-    screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.png"));
+    screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
     isTransitionRequested_ = false;
     transitionAlpha_       = 0.0f;
 }

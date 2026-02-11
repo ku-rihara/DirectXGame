@@ -141,6 +141,6 @@
     ],
     "scaleEaseParm.isScaleEase": true,
     "scaleEaseParm.maxTime": 0.4099999964237213,
-    "selectedTexturePath_": "Resources/texture/fire.png"
+    "selectedTexturePath_": "Resources/texture/fire.dds"
   }
 }

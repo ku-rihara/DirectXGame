@@ -16,9 +16,9 @@ void GameSceneFinish::Init() {
 
     // スプライト初期化
     if (pOwner_->GetGameObj().player_->GetIsDeathRenditionFinish()) {
-        clearSprite_.reset(KetaEngine::Sprite::Create("GameOver.png"));
+        clearSprite_.reset(KetaEngine::Sprite::Create("GameOver.dds"));
     } else {
-      clearSprite_.reset(KetaEngine::Sprite::Create("Clear.png"));
+      clearSprite_.reset(KetaEngine::Sprite::Create("Clear.dds"));
     }
     clearSprite_->transform_.pos = Vector2(640, -720);
 

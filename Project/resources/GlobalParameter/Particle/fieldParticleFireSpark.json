@@ -138,6 +138,6 @@
         ],
         "scaleEaseParm.isScaleEase": true,
         "scaleEaseParm.maxTime": 0.17000000178813934,
-        "selectedTexturePath_": "Resources/texture/StartBottomA.png"
+        "selectedTexturePath_": "Resources/texture/StartBottomA.dds"
     }
 }

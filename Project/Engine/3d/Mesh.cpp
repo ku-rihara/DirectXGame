@@ -12,7 +12,7 @@ void Mesh::Init(DirectXCommon* directXCommon, uint32_t vertexNum) {
     CreateVertexResource();
    
     //デフォルトテクスチャ設定
-    textureHandle_ = TextureManager::GetInstance()->LoadTexture("resources/Texture/default.png");
+    textureHandle_ = TextureManager::GetInstance()->LoadTexture("resources/Texture/default.dds");
 }
 
 void Mesh::SetIndexData(const uint32_t* indices,uint32_t indexCount) {

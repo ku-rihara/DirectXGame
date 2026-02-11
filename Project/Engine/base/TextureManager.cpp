@@ -30,36 +30,15 @@ void TextureManager::Init(DirectXCommon* dxCommon, SrvManager* srvManager) {
 }
 
 DirectX::ScratchImage TextureManager::LoadTextureFile(const std::string& filePath) {
-    HRESULT hr = 0;
-
-    // テクスチャファイルを読み込んでプログラムで扱えるようにする
     DirectX::ScratchImage image{};
     std::wstring filePathW = ConvertString(filePath);
 
-    // dds対応
-    if (filePathW.ends_with(L".dds")) {
-        hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);
-    } else {
-        hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
-    }
+    HRESULT hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);
     if (FAILED(hr)) {
-        throw std::runtime_error("Texture file not found! File path: " + filePath); // ファイルパスが見つからない
+        throw std::runtime_error("Texture file not found! File path: " + filePath);
     }
 
-    // ミニマップの作成
-    DirectX::ScratchImage mipImages{};
-    // 圧縮フォーマットならそのまま使うのでMoveする
-    if (DirectX::IsCompressed(image.GetMetadata().format)) {
-        mipImages = std::move(image);
-    } else {
-        hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-    }
-    if (FAILED(hr)) {
-        throw std::runtime_error("MiniMap Generate Failed: " + filePath);
-    }
-
-    // ミニマップ付きのデータを返す
-    return mipImages;
+    return image;
 }
 
 Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const DirectX::TexMetadata& metadata) {

@@ -1,4 +1,4 @@
-{
+﻿{
     "LeftHandParticle0": {
         "Align To Velocity": true,
         "Billboard Mode": 1,
@@ -59,7 +59,7 @@
             0.10000000149011612
         ],
         "Start Time": 0.0,
-        "Texture Path": "Resources/texture/circle.png",
+        "Texture Path": "Resources/texture/circle.dds",
         "Translate Max": [
             0.5600000023841858,
             0.800000011920929,

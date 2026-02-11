@@ -153,7 +153,7 @@
             1.0,
             1.0
         ],
-        "selectedTexturePath_": "resources/Texture/uvChecker.png",
+        "selectedTexturePath_": "resources/Texture/uvChecker.dds",
         "timeMode": 1,
         "useModel": false,
         "useRail": false,

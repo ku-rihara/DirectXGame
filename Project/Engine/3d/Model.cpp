@@ -106,7 +106,7 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
     }
     // テクスチャが無ければ
     if (modelData.material.textureFilePath.empty()) {
-        std::string whiteTexture           = "default.png";
+        std::string whiteTexture           = "default.dds";
         modelData.material.textureFilePath = texturePath_ + whiteTexture;
     }
     return modelData;

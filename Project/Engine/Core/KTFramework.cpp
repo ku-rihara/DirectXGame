@@ -171,15 +171,15 @@ void KTFramework::DisplayGameView() {
 
 
 void KTFramework::LoadAllTexture() {
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/uvChecker.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/smoke.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/HitEffectCenter.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/hitEffect.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/HowToOperate.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Model/AudienceSeats/audienceSeats.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Model/FieldSide/SideFiend.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/uvChecker.dds");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/smoke.dds");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.dds");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.dds");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/HitEffectCenter.dds");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/hitEffect.dds");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/HowToOperate.dds");
+    TextureManager::GetInstance()->LoadTexture("Resources/Model/AudienceSeats/audienceSeats.dds");
+    TextureManager::GetInstance()->LoadTexture("Resources/Model/FieldSide/SideFiend.dds");
 
     KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyWaiting.gltf");
     KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemySpawn.gltf");

@@ -127,6 +127,6 @@
         ],
         "scaleEaseParm.isScaleEase": true,
         "scaleEaseParm.maxTime": 1.0,
-        "selectedTexturePath_": "Resources/texture/star.png"
+        "selectedTexturePath_": "Resources/texture/star.dds"
     }
 }

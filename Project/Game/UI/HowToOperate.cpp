@@ -5,7 +5,7 @@
 
 void HowToOperate::Init() {
 
-    sprite_.reset(KetaEngine::Sprite::Create("HowToOperate.png", true));
+    sprite_.reset(KetaEngine::Sprite::Create("HowToOperate.dds", true));
     sprite_->transform_.scale = Vector2::ZeroVector();
 }
 

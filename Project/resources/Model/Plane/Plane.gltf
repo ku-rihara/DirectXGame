@@ -56,8 +56,8 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"uvChecker.png",
-			"uri":"uvChecker.png"
+			"name":"uvChecker.dds",
+			"uri":"uvChecker.dds"
 		}
 	],
 	"accessors":[

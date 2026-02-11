@@ -6,7 +6,7 @@
 void ComboUI::Init(const ComboDigit& digit) {
 
     /// Sprite create
-    sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.png"));
+    sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.dds"));
 
     CreateGroupName(digit);
 
