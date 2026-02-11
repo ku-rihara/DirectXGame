@@ -79,7 +79,7 @@ void GPUParticleManager::CreatePrimitiveParticle(
         group.primitive_->Create();
     }
 
-    group.textureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+    group.textureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.dds");
 
     // リソース作成
     InitializeGroupResources(group);

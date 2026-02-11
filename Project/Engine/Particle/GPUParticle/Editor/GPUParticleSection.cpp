@@ -48,7 +48,7 @@ void GPUParticleSection::Init(const std::string& particleName, const std::string
 
 void GPUParticleSection::ParameterInit() {
     billboardMode_       = static_cast<BillboardMode>(billboardModeInt_);
-    selectedTexturePath_ = "Resources/Texture/circle.png";
+    selectedTexturePath_ = "Resources/Texture/circle.dds";
     startTime_           = 0.0f;
 }
 
@@ -527,7 +527,7 @@ void GPUParticleSection::DisplayFileSelection(
 }
 
 void GPUParticleSection::ApplyTexture(const std::string& textureName) {
-    selectedTexturePath_ = textureFilePath_ + "/" + textureName + ".png";
+    selectedTexturePath_ = textureFilePath_ + "/" + textureName + ".dds";
     uint32_t handle      = TextureManager::GetInstance()->LoadTexture(selectedTexturePath_);
     GPUParticleManager::GetInstance()->SetTextureHandle(groupName_, handle);
 }

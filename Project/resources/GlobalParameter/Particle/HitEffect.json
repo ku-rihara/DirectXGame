@@ -125,6 +125,6 @@
     ],
     "scaleEaseParm.isScaleEase": true,
     "scaleEaseParm.maxTime": 0.2199999988079071,
-    "selectedTexturePath_": "Resources/texture/hitEffect.png"
+    "selectedTexturePath_": "Resources/texture/hitEffect.dds"
   }
 }

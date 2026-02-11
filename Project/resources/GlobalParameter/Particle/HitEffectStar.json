@@ -125,6 +125,6 @@
     ],
     "scaleEaseParm.isScaleEase": true,
     "scaleEaseParm.maxTime": 0.1899999976158142,
-    "selectedTexturePath_": "Resources/texture/circle.png"
+    "selectedTexturePath_": "Resources/texture/circle.dds"
   }
 }

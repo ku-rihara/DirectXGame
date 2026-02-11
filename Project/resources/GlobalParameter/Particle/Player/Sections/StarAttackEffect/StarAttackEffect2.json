@@ -153,7 +153,7 @@
             1.0,
             1.0
         ],
-        "selectedTexturePath": "Resources/texture/Particle/Start.png",
+        "selectedTexturePath": "Resources/texture/Particle/Start.dds",
         "timeMode": 1,
         "useModel": false
     }

@@ -35,7 +35,7 @@ void ModelMaterial::Init(DirectXCommon* dxCommon) {
     dissolvePlayer_ = std::make_unique<DissolvePlayer>();
     dissolvePlayer_->Init();
 
-    dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/Noise/noise0.png");
+    dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/Noise/noise0.dds");
 }
 
 void ModelMaterial::UpdateMaterialData(const Vector4& Color) {

@@ -23,7 +23,7 @@ void LockOn::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     // メインターゲット用スプライト
-    lockOnMark_.reset(KetaEngine::Sprite::Create("UI/anchorPoint.png"));
+    lockOnMark_.reset(KetaEngine::Sprite::Create("UI/anchorPoint.dds"));
    
 }
 
@@ -105,7 +105,7 @@ void LockOn::ResizeTargetMarkers(const size_t& targetCount) {
         ableLockOnMarkers_.resize(targetCount);
 
         for (size_t i = currentSize; i < targetCount; ++i) {
-            ableLockOnMarkers_[i].sprite.reset(KetaEngine::Sprite::Create("UI/anchorPoint.png"));
+            ableLockOnMarkers_[i].sprite.reset(KetaEngine::Sprite::Create("UI/anchorPoint.dds"));
             ableLockOnMarkers_[i].sprite->SetAnchorPoint(Vector2(0.5f, 0.5f));
         }
     }

@@ -153,7 +153,7 @@
             1.0,
             1.0
         ],
-        "selectedTexturePath": "Resources/texture/Particle/circle.png",
+        "selectedTexturePath": "Resources/texture/Particle/circle.dds",
         "timeMode": 1,
         "useModel": false
     }

@@ -20,9 +20,9 @@ void DeathTimerGauge::Init() {
 
 void DeathTimerGauge::SpriteInit() {
     // 枠のスプライト
-    frameSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGaugeFrame.png", true));
-    gaugeSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGauge.png", true));
-    gaugeIcon_.reset(KetaEngine::Sprite::Create("DeathGauge/PlayerDeathGaugeIcon.png", true));
+    frameSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGaugeFrame.dds", true));
+    gaugeSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGauge.dds", true));
+    gaugeIcon_.reset(KetaEngine::Sprite::Create("DeathGauge/PlayerDeathGaugeIcon.dds", true));
 
     frameSprite_->transform_.scale = Vector2::ZeroVector();
     gaugeSprite_->transform_.scale = Vector2::ZeroVector();
