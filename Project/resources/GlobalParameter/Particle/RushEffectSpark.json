@@ -138,6 +138,6 @@
         ],
         "scaleEaseParm.isScaleEase": false,
         "scaleEaseParm.maxTime": 0.0,
-        "selectedTexturePath_": "resources/Texture/uvChecker.png"
+        "selectedTexturePath_": "resources/Texture/uvChecker.dds"
     }
 }

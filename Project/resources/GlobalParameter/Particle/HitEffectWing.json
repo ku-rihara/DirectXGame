@@ -125,6 +125,6 @@
     ],
     "scaleEaseParm.isScaleEase": true,
     "scaleEaseParm.maxTime": 0.10000000149011612,
-    "selectedTexturePath_": "Resources/texture/effectblow.png"
+    "selectedTexturePath_": "Resources/texture/effectblow.dds"
   }
 }

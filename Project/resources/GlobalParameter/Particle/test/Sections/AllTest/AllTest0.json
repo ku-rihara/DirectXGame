@@ -151,7 +151,7 @@
             1.0,
             1.0
         ],
-        "selectedTexturePath": "Resources/texture/circle.png",
+        "selectedTexturePath": "Resources/texture/circle.dds",
         "timeMode": 1,
         "useModel": false
     }

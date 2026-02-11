@@ -134,7 +134,7 @@ void GameScene::ObjectInit() {
     gameObj_.audienceController_          = std::make_unique<AudienceController>();
     gameObj_.deathTimer_                  = std::make_unique<DeathTimer>();
 
-    gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.png"));
+    gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
     // 初期化
     gameObj_.player_->InitInGameScene();

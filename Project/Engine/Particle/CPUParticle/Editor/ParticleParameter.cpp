@@ -29,7 +29,7 @@ void ParticleParameter::ParameterInit() {
     intervalTime_                    = 1.0f;
     groupParameters_.isBillboard      = true;
     parameters_.uvParam.numOfFrame   = 1;
-    selectedTexturePath_             = "resources/Texture/uvChecker.png";
+    selectedTexturePath_             = "resources/Texture/uvChecker.dds";
 }
 
 void ParticleParameter::Init() {
@@ -448,7 +448,7 @@ void ParticleParameter::ImGuiTextureSelection() {
 
 void ParticleParameter::ApplyTexture(const std::string& textureName) {
     // テクスチャ
-    selectedTexturePath_ = textureFilePath_ + "/" + textureName + ".png";
+    selectedTexturePath_ = textureFilePath_ + "/" + textureName + ".dds";
     ParticleManager::GetInstance()->SetTextureHandle(particleName_, TextureManager::GetInstance()->LoadTexture(selectedTexturePath_));
 }
 

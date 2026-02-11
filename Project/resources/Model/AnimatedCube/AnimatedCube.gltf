@@ -189,10 +189,10 @@
    ],
    "images" : [
       {
-         "uri" : "AnimatedCube_BaseColor.png"
+         "uri" : "AnimatedCube_BaseColor.dds"
       },
       {
-         "uri" : "AnimatedCube_MetallicRoughness.png"
+         "uri" : "AnimatedCube_MetallicRoughness.dds"
       }
    ],
    "materials" : [

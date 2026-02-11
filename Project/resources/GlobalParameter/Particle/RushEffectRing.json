@@ -138,6 +138,6 @@
         ],
         "scaleEaseParm.isScaleEase": true,
         "scaleEaseParm.maxTime": 0.25999999046325684,
-        "selectedTexturePath_": "Resources/texture/gradationLine.png"
+        "selectedTexturePath_": "Resources/texture/gradationLine.dds"
     }
 }

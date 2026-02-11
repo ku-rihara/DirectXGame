@@ -13,7 +13,7 @@ void MovieLine::Init() {
 
     // create
     for (int32_t i = 0; i < static_cast<int32_t>(sprite_.size()); ++i) {
-        sprite_[i].reset(KetaEngine::Sprite::Create("movieLine.png"));
+        sprite_[i].reset(KetaEngine::Sprite::Create("movieLine.dds"));
     }
 
     exitEasing_[0].Init("UPMovieLineExit.json");

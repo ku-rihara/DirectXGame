@@ -1,4 +1,4 @@
-{
+﻿{
     "AnticipationEffectStrong0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -153,7 +153,7 @@
             0.8
         ],
         "scaleEaseParam.startValueF": 1.0,
-        "selectedTexturePath": "Resources/texture/gradationLine.png",
+        "selectedTexturePath": "Resources/texture/gradationLine.dds",
         "timeMode": 1,
         "useModel": false
     }

@@ -150,6 +150,6 @@
         ],
         "scaleEaseParm.isScaleEase": false,
         "scaleEaseParm.maxTime": 1.059999942779541,
-        "selectedTexturePath_": "Resources/texture/Crack.png"
+        "selectedTexturePath_": "Resources/texture/Crack.dds"
     }
 }

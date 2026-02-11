@@ -5,10 +5,10 @@
 void JumpAttackUI::Init() {
 
     // スプライト生成
-    bottoms_[X].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateX.png"));
-    bottoms_[Y].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateY.png"));
-    bottoms_[B].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateB.png"));
-    bottoms_[A].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateA.png"));
+    bottoms_[X].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateX.dds"));
+    bottoms_[Y].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateY.dds"));
+    bottoms_[B].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateB.dds"));
+    bottoms_[A].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateA.dds"));
 
     // 移動向き決定
     for (size_t i = 0; i < static_cast<size_t>(Type::COUNT); ++i) {

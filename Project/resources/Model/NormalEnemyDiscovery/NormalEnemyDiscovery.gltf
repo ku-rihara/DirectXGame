@@ -2404,7 +2404,7 @@
 		{
 			"mimeType":"image/png",
 			"name":"enemy_Base_Color",
-			"uri":"enemy_Base_Color.png"
+			"uri":"enemy_Base_Color.dds"
 		}
 	],
 	"skins":[

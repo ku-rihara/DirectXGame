@@ -1,4 +1,4 @@
-{
+﻿{
     "AttackEffect0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -181,7 +181,7 @@
             1.0,
             1.0
         ],
-        "selectedTexturePath": "Resources/texture/Particle/default.png",
+        "selectedTexturePath": "Resources/texture/Particle/default.dds",
         "timeMode": 1,
         "useModel": false
     }
