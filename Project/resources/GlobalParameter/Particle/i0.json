@@ -1,4 +1,4 @@
-{
+﻿{
     "i0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -119,7 +119,7 @@
         "UV isScroolEachPixel": false,
         "blendMode": 1,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillboard": true,
         "isFloatVelocity": true,
         "isMoveForRail": false,
         "isRailRoop": false,
@@ -128,7 +128,7 @@
         "isShot": false,
         "modelFilePath": "",
         "moveSpeed": 0.0,
-        "preBillBordType_": 0,
+        "preBillboardType_": 0,
         "primitiveTypeInt": 0,
         "railFileName": "",
         "scaleEaseParm.backRatio": 0.0,

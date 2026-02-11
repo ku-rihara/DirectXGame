@@ -1,4 +1,4 @@
-{
+﻿{
     "EnemyDeath": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -92,12 +92,12 @@
       10.0,
             -13.399999618530273
         ],
-        "isBillBord": true,
+        "isBillboard": true,
         "isMoveForRail": false,
         "isRotateforDirection": true,
         "isScalerScale": true,
     "isShot": true,
         "moveSpeed": 0.0,
-        "preBillBordType_": 0
+        "preBillboardType_": 0
     }
 }

@@ -19,11 +19,9 @@
         "HitStop_OnHit_StartTiming": 0.0,
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
-        "IsFirstAttack": false,
         "KnockBackPower": 5.53000020980835,
         "Main_Head_FileName": "",
         "Main_Head_StartTiming": 0.0,
-        "NextAttackType": "StrongAttack3",
         "ObjAnim_Head_FileName": "rightPunchMove",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
@@ -40,7 +38,6 @@
         "PostEffectParam_OnHit_StartTiming": 0.0,
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
-        "RequireHit": false,
         "ShakeAction_FileName": "None",
         "ShakeAction_OnHit_FileName": "PunchAttackCamera",
         "ShakeAction_OnHit_StartTiming": 0.0,
@@ -52,7 +49,6 @@
         "Vibration_TriggerByHit": true,
         "adaptTime": 0.1599999964237213,
         "blowYPower": 0.0,
-        "cancelFrame": 0.1599999964237213,
         "collisionOffsetPos": [
             0.0,
             0.0,
@@ -70,7 +66,6 @@
         "isAbleInputMoving": false,
         "isAlwaysFollowing": false,
         "isAutoAdvance": false,
-        "isCancel": true,
         "isMotionOnly": false,
         "isPositionYSelect": false,
         "keyBordBottom": 37,
@@ -84,6 +79,12 @@
             2.2200000286102295
         ],
         "power": 15.0,
-        "precedeInputFrame": 0.10000000149011612
+        "ComboBranchCount": 1,
+        "Branch_0_nextAttackName": "StrongAttack3",
+        "Branch_0_keyboardButton": 37,
+        "Branch_0_gamepadButton": 32768,
+        "Branch_0_cancelTime": 0.1599999964237213,
+        "Branch_0_precedeInputTime": 0.10000000149011612,
+        "Branch_0_requireHit": false
     }
 }

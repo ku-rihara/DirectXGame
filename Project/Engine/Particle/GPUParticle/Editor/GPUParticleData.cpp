@@ -193,14 +193,6 @@ void GPUParticleData::AdjustParam() {
 #endif
 }
 
-void GPUParticleData::LoadSequenceElements() {
-    BaseSequenceEffectData::LoadSequenceElements();
-}
-
-void GPUParticleData::SaveSequenceElements() {
-    BaseSequenceEffectData::SaveSequenceElements();
-}
-
 GPUParticleSection* GPUParticleData::GetKeyFrame(int32_t index) {
     if (index >= 0 && index < static_cast<int32_t>(sectionElements_.size())) {
         return sectionElements_[index].get();

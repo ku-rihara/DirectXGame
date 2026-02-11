@@ -1,4 +1,6 @@
 #include "PlayerComboAttackController.h"
+#include "Frame/Frame.h"
+// std
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
@@ -35,6 +37,7 @@ void PlayerComboAttackController::AllLoadFile() {
                 auto attack = std::make_unique<PlayerComboAttackData>();
                 attack->Init(fileName);
                 attack->LoadData(); // Load
+                attack->SetController(this);
                 attacks_.push_back(std::move(attack));
             }
         }
@@ -61,6 +64,9 @@ void PlayerComboAttackController::EditorUpdate() {
         ImGui::Separator();
         VisualizeComboFlow();
         ImGui::Separator();
+
+        // プレビューUI
+        DrawPreviewUI();
 
         // 選択された攻撃データの編集
         if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
@@ -94,12 +100,67 @@ void PlayerComboAttackController::EditorUpdate() {
         // 共通パラメータの調整
         AdjustCommonParam();
     }
+
+    // プレビューの更新(常に実行)
+    preview_.Update(KetaEngine::Frame::DeltaTime());
 #endif
+}
+
+void PlayerComboAttackController::DrawPreviewUI() {
+    if (!ImGui::CollapsingHeader("プレビュー設定")) {
+        return;
+    }
+
+    ImGui::PushID("PreviewControl");
+
+    // 再生モード選択
+    ImGui::Text("再生モード:");
+    ImGui::SameLine();
+
+    auto currentMode = preview_.GetCurrentMode();
+    if (ImGui::RadioButton("単体", currentMode == AttackPreviewMode::SINGLE)) {
+        preview_.SetPlayMode(AttackPreviewMode::SINGLE);
+    }
+    ImGui::SameLine();
+    if (ImGui::RadioButton("連続", currentMode == AttackPreviewMode::CONTINUOUS)) {
+        preview_.SetPlayMode(AttackPreviewMode::CONTINUOUS);
+    }
+
+    ImGui::Separator();
+
+    // 選択された攻撃があればプレビュー開始ボタンを表示
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
+        PlayerComboAttackData* selectedAttack = attacks_[selectedIndex_].get();
+
+        if (!preview_.IsPlaying()) {
+            // プレビュー開始ボタン
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.8f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 1.0f, 0.3f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.6f, 0.1f, 1.0f));
+
+            if (ImGui::Button("プレビュー開始", ImVec2(-1, 0))) {
+                preview_.StartPreview(selectedAttack, currentMode);
+            }
+
+            ImGui::PopStyleColor(3);
+        }
+    } else {
+        ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "攻撃を選択してください");
+    }
+
+    // プレビューUIを描画
+    preview_.DrawUI();
+
+    ImGui::PopID();
 }
 
 void PlayerComboAttackController::AddAttack(const std::string& attackName) {
     auto attack = std::make_unique<PlayerComboAttackData>();
     attack->Init(attackName);
+    attack->SetController(this);
+    if (pPlayer_) {
+        attack->SetPlayer(pPlayer_);
+    }
     attacks_.push_back(std::move(attack));
     selectedIndex_ = static_cast<int>(attacks_.size()) - 1;
 }
@@ -162,14 +223,14 @@ void PlayerComboAttackController::VisualizeComboFlow() {
 
                 ImGui::PushID(static_cast<int>(i));
                 // 攻撃名を表示
-                ImGui::Text("%d:",i);
+                ImGui::Text("%d:", i);
                 ImGui::SameLine();
                 if (attack->GetAttackParam().isMotionOnly) {
                     ImGui::TextColored(ImVec4(1.0f, 0.55f, 0.0f, 1.0f), "%s (Motion Only)", attackName.c_str());
                 } else {
                     ImGui::TextColored(ImVec4(0.85f, 0.15f, 0.15f, 1.0f), attackName.c_str());
                 }
-              
+
                 // 選択中の攻撃を強調表示
                 if (IsValidIndex(selectedIndex_) && attacks_[selectedIndex_]->GetGroupName() == attackName) {
                     ImGui::SameLine();
@@ -211,23 +272,24 @@ std::vector<std::vector<std::string>> PlayerComboAttackController::BuildComboCha
     std::vector<std::vector<std::string>> chains;
     std::unordered_set<std::string> visited;
 
-    // 開始攻撃を見つける
+    // 開始攻撃を見つける（他から参照されていない攻撃）
     std::unordered_set<std::string> referencedAttacks;
     for (const auto& attack : attacks_) {
-        const std::string& nextAttack = attack->GetAttackParam().nextAttackType;
-        if (!nextAttack.empty()) {
-            referencedAttacks.insert(nextAttack);
+        // 全てのコンボ分岐から参照されている攻撃を収集
+        for (const auto& branch : attack->GetComboBranches()) {
+            if (!branch->GetNextAttackName().empty()) {
+                referencedAttacks.insert(branch->GetNextAttackName());
+            }
         }
     }
 
     // 各開始攻撃からチェーンを構築
     for (const auto& attack : attacks_) {
         const std::string& attackName = attack->GetGroupName();
-        bool isFirstAttack            = attack->GetAttackParam().triggerParam.isFirstAttack;
         bool isNotReferenced          = (referencedAttacks.find(attackName) == referencedAttacks.end());
 
-        // 開始攻撃の条件
-        if ((isFirstAttack || isNotReferenced) && visited.find(attackName) == visited.end()) {
+        // 開始攻撃の条件（他から参照されていない）
+        if (isNotReferenced && visited.find(attackName) == visited.end()) {
             std::vector<std::string> chain;
             BuildChainRecursive(attackName, chain, visited);
             if (!chain.empty()) {
@@ -270,11 +332,24 @@ void PlayerComboAttackController::BuildChainRecursive(
     chain.push_back(attackName);
     visited.insert(attackName);
 
-    // 次の攻撃を再帰的に追加
-    const std::string& nextAttack = attack->GetAttackParam().nextAttackType;
-    if (!nextAttack.empty()) {
-        BuildChainRecursive(nextAttack, chain, visited);
+    // 全てのコンボ分岐から次の攻撃を再帰的に追加
+    for (const auto& branch : attack->GetComboBranches()) {
+        if (!branch->GetNextAttackName().empty()) {
+            BuildChainRecursive(branch->GetNextAttackName(), chain, visited);
+        }
     }
+}
+
+bool PlayerComboAttackController::IsFirstAttack(const std::string& attackName) const {
+    // 他の攻撃のcomboBranchesから参照されていなければ最初の攻撃
+    for (const auto& attack : attacks_) {
+        for (const auto& branch : attack->GetComboBranches()) {
+            if (branch->GetNextAttackName() == attackName) {
+                return false; // 他から参照されている
+            }
+        }
+    }
+    return true; // 誰からも参照されていない = 最初の攻撃
 }
 
 void PlayerComboAttackController::SelectAttackByName(const std::string& name) {
@@ -362,4 +437,16 @@ void PlayerComboAttackController::SetEditorSuite(KetaEngine::EffectEditorSuite* 
 
 void PlayerComboAttackController::SetCombo(Combo* combo) {
     pCombo_ = combo;
+}
+
+void PlayerComboAttackController::SetPlayer(Player* player) {
+    pPlayer_ = player;
+
+    // プレビューにプレイヤーとコントローラーを設定
+    preview_.Init(player, this, nullptr);
+
+    for (auto& attack : attacks_) {
+        attack->SetPlayer(player);
+        attack->SetController(this);
+    }
 }

@@ -1,4 +1,4 @@
-{
+﻿{
   "DebriParticle": {
     "AdaptRotateIsX": false,
     "AdaptRotateIsY": false,
@@ -91,13 +91,13 @@
     "Speed Min": 99.30000305175781,
     "blendMode": 0,
     "isAlphaNoMove": true,
-    "isBillBord": false,
+    "isBillboard": false,
     "isMoveForRail": false,
     "isRotateforDirection": false,
     "isScalerScale": true,
     "isShot": true,
     "moveSpeed": 0.0,
-    "preBillBordType_": 0,
+    "preBillboardType_": 0,
     "scaleEaseParm.easeTypeInt": 0,
     "scaleEaseParm.endValueF.max": 0.0,
     "scaleEaseParm.endValueF.min": 0.0,

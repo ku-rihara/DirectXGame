@@ -10,6 +10,7 @@ class StrongEnemy : public BaseEnemy {
 public:
     StrongEnemy()           = default;
     ~StrongEnemy() override = default;
+
     ///========================================================================================
     ///  public method
     ///========================================================================================
@@ -17,15 +18,13 @@ public:
     // 初期化、更新
     void Init(const Vector3& spownPos) override;
     void Update() override;
-   
+
+    // スポーン演出
+    void SpawnRenditionInit() override;
+
     /// <summary>
     /// UIスプライトの表示
     /// </summary>
     /// <param name="viewProjection"></param>
     void DisplaySprite(const KetaEngine::ViewProjection& viewProjection) override;
-
-    void SpawnRenditionInit() override;//<スポーン演出初期化
-
-private:
-
 };

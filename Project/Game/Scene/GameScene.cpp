@@ -8,7 +8,7 @@
 // math
 #include "2d/SpriteRegistry.h"
 #include "Frame/Frame.h"
-#include "Lighrt/Light.h"
+#include "Light/Light.h"
 #include "Scene/Manager/SceneManager.h"
 #include <imgui.h>
 
@@ -119,7 +119,6 @@ void GameScene::ObjectInit() {
     gameObj_.gameCamera_                  = std::make_unique<GameCamera>();
     gameObj_.enemyManager_                = std::make_unique<EnemyManager>();
     gameObj_.enemySpawner_                = std::make_unique<EnemySpawner>();
-    gameObj_.skyDome_                     = std::make_unique<SkyDome>();
     gameObj_.howToOperate_                = std::make_unique<HowToOperate>();
     gameObj_.skyBox_                      = std::make_unique<SkyBox>();
     gameObj_.combo_                       = std::make_unique<Combo>();
@@ -169,8 +168,7 @@ void GameScene::SetClassPointer() {
     gameObj_.enemyManager_->SetCombo(gameObj_.combo_.get());
     gameObj_.enemyManager_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.enemyManager_->SetEnemySpawner(gameObj_.enemySpawner_.get());
-    gameObj_.enemyManager_->SetAttackEffect(gameObj_.attackEffect_.get());
-
+  
     gameObj_.enemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
     gameObj_.continuousEnemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
     gameObj_.continuousEnemySpawner_->SetPlayer(gameObj_.player_.get());
@@ -197,9 +195,11 @@ void GameScene::SetClassPointer() {
     gameObj_.player_->SetComboAttackController(gameObj_.playerComboAttackController_.get());
     gameObj_.player_->SetCombo(gameObj_.combo_.get());
     gameObj_.player_->SetHitStop(gameObj_.attackEffect_.get());
+    gameObj_.player_->SetDeathTimer(gameObj_.deathTimer_.get());
     gameObj_.player_->SetDeathFragPointer(&gameObj_.deathTimer_->GetIsDeath());
 
     gameObj_.playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
+    gameObj_.playerComboAttackController_->SetPlayer(gameObj_.player_.get());
 }
 
 void GameScene::ChangeState(std::unique_ptr<BaseGameSceneState> state) {

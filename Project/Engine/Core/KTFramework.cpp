@@ -5,6 +5,7 @@ using namespace KetaEngine;
 // dx
 #include "Base/Dx/DxRenderTarget.h"
 #include "PostEffect/PostEffectRenderer.h"
+#include"3d/ModelManager.h"
 #include "ShadowMap/ShadowMap.h"
 
 // utility
@@ -25,8 +26,18 @@ void KTFramework::Init() {
     // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
 
-    /// エンジン初期化
+#ifdef _DEBUG
+    // Debug時：ウィンドウは大きく、ゲーム描画は1280x720
+    engineCore_->Initialize(
+        kWindowTitle,
+        KetaEngine::WinApp::kDebugWindowWidth,
+        KetaEngine::WinApp::kDebugWindowHeight,
+        KetaEngine::WinApp::kWindowWidth,
+        KetaEngine::WinApp::kWindowHeight);
+#else
+    // Release時：ウィンドウもゲーム描画も1280x720
     engineCore_->Initialize(kWindowTitle, KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight);
+#endif
 
     LoadAllTexture();
 }
@@ -114,7 +125,6 @@ void KTFramework::DisplayFPS() {
     ImGui::Begin("FPS");
     ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 100, 255));
     ImGui::Text("FPS: %.1f", io.Framerate);
-    ImGui::Text("Frame Time: %.3f ms", 1000.0f / io.Framerate);
     ImGui::PopStyleColor();
     ImGui::End();
 #endif
@@ -137,7 +147,7 @@ void KTFramework::DisplayGameView() {
     ImVec2 windowSize = ImGui::GetContentRegionAvail();
 
     // アスペクト比を維持してテクスチャを表示
-    float aspectRatio = WinApp::aspectRatio; // ゲーム画面のアスペクト比
+    float aspectRatio = WinApp::aspectRatio; 
     ImVec2 imageSize  = windowSize;
 
     if (windowSize.x / windowSize.y > aspectRatio) {
@@ -170,4 +180,12 @@ void KTFramework::LoadAllTexture() {
     TextureManager::GetInstance()->LoadTexture("Resources/Texture/HowToOperate.png");
     TextureManager::GetInstance()->LoadTexture("Resources/Model/AudienceSeats/audienceSeats.png");
     TextureManager::GetInstance()->LoadTexture("Resources/Model/FieldSide/SideFiend.png");
+
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyWaiting.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemySpawn.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyDiscovery.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyRun.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyAttack.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyAttack.gltf");
+    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyAttack.gltf");
 }

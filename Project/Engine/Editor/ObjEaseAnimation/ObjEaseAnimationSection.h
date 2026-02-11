@@ -64,6 +64,9 @@ public:
         Vector3 startValue     = Vector3::ZeroVector();
         Vector3 previousOffset = Vector3::ZeroVector();
 
+        // 待機中に保持するオフセット値
+        Vector3 preAnimationOffset = Vector3::ZeroVector();
+
         // イージング
         Easing<Vector3> ease;
         Easing<Vector3> returnEase;
@@ -89,6 +92,18 @@ public:
     void Reset();
     bool IsFinished() const;
 
+    // 個別Transform終了判定
+    bool IsTransformFinished(TransformType type) const;
+    // 個別Transformの開始値設定
+    void SetStartValueForTransform(TransformType type, const Vector3& value);
+    // 個別Transformの待機開始
+    void StartWaitingForTransform(TransformType type);
+    // 個別Transformの再生開始（独立進行用）
+    void StartPlayingForTransform(TransformType type);
+
+    // Transformがアクティブかどうか
+    bool IsTransformActive(TransformType type) const;
+
     // データ読み込み、保存、編集
     void LoadData();
     void SaveData();
@@ -96,6 +111,7 @@ public:
 
     // 開始処理
     void SetStartValues(const Vector3& scale, const Vector3& rotation, const Vector3& translation);
+    void SetPreAnimationOffsets(const Vector3& scale, const Vector3& rotation, const Vector3& translation);
     void StartWaiting();
 
 private:
@@ -159,6 +175,12 @@ public:
     bool IsUsingRail() const;
     bool IsLookingAtDirection() const;
     Vector3 GetMovementDirection() const;
+
+    // デバッグ用：Transformの状態を取得
+    TransformState GetTransformState(TransformType type) const {
+        return transformParams_[static_cast<size_t>(type)].state;
+    }
+    PlayState GetPlayState() const { return playState_; }
 };
 
 }; // KetaEngine

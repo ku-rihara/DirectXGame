@@ -1,7 +1,7 @@
 {
     "punchDamage_Rendition": {
         "FileName": "nockBackReaction",
-        "ObjAnim_FileName": "nockBackReaction",
+        "ObjAnim_FileName": "None",
         "ObjAnim_StartTiming": 0.0,
         "Particle_FileName": "NormalDamageEffect",
         "Particle_StartTiming": 0.0,

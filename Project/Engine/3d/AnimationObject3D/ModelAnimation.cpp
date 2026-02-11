@@ -80,7 +80,7 @@ int32_t ModelAnimation::CreateJoint(const Node& node, const std::optional<int32_
     joint.parent              = parent;
 
     joints.push_back(joint); // SkeletonのJoint列に追加
-    for (const Node& child : node.cihldren) {
+    for (const Node& child : node.children) {
         // 子Jointを作成し、そのIndexを登録
         int32_t childIndex = CreateJoint(child, joint.index, joints);
         joints[joint.index].children.push_back(childIndex);

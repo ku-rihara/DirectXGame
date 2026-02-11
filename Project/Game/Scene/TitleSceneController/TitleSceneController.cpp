@@ -1,6 +1,8 @@
 #include "TitleSceneController.h"
+// Frame
 #include "Frame/Frame.h"
-#include "Player/TitleBehavior/TitleRightPunch.h"
+// Behavior
+#include "Player/Behavior/TitleBehavior/TitleRightPunch.h"
 
 void TitleSceneController::Init(Player* player) {
     player_ = player;

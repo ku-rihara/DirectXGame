@@ -32,7 +32,7 @@ void PostEffectRenderer::Init(DirectXCommon* dxCommon) {
     effects_[static_cast<size_t>(PostEffectMode::GAUS)]             = std::make_unique<GaussianFilter>();
     effects_[static_cast<size_t>(PostEffectMode::BOXFILTER)]        = std::make_unique<BoxFilter>();
     effects_[static_cast<size_t>(PostEffectMode::RADIALBLUR)]       = std::make_unique<RadialBlur>();
-    effects_[static_cast<size_t>(PostEffectMode::RANDOMNOIZE)]      = std::make_unique<RandomNoize>();
+    effects_[static_cast<size_t>(PostEffectMode::RANDOMNOISE)]      = std::make_unique<RandomNoize>();
     effects_[static_cast<size_t>(PostEffectMode::DISSOLVE)]         = std::make_unique<Dissolve>();
     effects_[static_cast<size_t>(PostEffectMode::OUTLINE)]          = std::make_unique<Outline>();
     effects_[static_cast<size_t>(PostEffectMode::LUMINANCEOUTLINE)] = std::make_unique<LuminanceBasedOutline>();

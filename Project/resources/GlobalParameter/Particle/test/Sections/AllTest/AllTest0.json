@@ -1,4 +1,4 @@
-{
+﻿{
     "AllTest0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -121,13 +121,13 @@
         "UseRail": false,
         "blendMode": 1,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillboard": true,
         "isFloatVelocity": true,
         "isRotateForDirection": false,
         "isScalerScale": true,
         "isShot": false,
         "modelFilePath": "",
-        "preBillBordType": 0,
+        "preBillboardType": 0,
         "primitiveTypeInt": 0,
         "scaleEaseParam.backRatio": 0.0,
         "scaleEaseParam.easeTypeInt": 0,

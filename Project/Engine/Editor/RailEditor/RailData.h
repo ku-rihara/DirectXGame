@@ -65,12 +65,7 @@ public:
     void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
-    void LoadData() override;
-    void SaveData() override;
-
-    // BaseSequenceEffectDataからのオーバーライド
-    void LoadSequenceElements() override;
-    void SaveSequenceElements() override;
+  
 
     // Rail固有の更新
     void UpdateWithDirection(float speedRate, const PositionMode& mode = PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});

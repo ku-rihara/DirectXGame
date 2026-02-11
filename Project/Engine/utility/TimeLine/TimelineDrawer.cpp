@@ -3,7 +3,7 @@
 using namespace KetaEngine;
 #include <algorithm>
 #include <cstdio>
-#include <imgui.h>
+
 
 void TimelineDrawer::Init() {
     tracks_.clear();
@@ -16,6 +16,7 @@ void TimelineDrawer::Init() {
     draggingDurationKeyIndex_   = -1;
     rightClickedTrackIndex_     = -1;
     nextTrackId_                = 0;
+    isDraggingPlayhead_         = false;
 }
 
 uint32_t TimelineDrawer::AddTrack(const std::string& trackName, std::function<void(float)> callback) {
@@ -26,6 +27,23 @@ uint32_t TimelineDrawer::AddTrack(const std::string& trackName, std::function<vo
 
     tracks_.push_back(newTrack);
     return static_cast<uint32_t>(tracks_.size() - 1);
+}
+
+uint32_t TimelineDrawer::InsertTrack(uint32_t position, const std::string& trackName, std::function<void(float)> callback) {
+    TimeLineTrack newTrack;
+    newTrack.name           = trackName;
+    newTrack.onValueChanged = callback;
+    newTrack.id             = nextTrackId_++;
+
+    // 位置が範囲外の場合は末尾に追加
+    if (position >= tracks_.size()) {
+        tracks_.push_back(newTrack);
+        return static_cast<uint32_t>(tracks_.size() - 1);
+    }
+
+    // 指定位置に挿入
+    tracks_.insert(tracks_.begin() + position, newTrack);
+    return position;
 }
 
 bool TimelineDrawer::RemoveTrack(uint32_t trackIndex) {
@@ -187,16 +205,55 @@ void TimelineDrawer::HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex, 
 }
 
 void TimelineDrawer::Draw(const std::string& name) {
-
     ImGui::Begin(name.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar);
 
+    // オリジナルのUIを描画
     if (originalItemDrawCallBack_) {
         ImGui::SameLine();
         ImGui::Separator();
         originalItemDrawCallBack_();
     }
 
-    // ツールバー
+    DrawToolbar();
+
+    // 描画領域取得
+    ImVec2 canvasPosImGui  = ImGui::GetCursorScreenPos();
+    ImVec2 canvasSizeImGui = ImGui::GetContentRegionAvail();
+    Vector2 canvasPos      = Vector2(canvasPosImGui.x, canvasPosImGui.y);
+    Vector2 canvasSize     = Vector2(canvasSizeImGui.x, canvasSizeImGui.y);
+    ImDrawList* drawList   = ImGui::GetWindowDrawList();
+
+    const float frameWidth    = 10.0f * zoom_;
+    int visibleFrameStart     = scrollOffset_;
+    int visibleFrameEnd       = scrollOffset_ + static_cast<int>((canvasSize.x - headerWidth_) / frameWidth) + 1;
+    float trackAreaHeight     = rulerHeight_ + tracks_.size() * trackHeight_;
+
+    // 背景描画
+    DrawBackground(drawList, canvasPos, canvasSize);
+    // ルーラーとグリッドの描画
+    DrawRulerAndGrid(drawList, canvasPos, canvasSize, frameWidth, trackAreaHeight, visibleFrameStart, visibleFrameEnd);
+    // トラックの描画
+    DrawTracks(drawList, canvasPos, canvasSize, frameWidth, visibleFrameStart, visibleFrameEnd);
+    // ドラッグ処理の更新
+    HandleDragUpdates(canvasPos, frameWidth);
+    // フレームの終点の点線描画
+    DrawEndFrameLine(drawList, canvasPos, frameWidth, trackAreaHeight);
+    // キャンバスのインタラクション
+    HandleCanvasInteraction(canvasPos, canvasSize, frameWidth, trackAreaHeight);
+
+    // 現在フレームインジケーター
+    float currentFrameX = canvasPos.x + headerWidth_ + (currentFrame_ - scrollOffset_) * frameWidth;
+    drawList->AddLine(
+        ImVec2(currentFrameX, canvasPos.y),
+        ImVec2(currentFrameX, canvasPos.y + trackAreaHeight),
+        IM_COL32(255, 100, 100, 255), 2.0f);
+
+    UpdatePlayback();
+
+    ImGui::End();
+}
+
+void TimelineDrawer::DrawToolbar() {
     ImGui::Text("Frame: %d / %d", currentFrame_, endFrame_);
     ImGui::SameLine();
 
@@ -216,184 +273,191 @@ void TimelineDrawer::Draw(const std::string& name) {
     ImGui::SliderFloat("Zoom", &zoom_, 0.1f, 5.0f);
 
     ImGui::Separator();
+}
 
-    // 描画領域取得
-    ImVec2 canvas_pos     = ImGui::GetCursorScreenPos();
-    ImVec2 canvas_size    = ImGui::GetContentRegionAvail();
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-
-    // 背景
-    draw_list->AddRectFilled(canvas_pos,
-        ImVec2(canvas_pos.x + canvas_size.x, canvas_pos.y + canvas_size.y),
+void TimelineDrawer::DrawBackground(::ImDrawList* drawList, const Vector2& canvasPos, const Vector2& canvasSize) {
+    drawList->AddRectFilled(
+        ImVec2(canvasPos.x, canvasPos.y),
+        ImVec2(canvasPos.x + canvasSize.x, canvasPos.y + canvasSize.y),
         IM_COL32(30, 30, 30, 255));
+}
 
-    const float frameWidth = 10.0f * zoom_;
+void TimelineDrawer::DrawRulerAndGrid(::ImDrawList* drawList, const Vector2& canvasPos,
+    const Vector2& canvasSize, float frameWidth, float trackAreaHeight,
+    int visibleFrameStart, int visibleFrameEnd) {
 
-    // ルーラー描画
-    ImVec2 ruler_start = canvas_pos;
-    ImVec2 ruler_end   = ImVec2(canvas_pos.x + canvas_size.x, canvas_pos.y + rulerHeight_);
-    draw_list->AddRectFilled(ruler_start, ruler_end, IM_COL32(50, 50, 50, 255));
+    // ルーラー背景
+    ImVec2 rulerStart = ImVec2(canvasPos.x, canvasPos.y);
+    ImVec2 rulerEnd   = ImVec2(canvasPos.x + canvasSize.x, canvasPos.y + rulerHeight_);
+    drawList->AddRectFilled(rulerStart, rulerEnd, IM_COL32(50, 50, 50, 255));
 
     // フレーム番号とグリッド
-    int visibleFrameStart = scrollOffset_;
-    int visibleFrameEnd   = scrollOffset_ + static_cast<int>((canvas_size.x - headerWidth_) / frameWidth) + 1;
-
-    float trackAreaHeight = rulerHeight_ + tracks_.size() * trackHeight_;
-
     for (int frame = visibleFrameStart; frame <= visibleFrameEnd && frame <= endFrame_; frame++) {
-        float x = canvas_pos.x + headerWidth_ + (frame - scrollOffset_) * frameWidth;
+        float x = canvasPos.x + headerWidth_ + (frame - scrollOffset_) * frameWidth;
 
         if (frame % 5 == 0) {
-            draw_list->AddLine(
-                ImVec2(x, canvas_pos.y + rulerHeight_),
-                ImVec2(x, canvas_pos.y + trackAreaHeight),
+            drawList->AddLine(
+                ImVec2(x, canvasPos.y + rulerHeight_),
+                ImVec2(x, canvasPos.y + trackAreaHeight),
                 IM_COL32(60, 60, 60, 255), 1.0f);
 
             char frameText[8];
             std::snprintf(frameText, sizeof(frameText), "%d", frame);
-            draw_list->AddText(ImVec2(x + 2, canvas_pos.y + 5), IM_COL32(200, 200, 200, 255), frameText);
+            drawList->AddText(ImVec2(x + 2, canvasPos.y + 5), IM_COL32(200, 200, 200, 255), frameText);
         } else {
-            draw_list->AddLine(
-                ImVec2(x, canvas_pos.y + rulerHeight_),
-                ImVec2(x, canvas_pos.y + trackAreaHeight),
+            drawList->AddLine(
+                ImVec2(x, canvasPos.y + rulerHeight_),
+                ImVec2(x, canvasPos.y + trackAreaHeight),
                 IM_COL32(45, 45, 45, 255), 1.0f);
         }
     }
+}
 
-    // トラック描画
-    float trackY = canvas_pos.y + rulerHeight_;
+void TimelineDrawer::DrawTracks(::ImDrawList* drawList, const Vector2& canvasPos,
+    const Vector2& canvasSize, float frameWidth,
+    int visibleFrameStart, int visibleFrameEnd) {
+
+    float trackY = canvasPos.y + rulerHeight_;
 
     for (uint32_t i = 0; i < tracks_.size(); i++) {
         TimeLineTrack& track = tracks_[i];
 
         // トラックヘッダー
-        ImVec2 headerStart = ImVec2(canvas_pos.x, trackY);
-        ImVec2 headerEnd   = ImVec2(canvas_pos.x + headerWidth_, trackY + trackHeight_);
-        draw_list->AddRectFilled(headerStart, headerEnd, IM_COL32(40, 40, 40, 255));
-        draw_list->AddRect(headerStart, headerEnd, IM_COL32(70, 70, 70, 255));
-        draw_list->AddText(ImVec2(canvas_pos.x + 10, trackY + 8),
+        ImVec2 headerStart = ImVec2(canvasPos.x, trackY);
+        ImVec2 headerEnd   = ImVec2(canvasPos.x + headerWidth_, trackY + trackHeight_);
+        drawList->AddRectFilled(headerStart, headerEnd, IM_COL32(40, 40, 40, 255));
+        drawList->AddRect(headerStart, headerEnd, IM_COL32(70, 70, 70, 255));
+        drawList->AddText(ImVec2(canvasPos.x + 10, trackY + 8),
             IM_COL32(255, 255, 255, 255), track.name.c_str());
 
         // トラックライン背景
-        ImVec2 lineStart = ImVec2(canvas_pos.x + headerWidth_, trackY);
-        ImVec2 lineEnd   = ImVec2(canvas_pos.x + canvas_size.x, trackY + trackHeight_);
-        draw_list->AddRectFilled(lineStart, lineEnd,
+        ImVec2 lineStart = ImVec2(canvasPos.x + headerWidth_, trackY);
+        ImVec2 lineEnd   = ImVec2(canvasPos.x + canvasSize.x, trackY + trackHeight_);
+        drawList->AddRectFilled(lineStart, lineEnd,
             (i % 2 == 0) ? IM_COL32(35, 35, 35, 255) : IM_COL32(30, 30, 30, 255));
-        draw_list->AddLine(ImVec2(canvas_pos.x, trackY + trackHeight_),
-            ImVec2(canvas_pos.x + canvas_size.x, trackY + trackHeight_),
+        drawList->AddLine(ImVec2(canvasPos.x, trackY + trackHeight_),
+            ImVec2(canvasPos.x + canvasSize.x, trackY + trackHeight_),
             IM_COL32(50, 50, 50, 255));
 
         // キーフレーム描画
         for (uint32_t j = 0; j < track.keyframes.size(); j++) {
-            TimeLineKeyFrame& kf = track.keyframes[j];
-
-            if (kf.frame >= visibleFrameStart && kf.frame <= visibleFrameEnd) {
-                float kfX = canvas_pos.x + headerWidth_ + (kf.frame - scrollOffset_) * frameWidth;
-                float kfY = trackY + trackHeight_ / 2;
-
-                bool isOnCurrentFrame = (currentFrame_ >= kf.frame && currentFrame_ <= kf.frame + static_cast<int32_t>(kf.duration));
-
-                ImU32 color;
-                ImU32 durationUIColor;
-                if (isOnCurrentFrame) {
-                    color           = IM_COL32(70, 255, 70, 255);
-                    durationUIColor = IM_COL32(100, 255, 200, 180);
-                } else {
-                    color           = IM_COL32(255, 200, 50, 255);
-                    durationUIColor = IM_COL32(100, 150, 200, 180);
-                }
-
-                // 持続時間の表示
-                if (kf.duration > 1.0f) {
-                    float durationWidth = kf.duration * frameWidth;
-                    float barHeight     = trackHeight_ * 0.8f;
-                    float barTopY       = trackY + (trackHeight_ - barHeight) / 2.0f;
-
-                    draw_list->AddRectFilled(
-                        ImVec2(kfX, barTopY),
-                        ImVec2(kfX + durationWidth, barTopY + barHeight),
-                        durationUIColor);
-
-                    // ラベル表示
-                    if (!kf.label.empty()) {
-                        draw_list->AddText(
-                            ImVec2(kfX + 5, barTopY + 2),
-                            IM_COL32(255, 255, 255, 255),
-                            kf.label.c_str());
-                    }
-
-                    // duration ドラッグハンドル処理
-                    float durationEndX = kfX + durationWidth;
-                    HandleDurationDrag(i, j, durationEndX, trackY);
-                }
-
-                // キーフレームマーカー(ダイヤモンド)
-                ImVec2 diamond[4] = {
-                    ImVec2(kfX, kfY - 6),
-                    ImVec2(kfX + 6, kfY),
-                    ImVec2(kfX, kfY + 6),
-                    ImVec2(kfX - 6, kfY)};
-
-                draw_list->AddConvexPolyFilled(diamond, 4, color);
-
-                // ホバー時のラベル表示
-                if (!kf.label.empty() && ImGui::IsMouseHoveringRect(ImVec2(kfX - 8, kfY - 8), ImVec2(kfX + 8, kfY + 8))) {
-                    ImGui::SetTooltip("%s", kf.label.c_str());
-                }
-
-                // ドラッグ&ドロップ処理
-                HandleKeyFrameDragDrop(i, j, Vector2(kfX, kfY));
-
-                // キーフレーム右クリック
-                if (ImGui::IsMouseClicked(1) && ImGui::IsMouseHoveringRect(ImVec2(kfX - 8, kfY - 8), ImVec2(kfX + 8, kfY + 8))) {
-                    ImGui::OpenPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str());
-                }
-
-                // キーフレームコンテキストメニュー
-                if (ImGui::BeginPopup(("KeyFrameContextMenu_" + std::to_string(i) + "_" + std::to_string(j)).c_str())) {
-                    // 横棒を伸ばすメニュー
-                    if (ImGui::MenuItem("横棒を1フレーム伸ばす")) {
-                        tracks_[i].keyframes[j].duration += 1.0f;
-                    }
-
-                    ImGui::Separator();
-
-                    // カスタムコールバックがある場合は、それを呼び出して描画
-                    if (track.onKeyFrameRightClick) {
-                        track.onKeyFrameRightClick(i, j);
-                    }
-
-                    // 削除メニュー
-                    if (ImGui::MenuItem("Delete KeyFrame")) {
-                        RemoveKeyFrame(i, j);
-                    }
-                    ImGui::EndPopup();
-                }
-            }
+            DrawKeyFrame(drawList, i, j, canvasPos, frameWidth, visibleFrameStart, visibleFrameEnd, trackY);
         }
 
         trackY += trackHeight_;
     }
+}
 
+void TimelineDrawer::DrawKeyFrame(::ImDrawList* drawList, uint32_t trackIndex, uint32_t keyIndex,
+    const Vector2& canvasPos, float frameWidth,
+    int visibleFrameStart, int visibleFrameEnd, float trackY) {
+
+    TimeLineTrack& track = tracks_[trackIndex];
+    TimeLineKeyFrame& kf = track.keyframes[keyIndex];
+
+    if (kf.frame < visibleFrameStart || kf.frame > visibleFrameEnd) {
+        return;
+    }
+
+    float kfX = canvasPos.x + headerWidth_ + (kf.frame - scrollOffset_) * frameWidth;
+    float kfY = trackY + trackHeight_ / 2;
+
+    bool isOnCurrentFrame = (currentFrame_ >= kf.frame && currentFrame_ <= kf.frame + static_cast<int32_t>(kf.duration));
+
+    ImU32 color;
+    ImU32 durationUIColor;
+    if (isOnCurrentFrame) {
+        color           = IM_COL32(70, 255, 70, 255);
+        durationUIColor = IM_COL32(100, 255, 200, 180);
+    } else {
+        color           = IM_COL32(255, 200, 50, 255);
+        durationUIColor = IM_COL32(100, 150, 200, 180);
+    }
+
+    // 持続時間の表示
+    if (kf.duration > 1.0f) {
+        float durationWidth = kf.duration * frameWidth;
+        float barHeight     = trackHeight_ * 0.8f;
+        float barTopY       = trackY + (trackHeight_ - barHeight) / 2.0f;
+
+        drawList->AddRectFilled(
+            ImVec2(kfX, barTopY),
+            ImVec2(kfX + durationWidth, barTopY + barHeight),
+            durationUIColor);
+
+        // ラベル表示
+        if (!kf.label.empty()) {
+            drawList->AddText(
+                ImVec2(kfX + 5, barTopY + 2),
+                IM_COL32(255, 255, 255, 255),
+                kf.label.c_str());
+        }
+
+        // duration ドラッグハンドル処理
+        float durationEndX = kfX + durationWidth;
+        HandleDurationDrag(trackIndex, keyIndex, durationEndX, trackY);
+    }
+
+    // キーフレームマーカー(ダイヤモンド)
+    ImVec2 diamond[4] = {
+        ImVec2(kfX, kfY - 6),
+        ImVec2(kfX + 6, kfY),
+        ImVec2(kfX, kfY + 6),
+        ImVec2(kfX - 6, kfY)};
+
+    drawList->AddConvexPolyFilled(diamond, 4, color);
+
+    // ホバー時のラベル表示
+    if (!kf.label.empty() && ImGui::IsMouseHoveringRect(ImVec2(kfX - 8, kfY - 8), ImVec2(kfX + 8, kfY + 8))) {
+        ImGui::SetTooltip("%s", kf.label.c_str());
+    }
+
+    // ドラッグ&ドロップ処理
+    HandleKeyFrameDragDrop(trackIndex, keyIndex, Vector2(kfX, kfY));
+
+    // キーフレーム右クリック
+    if (ImGui::IsMouseClicked(1) && ImGui::IsMouseHoveringRect(ImVec2(kfX - 8, kfY - 8), ImVec2(kfX + 8, kfY + 8))) {
+        ImGui::OpenPopup(("KeyFrameContextMenu_" + std::to_string(trackIndex) + "_" + std::to_string(keyIndex)).c_str());
+    }
+
+    // キーフレームコンテキストメニュー
+    if (ImGui::BeginPopup(("KeyFrameContextMenu_" + std::to_string(trackIndex) + "_" + std::to_string(keyIndex)).c_str())) {
+        if (ImGui::MenuItem("横棒を1フレーム伸ばす")) {
+            tracks_[trackIndex].keyframes[keyIndex].duration += 1.0f;
+        }
+
+        ImGui::Separator();
+
+        if (track.onKeyFrameRightClick) {
+            track.onKeyFrameRightClick(trackIndex, keyIndex);
+        }
+
+        if (ImGui::MenuItem("Delete KeyFrame")) {
+            RemoveKeyFrame(trackIndex, keyIndex);
+        }
+        ImGui::EndPopup();
+    }
+}
+
+void TimelineDrawer::HandleDragUpdates(const Vector2& canvasPos, float frameWidth) {
     // ドラッグ中の処理(キーフレーム位置)
     if (draggingTrackIndex_ >= 0 && draggingKeyIndex_ >= 0 && ImGui::IsMouseDragging(0)) {
-        ImVec2 mouse_pos = ImGui::GetMousePos();
-        float deltaX     = mouse_pos.x - (canvas_pos.x + headerWidth_ + (dragStartFrame_ - scrollOffset_) * frameWidth);
-        int deltaFrame   = static_cast<int>(deltaX / frameWidth);
-        int newFrame     = dragStartFrame_ + deltaFrame;
+        ImVec2 mousePos = ImGui::GetMousePos();
+        float deltaX    = mousePos.x - (canvasPos.x + headerWidth_ + (dragStartFrame_ - scrollOffset_) * frameWidth);
+        int deltaFrame  = static_cast<int>(deltaX / frameWidth);
+        int newFrame    = dragStartFrame_ + deltaFrame;
 
         if (newFrame >= 0 && newFrame <= endFrame_) {
-
             tracks_[draggingTrackIndex_].keyframes[draggingKeyIndex_].frame = newFrame;
         }
     }
 
     // ドラッグ中の処理(duration)
     if (draggingDurationTrackIndex_ >= 0 && draggingDurationKeyIndex_ >= 0 && ImGui::IsMouseDragging(0)) {
-        ImVec2 mouse_pos  = ImGui::GetMousePos();
+        ImVec2 mousePos   = ImGui::GetMousePos();
         auto& kf          = tracks_[draggingDurationTrackIndex_].keyframes[draggingDurationKeyIndex_];
-        float kfX         = canvas_pos.x + headerWidth_ + (kf.frame - scrollOffset_) * frameWidth;
-        float deltaX      = mouse_pos.x - kfX;
+        float kfX         = canvasPos.x + headerWidth_ + (kf.frame - scrollOffset_) * frameWidth;
+        float deltaX      = mousePos.x - kfX;
         float newDuration = deltaX / frameWidth;
 
         if (newDuration >= 1.0f) {
@@ -415,38 +479,62 @@ void TimelineDrawer::Draw(const std::string& name) {
         draggingDurationTrackIndex_ = -1;
         draggingDurationKeyIndex_   = -1;
     }
+}
 
-    // 終端ライン描画
-    float endFrameX = canvas_pos.x + headerWidth_ + (endFrame_ - scrollOffset_) * frameWidth;
-    if (endFrameX >= canvas_pos.x + headerWidth_ && endFrameX <= canvas_pos.x + canvas_size.x) {
-        float dashLength = 5.0f;
-        float gapLength  = 3.0f;
-        float currentY   = canvas_pos.y;
+void TimelineDrawer::DrawEndFrameLine(::ImDrawList* drawList, const Vector2& canvasPos,
+    float frameWidth, float trackAreaHeight) {
 
-        while (currentY < canvas_pos.y + trackAreaHeight) {
-            float nextY = currentY + dashLength;
-            if (nextY > canvas_pos.y + trackAreaHeight) {
-                nextY = canvas_pos.y + trackAreaHeight;
-            }
+    float endFrameX = canvasPos.x + headerWidth_ + (endFrame_ - scrollOffset_) * frameWidth;
+    float canvasEndX = canvasPos.x + headerWidth_;
 
-            draw_list->AddLine(
-                ImVec2(endFrameX, currentY),
-                ImVec2(endFrameX, nextY),
-                IM_COL32(255, 50, 50, 255), 2.0f);
+    if (endFrameX < canvasEndX) {
+        return;
+    }
 
-            currentY = nextY + gapLength;
+    float dashLength = 5.0f;
+    float gapLength  = 3.0f;
+    float currentY   = canvasPos.y;
+
+    while (currentY < canvasPos.y + trackAreaHeight) {
+        float nextY = currentY + dashLength;
+        if (nextY > canvasPos.y + trackAreaHeight) {
+            nextY = canvasPos.y + trackAreaHeight;
+        }
+
+        drawList->AddLine(
+            ImVec2(endFrameX, currentY),
+            ImVec2(endFrameX, nextY),
+            IM_COL32(255, 50, 50, 255), 2.0f);
+
+        currentY = nextY + gapLength;
+    }
+}
+
+void TimelineDrawer::HandleCanvasInteraction(const Vector2& canvasPos, const Vector2& canvasSize,
+    float frameWidth, float trackAreaHeight) {
+
+    trackAreaHeight;
+    ImGui::SetCursorScreenPos(ImVec2(canvasPos.x, canvasPos.y));
+    ImGui::InvisibleButton("timeline_canvas", ImVec2(canvasSize.x, canvasSize.y));
+
+    // 再生ヘッドの現在位置を計算
+    float currentFrameX = canvasPos.x + headerWidth_ + (currentFrame_ - scrollOffset_) * frameWidth;
+    const float playheadHitWidth = 8.0f; // 縦線をクリックできる範囲
+
+    // マウスクリック時：縦線の近くをクリックした場合のみドラッグ開始
+    if (ImGui::IsMouseClicked(0) && ImGui::IsItemHovered()) {
+        ImVec2 mousePos = ImGui::GetMousePos();
+        // 縦線の近くかどうかをチェック
+        if (mousePos.x >= currentFrameX - playheadHitWidth && mousePos.x <= currentFrameX + playheadHitWidth) {
+            isDraggingPlayhead_ = true;
         }
     }
 
-    // インタラクション
-    ImGui::SetCursorScreenPos(canvas_pos);
-    ImGui::InvisibleButton("timeline_canvas", canvas_size);
-
-    // マウス長押しでフレームを移動
-    if (ImGui::IsItemActive() && ImGui::IsMouseDown(0)) {
-        ImVec2 mouse_pos = ImGui::GetMousePos();
-        if (mouse_pos.x > canvas_pos.x + headerWidth_) {
-            int clickedFrame = scrollOffset_ + (int)((mouse_pos.x - canvas_pos.x - headerWidth_) / frameWidth);
+    // ドラッグ中：縦線を移動
+    if (isDraggingPlayhead_ && ImGui::IsMouseDown(0)) {
+        ImVec2 mousePos = ImGui::GetMousePos();
+        if (mousePos.x > canvasPos.x + headerWidth_) {
+            int clickedFrame = scrollOffset_ + static_cast<int>((mousePos.x - canvasPos.x - headerWidth_) / frameWidth);
             if (clickedFrame >= 0 && clickedFrame <= endFrame_) {
                 currentFrame_ = clickedFrame;
                 ApplyCurrentFrame();
@@ -454,26 +542,27 @@ void TimelineDrawer::Draw(const std::string& name) {
         }
     }
 
-    // 現在フレームインジケーター
-    float currentFrameX = canvas_pos.x + headerWidth_ + (currentFrame_ - scrollOffset_) * frameWidth;
-    draw_list->AddLine(
-        ImVec2(currentFrameX, canvas_pos.y),
-        ImVec2(currentFrameX, canvas_pos.y + trackAreaHeight),
-        IM_COL32(255, 100, 100, 255), 2.0f);
+    // マウスリリース時：ドラッグ終了
+    if (ImGui::IsMouseReleased(0)) {
+        isDraggingPlayhead_ = false;
+    }
 
     // スクロール
     if (ImGui::IsItemHovered()) {
         float wheel = ImGui::GetIO().MouseWheel;
         if (wheel != 0) {
-            scrollOffset_ -= (int)(wheel * 3);
-            if (scrollOffset_ < 0)
+            scrollOffset_ -= static_cast<int>(wheel * 3);
+            if (scrollOffset_ < 0) {
                 scrollOffset_ = 0;
-            if (scrollOffset_ > endFrame_ - 10)
+            }
+            if (scrollOffset_ > endFrame_ - 10) {
                 scrollOffset_ = endFrame_ - 10;
+            }
         }
     }
+}
 
-    // 再生中の処理
+void TimelineDrawer::UpdatePlayback() {
     if (isPlaying_) {
         currentFrame_++;
         if (currentFrame_ > endFrame_) {
@@ -481,6 +570,4 @@ void TimelineDrawer::Draw(const std::string& name) {
         }
         ApplyCurrentFrame();
     }
-
-    ImGui::End();
 }

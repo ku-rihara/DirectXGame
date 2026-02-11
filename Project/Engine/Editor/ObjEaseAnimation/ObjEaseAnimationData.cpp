@@ -29,8 +29,8 @@ void ObjEaseAnimationData::Update(float speedRate) {
     if (playState_ != PlayState::PLAYING) {
         return;
     }
-    UpdateKeyFrameProgression();
     UpdateActiveSection(speedRate);
+    UpdateIndependentSRTProgression();
 }
 
 void ObjEaseAnimationData::UpdateActiveSection(float speedRate) {
@@ -38,49 +38,117 @@ void ObjEaseAnimationData::UpdateActiveSection(float speedRate) {
         return;
     }
 
-    // 現在のアクティブキーフレームを更新
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-        sectionElements_[activeKeyFrameIndex_]->Update(speedRate);
+    // 各SRTが使用しているセクションを全て更新
+    // どのセクションがアクティブかはSRTごとに異なる可能性があるため、
+    // 使用中の全セクションを更新する
+    std::array<bool, 16> updatedSections = {}; // 最大16セクションまで対応
+
+    for (size_t srtType = 0; srtType < static_cast<size_t>(TransformType::Count); ++srtType) {
+        int32_t sectionIndex = activeSectionIndices_[srtType];
+        if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+            if (!updatedSections[sectionIndex]) {
+                sectionElements_[sectionIndex]->Update(speedRate);
+                updatedSections[sectionIndex] = true;
+            }
+        }
     }
 }
 
 void ObjEaseAnimationData::UpdateKeyFrameProgression() {
+  
+}
+
+void ObjEaseAnimationData::UpdateIndependentSRTProgression() {
     if (sectionElements_.empty() || playState_ != PlayState::PLAYING) {
         return;
     }
 
-    // 現在のキーフレームが完了したかチェック
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-        if (!sectionElements_[activeKeyFrameIndex_]->IsFinished()) {
-            return; // まだ完了していない
+    int32_t totalSections = static_cast<int32_t>(sectionElements_.size());
+
+    // 各SRTを独立してチェック
+    for (size_t srtType = 0; srtType < static_cast<size_t>(TransformType::Count); ++srtType) {
+        TransformType type = static_cast<TransformType>(srtType);
+        // ObjEaseAnimationSection用のTransformType
+        auto sectionType = static_cast<ObjEaseAnimationSection::TransformType>(srtType);
+
+        // 既に全セクション完了している場合はスキップ
+        if (srtAllSectionsFinished_[srtType]) {
+            continue;
         }
 
-        // 最後のキーフレームかチェック
-        if (activeKeyFrameIndex_ == static_cast<int32_t>(sectionElements_.size()) - 1) {
-            isAllKeyFramesFinished_ = true;
-            playState_              = PlayState::STOPPED;
-        } else {
-            AdvanceToNextSequenceElement();
+        int32_t currentSectionIndex = activeSectionIndices_[srtType];
+
+        // 現在のセクションでこのSRTが完了したかチェック
+        if (currentSectionIndex >= 0 && currentSectionIndex < totalSections) {
+            if (sectionElements_[currentSectionIndex]->IsTransformFinished(sectionType)) {
+                // 最後のセクションかチェック
+                if (currentSectionIndex == totalSections - 1) {
+                    srtAllSectionsFinished_[srtType] = true;
+                } else {
+                    // 次のセクションへ進む
+                    AdvanceTransformToNextSection(type);
+                }
+            }
         }
     }
+
+    // 全SRTが全セクション完了したかチェック
+    if (AreAllSRTFinished()) {
+        isAllKeyFramesFinished_ = true;
+        playState_              = PlayState::STOPPED;
+    }
+}
+
+void ObjEaseAnimationData::AdvanceTransformToNextSection(TransformType type) {
+    size_t srtIndex          = static_cast<size_t>(type);
+    int32_t currentSection   = activeSectionIndices_[srtIndex];
+    int32_t nextSectionIndex = currentSection + 1;
+
+    if (nextSectionIndex >= static_cast<int32_t>(sectionElements_.size())) {
+        srtAllSectionsFinished_[srtIndex] = true;
+        return;
+    }
+
+    // ObjEaseAnimationSection用のTransformType
+    auto sectionType = static_cast<ObjEaseAnimationSection::TransformType>(srtIndex);
+
+    // 現在のセクションからこのSRTの最終値を取得
+    Vector3 currentValue;
+    switch (type) {
+    case TransformType::Scale:
+        currentValue = sectionElements_[currentSection]->GetCurrentScale();
+        break;
+    case TransformType::Rotation:
+        currentValue = sectionElements_[currentSection]->GetCurrentRotation();
+        break;
+    case TransformType::Translation:
+        currentValue = sectionElements_[currentSection]->GetCurrentTranslation();
+        break;
+    default:
+        return;
+    }
+
+    // 次のセクションへ進む
+    activeSectionIndices_[srtIndex] = nextSectionIndex;
+
+    // 次のセクションの開始値を設定して再生開始
+    sectionElements_[nextSectionIndex]->SetStartValueForTransform(sectionType, currentValue);
+    sectionElements_[nextSectionIndex]->StartPlayingForTransform(sectionType);
+}
+
+bool ObjEaseAnimationData::AreAllSRTFinished() const {
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        if (!srtAllSectionsFinished_[i]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void ObjEaseAnimationData::AdvanceToNextSequenceElement() {
-    if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size()) - 1) {
-        // 前のセクションの最終値を取得
-        Vector3 startScale       = sectionElements_[activeKeyFrameIndex_]->GetCurrentScale();
-        Vector3 startRotation    = sectionElements_[activeKeyFrameIndex_]->GetCurrentRotation();
-        Vector3 startTranslation = sectionElements_[activeKeyFrameIndex_]->GetCurrentTranslation();
-
-        // 次のセクションへ進む
-        activeKeyFrameIndex_++;
-
-        if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-            // 次のセクションの開始値として設定
-            sectionElements_[activeKeyFrameIndex_]->SetStartValues(startScale, startRotation, startTranslation);
-        }
-    }
+  
 }
+
 void ObjEaseAnimationData::Reset() {
     // 全てのキーフレームをリセット
     for (auto& section : sectionElements_) {
@@ -91,6 +159,12 @@ void ObjEaseAnimationData::Reset() {
     activeKeyFrameIndex_    = 0;
     isAllKeyFramesFinished_ = false;
     playState_              = PlayState::STOPPED;
+
+    // SRT独立進行用のリセット
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        activeSectionIndices_[i]     = 0;
+        srtAllSectionsFinished_[i]   = false;
+    }
 }
 
 void ObjEaseAnimationData::Play() {
@@ -99,6 +173,12 @@ void ObjEaseAnimationData::Play() {
     Vector3 scale     = originalValues_[static_cast<size_t>(TransformType::Scale)];
     Vector3 rotate    = originalValues_[static_cast<size_t>(TransformType::Rotation)];
     Vector3 transform = originalValues_[static_cast<size_t>(TransformType::Translation)];
+
+    // SRT独立進行用のリセット
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        activeSectionIndices_[i]   = 0;
+        srtAllSectionsFinished_[i] = false;
+    }
 
     // 全てのキーフレームをリセット
     for (auto& section : sectionElements_) {
@@ -126,6 +206,12 @@ void ObjEaseAnimationData::InitParams() {
     playState_              = PlayState::STOPPED;
     activeKeyFrameIndex_    = 0;
     isAllKeyFramesFinished_ = false;
+
+    // SRT独立進行用の初期化
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        activeSectionIndices_[i]   = 0;
+        srtAllSectionsFinished_[i] = false;
+    }
 }
 
 std::unique_ptr<ObjEaseAnimationSection> ObjEaseAnimationData::CreateKeyFrame(int32_t index) {
@@ -154,8 +240,10 @@ void ObjEaseAnimationData::CreateOrLoadSections(const std::vector<std::pair<int3
 }
 
 RailPlayer* ObjEaseAnimationData::GetCurrentRailPlayer() const {
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-        auto* railPlayer = sectionElements_[activeKeyFrameIndex_]->GetRailPlayer();
+    // TranslationのセクションインデックスでRailPlayerを取得
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        auto* railPlayer = sectionElements_[sectionIndex]->GetRailPlayer();
         if (railPlayer) {
             return railPlayer;
         }
@@ -168,14 +256,17 @@ Vector3 ObjEaseAnimationData::GetActiveKeyFrameValue(const TransformType& type) 
         return originalValues_[static_cast<size_t>(type)];
     }
 
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+    // 各SRTは独立したセクションインデックスを持つ
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(type)];
+
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
         switch (type) {
         case TransformType::Scale:
-            return sectionElements_[activeKeyFrameIndex_]->GetCurrentScale();
+            return sectionElements_[sectionIndex]->GetCurrentScale();
         case TransformType::Rotation:
-            return sectionElements_[activeKeyFrameIndex_]->GetCurrentRotation();
+            return sectionElements_[sectionIndex]->GetCurrentRotation();
         case TransformType::Translation:
-            return sectionElements_[activeKeyFrameIndex_]->GetCurrentTranslation();
+            return sectionElements_[sectionIndex]->GetCurrentTranslation();
         default:
             break;
         }
@@ -185,9 +276,11 @@ Vector3 ObjEaseAnimationData::GetActiveKeyFrameValue(const TransformType& type) 
 }
 
 bool ObjEaseAnimationData::GetIsUseRailActiveKeyFrame() const {
-    bool isUseRail = false;
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-        isUseRail = sectionElements_[activeKeyFrameIndex_]->IsUsingRail();
+    // TranslationのセクションインデックスでRail使用状態をチェック
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
+    bool isUseRail       = false;
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        isUseRail = sectionElements_[sectionIndex]->IsUsingRail();
     }
     return isUseRail;
 }
@@ -210,11 +303,7 @@ void ObjEaseAnimationData::AdjustParam() {
     Vector3 currentRot   = GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Rotation);
     Vector3 currentTrans = GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Translation);
 
-    ImGui::Text("Scale: (%.2f, %.2f, %.2f)", currentScale.x, currentScale.y, currentScale.z);
-    ImGui::Text("Rotation: (%.2f, %.2f, %.2f)", currentRot.x, currentRot.y, currentRot.z);
-    ImGui::Text("Translation: (%.2f, %.2f, %.2f)", currentTrans.x, currentTrans.y, currentTrans.z);
-
-    ImGui::Separator();
+  
     if (ImGui::Button("Play this Date")) {
         Play();
     }
@@ -263,9 +352,9 @@ std::string ObjEaseAnimationData::GetSRTName(const TransformType& type) const {
     }
 }
 
-void ObjEaseAnimationData::LoadSequenceElements() {
-    BaseSequenceEffectData::LoadSequenceElements();
+void ObjEaseAnimationData::SetPreAnimationOffsets(const Vector3& scale, const Vector3& rotation, const Vector3& translation) {
+    for (auto& section : sectionElements_) {
+        section->SetPreAnimationOffsets(scale, rotation, translation);
+    }
 }
-void ObjEaseAnimationData::SaveSequenceElements() {
-    BaseSequenceEffectData::SaveSequenceElements();
-}
+

@@ -14,40 +14,50 @@ void DeathTimer::Init() {
     deathTimerGauge_ = std::make_unique<DeathTimerGauge>();
     deathTimerGauge_->Init();
 
-    // タイマー初期化
-    currentTimer_ = maxTimer_;
+    // HP初期化
+    currentHP_ = maxHP_;
 }
 
 void DeathTimer::Update(float timer) {
 
     // イージング適応
-    AdaptEasing(timer);
+    AdaptEasing();
 
-    // maxTimerを超えないようにクランプ
-    currentTimer_ = std::clamp(currentTimer_, 0.0f, maxTimer_);
-    if (currentTimer_ <= 0.0f) {
+    // maxHPを超えないようにクランプ
+    currentHP_ = std::clamp(currentHP_, 0.0f, maxHP_);
+    if (currentHP_ <= 0.0f) {
         isDeath_ = true;
     }
 
-    // タイムセット
+    // ゲージ更新
     deathTimerGauge_->Update(timer);
-    deathTimerGauge_->SetTimer(currentTimer_, maxTimer_);
+    deathTimerGauge_->SetTimer(currentHP_, maxHP_);
 }
 
-void DeathTimer::IncrementTimer() {
-    if (isIncrementing_) {
+void DeathTimer::TakeDamage(float damage) {
+    // ダメージを受ける
+    currentHP_ -= damage;
+
+    // 0以下にならないようにクランプ
+    if (currentHP_ < 0.0f) {
+        currentHP_ = 0.0f;
+    }
+}
+
+void DeathTimer::RecoverHP() {
+    if (isRecovering_) {
         // 既にイージング中の場合、目標値を更新
-        incrementTargetValue_ += incrementTime_;
+        recoveryTargetValue_ += levelUpRecoveryAmount_;
     } else {
         // 新規イージング開始
-        incrementStartValue_  = currentTimer_;
-        incrementTargetValue_ = currentTimer_ + incrementTime_;
-        incrementTimer_       = 0.0f;
-        isIncrementing_       = true;
+        recoveryStartValue_  = currentHP_;
+        recoveryTargetValue_ = currentHP_ + levelUpRecoveryAmount_;
+        recoveryTimer_       = 0.0f;
+        isRecovering_        = true;
     }
 
-    // maxTimerを超えないようにクランプ
-    incrementTargetValue_ = (std::min)(incrementTargetValue_, maxTimer_);
+    // maxHPを超えないようにクランプ
+    recoveryTargetValue_ = (std::min)(recoveryTargetValue_, maxHP_);
 }
 
 ///==========================================================
@@ -59,10 +69,12 @@ void DeathTimer::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::DragFloat("decrementSpeedRate", &decrementSpeedRate_, 0.01f);
-        ImGui::DragFloat("Increment Time", &incrementTime_, 0.01f);
-        ImGui::DragFloat("maxTimer", &maxTimer_, 0.01f);
-        ImGui::DragFloat("incrementDuration", &incrementDuration_, 0.01f);
+        ImGui::DragFloat("最大HP", &maxHP_, 0.01f);
+        ImGui::DragFloat("レベルアップ回復量", &levelUpRecoveryAmount_, 0.01f);
+        ImGui::DragFloat("回復イージング時間", &recoveryDuration_, 0.01f);
+
+        ImGui::Separator();
+        ImGui::Text("現在のHP: %.2f / %.2f", currentHP_, maxHP_);
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -77,32 +89,29 @@ void DeathTimer::AdjustParam() {
 }
 
 void DeathTimer::RegisterParams() {
-    globalParameter_->Regist(groupName_, "decrementSpeedRate", &decrementSpeedRate_);
-    globalParameter_->Regist(groupName_, "incrementTime", &incrementTime_);
-    globalParameter_->Regist(groupName_, "maxTimer", &maxTimer_);
-    globalParameter_->Regist(groupName_, "incrementDuration", &incrementDuration_);
+    globalParameter_->Regist(groupName_, "maxHP", &maxHP_);
+    globalParameter_->Regist(groupName_, "levelUpRecoveryAmount", &levelUpRecoveryAmount_);
+    globalParameter_->Regist(groupName_, "recoveryDuration", &recoveryDuration_);
 }
 
-void DeathTimer::AdaptEasing(float timeSpeed) {
-    // イージング中の処理
-    if (isIncrementing_) {
-        incrementTimer_ += KetaEngine::Frame::DeltaTimeRate();
+void DeathTimer::AdaptEasing() {
+    // イージング中の処理（HP回復時）
+    if (isRecovering_) {
+        recoveryTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
-        // イージングでタイマーを増加
-        currentTimer_ = EaseOutQuad(
-            incrementStartValue_,
-            incrementTargetValue_,
-            incrementTimer_,
-            incrementDuration_);
+        // イージングでHPを増加
+        currentHP_ = EaseOutQuad(
+            recoveryStartValue_,
+            recoveryTargetValue_,
+            recoveryTimer_,
+            recoveryDuration_);
 
         // イージング完了
-        if (incrementTimer_ >= incrementDuration_) {
-            currentTimer_   = incrementTargetValue_;
-            isIncrementing_ = false;
-            incrementTimer_ = 0.0f;
+        if (recoveryTimer_ >= recoveryDuration_) {
+            currentHP_      = recoveryTargetValue_;
+            isRecovering_   = false;
+            recoveryTimer_  = 0.0f;
         }
-    } else {
-        // 通常の減少処理
-        currentTimer_ -= timeSpeed * decrementSpeedRate_;
     }
+    // 時間経過による減少は削除（敵からのダメージのみ）
 }

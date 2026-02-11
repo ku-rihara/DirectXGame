@@ -1,7 +1,7 @@
 #include "BaseScene.h"
 #include "Base/WinApp.h"
 #include "Frame/Frame.h"
-#include "Lighrt/Light.h"
+#include "Light/Light.h"
 #include "PostEffect/PostEffectRenderer.h"
 
 // editor

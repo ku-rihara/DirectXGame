@@ -39,6 +39,7 @@ struct Parameters {
     JumpParam upperJump;
     SpawnParam spawnParam;
     float moveSpeed;
+    float dashSpeedMultiplier;
     float fallSpeed;
     float attackRotate;
     float attackRotateAnit;
@@ -85,9 +86,9 @@ public:
     /// =========================================================================================
     /// getter
     /// =========================================================================================
-    const Parameters& GetParamaters() const { return playerParams_; }
-    const ComboParam& GetNormalComboParm(const ComboNum& index) const { return normalComboParams_[static_cast<int>(index)]; }
-    const ComboParam& GetJumpComboParm(const ComboNum& index) const { return jumpComboParams_[static_cast<int>(index)]; }
+    const Parameters& GetParameters() const { return playerParams_; }
+    const ComboParam& GetNormalComboParam(const ComboNum& index) const { return normalComboParams_[static_cast<int>(index)]; }
+    const ComboParam& GetJumpComboParam(const ComboNum& index) const { return jumpComboParams_[static_cast<int>(index)]; }
 
     /// =========================================================================================
     /// setter

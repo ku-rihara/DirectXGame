@@ -25,7 +25,7 @@ class ParticleParameter {
 public:
     // 共通パラメータの型エイリアス
  
-    using GroupParamaters = ParticleCommon::GroupParamaters;
+    using GroupParameters = ParticleCommon::GroupParameters;
     using Parameters      = ParticleCommon::Parameters;
     using EaseParm        = ParticleCommon::ScaleEaseParam;
     using UVParm          = ParticleCommon::UVParam;
@@ -63,12 +63,12 @@ public:
 
 public:
     Parameters parameters_;
-    GroupParamaters groupParamaters_;
+    GroupParameters groupParameters_;
     GlobalParameter* globalParameter_;
 
     std::unique_ptr<RailManager> railManager_;
 
-    int32_t billBordType_;
+    int32_t billboardType_;
     int32_t blendMode_;
     bool isShot_;
     float intervalTime_;
@@ -92,13 +92,13 @@ public:
 public:
     // getter
     std::string GetParticleName() const { return particleName_; }
-    int GetPreBillBordType() const { return billBordType_; }
+    int GetPreBillboardType() const { return billboardType_; }
     bool GetPreIsShot() const { return isShot_; }
 
     // setter
     void SetParameter(const Parameters& param) { parameters_ = param; }
-    void SetGroupParameter(const GroupParamaters& groupParam) { groupParamaters_ = groupParam; }
-    void SetPreBillBordType(int preBillBordType) { billBordType_ = preBillBordType; }
+    void SetGroupParameter(const GroupParameters& groupParam) { groupParameters_ = groupParam; }
+    void SetPreBillboardType(int preBillBordType) { billboardType_ = preBillBordType; }
     void SetPreIsShot(bool preIsShot) { isShot_ = preIsShot; }
 };
 

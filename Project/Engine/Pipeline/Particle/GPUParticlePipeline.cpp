@@ -110,8 +110,8 @@ void GPUParticlePipeline::CreateGraphicsPipeline() {
     blendDescAdd.RenderTarget[0].SrcBlend              = D3D12_BLEND_SRC_ALPHA;
     blendDescAdd.RenderTarget[0].DestBlend             = D3D12_BLEND_ONE;
     blendDescAdd.RenderTarget[0].BlendOp               = D3D12_BLEND_OP_ADD;
-    blendDescAdd.RenderTarget[0].SrcBlendAlpha         = D3D12_BLEND_ONE;
-    blendDescAdd.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ZERO;
+    blendDescAdd.RenderTarget[0].SrcBlendAlpha         = D3D12_BLEND_ZERO;  // アルファは変更しない
+    blendDescAdd.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ONE;   // 背景アルファを保持
     blendDescAdd.RenderTarget[0].BlendOpAlpha          = D3D12_BLEND_OP_ADD;
     blendDescAdd.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
@@ -121,8 +121,8 @@ void GPUParticlePipeline::CreateGraphicsPipeline() {
     blendDescAlpha.RenderTarget[0].SrcBlend              = D3D12_BLEND_SRC_ALPHA;
     blendDescAlpha.RenderTarget[0].DestBlend             = D3D12_BLEND_INV_SRC_ALPHA;
     blendDescAlpha.RenderTarget[0].BlendOp               = D3D12_BLEND_OP_ADD;
-    blendDescAlpha.RenderTarget[0].SrcBlendAlpha         = D3D12_BLEND_ONE;
-    blendDescAlpha.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ZERO;
+    blendDescAlpha.RenderTarget[0].SrcBlendAlpha         = D3D12_BLEND_ZERO;  // アルファは変更しない
+    blendDescAlpha.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ONE;   // 背景アルファを保持
     blendDescAlpha.RenderTarget[0].BlendOpAlpha          = D3D12_BLEND_OP_ADD;
     blendDescAlpha.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
@@ -143,8 +143,8 @@ void GPUParticlePipeline::CreateGraphicsPipeline() {
     blendDescSubtractive.RenderTarget[0].SrcBlend              = D3D12_BLEND_SRC_ALPHA;
     blendDescSubtractive.RenderTarget[0].DestBlend             = D3D12_BLEND_ONE;
     blendDescSubtractive.RenderTarget[0].BlendOp               = D3D12_BLEND_OP_REV_SUBTRACT;
-    blendDescSubtractive.RenderTarget[0].SrcBlendAlpha         = D3D12_BLEND_ONE;
-    blendDescSubtractive.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ZERO;
+    blendDescSubtractive.RenderTarget[0].SrcBlendAlpha         = D3D12_BLEND_ZERO;  // アルファは変更しない
+    blendDescSubtractive.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ONE;   // 背景アルファを保持
     blendDescSubtractive.RenderTarget[0].BlendOpAlpha          = D3D12_BLEND_OP_ADD;
     blendDescSubtractive.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
@@ -154,8 +154,8 @@ void GPUParticlePipeline::CreateGraphicsPipeline() {
     blendDescScreen.RenderTarget[0].SrcBlend              = D3D12_BLEND_ONE;
     blendDescScreen.RenderTarget[0].DestBlend             = D3D12_BLEND_INV_SRC_COLOR;
     blendDescScreen.RenderTarget[0].BlendOp               = D3D12_BLEND_OP_ADD;
-    blendDescScreen.RenderTarget[0].SrcBlendAlpha         = D3D12_BLEND_ONE;
-    blendDescScreen.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ZERO;
+    blendDescScreen.RenderTarget[0].SrcBlendAlpha         = D3D12_BLEND_ZERO;  // アルファは変更しない
+    blendDescScreen.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ONE;   // 背景アルファを保持
     blendDescScreen.RenderTarget[0].BlendOpAlpha          = D3D12_BLEND_OP_ADD;
     blendDescScreen.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 

@@ -17,6 +17,8 @@ EffectEditorSuite::EffectEditorSuite()  = default;
 EffectEditorSuite::~EffectEditorSuite() = default;
 
 void EffectEditorSuite::Init() {
+
+    // 生成
     objEaseAnimationEditor_ = std::make_unique<ObjEaseAnimationEditor>();
     cameraEditor_           = std::make_unique<CameraEditor>();
     shakeEditor_            = std::make_unique<ShakeEditor>();
@@ -35,10 +37,12 @@ void EffectEditorSuite::Init() {
     particleEditor_->Init("Particle");
     dissolveEditor_->Init("Dissolve");
     timeScaleEditor_->Init("TimeScale");
+
+    // SelectFileEditマップを初期化
+    InitEditorSelectFileEditMap();
 }
 
 void EffectEditorSuite::Update() {
-
     objEaseAnimationEditor_->Update();
     cameraEditor_->Update();
     shakeEditor_->Update();
@@ -58,6 +62,42 @@ void EffectEditorSuite::EditorUpdate() {
     gpuParticleEditor_->EditorUpdate();
     particleEditor_->EditorUpdate();
     timeScaleEditor_->EditorUpdate();
+}
+
+void EffectEditorSuite::InitEditorSelectFileEditMap() {
+    editorSelectFileEditMap_ = {
+        {EffectEditorType::ObjEaseAnimation, [this](const std::string& name, const std::string& category) {
+             objEaseAnimationEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::Camera, [this](const std::string& name, const std::string& category) {
+             cameraEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::Shake, [this](const std::string& name, const std::string& category) {
+             shakeEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::Rail, [this](const std::string& name, const std::string& category) {
+             railEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::GPUParticle, [this](const std::string& name, const std::string& category) {
+             gpuParticleEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::Particle, [this](const std::string& name, const std::string& category) {
+             particleEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::Dissolve, [this](const std::string& name, const std::string& category) {
+             dissolveEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::TimeScale, [this](const std::string& name, const std::string& category) {
+             timeScaleEditor_->SelectFileEdit(name, category);
+         }}
+    };
+}
+
+void EffectEditorSuite::SelectFileEdit(EffectEditorType type, const std::string& fileName, const std::string& categoryName) {
+    auto it = editorSelectFileEditMap_.find(type);
+    if (it != editorSelectFileEditMap_.end()) {
+        it->second(fileName, categoryName);
+    }
 }
 
 void EffectEditorSuite::SetViewProjection(ViewProjection* viewProjection) {

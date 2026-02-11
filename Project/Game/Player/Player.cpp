@@ -1,30 +1,34 @@
 #include "Player.h"
-#include "audio/Audio.h"
 
-/// input
-#include "input/Input.h"
+/// Enemy
+#include "Enemy/CollisionBox/EnemyAttackCollisionBox.h"
+#include "Enemy/Types/BaseEnemy.h"
+// DeathTimer
+#include "DeathTimer/DeathTimer.h"
 
-/// frame
-#include "Frame/Frame.h"
+/// Behavior
+#include "Behavior/ComboAttackBehavior/ComboAttackRoot.h"
+#include "Behavior/PlayerBehavior/PlayerDeath.h"
+#include "Behavior/PlayerBehavior/PlayerMove.h"
+#include "Behavior/PlayerBehavior/PlayerSpawn.h"
+#include "Behavior/TitleBehavior/TitleFirstFall.h"
 
 // light
-#include "Lighrt/AmbientLight.h"
-#include "Lighrt/Light.h"
-/// math
-#include "MathFunction.h"
-
-/// object
-#include "CollisionBox/EnemyCollisionBox.h"
-#include "ComboCreator/PlayerComboAttackController.h"
+#include "Light/AmbientLight.h"
+#include "Light/Light.h"
+#include "Light/LightingType.h"
+// Field
 #include "Field/Field.h"
+// LockOn
 #include "LockOn/LockOnController.h"
-
-/// behavior
-#include "ComboAttackBehavior/ComboAttackRoot.h"
-#include "PlayerBehavior/PlayerDeath.h"
-#include "PlayerBehavior/PlayerMove.h"
-#include "PlayerBehavior/PlayerSpawn.h"
-#include "TitleBehavior/TitleFirstFall.h"
+// ComboCreator
+#include "ComboCreator/PlayerComboAttackController.h"
+// input
+#include "input/Input.h"
+// Frame
+#include "Frame/Frame.h"
+// Math
+#include "MathFunction.h"
 
 ///=========================================================
 /// 　初期化
@@ -47,11 +51,11 @@ void Player::Init() {
 
     // Playerのモデル
     obj3d_.reset(KetaEngine::Object3d::CreateModel("Player.obj"));
-    obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = 7;
+    obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = static_cast<int32_t>(KetaEngine::LightingType::Ambient);
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.05f;
 
     // Playerの攻撃クラス
-    playerCollisionInfo_ = std::make_unique<PlayerCollisionInfo>();
+    playerCollisionInfo_ = std::make_unique<PlayerAttackCollisionBox>();
     playerCollisionInfo_->Init();
     playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
     playerCollisionInfo_->SetParentTransform(&baseTransform_);
@@ -71,7 +75,7 @@ void Player::Init() {
     jumpAttackUI_->Init();
 
     // パラメータセット
-    baseTransform_.translation_ = parameters_->GetParamaters().startPos_;
+    baseTransform_.translation_ = parameters_->GetParameters().startPos_;
 
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));
@@ -97,6 +101,14 @@ void Player::Update() {
 
     /// Particle
     effects_->Update(GetWorldPosition());
+
+    // ダメージクールダウン更新
+    if (isDamageColling_) {
+        damageCollTime_ -= KetaEngine::Frame::DeltaTimeRate();
+        if (damageCollTime_ <= 0.0f) {
+            isDamageColling_ = false;
+        }
+    }
 
     // コンボ更新
     if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
@@ -324,10 +336,10 @@ void Player::Fall(float& speed, float fallSpeedLimit, float gravity, const bool&
     speed = max(speed - (gravity * KetaEngine::Frame::DeltaTimeRate()), -fallSpeedLimit);
 
     // 着地
-    if (baseTransform_.translation_.y <= parameters_->GetParamaters().startPos_.y) {
+    if (baseTransform_.translation_.y <= parameters_->GetParameters().startPos_.y) {
 
         speed                         = 0.0f;
-        baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+        baseTransform_.translation_.y = parameters_->GetParameters().startPos_.y;
     }
 }
 
@@ -388,11 +400,25 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    /* if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
-         return;*/
-    // 突進などの攻撃は、敵を貫通するようにする
+    // 敵の攻撃コリジョンとの衝突判定
+    if (EnemyAttackCollisionBox* attackBox = dynamic_cast<EnemyAttackCollisionBox*>(other)) {
+        // ダメージクールダウン中はスキップ
+        if (!isDamageColling_ && pDeathTimer_) {
+            // ダメージを受ける
+            pDeathTimer_->TakeDamage(attackBox->GetAttackValue());
+            // クールダウン開始
+            isDamageColling_ = true;
+            damageCollTime_ = damageCollDuration_;
+        }
+        return;
+    }
 
-    if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
+    if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+        // 敵が攻撃中は押し戻し無効
+        if (enemy->IsAttacking()) {
+            return;
+        }
+
         // 敵の中心座標を取得
         const Vector3& enemyPosition = enemy->GetCollisionPos();
 
@@ -478,13 +504,20 @@ void Player::MainHeadAnimationStart(const std::string& name) {
     baseTransform_.PlayObjEaseAnimation(name, "MainHead");
 }
 
+bool Player::IsDashing() const {
+    if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
+        return moveState->IsDashing();
+    }
+    return false;
+}
+
 void Player::RotateReset() {
     obj3d_->transform_.rotation_      = {0, 0, 0};
     obj3d_->transform_.translation_.y = 0.0f;
 }
 
 void Player::ResetPositionY() {
-    baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+    baseTransform_.translation_.y = parameters_->GetParameters().startPos_.y;
 }
 
 void Player::ResetHeadScale() {
@@ -543,5 +576,5 @@ void Player::SetComboAttackController(PlayerComboAttackController* playerComboAt
 }
 
 bool Player::CheckIsChargeMax() const {
-    return currentUpperChargeTime_ >= parameters_->GetParamaters().upperParam.chargeTime;
+    return currentUpperChargeTime_ >= parameters_->GetParameters().upperParam.chargeTime;
 }

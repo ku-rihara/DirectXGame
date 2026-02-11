@@ -71,6 +71,7 @@ void EnemyDamageReactionData::LoadRendition() {
 ///==========================================================
 void EnemyDamageReactionData::RegisterParams() {
     globalParameter_->Regist(groupName_, "TriggerAttackName", &reactionParam_.triggerAttackName);
+    globalParameter_->Regist(groupName_, "DamageAnimationName", &reactionParam_.damageAnimationName);
     globalParameter_->Regist(groupName_, "ReactionState", &reactionParam_.intReactionState);
     globalParameter_->Regist(groupName_, "damageCollingTime", &reactionParam_.damageCollingTime);
     globalParameter_->Regist(groupName_, "isPriorityReaction", &reactionParam_.isPriorityReaction);
@@ -86,13 +87,13 @@ void EnemyDamageReactionData::RegisterParams() {
 
     // SlammedParam
     globalParameter_->Regist(groupName_, "Slammed_Gravity", &reactionParam_.slammedParam.gravity);
-    globalParameter_->Regist(groupName_, "Slammed_ThrustRotateSpeed", &reactionParam_.slammedParam.rotateSpeed);
+    globalParameter_->Regist(groupName_, "Slammed_RotateSpeed", &reactionParam_.slammedParam.rotateSpeed);
 
     // TakeUpperParam
     globalParameter_->Regist(groupName_, "TakeUpper_FloatingTime", &reactionParam_.takeUpperParam.floatingTime);
     globalParameter_->Regist(groupName_, "TakeUpper_FallSpeedLimit", &reactionParam_.takeUpperParam.fallSpeedLimit);
     globalParameter_->Regist(groupName_, "TakeUpper_Gravity", &reactionParam_.takeUpperParam.gravity);
-    globalParameter_->Regist(groupName_, "TakeUpper_ThrustRotateSpeed", &reactionParam_.takeUpperParam.rotateSpeed);
+    globalParameter_->Regist(groupName_, "TakeUpper_RotateSpeed", &reactionParam_.takeUpperParam.rotateSpeed);
 }
 
 ///==========================================================
@@ -106,6 +107,48 @@ void EnemyDamageReactionData::AdjustParam() {
     // Trigger Attack
     ImGui::SeparatorText("Trigger Attack");
     SelectTriggerAttack();
+
+    // Damage Animation
+    ImGui::SeparatorText("Damage Animation");
+
+    // 利用可能なアニメーションがある場合はドロップダウン表示
+    if (!availableAnimations_.empty()) {
+        // 現在選択されているインデックスを検索
+        int currentIndex = 0; 
+        for (size_t i = 0; i < availableAnimations_.size(); ++i) {
+            if (availableAnimations_[i] == reactionParam_.damageAnimationName) {
+                currentIndex = static_cast<int>(i + 1);
+                break;
+            }
+        }
+
+        // ドロップダウン用のアイテムリスト作成
+        std::vector<const char*> items;
+        items.push_back("None"); // 最初に"None"オプション
+        for (const auto& anim : availableAnimations_) {
+            items.push_back(anim.c_str());
+        }
+
+        if (ImGui::Combo("Animation", &currentIndex, items.data(), static_cast<int>(items.size()))) {
+            if (currentIndex == 0) {
+                reactionParam_.damageAnimationName.clear(); // None選択時はクリア
+            } else {
+                reactionParam_.damageAnimationName = availableAnimations_[currentIndex - 1];
+            }
+        }
+    } else {
+        // アニメーションリストがない場合はテキスト入力
+        char buffer[256] = {};
+        strncpy_s(buffer, reactionParam_.damageAnimationName.c_str(), sizeof(buffer) - 1);
+        if (ImGui::InputText("Animation Name", buffer, sizeof(buffer))) {
+            reactionParam_.damageAnimationName = buffer;
+        }
+    }
+
+    // 現在設定されているアニメーション名を表示
+    if (!reactionParam_.damageAnimationName.empty()) {
+        ImGui::Text("Current: %s", reactionParam_.damageAnimationName.c_str());
+    } 
 
     ImGui::Separator();
 
@@ -129,13 +172,13 @@ void EnemyDamageReactionData::AdjustParam() {
     if (reactionParam_.reactionState == ReactionState::Slammed) {
         ImGui::SeparatorText("Slammed Parameters");
         ImGui::DragFloat("Gravity", &reactionParam_.slammedParam.gravity, 0.1f, 0.0f);
-        ImGui::DragFloat("Rotate Speed", &reactionParam_.slammedParam.rotateSpeed, 0.01f);
+        ImGui::DragFloat3("Rotate Speed", &reactionParam_.slammedParam.rotateSpeed.x, 0.01f);
     } else if (reactionParam_.reactionState == ReactionState::TakeUpper) {
         ImGui::SeparatorText("Take Upper Parameters");
         ImGui::DragFloat("Floating Time", &reactionParam_.takeUpperParam.floatingTime, 0.01f);
         ImGui::DragFloat("Fall Speed Limit", &reactionParam_.takeUpperParam.fallSpeedLimit, 0.1f);
         ImGui::DragFloat("Gravity", &reactionParam_.takeUpperParam.gravity, 0.1f);
-        ImGui::DragFloat("Rotate Speed", &reactionParam_.takeUpperParam.rotateSpeed, 0.01f);
+        ImGui::DragFloat3("Rotate Speed", &reactionParam_.takeUpperParam.rotateSpeed.x, 0.01f);
     }
 
     // SlammedまたはTakeUpperの時、バウンドパラメータを表示

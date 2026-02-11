@@ -129,7 +129,7 @@ void WorldTransform::SetParent(const WorldTransform* parent) {
     parent_ = parent;
 }
 
-Vector3 WorldTransform::LookAt(const Vector3& direction) const {
+Vector3 WorldTransform::GetLookAt(const Vector3& direction) const {
     // 引数の方向ベクトルを正規化
     Vector3 normalizedDirection = direction.Normalize();
 
@@ -313,11 +313,22 @@ void WorldTransform::PlayObjEaseAnimation(const std::string& animationName, cons
         objEaseAnimationPlayer_->Init();
     }
 
+    // 待機中に保持する現在のオフセット値を保存
+    Vector3 currentScale       = offsetTransform_.scale;
+    Vector3 currentRotation    = offsetTransform_.rotation;
+    Vector3 currentTranslation = offsetTransform_.translation;
+
     objEaseAnimationPlayer_->Play(animationName, categoryName);
 
+    // 待機中に使用するオフセット値を設定
+    auto* animeData = objEaseAnimationPlayer_->GetAnimationData();
+    if (animeData) {
+        animeData->SetPreAnimationOffsets(currentScale, currentRotation, currentTranslation);
+    }
+
     // Rail使用時、親を設定
-    if (objEaseAnimationPlayer_->GetAnimationData() && objEaseAnimationPlayer_->GetAnimationData()->GetIsUseRailActiveKeyFrame()) {
-        auto* railPlayer = objEaseAnimationPlayer_->GetAnimationData()->GetCurrentRailPlayer();
+    if (animeData && animeData->GetIsUseRailActiveKeyFrame()) {
+        auto* railPlayer = animeData->GetCurrentRailPlayer();
         if (railPlayer) {
             railPlayer->SetParent(this);
         }

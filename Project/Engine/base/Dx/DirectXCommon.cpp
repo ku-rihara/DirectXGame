@@ -22,11 +22,18 @@ DirectXCommon* DirectXCommon::GetInstance() {
     return &instance;
 }
 
-void DirectXCommon::Init(WinApp* win,int32_t backBufferWidth, int32_t backBufferHeight) {
+void DirectXCommon::Init(WinApp* win, int32_t backBufferWidth, int32_t backBufferHeight) {
+    // ウィンドウサイズと描画サイズが同じ場合
+    Init(win, backBufferWidth, backBufferHeight, backBufferWidth, backBufferHeight);
+}
+
+void DirectXCommon::Init(WinApp* win, int32_t windowWidth, int32_t windowHeight, int32_t renderWidth, int32_t renderHeight) {
 
     winApp_           = win;
-    backBufferWidth_  = backBufferWidth;
-    backBufferHeight_ = backBufferHeight;
+    windowWidth_      = windowWidth;
+    windowHeight_     = windowHeight;
+    backBufferWidth_  = renderWidth;
+    backBufferHeight_ = renderHeight;
 
     srvManager_ = SrvManager::GetInstance();
     rtvManager_ = RtvManager::GetInstance();
@@ -50,7 +57,8 @@ void DirectXCommon::InitDxClasses() {
     // 各Dxクラス初期化
     dxDevice_->Init();
     dxCommand_->Init(dxDevice_->GetDevice());
-    dxSwapChain_->Init(dxDevice_->GetFactory(), dxCommand_->GetCommandQueue(), winApp_, backBufferWidth_, backBufferHeight_);
+    // SwapChainはウィンドウサイズで作成
+    dxSwapChain_->Init(dxDevice_->GetFactory(), dxCommand_->GetCommandQueue(), winApp_, windowWidth_, windowHeight_);
 
     dxCompiler_->Init();
 }

@@ -4,7 +4,7 @@
 // 2D
 #include "2d/SpriteRegistry.h"
 // Light
-#include "Lighrt/Light.h"
+#include "Light/Light.h"
 
 
 // math

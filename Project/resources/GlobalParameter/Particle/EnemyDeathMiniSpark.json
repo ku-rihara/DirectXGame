@@ -1,4 +1,4 @@
-{
+﻿{
     "EnemyDeathMiniSpark": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -117,14 +117,14 @@
         "UV isScroolEachPixel": false,
         "blendMode": 1,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillboard": true,
         "isFloatVelocity": true,
         "isMoveForRail": false,
         "isRotateforDirection": true,
         "isScalerScale": true,
         "isShot": true,
         "moveSpeed": 0.0,
-        "preBillBordType_": 0,
+        "preBillboardType_": 0,
         "scaleEaseParm.easeTypeInt": 0,
         "scaleEaseParm.endValueF.max": 0.0,
         "scaleEaseParm.endValueF.min": 0.0,

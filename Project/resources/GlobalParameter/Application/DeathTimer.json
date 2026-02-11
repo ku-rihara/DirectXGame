@@ -4,6 +4,9 @@
         "incrementByComboLevelUP": 0.0,
         "incrementDuration": 0.11999999731779099,
         "incrementTime": 0.36000001430511475,
-        "maxTimer": 10.0
+        "levelUpRecoveryAmount": 20.0,
+        "maxHP": 100.0,
+        "maxTimer": 10.0,
+        "recoveryDuration": 0.47999998927116394
     }
 }

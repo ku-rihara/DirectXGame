@@ -293,26 +293,6 @@ std::string RailData::GetSequenceElementFolderPath() const {
     return baseFolderPath_ + categoryName_ + "/" + "ControlPoints/" + groupName_ + "/";
 }
 
-void RailData::LoadSequenceElements() {
-    BaseSequenceEffectData::LoadSequenceElements();
-}
-
-void RailData::SaveSequenceElements() {
-    BaseSequenceEffectData::SaveSequenceElements();
-}
-
-void RailData::LoadData() {
-    globalParameter_->LoadFile(groupName_, folderPath_);
-    globalParameter_->SyncParamForGroup(groupName_);
-    GetParams();
-    LoadSequenceElements();
-}
-
-void RailData::SaveData() {
-    globalParameter_->SaveFile(groupName_, folderPath_);
-    SaveSequenceElements();
-}
-
 void RailData::AdjustParam() {
 #ifdef _DEBUG
     if (showControls_) {

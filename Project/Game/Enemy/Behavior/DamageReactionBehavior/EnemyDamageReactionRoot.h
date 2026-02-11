@@ -2,10 +2,16 @@
 
 #include "BaseEnemyDamageReaction.h"
 
-class PlayerCollisionInfo;
+class PlayerAttackCollisionBox;
 class EnemyDamageReactionController;
 class EnemyDamageReactionData;
 class SideRope;
+
+ enum class ReactionState {
+    Normal,
+    Slammed,
+    TakeUpper,
+};
 
 class EnemyDamageReactionRoot : public BaseEnemyDamageReaction {
 public:
@@ -20,7 +26,7 @@ public:
     /// ダメージリアクションを再生
     /// </summary>
     /// <param name="playerCollisionInfo">プレイヤーの攻撃情報</param>
-    void SelectDamageActionBehaviorByAttack(const PlayerCollisionInfo* playerCollisionInfo);
+    void SelectDamageActionBehaviorByAttack(const PlayerAttackCollisionBox* playerCollisionInfo);
 
 private:
     /// <summary>
@@ -42,6 +48,6 @@ private:
     void PlayDamageParticleEffect(EnemyDamageReactionData* reactionData);
 
 private:
-    const PlayerCollisionInfo* pPlayerCollisionInfo_    = nullptr;
+    const PlayerAttackCollisionBox* pPlayerCollisionInfo_    = nullptr;
     EnemyDamageReactionController* pReactionController_ = nullptr;
 };

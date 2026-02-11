@@ -87,12 +87,12 @@ struct Parameters {
 };
 
 // グループパラメータ
-struct GroupParamaters {
+struct GroupParameters {
     BlendMode blendMode;
-    bool isBillBord;
+    bool isBillboard;
     bool isShot;
     bool isAlphaNoMove;
-    BillboardType billBordType;
+    BillboardType billboardType;
     AdaptRotate adaptRotate_;
 };
 

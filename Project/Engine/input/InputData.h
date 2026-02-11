@@ -183,3 +183,17 @@ int32_t ToDIKCode(KeyboardKey key);
 /// <param name="dikCode">DirectInputのキーコード</param>
 /// <returns>対応するKeyboardKey列挙型のキー</returns>
 KeyboardKey FromDIKCode(int32_t dikCode);
+
+/// <summary>
+/// キーボードキーの名前を取得
+/// </summary>
+/// <param name="keyValue">DirectInputのキーコード</param>
+/// <returns>キー名の文字列</returns>
+const char* GetKeyboardKeyName(int32_t keyValue);
+
+/// <summary>
+/// ゲームパッドボタンの名前を取得
+/// </summary>
+/// <param name="buttonValue">XInputのボタンビット値</param>
+/// <returns>ボタン名の文字列</returns>
+const char* GetGamepadButtonName(int32_t buttonValue);

@@ -5,8 +5,8 @@ using namespace KetaEngine;
 #include "Base/Descriptors/DsvManager.h"
 #include "Base/Descriptors/SrvManager.h"
 #include "Base/Dx/DirectXCommon.h"
-#include "Lighrt/DirectionalLight.h"
-#include "Lighrt/Light.h"
+#include "Light/DirectionalLight.h"
+#include "Light/Light.h"
 #include "Pipeline/ShadowMap/ShadowMapPipeline.h"
 #include <imgui.h>
 

@@ -1,4 +1,4 @@
-{
+﻿{
     "StarFrame": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -105,13 +105,13 @@
         "UV isScroolEachPixel": false,
         "blendMode": 1,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillboard": true,
         "isMoveForRail": false,
         "isRotateforDirection": false,
         "isScalerScale": true,
         "isShot": true,
         "moveSpeed": 0.0,
-        "preBillBordType_": 0,
+        "preBillboardType_": 0,
         "scaleEaseParm.easeTypeInt": 3,
         "scaleEaseParm.endValueF.max": 9.0,
         "scaleEaseParm.endValueF.min": 9.0,

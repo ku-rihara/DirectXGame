@@ -3,6 +3,7 @@
 using namespace KetaEngine;
 #include "Base/TextureManager.h"
 #include "Base/Dx/DirectXCommon.h"
+#include "Light/LightingType.h"
 #include "Pipeline/Object3D/Object3DPipeline.h"
 #include <cassert>
 #include <imgui.h>
@@ -21,7 +22,7 @@ void ModelMaterial::Init(DirectXCommon* dxCommon) {
     materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f); 
     materialData_->shininess = 12.5f;
     materialData_->uvTransform = MakeIdentity4x4();
-    materialData_->enableLighting = 2;
+    materialData_->enableLighting = static_cast<int32_t>(LightingType::HalfLambert);
     materialData_->environmentCoefficient = 0.0f;
 
     // Dissolve用の初期値

@@ -3,14 +3,25 @@
         "Bound_BounceDamping": 0.20000000298023224,
         "Bound_BoundNum": 2,
         "Bound_InitialBounceRate": 0.8100000023841858,
+        "DamageAnimationName": "EnemyNormalDamage",
         "Normal_KnockBackDamping": 0.5,
         "Normal_KnockBackTime": 0.23999999463558197,
         "ReactionState": 2,
         "Slammed_Gravity": 0.0,
+        "Slammed_RotateSpeed": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "Slammed_ThrustRotateSpeed": 0.0,
         "TakeUpper_FallSpeedLimit": 257.29998779296875,
         "TakeUpper_FloatingTime": 0.0,
         "TakeUpper_Gravity": 105.5,
+        "TakeUpper_RotateSpeed": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "TakeUpper_ThrustRotateSpeed": 63.2400016784668,
         "TriggerAttackName": "FallRandingAttack",
         "damageCollingTime": 1.3600000143051147,

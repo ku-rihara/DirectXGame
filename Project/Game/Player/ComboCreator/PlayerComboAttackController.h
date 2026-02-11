@@ -1,5 +1,6 @@
 #pragma once
 #include "Combo/Combo.h"
+#include "Player/ComboCreator/PreView/PlayerComboAttackPreview.h"
 #include "PlayerComboAttackData.h"
 #include <array>
 #include <memory>
@@ -8,6 +9,7 @@
 #include <vector>
 
 class Combo;
+class Player;
 
 namespace KetaEngine {
 class EffectEditorSuite;
@@ -31,21 +33,21 @@ public:
 
     // 初期化、更新
     void Init();
-   
+
     // 攻撃データの追加、削除
     void AddAttack(const std::string& attackName);
     void RemoveAttack(const int& index);
 
     void EditorUpdate(); //< エディタ更新
-    void AllLoadFile();  //< 全ファイルロード
-    void AllSaveFile();  //< 全ファイルセーブ
+    void AllLoadFile(); //< 全ファイルロード
+    void AllSaveFile(); //< 全ファイルセーブ
 
     float GetRealAttackSpeed(float baseTimeSpeed) const;
     float GetPowerRate() const;
 
 private:
     //*-------------------------------- private Method --------------------------------*//
-    void BindCommonParams();  //< 共通パラメータバインド
+    void BindCommonParams(); //< 共通パラメータバインド
     void AdjustCommonParam(); //< 共通パラメータ調整
 
     // コンボフロー可視化、チェーン構築
@@ -60,6 +62,9 @@ private:
     // 攻撃名で選択
     void SelectAttackByName(const std::string& name);
     bool IsValidIndex(int index) const;
+
+    // プレビュー関連
+    void DrawPreviewUI();
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
@@ -76,7 +81,11 @@ private:
     char nameBuffer_[128] = "";
 
     std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
-    Combo* pCombo_ = nullptr;
+    Combo* pCombo_   = nullptr;
+    Player* pPlayer_ = nullptr;
+
+    // プレビュー機能
+    PlayerComboAttackPreview preview_;
 
 public:
     PlayerComboAttackData* GetSelectedAttack();
@@ -84,6 +93,13 @@ public:
     const std::vector<std::unique_ptr<PlayerComboAttackData>>& GetAllAttacks() const { return attacks_; }
     const int& GetAttackCount() const { return static_cast<int>(attacks_.size()); }
 
+    /// <summary>
+    /// 指定した攻撃が最初の攻撃かどうかを判定
+    /// 他の攻撃のcomboBranchesから参照されていなければ最初の攻撃
+    /// </summary>
+    bool IsFirstAttack(const std::string& attackName) const;
+
     void SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite);
     void SetCombo(Combo* combo);
+    void SetPlayer(Player* player);
 };

@@ -19,8 +19,6 @@ public:
         COLLISION,
         MOVE_EASING,
         FINISH_WAIT,
-        CANCEL_START,
-        PRECEDE_INPUT_START,
         COUNT
     };
 
@@ -31,20 +29,19 @@ public:
         SHAKE_ACTION,
         POST_EFFECT,
         PARTICLE_EFFECT,
+        AUDIO_ATTACK,
         // Rendition On Hit系
         CAMERA_ACTION_ON_HIT,
         HIT_STOP_ON_HIT,
         SHAKE_ACTION_ON_HIT,
         POST_EFFECT_ON_HIT,
         PARTICLE_EFFECT_ON_HIT,
+        AUDIO_ATTACK_ON_HIT,
         // Object Animation系
         OBJ_ANIM_HEAD,
         OBJ_ANIM_RIGHT_HAND,
         OBJ_ANIM_LEFT_HAND,
         OBJ_ANIM_MAIN_HEAD,
-        // Audio系
-        AUDIO_ATTACK,
-        AUDIO_HIT,
         // Timing系
         CANCEL_TIME,
         PRECEDE_INPUT,
@@ -55,8 +52,10 @@ public:
     struct TrackInfo {
         TrackType type;
         int32_t trackIndex;
+        int32_t branchIndex = -1;  // どの分岐のトラックか（-1は分岐と関係ない）
         std::string fileName;
         bool isCameraReset = false;
+        float volume       = 1.0f;
     };
 
 public:
@@ -70,6 +69,7 @@ public:
     void RemoveTrackInfo(int32_t trackIndex);
     TrackInfo* FindTrackInfo(int32_t trackIndex);
     bool IsTrackTypeAlreadyAdded(TrackType type) const;
+    void UpdateTrackIndicesAfterInsert(int32_t insertPosition, int32_t count);
 
     // ヘルパー
     const char* GetTrackTypeName(TrackType type) const;

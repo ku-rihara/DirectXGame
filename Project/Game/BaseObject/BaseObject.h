@@ -26,8 +26,6 @@ protected:
     ///  protected variables
     /// ===================================================
 
-    // モデル配列データ
-    std::unique_ptr<KetaEngine::Object3d> obj3d_;
     // ベースのワールド変換データ
     KetaEngine::WorldTransform baseTransform_;
 
@@ -37,12 +35,11 @@ public:
     /// ===================================================
     const KetaEngine::WorldTransform& GetBaseTransform() const { return baseTransform_; }
     const Vector3& GetScale() const { return baseTransform_.scale_; }
-    KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
+
     /// ===================================================
     /// setter
     /// ===================================================
     void SetParent(KetaEngine::WorldTransform* parent);
-    void SetColor(const Vector4& color);
     void SetWorldPosition(const Vector3& pos) { baseTransform_.translation_ = pos; }
     void SetWorldPositionY(float pos) { baseTransform_.translation_.y = pos; }
     void SetWorldPositionX(float pos) { baseTransform_.translation_.x = pos; }

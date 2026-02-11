@@ -1,4 +1,4 @@
-{
+﻿{
     "DisAppearEffect1": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -123,13 +123,13 @@
         "blendMode": 0,
         "emitPositionMode": 2,
         "isAlphaNoMove": true,
-        "isBillBord": true,
+        "isBillboard": true,
         "isFloatVelocity": false,
         "isRotateForDirection": false,
         "isScalerScale": true,
         "isShot": true,
         "modelFilePath": "",
-        "preBillBordType": 0,
+        "preBillboardType": 0,
         "primitiveTypeInt": 0,
         "scaleEaseParam.backRatio": 0.5600000023841858,
         "scaleEaseParam.easeTypeInt": 44,

@@ -1,4 +1,4 @@
-{
+﻿{
     "AttackHitEffect0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -122,13 +122,13 @@
         "afterDuration": 0.0,
         "blendMode": 0,
         "isAlphaNoMove": false,
-        "isBillBord": false,
+        "isBillboard": false,
         "isFloatVelocity": false,
         "isRotateForDirection": false,
         "isScalerScale": false,
         "isShot": false,
         "modelFilePath": "",
-        "preBillBordType": 0,
+        "preBillboardType": 0,
         "primitiveTypeInt": 0,
         "scaleEaseParam.backRatio": 0.0,
         "scaleEaseParam.easeTypeInt": 0,

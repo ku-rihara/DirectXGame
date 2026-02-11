@@ -3,6 +3,7 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 
 //
+#include "ComboBranchParameter.h"
 #include "PlayerAttackRenditionData.h"
 #include "Timeline/PlayerComboAttackTimeline.h"
 // utility
@@ -11,8 +12,13 @@
 #include "Vector3.h"
 // std
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
+
+class Player;
+class PlayerComboAttackController;
+class EnemyManager;
 
 /// <summary>
 /// プレイヤー攻撃データクラス
@@ -22,7 +28,9 @@ public:
     enum class TriggerCondition {
         GROUND, // 地上のみ
         AIR, // 空中のみ
-        BOTH // 両方
+        BOTH, // 両方
+        DASH, // ダッシュ
+        JUSTACTION // ジャスト回避とかのアクション
     };
 
 public:
@@ -50,20 +58,15 @@ public:
 
     // タイミングパラメータ
     struct TimingParam {
-        bool isCancel;
-        float cancelTime;
-        float precedeInputTime;
         float finishWaitTime;
         bool isAutoAdvance;
     };
 
     // 攻撃発動に関するパラメータ
     struct TriggerParam {
-        bool isFirstAttack;
         TriggerCondition condition;
         int32_t keyBordBottom;
         int32_t gamePadBottom;
-        bool requireHit;
     };
 
     // 落下パラメータ
@@ -82,7 +85,6 @@ public:
         float power;
         float blowYPower;
         bool isMotionOnly = false;
-        std::string nextAttackType;
     };
 
 public:
@@ -105,22 +107,33 @@ public:
     void LoadData();
     void SaveData();
 
-    bool IsReserveNextAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
+    bool IsReserveNextAttack(float currentTime, const ComboBranchParameter& branch, bool hasHitEnemy);
     bool IsWaitFinish(float currentTime);
-    bool IsCancelAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
+    bool IsCancelAttack(float currentTime, const ComboBranchParameter& branch, bool hasHitEnemy);
 
-    // 次の攻撃の選択
-    void SelectNextAttack();
+    // コンボ分岐の初期化
+    void InitComboBranches();
+
+    // コンボ分岐リストへのアクセス
+    const std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() const { return comboBranches_; }
+    std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() { return comboBranches_; }
+
+    // コンボ分岐UI
+    void DrawComboBranchesUI();
     void DrawCollisionParamUI();
     void DrawMoveParamUI();
-    void DrawTriggerParamUI();
+    void DrawTriggerParamUI(bool isFirstAttack);
     void DrawFlagsParamUI();
+
+    // 分岐トラックの再構築
+    void RebuildBranchTracks();
 
     // セーブ、ロードのUI描画
     void DrawSaveLoadUI();
 
 private:
-    //*-------------------------------- private Method --------------------------------*//
+    // TriggerConditionのチェック
+    bool CheckTriggerCondition(TriggerCondition condition) const;
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
@@ -130,12 +143,16 @@ private:
     std::string groupName_;
     const std::string folderPath_ = "AttackCreator";
 
+    Player* pPlayer_                          = nullptr;
+    PlayerComboAttackController* pController_ = nullptr;
+    EnemyManager* pEnemyManager_              = nullptr;
+
+    // コンボ分岐リスト
+    std::vector<std::unique_ptr<ComboBranchParameter>> comboBranches_;
+
     // 包含
     PlayerAttackRenditionData renditionData_;
     PlayerComboAttackTimeline timeLine_;
-
-    // file Selector
-    KetaEngine::FileSelector fileSelector_;
 
     // 攻撃パラメータ
     AttackParameter attackParam_;
@@ -147,6 +164,7 @@ private:
 
     // enum class Int
     int32_t triggerConditionInt_;
+    int32_t branchCount_ = 0;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
@@ -156,4 +174,10 @@ public:
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
     KetaEngine::GlobalParameter* GetGlobalParameter() const { return globalParameter_; }
     const std::string& GetFolderPath() const { return folderPath_; }
+    Player* GetPlayer() const { return pPlayer_; };
+    KetaEngine::TimelineDrawer* GetTimeline();
+
+    void SetPlayer(Player* player);
+    void SetController(PlayerComboAttackController* controller) { pController_ = controller; }
+    void SetEnemyManager(EnemyManager* enemyManager) { pEnemyManager_ = enemyManager; }
 };

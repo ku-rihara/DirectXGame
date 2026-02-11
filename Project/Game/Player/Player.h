@@ -1,15 +1,16 @@
 #pragma once
 // 3D
 #include "3D/ViewProjection.h"
+#include "3d/Object3D/Object3d.h"
 // Base
 #include "BaseObject/BaseObject.h"
 // Collider
 #include "Collider/AABBCollider.h"
-#include "CollisionBox/PlayerCollisionInfo.h"
+#include "CollisionBox/PlayerAttackCollisionBox.h"
 // Behavior
-#include "ComboAttackBehavior/BaseComboAttackBehavior.h"
-#include "PlayerBehavior/BasePlayerBehavior.h"
-#include "TitleBehavior/BaseTitleBehavior.h"
+#include "Behavior/ComboAttackBehavior/BaseComboAttackBehavior.h"
+#include "Behavior/PlayerBehavior/BasePlayerBehavior.h"
+#include "Behavior/TitleBehavior/BaseTitleBehavior.h"
 // Editor
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Particle,Effect
@@ -32,6 +33,7 @@ class GameCamera;
 class Combo;
 class AttackEffect;
 class PlayerComboAttackController;
+class DeathTimer;
 
 /// <summary>
 /// プレイヤークラス
@@ -113,6 +115,11 @@ public:
 
     void MainHeadAnimationStart(const std::string& name);
 
+    /// <summary>
+    /// ダッシュ中かどうかを取得
+    /// </summary>
+    bool IsDashing() const;
+
 private:
     void ChangeDeathMode();
     bool IsAbleBehavior();
@@ -127,14 +134,16 @@ private:
     Combo* pCombo_                                      = nullptr;
     AttackEffect* pAttackEffect_                        = nullptr;
     PlayerComboAttackController* comboAttackController_ = nullptr;
+    DeathTimer* pDeathTimer_                            = nullptr;
 
     const KetaEngine::ViewProjection* viewProjection_ = nullptr;
 
+    std::unique_ptr<KetaEngine::Object3d> obj3d_;
     std::unique_ptr<PlayerHandLeft> leftHand_;
     std::unique_ptr<PlayerHandRight> rightHand_;
     std::unique_ptr<PlayerEffects> effects_;
     std::unique_ptr<PlayerParameter> parameters_;
-    std::unique_ptr<PlayerCollisionInfo> playerCollisionInfo_;
+    std::unique_ptr<PlayerAttackCollisionBox> playerCollisionInfo_;
     std::unique_ptr<JumpAttackUI> jumpAttackUI_;
 
     /// behavior
@@ -160,20 +169,27 @@ private:
     const bool* isDeath_;
     bool isDeathRenditionFinish_ = false;
 
+    // ダメージクールダウン
+    bool isDamageColling_ = false;
+    float damageCollTime_ = 0.0f;
+    float damageCollDuration_ = 1.0f; // ダメージ無敵時間
+
 public:
     // getter
     PlayerHandLeft* GetLeftHand() const { return leftHand_.get(); }
     PlayerHandRight* GetRightHand() const { return rightHand_.get(); }
     BasePlayerBehavior* GetBehavior() const { return behavior_.get(); }
     BaseTitleBehavior* GetTitleBehavior() const { return titleBehavior_.get(); }
+    BaseComboAttackBehavior* GetComboBehavior() const { return comboBehavior_.get(); }
     PlayerEffects* GetEffects() const { return effects_.get(); }
     LockOnController* GetLockOn() const { return pLockOn_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     AttackEffect* GetAttackEffect() const { return pAttackEffect_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }
-    PlayerCollisionInfo* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
+    PlayerAttackCollisionBox* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
+    KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
     bool GetIsDeathRenditionFinish() const { return *isDeath_; }
 
@@ -185,6 +201,7 @@ public:
     void SetCombo(Combo* combo);
     void SetHitStop(AttackEffect* hitStop);
     void SetComboAttackController(PlayerComboAttackController* playerComboAttackController);
+    void SetDeathTimer(DeathTimer* deathTimer) { pDeathTimer_ = deathTimer; }
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
 

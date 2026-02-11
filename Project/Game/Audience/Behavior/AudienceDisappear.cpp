@@ -19,10 +19,8 @@ AudienceDisappear::AudienceDisappear(Audience* audience)
     isAnimationEnd_ = false;
     pOwner_->GetObjAnimation()->SetLoop(false);
 
-    pOwner_->GetObjAnimation()->SetAnimationEndCallback([this](const std::string& name) {
-        if (name == "AudienceDisAppear") {
-            isAnimationEnd_ = true;
-        }
+    pOwner_->GetObjAnimation()->SetAnimationEndCallback("AudienceDisAppear", [this]() {
+        isAnimationEnd_ = true;
     });
 }
 
@@ -83,7 +81,7 @@ void AudienceDisappear::EasingPlaying() {
 void AudienceDisappear::End() {
     // 終了処理
     pOwner_->GetObjAnimation()->transform_.scale_ = Vector3::ZeroVector();
-    pOwner_->ChangeBehavior(std::make_unique<AudienceRoot>(pOwner_,false));
+    pOwner_->ChangeBehavior(std::make_unique<AudienceRoot>(pOwner_, false));
 }
 
 void AudienceDisappear::Debug() {

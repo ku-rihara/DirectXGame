@@ -1,7 +1,12 @@
 #pragma once
 
-#include <memory>
+// math
 #include "Vector3.h"
+// std
+#include <functional>
+#include <memory>
+#include <string>
+#include <unordered_map>
 
 namespace KetaEngine {
 
@@ -16,6 +21,18 @@ class ParticleEditor;
 class DissolveEditor;
 class TimeScaleEditor;
 
+// エフェクトタイプ列挙型
+enum class EffectEditorType {
+    ObjEaseAnimation,
+    Camera,
+    Shake,
+    Rail,
+    GPUParticle,
+    Particle,
+    Dissolve,
+    TimeScale
+};
+
 class EffectEditorSuite {
 public:
     EffectEditorSuite();
@@ -26,6 +43,17 @@ public:
     void Init();
     void Update();
     void EditorUpdate();
+
+    // 統一されたSelectFileEdit呼び出し
+    void SelectFileEdit(EffectEditorType type, const std::string& fileName, const std::string& categoryName);
+
+private:
+    // エディタへのアクセス用マップ
+    using SelectFileEditFunc = std::function<void(const std::string&, const std::string&)>;
+    std::unordered_map<EffectEditorType, SelectFileEditFunc> editorSelectFileEditMap_;
+
+    // マップを初期化するヘルパー関数
+    void InitEditorSelectFileEditMap();
 
 private:
     std::unique_ptr<ObjEaseAnimationEditor> objEaseAnimationEditor_;

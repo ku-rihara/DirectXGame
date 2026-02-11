@@ -88,6 +88,10 @@ void Object3DAnimation::ChangeAnimation(const std::string& animationName) {
             // 前のアニメーションの時間を保存
             preAnimationTime_ = animationTime_;
 
+            // 前のアニメーションが終了状態だったかを記録
+            float preDuration = animations_[preAnimationIndex_].duration;
+            wasPreAnimationFinished_ = (animationTime_ >= preDuration);
+
             // 切り替え変数リセット
             animationTime_         = 0.0f;
             currentTransitionTime_ = 0.0f;
@@ -114,10 +118,11 @@ void Object3DAnimation::SetAnimationTime(float time) {
 /// アニメーションリセット
 ///============================================================
 void Object3DAnimation::ResetAnimation() {
-    animationTime_         = 0.0f;
-    currentTransitionTime_ = 0.0f;
-    isChange_              = false;
-    hasLoopedThisFrame_    = false;
+    animationTime_           = 0.0f;
+    currentTransitionTime_   = 0.0f;
+    isChange_                = false;
+    hasLoopedThisFrame_      = false;
+    wasPreAnimationFinished_ = false;
 }
 
 ///============================================================
@@ -153,9 +158,11 @@ void Object3DAnimation::UpdateAnimation(float deltaTime) {
             animationTime_      = std::fmod(animationTime_, duration);
             hasLoopedThisFrame_ = true;
 
-            // コールバック実行
-            if (onAnimationEnd_) {
-                onAnimationEnd_(animations_[currentAnimationIndex_].name);
+            // 現在のアニメーションに対応するコールバック実行
+            const std::string& currentAnimName = animations_[currentAnimationIndex_].name;
+            auto it = animationEndCallbacks_.find(currentAnimName);
+            if (it != animationEndCallbacks_.end() && it->second) {
+                it->second();
             }
         } else {
             // ループしない場合、最後のフレームで停止
@@ -164,8 +171,11 @@ void Object3DAnimation::UpdateAnimation(float deltaTime) {
                 animationTime_      = duration;
                 hasLoopedThisFrame_ = true;
 
-                if (onAnimationEnd_) {
-                    onAnimationEnd_(animations_[currentAnimationIndex_].name);
+                // 現在のアニメーションに対応するコールバック実行
+                const std::string& currentAnimName = animations_[currentAnimationIndex_].name;
+                auto it = animationEndCallbacks_.find(currentAnimName);
+                if (it != animationEndCallbacks_.end() && it->second) {
+                    it->second();
                 }
             } else {
                 // すでに終端にいる場合はそのまま
@@ -232,11 +242,19 @@ void Object3DAnimation::UpdateSkinCluster() {
 void Object3DAnimation::AnimationTransition(float deltaTime) {
     // 補間タイム加算
     currentTransitionTime_ += deltaTime / transitionDuration_;
-    preAnimationTime_ += deltaTime;
     currentTransitionTime_ = std::min(currentTransitionTime_, 1.0f);
 
-    // 前のアニメーションタイム
-    float preTime = std::fmod(preAnimationTime_, animations_[preAnimationIndex_].duration);
+    float preDuration = animations_[preAnimationIndex_].duration;
+    float preTime;
+
+    // 前のアニメーションが終了状態だった場合は最終フレームを維持
+    if (wasPreAnimationFinished_) {
+        preTime = preDuration;
+    } else {
+        // まだ終わっていない場合は時間を進める
+        preAnimationTime_ += deltaTime;
+        preTime = std::fmod(preAnimationTime_, preDuration);
+    }
 
     for (Joint& joint : skeleton_.joints) {
         Vector3 toTranslate = joint.transform.translate;
@@ -279,8 +297,9 @@ void Object3DAnimation::AnimationTransition(float deltaTime) {
 /// 遷移終了
 ///============================================================
 void Object3DAnimation::TransitionFinish() {
-    currentTransitionTime_ = 0.0f;
-    isChange_              = false;
+    currentTransitionTime_   = 0.0f;
+    isChange_                = false;
+    wasPreAnimationFinished_ = false;
 }
 
 void Object3DAnimation::CSSkinning() {
@@ -418,4 +437,12 @@ void Object3DAnimation::CreateMaterialResource() {
 
 void Object3DAnimation::CreateShadowMap() {
     BaseObject3d::CreateShadowMap();
+}
+
+std::vector<std::string> Object3DAnimation::GetAnimationNames() const {
+    std::vector<std::string> names;
+    for (const auto& anime : animations_) {
+        names.push_back(anime.name);
+    }
+    return names;
 }

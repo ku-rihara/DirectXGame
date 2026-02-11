@@ -60,6 +60,16 @@ public:
     void Init(WinApp* win, int32_t backBufferWidth, int32_t backBufferHeight);
 
     /// <summary>
+    /// 初期化（ウィンドウサイズと描画サイズを分離）
+    /// </summary>
+    /// <param name="win">WinApp</param>
+    /// <param name="windowWidth">ウィンドウ幅</param>
+    /// <param name="windowHeight">ウィンドウ高さ</param>
+    /// <param name="renderWidth">描画幅</param>
+    /// <param name="renderHeight">描画高さ</param>
+    void Init(WinApp* win, int32_t windowWidth, int32_t windowHeight, int32_t renderWidth, int32_t renderHeight);
+
+    /// <summary>
     /// リソースの作成
     /// </summary>
     /// <param name="device">デバイス</param>
@@ -125,6 +135,8 @@ private:
     ///===========================================================================
     uint32_t backBufferWidth_;
     uint32_t backBufferHeight_;
+    uint32_t windowWidth_;
+    uint32_t windowHeight_;
 
 public:
     ///==========================================================

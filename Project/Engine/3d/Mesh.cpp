@@ -41,7 +41,7 @@ void Mesh::SetTexture(const std::string& name) {
 }
 
 void Mesh::CreateVertexResource() {
-    // VeexBufferViewを作成する
+    // VertexBufferViewを作成する
     vertexResource_ = directXCommon_->CreateBufferResource(directXCommon_->GetDevice(), sizeof(VertexData) * vertexNum_);
     // 頂点バッファビューを作成する
     vertexBufferView_ = {};
