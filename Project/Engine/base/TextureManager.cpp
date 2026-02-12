@@ -157,6 +157,25 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
     return textureData.index;
 }
 
+void TextureManager::LoadAllTextures() {
+    const std::filesystem::path textureDir = "Resources/Texture";
+    if (!std::filesystem::exists(textureDir)) {
+        return;
+    }
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(textureDir)) {
+        if (!entry.is_regular_file()) {
+            continue;
+        }
+        if (entry.path().extension() == ".dds") {
+            std::string filePath = entry.path().generic_string();
+            if (textureDates_.contains(filePath)) {
+                continue;
+            }
+            LoadTexture(filePath);
+        }
+    }
+}
+
 const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureIndex) {
     // 範囲外チェック
     assert(textureIndex < textureDates_.size());

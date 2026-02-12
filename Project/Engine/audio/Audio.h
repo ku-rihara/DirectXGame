@@ -59,10 +59,10 @@ private:
     int LoadMP3File(const std::string& fullPath);
     void PlayForID(int soundId, float volume);
 
+public:
     // 全ファイルロード用
     void LoadAllFilesInDirectory();
 
-public:
     static Audio* GetInstance();
 
     Audio()  = default;

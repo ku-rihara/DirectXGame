@@ -8,6 +8,9 @@ using namespace KetaEngine;
 #include"3d/ModelManager.h"
 #include "ShadowMap/ShadowMap.h"
 
+// resource
+#include "Core/ResourceLoader.h"
+
 // utility
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // imGui
@@ -39,7 +42,8 @@ void KTFramework::Init() {
     engineCore_->Initialize(kWindowTitle, KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight);
 #endif
 
-    LoadAllTexture();
+    /// 全リソース一括ロード
+    ResourceLoader::LoadAllResources();
 }
 
 // ========================================================
@@ -169,23 +173,3 @@ void KTFramework::DisplayGameView() {
 #endif
 }
 
-
-void KTFramework::LoadAllTexture() {
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/uvChecker.dds");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/smoke.dds");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.dds");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.dds");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/HitEffectCenter.dds");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/hitEffect.dds");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/HowToOperate.dds");
-    TextureManager::GetInstance()->LoadTexture("Resources/Model/AudienceSeats/audienceSeats.dds");
-    TextureManager::GetInstance()->LoadTexture("Resources/Model/FieldSide/SideFiend.dds");
-
-    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyWaiting.gltf");
-    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemySpawn.gltf");
-    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyDiscovery.gltf");
-    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyRun.gltf");
-    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyAttack.gltf");
-    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyAttack.gltf");
-    KetaEngine::ModelManager::GetInstance()->LoadModel("NormalEnemyAttack.gltf");
-}

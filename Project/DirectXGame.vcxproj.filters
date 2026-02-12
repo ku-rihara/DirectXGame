@@ -540,6 +540,9 @@
     <ClCompile Include="Engine\Core\KTGame.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Core\ResourceLoader.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Easing\Easing.cpp">
       <Filter>Engine\Easing</Filter>
     </ClCompile>
@@ -1385,6 +1388,9 @@
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Core\KTGame.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\ResourceLoader.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Easing\Easing.h">

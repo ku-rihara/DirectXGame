@@ -6,7 +6,7 @@ using namespace KetaEngine;
 #include <filesystem>
 #include <fstream>
 #define ATTENUATION_TIME_MS 50
-#define ATTENUATION_FACTOR 0.01f // 音量を0.5%にする
+#define ATTENUATION_FACTOR 0.01f 
 #pragma comment(lib, "xaudio2.lib")
 #pragma comment(lib, "mfplat.lib")
 #pragma comment(lib, "mfreadwrite.lib")
@@ -32,8 +32,6 @@ void Audio::Init() {
         isMediaFoundationInitialized_ = true;
     }
 
-    // 全ファイルをロード
-    LoadAllFilesInDirectory();
 }
 
 void Audio::LoadAllFilesInDirectory() {

@@ -64,6 +64,7 @@
     <ClCompile Include="Engine\Core\EngineCore.cpp" />
     <ClCompile Include="Engine\Core\KTFramework.cpp" />
     <ClCompile Include="Engine\Core\KTGame.cpp" />
+    <ClCompile Include="Engine\Core\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Easing\Easing.cpp" />
     <ClCompile Include="Engine\Easing\EasingCreator\EasingCreator.cpp" />
     <ClCompile Include="Engine\Easing\EasingCreator\EasingEditor.cpp" />
@@ -355,6 +356,7 @@
     <ClInclude Include="Engine\Core\EngineCore.h" />
     <ClInclude Include="Engine\Core\KTFramework.h" />
     <ClInclude Include="Engine\Core\KTGame.h" />
+    <ClInclude Include="Engine\Core\ResourceLoader.h" />
     <ClInclude Include="Engine\Easing\Easing.h" />
     <ClInclude Include="Engine\Easing\EasingCreator\EasingCreator.h" />
     <ClInclude Include="Engine\Easing\EasingCreator\EasingEditor.h" />
