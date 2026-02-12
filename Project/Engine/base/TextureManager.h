@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d12.h>
 #include <DirectXTex.h>
+#include <filesystem>
 #include <string>
 #include <wrl.h>
 /// std
@@ -55,6 +56,11 @@ public:
     /// <param name="filePath">ファイルパス</param>
     /// <returns>テクスチャインデックス</returns>
     uint32_t LoadTexture(const std::string& filePath);
+
+    /// <summary>
+    /// 全テクスチャ一括読み込み
+    /// </summary>
+    void LoadAllTextures();
 
     /// <summary>
     /// Resourceデータの作成

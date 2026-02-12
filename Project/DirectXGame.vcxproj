@@ -64,6 +64,7 @@
     <ClCompile Include="Engine\Core\EngineCore.cpp" />
     <ClCompile Include="Engine\Core\KTFramework.cpp" />
     <ClCompile Include="Engine\Core\KTGame.cpp" />
+    <ClCompile Include="Engine\Core\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Easing\Easing.cpp" />
     <ClCompile Include="Engine\Easing\EasingCreator\EasingCreator.cpp" />
     <ClCompile Include="Engine\Easing\EasingCreator\EasingEditor.cpp" />
@@ -286,17 +287,17 @@
     <ClCompile Include="Game\UI\HowToOperate.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\Box.cpp" />
-    <ClCompile Include="math\MathFunction.cpp" />
-    <ClCompile Include="math\Matrix3x3.cpp" />
-    <ClCompile Include="math\Matrix4x4.cpp" />
-    <ClCompile Include="math\Quaternion.cpp" />
-    <ClCompile Include="math\random.cpp" />
-    <ClCompile Include="math\Shake.cpp" />
-    <ClCompile Include="math\Vector2.cpp" />
-    <ClCompile Include="math\Vector2Proxy.cpp" />
-    <ClCompile Include="math\Vector3.cpp" />
-    <ClCompile Include="math\Vector4.cpp" />
+    <ClCompile Include="Engine\math\Box.cpp" />
+    <ClCompile Include="Engine\math\MathFunction.cpp" />
+    <ClCompile Include="Engine\math\Matrix3x3.cpp" />
+    <ClCompile Include="Engine\math\Matrix4x4.cpp" />
+    <ClCompile Include="Engine\math\Quaternion.cpp" />
+    <ClCompile Include="Engine\math\random.cpp" />
+    <ClCompile Include="Engine\math\Shake.cpp" />
+    <ClCompile Include="Engine\math\Vector2.cpp" />
+    <ClCompile Include="Engine\math\Vector2Proxy.cpp" />
+    <ClCompile Include="Engine\math\Vector3.cpp" />
+    <ClCompile Include="Engine\math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\ImGuiManager.h" />
@@ -355,6 +356,7 @@
     <ClInclude Include="Engine\Core\EngineCore.h" />
     <ClInclude Include="Engine\Core\KTFramework.h" />
     <ClInclude Include="Engine\Core\KTGame.h" />
+    <ClInclude Include="Engine\Core\ResourceLoader.h" />
     <ClInclude Include="Engine\Easing\Easing.h" />
     <ClInclude Include="Engine\Easing\EasingCreator\EasingCreator.h" />
     <ClInclude Include="Engine\Easing\EasingCreator\EasingEditor.h" />
@@ -590,18 +592,18 @@
     <ClInclude Include="Game\SkyDome\SkyDome.h" />
     <ClInclude Include="Game\UI\HowToOperate.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />
-    <ClInclude Include="math\Box.h" />
-    <ClInclude Include="math\MathFunction.h" />
-    <ClInclude Include="math\Matrix3x3.h" />
-    <ClInclude Include="math\Matrix4x4.h" />
-    <ClInclude Include="math\MinMax.h" />
-    <ClInclude Include="math\Quaternion.h" />
-    <ClInclude Include="math\random.h" />
-    <ClInclude Include="math\Shake.h" />
-    <ClInclude Include="math\Vector2.h" />
-    <ClInclude Include="math\Vector2Proxy.h" />
-    <ClInclude Include="math\Vector3.h" />
-    <ClInclude Include="math\Vector4.h" />
+    <ClInclude Include="Engine\math\Box.h" />
+    <ClInclude Include="Engine\math\MathFunction.h" />
+    <ClInclude Include="Engine\math\Matrix3x3.h" />
+    <ClInclude Include="Engine\math\Matrix4x4.h" />
+    <ClInclude Include="Engine\math\MinMax.h" />
+    <ClInclude Include="Engine\math\Quaternion.h" />
+    <ClInclude Include="Engine\math\random.h" />
+    <ClInclude Include="Engine\math\Shake.h" />
+    <ClInclude Include="Engine\math\Vector2.h" />
+    <ClInclude Include="Engine\math\Vector2Proxy.h" />
+    <ClInclude Include="Engine\math\Vector3.h" />
+    <ClInclude Include="Engine\math\Vector4.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
@@ -857,7 +859,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)Game;$(ProjectDir)math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)Game;$(ProjectDir)Engine\math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -883,7 +885,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)\d
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)Game;$(ProjectDir)math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)Game;$(ProjectDir)Engine\math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>

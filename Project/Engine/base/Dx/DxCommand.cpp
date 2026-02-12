@@ -61,14 +61,16 @@ void DxCommand::ResetCommand() {
 
 void DxCommand::WaitForGPU() {
     if (fence_->GetCompletedValue() < fenceValue_) {
-        fenceEvent_ = CreateEvent(nullptr, false, false, nullptr);
         fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
         WaitForSingleObject(fenceEvent_, INFINITE);
-        CloseHandle(fenceEvent_);
     }
 }
 
 void DxCommand::Finalize() {
+    if (fenceEvent_) {
+        CloseHandle(fenceEvent_);
+        fenceEvent_ = nullptr;
+    }
     if (fence_) {
         fence_.Reset();
     }

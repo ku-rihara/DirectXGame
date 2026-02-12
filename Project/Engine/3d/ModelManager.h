@@ -1,5 +1,6 @@
 #pragma once
 #include "3D/Model.h"
+#include <filesystem>
 #include <map>
 #include <memory>
 #include <string>
@@ -31,6 +32,11 @@ public:
     /// <param name="modelName">モデル名</param>
     /// <returns>モデルのポインタ</returns>
     static Model* LoadModel(const std::string& modelName);
+
+    /// <summary>
+    /// 全モデル一括読み込み
+    /// </summary>
+    static void LoadAllModels();
 
     /// <summary>
     /// モデルの検索

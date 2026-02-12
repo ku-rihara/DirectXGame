@@ -29,8 +29,6 @@ public:
     void DisplayGameView(); //< ゲームビュー表示
     void Run(); //< 実行
 
-    void LoadAllTexture(); //< 全テクスチャ読み込み
-
 protected:
     /// other class
     SceneManager* pSceneManager_ = nullptr;

@@ -33,6 +33,29 @@ Model* ModelManager::LoadModel(const std::string& modelName) {
 }
 
 
+void ModelManager::LoadAllModels() {
+    const std::filesystem::path modelDir = "Resources/Model";
+    if (!std::filesystem::exists(modelDir)) {
+        return;
+    }
+    for (const auto& entry : std::filesystem::directory_iterator(modelDir)) {
+        if (!entry.is_directory()) {
+            continue;
+        }
+        for (const auto& file : std::filesystem::directory_iterator(entry.path())) {
+            if (!file.is_regular_file()) {
+                continue;
+            }
+            const auto& ext = file.path().extension();
+            if (ext == ".gltf" || ext == ".obj") {
+                std::string modelFileName = file.path().filename().string();
+                LoadModel(modelFileName);
+                break;
+            }
+        }
+    }
+}
+
 Model* ModelManager::FindModel(const std::string& modelName) {
     // 読み込み済モデルを検索
     if (models_.contains(modelName)) {
