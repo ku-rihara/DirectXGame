@@ -17,6 +17,8 @@ private:
     struct MaterialSprite {
         Vector4 color;
         Matrix4x4 uvTransform;
+        float gaugeRate;
+        float padding[3];
     };
 
 public:

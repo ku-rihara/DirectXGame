@@ -8,6 +8,8 @@
 #include "Combo/Combo.h"
 // DeathTimer
 #include "DeathTimer/DeathTimer.h"
+// KillCounter
+#include "KillCounter/KillCounter.h"
 // Enemy
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Spawner/EnemySpawner.h"
@@ -24,6 +26,8 @@
 #include "Player/Player.h"
 // SkyBox
 #include "SkyBox/SkyBox.h"
+// UI
+
 // utility
 #include "utility/ObjectFromBlender/ObjectFromBlender.h"
 
@@ -72,6 +76,7 @@ private:
     std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
     std::unique_ptr<AudienceController> audienceController_                   = nullptr;
     std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
+    std::unique_ptr<KillCounter> killCounter_                                = nullptr;
 
     std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_ = nullptr;
 

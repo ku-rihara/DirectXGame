@@ -4,6 +4,7 @@ using namespace KetaEngine;
 #include "Base/TextureManager.h"
 #include "Base/WinApp.h"
 #include "Base/Dx/DirectXCommon.h"
+#include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 #include "SpriteRegistry.h"
 #include <algorithm>
 #include <imgui.h>
@@ -139,17 +140,23 @@ void Sprite::CreateSprite(const std::string& textureName) {
     const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureIndex_);
     textureSize_.x                       = static_cast<float>(metadata.width);
     textureSize_.y                       = static_cast<float>(metadata.height);
+
+    // スプライトイージングアニメーションプレイヤー初期化
+    if (!spriteEaseAnimationPlayer_) {
+        spriteEaseAnimationPlayer_ = std::make_unique<SpriteEaseAnimationPlayer>();
+        spriteEaseAnimationPlayer_->Init();
+    }
 }
 
 void Sprite::Draw() {
     DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 
     ///==========================================================================================
-    //  anchorPoint + ゲージレート対応
+    //  anchorPoint
     ///==========================================================================================
 
     float left   = 0.0f - anchorPoint_.x;
-    float right  = (1.0f * gaugeRate_) - anchorPoint_.x;
+    float right  = 1.0f - anchorPoint_.x;
     float top    = 0.0f - anchorPoint_.y;
     float bottom = 1.0f - anchorPoint_.y;
 
@@ -170,11 +177,11 @@ void Sprite::Draw() {
     }
 
     ///==========================================================================================
-    //  TextureClip + ゲージレート対応
+    //  TextureClip
     ///==========================================================================================
 
     float texLeft   = textureLeftTop_.x / textureSize_.x;
-    float texRight  = (textureLeftTop_.x + textureSize_.x * gaugeRate_) / textureSize_.x; 
+    float texRight  = (textureLeftTop_.x + textureSize_.x) / textureSize_.x;
     float texTop    = textureLeftTop_.y / textureSize_.y;
     float texBottom = (textureLeftTop_.y + textureSize_.y) / textureSize_.y;
 
@@ -183,6 +190,14 @@ void Sprite::Draw() {
     vertexData_[1].texcoord = {texLeft, texTop};
     vertexData_[2].texcoord = {texRight, texBottom};
     vertexData_[3].texcoord = {texRight, texTop};
+
+    // ゲージレートをマテリアルに設定
+    material_.GetMaterialData()->gaugeRate = gaugeRate_;
+
+    ///==========================================================================================
+    //  SpriteEaseAnimation
+    ///==========================================================================================
+    UpdateSpriteEaseAnimation();
 
     ///==========================================================================================
     //  Transform
@@ -286,4 +301,66 @@ void Sprite::SetColor(const Vector3& color) {
 
 void Sprite::SetAlpha(float alpha) {
     material_.GetMaterialData()->color.w = alpha;
+}
+
+///============================================================
+/// スプライトイージングアニメーション再生
+///============================================================
+void Sprite::PlaySpriteEaseAnimation(const std::string& animationName, const std::string& categoryName) {
+    if (!spriteEaseAnimationPlayer_) {
+        spriteEaseAnimationPlayer_ = std::make_unique<SpriteEaseAnimationPlayer>();
+        spriteEaseAnimationPlayer_->Init();
+    }
+
+    spriteEaseAnimationPlayer_->Play(animationName, categoryName);
+}
+
+///============================================================
+/// スプライトイージングアニメーション停止
+///============================================================
+void Sprite::StopSpriteEaseAnimation() {
+    if (spriteEaseAnimationPlayer_) {
+        spriteEaseAnimationPlayer_->Stop();
+    }
+}
+
+///============================================================
+/// スプライトイージングアニメーション更新
+///============================================================
+void Sprite::UpdateSpriteEaseAnimation() {
+    if (spriteEaseAnimationPlayer_) {
+        spriteEaseAnimationPlayer_->Update();
+        ApplyAnimationToTransform();
+    }
+}
+
+///============================================================
+/// アニメーション適用後のTransform更新
+///============================================================
+void Sprite::ApplyAnimationToTransform() {
+    if (!spriteEaseAnimationPlayer_ || !spriteEaseAnimationPlayer_->IsPlaying()) {
+        return;
+    }
+
+    // Scale (ベーススケールにアニメーション値を乗算)
+    Vector2 scaleOffset = spriteEaseAnimationPlayer_->GetCurrentScale();
+    transform_.scale.x  = parameter_.scale_.x * scaleOffset.x;
+    transform_.scale.y  = parameter_.scale_.y * scaleOffset.y;
+
+    // Position (開始位置にアニメーションオフセットを加算)
+    Vector2 posOffset = spriteEaseAnimationPlayer_->GetCurrentPosition();
+    transform_.pos.x  = parameter_.position_.x + posOffset.x;
+    transform_.pos.y  = parameter_.position_.y + posOffset.y;
+
+    // Rotation
+    transform_.rotate = spriteEaseAnimationPlayer_->GetCurrentRotation();
+
+    // Color
+    Vector3 color = spriteEaseAnimationPlayer_->GetCurrentColor();
+    material_.GetMaterialData()->color.x = color.x;
+    material_.GetMaterialData()->color.y = color.y;
+    material_.GetMaterialData()->color.z = color.z;
+
+    // Alpha
+    material_.GetMaterialData()->color.w = spriteEaseAnimationPlayer_->GetCurrentAlpha();
 }

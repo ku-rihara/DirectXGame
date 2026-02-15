@@ -47,7 +47,7 @@ void ComboAttackAction::Init() {
     for (auto& branch : branches) {
         if (!branch->GetNextAttackName().empty() && branch->GetNextAttackName() != "None") {
             PlayerComboAttackData* nextAttack = controller->GetAttackByName(branch->GetNextAttackName());
-            if (nextAttack) {
+            if (nextAttack && nextAttack->GetAttackParam().isUnlocked) {
                 NextAttackCandidate candidate;
                 candidate.branch = branch.get();
                 candidate.attackData = nextAttack;

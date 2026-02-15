@@ -25,6 +25,7 @@ class Player;
 class GameCamera;
 class EnemyManager;
 class Combo;
+class KillCounter;
 class PlayerAttackCollisionBox;
 
 /// <summary>
@@ -216,6 +217,7 @@ private:
     // other class
     Player* pPlayer_;
     Combo* pCombo_;
+    KillCounter* pKillCounter_ = nullptr;
     GameCamera* pGameCamera_;
     EnemyManager* pEnemyManager_;
 
@@ -301,6 +303,7 @@ public:
     void SetGameCamera(GameCamera* gamecamera);
     void SetManager(EnemyManager* manager);
     void SetCombo(Combo* combo);
+    void SetKillCounter(KillCounter* killCounter);
     void SetParameter(const Type& type, const Parameter& paramater);
     void SetBodyRotate(Vector3 rotate) { objAnimation_->transform_.rotation_ = rotate; }
     void SetBodyColor(const Vector4& color);

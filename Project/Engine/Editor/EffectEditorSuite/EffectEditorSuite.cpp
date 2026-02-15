@@ -7,6 +7,7 @@ using namespace KetaEngine;
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationEditor.h"
 #include "Editor/RailEditor/RailEditor.h"
 #include "Editor/ShakeEditor/ShakeEditor.h"
+#include "Editor/SpriteEaseAnimation/SpriteEaseAnimationEditor.h"
 #include "Editor/TimeScaleEditor/TimeScaleEditor.h"
 #include "Particle/CPUParticle/Editor/ParticleEditor.h"
 #include "Particle/GPUParticle/Editor/GPUParticleEditor.h"
@@ -19,17 +20,19 @@ EffectEditorSuite::~EffectEditorSuite() = default;
 void EffectEditorSuite::Init() {
 
     // 生成
-    objEaseAnimationEditor_ = std::make_unique<ObjEaseAnimationEditor>();
-    cameraEditor_           = std::make_unique<CameraEditor>();
-    shakeEditor_            = std::make_unique<ShakeEditor>();
-    railEditor_             = std::make_unique<RailEditor>();
-    gpuParticleEditor_      = std::make_unique<GPUParticleEditor>();
-    particleEditor_         = std::make_unique<ParticleEditor>();
-    dissolveEditor_         = std::make_unique<DissolveEditor>();
-    timeScaleEditor_        = std::make_unique<TimeScaleEditor>();
+    objEaseAnimationEditor_    = std::make_unique<ObjEaseAnimationEditor>();
+    spriteEaseAnimationEditor_ = std::make_unique<SpriteEaseAnimationEditor>();
+    cameraEditor_              = std::make_unique<CameraEditor>();
+    shakeEditor_               = std::make_unique<ShakeEditor>();
+    railEditor_                = std::make_unique<RailEditor>();
+    gpuParticleEditor_         = std::make_unique<GPUParticleEditor>();
+    particleEditor_            = std::make_unique<ParticleEditor>();
+    dissolveEditor_            = std::make_unique<DissolveEditor>();
+    timeScaleEditor_           = std::make_unique<TimeScaleEditor>();
 
     // 初期化
     objEaseAnimationEditor_->Init("ObjEaseAnimation");
+    spriteEaseAnimationEditor_->Init("SpriteEaseAnimation");
     cameraEditor_->Init("CameraAnimation");
     shakeEditor_->Init("Shake");
     railEditor_->Init("Rail");
@@ -44,6 +47,7 @@ void EffectEditorSuite::Init() {
 
 void EffectEditorSuite::Update() {
     objEaseAnimationEditor_->Update();
+    spriteEaseAnimationEditor_->Update();
     cameraEditor_->Update();
     shakeEditor_->Update();
     railEditor_->Update();
@@ -55,6 +59,7 @@ void EffectEditorSuite::Update() {
 
 void EffectEditorSuite::EditorUpdate() {
     objEaseAnimationEditor_->EditorUpdate();
+    spriteEaseAnimationEditor_->EditorUpdate();
     cameraEditor_->EditorUpdate();
     dissolveEditor_->EditorUpdate();
     shakeEditor_->EditorUpdate();
@@ -68,6 +73,9 @@ void EffectEditorSuite::InitEditorSelectFileEditMap() {
     editorSelectFileEditMap_ = {
         {EffectEditorType::ObjEaseAnimation, [this](const std::string& name, const std::string& category) {
              objEaseAnimationEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::SpriteEaseAnimation, [this](const std::string& name, const std::string& category) {
+             spriteEaseAnimationEditor_->SelectFileEdit(name, category);
          }},
         {EffectEditorType::Camera, [this](const std::string& name, const std::string& category) {
              cameraEditor_->SelectFileEdit(name, category);

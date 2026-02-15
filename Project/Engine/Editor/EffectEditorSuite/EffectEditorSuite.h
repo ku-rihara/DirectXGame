@@ -13,6 +13,7 @@ namespace KetaEngine {
 class ViewProjection;
 
 class ObjEaseAnimationEditor;
+class SpriteEaseAnimationEditor;
 class CameraEditor;
 class ShakeEditor;
 class RailEditor;
@@ -24,6 +25,7 @@ class TimeScaleEditor;
 // エフェクトタイプ列挙型
 enum class EffectEditorType {
     ObjEaseAnimation,
+    SpriteEaseAnimation,
     Camera,
     Shake,
     Rail,
@@ -57,6 +59,7 @@ private:
 
 private:
     std::unique_ptr<ObjEaseAnimationEditor> objEaseAnimationEditor_;
+    std::unique_ptr<SpriteEaseAnimationEditor> spriteEaseAnimationEditor_;
     std::unique_ptr<CameraEditor> cameraEditor_;
     std::unique_ptr<ShakeEditor> shakeEditor_;
     std::unique_ptr<RailEditor> railEditor_;

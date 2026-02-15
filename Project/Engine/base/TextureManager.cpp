@@ -7,6 +7,7 @@ using namespace KetaEngine;
 #include "Base/Descriptors/SrvManager.h"
 // function
 #include "function/Convert.h"
+// std
 #include <cstdlib>
 #include <d3dx12.h>
 #include <stdexcept>
@@ -67,9 +68,9 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::CreateTextureResource(Mic
         IID_PPV_ARGS(&resource));
 
     if (FAILED(hr)) {
-        assert(hr);
         return nullptr;
     }
+
     return resource.Get();
 }
 
@@ -127,7 +128,6 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
         srvDesc.TextureCube.MostDetailedMip     = 0;
         srvDesc.TextureCube.MipLevels           = UINT_MAX;
         srvDesc.TextureCube.ResourceMinLODClamp = 0.0f;
-        /* skyBoxHandle_                           = textureData.srvGPUHandle;*/
     } else {
         // Texture 2dの設定
         srvDesc.ViewDimension       = D3D12_SRV_DIMENSION_TEXTURE2D;

@@ -47,6 +47,11 @@ void ComboAttackRoot::Update(float atkSpeed) {
             continue;
         }
 
+        // 未解放の攻撃はスキップ
+        if (!attackPtr->GetAttackParam().isUnlocked) {
+            continue;
+        }
+
         auto& attackParam  = attackPtr->GetAttackParam();
         auto& triggerParam = attackParam.triggerParam;
 

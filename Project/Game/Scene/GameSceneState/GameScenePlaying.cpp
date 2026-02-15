@@ -21,7 +21,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.audienceController_->Update();
 
     // 各クラス更新
-    obj.comboScene_->Update();
+    obj.comboDirector_->Update();
     obj.player_->Update();
     obj.skyBox_->Update();
     obj.howToOperate_->Update();

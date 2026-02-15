@@ -25,6 +25,9 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     // conditionをIntから適応
     attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
 
+    // 解放フラグ初期化（ableDefeatLevel == 0 なら最初から使用可能）
+    attackParam_.isUnlocked = (attackParam_.ableDefeatLevel == 0);
+
     // コンボ分岐データを初期化
     InitComboBranches();
 
@@ -39,6 +42,9 @@ void PlayerComboAttackData::LoadData() {
 
     // conditionをIntから適応
     attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
+
+    // 解放フラグ初期化（ableDefeatLevel == 0 なら最初から使用可能）
+    attackParam_.isUnlocked = (attackParam_.ableDefeatLevel == 0);
 }
 
 void PlayerComboAttackData::SaveData() {
@@ -137,6 +143,9 @@ void PlayerComboAttackData::RegisterParams() {
     // FallParam
     globalParameter_->Regist(groupName_, "enableFall", &attackParam_.fallParam.enableFall);
 
+    // 解放レベル
+    globalParameter_->Regist(groupName_, "ableDefeatLevel", &attackParam_.ableDefeatLevel);
+
     // コンボ分岐数
     globalParameter_->Regist(groupName_, "ComboBranchCount", &branchCount_);
 
@@ -234,6 +243,13 @@ void PlayerComboAttackData::DrawFlagsParamUI() {
     ImGui::Checkbox("モーションのみ有効", &attackParam_.isMotionOnly);
     ImGui::Checkbox("自動で次の攻撃に進む", &attackParam_.timingParam.isAutoAdvance);
     ImGui::Checkbox("攻撃終了時に落ちる", &attackParam_.fallParam.enableFall);
+
+    ImGui::SeparatorText("解放設定");
+    ImGui::InputInt("解放に必要なレベル", &attackParam_.ableDefeatLevel);
+    if (attackParam_.ableDefeatLevel < 0) {
+        attackParam_.ableDefeatLevel = 0;
+    }
+    ImGui::Text("解放状態: %s", attackParam_.isUnlocked ? "解放済み" : "未解放");
 }
 
 void PlayerComboAttackData::DrawComboBranchesUI() {

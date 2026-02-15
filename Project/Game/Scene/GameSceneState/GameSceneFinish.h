@@ -2,7 +2,6 @@
 
 #include "2d/Sprite.h"
 #include "BaseGameSceneState.h"
-#include "Easing/Easing.h"
 #include "Vector2.h"
 #include <memory>
 
@@ -24,11 +23,9 @@ private:
     bool isStartFadeOut_ = false;
     bool isGameEnd_      = false;
 
-
     std::unique_ptr<KetaEngine::Sprite> clearSprite_;
 
-    KetaEngine::Easing<Vector2> finishSpriteEase_;
-    Vector2 tempSpritePos_;
+    bool isWaitingInput_ = false;
 
     void CheckEndInput();
 

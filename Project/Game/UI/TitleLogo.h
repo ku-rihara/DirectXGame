@@ -3,8 +3,6 @@
 #include "Vector2.h"
 #include <memory>
 
-#include "Easing/Easing.h"
-
 /// <summary>
 /// タイトルロゴ管理クラス
 /// </summary>
@@ -13,7 +11,6 @@ public:
     // 初期化、更新
     void Init();
     void Update();
-    void EasingSet();
 private:
     enum class Step {
         PUNCH,
@@ -24,22 +21,8 @@ private:
 
 private:
     Step step_;
-    // 座標
-    Vector2 punchPosition_;
-    Vector2 rushPosition_;
-    Vector2 bottonPosition_;
-    // サイズ
-    Vector2 size_;
     // スプライト
     std::unique_ptr<KetaEngine::Sprite> punchSprite_;
     std::unique_ptr<KetaEngine::Sprite> rushSprite_;
     std::unique_ptr<KetaEngine::Sprite> bottomSprite_;
-
-    KetaEngine::Easing<Vector2> punchEase_;
-    KetaEngine::Easing<Vector2> rushEase_;
-    KetaEngine::Easing<Vector2> bottomEase_;
-
-    Vector2 punchSpriteScale_;
-    Vector2 rushSpriteScale_;
-    Vector2 bottomSpriteScale_;
 };

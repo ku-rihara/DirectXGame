@@ -91,6 +91,9 @@
     <Filter Include="Game\ComboScene">
       <UniqueIdentifier>{ADEE0956-E5FF-4FC4-A388-4373B83FC79E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\KillCounter">
+      <UniqueIdentifier>{B1A2C3D4-E5F6-7890-ABCD-EF1234567890}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\DeathTimer">
       <UniqueIdentifier>{4B03D028-E89C-4DF2-80AA-F3E6A7A72977}</UniqueIdentifier>
     </Filter>
@@ -378,6 +381,12 @@
     </Filter>
     <Filter Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior">
       <UniqueIdentifier>{a1b2c3d4-e5f6-7890-abcd-ef1234567890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI\ComboAsistUI">
+      <UniqueIdentifier>{b2e1a200-29e5-4067-9342-a7ef5defa722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editor\SpriteEaseAnimation">
+      <UniqueIdentifier>{a924218b-19f7-4191-b7c7-8777b83adbf8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -898,8 +907,11 @@
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\ComboScene\ComboScene.cpp">
+    <ClCompile Include="Game\ComboScene\ComboDirector.cpp">
       <Filter>Game\ComboScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\KillCounter\KillCounter.cpp">
+      <Filter>Game\KillCounter</Filter>
     </ClCompile>
     <ClCompile Include="Game\Combo\Behavior\BaseComboUIBehavior.cpp">
       <Filter>Game\Combo\Behavior</Filter>
@@ -1786,8 +1798,11 @@
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\ComboScene\ComboScene.h">
+    <ClInclude Include="Game\ComboScene\ComboDirector.h">
       <Filter>Game\ComboScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\KillCounter\KillCounter.h">
+      <Filter>Game\KillCounter</Filter>
     </ClInclude>
     <ClInclude Include="Game\Combo\Behavior\BaseComboUIBehavior.h">
       <Filter>Game\Combo\Behavior</Filter>
@@ -2276,6 +2291,24 @@
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyWait.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistController.cpp">
+      <Filter>Game\UI\ComboAsistUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistUI.cpp">
+      <Filter>Game\UI\ComboAsistUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationData.cpp">
+      <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationEditor.cpp">
+      <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationPlayer.cpp">
+      <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationSection.cpp">
+      <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2295,6 +2328,24 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyWait.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistController.h">
+      <Filter>Game\UI\ComboAsistUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistUI.h">
+      <Filter>Game\UI\ComboAsistUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationData.h">
+      <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationEditor.h">
+      <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationPlayer.h">
+      <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationSection.h">
+      <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

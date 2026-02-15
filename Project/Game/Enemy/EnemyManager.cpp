@@ -56,6 +56,7 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     enemy->SetGameCamera(pGameCamera_);
     enemy->SetManager(this);
     enemy->SetCombo(pCombo_);
+    enemy->SetKillCounter(pKillCounter_);
     enemy->SetGroupId(groupID);
     enemy->Init(position);
 
@@ -280,6 +281,10 @@ void EnemyManager::SetPlayer(Player* player) {
 
 void EnemyManager::SetCombo(Combo* lockOn) {
     pCombo_ = lockOn;
+}
+
+void EnemyManager::SetKillCounter(KillCounter* killCounter) {
+    pKillCounter_ = killCounter;
 }
 
 void EnemyManager::SetGameCamera(GameCamera* gameCamera) {

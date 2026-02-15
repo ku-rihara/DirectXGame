@@ -69,6 +69,7 @@ void EditorScene::Debug() {
     enemyManager_->AdjustParam();
     enemySpawner_->AdjustParam();
     combo_->AdjustParam();
+    killCounter_->AdjustParam();
     audienceController_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
@@ -122,6 +123,7 @@ void EditorScene::ObjectInit() {
     audienceController_          = std::make_unique<AudienceController>();
     ObjectFromBlender_           = std::make_unique<KetaEngine::ObjectFromBlender>();
     deathTimer_                  = std::make_unique<DeathTimer>();
+    killCounter_                 = std::make_unique<KillCounter>();
 
     // 初期化
     player_->InitInGameScene();
@@ -132,6 +134,8 @@ void EditorScene::ObjectInit() {
     enemySpawner_->Init("enemySpawner.json");
     gameCamera_->Init();
     playerComboAttackController_->Init();
+    killCounter_->SetAttackController(playerComboAttackController_.get());
+    killCounter_->Init();
     attackEffect_->Init();
     sideRopeController_->Init();
     audienceController_->Init();
@@ -146,6 +150,7 @@ void EditorScene::SetClassPointer() {
 
     enemyManager_->SetPlayer(player_.get());
     enemyManager_->SetCombo(combo_.get());
+    enemyManager_->SetKillCounter(killCounter_.get());
     enemyManager_->SetGameCamera(gameCamera_.get());
     enemyManager_->SetEnemySpawner(enemySpawner_.get());
    

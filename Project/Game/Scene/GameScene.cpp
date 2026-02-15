@@ -76,6 +76,7 @@ void GameScene::Debug() {
     gameObj_.gameIntroManager_->AdjustParam();
     gameObj_.audienceController_->AdjustParam();
     gameObj_.deathTimer_->AdjustParam();
+    gameObj_.killCounter_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
@@ -124,7 +125,7 @@ void GameScene::ObjectInit() {
     gameObj_.combo_                       = std::make_unique<Combo>();
     gameObj_.fireInjectors_               = std::make_unique<FireInjectors>();
     gameObj_.gameBackGroundObject_        = std::make_unique<GameBackGroundObject>();
-    gameObj_.comboScene_                  = std::make_unique<ComboScene>();
+    gameObj_.comboDirector_                  = std::make_unique<ComboDirector>();
     gameObj_.attackEffect_                = std::make_unique<AttackEffect>();
     gameObj_.gameIntroManager_            = std::make_unique<GameIntroManager>();
     gameObj_.comboLevelObjHolder_         = std::make_unique<ComboLevelObjHolder>();
@@ -133,6 +134,7 @@ void GameScene::ObjectInit() {
     gameObj_.sideRopeController_          = std::make_unique<SideRopeController>();
     gameObj_.audienceController_          = std::make_unique<AudienceController>();
     gameObj_.deathTimer_                  = std::make_unique<DeathTimer>();
+    gameObj_.killCounter_                 = std::make_unique<KillCounter>();
 
     gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
@@ -148,8 +150,10 @@ void GameScene::ObjectInit() {
     gameObj_.fireInjectors_->Init();
     gameObj_.gameCamera_->Init();
     gameObj_.howToOperate_->Init();
-    gameObj_.comboScene_->Init();
+    gameObj_.comboDirector_->Init();
     gameObj_.playerComboAttackController_->Init();
+    gameObj_.killCounter_->SetAttackController(gameObj_.playerComboAttackController_.get());
+    gameObj_.killCounter_->Init();
     gameObj_.attackEffect_->Init();
     gameObj_.sideRopeController_->Init();
     gameObj_.audienceController_->Init();
@@ -166,6 +170,7 @@ void GameScene::SetClassPointer() {
 
     gameObj_.enemyManager_->SetPlayer(gameObj_.player_.get());
     gameObj_.enemyManager_->SetCombo(gameObj_.combo_.get());
+    gameObj_.enemyManager_->SetKillCounter(gameObj_.killCounter_.get());
     gameObj_.enemyManager_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.enemyManager_->SetEnemySpawner(gameObj_.enemySpawner_.get());
   
@@ -184,10 +189,10 @@ void GameScene::SetClassPointer() {
     gameObj_.gameIntroManager_->SetDeathTimerGauge(gameObj_.deathTimer_->GetDeathTimerGauge());
     gameObj_.gameIntroManager_->ClassisSet();
 
-    gameObj_.comboScene_->SetPlayer(gameObj_.player_.get());
-    gameObj_.comboScene_->SetComboAndDeathTimer(gameObj_.combo_.get(), gameObj_.deathTimer_.get());
-    gameObj_.comboScene_->SetComboLevelObjHolder(gameObj_.comboLevelObjHolder_.get());
-    gameObj_.comboScene_->SetAudienceController(gameObj_.audienceController_.get());
+    gameObj_.comboDirector_->SetPlayer(gameObj_.player_.get());
+    gameObj_.comboDirector_->SetComboAndDeathTimer(gameObj_.combo_.get(), gameObj_.deathTimer_.get());
+    gameObj_.comboDirector_->SetComboLevelObjHolder(gameObj_.comboLevelObjHolder_.get());
+    gameObj_.comboDirector_->SetAudienceController(gameObj_.audienceController_.get());
 
     gameObj_.player_->SetViewProjection(&viewProjection_);
     gameObj_.player_->SetLockOn(gameObj_.lockOnController_.get());

@@ -101,6 +101,10 @@
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakeData.cpp" />
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakeEditor.cpp" />
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakePlayer.cpp" />
+    <ClCompile Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationData.cpp" />
+    <ClCompile Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationEditor.cpp" />
+    <ClCompile Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationPlayer.cpp" />
+    <ClCompile Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationSection.cpp" />
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.cpp" />
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleData.cpp" />
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.cpp" />
@@ -183,7 +187,8 @@
     <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
-    <ClCompile Include="Game\ComboScene\ComboScene.cpp" />
+    <ClCompile Include="Game\ComboScene\ComboDirector.cpp" />
+    <ClCompile Include="Game\KillCounter\KillCounter.cpp" />
     <ClCompile Include="Game\Combo\Behavior\BaseComboUIBehavior.cpp" />
     <ClCompile Include="Game\Combo\Behavior\ComboCountUp.cpp" />
     <ClCompile Include="Game\Combo\Behavior\ComboWait.cpp" />
@@ -284,6 +289,8 @@
     <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneTransition.cpp" />
     <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Game\SkyDome\SkyDome.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistController.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistUI.cpp" />
     <ClCompile Include="Game\UI\HowToOperate.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
     <ClCompile Include="main.cpp" />
@@ -393,6 +400,10 @@
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakeData.h" />
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakeEditor.h" />
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakePlayer.h" />
+    <ClInclude Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationData.h" />
+    <ClInclude Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationEditor.h" />
+    <ClInclude Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationPlayer.h" />
+    <ClInclude Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationSection.h" />
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleEditor.h" />
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleData.h" />
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScalePlayer.h" />
@@ -488,7 +499,8 @@
     <ClInclude Include="Game\BaseBehavior\BaseBehavior.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
-    <ClInclude Include="Game\ComboScene\ComboScene.h" />
+    <ClInclude Include="Game\ComboScene\ComboDirector.h" />
+    <ClInclude Include="Game\KillCounter\KillCounter.h" />
     <ClInclude Include="Game\Combo\Behavior\BaseComboUIBehavior.h" />
     <ClInclude Include="Game\Combo\Behavior\ComboCountUp.h" />
     <ClInclude Include="Game\Combo\Behavior\ComboWait.h" />
@@ -590,6 +602,8 @@
     <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneTransition.h" />
     <ClInclude Include="Game\SkyBox\SkyBox.h" />
     <ClInclude Include="Game\SkyDome\SkyDome.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistController.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistUI.h" />
     <ClInclude Include="Game\UI\HowToOperate.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />
     <ClInclude Include="Engine\math\Box.h" />

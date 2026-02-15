@@ -85,6 +85,8 @@ public:
         float power;
         float blowYPower;
         bool isMotionOnly = false;
+        int32_t ableDefeatLevel = 0;  // 使用可能になるKillCounterレベル (0=最初から使用可能)
+        bool isUnlocked = true;       // 解放フラグ（ランタイム用、シリアライズ不要）
     };
 
 public:

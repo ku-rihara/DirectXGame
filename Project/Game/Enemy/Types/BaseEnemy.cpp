@@ -2,6 +2,8 @@
 
 // std
 #include <algorithm>
+// KillCounter
+#include "KillCounter/KillCounter.h"
 // Manager
 #include "Enemy/EnemyManager.h"
 // behavior
@@ -312,6 +314,13 @@ void BaseEnemy::TakeDamage(float damageValue) {
     // コンボをカウント
     pCombo_->ComboCountUP();
 
+    if (hp_ <= 0.0f && !isDeathPending_) {
+        // 撃破カウント
+        if (pKillCounter_) {
+            pKillCounter_->AddKillCount();
+        }
+    }
+
     if (hp_ < 0.0f) {
         hp_ = 0.0f;
     }
@@ -483,6 +492,10 @@ void BaseEnemy::SetManager(EnemyManager* manager) {
 
 void BaseEnemy::SetCombo(Combo* manager) {
     pCombo_ = manager;
+}
+
+void BaseEnemy::SetKillCounter(KillCounter* killCounter) {
+    pKillCounter_ = killCounter;
 }
 
 void BaseEnemy::BackToDamageRoot() {

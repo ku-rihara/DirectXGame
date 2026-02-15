@@ -9,12 +9,15 @@
 #include "struct/ModelData.h"
 #include "struct/TransformationMatrix.h"
 #include <cstdint>
+#include <memory>
 #include <string>
 
 /// <summary>
 /// スプライトクラス
 /// </summary>
 namespace KetaEngine {
+
+class SpriteEaseAnimationPlayer;
 
 class Sprite {
 public:
@@ -34,7 +37,7 @@ public:
         Vector2 scale_            = Vector2::OneVector();
         Vector2 uvScale_          = Vector2::OneVector();
         Vector4 color_            = Vector4::kWHITE();
-        Vector2 startAnchorPoint_ = Vector2::OneVector();
+        Vector2 startAnchorPoint_ = Vector2::ZeroVector();
         int32_t startLayerNum_;
     };
 
@@ -99,6 +102,11 @@ private:
     // ゲージ用の表示割合(0.0f~1.0f)
     float gaugeRate_ = 1.0f;
 
+    // スプライトイージングアニメーション
+    std::unique_ptr<SpriteEaseAnimationPlayer> spriteEaseAnimationPlayer_;
+
+    void ApplyAnimationToTransform();
+
     // テクスチャ
     Vector2 textureSize_; //< テクスチャ自体のサイズ
     D3D12_GPU_DESCRIPTOR_HANDLE texture_;
@@ -159,6 +167,32 @@ public:
     void SetUVScale(const Vector2& scale) { uvTransform_.scale = scale; }
     void SetUVRotate(const Vector3& rotate) { uvTransform_.rotate = rotate; }
     void SetUVPosition(const Vector2& pos) { uvTransform_.pos = pos; }
+
+    ///=========================================================================================
+    ///  スプライトイージングアニメーション
+    ///=========================================================================================
+
+    /// <summary>
+    /// スプライトイージングアニメーション再生
+    /// </summary>
+    /// <param name="animationName">アニメーション名</param>
+    /// <param name="categoryName">カテゴリー名</param>
+    void PlaySpriteEaseAnimation(const std::string& animationName, const std::string& categoryName = "Common");
+
+    /// <summary>
+    /// スプライトイージングアニメーション停止
+    /// </summary>
+    void StopSpriteEaseAnimation();
+
+    /// <summary>
+    /// スプライトイージングアニメーション更新
+    /// </summary>
+    void UpdateSpriteEaseAnimation();
+
+    /// <summary>
+    /// アニメーションプレイヤー取得
+    /// </summary>
+    SpriteEaseAnimationPlayer* GetSpriteEaseAnimationPlayer() { return spriteEaseAnimationPlayer_.get(); }
 };
 
 }; // KetaEngine
