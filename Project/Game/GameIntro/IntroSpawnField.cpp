@@ -1,4 +1,5 @@
 #include "IntroSpawnField.h"
+#include "UI/ComboAsistUI/ComboAsistController.h"
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "DeathTimer/DeathTimerGauge.h"
 #include "FireInjectors/FireInjectors.h"
@@ -21,6 +22,8 @@ void IntroSpawnField::Init(const std::string& name) {
     spriteEaseScale_ = Vector2::ZeroVector();
     scaleEasing_.SetAdaptValue(&spriteEaseScale_);
     scaleEasing_.Reset();
+
+    introSlideStarted_ = false;
 }
 
 void IntroSpawnField::Update(float playSpeed) {
@@ -64,6 +67,17 @@ void IntroSpawnField::FinishWait() {
         pHowToOperate_->SetScale(spriteEaseScale_);
         pDeathTimerGauge_->SetSpriteScales(spriteEaseScale_);
     }
+
+    // コンボアシストUIスライドイン
+    if (pComboAsistController_) {
+        if (!introSlideStarted_) {
+            pComboAsistController_->StartSlideIn();
+            introSlideStarted_ = true;
+        }
+        pComboAsistController_->UpdateSlide(playSpeed_);
+        pComboAsistController_->ApplySlideOffset();
+    }
+
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }

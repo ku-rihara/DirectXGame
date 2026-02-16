@@ -73,6 +73,11 @@ public:
         availableAnimations_ = animations;
     }
 
+    // 利用可能なアニメーション名リストを取得
+    static const std::vector<std::string>& GetAvailableAnimations() {
+        return availableAnimations_;
+    }
+
 private:
     // 利用可能なアニメーション名リスト（静的、エディター用）
     static inline std::vector<std::string> availableAnimations_;

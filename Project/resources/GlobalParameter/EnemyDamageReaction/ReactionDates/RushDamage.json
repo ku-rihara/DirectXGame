@@ -22,7 +22,7 @@
             0.0,
             0.0
         ],
-        "TakeUpper_ThrustRotateSpeed": 55.43000030517578,
+        "TakeUpper_ThrustRotateSpeed": 0.0,
         "TriggerAttackName": "RushAttack",
         "damageCollingTime": 1.590000033378601,
         "isPriorityReaction": false

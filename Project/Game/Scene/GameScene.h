@@ -37,7 +37,7 @@
 // SkyBox
 #include "SkyBox/SkyBox.h"
 // UI
-
+#include "UI/ComboAsistUI/ComboAsistController.h"
 #include "UI/HowToOperate.h"
 // Sprite
 #include "2D/Sprite.h"
@@ -98,6 +98,7 @@ private:
         std::unique_ptr<AudienceController> audienceController_                   = nullptr;
         std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
         std::unique_ptr<KillCounter> killCounter_                                = nullptr;
+        std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
 
         std::unique_ptr<KetaEngine::Sprite> screenSprite_;
     };

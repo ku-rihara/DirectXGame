@@ -7,7 +7,6 @@
 
 /// <summary>
 /// スプライトイージングアニメーションエディター
-/// カテゴリーシステムを使用
 /// </summary>
 namespace KetaEngine {
 
@@ -48,7 +47,7 @@ private:
     const std::string folderName_    = "SpriteEaseAnimation/";
 
     // プレビュー設定
-    bool showPreview_                     = true;
+    bool showPreview_                     = false;
     char previewTextureNameBuffer_[128]   = "UVChecker.dds";
     PreViewTransform previewBaseTransform_;
 

@@ -77,6 +77,7 @@ void GameScene::Debug() {
     gameObj_.audienceController_->AdjustParam();
     gameObj_.deathTimer_->AdjustParam();
     gameObj_.killCounter_->AdjustParam();
+    gameObj_.comboAsistController_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
@@ -135,6 +136,7 @@ void GameScene::ObjectInit() {
     gameObj_.audienceController_          = std::make_unique<AudienceController>();
     gameObj_.deathTimer_                  = std::make_unique<DeathTimer>();
     gameObj_.killCounter_                 = std::make_unique<KillCounter>();
+    gameObj_.comboAsistController_        = std::make_unique<ComboAsistController>();
 
     gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
@@ -187,6 +189,7 @@ void GameScene::SetClassPointer() {
     gameObj_.gameIntroManager_->SetGameBackGroundObject(gameObj_.gameBackGroundObject_.get());
     gameObj_.gameIntroManager_->SetHowToOperate(gameObj_.howToOperate_.get());
     gameObj_.gameIntroManager_->SetDeathTimerGauge(gameObj_.deathTimer_->GetDeathTimerGauge());
+    gameObj_.gameIntroManager_->SetComboAsistController(gameObj_.comboAsistController_.get());
     gameObj_.gameIntroManager_->ClassisSet();
 
     gameObj_.comboDirector_->SetPlayer(gameObj_.player_.get());
@@ -205,6 +208,10 @@ void GameScene::SetClassPointer() {
 
     gameObj_.playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
     gameObj_.playerComboAttackController_->SetPlayer(gameObj_.player_.get());
+
+    gameObj_.comboAsistController_->SetAttackController(gameObj_.playerComboAttackController_.get());
+    gameObj_.comboAsistController_->SetPlayer(gameObj_.player_.get());
+    gameObj_.comboAsistController_->Init();
 }
 
 void GameScene::ChangeState(std::unique_ptr<BaseGameSceneState> state) {

@@ -1,0 +1,7 @@
+{
+    "EnemyDamageReaction_Default": {
+        "DefaultDamageAnimationName": "EnemyNormalDamage",
+        "DefaultObjEaseAnimationName": "",
+        "DefaultObjEaseAnimationStartTiming": 0.0
+    }
+}

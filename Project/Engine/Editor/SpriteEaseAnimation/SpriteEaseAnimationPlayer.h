@@ -35,6 +35,8 @@ public:
     Vector3 GetCurrentColor() const;
     float GetCurrentAlpha() const;
 
+    bool IsPropertyActive(SpriteEaseAnimationData::PropertyType type) const;
+
     SpriteEaseAnimationData* GetAnimationData();
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
 };

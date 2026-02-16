@@ -22,7 +22,7 @@
             0.0,
             0.0
         ],
-        "TakeUpper_ThrustRotateSpeed": 63.2400016784668,
+        "TakeUpper_ThrustRotateSpeed": 0.0,
         "TriggerAttackName": "FallRandingAttack",
         "damageCollingTime": 1.3600000143051147,
         "isPriorityReaction": false

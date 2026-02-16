@@ -75,6 +75,14 @@ float SpriteEaseAnimationPlayer::GetCurrentAlpha() const {
     return 1.0f;
 }
 
+bool SpriteEaseAnimationPlayer::IsPropertyActive(SpriteEaseAnimationData::PropertyType type) const {
+    auto* animeData = dynamic_cast<SpriteEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->IsPropertyActive(type);
+    }
+    return false;
+}
+
 SpriteEaseAnimationData* SpriteEaseAnimationPlayer::GetAnimationData() {
     return dynamic_cast<SpriteEaseAnimationData*>(effectData_.get());
 }

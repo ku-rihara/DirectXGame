@@ -1,4 +1,5 @@
 #pragma once
+// dx
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
@@ -54,6 +55,28 @@ public:
     static Sprite* Create(const std::string& textureName, bool isAbleEdit = true);
     void CreateSprite(const std::string& textureName);
 
+     ///=========================================================================================
+    ///  スプライトイージングアニメーション
+    ///=========================================================================================
+
+    /// <summary>
+    /// スプライトイージングアニメーション再生
+    /// </summary>
+    /// <param name="animationName">アニメーション名</param>
+    /// <param name="categoryName">カテゴリー名</param>
+    void PlaySpriteEaseAnimation(const std::string& animationName, const std::string& categoryName = "Common");
+
+    /// <summary>
+    /// スプライトイージングアニメーション停止
+    /// </summary>
+    void StopSpriteEaseAnimation();
+
+    /// <summary>
+    /// スプライトイージングアニメーション更新
+    /// </summary>
+    void UpdateSpriteEaseAnimation();
+
+
     // パラメータ編集
     void AdjustParam();
     void RegisterParams();
@@ -105,7 +128,9 @@ private:
     // スプライトイージングアニメーション
     std::unique_ptr<SpriteEaseAnimationPlayer> spriteEaseAnimationPlayer_;
 
-    void ApplyAnimationToTransform();
+    void ApplyAnimationToMaterial();
+    Vector2 GetAnimationPosition() const;
+    Vector3 GetAnimationRotation() const;
 
     // テクスチャ
     Vector2 textureSize_; //< テクスチャ自体のサイズ
@@ -146,6 +171,12 @@ public:
     UVTransform& GetUVTransform() { return uvTransform_; }
     const UVTransform& GetUVTransform() const { return uvTransform_; }
 
+    
+    /// <summary>
+    /// アニメーションプレイヤー取得
+    /// </summary>
+    SpriteEaseAnimationPlayer* GetSpriteEaseAnimationPlayer() { return spriteEaseAnimationPlayer_.get(); }
+
     ///=========================================================================================
     ///  setter
     ///=========================================================================================
@@ -167,32 +198,6 @@ public:
     void SetUVScale(const Vector2& scale) { uvTransform_.scale = scale; }
     void SetUVRotate(const Vector3& rotate) { uvTransform_.rotate = rotate; }
     void SetUVPosition(const Vector2& pos) { uvTransform_.pos = pos; }
-
-    ///=========================================================================================
-    ///  スプライトイージングアニメーション
-    ///=========================================================================================
-
-    /// <summary>
-    /// スプライトイージングアニメーション再生
-    /// </summary>
-    /// <param name="animationName">アニメーション名</param>
-    /// <param name="categoryName">カテゴリー名</param>
-    void PlaySpriteEaseAnimation(const std::string& animationName, const std::string& categoryName = "Common");
-
-    /// <summary>
-    /// スプライトイージングアニメーション停止
-    /// </summary>
-    void StopSpriteEaseAnimation();
-
-    /// <summary>
-    /// スプライトイージングアニメーション更新
-    /// </summary>
-    void UpdateSpriteEaseAnimation();
-
-    /// <summary>
-    /// アニメーションプレイヤー取得
-    /// </summary>
-    SpriteEaseAnimationPlayer* GetSpriteEaseAnimationPlayer() { return spriteEaseAnimationPlayer_.get(); }
 };
 
 }; // KetaEngine

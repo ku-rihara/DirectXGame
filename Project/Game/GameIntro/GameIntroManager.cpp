@@ -188,5 +188,6 @@ void GameIntroManager::ClassisSet() {
         intro->SetFireInjectors(pFireInjectors_);
         intro->SetGameBackGroundObject(pGameBackGroundObject_);
         intro->SetDeathTimerGauge(pDeathTimerGauge_);
+        intro->SetComboAsistController(pComboAsistController_);
     }
 }

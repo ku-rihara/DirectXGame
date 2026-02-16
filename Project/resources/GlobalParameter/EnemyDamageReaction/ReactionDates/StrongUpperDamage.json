@@ -11,7 +11,7 @@
         "TakeUpper_FallSpeedLimit": 157.60000610351563,
         "TakeUpper_FloatingTime": 0.0,
         "TakeUpper_Gravity": 81.30000305175781,
-        "TakeUpper_ThrustRotateSpeed": 45.77000045776367,
+        "TakeUpper_ThrustRotateSpeed": 0.0,
         "TriggerAttackName": "StrongAttack3",
         "damageCollingTime": 0.5799999833106995,
         "isPriorityReaction": false

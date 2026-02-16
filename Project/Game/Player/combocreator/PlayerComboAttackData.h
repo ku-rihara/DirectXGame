@@ -85,6 +85,8 @@ public:
         float power;
         float blowYPower;
         bool isMotionOnly = false;
+        int32_t ableDefeatLevel = 0; 
+        bool isUnlocked = true;      
     };
 
 public:

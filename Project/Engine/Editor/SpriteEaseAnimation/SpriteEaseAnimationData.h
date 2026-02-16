@@ -92,6 +92,8 @@ public:
     Vector3 GetActiveColor() const;
     float GetActiveAlpha() const;
 
+    bool IsPropertyActive(PropertyType type) const;
+
     void SetPreAnimationOffsets(const Vector2& scale, const Vector2& position,
                                 const Vector3& rotation, const Vector3& color, float alpha);
 };

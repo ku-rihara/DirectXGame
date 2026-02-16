@@ -388,6 +388,9 @@
     <Filter Include="Engine\Editor\SpriteEaseAnimation">
       <UniqueIdentifier>{a924218b-19f7-4191-b7c7-8777b83adbf8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\UI\ComboAsistUI\AsistParts">
+      <UniqueIdentifier>{42e826c6-51b8-48ec-8b59-5cde07a2e091}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -2294,9 +2297,6 @@
     <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistController.cpp">
       <Filter>Game\UI\ComboAsistUI</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistUI.cpp">
-      <Filter>Game\UI\ComboAsistUI</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationData.cpp">
       <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
     </ClCompile>
@@ -2308,6 +2308,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationSection.cpp">
       <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistButtonUI.cpp">
+      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistArrowUI.cpp">
+      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\BaseComboAsistUI.cpp">
+      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2332,9 +2341,6 @@
     <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistController.h">
       <Filter>Game\UI\ComboAsistUI</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistUI.h">
-      <Filter>Game\UI\ComboAsistUI</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationData.h">
       <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
     </ClInclude>
@@ -2346,6 +2352,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\SpriteEaseAnimation\SpriteEaseAnimationSection.h">
       <Filter>Engine\Editor\SpriteEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistButtonUI.h">
+      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistArrowUI.h">
+      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\BaseComboAsistUI.h">
+      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

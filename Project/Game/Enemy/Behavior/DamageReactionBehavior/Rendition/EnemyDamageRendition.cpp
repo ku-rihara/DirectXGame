@@ -1,5 +1,7 @@
 #include "EnemyDamageRendition.h"
 #include "Enemy/Types/BaseEnemy.h"
+#include "Enemy/EnemyManager.h"
+#include "Enemy/DamageReaction/EnemyDamageReactionController.h"
 #include "Frame/Frame.h"
 
 void EnemyDamageRendition::Init(BaseEnemy* enemy, EnemyDamageReactionData* reactionData) {
@@ -38,9 +40,21 @@ void EnemyDamageRendition::Update(
 
     // オブジェクトアニメーションの再生
     const auto& animParam = rendition->GetObjAnimationParam();
-    if (reactionTimer >= animParam.startTiming && !animParam.fileName.empty() && animParam.fileName != "None") {
-        if (pBaseEnemy_->GetAnimationObject()) {
-            pBaseEnemy_->GetAnimationObject()->transform_.PlayObjEaseAnimation(animParam.fileName, "Enemy");
+    if (animParam.fileName != "None") {
+        std::string easeFileName = animParam.fileName;
+        float easeTiming = animParam.startTiming;
+
+        // ファイル名が空の場合はデフォルトを使用
+        if (easeFileName.empty()) {
+            const auto* controller = pBaseEnemy_->GetManager()->GetDamageReactionController();
+            easeFileName = controller->GetDefaultObjEaseAnimationName();
+            easeTiming = controller->GetDefaultObjEaseAnimationStartTiming();
+        }
+
+        if (reactionTimer >= easeTiming && !easeFileName.empty() && easeFileName != "None") {
+            if (pBaseEnemy_->GetAnimationObject()) {
+                pBaseEnemy_->GetAnimationObject()->transform_.PlayObjEaseAnimation(easeFileName, "Enemy");
+            }
         }
     }
 
@@ -53,7 +67,21 @@ void EnemyDamageRendition::Update(
     }
 
     // 両方の演出のタイミングをチェックして、いずれかが再生されたら完了
-    bool animReady     = animParam.fileName.empty() || animParam.fileName == "None" || reactionTimer >= animParam.startTiming;
+    // オブジェクトアニメーションの完了判定（デフォルト考慮）
+    bool animReady = false;
+    if (animParam.fileName == "None") {
+        animReady = true;
+    } else if (animParam.fileName.empty()) {
+        const auto* ctrl = pBaseEnemy_->GetManager()->GetDamageReactionController();
+        const auto& defEase = ctrl->GetDefaultObjEaseAnimationName();
+        if (defEase.empty() || defEase == "None") {
+            animReady = true;
+        } else {
+            animReady = reactionTimer >= ctrl->GetDefaultObjEaseAnimationStartTiming();
+        }
+    } else {
+        animReady = reactionTimer >= animParam.startTiming;
+    }
     bool particleReady = particleParam.fileName.empty() || particleParam.fileName == "None" || reactionTimer >= particleParam.startTiming;
 
     if (animReady && particleReady) {

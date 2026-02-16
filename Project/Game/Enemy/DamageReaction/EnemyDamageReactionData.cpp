@@ -131,7 +131,7 @@ void EnemyDamageReactionData::AdjustParam() {
 
         if (ImGui::Combo("Animation", &currentIndex, items.data(), static_cast<int>(items.size()))) {
             if (currentIndex == 0) {
-                reactionParam_.damageAnimationName.clear(); // None選択時はクリア
+                reactionParam_.damageAnimationName = "None"; // None選択時は"None"をセット
             } else {
                 reactionParam_.damageAnimationName = availableAnimations_[currentIndex - 1];
             }
@@ -148,7 +148,9 @@ void EnemyDamageReactionData::AdjustParam() {
     // 現在設定されているアニメーション名を表示
     if (!reactionParam_.damageAnimationName.empty()) {
         ImGui::Text("Current: %s", reactionParam_.damageAnimationName.c_str());
-    } 
+    } else {
+        ImGui::Text("Current: (Default)");
+    }
 
     ImGui::Separator();
 

@@ -203,11 +203,15 @@ void Sprite::Draw() {
     //  Transform
     ///==========================================================================================
 
+    Vector2 animPos   = GetAnimationPosition();
+    Vector3 animRot   = GetAnimationRotation();
+
     Vector3 size      = Vector3(textureSize_.x, textureSize_.y, 0.0f) * Vector3(transform_.scale.x * parameter_.scale_.x, transform_.scale.y * parameter_.scale_.y, 0.0f);
-    Vector3 translate = Vector3(transform_.pos.x, transform_.pos.y, 0.0f);
+    Vector3 translate = Vector3(transform_.pos.x + animPos.x, transform_.pos.y + animPos.y, 0.0f);
+    Vector3 rotate    = Vector3(transform_.rotate.x + animRot.x, transform_.rotate.y + animRot.y, transform_.rotate.z + animRot.z);
 
     // 行列変換
-    Matrix4x4 worldMatrixSprite               = MakeAffineMatrix(size, transform_.rotate, translate);
+    Matrix4x4 worldMatrixSprite               = MakeAffineMatrix(size, rotate, translate);
     Matrix4x4 projectionMatrixSprite          = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
     Matrix4x4 worldViewProjectionMatrixSprite = worldMatrixSprite * projectionMatrixSprite;
 
@@ -330,37 +334,63 @@ void Sprite::StopSpriteEaseAnimation() {
 void Sprite::UpdateSpriteEaseAnimation() {
     if (spriteEaseAnimationPlayer_) {
         spriteEaseAnimationPlayer_->Update();
-        ApplyAnimationToTransform();
+        ApplyAnimationToMaterial();
     }
 }
 
 ///============================================================
-/// アニメーション適用後のTransform更新
+/// アニメーションのColor/Alphaをマテリアルに適用
 ///============================================================
-void Sprite::ApplyAnimationToTransform() {
+void Sprite::ApplyAnimationToMaterial() {
     if (!spriteEaseAnimationPlayer_ || !spriteEaseAnimationPlayer_->IsPlaying()) {
         return;
     }
 
+    using PropType = SpriteEaseAnimationData::PropertyType;
+
     // Scale (ベーススケールにアニメーション値を乗算)
-    Vector2 scaleOffset = spriteEaseAnimationPlayer_->GetCurrentScale();
-    transform_.scale.x  = parameter_.scale_.x * scaleOffset.x;
-    transform_.scale.y  = parameter_.scale_.y * scaleOffset.y;
-
-    // Position (開始位置にアニメーションオフセットを加算)
-    Vector2 posOffset = spriteEaseAnimationPlayer_->GetCurrentPosition();
-    transform_.pos.x  = parameter_.position_.x + posOffset.x;
-    transform_.pos.y  = parameter_.position_.y + posOffset.y;
-
-    // Rotation
-    transform_.rotate = spriteEaseAnimationPlayer_->GetCurrentRotation();
+    if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Scale)) {
+        Vector2 scaleOffset = spriteEaseAnimationPlayer_->GetCurrentScale();
+        transform_.scale.x  = parameter_.scale_.x * scaleOffset.x;
+        transform_.scale.y  = parameter_.scale_.y * scaleOffset.y;
+    }
 
     // Color
-    Vector3 color = spriteEaseAnimationPlayer_->GetCurrentColor();
-    material_.GetMaterialData()->color.x = color.x;
-    material_.GetMaterialData()->color.y = color.y;
-    material_.GetMaterialData()->color.z = color.z;
+    if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Color)) {
+        Vector3 color = spriteEaseAnimationPlayer_->GetCurrentColor();
+        material_.GetMaterialData()->color.x = color.x;
+        material_.GetMaterialData()->color.y = color.y;
+        material_.GetMaterialData()->color.z = color.z;
+    }
 
     // Alpha
-    material_.GetMaterialData()->color.w = spriteEaseAnimationPlayer_->GetCurrentAlpha();
+    if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Alpha)) {
+        material_.GetMaterialData()->color.w = spriteEaseAnimationPlayer_->GetCurrentAlpha();
+    }
+}
+
+///============================================================
+/// アニメーションの位置オフセットを取得
+///============================================================
+Vector2 Sprite::GetAnimationPosition() const {
+    if (spriteEaseAnimationPlayer_ && spriteEaseAnimationPlayer_->IsPlaying()) {
+        using PropType = SpriteEaseAnimationData::PropertyType;
+        if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Position)) {
+            return spriteEaseAnimationPlayer_->GetCurrentPosition();
+        }
+    }
+    return Vector2::ZeroVector();
+}
+
+///============================================================
+/// アニメーションの回転オフセットを取得
+///============================================================
+Vector3 Sprite::GetAnimationRotation() const {
+    if (spriteEaseAnimationPlayer_ && spriteEaseAnimationPlayer_->IsPlaying()) {
+        using PropType = SpriteEaseAnimationData::PropertyType;
+        if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Rotation)) {
+            return spriteEaseAnimationPlayer_->GetCurrentRotation();
+        }
+    }
+    return Vector3::ZeroVector();
 }

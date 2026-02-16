@@ -328,6 +328,20 @@ const char* SpriteEaseAnimationData::GetPropertyName(PropertyType type) const {
     }
 }
 
+bool SpriteEaseAnimationData::IsPropertyActive(PropertyType type) const {
+    if (sectionElements_.empty()) {
+        return false;
+    }
+    // いずれかのセクションでアクティブなら有効とみなす
+    auto sectionType = static_cast<SpriteEaseAnimationSection::PropertyType>(static_cast<size_t>(type));
+    for (const auto& section : sectionElements_) {
+        if (section->IsPropertyActive(sectionType)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void SpriteEaseAnimationData::SetPreAnimationOffsets(const Vector2& scale, const Vector2& position,
                                                       const Vector3& rotation, const Vector3& color, float alpha) {
     for (auto& section : sectionElements_) {

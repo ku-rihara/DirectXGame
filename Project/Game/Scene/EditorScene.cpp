@@ -26,6 +26,9 @@ void EditorScene::Update() {
 
     effectEditorSuite_->SetCameraPreViewPos(player_->GetWorldPosition());
 
+    // コンボアシストUI更新
+    comboAsistController_->Update();
+
     // Editor
     attackEffect_->Update();
     field_->Update();
@@ -70,6 +73,7 @@ void EditorScene::Debug() {
     enemySpawner_->AdjustParam();
     combo_->AdjustParam();
     killCounter_->AdjustParam();
+    comboAsistController_->AdjustParam();
     audienceController_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
@@ -124,6 +128,7 @@ void EditorScene::ObjectInit() {
     ObjectFromBlender_           = std::make_unique<KetaEngine::ObjectFromBlender>();
     deathTimer_                  = std::make_unique<DeathTimer>();
     killCounter_                 = std::make_unique<KillCounter>();
+    comboAsistController_        = std::make_unique<ComboAsistController>();
 
     // 初期化
     player_->InitInGameScene();
@@ -169,4 +174,8 @@ void EditorScene::SetClassPointer() {
 
     playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
     playerComboAttackController_->SetPlayer(player_.get());
+
+    comboAsistController_->SetAttackController(playerComboAttackController_.get());
+    comboAsistController_->SetPlayer(player_.get());
+    comboAsistController_->Init();
 }

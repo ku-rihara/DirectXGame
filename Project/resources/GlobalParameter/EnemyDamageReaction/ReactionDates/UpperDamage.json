@@ -27,7 +27,7 @@
             0.0,
             0.0
         ],
-        "TakeUpper_ThrustRotateSpeed": 26.639999389648438,
+        "TakeUpper_ThrustRotateSpeed": 0.0,
         "TriggerAttackName": "UpperAttack",
         "damageCollingTime": 0.5199999809265137,
         "isPriorityReaction": false

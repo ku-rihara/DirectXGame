@@ -1,0 +1,17 @@
+{
+    "ComboAsistUI": {
+        "arrowOffset": [
+            48.0,
+            0.0
+        ],
+        "arrowScale": 0.6000000238418579,
+        "basePosition": [
+            30.0,
+            382.0
+        ],
+        "branchYOffset": 42.0,
+        "buttonScale": 0.6299999952316284,
+        "columnSpacing": 101.5,
+        "rowSpacing": 50.0
+    }
+}

@@ -5,7 +5,15 @@
 #include <Windows.h>
 
 void EnemyDamageReactionController::Init() {
-   
+    // デフォルトパラメータの初期化
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(defaultParamGroupName_);
+    globalParameter_->Regist(defaultParamGroupName_, "DefaultDamageAnimationName", &defaultDamageAnimationName_);
+    globalParameter_->Regist(defaultParamGroupName_, "DefaultObjEaseAnimationName", &defaultObjEaseAnimationName_);
+    globalParameter_->Regist(defaultParamGroupName_, "DefaultObjEaseAnimationStartTiming", &defaultObjEaseAnimationStartTiming_);
+    globalParameter_->LoadFile(defaultParamGroupName_, defaultParamFolderPath_);
+    globalParameter_->SyncParamForGroup(defaultParamGroupName_);
+
     AllLoadFile();
 }
 
@@ -45,6 +53,65 @@ void EnemyDamageReactionController::EditorUpdate() {
     if (ImGui::CollapsingHeader("Damage Reaction Manager")) {
         ImGui::PushID("Damage Reaction Manager");
 
+        // デフォルトパラメータUI
+        if (ImGui::TreeNode("Default Parameters")) {
+            // デフォルトダメージアニメーション名（ドロップダウン選択）
+            const auto& availableAnims = EnemyDamageReactionData::GetAvailableAnimations();
+            if (!availableAnims.empty()) {
+                // 現在選択されているインデックスを検索
+                int currentIndex = 0;
+                for (size_t i = 0; i < availableAnims.size(); ++i) {
+                    if (availableAnims[i] == defaultDamageAnimationName_) {
+                        currentIndex = static_cast<int>(i + 1);
+                        break;
+                    }
+                }
+
+                // ドロップダウン用のアイテムリスト作成
+                std::vector<const char*> items;
+                items.push_back("None");
+                for (const auto& anim : availableAnims) {
+                    items.push_back(anim.c_str());
+                }
+
+                if (ImGui::Combo("Default Damage Animation", &currentIndex, items.data(), static_cast<int>(items.size()))) {
+                    if (currentIndex == 0) {
+                        defaultDamageAnimationName_.clear();
+                    } else {
+                        defaultDamageAnimationName_ = availableAnims[currentIndex - 1];
+                    }
+                }
+            } else {
+                // アニメーションリストがない場合はテキスト入力
+                char animBuffer[256] = {};
+                strncpy_s(animBuffer, defaultDamageAnimationName_.c_str(), sizeof(animBuffer) - 1);
+                if (ImGui::InputText("Default Damage Animation", animBuffer, sizeof(animBuffer))) {
+                    defaultDamageAnimationName_ = animBuffer;
+                }
+            }
+            if (!defaultDamageAnimationName_.empty()) {
+                ImGui::Text("Current: %s", defaultDamageAnimationName_.c_str());
+            } else {
+                ImGui::Text("Current: (None)");
+            }
+
+            // デフォルトイージングアニメーション
+            defaultObjEaseFileSelector_.SelectFile(
+                "Default Obj Ease Animation",
+                "Resources/GlobalParameter/ObjEaseAnimation/Enemy/Dates/",
+                defaultObjEaseAnimationName_,
+                "",
+                true);
+            ImGui::DragFloat("Default Ease Start Timing", &defaultObjEaseAnimationStartTiming_, 0.01f);
+
+            // デフォルトパラメータ保存
+            if (ImGui::Button("Save Default Parameters")) {
+                globalParameter_->SaveFile(defaultParamGroupName_, defaultParamFolderPath_);
+            }
+            ImGui::TreePop();
+        }
+
+        ImGui::Separator();
         ImGui::Text("Damage Reaction Edit:");
 
         // 新規追加

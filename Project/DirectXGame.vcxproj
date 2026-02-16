@@ -289,8 +289,10 @@
     <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneTransition.cpp" />
     <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Game\SkyDome\SkyDome.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\BaseComboAsistUI.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistArrowUI.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistButtonUI.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistController.cpp" />
-    <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistUI.cpp" />
     <ClCompile Include="Game\UI\HowToOperate.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
     <ClCompile Include="main.cpp" />
@@ -602,8 +604,10 @@
     <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneTransition.h" />
     <ClInclude Include="Game\SkyBox\SkyBox.h" />
     <ClInclude Include="Game\SkyDome\SkyDome.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\BaseComboAsistUI.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistArrowUI.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistButtonUI.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistController.h" />
-    <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistUI.h" />
     <ClInclude Include="Game\UI\HowToOperate.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />
     <ClInclude Include="Engine\math\Box.h" />

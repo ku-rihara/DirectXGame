@@ -500,6 +500,7 @@ void BaseEnemy::SetKillCounter(KillCounter* killCounter) {
 
 void BaseEnemy::BackToDamageRoot() {
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+    ResetToWaitAnimation();
 }
 
 void BaseEnemy::SetParameter(const Type& type, const Parameter& parameter) {
