@@ -71,7 +71,8 @@ void EnemyDamageReactionData::LoadRendition() {
 ///==========================================================
 void EnemyDamageReactionData::RegisterParams() {
     globalParameter_->Regist(groupName_, "TriggerAttackName", &reactionParam_.triggerAttackName);
-    globalParameter_->Regist(groupName_, "DamageAnimationName", &reactionParam_.damageAnimationName);
+    globalParameter_->Regist(groupName_, "Normal_DamageAnimationName", &reactionParam_.damageAnimationNames[0]);
+    globalParameter_->Regist(groupName_, "Strong_DamageAnimationName", &reactionParam_.damageAnimationNames[1]);
     globalParameter_->Regist(groupName_, "ReactionState", &reactionParam_.intReactionState);
     globalParameter_->Regist(groupName_, "damageCollingTime", &reactionParam_.damageCollingTime);
     globalParameter_->Regist(groupName_, "isPriorityReaction", &reactionParam_.isPriorityReaction);
@@ -108,48 +109,55 @@ void EnemyDamageReactionData::AdjustParam() {
     ImGui::SeparatorText("Trigger Attack");
     SelectTriggerAttack();
 
-    // Damage Animation
+    // Damage Animation（敵タイプ別）
     ImGui::SeparatorText("Damage Animation");
+    {
+        const char* enemyTypeLabels[] = {"Normal Enemy", "Strong Enemy"};
+        for (int t = 0; t < kEnemyTypeCount; ++t) {
+            ImGui::PushID(t);
 
-    // 利用可能なアニメーションがある場合はドロップダウン表示
-    if (!availableAnimations_.empty()) {
-        // 現在選択されているインデックスを検索
-        int currentIndex = 0; 
-        for (size_t i = 0; i < availableAnimations_.size(); ++i) {
-            if (availableAnimations_[i] == reactionParam_.damageAnimationName) {
-                currentIndex = static_cast<int>(i + 1);
-                break;
-            }
-        }
+            if (!availableAnimations_.empty()) {
+                // 現在選択されているインデックスを検索
+                // 0=Default(空文字), 1=None, 2+=アニメーション名
+                int currentIndex = 0; // Default
+                if (reactionParam_.damageAnimationNames[t] == "None") {
+                    currentIndex = 1;
+                } else if (!reactionParam_.damageAnimationNames[t].empty()) {
+                    for (size_t i = 0; i < availableAnimations_.size(); ++i) {
+                        if (availableAnimations_[i] == reactionParam_.damageAnimationNames[t]) {
+                            currentIndex = static_cast<int>(i + 2);
+                            break;
+                        }
+                    }
+                }
 
-        // ドロップダウン用のアイテムリスト作成
-        std::vector<const char*> items;
-        items.push_back("None"); // 最初に"None"オプション
-        for (const auto& anim : availableAnimations_) {
-            items.push_back(anim.c_str());
-        }
+                // ドロップダウン用のアイテムリスト作成
+                std::vector<const char*> items;
+                items.push_back("Default");
+                items.push_back("None");
+                for (const auto& anim : availableAnimations_) {
+                    items.push_back(anim.c_str());
+                }
 
-        if (ImGui::Combo("Animation", &currentIndex, items.data(), static_cast<int>(items.size()))) {
-            if (currentIndex == 0) {
-                reactionParam_.damageAnimationName = "None"; // None選択時は"None"をセット
+                if (ImGui::Combo(enemyTypeLabels[t], &currentIndex, items.data(), static_cast<int>(items.size()))) {
+                    if (currentIndex == 0) {
+                        reactionParam_.damageAnimationNames[t].clear(); // Default
+                    } else if (currentIndex == 1) {
+                        reactionParam_.damageAnimationNames[t] = "None";
+                    } else {
+                        reactionParam_.damageAnimationNames[t] = availableAnimations_[currentIndex - 2];
+                    }
+                }
             } else {
-                reactionParam_.damageAnimationName = availableAnimations_[currentIndex - 1];
+                char buffer[256] = {};
+                strncpy_s(buffer, reactionParam_.damageAnimationNames[t].c_str(), sizeof(buffer) - 1);
+                if (ImGui::InputText(enemyTypeLabels[t], buffer, sizeof(buffer))) {
+                    reactionParam_.damageAnimationNames[t] = buffer;
+                }
             }
-        }
-    } else {
-        // アニメーションリストがない場合はテキスト入力
-        char buffer[256] = {};
-        strncpy_s(buffer, reactionParam_.damageAnimationName.c_str(), sizeof(buffer) - 1);
-        if (ImGui::InputText("Animation Name", buffer, sizeof(buffer))) {
-            reactionParam_.damageAnimationName = buffer;
-        }
-    }
 
-    // 現在設定されているアニメーション名を表示
-    if (!reactionParam_.damageAnimationName.empty()) {
-        ImGui::Text("Current: %s", reactionParam_.damageAnimationName.c_str());
-    } else {
-        ImGui::Text("Current: (Default)");
+            ImGui::PopID();
+        }
     }
 
     ImGui::Separator();

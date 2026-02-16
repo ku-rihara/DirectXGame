@@ -5,12 +5,24 @@
 #include <Windows.h>
 
 void EnemyDamageReactionController::Init() {
-    // デフォルトパラメータの初期化
+    // デフォルトパラメータの初期化（敵タイプ別）
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(defaultParamGroupName_);
-    globalParameter_->Regist(defaultParamGroupName_, "DefaultDamageAnimationName", &defaultDamageAnimationName_);
-    globalParameter_->Regist(defaultParamGroupName_, "DefaultObjEaseAnimationName", &defaultObjEaseAnimationName_);
-    globalParameter_->Regist(defaultParamGroupName_, "DefaultObjEaseAnimationStartTiming", &defaultObjEaseAnimationStartTiming_);
+
+    const char* typeNames[] = {"Normal", "Strong"};
+    const char* animTypeNames[] = {"Normal", "TakeUpper", "Slammed", "Bound", "GetUp"};
+    for (int i = 0; i < kEnemyTypeCount; ++i) {
+        std::string typePrefix = std::string(typeNames[i]) + "_";
+        // アニメーション種類別に登録
+        for (int a = 0; a < kDefaultAnimTypeCount; ++a) {
+            globalParameter_->Regist(defaultParamGroupName_,
+                typePrefix + animTypeNames[a] + "_DefaultDamageAnimationName",
+                &defaultDamageAnimationNames_[i][a]);
+        }
+        // イージング系は敵タイプ別のみ
+        globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultObjEaseAnimationName", &defaultObjEaseAnimationNames_[i]);
+        globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultObjEaseAnimationStartTiming", &defaultObjEaseAnimationStartTimings_[i]);
+    }
     globalParameter_->LoadFile(defaultParamGroupName_, defaultParamFolderPath_);
     globalParameter_->SyncParamForGroup(defaultParamGroupName_);
 
@@ -53,56 +65,66 @@ void EnemyDamageReactionController::EditorUpdate() {
     if (ImGui::CollapsingHeader("Damage Reaction Manager")) {
         ImGui::PushID("Damage Reaction Manager");
 
-        // デフォルトパラメータUI
+        // デフォルトパラメータUI（敵タイプ別）
         if (ImGui::TreeNode("Default Parameters")) {
-            // デフォルトダメージアニメーション名（ドロップダウン選択）
+            const char* typeNames[] = {"Normal", "Strong"};
             const auto& availableAnims = EnemyDamageReactionData::GetAvailableAnimations();
-            if (!availableAnims.empty()) {
-                // 現在選択されているインデックスを検索
-                int currentIndex = 0;
-                for (size_t i = 0; i < availableAnims.size(); ++i) {
-                    if (availableAnims[i] == defaultDamageAnimationName_) {
-                        currentIndex = static_cast<int>(i + 1);
-                        break;
+
+            const char* animTypeLabels[] = {"Normal Damage", "TakeUpper", "Slammed", "Bound", "GetUp"};
+
+            for (int t = 0; t < kEnemyTypeCount; ++t) {
+                ImGui::PushID(t);
+                if (ImGui::TreeNode(typeNames[t])) {
+                    // アニメーション種類別のドロップダウン
+                    for (int a = 0; a < kDefaultAnimTypeCount; ++a) {
+                        ImGui::PushID(a);
+                        if (!availableAnims.empty()) {
+                            int currentIndex = 0;
+                            for (size_t i = 0; i < availableAnims.size(); ++i) {
+                                if (availableAnims[i] == defaultDamageAnimationNames_[t][a]) {
+                                    currentIndex = static_cast<int>(i + 1);
+                                    break;
+                                }
+                            }
+
+                            std::vector<const char*> items;
+                            items.push_back("None");
+                            for (const auto& anim : availableAnims) {
+                                items.push_back(anim.c_str());
+                            }
+
+                            if (ImGui::Combo(animTypeLabels[a], &currentIndex, items.data(), static_cast<int>(items.size()))) {
+                                if (currentIndex == 0) {
+                                    defaultDamageAnimationNames_[t][a].clear();
+                                } else {
+                                    defaultDamageAnimationNames_[t][a] = availableAnims[currentIndex - 1];
+                                }
+                            }
+                        } else {
+                            char animBuffer[256] = {};
+                            strncpy_s(animBuffer, defaultDamageAnimationNames_[t][a].c_str(), sizeof(animBuffer) - 1);
+                            if (ImGui::InputText(animTypeLabels[a], animBuffer, sizeof(animBuffer))) {
+                                defaultDamageAnimationNames_[t][a] = animBuffer;
+                            }
+                        }
+                        ImGui::PopID();
                     }
-                }
 
-                // ドロップダウン用のアイテムリスト作成
-                std::vector<const char*> items;
-                items.push_back("None");
-                for (const auto& anim : availableAnims) {
-                    items.push_back(anim.c_str());
-                }
+                    ImGui::Separator();
 
-                if (ImGui::Combo("Default Damage Animation", &currentIndex, items.data(), static_cast<int>(items.size()))) {
-                    if (currentIndex == 0) {
-                        defaultDamageAnimationName_.clear();
-                    } else {
-                        defaultDamageAnimationName_ = availableAnims[currentIndex - 1];
-                    }
+                    // イージングアニメーション選択
+                    defaultObjEaseFileSelectors_[t].SelectFile(
+                        "Obj Ease Animation",
+                        "Resources/GlobalParameter/ObjEaseAnimation/Enemy/Dates/",
+                        defaultObjEaseAnimationNames_[t],
+                        "",
+                        true);
+                    ImGui::DragFloat("Ease Start Timing", &defaultObjEaseAnimationStartTimings_[t], 0.01f);
+
+                    ImGui::TreePop();
                 }
-            } else {
-                // アニメーションリストがない場合はテキスト入力
-                char animBuffer[256] = {};
-                strncpy_s(animBuffer, defaultDamageAnimationName_.c_str(), sizeof(animBuffer) - 1);
-                if (ImGui::InputText("Default Damage Animation", animBuffer, sizeof(animBuffer))) {
-                    defaultDamageAnimationName_ = animBuffer;
-                }
+                ImGui::PopID();
             }
-            if (!defaultDamageAnimationName_.empty()) {
-                ImGui::Text("Current: %s", defaultDamageAnimationName_.c_str());
-            } else {
-                ImGui::Text("Current: (None)");
-            }
-
-            // デフォルトイージングアニメーション
-            defaultObjEaseFileSelector_.SelectFile(
-                "Default Obj Ease Animation",
-                "Resources/GlobalParameter/ObjEaseAnimation/Enemy/Dates/",
-                defaultObjEaseAnimationName_,
-                "",
-                true);
-            ImGui::DragFloat("Default Ease Start Timing", &defaultObjEaseAnimationStartTiming_, 0.01f);
 
             // デフォルトパラメータ保存
             if (ImGui::Button("Save Default Parameters")) {

@@ -2,6 +2,20 @@
     "EnemyDamageReaction_Default": {
         "DefaultDamageAnimationName": "EnemyNormalDamage",
         "DefaultObjEaseAnimationName": "",
-        "DefaultObjEaseAnimationStartTiming": 0.0
+        "DefaultObjEaseAnimationStartTiming": 0.0,
+        "Normal_Bound_DefaultDamageAnimationName": "",
+        "Normal_DefaultObjEaseAnimationName": "",
+        "Normal_DefaultObjEaseAnimationStartTiming": 0.0,
+        "Normal_GetUp_DefaultDamageAnimationName": "",
+        "Normal_Normal_DefaultDamageAnimationName": "EnemyNormalDamage",
+        "Normal_Slammed_DefaultDamageAnimationName": "EnemyNormalDamage",
+        "Normal_TakeUpper_DefaultDamageAnimationName": "EnemyNormalDamage",
+        "Strong_Bound_DefaultDamageAnimationName": "",
+        "Strong_DefaultObjEaseAnimationName": "",
+        "Strong_DefaultObjEaseAnimationStartTiming": 0.0,
+        "Strong_GetUp_DefaultDamageAnimationName": "",
+        "Strong_Normal_DefaultDamageAnimationName": "EnemyNormalDamage",
+        "Strong_Slammed_DefaultDamageAnimationName": "EnemyNormalDamage",
+        "Strong_TakeUpper_DefaultDamageAnimationName": "EnemyNormalDamage"
     }
 }

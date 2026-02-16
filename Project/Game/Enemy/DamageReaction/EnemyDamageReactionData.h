@@ -5,6 +5,7 @@
 #include "EnemyDamageRenditionData.h"
 #include "utility/FileSelector/FileSelector.h"
 #include "Vector3.h"
+#include <array>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -45,10 +46,13 @@ public:
         Vector3 rotateSpeed;
     };
 
+    // 敵タイプ数
+    static constexpr int kEnemyTypeCount = 2;
+
     // リアクションパラメータ
     struct ReactionParameter {
         std::string triggerAttackName;
-        std::string damageAnimationName; // ダメージアニメーション名
+        std::array<std::string, kEnemyTypeCount> damageAnimationNames; // ダメージアニメーション名（0=Normal, 1=Strong）
         int32_t intReactionState = 0;
         ReactionState reactionState;
         NormalParam normalParam;

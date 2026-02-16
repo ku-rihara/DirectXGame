@@ -50,18 +50,20 @@ void EnemyDamageReactionNormal::InitReaction() {
 
     const auto& reactionParam = pReactionData_->GetReactionParam();
 
-    // ダメージアニメーションを再生
-    if (reactionParam.damageAnimationName == "None") {
+    // ダメージアニメーションを再生（敵タイプ別）
+    int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+    const auto& animName = reactionParam.damageAnimationNames[enemyType];
+    if (animName == "None") {
         // "None"が設定されている場合は何もしない
-    } else if (reactionParam.damageAnimationName.empty()) {
+    } else if (animName.empty()) {
         // 空の場合はデフォルトアニメーションを再生
         const auto* controller = pBaseEnemy_->GetManager()->GetDamageReactionController();
-        const auto& defaultAnim = controller->GetDefaultDamageAnimationName();
+        const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::Normal);
         if (!defaultAnim.empty()) {
             pBaseEnemy_->PlayAnimationByName(defaultAnim, false);
         }
     } else {
-        pBaseEnemy_->PlayAnimationByName(reactionParam.damageAnimationName, false);
+        pBaseEnemy_->PlayAnimationByName(animName, false);
     }
 
     knockBackPower_ = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().knockBackPower;

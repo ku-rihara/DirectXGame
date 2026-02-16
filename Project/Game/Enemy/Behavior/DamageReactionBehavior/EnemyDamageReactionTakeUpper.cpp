@@ -71,18 +71,20 @@ void EnemyDamageReactionTakeUpper::InitReaction() {
 
     const auto& reactionParam = pReactionData_->GetReactionParam();
 
-    // ダメージアニメーションを再生
-    if (reactionParam.damageAnimationName == "None") {
+    // ダメージアニメーションを再生（敵タイプ別）
+    int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+    const auto& animName = reactionParam.damageAnimationNames[enemyType];
+    if (animName == "None") {
         // "None"が設定されている場合は何もしない
-    } else if (reactionParam.damageAnimationName.empty()) {
+    } else if (animName.empty()) {
         // 空の場合はデフォルトアニメーションを再生
         const auto* controller = pBaseEnemy_->GetManager()->GetDamageReactionController();
-        const auto& defaultAnim = controller->GetDefaultDamageAnimationName();
+        const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::TakeUpper);
         if (!defaultAnim.empty()) {
             pBaseEnemy_->PlayAnimationByName(defaultAnim, false);
         }
     } else {
-        pBaseEnemy_->PlayAnimationByName(reactionParam.damageAnimationName, false);
+        pBaseEnemy_->PlayAnimationByName(animName, false);
     }
 
     blowYPower_ = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
@@ -184,6 +186,16 @@ void EnemyDamageReactionTakeUpper::UpdateTakeUpper() {
             pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
             hasReachedGround_ = true;
 
+            // バウンドアニメーション再生
+            {
+                const auto* ctrl = pBaseEnemy_->GetManager()->GetDamageReactionController();
+                int eType = static_cast<int>(pBaseEnemy_->GetType());
+                const auto& boundAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::Bound);
+                if (!boundAnim.empty()) {
+                    pBaseEnemy_->PlayAnimationByName(boundAnim, false);
+                }
+            }
+
             // バウンドエフェクト
             pBaseEnemy_->ThrustRenditionInit();
 
@@ -253,6 +265,14 @@ void EnemyDamageReactionTakeUpper::OnReactionEnd() {
     pBaseEnemy_->RotateInit();
     const auto& enemyParam = pBaseEnemy_->GetParameter();
     pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
+
+    // 起き上がりアニメーション再生
+    const auto* ctrl = pBaseEnemy_->GetManager()->GetDamageReactionController();
+    int eType = static_cast<int>(pBaseEnemy_->GetType());
+    const auto& getUpAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::GetUp);
+    if (!getUpAnim.empty()) {
+        pBaseEnemy_->PlayAnimationByName(getUpAnim, false);
+    }
 }
 
 void EnemyDamageReactionTakeUpper::RotationUpdate() {

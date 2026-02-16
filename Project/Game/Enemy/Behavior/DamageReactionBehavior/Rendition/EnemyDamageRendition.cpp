@@ -47,8 +47,9 @@ void EnemyDamageRendition::Update(
         // ファイル名が空の場合はデフォルトを使用
         if (easeFileName.empty()) {
             const auto* controller = pBaseEnemy_->GetManager()->GetDamageReactionController();
-            easeFileName = controller->GetDefaultObjEaseAnimationName();
-            easeTiming = controller->GetDefaultObjEaseAnimationStartTiming();
+            int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+            easeFileName = controller->GetDefaultObjEaseAnimationName(enemyType);
+            easeTiming = controller->GetDefaultObjEaseAnimationStartTiming(enemyType);
         }
 
         if (reactionTimer >= easeTiming && !easeFileName.empty() && easeFileName != "None") {
@@ -73,11 +74,12 @@ void EnemyDamageRendition::Update(
         animReady = true;
     } else if (animParam.fileName.empty()) {
         const auto* ctrl = pBaseEnemy_->GetManager()->GetDamageReactionController();
-        const auto& defEase = ctrl->GetDefaultObjEaseAnimationName();
+        int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+        const auto& defEase = ctrl->GetDefaultObjEaseAnimationName(enemyType);
         if (defEase.empty() || defEase == "None") {
             animReady = true;
         } else {
-            animReady = reactionTimer >= ctrl->GetDefaultObjEaseAnimationStartTiming();
+            animReady = reactionTimer >= ctrl->GetDefaultObjEaseAnimationStartTiming(enemyType);
         }
     } else {
         animReady = reactionTimer >= animParam.startTiming;
