@@ -16,13 +16,21 @@ public:
     /// </summary>
     /// <param name="gamepadButton">XINPUT_GAMEPAD_* のボタン値</param>
     /// <param name="isUnlocked">開放済みか</param>
-    void Init(int32_t gamepadButton, bool isUnlocked);
+    /// <param name="row">行番号</param>
+    /// <param name="col">列番号</param>
+    /// <param name="layout">レイアウト情報</param>
+    void Init(int32_t gamepadButton, bool isUnlocked, int32_t row, int32_t col, const LayoutParam& layout);
+
     void Update() override;
+    void ApplyLayout() override;
 
     /// <summary>
     /// 開放状態の更新
     /// </summary>
     void SetUnlocked(bool isUnlocked);
+
+    // 表示/非表示（ロック状態を考慮）
+    void SetVisible(bool visible) override;
 
 private:
     int32_t gamepadButton_ = 0;

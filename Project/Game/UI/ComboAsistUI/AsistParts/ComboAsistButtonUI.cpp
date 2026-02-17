@@ -1,11 +1,14 @@
 #include "ComboAsistButtonUI.h"
 #include <XInput.h>
 
-void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked) {
+void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, int32_t row, int32_t col, const LayoutParam& layout) {
     gamepadButton_ = gamepadButton;
     isUnlocked_    = isUnlocked;
+    rowNum_        = row;
+    columnNum_     = col;
+    layout_        = layout;
 
-    const int32_t layerNum = 10; // レイヤー番号
+    const int32_t layerNum = 20; // レイヤー番号
 
     // ボタンに応じたテクスチャを選択
     if (gamepadButton == XINPUT_GAMEPAD_Y) {
@@ -34,15 +37,49 @@ void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked) {
         activeOutLineUI_->SetIsDraw(false);
         activeOutLineUI_->SetAnchorPoint({0.5f, 0.5f});
     }
+
+    // レイアウト適用
+    ApplyLayout();
+
+    // 初期配置はスナップ（Lerpなしで即座に反映）
+    currentDisplayPos_ = targetPos_;
+    SetPosition(currentDisplayPos_);
+    needsLerpUpdate_ = false;
 }
 
 void ComboAsistButtonUI::Update() {
     BaseComboAsistUI::Update();
 }
 
+void ComboAsistButtonUI::ApplyLayout() {
+    Vector2 pos(
+        layout_.basePosition.x + columnNum_ * layout_.columnSpacing + slideOffsetX_,
+        layout_.basePosition.y + rowNum_ * (layout_.rowSpacing + layout_.branchYOffset));
+
+    // ターゲット位置を設定（Lerpで補間される）
+    targetPos_ = pos;
+    needsLerpUpdate_ = true;
+    SetScale(layout_.buttonScale);
+}
+
 void ComboAsistButtonUI::SetUnlocked(bool isUnlocked) {
     isUnlocked_ = isUnlocked;
     if (outLineUI_) {
         outLineUI_->SetIsDraw(!isUnlocked_);
+    }
+}
+
+void ComboAsistButtonUI::SetVisible(bool visible) {
+    if (uiSprite_) {
+        uiSprite_->SetIsDraw(visible);
+    }
+    if (outLineUI_) {
+        // ロック中かつ表示中の場合のみロックオーバーレイを表示
+        outLineUI_->SetIsDraw(visible && !isUnlocked_);
+    }
+    if (activeOutLineUI_) {
+        if (!visible) {
+            activeOutLineUI_->SetIsDraw(false);
+        }
     }
 }

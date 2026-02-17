@@ -2318,6 +2318,9 @@
     <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\BaseComboAsistUI.cpp">
       <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\ComboPathBuilder.cpp">
+      <Filter>Game\UI\ComboAsistUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2361,6 +2364,9 @@
     </ClInclude>
     <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\BaseComboAsistUI.h">
       <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\ComboPathBuilder.h">
+      <Filter>Game\UI\ComboAsistUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

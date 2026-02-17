@@ -25,7 +25,7 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     // conditionをIntから適応
     attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
 
-    // 解放フラグ初期化（ableDefeatLevel == 0 なら最初から使用可能）
+    // 解放フラグ初期化
     attackParam_.isUnlocked = (attackParam_.ableDefeatLevel == 0);
 
     // コンボ分岐データを初期化
@@ -43,7 +43,7 @@ void PlayerComboAttackData::LoadData() {
     // conditionをIntから適応
     attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
 
-    // 解放フラグ初期化（ableDefeatLevel == 0 なら最初から使用可能）
+    // 解放フラグ初期化
     attackParam_.isUnlocked = (attackParam_.ableDefeatLevel == 0);
 }
 
@@ -249,7 +249,6 @@ void PlayerComboAttackData::DrawFlagsParamUI() {
     if (attackParam_.ableDefeatLevel < 0) {
         attackParam_.ableDefeatLevel = 0;
     }
-    ImGui::Text("解放状態: %s", attackParam_.isUnlocked ? "解放済み" : "未解放");
 }
 
 void PlayerComboAttackData::DrawComboBranchesUI() {
@@ -263,7 +262,7 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
     // 削除対象のインデックス
     int32_t removeIndex = -1;
 
-    // 各分岐のUIを描画（ComboBranchParameterに委譲）
+    // 各分岐のUIを描画
     size_t branchSize = comboBranches_.size();
     for (size_t i = 0; i < branchSize; ++i) {
         auto& branch = comboBranches_[i];
@@ -273,7 +272,7 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
 
         ImGui::PushID(static_cast<int>(i));
 
-        // 分岐のパラメータUIを描画（削除要求があればremoveIndexに設定）
+        // 分岐のパラメータUIを描画
         if (branch->DrawParameterUI("Resources/GlobalParameter/AttackCreator", groupName_)) {
             removeIndex = static_cast<int32_t>(i);
         }
@@ -281,7 +280,7 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
         ImGui::PopID();
     }
 
-    // 削除処理（ループ終了後に安全に削除）
+    // 削除処理
     if (removeIndex >= 0 && removeIndex < static_cast<int32_t>(comboBranches_.size())) {
         // 削除前にbranchCount_を更新
         branchCount_ = static_cast<int32_t>(comboBranches_.size()) - 1;
@@ -311,7 +310,7 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
     }
     ImGui::PopStyleColor(3);
 
-    // トラック名更新ボタン（ボタン設定変更後に使用）
+    // トラック名更新ボタン
     if (!comboBranches_.empty()) {
         ImGui::SameLine();
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.4f, 0.4f, 0.8f, 1.0f));

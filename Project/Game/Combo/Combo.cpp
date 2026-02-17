@@ -28,7 +28,6 @@ void Combo::Update() {
 /// パラメータ調整
 ///==========================================================
 void Combo::AdjustParam() {
-
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());

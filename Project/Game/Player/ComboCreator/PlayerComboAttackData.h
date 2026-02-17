@@ -116,10 +116,6 @@ public:
     // コンボ分岐の初期化
     void InitComboBranches();
 
-    // コンボ分岐リストへのアクセス
-    const std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() const { return comboBranches_; }
-    std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() { return comboBranches_; }
-
     // コンボ分岐UI
     void DrawComboBranchesUI();
     void DrawCollisionParamUI();
@@ -178,6 +174,9 @@ public:
     const std::string& GetFolderPath() const { return folderPath_; }
     Player* GetPlayer() const { return pPlayer_; };
     KetaEngine::TimelineDrawer* GetTimeline();
+  
+    const std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() const { return comboBranches_; }
+   
 
     void SetPlayer(Player* player);
     void SetController(PlayerComboAttackController* controller) { pController_ = controller; }
