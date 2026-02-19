@@ -165,7 +165,7 @@ void PlayerComboAttackController::AddAttack(const std::string& attackName) {
     selectedIndex_ = static_cast<int>(attacks_.size()) - 1;
 }
 
-void PlayerComboAttackController::RemoveAttack(const int& index) {
+void PlayerComboAttackController::RemoveAttack(int index) {
     if (index >= 0 && index < static_cast<int>(attacks_.size())) {
         attacks_.erase(attacks_.begin() + index);
 

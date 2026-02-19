@@ -15,8 +15,7 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
     SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
 
-    // ダメージリアクション用アニメーションを追加
-    AddDamageReactionAnimation("EnemyNormalDamage");
+   
 
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);

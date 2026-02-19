@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 /// <summary>
 /// ダメージリアクションデータクラス
@@ -72,24 +73,12 @@ public:
     // 初期化
     void Init(const std::string& reactionName);
 
-    // 利用可能なアニメーション名リストを設定（エディター用）
-    static void SetAvailableAnimations(const std::vector<std::string>& animations) {
-        availableAnimations_ = animations;
-    }
-
-    // 利用可能なアニメーション名リストを取得
-    static const std::vector<std::string>& GetAvailableAnimations() {
-        return availableAnimations_;
-    }
-
 private:
-    // 利用可能なアニメーション名リスト（静的、エディター用）
-    static inline std::vector<std::string> availableAnimations_;
 
 public:
 
     // パラメータバインド、調節
-    void AdjustParam();
+    void AdjustParam(const std::vector<std::string>& availableAnimations);
     void RegisterParams();
 
     // データロード、セーブ

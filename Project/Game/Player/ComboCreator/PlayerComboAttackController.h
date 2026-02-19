@@ -36,7 +36,7 @@ public:
 
     // 攻撃データの追加、削除
     void AddAttack(const std::string& attackName);
-    void RemoveAttack(const int& index);
+    void RemoveAttack(int index);
 
     void EditorUpdate(); //< エディタ更新
     void AllLoadFile(); //< 全ファイルロード
@@ -96,7 +96,7 @@ public:
     PlayerComboAttackData* GetSelectedAttack();
     PlayerComboAttackData* GetAttackByName(const std::string& name);
     const std::vector<std::unique_ptr<PlayerComboAttackData>>& GetAllAttacks() const { return attacks_; }
-    const int& GetAttackCount() const { return static_cast<int>(attacks_.size()); }
+    int GetAttackCount() const { return static_cast<int>(attacks_.size()); }
 
     void SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite);
     void SetCombo(Combo* combo);

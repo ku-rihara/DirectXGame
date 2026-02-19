@@ -14,9 +14,10 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     SetAnimationName(AnimationType::Discovery, "NormalEnemyDiscovery");
     SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
     SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
-
+    
      // ダメージリアクション用アニメーションを追加
     AddDamageReactionAnimation("EnemyNormalDamage");
+    AddDamageReactionAnimation("TakeUpMotion",true);
     
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);

@@ -100,7 +100,7 @@ void EnemyDamageReactionData::RegisterParams() {
 ///==========================================================
 /// パラメータ調整
 ///==========================================================
-void EnemyDamageReactionData::AdjustParam() {
+void EnemyDamageReactionData::AdjustParam(const std::vector<std::string>& availableAnimations) {
 #ifdef _DEBUG
 
     ImGui::PushID(groupName_.c_str());
@@ -116,15 +116,15 @@ void EnemyDamageReactionData::AdjustParam() {
         for (int t = 0; t < kEnemyTypeCount; ++t) {
             ImGui::PushID(t);
 
-            if (!availableAnimations_.empty()) {
+            if (!availableAnimations.empty()) {
                 // 現在選択されているインデックスを検索
                 // 0=Default(空文字), 1=None, 2+=アニメーション名
                 int currentIndex = 0; // Default
                 if (reactionParam_.damageAnimationNames[t] == "None") {
                     currentIndex = 1;
                 } else if (!reactionParam_.damageAnimationNames[t].empty()) {
-                    for (size_t i = 0; i < availableAnimations_.size(); ++i) {
-                        if (availableAnimations_[i] == reactionParam_.damageAnimationNames[t]) {
+                    for (size_t i = 0; i < availableAnimations.size(); ++i) {
+                        if (availableAnimations[i] == reactionParam_.damageAnimationNames[t]) {
                             currentIndex = static_cast<int>(i + 2);
                             break;
                         }
@@ -135,7 +135,7 @@ void EnemyDamageReactionData::AdjustParam() {
                 std::vector<const char*> items;
                 items.push_back("Default");
                 items.push_back("None");
-                for (const auto& anim : availableAnimations_) {
+                for (const auto& anim : availableAnimations) {
                     items.push_back(anim.c_str());
                 }
 
@@ -145,7 +145,7 @@ void EnemyDamageReactionData::AdjustParam() {
                     } else if (currentIndex == 1) {
                         reactionParam_.damageAnimationNames[t] = "None";
                     } else {
-                        reactionParam_.damageAnimationNames[t] = availableAnimations_[currentIndex - 2];
+                        reactionParam_.damageAnimationNames[t] = availableAnimations[currentIndex - 2];
                     }
                 }
             } else {

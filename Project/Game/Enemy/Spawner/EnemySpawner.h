@@ -60,7 +60,7 @@ public:
     /// 敵が倒されたときの通知
     /// </summary>
     /// <param name="groupId">グループID</param>
-    void OnEnemyDestroyed(const int& groupId);
+    void OnEnemyDestroyed(int groupId);
 
     ///=======================================================================================
     /// Editor method
@@ -83,7 +83,7 @@ public:
     /// </summary>
     /// <param name="groupId">グループID</param>
     /// <returns>完了していればtrue</returns>
-    bool IsGroupCompleted(const int& groupId) const;
+    bool IsGroupCompleted(int groupId) const;
 
     void ActivateNextGroup(); //< 次のグループをアクティブ化
     void SettingGroupSpawnPos(); //< グループスポーン位置設定
@@ -120,8 +120,8 @@ public:
     /// getter method
     ///=======================================================================================
     const bool& IsActive() const { return isSystemActive_; }
-    const int& GetCurrentGroupIndex() const { return currentGroupIndex_; }
-    const int& GetTotalGroups() const { return static_cast<int>(spawnGroups_.size()); }
+    int GetCurrentGroupIndex() const { return currentGroupIndex_; }
+    int GetTotalGroups() const { return static_cast<int>(spawnGroups_.size()); }
     const bool& GetAllGroupsCompleted() const { return allGroupsCompleted_; }
 
     ///=======================================================================================

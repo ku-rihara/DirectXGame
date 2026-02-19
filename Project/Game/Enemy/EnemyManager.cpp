@@ -8,8 +8,6 @@
 #include "LockOn/LockOn.h"
 // Spawner
 #include "Spawner/EnemySpawner.h"
-// DamageReaction
-#include "DamageReaction/EnemyDamageReactionData.h"
 // imGui
 #include <imgui.h>
 
@@ -305,7 +303,7 @@ void EnemyManager::UpdateAvailableAnimationsForEditor(BaseEnemy* enemy) {
 
     // エディター用に利用可能なアニメーションリストを設定
     if (!animeNames.empty()) {
-        EnemyDamageReactionData::SetAvailableAnimations(animeNames);
+        damageReactionController_->SetAvailableAnimations(animeNames);
     }
 }
 

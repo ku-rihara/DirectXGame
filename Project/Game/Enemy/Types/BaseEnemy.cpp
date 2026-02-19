@@ -449,9 +449,9 @@ std::vector<std::string> BaseEnemy::GetAnimationNames() const {
     return {};
 }
 
-void BaseEnemy::AddDamageReactionAnimation(const std::string& name) {
+void BaseEnemy::AddDamageReactionAnimation(const std::string& name, bool isLoop) {
     objAnimation_->Add("Enemy/" + name + ".gltf");
-    damageReactionAnimationNames_.push_back(name);
+    damageReactionAnimations_.push_back({name, isLoop});
 }
 
 float BaseEnemy::CalcDistanceToPlayer() {
@@ -537,4 +537,23 @@ void BaseEnemy::RotateInit() {
 
 void BaseEnemy::ScaleReset() {
     baseTransform_.scale_ = parameter_.baseScale_;
+}
+
+std::vector<std::string> BaseEnemy::GetDamageReactionAnimationNames() const {
+    std::vector<std::string> names;
+    names.reserve(damageReactionAnimations_.size());
+    for (const auto& info : damageReactionAnimations_) {
+        names.push_back(info.name);
+    }
+    return names;
+}
+
+
+bool BaseEnemy::GetDamageReactionAnimationIsLoop(const std::string& name) const {
+    for (const auto& info : damageReactionAnimations_) {
+        if (info.name == name) {
+            return info.isLoop;
+        }
+    }
+    return false;
 }

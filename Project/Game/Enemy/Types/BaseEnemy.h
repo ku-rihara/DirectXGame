@@ -58,6 +58,11 @@ public:
         float deathBurstTime;
     };
 
+     struct DamageReactionAnimInfo {
+        std::string name;
+        bool isLoop = false;
+    };
+
     // アニメーションタイプ
     enum class AnimationType {
         Wait,
@@ -107,7 +112,8 @@ public:
     /// ダメージリアクション用アニメーションを追加
     /// </summary>
     /// <param name="name">アニメーション名</param>
-    void AddDamageReactionAnimation(const std::string& name);
+    /// <param name="isLoop">ループするか（デフォルト: false）</param>
+    void AddDamageReactionAnimation(const std::string& name, bool isLoop = false);
 
     /// <summary>
     /// 追跡中のアニメーション更新
@@ -242,7 +248,8 @@ protected:
 
     // アニメーション関連
     std::array<std::string, static_cast<size_t>(AnimationType::Count)> animationNames_;
-    std::vector<std::string> damageReactionAnimationNames_; // ダメージリアクション用アニメーション
+   
+    std::vector<DamageReactionAnimInfo> damageReactionAnimations_;
     ChaseAnimationState chaseAnimeState_ = ChaseAnimationState::NONE;
     bool isPreDashFinished_              = false;
 
@@ -289,12 +296,8 @@ public:
         return animationNames_[static_cast<size_t>(type)];
     }
 
-    /// <summary>
-    /// ダメージリアクション用アニメーション名リストを取得
-    /// </summary>
-    const std::vector<std::string>& GetDamageReactionAnimationNames() const {
-        return damageReactionAnimationNames_;
-    }
+    std::vector<std::string> GetDamageReactionAnimationNames() const;
+    bool GetDamageReactionAnimationIsLoop(const std::string& name) const;
 
     /// ========================================================================================
     ///  setter method
@@ -308,7 +311,7 @@ public:
     void SetBodyRotate(Vector3 rotate) { objAnimation_->transform_.rotation_ = rotate; }
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
-    void SetGroupId(const int& groupId) { groupId_ = groupId; }
+    void SetGroupId(int groupId) { groupId_ = groupId; }
     void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
     void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }

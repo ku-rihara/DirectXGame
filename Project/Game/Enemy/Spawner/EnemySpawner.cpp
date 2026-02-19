@@ -177,7 +177,7 @@ void EnemySpawner::RegisterParams() {
     }
 }
 
-bool EnemySpawner::IsGroupCompleted(const int& groupId) const {
+bool EnemySpawner::IsGroupCompleted(int groupId) const {
     if (groupId >= 0 && groupId < spawnGroups_.size()) {
         const SpawnGroup& group = spawnGroups_[groupId];
         return (group.aliveCount <= group.nextFazeEnemyNum && group.spawnedCount == group.objectCount);
@@ -194,7 +194,7 @@ void EnemySpawner::ActivateNextGroup() {
     }
 }
 
-void EnemySpawner::OnEnemyDestroyed(const int& groupId) {
+void EnemySpawner::OnEnemyDestroyed(int groupId) {
     if (groupId >= 0 && groupId < spawnGroups_.size()) {
         spawnGroups_[groupId].aliveCount--;
         if (spawnGroups_[groupId].aliveCount < 0) {

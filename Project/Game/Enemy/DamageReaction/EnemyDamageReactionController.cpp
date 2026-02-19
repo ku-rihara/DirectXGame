@@ -8,25 +8,29 @@ void EnemyDamageReactionController::Init() {
     // デフォルトパラメータの初期化（敵タイプ別）
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(defaultParamGroupName_);
+    RegisterParams();
+    globalParameter_->SyncParamForGroup(defaultParamGroupName_);
 
-    const char* typeNames[] = {"Normal", "Strong"};
-    const char* animTypeNames[] = {"Normal", "TakeUpper", "Slammed", "Bound", "GetUp"};
+    AllLoadFile();
+}
+
+void EnemyDamageReactionController::RegisterParams() {
+    // 敵タイプの名前
+    const char* typeNames[]     = {"Normal", "Strong"};
+    // アニメーション種類の名前
+    const char* animeTypeNames[] = {"Normal", "TakeUpper", "Slammed", "Bound", "GetUp"};
     for (int i = 0; i < kEnemyTypeCount; ++i) {
         std::string typePrefix = std::string(typeNames[i]) + "_";
         // アニメーション種類別に登録
-        for (int a = 0; a < kDefaultAnimTypeCount; ++a) {
+        for (int a = 0; a < static_cast<int>(DefaultAnimType::Count); ++a) {
             globalParameter_->Regist(defaultParamGroupName_,
-                typePrefix + animTypeNames[a] + "_DefaultDamageAnimationName",
+                typePrefix + animeTypeNames[a] + "_DefaultDamageAnimationName",
                 &defaultDamageAnimationNames_[i][a]);
         }
         // イージング系は敵タイプ別のみ
         globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultObjEaseAnimationName", &defaultObjEaseAnimationNames_[i]);
         globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultObjEaseAnimationStartTiming", &defaultObjEaseAnimationStartTimings_[i]);
     }
-    globalParameter_->LoadFile(defaultParamGroupName_, defaultParamFolderPath_);
-    globalParameter_->SyncParamForGroup(defaultParamGroupName_);
-
-    AllLoadFile();
 }
 
 void EnemyDamageReactionController::AllLoadFile() {
@@ -68,20 +72,20 @@ void EnemyDamageReactionController::EditorUpdate() {
         // デフォルトパラメータUI（敵タイプ別）
         if (ImGui::TreeNode("Default Parameters")) {
             const char* typeNames[] = {"Normal", "Strong"};
-            const auto& availableAnims = EnemyDamageReactionData::GetAvailableAnimations();
+            const auto& availableAnimes = availableAnimations_;
 
-            const char* animTypeLabels[] = {"Normal Damage", "TakeUpper", "Slammed", "Bound", "GetUp"};
+            const char* animeTypeLabels[] = {"Normal Damage", "TakeUpper", "Slammed", "Bound", "GetUp"};
 
             for (int t = 0; t < kEnemyTypeCount; ++t) {
                 ImGui::PushID(t);
                 if (ImGui::TreeNode(typeNames[t])) {
                     // アニメーション種類別のドロップダウン
-                    for (int a = 0; a < kDefaultAnimTypeCount; ++a) {
+                    for (int a = 0; a < static_cast<int>(DefaultAnimType::Count); ++a) {
                         ImGui::PushID(a);
-                        if (!availableAnims.empty()) {
+                        if (!availableAnimes.empty()) {
                             int currentIndex = 0;
-                            for (size_t i = 0; i < availableAnims.size(); ++i) {
-                                if (availableAnims[i] == defaultDamageAnimationNames_[t][a]) {
+                            for (size_t i = 0; i < availableAnimes.size(); ++i) {
+                                if (availableAnimes[i] == defaultDamageAnimationNames_[t][a]) {
                                     currentIndex = static_cast<int>(i + 1);
                                     break;
                                 }
@@ -89,22 +93,16 @@ void EnemyDamageReactionController::EditorUpdate() {
 
                             std::vector<const char*> items;
                             items.push_back("None");
-                            for (const auto& anim : availableAnims) {
-                                items.push_back(anim.c_str());
+                            for (const auto& anime : availableAnimes) {
+                                items.push_back(anime.c_str());
                             }
 
-                            if (ImGui::Combo(animTypeLabels[a], &currentIndex, items.data(), static_cast<int>(items.size()))) {
+                            if (ImGui::Combo(animeTypeLabels[a], &currentIndex, items.data(), static_cast<int>(items.size()))) {
                                 if (currentIndex == 0) {
                                     defaultDamageAnimationNames_[t][a].clear();
                                 } else {
-                                    defaultDamageAnimationNames_[t][a] = availableAnims[currentIndex - 1];
+                                    defaultDamageAnimationNames_[t][a] = availableAnimes[currentIndex - 1];
                                 }
-                            }
-                        } else {
-                            char animBuffer[256] = {};
-                            strncpy_s(animBuffer, defaultDamageAnimationNames_[t][a].c_str(), sizeof(animBuffer) - 1);
-                            if (ImGui::InputText(animTypeLabels[a], animBuffer, sizeof(animBuffer))) {
-                                defaultDamageAnimationNames_[t][a] = animBuffer;
                             }
                         }
                         ImGui::PopID();
@@ -166,7 +164,7 @@ void EnemyDamageReactionController::EditorUpdate() {
 
         // 選択された攻撃データの編集
         if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(reactions_.size())) {
-            reactions_[selectedIndex_]->AdjustParam();
+            reactions_[selectedIndex_]->AdjustParam(availableAnimations_);
         }
 
         ImGui::Separator();
@@ -216,7 +214,7 @@ void EnemyDamageReactionController::AddAttack(const std::string& attackName) {
     selectedIndex_ = static_cast<int>(reactions_.size()) - 1;
 }
 
-void EnemyDamageReactionController::RemoveAttack(const int& index) {
+void EnemyDamageReactionController::RemoveAttack(int index) {
     if (index >= 0 && index < static_cast<int>(reactions_.size())) {
         reactions_.erase(reactions_.begin() + index);
 

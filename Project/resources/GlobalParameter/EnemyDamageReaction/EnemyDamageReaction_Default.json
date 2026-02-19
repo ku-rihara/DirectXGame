@@ -9,7 +9,7 @@
         "Normal_GetUp_DefaultDamageAnimationName": "",
         "Normal_Normal_DefaultDamageAnimationName": "EnemyNormalDamage",
         "Normal_Slammed_DefaultDamageAnimationName": "EnemyNormalDamage",
-        "Normal_TakeUpper_DefaultDamageAnimationName": "EnemyNormalDamage",
+        "Normal_TakeUpper_DefaultDamageAnimationName": "TakeUpMotion",
         "Strong_Bound_DefaultDamageAnimationName": "",
         "Strong_DefaultObjEaseAnimationName": "",
         "Strong_DefaultObjEaseAnimationStartTiming": 0.0,

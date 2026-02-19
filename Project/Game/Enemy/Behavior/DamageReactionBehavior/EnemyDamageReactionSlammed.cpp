@@ -85,10 +85,10 @@ void EnemyDamageReactionSlammed::InitReaction() {
         const auto* controller = pBaseEnemy_->GetManager()->GetDamageReactionController();
         const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::Slammed);
         if (!defaultAnim.empty()) {
-            pBaseEnemy_->PlayAnimationByName(defaultAnim, false);
+            pBaseEnemy_->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetDamageReactionAnimationIsLoop(defaultAnim));
         }
     } else {
-        pBaseEnemy_->PlayAnimationByName(animName, false);
+        pBaseEnemy_->PlayAnimationByName(animName, pBaseEnemy_->GetDamageReactionAnimationIsLoop(animName));
     }
 
     blowYPower_     = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
