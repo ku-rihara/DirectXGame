@@ -71,7 +71,7 @@ void IntroSpawnField::FinishWait() {
     // コンボアシストUIスライドイン
     if (pComboAsistController_) {
         if (!introSlideStarted_) {
-            pComboAsistController_->StartSlideIn();
+            pComboAsistController_->OpenPanel();
             introSlideStarted_ = true;
         }
         pComboAsistController_->UpdateSlide(playSpeed_);

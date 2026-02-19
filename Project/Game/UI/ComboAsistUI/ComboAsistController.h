@@ -1,9 +1,6 @@
 #pragma once
-// AsistParts
-#include "AsistParts/ComboAsistArrowUI.h"
-#include "AsistParts/ComboAsistButtonUI.h"
-// Builder
-#include "ComboPathBuilder.h"
+// UI生成・ヘルパー
+#include "ComboUIBuilder.h"
 // Parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Easing
@@ -13,7 +10,6 @@
 // std
 #include <cstdint>
 #include <map>
-#include <memory>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -23,48 +19,12 @@ class PlayerComboAttackController;
 
 /// <summary>
 /// コンボアシストUI管理クラス
+/// UI生成はComboUIBuilderに委譲し、表示制御・入力・演出を担当する
 /// </summary>
 class ComboAsistController {
 public:
-    // UI要素のグループ（パスデータはBuilderが保持）
-    struct ComboUIGroup {
-        std::vector<std::unique_ptr<ComboAsistButtonUI>> mainButtonUIs;
-        std::vector<std::unique_ptr<ComboAsistArrowUI>> mainArrowUIs;
+    enum class PanelMode { Close, Open };
 
-        std::vector<std::vector<std::unique_ptr<ComboAsistButtonUI>>> branchButtonUIs;
-        std::vector<std::unique_ptr<ComboAsistArrowUI>> branchArrowUIs;
-        std::vector<std::vector<std::unique_ptr<ComboAsistArrowUI>>> branchInnerArrowUIs;
-
-        void Clear() {
-            mainButtonUIs.clear();
-            mainArrowUIs.clear();
-            branchButtonUIs.clear();
-            branchArrowUIs.clear();
-            branchInnerArrowUIs.clear();
-        }
-    };
-
-    // 発動条件ごとのUI・パスデータ
-    struct ConditionUIData {
-        ComboPathBuilder pathBuilder;
-        ComboUIGroup xUIGroup;
-        ComboUIGroup yUIGroup;
-        int32_t columnShiftAmount = 0;
-        bool isColumnShifting = false;
-
-        void Clear() {
-            xUIGroup.Clear();
-            yUIGroup.Clear();
-            columnShiftAmount = 0;
-            isColumnShifting = false;
-        }
-
-        bool HasData() const {
-            return !xUIGroup.mainButtonUIs.empty() || !yUIGroup.mainButtonUIs.empty();
-        }
-    };
-
-public:
     ComboAsistController()  = default;
     ~ComboAsistController() = default;
 
@@ -78,11 +38,13 @@ public:
     void UpdateSlide(float deltaTime);
     void ApplySlideOffset();
 
+    //=== パネル開閉 ===
+    void OpenPanel();
+    void TogglePanelMode();
+
 private:
     //=== UI生成 ===
-    void BuildAllConditions();
-    void CreateConditionUI(ConditionUIData& data);
-    void CreateGroupUI(const ComboPathBuilder::ComboPathGroup& pathGroup, ComboUIGroup& uiGroup, int32_t* currentRow);
+    void RebuildAllConditions();
 
     //=== ロック同期 ===
     void SyncUnlockStates();
@@ -110,14 +72,28 @@ private:
     //=== パラメータ ===
     void RegisterParams();
 
-    //=== レイアウト情報の構築 ===
+    //=== ラムダ置き換え用 ===
+    void UpdateCurrentConditionUI();
+    void ApplySlideOffsetToCondition(ConditionUIData& data);
+    void SnapConditionToTarget(ConditionUIData& data);
+    bool CheckGroupColumnOverflow(ConditionUIData& data, ComboUIGroup& uiGroup);
+    void ShiftGroup(ComboUIGroup& uiGroup, int32_t delta);
+    bool IsInVisibleRange(int32_t col, int32_t row) const;
+    bool IsArrowVisible(const ComboAsistArrowUI& arrow) const;
+    void UpdateGroupVisibility(ComboUIGroup& uiGroup);
+
+    //=== ヘルパー ===
     LayoutParam MakeLayoutParam() const;
+    ConditionUIData* GetCurrentData();
 
 private:
     Player* pPlayer_                                = nullptr;
     PlayerComboAttackController* pAttackController_ = nullptr;
     KetaEngine::GlobalParameter* globalParameter_   = nullptr;
     std::string groupName_                          = "ComboAsistUI";
+
+    // UI生成担当
+    ComboUIBuilder uiBuilder_;
 
     // 条件別UIデータ（全条件を事前構築）
     std::map<PlayerComboAttackData::TriggerCondition, ConditionUIData> conditionDataMap_;
@@ -132,9 +108,13 @@ private:
     KetaEngine::Easing<float> slideOutEasing_;
     KetaEngine::Easing<float>* activeSlideEasing_ = nullptr;
 
-    float slideOffsetX_                           = 0.0f;
-    bool isVisible_                               = false;
-    bool isSliding_                               = false;
+    float slideOffsetX_ = 0.0f;
+    bool isVisible_           = false;
+    bool isSliding_           = false;
+
+    // パネル開閉モード
+    PanelMode panelMode_      = PanelMode::Close;
+    bool isModeTransitioning_ = false;
 
     // 表示範囲（minは常に0）
     int32_t maxVisibleColumn_ = 5;
@@ -142,7 +122,7 @@ private:
 
     // 列オーバーフロー
     KetaEngine::Easing<float> columnOverflowEasing_;
-    float overflowScale_      = 0.0f;
+    float overflowScale_ = 0.0f;
 
     // 発動条件切替
     PlayerComboAttackData::TriggerCondition currentCondition_ = PlayerComboAttackData::TriggerCondition::GROUND;

@@ -141,8 +141,8 @@ void ComboPathBuilder::ClassifyPaths(ComboPathGroup& group, std::vector<ComboPat
 	}
 
 	// 最長パスが先頭に来るようソート
-	std::sort(paths.begin(), paths.end(), [](const ComboPath& a, const ComboPath& b) {
-		return a.steps.size() > b.steps.size();
+	std::sort(paths.begin(), paths.end(), [](const ComboPath& lhs, const ComboPath& rhs) {
+		return lhs.steps.size() > rhs.steps.size();
 	});
 
 	// 先頭（最長）をメインパスとして採用

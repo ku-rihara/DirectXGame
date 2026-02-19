@@ -294,6 +294,7 @@
     <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistButtonUI.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistController.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\ComboPathBuilder.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\ComboUIBuilder.cpp" />
     <ClCompile Include="Game\UI\HowToOperate.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
     <ClCompile Include="main.cpp" />
@@ -610,6 +611,7 @@
     <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistButtonUI.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistController.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\ComboPathBuilder.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\ComboUIBuilder.h" />
     <ClInclude Include="Game\UI\HowToOperate.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />
     <ClInclude Include="Engine\math\Box.h" />

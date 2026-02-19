@@ -55,8 +55,6 @@ public:
 	// グループ参照の取得
 	const ComboPathGroup& GetXGroup() const { return xGroup_; }
 	const ComboPathGroup& GetYGroup() const { return yGroup_; }
-	ComboPathGroup& GetXGroup() { return xGroup_; }
-	ComboPathGroup& GetYGroup() { return yGroup_; }
 
 private:
 	/// 攻撃データを再帰的に辿り、全パスを列挙する

@@ -95,7 +95,7 @@ void BaseComboAsistUI::SetVisible(bool visible) {
         outLineUI_->SetIsDraw(visible);
     }
     if (activeOutLineUI_) {
-        // 非表示時は強制非表示、表示時はactiveOutLineの状態は外部制御に任せる
+    
         if (!visible) {
             activeOutLineUI_->SetIsDraw(false);
         }

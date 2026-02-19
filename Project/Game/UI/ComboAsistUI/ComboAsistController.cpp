@@ -2,29 +2,45 @@
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 #include "input/InputData.h"
-#include "Player/Player.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
+#include "Player/Player.h"
 #include <algorithm>
 #include <cmath>
 #include <imgui.h>
+
+///==========================================================
+/// ヘルパーメソッド
+///==========================================================
+ConditionUIData* ComboAsistController::GetCurrentData() {
+    auto it = conditionDataMap_.find(currentCondition_);
+    if (it != conditionDataMap_.end()) {
+        return &it->second;
+    }
+    return nullptr;
+}
+
+LayoutParam ComboAsistController::MakeLayoutParam() const {
+    return {basePosition_, arrowOffset_, columnSpacing_, rowSpacing_, branchYOffset_, buttonScale_, arrowScale_};
+}
+
 
 void ComboAsistController::Init() {
     if (!pAttackController_) {
         return;
     }
 
-    // GlobalParameter初期化
+    // globalParameterのセット
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    // 全条件のパス構築＆UI生成
+    // 全ての攻撃Conditionの攻撃を構築
     currentCondition_ = PlayerComboAttackData::TriggerCondition::GROUND;
-    BuildAllConditions();
+    RebuildAllConditions();
 
-    // スライドイージング初期化
+
     slideInEasing_.Init("ComboAsistSlideIn.json");
     slideInEasing_.SetAdaptValue(&slideOffsetX_);
     slideInEasing_.Reset();
@@ -33,28 +49,30 @@ void ComboAsistController::Init() {
     slideOutEasing_.SetAdaptValue(&slideOffsetX_);
     slideOutEasing_.Reset();
 
-    activeSlideEasing_ = nullptr;
-    isVisible_ = false;
-    isSliding_ = false;
+    activeSlideEasing_  = nullptr;
+    isVisible_          = false;
+    isSliding_          = false;
+    panelMode_          = PanelMode::Close;
+    isModeTransitioning_ = false;
 
-    // 列オーバーフローイージング初期化
     columnOverflowEasing_.Init("ComboAsistColumnOverflow.json");
     columnOverflowEasing_.SetAdaptValue(&overflowScale_);
     columnOverflowEasing_.Reset();
     isAutoSwitchedCondition_ = false;
 
-    // 初期条件以外は非表示
     for (auto& [cond, data] : conditionDataMap_) {
         if (cond != currentCondition_) {
             SetConditionVisible(data, false);
         }
     }
 
-    // 初期状態は画面外に隠す
     slideOffsetX_ = slideInEasing_.GetStartValue();
     ApplySlideOffset();
 }
 
+///==========================================================
+/// Update
+///==========================================================
 void ComboAsistController::Update() {
     SyncUnlockStates();
     UpdateComboState();
@@ -66,217 +84,22 @@ void ComboAsistController::Update() {
     CheckColumnOverflow();
     UpdateVisibility();
 
-    // 現在の条件のUIのみLerp更新
-    auto it = conditionDataMap_.find(currentCondition_);
-    if (it == conditionDataMap_.end()) {
-        return;
-    }
-    auto& curData = it->second;
+    UpdateCurrentConditionUI();
+}
 
-    auto updateGroup = [](ComboUIGroup& uiGroup) {
-        for (auto& btn : uiGroup.mainButtonUIs) {
-            btn->Update();
-        }
-        for (auto& arrow : uiGroup.mainArrowUIs) {
-            arrow->Update();
-        }
-        for (auto& arrow : uiGroup.branchArrowUIs) {
-            arrow->Update();
-        }
-        for (auto& buttons : uiGroup.branchButtonUIs) {
-            for (auto& btn : buttons) {
-                btn->Update();
-            }
-        }
-        for (auto& arrows : uiGroup.branchInnerArrowUIs) {
-            for (auto& arrow : arrows) {
-                arrow->Update();
-            }
-        }
-    };
-    updateGroup(curData.xUIGroup);
-    updateGroup(curData.yUIGroup);
+
+void ComboAsistController::RebuildAllConditions() {
+    // 全攻撃ConditionのUIを構築
+    uiBuilder_.BuildAllConditions(
+        pAttackController_,
+        MakeLayoutParam(),
+        conditionDataMap_,
+        availableConditions_,
+        currentCondition_);
 }
 
 ///==========================================================
-/// レイアウト情報の構築
-///==========================================================
-LayoutParam ComboAsistController::MakeLayoutParam() const {
-    LayoutParam lp;
-    lp.basePosition  = basePosition_;
-    lp.arrowOffset   = arrowOffset_;
-    lp.columnSpacing = columnSpacing_;
-    lp.rowSpacing    = rowSpacing_;
-    lp.branchYOffset = branchYOffset_;
-    lp.buttonScale   = buttonScale_;
-    lp.arrowScale    = arrowScale_;
-    return lp;
-}
-
-///==========================================================
-/// 全条件のパス構築＆UI生成
-///==========================================================
-void ComboAsistController::BuildAllConditions() {
-    using TC = PlayerComboAttackData::TriggerCondition;
-
-    conditionDataMap_.clear();
-    availableConditions_.clear();
-
-    const TC conditions[] = { TC::GROUND, TC::AIR, TC::DASH, TC::BOTH, TC::JUSTACTION };
-
-    for (TC cond : conditions) {
-        ConditionUIData data;
-        data.pathBuilder.Build(pAttackController_, cond);
-
-        bool hasX = !data.pathBuilder.GetXGroup().mainPath.steps.empty();
-        bool hasY = !data.pathBuilder.GetYGroup().mainPath.steps.empty();
-        if (hasX || hasY) {
-            CreateConditionUI(data);
-            conditionDataMap_[cond] = std::move(data);
-            availableConditions_.push_back(cond);
-        }
-    }
-
-    // 現在の条件が利用不可なら最初の利用可能条件に切替
-    if (conditionDataMap_.count(currentCondition_) == 0 && !availableConditions_.empty()) {
-        currentCondition_ = availableConditions_[0];
-    }
-}
-
-///==========================================================
-/// 条件別UI生成
-///==========================================================
-void ComboAsistController::CreateConditionUI(ConditionUIData& data) {
-    int32_t currentRow = 0;
-    CreateGroupUI(data.pathBuilder.GetXGroup(), data.xUIGroup, &currentRow);
-    CreateGroupUI(data.pathBuilder.GetYGroup(), data.yUIGroup, &currentRow);
-}
-
-///==========================================================
-/// グループのUI生成
-///==========================================================
-void ComboAsistController::CreateGroupUI(
-    const ComboPathBuilder::ComboPathGroup& pathGroup,
-    ComboUIGroup& uiGroup,
-    int32_t* currentRow) {
-
-    if (pathGroup.mainPath.steps.empty()) {
-        return;
-    }
-
-    LayoutParam lp = MakeLayoutParam();
-    int32_t mainRow = *currentRow;
-
-    // --- メインパスの列マッピング構築 ---
-    // step[i] は i==0 または step[i-1].isAutoAdvance==false の場合のみ表示
-    std::vector<int32_t> mainColumnMap(pathGroup.mainPath.steps.size(), -1);
-    int32_t displayCol = 0;
-    for (size_t i = 0; i < pathGroup.mainPath.steps.size(); ++i) {
-        bool needsButton = (i == 0) || !pathGroup.mainPath.steps[i - 1].isAutoAdvance;
-        if (needsButton) {
-            mainColumnMap[i] = displayCol++;
-        }
-    }
-
-    // --- メインパスのボタン ---
-    for (size_t i = 0; i < pathGroup.mainPath.steps.size(); ++i) {
-        if (mainColumnMap[i] < 0) {
-            continue;
-        }
-        const auto& step = pathGroup.mainPath.steps[i];
-        auto btn = std::make_unique<ComboAsistButtonUI>();
-        btn->Init(step.gamepadButton, step.isUnlocked, mainRow, mainColumnMap[i], lp);
-        uiGroup.mainButtonUIs.push_back(std::move(btn));
-    }
-
-    // --- メインパスの矢印（表示ステップ間のみ） ---
-    int32_t prevVisibleCol = -1;
-    for (size_t i = 0; i < pathGroup.mainPath.steps.size(); ++i) {
-        if (mainColumnMap[i] < 0) {
-            continue;
-        }
-        if (prevVisibleCol >= 0) {
-            auto arrow = std::make_unique<ComboAsistArrowUI>();
-            arrow->Init(prevVisibleCol, mainRow, mainColumnMap[i], mainRow, lp);
-            uiGroup.mainArrowUIs.push_back(std::move(arrow));
-        }
-        prevVisibleCol = mainColumnMap[i];
-    }
-
-    (*currentRow)++;
-
-    // --- 分岐パスのUI ---
-    uiGroup.branchButtonUIs.resize(pathGroup.branches.size());
-    uiGroup.branchInnerArrowUIs.resize(pathGroup.branches.size());
-
-    for (size_t bIdx = 0; bIdx < pathGroup.branches.size(); ++bIdx) {
-        const auto& branchInfo = pathGroup.branches[bIdx];
-        int32_t branchRow      = *currentRow;
-        auto& buttons          = uiGroup.branchButtonUIs[bIdx];
-        auto& innerArrows      = uiGroup.branchInnerArrowUIs[bIdx];
-
-        // --- 分岐パスの列マッピング構築 ---
-        // 共通部分（divergeIndex前）のうち最後の表示列を求め、分岐部分はそこから続ける
-        int32_t lastSharedCol = -1;
-        for (int32_t j = branchInfo.divergeIndex - 1; j >= 0; --j) {
-            if (j < static_cast<int32_t>(mainColumnMap.size()) && mainColumnMap[j] >= 0) {
-                lastSharedCol = mainColumnMap[j];
-                break;
-            }
-        }
-
-        // 分岐部分の列マッピング
-        std::vector<int32_t> branchColumnMap(branchInfo.path.steps.size(), -1);
-        int32_t branchCol = lastSharedCol + 1;
-        for (size_t i = branchInfo.divergeIndex; i < branchInfo.path.steps.size(); ++i) {
-            // divergeIndex == 0 の場合は最初のステップなので必ず表示
-            bool needsButton = (i == 0) || !branchInfo.path.steps[i - 1].isAutoAdvance;
-            if (needsButton) {
-                branchColumnMap[i] = branchCol++;
-            }
-        }
-
-        // 分岐元から分岐先への斜め矢印
-        if (branchInfo.divergeIndex > 0 &&
-            branchInfo.divergeIndex < static_cast<int32_t>(branchInfo.path.steps.size()) &&
-            lastSharedCol >= 0 &&
-            branchColumnMap[branchInfo.divergeIndex] >= 0) {
-            auto branchArrow = std::make_unique<ComboAsistArrowUI>();
-            branchArrow->Init(lastSharedCol, mainRow, branchColumnMap[branchInfo.divergeIndex], branchRow, lp);
-            uiGroup.branchArrowUIs.push_back(std::move(branchArrow));
-        }
-
-        // 分岐パスのボタン
-        for (size_t i = branchInfo.divergeIndex; i < branchInfo.path.steps.size(); ++i) {
-            if (branchColumnMap[i] < 0) {
-                continue;
-            }
-            const auto& step = branchInfo.path.steps[i];
-            auto btn = std::make_unique<ComboAsistButtonUI>();
-            btn->Init(step.gamepadButton, step.isUnlocked, branchRow, branchColumnMap[i], lp);
-            buttons.push_back(std::move(btn));
-        }
-
-        // 分岐パス内の矢印（表示ステップ間のみ）
-        int32_t prevBranchVisibleCol = -1;
-        for (size_t i = branchInfo.divergeIndex; i < branchInfo.path.steps.size(); ++i) {
-            if (branchColumnMap[i] < 0) {
-                continue;
-            }
-            if (prevBranchVisibleCol >= 0) {
-                auto arrow = std::make_unique<ComboAsistArrowUI>();
-                arrow->Init(prevBranchVisibleCol, branchRow, branchColumnMap[i], branchRow, lp);
-                innerArrows.push_back(std::move(arrow));
-            }
-            prevBranchVisibleCol = branchColumnMap[i];
-        }
-
-        (*currentRow)++;
-    }
-}
-
-///==========================================================
-/// スライドイン開始
+/// スライドイン・アウト
 ///==========================================================
 void ComboAsistController::StartSlideIn() {
     activeSlideEasing_ = &slideInEasing_;
@@ -285,18 +108,12 @@ void ComboAsistController::StartSlideIn() {
     isVisible_ = true;
 }
 
-///==========================================================
-/// スライドアウト開始
-///==========================================================
 void ComboAsistController::StartSlideOut() {
     activeSlideEasing_ = &slideOutEasing_;
     activeSlideEasing_->Reset();
     isSliding_ = true;
 }
 
-///==========================================================
-/// スライド更新
-///==========================================================
 void ComboAsistController::UpdateSlide(float deltaTime) {
     if (!isSliding_ || !activeSlideEasing_) {
         return;
@@ -304,59 +121,43 @@ void ComboAsistController::UpdateSlide(float deltaTime) {
     activeSlideEasing_->Update(deltaTime);
     if (activeSlideEasing_->IsFinished()) {
         isSliding_ = false;
-        // スライドアウト完了時に非表示
+        isModeTransitioning_ = false;
         if (activeSlideEasing_ == &slideOutEasing_) {
             isVisible_ = false;
         }
     }
 }
 
-///==========================================================
-/// スライドオフセット適用（現在の条件のみ）
-///==========================================================
 void ComboAsistController::ApplySlideOffset() {
-    auto it = conditionDataMap_.find(currentCondition_);
-    if (it == conditionDataMap_.end()) {
-        return;
+    auto* currentData = GetCurrentData();
+    if (currentData) {
+        ApplySlideOffsetToCondition(*currentData);
     }
-    auto& curData = it->second;
-
-    auto applyToGroup = [&](ComboUIGroup& uiGroup) {
-        for (auto& btn : uiGroup.mainButtonUIs) {
-            btn->ApplySlideOffset(slideOffsetX_);
-        }
-        for (auto& arrow : uiGroup.mainArrowUIs) {
-            arrow->ApplySlideOffset(slideOffsetX_);
-        }
-        for (auto& arrow : uiGroup.branchArrowUIs) {
-            arrow->ApplySlideOffset(slideOffsetX_);
-        }
-        for (auto& buttons : uiGroup.branchButtonUIs) {
-            for (auto& btn : buttons) {
-                btn->ApplySlideOffset(slideOffsetX_);
-            }
-        }
-        for (auto& arrows : uiGroup.branchInnerArrowUIs) {
-            for (auto& arrow : arrows) {
-                arrow->ApplySlideOffset(slideOffsetX_);
-            }
-        }
-    };
-
-    applyToGroup(curData.xUIGroup);
-    applyToGroup(curData.yUIGroup);
 }
 
-///==========================================================
-/// トグル入力チェック
-///==========================================================
+void ComboAsistController::OpenPanel() {
+    if (panelMode_ == PanelMode::Open) return;
+    panelMode_ = PanelMode::Open;
+    StartSlideIn();
+    isModeTransitioning_ = true;
+}
+
+void ComboAsistController::TogglePanelMode() {
+    if (isModeTransitioning_) return;
+    if (panelMode_ == PanelMode::Open) {
+        panelMode_ = PanelMode::Close;
+        StartSlideOut();
+        isModeTransitioning_ = true;
+    } else {
+        panelMode_ = PanelMode::Open;
+        StartSlideIn();
+        isModeTransitioning_ = true;
+    }
+}
+
 void ComboAsistController::CheckToggleInput() {
-    if (KetaEngine::Input::IsTriggerPad(0, GamepadButton::DPadRight)) {
-        if (isVisible_) {
-            StartSlideOut();
-        } else {
-            StartSlideIn();
-        }
+    if (KetaEngine::Input::IsTriggerPad(0, GamepadButton::DPadUp)) {
+        TogglePanelMode();
     }
 }
 
@@ -367,8 +168,6 @@ void ComboAsistController::SyncUnlockStates() {
     if (!pAttackController_) {
         return;
     }
-
-    // 全条件のロック状態を同期
     for (auto& [cond, data] : conditionDataMap_) {
         SyncGroupUnlockStates(data.pathBuilder.GetXGroup(), data.xUIGroup);
         SyncGroupUnlockStates(data.pathBuilder.GetYGroup(), data.yUIGroup);
@@ -378,210 +177,107 @@ void ComboAsistController::SyncUnlockStates() {
 void ComboAsistController::SyncGroupUnlockStates(
     const ComboPathBuilder::ComboPathGroup& pathGroup,
     ComboUIGroup& uiGroup) {
-
-    // メインパス（自動遷移ステップはUI未生成なのでスキップ）
-    size_t btnIdx = 0;
-    for (size_t i = 0; i < pathGroup.mainPath.steps.size(); ++i) {
-        bool needsButton = (i == 0) || !pathGroup.mainPath.steps[i - 1].isAutoAdvance;
-        if (!needsButton) {
-            continue;
+    uiBuilder_.ForEachStepButton(pathGroup, uiGroup, [&](const ComboPathBuilder::ComboStep& step, ComboAsistButtonUI& btn) {
+        auto* attackData = pAttackController_->GetAttackByName(step.attackName);
+        if (attackData) {
+            btn.SetUnlocked(attackData->GetAttackParam().isUnlocked);
         }
-        auto* attack = pAttackController_->GetAttackByName(pathGroup.mainPath.steps[i].attackName);
-        if (attack && btnIdx < uiGroup.mainButtonUIs.size()) {
-            uiGroup.mainButtonUIs[btnIdx]->SetUnlocked(attack->GetAttackParam().isUnlocked);
-        }
-        btnIdx++;
-    }
-
-    // 分岐パス
-    for (size_t bIdx = 0; bIdx < pathGroup.branches.size() && bIdx < uiGroup.branchButtonUIs.size(); ++bIdx) {
-        const auto& branch = pathGroup.branches[bIdx];
-        auto& buttons      = uiGroup.branchButtonUIs[bIdx];
-
-        size_t branchBtnIdx = 0;
-        for (size_t i = branch.divergeIndex; i < branch.path.steps.size(); ++i) {
-            bool needsButton = (i == 0) || !branch.path.steps[i - 1].isAutoAdvance;
-            if (!needsButton) {
-                continue;
-            }
-            auto* attack = pAttackController_->GetAttackByName(branch.path.steps[i].attackName);
-            if (attack && branchBtnIdx < buttons.size()) {
-                buttons[branchBtnIdx]->SetUnlocked(attack->GetAttackParam().isUnlocked);
-            }
-            branchBtnIdx++;
-        }
-    }
+    });
 }
 
 ///==========================================================
-/// 攻撃発動演出の更新
+/// 攻撃発動演出
 ///==========================================================
 void ComboAsistController::UpdateComboState() {
     if (!pPlayer_) {
         return;
     }
-
-    auto it = conditionDataMap_.find(currentCondition_);
-    if (it == conditionDataMap_.end()) {
+    auto* currentData = GetCurrentData();
+    if (!currentData) {
         return;
     }
-    auto& curData = it->second;
 
     auto* comboBehavior = pPlayer_->GetComboBehavior();
     if (!comboBehavior) {
         return;
     }
 
-    const std::string& behaviorName = comboBehavior->GetName();
+    const std::string& name = comboBehavior->GetName();
 
-    if (behaviorName == "ComboAttackRoot") {
-        // ComboAttackRootに戻ったら全リセット
+    if (name == "ComboAttackRoot") {
         if (!playedAttacks_.empty()) {
             playedAttacks_.clear();
-            SetGroupActiveOutLines(curData.pathBuilder.GetYGroup(), curData.yUIGroup, playedAttacks_);
-            SetGroupActiveOutLines(curData.pathBuilder.GetXGroup(), curData.xUIGroup, playedAttacks_);
+            SetGroupActiveOutLines(currentData->pathBuilder.GetXGroup(), currentData->xUIGroup, playedAttacks_);
+            SetGroupActiveOutLines(currentData->pathBuilder.GetYGroup(), currentData->yUIGroup, playedAttacks_);
         }
-
-        // 列シフトをリセット（元の位置に戻す）
-        if (curData.columnShiftAmount != 0) {
-            ShiftAllColumns(curData.columnShiftAmount);
+        if (currentData->columnShiftAmount != 0) {
+            ShiftAllColumns(currentData->columnShiftAmount);
         }
-
-        // 自動切替されたAIRをGROUNDに戻す（手動切替は戻さない）
         if (isAutoSwitchedCondition_) {
             isAutoSwitchedCondition_ = false;
             SwitchCondition(PlayerComboAttackData::TriggerCondition::GROUND);
         }
     } else {
-        // 新たな攻撃が発動した瞬間にPushScalingアニメ再生
-        bool isNewAttack = (behaviorName != prevBehaviorName_);
-        playedAttacks_.insert(behaviorName);
-        SetGroupActiveOutLines(curData.pathBuilder.GetYGroup(), curData.yUIGroup, playedAttacks_);
-        SetGroupActiveOutLines(curData.pathBuilder.GetXGroup(), curData.xUIGroup, playedAttacks_);
-
-        if (isNewAttack) {
-            PlayPushScalingForAttack(curData.pathBuilder.GetYGroup(), curData.yUIGroup, behaviorName);
-            PlayPushScalingForAttack(curData.pathBuilder.GetXGroup(), curData.xUIGroup, behaviorName);
+        bool isNew = (name != prevBehaviorName_);
+        playedAttacks_.insert(name);
+        SetGroupActiveOutLines(currentData->pathBuilder.GetXGroup(), currentData->xUIGroup, playedAttacks_);
+        SetGroupActiveOutLines(currentData->pathBuilder.GetYGroup(), currentData->yUIGroup, playedAttacks_);
+        if (isNew) {
+            PlayPushScalingForAttack(currentData->pathBuilder.GetXGroup(), currentData->xUIGroup, name);
+            PlayPushScalingForAttack(currentData->pathBuilder.GetYGroup(), currentData->yUIGroup, name);
         }
     }
-
-    prevBehaviorName_ = behaviorName;
+    prevBehaviorName_ = name;
 }
 
-///==========================================================
-/// グループ内ボタンのアクティブアウトライン設定
-///==========================================================
 void ComboAsistController::SetGroupActiveOutLines(
     const ComboPathBuilder::ComboPathGroup& pathGroup,
     ComboUIGroup& uiGroup,
     const std::unordered_set<std::string>& activeAttacks) {
-
-    // メインパス（自動遷移ステップスキップ）
-    size_t btnIdx = 0;
-    for (size_t i = 0; i < pathGroup.mainPath.steps.size(); ++i) {
-        bool needsButton = (i == 0) || !pathGroup.mainPath.steps[i - 1].isAutoAdvance;
-        if (!needsButton) {
-            continue;
-        }
-        if (btnIdx < uiGroup.mainButtonUIs.size()) {
-            bool active = activeAttacks.count(pathGroup.mainPath.steps[i].attackName) > 0;
-            uiGroup.mainButtonUIs[btnIdx]->SetActiveOutLine(active);
-        }
-        btnIdx++;
-    }
-
-    // 分岐パス
-    for (size_t bIdx = 0; bIdx < pathGroup.branches.size() && bIdx < uiGroup.branchButtonUIs.size(); ++bIdx) {
-        const auto& branch = pathGroup.branches[bIdx];
-        auto& buttons      = uiGroup.branchButtonUIs[bIdx];
-
-        size_t branchBtnIdx = 0;
-        for (size_t i = branch.divergeIndex; i < branch.path.steps.size(); ++i) {
-            bool needsButton = (i == 0) || !branch.path.steps[i - 1].isAutoAdvance;
-            if (!needsButton) {
-                continue;
-            }
-            if (branchBtnIdx < buttons.size()) {
-                bool active = activeAttacks.count(branch.path.steps[i].attackName) > 0;
-                buttons[branchBtnIdx]->SetActiveOutLine(active);
-            }
-            branchBtnIdx++;
-        }
-    }
+    uiBuilder_.ForEachStepButton(pathGroup, uiGroup, [&](const ComboPathBuilder::ComboStep& step, ComboAsistButtonUI& btn) {
+        btn.SetActiveOutLine(activeAttacks.count(step.attackName) > 0);
+    });
 }
 
-///==========================================================
-/// 攻撃名に対応するボタンのPushScalingアニメーション再生
-///==========================================================
 void ComboAsistController::PlayPushScalingForAttack(
     const ComboPathBuilder::ComboPathGroup& pathGroup,
     ComboUIGroup& uiGroup,
     const std::string& attackName) {
-
-    // メインパス（自動遷移ステップスキップ）
-    size_t btnIdx = 0;
-    for (size_t i = 0; i < pathGroup.mainPath.steps.size(); ++i) {
-        bool needsButton = (i == 0) || !pathGroup.mainPath.steps[i - 1].isAutoAdvance;
-        if (!needsButton) {
-            continue;
+    bool found = false;
+    uiBuilder_.ForEachStepButton(pathGroup, uiGroup, [&](const ComboPathBuilder::ComboStep& step, ComboAsistButtonUI& btn) {
+        if (!found && step.attackName == attackName) {
+            btn.PlayPushScaling();
+            found = true;
         }
-        if (pathGroup.mainPath.steps[i].attackName == attackName && btnIdx < uiGroup.mainButtonUIs.size()) {
-            uiGroup.mainButtonUIs[btnIdx]->PlayPushScaling();
-            return;
-        }
-        btnIdx++;
-    }
-
-    // 分岐パス
-    for (size_t bIdx = 0; bIdx < pathGroup.branches.size() && bIdx < uiGroup.branchButtonUIs.size(); ++bIdx) {
-        const auto& branch = pathGroup.branches[bIdx];
-        auto& buttons      = uiGroup.branchButtonUIs[bIdx];
-
-        size_t branchBtnIdx = 0;
-        for (size_t i = branch.divergeIndex; i < branch.path.steps.size(); ++i) {
-            bool needsButton = (i == 0) || !branch.path.steps[i - 1].isAutoAdvance;
-            if (!needsButton) {
-                continue;
-            }
-            if (branch.path.steps[i].attackName == attackName && branchBtnIdx < buttons.size()) {
-                buttons[branchBtnIdx]->PlayPushScaling();
-                return;
-            }
-            branchBtnIdx++;
-        }
-    }
+    });
 }
 
 ///==========================================================
-/// 発動条件切替入力チェック
+/// 発動条件切替
 ///==========================================================
 void ComboAsistController::CheckConditionSwitchInput() {
-    if (KetaEngine::Input::IsTriggerPad(0, GamepadButton::DPadUp)) {
-        if (availableConditions_.size() <= 1) {
-            return;
-        }
-
-        // 現在の条件のインデックスを見つけて次へ循環
-        auto found = std::find(availableConditions_.begin(), availableConditions_.end(), currentCondition_);
-        size_t idx = (found != availableConditions_.end()) ? static_cast<size_t>(found - availableConditions_.begin()) : 0;
-        size_t nextIdx = (idx + 1) % availableConditions_.size();
-
-        isAutoSwitchedCondition_ = false; // 手動切替
-        SwitchCondition(availableConditions_[nextIdx]);
+    if (panelMode_ != PanelMode::Open) {
+        return;
     }
-}
-
-///==========================================================
-/// ジャンプ攻撃自動切替チェック
-///==========================================================
-void ComboAsistController::CheckAutoConditionSwitch() {
-    using TC = PlayerComboAttackData::TriggerCondition;
-    if (!isVisible_ || !pPlayer_ || !pAttackController_) {
+    if (!KetaEngine::Input::IsTriggerPad(0, GamepadButton::DPadRight)) {
+        return;
+    }
+    if (availableConditions_.size() <= 1) {
         return;
     }
 
-    // GROUND表示中のみ自動切替
-    if (currentCondition_ != TC::GROUND) {
+    auto found               = std::find(availableConditions_.begin(), availableConditions_.end(), currentCondition_);
+    size_t idx = 0;
+    if (found != availableConditions_.end()) {
+        idx = static_cast<size_t>(found - availableConditions_.begin());
+    }
+    isAutoSwitchedCondition_ = false;
+    SwitchCondition(availableConditions_[(idx + 1) % availableConditions_.size()]);
+}
+
+void ComboAsistController::CheckAutoConditionSwitch() {
+    using TC = PlayerComboAttackData::TriggerCondition;
+    if (!isVisible_ || !pPlayer_ || !pAttackController_ || currentCondition_ != TC::GROUND) {
         return;
     }
 
@@ -589,245 +285,179 @@ void ComboAsistController::CheckAutoConditionSwitch() {
     if (!comboBehavior) {
         return;
     }
-
-    const std::string& behaviorName = comboBehavior->GetName();
-    if (behaviorName == "ComboAttackRoot") {
+    const std::string& name = comboBehavior->GetName();
+    if (name == "ComboAttackRoot" || name == prevBehaviorName_) {
         return;
     }
 
-    // 新たな攻撃が発動した瞬間のみチェック
-    if (behaviorName == prevBehaviorName_) {
-        return;
-    }
-
-    // 攻撃データを取得し、AIR条件なら自動切替
-    auto* attack = pAttackController_->GetAttackByName(behaviorName);
-    if (attack && attack->GetAttackParam().triggerParam.condition == TC::AIR) {
-        if (conditionDataMap_.count(TC::AIR) > 0) {
-            isAutoSwitchedCondition_ = true;
-            SwitchCondition(TC::AIR);
-        }
+    auto* attackData = pAttackController_->GetAttackByName(name);
+    if (attackData && attackData->GetAttackParam().triggerParam.condition == TC::AIR && conditionDataMap_.count(TC::AIR) > 0) {
+        isAutoSwitchedCondition_ = true;
+        SwitchCondition(TC::AIR);
     }
 }
 
-///==========================================================
-/// 条件切替（再ビルドなし・表示切替のみ）
-///==========================================================
 void ComboAsistController::SwitchCondition(PlayerComboAttackData::TriggerCondition condition) {
-    if (conditionDataMap_.count(condition) == 0) {
+    if (conditionDataMap_.count(condition) == 0 || condition == currentCondition_) {
         return;
     }
-    if (condition == currentCondition_) {
-        return;
-    }
-
-    // 旧条件を非表示
     if (conditionDataMap_.count(currentCondition_) > 0) {
         SetConditionVisible(conditionDataMap_[currentCondition_], false);
     }
-
-    // 条件切替
     currentCondition_ = condition;
-    auto& newData = conditionDataMap_[currentCondition_];
-
-    // スライドオフセットを新条件のUIに適用
     ApplySlideOffset();
-
-    // Lerpせず即座に位置を反映（非表示だった間のズレを防止）
-    auto snapGroup = [](ComboUIGroup& uiGroup) {
-        for (auto& btn : uiGroup.mainButtonUIs) { btn->SnapToTarget(); }
-        for (auto& arrow : uiGroup.mainArrowUIs) { arrow->SnapToTarget(); }
-        for (auto& arrow : uiGroup.branchArrowUIs) { arrow->SnapToTarget(); }
-        for (auto& buttons : uiGroup.branchButtonUIs) {
-            for (auto& btn : buttons) { btn->SnapToTarget(); }
-        }
-        for (auto& arrows : uiGroup.branchInnerArrowUIs) {
-            for (auto& arrow : arrows) { arrow->SnapToTarget(); }
-        }
-    };
-    snapGroup(newData.xUIGroup);
-    snapGroup(newData.yUIGroup);
-
-    // 表示範囲に基づいて表示更新
+    SnapConditionToTarget(conditionDataMap_[currentCondition_]);
     UpdateVisibility();
-
-    // 演出リセット
     playedAttacks_.clear();
 }
 
-///==========================================================
-/// 条件データの全UI表示/非表示
-///==========================================================
 void ComboAsistController::SetConditionVisible(ConditionUIData& data, bool visible) {
-    auto setGroupVisible = [visible](ComboUIGroup& uiGroup) {
-        for (auto& btn : uiGroup.mainButtonUIs) { btn->SetVisible(visible); }
-        for (auto& arrow : uiGroup.mainArrowUIs) { arrow->SetVisible(visible); }
-        for (auto& arrow : uiGroup.branchArrowUIs) { arrow->SetVisible(visible); }
-        for (auto& buttons : uiGroup.branchButtonUIs) {
-            for (auto& btn : buttons) { btn->SetVisible(visible); }
-        }
-        for (auto& arrows : uiGroup.branchInnerArrowUIs) {
-            for (auto& arrow : arrows) { arrow->SetVisible(visible); }
-        }
-    };
-    setGroupVisible(data.xUIGroup);
-    setGroupVisible(data.yUIGroup);
+    uiBuilder_.ApplyToCondition(data, [visible](BaseComboAsistUI& ui) { ui.SetVisible(visible); });
 }
 
 ///==========================================================
-/// 列オーバーフローチェック
+/// 表示範囲・列オーバーフロー
 ///==========================================================
 void ComboAsistController::CheckColumnOverflow() {
     if (!isVisible_) {
         return;
     }
-
-    auto it = conditionDataMap_.find(currentCondition_);
-    if (it == conditionDataMap_.end()) {
+    auto* currentData = GetCurrentData();
+    if (!currentData) {
         return;
     }
-    auto& curData = it->second;
 
-    // オーバーフローイージング更新
-    if (curData.isColumnShifting) {
+    if (currentData->isColumnShifting) {
         columnOverflowEasing_.Update(KetaEngine::Frame::DeltaTime());
         if (columnOverflowEasing_.IsFinished()) {
-            curData.isColumnShifting = false;
+            currentData->isColumnShifting = false;
             ShiftAllColumns(-1);
         }
         return;
     }
 
-    // 現在のアクティブ攻撃のcolumnがmaxVisibleColumnを超えているかチェック
-    auto checkGroup = [&](ComboUIGroup& uiGroup) {
-        for (auto& btn : uiGroup.mainButtonUIs) {
-            if (btn->GetState() != BaseComboAsistUI::AsistState::NONE &&
-                btn->GetColumnNum() > maxVisibleColumn_) {
-                // オーバーフロー開始
-                curData.isColumnShifting = true;
-                columnOverflowEasing_.Reset();
-
-                // column 0 のボタンのスケールをイージングで0にする
-                for (auto& b : uiGroup.mainButtonUIs) {
-                    if (b->GetColumnNum() == 0) {
-                        columnOverflowEasing_.SetAdaptValue(&overflowScale_);
-                        break;
-                    }
-                }
-                return true;
-            }
-        }
-        return false;
-    };
-
-    checkGroup(curData.xUIGroup);
-    checkGroup(curData.yUIGroup);
+    CheckGroupColumnOverflow(*currentData, currentData->xUIGroup) || CheckGroupColumnOverflow(*currentData, currentData->yUIGroup);
 }
 
-///==========================================================
-/// 全列シフト
-///==========================================================
 void ComboAsistController::ShiftAllColumns(int32_t delta) {
-    auto it = conditionDataMap_.find(currentCondition_);
-    if (it == conditionDataMap_.end()) {
+    auto* currentData = GetCurrentData();
+    if (!currentData) {
         return;
     }
-    auto& curData = it->second;
 
-    auto shiftGroup = [&](ComboUIGroup& uiGroup) {
-        for (auto& btn : uiGroup.mainButtonUIs) {
-            btn->SetRowColumn(btn->GetRowNum(), btn->GetColumnNum() + delta);
-            btn->ApplyLayout();
-        }
-        for (auto& arrow : uiGroup.mainArrowUIs) {
-            arrow->ShiftColumns(delta);
-            arrow->ApplyLayout();
-        }
-        for (auto& arrow : uiGroup.branchArrowUIs) {
-            arrow->ShiftColumns(delta);
-            arrow->ApplyLayout();
-        }
-        for (auto& buttons : uiGroup.branchButtonUIs) {
-            for (auto& btn : buttons) {
-                btn->SetRowColumn(btn->GetRowNum(), btn->GetColumnNum() + delta);
-                btn->ApplyLayout();
-            }
-        }
-        for (auto& arrows : uiGroup.branchInnerArrowUIs) {
-            for (auto& arrow : arrows) {
-                arrow->ShiftColumns(delta);
-                arrow->ApplyLayout();
-            }
-        }
-    };
-
-    shiftGroup(curData.xUIGroup);
-    shiftGroup(curData.yUIGroup);
-    curData.columnShiftAmount -= delta; // deltaが-1なら+1
+    ShiftGroup(currentData->xUIGroup, delta);
+    ShiftGroup(currentData->yUIGroup, delta);
+    currentData->columnShiftAmount -= delta;
 }
 
-///==========================================================
-/// 表示範囲の更新
-///==========================================================
 void ComboAsistController::UpdateVisibility() {
     if (!isVisible_) {
         return;
     }
-
-    auto it = conditionDataMap_.find(currentCondition_);
-    if (it == conditionDataMap_.end()) {
+    auto* currentData = GetCurrentData();
+    if (!currentData) {
         return;
     }
-    auto& curData = it->second;
 
-    auto updateGroupVisibility = [&](ComboUIGroup& uiGroup) {
-        for (auto& btn : uiGroup.mainButtonUIs) {
-            bool visible = btn->GetColumnNum() >= 0 &&
-                           btn->GetColumnNum() <= maxVisibleColumn_ &&
-                           btn->GetRowNum() >= 0 &&
-                           btn->GetRowNum() <= maxVisibleRow_;
-            btn->SetVisible(visible);
-        }
-        for (auto& arrow : uiGroup.mainArrowUIs) {
-            bool visible = arrow->GetColumnNum() >= 0 &&
-                           arrow->GetColumnNum() <= maxVisibleColumn_ &&
-                           arrow->GetRowNum() >= 0 &&
-                           arrow->GetRowNum() <= maxVisibleRow_;
-            arrow->SetVisible(visible);
-        }
-        for (auto& arrow : uiGroup.branchArrowUIs) {
-            bool visible = arrow->GetFromCol() >= 0 &&
-                           arrow->GetToCol() <= maxVisibleColumn_ &&
-                           arrow->GetFromRow() >= 0 &&
-                           arrow->GetToRow() <= maxVisibleRow_;
-            arrow->SetVisible(visible);
-        }
-        for (auto& buttons : uiGroup.branchButtonUIs) {
-            for (auto& btn : buttons) {
-                bool visible = btn->GetColumnNum() >= 0 &&
-                               btn->GetColumnNum() <= maxVisibleColumn_ &&
-                               btn->GetRowNum() >= 0 &&
-                               btn->GetRowNum() <= maxVisibleRow_;
-                btn->SetVisible(visible);
-            }
-        }
-        for (auto& arrows : uiGroup.branchInnerArrowUIs) {
-            for (auto& arrow : arrows) {
-                bool visible = arrow->GetFromCol() >= 0 &&
-                               arrow->GetToCol() <= maxVisibleColumn_ &&
-                               arrow->GetFromRow() >= 0 &&
-                               arrow->GetToRow() <= maxVisibleRow_;
-                arrow->SetVisible(visible);
-            }
-        }
-    };
-
-    updateGroupVisibility(curData.xUIGroup);
-    updateGroupVisibility(curData.yUIGroup);
+    UpdateGroupVisibility(currentData->xUIGroup);
+    UpdateGroupVisibility(currentData->yUIGroup);
 }
 
 ///==========================================================
-/// パラメータ登録
+/// ラムダ置き換え用メンバ関数
+///==========================================================
+void ComboAsistController::UpdateCurrentConditionUI() {
+    auto* currentData = GetCurrentData();
+    if (currentData) {
+        uiBuilder_.ApplyToCondition(*currentData, [](BaseComboAsistUI& ui) { ui.Update(); });
+    }
+}
+
+void ComboAsistController::ApplySlideOffsetToCondition(ConditionUIData& data) {
+    uiBuilder_.ApplyToCondition(data, [&](BaseComboAsistUI& ui) { ui.ApplySlideOffset(slideOffsetX_); });
+}
+
+void ComboAsistController::SnapConditionToTarget(ConditionUIData& data) {
+    uiBuilder_.ApplyToCondition(data, [](BaseComboAsistUI& ui) { ui.SnapToTarget(); });
+}
+
+bool ComboAsistController::CheckGroupColumnOverflow(ConditionUIData& data, ComboUIGroup& uiGroup) {
+    for (auto& btn : uiGroup.mainButtonUIs) {
+        if (btn->GetState() != BaseComboAsistUI::AsistState::NONE && btn->GetColumnNum() > maxVisibleColumn_) {
+            data.isColumnShifting = true;
+            columnOverflowEasing_.Reset();
+            for (auto& button : uiGroup.mainButtonUIs) {
+                if (button->GetColumnNum() == 0) {
+                    columnOverflowEasing_.SetAdaptValue(&overflowScale_);
+                    break;
+                }
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+void ComboAsistController::ShiftGroup(ComboUIGroup& uiGroup, int32_t delta) {
+    for (auto& btn : uiGroup.mainButtonUIs) {
+        btn->SetRowColumn(btn->GetRowNum(), btn->GetColumnNum() + delta);
+        btn->ApplyLayout();
+    }
+    for (auto& buttonRow : uiGroup.branchButtonUIs) {
+        for (auto& btn : buttonRow) {
+            btn->SetRowColumn(btn->GetRowNum(), btn->GetColumnNum() + delta);
+            btn->ApplyLayout();
+        }
+    }
+    for (auto& arrow : uiGroup.mainArrowUIs) {
+        arrow->ShiftColumns(delta);
+        arrow->ApplyLayout();
+    }
+    for (auto& arrow : uiGroup.branchArrowUIs) {
+        arrow->ShiftColumns(delta);
+        arrow->ApplyLayout();
+    }
+    for (auto& arrowRow : uiGroup.branchInnerArrowUIs) {
+        for (auto& arrow : arrowRow) {
+            arrow->ShiftColumns(delta);
+            arrow->ApplyLayout();
+        }
+    }
+}
+
+bool ComboAsistController::IsInVisibleRange(int32_t col, int32_t row) const {
+    return col >= 0 && col <= maxVisibleColumn_ && row >= 0 && row <= maxVisibleRow_;
+}
+
+bool ComboAsistController::IsArrowVisible(const ComboAsistArrowUI& arrow) const {
+    return arrow.GetFromCol() >= 0 && arrow.GetToCol() <= maxVisibleColumn_ &&
+           arrow.GetFromRow() >= 0 && arrow.GetToRow() <= maxVisibleRow_;
+}
+
+void ComboAsistController::UpdateGroupVisibility(ComboUIGroup& uiGroup) {
+    for (auto& btn : uiGroup.mainButtonUIs) {
+        btn->SetVisible(IsInVisibleRange(btn->GetColumnNum(), btn->GetRowNum()));
+    }
+    for (auto& buttonRow : uiGroup.branchButtonUIs) {
+        for (auto& btn : buttonRow) {
+            btn->SetVisible(IsInVisibleRange(btn->GetColumnNum(), btn->GetRowNum()));
+        }
+    }
+    for (auto& arrow : uiGroup.mainArrowUIs) {
+        arrow->SetVisible(IsInVisibleRange(arrow->GetColumnNum(), arrow->GetRowNum()));
+    }
+    for (auto& arrow : uiGroup.branchArrowUIs) {
+        arrow->SetVisible(IsArrowVisible(*arrow));
+    }
+    for (auto& arrowRow : uiGroup.branchInnerArrowUIs) {
+        for (auto& arrow : arrowRow) {
+            arrow->SetVisible(IsArrowVisible(*arrow));
+        }
+    }
+}
+
+///==========================================================
+/// パラメータ
 ///==========================================================
 void ComboAsistController::RegisterParams() {
     globalParameter_->Regist(groupName_, "basePosition", &basePosition_);
@@ -841,14 +471,10 @@ void ComboAsistController::RegisterParams() {
     globalParameter_->Regist(groupName_, "maxVisibleRow", &maxVisibleRow_);
 }
 
-///==========================================================
-/// パラメータ調整
-///==========================================================
 void ComboAsistController::AdjustParam() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
-
         ImGui::DragFloat2("Base Position", &basePosition_.x, 0.1f);
         ImGui::DragFloat2("Arrow Offset", &arrowOffset_.x, 0.1f);
         ImGui::DragFloat("Column Spacing", &columnSpacing_, 0.1f);
@@ -861,10 +487,8 @@ void ComboAsistController::AdjustParam() {
         ImGui::DragInt("Max Visible Column", &maxVisibleColumn_, 1);
         ImGui::DragInt("Max Visible Row", &maxVisibleRow_, 1);
 
-        // リアルタイム再配置（全条件再構築）
         if (ImGui::Button("Rebuild UI")) {
-            BuildAllConditions();
-            // 現在の条件以外を非表示
+            RebuildAllConditions();
             for (auto& [cond, data] : conditionDataMap_) {
                 if (cond != currentCondition_) {
                     SetConditionVisible(data, false);
@@ -874,10 +498,8 @@ void ComboAsistController::AdjustParam() {
             UpdateVisibility();
         }
 
-        // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
-
         ImGui::PopID();
     }
 #endif

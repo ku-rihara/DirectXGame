@@ -12,6 +12,7 @@ void PlayerComboAttackTimelineUI::Init(
     PlayerComboAttackTimelineData* data,
     PlayerComboAttackTimelineTrackBuilder* trackBuilder) {
 
+    // クラスセット
     attackData_   = attackData;
     timeline_     = timeline;
     data_         = data;
@@ -22,8 +23,9 @@ void PlayerComboAttackTimelineUI::Init(
 }
 
 void PlayerComboAttackTimelineUI::RegisterParamUIFunctions() {
-    if (!attackData_)
+    if (!attackData_) {
         return;
+    }
 
     paramUIDrawFunctions_[ParamEditType::COLLISION] = [this]() {
         attackData_->DrawCollisionParamUI();
