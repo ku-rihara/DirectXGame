@@ -450,7 +450,7 @@ std::vector<std::string> BaseEnemy::GetAnimationNames() const {
 }
 
 void BaseEnemy::AddDamageReactionAnimation(const std::string& name) {
-    objAnimation_->Add(name + ".gltf");
+    objAnimation_->Add("Enemy/" + name + ".gltf");
     damageReactionAnimationNames_.push_back(name);
 }
 
@@ -519,13 +519,13 @@ void BaseEnemy::SetBodyColor(const Vector4& color) {
 void BaseEnemy::SetAnimationName(AnimationType type, const std::string& name) {
 
     if (type == AnimationType::Wait) {
-        objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(name+ ".gltf"));
+        objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("Enemy/" + name + ".gltf"));
         objAnimation_->Init();
         animationNames_[static_cast<size_t>(type)] = name;
         return;
     }
 
-    objAnimation_->Add(name + ".gltf");
+    objAnimation_->Add("Enemy/" + name + ".gltf");
     animationNames_[static_cast<size_t>(type)] = name;
 }
 

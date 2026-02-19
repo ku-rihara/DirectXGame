@@ -1,4 +1,4 @@
-{
+﻿{
     "name": "scene",
     "objects": [
         {
@@ -21,7 +21,7 @@
                     1.0
                 ]
             },
-            "file_name": "Speaker.obj",
+            "file_name": "BackObj/Speaker.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -101,7 +101,7 @@
                     1.0
                 ]
             },
-            "file_name": "Speaker.obj",
+            "file_name": "BackObj/Speaker.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -181,7 +181,7 @@
                     1.0
                 ]
             },
-            "file_name": "Speaker.obj",
+            "file_name": "BackObj/Speaker.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -261,7 +261,7 @@
                     1.0
                 ]
             },
-            "file_name": "Speaker.obj",
+            "file_name": "BackObj/Speaker.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -510,7 +510,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "Field.obj",
+            "file_name": "BackObj/Field.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -562,7 +562,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "FieldSide.obj",
+            "file_name": "BackObj/FieldSide.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -614,7 +614,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "AudienceSeats.obj",
+            "file_name": "BackObj/AudienceSeats.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -666,7 +666,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "AudienceSeats.obj",
+            "file_name": "BackObj/AudienceSeats.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -718,7 +718,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "AudienceSeats.obj",
+            "file_name": "BackObj/AudienceSeats.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -770,7 +770,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "AudienceSeats.obj",
+            "file_name": "BackObj/AudienceSeats.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -906,7 +906,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -1002,7 +1002,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -1098,7 +1098,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -1194,7 +1194,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -1290,7 +1290,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -1386,7 +1386,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -1482,7 +1482,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -1578,7 +1578,7 @@
                 ]
             },
             "isDisable": true,
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,

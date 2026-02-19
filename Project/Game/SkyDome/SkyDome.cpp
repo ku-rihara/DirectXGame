@@ -6,7 +6,7 @@ SkyDome::SkyDome() {}
 SkyDome::~SkyDome() {}
 
 void SkyDome::Init() {
-    obj3D_.reset(KetaEngine::Object3d::CreateModel("SkyDome.obj"));
+    obj3D_.reset(KetaEngine::Object3d::CreateModel("BackObj/SkyDome.obj"));
 	transform_.Init();
 	transform_.scale_ = { 200, 200, 200 };
 }

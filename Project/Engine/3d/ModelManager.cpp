@@ -38,19 +38,26 @@ void ModelManager::LoadAllModels() {
     if (!std::filesystem::exists(modelDir)) {
         return;
     }
-    for (const auto& entry : std::filesystem::directory_iterator(modelDir)) {
-        if (!entry.is_directory()) {
+    // カテゴリフォルダを巡回 (Resources/Model/Category/ModelName/ModelName.ext)
+    for (const auto& category : std::filesystem::directory_iterator(modelDir)) {
+        if (!category.is_directory()) {
             continue;
         }
-        for (const auto& file : std::filesystem::directory_iterator(entry.path())) {
-            if (!file.is_regular_file()) {
+        std::string categoryName = category.path().filename().string();
+        for (const auto& modelFolder : std::filesystem::directory_iterator(category.path())) {
+            if (!modelFolder.is_directory()) {
                 continue;
             }
-            const auto& ext = file.path().extension();
-            if (ext == ".gltf" || ext == ".obj") {
-                std::string modelFileName = file.path().filename().string();
-                LoadModel(modelFileName);
-                break;
+            for (const auto& file : std::filesystem::directory_iterator(modelFolder.path())) {
+                if (!file.is_regular_file()) {
+                    continue;
+                }
+                const auto& ext = file.path().extension();
+                if (ext == ".gltf" || ext == ".obj") {
+                    std::string modelFileName = categoryName + "/" + file.path().filename().string();
+                    LoadModel(modelFileName);
+                    break;
+                }
             }
         }
     }

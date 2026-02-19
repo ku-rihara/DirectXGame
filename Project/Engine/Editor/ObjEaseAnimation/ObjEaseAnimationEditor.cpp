@@ -11,7 +11,7 @@ void ObjEaseAnimationEditor::Init(const std::string& typeName) {
 }
 
 void ObjEaseAnimationEditor::InitPreviewObject() {
-    previewObject_.reset(Object3d::CreateModel("DebugCube.obj"));
+    previewObject_.reset(Object3d::CreateModel("TestObj/DebugCube.obj"));
 
     if (previewObject_) {
         previewObject_->SetIsAutoUpdate(false);

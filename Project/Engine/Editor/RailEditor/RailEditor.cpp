@@ -10,7 +10,7 @@ RailEditor::~RailEditor() = default;
 void RailEditor::Init(const std::string& editorName) {
     BaseEffectEditor::Init(editorName);
 
-    preViewObj_.reset(Object3d::CreateModel("DebugCube.obj"));
+    preViewObj_.reset(Object3d::CreateModel("TestObj/DebugCube.obj"));
     preViewObj_->SetIsDraw(false);
     debugLine3D_.reset(Line3D::Create(1000));
 }

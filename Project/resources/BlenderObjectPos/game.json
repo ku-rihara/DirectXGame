@@ -1,4 +1,4 @@
-{
+﻿{
     "name": "scene",
     "objects": [
         {
@@ -63,7 +63,7 @@
                     1.0
                 ]
             },
-            "file_name": "AudienceSeats.obj",
+            "file_name": "BackObj/AudienceSeats.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -113,7 +113,7 @@
                     1.0
                 ]
             },
-            "file_name": "AudienceSeats.obj",
+            "file_name": "BackObj/AudienceSeats.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -163,7 +163,7 @@
                     1.0
                 ]
             },
-            "file_name": "AudienceSeats.obj",
+            "file_name": "BackObj/AudienceSeats.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -213,7 +213,7 @@
                     1.0
                 ]
             },
-            "file_name": "AudienceSeats.obj",
+            "file_name": "BackObj/AudienceSeats.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -263,7 +263,7 @@
                     1.0
                 ]
             },
-            "file_name": "FieldSide.obj",
+            "file_name": "BackObj/FieldSide.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -314,7 +314,7 @@
                 ]
             },
             "isDisable": false,
-            "file_name": "Field.obj",
+            "file_name": "BackObj/Field.obj",
             "easing_groups": [
                 {
                     "group_id": 0,

@@ -50,7 +50,7 @@ void Player::Init() {
     rightHand_ = std::make_unique<PlayerHandRight>();
 
     // Playerのモデル
-    obj3d_.reset(KetaEngine::Object3d::CreateModel("Player.obj"));
+    obj3d_.reset(KetaEngine::Object3d::CreateModel("Player/Player.obj"));
     obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = static_cast<int32_t>(KetaEngine::LightingType::Ambient);
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.05f;
 

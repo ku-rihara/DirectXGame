@@ -1,4 +1,4 @@
-{
+﻿{
     "name": "scene",
     "objects": [
         {
@@ -147,7 +147,7 @@
                     1.0
                 ]
             },
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -242,7 +242,7 @@
                     1.0
                 ]
             },
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -337,7 +337,7 @@
                     1.0
                 ]
             },
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -432,7 +432,7 @@
                     1.0
                 ]
             },
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -527,7 +527,7 @@
                     1.0
                 ]
             },
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -622,7 +622,7 @@
                     1.0
                 ]
             },
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -717,7 +717,7 @@
                     1.0
                 ]
             },
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -812,7 +812,7 @@
                     1.0
                 ]
             },
-            "file_name": "backLight.obj",
+            "file_name": "BackObj/backLight.obj",
             "easing_groups": [
                 {
                     "group_id": 0,

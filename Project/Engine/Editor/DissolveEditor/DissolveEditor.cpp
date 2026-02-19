@@ -5,7 +5,7 @@ using namespace KetaEngine;
 
 void DissolveEditor::Init(const std::string& typeName) {
     BaseEffectEditor::Init(typeName);
-    preViewObj_.reset(Object3d::CreateModel("DebugCube.obj"));
+    preViewObj_.reset(Object3d::CreateModel("TestObj/DebugCube.obj"));
     preViewObj_->SetIsDraw(false);
 }
 

@@ -147,12 +147,22 @@ void Model::CreateModel(const std::string& ModelFileName) {
     std::filesystem::path path(ModelFileName);
     std::string extension = path.extension().string();
     std::string stemName  = path.stem().string();
+    std::string fileName  = path.filename().string();
+    std::string parentDir = path.parent_path().string();
+
+    // "Category/ModelName.ext" 形式に対応: Resources/Model/Category/ModelName/
+    std::string directory;
+    if (parentDir.empty()) {
+        directory = modelPath_ + stemName;
+    } else {
+        directory = modelPath_ + parentDir + "/" + stemName;
+    }
 
     if (extension == ".gltf") {
         isFileGltf_ = true;
-        modelData_  = LoadModelGltf(modelPath_ + stemName, ModelFileName);
+        modelData_  = LoadModelGltf(directory, fileName);
     } else {
-        modelData_ = LoadModelFile(modelPath_ + stemName, ModelFileName);
+        modelData_ = LoadModelFile(directory, fileName);
     }
 
     textureManager_ = TextureManager::GetInstance();

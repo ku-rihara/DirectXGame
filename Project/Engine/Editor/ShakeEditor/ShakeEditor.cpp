@@ -6,7 +6,7 @@ using namespace KetaEngine;
 void ShakeEditor::Init(const std::string& typeName) {
     BaseEffectEditor::Init(typeName);
 
-    preViewObj_.reset(Object3d::CreateModel("debugCube.obj"));
+    preViewObj_.reset(Object3d::CreateModel("TestObj/DebugCube.obj"));
     preViewObj_->SetIsDraw(false);
 }
 
