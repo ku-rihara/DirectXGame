@@ -15,8 +15,6 @@ void EnemyDamageReactionData::Init(const std::string& reactionName) {
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    reactionParam_.reactionState = static_cast<ReactionState>(reactionParam_.intReactionState);
-
     // 演出データを生成
     rendition_ = std::make_unique<EnemyDamageRenditionData>();
     rendition_->Init(groupName_);
@@ -73,7 +71,6 @@ void EnemyDamageReactionData::RegisterParams() {
     globalParameter_->Regist(groupName_, "TriggerAttackName", &reactionParam_.triggerAttackName);
     globalParameter_->Regist(groupName_, "Normal_DamageAnimationName", &reactionParam_.damageAnimationNames[0]);
     globalParameter_->Regist(groupName_, "Strong_DamageAnimationName", &reactionParam_.damageAnimationNames[1]);
-    globalParameter_->Regist(groupName_, "ReactionState", &reactionParam_.intReactionState);
     globalParameter_->Regist(groupName_, "damageCollingTime", &reactionParam_.damageCollingTime);
     globalParameter_->Regist(groupName_, "isPriorityReaction", &reactionParam_.isPriorityReaction);
 
@@ -163,43 +160,30 @@ void EnemyDamageReactionData::AdjustParam(const std::vector<std::string>& availa
     ImGui::Separator();
 
     // Reaction State
-    ImGui::SeparatorText("Simple Param");
-    ImGui::Checkbox("isPriorityReaction", &reactionParam_.isPriorityReaction);
-    ImGui::DragFloat("damageCollingTime", &reactionParam_.damageCollingTime, 0.01f);
 
-    ImGui::SeparatorText("Reaction State");
-    const char* stateNames[] = {"Normal", "Slammed", "TakeUpper"};
-    ImGui::Combo("Reaction Type", &reactionParam_.intReactionState, stateNames, IM_ARRAYSIZE(stateNames));
+    ImGui::SeparatorText("通常パラメータ");
+    ImGui::Checkbox("死亡せずリアクション優先", &reactionParam_.isPriorityReaction);
+    ImGui::DragFloat("ダメージクールタイム", &reactionParam_.damageCollingTime, 0.01f);
+    ImGui::DragFloat("ノックバック適応時間", &reactionParam_.normalParam.knockBackTime, 0.01f, 0.0f, 10.0f);
+    ImGui::DragFloat("ノックバック減衰", &reactionParam_.normalParam.knockBackDamping, 0.1f);
 
-    // 状態に応じたパラメータ表示
-    reactionParam_.reactionState = static_cast<ReactionState>(reactionParam_.intReactionState);
-
-    ImGui::SeparatorText("Normal Parameters");
-    ImGui::DragFloat("Knock Back Time", &reactionParam_.normalParam.knockBackTime, 0.01f, 0.0f, 10.0f);
-    ImGui::DragFloat("Knock Back Damping", &reactionParam_.normalParam.knockBackDamping, 0.1f);
-
-    // 各状態固有のパラメータ
-    if (reactionParam_.reactionState == ReactionState::Slammed) {
-        ImGui::SeparatorText("Slammed Parameters");
-        ImGui::DragFloat("Gravity", &reactionParam_.slammedParam.gravity, 0.1f, 0.0f);
-        ImGui::DragFloat3("Rotate Speed", &reactionParam_.slammedParam.rotateSpeed.x, 0.01f);
-    } else if (reactionParam_.reactionState == ReactionState::TakeUpper) {
-        ImGui::SeparatorText("Take Upper Parameters");
-        ImGui::DragFloat("Floating Time", &reactionParam_.takeUpperParam.floatingTime, 0.01f);
-        ImGui::DragFloat("Fall Speed Limit", &reactionParam_.takeUpperParam.fallSpeedLimit, 0.1f);
-        ImGui::DragFloat("Gravity", &reactionParam_.takeUpperParam.gravity, 0.1f);
-        ImGui::DragFloat3("Rotate Speed", &reactionParam_.takeUpperParam.rotateSpeed.x, 0.01f);
+    if(ImGui::CollapsingHeader("突き落とされる用のパラメータ")) {
+        ImGui::DragFloat("突き落とされる場合の重力", &reactionParam_.slammedParam.gravity, 0.1f, 0.0f);
+        ImGui::DragFloat3("突き落とされる場合の回転スピード", &reactionParam_.slammedParam.rotateSpeed.x, 0.01f);
     }
 
-    // SlammedまたはTakeUpperの時、バウンドパラメータを表示
-    if (reactionParam_.reactionState == ReactionState::Slammed || reactionParam_.reactionState == ReactionState::TakeUpper) {
-
-        ImGui::SeparatorText("Bound Parameters");
-        ImGui::InputInt("Bound Number", &reactionParam_.boundParam.boundNum);
-        ImGui::DragFloat("Bounce Damping", &reactionParam_.boundParam.bounceDamping, 0.01f, 0.0f, 1.0f);
-        ImGui::DragFloat("Initial Bounce Rate", &reactionParam_.boundParam.initialBounceRate, 0.01f, 0.0f, 2.0f);
+    if (ImGui::CollapsingHeader("突き上げられた時のパラメータ")) {
+        ImGui::DragFloat("頂点に達してからの滞空時間", &reactionParam_.takeUpperParam.floatingTime, 0.01f);
+        ImGui::DragFloat("落ちる速さの限界", &reactionParam_.takeUpperParam.fallSpeedLimit, 0.1f);
+        ImGui::DragFloat("突き上げられるときの重力", &reactionParam_.takeUpperParam.gravity, 0.1f);
+        ImGui::DragFloat3("突き上げられるときの回転スピード", &reactionParam_.takeUpperParam.rotateSpeed.x, 0.01f);
     }
 
+    if (ImGui::CollapsingHeader("バウンドパラメータ")) {
+        ImGui::InputInt("バウンド回数", &reactionParam_.boundParam.boundNum);
+        ImGui::DragFloat("最初のバウンド力", &reactionParam_.boundParam.initialBounceRate, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("バウンド減衰率", &reactionParam_.boundParam.bounceDamping, 0.01f, 0.0f, 1.0f);
+    }
     ImGui::Separator();
 
     // 演出の調整

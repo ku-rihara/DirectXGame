@@ -16,12 +16,6 @@
 /// </summary>
 class EnemyDamageReactionData {
 public:
-    enum class ReactionState {
-        Normal,
-        Slammed,
-        TakeUpper,
-    };
-
     // Normal状態のパラメータ
     struct NormalParam {
         float knockBackTime;
@@ -53,9 +47,7 @@ public:
     // リアクションパラメータ
     struct ReactionParameter {
         std::string triggerAttackName;
-        std::array<std::string, kEnemyTypeCount> damageAnimationNames; // ダメージアニメーション名（0=Normal, 1=Strong）
-        int32_t intReactionState = 0;
-        ReactionState reactionState;
+        std::array<std::string, kEnemyTypeCount> damageAnimationNames; 
         NormalParam normalParam;
         BoundParam boundParam;
         SlammedParam slammedParam;
@@ -120,7 +112,6 @@ public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
     const ReactionParameter& GetReactionParam() const { return reactionParam_; }
-    ReactionState GetReactionState() const { return static_cast<ReactionState>(reactionParam_.intReactionState); }
 
     // 演出データ取得
     const EnemyDamageRenditionData* GetRendition() const { return rendition_.get(); }

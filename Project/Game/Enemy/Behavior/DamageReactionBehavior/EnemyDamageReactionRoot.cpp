@@ -84,18 +84,19 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
         // 死亡リアクションに変更
         ChangeDeathReaction(reactionData);
     } else {
-        // リアクション状態に応じたBehaviorに切り替え
-        int reactionState = reactionData->GetReactionParam().intReactionState;
+        // blowYPowerでリアクション種別を自動判定
+        // blowYPower > 0 → TakeUpper、blowYPower < 0 → Slammed、0 → Normal
+        float blowYPower = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
 
-        if (reactionState == static_cast<int>(ReactionState::Normal)) {
-            pBaseEnemy_->ChangeDamageReactionBehavior(
-                std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
-        } else if (reactionState == static_cast<int>(ReactionState::Slammed)) {
-            pBaseEnemy_->ChangeDamageReactionBehavior(
-                std::make_unique<EnemyDamageReactionSlammed>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
-        } else if (reactionState == static_cast<int>(ReactionState::TakeUpper)) {
+        if (blowYPower > 0.0f) {
             pBaseEnemy_->ChangeDamageReactionBehavior(
                 std::make_unique<EnemyDamageReactionTakeUpper>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+        } else if (blowYPower < 0.0f) {
+            pBaseEnemy_->ChangeDamageReactionBehavior(
+                std::make_unique<EnemyDamageReactionSlammed>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+        } else {
+            pBaseEnemy_->ChangeDamageReactionBehavior(
+                std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
         }
     }
 }
@@ -110,20 +111,16 @@ void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* react
     // ダメージパーティクルエフェクトを再生
     PlayDamageParticleEffect(reactionData);
 
-    int reactionState = reactionData->GetReactionParam().intReactionState;
+    // blowYPowerでリアクション種別を自動判定
+    float blowYPower = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
 
-    // Slammed状態の場合は、Slammedリアクションに切り替え
-    if (reactionState == static_cast<int>(ReactionState::Slammed)) {
-        pBaseEnemy_->ChangeDamageReactionBehavior(
-            std::make_unique<EnemyDamageReactionSlammed>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
-    }
-    // TakeUpper状態の場合は、TakeUpperリアクションに切り替え
-    else if (reactionState == static_cast<int>(ReactionState::TakeUpper)) {
+    if (blowYPower > 0.0f) {
         pBaseEnemy_->ChangeDamageReactionBehavior(
             std::make_unique<EnemyDamageReactionTakeUpper>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
-    }
-    // それ以外の場合は即座に死亡Behaviorに切り替え
-    else {
+    } else if (blowYPower < 0.0f) {
+        pBaseEnemy_->ChangeDamageReactionBehavior(
+            std::make_unique<EnemyDamageReactionSlammed>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+    } else {
         pBaseEnemy_->ChangeDamageReactionBehavior(
             std::make_unique<EnemyDeath>(pBaseEnemy_));
     }
