@@ -13,8 +13,9 @@ namespace KetaEngine {
 
 enum class ParticleRootParameter {
     ParticleData,
-    Material,    
-    Texture,     
+    Material,
+    Texture,
+    DissolveTexture,
     Count
 };
 

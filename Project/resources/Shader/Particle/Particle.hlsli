@@ -56,6 +56,7 @@ struct VertexShaderOutput
     float2 texcoord : TEXCOORD0;
     float4 color : COLOR0;
     float3 normal : NORMAL0;
+    float dissolveThreshold : TEXCOORD1;
 };
 
 struct VertexShaderInput

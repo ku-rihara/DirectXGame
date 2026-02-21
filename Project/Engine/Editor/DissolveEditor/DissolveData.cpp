@@ -16,17 +16,16 @@ void DissolveData::Init(const std::string& dissolveName, const std::string& cate
     groupName_  = dissolveName;
     folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
 
+    LoadNoiseTextures();
+
     if (!globalParameter_->HasRegisters(groupName_)) {
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
+        InitParams();
     } else {
         GetParams();
     }
-
-    InitParams();
-
-    LoadNoiseTextures();
 
     // イージング設定
     thresholdEase_.SetAdaptValue(&easedThreshold_);
@@ -104,6 +103,16 @@ void DissolveData::RegisterParams() {
 }
 
 void DissolveData::GetParams() {
+    if (!globalParameter_->HasGroup(groupName_)) {
+        return;
+    }
+
+    startThreshold_       = globalParameter_->GetValue<float>(groupName_, "startThreshold");
+    endThreshold_         = globalParameter_->GetValue<float>(groupName_, "endThreshold");
+    maxTime_              = globalParameter_->GetValue<float>(groupName_, "maxTime");
+    offsetTime_           = globalParameter_->GetValue<float>(groupName_, "offsetTime");
+    easeType_             = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
+    selectedTextureIndex_ = globalParameter_->GetValue<int32_t>(groupName_, "selectedTextureIndex");
 
     if (selectedTextureIndex_ >= 0 && selectedTextureIndex_ < static_cast<int32_t>(noiseTextureFiles_.size())) {
         currentTexturePath_ = textureFilePath_ + "/" + noiseTextureFiles_[selectedTextureIndex_];

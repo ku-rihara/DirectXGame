@@ -62,9 +62,10 @@ private:
 private:
     // Names
     std::string groupName_;
-    const std::string railFolderPath_  = "Resources/GlobalParameter/RailEditor/Dates";
-    const std::string textureFilePath_ = "Resources/texture/Particle";
-    const std::string modelBasePath_   = "Resources/Model/";
+    const std::string railFolderPath_     = "Resources/GlobalParameter/RailEditor/Dates";
+    const std::string textureFilePath_    = "Resources/texture/Particle";
+    const std::string modelBasePath_      = "Resources/Model/";
+    const std::string dissolveFolderPath_ = "Resources/GlobalParameter/DissolveEditor/Common/Dates";
 
     // Parameters
     Parameters parameters_;
@@ -98,6 +99,7 @@ private:
     // filePath
     std::string modelFilePath_;
     std::string selectedTexturePath_;
+    std::string dissolveName_;
 
     // テクスチャ変更時のコールバック
     std::function<void()> onTextureChanged_;
@@ -118,6 +120,7 @@ public:
     const std::string& GetRailFileName() const { return railFileParam_.first; }
     const std::string& GetModelFilePath() const { return modelFilePath_; }
     const std::string& GetSelectedTexturePath() const { return selectedTexturePath_; }
+    const std::string& GetDissolveName() const { return dissolveName_; }
 
     // Setter
     void SetEmitPos(const Vector3& pos) { parameters_.emitPos = pos; }

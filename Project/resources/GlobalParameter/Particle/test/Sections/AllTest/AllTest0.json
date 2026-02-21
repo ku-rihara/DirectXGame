@@ -1,4 +1,4 @@
-﻿{
+{
     "AllTest0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -33,9 +33,9 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 0.18000000715255737,
+        "LifeTime": 3.2300000190734863,
         "Max Particle Num": 1000,
-        "Particle Count": 45,
+        "Particle Count": 1,
         "Position Base": [
             0.0,
             0.0,
@@ -67,6 +67,20 @@
             0.0,
             0.0
         ],
+        "RotateEaseParam.backRatio": 0.0,
+        "RotateEaseParam.easeTypeInt": 0,
+        "RotateEaseParam.endValueV3.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateEaseParam.endValueV3.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateEaseParam.isScaleEase": false,
+        "RotateEaseParam.maxTime": 1.0,
         "RotateSpeed Max": [
             0.0,
             0.0,
@@ -102,6 +116,20 @@
             0.0
         ],
         "StartTime": 0.0,
+        "TranslateEaseParam.backRatio": 0.0,
+        "TranslateEaseParam.easeTypeInt": 0,
+        "TranslateEaseParam.endValueV3.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "TranslateEaseParam.endValueV3.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "TranslateEaseParam.isScaleEase": false,
+        "TranslateEaseParam.maxTime": 1.0,
         "UV IsLoop": false,
         "UV NumOfFrame": 0,
         "UV Pos": [
@@ -119,7 +147,10 @@
         "UV isScroll": false,
         "UV isScrollEachPixel": false,
         "UseRail": false,
-        "blendMode": 1,
+        "afterDuration": 0.0,
+        "blendMode": 0,
+        "dissolveName": "test",
+        "emitPositionMode": 0,
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": true,
@@ -151,7 +182,7 @@
             1.0,
             1.0
         ],
-        "selectedTexturePath": "Resources/texture/circle.dds",
+        "selectedTexturePath": "Resources/texture/Particle/uvChecker.dds",
         "timeMode": 1,
         "useModel": false
     }

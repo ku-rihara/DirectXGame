@@ -22,6 +22,10 @@ void ParticleMaterial::Init(DirectXCommon* dxCommon) {
     materialData_->uvMatrix               = MakeIdentity4x4();
     materialData_->enableLighting         = static_cast<int32_t>(LightingType::Lambert);
     materialData_->environmentCoefficient = 0.0f;
+    materialData_->dissolveThreshold      = 1.0f;
+    materialData_->dissolveEdgeWidth      = 0.03f;
+    materialData_->dissolveEdgeColor      = Vector3(1.0f, 0.5f, 0.0f);
+    materialData_->enableDissolve         = 0;
 }
 
 void ParticleMaterial::UpdateMaterialData(const Vector4& Color) {

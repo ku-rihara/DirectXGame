@@ -14,20 +14,6 @@ std::unique_ptr<DissolveData> DissolveEditor::CreateEffectData() {
 }
 
 void DissolveEditor::RenderSpecificUI() {
-    // プレビュー用の更新処理
-    if (preViewObj_) {
-        auto* selectedDissolve = GetSelectedEffect();
-        if (selectedDissolve && selectedDissolve->IsPlaying()) {
-            preViewObj_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = selectedDissolve->GetCurrentThreshold();
-            preViewObj_->GetModelMaterial()->GetMaterialData()->enableDissolve    = selectedDissolve->IsDissolveEnabled();
-
-            // テクスチャも更新
-            if (!selectedDissolve->GetCurrentTexturePath().empty()) {
-                preViewObj_->GetModelMaterial()->SetDissolveNoizeTexture(selectedDissolve->GetCurrentTexturePath());
-            }
-        }
-    }
-
     // プレビューコントロール
     ImGui::SeparatorText("Preview Control");
     if (preViewObj_) {
@@ -36,8 +22,24 @@ void DissolveEditor::RenderSpecificUI() {
         preViewObj_->SetIsDraw(showPreview_);
         ImGui::DragFloat3("Position", &preViewObj_->transform_.translation_.x, 0.1f);
 
-        preViewObj_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = manualThreshold_;
-        preViewObj_->GetModelMaterial()->GetMaterialData()->enableDissolve    = manualEnable_;
+        auto* selectedDissolve = GetSelectedEffect();
+        if (selectedDissolve && selectedDissolve->IsPlaying()) {
+            // アニメーション再生中はDissolveDataの値を適用
+            preViewObj_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = selectedDissolve->GetCurrentThreshold();
+            preViewObj_->GetModelMaterial()->GetMaterialData()->enableDissolve    = selectedDissolve->IsDissolveEnabled();
+
+            if (!selectedDissolve->GetCurrentTexturePath().empty()) {
+                preViewObj_->GetModelMaterial()->SetDissolveNoizeTexture(selectedDissolve->GetCurrentTexturePath());
+            }
+        } else {
+            // 停止中は手動値を適用
+            preViewObj_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = manualThreshold_;
+            preViewObj_->GetModelMaterial()->GetMaterialData()->enableDissolve    = manualEnable_ ? 1 : 0;
+
+            if (selectedDissolve && !selectedDissolve->GetCurrentTexturePath().empty()) {
+                preViewObj_->GetModelMaterial()->SetDissolveNoizeTexture(selectedDissolve->GetCurrentTexturePath());
+            }
+        }
 
         ImGui::Checkbox("Manual Enable", &manualEnable_);
         ImGui::DragFloat("Manual Threshold", &manualThreshold_, 0.01f, 0.0f, 1.0f);

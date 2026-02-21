@@ -48,6 +48,28 @@ void ParticleManager::Update() {
         ParticleGroup& group           = groupPair.second;
         std::list<Particle>& particles = group.particles;
 
+        ///------------------------------------------------------------------------
+        /// Dissolveプレイヤー更新 (グループレベル)
+        ///------------------------------------------------------------------------
+        if (group.dissolvePlayer && group.dissolvePlayer->IsPlaying()) {
+            group.dissolvePlayer->Update(Frame::DeltaTimeRate());
+            group.material.GetMaterialData()->enableDissolve = 1;
+
+            auto& dp      = group.dissolveParams;
+            dp.startThreshold = group.dissolvePlayer->GetStartThreshold();
+            dp.endThreshold   = group.dissolvePlayer->GetEndThreshold();
+            dp.maxTime        = (group.dissolvePlayer->GetMaxTime() > 0.0f) ? group.dissolvePlayer->GetMaxTime() : 0.001f;
+            dp.offsetTime     = group.dissolvePlayer->GetOffsetTime();
+            dp.easeType       = group.dissolvePlayer->GetEaseType();
+            dp.isActive       = true;
+
+            const std::string& texPath = group.dissolvePlayer->GetTexturePath();
+            if (!texPath.empty() && texPath != group.lastDissolveTexturePath) {
+                group.dissolveTextureHandle   = TextureManager::GetInstance()->LoadTexture(texPath);
+                group.lastDissolveTexturePath = texPath;
+            }
+        }
+
         /// 粒子一つ一つの更新
         for (auto it = particles.begin(); it != particles.end();) {
 
@@ -127,6 +149,18 @@ void ParticleManager::Update() {
 
             // 時間を進める
             it->currentTime_ += Frame::DeltaTime();
+
+            ///------------------------------------------------------------------------
+            /// Dissolveイージング更新
+            ///------------------------------------------------------------------------
+            if (it->isAdaptDissolveEasing) {
+                if (it->dissolveCurrentTime < it->dissolveOffsetTime) {
+                    it->dissolveCurrentTime += Frame::DeltaTimeRate();
+                } else {
+                    it->dissolveEasing->Update(Frame::DeltaTimeRate());
+                }
+            }
+
             ++it;
         }
     }
@@ -177,6 +211,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
                 instancingData[instanceIndex].isFlipY = true;
             }
 
+        
             ++instanceIndex;
             ++it;
         }
@@ -191,6 +226,10 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 
             // テクスチャハンドルの設定
             commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(ParticleRootParameter::Texture), TextureManager::GetInstance()->GetTextureHandle(group.textureHandle));
+
+            // ディゾルブテクスチャの設定
+            uint32_t dTexHandle = (group.dissolveTextureHandle != 0) ? group.dissolveTextureHandle : group.textureHandle;
+            commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(ParticleRootParameter::DissolveTexture), TextureManager::GetInstance()->GetTextureHandle(dTexHandle));
 
             // モデル描画
             if (group.model) {
@@ -297,6 +336,38 @@ void ParticleManager::SetTextureHandle(const std::string name, uint32_t handle) 
     particleGroups_[name].textureHandle = handle;
 }
 
+void ParticleManager::SetDissolveTextureHandle(const std::string& name, uint32_t handle) {
+    particleGroups_[name].dissolveTextureHandle = handle;
+}
+
+void ParticleManager::PlayDissolve(const std::string& name, const std::string& dissolveName) {
+    auto it = particleGroups_.find(name);
+    if (it == particleGroups_.end()) {
+        return;
+    }
+    auto& group = it->second;
+    if (!group.dissolvePlayer) {
+        group.dissolvePlayer = std::make_unique<DissolvePlayer>();
+    }
+    group.dissolvePlayer->Play(dissolveName);
+    group.lastDissolveTexturePath.clear();
+}
+
+void ParticleManager::StopDissolve(const std::string& name) {
+    auto it = particleGroups_.find(name);
+    if (it == particleGroups_.end()) {
+        return;
+    }
+    auto& group = it->second;
+    if (group.dissolvePlayer) {
+        group.dissolvePlayer->Stop();
+    }
+    group.material.GetMaterialData()->enableDissolve = 0;
+    group.dissolveTextureHandle                      = 0;
+    group.lastDissolveTexturePath.clear();
+    group.dissolveParams                             = DissolveGroupParams{};
+}
+
 ///============================================================
 /// モデルセット
 ///============================================================
@@ -345,7 +416,7 @@ void ParticleManager::CreateInstancingResource(const std::string& name, uint32_t
 ///======================================================================
 /// パーティクル作成
 ///======================================================================
-ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parameters) {
+ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parameters, const DissolveGroupParams* dissolveParams) {
 
     Particle particle;
 
@@ -598,6 +669,27 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
     ///------------------------------------------------------------------------
     particle.gravity_ = parameters.gravity;
 
+    ///------------------------------------------------------------------------
+    /// Dissolveイージング設定
+    ///------------------------------------------------------------------------
+    if (dissolveParams && dissolveParams->isActive) {
+        particle.dissolveOffsetTime       = dissolveParams->offsetTime;
+        particle.dissolveThresholdData_   = std::make_unique<float>(dissolveParams->startThreshold);
+        particle.dissolveEasing           = std::make_unique<Easing<float>>();
+        particle.isAdaptDissolveEasing    = true;
+
+        EasingParameter<float> dissolveEasingParam;
+        dissolveEasingParam.type       = static_cast<EasingType>(dissolveParams->easeType);
+        dissolveEasingParam.startValue = dissolveParams->startThreshold;
+        dissolveEasingParam.endValue   = dissolveParams->endThreshold;
+        dissolveEasingParam.maxTime    = dissolveParams->maxTime;
+        dissolveEasingParam.backRatio  = 0.0f;
+        dissolveEasingParam.finishType = EasingFinishValueType::End;
+
+        particle.dissolveEasing->SettingValue(dissolveEasingParam);
+        particle.dissolveEasing->SetAdaptValue(particle.dissolveThresholdData_.get());
+    }
+
     return particle;
 }
 
@@ -617,7 +709,7 @@ void ParticleManager::Emit(
     // 生成、グループ追加
     std::list<Particle> particles;
     for (uint32_t i = 0; i < uint32_t(count); ++i) {
-        particles.emplace_back(MakeParticle(parameters));
+        particles.emplace_back(MakeParticle(parameters, &particleGroup.dissolveParams));
     }
 
     // グループに追加

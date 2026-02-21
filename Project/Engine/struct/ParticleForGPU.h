@@ -14,6 +14,7 @@ struct ParticleFprGPU {
     Vector4 color;
     uint32_t isFlipX;
     uint32_t isFlipY;
+    float dissolveThreshold; // パーティクルごとの個別閾値
 };
 
 
