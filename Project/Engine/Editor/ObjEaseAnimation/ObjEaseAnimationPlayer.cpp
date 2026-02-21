@@ -64,3 +64,10 @@ Vector3 ObjEaseAnimationPlayer::GetCurrentTranslation() const {
 ObjEaseAnimationData* ObjEaseAnimationPlayer::GetAnimationData() {
     return dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
 }
+
+void ObjEaseAnimationPlayer::SetLoop(bool isLoop) {
+    auto* animeData = GetAnimationData();
+    if (animeData) {
+        animeData->SetLoop(isLoop);
+    }
+}

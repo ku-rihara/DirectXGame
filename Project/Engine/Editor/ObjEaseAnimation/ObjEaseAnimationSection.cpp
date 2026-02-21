@@ -61,6 +61,8 @@ void ObjEaseAnimationSection::LoadData() {
     // パラメータ読み込み・同期
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
+    // JSONロード後に正しい値でイージングを再設定する
+    AdaptEaseParam();
 }
 
 void ObjEaseAnimationSection::SaveData() {

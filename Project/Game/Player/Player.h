@@ -114,6 +114,12 @@ public:
     Vector3 GetCollisionPos() const override; //< 衝突位置取得
 
     void MainHeadAnimationStart(const std::string& name);
+    void TitleAnimationPlay(const std::string& name);         //< タイトル本体アニメーション再生
+    void TitleRightHandAnimationPlay(const std::string& name); //< タイトル右手アニメーション再生
+    void TitleLeftHandAnimationPlay(const std::string& name);  //< タイトル左手アニメーション再生
+    bool IsTitleAnimationFinished();          //< 本体アニメーション終了判定
+    bool IsTitleRightHandAnimationFinished(); //< 右手アニメーション終了判定
+    bool IsTitleLeftHandAnimationFinished();  //< 左手アニメーション終了判定
 
     /// <summary>
     /// ダッシュ中かどうかを取得

@@ -39,6 +39,9 @@ public:
 
     ObjEaseAnimationData* GetAnimationData();
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
+
+    //*----------------------------- setter Methods -----------------------------*//
+    void SetLoop(bool isLoop);
 };
 
 }; // KetaEngine

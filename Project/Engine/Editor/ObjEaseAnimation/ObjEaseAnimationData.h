@@ -77,6 +77,8 @@ private:
     // 各TransformTypeが全セクション完了したかどうか
     std::array<bool, static_cast<size_t>(TransformType::Count)> srtAllSectionsFinished_ = {false, false, false};
 
+    bool isLoop_ = false; //< ループ再生フラグ
+
 public:
     //*----------------------------- getter Methods -----------------------------*//
     const std::string& GetCategoryName() const { return categoryName_; }
@@ -89,6 +91,10 @@ public:
 
     // アニメーション開始前のオフセット値を設定
     void SetPreAnimationOffsets(const Vector3& scale, const Vector3& rotation, const Vector3& translation);
+
+    //*----------------------------- setter Methods -----------------------------*//
+    void SetLoop(bool isLoop) { isLoop_ = isLoop; }
+    bool GetIsLoop() const { return isLoop_; }
 };
 
 }; // KetaEngine

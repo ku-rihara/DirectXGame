@@ -5,13 +5,14 @@
 #include "Enemy/Types/BaseEnemy.h"
 // DeathTimer
 #include "DeathTimer/DeathTimer.h"
-
+// ObjEaseAnimation
+#include"Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 /// Behavior
 #include "Behavior/ComboAttackBehavior/ComboAttackRoot.h"
 #include "Behavior/PlayerBehavior/PlayerDeath.h"
 #include "Behavior/PlayerBehavior/PlayerMove.h"
 #include "Behavior/PlayerBehavior/PlayerSpawn.h"
-#include "Behavior/TitleBehavior/TitleFirstFall.h"
+#include "Behavior/TitleBehavior/TitlePlayerBehavior.h"
 
 // light
 #include "Light/AmbientLight.h"
@@ -386,7 +387,7 @@ void Player::ChangeCombBoRoot() {
 /// =========================================================================================
 
 void Player::SetTitleBehavior() {
-    ChangeTitleBehavior(std::make_unique<TitleFirstFall>(this));
+    ChangeTitleBehavior(std::make_unique<TitlePlayerBehavior>(this));
 }
 
 void Player::UpdateMatrix() {
@@ -506,6 +507,33 @@ void Player::MainHeadAnimationStart(const std::string& name) {
     baseTransform_.PlayObjEaseAnimation(name, "MainHead");
 }
 
+void Player::TitleAnimationPlay(const std::string& name) {
+    baseTransform_.PlayObjEaseAnimation(name, "TitlePlayer");
+}
+
+void Player::TitleRightHandAnimationPlay(const std::string& name) {
+    rightHand_->GetObject3D()->transform_.PlayObjEaseAnimation(name, "TitlePlayer");
+}
+
+void Player::TitleLeftHandAnimationPlay(const std::string& name) {
+    leftHand_->GetObject3D()->transform_.PlayObjEaseAnimation(name, "TitlePlayer");
+}
+
+bool Player::IsTitleAnimationFinished() {
+    auto* p = baseTransform_.GetObjEaseAnimationPlayer();
+    return p && p->IsFinished();
+}
+
+bool Player::IsTitleRightHandAnimationFinished() {
+    auto* p = rightHand_->GetObject3D()->transform_.GetObjEaseAnimationPlayer();
+    return p && p->IsFinished();
+}
+
+bool Player::IsTitleLeftHandAnimationFinished() {
+    auto* p = leftHand_->GetObject3D()->transform_.GetObjEaseAnimationPlayer();
+    return p && p->IsFinished();
+}
+
 bool Player::IsDashing() const {
     if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
         return moveState->IsDashing();
@@ -533,6 +561,7 @@ bool Player::IsAbleBehavior() {
 
 void Player::InitInGameScene() {
     Init();
+    baseTransform_.SetBaseScale(parameters_->GetParameters().baseScale_);
 
     DissolveUpdate(1.0f);
     leftHand_->DissolveAdapt(1.0f);

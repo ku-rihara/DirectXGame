@@ -2,7 +2,7 @@
 // Frame
 #include "Frame/Frame.h"
 // Behavior
-#include "Player/Behavior/TitleBehavior/TitleRightPunch.h"
+#include "Player/Behavior/TitleBehavior/TitlePlayerBehavior.h"
 
 void TitleSceneController::Init(Player* player) {
     player_ = player;
@@ -34,7 +34,8 @@ void TitleSceneController::UpdatePlayerPerformance() {
     player_->TitleUpdate();
 
     // プレイヤーの特定行動をトリガーにロゴ表示開始
-    if (dynamic_cast<TitleRightPunch*>(player_->GetTitleBehavior())) {
+    if (auto* titleBehavior = dynamic_cast<TitlePlayerBehavior*>(player_->GetTitleBehavior())) {
+        (void)titleBehavior;
         if (!isTitleLogoUpdate_) {
             isTitleLogoUpdate_ = true;
         }

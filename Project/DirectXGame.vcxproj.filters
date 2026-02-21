@@ -1096,18 +1096,6 @@
     <ClCompile Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.cpp">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleFirstFall.cpp">
-      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleLeftPunch.cpp">
-      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleRightPunch.cpp">
-      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleWait.cpp">
-      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\CollisionBox\PlayerAttackCollisionBox.cpp">
       <Filter>Game\Player\CollisionBox</Filter>
     </ClCompile>
@@ -1990,18 +1978,6 @@
     <ClInclude Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.h">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleFirstFall.h">
-      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleLeftPunch.h">
-      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleRightPunch.h">
-      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleWait.h">
-      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\CollisionBox\PlayerAttackCollisionBox.h">
       <Filter>Game\Player\CollisionBox</Filter>
     </ClInclude>
@@ -2345,6 +2321,9 @@
     <ClCompile Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.cpp">
       <Filter>Game\UI\ComboAsistUI\UnlockNotifier</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitlePlayerBehavior.cpp">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2409,6 +2388,9 @@
     </ClInclude>
     <ClInclude Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.h">
       <Filter>Game\UI\ComboAsistUI\UnlockNotifier</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitlePlayerBehavior.h">
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

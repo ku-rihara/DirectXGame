@@ -252,10 +252,7 @@
     <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerMove.cpp" />
     <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerSpawn.cpp" />
     <ClCompile Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.cpp" />
-    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleFirstFall.cpp" />
-    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleLeftPunch.cpp" />
-    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleRightPunch.cpp" />
-    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitleWait.cpp" />
+    <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitlePlayerBehavior.cpp" />
     <ClCompile Include="Game\Player\CollisionBox\PlayerAttackCollisionBox.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\ComboBranchParameter.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp" />
@@ -574,10 +571,7 @@
     <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerMove.h" />
     <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerSpawn.h" />
     <ClInclude Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.h" />
-    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleFirstFall.h" />
-    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleLeftPunch.h" />
-    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleRightPunch.h" />
-    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitleWait.h" />
+    <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitlePlayerBehavior.h" />
     <ClInclude Include="Game\Player\CollisionBox\PlayerAttackCollisionBox.h" />
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />
