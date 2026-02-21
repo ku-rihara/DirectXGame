@@ -69,18 +69,12 @@ public:
         int32_t gamePadBottom;
     };
 
-    // 落下パラメータ
-    struct FallParam {
-        bool enableFall;
-    };
-
     // アタックパラメータ
     struct AttackParameter {
         CollisionParam collisionParam;
         MoveParam moveParam;
         TimingParam timingParam;
         TriggerParam triggerParam;
-        FallParam fallParam;
         float knockBackPower;
         float power;
         float blowYPower;
@@ -95,10 +89,7 @@ public:
 
     //*-------------------------------- public Method --------------------------------*//
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="attackName">攻撃名</param>
+    // 初期化
     void Init(const std::string& attackName);
 
     // パラメータバインド、調節
