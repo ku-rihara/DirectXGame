@@ -9,21 +9,6 @@
 #include <cmath>
 #include <imgui.h>
 
-///==========================================================
-/// ヘルパーメソッド
-///==========================================================
-ConditionUIData* ComboAsistController::GetCurrentData() {
-    auto it = conditionDataMap_.find(currentCondition_);
-    if (it != conditionDataMap_.end()) {
-        return &it->second;
-    }
-    return nullptr;
-}
-
-LayoutParam ComboAsistController::MakeLayoutParam() const {
-    return {basePosition_, arrowOffset_, columnSpacing_, rowSpacing_, branchYOffset_, buttonScale_, arrowScale_};
-}
-
 
 void ComboAsistController::Init() {
     if (!pAttackController_) {
@@ -118,7 +103,10 @@ void ComboAsistController::UpdateSlide(float deltaTime) {
     if (!isSliding_ || !activeSlideEasing_) {
         return;
     }
+    // アクティブなイージングを更新
     activeSlideEasing_->Update(deltaTime);
+
+    // アシストUIのCLOSEまたはOPENの完了
     if (activeSlideEasing_->IsFinished()) {
         isSliding_ = false;
         isModeTransitioning_ = false;
@@ -136,14 +124,20 @@ void ComboAsistController::ApplySlideOffset() {
 }
 
 void ComboAsistController::OpenPanel() {
-    if (panelMode_ == PanelMode::Open) return;
+    if (panelMode_ == PanelMode::Open) {
+        return;
+    }
     panelMode_ = PanelMode::Open;
     StartSlideIn();
     isModeTransitioning_ = true;
 }
 
 void ComboAsistController::TogglePanelMode() {
-    if (isModeTransitioning_) return;
+    if (isModeTransitioning_) {
+        return;
+    }
+
+    // モード切替
     if (panelMode_ == PanelMode::Open) {
         panelMode_ = PanelMode::Close;
         StartSlideOut();
@@ -455,6 +449,23 @@ void ComboAsistController::UpdateGroupVisibility(ComboUIGroup& uiGroup) {
         }
     }
 }
+
+///==========================================================
+/// ヘルパーメソッド
+///==========================================================
+ConditionUIData* ComboAsistController::GetCurrentData() {
+    auto it = conditionDataMap_.find(currentCondition_);
+    if (it != conditionDataMap_.end()) {
+        return &it->second;
+    }
+    return nullptr;
+}
+
+LayoutParam ComboAsistController::MakeLayoutParam() const {
+    return {basePosition_, arrowOffset_, columnSpacing_, rowSpacing_, branchYOffset_, buttonScale_, arrowScale_};
+}
+
+
 
 ///==========================================================
 /// パラメータ

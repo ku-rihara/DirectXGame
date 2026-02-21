@@ -1,8 +1,8 @@
 #pragma once
 #include "2d/Sprite.h"
-#include "Vector2.h"
-#include "math/MathFunction.h"
 #include "Frame/Frame.h"
+#include "math/MathFunction.h"
+#include "Vector2.h"
 #include <cstdint>
 #include <memory>
 
@@ -43,14 +43,11 @@ public:
     // スライドオフセットを加味して再配置
     void ApplySlideOffset(float offsetX);
 
-    // 位置設定
+    // 
     void SetPosition(const Vector2& pos);
-
-    // スケール設定（均一スケール）
     void SetScale(float scale);
-
-    // Z軸回転設定（ラジアン）
     void SetRotation(float rotZ);
+    void SetTargetPosY(float y);
 
     // 表示/非表示
     virtual void SetVisible(bool visible);
@@ -80,7 +77,7 @@ protected:
     // Lerp位置補間
     Vector2 currentDisplayPos_;
     Vector2 targetPos_;
-    float lerpSpeed_ = 10.0f;
+    float lerpSpeed_      = 10.0f;
     bool needsLerpUpdate_ = false;
 
 public:

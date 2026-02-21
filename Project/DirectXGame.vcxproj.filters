@@ -394,6 +394,9 @@
     <Filter Include="Game\UI\SupportSprite">
       <UniqueIdentifier>{5c65e7a3-56e8-4017-934a-4e735a184c6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\UI\ComboAsistUI\UnlockNotifier">
+      <UniqueIdentifier>{100c0824-8e30-4df2-8534-b3b8accd033b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -2339,6 +2342,9 @@
     <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.cpp">
       <Filter>Game\UI\SupportSprite</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.cpp">
+      <Filter>Game\UI\ComboAsistUI\UnlockNotifier</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2400,6 +2406,9 @@
     </ClInclude>
     <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.h">
       <Filter>Game\UI\SupportSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.h">
+      <Filter>Game\UI\ComboAsistUI\UnlockNotifier</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

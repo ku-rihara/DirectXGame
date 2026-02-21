@@ -161,7 +161,6 @@ public:
     const AttackParameter& GetAttackParam() const { return attackParam_; }
     AttackParameter& GetAttackParam() { return attackParam_; }
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
-    KetaEngine::GlobalParameter* GetGlobalParameter() const { return globalParameter_; }
     const std::string& GetFolderPath() const { return folderPath_; }
     Player* GetPlayer() const { return pPlayer_; };
     KetaEngine::TimelineDrawer* GetTimeline();

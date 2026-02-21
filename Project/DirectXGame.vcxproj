@@ -299,6 +299,7 @@
     <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistBackGroundUI.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistComboNameUI.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.cpp" />
     <ClCompile Include="Game\UI\HowToOperate.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
     <ClCompile Include="main.cpp" />
@@ -620,6 +621,7 @@
     <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistBackGroundUI.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistComboNameUI.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.h" />
     <ClInclude Include="Game\UI\HowToOperate.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />
     <ClInclude Include="Engine\math\Box.h" />

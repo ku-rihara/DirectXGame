@@ -101,3 +101,8 @@ void BaseComboAsistUI::SetVisible(bool visible) {
         }
     }
 }
+
+void BaseComboAsistUI::SetTargetPosY(float y) {
+    targetPos_.y     = y;
+    needsLerpUpdate_ = true;
+}

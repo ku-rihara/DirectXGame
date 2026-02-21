@@ -341,8 +341,6 @@ bool PlayerComboAttackData::IsReserveNextAttack(float currentTime, const ComboBr
         return false;
     }
 
-    // 発動条件は最初の攻撃開始時のみチェックされるため、コンボ継続時はチェックしない
-
     // キーボード入力チェック
     if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(branch.GetKeyboardButton()))) {
         return true;
@@ -367,8 +365,6 @@ bool PlayerComboAttackData::IsCancelAttack(float currentTime, const ComboBranchP
     if (branch.GetRequireHit() && !hasHitEnemy) {
         return false;
     }
-
-    // 発動条件は最初の攻撃開始時のみチェックされるため、コンボ継続時はチェックしない
 
     // キーボード入力チェック
     if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(branch.GetKeyboardButton()))) {
