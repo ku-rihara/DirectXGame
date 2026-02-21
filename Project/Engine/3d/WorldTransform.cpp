@@ -299,7 +299,7 @@ Vector3 WorldTransform::CalcForwardOffset(const Vector3& offsetValue) const {
 
 Vector3 WorldTransform::ScaleCalc(bool isDirectScale) {
     if (!isDirectScale) {
-        return scale_ * offsetTransform_.scale;
+        return baseScale_ * scale_ * offsetTransform_.scale;
     }
     return scale_;
 }
@@ -405,7 +405,6 @@ void WorldTransform::InitOffsetTransform() {
     offsetTransform_.quaternion  = Quaternion::Identity();
 }
 
-
 void WorldTransform::ApplyLookAtDirection(const Vector3& direction) {
     // 方向ベクトルが小さすぎる場合は処理しない
     if (direction.Length() < 0.001f) {
@@ -428,7 +427,7 @@ void WorldTransform::ApplyLookAtDirection(const Vector3& direction) {
         offsetTransform_.quaternion = lookAtQuat * quaternion_;
 
     } else {
-      
+
         // Y軸回転
         float rotateY = std::atan2(normalizedDir.x, normalizedDir.z);
 
@@ -439,6 +438,5 @@ void WorldTransform::ApplyLookAtDirection(const Vector3& direction) {
         // オフセットとして設定
         offsetTransform_.rotation.y = rotateY;
         offsetTransform_.rotation.x = rotateX;
-     
     }
 }

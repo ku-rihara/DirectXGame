@@ -20,8 +20,7 @@ public:
 
 
     void AdjustParam() override; //< パラメータの調整
-    void SaveAndLoad() override; //< セーブ・ロード
-
+  
     /// <summary>
     /// ディゾルブ効果の適用
     /// </summary>

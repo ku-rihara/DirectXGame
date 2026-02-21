@@ -2,7 +2,6 @@
 
 #include "Editor/ParameterEditor/GlobalParameter.h"
 
-
 #include "3d/Object3D/Object3d.h"
 #include "BaseObject/BaseObject.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
@@ -22,8 +21,7 @@ public:
     // 初期化、更新
     virtual void Init();
     virtual void Update();
-
-    virtual void AdjustParam() = 0; //< パラメータの調整
+    virtual void AdjustParam() = 0;
 
     /// <summary>
     /// ディゾルブ効果の適用
@@ -31,12 +29,9 @@ public:
     /// <param name="dissolve">ディゾルブ値</param>
     virtual void DissolveAdapt(float dissolve);
 
-    void ParamLoadForImGui(); //< ImGui用パラメータロード
-    void AddParamGroup();         //< パラメータグループの追加
-    void SetValues();            //< 値の設定
-    void ApplyGlobalParameter(); //< グローバルパラメータの適用
+    void RegisterParams(); //< パラメータ登録
     void AdjustParamBase(); //< 基本パラメータの調整
-    virtual void SaveAndLoad(); //< セーブ・ロード
+
 protected:
     void EffectEmit(const std::string& effectName);
 

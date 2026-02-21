@@ -19,7 +19,7 @@ struct ConstBufferDataWorldTransform {
 
 enum class BillboardType {
     XYZ, //< XYZ軸ビルボード
-    Y,   //< Y軸ビルボード
+    Y, //< Y軸ビルボード
 };
 
 struct AdaptRotate {
@@ -48,10 +48,10 @@ private:
         Quaternion quaternion;
     };
 
-     struct DirectionSettings {
+    struct DirectionSettings {
         bool isLookAtDirection   = false;
         Vector3 upVector         = Vector3::ToUp();
-        Vector3 previousPosition = Vector3::ZeroVector(); 
+        Vector3 previousPosition = Vector3::ZeroVector();
     };
 
 public:
@@ -110,10 +110,10 @@ public:
     void ApplyLookAtDirection(const Vector3& direction);
 
 private:
-    void UpdateAffineMatrix();    //< アフィン行列更新
-    void ClearParentJoint();      //< ペアレントジョイントクリア
+    void UpdateAffineMatrix(); //< アフィン行列更新
+    void ClearParentJoint(); //< ペアレントジョイントクリア
     void UpdateMatrixWithJoint(); //< ジョイントで行列更新
-    bool HasParentJoint() const;  //< ペアレントジョイントを持つか
+    bool HasParentJoint() const; //< ペアレントジョイントを持つか
 
     void ApplyAnimationToTransform();
     void InitOffsetTransform();
@@ -121,19 +121,25 @@ private:
     Vector3 ScaleCalc(bool isDirectScale);
 
 public:
+    // SRTQ
     Vector3 scale_ = Vector3::OneVector();
     Vector3 rotation_;
     Vector3 translation_;
     Quaternion quaternion_;
 
-    Transform offsetTransform_;
-
-    Matrix4x4 matWorld_; 
+    // matWorld
+    Matrix4x4 matWorld_;
 
     const WorldTransform* parent_ = nullptr;
-    RotateOder rotateOder_        = RotateOder::XYZ;
 
 private:
+    // Transform
+    Transform offsetTransform_;
+    RotateOder rotateOder_ = RotateOder::XYZ;
+
+    // baseScale
+    Vector3 baseScale_ = Vector3::OneVector();
+
     const Object3DAnimation* parentAnimation_ = nullptr;
     int32_t parentJointIndex_                 = -1;
     std::string parentJointName_;
@@ -147,31 +153,22 @@ private:
     std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;
 
 public:
-    /// <summary>
-    /// ペアレント設定
-    /// </summary>
-    /// <param name="parent">親のWorldTransform</param>
-    void SetParent(const WorldTransform* parent);
+    // Getter
 
-    /// <summary>
-    /// ペアレントジョイント設定
-    /// </summary>
-    /// <param name="animation">アニメーション</param>
-    /// <param name="jointName">ジョイント名</param>
-    void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
-    void SetIsAdaptDirectScale(bool is) { isAdaptDirectScale_ = is; }
+    Vector3 GetLocalPos() const; //< ローカル座標取得
+    Vector3 GetWorldPos() const; //< ワールド座標取得
 
-    Vector3 GetLocalPos() const;      //< ローカル座標取得
-    Vector3 GetWorldPos() const;      //< ワールド座標取得
-
-    Vector3 GetRightVector() const;   //< 右方向ベクトル取得
-    Vector3 GetUpVector() const;      //< 上方向ベクトル取得
+    Vector3 GetRightVector() const; //< 右方向ベクトル取得
+    Vector3 GetUpVector() const; //< 上方向ベクトル取得
     Vector3 GetForwardVector() const; //< 前方向ベクトル取得
 
-    /// <summary>
-    /// アニメーションプレイヤー取得
-    /// </summary>
     ObjEaseAnimationPlayer* GetObjEaseAnimationPlayer() { return objEaseAnimationPlayer_.get(); }
+
+    // Setter 
+    void SetParent(const WorldTransform* parent);
+    void SetBaseScale(const Vector3& scale) { baseScale_ = scale; }
+    void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
+    void SetIsAdaptDirectScale(bool is) { isAdaptDirectScale_ = is; }
 };
 
 } // KetaEngine

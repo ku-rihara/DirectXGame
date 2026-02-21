@@ -1,5 +1,10 @@
 {
     "Player": {
+        "BaseScale": [
+            1.5,
+            1.5,
+            1.5
+        ],
         "DashSpeedMultiplier": 2.359999895095825,
         "FallSpeed": 0.0,
         "FallSpeedLimit": 80.0,

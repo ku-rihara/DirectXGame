@@ -29,27 +29,15 @@ void PlayerHandRight::Update() {
 
 void PlayerHandRight::AdjustParam() {
 
-    BasePlayerHand::SetValues();
-
     if (ImGui::CollapsingHeader("RightHand")) {
         ImGui::PushID("RightHand");
         BasePlayerHand::AdjustParamBase();
-
-        SaveAndLoad();
         ImGui::PopID();
     }
 }
 
 void PlayerHandRight::DissolveAdapt(float dissolve) {
     BasePlayerHand::DissolveAdapt(dissolve);
-}
-
-///=====================================================
-///  セーブロード
-///=====================================================
-void PlayerHandRight::SaveAndLoad() {
-
-    BasePlayerHand::SaveAndLoad();
 }
 
 void PlayerHandRight::SetParent(KetaEngine::WorldTransform* parent) {

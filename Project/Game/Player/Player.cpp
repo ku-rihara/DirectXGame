@@ -75,6 +75,7 @@ void Player::Init() {
     jumpAttackUI_->Init();
 
     // パラメータセット
+    baseTransform_.SetBaseScale(Vector3::OneVector());
     baseTransform_.translation_ = parameters_->GetParameters().startPos_;
 
     /// 通常モードから
@@ -121,6 +122,7 @@ void Player::Update() {
     }
 
     // 移動制限
+    baseTransform_.SetBaseScale(parameters_->GetParameters().baseScale_);
     MoveToLimit();
     UpdateMatrix();
 }

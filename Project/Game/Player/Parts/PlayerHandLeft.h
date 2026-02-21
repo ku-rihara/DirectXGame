@@ -17,11 +17,8 @@ public:
     // 初期化、更新
     void Init() override;
     void Update() override;
-
-
     void AdjustParam() override; //< パラメータの調整
-    void SaveAndLoad() override; //< セーブ・ロード
-
+   
     /// <summary>
     /// ディゾルブ効果の適用
     /// </summary>
