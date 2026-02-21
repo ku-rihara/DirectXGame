@@ -10,19 +10,20 @@
 #include <imgui.h>
 
 // 初期化
-PlayerJump::PlayerJump(Player* player, const bool& skipJump)
-    : BasePlayerBehavior("PlayerJump", player), skipJump_(skipJump) {
+PlayerJump::PlayerJump(Player* player, float initSpeed)
+    : BasePlayerBehavior("PlayerJump", player) {
 
     /// ===================================================
     /// 変数初期化
     /// ===================================================
+    speed_ = initSpeed;
 
-    // ジャンプをスキップする場合は速度を0にして落下のみ
-    if (skipJump_) {
-        speed_ = 0.0f;
+    if (speed_==0.0f) {
         ChangeState([this]() { FallOnlyState(); });
     } else {
-        speed_ = pPlayerParameter_->GetParameters().normalJump.jumpSpeed;
+        pOwner_->GetGameCamera()->PlayAnimation("PlayerJunmp", false);
+        pOwner_->GetObject3D()->transform_.PlayObjEaseAnimation("JumpRotation", "Player");
+
         ChangeState([this]() { StartState(); });
     }
 }
@@ -45,10 +46,7 @@ void PlayerJump::ChangeState(std::function<void()> newState) {
 }
 
 void PlayerJump::StartState() {
-    if (!skipJump_) {
-        pOwner_->GetGameCamera()->PlayAnimation("PlayerJunmp",false);
-        pOwner_->GetObject3D()->transform_.PlayObjEaseAnimation("JumpRotation", "Player");
-    }
+   
     ChangeState([this]() { JumpState(); });
 }
 

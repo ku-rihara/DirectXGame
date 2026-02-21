@@ -391,6 +391,9 @@
     <Filter Include="Game\UI\ComboAsistUI\AsistParts">
       <UniqueIdentifier>{42e826c6-51b8-48ec-8b59-5cde07a2e091}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\UI\SupportSprite">
+      <UniqueIdentifier>{5c65e7a3-56e8-4017-934a-4e735a184c6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -2324,6 +2327,18 @@
     <ClCompile Include="Game\UI\ComboAsistUI\ComboUIBuilder.cpp">
       <Filter>Game\UI\ComboAsistUI</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\BaseSupportSpriteUI.cpp">
+      <Filter>Game\UI\SupportSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistBackGroundUI.cpp">
+      <Filter>Game\UI\SupportSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistComboNameUI.cpp">
+      <Filter>Game\UI\SupportSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.cpp">
+      <Filter>Game\UI\SupportSprite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2373,6 +2388,18 @@
     </ClInclude>
     <ClInclude Include="Game\UI\ComboAsistUI\ComboUIBuilder.h">
       <Filter>Game\UI\ComboAsistUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\BaseSupportSpriteUI.h">
+      <Filter>Game\UI\SupportSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistBackGroundUI.h">
+      <Filter>Game\UI\SupportSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistComboNameUI.h">
+      <Filter>Game\UI\SupportSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.h">
+      <Filter>Game\UI\SupportSprite</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -14,34 +14,33 @@ class PlayerComboAttackData;
 
 /// <summary>
 /// コンボパス構築クラス
-/// コンボツリーからパス情報を構築する（UI要素は持たない）
 /// </summary>
 class ComboPathBuilder {
 public:
-	/// コンボの1ステップ（ボタン入力 + 攻撃名 + 解放状態）
+	/// コンボの1ステップ
 	struct ComboStep {
 		int32_t gamepadButton;
 		bool isUnlocked;
-		bool isAutoAdvance = false; // 自動遷移（ボタン入力不要）
+		bool isAutoAdvance = false; 
 		std::string attackName;
 	};
 
-	/// コンボの1経路（ルートから末端までのステップ列）
+	/// コンボの1経路
 	struct ComboPath {
 		std::vector<ComboStep> steps;
 	};
 
-	/// 分岐情報（メインパスからどこで分岐するか + 分岐パス）
+	/// 分岐情報
 	struct BranchInfo {
-		int32_t divergeIndex; // メインパスから分岐するステップ位置
-		ComboPath path;       // 分岐側の全ステップ（共通部分含む）
+		int32_t divergeIndex; 
+		ComboPath path;      
 	};
 
 	/// 開始ボタンでグループ化されたパス群
 	struct ComboPathGroup {
 		int32_t startButton = 0;
-		ComboPath mainPath;                // 最長パス（メインライン）
-		std::vector<BranchInfo> branches;  // メインから分岐するサブパス群
+		ComboPath mainPath;               
+		std::vector<BranchInfo> branches;  
 	};
 
 public:

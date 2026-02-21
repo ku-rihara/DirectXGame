@@ -59,7 +59,7 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
 
     // 　ジャンプに切り替え
     if (KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::J)) {
-        pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
+        pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, pPlayerParameter_->GetParameters().normalJump.jumpSpeed));
     } else {
         JumpForJoyState(); // コントローラジャンプ
     }
@@ -71,7 +71,7 @@ void PlayerMove::JumpForJoyState() {
         return;
     }
 
-    pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
+    pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, pPlayerParameter_->GetParameters().normalJump.jumpSpeed));
 }
 
 void PlayerMove::MoveAnimation() {

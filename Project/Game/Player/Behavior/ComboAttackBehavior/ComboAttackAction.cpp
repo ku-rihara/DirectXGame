@@ -30,26 +30,27 @@ ComboAttackAction::~ComboAttackAction() {}
 void ComboAttackAction::Init() {
 
     // タイミングのリセット
-    currentFrame_      = 0.0f;
-    waitTime_          = 0.0f;
-    collisionTimer_    = 0.0f;
-    isCollisionActive_ = false;
-    hasHitEnemy_       = false;
-    isReserveNextCombo_ = false;
-    isAttackCancel_ = false;
+    currentFrame_        = 0.0f;
+    waitTime_            = 0.0f;
+    collisionTimer_      = 0.0f;
+    isCollisionActive_   = false;
+    hasHitEnemy_         = false;
+    isReserveNextCombo_  = false;
+    isAttackCancel_      = false;
     selectedBranchIndex_ = -1;
 
     // 次の攻撃候補リストを構築
     nextAttackCandidates_.clear();
-    auto& branches = attackData_->GetComboBranches();
+    auto& branches                          = attackData_->GetComboBranches();
     PlayerComboAttackController* controller = pOwner_->GetComboAttackController();
 
     for (auto& branch : branches) {
         if (!branch->GetNextAttackName().empty() && branch->GetNextAttackName() != "None") {
             PlayerComboAttackData* nextAttack = controller->GetAttackByName(branch->GetNextAttackName());
+
             if (nextAttack && nextAttack->GetAttackParam().isUnlocked) {
                 NextAttackCandidate candidate;
-                candidate.branch = branch.get();
+                candidate.branch     = branch.get();
                 candidate.attackData = nextAttack;
                 nextAttackCandidates_.push_back(candidate);
             }
@@ -187,8 +188,8 @@ void ComboAttackAction::ChangeNextAttack() {
 
     } else {
         // 落下フラグがある場合はPlayerJumpに移行
-        if (attackData_->GetAttackParam().fallParam.enableFall) {
-            pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, true));
+        if (pOwner_->GetWorldPosition().y >= pOwner_->GetParameter()->GetParameters().startPos_.y) {
+            pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
             pOwner_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pOwner_));
             return;
         }
@@ -214,7 +215,7 @@ void ComboAttackAction::PreOderNextComboForButton() {
 
         // ヒット状態を渡して先行入力をチェック
         if (attackData_->IsReserveNextAttack(currentFrame_, *candidate.branch, hasHitEnemy_)) {
-            isReserveNextCombo_ = true;
+            isReserveNextCombo_  = true;
             selectedBranchIndex_ = static_cast<int32_t>(i);
             return;
         }
@@ -235,9 +236,9 @@ void ComboAttackAction::AttackCancel() {
 
         // キャンセル時間をチェック
         if (attackData_->IsCancelAttack(currentFrame_, *candidate.branch, hasHitEnemy_)) {
-            isAttackCancel_ = true;
+            isAttackCancel_      = true;
             selectedBranchIndex_ = static_cast<int32_t>(i);
-            order_ = Order::CHANGE;
+            order_               = Order::CHANGE;
             return;
         }
     }

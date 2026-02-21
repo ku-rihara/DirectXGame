@@ -140,9 +140,6 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "finishWaitTime", &attackParam_.timingParam.finishWaitTime);
     globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance);
 
-    // FallParam
-    globalParameter_->Regist(groupName_, "enableFall", &attackParam_.fallParam.enableFall);
-
     // 解放レベル
     globalParameter_->Regist(groupName_, "ableDefeatLevel", &attackParam_.ableDefeatLevel);
 
@@ -242,8 +239,7 @@ void PlayerComboAttackData::DrawFlagsParamUI() {
 
     ImGui::Checkbox("モーションのみ有効", &attackParam_.isMotionOnly);
     ImGui::Checkbox("自動で次の攻撃に進む", &attackParam_.timingParam.isAutoAdvance);
-    ImGui::Checkbox("攻撃終了時に落ちる", &attackParam_.fallParam.enableFall);
-
+ 
     ImGui::SeparatorText("解放設定");
     ImGui::InputInt("解放に必要なレベル", &attackParam_.ableDefeatLevel);
     if (attackParam_.ableDefeatLevel < 0) {
