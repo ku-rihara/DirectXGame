@@ -201,81 +201,9 @@ void PlayerComboAttackController::VisualizeComboFlow() {
         return;
     }
 
-    // 全ての攻撃をチェーンに分類
-    std::vector<std::vector<std::string>> comboChains = BuildComboChains();
-
-    // 各チェーンを表示
-    for (size_t chainIdx = 0; chainIdx < comboChains.size(); ++chainIdx) {
-        ImGui::PushID(static_cast<int>(chainIdx));
-
-        const auto& chain       = comboChains[chainIdx];
-        std::string headerLabel = "コンボチェイン" + std::to_string(chainIdx + 1);
-
-        if (ImGui::TreeNode(headerLabel.c_str())) {
-            // チェーン内の各攻撃を表示
-            for (size_t i = 0; i < chain.size(); ++i) {
-                const std::string& attackName = chain[i];
-                PlayerComboAttackData* attack = GetAttackByName(attackName);
-
-                if (!attack) {
-                    continue;
-                }
-
-                ImGui::PushID(static_cast<int>(i));
-                // 攻撃名を表示
-                ImGui::Text("%d:", i);
-                ImGui::SameLine();
-                if (attack->GetAttackParam().isMotionOnly) {
-                    ImGui::TextColored(ImVec4(1.0f, 0.55f, 0.0f, 1.0f), "%s (Motion Only)", attackName.c_str());
-                } else {
-                    ImGui::TextColored(ImVec4(0.85f, 0.15f, 0.15f, 1.0f), attackName.c_str());
-                }
-
-                // 選択中の攻撃を強調表示
-                if (IsValidIndex(selectedIndex_) && attacks_[selectedIndex_]->GetGroupName() == attackName) {
-                    ImGui::SameLine();
-                    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "[Selected]");
-                }
-
-                // クリックで選択
-                if (ImGui::IsItemClicked()) {
-                    SelectAttackByName(attackName);
-                }
-
-                // 次の攻撃への矢印
-                if (i < chain.size() - 1) {
-                    ImGui::Indent(50.0f);
-                    ImGui::Text("↓");
-                    ImGui::Unindent(50.0f);
-                }
-
-                ImGui::PopID();
-            }
-
-            ImGui::TreePop();
-        }
-
-        // チェーン間の区切り
-        if (chainIdx < comboChains.size() - 1) {
-            ImGui::Separator();
-        }
-
-        ImGui::PopID();
-    }
-
-    ImGui::PopID();
-
-#endif
-}
-
-std::vector<std::vector<std::string>> PlayerComboAttackController::BuildComboChains() {
-    std::vector<std::vector<std::string>> chains;
-    std::unordered_set<std::string> visited;
-
-    // 開始攻撃を見つける（他から参照されていない攻撃）
+    // 他から参照されている攻撃を収集
     std::unordered_set<std::string> referencedAttacks;
     for (const auto& attack : attacks_) {
-        // 全てのコンボ分岐から参照されている攻撃を収集
         for (const auto& branch : attack->GetComboBranches()) {
             if (!branch->GetNextAttackName().empty()) {
                 referencedAttacks.insert(branch->GetNextAttackName());
@@ -283,43 +211,73 @@ std::vector<std::vector<std::string>> PlayerComboAttackController::BuildComboCha
         }
     }
 
-    // 各開始攻撃からチェーンを構築
-    for (const auto& attack : attacks_) {
-        const std::string& attackName = attack->GetGroupName();
-        bool isNotReferenced          = (referencedAttacks.find(attackName) == referencedAttacks.end());
+    int chainIdx = 0;
+    std::unordered_set<std::string> coveredAttacks; // 全ツリー描画で訪れた攻撃を蓄積
 
-        // 開始攻撃の条件（他から参照されていない）
-        if (isNotReferenced && visited.find(attackName) == visited.end()) {
-            std::vector<std::string> chain;
-            BuildChainRecursive(attackName, chain, visited);
-            if (!chain.empty()) {
-                chains.push_back(chain);
-            }
+    // ルート攻撃（どこからも参照されていない）からチェーンを表示
+    for (const auto& attack : attacks_) {
+        const std::string& name = attack->GetGroupName();
+        if (referencedAttacks.count(name) != 0 || coveredAttacks.count(name) != 0) {
+            continue;
         }
+
+        // TreeNodeの開閉に関わらず、処理済みとして登録
+        coveredAttacks.insert(name);
+
+        if (chainIdx > 0) {
+            ImGui::Separator();
+        }
+
+        ImGui::PushID(chainIdx);
+        std::string label = "コンボチェイン" + std::to_string(chainIdx + 1);
+        if (ImGui::TreeNode(label.c_str())) {
+            std::unordered_set<std::string> visited;
+            DrawComboFlowTree(name, "", {}, visited);
+            coveredAttacks.insert(visited.begin(), visited.end());
+            ImGui::TreePop();
+        }
+        ImGui::PopID();
+        ++chainIdx;
     }
 
     // 孤立した攻撃
     for (const auto& attack : attacks_) {
-        const std::string& attackName = attack->GetGroupName();
-        if (visited.find(attackName) == visited.end()) {
-            std::vector<std::string> chain;
-            BuildChainRecursive(attackName, chain, visited);
-            if (!chain.empty()) {
-                chains.push_back(chain);
-            }
+        const std::string& name = attack->GetGroupName();
+        if (coveredAttacks.count(name) != 0 || referencedAttacks.count(name) != 0) {
+            continue;
         }
+
+        coveredAttacks.insert(name);
+
+        if (chainIdx > 0) {
+            ImGui::Separator();
+        }
+
+        ImGui::PushID(chainIdx);
+        std::string label = "コンボチェイン" + std::to_string(chainIdx + 1);
+        if (ImGui::TreeNode(label.c_str())) {
+            std::unordered_set<std::string> visited;
+            DrawComboFlowTree(name, "", {}, visited);
+            coveredAttacks.insert(visited.begin(), visited.end());
+            ImGui::TreePop();
+        }
+        ImGui::PopID();
+        ++chainIdx;
     }
 
-    return chains;
+    ImGui::PopID();
+#endif
 }
 
-void PlayerComboAttackController::BuildChainRecursive(
+void PlayerComboAttackController::DrawComboFlowTree(
     const std::string& attackName,
-    std::vector<std::string>& chain,
+    const std::string& parentName,
+    const std::vector<std::pair<std::string, int>>& siblingBranches,
     std::unordered_set<std::string>& visited) {
 
     // 循環参照チェック
-    if (visited.find(attackName) != visited.end()) {
+    if (visited.count(attackName)) {
+        ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "(→ %s)", attackName.c_str());
         return;
     }
 
@@ -328,16 +286,75 @@ void PlayerComboAttackController::BuildChainRecursive(
         return;
     }
 
-    // 現在の攻撃を追加
-    chain.push_back(attackName);
     visited.insert(attackName);
 
-    // 全てのコンボ分岐から次の攻撃を再帰的に追加
+    ImGui::PushID(attackName.c_str());
+
+    // 攻撃名の表示
+    if (attack->GetAttackParam().isMotionOnly) {
+        ImGui::TextColored(ImVec4(1.0f, 0.55f, 0.0f, 1.0f), "%s (Motion Only)", attackName.c_str());
+    } else {
+        ImGui::TextColored(ImVec4(0.85f, 0.15f, 0.15f, 1.0f), attackName.c_str());
+    }
+
+    // クリックで選択
+    if (ImGui::IsItemClicked()) {
+        SelectAttackByName(attackName);
+    }
+
+    // 選択中の強調表示
+    if (IsValidIndex(selectedIndex_) && attacks_[selectedIndex_]->GetGroupName() == attackName) {
+        ImGui::SameLine();
+        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "[Selected]");
+    }
+
+    // 親の分岐点から渡された代替ブランチボタンを右に表示
+    for (const auto& sibling : siblingBranches) {
+        ImGui::SameLine();
+        ImGui::PushID(sibling.second);
+        if (ImGui::SmallButton(("[" + sibling.first + "]").c_str())) {
+            activeBranchIndices_[parentName] = sibling.second;
+        }
+        ImGui::PopID();
+    }
+
+    // 分岐を収集
+    std::vector<std::string> nextNames;
     for (const auto& branch : attack->GetComboBranches()) {
-        if (!branch->GetNextAttackName().empty()) {
-            BuildChainRecursive(branch->GetNextAttackName(), chain, visited);
+        const std::string& next = branch->GetNextAttackName();
+        if (!next.empty()) {
+            nextNames.push_back(next);
         }
     }
+
+    if (nextNames.empty()) {
+        ImGui::PopID();
+        return;
+    }
+
+    // アクティブブランチのインデックスを取得・補正
+    int& activeBranchIdx = activeBranchIndices_[attackName];
+    if (activeBranchIdx < 0 || activeBranchIdx >= static_cast<int>(nextNames.size())) {
+        activeBranchIdx = 0;
+    }
+
+    // 次の描画に渡す非アクティブ分岐リストを構築
+    std::vector<std::pair<std::string, int>> nextSiblings;
+    for (int i = 0; i < static_cast<int>(nextNames.size()); ++i) {
+        if (i != activeBranchIdx) {
+            nextSiblings.push_back({nextNames[i], i});
+        }
+    }
+
+    // 矢印
+    ImGui::Indent(50.0f);
+    ImGui::Text("↓");
+    ImGui::Unindent(50.0f);
+
+    ImGui::PopID();
+
+    // アクティブな分岐へ再帰
+    DrawComboFlowTree(nextNames[activeBranchIdx], attackName, nextSiblings, visited);
 }
 
 bool PlayerComboAttackController::IsFirstAttack(const std::string& attackName) const {

@@ -5,6 +5,7 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -55,13 +56,12 @@ private:
     void BindCommonParams(); //< 共通パラメータバインド
     void AdjustCommonParam(); //< 共通パラメータ調整
 
-    // コンボフロー可視化、チェーン構築
+    // コンボフロー可視化
     void VisualizeComboFlow();
-    std::vector<std::vector<std::string>> BuildComboChains();
-
-    void BuildChainRecursive(
+    void DrawComboFlowTree(
         const std::string& attackName,
-        std::vector<std::string>& chain,
+        const std::string& parentName,
+        const std::vector<std::pair<std::string, int>>& siblingBranches,
         std::unordered_set<std::string>& visited);
 
     // 攻撃名で選択
@@ -86,6 +86,7 @@ private:
     char nameBuffer_[128] = "";
 
     std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
+    std::unordered_map<std::string, int> activeBranchIndices_;
     Combo* pCombo_   = nullptr;
     Player* pPlayer_ = nullptr;
 
