@@ -48,7 +48,7 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
     MoveAnimation();
     WaitAnimation();
 
-    if ((KetaEngine::Input::IsPressPad(0, GamepadButton::B))) {
+    if ((KetaEngine::Input::IsPressPad(0, GamepadButton::B)) || forceDash_) {
         isDashing_ = true;
         pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed *
                       pPlayerParameter_->GetParameters().dashSpeedMultiplier);

@@ -23,7 +23,10 @@
 // Parts
 #include "Parts/PlayerHandLeft.h"
 #include "Parts/PlayerHandRight.h"
+// ComboCreator
+#include "Player/AutoComboAttack/AutoComboQueue.h"
 // std
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -157,6 +160,12 @@ private:
     std::unique_ptr<BaseComboAttackBehavior> comboBehavior_ = nullptr;
     std::unique_ptr<BaseTitleBehavior> titleBehavior_       = nullptr;
 
+    // コンボ自動実行キュー（アンロック演出用）
+    AutoComboQueue autoComboQueue_;
+
+    // 自動実行攻撃発火時コールバック（アンロック演出UIへの通知用）
+    std::function<void(const std::string&)> autoComboAttackCallback_;
+
 private:
     /// ===================================================
     /// private variables
@@ -210,6 +219,34 @@ public:
     void SetDeathTimer(DeathTimer* deathTimer) { pDeathTimer_ = deathTimer; }
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
+
+    AutoComboQueue& GetAutoComboQueue() { return autoComboQueue_; }
+
+    /// <summary>
+    /// 自動実行コールバックを登録（アンロック演出UIへの接続用）
+    /// </summary>
+    void SetAutoComboAttackCallback(std::function<void(const std::string&)> callback) {
+        autoComboAttackCallback_ = std::move(callback);
+    }
+
+    /// <summary>
+    /// 自動実行攻撃発火を通知（ComboAttackRoot/ComboAttackActionから呼ぶ）
+    /// </summary>
+    void FireAutoComboAttackCallback(const std::string& attackName) {
+        if (autoComboAttackCallback_) {
+            autoComboAttackCallback_(attackName);
+        }
+    }
+
+    /// <summary>
+    /// 自動ダッシュ開始（アンロック演出用）
+    /// </summary>
+    void StartAutoDash();
+
+    /// <summary>
+    /// 自動ダッシュ解除
+    /// </summary>
+    void ClearAutoDash();
 
     void SetTitleBehavior();
     void RotateReset();

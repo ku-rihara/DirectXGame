@@ -242,6 +242,7 @@
     <ClCompile Include="Game\GameIntro\MovieLine.cpp" />
     <ClCompile Include="Game\LockOn\LockOn.cpp" />
     <ClCompile Include="Game\LockOn\LockOnController.cpp" />
+    <ClCompile Include="Game\Player\AutoComboAttack\AutoComboQueue.cpp" />
     <ClCompile Include="Game\Player\Behavior\ComboAttackBehavior\BaseComboAttackBehavior.cpp" />
     <ClCompile Include="Game\Player\Behavior\ComboAttackBehavior\ComboAttackAction.cpp" />
     <ClCompile Include="Game\Player\Behavior\ComboAttackBehavior\ComboAttackRoot.cpp" />
@@ -561,6 +562,7 @@
     <ClInclude Include="Game\GameIntro\MovieLine.h" />
     <ClInclude Include="Game\LockOn\LockOn.h" />
     <ClInclude Include="Game\LockOn\LockOnController.h" />
+    <ClInclude Include="Game\Player\AutoComboAttack\AutoComboQueue.h" />
     <ClInclude Include="Game\Player\Behavior\ComboAttackBehavior\BaseComboAttackBehavior.h" />
     <ClInclude Include="Game\Player\Behavior\ComboAttackBehavior\ComboAttackAction.h" />
     <ClInclude Include="Game\Player\Behavior\ComboAttackBehavior\ComboAttackRoot.h" />

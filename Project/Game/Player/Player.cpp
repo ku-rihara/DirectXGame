@@ -541,6 +541,18 @@ bool Player::IsDashing() const {
     return false;
 }
 
+void Player::StartAutoDash() {
+    if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
+        moveState->SetForceDash(true);
+    }
+}
+
+void Player::ClearAutoDash() {
+    if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
+        moveState->SetForceDash(false);
+    }
+}
+
 void Player::RotateReset() {
     obj3d_->transform_.rotation_      = {0, 0, 0};
     obj3d_->transform_.translation_.y = 0.0f;

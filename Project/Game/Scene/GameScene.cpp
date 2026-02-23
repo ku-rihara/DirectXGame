@@ -137,6 +137,7 @@ void GameScene::ObjectInit() {
     gameObj_.deathTimer_                  = std::make_unique<DeathTimer>();
     gameObj_.killCounter_                 = std::make_unique<KillCounter>();
     gameObj_.comboAsistController_        = std::make_unique<ComboAsistController>();
+    gameObj_.unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
 
     gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
@@ -212,6 +213,12 @@ void GameScene::SetClassPointer() {
     gameObj_.comboAsistController_->SetAttackController(gameObj_.playerComboAttackController_.get());
     gameObj_.comboAsistController_->SetPlayer(gameObj_.player_.get());
     gameObj_.comboAsistController_->Init();
+
+    // 自動コンボ実行 → アンロック通知UIリアクション の接続
+    ComboUnlockNotifier* notifier = gameObj_.unlockNotifier_.get();
+    gameObj_.player_->SetAutoComboAttackCallback([notifier](const std::string& name) {
+        notifier->NotifyAttackExecuted(name);
+    });
 }
 
 void GameScene::ChangeState(std::unique_ptr<BaseGameSceneState> state) {

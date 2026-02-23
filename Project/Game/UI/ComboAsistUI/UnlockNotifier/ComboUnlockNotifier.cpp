@@ -1,6 +1,7 @@
 #include "ComboUnlockNotifier.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
+#include "Player/Player.h"
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -75,7 +76,8 @@ void ComboUnlockNotifier::UpdateCardFadeOut(NotifyCard& card, float deltaTime) {
 void ComboUnlockNotifier::OnAttackUnlocked(
     const std::string& unlockedAttackName,
     const LayoutParam& layoutParam,
-    PlayerComboAttackController* attackController) {
+    PlayerComboAttackController* attackController,
+    Player* player) {
 
     if (!attackController) {
         return;
@@ -99,6 +101,18 @@ void ComboUnlockNotifier::OnAttackUnlocked(
         return;
     }
 
+    // プレイヤーの自動実行キューにシーケンスをセット
+    if (player) {
+        auto& queue = player->GetAutoComboQueue();
+        queue.Clear();
+        for (const auto& step : steps) {
+            PlayerComboAttackData* data = attackController->GetAttackByName(step.attackName);
+            if (data) {
+                queue.Enqueue(data);
+            }
+        }
+    }
+
     // NotifyCard　初期化
     auto card         = std::make_unique<NotifyCard>();
     card->lifetime    = displayTime_;
@@ -119,6 +133,22 @@ void ComboUnlockNotifier::OnAttackUnlocked(
     int32_t cardIndex = static_cast<int32_t>(cards_.size());
     PopulateCard(*card, steps, layoutParam, cardIndex, condition);
     cards_.push_back(std::move(card));
+}
+
+///==========================================================
+/// 攻撃自動実行時に通知UIにリアクションさせる
+///==========================================================
+void ComboUnlockNotifier::NotifyAttackExecuted(const std::string& attackName) {
+    for (auto& card : cards_) {
+        if (!card) {
+            continue;
+        }
+        for (auto& btn : card->buttonUIs) {
+            if (btn) {
+                btn->TryPlayPushScaling(attackName);
+            }
+        }
+    }
 }
 
 ///==========================================================

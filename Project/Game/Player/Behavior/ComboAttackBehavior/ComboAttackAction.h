@@ -47,6 +47,7 @@ private:
     void SetMoveEasing();
 
     void PreOderNextComboForButton();
+    void TryAutoSelectNextFromQueue(); // キューから次の攻撃を自動選択
     void AttackCancel();
 
 private:

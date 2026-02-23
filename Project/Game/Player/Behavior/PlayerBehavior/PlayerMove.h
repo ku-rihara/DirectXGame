@@ -13,8 +13,8 @@ public:
     PlayerMove(Player* player);
     ~PlayerMove();
 
-     void Update([[maybe_unused]] float timeSpeed = 0.0f) override; //< 更新
-    void Debug() override;                                          //< デバッグ
+    void Update([[maybe_unused]] float timeSpeed = 0.0f) override; //< 更新
+    void Debug() override; //< デバッグ
 
     void MoveAnimation(); //< 移動アニメーション
     void WaitAnimation(); //< 待機アニメーション
@@ -33,12 +33,18 @@ public:
     /// </summary>
     bool IsDashing() const { return isDashing_; }
 
+    /// <summary>
+    /// 自動実行用ダッシュ強制フラグのセット
+    /// </summary>
+    void SetForceDash(bool force) { forceDash_ = force; }
+
 private:
     /// ===================================================
     /// private variable
     /// ===================================================
 
     bool isDashing_ = false; // ダッシュ中フラグ
+    bool forceDash_ = false; // 自動実行用ダッシュ強制フラグ
 
     AnimationStep animationStep_;
     float speed_;

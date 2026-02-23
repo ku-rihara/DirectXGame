@@ -28,6 +28,7 @@
 #include "SkyBox/SkyBox.h"
 // UI
 #include "UI/ComboAsistUI/ComboAsistController.h"
+#include "UI/ComboAsistUI/UnlockNotifier/ComboUnlockNotifier.h"
 // utility
 #include "utility/ObjectFromBlender/ObjectFromBlender.h"
 
@@ -78,6 +79,7 @@ private:
     std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
     std::unique_ptr<KillCounter> killCounter_                                = nullptr;
     std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
+    std::unique_ptr<ComboUnlockNotifier>  unlockNotifier_                    = nullptr;
 
     std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_ = nullptr;
 

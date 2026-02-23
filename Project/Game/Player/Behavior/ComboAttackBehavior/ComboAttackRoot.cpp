@@ -34,6 +34,53 @@ void ComboAttackRoot::Update(float atkSpeed) {
         return;
     }
 
+    // -------------------------------------------------------
+    // 自動実行キューのチェック（アンロック演出用）
+    // -------------------------------------------------------
+    auto& queue = pOwner_->GetAutoComboQueue();
+    if (!queue.IsEmpty()) {
+        PlayerComboAttackData* nextData = queue.Peek();
+        if (nextData) {
+            if (controller->IsFirstAttack(nextData->GetGroupName())) {
+                using TC = PlayerComboAttackData::TriggerCondition;
+                auto& triggerParam = nextData->GetAttackParam().triggerParam;
+
+                if (CheckConditionMuch(triggerParam.condition)) {
+                    // 条件OK: 強制ダッシュを解除してから実行
+                    pOwner_->ClearAutoDash();
+                    queue.Dequeue();
+                    // 通知UIにリアクションさせる
+                    pOwner_->FireAutoComboAttackCallback(nextData->GetGroupName());
+                    pOwner_->ChangeComboBehavior(
+                        std::make_unique<ComboAttackAction>(pOwner_, nextData));
+                    return;
+                }
+
+                // 条件が合わない場合の前処理
+                if (triggerParam.condition == TC::AIR && attackPatern_ == AttackPatern::NORMAL) {
+                    // 地上にいるのでジャンプを開始。次フレームでAIR条件が通る
+                    pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
+                    return;
+                }
+
+                if (triggerParam.condition == TC::DASH && !pOwner_->IsDashing()) {
+                    // ダッシュ中でないので強制ダッシュを開始。次フレームでDASH条件が通る
+                    pOwner_->StartAutoDash();
+                    return;
+                }
+
+                // 解決できない条件ミスマッチはキューをクリア
+                pOwner_->ClearAutoDash();
+                queue.Clear();
+
+            } else {
+                // 中間の攻撃がルートまで戻ってきた
+                pOwner_->ClearAutoDash();
+                queue.Clear();
+            }
+        }
+    }
+
     // 全ての攻撃データをチェック
     const auto& attacks = controller->GetAllAttacks();
 
@@ -95,6 +142,10 @@ bool ComboAttackRoot::CheckConditionMuch(const PlayerComboAttackData::TriggerCon
     case PlayerComboAttackData::TriggerCondition::BOTH:
         // 両方OK
         return true;
+
+    case PlayerComboAttackData::TriggerCondition::DASH:
+        // ダッシュ中のみ
+        return pOwner_->IsDashing();
 
     default:
         return false;

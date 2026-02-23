@@ -26,8 +26,9 @@ void EditorScene::Update() {
 
     effectEditorSuite_->SetCameraPreViewPos(player_->GetWorldPosition());
 
-    // コンボアシストUI更新
+    // UI更新
     comboAsistController_->Update();
+    unlockNotifier_->Update(KetaEngine::Frame::DeltaTime());
 
     // Editor
     attackEffect_->Update();
@@ -129,6 +130,7 @@ void EditorScene::ObjectInit() {
     deathTimer_                  = std::make_unique<DeathTimer>();
     killCounter_                 = std::make_unique<KillCounter>();
     comboAsistController_        = std::make_unique<ComboAsistController>();
+    unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
 
     // 初期化
     player_->InitInGameScene();
@@ -178,4 +180,10 @@ void EditorScene::SetClassPointer() {
     comboAsistController_->SetAttackController(playerComboAttackController_.get());
     comboAsistController_->SetPlayer(player_.get());
     comboAsistController_->Init();
+
+    // 自動コンボ実行 → アンロック通知UIリアクション の接続
+    ComboUnlockNotifier* notifier = unlockNotifier_.get();
+    player_->SetAutoComboAttackCallback([notifier](const std::string& name) {
+        notifier->NotifyAttackExecuted(name);
+    });
 }

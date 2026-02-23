@@ -19,6 +19,7 @@
 
 
 class PlayerComboAttackController;
+class Player;
 
 /// <summary>
 /// コンボ解放通知UI
@@ -59,7 +60,11 @@ public:
     void OnAttackUnlocked(
         const std::string&           unlockedAttackName,
         const LayoutParam&           layoutParam,
-        PlayerComboAttackController* attackController);
+        PlayerComboAttackController* attackController,
+        Player*                      player = nullptr);
+
+    /// 攻撃が自動実行されたときに呼ぶ（通知UIにリアクションさせる）
+    void NotifyAttackExecuted(const std::string& attackName);
 
 private:
     /// Condition に対応するアイコンのテクスチャパスを返す

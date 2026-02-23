@@ -112,8 +112,9 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
     // 移動適用
     ApplyMovement(atkSpeed);
 
-    // 予約入力
+    // 予約入力（手動 → 自動の順でチェック。手動が優先）
     PreOderNextComboForButton();
+    TryAutoSelectNextFromQueue();
 
     // キャンセル処理
     AttackCancel();
@@ -222,6 +223,53 @@ void ComboAttackAction::PreOderNextComboForButton() {
     }
 
     isReserveNextCombo_ = false;
+}
+
+///  キューから次のコンボを自動選択（アンロック演出用）
+void ComboAttackAction::TryAutoSelectNextFromQueue() {
+    // 手動入力で既に選択済みなら何もしない
+    if (isReserveNextCombo_) {
+        return;
+    }
+
+    auto& queue = pOwner_->GetAutoComboQueue();
+    if (queue.IsEmpty()) {
+        return;
+    }
+
+    PlayerComboAttackData* nextData = queue.Peek();
+    if (!nextData) {
+        return;
+    }
+
+    for (size_t i = 0; i < nextAttackCandidates_.size(); ++i) {
+        const auto& candidate = nextAttackCandidates_[i];
+
+        // キューの先頭と一致するか
+        if (candidate.attackData != nextData) {
+            continue;
+        }
+
+        // 先行入力タイミングウィンドウが開いているか
+        float precedeTime = candidate.branch->GetPrecedeInputTime();
+        bool timingOk = (currentFrame_ >= precedeTime) || attackData_->IsWaitFinish(currentFrame_);
+        if (!timingOk) {
+            continue;
+        }
+
+        // ヒット条件チェック
+        if (candidate.branch->GetRequireHit() && !hasHitEnemy_) {
+            continue;
+        }
+
+        // 自動選択確定
+        queue.Dequeue();
+        isReserveNextCombo_  = true;
+        selectedBranchIndex_ = static_cast<int32_t>(i);
+        // 通知UIにリアクションさせる
+        pOwner_->FireAutoComboAttackCallback(nextData->GetGroupName());
+        return;
+    }
 }
 
 void ComboAttackAction::AttackCancel() {

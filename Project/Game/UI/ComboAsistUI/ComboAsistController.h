@@ -140,4 +140,7 @@ private:
 public:
     void SetAttackController(PlayerComboAttackController* controller) { pAttackController_ = controller; }
     void SetPlayer(Player* player) { pPlayer_ = player; }
+
+    /// 通知UIなど外部からレイアウトパラメータが必要な場合に使う
+    LayoutParam GetLayoutParam() const { return MakeLayoutParam(); }
 };
