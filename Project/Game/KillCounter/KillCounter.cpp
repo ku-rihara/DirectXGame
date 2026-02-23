@@ -54,7 +54,12 @@ void KillCounter::UnlockAttacksForLevel(int32_t level) {
 
         auto& param = attack->GetAttackParam();
         if (param.ableDefeatLevel <= level) {
+            bool wasLocked = !param.isUnlocked;
             param.isUnlocked = true;
+
+            if (wasLocked && param.ableDefeatLevel > 0 && onAttackUnlockedCallback_) {
+                onAttackUnlockedCallback_(attack->GetGroupName());
+            }
         }
     }
 }

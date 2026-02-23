@@ -9,14 +9,14 @@
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 // Easing
 #include "Easing/Easing.h"
+// GlobalParameter
+#include "Editor/ParameterEditor/GlobalParameter.h"
 // Sprite
 #include "2d/Sprite.h"
 // std
 #include <memory>
 #include <string>
 #include <vector>
-#include <functional>
-
 
 class PlayerComboAttackController;
 class Player;
@@ -30,6 +30,7 @@ public:
     struct NotifyCard {
         // Conditionのアイコン用スプライト
         std::unique_ptr<KetaEngine::Sprite> conditionIconSprite;
+        float conditionIconBaseScaleY = 1.0f;
 
         // 攻撃ステップのボタンUI群
         std::vector<std::unique_ptr<ComboAsistButtonUI>> buttonUIs;
@@ -37,21 +38,27 @@ public:
         // ボタン間の矢印UI
         std::vector<std::unique_ptr<ComboAsistArrowUI>> arrowUIs;
 
-        float lifetime    = 0.0f;
-        float fadeOutTime = 0.0f;
-        bool  isFadingOut = false;
+        // 状態
+        enum class State { OPENING, DISPLAYING, CLOSING, DONE };
+        State state = State::OPENING;
 
-        KetaEngine::Easing<float> slideInEasing;
-        float slideOffsetX = 0.0f;
-        bool  isSliding    = false;
+        // スケールYイージング（0→1 Open, 1→0 Close）
+        KetaEngine::Easing<float> scaleYEasing;
+        float scaleY = 0.0f;
 
-        // フェードインアウト
-        std::function<void(NotifyCard&, float)> updateFunc;
+        // 自動実行用データ
+        Player* player = nullptr;
+        std::vector<PlayerComboAttackData*> pendingAttacks;
+        int32_t totalAttackCount    = 0;
+        int32_t executedAttackCount = 0;
     };
 
 public:
     ComboUnlockNotifier()  = default;
     ~ComboUnlockNotifier() = default;
+
+    /// 初期化（GlobalParameter登録 & EasingCreatorロード）
+    void Init();
 
     /// 毎フレーム呼ぶ
     void Update(float deltaTime);
@@ -66,19 +73,20 @@ public:
     /// 攻撃が自動実行されたときに呼ぶ（通知UIにリアクションさせる）
     void NotifyAttackExecuted(const std::string& attackName);
 
+    /// ImGui編集（EasingCreator + GlobalParameter）
+    void AdjustParam();
+
 private:
     /// Condition に対応するアイコンのテクスチャパスを返す
-     const char* ResolveConditionIconPath(PlayerComboAttackData::TriggerCondition condition);
-    void UpdateCardDisplay(NotifyCard& card, float deltaTime);
-    void UpdateCardFadeOut(NotifyCard& card, float deltaTime);
-    
+    const char* ResolveConditionIconPath(PlayerComboAttackData::TriggerCondition condition);
+
     /// 解放された攻撃を始点まで遡り直線パスを構築する
     std::vector<ComboPathBuilder::ComboStep> BuildLinearPath(
         const std::string&                      unlockedAttackName,
         PlayerComboAttackData::TriggerCondition condition,
         PlayerComboAttackController*            attackController);
 
-     bool DfsPath(
+    bool DfsPath(
         PlayerComboAttackData* current,
         const std::string& targetName,
         PlayerComboAttackController* attackController,
@@ -93,25 +101,30 @@ private:
         int32_t                                            cardIndex,
         PlayerComboAttackData::TriggerCondition            condition);
 
-    void ApplyAlphaToCard(NotifyCard& card, float alpha);
-    void ApplySlideToCard(NotifyCard& card);
+    /// カードの状態を更新
+    void UpdateCardState(NotifyCard& card, float deltaTime);
+
+    /// スケールYをカードのUI全体に適用
+    void ApplyScaleYToCard(NotifyCard& card);
+
+    /// クローズアニメーション開始
+    void StartCloseAnimation(NotifyCard& card);
+
     void RearrangeCards();
 
 private:
     std::vector<std::unique_ptr<NotifyCard>> cards_;
 
-    Vector2     notifyBasePosition_  = {800.0f, 400.0f};
-    float       displayTime_         = 3.0f;
-    float       fadeOutTimeDuration_ = 0.8f;
-    float       cardSpacingY_        = 120.0f;
-    std::string slideInEasingFile_   = "ComboAsistSlideIn.json";
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
+    const std::string groupName_          = "ComboUnlockNotifier";
+    const std::string kScaleYEasingFile_  = "ComboUnlockOpen.json";
+
+    Vector2 notifyBasePosition_ = {800.0f, 400.0f};
+    float   cardSpacingY_       = 120.0f;
 
 public:
     size_t GetActiveCardCount() const { return cards_.size(); }
 
     void SetNotifyBasePosition(const Vector2& pos) { notifyBasePosition_ = pos; }
-    void SetDisplayTime(float sec) { displayTime_ = sec; }
-    void SetFadeOutTime(float sec) { fadeOutTimeDuration_ = sec; }
     void SetCardSpacingY(float spacing) { cardSpacingY_ = spacing; }
-    void SetSlideInEasingFile(const std::string& f) { slideInEasingFile_ = f; }
 };

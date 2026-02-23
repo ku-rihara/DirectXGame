@@ -1,6 +1,6 @@
 {
     "KillCounter": {
-        "LevelUpThreshold1": 5,
+        "LevelUpThreshold1": 2,
         "LevelUpThreshold2": 20,
         "LevelUpThreshold3": 0,
         "LevelUpThreshold4": 0,

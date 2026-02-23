@@ -3,31 +3,38 @@
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
 #include <algorithm>
-#include <cmath>
-#include <functional>
+#include <imgui.h>
 
+///==========================================================
+/// 初期化
+///==========================================================
+void ComboUnlockNotifier::Init() {
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_);
+
+    if (!globalParameter_->HasRegisters(groupName_)) {
+        globalParameter_->Regist(groupName_, "NotifyBasePositionX", &notifyBasePosition_.x);
+        globalParameter_->Regist(groupName_, "NotifyBasePositionY", &notifyBasePosition_.y);
+        globalParameter_->Regist(groupName_, "CardSpacingY", &cardSpacingY_);
+    }
+    globalParameter_->SyncParamForGroup(groupName_);
+
+}
+
+///==========================================================
+/// 毎フレーム更新
+///==========================================================
 void ComboUnlockNotifier::Update(float deltaTime) {
     for (auto& card : cards_) {
         if (!card) {
             continue;
         }
 
-        // スライドインの更新
-        if (card->isSliding) {
-            card->slideInEasing.Update(deltaTime);
-            // 終了処理
-            if (card->slideInEasing.IsFinished()) {
-                card->isSliding    = false;
-                card->slideOffsetX = 0.0f;
-            }
-            ApplySlideToCard(*card);
-        }
+        UpdateCardState(*card, deltaTime);
+        ApplyScaleYToCard(*card);
 
-        // 状態別更新（表示中 / フェードアウト中）
-        card->updateFunc(*card, deltaTime);
-
-        // フェードアウトが終わったカードを消滅
-        if (card->isFadingOut && card->fadeOutTime <= 0.0f) {
+        // DONE になったカードを削除マーク
+        if (card->state == NotifyCard::State::DONE) {
             card.reset();
         }
     }
@@ -40,39 +47,84 @@ void ComboUnlockNotifier::Update(float deltaTime) {
 
     RearrangeCards();
 
+    // UIエレメントの更新
     for (auto& card : cards_) {
         if (!card) {
             continue;
         }
         for (auto& btn : card->buttonUIs) {
-            if (btn)
-                btn->Update();
+            if (btn) btn->Update();
         }
         for (auto& arrow : card->arrowUIs) {
-            if (arrow)
-                arrow->Update();
+            if (arrow) arrow->Update();
         }
     }
 }
 
-void ComboUnlockNotifier::UpdateCardDisplay(NotifyCard& card, float deltaTime) {
-    card.lifetime -= deltaTime;
-    if (card.lifetime <= 0.0f) {
-        card.lifetime    = 0.0f;
-        card.isFadingOut = true;
-        card.fadeOutTime = fadeOutTimeDuration_;
-        card.updateFunc  = [this](NotifyCard& c, float dt) {
-            UpdateCardFadeOut(c, dt);
-        };
+///==========================================================
+/// カード状態更新
+///==========================================================
+void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
+    switch (card.state) {
+    case NotifyCard::State::OPENING:
+        card.scaleYEasing.Update(deltaTime);
+        if (card.scaleYEasing.IsFinished()) {
+            card.state = NotifyCard::State::DISPLAYING;
+
+            if (card.player) {
+                auto& queue = card.player->GetAutoComboQueue();
+                queue.Clear();
+                for (auto* data : card.pendingAttacks) {
+                    queue.Enqueue(data);
+                }
+            }
+
+            if (card.totalAttackCount == 0) {
+                StartCloseAnimation(card);
+            }
+        }
+        break;
+    case NotifyCard::State::DISPLAYING:
+        break;
+    case NotifyCard::State::CLOSING:
+        card.scaleYEasing.Update(deltaTime);
+        if (card.scaleYEasing.IsFinished()) {
+            card.state = NotifyCard::State::DONE;
+        }
+        break;
+    case NotifyCard::State::DONE:
+        break;
     }
 }
 
-void ComboUnlockNotifier::UpdateCardFadeOut(NotifyCard& card, float deltaTime) {
-    card.fadeOutTime -= deltaTime;
-    float alpha = (std::max)(0.0f, card.fadeOutTime / fadeOutTimeDuration_);
-    ApplyAlphaToCard(card, alpha);
+///==========================================================
+/// スケールYをカードUIに適用
+///==========================================================
+void ComboUnlockNotifier::ApplyScaleYToCard(NotifyCard& card) {
+    if (card.conditionIconSprite) {
+        card.conditionIconSprite->transform_.scale.y = card.conditionIconBaseScaleY * card.scaleY;
+    }
+    for (auto& btn : card.buttonUIs) {
+        if (btn) btn->SetScaleY(card.scaleY);
+    }
+    for (auto& arrow : card.arrowUIs) {
+        if (arrow) arrow->SetScaleY(card.scaleY);
+    }
 }
 
+///==========================================================
+/// クローズアニメーション開始（1→0）
+///==========================================================
+void ComboUnlockNotifier::StartCloseAnimation(NotifyCard& card) {
+    card.scaleYEasing.SetIsStartEndReverse(true);
+    card.scaleYEasing.SetAdaptValue(&card.scaleY);
+    card.scaleYEasing.Reset();
+    card.state = NotifyCard::State::CLOSING;
+}
+
+///==========================================================
+/// 攻撃解放通知
+///==========================================================
 void ComboUnlockNotifier::OnAttackUnlocked(
     const std::string& unlockedAttackName,
     const LayoutParam& layoutParam,
@@ -83,52 +135,36 @@ void ComboUnlockNotifier::OnAttackUnlocked(
         return;
     }
 
-    // 攻撃を取得
     PlayerComboAttackData* unlockedData = attackController->GetAttackByName(unlockedAttackName);
-
     if (!unlockedData) {
         return;
     }
 
-    // ConditionTypeを取得
     auto condition = unlockedData->GetAttackParam().triggerParam.condition;
+    auto steps     = BuildLinearPath(unlockedAttackName, condition, attackController);
 
-    // ComboStepのvector
-    auto steps = BuildLinearPath(unlockedAttackName, condition, attackController);
-
-    // 早期リターン
     if (steps.empty()) {
         return;
     }
 
-    // プレイヤーの自動実行キューにシーケンスをセット
+    auto card    = std::make_unique<NotifyCard>();
+    card->player = player;
+
+    // 自動実行用攻撃データを収集
     if (player) {
-        auto& queue = player->GetAutoComboQueue();
-        queue.Clear();
         for (const auto& step : steps) {
             PlayerComboAttackData* data = attackController->GetAttackByName(step.attackName);
             if (data) {
-                queue.Enqueue(data);
+                card->pendingAttacks.push_back(data);
             }
         }
+        card->totalAttackCount = static_cast<int32_t>(card->pendingAttacks.size());
     }
 
-    // NotifyCard　初期化
-    auto card         = std::make_unique<NotifyCard>();
-    card->lifetime    = displayTime_;
-    card->fadeOutTime = fadeOutTimeDuration_;
-    card->isFadingOut = false;
-
-    // 初期状態は「表示中」の更新処理
-    card->updateFunc = [this](NotifyCard& c, float dt) {
-        UpdateCardDisplay(c, dt);
-    };
-
-    // スライドイージングの初期化
-    card->slideInEasing.Init(slideInEasingFile_);
-    card->slideInEasing.SetAdaptValue(&card->slideOffsetX);
-    card->slideInEasing.Reset();
-    card->isSliding = true;
+    // スケールYイージング設定（Open: 0→1）
+    card->scaleYEasing.Init(kScaleYEasingFile_);
+    card->scaleYEasing.SetAdaptValue(&card->scaleY);
+    card->scaleYEasing.Reset();
 
     int32_t cardIndex = static_cast<int32_t>(cards_.size());
     PopulateCard(*card, steps, layoutParam, cardIndex, condition);
@@ -140,15 +176,47 @@ void ComboUnlockNotifier::OnAttackUnlocked(
 ///==========================================================
 void ComboUnlockNotifier::NotifyAttackExecuted(const std::string& attackName) {
     for (auto& card : cards_) {
-        if (!card) {
+        if (!card || card->state != NotifyCard::State::DISPLAYING) {
             continue;
         }
+
+        // ボタンアニメーション再生
         for (auto& btn : card->buttonUIs) {
-            if (btn) {
-                btn->TryPlayPushScaling(attackName);
+            if (btn) btn->TryPlayPushScaling(attackName);
+        }
+
+        // このカードの pendingAttacks に含まれる攻撃か確認
+        bool belongsToCard = false;
+        for (auto* data : card->pendingAttacks) {
+            if (data && data->GetGroupName() == attackName) {
+                belongsToCard = true;
+                break;
             }
         }
+
+        if (!belongsToCard) {
+            continue;
+        }
+
+        card->executedAttackCount++;
+        if (card->executedAttackCount >= card->totalAttackCount) {
+            StartCloseAnimation(*card);
+        }
     }
+}
+
+///==========================================================
+/// ImGui調整
+///==========================================================
+void ComboUnlockNotifier::AdjustParam() {
+#ifdef _DEBUG
+    if (ImGui::CollapsingHeader("ComboUnlockNotifier")) {
+        ImGui::DragFloat2("NotifyBasePosition", &notifyBasePosition_.x, 1.0f);
+        ImGui::DragFloat("CardSpacingY", &cardSpacingY_, 1.0f);
+        globalParameter_->ParamSaveForImGui(groupName_);
+        globalParameter_->ParamLoadForImGui(groupName_);
+    }
+#endif
 }
 
 ///==========================================================
@@ -162,7 +230,6 @@ std::vector<ComboPathBuilder::ComboStep> ComboUnlockNotifier::BuildLinearPath(
     const auto& allAttacks = attackController->GetAllAttacks();
 
     for (const auto& atk : allAttacks) {
-
         if (!atk) {
             continue;
         }
@@ -234,7 +301,6 @@ bool ComboUnlockNotifier::DfsPath(
             return true;
         }
 
-        // バックトラック
         currentPath.pop_back();
         visited.erase(nextName);
     }
@@ -288,19 +354,20 @@ void ComboUnlockNotifier::PopulateCard(
     if (iconPath) {
         card.conditionIconSprite.reset(KetaEngine::Sprite::Create(iconPath, false));
         if (card.conditionIconSprite) {
+            card.conditionIconBaseScaleY = notifyLayout.buttonScale;
             card.conditionIconSprite->SetLayerNum(kLayerNum);
             card.conditionIconSprite->SetAnchorPoint({0.5f, 0.5f});
-            card.conditionIconSprite->transform_.scale = {notifyLayout.buttonScale, notifyLayout.buttonScale};
+            card.conditionIconSprite->transform_.scale = {notifyLayout.buttonScale, 0.0f};
             card.conditionIconSprite->transform_.pos   = {
-                notifyLayout.basePosition.x + col * notifyLayout.columnSpacing + card.slideOffsetX,
+                notifyLayout.basePosition.x + col * notifyLayout.columnSpacing,
                 notifyLayout.basePosition.y};
         }
         ++col;
 
-        // アイコン → 始点ボタン間の矢印
         auto arrow = std::make_unique<ComboAsistArrowUI>();
         arrow->Init(col - 1, kRow, col, kRow, notifyLayout);
         arrow->SnapToTarget();
+        arrow->SetScaleY(0.0f);
         card.arrowUIs.push_back(std::move(arrow));
     }
 
@@ -313,12 +380,12 @@ void ComboUnlockNotifier::PopulateCard(
             continue;
         }
 
-        // アイコンがある場合、最初のボタン前の矢印は①で追加済みなのでスキップ
         if (!isFirstButton || !iconPath) {
             if (col > 0) {
                 auto arrow = std::make_unique<ComboAsistArrowUI>();
                 arrow->Init(col - 1, kRow, col, kRow, notifyLayout);
                 arrow->SnapToTarget();
+                arrow->SetScaleY(0.0f);
                 card.arrowUIs.push_back(std::move(arrow));
             }
         }
@@ -329,12 +396,12 @@ void ComboUnlockNotifier::PopulateCard(
         btn->SetRowColumn(kRow, col);
         btn->ApplyLayout();
 
-        // 最後（解放されたステップ）をアクティブアウトラインで強調
         if (i == steps.size() - 1) {
             btn->SetActiveOutLine(true);
         }
 
         btn->SnapToTarget();
+        btn->SetScaleY(0.0f);
         card.buttonUIs.push_back(std::move(btn));
 
         isFirstButton = false;
@@ -343,42 +410,8 @@ void ComboUnlockNotifier::PopulateCard(
 }
 
 ///==========================================================
-/// アルファ適用（フェードアウト用）
+/// カード再配置
 ///==========================================================
-void ComboUnlockNotifier::ApplyAlphaToCard(NotifyCard& card, float alpha) {
-    if (card.conditionIconSprite) {
-        card.conditionIconSprite->SetAlpha(alpha);
-    }
-  /*  for (auto& btn : card.buttonUIs) {
-        if (btn)
-            btn->SetAlpha(alpha);
-    }
-    for (auto& arrow : card.arrowUIs) {
-        if (arrow)
-            arrow->SetAlpha(alpha);
-    }*/
-}
-
-///==========================================================
-/// スライドオフセット適用
-///==========================================================
-void ComboUnlockNotifier::ApplySlideToCard(NotifyCard& card) {
-    if (card.conditionIconSprite) {
-        // col=0 の X 座標にスライドオフセットを加算
-        card.conditionIconSprite->transform_.pos.x =
-            notifyBasePosition_.x + card.slideOffsetX;
-    }
-    for (auto& btn : card.buttonUIs) {
-        if (btn)
-            btn->ApplySlideOffset(card.slideOffsetX);
-    }
-    for (auto& arrow : card.arrowUIs) {
-        if (arrow)
-            arrow->ApplySlideOffset(card.slideOffsetX);
-    }
-}
-
-
 void ComboUnlockNotifier::RearrangeCards() {
     for (size_t i = 0; i < cards_.size(); ++i) {
         if (!cards_[i]) {
@@ -387,7 +420,6 @@ void ComboUnlockNotifier::RearrangeCards() {
 
         float targetY = notifyBasePosition_.y + static_cast<float>(i) * cardSpacingY_;
 
-        // conditionIconSprite の Y を更新
         if (cards_[i]->conditionIconSprite) {
             cards_[i]->conditionIconSprite->transform_.pos.y = targetY;
         }

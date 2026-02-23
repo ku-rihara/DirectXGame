@@ -43,9 +43,10 @@ public:
     // スライドオフセットを加味して再配置
     void ApplySlideOffset(float offsetX);
 
-    // 
+    //
     void SetPosition(const Vector2& pos);
     void SetScale(float scale);
+    void SetScaleY(float multiplier); //< スケールY倍率設定（0→1 アニメ用）
     void SetRotation(float rotZ);
     void SetTargetPosY(float y);
 
@@ -79,6 +80,8 @@ protected:
     Vector2 targetPos_;
     float lerpSpeed_      = 10.0f;
     bool needsLerpUpdate_ = false;
+
+    float baseScaleY_ = 1.0f; //< SetScale時に記録するYスケール基準値
 
 public:
     // getter

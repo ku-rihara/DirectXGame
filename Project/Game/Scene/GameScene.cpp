@@ -78,6 +78,7 @@ void GameScene::Debug() {
     gameObj_.deathTimer_->AdjustParam();
     gameObj_.killCounter_->AdjustParam();
     gameObj_.comboAsistController_->AdjustParam();
+    gameObj_.unlockNotifier_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
@@ -138,6 +139,7 @@ void GameScene::ObjectInit() {
     gameObj_.killCounter_                 = std::make_unique<KillCounter>();
     gameObj_.comboAsistController_        = std::make_unique<ComboAsistController>();
     gameObj_.unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
+    gameObj_.unlockNotifier_->Init();
 
     gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
@@ -219,6 +221,16 @@ void GameScene::SetClassPointer() {
     gameObj_.player_->SetAutoComboAttackCallback([notifier](const std::string& name) {
         notifier->NotifyAttackExecuted(name);
     });
+
+    // 攻撃解放 → アンロック通知UI の接続
+    {
+        ComboAsistController* asist = gameObj_.comboAsistController_.get();
+        PlayerComboAttackController* atkCtrl = gameObj_.playerComboAttackController_.get();
+        Player* player = gameObj_.player_.get();
+        gameObj_.killCounter_->SetOnAttackUnlockedCallback([notifier, asist, atkCtrl, player](const std::string& name) {
+            notifier->OnAttackUnlocked(name, asist->GetLayoutParam(), atkCtrl, player);
+        });
+    }
 }
 
 void GameScene::ChangeState(std::unique_ptr<BaseGameSceneState> state) {

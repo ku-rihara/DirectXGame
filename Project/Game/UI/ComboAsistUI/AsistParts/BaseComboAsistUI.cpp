@@ -40,6 +40,7 @@ void BaseComboAsistUI::SetPosition(const Vector2& pos) {
 }
 
 void BaseComboAsistUI::SetScale(float scale) {
+    baseScaleY_ = scale;
     if (uiSprite_) {
         uiSprite_->transform_.scale.x = scale;
         uiSprite_->transform_.scale.y = scale;
@@ -51,6 +52,19 @@ void BaseComboAsistUI::SetScale(float scale) {
     if (activeOutLineUI_) {
         activeOutLineUI_->transform_.scale.x = scale;
         activeOutLineUI_->transform_.scale.y = scale;
+    }
+}
+
+void BaseComboAsistUI::SetScaleY(float multiplier) {
+    float sy = baseScaleY_ * multiplier;
+    if (uiSprite_) {
+        uiSprite_->transform_.scale.y = sy;
+    }
+    if (outLineUI_) {
+        outLineUI_->transform_.scale.y = sy;
+    }
+    if (activeOutLineUI_) {
+        activeOutLineUI_->transform_.scale.y = sy;
     }
 }
 

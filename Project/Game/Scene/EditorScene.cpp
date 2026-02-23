@@ -75,6 +75,7 @@ void EditorScene::Debug() {
     combo_->AdjustParam();
     killCounter_->AdjustParam();
     comboAsistController_->AdjustParam();
+    unlockNotifier_->AdjustParam();
     audienceController_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
@@ -131,6 +132,7 @@ void EditorScene::ObjectInit() {
     killCounter_                 = std::make_unique<KillCounter>();
     comboAsistController_        = std::make_unique<ComboAsistController>();
     unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
+    unlockNotifier_->Init();
 
     // 初期化
     player_->InitInGameScene();
@@ -186,4 +188,14 @@ void EditorScene::SetClassPointer() {
     player_->SetAutoComboAttackCallback([notifier](const std::string& name) {
         notifier->NotifyAttackExecuted(name);
     });
+
+    // 攻撃解放 → アンロック通知UI の接続
+    {
+        ComboAsistController* asist = comboAsistController_.get();
+        PlayerComboAttackController* atkCtrl = playerComboAttackController_.get();
+        Player* playerPtr = player_.get();
+        killCounter_->SetOnAttackUnlockedCallback([notifier, asist, atkCtrl, playerPtr](const std::string& name) {
+            notifier->OnAttackUnlocked(name, asist->GetLayoutParam(), atkCtrl, playerPtr);
+        });
+    }
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <cstdint>
+#include <functional>
+#include <string>
 
 class PlayerComboAttackController;
 
@@ -32,6 +34,7 @@ private:
     int32_t levelUpThresholds_[kMaxKillLevel] = {};
 
     PlayerComboAttackController* pAttackController_ = nullptr;
+    std::function<void(const std::string&)> onAttackUnlockedCallback_;
 
 
     // GlobalParameter
@@ -44,5 +47,6 @@ public:
     int32_t GetKillCount() const { return killCount_; }
     // Setter
     void SetAttackController(PlayerComboAttackController* controller) { pAttackController_ = controller; }
+    void SetOnAttackUnlockedCallback(std::function<void(const std::string&)> callback) { onAttackUnlockedCallback_ = std::move(callback); }
 
 };
