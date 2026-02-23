@@ -88,6 +88,9 @@ public:
     Vector3 GetActiveKeyFrameValue(const TransformType& type) const;
     bool GetIsUseRailActiveKeyFrame() const;
     RailPlayer* GetCurrentRailPlayer() const;
+    bool IsLookingAtDirection() const;
+    Vector3 GetMovementDirection() const;
+    bool IsTranslationReturning() const;
 
     // アニメーション開始前のオフセット値を設定
     void SetPreAnimationOffsets(const Vector3& scale, const Vector3& rotation, const Vector3& translation);

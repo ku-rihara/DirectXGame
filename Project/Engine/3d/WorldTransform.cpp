@@ -376,24 +376,31 @@ void WorldTransform::ApplyAnimationToTransform() {
         offsetTransform_.scale = objEaseAnimationPlayer_->GetCurrentScale();
     }
 
-    // Rotationをオフセット
-    if (rotateOder_ == RotateOder::Quaternion) {
-        // Quaternionの場合
-        Vector3 rotationOffset      = objEaseAnimationPlayer_->GetCurrentRotation();
-        offsetTransform_.quaternion = Quaternion::EulerToQuaternion(rotationOffset);
-    } else {
-        // オイラー角の場合
-        offsetTransform_.rotation = objEaseAnimationPlayer_->GetCurrentRotation();
-    }
-
     // Translationをオフセット
     if (!animeData->GetIsUseRailActiveKeyFrame()) {
         offsetTransform_.translation = objEaseAnimationPlayer_->GetCurrentTranslation();
-
     } else {
         auto* railPlayer = animeData->GetCurrentRailPlayer();
         if (railPlayer) {
             offsetTransform_.translation = railPlayer->GetCurrentPosition();
+        }
+    }
+
+    // 進行方向を向く設定が有効な場合は方向から回転を決定する
+    if (objEaseAnimationPlayer_->IsLookingAtDirection()) {
+        Vector3 dir = objEaseAnimationPlayer_->GetMovementDirection();
+        // 戻り中は移動方向の逆を向く（パンチ後に正面を維持しながら引く）
+        if (objEaseAnimationPlayer_->IsTranslationReturning()) {
+            dir = dir * -1.0f;
+        }
+        ApplyLookAtDirection(dir);
+    } else {
+        // Rotationをオフセット
+        if (rotateOder_ == RotateOder::Quaternion) {
+            Vector3 rotationOffset      = objEaseAnimationPlayer_->GetCurrentRotation();
+            offsetTransform_.quaternion = Quaternion::EulerToQuaternion(rotationOffset);
+        } else {
+            offsetTransform_.rotation = objEaseAnimationPlayer_->GetCurrentRotation();
         }
     }
 }

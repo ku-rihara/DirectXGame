@@ -174,14 +174,6 @@ void ObjEaseAnimationSection::UpdateTransformPlay(TransformParam& param, Transfo
         isFinished          = param.ease.IsFinished();
     }
 
-    // 進行方向の計算と保存
-    if (type == TransformType::Translation && param.isLookAtDirection) {
-        Vector3 moveDirection = param.currentOffset - previousOffset;
-        if (moveDirection.Length() > 0.001f) {
-            param.previousOffset = moveDirection;
-        }
-    }
-
     param.previousOffset = previousOffset;
 
     if (isFinished) {

@@ -65,6 +65,30 @@ ObjEaseAnimationData* ObjEaseAnimationPlayer::GetAnimationData() {
     return dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
 }
 
+bool ObjEaseAnimationPlayer::IsLookingAtDirection() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->IsLookingAtDirection();
+    }
+    return false;
+}
+
+Vector3 ObjEaseAnimationPlayer::GetMovementDirection() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->GetMovementDirection();
+    }
+    return Vector3::ToForward();
+}
+
+bool ObjEaseAnimationPlayer::IsTranslationReturning() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->IsTranslationReturning();
+    }
+    return false;
+}
+
 void ObjEaseAnimationPlayer::SetLoop(bool isLoop) {
     auto* animeData = GetAnimationData();
     if (animeData) {

@@ -279,6 +279,32 @@ Vector3 ObjEaseAnimationData::GetActiveKeyFrameValue(const TransformType& type) 
     return Vector3::ZeroVector();
 }
 
+bool ObjEaseAnimationData::IsLookingAtDirection() const {
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        return sectionElements_[sectionIndex]->IsLookingAtDirection();
+    }
+    return false;
+}
+
+Vector3 ObjEaseAnimationData::GetMovementDirection() const {
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        return sectionElements_[sectionIndex]->GetMovementDirection();
+    }
+    return Vector3::ToForward();
+}
+
+bool ObjEaseAnimationData::IsTranslationReturning() const {
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        auto state = sectionElements_[sectionIndex]->GetTransformState(ObjEaseAnimationSection::TransformType::Translation);
+        return state == ObjEaseAnimationSection::TransformState::RETURNING ||
+               state == ObjEaseAnimationSection::TransformState::RETURN_WAITING;
+    }
+    return false;
+}
+
 bool ObjEaseAnimationData::GetIsUseRailActiveKeyFrame() const {
     // TranslationのセクションインデックスでRail使用状態をチェック
     int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];

@@ -39,6 +39,9 @@ public:
 
     ObjEaseAnimationData* GetAnimationData();
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
+    bool IsLookingAtDirection() const;
+    Vector3 GetMovementDirection() const;
+    bool IsTranslationReturning() const;
 
     //*----------------------------- setter Methods -----------------------------*//
     void SetLoop(bool isLoop);
