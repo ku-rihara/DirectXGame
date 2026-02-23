@@ -389,10 +389,6 @@ void WorldTransform::ApplyAnimationToTransform() {
     // 進行方向を向く設定が有効な場合は方向から回転を決定する
     if (objEaseAnimationPlayer_->IsLookingAtDirection()) {
         Vector3 dir = objEaseAnimationPlayer_->GetMovementDirection();
-        // 戻り中は移動方向の逆を向く（パンチ後に正面を維持しながら引く）
-        if (objEaseAnimationPlayer_->IsTranslationReturning()) {
-            dir = dir * -1.0f;
-        }
         ApplyLookAtDirection(dir);
     } else {
         // Rotationをオフセット
