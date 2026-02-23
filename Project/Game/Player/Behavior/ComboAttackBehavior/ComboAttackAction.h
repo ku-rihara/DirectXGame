@@ -64,8 +64,10 @@ private:
     float waitTime_;
 
     bool isReserveNextCombo_;
+    bool isAutoReservedCombo_; // キューによる自動予約（PreOderによるリセットを跨いで保持）
     bool isAttackCancel_;
     bool hasHitEnemy_;
+    int32_t autoSelectedBranchIndex_ = -1; // 自動予約の分岐インデックス
 
     // 移動関連
     std::unique_ptr<PlayerAttackRendition> attackRendition_;

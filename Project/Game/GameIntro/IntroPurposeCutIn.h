@@ -43,6 +43,11 @@ private:
     bool IsAllAppearFinished() const;
 
     /// <summary>
+    /// 出現アニメーションを開始
+    /// </summary>
+    void StartAppearAnimation();
+
+    /// <summary>
     /// 閉じアニメーションを開始
     /// </summary>
     void StartCloseAnimation();
@@ -55,5 +60,6 @@ private:
 private:
     std::unique_ptr<KetaEngine::Sprite> backLineSprite_;
     std::array<std::unique_ptr<KetaEngine::Sprite>, static_cast<size_t>(SpritePos::COUNT)> sprites_;
-    Phase phase_ = Phase::Appear;
+    Phase phase_                = Phase::Appear;
+    bool  appearAnimStarted_    = false;
 };

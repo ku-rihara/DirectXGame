@@ -17,15 +17,10 @@ void IntroPurposeCutIn::Init(const std::string& name) {
     backLineSprite_->transform_.scale = Vector2::ZeroVector();
 
     // 変数初期化
-    phase_            = Phase::Appear;
-    isFinish_         = false;
-    isAbleEnemySpawn_ = false;
-
-    // 全出現アニメーション一斉開始
-    sprites_[LEFT]->PlaySpriteEaseAnimation("leftSideAppear", "IntroPurposeCutIn");
-    sprites_[RIGHT]->PlaySpriteEaseAnimation("rightSideAppear", "IntroPurposeCutIn");
-    sprites_[CENTER]->PlaySpriteEaseAnimation("centerAppearScale", "IntroPurposeCutIn");
-    backLineSprite_->PlaySpriteEaseAnimation("appearScale", "IntroPurposeCutIn");
+    phase_             = Phase::Appear;
+    isFinish_          = false;
+    isAbleEnemySpawn_  = false;
+    appearAnimStarted_ = false;
 }
 
 void IntroPurposeCutIn::Update(float playSpeed) {
@@ -33,6 +28,11 @@ void IntroPurposeCutIn::Update(float playSpeed) {
 
     switch (phase_) {
     case Phase::Appear:
+        // Appearフェーズ初回のみアニメーション開始
+        if (!appearAnimStarted_) {
+            StartAppearAnimation();
+            appearAnimStarted_ = true;
+        }
         // 全出現アニメーションが終わったらCloseへ
         if (IsAllAppearFinished()) {
             StartCloseAnimation();
@@ -63,6 +63,13 @@ bool IntroPurposeCutIn::IsAllAppearFinished() const {
         return false;
     }
     return true;
+}
+
+void IntroPurposeCutIn::StartAppearAnimation() {
+    sprites_[LEFT]->PlaySpriteEaseAnimation("leftSideAppear", "IntroPurposeCutIn");
+    sprites_[RIGHT]->PlaySpriteEaseAnimation("rightSideAppear", "IntroPurposeCutIn");
+    sprites_[CENTER]->PlaySpriteEaseAnimation("centerAppearScale", "IntroPurposeCutIn");
+    backLineSprite_->PlaySpriteEaseAnimation("appearScale", "IntroPurposeCutIn");
 }
 
 void IntroPurposeCutIn::StartCloseAnimation() {

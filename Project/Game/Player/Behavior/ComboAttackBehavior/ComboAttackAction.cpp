@@ -35,8 +35,10 @@ void ComboAttackAction::Init() {
     collisionTimer_      = 0.0f;
     isCollisionActive_   = false;
     hasHitEnemy_         = false;
-    isReserveNextCombo_  = false;
-    isAttackCancel_      = false;
+    isReserveNextCombo_      = false;
+    isAutoReservedCombo_     = false;
+    autoSelectedBranchIndex_ = -1;
+    isAttackCancel_          = false;
     selectedBranchIndex_ = -1;
 
     // 次の攻撃候補リストを構築
@@ -63,6 +65,9 @@ void ComboAttackAction::Init() {
     SetMoveEasing();
 
     order_ = Order::INIT;
+
+    // 攻撃開始を通知（Init確定 = 攻撃実行開始のタイミング）
+    pOwner_->FireAutoComboAttackCallback(attackData_->GetGroupName());
 }
 
 void ComboAttackAction::Update(float atkSpeed) {
@@ -166,13 +171,23 @@ void ComboAttackAction::UpdateWait(float atkSpeed) {
 void ComboAttackAction::ChangeNextAttack() {
 
     // 自動進行フラグがtrueの場合も次に進む（最初の分岐を選択）
-    bool shouldAdvance = isReserveNextCombo_ || isAttackCancel_ || attackData_->GetAttackParam().timingParam.isAutoAdvance;
+    bool shouldAdvance = isReserveNextCombo_ || isAutoReservedCombo_ || isAttackCancel_ || attackData_->GetAttackParam().timingParam.isAutoAdvance;
     KetaEngine::Input::SetVibration(0, 0.0f, 0.0f);
+
+    // 自動予約時: 遷移直前にキューから取り出す
+    auto TryDequeueIfAutoReserved = [this](PlayerComboAttackData* nextAttackData) {
+        if (!isAutoReservedCombo_) return;
+        auto& queue = pOwner_->GetAutoComboQueue();
+        if (queue.Peek() == nextAttackData) {
+            queue.Dequeue();
+        }
+    };
 
     // 次のコンボに移動する
     if (shouldAdvance && selectedBranchIndex_ >= 0 && selectedBranchIndex_ < static_cast<int32_t>(nextAttackCandidates_.size())) {
         PlayerComboAttackData* nextAttackData = nextAttackCandidates_[selectedBranchIndex_].attackData;
 
+        TryDequeueIfAutoReserved(nextAttackData);
         BaseComboAttackBehavior::ChangeNextCombo(
             std::make_unique<ComboAttackAction>(pOwner_, nextAttackData));
 
@@ -182,6 +197,7 @@ void ComboAttackAction::ChangeNextAttack() {
         // 自動進行の場合は最初の分岐を使用
         PlayerComboAttackData* nextAttackData = nextAttackCandidates_[0].attackData;
 
+        TryDequeueIfAutoReserved(nextAttackData);
         BaseComboAttackBehavior::ChangeNextCombo(
             std::make_unique<ComboAttackAction>(pOwner_, nextAttackData));
 
@@ -227,6 +243,15 @@ void ComboAttackAction::PreOderNextComboForButton() {
 
 ///  キューから次のコンボを自動選択（アンロック演出用）
 void ComboAttackAction::TryAutoSelectNextFromQueue() {
+    // 既に自動予約済み: PreOderNextComboForButton のリセットを上書きして再アサート
+    if (isAutoReservedCombo_) {
+        if (!isReserveNextCombo_) {
+            isReserveNextCombo_  = true;
+            selectedBranchIndex_ = autoSelectedBranchIndex_;
+        }
+        return;
+    }
+
     // 手動入力で既に選択済みなら何もしない
     if (isReserveNextCombo_) {
         return;
@@ -262,12 +287,11 @@ void ComboAttackAction::TryAutoSelectNextFromQueue() {
             continue;
         }
 
-        // 自動選択確定
-        queue.Dequeue();
-        isReserveNextCombo_  = true;
-        selectedBranchIndex_ = static_cast<int32_t>(i);
-        // 通知UIにリアクションさせる
-        pOwner_->FireAutoComboAttackCallback(nextData->GetGroupName());
+        // 自動予約確定（Dequeueはここではせず ChangeNextAttack で行う）
+        isAutoReservedCombo_     = true;
+        autoSelectedBranchIndex_ = static_cast<int32_t>(i);
+        isReserveNextCombo_      = true;
+        selectedBranchIndex_     = static_cast<int32_t>(i);
         return;
     }
 }

@@ -49,8 +49,6 @@ void ComboAttackRoot::Update(float atkSpeed) {
                     // 条件OK: 強制ダッシュを解除してから実行
                     pOwner_->ClearAutoDash();
                     queue.Dequeue();
-                    // 通知UIにリアクションさせる
-                    pOwner_->FireAutoComboAttackCallback(nextData->GetGroupName());
                     pOwner_->ChangeComboBehavior(
                         std::make_unique<ComboAttackAction>(pOwner_, nextData));
                     return;
@@ -66,6 +64,11 @@ void ComboAttackRoot::Update(float atkSpeed) {
                 if (triggerParam.condition == TC::DASH && !pOwner_->IsDashing()) {
                     // ダッシュ中でないので強制ダッシュを開始。次フレームでDASH条件が通る
                     pOwner_->StartAutoDash();
+                    return;
+                }
+
+                if (triggerParam.condition == TC::GROUND && attackPatern_ == AttackPatern::JUMP) {
+                    // 空中にいるので着地を待機（キューを保持したまま次フレームで再チェック）
                     return;
                 }
 
