@@ -12,11 +12,12 @@ void ComboUnlockNotifier::Init() {
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
 
-    if (!globalParameter_->HasRegisters(groupName_)) {
-        globalParameter_->Regist(groupName_, "NotifyBasePositionX", &notifyBasePosition_.x);
-        globalParameter_->Regist(groupName_, "NotifyBasePositionY", &notifyBasePosition_.y);
-        globalParameter_->Regist(groupName_, "CardSpacingY", &cardSpacingY_);
-    }
+    // シーン再生成時に古いlambdaがダングリングポインタを捕捉しないよう、
+    // 毎回クリアしてから現インスタンスのアドレスで再登録する
+    globalParameter_->ClearRegistersForGroup(groupName_);
+    globalParameter_->Regist(groupName_, "NotifyBasePositionX", &notifyBasePosition_.x);
+    globalParameter_->Regist(groupName_, "NotifyBasePositionY", &notifyBasePosition_.y);
+    globalParameter_->Regist(groupName_, "CardSpacingY", &cardSpacingY_);
     globalParameter_->SyncParamForGroup(groupName_);
 
 }
@@ -313,17 +314,10 @@ bool ComboUnlockNotifier::DfsPath(
 const char* ComboUnlockNotifier::ResolveConditionIconPath(
     PlayerComboAttackData::TriggerCondition condition) {
 
-    using TC = PlayerComboAttackData::TriggerCondition;
-    switch (condition) {
-    case TC::AIR:
-        return "OperateUI/ConditionAir.dds";
-    case TC::DASH:
-        return "OperateUI/ConditionDash.dds";
-    case TC::GROUND:
-    case TC::BOTH:
-    default:
-        return nullptr;
-    }
+    // TODO: 対応するテクスチャファイルが用意できたら各条件のパスを返す
+    // 現在は ConditionAir.dds / ConditionDash.dds が存在しないため全て nullptr を返す
+    (void)condition;
+    return nullptr;
 }
 
 ///==========================================================
