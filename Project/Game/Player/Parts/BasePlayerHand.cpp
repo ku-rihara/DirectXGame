@@ -1,5 +1,5 @@
 #include "BasePlayerHand.h"
-
+#include"Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 /// imgui
 #include "base/TextureManager.h"
 #include <imgui.h>
@@ -23,6 +23,10 @@ void BasePlayerHand::Init() {
 /// 　更新
 ///==========================================================
 void BasePlayerHand::Update() {
+
+    // 戻り中は進行方向の逆を向くよう WorldTransform に伝える
+    auto* animPlayer = obj3d_->transform_.GetObjEaseAnimationPlayer();
+    obj3d_->transform_.SetReverseDirectionOnReturn(animPlayer->IsTranslationReturning());
 
     obj3d_->SetIsShadow(isShadow_);
 

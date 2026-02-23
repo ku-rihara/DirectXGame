@@ -1,12 +1,11 @@
 #include "ComboAsistButtonUI.h"
 #include <XInput.h>
 
-void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, int32_t row, int32_t col, const LayoutParam& layout) {
+void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const LayoutParam& layout, const std::string& attackName) {
     gamepadButton_ = gamepadButton;
     isUnlocked_    = isUnlocked;
-    rowNum_        = row;
-    columnNum_     = col;
     layout_        = layout;
+    attackName_    = attackName;
 
     const int32_t layerNum = 20;
 
@@ -38,10 +37,6 @@ void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, int32_t ro
         activeOutLineUI_->SetAnchorPoint({0.5f, 0.5f});
     }
 
-    ApplyLayout();
-    currentDisplayPos_ = targetPos_;
-    SetPosition(currentDisplayPos_);
-    needsLerpUpdate_ = false;
 }
 
 void ComboAsistButtonUI::Update() {
@@ -62,6 +57,12 @@ void ComboAsistButtonUI::SetUnlocked(bool isUnlocked) {
     isUnlocked_ = isUnlocked;
     if (outLineUI_) {
         outLineUI_->SetIsDraw(!isUnlocked_);
+    }
+}
+
+void ComboAsistButtonUI::TryPlayPushScaling(const std::string& attackName) {
+    if (attackName_ == attackName) {
+        PlayPushScaling();
     }
 }
 

@@ -159,6 +159,9 @@ private:
     // 再生状態
     PlayState playState_ = PlayState::STOPPED;
 
+    // 戻りセクションフラグ
+    bool isReturnSection_ = false;
+
     TimeModeSelector timeModeSelector_;
 
 public:
@@ -174,6 +177,7 @@ public:
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const;
     bool IsLookingAtDirection() const;
+    bool IsReturnSection() const { return isReturnSection_; }
     Vector3 GetMovementDirection() const;
 
     // デバッグ用：Transformの状態を取得

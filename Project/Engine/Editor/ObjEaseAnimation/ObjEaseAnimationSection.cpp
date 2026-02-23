@@ -37,7 +37,7 @@ void ObjEaseAnimationSection::Reset() {
         param.ease.Reset();
         param.returnEase.Reset();
         param.currentOffset     = param.startValue;
-        param.state             = param.isActive ? TransformState::INACTIVE : TransformState::INACTIVE;
+        param.state             = TransformState::INACTIVE;
         param.returnElapsedTime = 0.0f;
     }
 
@@ -265,6 +265,7 @@ void ObjEaseAnimationSection::StartPlay() {
 void ObjEaseAnimationSection::RegisterParams() {
     globalParameter_->Regist(groupName_, "startTime", &startTime_);
     globalParameter_->Regist(groupName_, "returnStartTime", &returnStartTime_);
+    globalParameter_->Regist(groupName_, "isReturnSection", &isReturnSection_);
     timeModeSelector_.RegisterParam(groupName_, globalParameter_);
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
@@ -282,15 +283,16 @@ void ObjEaseAnimationSection::RegisterParams() {
         if (i == static_cast<size_t>(TransformType::Translation)) {
             globalParameter_->Regist(groupName_, std::string(name) + "_UseRail", &param.useRail);
             globalParameter_->Regist(groupName_, std::string(name) + "_RailFileName", &param.railFileName);
-            globalParameter_->Regist(groupName_, std::string(name) + "_IsLookAtDirection", &param.isLookAtDirection); // 追加
+            globalParameter_->Regist(groupName_, std::string(name) + "_IsLookAtDirection", &param.isLookAtDirection); 
         }
     }
 }
 
 void ObjEaseAnimationSection::GetParams() {
-    startTime_ = globalParameter_->GetValue<float>(groupName_, "startTime");
-    timeModeSelector_.GetParam(groupName_, globalParameter_);
+    startTime_       = globalParameter_->GetValue<float>(groupName_, "startTime");
     returnStartTime_ = globalParameter_->GetValue<float>(groupName_, "returnStartTime");
+    isReturnSection_ = globalParameter_->GetValue<bool>(groupName_, "isReturnSection");
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
         const char* name = GetSRTName(static_cast<TransformType>(i));
@@ -307,7 +309,7 @@ void ObjEaseAnimationSection::GetParams() {
         if (i == static_cast<size_t>(TransformType::Translation)) {
             param.useRail           = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
             param.railFileName      = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
-            param.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection"); // 追加
+            param.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection"); 
         }
     }
 }
@@ -346,7 +348,7 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
         ImGui::Checkbox("Use Rail", &param.useRail);
 
         if (param.useRail) {
-            std::string directory = globalParameter_->GetDirectoryPath() + "RailEditor/Dates";
+            std::string directory = globalParameter_->GetDirectoryPath() + "RailEditor/Common/Dates";
             railFileSelector_.selector.SelectFile("Rail File", directory, param.railFileName, "", true);
             ImGui::PopID();
             return;
@@ -382,6 +384,7 @@ void ObjEaseAnimationSection::AdjustParam() {
     ImGui::PushID(groupName_.c_str());
 
     ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 100.0f);
+    ImGui::Checkbox("Is Return Section", &isReturnSection_);
     timeModeSelector_.SelectTimeModeImGui("Time Mode");
 
     ImGui::Separator();
@@ -448,7 +451,7 @@ void ObjEaseAnimationSection::StartWaitingForTransform(TransformType type) {
 void ObjEaseAnimationSection::StartPlayingForTransform(TransformType type) {
     auto& param = transformParams_[static_cast<size_t>(type)];
     if (param.isActive) {
-        // セクション全体をPLAYING状態にする（Update()が処理を行うため）
+        // セクション全体をPLAYING状態にする
         playState_ = PlayState::PLAYING;
 
         // この特定のTransformをPLAYING状態にする

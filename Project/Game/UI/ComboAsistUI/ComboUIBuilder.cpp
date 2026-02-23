@@ -73,7 +73,10 @@ void ComboUIBuilder::CreateGroupUI(
         }
         const auto& step = pathGroup.mainPath.steps[i];
         auto btn         = std::make_unique<ComboAsistButtonUI>();
-        btn->Init(step.gamepadButton, step.isUnlocked, mainRow, mainColMap[i], layoutParam);
+        btn->Init(step.gamepadButton, step.isUnlocked, layoutParam, step.attackName);
+        btn->SetRowColumn(mainRow, mainColMap[i]);
+        btn->ApplyLayout();
+        btn->SnapToTarget();
         uiGroup.mainButtonUIs.push_back(std::move(btn));
     }
 
@@ -136,7 +139,10 @@ void ComboUIBuilder::CreateGroupUI(
                 continue;
             }
             auto btn = std::make_unique<ComboAsistButtonUI>();
-            btn->Init(branchInfo.path.steps[i].gamepadButton, branchInfo.path.steps[i].isUnlocked, branchRow, branchColMap[i], layoutParam);
+            btn->Init(branchInfo.path.steps[i].gamepadButton, branchInfo.path.steps[i].isUnlocked, layoutParam, branchInfo.path.steps[i].attackName);
+            btn->SetRowColumn(branchRow, branchColMap[i]);
+            btn->ApplyLayout();
+            btn->SnapToTarget();
             buttons.push_back(std::move(btn));
         }
 

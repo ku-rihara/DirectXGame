@@ -237,12 +237,8 @@ void ComboAsistController::PlayPushScalingForAttack(
     const ComboPathBuilder::ComboPathGroup& pathGroup,
     ComboUIGroup& uiGroup,
     const std::string& attackName) {
-    bool found = false;
-    uiBuilder_.ForEachStepButton(pathGroup, uiGroup, [&](const ComboPathBuilder::ComboStep& step, ComboAsistButtonUI& btn) {
-        if (!found && step.attackName == attackName) {
-            btn.PlayPushScaling();
-            found = true;
-        }
+    uiBuilder_.ForEachStepButton(pathGroup, uiGroup, [&](const ComboPathBuilder::ComboStep&, ComboAsistButtonUI& btn) {
+        btn.TryPlayPushScaling(attackName);
     });
 }
 

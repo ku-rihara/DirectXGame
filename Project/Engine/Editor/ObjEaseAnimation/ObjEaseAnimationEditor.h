@@ -7,7 +7,6 @@
 
 /// <summary>
 /// オブジェクトイージングアニメーションエディター
-/// カテゴリーシステムを使用
 /// </summary>
 namespace KetaEngine {
 

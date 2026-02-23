@@ -39,9 +39,7 @@ void ObjEaseAnimationData::UpdateActiveSection(float speedRate) {
     }
 
     // 各SRTが使用しているセクションを全て更新
-    // どのセクションがアクティブかはSRTごとに異なる可能性があるため、
-    // 使用中の全セクションを更新する
-    std::array<bool, 16> updatedSections = {}; // 最大16セクションまで対応
+    std::array<bool, 16> updatedSections = {};
 
     for (size_t srtType = 0; srtType < static_cast<size_t>(TransformType::Count); ++srtType) {
         int32_t sectionIndex = activeSectionIndices_[srtType];
@@ -298,9 +296,21 @@ Vector3 ObjEaseAnimationData::GetMovementDirection() const {
 bool ObjEaseAnimationData::IsTranslationReturning() const {
     int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
     if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        // isReturnToOrigin による戻り
         auto state = sectionElements_[sectionIndex]->GetTransformState(ObjEaseAnimationSection::TransformType::Translation);
-        return state == ObjEaseAnimationSection::TransformState::RETURNING ||
-               state == ObjEaseAnimationSection::TransformState::RETURN_WAITING;
+        if (state == ObjEaseAnimationSection::TransformState::RETURNING ||
+            state == ObjEaseAnimationSection::TransformState::RETURN_WAITING) {
+            return true;
+        }
+        //RailPlayer 自体が戻り中かチェック
+        if (sectionElements_[sectionIndex]->IsUsingRail()) {
+            auto* railPlayer = sectionElements_[sectionIndex]->GetRailPlayer();
+            if (railPlayer && railPlayer->IsReturning()) {
+                return true;
+            }
+        }
+        // 別セクションで戻りを実装している場合
+        return sectionElements_[sectionIndex]->IsReturnSection();
     }
     return false;
 }

@@ -295,7 +295,9 @@ void ComboUnlockNotifier::PopulateCard(
 
         const auto& step = steps[i];
         auto btn         = std::make_unique<ComboAsistButtonUI>();
-        btn->Init(step.gamepadButton, step.isUnlocked, kRow, col, notifyLayout);
+        btn->Init(step.gamepadButton, step.isUnlocked, notifyLayout, step.attackName);
+        btn->SetRowColumn(kRow, col);
+        btn->ApplyLayout();
 
         // 最後（解放されたステップ）をアクティブアウトラインで強調
         if (i == steps.size() - 1) {

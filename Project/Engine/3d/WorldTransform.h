@@ -148,6 +148,7 @@ private:
     Matrix4x4 backToFrontMatrix_;
 
     bool isAdaptDirectScale_ = false;
+    bool reverseDirectionOnReturn_ = false;
 
     // オブジェクトイージングアニメーション
     std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;
@@ -169,6 +170,7 @@ public:
     void SetBaseScale(const Vector3& scale) { baseScale_ = scale; }
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
     void SetIsAdaptDirectScale(bool is) { isAdaptDirectScale_ = is; }
+    void SetReverseDirectionOnReturn(bool reverse) { reverseDirectionOnReturn_ = reverse; }
 };
 
 } // KetaEngine
