@@ -13,7 +13,7 @@ public:
     // フェーズ
     enum class Phase {
         Appear, // 出現アニメーション中
-        Close,  // 閉じアニメーション中
+        Close, // 閉じアニメーション中
         Finish, // 完了
     };
 
@@ -57,9 +57,14 @@ private:
     /// </summary>
     bool IsCloseFinished() const;
 
+    /// <summary>
+    /// 全スプライトのスケールを0にする
+    /// </summary>
+    void ResetAllSpritesScale();
+
 private:
     std::unique_ptr<KetaEngine::Sprite> backLineSprite_;
     std::array<std::unique_ptr<KetaEngine::Sprite>, static_cast<size_t>(SpritePos::COUNT)> sprites_;
-    Phase phase_                = Phase::Appear;
-    bool  appearAnimStarted_    = false;
+    Phase phase_            = Phase::Appear;
+    bool appearAnimStarted_ = false;
 };

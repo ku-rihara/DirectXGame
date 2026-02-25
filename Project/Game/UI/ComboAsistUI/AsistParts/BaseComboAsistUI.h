@@ -47,6 +47,8 @@ public:
     void SetPosition(const Vector2& pos);
     void SetScale(float scale);
     void SetScaleY(float multiplier); //< スケールY倍率設定（0→1 アニメ用）
+
+    void SetExtraScale(float extraScale);
     void SetRotation(float rotZ);
     void SetTargetPosY(float y);
 
@@ -81,7 +83,8 @@ protected:
     float lerpSpeed_      = 10.0f;
     bool needsLerpUpdate_ = false;
 
-    float baseScaleY_ = 1.0f; //< SetScale時に記録するYスケール基準値
+    float baseScaleY_ = 1.0f; 
+    float extraScale_ = 1.0f; 
 
 public:
     // getter

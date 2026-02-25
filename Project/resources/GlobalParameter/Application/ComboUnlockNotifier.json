@@ -1,7 +1,13 @@
 {
     "ComboUnlockNotifier": {
+        "ButtonExtraScale": 2.0,
         "CardSpacingY": 120.0,
-        "NotifyBasePositionX": 594.0,
-        "NotifyBasePositionY": 355.0
+        "NotifyBasePositionX": 468.0,
+        "NotifyBasePositionY": 232.0,
+        "arrowOffsetPos": [
+            105.0,
+            0.0
+        ],
+        "spaceColumn": 232.39999389648438
     }
 }

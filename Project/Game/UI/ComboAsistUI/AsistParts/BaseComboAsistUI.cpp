@@ -2,21 +2,21 @@
 #include <cmath>
 
 void BaseComboAsistUI::SetRowColumn(int32_t row, int32_t column) {
-    rowNum_ = row;
+    rowNum_    = row;
     columnNum_ = column;
 }
 
 void BaseComboAsistUI::Update() {
     if (needsLerpUpdate_) {
-        float dt = KetaEngine::Frame::DeltaTime();
-        float t = 1.0f - std::exp(-lerpSpeed_ * dt);
+        float dt           = KetaEngine::Frame::DeltaTime();
+        float t            = 1.0f - std::exp(-lerpSpeed_ * dt);
         currentDisplayPos_ = Lerp(currentDisplayPos_, targetPos_, t);
 
         // 十分近づいたらスナップ
-        Vector2 diff = { targetPos_.x - currentDisplayPos_.x, targetPos_.y - currentDisplayPos_.y };
+        Vector2 diff = {targetPos_.x - currentDisplayPos_.x, targetPos_.y - currentDisplayPos_.y};
         if (std::abs(diff.x) < 0.5f && std::abs(diff.y) < 0.5f) {
             currentDisplayPos_ = targetPos_;
-            needsLerpUpdate_ = false;
+            needsLerpUpdate_   = false;
         }
         SetPosition(currentDisplayPos_);
     }
@@ -41,22 +41,23 @@ void BaseComboAsistUI::SetPosition(const Vector2& pos) {
 
 void BaseComboAsistUI::SetScale(float scale) {
     baseScaleY_ = scale;
+    float s     = scale * extraScale_;
     if (uiSprite_) {
-        uiSprite_->transform_.scale.x = scale;
-        uiSprite_->transform_.scale.y = scale;
+        uiSprite_->transform_.scale.x = s;
+        uiSprite_->transform_.scale.y = s;
     }
     if (outLineUI_) {
-        outLineUI_->transform_.scale.x = scale;
-        outLineUI_->transform_.scale.y = scale;
+        outLineUI_->transform_.scale.x = s;
+        outLineUI_->transform_.scale.y = s;
     }
     if (activeOutLineUI_) {
-        activeOutLineUI_->transform_.scale.x = scale;
-        activeOutLineUI_->transform_.scale.y = scale;
+        activeOutLineUI_->transform_.scale.x = s;
+        activeOutLineUI_->transform_.scale.y = s;
     }
 }
 
 void BaseComboAsistUI::SetScaleY(float multiplier) {
-    float sy = baseScaleY_ * multiplier;
+    float sy = baseScaleY_ * extraScale_ * multiplier;
     if (uiSprite_) {
         uiSprite_->transform_.scale.y = sy;
     }
@@ -91,7 +92,7 @@ void BaseComboAsistUI::SetActiveOutLine(bool visible) {
 
 void BaseComboAsistUI::SnapToTarget() {
     currentDisplayPos_ = targetPos_;
-    needsLerpUpdate_ = false;
+    needsLerpUpdate_   = false;
     SetPosition(currentDisplayPos_);
 }
 
@@ -109,7 +110,7 @@ void BaseComboAsistUI::SetVisible(bool visible) {
         outLineUI_->SetIsDraw(visible);
     }
     if (activeOutLineUI_) {
-    
+
         if (!visible) {
             activeOutLineUI_->SetIsDraw(false);
         }
@@ -119,4 +120,9 @@ void BaseComboAsistUI::SetVisible(bool visible) {
 void BaseComboAsistUI::SetTargetPosY(float y) {
     targetPos_.y     = y;
     needsLerpUpdate_ = true;
+}
+
+void BaseComboAsistUI::SetExtraScale(float extraScale) {
+    extraScale_ = extraScale;
+    SetScale(baseScaleY_);
 }

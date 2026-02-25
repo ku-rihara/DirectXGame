@@ -1,7 +1,7 @@
 #pragma once
 // AsistParts
-#include "UI/ComboAsistUI/AsistParts/ComboAsistButtonUI.h"
 #include "UI/ComboAsistUI/AsistParts/ComboAsistArrowUI.h"
+#include "UI/ComboAsistUI/AsistParts/ComboAsistButtonUI.h"
 // Builder / Data
 #include "../ComboPathBuilder.h"
 #include "../ComboUIBuilder.h"
@@ -28,6 +28,7 @@ class ComboUnlockNotifier {
 public:
     /// 1枚の通知カード
     struct NotifyCard {
+
         // Conditionのアイコン用スプライト
         std::unique_ptr<KetaEngine::Sprite> conditionIconSprite;
         float conditionIconBaseScaleY = 1.0f;
@@ -39,12 +40,14 @@ public:
         std::vector<std::unique_ptr<ComboAsistArrowUI>> arrowUIs;
 
         // 状態
-        enum class State { OPENING, DISPLAYING, CLOSING, DONE };
-        State state = State::OPENING;
+        enum class State {
+            OPENING,
+            DISPLAYING,
+            CLOSING,
+            DONE
+        };
 
-        // スケールYイージング（0→1 Open, 1→0 Close）
-        KetaEngine::Easing<float> scaleYEasing;
-        float scaleY = 0.0f;
+        State state = State::OPENING;
 
         // 自動実行用データ
         Player* player = nullptr;
@@ -57,7 +60,7 @@ public:
     ComboUnlockNotifier()  = default;
     ~ComboUnlockNotifier() = default;
 
-    /// 初期化（GlobalParameter登録 & EasingCreatorロード）
+    /// 初期化
     void Init();
 
     /// 毎フレーム呼ぶ
@@ -65,15 +68,15 @@ public:
 
     /// 攻撃が解放されたときに外部から呼ぶ
     void OnAttackUnlocked(
-        const std::string&           unlockedAttackName,
-        const LayoutParam&           layoutParam,
+        const std::string& unlockedAttackName,
+        const LayoutParam& layoutParam,
         PlayerComboAttackController* attackController,
-        Player*                      player = nullptr);
+        Player* player = nullptr);
 
-    /// 攻撃が自動実行されたときに呼ぶ（通知UIにリアクションさせる）
+    /// 攻撃が自動実行されたときに呼ぶ
     void NotifyAttackExecuted(const std::string& attackName);
 
-    /// ImGui編集（EasingCreator + GlobalParameter）
+    /// ImGui編集
     void AdjustParam();
 
 private:
@@ -82,9 +85,9 @@ private:
 
     /// 解放された攻撃を始点まで遡り直線パスを構築する
     std::vector<ComboPathBuilder::ComboStep> BuildLinearPath(
-        const std::string&                      unlockedAttackName,
+        const std::string& unlockedAttackName,
         PlayerComboAttackData::TriggerCondition condition,
-        PlayerComboAttackController*            attackController);
+        PlayerComboAttackController* attackController);
 
     bool DfsPath(
         PlayerComboAttackData* current,
@@ -93,13 +96,16 @@ private:
         std::vector<ComboPathBuilder::ComboStep>& currentPath,
         std::unordered_set<std::string>& visited);
 
+    /// カードの背景・テキストスプライトを初期化する
+    void InitBackSprite();
+
     /// パスと Condition からUI一式を生成してカードに詰める
     void PopulateCard(
-        NotifyCard&                                        card,
-        const std::vector<ComboPathBuilder::ComboStep>&   steps,
-        const LayoutParam&                                 layoutParam,
-        int32_t                                            cardIndex,
-        PlayerComboAttackData::TriggerCondition            condition);
+        NotifyCard& card,
+        const std::vector<ComboPathBuilder::ComboStep>& steps,
+        const LayoutParam& layoutParam,
+        int32_t cardIndex,
+        PlayerComboAttackData::TriggerCondition condition);
 
     /// カードの状態を更新
     void UpdateCardState(NotifyCard& card, float deltaTime);
@@ -112,15 +118,32 @@ private:
 
     void RearrangeCards();
 
+    // パラメータ登録
+    void RegisterParams();
+
 private:
     std::vector<std::unique_ptr<NotifyCard>> cards_;
 
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
-    const std::string groupName_          = "ComboUnlockNotifier";
-    const std::string kScaleYEasingFile_  = "ComboUnlockOpen.json";
+    const std::string groupName_                  = "ComboUnlockNotifier";
+    const std::string kScaleYEasingFile_          = "ComboUnlockOpen.json";
 
-    Vector2 notifyBasePosition_ = {800.0f, 400.0f};
-    float   cardSpacingY_       = 120.0f;
+    Vector2 notifyBasePosition_;
+    float cardSpacingY_;
+
+    /// スケールYイージング
+    KetaEngine::Easing<float> scaleYEasing_;
+    float scaleY_ = 0.0f;
+
+    // 背景スプライト
+    std::unique_ptr<KetaEngine::Sprite> backgroundSprite;
+    // テキストスプライト
+    std::unique_ptr<KetaEngine::Sprite> notifierTextSprite;
+
+    /// ボタン・矢印UIに追加で掛けるスケール倍率
+    float buttonExtraScale_ = 1.0f;
+    float spaceColumn_      = 1.0f;
+    Vector2 arrowOffsetPos_;
 
 public:
     size_t GetActiveCardCount() const { return cards_.size(); }

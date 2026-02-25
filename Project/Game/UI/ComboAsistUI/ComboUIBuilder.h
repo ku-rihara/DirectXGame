@@ -14,7 +14,7 @@
 class PlayerComboAttackController;
 
 /// <summary>
-/// コンボアシストUI要素のグループ（パスデータはComboPathBuilderが保持）
+/// コンボアシストUI要素のグループ
 /// </summary>
 struct ComboUIGroup {
     std::vector<std::unique_ptr<ComboAsistButtonUI>> mainButtonUIs;
@@ -57,8 +57,6 @@ struct ConditionUIData {
 
 /// <summary>
 /// コンボアシストUI生成クラス
-/// パス情報からUI要素（ボタン・矢印）を生成し、ConditionUIDataに格納する。
-/// ヘルパーも提供する。
 /// </summary>
 class ComboUIBuilder {
 public:

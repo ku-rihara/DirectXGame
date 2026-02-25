@@ -11,15 +11,10 @@
 void ComboUnlockNotifier::Init() {
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
-
-    // シーン再生成時に古いlambdaがダングリングポインタを捕捉しないよう、
-    // 毎回クリアしてから現インスタンスのアドレスで再登録する
-    globalParameter_->ClearRegistersForGroup(groupName_);
-    globalParameter_->Regist(groupName_, "NotifyBasePositionX", &notifyBasePosition_.x);
-    globalParameter_->Regist(groupName_, "NotifyBasePositionY", &notifyBasePosition_.y);
-    globalParameter_->Regist(groupName_, "CardSpacingY", &cardSpacingY_);
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
+    InitBackSprite();
 }
 
 ///==========================================================
@@ -54,10 +49,12 @@ void ComboUnlockNotifier::Update(float deltaTime) {
             continue;
         }
         for (auto& btn : card->buttonUIs) {
-            if (btn) btn->Update();
+            if (btn)
+                btn->Update();
         }
         for (auto& arrow : card->arrowUIs) {
-            if (arrow) arrow->Update();
+            if (arrow)
+                arrow->Update();
         }
     }
 }
@@ -68,8 +65,8 @@ void ComboUnlockNotifier::Update(float deltaTime) {
 void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
     switch (card.state) {
     case NotifyCard::State::OPENING:
-        card.scaleYEasing.Update(deltaTime);
-        if (card.scaleYEasing.IsFinished()) {
+        scaleYEasing_.Update(deltaTime);
+        if (scaleYEasing_.IsFinished()) {
             card.state = NotifyCard::State::DISPLAYING;
 
             if (card.player) {
@@ -88,8 +85,8 @@ void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
     case NotifyCard::State::DISPLAYING:
         break;
     case NotifyCard::State::CLOSING:
-        card.scaleYEasing.Update(deltaTime);
-        if (card.scaleYEasing.IsFinished()) {
+        scaleYEasing_.Update(deltaTime);
+        if (scaleYEasing_.IsFinished()) {
             card.state = NotifyCard::State::DONE;
         }
         break;
@@ -99,17 +96,29 @@ void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
 }
 
 ///==========================================================
-/// スケールYをカードUIに適用
+/// スケールYをUIに適用
 ///==========================================================
 void ComboUnlockNotifier::ApplyScaleYToCard(NotifyCard& card) {
+    if (backgroundSprite) {
+        backgroundSprite->transform_.scale.y = 1.0f * scaleY_;
+        // scaleXは常に1
+        backgroundSprite->transform_.scale.x = 1.0f;
+    }
+    if (notifierTextSprite) {
+        notifierTextSprite->transform_.scale.y = 1.0f * scaleY_;
+        // scaleXは常に1
+        notifierTextSprite->transform_.scale.x = 1.0f;
+    }
     if (card.conditionIconSprite) {
-        card.conditionIconSprite->transform_.scale.y = card.conditionIconBaseScaleY * card.scaleY;
+        card.conditionIconSprite->transform_.scale.y = card.conditionIconBaseScaleY * scaleY_;
     }
     for (auto& btn : card.buttonUIs) {
-        if (btn) btn->SetScaleY(card.scaleY);
+        if (btn)
+            btn->SetScaleY(scaleY_);
     }
     for (auto& arrow : card.arrowUIs) {
-        if (arrow) arrow->SetScaleY(card.scaleY);
+        if (arrow)
+            arrow->SetScaleY(scaleY_);
     }
 }
 
@@ -117,9 +126,9 @@ void ComboUnlockNotifier::ApplyScaleYToCard(NotifyCard& card) {
 /// クローズアニメーション開始（1→0）
 ///==========================================================
 void ComboUnlockNotifier::StartCloseAnimation(NotifyCard& card) {
-    card.scaleYEasing.SetIsStartEndReverse(true);
-    card.scaleYEasing.SetAdaptValue(&card.scaleY);
-    card.scaleYEasing.Reset();
+    scaleYEasing_.SetIsStartEndReverse(true);
+    scaleYEasing_.SetAdaptValue(&scaleY_);
+    scaleYEasing_.Reset();
     card.state = NotifyCard::State::CLOSING;
 }
 
@@ -163,9 +172,9 @@ void ComboUnlockNotifier::OnAttackUnlocked(
     }
 
     // スケールYイージング設定（Open: 0→1）
-    card->scaleYEasing.Init(kScaleYEasingFile_);
-    card->scaleYEasing.SetAdaptValue(&card->scaleY);
-    card->scaleYEasing.Reset();
+    scaleYEasing_.Init(kScaleYEasingFile_);
+    scaleYEasing_.SetAdaptValue(&scaleY_);
+    scaleYEasing_.Reset();
 
     int32_t cardIndex = static_cast<int32_t>(cards_.size());
     PopulateCard(*card, steps, layoutParam, cardIndex, condition);
@@ -183,7 +192,8 @@ void ComboUnlockNotifier::NotifyAttackExecuted(const std::string& attackName) {
 
         // ボタンアニメーション再生
         for (auto& btn : card->buttonUIs) {
-            if (btn) btn->TryPlayPushScaling(attackName);
+            if (btn)
+                btn->TryPlayPushScaling(attackName);
         }
 
         // このカードの pendingAttacks に含まれる攻撃か確認
@@ -204,20 +214,6 @@ void ComboUnlockNotifier::NotifyAttackExecuted(const std::string& attackName) {
             StartCloseAnimation(*card);
         }
     }
-}
-
-///==========================================================
-/// ImGui調整
-///==========================================================
-void ComboUnlockNotifier::AdjustParam() {
-#ifdef _DEBUG
-    if (ImGui::CollapsingHeader("ComboUnlockNotifier")) {
-        ImGui::DragFloat2("NotifyBasePosition", &notifyBasePosition_.x, 1.0f);
-        ImGui::DragFloat("CardSpacingY", &cardSpacingY_, 1.0f);
-        globalParameter_->ParamSaveForImGui(groupName_);
-        globalParameter_->ParamLoadForImGui(groupName_);
-    }
-#endif
 }
 
 ///==========================================================
@@ -314,10 +310,26 @@ bool ComboUnlockNotifier::DfsPath(
 const char* ComboUnlockNotifier::ResolveConditionIconPath(
     PlayerComboAttackData::TriggerCondition condition) {
 
-    // TODO: 対応するテクスチャファイルが用意できたら各条件のパスを返す
-    // 現在は ConditionAir.dds / ConditionDash.dds が存在しないため全て nullptr を返す
     (void)condition;
     return nullptr;
+}
+
+///==========================================================
+/// 背景・テキストスプライト初期化
+///==========================================================
+void ComboUnlockNotifier::InitBackSprite() {
+
+    // 背景スプライト
+    backgroundSprite.reset(KetaEngine::Sprite::Create("OperateUI/NotifyBackground.dds", true));
+    if (backgroundSprite) {
+        backgroundSprite->transform_.scale = {1.0f, 0.0f};
+    }
+
+    // テキストスプライト
+    notifierTextSprite.reset(KetaEngine::Sprite::Create("OperateUI/NotifyText.dds", true));
+    if (notifierTextSprite) {
+        notifierTextSprite->transform_.scale = {1.0f, 0.0f};
+    }
 }
 
 ///==========================================================
@@ -330,19 +342,20 @@ void ComboUnlockNotifier::PopulateCard(
     int32_t cardIndex,
     PlayerComboAttackData::TriggerCondition condition) {
 
-    constexpr int32_t kLayerNum = 20;
-    constexpr int32_t kRow      = 0;
+    const int32_t kLayerNum = 35;
+    const int32_t kRow      = 0;
 
     // 通知UI専用レイアウト
     LayoutParam notifyLayout  = layoutParam;
     notifyLayout.basePosition = notifyBasePosition_;
     notifyLayout.basePosition.y += cardIndex * cardSpacingY_;
     notifyLayout.branchYOffset = 0.0f;
-
-    int32_t col = 0;
+    notifyLayout.columnSpacing = spaceColumn_;
+    notifyLayout.arrowOffset   = arrowOffsetPos_;
+    int32_t col                = 0;
 
     //------------------------------------------------------
-    // ① Condition アイコン
+    //  Condition アイコン
     //------------------------------------------------------
     const char* iconPath = ResolveConditionIconPath(condition);
     if (iconPath) {
@@ -361,12 +374,13 @@ void ComboUnlockNotifier::PopulateCard(
         auto arrow = std::make_unique<ComboAsistArrowUI>();
         arrow->Init(col - 1, kRow, col, kRow, notifyLayout);
         arrow->SnapToTarget();
+        arrow->SetExtraScale(buttonExtraScale_);
         arrow->SetScaleY(0.0f);
         card.arrowUIs.push_back(std::move(arrow));
     }
 
     //------------------------------------------------------
-    // ② 攻撃ステップ（始点〜解放ステップ）
+    //  攻撃ステップ（始点〜解放ステップ）
     //------------------------------------------------------
     bool isFirstButton = true;
     for (size_t i = 0; i < steps.size(); ++i) {
@@ -379,6 +393,7 @@ void ComboUnlockNotifier::PopulateCard(
                 auto arrow = std::make_unique<ComboAsistArrowUI>();
                 arrow->Init(col - 1, kRow, col, kRow, notifyLayout);
                 arrow->SnapToTarget();
+                arrow->SetExtraScale(buttonExtraScale_);
                 arrow->SetScaleY(0.0f);
                 card.arrowUIs.push_back(std::move(arrow));
             }
@@ -389,6 +404,7 @@ void ComboUnlockNotifier::PopulateCard(
         btn->Init(step.gamepadButton, step.isUnlocked, notifyLayout, step.attackName);
         btn->SetRowColumn(kRow, col);
         btn->ApplyLayout();
+        btn->SetExtraScale(buttonExtraScale_);
 
         if (i == steps.size() - 1) {
             btn->SetActiveOutLine(true);
@@ -429,4 +445,31 @@ void ComboUnlockNotifier::RearrangeCards() {
             }
         }
     }
+}
+
+
+void ComboUnlockNotifier::RegisterParams() {
+    globalParameter_->Regist(groupName_, "NotifyBasePositionX", &notifyBasePosition_.x);
+    globalParameter_->Regist(groupName_, "NotifyBasePositionY", &notifyBasePosition_.y);
+    globalParameter_->Regist(groupName_, "CardSpacingY", &cardSpacingY_);
+    globalParameter_->Regist(groupName_, "ButtonExtraScale", &buttonExtraScale_);
+    globalParameter_->Regist(groupName_, "spaceColumn", &spaceColumn_);
+    globalParameter_->Regist(groupName_, "arrowOffsetPos", &arrowOffsetPos_);
+}
+
+///==========================================================
+/// ImGui調整
+///==========================================================
+void ComboUnlockNotifier::AdjustParam() {
+#ifdef _DEBUG
+    if (ImGui::CollapsingHeader("ComboUnlockNotifier")) {
+        ImGui::DragFloat2("NotifyBasePosition", &notifyBasePosition_.x, 1.0f);
+        ImGui::DragFloat("CardSpacingY", &cardSpacingY_, 1.0f);
+        ImGui::DragFloat("ButtonExtraScale", &buttonExtraScale_, 0.01f, 0.1f, 5.0f);
+        ImGui::DragFloat("spaceColumn", &spaceColumn_, 0.1f);
+        ImGui::DragFloat2("矢印オフセット位置", &arrowOffsetPos_.x, 0.1f);
+        globalParameter_->ParamSaveForImGui(groupName_);
+        globalParameter_->ParamLoadForImGui(groupName_);
+    }
+#endif
 }

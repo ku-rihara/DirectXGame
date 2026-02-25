@@ -89,7 +89,7 @@ private:
         std::unique_ptr<HowToOperate> howToOperate_                               = nullptr;
         std::unique_ptr<FireInjectors> fireInjectors_                             = nullptr;
         std::unique_ptr<GameBackGroundObject> gameBackGroundObject_               = nullptr;
-        std::unique_ptr<ComboDirector> comboDirector_                               = nullptr;
+        std::unique_ptr<ComboDirector> comboDirector_                             = nullptr;
         std::unique_ptr<AttackEffect> attackEffect_                               = nullptr;
         std::unique_ptr<GameIntroManager> gameIntroManager_                       = nullptr;
         std::unique_ptr<ComboLevelObjHolder> comboLevelObjHolder_                 = nullptr;
@@ -98,7 +98,7 @@ private:
         std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
         std::unique_ptr<AudienceController> audienceController_                   = nullptr;
         std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
-        std::unique_ptr<KillCounter> killCounter_                                = nullptr;
+        std::unique_ptr<KillCounter> killCounter_                                 = nullptr;
         std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
         std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;
 

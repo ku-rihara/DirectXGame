@@ -139,12 +139,12 @@ void GameScene::ObjectInit() {
     gameObj_.killCounter_                 = std::make_unique<KillCounter>();
     gameObj_.comboAsistController_        = std::make_unique<ComboAsistController>();
     gameObj_.unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
-    gameObj_.unlockNotifier_->Init();
 
     gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
     // 初期化
     gameObj_.player_->InitInGameScene();
+    gameObj_.unlockNotifier_->Init();
     gameObj_.lockOnController_->Init();
     gameObj_.skyBox_->Init();
     gameObj_.combo_->Init();

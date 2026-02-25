@@ -7,7 +7,7 @@ void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const Layo
     layout_        = layout;
     attackName_    = attackName;
 
-    const int32_t layerNum = 20;
+    const int32_t layerNum = 30;
 
     // ボタンに応じたテクスチャを選択
     if (gamepadButton == XINPUT_GAMEPAD_Y) {

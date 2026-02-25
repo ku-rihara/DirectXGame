@@ -43,6 +43,7 @@ void IntroPurposeCutIn::Update(float playSpeed) {
     case Phase::Close:
         // 閉じアニメーションが終わったら完了
         if (IsCloseFinished()) {
+            ResetAllSpritesScale();
             phase_    = Phase::Finish;
             isFinish_ = true;
         }
@@ -89,6 +90,18 @@ bool IntroPurposeCutIn::IsCloseFinished() const {
         return false;
     }
     return true;
+}
+
+
+void IntroPurposeCutIn::ResetAllSpritesScale() {
+    for (auto& sprite : sprites_) {
+        if (sprite) {
+            sprite->transform_.scale = Vector2::ZeroVector();
+        }
+    }
+    if (backLineSprite_) {
+        backLineSprite_->transform_.scale = Vector2::ZeroVector();
+    }
 }
 
 void IntroPurposeCutIn::RegisterParams() {

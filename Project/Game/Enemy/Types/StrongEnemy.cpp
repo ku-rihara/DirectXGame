@@ -15,6 +15,12 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
     SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
 
+    // ダメージリアクション用アニメーションを追加
+    AddDamageReactionAnimation("EnemyNormalDamage");
+    AddDamageReactionAnimation("TakeUpMotion", true);
+    AddDamageReactionAnimation("NormalEnemyBoundDamage");
+    AddDamageReactionAnimation("NormalEnemyKipUp");
+    
    
 
     objAnimation_->transform_.Init();

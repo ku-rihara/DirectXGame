@@ -10,7 +10,7 @@ void ComboAsistArrowUI::Init(int32_t fromCol, int32_t fromRow, int32_t toCol, in
 
     uiSprite_.reset(KetaEngine::Sprite::Create("OperateUI/Arrow.dds", false));
 
-    const int32_t layerNum = 20; // レイヤー番号
+    const int32_t layerNum = 32; // レイヤー番号
     if (uiSprite_) {
         uiSprite_->SetLayerNum(layerNum);
         uiSprite_->SetAnchorPoint({0.5f, 0.5f});
