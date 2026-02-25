@@ -50,7 +50,7 @@ void ComboAsistButtonUI::ApplyLayout() {
 
     targetPos_       = pos;
     needsLerpUpdate_ = true;
-    SetScale(layout_.buttonScale);
+    SetScale({layout_.buttonScale, layout_.buttonScale});
 }
 
 void ComboAsistButtonUI::SetUnlocked(bool isUnlocked) {

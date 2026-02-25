@@ -45,8 +45,7 @@ public:
 
     //
     void SetPosition(const Vector2& pos);
-    void SetScale(float scale);
-    void SetScaleY(float multiplier); //< スケールY倍率設定（0→1 アニメ用）
+    void SetScale(const Vector2& scale);
 
     void SetExtraScale(float extraScale);
     void SetRotation(float rotZ);
@@ -83,12 +82,13 @@ protected:
     float lerpSpeed_      = 10.0f;
     bool needsLerpUpdate_ = false;
 
-    float baseScaleY_ = 1.0f; 
-    float extraScale_ = 1.0f; 
+    Vector2 baseScale_ = {1.0f, 1.0f};
+    float extraScale_  = 1.0f;
 
 public:
     // getter
     AsistState GetState() const { return state_; }
+    Vector2 GetBaseScale() const { return baseScale_; }
     int32_t GetRowNum() const { return rowNum_; }
     int32_t GetColumnNum() const { return columnNum_; }
 

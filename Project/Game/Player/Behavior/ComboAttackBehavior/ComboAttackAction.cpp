@@ -221,6 +221,12 @@ void ComboAttackAction::ChangeNextAttack() {
 ///  コンボ移動フラグ処理
 void ComboAttackAction::PreOderNextComboForButton() {
 
+    // 自動再生中はプレイヤーの手動入力を受け付けない
+    if (!pOwner_->GetAutoComboQueue().IsEmpty()) {
+        isReserveNextCombo_ = false;
+        return;
+    }
+
     if (nextAttackCandidates_.empty()) {
         isReserveNextCombo_ = false;
         return;

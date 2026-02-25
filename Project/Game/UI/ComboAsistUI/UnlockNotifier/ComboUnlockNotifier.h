@@ -43,11 +43,13 @@ public:
         enum class State {
             OPENING,
             DISPLAYING,
+            CLOSE_WAITING, //< クローズ前の待機
             CLOSING,
             DONE
         };
 
-        State state = State::OPENING;
+        State state             = State::OPENING;
+        float closeWaitTimer    = 0.0f;
 
         // 自動実行用データ
         Player* player = nullptr;
@@ -141,8 +143,9 @@ private:
     std::unique_ptr<KetaEngine::Sprite> notifierTextSprite;
 
     /// ボタン・矢印UIに追加で掛けるスケール倍率
-    float buttonExtraScale_ = 1.0f;
-    float spaceColumn_      = 1.0f;
+    float buttonExtraScale_  = 1.0f;
+    float spaceColumn_       = 1.0f;
+    float closeOffsetTime_   = 1.0f; //< 最後の演出後、閉じるまでの待機時間
     Vector2 arrowOffsetPos_;
 
 public:

@@ -39,33 +39,17 @@ void BaseComboAsistUI::SetPosition(const Vector2& pos) {
     }
 }
 
-void BaseComboAsistUI::SetScale(float scale) {
-    baseScaleY_ = scale;
-    float s     = scale * extraScale_;
+void BaseComboAsistUI::SetScale(const Vector2& scale) {
+    baseScale_ = scale;
+    Vector2 s  = baseScale_ * extraScale_;
     if (uiSprite_) {
-        uiSprite_->transform_.scale.x = s;
-        uiSprite_->transform_.scale.y = s;
+        uiSprite_->transform_.scale = s;
     }
     if (outLineUI_) {
-        outLineUI_->transform_.scale.x = s;
-        outLineUI_->transform_.scale.y = s;
+        outLineUI_->transform_.scale = s;
     }
     if (activeOutLineUI_) {
-        activeOutLineUI_->transform_.scale.x = s;
-        activeOutLineUI_->transform_.scale.y = s;
-    }
-}
-
-void BaseComboAsistUI::SetScaleY(float multiplier) {
-    float sy = baseScaleY_ * extraScale_ * multiplier;
-    if (uiSprite_) {
-        uiSprite_->transform_.scale.y = sy;
-    }
-    if (outLineUI_) {
-        outLineUI_->transform_.scale.y = sy;
-    }
-    if (activeOutLineUI_) {
-        activeOutLineUI_->transform_.scale.y = sy;
+        activeOutLineUI_->transform_.scale = s;
     }
 }
 
@@ -99,6 +83,7 @@ void BaseComboAsistUI::SnapToTarget() {
 void BaseComboAsistUI::PlayPushScaling() {
     if (uiSprite_) {
         uiSprite_->PlaySpriteEaseAnimation("PushScalingUI", "ComboAsistUI");
+        activeOutLineUI_->PlaySpriteEaseAnimation("PushScalingUI", "ComboAsistUI");
     }
 }
 
@@ -124,5 +109,4 @@ void BaseComboAsistUI::SetTargetPosY(float y) {
 
 void BaseComboAsistUI::SetExtraScale(float extraScale) {
     extraScale_ = extraScale;
-    SetScale(baseScaleY_);
 }

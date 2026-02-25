@@ -78,11 +78,18 @@ void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
             }
 
             if (card.totalAttackCount == 0) {
-                StartCloseAnimation(card);
+                card.state           = NotifyCard::State::CLOSE_WAITING;
+                card.closeWaitTimer  = 0.0f;
             }
         }
         break;
     case NotifyCard::State::DISPLAYING:
+        break;
+    case NotifyCard::State::CLOSE_WAITING:
+        card.closeWaitTimer += deltaTime;
+        if (card.closeWaitTimer >= closeOffsetTime_) {
+            StartCloseAnimation(card);
+        }
         break;
     case NotifyCard::State::CLOSING:
         scaleYEasing_.Update(deltaTime);
@@ -113,12 +120,16 @@ void ComboUnlockNotifier::ApplyScaleYToCard(NotifyCard& card) {
         card.conditionIconSprite->transform_.scale.y = card.conditionIconBaseScaleY * scaleY_;
     }
     for (auto& btn : card.buttonUIs) {
-        if (btn)
-            btn->SetScaleY(scaleY_);
+        if (btn) {
+            float bx = btn->GetBaseScale().x;
+            btn->SetScale({bx, bx * scaleY_});
+        }
     }
     for (auto& arrow : card.arrowUIs) {
-        if (arrow)
-            arrow->SetScaleY(scaleY_);
+        if (arrow) {
+            float bx = arrow->GetBaseScale().x;
+            arrow->SetScale({bx, bx * scaleY_});
+        }
     }
 }
 
@@ -211,7 +222,8 @@ void ComboUnlockNotifier::NotifyAttackExecuted(const std::string& attackName) {
 
         card->executedAttackCount++;
         if (card->executedAttackCount >= card->totalAttackCount) {
-            StartCloseAnimation(*card);
+            card->state          = NotifyCard::State::CLOSE_WAITING;
+            card->closeWaitTimer = 0.0f;
         }
     }
 }
@@ -375,7 +387,7 @@ void ComboUnlockNotifier::PopulateCard(
         arrow->Init(col - 1, kRow, col, kRow, notifyLayout);
         arrow->SnapToTarget();
         arrow->SetExtraScale(buttonExtraScale_);
-        arrow->SetScaleY(0.0f);
+        arrow->SetScale({arrow->GetBaseScale().x, 0.0f});
         card.arrowUIs.push_back(std::move(arrow));
     }
 
@@ -394,7 +406,7 @@ void ComboUnlockNotifier::PopulateCard(
                 arrow->Init(col - 1, kRow, col, kRow, notifyLayout);
                 arrow->SnapToTarget();
                 arrow->SetExtraScale(buttonExtraScale_);
-                arrow->SetScaleY(0.0f);
+                arrow->SetScale({arrow->GetBaseScale().x, 0.0f});
                 card.arrowUIs.push_back(std::move(arrow));
             }
         }
@@ -411,7 +423,7 @@ void ComboUnlockNotifier::PopulateCard(
         }
 
         btn->SnapToTarget();
-        btn->SetScaleY(0.0f);
+        btn->SetScale({btn->GetBaseScale().x, 0.0f});
         card.buttonUIs.push_back(std::move(btn));
 
         isFirstButton = false;
@@ -455,6 +467,7 @@ void ComboUnlockNotifier::RegisterParams() {
     globalParameter_->Regist(groupName_, "ButtonExtraScale", &buttonExtraScale_);
     globalParameter_->Regist(groupName_, "spaceColumn", &spaceColumn_);
     globalParameter_->Regist(groupName_, "arrowOffsetPos", &arrowOffsetPos_);
+    globalParameter_->Regist(groupName_, "CloseOffsetTime", &closeOffsetTime_);
 }
 
 ///==========================================================
@@ -468,6 +481,7 @@ void ComboUnlockNotifier::AdjustParam() {
         ImGui::DragFloat("ButtonExtraScale", &buttonExtraScale_, 0.01f, 0.1f, 5.0f);
         ImGui::DragFloat("spaceColumn", &spaceColumn_, 0.1f);
         ImGui::DragFloat2("矢印オフセット位置", &arrowOffsetPos_.x, 0.1f);
+        ImGui::DragFloat("CloseOffsetTime", &closeOffsetTime_, 0.1f, 0.0f, 10.0f);
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
     }

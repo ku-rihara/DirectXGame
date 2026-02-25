@@ -52,7 +52,7 @@ void ComboAsistArrowUI::ApplyLayout() {
     float dy = toPos.y - fromPos.y;
     SetRotation(std::atan2(dy, dx));
 
-    SetScale(layout_.arrowScale);
+    SetScale({layout_.arrowScale, layout_.arrowScale});
 }
 
 void ComboAsistArrowUI::ShiftColumns(int32_t delta) {
