@@ -37,6 +37,7 @@ void ParticleParameter::Init() {
 
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(particleName_);
+    globalParameter_->ClearRegistersForGroup(particleName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(particleName_);
 
@@ -253,7 +254,9 @@ void ParticleParameter::EditorUpdate() {
         ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.1f);
 
         ImGui::SeparatorText("ControlPoints:");
-        railManager_->ImGuiEdit();
+        if (railManager_) {
+            railManager_->ImGuiEdit();
+        }
     }
 
     // Position

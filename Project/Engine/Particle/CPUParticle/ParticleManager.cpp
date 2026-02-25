@@ -187,8 +187,8 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
                 continue;
             }
 
-            if (instanceIndex > particleGroups_[name].currentNum) {
-                return;
+            if (instanceIndex >= group.currentNum) {
+                break;
             }
 
             // WVP適応
@@ -204,14 +204,16 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             ///==========================================================================================
             instancingData[instanceIndex].UVTransform = MakeAffineMatrix(it->uvInfo_.scale, it->uvInfo_.rotate, it->uvInfo_.pos);
 
-            if (it->uvInfo_.isFlipX) {
-                instancingData[instanceIndex].isFlipX = true;
-            }
-            if (it->uvInfo_.isFlipY) {
-                instancingData[instanceIndex].isFlipY = true;
+            instancingData[instanceIndex].isFlipX = it->uvInfo_.isFlipX ? 1u : 0u;
+            instancingData[instanceIndex].isFlipY = it->uvInfo_.isFlipY ? 1u : 0u;
+
+            // Dissolveしきい値書き込み
+            if (it->isAdaptDissolveEasing && it->dissolveThresholdData_) {
+                instancingData[instanceIndex].dissolveThreshold = *it->dissolveThresholdData_;
+            } else {
+                instancingData[instanceIndex].dissolveThreshold = 1.0f;
             }
 
-        
             ++instanceIndex;
             ++it;
         }
@@ -390,25 +392,35 @@ void ParticleManager::CreateMaterialResource(const std::string& name) {
 ///============================================================
 void ParticleManager::CreateInstancingResource(const std::string& name, uint32_t instanceNum) {
 
-    particleGroups_[name].instanceNum = instanceNum;
-    particleGroups_[name].currentNum  = instanceNum;
+    auto it = particleGroups_.find(name);
+    if (it == particleGroups_.end()) {
+        return;
+    }
+    ParticleGroup& group = it->second;
+
+    group.instanceNum = instanceNum;
+    group.currentNum  = instanceNum;
 
     // Instancing用のTransformationMatrixリソースを作る
-    particleGroups_[name].instancingResource = DirectXCommon::GetInstance()->CreateBufferResource(
-        DirectXCommon::GetInstance()->GetDevice(), sizeof(ParticleFprGPU) * particleGroups_[name].instanceNum);
+    group.instancingResource = DirectXCommon::GetInstance()->CreateBufferResource(
+        DirectXCommon::GetInstance()->GetDevice(), sizeof(ParticleFprGPU) * instanceNum);
 
-    particleGroups_[name].instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&particleGroups_[name].instancingData));
+    if (!group.instancingResource) {
+        return;
+    }
+
+    group.instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&group.instancingData));
 
     // インスタンシングデータリセット
     ResetInstancingData(name);
 
     // SRV確保
-    particleGroups_[name].srvIndex = pSrvManager_->Allocate();
+    group.srvIndex = pSrvManager_->Allocate();
 
     // SRVの作成
     pSrvManager_->CreateForStructuredBuffer(
-        particleGroups_[name].srvIndex,
-        particleGroups_[name].instancingResource.Get(),
+        group.srvIndex,
+        group.instancingResource.Get(),
         instanceNum,
         sizeof(ParticleFprGPU));
 }
@@ -726,20 +738,28 @@ void ParticleManager::ResetAllParticles() {
 
         // インスタンシングデータをリセット
         for (uint32_t index = 0; index < group.instanceNum; ++index) {
-            group.instancingData[index].WVP         = MakeIdentity4x4();
-            group.instancingData[index].World       = MakeIdentity4x4();
-            group.instancingData[index].color       = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-            group.instancingData[index].UVTransform = MakeIdentity4x4();
+            group.instancingData[index].WVP                  = MakeIdentity4x4();
+            group.instancingData[index].World                = MakeIdentity4x4();
+            group.instancingData[index].WorldInverseTranspose = MakeIdentity4x4();
+            group.instancingData[index].UVTransform          = MakeIdentity4x4();
+            group.instancingData[index].color                = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+            group.instancingData[index].isFlipX              = 0u;
+            group.instancingData[index].isFlipY              = 0u;
+            group.instancingData[index].dissolveThreshold    = 1.0f;
         }
     }
 }
 
 void ParticleManager::ResetInstancingData(const std::string& name) {
     for (uint32_t index = 0; index < particleGroups_[name].instanceNum; ++index) {
-        particleGroups_[name].instancingData[index].WVP         = MakeIdentity4x4();
-        particleGroups_[name].instancingData[index].World       = MakeIdentity4x4();
-        particleGroups_[name].instancingData[index].color       = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-        particleGroups_[name].instancingData[index].UVTransform = MakeIdentity4x4();
+        particleGroups_[name].instancingData[index].WVP                  = MakeIdentity4x4();
+        particleGroups_[name].instancingData[index].World                = MakeIdentity4x4();
+        particleGroups_[name].instancingData[index].WorldInverseTranspose = MakeIdentity4x4();
+        particleGroups_[name].instancingData[index].UVTransform          = MakeIdentity4x4();
+        particleGroups_[name].instancingData[index].color                = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+        particleGroups_[name].instancingData[index].isFlipX              = 0u;
+        particleGroups_[name].instancingData[index].isFlipY              = 0u;
+        particleGroups_[name].instancingData[index].dissolveThreshold    = 1.0f;
     }
 }
 
