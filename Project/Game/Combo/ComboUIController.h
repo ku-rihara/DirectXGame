@@ -55,10 +55,11 @@ private:
     // parameter
     ScalingParameter parameter_;
     Vector2 basePosition_; // 基準座標
-    Vector2 digitOffset_; // 桁間のオフセット
+    Vector2 baseScale_;    // 基準スケール
+    Vector2 digitOffset_;  // 桁間のオフセット
 
     // Variants
-    Vector2 baseScale_;
+    float rotateY_ = 0.0f; //< Y軸回転
     std::array<std::unique_ptr<ComboUI>, 3> comboSprites_;
     float alpha_;
 

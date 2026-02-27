@@ -39,7 +39,7 @@
 // UI
 #include "UI/ComboAsistUI/ComboAsistController.h"
 #include "UI/ComboAsistUI/UnlockNotifier/ComboUnlockNotifier.h"
-#include "UI/HowToOperate.h"
+#include "UI/OperateUI.h"
 // Sprite
 #include "2D/Sprite.h"
 
@@ -86,7 +86,7 @@ private:
         std::unique_ptr<Combo> combo_                                             = nullptr;
         std::unique_ptr<EnemyManager> enemyManager_                               = nullptr;
         std::unique_ptr<EnemySpawner> enemySpawner_                               = nullptr;
-        std::unique_ptr<HowToOperate> howToOperate_                               = nullptr;
+        std::unique_ptr<OperateUI> operateUI_                                     = nullptr;
         std::unique_ptr<FireInjectors> fireInjectors_                             = nullptr;
         std::unique_ptr<GameBackGroundObject> gameBackGroundObject_               = nullptr;
         std::unique_ptr<ComboDirector> comboDirector_                             = nullptr;

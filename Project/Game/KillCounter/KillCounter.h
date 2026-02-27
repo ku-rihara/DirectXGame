@@ -1,5 +1,6 @@
 #pragma once
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "KillCountUIController.h"
 #include <cstdint>
 #include <functional>
 #include <string>
@@ -18,6 +19,7 @@ public:
     ~KillCounter() = default;
 
     void Init();
+    void Update();
     void AddKillCount();
 
     // ImGui / GlobalParameter
@@ -32,6 +34,8 @@ private:
     int32_t killCount_    = 0;
     int32_t currentLevel_ = 0;
     int32_t levelUpThresholds_[kMaxKillLevel] = {};
+
+    KillCountUIController killCountUIController_;
 
     PlayerComboAttackController* pAttackController_ = nullptr;
     std::function<void(const std::string&)> onAttackUnlockedCallback_;

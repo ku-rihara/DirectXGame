@@ -74,7 +74,7 @@ private:
     float fastSpeedRate_                         = 3.0f;
 
     ComboAsistController* pComboAsistController_  = nullptr;
-    HowToOperate* pHowToOperate_                 = nullptr;
+    OperateUI* pHowToOperate_                 = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
     Player* pPlayer_                             = nullptr;
     FireInjectors* pFireInjectors_               = nullptr;
@@ -89,7 +89,7 @@ public:
     MovieLine* GetMovieLine() const { return movieLine_.get(); }
 
     // setter
-    void SetHowToOperate(HowToOperate* howToOperate);
+    void SetHowToOperate(OperateUI* howToOperate);
     void SetGameCamera(GameCamera* gameCamera);
     void SetPlayer(Player* player);
     void SetFireInjectors(FireInjectors* fireInjectors);

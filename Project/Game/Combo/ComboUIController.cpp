@@ -35,6 +35,7 @@ void ComboUIController::Update(int32_t comboNum) {
         comboSprites_[i]->Update(baseScale_, alpha_);
         comboSprites_[i]->CalculateNumber(comboNum);
         comboSprites_[i]->SetPosition(digitPosition);
+        comboSprites_[i]->SetRotateY(rotateY_);
     }
 }
 
@@ -56,8 +57,12 @@ void ComboUIController::AdjustParam() {
 
         // 基準座標の調整
         ImGui::DragFloat2("Base Position", &basePosition_.x, 0.1f);
+        // 基準スケールの調整
+        ImGui::DragFloat2("Base Scale", &baseScale_.x, 0.01f);
         // 桁間オフセットの調整
         ImGui::DragFloat2("Digit Offset", &digitOffset_.x, 0.1f);
+        // Y軸回転
+        ImGui::DragFloat("RotateY", &rotateY_, 0.01f);
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -78,7 +83,9 @@ void ComboUIController::AdjustParam() {
 ///==========================================================
 void ComboUIController::RegisterParams() {
     globalParameter_->Regist(groupName_, "basePosition", &basePosition_);
+    globalParameter_->Regist(groupName_, "baseScale", &baseScale_);
     globalParameter_->Regist(groupName_, "digitOffset", &digitOffset_);
+    globalParameter_->Regist(groupName_, "rotateY", &rotateY_);
 }
 
 void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior) {

@@ -8,6 +8,7 @@
 #include "Scene/Manager/SceneManager.h"
 #include <imgui.h>
 
+
 void EditorScene::Init() {
     //// グローバル変数の読み込み
     KetaEngine::GlobalParameter::GetInstance()->LoadFiles();
@@ -132,7 +133,9 @@ void EditorScene::ObjectInit() {
     killCounter_                 = std::make_unique<KillCounter>();
     comboAsistController_        = std::make_unique<ComboAsistController>();
     unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
+    operateUI_                   = std::make_unique<OperateUI>();
     unlockNotifier_->Init();
+    operateUI_->Init();
 
     // 初期化
     player_->InitInGameScene();
@@ -162,7 +165,7 @@ void EditorScene::SetClassPointer() {
     enemyManager_->SetKillCounter(killCounter_.get());
     enemyManager_->SetGameCamera(gameCamera_.get());
     enemyManager_->SetEnemySpawner(enemySpawner_.get());
-   
+
     enemySpawner_->SetEnemyManager(enemyManager_.get());
 
     lockOnController_->SetEnemyManager(enemyManager_.get());
@@ -179,6 +182,8 @@ void EditorScene::SetClassPointer() {
     playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
     playerComboAttackController_->SetPlayer(player_.get());
 
+    operateUI_->SetPlayer(player_.get());
+
     comboAsistController_->SetAttackController(playerComboAttackController_.get());
     comboAsistController_->SetPlayer(player_.get());
     comboAsistController_->Init();
@@ -191,9 +196,9 @@ void EditorScene::SetClassPointer() {
 
     // 攻撃解放 → アンロック通知UI の接続
     {
-        ComboAsistController* asist = comboAsistController_.get();
+        ComboAsistController* asist          = comboAsistController_.get();
         PlayerComboAttackController* atkCtrl = playerComboAttackController_.get();
-        Player* playerPtr = player_.get();
+        Player* playerPtr                    = player_.get();
         killCounter_->SetOnAttackUnlockedCallback([notifier, asist, atkCtrl, playerPtr](const std::string& name) {
             notifier->OnAttackUnlocked(name, asist->GetLayoutParam(), atkCtrl, playerPtr);
         });

@@ -10,11 +10,11 @@
 #include <functional>
 
 /// <summary>
-/// コンボ数値表示UI
+/// キルカウント数値表示UI
 /// </summary>
-class ComboUI {
+class KillCountUI {
 public:
-    enum class ComboDigit {
+    enum class KillCountDigit {
         ONE,
         TWO,
         THREE,
@@ -22,57 +22,36 @@ public:
     };
 
 public:
-    ComboUI()  = default;
-    ~ComboUI() = default;
+    KillCountUI()  = default;
+    ~KillCountUI() = default;
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="digit">桁</param>
-    void Init(const ComboDigit& digit);
-
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="scale">スケール</param>
-    /// <param name="alpha">アルファ値</param>
+    void Init(const KillCountDigit& digit);
     void Update(const Vector2& scale, float alpha);
-
-    /// <summary>
-    /// 数値の計算
-    /// </summary>
-    /// <param name="value">値</param>
     void CalculateNumber(int32_t value);
+    void CreateGroupName(const KillCountDigit& digit);
 
-    /// <summary>
-    /// グループ名の作成
-    /// </summary>
-    /// <param name="digit">桁</param>
-    void CreateGroupName(const ComboDigit& digit);
-
-    void AdjustParam(); //< パラメータ調整
-    void RegisterParams(); //< パラメータバインド
+    void AdjustParam();
+    void RegisterParams();
 
 private:
     void InitDigitCalculators();
-private:
 
+private:
     static constexpr float kUVScaleStep = 0.1f; //< テクスチャ上の1桁分のUV幅 (10数字分割)
 
     ///* globalParameter *//
     KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
 
-    std::unordered_map<ComboDigit, std::function<void(int32_t)>> digitCalculators_;
+    std::unordered_map<KillCountDigit, std::function<void(int32_t)>> digitCalculators_;
 
     ///* parameter *//
-    ComboDigit comboDigit_ = ComboDigit::ONE;
+    KillCountDigit killCountDigit_ = KillCountDigit::ONE;
     Vector2 position_;
     Vector2 positionOffset_ = { 0.0f, 0.0f }; //< 位置オフセット (最終位置 = 基準位置 + オフセット)
     Vector2 scaleOffset_    = { 1.0f, 1.0f }; //< スケールオフセット (最終スケール = 基準スケール * オフセット)
     int32_t valueForDigit_;
     float uvPosX_;
-    float uvScaleOffset_;
     float rotateY_ = 0.0f;
 
     //* variables *//
@@ -83,10 +62,10 @@ private:
 
 public:
     ///* Getter *//
-    const ComboDigit& GetComboDigit() const { return comboDigit_; }
+    const KillCountDigit& GetKillCountDigit() const { return killCountDigit_; }
 
     ///* Setter *//
-    void SetComboDigit(const ComboDigit& digit) { comboDigit_ = digit; }
+    void SetKillCountDigit(const KillCountDigit& digit) { killCountDigit_ = digit; }
     void SetPosition(const Vector2& pos) { position_ = pos; }
     void SetRotateY(float rotateY) { rotateY_ = rotateY; }
 };

@@ -271,8 +271,8 @@ void Sprite::AdjustParam() {
         ImGui::InputInt("LayerNum", &parameter_.startLayerNum_);
 
         ImGui::SeparatorText("InitParam");
-        ImGui::DragFloat2("StartPos", &parameter_.position_.x, 0.1f);
-        ImGui::DragFloat2("baseScale", &parameter_.scale_.x, 0.1f);
+        ImGui::DragFloat2("StartPos", &parameter_.position_.x, 0.5f);
+        ImGui::DragFloat2("baseScale", &parameter_.scale_.x, 0.01f);
         ImGui::DragFloat2("StartAnchorPoint", &parameter_.startAnchorPoint_.x, 0.01f);
         ImGui::ColorEdit4("StartColor", &parameter_.color_.x);
         ImGui::SeparatorText("UVParam");

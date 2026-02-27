@@ -189,6 +189,8 @@
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
     <ClCompile Include="Game\ComboScene\ComboDirector.cpp" />
     <ClCompile Include="Game\KillCounter\KillCounter.cpp" />
+    <ClCompile Include="Game\KillCounter\KillCountUI.cpp" />
+    <ClCompile Include="Game\KillCounter\KillCountUIController.cpp" />
     <ClCompile Include="Game\Combo\Behavior\BaseComboUIBehavior.cpp" />
     <ClCompile Include="Game\Combo\Behavior\ComboCountUp.cpp" />
     <ClCompile Include="Game\Combo\Behavior\ComboWait.cpp" />
@@ -298,7 +300,7 @@
     <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistComboNameUI.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.cpp" />
-    <ClCompile Include="Game\UI\HowToOperate.cpp" />
+    <ClCompile Include="Game\UI\OperateUI.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\math\Box.cpp" />
@@ -508,6 +510,8 @@
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\ComboScene\ComboDirector.h" />
     <ClInclude Include="Game\KillCounter\KillCounter.h" />
+    <ClInclude Include="Game\KillCounter\KillCountUI.h" />
+    <ClInclude Include="Game\KillCounter\KillCountUIController.h" />
     <ClInclude Include="Game\Combo\Behavior\BaseComboUIBehavior.h" />
     <ClInclude Include="Game\Combo\Behavior\ComboCountUp.h" />
     <ClInclude Include="Game\Combo\Behavior\ComboWait.h" />
@@ -618,7 +622,7 @@
     <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistComboNameUI.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.h" />
-    <ClInclude Include="Game\UI\HowToOperate.h" />
+    <ClInclude Include="Game\UI\OperateUI.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />
     <ClInclude Include="Engine\math\Box.h" />
     <ClInclude Include="Engine\math\MathFunction.h" />

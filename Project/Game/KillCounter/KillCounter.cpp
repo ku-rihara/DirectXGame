@@ -17,10 +17,17 @@ void KillCounter::Init() {
     killCount_    = 0;
     currentLevel_ = 0;
 
+    // UI初期化
+    killCountUIController_.Init();
+
     // ableDefeatLevel == 0 の攻撃だけ解放
     if (pAttackController_) {
         UnlockAttacksForLevel(0);
     }
+}
+
+void KillCounter::Update() {
+    killCountUIController_.Update(killCount_);
 }
 
 void KillCounter::AddKillCount() {
@@ -90,5 +97,7 @@ void KillCounter::AdjustParam() {
 
         ImGui::PopID();
     }
+
+    killCountUIController_.AdjustParam();
 #endif
 }

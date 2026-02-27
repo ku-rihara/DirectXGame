@@ -21,14 +21,15 @@
 // LockOn
 #include "LockOn/LockOnController.h"
 // Player
-#include "Player/Effect/AttackEffect/AttackEffect.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
+#include "Player/Effect/AttackEffect/AttackEffect.h"
 #include "Player/Player.h"
 // SkyBox
 #include "SkyBox/SkyBox.h"
 // UI
 #include "UI/ComboAsistUI/ComboAsistController.h"
 #include "UI/ComboAsistUI/UnlockNotifier/ComboUnlockNotifier.h"
+#include "UI/OperateUI.h"
 // utility
 #include "utility/ObjectFromBlender/ObjectFromBlender.h"
 
@@ -77,9 +78,10 @@ private:
     std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
     std::unique_ptr<AudienceController> audienceController_                   = nullptr;
     std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
-    std::unique_ptr<KillCounter> killCounter_                                = nullptr;
+    std::unique_ptr<KillCounter> killCounter_                                 = nullptr;
     std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
-    std::unique_ptr<ComboUnlockNotifier>  unlockNotifier_                    = nullptr;
+    std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;
+    std::unique_ptr<OperateUI> operateUI_                                     = nullptr;
 
     std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_ = nullptr;
 

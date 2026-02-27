@@ -5,7 +5,7 @@
 #include "FireInjectors/FireInjectors.h"
 #include "GameCamera/GameCamera.h"
 #include "player/Player.h"
-#include "UI/HowToOperate.h"
+#include "UI/OperateUI.h"
 #include <imgui.h>
 
 void IntroSpawnField::Init(const std::string& name) {

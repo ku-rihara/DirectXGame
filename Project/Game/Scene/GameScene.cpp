@@ -63,7 +63,7 @@ void GameScene::Debug() {
     BaseScene::Debug();
 
     KetaEngine::Light::GetInstance()->DebugImGui();
-    gameObj_.howToOperate_->Debug();
+    gameObj_.operateUI_->Debug();
 
     ImGui::Begin("ParameterEditor");
     gameObj_.player_->AdjustParam();
@@ -122,7 +122,7 @@ void GameScene::ObjectInit() {
     gameObj_.gameCamera_                  = std::make_unique<GameCamera>();
     gameObj_.enemyManager_                = std::make_unique<EnemyManager>();
     gameObj_.enemySpawner_                = std::make_unique<EnemySpawner>();
-    gameObj_.howToOperate_                = std::make_unique<HowToOperate>();
+    gameObj_.operateUI_                = std::make_unique<OperateUI>();
     gameObj_.skyBox_                      = std::make_unique<SkyBox>();
     gameObj_.combo_                       = std::make_unique<Combo>();
     gameObj_.fireInjectors_               = std::make_unique<FireInjectors>();
@@ -154,7 +154,7 @@ void GameScene::ObjectInit() {
     gameObj_.continuousEnemySpawner_->Init();
     gameObj_.fireInjectors_->Init();
     gameObj_.gameCamera_->Init();
-    gameObj_.howToOperate_->Init();
+    gameObj_.operateUI_->Init();
     gameObj_.comboDirector_->Init();
     gameObj_.playerComboAttackController_->Init();
     gameObj_.killCounter_->SetAttackController(gameObj_.playerComboAttackController_.get());
@@ -190,7 +190,8 @@ void GameScene::SetClassPointer() {
     gameObj_.gameIntroManager_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.gameIntroManager_->SetPlayer(gameObj_.player_.get());
     gameObj_.gameIntroManager_->SetGameBackGroundObject(gameObj_.gameBackGroundObject_.get());
-    gameObj_.gameIntroManager_->SetHowToOperate(gameObj_.howToOperate_.get());
+    gameObj_.operateUI_->SetPlayer(gameObj_.player_.get());
+    gameObj_.gameIntroManager_->SetHowToOperate(gameObj_.operateUI_.get());
     gameObj_.gameIntroManager_->SetDeathTimerGauge(gameObj_.deathTimer_->GetDeathTimerGauge());
     gameObj_.gameIntroManager_->SetComboAsistController(gameObj_.comboAsistController_.get());
     gameObj_.gameIntroManager_->ClassisSet();

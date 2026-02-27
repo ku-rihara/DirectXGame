@@ -155,7 +155,7 @@ const bool& GameIntroManager::GetIsFinishStep(const IntroStep& step) {
     return introSequences_[step]->GetIsFinish();
 }
 
-void GameIntroManager::SetHowToOperate(HowToOperate* howToOperate) {
+void GameIntroManager::SetHowToOperate(OperateUI* howToOperate) {
     pHowToOperate_ = howToOperate;
 }
 
