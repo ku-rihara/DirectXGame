@@ -100,6 +100,14 @@ void EnemyDamageReactionNormal::UpdateNormal() {
         Vector3 newPos = pBaseEnemy_->GetWorldPosition() + knockBackVelocity_ * KetaEngine::Frame::DeltaTimeRate();
         pBaseEnemy_->SetWorldPositionX(newPos.x);
         pBaseEnemy_->SetWorldPositionZ(newPos.z);
+
+        // 滞空中の場合、重力を適用して落下させる
+        const auto& enemyParam = pBaseEnemy_->GetParameter();
+        float currentY = pBaseEnemy_->GetWorldPosition().y;
+        if (currentY > enemyParam.basePosY) {
+            float newY = currentY - enemyParam.deathGravity * KetaEngine::Frame::DeltaTimeRate();
+            pBaseEnemy_->SetWorldPositionY(newY < enemyParam.basePosY ? enemyParam.basePosY : newY);
+        }
     }
 }
 

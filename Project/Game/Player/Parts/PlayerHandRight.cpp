@@ -9,7 +9,7 @@
 void PlayerHandRight::Init() {
 
     // グループネーム
-    groupName_ = "RightHand";
+    groupName_ = "PlayerRightHand";
 
     obj3d_.reset(KetaEngine::Object3d::CreateModel("Player/RHand.obj"));
     obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = static_cast<int32_t>(KetaEngine::LightingType::HalfLambert);
@@ -28,12 +28,13 @@ void PlayerHandRight::Update() {
 }
 
 void PlayerHandRight::AdjustParam() {
-
+#ifdef _DEBUG
     if (ImGui::CollapsingHeader("RightHand")) {
         ImGui::PushID("RightHand");
         BasePlayerHand::AdjustParamBase();
         ImGui::PopID();
     }
+#endif // _DEBUG
 }
 
 void PlayerHandRight::DissolveAdapt(float dissolve) {

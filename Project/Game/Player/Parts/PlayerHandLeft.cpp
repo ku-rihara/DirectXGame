@@ -9,7 +9,7 @@
 void PlayerHandLeft::Init() {
 
     // グループネーム
-    groupName_ = "LeftHand";
+    groupName_ = "PlayerLeftHand";
 
     obj3d_.reset(KetaEngine::Object3d::CreateModel("Player/LHand.obj"));
     obj3d_->transform_.scale_                                             = {2, 2, 2};
@@ -31,12 +31,13 @@ void PlayerHandLeft::Update() {
 ///  パラメータ調節
 ///=====================================================
 void PlayerHandLeft::AdjustParam() {
-
+#ifdef _DEBUG
     if (ImGui::CollapsingHeader("LeftHand")) {
         ImGui::PushID("LeftHand");
         BasePlayerHand::AdjustParamBase();
         ImGui::PopID();
     }
+#endif // _DEBUG
 }
 
 void PlayerHandLeft::DissolveAdapt(float dissolve) {
