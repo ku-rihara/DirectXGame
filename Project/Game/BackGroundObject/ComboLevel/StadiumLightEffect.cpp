@@ -5,7 +5,7 @@
 void StadiumLightEffect::Init(const std::string& filename) {
     BaseComboLevelBackObj::Init(filename);
 
-    ObjectFromBlender_->SetLoopEndCallback(static_cast<int32_t>(ObjEffectMode::PULSE),EasingAdaptTransform::Scale, [this]() {
+    ObjectFromBlender_->SetLoopEndCallback(static_cast<int32_t>(ObjEffectMode::PULSE), [this]() {
         isPulseOneCycleEnd_ = true;
     });
 }

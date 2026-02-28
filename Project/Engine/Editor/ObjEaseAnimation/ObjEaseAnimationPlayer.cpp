@@ -95,3 +95,10 @@ void ObjEaseAnimationPlayer::SetLoop(bool isLoop) {
         animeData->SetLoop(isLoop);
     }
 }
+
+void ObjEaseAnimationPlayer::SetLoopEndCallback(const std::function<void()>& callback) {
+    auto* animeData = GetAnimationData();
+    if (animeData) {
+        animeData->SetLoopEndCallback(callback);
+    }
+}

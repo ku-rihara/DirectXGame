@@ -1,4 +1,4 @@
-﻿{
+{
     "name": "scene",
     "objects": [
         {
@@ -43,307 +43,187 @@
                 ]
             }
         },
-        {
-            "type": "MESH",
-            "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk",
-            "transform": {
-                "translation": [
-                    0.0,
-                    119.16585540771484,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "BackObj/AudienceSeats.obj",
-            "easing_groups": [
-                {
-                    "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StartAudienceSeatS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StartAudienceSeatR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StartAudienceSeatT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 2.5
-                }
-            ]
+      {
+        "type": "MESH",
+        "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk",
+        "transform": {
+          "translation": [
+            0.0,
+            119.16585540771484,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            -0.0,
+            0.0
+          ],
+          "scaling": [
+            1.0,
+            1.0,
+            1.0
+          ]
         },
-        {
-            "type": "MESH",
-            "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk.001",
-            "transform": {
-                "translation": [
-                    0.0,
-                    -117.20775604248047,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    -179.99998474121094
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "BackObj/AudienceSeats.obj",
-            "easing_groups": [
-                {
-                    "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StartAudienceSeatS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StartAudienceSeatR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StartAudienceSeatT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 2.700000047683716
-                }
-            ]
+        "file_name": "BackObj/AudienceSeats.obj",
+        "easing_groups": [
+          {
+            "group_id": 0,
+            "animation_name": "StartAudienceSeat",
+            "start_time": 2.5,
+            "is_loop": false
+          }
+        ]
+      },
+      {
+        "type": "MESH",
+        "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk.001",
+        "transform": {
+          "translation": [
+            0.0,
+            -117.20775604248047,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            -0.0,
+            -179.99998474121094
+          ],
+          "scaling": [
+            1.0,
+            1.0,
+            1.0
+          ]
         },
-        {
-            "type": "MESH",
-            "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk.002",
-            "transform": {
-                "translation": [
-                    -119.67853546142578,
-                    -3.0797276496887207,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    90.00000762939453
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "BackObj/AudienceSeats.obj",
-            "easing_groups": [
-                {
-                    "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StartAudienceSeatS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StartAudienceSeatR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StartAudienceSeatT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 2.799999952316284
-                }
-            ]
+        "file_name": "BackObj/AudienceSeats.obj",
+        "easing_groups": [
+          {
+            "group_id": 0,
+            "animation_name": "StartAudienceSeat",
+            "start_time": 2.700000047683716,
+            "is_loop": false
+          }
+        ]
+      },
+      {
+        "type": "MESH",
+        "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk.002",
+        "transform": {
+          "translation": [
+            -119.67853546142578,
+            -3.0797276496887207,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            -0.0,
+            90.00000762939453
+          ],
+          "scaling": [
+            1.0,
+            1.0,
+            1.0
+          ]
         },
-        {
-            "type": "MESH",
-            "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk.003",
-            "transform": {
-                "translation": [
-                    119.60420989990234,
-                    -3.0797276496887207,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    -90.00000762939453
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "BackObj/AudienceSeats.obj",
-            "easing_groups": [
-                {
-                    "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StartAudienceSeatS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StartAudienceSeatR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StartAudienceSeatT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 2.5999999046325684
-                }
-            ]
+        "file_name": "BackObj/AudienceSeats.obj",
+        "easing_groups": [
+          {
+            "group_id": 0,
+            "animation_name": "StartAudienceSeat",
+            "start_time": 2.799999952316284,
+            "is_loop": false
+          }
+        ]
+      },
+      {
+        "type": "MESH",
+        "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk.003",
+        "transform": {
+          "translation": [
+            119.60420989990234,
+            -3.0797276496887207,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            -0.0,
+            -90.00000762939453
+          ],
+          "scaling": [
+            1.0,
+            1.0,
+            1.0
+          ]
         },
-        {
-            "type": "MESH",
-            "name": "Rope_2_Cylinder.005",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "BackObj/FieldSide.obj",
-            "easing_groups": [
-                {
-                    "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StartSideFieldS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StartSideFieldR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StartSideFieldT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 1.5
-                }
-            ]
+        "file_name": "BackObj/AudienceSeats.obj",
+        "easing_groups": [
+          {
+            "group_id": 0,
+            "animation_name": "StartAudienceSeat",
+            "start_time": 2.5999999046325684,
+            "is_loop": false
+          }
+        ]
+      },
+      {
+        "type": "MESH",
+        "name": "Rope_2_Cylinder.005",
+        "transform": {
+          "translation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            -0.0,
+            0.0
+          ],
+          "scaling": [
+            1.0,
+            1.0,
+            1.0
+          ]
         },
-        {
-            "type": "MESH",
-            "name": "平面",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "isDisable": false,
-            "file_name": "BackObj/Field.obj",
-            "easing_groups": [
-                {
-                    "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StartFieldS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StartFieldR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StartFieldT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.800000011920929
-                }
-            ]
+        "file_name": "BackObj/FieldSide.obj",
+        "easing_groups": [
+          {
+            "group_id": 0,
+            "animation_name": "StartSideField",
+            "start_time": 1.5,
+            "is_loop": false
+          }
+        ]
+      },
+      {
+        "type": "MESH",
+        "name": "平面",
+        "transform": {
+          "translation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            -0.0,
+            0.0
+          ],
+          "scaling": [
+            1.0,
+            1.0,
+            1.0
+          ]
         },
+        "isDisable": false,
+        "file_name": "BackObj/Field.obj",
+        "easing_groups": [
+          {
+            "group_id": 0,
+            "animation_name": "StartField",
+            "start_time": 0.800000011920929,
+            "is_loop": false
+          }
+        ]
+      },
         {
             "type": "LIGHT",
             "name": "Light.001",

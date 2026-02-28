@@ -1,4 +1,4 @@
-﻿{
+{
     "name": "scene",
     "objects": [
         {
@@ -155,29 +155,9 @@
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StartSideFieldS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StartSideFieldR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StartSideFieldT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 1.5
+                    "animation_name": "StartSideField",
+                    "start_time": 1.5,
+                    "is_loop": false
                 }
             ]
         },
@@ -206,29 +186,9 @@
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StartFieldS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StartFieldR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StartFieldT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.800000011920929
+                    "animation_name": "StartField",
+                    "start_time": 0.800000011920929,
+                    "is_loop": false
                 }
             ]
         },

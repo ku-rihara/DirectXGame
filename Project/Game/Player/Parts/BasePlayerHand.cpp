@@ -1,6 +1,6 @@
 #include "BasePlayerHand.h"
 #include"Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
-/// imgui
+/// imGui
 #include "base/TextureManager.h"
 #include <imgui.h>
 ///=========================================================

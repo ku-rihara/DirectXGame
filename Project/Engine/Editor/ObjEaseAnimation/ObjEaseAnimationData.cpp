@@ -93,6 +93,9 @@ void ObjEaseAnimationData::UpdateIndependentSRTProgression() {
     // 全SRTが全セクション完了したかチェック
     if (AreAllSRTFinished()) {
         if (isLoop_) {
+            if (onLoopEndCallback_) {
+                onLoopEndCallback_();
+            }
             Play(); // リセットして再生
         } else {
             isAllKeyFramesFinished_ = true;

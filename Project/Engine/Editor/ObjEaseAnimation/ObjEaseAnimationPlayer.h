@@ -2,6 +2,7 @@
 #include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
 #include "ObjEaseAnimationData.h"
 #include "Vector3.h"
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -45,6 +46,7 @@ public:
 
     //*----------------------------- setter Methods -----------------------------*//
     void SetLoop(bool isLoop);
+    void SetLoopEndCallback(const std::function<void()>& callback);
 };
 
 }; // KetaEngine

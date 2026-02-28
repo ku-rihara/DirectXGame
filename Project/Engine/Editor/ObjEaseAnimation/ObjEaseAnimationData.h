@@ -4,6 +4,7 @@
 #include "Vector3.h"
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -78,6 +79,7 @@ private:
     std::array<bool, static_cast<size_t>(TransformType::Count)> srtAllSectionsFinished_ = {false, false, false};
 
     bool isLoop_ = false; //< ループ再生フラグ
+    std::function<void()> onLoopEndCallback_; //< ループ1周完了コールバック
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
@@ -98,6 +100,7 @@ public:
     //*----------------------------- setter Methods -----------------------------*//
     void SetLoop(bool isLoop) { isLoop_ = isLoop; }
     bool GetIsLoop() const { return isLoop_; }
+    void SetLoopEndCallback(const std::function<void()>& callback) { onLoopEndCallback_ = callback; }
 };
 
 }; // KetaEngine

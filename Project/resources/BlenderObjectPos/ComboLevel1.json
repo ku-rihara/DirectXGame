@@ -1,4 +1,4 @@
-﻿{
+{
     "name": "scene",
     "objects": [
         {
@@ -151,72 +151,19 @@
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightSpawnR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightSpawnT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightSpawn",
                     "start_time": 0.0,
                     "is_loop": false
                 },
                 {
                     "group_id": 1,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightPulus.json",
-                                    "srt_type": "Scale"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightPulus",
                     "start_time": 0.0,
                     "is_loop": true
                 },
                 {
                     "group_id": 2,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightCloseS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightCloseR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightCloseT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightClose",
                     "start_time": 0.0,
                     "is_loop": false
                 }
@@ -246,72 +193,19 @@
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightSpawnR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightSpawnT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightSpawn",
                     "start_time": 0.0,
                     "is_loop": false
                 },
                 {
                     "group_id": 1,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightPulus.json",
-                                    "srt_type": "Scale"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightPulus",
                     "start_time": 0.0,
                     "is_loop": true
                 },
                 {
                     "group_id": 2,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightCloseS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightCloseR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightCloseT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightClose",
                     "start_time": 0.0,
                     "is_loop": false
                 }
@@ -341,72 +235,19 @@
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightSpawnR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightSpawnT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightSpawn",
                     "start_time": 0.0,
                     "is_loop": false
                 },
                 {
                     "group_id": 1,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightPulus.json",
-                                    "srt_type": "Scale"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightPulus",
                     "start_time": 0.0,
                     "is_loop": true
                 },
                 {
                     "group_id": 2,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightCloseS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightCloseR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightCloseT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightClose",
                     "start_time": 0.0,
                     "is_loop": false
                 }
@@ -436,72 +277,19 @@
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightSpawnR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightSpawnT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightSpawn",
                     "start_time": 0.0,
                     "is_loop": false
                 },
                 {
                     "group_id": 1,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightPulus.json",
-                                    "srt_type": "Scale"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightPulus",
                     "start_time": 0.0,
                     "is_loop": true
                 },
                 {
                     "group_id": 2,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightCloseS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightCloseR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightCloseT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightClose",
                     "start_time": 0.0,
                     "is_loop": false
                 }
@@ -531,72 +319,19 @@
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightSpawnR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightSpawnT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightSpawn",
                     "start_time": 0.0,
                     "is_loop": false
                 },
                 {
                     "group_id": 1,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightPulus.json",
-                                    "srt_type": "Scale"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightPulus",
                     "start_time": 0.0,
                     "is_loop": true
                 },
                 {
                     "group_id": 2,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightCloseS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightCloseR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightCloseT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightClose",
                     "start_time": 0.0,
                     "is_loop": false
                 }
@@ -626,72 +361,19 @@
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightSpawnR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightSpawnT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightSpawn",
                     "start_time": 0.0,
                     "is_loop": false
                 },
                 {
                     "group_id": 1,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightPulus.json",
-                                    "srt_type": "Scale"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightPulus",
                     "start_time": 0.0,
                     "is_loop": true
                 },
                 {
                     "group_id": 2,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightCloseS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightCloseR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightCloseT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightClose",
                     "start_time": 0.0,
                     "is_loop": false
                 }
@@ -721,72 +403,19 @@
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightSpawnR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightSpawnT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightSpawn",
                     "start_time": 0.0,
                     "is_loop": false
                 },
                 {
                     "group_id": 1,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightPulus.json",
-                                    "srt_type": "Scale"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightPulus",
                     "start_time": 0.0,
                     "is_loop": true
                 },
                 {
                     "group_id": 2,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightCloseS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightCloseR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightCloseT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightClose",
                     "start_time": 0.0,
                     "is_loop": false
                 }
@@ -816,72 +445,19 @@
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightSpawnR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightSpawnT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightSpawn",
                     "start_time": 0.0,
                     "is_loop": false
                 },
                 {
                     "group_id": 1,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightPulus.json",
-                                    "srt_type": "Scale"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightPulus",
                     "start_time": 0.0,
                     "is_loop": true
                 },
                 {
                     "group_id": 2,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StadiumLightCloseS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StadiumLightCloseR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StadiumLightCloseT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
+                    "animation_name": "StadiumLightClose",
                     "start_time": 0.0,
                     "is_loop": false
                 }

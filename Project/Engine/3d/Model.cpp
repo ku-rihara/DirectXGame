@@ -150,7 +150,7 @@ void Model::CreateModel(const std::string& ModelFileName) {
     std::string fileName  = path.filename().string();
     std::string parentDir = path.parent_path().string();
 
-    // "Category/ModelName.ext" 形式に対応: Resources/Model/Category/ModelName/
+
     std::string directory;
     if (parentDir.empty()) {
         directory = modelPath_ + stemName;
