@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/DissolveEditor/DissolvePlayer.h"
 
 #include "3d/Object3D/Object3d.h"
 #include "BaseObject/BaseObject.h"
@@ -23,14 +24,12 @@ public:
     virtual void Update();
     virtual void AdjustParam() = 0;
 
-    /// <summary>
-    /// ディゾルブ効果の適用
-    /// </summary>
-    /// <param name="dissolve">ディゾルブ値</param>
-    virtual void DissolveAdapt(float dissolve);
 
     void RegisterParams(); //< パラメータ登録
     void AdjustParamBase(); //< 基本パラメータの調整
+
+    void PlayDissolve(const std::string& name); //< ディゾルブ再生
+    void SetInitialDissolveHidden(); //< 初期非表示状態設定
 
 protected:
     void EffectEmit(const std::string& effectName);
@@ -53,6 +52,8 @@ protected:
 
     bool isEmit_   = true;
     bool isShadow_ = true;
+
+    KetaEngine::DissolvePlayer dissolvePlayer_;
 
 public:
     ///========================================================

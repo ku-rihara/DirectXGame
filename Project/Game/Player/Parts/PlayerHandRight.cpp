@@ -37,10 +37,6 @@ void PlayerHandRight::AdjustParam() {
 #endif // _DEBUG
 }
 
-void PlayerHandRight::DissolveAdapt(float dissolve) {
-    BasePlayerHand::DissolveAdapt(dissolve);
-}
-
 void PlayerHandRight::SetParent(KetaEngine::WorldTransform* parent) {
     BasePlayerHand::SetParent(parent);
 }

@@ -28,8 +28,6 @@ private:
     /// ===================================================
 
     float startWaitTime_;
-    KetaEngine::Easing<float> spawnEase_;
-    float tempDessolve_;
 
     Step step_;
     float speed_;

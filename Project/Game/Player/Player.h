@@ -13,6 +13,7 @@
 #include "Behavior/TitleBehavior/BaseTitleBehavior.h"
 // Editor
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/DissolveEditor/DissolvePlayer.h"
 // Particle,Effect
 #include "Particle/CPUParticle/Editor/ParticleEmitter.h"
 #include "Effect/PlayerEffects.h"
@@ -79,10 +80,17 @@ public:
     void ResetHeadScale(); //< 頭のスケールリセット
 
     /// <summary>
-    /// ディゾルブ処理更新
+    /// ディゾルブアニメーション再生 (手も含めて同時再生)
     /// </summary>
-    /// <param name="dissolve">Dissolve</param>
-    void DissolveUpdate(float dissolve);
+    /// <param name="name">ディゾルブ名</param>
+    void PlayDissolve(const std::string& name);
+
+    /// <summary>
+    /// ディゾルブアニメーション完了判定
+    /// </summary>
+    bool IsDissolveFinished() const;
+
+    void SetInitialDissolveHidden(); //< 初期非表示状態設定
 
     /// <summary>
     /// ジャンプ
@@ -136,6 +144,8 @@ private:
 private:
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Player";
+
+    KetaEngine::DissolvePlayer dissolvePlayer_;
 
     /// other class
     LockOnController* pLockOn_                          = nullptr;

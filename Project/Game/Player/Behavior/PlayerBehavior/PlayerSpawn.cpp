@@ -25,14 +25,6 @@ PlayerSpawn::PlayerSpawn(Player* player)
         waitEase_.Reset();
     });
 
-    spawnEase_.Init("SpawnDissolve.json");
-    spawnEase_.SetAdaptValue(&tempDessolve_);
-    spawnEase_.Reset();
-
-    spawnEase_.SetOnWaitEndCallback([this]() {
-        step_ = Step::END;
-    });
-
     speed_ = pPlayerParameter_->GetParameters().moveSpeed;
 
     step_ = Step::WAIT;
@@ -57,6 +49,7 @@ void PlayerSpawn::Update([[maybe_unused]] float timeSpeed) {
             break;
         }
         pOwner_->SetShadowFrag(true);
+        pOwner_->PlayDissolve("SpawnDissolve");
         step_ = Step::SPAWN;
         break;
 
@@ -64,10 +57,9 @@ void PlayerSpawn::Update([[maybe_unused]] float timeSpeed) {
         ///
         ///================================================================
     case PlayerSpawn::Step::SPAWN:
-        spawnEase_.Update(KetaEngine::Frame::DeltaTimeRate());
-        pOwner_->DissolveUpdate(tempDessolve_);
-        pOwner_->GetLeftHand()->DissolveAdapt(tempDessolve_);
-        pOwner_->GetRightHand()->DissolveAdapt(tempDessolve_);
+        if (pOwner_->IsDissolveFinished()) {
+            step_ = Step::END;
+        }
         break;
 
         ///================================================================

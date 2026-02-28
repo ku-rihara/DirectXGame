@@ -17,6 +17,11 @@ void BasePlayerHand::Init() {
     particlePlayer_ = std::make_unique<KetaEngine::ParticlePlayer>();
     particlePlayer_->Init();
     particlePlayer_->SetFollowingPos(&effectFollowPos_);
+
+    // ディゾルブエッジ設定
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.05f;
+    dissolvePlayer_.Init();
 }
 
 ///=========================================================
@@ -34,6 +39,12 @@ void BasePlayerHand::Update() {
     particlePlayer_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
     effectFollowPos_ = obj3d_->transform_.GetWorldPos();
     particlePlayer_->Update();
+
+    // ディゾルブ更新・適用 
+    dissolvePlayer_.Update();
+    if (dissolvePlayer_.IsPlaying()) {
+        dissolvePlayer_.ApplyToMaterial(*obj3d_->GetModelMaterial());
+    }
 
     BaseObject::Update();
 }
@@ -55,11 +66,13 @@ void BasePlayerHand::AdjustParamBase() {
 }
 
 
-void BasePlayerHand::DissolveAdapt(float dissolve) {
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.05f;
+void BasePlayerHand::PlayDissolve(const std::string& name) {
+    dissolvePlayer_.Play(name);
+}
+
+void BasePlayerHand::SetInitialDissolveHidden() {
     obj3d_->GetModelMaterial()->GetMaterialData()->enableDissolve    = true;
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = dissolve;
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = 1.0f;
 }
 
 void BasePlayerHand::SetParent(KetaEngine::WorldTransform* parent) {

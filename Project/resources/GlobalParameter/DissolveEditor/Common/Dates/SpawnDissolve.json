@@ -1,0 +1,10 @@
+{
+    "SpawnDissolve": {
+        "easeType": 0,
+        "endThreshold": 0.0,
+        "maxTime": 2.0,
+        "offsetTime": 0.0,
+        "selectedTextureIndex": 0,
+        "startThreshold": 1.0
+    }
+}

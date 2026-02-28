@@ -21,12 +21,6 @@ public:
 
     void AdjustParam() override; //< パラメータの調整
   
-    /// <summary>
-    /// ディゾルブ効果の適用
-    /// </summary>
-    /// <param name="dissolve">ディゾルブ値</param>
-    virtual void DissolveAdapt(float dissolve);
-
 private:
     ///===========================================
     /// private variant

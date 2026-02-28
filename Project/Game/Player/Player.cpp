@@ -79,6 +79,11 @@ void Player::Init() {
     baseTransform_.SetBaseScale(Vector3::OneVector());
     baseTransform_.translation_ = parameters_->GetParameters().startPos_;
 
+    // ディゾルブエッジ設定 (アート定義値: 1回のみ)
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.09f;
+    dissolvePlayer_.Init();
+
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));
     ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
@@ -394,6 +399,13 @@ void Player::UpdateMatrix() {
     /// 行列更新
     leftHand_->Update();
     rightHand_->Update();
+
+    // ディゾルブ更新・適用 (再生中のみマテリアルに反映)
+    dissolvePlayer_.Update();
+    if (dissolvePlayer_.IsPlaying()) {
+        dissolvePlayer_.ApplyToMaterial(*obj3d_->GetModelMaterial());
+    }
+
     BaseObject::Update();
 }
 
@@ -477,11 +489,19 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 }
 
-void Player::DissolveUpdate(float dissolve) {
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.09f;
+void Player::PlayDissolve(const std::string& name) {
+    dissolvePlayer_.Play(name);
+    leftHand_->PlayDissolve(name);
+    rightHand_->PlayDissolve(name);
+}
+
+bool Player::IsDissolveFinished() const {
+    return dissolvePlayer_.IsFinished();
+}
+
+void Player::SetInitialDissolveHidden() {
     obj3d_->GetModelMaterial()->GetMaterialData()->enableDissolve    = true;
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = dissolve;
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = 1.0f;
 }
 
 Vector3 Player::GetCollisionPos() const {
@@ -575,9 +595,10 @@ void Player::InitInGameScene() {
     Init();
     baseTransform_.SetBaseScale(parameters_->GetParameters().baseScale_);
 
-    DissolveUpdate(1.0f);
-    leftHand_->DissolveAdapt(1.0f);
-    rightHand_->DissolveAdapt(1.0f);
+    // 初期状態: スポーンアニメーション開始まで非表示
+    SetInitialDissolveHidden();
+    leftHand_->SetInitialDissolveHidden();
+    rightHand_->SetInitialDissolveHidden();
     leftHand_->SetIsEmit(false);
     rightHand_->SetIsEmit(false);
     SetShadowFrag(false);
