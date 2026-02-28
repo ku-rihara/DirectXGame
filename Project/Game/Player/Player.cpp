@@ -79,7 +79,7 @@ void Player::Init() {
     baseTransform_.SetBaseScale(Vector3::OneVector());
     baseTransform_.translation_ = parameters_->GetParameters().startPos_;
 
-    // ディゾルブエッジ設定 (アート定義値: 1回のみ)
+    // ディゾルブエッジ設定
     obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
     obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.09f;
     dissolvePlayer_.Init();

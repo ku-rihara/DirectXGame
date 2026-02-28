@@ -220,11 +220,10 @@ void ObjectFromBlender::EasingAllReset() {
             objectData.object3d->transform_.StopObjEaseAnimation();
             objectData.groupStarted[i] = false;
         }
+        // イージングのオリジナル値をtransformに直接適応
+        objectData.object3d->transform_.ApplyOriginalAnimationValuesToTransform();
     }
     currentTime_ = 0.0f;
-
-    // イージングのオリジナル値をtransformに適応
-    UpdateTransform();
 }
 
 void ObjectFromBlender::EasingUpdateSelectGroup(float deltaTime, int32_t groupNum) {

@@ -1,7 +1,7 @@
 #pragma once
 // 3D
-#include "3D/ViewProjection.h"
 #include "3d/Object3D/Object3d.h"
+#include "3D/ViewProjection.h"
 // Base
 #include "BaseObject/BaseObject.h"
 // Collider
@@ -12,11 +12,11 @@
 #include "Behavior/PlayerBehavior/BasePlayerBehavior.h"
 #include "Behavior/TitleBehavior/BaseTitleBehavior.h"
 // Editor
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/DissolveEditor/DissolvePlayer.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 // Particle,Effect
-#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
 #include "Effect/PlayerEffects.h"
+#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
 // UI
 #include "JumpAttackUI/JumpAttackUI.h"
 // Parameter
@@ -58,7 +58,7 @@ public:
     void Update() override;
 
     void InitInGameScene(); //< ゲームシーンでの初期化
-    void TitleUpdate();     //< タイトル更新処理
+    void TitleUpdate(); //< タイトル更新処理
     void GameIntroUpdate(); //< イントロシーン更新
 
     // 影適応するかのフラグセット
@@ -70,10 +70,10 @@ public:
     /// <param name="speed">移動スピード</param>
     void Move(float speed);
 
-    bool CheckIsMoving();        //< 移動中かチェック
-    void MoveToLimit();          //< 移動範囲制限
+    bool CheckIsMoving(); //< 移動中かチェック
+    void MoveToLimit(); //< 移動範囲制限
     Vector3 GetInputDirection(); //< 入力による方向決定
-    void UpdateMatrix();         //< 行列更新
+    void UpdateMatrix(); //< 行列更新
 
     // reset
     void ResetPositionY(); //< Y座標リセット
@@ -117,20 +117,20 @@ public:
     // 衝突コールバック
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
-    void ChangeCombBoRoot();                  //< コンボルート変更
-    void FaceToTarget();                      //< ターゲット方向を向く
-    void AdaptRotate();                       //< 回転適用
-    bool CheckIsChargeMax() const;            //< チャージ最大判定
-    void AdjustParam();                       //< パラメータ調整
+    void ChangeCombBoRoot(); //< コンボルート変更
+    void FaceToTarget(); //< ターゲット方向を向く
+    void AdaptRotate(); //< 回転適用
+    bool CheckIsChargeMax() const; //< チャージ最大判定
+    void AdjustParam(); //< パラメータ調整
     Vector3 GetCollisionPos() const override; //< 衝突位置取得
 
     void MainHeadAnimationStart(const std::string& name);
-    void TitleAnimationPlay(const std::string& name);         //< タイトル本体アニメーション再生
+    void TitleAnimationPlay(const std::string& name); //< タイトル本体アニメーション再生
     void TitleRightHandAnimationPlay(const std::string& name); //< タイトル右手アニメーション再生
-    void TitleLeftHandAnimationPlay(const std::string& name);  //< タイトル左手アニメーション再生
-    bool IsTitleAnimationFinished();          //< 本体アニメーション終了判定
+    void TitleLeftHandAnimationPlay(const std::string& name); //< タイトル左手アニメーション再生
+    bool IsTitleAnimationFinished(); //< 本体アニメーション終了判定
     bool IsTitleRightHandAnimationFinished(); //< 右手アニメーション終了判定
-    bool IsTitleLeftHandAnimationFinished();  //< 左手アニメーション終了判定
+    bool IsTitleLeftHandAnimationFinished(); //< 左手アニメーション終了判定
 
     /// <summary>
     /// ダッシュ中かどうかを取得
@@ -195,9 +195,12 @@ private:
     bool isDeathRenditionFinish_ = false;
 
     // ダメージクールダウン
-    bool isDamageColling_ = false;
-    float damageCollTime_ = 0.0f;
+    bool isDamageColling_     = false;
+    float damageCollTime_     = 0.0f;
     float damageCollDuration_ = 1.0f; // ダメージ無敵時間
+
+    // コンボアンロックスキップ
+    bool isIgnoreUnlockState_ = false;
 
 public:
     // getter
@@ -214,6 +217,7 @@ public:
     PlayerAttackCollisionBox* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
+    bool GetIsIgnoreUnlockState() const { return isIgnoreUnlockState_; }
     KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
     bool GetIsDeathRenditionFinish() const { return *isDeath_; }
@@ -229,18 +233,19 @@ public:
     void SetDeathTimer(DeathTimer* deathTimer) { pDeathTimer_ = deathTimer; }
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
+    void SetIsIgnoreUnlockState(bool isIgnore) { isIgnoreUnlockState_ = isIgnore; }
 
     AutoComboQueue& GetAutoComboQueue() { return autoComboQueue_; }
 
     /// <summary>
-    /// 自動実行コールバックを登録（アンロック演出UIへの接続用）
+    /// 自動実行コールバックを登録
     /// </summary>
     void SetAutoComboAttackCallback(std::function<void(const std::string&)> callback) {
         autoComboAttackCallback_ = std::move(callback);
     }
 
     /// <summary>
-    /// 自動実行攻撃発火を通知（ComboAttackRoot/ComboAttackActionから呼ぶ）
+    /// 自動実行攻撃発火を通知
     /// </summary>
     void FireAutoComboAttackCallback(const std::string& attackName) {
         if (autoComboAttackCallback_) {

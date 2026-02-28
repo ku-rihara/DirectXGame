@@ -50,6 +50,8 @@ private:
     void TryAutoSelectNextFromQueue(); // キューから次の攻撃を自動選択
     void AttackCancel();
 
+    bool IsAttackUnlock(const PlayerComboAttackData&data) const;
+
 private:
     Order order_;
     PlayerComboAttackData* attackData_        = nullptr;
@@ -57,17 +59,17 @@ private:
 
     // 次の攻撃候補リスト
     std::vector<NextAttackCandidate> nextAttackCandidates_;
-    int32_t selectedBranchIndex_ = -1; // 選択された分岐のインデックス
+    int32_t selectedBranchIndex_ = -1; 
 
     // タイミング
     float currentFrame_;
     float waitTime_;
 
     bool isReserveNextCombo_;
-    bool isAutoReservedCombo_; // キューによる自動予約（PreOderによるリセットを跨いで保持）
+    bool isAutoReservedCombo_;
     bool isAttackCancel_;
     bool hasHitEnemy_;
-    int32_t autoSelectedBranchIndex_ = -1; // 自動予約の分岐インデックス
+    int32_t autoSelectedBranchIndex_ = -1; 
 
     // 移動関連
     std::unique_ptr<PlayerAttackRendition> attackRendition_;

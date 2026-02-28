@@ -98,6 +98,11 @@ public:
     void StopObjEaseAnimation();
 
     /// <summary>
+    /// アニメーションのオリジナル値をtransformに直接適応 (UpdateObjEaseAnimationをスキップ)
+    /// </summary>
+    void ApplyOriginalAnimationValuesToTransform();
+
+    /// <summary>
     /// アニメーション更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
@@ -149,6 +154,7 @@ private:
 
     bool isAdaptDirectScale_ = false;
     bool reverseDirectionOnReturn_ = false;
+    bool applyOriginalOnStop_ = false; //< 停止時にオリジナル値を維持するフラグ
 
     // オブジェクトイージングアニメーション
     std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;

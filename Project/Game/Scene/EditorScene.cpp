@@ -138,7 +138,9 @@ void EditorScene::ObjectInit() {
     operateUI_->Init();
 
     // 初期化
-    player_->InitInGameScene();
+    field_->Init();
+    player_->Init();
+    player_->SetIsIgnoreUnlockState(true);
     lockOnController_->Init();
     skyBox_->Init();
     combo_->Init();

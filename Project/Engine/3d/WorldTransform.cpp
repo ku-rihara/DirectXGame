@@ -318,6 +318,7 @@ void WorldTransform::PlayObjEaseAnimation(const std::string& animationName, cons
     Vector3 currentRotation    = offsetTransform_.rotation;
     Vector3 currentTranslation = offsetTransform_.translation;
 
+    applyOriginalOnStop_ = false;
     objEaseAnimationPlayer_->Play(animationName, categoryName);
 
     // 待機中に使用するオフセット値を設定
@@ -358,21 +359,17 @@ void WorldTransform::UpdateObjEaseAnimation() {
 /// アニメーション適用後のTransform更新
 ///============================================================
 void WorldTransform::ApplyAnimationToTransform() {
-    if (!objEaseAnimationPlayer_) {
-        InitOffsetTransform();
-        return;
-    }
-
-    if (!objEaseAnimationPlayer_->IsPlaying()) {
-        // 停止中でもアニメーションデータが存在すればオリジナル値を適応
-        auto* animeData = objEaseAnimationPlayer_->GetAnimationData();
-        if (animeData) {
-            offsetTransform_.scale       = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Scale);
-            offsetTransform_.rotation    = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Rotation);
-            offsetTransform_.translation = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Translation);
-        } else {
-            InitOffsetTransform();
+    if (!objEaseAnimationPlayer_ || !objEaseAnimationPlayer_->IsPlaying()) {
+        if (applyOriginalOnStop_) {
+            auto* animeData = objEaseAnimationPlayer_ ? objEaseAnimationPlayer_->GetAnimationData() : nullptr;
+            if (animeData) {
+                offsetTransform_.scale       = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Scale);
+                offsetTransform_.rotation    = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Rotation);
+                offsetTransform_.translation = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Translation);
+                return;
+            }
         }
+        InitOffsetTransform();
         return;
     }
 
@@ -415,6 +412,33 @@ void WorldTransform::ApplyAnimationToTransform() {
         } else {
             offsetTransform_.rotation = objEaseAnimationPlayer_->GetCurrentRotation();
         }
+    }
+}
+
+///============================================================
+/// アニメーションのオリジナル値をtransformに直接適応
+///============================================================
+void WorldTransform::ApplyOriginalAnimationValuesToTransform() {
+    if (!objEaseAnimationPlayer_) {
+        return;
+    }
+    auto* animeData = objEaseAnimationPlayer_->GetAnimationData();
+    if (!animeData) {
+        return;
+    }
+
+    offsetTransform_.scale       = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Scale);
+    offsetTransform_.rotation    = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Rotation);
+    offsetTransform_.translation = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Translation);
+
+    applyOriginalOnStop_ = true;
+
+    // UpdateObjEaseAnimation をスキップしてアフィン行列のみ再計算
+    UpdateAffineMatrix();
+    if (HasParentJoint()) {
+        UpdateMatrixWithJoint();
+    } else if (parent_) {
+        matWorld_ *= parent_->matWorld_;
     }
 }
 

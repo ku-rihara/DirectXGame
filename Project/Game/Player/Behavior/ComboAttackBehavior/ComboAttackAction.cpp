@@ -30,16 +30,16 @@ ComboAttackAction::~ComboAttackAction() {}
 void ComboAttackAction::Init() {
 
     // タイミングのリセット
-    currentFrame_        = 0.0f;
-    waitTime_            = 0.0f;
-    collisionTimer_      = 0.0f;
-    isCollisionActive_   = false;
-    hasHitEnemy_         = false;
+    currentFrame_            = 0.0f;
+    waitTime_                = 0.0f;
+    collisionTimer_          = 0.0f;
+    isCollisionActive_       = false;
+    hasHitEnemy_             = false;
     isReserveNextCombo_      = false;
     isAutoReservedCombo_     = false;
     autoSelectedBranchIndex_ = -1;
     isAttackCancel_          = false;
-    selectedBranchIndex_ = -1;
+    selectedBranchIndex_     = -1;
 
     // 次の攻撃候補リストを構築
     nextAttackCandidates_.clear();
@@ -50,7 +50,7 @@ void ComboAttackAction::Init() {
         if (!branch->GetNextAttackName().empty() && branch->GetNextAttackName() != "None") {
             PlayerComboAttackData* nextAttack = controller->GetAttackByName(branch->GetNextAttackName());
 
-            if (nextAttack && nextAttack->GetAttackParam().isUnlocked) {
+            if (IsAttackUnlock(*nextAttack)) {
                 NextAttackCandidate candidate;
                 candidate.branch     = branch.get();
                 candidate.attackData = nextAttack;
@@ -176,7 +176,8 @@ void ComboAttackAction::ChangeNextAttack() {
 
     // 自動予約時: 遷移直前にキューから取り出す
     auto TryDequeueIfAutoReserved = [this](PlayerComboAttackData* nextAttackData) {
-        if (!isAutoReservedCombo_) return;
+        if (!isAutoReservedCombo_)
+            return;
         auto& queue = pOwner_->GetAutoComboQueue();
         if (queue.Peek() == nextAttackData) {
             queue.Dequeue();
@@ -247,9 +248,9 @@ void ComboAttackAction::PreOderNextComboForButton() {
     isReserveNextCombo_ = false;
 }
 
-///  キューから次のコンボを自動選択（アンロック演出用）
+///  キューから次のコンボを自動選択
 void ComboAttackAction::TryAutoSelectNextFromQueue() {
-    // 既に自動予約済み: PreOderNextComboForButton のリセットを上書きして再アサート
+    // PreOderNextComboForButton のリセットを上書きして再アサート
     if (isAutoReservedCombo_) {
         if (!isReserveNextCombo_) {
             isReserveNextCombo_  = true;
@@ -283,7 +284,7 @@ void ComboAttackAction::TryAutoSelectNextFromQueue() {
 
         // 先行入力タイミングウィンドウが開いているか
         float precedeTime = candidate.branch->GetPrecedeInputTime();
-        bool timingOk = (currentFrame_ >= precedeTime) || attackData_->IsWaitFinish(currentFrame_);
+        bool timingOk     = (currentFrame_ >= precedeTime) || attackData_->IsWaitFinish(currentFrame_);
         if (!timingOk) {
             continue;
         }
@@ -380,6 +381,11 @@ void ComboAttackAction::SetMoveEasing() {
 
     // 開始時間を設定
     moveEasing_.SetStartTimeOffset(moveParam.startTime);
+}
+
+bool ComboAttackAction::IsAttackUnlock(const PlayerComboAttackData& data) const {
+    bool result = data.GetAttackParam().isUnlocked || pOwner_->GetIsIgnoreUnlockState();
+    return result;
 }
 
 void ComboAttackAction::Debug() {
