@@ -61,6 +61,30 @@ Vector3 ObjEaseAnimationPlayer::GetCurrentTranslation() const {
     return Vector3::ZeroVector();
 }
 
+Vector3 ObjEaseAnimationPlayer::GetCurrentScaleAnchor() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->GetActiveAnchorValue(ObjEaseAnimationData::TransformType::Scale);
+    }
+    return Vector3::ZeroVector();
+}
+
+Vector3 ObjEaseAnimationPlayer::GetCurrentRotationAnchor() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->GetActiveAnchorValue(ObjEaseAnimationData::TransformType::Rotation);
+    }
+    return Vector3::ZeroVector();
+}
+
+Vector3 ObjEaseAnimationPlayer::GetCurrentTranslationAnchor() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->GetActiveAnchorValue(ObjEaseAnimationData::TransformType::Translation);
+    }
+    return Vector3::ZeroVector();
+}
+
 ObjEaseAnimationData* ObjEaseAnimationPlayer::GetAnimationData() {
     return dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
 }

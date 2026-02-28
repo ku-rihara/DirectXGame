@@ -42,12 +42,14 @@ void ObjEaseAnimationEditor::UpdatePreviewObject() {
     previewObject_->transform_.rotation_    = previewBaseTransform_.rotation;
     previewObject_->transform_.translation_ = previewBaseTransform_.translation;
 
+    ObjEaseAnimationData* animation = nullptr;
+
     // 選択中のアニメーションを適用
     if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
         auto& category = categories_[selectedCategoryIndex_];
         if (category.selectedEffectIndex >= 0 && category.selectedEffectIndex < static_cast<int>(category.effects.size())) {
 
-            auto* animation = category.effects[category.selectedEffectIndex].get();
+            animation = category.effects[category.selectedEffectIndex].get();
 
             if (animation && animation->IsPlaying()) {
                 Vector3 scaleOffset = animation->GetActiveKeyFrameValue(

@@ -167,16 +167,49 @@ void WorldTransform::UpdateAffineMatrix() {
     const Vector3 translation = translation_ + offsetTransform_.translation;
     Quaternion quaternion     = quaternion_ * offsetTransform_.quaternion;
 
+    // アンカーポイントが設定されているか確認
+    const bool hasAnchor =
+        (anchorScale_.x != 0.0f || anchorScale_.y != 0.0f || anchorScale_.z != 0.0f) ||
+        (anchorRotation_.x != 0.0f || anchorRotation_.y != 0.0f || anchorRotation_.z != 0.0f) ||
+        (anchorTranslation_.x != 0.0f || anchorTranslation_.y != 0.0f || anchorTranslation_.z != 0.0f);
+
     switch (rotateOder_) {
-    case RotateOder::XYZ:
-        matWorld_ = MakeAffineMatrix(scale, rotation, translation);
+    case RotateOder::XYZ: {
+      
+        Matrix4x4 rotMatrix;
+       
+            rotMatrix = MakeRotateMatrix(offsetTransform_.rotation) * MakeRotateMatrix(rotation_);
+
+        if (hasAnchor) {
+        
+            const Vector3 arPostScale = (anchorRotation_ - anchorScale_) * scale + anchorScale_;
+            matWorld_ =
+                MakeTranslateMatrix((anchorTranslation_ + anchorScale_) * -1.0f) *
+                MakeScaleMatrix(scale) *
+                MakeTranslateMatrix((anchorScale_ - anchorRotation_) * scale) *
+                rotMatrix *
+                MakeTranslateMatrix(arPostScale + translation);
+        } else {
+            matWorld_ = MakeScaleMatrix(scale) * rotMatrix * MakeTranslateMatrix(translation);
+        }
         break;
+    }
+
     case RotateOder::Quaternion:
-
         quaternion.Normalize();
-        matWorld_ = MakeAffineMatrixQuaternion(scale, quaternion, translation);
-
+        if (hasAnchor) {
+            const Vector3 arPostScale = (anchorRotation_ - anchorScale_) * scale + anchorScale_;
+            matWorld_ =
+                MakeTranslateMatrix((anchorTranslation_ + anchorScale_) * -1.0f) *
+                MakeScaleMatrix(scale) *
+                MakeTranslateMatrix((anchorScale_ - anchorRotation_) * scale) *
+                quaternion.MakeRotateMatrix() *
+                MakeTranslateMatrix(arPostScale + translation);
+        } else {
+            matWorld_ = MakeAffineMatrixQuaternion(scale, quaternion, translation);
+        }
         break;
+
     default:
         break;
     }
@@ -366,16 +399,19 @@ void WorldTransform::ApplyAnimationToTransform() {
                 offsetTransform_.scale       = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Scale);
                 offsetTransform_.rotation    = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Rotation);
                 offsetTransform_.translation = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Translation);
+                anchorScale_ = anchorRotation_ = anchorTranslation_ = Vector3::ZeroVector();
                 return;
             }
         }
         InitOffsetTransform();
+        anchorScale_ = anchorRotation_ = anchorTranslation_ = Vector3::ZeroVector();
         return;
     }
 
     auto* animeData = objEaseAnimationPlayer_->GetAnimationData();
     if (!animeData) {
         InitOffsetTransform();
+        anchorScale_ = anchorRotation_ = anchorTranslation_ = Vector3::ZeroVector();
         return;
     }
 
@@ -399,7 +435,7 @@ void WorldTransform::ApplyAnimationToTransform() {
     // 進行方向を向く設定が有効な場合は方向から回転を決定する
     if (objEaseAnimationPlayer_->IsLookingAtDirection()) {
         Vector3 dir = objEaseAnimationPlayer_->GetMovementDirection();
-   
+
         if (reverseDirectionOnReturn_) {
             dir = dir * -1.0f;
         }
@@ -413,6 +449,11 @@ void WorldTransform::ApplyAnimationToTransform() {
             offsetTransform_.rotation = objEaseAnimationPlayer_->GetCurrentRotation();
         }
     }
+
+    // アニメーションセクションのアンカーポイントを適用
+    anchorScale_       = objEaseAnimationPlayer_->GetCurrentScaleAnchor();
+    anchorRotation_    = objEaseAnimationPlayer_->GetCurrentRotationAnchor();
+    anchorTranslation_ = objEaseAnimationPlayer_->GetCurrentTranslationAnchor();
 }
 
 ///============================================================
@@ -430,6 +471,7 @@ void WorldTransform::ApplyOriginalAnimationValuesToTransform() {
     offsetTransform_.scale       = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Scale);
     offsetTransform_.rotation    = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Rotation);
     offsetTransform_.translation = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Translation);
+    anchorScale_ = anchorRotation_ = anchorTranslation_ = Vector3::ZeroVector();
 
     applyOriginalOnStop_ = true;
 
@@ -448,6 +490,7 @@ void WorldTransform::InitOffsetTransform() {
     offsetTransform_.rotation    = Vector3::ZeroVector();
     offsetTransform_.quaternion  = Quaternion::Identity();
 }
+
 
 void WorldTransform::ApplyLookAtDirection(const Vector3& direction) {
     // 方向ベクトルが小さすぎる場合は処理しない

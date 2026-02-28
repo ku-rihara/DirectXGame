@@ -68,6 +68,9 @@ public:
         // 待機中に保持するオフセット値
         Vector3 preAnimationOffset = Vector3::ZeroVector();
 
+        // アンカーポイント (ローカル空間)
+        Vector3 anchor = Vector3::ZeroVector();
+
         // イージング
         Easing<Vector3> ease;
         Easing<Vector3> returnEase;
@@ -174,6 +177,8 @@ public:
     const Vector3& GetEditScale() const { return transformParams_[static_cast<size_t>(TransformType::Scale)].endValue; }
     const Vector3& GetEditRotation() const { return transformParams_[static_cast<size_t>(TransformType::Rotation)].endValue; }
     const Vector3& GetEditTranslation() const { return transformParams_[static_cast<size_t>(TransformType::Translation)].endValue; }
+
+    Vector3 GetAnchor(TransformType type) const { return transformParams_[static_cast<size_t>(type)].anchor; }
 
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const;

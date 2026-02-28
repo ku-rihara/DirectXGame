@@ -25,7 +25,7 @@
         "HitStop_OnHit_StartTiming": 0.0,
         "HitStop_StartTiming": 0.0,
         "KnockBackPower": 3.0,
-        "Main_Head_FileName": "None",
+        "Main_Head_FileName": "CyclingAnimation",
         "Main_Head_StartTiming": 0.0,
         "ObjAnim_Head_FileName": "",
         "ObjAnim_Head_StartTiming": 0.0,

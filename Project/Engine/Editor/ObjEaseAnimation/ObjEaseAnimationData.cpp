@@ -280,6 +280,19 @@ Vector3 ObjEaseAnimationData::GetActiveKeyFrameValue(const TransformType& type) 
     return Vector3::ZeroVector();
 }
 
+Vector3 ObjEaseAnimationData::GetActiveAnchorValue(const TransformType& type) const {
+    if (sectionElements_.empty()) {
+        return Vector3::ZeroVector();
+    }
+
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(type)];
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        auto sectionType = static_cast<ObjEaseAnimationSection::TransformType>(static_cast<size_t>(type));
+        return sectionElements_[sectionIndex]->GetAnchor(sectionType);
+    }
+    return Vector3::ZeroVector();
+}
+
 bool ObjEaseAnimationData::IsLookingAtDirection() const {
     int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
     if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {

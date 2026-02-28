@@ -98,7 +98,7 @@ public:
     void StopObjEaseAnimation();
 
     /// <summary>
-    /// アニメーションのオリジナル値をtransformに直接適応 (UpdateObjEaseAnimationをスキップ)
+    /// アニメーションのオリジナル値をtransformに直接適応
     /// </summary>
     void ApplyOriginalAnimationValuesToTransform();
 
@@ -154,7 +154,12 @@ private:
 
     bool isAdaptDirectScale_ = false;
     bool reverseDirectionOnReturn_ = false;
-    bool applyOriginalOnStop_ = false; //< 停止時にオリジナル値を維持するフラグ
+    bool applyOriginalOnStop_ = false;
+
+    // アンカーポイント (SRTそれぞれ独立)
+    Vector3 anchorScale_       = Vector3::ZeroVector();
+    Vector3 anchorRotation_    = Vector3::ZeroVector();
+    Vector3 anchorTranslation_ = Vector3::ZeroVector();
 
     // オブジェクトイージングアニメーション
     std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;
@@ -171,12 +176,23 @@ public:
 
     ObjEaseAnimationPlayer* GetObjEaseAnimationPlayer() { return objEaseAnimationPlayer_.get(); }
 
-    // Setter 
+    // Setter
     void SetParent(const WorldTransform* parent);
     void SetBaseScale(const Vector3& scale) { baseScale_ = scale; }
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
     void SetIsAdaptDirectScale(bool is) { isAdaptDirectScale_ = is; }
     void SetReverseDirectionOnReturn(bool reverse) { reverseDirectionOnReturn_ = reverse; }
+  
+    // アンカーポイント Setter
+    void SetAnchorScale(const Vector3& anchor) { anchorScale_ = anchor; }         
+    void SetAnchorRotation(const Vector3& anchor) { anchorRotation_ = anchor; }   
+    void SetAnchorTranslation(const Vector3& anchor) { anchorTranslation_ = anchor; } 
+    void ResetAnchor() { anchorScale_ = anchorRotation_ = anchorTranslation_ = Vector3::ZeroVector(); } 
+  
+    // アンカーポイント Getter
+    const Vector3& GetAnchorScale() const { return anchorScale_; }
+    const Vector3& GetAnchorRotation() const { return anchorRotation_; }
+    const Vector3& GetAnchorTranslation() const { return anchorTranslation_; }
 };
 
 } // KetaEngine

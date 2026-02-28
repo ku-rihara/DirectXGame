@@ -284,8 +284,10 @@ void ObjEaseAnimationSection::RegisterParams() {
         if (i == static_cast<size_t>(TransformType::Translation)) {
             globalParameter_->Regist(groupName_, std::string(name) + "_UseRail", &param.useRail);
             globalParameter_->Regist(groupName_, std::string(name) + "_RailFileName", &param.railFileName);
-            globalParameter_->Regist(groupName_, std::string(name) + "_IsLookAtDirection", &param.isLookAtDirection); 
+            globalParameter_->Regist(groupName_, std::string(name) + "_IsLookAtDirection", &param.isLookAtDirection);
         }
+
+        globalParameter_->Regist(groupName_, std::string(name) + "_Anchor", &param.anchor);
     }
 }
 
@@ -311,8 +313,10 @@ void ObjEaseAnimationSection::GetParams() {
         if (i == static_cast<size_t>(TransformType::Translation)) {
             param.useRail           = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
             param.railFileName      = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
-            param.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection"); 
+            param.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection");
         }
+
+        param.anchor = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_Anchor");
     }
 }
 
@@ -345,6 +349,11 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
 
     // 戻りフラグ
     ImGui::Checkbox((std::string(label) + " Return To Origin").c_str(), &param.isReturnToOrigin);
+
+    // アンカーポイント
+    if (ImGui::DragFloat3("Anchor", &param.anchor.x, 0.01f)) {
+        globalParameter_->SetValue(groupName_, std::string(GetSRTName(type)) + "_Anchor", param.anchor);
+    }
 
     if (type == TransformType::Translation) {
         ImGui::Checkbox("Look At Movement Direction", &param.isLookAtDirection);

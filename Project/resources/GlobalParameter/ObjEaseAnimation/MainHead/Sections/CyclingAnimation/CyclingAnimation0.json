@@ -1,5 +1,10 @@
 {
     "CyclingAnimation0": {
+        "Rotation_Anchor": [
+            0.0,
+            1.399999976158142,
+            0.0
+        ],
         "Rotation_BackRatio": 0.0,
         "Rotation_EaseType": 6,
         "Rotation_IsActive": true,
@@ -12,6 +17,11 @@
             0.0,
             -1.5707963705062866
         ],
+        "Scale_Anchor": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "Scale_BackRatio": 0.0,
         "Scale_EaseType": 0,
         "Scale_IsActive": false,
@@ -23,6 +33,11 @@
             1.0,
             1.0,
             1.0
+        ],
+        "Translation_Anchor": [
+            0.0,
+            0.0,
+            0.0
         ],
         "Translation_BackRatio": 0.0,
         "Translation_EaseType": 22,

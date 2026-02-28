@@ -88,6 +88,7 @@ public:
         return originalValues_[static_cast<size_t>(type)];
     }
     Vector3 GetActiveKeyFrameValue(const TransformType& type) const;
+    Vector3 GetActiveAnchorValue(const TransformType& type) const;
     bool GetIsUseRailActiveKeyFrame() const;
     RailPlayer* GetCurrentRailPlayer() const;
     bool IsLookingAtDirection() const;
