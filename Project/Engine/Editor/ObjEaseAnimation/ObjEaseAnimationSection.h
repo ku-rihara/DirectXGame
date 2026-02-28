@@ -52,6 +52,7 @@ public:
         // 通常再生パラメータ
         float maxTime    = 1.0f;
         int32_t easeType = 0;
+        float backRatio  = 0.0f;
 
         // 戻り動作パラメータ
         float returnMaxTime    = 1.0f;

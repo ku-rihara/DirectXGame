@@ -102,3 +102,10 @@ void ObjEaseAnimationPlayer::SetLoopEndCallback(const std::function<void()>& cal
         animeData->SetLoopEndCallback(callback);
     }
 }
+
+void ObjEaseAnimationPlayer::SetPreAnimationOffsetsToOriginalValues() {
+    auto* animeData = GetAnimationData();
+    if (animeData) {
+        animeData->SetPreAnimationOffsetsToOriginalValues();
+    }
+}

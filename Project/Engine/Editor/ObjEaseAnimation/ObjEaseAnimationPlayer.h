@@ -47,6 +47,7 @@ public:
     //*----------------------------- setter Methods -----------------------------*//
     void SetLoop(bool isLoop);
     void SetLoopEndCallback(const std::function<void()>& callback);
+    void SetPreAnimationOffsetsToOriginalValues();
 };
 
 }; // KetaEngine

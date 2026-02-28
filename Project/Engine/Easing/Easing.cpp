@@ -52,6 +52,12 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     finishTimeOffset_ = easingParam.finishOffsetTime;
 
     startTimeOffset_ = easingParam.startTimeOffset;
+
+     if (easingParam.backRatio == 0.0f) {
+        finishValueType_ = EasingFinishValueType::End;
+    } else {
+         finishValueType_ = EasingFinishValueType::Start;
+    }
 }
 
 

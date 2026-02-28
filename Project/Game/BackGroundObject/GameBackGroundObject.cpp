@@ -3,6 +3,8 @@
 
 void GameBackGroundObject::Init(const std::string& filename) {
     BaseBackGroundObject::Init(filename);
+    ObjectFromBlender_->EasingUpdateSelectGroup(0.0f, 0);
+    ObjectFromBlender_->UpdateTransform();
 }
 
 

@@ -4,6 +4,7 @@
 void BaseComboLevelBackObj::Init(const std::string& filename) {
     BaseBackGroundObject::Init(filename);
     ObjectFromBlender_->EasingUpdateSelectGroup(0.0f, static_cast<int32_t>(ObjEffectMode::SPAWN));
+    ObjectFromBlender_->UpdateTransform();
 }
 
 void BaseComboLevelBackObj::Update(float playSpeed) {
@@ -33,6 +34,7 @@ void BaseComboLevelBackObj::Update(float playSpeed) {
             ObjectFromBlender_->EasingAllReset();
             isPulseCycleStart_ = false;
             ObjectFromBlender_->EasingUpdateSelectGroup(0.0f, static_cast<int32_t>(ObjEffectMode::SPAWN));
+            ObjectFromBlender_->UpdateTransform();
             effectMode_ = ObjEffectMode::NONE;       
         }
     }

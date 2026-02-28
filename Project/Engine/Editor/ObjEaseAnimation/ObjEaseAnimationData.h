@@ -97,6 +97,14 @@ public:
     // アニメーション開始前のオフセット値を設定
     void SetPreAnimationOffsets(const Vector3& scale, const Vector3& rotation, const Vector3& translation);
 
+    // プリアニメーションオフセットをオリジナル値にリセット
+    void SetPreAnimationOffsetsToOriginalValues() {
+        SetPreAnimationOffsets(
+            originalValues_[static_cast<size_t>(TransformType::Scale)],
+            originalValues_[static_cast<size_t>(TransformType::Rotation)],
+            originalValues_[static_cast<size_t>(TransformType::Translation)]);
+    }
+
     //*----------------------------- setter Methods -----------------------------*//
     void SetLoop(bool isLoop) { isLoop_ = isLoop; }
     bool GetIsLoop() const { return isLoop_; }

@@ -38,7 +38,7 @@ void ModelManager::LoadAllModels() {
     if (!std::filesystem::exists(modelDir)) {
         return;
     }
-    // カテゴリフォルダを巡回 (Resources/Model/Category/ModelName/ModelName.ext)
+    // カテゴリフォルダを巡回
     for (const auto& category : std::filesystem::directory_iterator(modelDir)) {
         if (!category.is_directory()) {
             continue;

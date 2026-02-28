@@ -552,12 +552,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
         easingParam.endValue   = particle.scaleInfo.easeEndScale;
         easingParam.maxTime    = parameters.scaleEaseParam.baseParam.maxTime;
         easingParam.backRatio  = parameters.scaleEaseParam.baseParam.backRatio;
-        if (easingParam.backRatio == 0.0f) {
-            easingParam.finishType = EasingFinishValueType::End;
-        } else {
-            easingParam.finishType = EasingFinishValueType::Start;
-        }
-
+      
         // Easingに設定
         particle.scaleEasing->SettingValue(easingParam);
 

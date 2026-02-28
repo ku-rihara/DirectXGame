@@ -400,7 +400,7 @@ void Player::UpdateMatrix() {
     leftHand_->Update();
     rightHand_->Update();
 
-    // ディゾルブ更新・適用 (再生中のみマテリアルに反映)
+      // ディゾルブ更新・適用
     dissolvePlayer_.Update();
     if (dissolvePlayer_.IsPlaying()) {
         dissolvePlayer_.ApplyToMaterial(*obj3d_->GetModelMaterial());

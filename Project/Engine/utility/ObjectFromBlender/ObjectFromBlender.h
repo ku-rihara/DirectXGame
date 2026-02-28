@@ -69,17 +69,15 @@ public:
     /// <param name="object">JSONオブジェクト</param>
     void ConvertJSONToObjects(const nlohmann::json& object);
 
-    /// <summary>
-    /// 文字列をプリミティブタイプに変換
-    /// </summary>
-    /// <param name="typeStr">タイプ文字列</param>
-    /// <returns>プリミティブタイプ</returns>
-    PrimitiveType StringToPrimitiveType(const std::string& typeStr);
-
     void EmitterAllUpdate(); //< 全エミッター更新
     void EmitAll(const std::string& particleName = ""); //< 全エミッター放出
 
     void EasingAllReset(); //< 全イージングリセット
+
+    /// <summary>
+    /// 全オブジェクトのトランスフォームを更新
+    /// </summary>
+    void UpdateTransform();
 
 private:
     /// <summary>

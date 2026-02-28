@@ -358,8 +358,21 @@ void WorldTransform::UpdateObjEaseAnimation() {
 /// アニメーション適用後のTransform更新
 ///============================================================
 void WorldTransform::ApplyAnimationToTransform() {
-    if (!objEaseAnimationPlayer_ || !objEaseAnimationPlayer_->IsPlaying()) {
+    if (!objEaseAnimationPlayer_) {
         InitOffsetTransform();
+        return;
+    }
+
+    if (!objEaseAnimationPlayer_->IsPlaying()) {
+        // 停止中でもアニメーションデータが存在すればオリジナル値を適応
+        auto* animeData = objEaseAnimationPlayer_->GetAnimationData();
+        if (animeData) {
+            offsetTransform_.scale       = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Scale);
+            offsetTransform_.rotation    = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Rotation);
+            offsetTransform_.translation = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Translation);
+        } else {
+            InitOffsetTransform();
+        }
         return;
     }
 

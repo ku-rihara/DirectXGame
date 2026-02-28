@@ -153,6 +153,7 @@ public:
     void SetMaxTime(float time) { maxTime_ = time; }
     void SetIsStartEndReverse(bool isReverse) { isStartEndReverse_ = isReverse; }
     void SetFinishTimeOffset(float time) { finishTimeOffset_ = time; }
+    void SetBackRatio(float ratio) { backRatio_ = ratio; }
 };
 
 }; // KetaEngine

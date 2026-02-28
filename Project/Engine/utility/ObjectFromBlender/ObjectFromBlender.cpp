@@ -183,6 +183,12 @@ void ObjectFromBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Lev
     }
 }
 
+void ObjectFromBlender::UpdateTransform() {
+    for (auto& objectData : levelData_->objects) {
+        objectData.object3d->transform_.UpdateMatrix();
+    }
+}
+
 void ObjectFromBlender::EmitterAllUpdate() {
 
     for (auto& objectData : levelData_->objects) {
@@ -216,6 +222,9 @@ void ObjectFromBlender::EasingAllReset() {
         }
     }
     currentTime_ = 0.0f;
+
+    // イージングのオリジナル値をtransformに適応
+    UpdateTransform();
 }
 
 void ObjectFromBlender::EasingUpdateSelectGroup(float deltaTime, int32_t groupNum) {
@@ -324,25 +333,5 @@ void ObjectFromBlender::SetLoopEndCallback(int32_t groupNum, const std::function
                 player->SetLoopEndCallback(callback);
             }
         }
-    }
-}
-
-PrimitiveType ObjectFromBlender::StringToPrimitiveType(const std::string& typeStr) {
-    if (typeStr == "Plane") {
-        return PrimitiveType::Plane;
-    }
-    if (typeStr == "Sphere") {
-        return PrimitiveType::Sphere;
-    }
-    if (typeStr == "Cylinder") {
-        return PrimitiveType::Cylinder;
-    }
-    if (typeStr == "Ring") {
-        return PrimitiveType::Ring;
-    }
-    if (typeStr == "Box") {
-        return PrimitiveType::Box;
-    } else {
-        return PrimitiveType::Plane;
     }
 }
