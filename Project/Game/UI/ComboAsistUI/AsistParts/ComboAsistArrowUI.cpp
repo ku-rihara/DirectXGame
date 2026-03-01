@@ -19,7 +19,7 @@ void ComboAsistArrowUI::Init(int32_t fromCol, int32_t fromRow, int32_t toCol, in
     // レイアウト適用
     ApplyLayout();
 
-    // 初期配置はスナップ（Lerpなしで即座に反映）
+    // 初期配置はスナップ
     currentDisplayPos_ = targetPos_;
     SetPosition(currentDisplayPos_);
     needsLerpUpdate_ = false;
