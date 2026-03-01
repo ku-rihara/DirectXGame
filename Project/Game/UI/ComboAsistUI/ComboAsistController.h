@@ -19,11 +19,11 @@ class PlayerComboAttackController;
 
 /// <summary>
 /// コンボアシストUI管理クラス
-/// UI生成はComboUIBuilderに委譲し、表示制御・入力・演出を担当する
 /// </summary>
 class ComboAsistController {
 public:
-    enum class PanelMode { Close, Open };
+    enum class PanelMode { Close,
+        Open };
 
     ComboAsistController()  = default;
     ~ComboAsistController() = default;
@@ -95,6 +95,12 @@ private:
     ConditionUIData* GetCurrentData();
     int32_t FindAttackColumnInGroup(const ComboUIGroup& uiGroup, const std::string& attackName) const;
 
+    /// グループ内の全ボタンの最大列番号を返す（ボタンが無い場合は -1）
+    int32_t GetGroupMaxColumn(const ComboUIGroup& uiGroup) const;
+
+    /// 指定した攻撃名の後にコンボの続きがあるか（パスデータで確認）
+    bool HasNextStepAfterAttack(const ComboPathBuilder::ComboPathGroup& pathGroup, const std::string& attackName) const;
+
 private:
     Player* pPlayer_                                = nullptr;
     PlayerComboAttackController* pAttackController_ = nullptr;
@@ -118,8 +124,8 @@ private:
     KetaEngine::Easing<float>* activeSlideEasing_ = nullptr;
 
     float slideOffsetX_ = 0.0f;
-    bool isVisible_           = false;
-    bool isSliding_           = false;
+    bool isVisible_     = false;
+    bool isSliding_     = false;
 
     // パネル開閉モード
     PanelMode panelMode_      = PanelMode::Close;
@@ -135,16 +141,16 @@ private:
 
     // 発動条件切替
     PlayerComboAttackData::TriggerCondition currentCondition_ = PlayerComboAttackData::TriggerCondition::GROUND;
-    bool isAutoSwitchedCondition_ = false; // 自動切替されたかどうか
+    bool isAutoSwitchedCondition_                             = false; // 自動切替されたかどうか
 
     // レイアウトパラメータ
     Vector2 basePosition_;
     Vector2 arrowOffset_; // ボタン中心からの矢印オフセット
     float columnSpacing_; // ボタン間の横間隔
-    float rowSpacing_;    // パス間の縦間隔
+    float rowSpacing_; // パス間の縦間隔
     float branchYOffset_; // 分岐ボタンのY座標オフセット
-    float buttonScale_;   // ボタンUIのスケール
-    float arrowScale_;    // 矢印UIのスケール
+    float buttonScale_; // ボタンUIのスケール
+    float arrowScale_; // 矢印UIのスケール
 
 public:
     void SetAttackController(PlayerComboAttackController* controller) { pAttackController_ = controller; }

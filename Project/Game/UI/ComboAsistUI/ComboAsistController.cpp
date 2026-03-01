@@ -10,7 +10,6 @@
 #include <cmath>
 #include <imgui.h>
 
-
 void ComboAsistController::Init() {
     if (!pAttackController_) {
         return;
@@ -26,7 +25,6 @@ void ComboAsistController::Init() {
     currentCondition_ = PlayerComboAttackData::TriggerCondition::GROUND;
     RebuildAllConditions();
 
-
     slideInEasing_.Init("ComboAsistSlideIn.json");
     slideInEasing_.SetAdaptValue(&slideOffsetX_);
     slideInEasing_.Reset();
@@ -35,10 +33,10 @@ void ComboAsistController::Init() {
     slideOutEasing_.SetAdaptValue(&slideOffsetX_);
     slideOutEasing_.Reset();
 
-    activeSlideEasing_  = nullptr;
-    isVisible_          = false;
-    isSliding_          = false;
-    panelMode_          = PanelMode::Close;
+    activeSlideEasing_   = nullptr;
+    isVisible_           = false;
+    isSliding_           = false;
+    panelMode_           = PanelMode::Close;
     isModeTransitioning_ = false;
 
     columnOverflowEasing_.Init("ComboAsistColumnOverflow.json");
@@ -73,7 +71,6 @@ void ComboAsistController::Update() {
 
     UpdateCurrentConditionUI();
 }
-
 
 void ComboAsistController::RebuildAllConditions() {
     // 全攻撃ConditionのUIを構築
@@ -110,7 +107,7 @@ void ComboAsistController::UpdateSlide(float deltaTime) {
 
     // アシストUIのCLOSEまたはOPENの完了
     if (activeSlideEasing_->IsFinished()) {
-        isSliding_ = false;
+        isSliding_           = false;
         isModeTransitioning_ = false;
         if (activeSlideEasing_ == &slideOutEasing_) {
             isVisible_ = false;
@@ -243,21 +240,27 @@ void ComboAsistController::UpdateComboState() {
             PlayPushScalingForAttack(currentData->pathBuilder.GetXGroup(), currentData->xUIGroup, name);
             PlayPushScalingForAttack(currentData->pathBuilder.GetYGroup(), currentData->yUIGroup, name);
             // 発動攻撃が表示範囲端に達したらグループ別にシフト
+            // ただし、その攻撃のパス上に次のステップが無い（末端）場合はシフトしない
+            // （例: X→X→Y の末端Yに到達しても、Yの先にコンボが無ければシフト不要）
             int32_t xActiveCol = FindAttackColumnInGroup(currentData->xUIGroup, name);
             if (xActiveCol >= maxVisibleColumn_ && !currentData->xUIGroup.isColumnShifting) {
-                int32_t shiftAmount = xActiveCol - maxVisibleColumn_ + 1;
-                for (int32_t c = 0; c < shiftAmount; ++c) {
-                    TriggerLeaveRangeForColumn(currentData->xUIGroup, c);
+                if (HasNextStepAfterAttack(currentData->pathBuilder.GetXGroup(), name)) {
+                    int32_t shiftAmount = xActiveCol - maxVisibleColumn_ + 1;
+                    for (int32_t c = 0; c < shiftAmount; ++c) {
+                        TriggerLeaveRangeForColumn(currentData->xUIGroup, c);
+                    }
+                    ShiftGroupColumns(currentData->xUIGroup, -shiftAmount);
                 }
-                ShiftGroupColumns(currentData->xUIGroup, -shiftAmount);
             }
             int32_t yActiveCol = FindAttackColumnInGroup(currentData->yUIGroup, name);
             if (yActiveCol >= maxVisibleColumn_ && !currentData->yUIGroup.isColumnShifting) {
-                int32_t shiftAmount = yActiveCol - maxVisibleColumn_ + 1;
-                for (int32_t c = 0; c < shiftAmount; ++c) {
-                    TriggerLeaveRangeForColumn(currentData->yUIGroup, c);
+                if (HasNextStepAfterAttack(currentData->pathBuilder.GetYGroup(), name)) {
+                    int32_t shiftAmount = yActiveCol - maxVisibleColumn_ + 1;
+                    for (int32_t c = 0; c < shiftAmount; ++c) {
+                        TriggerLeaveRangeForColumn(currentData->yUIGroup, c);
+                    }
+                    ShiftGroupColumns(currentData->yUIGroup, -shiftAmount);
                 }
-                ShiftGroupColumns(currentData->yUIGroup, -shiftAmount);
             }
         }
     }
@@ -296,7 +299,7 @@ void ComboAsistController::CheckConditionSwitchInput() {
         return;
     }
 
-    auto found               = std::find(availableConditions_.begin(), availableConditions_.end(), currentCondition_);
+    auto found = std::find(availableConditions_.begin(), availableConditions_.end(), currentCondition_);
     size_t idx = 0;
     if (found != availableConditions_.end()) {
         idx = static_cast<size_t>(found - availableConditions_.begin());
@@ -417,6 +420,11 @@ void ComboAsistController::SnapConditionToTarget(ConditionUIData& data) {
 void ComboAsistController::CheckGroupColumnOverflowDetect(ComboUIGroup& uiGroup) {
     for (auto& btn : uiGroup.mainButtonUIs) {
         if (btn->GetState() != BaseComboAsistUI::AsistState::NONE && btn->GetColumnNum() > maxVisibleColumn_) {
+            // 発動攻撃列より先にボタンが存在しない場合はシフト不要
+            int32_t maxCol = GetGroupMaxColumn(uiGroup);
+            if (maxCol <= btn->GetColumnNum()) {
+                return;
+            }
             uiGroup.isColumnShifting = true;
             columnOverflowEasing_.Reset();
             columnOverflowEasing_.SetAdaptValue(&overflowScale_);
@@ -458,8 +466,7 @@ bool ComboAsistController::IsInVisibleRange(int32_t col, int32_t row) const {
 }
 
 bool ComboAsistController::IsArrowVisible(const ComboAsistArrowUI& arrow) const {
-    return arrow.GetFromCol() >= 0 && arrow.GetToCol() <= maxVisibleColumn_ &&
-           arrow.GetFromRow() >= 0 && arrow.GetToRow() <= maxVisibleRow_;
+    return arrow.GetFromCol() >= 0 && arrow.GetToCol() <= maxVisibleColumn_ && arrow.GetFromRow() >= 0 && arrow.GetToRow() <= maxVisibleRow_;
 }
 
 void ComboAsistController::UpdateGroupVisibility(ComboUIGroup& uiGroup) {
@@ -545,12 +552,12 @@ void ComboAsistController::CheckRowShift() {
     ComboUIGroup* affectedGroup = nullptr;
     int32_t branchRow           = FindBranchRowForAttack(currentData->xUIGroup, name);
     if (branchRow >= 0) {
-        affectedGroup = &currentData->xUIGroup;
+        affectedGroup                 = &currentData->xUIGroup;
         currentData->rowShiftIsXGroup = true;
     } else {
         branchRow = FindBranchRowForAttack(currentData->yUIGroup, name);
         if (branchRow >= 0) {
-            affectedGroup = &currentData->yUIGroup;
+            affectedGroup                 = &currentData->yUIGroup;
             currentData->rowShiftIsXGroup = false;
         }
     }
@@ -559,7 +566,7 @@ void ComboAsistController::CheckRowShift() {
         return;
     }
 
-    int32_t divCol  = FindDivergeColForBranchRow(*affectedGroup, branchRow);
+    int32_t divCol = FindDivergeColForBranchRow(*affectedGroup, branchRow);
     if (divCol < 0) {
         return;
     }
@@ -665,11 +672,13 @@ ConditionUIData* ComboAsistController::GetCurrentData() {
 
 int32_t ComboAsistController::FindAttackColumnInGroup(const ComboUIGroup& uiGroup, const std::string& attackName) const {
     for (const auto& btn : uiGroup.mainButtonUIs) {
-        if (btn->GetAttackName() == attackName) return btn->GetColumnNum();
+        if (btn->GetAttackName() == attackName)
+            return btn->GetColumnNum();
     }
     for (const auto& buttonRow : uiGroup.branchButtonUIs) {
         for (const auto& btn : buttonRow) {
-            if (btn->GetAttackName() == attackName) return btn->GetColumnNum();
+            if (btn->GetAttackName() == attackName)
+                return btn->GetColumnNum();
         }
     }
     return -1;
@@ -679,7 +688,44 @@ LayoutParam ComboAsistController::MakeLayoutParam() const {
     return {basePosition_, arrowOffset_, columnSpacing_, rowSpacing_, branchYOffset_, buttonScale_, arrowScale_};
 }
 
+int32_t ComboAsistController::GetGroupMaxColumn(const ComboUIGroup& uiGroup) const {
+    int32_t maxCol = -1;
+    for (const auto& btn : uiGroup.mainButtonUIs) {
+        maxCol = (std::max)(maxCol, btn->GetColumnNum());
+    }
+    for (const auto& buttonRow : uiGroup.branchButtonUIs) {
+        for (const auto& btn : buttonRow) {
+            maxCol = (std::max)(maxCol, btn->GetColumnNum());
+        }
+    }
+    return maxCol;
+}
 
+bool ComboAsistController::HasNextStepAfterAttack(
+    const ComboPathBuilder::ComboPathGroup& pathGroup,
+    const std::string& attackName) const {
+
+    // メインパスを確認
+    const auto& mainSteps = pathGroup.mainPath.steps;
+    for (size_t i = 0; i < mainSteps.size(); ++i) {
+        if (mainSteps[i].attackName == attackName) {
+            // この攻撃の後にステップが存在するか
+            return (i + 1) < mainSteps.size();
+        }
+    }
+
+    // 分岐パスを確認
+    for (const auto& branch : pathGroup.branches) {
+        const auto& steps = branch.path.steps;
+        for (size_t i = 0; i < steps.size(); ++i) {
+            if (steps[i].attackName == attackName) {
+                return (i + 1) < steps.size();
+            }
+        }
+    }
+
+    return false; // 攻撃が見つからなければ false
+}
 
 ///==========================================================
 /// パラメータ
