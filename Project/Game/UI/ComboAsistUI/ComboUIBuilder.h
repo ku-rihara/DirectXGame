@@ -24,12 +24,18 @@ struct ComboUIGroup {
     std::vector<std::unique_ptr<ComboAsistArrowUI>> branchArrowUIs;
     std::vector<std::vector<std::unique_ptr<ComboAsistArrowUI>>> branchInnerArrowUIs;
 
+    // グループ独立のカラムシフト状態
+    int32_t columnShiftAmount = 0;
+    bool isColumnShifting     = false;
+
     void Clear() {
         mainButtonUIs.clear();
         mainArrowUIs.clear();
         branchButtonUIs.clear();
         branchArrowUIs.clear();
         branchInnerArrowUIs.clear();
+        columnShiftAmount = 0;
+        isColumnShifting  = false;
     }
 };
 
@@ -40,14 +46,18 @@ struct ConditionUIData {
     ComboPathBuilder pathBuilder;
     ComboUIGroup xUIGroup;
     ComboUIGroup yUIGroup;
-    int32_t columnShiftAmount = 0;
-    bool isColumnShifting     = false;
+    int32_t rowShiftAmount     = 0;    // シフト元のbranchRow（0=未シフト）
+    int32_t rowShiftDivergeCol = -1;   // シフト発動時の分岐列
+    int32_t rowShiftMainRow    = 0;    // シフト発動時のmainRow
+    bool rowShiftIsXGroup      = true; // シフトしたのはXグループか（falseならY）
 
     void Clear() {
         xUIGroup.Clear();
         yUIGroup.Clear();
-        columnShiftAmount = 0;
-        isColumnShifting  = false;
+        rowShiftAmount     = 0;
+        rowShiftDivergeCol = -1;
+        rowShiftMainRow    = 0;
+        rowShiftIsXGroup   = true;
     }
 
     bool HasData() const {

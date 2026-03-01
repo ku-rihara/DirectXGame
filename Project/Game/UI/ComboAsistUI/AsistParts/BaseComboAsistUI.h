@@ -5,6 +5,7 @@
 #include "Vector2.h"
 #include <cstdint>
 #include <memory>
+#include <string>
 
 /// <summary>
 /// レイアウト情報
@@ -51,8 +52,11 @@ public:
     void SetRotation(float rotZ);
     void SetTargetPosY(float y);
 
-    // 表示/非表示
+    // 表示/非表示（即時）
     virtual void SetVisible(bool visible);
+
+    // 範囲内外の遷移時にスケールアニメーション付きで表示切替
+    void SetRangeVisible(bool inRange);
 
 protected:
     // UI
@@ -85,6 +89,10 @@ protected:
     Vector2 baseScale_ = {1.0f, 1.0f};
     float extraScale_  = 1.0f;
 
+    // 範囲内外のアニメーション管理
+    bool isInRange_         = false;
+    bool isScaleOutPlaying_ = false;
+
 public:
     // getter
     AsistState GetState() const { return state_; }
@@ -104,4 +112,9 @@ public:
 
     // プッシュスケーリングアニメーション再生
     void PlayPushScaling();
+
+protected:
+    // スケールアニメーション（サブクラスでオーバーライド可）
+    virtual void PlayScaleIn();
+    virtual void PlayScaleOut();
 };

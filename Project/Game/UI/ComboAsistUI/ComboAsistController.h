@@ -66,8 +66,14 @@ private:
 
     //=== 表示範囲・列オーバーフロー ===
     void CheckColumnOverflow();
-    void ShiftAllColumns(int32_t delta);
+    void ShiftGroupColumns(ComboUIGroup& uiGroup, int32_t delta);
     void UpdateVisibility();
+
+    //=== Row shift ===
+    void CheckRowShift();
+    void ShiftGroupRows(ComboUIGroup& uiGroup, int32_t fromRow, int32_t divergeCol, int32_t delta);
+    int32_t FindBranchRowForAttack(const ComboUIGroup& uiGroup, const std::string& attackName) const;
+    int32_t FindDivergeColForBranchRow(const ComboUIGroup& uiGroup, int32_t branchRow) const;
 
     //=== パラメータ ===
     void RegisterParams();
@@ -76,15 +82,18 @@ private:
     void UpdateCurrentConditionUI();
     void ApplySlideOffsetToCondition(ConditionUIData& data);
     void SnapConditionToTarget(ConditionUIData& data);
-    bool CheckGroupColumnOverflow(ConditionUIData& data, ComboUIGroup& uiGroup);
+    void CheckGroupColumnOverflowDetect(ComboUIGroup& uiGroup);
     void ShiftGroup(ComboUIGroup& uiGroup, int32_t delta);
     bool IsInVisibleRange(int32_t col, int32_t row) const;
     bool IsArrowVisible(const ComboAsistArrowUI& arrow) const;
     void UpdateGroupVisibility(ComboUIGroup& uiGroup);
+    void ApplyRangeVisibleToGroup(ComboUIGroup& uiGroup);
+    void TriggerLeaveRangeForColumn(ComboUIGroup& uiGroup, int32_t col);
 
     //=== ヘルパー ===
     LayoutParam MakeLayoutParam() const;
     ConditionUIData* GetCurrentData();
+    int32_t FindAttackColumnInGroup(const ComboUIGroup& uiGroup, const std::string& attackName) const;
 
 private:
     Player* pPlayer_                                = nullptr;

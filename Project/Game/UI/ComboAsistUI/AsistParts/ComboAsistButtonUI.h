@@ -39,6 +39,9 @@ public:
     /// </summary>
     void TryPlayPushScaling(const std::string& attackName);
 
+public:
+    const std::string& GetAttackName() const { return attackName_; }
+
 private:
     int32_t gamepadButton_ = 0;
     bool isUnlocked_       = true;

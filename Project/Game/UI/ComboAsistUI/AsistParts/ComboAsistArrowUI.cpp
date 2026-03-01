@@ -59,3 +59,21 @@ void ComboAsistArrowUI::ShiftColumns(int32_t delta) {
     fromCol_ += delta;
     toCol_ += delta;
 }
+
+void ComboAsistArrowUI::ShiftRows(int32_t delta) {
+    fromRow_ += delta;
+    toRow_ += delta;
+}
+
+void ComboAsistArrowUI::PlayScaleIn() {
+    if (uiSprite_) {
+        uiSprite_->transform_.scale = {0.0f, 0.0f};
+        uiSprite_->PlaySpriteEaseAnimation("ScaleInArrowUI", "ComboAsistUI");
+    }
+}
+
+void ComboAsistArrowUI::PlayScaleOut() {
+    if (uiSprite_) {
+        uiSprite_->PlaySpriteEaseAnimation("ScaleOutArrowUI", "ComboAsistUI");
+    }
+}

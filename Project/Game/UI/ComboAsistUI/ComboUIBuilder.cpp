@@ -37,9 +37,15 @@ void ComboUIBuilder::BuildAllConditions(
 /// 条件別UI生成
 ///==========================================================
 void ComboUIBuilder::CreateConditionUI(ConditionUIData& conditionData, const LayoutParam& layoutParam) {
-    int32_t currentRow = 0;
-    CreateGroupUI(conditionData.pathBuilder.GetXGroup(), conditionData.xUIGroup, &currentRow, layoutParam);
-    CreateGroupUI(conditionData.pathBuilder.GetYGroup(), conditionData.yUIGroup, &currentRow, layoutParam);
+    // X グループは row=0 始まり
+    int32_t xCurrentRow = 0;
+    CreateGroupUI(conditionData.pathBuilder.GetXGroup(), conditionData.xUIGroup, &xCurrentRow, layoutParam);
+
+    // Y グループも独自の row=0 始まり、視覚的位置は X の行数分オフセット
+    LayoutParam yLayout = layoutParam;
+    yLayout.basePosition.y += static_cast<float>(xCurrentRow) * (layoutParam.rowSpacing + layoutParam.branchYOffset);
+    int32_t yCurrentRow = 0;
+    CreateGroupUI(conditionData.pathBuilder.GetYGroup(), conditionData.yUIGroup, &yCurrentRow, yLayout);
 }
 
 ///==========================================================

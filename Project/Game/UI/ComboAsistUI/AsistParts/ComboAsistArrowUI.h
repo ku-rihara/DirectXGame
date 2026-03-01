@@ -29,11 +29,20 @@ public:
     /// </summary>
     void ShiftColumns(int32_t delta);
 
+    /// <summary>
+    /// 行番号をシフトする（from/to 両方）
+    /// </summary>
+    void ShiftRows(int32_t delta);
+
     // getter
     int32_t GetFromCol() const { return fromCol_; }
     int32_t GetFromRow() const { return fromRow_; }
     int32_t GetToCol() const { return toCol_; }
     int32_t GetToRow() const { return toRow_; }
+
+protected:
+    void PlayScaleIn() override;
+    void PlayScaleOut() override;
 
 private:
     int32_t fromCol_ = 0;

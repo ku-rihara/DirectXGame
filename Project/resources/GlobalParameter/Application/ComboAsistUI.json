@@ -12,8 +12,8 @@
         "branchYOffset": 42.0,
         "buttonScale": 0.6299999952316284,
         "columnSpacing": 101.5,
-        "maxVisibleColumn": 3,
-        "maxVisibleRow": 2,
+        "maxVisibleColumn": 2,
+        "maxVisibleRow": 1,
         "rowSpacing": 50.0
     }
 }

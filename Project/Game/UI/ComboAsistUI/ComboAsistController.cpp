@@ -6,6 +6,7 @@
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
 #include <algorithm>
+#include <climits>
 #include <cmath>
 #include <imgui.h>
 
@@ -45,10 +46,10 @@ void ComboAsistController::Init() {
     columnOverflowEasing_.Reset();
     isAutoSwitchedCondition_ = false;
 
+    // スプライトはデフォルトで表示状態のため、全条件を明示的に非表示化
+    // 実際の表示はパネルオープン後にUpdateVisibilityが行う
     for (auto& [cond, data] : conditionDataMap_) {
-        if (cond != currentCondition_) {
-            SetConditionVisible(data, false);
-        }
+        SetConditionVisible(data, false);
     }
 
     slideOffsetX_ = slideInEasing_.GetStartValue();
@@ -67,6 +68,7 @@ void ComboAsistController::Update() {
     UpdateSlide(KetaEngine::Frame::DeltaTime());
     ApplySlideOffset();
     CheckColumnOverflow();
+    CheckRowShift();
     UpdateVisibility();
 
     UpdateCurrentConditionUI();
@@ -204,8 +206,29 @@ void ComboAsistController::UpdateComboState() {
             SetGroupActiveOutLines(currentData->pathBuilder.GetXGroup(), currentData->xUIGroup, playedAttacks_);
             SetGroupActiveOutLines(currentData->pathBuilder.GetYGroup(), currentData->yUIGroup, playedAttacks_);
         }
-        if (currentData->columnShiftAmount != 0) {
-            ShiftAllColumns(currentData->columnShiftAmount);
+        // Rowリセットを先に行う（divColはカラムシフト後の座標で記録されているため、
+        // カラムを先に戻すと座標系がずれてしまう）
+        if (currentData->rowShiftAmount != 0) {
+            int32_t branchRow = currentData->rowShiftAmount;
+            int32_t divCol    = currentData->rowShiftDivergeCol;
+            int32_t mainRow   = currentData->rowShiftMainRow;
+            int32_t delta     = branchRow - mainRow; // 正方向（復元用）
+            // シフトしたグループのみに適用（X/Y独立row座標系のため）
+            ComboUIGroup& shiftedGroup = currentData->rowShiftIsXGroup ? currentData->xUIGroup : currentData->yUIGroup;
+            // Step1: 現在mainRowにいるbranch itemsをbranchRowへ戻す
+            ShiftGroupRows(shiftedGroup, mainRow, divCol, delta);
+            // Step2: 範囲外にいるmain items（row = mainRow-delta）をmainRowへ戻す
+            ShiftGroupRows(shiftedGroup, mainRow - delta, divCol, delta);
+            currentData->rowShiftAmount     = 0;
+            currentData->rowShiftDivergeCol = -1;
+            currentData->rowShiftMainRow    = 0;
+        }
+        // Columnリセット（rowリセット後に行うことで座標系が一致する）
+        if (currentData->xUIGroup.columnShiftAmount != 0) {
+            ShiftGroupColumns(currentData->xUIGroup, currentData->xUIGroup.columnShiftAmount);
+        }
+        if (currentData->yUIGroup.columnShiftAmount != 0) {
+            ShiftGroupColumns(currentData->yUIGroup, currentData->yUIGroup.columnShiftAmount);
         }
         if (isAutoSwitchedCondition_) {
             isAutoSwitchedCondition_ = false;
@@ -219,6 +242,23 @@ void ComboAsistController::UpdateComboState() {
         if (isNew) {
             PlayPushScalingForAttack(currentData->pathBuilder.GetXGroup(), currentData->xUIGroup, name);
             PlayPushScalingForAttack(currentData->pathBuilder.GetYGroup(), currentData->yUIGroup, name);
+            // 発動攻撃が表示範囲端に達したらグループ別にシフト
+            int32_t xActiveCol = FindAttackColumnInGroup(currentData->xUIGroup, name);
+            if (xActiveCol >= maxVisibleColumn_ && !currentData->xUIGroup.isColumnShifting) {
+                int32_t shiftAmount = xActiveCol - maxVisibleColumn_ + 1;
+                for (int32_t c = 0; c < shiftAmount; ++c) {
+                    TriggerLeaveRangeForColumn(currentData->xUIGroup, c);
+                }
+                ShiftGroupColumns(currentData->xUIGroup, -shiftAmount);
+            }
+            int32_t yActiveCol = FindAttackColumnInGroup(currentData->yUIGroup, name);
+            if (yActiveCol >= maxVisibleColumn_ && !currentData->yUIGroup.isColumnShifting) {
+                int32_t shiftAmount = yActiveCol - maxVisibleColumn_ + 1;
+                for (int32_t c = 0; c < shiftAmount; ++c) {
+                    TriggerLeaveRangeForColumn(currentData->yUIGroup, c);
+                }
+                ShiftGroupColumns(currentData->yUIGroup, -shiftAmount);
+            }
         }
     }
     prevBehaviorName_ = name;
@@ -317,27 +357,30 @@ void ComboAsistController::CheckColumnOverflow() {
         return;
     }
 
-    if (currentData->isColumnShifting) {
+    // X/Yグループのオーバーフロー処理（イージングは共有、更新は1回だけ）
+    bool anyShifting = currentData->xUIGroup.isColumnShifting || currentData->yUIGroup.isColumnShifting;
+    if (anyShifting) {
         columnOverflowEasing_.Update(KetaEngine::Frame::DeltaTime());
         if (columnOverflowEasing_.IsFinished()) {
-            currentData->isColumnShifting = false;
-            ShiftAllColumns(-1);
+            if (currentData->xUIGroup.isColumnShifting) {
+                currentData->xUIGroup.isColumnShifting = false;
+                ShiftGroupColumns(currentData->xUIGroup, -1);
+            }
+            if (currentData->yUIGroup.isColumnShifting) {
+                currentData->yUIGroup.isColumnShifting = false;
+                ShiftGroupColumns(currentData->yUIGroup, -1);
+            }
         }
         return;
     }
 
-    CheckGroupColumnOverflow(*currentData, currentData->xUIGroup) || CheckGroupColumnOverflow(*currentData, currentData->yUIGroup);
+    CheckGroupColumnOverflowDetect(currentData->xUIGroup);
+    CheckGroupColumnOverflowDetect(currentData->yUIGroup);
 }
 
-void ComboAsistController::ShiftAllColumns(int32_t delta) {
-    auto* currentData = GetCurrentData();
-    if (!currentData) {
-        return;
-    }
-
-    ShiftGroup(currentData->xUIGroup, delta);
-    ShiftGroup(currentData->yUIGroup, delta);
-    currentData->columnShiftAmount -= delta;
+void ComboAsistController::ShiftGroupColumns(ComboUIGroup& uiGroup, int32_t delta) {
+    ShiftGroup(uiGroup, delta);
+    uiGroup.columnShiftAmount -= delta;
 }
 
 void ComboAsistController::UpdateVisibility() {
@@ -371,21 +414,16 @@ void ComboAsistController::SnapConditionToTarget(ConditionUIData& data) {
     uiBuilder_.ApplyToCondition(data, [](BaseComboAsistUI& ui) { ui.SnapToTarget(); });
 }
 
-bool ComboAsistController::CheckGroupColumnOverflow(ConditionUIData& data, ComboUIGroup& uiGroup) {
+void ComboAsistController::CheckGroupColumnOverflowDetect(ComboUIGroup& uiGroup) {
     for (auto& btn : uiGroup.mainButtonUIs) {
         if (btn->GetState() != BaseComboAsistUI::AsistState::NONE && btn->GetColumnNum() > maxVisibleColumn_) {
-            data.isColumnShifting = true;
+            uiGroup.isColumnShifting = true;
             columnOverflowEasing_.Reset();
-            for (auto& button : uiGroup.mainButtonUIs) {
-                if (button->GetColumnNum() == 0) {
-                    columnOverflowEasing_.SetAdaptValue(&overflowScale_);
-                    break;
-                }
-            }
-            return true;
+            columnOverflowEasing_.SetAdaptValue(&overflowScale_);
+            TriggerLeaveRangeForColumn(uiGroup, 0);
+            return;
         }
     }
-    return false;
 }
 
 void ComboAsistController::ShiftGroup(ComboUIGroup& uiGroup, int32_t delta) {
@@ -425,25 +463,193 @@ bool ComboAsistController::IsArrowVisible(const ComboAsistArrowUI& arrow) const 
 }
 
 void ComboAsistController::UpdateGroupVisibility(ComboUIGroup& uiGroup) {
+    ApplyRangeVisibleToGroup(uiGroup);
+}
+
+void ComboAsistController::ApplyRangeVisibleToGroup(ComboUIGroup& uiGroup) {
     for (auto& btn : uiGroup.mainButtonUIs) {
-        btn->SetVisible(IsInVisibleRange(btn->GetColumnNum(), btn->GetRowNum()));
+        btn->SetRangeVisible(IsInVisibleRange(btn->GetColumnNum(), btn->GetRowNum()));
     }
     for (auto& buttonRow : uiGroup.branchButtonUIs) {
         for (auto& btn : buttonRow) {
-            btn->SetVisible(IsInVisibleRange(btn->GetColumnNum(), btn->GetRowNum()));
+            btn->SetRangeVisible(IsInVisibleRange(btn->GetColumnNum(), btn->GetRowNum()));
         }
     }
     for (auto& arrow : uiGroup.mainArrowUIs) {
-        arrow->SetVisible(IsInVisibleRange(arrow->GetColumnNum(), arrow->GetRowNum()));
+        arrow->SetRangeVisible(IsArrowVisible(*arrow));
     }
     for (auto& arrow : uiGroup.branchArrowUIs) {
-        arrow->SetVisible(IsArrowVisible(*arrow));
+        arrow->SetRangeVisible(IsArrowVisible(*arrow));
     }
     for (auto& arrowRow : uiGroup.branchInnerArrowUIs) {
         for (auto& arrow : arrowRow) {
-            arrow->SetVisible(IsArrowVisible(*arrow));
+            arrow->SetRangeVisible(IsArrowVisible(*arrow));
         }
     }
+}
+
+void ComboAsistController::TriggerLeaveRangeForColumn(ComboUIGroup& uiGroup, int32_t col) {
+    for (auto& btn : uiGroup.mainButtonUIs) {
+        if (btn->GetColumnNum() == col) {
+            btn->SetRangeVisible(false);
+        }
+    }
+    for (auto& buttonRow : uiGroup.branchButtonUIs) {
+        for (auto& btn : buttonRow) {
+            if (btn->GetColumnNum() == col) {
+                btn->SetRangeVisible(false);
+            }
+        }
+    }
+    for (auto& arrow : uiGroup.mainArrowUIs) {
+        if (arrow->GetFromCol() == col) {
+            arrow->SetRangeVisible(false);
+        }
+    }
+    for (auto& arrow : uiGroup.branchArrowUIs) {
+        if (arrow->GetFromCol() == col) {
+            arrow->SetRangeVisible(false);
+        }
+    }
+    for (auto& arrowRow : uiGroup.branchInnerArrowUIs) {
+        for (auto& arrow : arrowRow) {
+            if (arrow->GetFromCol() == col) {
+                arrow->SetRangeVisible(false);
+            }
+        }
+    }
+}
+
+///==========================================================
+/// Row shift
+///==========================================================
+void ComboAsistController::CheckRowShift() {
+    if (!isVisible_ || !pPlayer_) {
+        return;
+    }
+    auto* currentData = GetCurrentData();
+    if (!currentData || currentData->rowShiftAmount != 0) {
+        return;
+    }
+
+    auto* comboBehavior = pPlayer_->GetComboBehavior();
+    if (!comboBehavior) {
+        return;
+    }
+    const std::string& name = comboBehavior->GetName();
+    if (name == "ComboAttackRoot") {
+        return;
+    }
+
+    // どちらのグループの分岐にいるか探す
+    ComboUIGroup* affectedGroup = nullptr;
+    int32_t branchRow           = FindBranchRowForAttack(currentData->xUIGroup, name);
+    if (branchRow >= 0) {
+        affectedGroup = &currentData->xUIGroup;
+        currentData->rowShiftIsXGroup = true;
+    } else {
+        branchRow = FindBranchRowForAttack(currentData->yUIGroup, name);
+        if (branchRow >= 0) {
+            affectedGroup = &currentData->yUIGroup;
+            currentData->rowShiftIsXGroup = false;
+        }
+    }
+
+    if (!affectedGroup || branchRow <= 0) {
+        return;
+    }
+
+    int32_t divCol  = FindDivergeColForBranchRow(*affectedGroup, branchRow);
+    if (divCol < 0) {
+        return;
+    }
+
+    // このグループのmainRowを取得（col < divCol にいるmainButtonの行）
+    int32_t mainRow = 0;
+    for (auto& btn : affectedGroup->mainButtonUIs) {
+        if (btn->GetColumnNum() < divCol) {
+            mainRow = btn->GetRowNum();
+            break;
+        }
+    }
+
+    const int32_t delta = mainRow - branchRow; // 負の値
+
+    // Step1: 競合するmain items（mainRow, col>=divCol）を範囲外へ
+    ShiftGroupRows(*affectedGroup, mainRow, divCol, delta);
+    // Step2: branch items（branchRow, col>=divCol）をmainRowへ
+    ShiftGroupRows(*affectedGroup, branchRow, divCol, delta);
+
+    currentData->rowShiftAmount     = branchRow;
+    currentData->rowShiftDivergeCol = divCol;
+    currentData->rowShiftMainRow    = mainRow;
+}
+
+void ComboAsistController::ShiftGroupRows(ComboUIGroup& uiGroup, int32_t fromRow, int32_t divergeCol, int32_t delta) {
+    // メインパスのボタン
+    for (auto& btn : uiGroup.mainButtonUIs) {
+        if (btn->GetRowNum() == fromRow && btn->GetColumnNum() >= divergeCol) {
+            btn->SetRowColumn(btn->GetRowNum() + delta, btn->GetColumnNum());
+            btn->ApplyLayout();
+        }
+    }
+    // 分岐パスのボタン
+    for (auto& buttonRow : uiGroup.branchButtonUIs) {
+        for (auto& btn : buttonRow) {
+            if (btn->GetRowNum() == fromRow && btn->GetColumnNum() >= divergeCol) {
+                btn->SetRowColumn(btn->GetRowNum() + delta, btn->GetColumnNum());
+                btn->ApplyLayout();
+            }
+        }
+    }
+    // メインパスの矢印（始点が fromRow かつ divCol 以降）
+    for (auto& arrow : uiGroup.mainArrowUIs) {
+        if (arrow->GetFromRow() == fromRow && arrow->GetFromCol() >= divergeCol) {
+            arrow->ShiftRows(delta);
+            arrow->ApplyLayout();
+        }
+    }
+    // 分岐斜め矢印（終点が fromRow のもの）
+    for (auto& arrow : uiGroup.branchArrowUIs) {
+        if (arrow->GetToRow() == fromRow) {
+            arrow->ShiftRows(delta);
+            arrow->ApplyLayout();
+        }
+    }
+    // 分岐内矢印（始点が fromRow のもの）
+    for (auto& arrowRow : uiGroup.branchInnerArrowUIs) {
+        for (auto& arrow : arrowRow) {
+            if (arrow->GetFromRow() == fromRow) {
+                arrow->ShiftRows(delta);
+                arrow->ApplyLayout();
+            }
+        }
+    }
+}
+
+int32_t ComboAsistController::FindBranchRowForAttack(const ComboUIGroup& uiGroup, const std::string& attackName) const {
+    for (auto& buttonRow : uiGroup.branchButtonUIs) {
+        for (auto& btn : buttonRow) {
+            if (btn->GetAttackName() == attackName) {
+                return btn->GetRowNum();
+            }
+        }
+    }
+    return -1;
+}
+
+int32_t ComboAsistController::FindDivergeColForBranchRow(const ComboUIGroup& uiGroup, int32_t branchRow) const {
+    int32_t minCol = INT32_MAX;
+    for (auto& buttonRow : uiGroup.branchButtonUIs) {
+        for (auto& btn : buttonRow) {
+            if (btn->GetRowNum() == branchRow) {
+                if (btn->GetColumnNum() < minCol) {
+                    minCol = btn->GetColumnNum();
+                }
+            }
+        }
+    }
+    return (minCol == INT32_MAX) ? -1 : minCol;
 }
 
 ///==========================================================
@@ -455,6 +661,18 @@ ConditionUIData* ComboAsistController::GetCurrentData() {
         return &it->second;
     }
     return nullptr;
+}
+
+int32_t ComboAsistController::FindAttackColumnInGroup(const ComboUIGroup& uiGroup, const std::string& attackName) const {
+    for (const auto& btn : uiGroup.mainButtonUIs) {
+        if (btn->GetAttackName() == attackName) return btn->GetColumnNum();
+    }
+    for (const auto& buttonRow : uiGroup.branchButtonUIs) {
+        for (const auto& btn : buttonRow) {
+            if (btn->GetAttackName() == attackName) return btn->GetColumnNum();
+        }
+    }
+    return -1;
 }
 
 LayoutParam ComboAsistController::MakeLayoutParam() const {
@@ -497,9 +715,7 @@ void ComboAsistController::AdjustParam() {
         if (ImGui::Button("Rebuild UI")) {
             RebuildAllConditions();
             for (auto& [cond, data] : conditionDataMap_) {
-                if (cond != currentCondition_) {
-                    SetConditionVisible(data, false);
-                }
+                SetConditionVisible(data, false);
             }
             ApplySlideOffset();
             UpdateVisibility();

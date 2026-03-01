@@ -1,4 +1,5 @@
 #include "BaseComboAsistUI.h"
+#include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 #include <cmath>
 
 void BaseComboAsistUI::SetRowColumn(int32_t row, int32_t column) {
@@ -19,6 +20,15 @@ void BaseComboAsistUI::Update() {
             needsLerpUpdate_   = false;
         }
         SetPosition(currentDisplayPos_);
+    }
+
+    // ScaleOutアニメーション完了後に非表示化
+    if (isScaleOutPlaying_ && uiSprite_) {
+        auto* player = uiSprite_->GetSpriteEaseAnimationPlayer();
+        if (player && player->IsFinished()) {
+            SetVisible(false);
+            isScaleOutPlaying_ = false;
+        }
     }
 }
 
@@ -84,6 +94,47 @@ void BaseComboAsistUI::PlayPushScaling() {
     if (uiSprite_) {
         uiSprite_->PlaySpriteEaseAnimation("PushScalingUI", "ComboAsistUI");
         activeOutLineUI_->PlaySpriteEaseAnimation("PushScalingUI", "ComboAsistUI");
+    }
+}
+
+void BaseComboAsistUI::SetRangeVisible(bool inRange) {
+    if (inRange == isInRange_) {
+        return;
+    }
+    // ScaleOut再生中に範囲内扱いされても無視（シフト後に自動解決）
+    if (inRange && isScaleOutPlaying_) {
+        return;
+    }
+    isInRange_ = inRange;
+
+    if (inRange) {
+        // 範囲内に入る: 表示してからScaleIn再生
+        SetVisible(true);
+        PlayScaleIn();
+    } else {
+        // 範囲外に出る: ScaleOut再生、完了後にUpdate()で非表示化
+        isScaleOutPlaying_ = true;
+        PlayScaleOut();
+    }
+}
+
+void BaseComboAsistUI::PlayScaleIn() {
+    if (uiSprite_) {
+        uiSprite_->transform_.scale = {0.0f, 0.0f};
+        uiSprite_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
+    }
+    if (outLineUI_) {
+        outLineUI_->transform_.scale = {0.0f, 0.0f};
+        outLineUI_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
+    }
+}
+
+void BaseComboAsistUI::PlayScaleOut() {
+    if (uiSprite_) {
+        uiSprite_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAsistUI");
+    }
+    if (outLineUI_) {
+        outLineUI_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAsistUI");
     }
 }
 
