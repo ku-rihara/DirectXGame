@@ -152,7 +152,7 @@ void ComboPathBuilder::ClassifyPaths(ComboPathGroup& group, std::vector<ComboPat
 	for (size_t i = 1; i < paths.size(); ++i) {
 		BranchInfo branch;
 
-		// メインパスと何ステップ目まで共通かを調べる 
+		// メインパスと何ステップ目まで共通かを調べる
 		branch.divergeIndex   = 0;
 		const auto& branchSteps = paths[i].steps;
 		size_t compareLength    = (std::min)(group.mainPath.steps.size(), branchSteps.size());

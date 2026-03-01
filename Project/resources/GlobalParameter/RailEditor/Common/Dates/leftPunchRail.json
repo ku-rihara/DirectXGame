@@ -1,6 +1,7 @@
 {
     "leftPunchRail": {
         "easeType": 7,
+        "isLookAtDirection": false,
         "isLoop": false,
         "maxTime": 0.15000000596046448,
         "returnEaseType": 6,

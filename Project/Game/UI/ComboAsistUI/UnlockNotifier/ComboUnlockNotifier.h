@@ -3,8 +3,8 @@
 #include "UI/ComboAsistUI/AsistParts/ComboAsistArrowUI.h"
 #include "UI/ComboAsistUI/AsistParts/ComboAsistButtonUI.h"
 // Builder / Data
-#include "../ComboPathBuilder.h"
-#include "../ComboUIBuilder.h"
+#include "../AsistBuilder/ComboPathBuilder.h"
+#include "../AsistBuilder/ComboUIBuilder.h"
 // Player
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 // Easing

@@ -397,6 +397,12 @@
     <Filter Include="Game\UI\ComboAsistUI\UnlockNotifier">
       <UniqueIdentifier>{100c0824-8e30-4df2-8534-b3b8accd033b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\UI\ComboAsistUI\AsistBuilder">
+      <UniqueIdentifier>{f3a1b2c4-7d8e-4f90-a1b2-c3d4e5f60718}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI\ComboAsistUI\SubControllers">
+      <UniqueIdentifier>{e5f60718-3c2d-4b1a-90f8-7e6d5c4b3a29}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\Player\AutoComboAttack">
       <UniqueIdentifier>{b8370061-e785-4f49-aa41-5086ed3367d7}</UniqueIdentifier>
     </Filter>
@@ -2303,11 +2309,11 @@
     <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\BaseComboAsistUI.cpp">
       <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\ComboPathBuilder.cpp">
-      <Filter>Game\UI\ComboAsistUI</Filter>
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboPathBuilder.cpp">
+      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\ComboUIBuilder.cpp">
-      <Filter>Game\UI\ComboAsistUI</Filter>
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.cpp">
+      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\BaseSupportSpriteUI.cpp">
       <Filter>Game\UI\SupportSprite</Filter>
@@ -2329,6 +2335,17 @@
     </ClCompile>
     <ClCompile Include="Game\Player\AutoComboAttack\AutoComboQueue.cpp">
       <Filter>Game\Player\AutoComboAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\KillCounter\KillCountUI.cpp" />
+    <ClCompile Include="Game\KillCounter\KillCountUIController.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistColumnScroller.cpp">
+      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistConditionSwitcher.cpp">
+      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.cpp">
+      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2374,11 +2391,11 @@
     <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\BaseComboAsistUI.h">
       <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\ComboPathBuilder.h">
-      <Filter>Game\UI\ComboAsistUI</Filter>
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboPathBuilder.h">
+      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\ComboUIBuilder.h">
-      <Filter>Game\UI\ComboAsistUI</Filter>
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.h">
+      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\BaseSupportSpriteUI.h">
       <Filter>Game\UI\SupportSprite</Filter>
@@ -2400,6 +2417,17 @@
     </ClInclude>
     <ClInclude Include="Game\Player\AutoComboAttack\AutoComboQueue.h">
       <Filter>Game\Player\AutoComboAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\KillCounter\KillCountUI.h" />
+    <ClInclude Include="Game\KillCounter\KillCountUIController.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistColumnScroller.h">
+      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistConditionSwitcher.h">
+      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.h">
+      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

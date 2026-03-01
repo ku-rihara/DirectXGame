@@ -69,6 +69,10 @@ private:
     std::array<float, kEnemyTypeCount> defaultObjEaseAnimationStartTimings_ = {0.0f, 0.0f};
     std::array<KetaEngine::FileSelector, kEnemyTypeCount> defaultObjEaseFileSelectors_;
 
+    // デフォルトパーティクルエフェクト（敵タイプ別）
+    std::array<std::string, kEnemyTypeCount> defaultParticleEffectNames_;
+    std::array<KetaEngine::FileSelector, kEnemyTypeCount> defaultParticleFileSelectors_;
+
     // エディター用 利用可能なアニメーション名リスト
     std::vector<std::string> availableAnimations_;
 
@@ -88,4 +92,5 @@ public:
     }
     const std::string& GetDefaultObjEaseAnimationName(int enemyType) const { return defaultObjEaseAnimationNames_[enemyType]; }
     float GetDefaultObjEaseAnimationStartTiming(int enemyType) const { return defaultObjEaseAnimationStartTimings_[enemyType]; }
+    const std::string& GetDefaultParticleEffectName(int enemyType) const { return defaultParticleEffectNames_[enemyType]; }
  };

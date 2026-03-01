@@ -65,17 +65,27 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
     // 攻撃名に対応するリアクションデータを検索
     EnemyDamageReactionData* reactionData = pReactionController_->GetAttackByTriggerName(attackName);
 
+    if (!pPlayerCollisionInfo_) {
+        return;
+    }
+
     if (!reactionData) {
+        // 設定されていない攻撃: デフォルトアニメーション + ノックバックのみ
+        pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
+        PlayDamageParticleEffect(nullptr);
+        if (pBaseEnemy_->GetHP() <= 0.0f) {
+            pBaseEnemy_->SetIsDeathPending(true);
+            pBaseEnemy_->SetIsAdaptCollision(false);
+            pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
+        } else {
+            pBaseEnemy_->ChangeDamageReactionBehavior(
+                std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, nullptr, pPlayerCollisionInfo_));
+        }
         return;
     }
 
     // ダメージクールタイムの開始
     pBaseEnemy_->StartDamageColling(reactionData->GetReactionParam().damageCollingTime, attackName);
-
-    // ダメージを適用
-    if (!pPlayerCollisionInfo_) {
-        return;
-    }
 
     // ダメージを受ける
     pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
@@ -128,6 +138,14 @@ void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* react
 
 void EnemyDamageReactionRoot::PlayDamageParticleEffect(EnemyDamageReactionData* reactionData) {
     if (!reactionData) {
+        // デフォルトパーティクルエフェクトを再生
+        int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+        const auto& defaultParticle = pReactionController_->GetDefaultParticleEffectName(enemyType);
+        if (!defaultParticle.empty() && defaultParticle != "None") {
+            if (pBaseEnemy_->GetEnemyEffects()) {
+                pBaseEnemy_->GetEnemyEffects()->Emit(defaultParticle);
+            }
+        }
         return;
     }
 

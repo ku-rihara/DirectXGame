@@ -1,7 +1,7 @@
 #pragma once
 // AsistParts
-#include "AsistParts/ComboAsistArrowUI.h"
-#include "AsistParts/ComboAsistButtonUI.h"
+#include "../AsistParts/ComboAsistArrowUI.h"
+#include "../AsistParts/ComboAsistButtonUI.h"
 // Builder
 #include "ComboPathBuilder.h"
 // std

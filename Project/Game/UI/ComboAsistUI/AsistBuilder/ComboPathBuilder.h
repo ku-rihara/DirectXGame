@@ -21,7 +21,7 @@ public:
 	struct ComboStep {
 		int32_t gamepadButton;
 		bool isUnlocked;
-		bool isAutoAdvance = false; 
+		bool isAutoAdvance = false;
 		std::string attackName;
 	};
 
@@ -32,15 +32,15 @@ public:
 
 	/// 分岐情報
 	struct BranchInfo {
-		int32_t divergeIndex; 
-		ComboPath path;      
+		int32_t divergeIndex;
+		ComboPath path;
 	};
 
 	/// 開始ボタンでグループ化されたパス群
 	struct ComboPathGroup {
 		int32_t startButton = 0;
-		ComboPath mainPath;               
-		std::vector<BranchInfo> branches;  
+		ComboPath mainPath;
+		std::vector<BranchInfo> branches;
 	};
 
 public:

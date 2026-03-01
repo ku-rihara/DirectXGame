@@ -30,6 +30,8 @@ void EnemyDamageReactionController::RegisterParams() {
         // イージング系は敵タイプ別のみ
         globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultObjEaseAnimationName", &defaultObjEaseAnimationNames_[i]);
         globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultObjEaseAnimationStartTiming", &defaultObjEaseAnimationStartTimings_[i]);
+        // デフォルトパーティクルエフェクト
+        globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultParticleEffectName", &defaultParticleEffectNames_[i]);
     }
 }
 
@@ -118,6 +120,14 @@ void EnemyDamageReactionController::EditorUpdate() {
                         "",
                         true);
                     ImGui::DragFloat("Ease Start Timing", &defaultObjEaseAnimationStartTimings_[t], 0.01f);
+
+                    // デフォルトパーティクルエフェクト選択
+                    defaultParticleFileSelectors_[t].SelectFile(
+                        "Default Particle Effect",
+                        "Resources/GlobalParameter/Particle/Enemy/Dates/",
+                        defaultParticleEffectNames_[t],
+                        "",
+                        true);
 
                     ImGui::TreePop();
                 }
