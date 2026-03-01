@@ -32,6 +32,8 @@
     <ClCompile Include="Engine\3d\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\3d\Primitive\PrimitiveRing.cpp" />
     <ClCompile Include="Engine\3d\Primitive\PrimitiveSphere.cpp" />
+    <ClCompile Include="Engine\3d\RibbonTrail\RibbonTrail.cpp" />
+    <ClCompile Include="Engine\3d\RibbonTrail\RibbonTrailManager.cpp" />
     <ClCompile Include="Engine\3d\ViewProjection.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
@@ -98,6 +100,9 @@
     <ClCompile Include="Engine\Editor\RailEditor\RailEditor.cpp" />
     <ClCompile Include="Engine\Editor\RailEditor\RailManager.cpp" />
     <ClCompile Include="Engine\Editor\RailEditor\RailPlayer.cpp" />
+    <ClCompile Include="Engine\Editor\RibbonTrailEditor\RibbonTrailData.cpp" />
+    <ClCompile Include="Engine\Editor\RibbonTrailEditor\RibbonTrailEditor.cpp" />
+    <ClCompile Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.cpp" />
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakeData.cpp" />
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakeEditor.cpp" />
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakePlayer.cpp" />
@@ -151,6 +156,7 @@
     <ClCompile Include="Engine\Pipeline\Particle\GPUParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\ParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\PipelineManager.cpp" />
+    <ClCompile Include="Engine\Pipeline\RibbonTrail\RibbonTrailPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Skinning\SkinningCSPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.cpp" />
@@ -343,6 +349,8 @@
     <ClInclude Include="Engine\3d\Primitive\PrimitivePlane.h" />
     <ClInclude Include="Engine\3d\Primitive\PrimitiveRing.h" />
     <ClInclude Include="Engine\3d\Primitive\PrimitiveSphere.h" />
+    <ClInclude Include="Engine\3d\RibbonTrail\RibbonTrail.h" />
+    <ClInclude Include="Engine\3d\RibbonTrail\RibbonTrailManager.h" />
     <ClInclude Include="Engine\3d\ViewProjection.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
@@ -409,6 +417,9 @@
     <ClInclude Include="Engine\Editor\RailEditor\RailEditor.h" />
     <ClInclude Include="Engine\Editor\RailEditor\RailManager.h" />
     <ClInclude Include="Engine\Editor\RailEditor\RailPlayer.h" />
+    <ClInclude Include="Engine\Editor\RibbonTrailEditor\RibbonTrailData.h" />
+    <ClInclude Include="Engine\Editor\RibbonTrailEditor\RibbonTrailEditor.h" />
+    <ClInclude Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.h" />
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakeData.h" />
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakeEditor.h" />
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakePlayer.h" />
@@ -465,6 +476,7 @@
     <ClInclude Include="Engine\Pipeline\Particle\GPUParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\PipelineManager.h" />
+    <ClInclude Include="Engine\Pipeline\RibbonTrail\RibbonTrailPipeline.h" />
     <ClInclude Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Skinning\SkinningCSPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.h" />

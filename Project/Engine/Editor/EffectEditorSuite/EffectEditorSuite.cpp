@@ -6,6 +6,7 @@ using namespace KetaEngine;
 #include "Editor/DissolveEditor/DissolveEditor.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationEditor.h"
 #include "Editor/RailEditor/RailEditor.h"
+#include "Editor/RibbonTrailEditor/RibbonTrailEditor.h"
 #include "Editor/ShakeEditor/ShakeEditor.h"
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationEditor.h"
 #include "Editor/TimeScaleEditor/TimeScaleEditor.h"
@@ -29,6 +30,7 @@ void EffectEditorSuite::Init() {
     particleEditor_            = std::make_unique<ParticleEditor>();
     dissolveEditor_            = std::make_unique<DissolveEditor>();
     timeScaleEditor_           = std::make_unique<TimeScaleEditor>();
+    ribbonTrailEditor_         = std::make_unique<RibbonTrailEditor>();
 
     // 初期化
     objEaseAnimationEditor_->Init("ObjEaseAnimation");
@@ -40,6 +42,7 @@ void EffectEditorSuite::Init() {
     particleEditor_->Init("Particle");
     dissolveEditor_->Init("Dissolve");
     timeScaleEditor_->Init("TimeScale");
+    ribbonTrailEditor_->Init("RibbonTrail");
 
     // SelectFileEditマップを初期化
     InitEditorSelectFileEditMap();
@@ -55,6 +58,7 @@ void EffectEditorSuite::Update() {
     particleEditor_->Update();
     dissolveEditor_->Update();
     timeScaleEditor_->Update(Frame::DeltaTime());
+    ribbonTrailEditor_->Update();
 }
 
 void EffectEditorSuite::EditorUpdate() {
@@ -67,6 +71,7 @@ void EffectEditorSuite::EditorUpdate() {
     gpuParticleEditor_->EditorUpdate();
     particleEditor_->EditorUpdate();
     timeScaleEditor_->EditorUpdate();
+    ribbonTrailEditor_->EditorUpdate();
 }
 
 void EffectEditorSuite::InitEditorSelectFileEditMap() {
@@ -97,6 +102,9 @@ void EffectEditorSuite::InitEditorSelectFileEditMap() {
          }},
         {EffectEditorType::TimeScale, [this](const std::string& name, const std::string& category) {
              timeScaleEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::RibbonTrail, [this](const std::string& name, const std::string& category) {
+             ribbonTrailEditor_->SelectFileEdit(name, category);
          }}
     };
 }

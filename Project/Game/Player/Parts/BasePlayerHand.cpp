@@ -1,4 +1,5 @@
 #include "BasePlayerHand.h"
+#include "3d/RibbonTrail/RibbonTrail.h"
 #include"Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 /// imGui
 #include "base/TextureManager.h"
@@ -18,6 +19,9 @@ void BasePlayerHand::Init() {
     particlePlayer_->Init();
     particlePlayer_->SetFollowingPos(&effectFollowPos_);
 
+    // トレイルプレイヤー初期化
+    trailPlayer_.Init();
+
     // ディゾルブエッジ設定
     obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
     obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.05f;
@@ -36,9 +40,23 @@ void BasePlayerHand::Update() {
     obj3d_->SetIsShadow(isShadow_);
 
     // エミッター更新
-    particlePlayer_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
-    effectFollowPos_ = obj3d_->transform_.GetWorldPos();
+    Vector3 handPos  = obj3d_->transform_.GetWorldPos();
+    particlePlayer_->SetTargetPosition(handPos);
+    effectFollowPos_ = handPos;
     particlePlayer_->Update();
+
+    // リボントレイル（放出中かつ移動距離が emitInterval 以上のときポイント追加）
+    if (ribbonTrail_ != nullptr && isTrailEmit_) {
+        float dx       = handPos.x - lastTrailPos_.x;
+        float dy       = handPos.y - lastTrailPos_.y;
+        float dz       = handPos.z - lastTrailPos_.z;
+        float distSq   = dx * dx + dy * dy + dz * dz;
+        float interval = trailPlayer_.GetEmitInterval();
+        if (distSq >= interval * interval) {
+            ribbonTrail_->AddPoint(handPos, trailPlayer_.GetStartColor(), trailPlayer_.GetStartWidth(), trailPlayer_.GetLifetime());
+            lastTrailPos_ = handPos;
+        }
+    }
 
     // ディゾルブ更新・適用 
     dissolvePlayer_.Update();
@@ -77,6 +95,19 @@ void BasePlayerHand::SetInitialDissolveHidden() {
 
 void BasePlayerHand::SetParent(KetaEngine::WorldTransform* parent) {
     obj3d_->transform_.parent_ = parent;
+}
+
+void BasePlayerHand::StartTrailEmit(const std::string& presetName, const std::string& category) {
+    trailPlayer_.Play(presetName, category);
+
+    // プリセットに合わせてリボントレイルを再生成
+    ribbonTrail_.reset(KetaEngine::RibbonTrail::Create(static_cast<size_t>(trailPlayer_.GetMaxPoints())));
+    ribbonTrail_->SetEndColor(trailPlayer_.GetEndColor());
+    ribbonTrail_->SetEndWidth(trailPlayer_.GetEndWidth());
+    ribbonTrail_->SetTexture(trailPlayer_.GetTexturePath());
+
+    lastTrailPos_ = {1e30f, 1e30f, 1e30f}; // 初回は必ずポイントを追加する
+    isTrailEmit_  = true;
 }
 
 void BasePlayerHand::EffectEmit(const std::string& effectName) {

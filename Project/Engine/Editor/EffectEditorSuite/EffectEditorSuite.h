@@ -21,6 +21,7 @@ class GPUParticleEditor;
 class ParticleEditor;
 class DissolveEditor;
 class TimeScaleEditor;
+class RibbonTrailEditor;
 
 // エフェクトタイプ列挙型
 enum class EffectEditorType {
@@ -32,7 +33,8 @@ enum class EffectEditorType {
     GPUParticle,
     Particle,
     Dissolve,
-    TimeScale
+    TimeScale,
+    RibbonTrail
 };
 
 class EffectEditorSuite {
@@ -67,6 +69,7 @@ private:
     std::unique_ptr<ParticleEditor> particleEditor_;
     std::unique_ptr<DissolveEditor> dissolveEditor_;
     std::unique_ptr<TimeScaleEditor> timeScaleEditor_;
+    std::unique_ptr<RibbonTrailEditor> ribbonTrailEditor_;
 
 public:
     CameraEditor* GetCameraEditor() const { return cameraEditor_.get(); }

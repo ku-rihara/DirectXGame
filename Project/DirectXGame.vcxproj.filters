@@ -139,6 +139,9 @@
     <Filter Include="Engine\3d\Line3D">
       <UniqueIdentifier>{564DAABF-72A4-4BFD-B143-9E342038B0F0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\3d\RibbonTrail">
+      <UniqueIdentifier>{A1B2C3D4-E5F6-4A90-ABCD-EF1234567891}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\3d\Object3D">
       <UniqueIdentifier>{C76F78D6-BA00-4208-B70E-8CC48FEB3384}</UniqueIdentifier>
     </Filter>
@@ -190,6 +193,9 @@
     <Filter Include="Engine\Editor\TimeScaleEditor">
       <UniqueIdentifier>{25ADB5E5-6593-4AE1-9D2D-5024198C760E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Editor\RibbonTrailEditor">
+      <UniqueIdentifier>{C3D4E5F6-A7B8-4C02-CDEF-123456789013}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Particle\CPUParticle">
       <UniqueIdentifier>{CD39CF85-EC95-4464-BAD0-9A7C9302BD51}</UniqueIdentifier>
     </Filter>
@@ -210,6 +216,9 @@
     </Filter>
     <Filter Include="Engine\Pipeline\Skinning">
       <UniqueIdentifier>{AB934250-C900-44F2-9116-169F9378C19A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Pipeline\RibbonTrail">
+      <UniqueIdentifier>{B2C3D4E5-F6A7-4B01-BCDE-F12345678902}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Pipeline\SkyBox">
       <UniqueIdentifier>{F5B7523D-9079-4F35-9322-496DE10AF0FD}</UniqueIdentifier>
@@ -2336,8 +2345,6 @@
     <ClCompile Include="Game\Player\AutoComboAttack\AutoComboQueue.cpp">
       <Filter>Game\Player\AutoComboAttack</Filter>
     </ClCompile>
-    <ClCompile Include="Game\KillCounter\KillCountUI.cpp" />
-    <ClCompile Include="Game\KillCounter\KillCountUIController.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistColumnScroller.cpp">
       <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
     </ClCompile>
@@ -2346,6 +2353,30 @@
     </ClCompile>
     <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.cpp">
       <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\KillCounter\KillCountUI.cpp">
+      <Filter>Game\KillCounter</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\KillCounter\KillCountUIController.cpp">
+      <Filter>Game\KillCounter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\RibbonTrailEditor\RibbonTrailData.cpp">
+      <Filter>Engine\Editor\RibbonTrailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\RibbonTrailEditor\RibbonTrailEditor.cpp">
+      <Filter>Engine\Editor\RibbonTrailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\RibbonTrail\RibbonTrail.cpp">
+      <Filter>Engine\3d\RibbonTrail</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\RibbonTrail\RibbonTrailManager.cpp">
+      <Filter>Engine\3d\RibbonTrail</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\RibbonTrail\RibbonTrailPipeline.cpp">
+      <Filter>Engine\Pipeline\RibbonTrail</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.cpp">
+      <Filter>Engine\Editor\RibbonTrailEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2418,8 +2449,6 @@
     <ClInclude Include="Game\Player\AutoComboAttack\AutoComboQueue.h">
       <Filter>Game\Player\AutoComboAttack</Filter>
     </ClInclude>
-    <ClInclude Include="Game\KillCounter\KillCountUI.h" />
-    <ClInclude Include="Game\KillCounter\KillCountUIController.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistColumnScroller.h">
       <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
     </ClInclude>
@@ -2428,6 +2457,30 @@
     </ClInclude>
     <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.h">
       <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\KillCounter\KillCountUI.h">
+      <Filter>Game\KillCounter</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\KillCounter\KillCountUIController.h">
+      <Filter>Game\KillCounter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\RibbonTrailEditor\RibbonTrailData.h">
+      <Filter>Engine\Editor\RibbonTrailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\RibbonTrailEditor\RibbonTrailEditor.h">
+      <Filter>Engine\Editor\RibbonTrailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\RibbonTrail\RibbonTrail.h">
+      <Filter>Engine\3d\RibbonTrail</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\RibbonTrail\RibbonTrailManager.h">
+      <Filter>Engine\3d\RibbonTrail</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\RibbonTrail\RibbonTrailPipeline.h">
+      <Filter>Engine\Pipeline\RibbonTrail</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.h">
+      <Filter>Engine\Editor\RibbonTrailEditor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

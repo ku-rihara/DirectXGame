@@ -9,6 +9,7 @@ using namespace KetaEngine;
 #include "Scene/Factory/SceneFactory.h"
 #include "Particle/CPUParticle/ParticleManager.h"
 #include "3D/Line3D/Line3DManager.h"
+#include "3D/RibbonTrail/RibbonTrailManager.h"
 #include "Particle/GPUParticle/GPUParticleManager.h"
 
 // utility
@@ -64,6 +65,8 @@ void KTGame::Draw() {
     GPUParticleManager::GetInstance()->Draw(viewProjection);
     // ライン描画
     Line3DManager::GetInstance()->DrawAll(viewProjection);
+    // リボントレイル描画
+    RibbonTrailManager::GetInstance()->DrawAll(viewProjection);
   
     // --------------------------------------------------------------------------
     /// スプライト描画

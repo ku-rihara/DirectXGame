@@ -22,6 +22,12 @@ void PlayerAttackRendition::Reset() {
     hasTriggeredHitEffects_ = false;
     previousHasHit_         = false;
 
+    // トレイル停止
+    if (pPlayer_) {
+        pPlayer_->GetRightHand()->StopTrailEmit();
+        pPlayer_->GetLeftHand()->StopTrailEmit();
+    }
+
     // 振動の状態をリセット
     isVibrationPlayed_ = false;
     vibrationTimer_    = 0.0f;
@@ -130,6 +136,11 @@ void PlayerAttackRendition::PlayRenditionEffect(PlayerAttackRenditionData::Type 
 
     case PlayerAttackRenditionData::Type::ParticleEffect:
         pPlayer_->GetEffects()->Emit(param.fileName);
+        break;
+
+    case PlayerAttackRenditionData::Type::RibbonTrailEffect:
+        pPlayer_->GetRightHand()->StartTrailEmit(param.fileName, "Player");
+        pPlayer_->GetLeftHand()->StartTrailEmit(param.fileName, "Player");
         break;
 
     case PlayerAttackRenditionData::Type::AudioAttack:
