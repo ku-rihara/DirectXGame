@@ -47,6 +47,11 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
 
         globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
         globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
+
+        // 右手・左手のみトレイルファイル名を登録
+        if (info.type == ObjAnimationType::RightHand || info.type == ObjAnimationType::LeftHand) {
+            globalParam->Regist(groupName, std::string(info.name) + "_TrailFileName", &param.trailFileName);
+        }
     }
 
     // 振動パラメータの登録

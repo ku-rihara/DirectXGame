@@ -194,8 +194,9 @@ void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
         PlayerComboAttackTimelineData::TrackInfo info;
         info.type = static_cast<PlayerComboAttackTimelineData::TrackType>(
             static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD) + i);
-        info.trackIndex = trackIdx;
-        info.fileName   = param.fileName;
+        info.trackIndex    = trackIdx;
+        info.fileName      = param.fileName;
+        info.trailFileName = param.trailFileName;
         data_->AddTrackInfo(info);
 
         int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);

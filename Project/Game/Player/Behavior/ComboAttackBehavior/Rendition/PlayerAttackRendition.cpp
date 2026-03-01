@@ -177,10 +177,16 @@ void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionDa
 
             case PlayerAttackRenditionData::ObjAnimationType::RightHand:
                 pPlayer_->GetRightHand()->GetObject3D()->transform_.PlayObjEaseAnimation(param.fileName, "RightHand");
+                if (!param.trailFileName.empty() && param.trailFileName != "None") {
+                    pPlayer_->GetRightHand()->StartTrailEmit(param.trailFileName, "Player");
+                }
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::LeftHand:
                 pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation(param.fileName, "LeftHand");
+                if (!param.trailFileName.empty() && param.trailFileName != "None") {
+                    pPlayer_->GetLeftHand()->StartTrailEmit(param.trailFileName, "Player");
+                }
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::MainHead:

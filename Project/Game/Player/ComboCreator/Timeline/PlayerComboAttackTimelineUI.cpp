@@ -254,6 +254,25 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
         timeline_->SetKeyFrameLabel(trackIndex, keyIndex, "使用ファイル:" + trackInfo->fileName);
     }
 
+    // 右手・左手アニメーションの場合のみトレイルファイル選択を表示
+    if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_RIGHT_HAND ||
+        trackInfo->type == PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_LEFT_HAND) {
+
+        ImGui::SeparatorText("トレイル選択");
+
+        std::string trailSelectorKey = fileSelectorKey + "_trail";
+        if (fileSelectorMap_.find(trailSelectorKey) == fileSelectorMap_.end()) {
+            fileSelectorMap_[trailSelectorKey] = KetaEngine::FileSelector();
+        }
+
+        fileSelectorMap_[trailSelectorKey].SelectFile(
+            "トレイルファイル",
+            "Resources/GlobalParameter/RibbonTrail/Player/Dates",
+            trackInfo->trailFileName,
+            "",
+            true);
+    }
+
     // カメラアクションの場合のみチェックボックスを表示
     if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION || trackInfo->type == PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION_ON_HIT) {
         ImGui::Checkbox("攻撃時にカメラをリセットする", &trackInfo->isCameraReset);

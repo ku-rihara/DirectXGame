@@ -54,6 +54,7 @@ public:
         int32_t trackIndex;
         int32_t branchIndex = -1;  // どの分岐のトラックか（-1は分岐と関係ない）
         std::string fileName;
+        std::string trailFileName; // トレイルプリセット名（右手・左手アニメーションのみ使用）
         bool isCameraReset = false;
         float volume       = 1.0f;
     };

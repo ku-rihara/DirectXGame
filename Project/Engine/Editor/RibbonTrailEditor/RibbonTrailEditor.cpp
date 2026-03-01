@@ -77,7 +77,7 @@ void RibbonTrailEditor::RebuildPreviewTrail() {
         previewTrail_->Clear();
     }
 
-    // 新しいトレイルを生成（Manager に自動登録される）
+    // 新しいトレイルを生成
     previewTrail_ = RibbonTrail::Create(static_cast<size_t>(data->GetMaxPoints()));
 
     SyncPreviewTrail(data);

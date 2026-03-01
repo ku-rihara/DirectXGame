@@ -248,8 +248,9 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
         int baseIndex = typeInt - static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD);
         auto& param   = const_cast<PlayerAttackRenditionData::ObjAnimationParam&>(
             renditionData.GetObjAnimationParamFromIndex(baseIndex));
-        param.fileName    = trackInfo.fileName;
-        param.startTiming = timing;
+        param.fileName      = trackInfo.fileName;
+        param.startTiming   = timing;
+        param.trailFileName = trackInfo.trailFileName;
     }
 }
 

@@ -7,16 +7,9 @@
 
 namespace KetaEngine {
 
-class RibbonTrail; // 前方宣言
+class RibbonTrail;
 
-/// <summary>
-/// リボントレイルエディタクラス
-///
-/// [Fix] 旧実装はパラメータ表示UIのみで、プレビュー用 RibbonTrail オブジェクトが
-///       存在しなかったためエディタ上でトレイルが一切表示されていなかった。
-///       Update() 内で円運動のダミーパスを生成し、RibbonTrail にポイントを追加する
-///       プレビューロジックを追加した。
-/// </summary>
+
 class RibbonTrailEditor : public BaseEffectEditor<RibbonTrailData> {
 public:
     RibbonTrailEditor()  = default;
@@ -50,7 +43,7 @@ private:
     float        previewAngle_   = 0.0f; // 円運動用角度（ラジアン）
     float        emitTimer_      = 0.0f; // EmitInterval タイマー
 
-    // 前フレームで選択していたエフェクト名（切り替え検知用）
+    // 前フレームで選択していたエフェクト名
     std::string  prevSelectedName_;
 };
 

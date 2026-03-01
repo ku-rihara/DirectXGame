@@ -26,7 +26,8 @@ public:
     // オブジェクトアニメーションパラメータ
     struct ObjAnimationParam {
         std::string fileName;
-        float startTiming = 0.0f;
+        float       startTiming   = 0.0f;
+        std::string trailFileName; // トレイルプリセット名（右手・左手のみ使用）
     };
 
     // 振動パラメータ

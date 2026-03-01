@@ -37,17 +37,17 @@ private:
     float endWidth_   = 0.0f;  // テールの幅（先端が鋭く消える）
 
     // ---- 寿命・長さ ----
-    float   lifetime_     = 0.25f; // 各ポイントの生存時間（秒）
-    int32_t maxPoints_    = 48;    // 保持する最大ポイント数（= トレイルの最大長さ）
+    float   lifetime_     = 0.25f;  // 各ポイントの生存時間（秒）
+    int32_t maxPoints_    = 48;     // 保持する最大ポイント数（= トレイルの最大長さ）
     float   emitInterval_ = 0.005f; // ポイントを追加する間隔（秒）
 
     // ---- テクスチャ ----
-    std::string texturePath_; // 空文字列 = デフォルト白テクスチャ（フルパスで保存）
+    std::string texturePath_; 
 
     // テクスチャ選択（エディタ用）
     static constexpr const char* kTextureFolderPath = "Resources/EngineTexture";
     FileSelector                 textureSelector_;
-    std::string                  textureStem_; // FileSelector が管理するステム名（一時変数）
+    std::string                  textureStem_;
 
     const std::string baseFolderPath_ = "RibbonTrail/";
 
