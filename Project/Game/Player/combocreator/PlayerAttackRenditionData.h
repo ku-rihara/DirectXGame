@@ -43,6 +43,7 @@ public:
         ShakeAction,
         PostEffect,
         ParticleEffect,
+        RibbonTrailEffect,
         AudioAttack,
         AudioHit,
         Count
@@ -73,13 +74,14 @@ public:
 
     // 静的な演出タイプ配列
     static constexpr RenditionTypeInfo kRenditionTypeInfos[] = {
-        {Type::CameraAction, "CameraAction", "カメラアクション", "CameraAnimation/AnimationData"},
-        {Type::HitStop, "HitStop", "ヒットストップ", "TimeScale"},
-        {Type::ShakeAction, "ShakeAction", "シェイクアクション", "ShakeEditor"},
-        {Type::PostEffect, "PostEffectParam", "ポストエフェクト", "PostEffect"},
-        {Type::ParticleEffect, "ParticleEffectParam", "パーティクルエフェクト", "Particle/Player/Dates"},
-        {Type::AudioAttack, "Audio_Attack", "攻撃音", "Audio"},
-        {Type::AudioHit, "Audio_Hit", "ヒット音", "Audio"},
+        {Type::CameraAction,      "CameraAction",       "カメラアクション",       "CameraAnimation/AnimationData"},
+        {Type::HitStop,           "HitStop",            "ヒットストップ",         "TimeScale"},
+        {Type::ShakeAction,       "ShakeAction",        "シェイクアクション",     "ShakeEditor"},
+        {Type::PostEffect,        "PostEffectParam",    "ポストエフェクト",       "PostEffect"},
+        {Type::ParticleEffect,    "ParticleEffectParam","パーティクルエフェクト", "Particle/Player/Dates"},
+        {Type::RibbonTrailEffect, "RibbonTrailEffect",  "リボントレイル",         "RibbonTrail/Player/Dates"},
+        {Type::AudioAttack,       "Audio_Attack",       "攻撃音",                 "Audio"},
+        {Type::AudioHit,          "Audio_Hit",          "ヒット音",               "Audio"},
     };
 
     // 静的なオブジェクトアニメーションタイプ配列
