@@ -3,8 +3,11 @@
 #include "2d/Sprite.h"
 // Easing
 #include "Easing/Easing.h"
+// Editor
+#include "Editor/ParameterEditor/GlobalParameter.h"
 // math
 #include "Vector2.h"
+#include "Vector3.h"
 // std
 #include <array>
 #include <cstdint>
@@ -29,8 +32,6 @@ public:
 
     struct UIParam {
         std::unique_ptr<KetaEngine::Sprite> sprite_;
-       /* std::unique_ptr<KetaEngine::Sprite> outLineSprite_;
-        std::unique_ptr<KetaEngine::Sprite> uiFrame;*/
     };
 
 public:
@@ -44,6 +45,7 @@ public:
     void Debug(); //< デバッグ
 private:
     bool IsPushCondition(OperateButtonType type);
+    void RegisterParams();
 
 private:
     // ボタンごとのスプライトファイルパス
@@ -55,10 +57,21 @@ private:
         "OperateUI/Operate_LB.dds",
     };
 
-    // アウトラインは共通
-
     Player* player_ = nullptr;
     std::array<UIParam, static_cast<int32_t>(OperateButtonType::COUNT)> uiParam_;
+
+    // GlobalParameter
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
+    const std::string groupName_                  = "OperateUI_Reaction";
+
+    // 現在の基準スケール（SetScale で外部から設定される）
+    Vector2 currentScale_;
+
+    // 押下時スケール倍率（共通）
+    float pressScaleMultiplier_ = 0.85f;
+
+    // 押下時の色（ボタンごとに個別）
+    std::array<Vector3, static_cast<int32_t>(OperateButtonType::COUNT)> pressColors_;
 
 public:
     void SetScale(const Vector2& scale);

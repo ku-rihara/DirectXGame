@@ -1,0 +1,13 @@
+{
+    "PlayerCyclingAttackRail": {
+        "easeType": 0,
+        "isLookAtDirection": false,
+        "isLoop": false,
+        "maxTime": 0.6499999761581421,
+        "returnEaseType": 0,
+        "returnMode": 0,
+        "returnTime": 0.47999998927116394,
+        "startTime": 0.0,
+        "timeMode": 1
+    }
+}

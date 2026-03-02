@@ -4,6 +4,7 @@ using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
 #include <cassert>
 #include <d3dx12.h>
+#include <stdexcept>
 
 ///============================================================
 /// 初期化
@@ -104,7 +105,7 @@ void RibbonTrailPipeline::CreateGraphicsPipeline() {
     rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
     rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
-    // 深度ステンシル（透過エフェクトなので深度書き込みなし）
+    // 深度ステンシル
     depthStencilDesc_.DepthEnable    = true;
     depthStencilDesc_.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
     depthStencilDesc_.DepthFunc      = D3D12_COMPARISON_FUNC_LESS_EQUAL;
@@ -125,7 +126,10 @@ void RibbonTrailPipeline::CreateGraphicsPipeline() {
     desc.SampleMask            = D3D12_DEFAULT_SAMPLE_MASK;
 
     HRESULT hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&graphicsPipelineState_));
-    assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+
+        throw std::runtime_error("CreateCommittedResource failed");
+    }
 }
 
 ///============================================================

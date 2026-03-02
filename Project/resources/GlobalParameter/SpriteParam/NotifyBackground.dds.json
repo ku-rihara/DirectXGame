@@ -2,7 +2,7 @@
     "NotifyBackground.dds": {
         "layerNum": 23,
         "startAnchorPoint": [
-            0.5,
+            0.0,
             0.5
         ],
         "startColor": [
@@ -12,7 +12,7 @@
             0.8470588326454163
         ],
         "startPosition": [
-            639.0,
+            245.0,
             182.39999389648438
         ],
         "startScale": [

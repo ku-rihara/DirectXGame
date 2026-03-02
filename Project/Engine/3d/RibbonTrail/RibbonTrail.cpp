@@ -41,14 +41,18 @@ void RibbonTrail::Init(size_t maxPoints) {
     D3D12_HEAP_PROPERTIES heapProps = {D3D12_HEAP_TYPE_UPLOAD};
     D3D12_RESOURCE_DESC   vbDesc    = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
 
-    HRESULT hr = dxCommon->GetDevice()->CreateCommittedResource(
+   HRESULT hr = dxCommon->GetDevice()->CreateCommittedResource(
         &heapProps,
         D3D12_HEAP_FLAG_NONE,
         &vbDesc,
         D3D12_RESOURCE_STATE_GENERIC_READ,
         nullptr,
         IID_PPV_ARGS(&vertexBuffer_));
-    assert(SUCCEEDED(hr));
+
+    if (FAILED(hr)) {
+       
+        throw std::runtime_error("CreateCommittedResource failed");
+    }
 
     vertexBufferView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
     vertexBufferView_.SizeInBytes    = bufferSize;

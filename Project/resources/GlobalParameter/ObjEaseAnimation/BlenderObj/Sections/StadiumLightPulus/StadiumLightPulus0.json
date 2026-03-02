@@ -1,5 +1,11 @@
 {
     "StadiumLightPulus0": {
+        "Rotation_Anchor": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation_BackRatio": 0.0,
         "Rotation_EaseType": 0,
         "Rotation_IsActive": false,
         "Rotation_IsReturnToOrigin": false,
@@ -11,9 +17,15 @@
             0.0,
             0.0
         ],
+        "Scale_Anchor": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale_BackRatio": 0.5199999809265137,
         "Scale_EaseType": 37,
         "Scale_IsActive": true,
-        "Scale_IsReturnToOrigin": true,
+        "Scale_IsReturnToOrigin": false,
         "Scale_MaxTime": 0.2199999988079071,
         "Scale_ReturnEaseType": 37,
         "Scale_ReturnMaxTime": 0.2199999988079071,
@@ -22,6 +34,12 @@
             1.100000023841858,
             1.2999999523162842
         ],
+        "Translation_Anchor": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Translation_BackRatio": 0.0,
         "Translation_EaseType": 0,
         "Translation_IsActive": false,
         "Translation_IsLookAtDirection": false,
@@ -36,6 +54,7 @@
             0.0,
             0.0
         ],
+        "isReturnSection": false,
         "returnStartTime": 0.0,
         "startTime": 0.0,
         "timeMode": 1

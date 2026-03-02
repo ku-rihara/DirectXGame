@@ -15,19 +15,27 @@ void ComboUnlockNotifier::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     InitBackSprite();
+
+    // 初期状態は画面右端外（通知前は非表示と同等の位置）
+    slideNorm_    = 1.0f;
+    slideOffsetX_ = slideStartOffsetX_;
+    ApplySlideToShared();
 }
 
 ///==========================================================
 /// 毎フレーム更新
 ///==========================================================
 void ComboUnlockNotifier::Update(float deltaTime) {
+    // スライドオフセット計算
+    slideOffsetX_ = slideNorm_ * slideStartOffsetX_;
+
     for (auto& card : cards_) {
         if (!card) {
             continue;
         }
 
         UpdateCardState(*card, deltaTime);
-        ApplyScaleYToCard(*card);
+        ApplySlideToCard(*card);
 
         // DONE になったカードを削除マーク
         if (card->state == NotifyCard::State::DONE) {
@@ -42,6 +50,9 @@ void ComboUnlockNotifier::Update(float deltaTime) {
         cards_.end());
 
     RearrangeCards();
+
+    // 共有スプライト（背景・テキスト）のスライド適用
+    ApplySlideToShared();
 
     // UIエレメントの更新
     for (auto& card : cards_) {
@@ -65,10 +76,14 @@ void ComboUnlockNotifier::Update(float deltaTime) {
 void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
     switch (card.state) {
     case NotifyCard::State::OPENING:
-        scaleYEasing_.Update(deltaTime);
-        if (scaleYEasing_.IsFinished()) {
-            card.state = NotifyCard::State::DISPLAYING;
+        slideEasing_.Update(deltaTime);
+        if (slideEasing_.IsFinished()) {
+            // 自動再生オフ：OPENINGが終わったら即クローズ待機へ
+            card.state          = NotifyCard::State::CLOSE_WAITING;
+            card.closeWaitTimer = 0.0f;
 
+            /* --- 自動再生（一旦オフ） ---
+            card.state = NotifyCard::State::DISPLAYING;
             if (card.player) {
                 auto& queue = card.player->GetAutoComboQueue();
                 queue.Clear();
@@ -76,24 +91,27 @@ void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
                     queue.Enqueue(data);
                 }
             }
-
             if (card.totalAttackCount == 0) {
-                card.state           = NotifyCard::State::CLOSE_WAITING;
-                card.closeWaitTimer  = 0.0f;
+                card.state          = NotifyCard::State::CLOSE_WAITING;
+                card.closeWaitTimer = 0.0f;
             }
+            */
         }
         break;
     case NotifyCard::State::DISPLAYING:
+        // 自動再生オフのため、このステートには遷移しないが念のためクローズ待機へ
+        card.state          = NotifyCard::State::CLOSE_WAITING;
+        card.closeWaitTimer = 0.0f;
         break;
     case NotifyCard::State::CLOSE_WAITING:
         card.closeWaitTimer += deltaTime;
         if (card.closeWaitTimer >= closeOffsetTime_) {
-            StartCloseAnimation(card);
+            StartSlideOut(card);
         }
         break;
     case NotifyCard::State::CLOSING:
-        scaleYEasing_.Update(deltaTime);
-        if (scaleYEasing_.IsFinished()) {
+        slideEasing_.Update(deltaTime);
+        if (slideEasing_.IsFinished()) {
             card.state = NotifyCard::State::DONE;
         }
         break;
@@ -103,43 +121,51 @@ void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
 }
 
 ///==========================================================
-/// スケールYをUIに適用
+/// カードのUI要素にスライドオフセットを適用
 ///==========================================================
-void ComboUnlockNotifier::ApplyScaleYToCard(NotifyCard& card) {
-    if (backgroundSprite) {
-        backgroundSprite->transform_.scale.y = 1.0f * scaleY_;
-        // scaleXは常に1
-        backgroundSprite->transform_.scale.x = 1.0f;
-    }
-    if (notifierTextSprite) {
-        notifierTextSprite->transform_.scale.y = 1.0f * scaleY_;
-        // scaleXは常に1
-        notifierTextSprite->transform_.scale.x = 1.0f;
-    }
+void ComboUnlockNotifier::ApplySlideToCard(NotifyCard& card) {
+    // conditionIconはbasePositionXのcol=0位置
     if (card.conditionIconSprite) {
-        card.conditionIconSprite->transform_.scale.y = card.conditionIconBaseScaleY * scaleY_;
+        card.conditionIconSprite->transform_.pos.x = card.basePositionX + slideOffsetX_;
     }
+
     for (auto& btn : card.buttonUIs) {
         if (btn) {
-            float bx = btn->GetBaseScale().x;
-            btn->SetScale({bx, bx * scaleY_});
+            btn->ApplySlideOffset(slideOffsetX_);
         }
     }
     for (auto& arrow : card.arrowUIs) {
         if (arrow) {
-            float bx = arrow->GetBaseScale().x;
-            arrow->SetScale({bx, bx * scaleY_});
+            arrow->ApplySlideOffset(slideOffsetX_);
         }
     }
 }
 
 ///==========================================================
-/// クローズアニメーション開始（1→0）
+/// 共有スプライト（背景・テキスト）のスライド適用
 ///==========================================================
-void ComboUnlockNotifier::StartCloseAnimation(NotifyCard& card) {
-    scaleYEasing_.SetIsStartEndReverse(true);
-    scaleYEasing_.SetAdaptValue(&scaleY_);
-    scaleYEasing_.Reset();
+void ComboUnlockNotifier::ApplySlideToShared() {
+    if (backgroundSprite) {
+        backgroundSprite->transform_.pos = {
+            notifyBasePosition_.x + bgSpriteOffset_.x + slideOffsetX_,
+            notifyBasePosition_.y + bgSpriteOffset_.y};
+        backgroundSprite->transform_.scale = bgSpriteScale_;
+    }
+    if (notifierTextSprite) {
+        notifierTextSprite->transform_.pos = {
+            notifyBasePosition_.x + textSpriteOffset_.x + slideOffsetX_,
+            notifyBasePosition_.y + textSpriteOffset_.y};
+        notifierTextSprite->transform_.scale = textSpriteScale_;
+    }
+}
+
+///==========================================================
+/// スライドアウト開始（0→1: 定位置→画面右端外）
+///==========================================================
+void ComboUnlockNotifier::StartSlideOut(NotifyCard& card) {
+    slideEasing_.SetIsStartEndReverse(false); // 0→1（スライドアウト）
+    slideEasing_.SetAdaptValue(&slideNorm_);
+    slideEasing_.Reset();
     card.state = NotifyCard::State::CLOSING;
 }
 
@@ -171,7 +197,7 @@ void ComboUnlockNotifier::OnAttackUnlocked(
     auto card    = std::make_unique<NotifyCard>();
     card->player = player;
 
-    // 自動実行用攻撃データを収集
+    // 将来の自動実行再有効化のためデータを収集（現在は使用しない）
     if (player) {
         for (const auto& step : steps) {
             PlayerComboAttackData* data = attackController->GetAttackByName(step.attackName);
@@ -182,10 +208,12 @@ void ComboUnlockNotifier::OnAttackUnlocked(
         card->totalAttackCount = static_cast<int32_t>(card->pendingAttacks.size());
     }
 
-    // スケールYイージング設定（Open: 0→1）
-    scaleYEasing_.Init(kScaleYEasingFile_);
-    scaleYEasing_.SetAdaptValue(&scaleY_);
-    scaleYEasing_.Reset();
+    // スライドイージング設定（1→0: 画面外→定位置）
+    slideEasing_.Init(kSlideEasingFile_);
+    slideEasing_.SetIsStartEndReverse(true); // 1→0（スライドイン）
+    slideEasing_.SetAdaptValue(&slideNorm_);
+    slideNorm_ = 1.0f; // 初期状態は画面外（右端）
+    slideEasing_.Reset();
 
     int32_t cardIndex = static_cast<int32_t>(cards_.size());
     PopulateCard(*card, steps, layoutParam, cardIndex, condition);
@@ -330,17 +358,16 @@ const char* ComboUnlockNotifier::ResolveConditionIconPath(
 /// 背景・テキストスプライト初期化
 ///==========================================================
 void ComboUnlockNotifier::InitBackSprite() {
-
     // 背景スプライト
     backgroundSprite.reset(KetaEngine::Sprite::Create("OperateUI/NotifyBackground.dds", true));
     if (backgroundSprite) {
-        backgroundSprite->transform_.scale = {1.0f, 0.0f};
+        backgroundSprite->transform_.scale = bgSpriteScale_;
     }
 
     // テキストスプライト
     notifierTextSprite.reset(KetaEngine::Sprite::Create("OperateUI/NotifyText.dds", true));
     if (notifierTextSprite) {
-        notifierTextSprite->transform_.scale = {1.0f, 0.0f};
+        notifierTextSprite->transform_.scale = textSpriteScale_;
     }
 }
 
@@ -357,42 +384,68 @@ void ComboUnlockNotifier::PopulateCard(
     const int32_t kLayerNum = 35;
     const int32_t kRow      = 0;
 
-    // 通知UI専用レイアウト
-    LayoutParam notifyLayout  = layoutParam;
-    notifyLayout.basePosition = notifyBasePosition_;
-    notifyLayout.basePosition.y += cardIndex * cardSpacingY_;
-    notifyLayout.branchYOffset = 0.0f;
-    notifyLayout.columnSpacing = spaceColumn_;
-    notifyLayout.arrowOffset   = arrowOffsetPos_;
-    int32_t col                = 0;
-
     //------------------------------------------------------
-    //  Condition アイコン
+    // 1. 総列数を先行カウントしてbasePosition.xを算出
     //------------------------------------------------------
     const char* iconPath = ResolveConditionIconPath(condition);
+    int32_t colCount     = 0;
+    if (iconPath) {
+        colCount++; // condition icon
+    }
+    for (size_t i = 0; i < steps.size(); ++i) {
+        if (i > 0 && steps[i - 1].isAutoAdvance) {
+            continue;
+        }
+        colCount++;
+    }
+    // 最後の列インデックス = colCount - 1
+    // 最後の列がrightAnchorX_に来るようにbasePosition.xを算出
+    const float adjustedBaseX =
+        (colCount > 0)
+            ? rightAnchorX_ - static_cast<float>(colCount - 1) * spaceColumn_
+            : rightAnchorX_;
+
+    //------------------------------------------------------
+    // 2. 通知UI専用レイアウト設定
+    //------------------------------------------------------
+    LayoutParam notifyLayout  = layoutParam;
+    notifyLayout.basePosition = notifyBasePosition_;
+    notifyLayout.basePosition.x = adjustedBaseX;
+    notifyLayout.basePosition.y += cardIndex * cardSpacingY_;
+    notifyLayout.yGroupOffsetY = 0.0f;
+    notifyLayout.columnSpacing = spaceColumn_;
+    notifyLayout.arrowOffset   = arrowOffsetPos_;
+
+    // カードの基準X位置を保存
+    card.basePositionX = adjustedBaseX;
+
+    int32_t col = 0;
+
+    //------------------------------------------------------
+    // 3. Condition アイコン
+    //------------------------------------------------------
     if (iconPath) {
         card.conditionIconSprite.reset(KetaEngine::Sprite::Create(iconPath, false));
         if (card.conditionIconSprite) {
-            card.conditionIconBaseScaleY = notifyLayout.buttonScale;
             card.conditionIconSprite->SetLayerNum(kLayerNum);
             card.conditionIconSprite->SetAnchorPoint({0.5f, 0.5f});
-            card.conditionIconSprite->transform_.scale = {notifyLayout.buttonScale, 0.0f};
+            card.conditionIconSprite->transform_.scale = {notifyLayout.buttonScale, notifyLayout.buttonScale};
             card.conditionIconSprite->transform_.pos   = {
-                notifyLayout.basePosition.x + col * notifyLayout.columnSpacing,
+                notifyLayout.basePosition.x + col * notifyLayout.columnSpacing + slideStartOffsetX_,
                 notifyLayout.basePosition.y};
         }
         ++col;
 
         auto arrow = std::make_unique<ComboAsistArrowUI>();
         arrow->Init(col - 1, kRow, col, kRow, notifyLayout);
+        arrow->ApplySlideOffset(slideStartOffsetX_);
         arrow->SnapToTarget();
         arrow->SetExtraScale(buttonExtraScale_);
-        arrow->SetScale({arrow->GetBaseScale().x, 0.0f});
         card.arrowUIs.push_back(std::move(arrow));
     }
 
     //------------------------------------------------------
-    //  攻撃ステップ（始点〜解放ステップ）
+    // 4. 攻撃ステップ（始点〜解放ステップ）
     //------------------------------------------------------
     bool isFirstButton = true;
     for (size_t i = 0; i < steps.size(); ++i) {
@@ -404,9 +457,9 @@ void ComboUnlockNotifier::PopulateCard(
             if (col > 0) {
                 auto arrow = std::make_unique<ComboAsistArrowUI>();
                 arrow->Init(col - 1, kRow, col, kRow, notifyLayout);
+                arrow->ApplySlideOffset(slideStartOffsetX_);
                 arrow->SnapToTarget();
                 arrow->SetExtraScale(buttonExtraScale_);
-                arrow->SetScale({arrow->GetBaseScale().x, 0.0f});
                 card.arrowUIs.push_back(std::move(arrow));
             }
         }
@@ -422,8 +475,9 @@ void ComboUnlockNotifier::PopulateCard(
             btn->SetActiveOutLine(true);
         }
 
+        // 初期位置を画面外（スライドイン前）に設定
+        btn->ApplySlideOffset(slideStartOffsetX_);
         btn->SnapToTarget();
-        btn->SetScale({btn->GetBaseScale().x, 0.0f});
         card.buttonUIs.push_back(std::move(btn));
 
         isFirstButton = false;
@@ -432,7 +486,7 @@ void ComboUnlockNotifier::PopulateCard(
 }
 
 ///==========================================================
-/// カード再配置
+/// カード再配置（Y位置のみ）
 ///==========================================================
 void ComboUnlockNotifier::RearrangeCards() {
     for (size_t i = 0; i < cards_.size(); ++i) {
@@ -459,7 +513,9 @@ void ComboUnlockNotifier::RearrangeCards() {
     }
 }
 
-
+///==========================================================
+/// パラメータ登録
+///==========================================================
 void ComboUnlockNotifier::RegisterParams() {
     globalParameter_->Regist(groupName_, "NotifyBasePositionX", &notifyBasePosition_.x);
     globalParameter_->Regist(groupName_, "NotifyBasePositionY", &notifyBasePosition_.y);
@@ -468,6 +524,12 @@ void ComboUnlockNotifier::RegisterParams() {
     globalParameter_->Regist(groupName_, "spaceColumn", &spaceColumn_);
     globalParameter_->Regist(groupName_, "arrowOffsetPos", &arrowOffsetPos_);
     globalParameter_->Regist(groupName_, "CloseOffsetTime", &closeOffsetTime_);
+    globalParameter_->Regist(groupName_, "RightAnchorX", &rightAnchorX_);
+    globalParameter_->Regist(groupName_, "SlideStartOffsetX", &slideStartOffsetX_);
+    globalParameter_->Regist(groupName_, "BgSpriteScale", &bgSpriteScale_);
+    globalParameter_->Regist(groupName_, "TextSpriteScale", &textSpriteScale_);
+    globalParameter_->Regist(groupName_, "BgSpriteOffset", &bgSpriteOffset_);
+    globalParameter_->Regist(groupName_, "TextSpriteOffset", &textSpriteOffset_);
 }
 
 ///==========================================================
@@ -482,6 +544,14 @@ void ComboUnlockNotifier::AdjustParam() {
         ImGui::DragFloat("spaceColumn", &spaceColumn_, 0.1f);
         ImGui::DragFloat2("矢印オフセット位置", &arrowOffsetPos_.x, 0.1f);
         ImGui::DragFloat("CloseOffsetTime", &closeOffsetTime_, 0.1f, 0.0f, 10.0f);
+        ImGui::Separator();
+        ImGui::DragFloat("RightAnchorX（最右列ボタンX）", &rightAnchorX_, 1.0f);
+        ImGui::DragFloat("SlideStartOffsetX（スライド幅）", &slideStartOffsetX_, 1.0f, 0.0f);
+        ImGui::Separator();
+        ImGui::DragFloat2("BgSpriteScale", &bgSpriteScale_.x, 0.01f, 0.0f, 10.0f);
+        ImGui::DragFloat2("BgSpriteOffset", &bgSpriteOffset_.x, 1.0f);
+        ImGui::DragFloat2("TextSpriteScale", &textSpriteScale_.x, 0.01f, 0.0f, 10.0f);
+        ImGui::DragFloat2("TextSpriteOffset", &textSpriteOffset_.x, 1.0f);
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
     }

@@ -21,7 +21,7 @@
         "ComboBranchCount": 0,
         "Condition": 0,
         "HitStop_FileName": "",
-        "HitStop_OnHit_FileName": "",
+        "HitStop_OnHit_FileName": "CyclingAttackStop",
         "HitStop_OnHit_StartTiming": 0.0,
         "HitStop_StartTiming": 0.0,
         "KnockBackPower": 3.0,
@@ -55,40 +55,40 @@
         "Vibration_Intensity": 0.0,
         "Vibration_StartTiming": 0.0,
         "Vibration_TriggerByHit": false,
-        "ableDefeatLevel": 1,
-        "adaptTime": 0.20000000298023224,
+        "ableDefeatLevel": 0,
+        "adaptTime": 0.13333334028720856,
         "blowYPower": 0.0,
         "collisionOffsetPos": [
             0.0,
             0.0,
-            5.480000019073486
+            0.8899999856948853
         ],
         "collisionSize": [
-            6.0,
-            6.0,
-            6.0
+            8.0,
+            11.0,
+            8.0
         ],
         "collisionStartTime": 0.0,
         "enableFall": false,
         "finishTimeOffset": 0.0,
-        "finishWaitTime": 0.10000000149011612,
+        "finishWaitTime": 0.01666666753590107,
         "gamePadBottom": 0,
-        "isAbleInputMoving": false,
+        "isAbleInputMoving": true,
         "isAlwaysFollowing": true,
         "isAutoAdvance": false,
         "isMotionOnly": false,
         "isPositionYSelect": false,
         "keyBordBottom": 0,
-        "loopNum": 5,
+        "loopNum": 3,
         "loopWaitTime": 0.09000000357627869,
-        "moveEaseTime": 0.20000000298023224,
+        "moveEaseTime": 0.1666666716337204,
         "moveEaseType": 0,
         "moveStartTime": 0.0,
         "moveValue": [
             0.0,
             0.0,
-            0.0
+            3.8299999237060547
         ],
-        "power": 5.0
+        "power": 10.0
     }
 }

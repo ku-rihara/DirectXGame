@@ -36,7 +36,7 @@ public:
     /// </summary>
     /// <param name="scale">スケール</param>
     /// <param name="alpha">アルファ値</param>
-    void Update(const Vector2& scale, float alpha);
+    void Update(const Vector2& scale, float alpha, const Vector3& color);
 
     /// <summary>
     /// 数値の計算
@@ -57,7 +57,7 @@ private:
     void InitDigitCalculators();
 private:
 
-    static constexpr float kUVScaleStep = 0.1f; //< テクスチャ上の1桁分のUV幅 (10数字分割)
+    static constexpr float kUVScaleStep = 0.1f; //< テクスチャ上の1桁分のUV幅
 
     ///* globalParameter *//
     KetaEngine::GlobalParameter* globalParameter_;
@@ -68,8 +68,8 @@ private:
     ///* parameter *//
     ComboDigit comboDigit_ = ComboDigit::ONE;
     Vector2 position_;
-    Vector2 positionOffset_ = { 0.0f, 0.0f }; //< 位置オフセット (最終位置 = 基準位置 + オフセット)
-    Vector2 scaleOffset_    = { 1.0f, 1.0f }; //< スケールオフセット (最終スケール = 基準スケール * オフセット)
+    Vector2 positionOffset_ = { 0.0f, 0.0f }; //< 位置オフセット
+    Vector2 scaleOffset_    = { 1.0f, 1.0f }; //< スケールオフセット 
     int32_t valueForDigit_;
     float uvPosX_;
     float uvScaleOffset_;

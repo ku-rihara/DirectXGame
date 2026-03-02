@@ -15,7 +15,7 @@ struct LayoutParam {
     Vector2 arrowOffset;
     float columnSpacing;
     float rowSpacing;
-    float branchYOffset;
+    float yGroupOffsetY; //< Yボタン始まりコンボグループの基準Y座標オフセット
     float buttonScale;
     float arrowScale;
 };

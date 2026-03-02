@@ -71,6 +71,8 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
 
     if (!reactionData) {
         // 設定されていない攻撃: デフォルトアニメーション + ノックバックのみ
+        int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+        pBaseEnemy_->StartDamageColling(pReactionController_->GetDefaultDamageCoolTime(enemyType), attackName);
         pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
         PlayDamageParticleEffect(nullptr);
         if (pBaseEnemy_->GetHP() <= 0.0f) {

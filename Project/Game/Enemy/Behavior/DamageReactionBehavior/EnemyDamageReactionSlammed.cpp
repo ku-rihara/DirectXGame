@@ -52,7 +52,7 @@ void EnemyDamageReactionSlammed::UpdatePhase() {
         OnReactionEnd();
         endType_      = EndType::BackToRoot;
         currentPhase_ = [this]() {
-            EndPhase();
+            GetUpPhase();
         };
     }
 }
@@ -234,6 +234,12 @@ bool EnemyDamageReactionSlammed::IsReactionFinished() const {
     return false;
 }
 
+void EnemyDamageReactionSlammed::GetUpPhase() {
+    if (getUpFinished_) {
+        EndPhase();
+    }
+}
+
 void EnemyDamageReactionSlammed::OnReactionEnd() {
     pBaseEnemy_->RotateInit();
     const auto& enemyParam = pBaseEnemy_->GetParameter();
@@ -243,9 +249,19 @@ void EnemyDamageReactionSlammed::OnReactionEnd() {
     const auto* ctrl = pBaseEnemy_->GetManager()->GetDamageReactionController();
     int eType = static_cast<int>(pBaseEnemy_->GetType());
     const auto& getUpAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::GetUp);
-    if (!getUpAnim.empty()) {
-        pBaseEnemy_->PlayAnimationByName(getUpAnim, false);
+
+    if (getUpAnim.empty()) {
+        // GetUpアニメーションが未設定の場合はすぐに終了へ
+        getUpFinished_ = true;
+        return;
     }
+
+    pBaseEnemy_->PlayAnimationByName(getUpAnim, false);
+
+    // アニメーション終了コールバックで完了フラグを立てる
+    pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(getUpAnim, [this]() {
+        getUpFinished_ = true;
+    });
 }
 
 void EnemyDamageReactionSlammed::RotationUpdate() {

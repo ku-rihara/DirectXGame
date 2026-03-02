@@ -293,7 +293,7 @@ ConditionUIData* ComboAsistController::GetCurrentData() {
 }
 
 LayoutParam ComboAsistController::MakeLayoutParam() const {
-    return {basePosition_, arrowOffset_, columnSpacing_, rowSpacing_, branchYOffset_, buttonScale_, arrowScale_};
+    return {basePosition_, arrowOffset_, columnSpacing_, rowSpacing_, yGroupOffsetY_, buttonScale_, arrowScale_};
 }
 
 ///==========================================================
@@ -304,7 +304,7 @@ void ComboAsistController::RegisterParams() {
     globalParameter_->Regist(groupName_, "arrowOffset",      &arrowOffset_);
     globalParameter_->Regist(groupName_, "columnSpacing",    &columnSpacing_);
     globalParameter_->Regist(groupName_, "rowSpacing",       &rowSpacing_);
-    globalParameter_->Regist(groupName_, "branchYOffset",    &branchYOffset_);
+    globalParameter_->Regist(groupName_, "yGroupOffsetY",    &yGroupOffsetY_);
     globalParameter_->Regist(groupName_, "buttonScale",      &buttonScale_);
     globalParameter_->Regist(groupName_, "arrowScale",       &arrowScale_);
     globalParameter_->Regist(groupName_, "maxVisibleColumn", &maxVisibleColumn_);
@@ -319,7 +319,7 @@ void ComboAsistController::AdjustParam() {
         ImGui::DragFloat2("Arrow Offset",     &arrowOffset_.x,  0.1f);
         ImGui::DragFloat("Column Spacing",    &columnSpacing_,  0.1f);
         ImGui::DragFloat("Row Spacing",       &rowSpacing_,     0.1f);
-        ImGui::DragFloat("Branch Y Offset",   &branchYOffset_,  0.1f);
+        ImGui::DragFloat("Y Group Offset Y",   &yGroupOffsetY_,  0.1f);
         ImGui::DragFloat("Button Scale",      &buttonScale_,    0.01f);
         ImGui::DragFloat("Arrow Scale",       &arrowScale_,     0.01f);
         ImGui::Separator();

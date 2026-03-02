@@ -27,6 +27,8 @@ void EnemyDamageReactionController::RegisterParams() {
                 typePrefix + animeTypeNames[a] + "_DefaultDamageAnimationName",
                 &defaultDamageAnimationNames_[i][a]);
         }
+        // デフォルトダメージクールタイム
+        globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultDamageCoolTime", &defaultDamageCoolTime_[i]);
         // イージング系は敵タイプ別のみ
         globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultObjEaseAnimationName", &defaultObjEaseAnimationNames_[i]);
         globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultObjEaseAnimationStartTiming", &defaultObjEaseAnimationStartTimings_[i]);
@@ -111,6 +113,9 @@ void EnemyDamageReactionController::EditorUpdate() {
                     }
 
                     ImGui::Separator();
+
+                    // デフォルトダメージクールタイム
+                    ImGui::DragFloat("Default Damage Cool Time", &defaultDamageCoolTime_[t], 0.01f, 0.0f, 30.0f);
 
                     // イージングアニメーション選択
                     defaultObjEaseFileSelectors_[t].SelectFile(

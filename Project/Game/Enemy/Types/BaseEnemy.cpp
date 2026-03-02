@@ -40,6 +40,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     /// transform
     baseTransform_.translation_   = spawnPos;
     baseTransform_.translation_.y = parameter_.basePosY;
+    baseTransform_.SetAnchorRotation(Vector3(0.0f, 1.5f, 0.0f));
     baseTransform_.scale_         = Vector3::ZeroVector();
 
     /// attack collision

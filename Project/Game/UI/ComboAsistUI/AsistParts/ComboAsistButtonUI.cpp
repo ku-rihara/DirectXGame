@@ -46,7 +46,7 @@ void ComboAsistButtonUI::Update() {
 void ComboAsistButtonUI::ApplyLayout() {
     Vector2 pos(
         layout_.basePosition.x + columnNum_ * layout_.columnSpacing + slideOffsetX_,
-        layout_.basePosition.y + rowNum_ * (layout_.rowSpacing + layout_.branchYOffset));
+        layout_.basePosition.y + rowNum_ * layout_.rowSpacing);
 
     targetPos_       = pos;
     needsLerpUpdate_ = true;

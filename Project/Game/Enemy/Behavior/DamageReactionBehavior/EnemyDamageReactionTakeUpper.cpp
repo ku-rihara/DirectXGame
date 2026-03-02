@@ -49,7 +49,7 @@ void EnemyDamageReactionTakeUpper::UpdatePhase() {
     if (IsReactionFinished()) {
         OnReactionEnd();
         endType_ = EndType::BackToRoot;
-        currentPhase_ = [this]() { EndPhase(); };
+        currentPhase_ = [this]() { GetUpPhase(); };
     }
 }
 
@@ -261,6 +261,12 @@ bool EnemyDamageReactionTakeUpper::IsReactionFinished() const {
     return false;
 }
 
+void EnemyDamageReactionTakeUpper::GetUpPhase() {
+    if (getUpFinished_) {
+        EndPhase();
+    }
+}
+
 void EnemyDamageReactionTakeUpper::OnReactionEnd() {
     pBaseEnemy_->RotateInit();
     const auto& enemyParam = pBaseEnemy_->GetParameter();
@@ -270,9 +276,19 @@ void EnemyDamageReactionTakeUpper::OnReactionEnd() {
     const auto* ctrl = pBaseEnemy_->GetManager()->GetDamageReactionController();
     int eType = static_cast<int>(pBaseEnemy_->GetType());
     const auto& getUpAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::GetUp);
-    if (!getUpAnim.empty()) {
-        pBaseEnemy_->PlayAnimationByName(getUpAnim, false);
+
+    if (getUpAnim.empty()) {
+        // GetUpアニメーションが未設定の場合はすぐに終了へ
+        getUpFinished_ = true;
+        return;
     }
+
+    pBaseEnemy_->PlayAnimationByName(getUpAnim, false);
+
+    // アニメーション終了コールバックで完了フラグを立てる
+    pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(getUpAnim, [this]() {
+        getUpFinished_ = true;
+    });
 }
 
 void EnemyDamageReactionTakeUpper::RotationUpdate() {

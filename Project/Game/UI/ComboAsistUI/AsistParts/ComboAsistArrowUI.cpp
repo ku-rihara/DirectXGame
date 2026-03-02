@@ -33,10 +33,10 @@ void ComboAsistArrowUI::ApplyLayout() {
     // 始点・終点のボタン位置を計算
     Vector2 fromPos(
         layout_.basePosition.x + fromCol_ * layout_.columnSpacing + slideOffsetX_,
-        layout_.basePosition.y + fromRow_ * (layout_.rowSpacing + layout_.branchYOffset));
+        layout_.basePosition.y + fromRow_ * layout_.rowSpacing);
     Vector2 toPos(
         layout_.basePosition.x + toCol_ * layout_.columnSpacing + slideOffsetX_,
-        layout_.basePosition.y + toRow_ * (layout_.rowSpacing + layout_.branchYOffset));
+        layout_.basePosition.y + toRow_ * layout_.rowSpacing);
 
     // 矢印位置：始点からオフセット + 縦方向は中間
     Vector2 arrowPos(

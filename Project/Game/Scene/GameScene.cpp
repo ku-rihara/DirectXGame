@@ -82,6 +82,7 @@ void GameScene::Debug() {
     gameObj_.comboAsistController_->AdjustParam();
     gameObj_.unlockNotifier_->AdjustParam();
     gameObj_.comboSupportSpriteUi_->AdjustParam();
+    gameObj_.operateUI_->Debug();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();

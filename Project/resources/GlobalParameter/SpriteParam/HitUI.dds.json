@@ -1,0 +1,27 @@
+{
+    "HitUI.dds": {
+        "layerNum": 0,
+        "startAnchorPoint": [
+            0.0,
+            0.0
+        ],
+        "startColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "startPosition": [
+            0.0,
+            0.0
+        ],
+        "startScale": [
+            0.6000000238418579,
+            0.6000000238418579
+        ],
+        "startUVScale": [
+            1.0,
+            1.0
+        ]
+    }
+}

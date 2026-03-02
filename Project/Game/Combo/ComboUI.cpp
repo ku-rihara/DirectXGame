@@ -22,7 +22,7 @@ void ComboUI::Init(const ComboDigit& digit) {
     isVisible_ = true;
 }
 
-void ComboUI::Update(const Vector2& scale, float alpha) {
+void ComboUI::Update(const Vector2& scale, float alpha, const Vector3& color) {
 
     sprite_->SetIsDraw(isVisible_);
 
@@ -30,6 +30,7 @@ void ComboUI::Update(const Vector2& scale, float alpha) {
     sprite_->transform_.rotate.y = rotateY_;
     sprite_->transform_.pos      = position_ + positionOffset_;
     sprite_->SetUVPosition((Vector2(uvPosX_, 0.0f)));
+    sprite_->SetColor(color);
     sprite_->SetAlpha(alpha);
 }
 

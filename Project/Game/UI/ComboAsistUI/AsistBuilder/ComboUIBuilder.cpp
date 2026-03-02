@@ -41,9 +41,9 @@ void ComboUIBuilder::CreateConditionUI(ConditionUIData& conditionData, const Lay
     int32_t xCurrentRow = 0;
     CreateGroupUI(conditionData.pathBuilder.GetXGroup(), conditionData.xUIGroup, &xCurrentRow, layoutParam);
 
-    // Y グループも独自の row=0 始まり、視覚的位置は X の行数分オフセット
+    // Y グループは固定オフセット（yGroupOffsetY）で位置を決定する
     LayoutParam yLayout = layoutParam;
-    yLayout.basePosition.y += static_cast<float>(xCurrentRow) * (layoutParam.rowSpacing + layoutParam.branchYOffset);
+    yLayout.basePosition.y += layoutParam.yGroupOffsetY;
     int32_t yCurrentRow = 0;
     CreateGroupUI(conditionData.pathBuilder.GetYGroup(), conditionData.yUIGroup, &yCurrentRow, yLayout);
 }

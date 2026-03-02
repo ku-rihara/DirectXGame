@@ -64,6 +64,9 @@ private:
     // [敵タイプ][アニメーション種類]
     std::array<std::array<std::string, static_cast<int>(DefaultAnimType::Count)>, kEnemyTypeCount> defaultDamageAnimationNames_;
 
+    // デフォルトダメージクールタイム（敵タイプ別）
+    std::array<float, kEnemyTypeCount> defaultDamageCoolTime_ = {0.0f, 0.0f};
+
     // イージング系は敵タイプ別のみ
     std::array<std::string, kEnemyTypeCount> defaultObjEaseAnimationNames_;
     std::array<float, kEnemyTypeCount> defaultObjEaseAnimationStartTimings_ = {0.0f, 0.0f};
@@ -93,4 +96,5 @@ public:
     const std::string& GetDefaultObjEaseAnimationName(int enemyType) const { return defaultObjEaseAnimationNames_[enemyType]; }
     float GetDefaultObjEaseAnimationStartTiming(int enemyType) const { return defaultObjEaseAnimationStartTimings_[enemyType]; }
     const std::string& GetDefaultParticleEffectName(int enemyType) const { return defaultParticleEffectNames_[enemyType]; }
+    float GetDefaultDamageCoolTime(int enemyType) const { return defaultDamageCoolTime_[enemyType]; }
  };

@@ -1,5 +1,7 @@
 #include "ComboUIController.h"
 #include "Frame/Frame.h"
+#include "base/TextureManager.h"
+#include "Easing/EasingFunction.h"
 // behavior
 #include "Behavior/ComboCountUp.h"
 #include "Behavior/ComboWait.h"
@@ -20,6 +22,15 @@ void ComboUIController::Init() {
         comboSprites_[i]->Init(static_cast<ComboUI::ComboDigit>(i));
     }
 
+    // Hit スプライト生成
+    hitSprite_.reset(KetaEngine::Sprite::Create("UI/HitUI.dds", true));
+    if (hitSprite_) {
+        hitSprite_->SetAnchorPoint({0.5f, 0.5f});
+        hitSprite_->SetIsDraw(false);
+    }
+    hitScaleEasing_.Init(kHitEasingFile_);
+    hitScaleEasing_.SetAdaptValue(&hitEaseScale_);
+
     ChangeBehavior(std::make_unique<ComboWait>(this));
 }
 
@@ -32,16 +43,37 @@ void ComboUIController::Update(int32_t comboNum) {
         // 基準座標 + 桁ごとのオフセットを適用
         Vector2 digitPosition = basePosition_ + Vector2(digitOffset_.x * i, digitOffset_.y * i);
 
-        comboSprites_[i]->Update(baseScale_, alpha_);
+        comboSprites_[i]->Update(baseScale_, alpha_, color_);
         comboSprites_[i]->CalculateNumber(comboNum);
         comboSprites_[i]->SetPosition(digitPosition);
         comboSprites_[i]->SetRotateY(rotateY_);
+    }
+
+    // Hit スプライト更新
+    if (hitSprite_) {
+        const bool isVisible = (comboNum >= 1);
+        hitSprite_->SetIsDraw(isVisible);
+        if (isVisible) {
+            hitScaleEasing_.Update(KetaEngine::Frame::DeltaTime());
+            hitSprite_->transform_.pos      = basePosition_ + hitSpriteOffset_;
+            hitSprite_->transform_.scale    = baseScale_ * hitEaseScale_;
+            hitSprite_->transform_.rotate.y = hitSpriteRotate_;
+            hitSprite_->SetColor(color_);
+            hitSprite_->SetAlpha(alpha_);
+        }
     }
 }
 
 void ComboUIController::AlphaAdaptForTime(float comboTime, float comboMaxTime) {
 
-    alpha_ = std::clamp(comboTime / comboMaxTime, 0.0f, 1.0f);
+    if (comboMaxTime <= 0.0f) {
+        alpha_ = 0.0f;
+        return;
+    }
+    // 経過時間が増えるほど alpha が 1→0 へ落ちるが、EaseInQuint により
+    // 大半の時間は 1 付近を保ち、残り僅かになってから急激にフェードアウトする
+    const float elapsed = std::clamp(comboMaxTime - comboTime, 0.0f, comboMaxTime);
+    alpha_ = EaseInQuint(1.0f, 0.0f, elapsed, comboMaxTime);
 }
 
 ///=========================================================
@@ -63,6 +95,13 @@ void ComboUIController::AdjustParam() {
         ImGui::DragFloat2("Digit Offset", &digitOffset_.x, 0.1f);
         // Y軸回転
         ImGui::DragFloat("RotateY", &rotateY_, 0.01f);
+
+        ImGui::SeparatorText("Color");
+        ImGui::ColorEdit3("Tint Color", &color_.x);
+
+        ImGui::SeparatorText("Hit Sprite");
+        ImGui::DragFloat2("Hit Sprite Offset", &hitSpriteOffset_.x, 1.0f);
+        ImGui::DragFloat("Hit Sprite Rotate", &hitSpriteRotate_, 0.01f);
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -86,6 +125,9 @@ void ComboUIController::RegisterParams() {
     globalParameter_->Regist(groupName_, "baseScale", &baseScale_);
     globalParameter_->Regist(groupName_, "digitOffset", &digitOffset_);
     globalParameter_->Regist(groupName_, "rotateY", &rotateY_);
+    globalParameter_->Regist(groupName_, "color", &color_);
+    globalParameter_->Regist(groupName_, "hitSpriteOffset", &hitSpriteOffset_);
+    globalParameter_->Regist(groupName_, "hitSpriteRotate", &hitSpriteRotate_);
 }
 
 void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior) {
@@ -94,4 +136,7 @@ void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> beha
 
 void ComboUIController::ChangeCountUPAnimation() {
     ChangeBehavior(std::make_unique<ComboCountUP>(this));
+
+    // Hit スケールイージングをリセット（ヒット演出）
+    hitScaleEasing_.Reset();
 }

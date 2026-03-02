@@ -127,7 +127,7 @@ private:
     Vector2 arrowOffset_;
     float columnSpacing_;
     float rowSpacing_;
-    float branchYOffset_;
+    float yGroupOffsetY_; //< Yボタン始まりコンボグループの基準Y座標オフセット
     float buttonScale_;
     float arrowScale_;
 };
