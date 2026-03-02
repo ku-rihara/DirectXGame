@@ -3,6 +3,8 @@
 #include "ComboUI.h"
 
 #include "Editor/ParameterEditor/GlobalParameter.h"
+// Easing
+#include "Easing/Easing.h"
 // behavior
 #include "Behavior/BaseComboUIBehavior.h"
 // std
@@ -55,12 +57,22 @@ private:
     // parameter
     ScalingParameter parameter_;
     Vector2 basePosition_; // 基準座標
-    Vector2 digitOffset_; // 桁間のオフセット
+    Vector2 baseScale_;    // 基準スケール
+    Vector2 digitOffset_;  // 桁間のオフセット
 
     // Variants
-    Vector2 baseScale_;
+    float rotateY_ = 0.0f;                    //< Y軸回転
+    Vector3 color_ = {1.0f, 1.0f, 1.0f};     //< 全体カラー
     std::array<std::unique_ptr<ComboUI>, 3> comboSprites_;
     float alpha_;
+
+    // Hit スプライト
+    std::unique_ptr<KetaEngine::Sprite> hitSprite_;
+    KetaEngine::Easing<Vector2> hitScaleEasing_;
+    Vector2 hitEaseScale_    = {1.0f, 1.0f};
+    Vector2 hitSpriteOffset_;
+    float hitSpriteRotate_   = 0.0f;
+    const std::string kHitEasingFile_ = "HitSpriteScale.json";
 
     // behavior
     std::unique_ptr<BaseComboUIBehavior> behavior_;

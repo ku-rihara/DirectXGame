@@ -55,7 +55,7 @@ void PlayerComboAttackTimeline::Draw() {
 
     ImGui::PushID("AttackTimeline");
 
-    // 攻撃パラメータウィンドウ（独立したウィンドウとして描画）
+    // 攻撃パラメータウィンドウ
     if (ImGui::Begin("攻撃パラメータ")) {
         ui_.DrawParamEditButtons();
     }
@@ -63,7 +63,7 @@ void PlayerComboAttackTimeline::Draw() {
 
     ImGui::Separator();
 
-    // タイムライン描画前の追加UI（トラック追加のみ）
+    // タイムライントラック追加
     timeline_.SetOriginalItemDrawCallBack([this]() {
         // トラック追加ボタン
         ui_.DrawAddTrackButton();

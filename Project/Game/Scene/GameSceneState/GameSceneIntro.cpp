@@ -37,7 +37,7 @@ void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
 
     // gameIntro
     obj.gameIntroManager_->Update();
-    obj.howToOperate_->Update();
+    obj.operateUI_->Update();
 
     if (obj.gameIntroManager_->GetIsFinishStep(GameIntroManager::SpawnField)) {
         obj.enemySpawner_->Update(KetaEngine::Frame::DeltaTimeRate());

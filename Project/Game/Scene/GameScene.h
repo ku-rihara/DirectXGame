@@ -11,7 +11,9 @@
 #include "BackGroundObject/GameBackGroundObject.h"
 // Combo
 #include "Combo/Combo.h"
-#include "ComboScene/ComboScene.h"
+#include "ComboScene/ComboDirector.h"
+// KillCounter
+#include "KillCounter/KillCounter.h"
 // DeathTimer
 #include "DeathTimer/DeathTimer.h"
 // Enemy
@@ -35,7 +37,10 @@
 // SkyBox
 #include "SkyBox/SkyBox.h"
 // UI
-#include "UI/HowToOperate.h"
+#include "UI/ComboAsistUI/ComboAsistController.h"
+#include "UI/ComboAsistUI/SupportSprite/ComboSupportSpriteUi.h"
+#include "UI/ComboAsistUI/UnlockNotifier/ComboUnlockNotifier.h"
+#include "UI/OperateUI.h"
 // Sprite
 #include "2D/Sprite.h"
 
@@ -82,10 +87,10 @@ private:
         std::unique_ptr<Combo> combo_                                             = nullptr;
         std::unique_ptr<EnemyManager> enemyManager_                               = nullptr;
         std::unique_ptr<EnemySpawner> enemySpawner_                               = nullptr;
-        std::unique_ptr<HowToOperate> howToOperate_                               = nullptr;
+        std::unique_ptr<OperateUI> operateUI_                                     = nullptr;
         std::unique_ptr<FireInjectors> fireInjectors_                             = nullptr;
         std::unique_ptr<GameBackGroundObject> gameBackGroundObject_               = nullptr;
-        std::unique_ptr<ComboScene> comboScene_                                   = nullptr;
+        std::unique_ptr<ComboDirector> comboDirector_                             = nullptr;
         std::unique_ptr<AttackEffect> attackEffect_                               = nullptr;
         std::unique_ptr<GameIntroManager> gameIntroManager_                       = nullptr;
         std::unique_ptr<ComboLevelObjHolder> comboLevelObjHolder_                 = nullptr;
@@ -94,6 +99,10 @@ private:
         std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
         std::unique_ptr<AudienceController> audienceController_                   = nullptr;
         std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
+        std::unique_ptr<KillCounter> killCounter_                                 = nullptr;
+        std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
+        std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;
+        std::unique_ptr<ComboSupportSpriteUi> comboSupportSpriteUi_              = nullptr;
 
         std::unique_ptr<KetaEngine::Sprite> screenSprite_;
     };

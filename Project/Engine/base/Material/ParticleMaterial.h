@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseMaterial.h"
 #include "Matrix4x4.h"
+#include "Vector3.h"
 #include "Vector4.h"
 #include <d3d12.h>
 #include <string>
@@ -46,6 +47,10 @@ private:
         Matrix4x4 uvMatrix;
         float shininess;
         float environmentCoefficient;
+        float dissolveThreshold;
+        float dissolveEdgeWidth;
+        Vector3 dissolveEdgeColor;
+        int32_t enableDissolve;
     };
 
 private:

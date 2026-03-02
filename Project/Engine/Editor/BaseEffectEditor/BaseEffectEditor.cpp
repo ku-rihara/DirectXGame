@@ -7,8 +7,10 @@ using namespace KetaEngine;
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationData.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailData.h"
+#include "Editor/RibbonTrailEditor/RibbonTrailData.h"
 #include "Editor/ShakeEditor/ShakeData.h"
 #include "Editor/TimeScaleEditor/TimeScaleData.h"
+#include"Editor/SpriteEaseAnimation/SpriteEaseAnimationData.h"
 #include "Particle/CPUParticle/Editor/ParticleData.h"
 #include "Particle/GPUParticle/Editor/GPUParticleData.h"
 // std
@@ -532,8 +534,10 @@ TEffectData* BaseEffectEditor<TEffectData>::GetSelectedEffect() {
 template class BaseEffectEditor<CameraAnimationData>;
 template class BaseEffectEditor<ObjEaseAnimationData>;
 template class BaseEffectEditor<RailData>;
+template class BaseEffectEditor<RibbonTrailData>;
 template class BaseEffectEditor<ShakeData>;
 template class BaseEffectEditor<TimeScaleData>;
 template class BaseEffectEditor<GPUParticleData>;
 template class BaseEffectEditor<ParticleData>;
 template class BaseEffectEditor<DissolveData>;
+template class BaseEffectEditor<SpriteEaseAnimationData>;

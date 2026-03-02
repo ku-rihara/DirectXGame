@@ -40,7 +40,7 @@ void TitleScene::Init() {
 
     // プレイヤー設定
     player_->SetTitleBehavior();
-    player_->SetWorldPositionY(30.0f);
+    player_->SetWorldPositionY(0.0f); // 落下開始位置はObjEaseAnimationのOriginal_Translationで管理
 
     // 演出・遷移クラス初期化
     sceneController_->Init(player_.get());
@@ -80,6 +80,7 @@ void TitleScene::SkyBoxDraw() {
 void TitleScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Param");
+    effectEditorSuite_->EditorUpdate();
     KetaEngine::Light::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();

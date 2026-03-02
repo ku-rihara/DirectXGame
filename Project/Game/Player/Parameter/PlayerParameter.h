@@ -31,6 +31,7 @@ struct SpawnParam {
 /// Parameter構造体
 struct Parameters {
     Vector3 startPos_;
+    Vector3 baseScale_;
     float rushDistance;
     float upperPosY;
     UpperParam upperParam;
@@ -46,12 +47,6 @@ struct Parameters {
     float attackFloatValue;
 };
 
-enum ComboNum {
-    FIRST,
-    SECOND,
-    THIRD,
-    FORTH,
-};
 
 class PlayerParameter {
 public:
@@ -78,8 +73,6 @@ private:
     /// ===================================================
 
     // コンボパラメータ
-    std::array<ComboParam, 4> normalComboParams_;
-    std::array<ComboParam, 2> jumpComboParams_;
     Parameters playerParams_;
 
 public:
@@ -87,9 +80,7 @@ public:
     /// getter
     /// =========================================================================================
     const Parameters& GetParameters() const { return playerParams_; }
-    const ComboParam& GetNormalComboParam(const ComboNum& index) const { return normalComboParams_[static_cast<int>(index)]; }
-    const ComboParam& GetJumpComboParam(const ComboNum& index) const { return jumpComboParams_[static_cast<int>(index)]; }
-
+  
     /// =========================================================================================
     /// setter
     /// =========================================================================================

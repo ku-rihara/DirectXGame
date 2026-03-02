@@ -1,7 +1,7 @@
 #pragma once
 // 3D
-#include "3D/ViewProjection.h"
 #include "3d/Object3D/Object3d.h"
+#include "3D/ViewProjection.h"
 // Base
 #include "BaseObject/BaseObject.h"
 // Collider
@@ -12,10 +12,11 @@
 #include "Behavior/PlayerBehavior/BasePlayerBehavior.h"
 #include "Behavior/TitleBehavior/BaseTitleBehavior.h"
 // Editor
+#include "Editor/DissolveEditor/DissolvePlayer.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Particle,Effect
-#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
 #include "Effect/PlayerEffects.h"
+#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
 // UI
 #include "JumpAttackUI/JumpAttackUI.h"
 // Parameter
@@ -23,7 +24,10 @@
 // Parts
 #include "Parts/PlayerHandLeft.h"
 #include "Parts/PlayerHandRight.h"
+// ComboCreator
+#include "Player/AutoComboAttack/AutoComboQueue.h"
 // std
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -54,7 +58,7 @@ public:
     void Update() override;
 
     void InitInGameScene(); //< ゲームシーンでの初期化
-    void TitleUpdate();     //< タイトル更新処理
+    void TitleUpdate(); //< タイトル更新処理
     void GameIntroUpdate(); //< イントロシーン更新
 
     // 影適応するかのフラグセット
@@ -66,20 +70,27 @@ public:
     /// <param name="speed">移動スピード</param>
     void Move(float speed);
 
-    bool CheckIsMoving();        //< 移動中かチェック
-    void MoveToLimit();          //< 移動範囲制限
+    bool CheckIsMoving(); //< 移動中かチェック
+    void MoveToLimit(); //< 移動範囲制限
     Vector3 GetInputDirection(); //< 入力による方向決定
-    void UpdateMatrix();         //< 行列更新
+    void UpdateMatrix(); //< 行列更新
 
     // reset
     void ResetPositionY(); //< Y座標リセット
     void ResetHeadScale(); //< 頭のスケールリセット
 
     /// <summary>
-    /// ディゾルブ処理更新
+    /// ディゾルブアニメーション再生 (手も含めて同時再生)
     /// </summary>
-    /// <param name="dissolve">Dissolve</param>
-    void DissolveUpdate(float dissolve);
+    /// <param name="name">ディゾルブ名</param>
+    void PlayDissolve(const std::string& name);
+
+    /// <summary>
+    /// ディゾルブアニメーション完了判定
+    /// </summary>
+    bool IsDissolveFinished() const;
+
+    void SetInitialDissolveHidden(); //< 初期非表示状態設定
 
     /// <summary>
     /// ジャンプ
@@ -106,14 +117,20 @@ public:
     // 衝突コールバック
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
-    void ChangeCombBoRoot();                  //< コンボルート変更
-    void FaceToTarget();                      //< ターゲット方向を向く
-    void AdaptRotate();                       //< 回転適用
-    bool CheckIsChargeMax() const;            //< チャージ最大判定
-    void AdjustParam();                       //< パラメータ調整
+    void ChangeCombBoRoot(); //< コンボルート変更
+    void FaceToTarget(); //< ターゲット方向を向く
+    void AdaptRotate(); //< 回転適用
+    bool CheckIsChargeMax() const; //< チャージ最大判定
+    void AdjustParam(); //< パラメータ調整
     Vector3 GetCollisionPos() const override; //< 衝突位置取得
 
     void MainHeadAnimationStart(const std::string& name);
+    void TitleAnimationPlay(const std::string& name); //< タイトル本体アニメーション再生
+    void TitleRightHandAnimationPlay(const std::string& name); //< タイトル右手アニメーション再生
+    void TitleLeftHandAnimationPlay(const std::string& name); //< タイトル左手アニメーション再生
+    bool IsTitleAnimationFinished(); //< 本体アニメーション終了判定
+    bool IsTitleRightHandAnimationFinished(); //< 右手アニメーション終了判定
+    bool IsTitleLeftHandAnimationFinished(); //< 左手アニメーション終了判定
 
     /// <summary>
     /// ダッシュ中かどうかを取得
@@ -127,6 +144,8 @@ private:
 private:
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Player";
+
+    KetaEngine::DissolvePlayer dissolvePlayer_;
 
     /// other class
     LockOnController* pLockOn_                          = nullptr;
@@ -151,6 +170,12 @@ private:
     std::unique_ptr<BaseComboAttackBehavior> comboBehavior_ = nullptr;
     std::unique_ptr<BaseTitleBehavior> titleBehavior_       = nullptr;
 
+    // コンボ自動実行キュー（アンロック演出用）
+    AutoComboQueue autoComboQueue_;
+
+    // 自動実行攻撃発火時コールバック（アンロック演出UIへの通知用）
+    std::function<void(const std::string&)> autoComboAttackCallback_;
+
 private:
     /// ===================================================
     /// private variables
@@ -170,9 +195,12 @@ private:
     bool isDeathRenditionFinish_ = false;
 
     // ダメージクールダウン
-    bool isDamageColling_ = false;
-    float damageCollTime_ = 0.0f;
+    bool isDamageColling_     = false;
+    float damageCollTime_     = 0.0f;
     float damageCollDuration_ = 1.0f; // ダメージ無敵時間
+
+    // コンボアンロックスキップ
+    bool isIgnoreUnlockState_ = false;
 
 public:
     // getter
@@ -189,6 +217,7 @@ public:
     PlayerAttackCollisionBox* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
+    bool GetIsIgnoreUnlockState() const { return isIgnoreUnlockState_; }
     KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
     bool GetIsDeathRenditionFinish() const { return *isDeath_; }
@@ -204,6 +233,35 @@ public:
     void SetDeathTimer(DeathTimer* deathTimer) { pDeathTimer_ = deathTimer; }
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
+    void SetIsIgnoreUnlockState(bool isIgnore) { isIgnoreUnlockState_ = isIgnore; }
+
+    AutoComboQueue& GetAutoComboQueue() { return autoComboQueue_; }
+
+    /// <summary>
+    /// 自動実行コールバックを登録
+    /// </summary>
+    void SetAutoComboAttackCallback(std::function<void(const std::string&)> callback) {
+        autoComboAttackCallback_ = std::move(callback);
+    }
+
+    /// <summary>
+    /// 自動実行攻撃発火を通知
+    /// </summary>
+    void FireAutoComboAttackCallback(const std::string& attackName) {
+        if (autoComboAttackCallback_) {
+            autoComboAttackCallback_(attackName);
+        }
+    }
+
+    /// <summary>
+    /// 自動ダッシュ開始（アンロック演出用）
+    /// </summary>
+    void StartAutoDash();
+
+    /// <summary>
+    /// 自動ダッシュ解除
+    /// </summary>
+    void ClearAutoDash();
 
     void SetTitleBehavior();
     void RotateReset();

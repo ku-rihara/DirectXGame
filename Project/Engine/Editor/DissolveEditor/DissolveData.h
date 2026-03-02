@@ -68,6 +68,11 @@ public:
     const std::string& GetCurrentTexturePath() const { return currentTexturePath_; }
     float GetCurrentThreshold() const { return currentThreshold_; }
     bool IsDissolveEnabled() const { return currentEnable_; }
+    float GetStartThreshold() const { return startThreshold_; }
+    float GetEndThreshold() const { return endThreshold_; }
+    float GetMaxTime() const { return maxTime_; }
+    float GetOffsetTime() const { return offsetTime_; }
+    int32_t GetEaseType() const { return easeType_; }
 
     // setter
     void SetTextureIndex(int32_t index);

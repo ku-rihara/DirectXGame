@@ -30,26 +30,29 @@ ComboAttackAction::~ComboAttackAction() {}
 void ComboAttackAction::Init() {
 
     // タイミングのリセット
-    currentFrame_      = 0.0f;
-    waitTime_          = 0.0f;
-    collisionTimer_    = 0.0f;
-    isCollisionActive_ = false;
-    hasHitEnemy_       = false;
-    isReserveNextCombo_ = false;
-    isAttackCancel_ = false;
-    selectedBranchIndex_ = -1;
+    currentFrame_            = 0.0f;
+    waitTime_                = 0.0f;
+    collisionTimer_          = 0.0f;
+    isCollisionActive_       = false;
+    hasHitEnemy_             = false;
+    isReserveNextCombo_      = false;
+    isAutoReservedCombo_     = false;
+    autoSelectedBranchIndex_ = -1;
+    isAttackCancel_          = false;
+    selectedBranchIndex_     = -1;
 
     // 次の攻撃候補リストを構築
     nextAttackCandidates_.clear();
-    auto& branches = attackData_->GetComboBranches();
+    auto& branches                          = attackData_->GetComboBranches();
     PlayerComboAttackController* controller = pOwner_->GetComboAttackController();
 
     for (auto& branch : branches) {
         if (!branch->GetNextAttackName().empty() && branch->GetNextAttackName() != "None") {
             PlayerComboAttackData* nextAttack = controller->GetAttackByName(branch->GetNextAttackName());
-            if (nextAttack) {
+
+            if (IsAttackUnlock(*nextAttack)) {
                 NextAttackCandidate candidate;
-                candidate.branch = branch.get();
+                candidate.branch     = branch.get();
                 candidate.attackData = nextAttack;
                 nextAttackCandidates_.push_back(candidate);
             }
@@ -62,6 +65,9 @@ void ComboAttackAction::Init() {
     SetMoveEasing();
 
     order_ = Order::INIT;
+
+    // 攻撃開始を通知（Init確定 = 攻撃実行開始のタイミング）
+    pOwner_->FireAutoComboAttackCallback(attackData_->GetGroupName());
 }
 
 void ComboAttackAction::Update(float atkSpeed) {
@@ -111,8 +117,9 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
     // 移動適用
     ApplyMovement(atkSpeed);
 
-    // 予約入力
+    // 予約入力（手動 → 自動の順でチェック。手動が優先）
     PreOderNextComboForButton();
+    TryAutoSelectNextFromQueue();
 
     // キャンセル処理
     AttackCancel();
@@ -164,13 +171,24 @@ void ComboAttackAction::UpdateWait(float atkSpeed) {
 void ComboAttackAction::ChangeNextAttack() {
 
     // 自動進行フラグがtrueの場合も次に進む（最初の分岐を選択）
-    bool shouldAdvance = isReserveNextCombo_ || isAttackCancel_ || attackData_->GetAttackParam().timingParam.isAutoAdvance;
+    bool shouldAdvance = isReserveNextCombo_ || isAutoReservedCombo_ || isAttackCancel_ || attackData_->GetAttackParam().timingParam.isAutoAdvance;
     KetaEngine::Input::SetVibration(0, 0.0f, 0.0f);
+
+    // 自動予約時: 遷移直前にキューから取り出す
+    auto TryDequeueIfAutoReserved = [this](PlayerComboAttackData* nextAttackData) {
+        if (!isAutoReservedCombo_)
+            return;
+        auto& queue = pOwner_->GetAutoComboQueue();
+        if (queue.Peek() == nextAttackData) {
+            queue.Dequeue();
+        }
+    };
 
     // 次のコンボに移動する
     if (shouldAdvance && selectedBranchIndex_ >= 0 && selectedBranchIndex_ < static_cast<int32_t>(nextAttackCandidates_.size())) {
         PlayerComboAttackData* nextAttackData = nextAttackCandidates_[selectedBranchIndex_].attackData;
 
+        TryDequeueIfAutoReserved(nextAttackData);
         BaseComboAttackBehavior::ChangeNextCombo(
             std::make_unique<ComboAttackAction>(pOwner_, nextAttackData));
 
@@ -180,6 +198,7 @@ void ComboAttackAction::ChangeNextAttack() {
         // 自動進行の場合は最初の分岐を使用
         PlayerComboAttackData* nextAttackData = nextAttackCandidates_[0].attackData;
 
+        TryDequeueIfAutoReserved(nextAttackData);
         BaseComboAttackBehavior::ChangeNextCombo(
             std::make_unique<ComboAttackAction>(pOwner_, nextAttackData));
 
@@ -187,8 +206,8 @@ void ComboAttackAction::ChangeNextAttack() {
 
     } else {
         // 落下フラグがある場合はPlayerJumpに移行
-        if (attackData_->GetAttackParam().fallParam.enableFall) {
-            pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, true));
+        if (pOwner_->GetWorldPosition().y >= pOwner_->GetParameter()->GetParameters().startPos_.y) {
+            pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
             pOwner_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pOwner_));
             return;
         }
@@ -203,6 +222,12 @@ void ComboAttackAction::ChangeNextAttack() {
 ///  コンボ移動フラグ処理
 void ComboAttackAction::PreOderNextComboForButton() {
 
+    // 自動再生中はプレイヤーの手動入力を受け付けない
+    if (!pOwner_->GetAutoComboQueue().IsEmpty()) {
+        isReserveNextCombo_ = false;
+        return;
+    }
+
     if (nextAttackCandidates_.empty()) {
         isReserveNextCombo_ = false;
         return;
@@ -214,13 +239,68 @@ void ComboAttackAction::PreOderNextComboForButton() {
 
         // ヒット状態を渡して先行入力をチェック
         if (attackData_->IsReserveNextAttack(currentFrame_, *candidate.branch, hasHitEnemy_)) {
-            isReserveNextCombo_ = true;
+            isReserveNextCombo_  = true;
             selectedBranchIndex_ = static_cast<int32_t>(i);
             return;
         }
     }
 
     isReserveNextCombo_ = false;
+}
+
+///  キューから次のコンボを自動選択
+void ComboAttackAction::TryAutoSelectNextFromQueue() {
+    // PreOderNextComboForButton のリセットを上書きして再アサート
+    if (isAutoReservedCombo_) {
+        if (!isReserveNextCombo_) {
+            isReserveNextCombo_  = true;
+            selectedBranchIndex_ = autoSelectedBranchIndex_;
+        }
+        return;
+    }
+
+    // 手動入力で既に選択済みなら何もしない
+    if (isReserveNextCombo_) {
+        return;
+    }
+
+    auto& queue = pOwner_->GetAutoComboQueue();
+    if (queue.IsEmpty()) {
+        return;
+    }
+
+    PlayerComboAttackData* nextData = queue.Peek();
+    if (!nextData) {
+        return;
+    }
+
+    for (size_t i = 0; i < nextAttackCandidates_.size(); ++i) {
+        const auto& candidate = nextAttackCandidates_[i];
+
+        // キューの先頭と一致するか
+        if (candidate.attackData != nextData) {
+            continue;
+        }
+
+        // 先行入力タイミングウィンドウが開いているか
+        float precedeTime = candidate.branch->GetPrecedeInputTime();
+        bool timingOk     = (currentFrame_ >= precedeTime) || attackData_->IsWaitFinish(currentFrame_);
+        if (!timingOk) {
+            continue;
+        }
+
+        // ヒット条件チェック
+        if (candidate.branch->GetRequireHit() && !hasHitEnemy_) {
+            continue;
+        }
+
+        // 自動予約確定（Dequeueはここではせず ChangeNextAttack で行う）
+        isAutoReservedCombo_     = true;
+        autoSelectedBranchIndex_ = static_cast<int32_t>(i);
+        isReserveNextCombo_      = true;
+        selectedBranchIndex_     = static_cast<int32_t>(i);
+        return;
+    }
 }
 
 void ComboAttackAction::AttackCancel() {
@@ -235,9 +315,9 @@ void ComboAttackAction::AttackCancel() {
 
         // キャンセル時間をチェック
         if (attackData_->IsCancelAttack(currentFrame_, *candidate.branch, hasHitEnemy_)) {
-            isAttackCancel_ = true;
+            isAttackCancel_      = true;
             selectedBranchIndex_ = static_cast<int32_t>(i);
-            order_ = Order::CHANGE;
+            order_               = Order::CHANGE;
             return;
         }
     }
@@ -301,6 +381,11 @@ void ComboAttackAction::SetMoveEasing() {
 
     // 開始時間を設定
     moveEasing_.SetStartTimeOffset(moveParam.startTime);
+}
+
+bool ComboAttackAction::IsAttackUnlock(const PlayerComboAttackData& data) const {
+    bool result = data.GetAttackParam().isUnlocked || pOwner_->GetIsIgnoreUnlockState();
+    return result;
 }
 
 void ComboAttackAction::Debug() {

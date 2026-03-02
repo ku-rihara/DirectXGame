@@ -2,6 +2,8 @@
 
 // std
 #include <algorithm>
+// KillCounter
+#include "KillCounter/KillCounter.h"
 // Manager
 #include "Enemy/EnemyManager.h"
 // behavior
@@ -38,6 +40,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     /// transform
     baseTransform_.translation_   = spawnPos;
     baseTransform_.translation_.y = parameter_.basePosY;
+    baseTransform_.SetAnchorRotation(Vector3(0.0f, 1.5f, 0.0f));
     baseTransform_.scale_         = Vector3::ZeroVector();
 
     /// attack collision
@@ -312,6 +315,13 @@ void BaseEnemy::TakeDamage(float damageValue) {
     // コンボをカウント
     pCombo_->ComboCountUP();
 
+    if (hp_ <= 0.0f && !isDeathPending_) {
+        // 撃破カウント
+        if (pKillCounter_) {
+            pKillCounter_->AddKillCount();
+        }
+    }
+
     if (hp_ < 0.0f) {
         hp_ = 0.0f;
     }
@@ -440,9 +450,9 @@ std::vector<std::string> BaseEnemy::GetAnimationNames() const {
     return {};
 }
 
-void BaseEnemy::AddDamageReactionAnimation(const std::string& name) {
-    objAnimation_->Add(name + ".gltf");
-    damageReactionAnimationNames_.push_back(name);
+void BaseEnemy::AddDamageReactionAnimation(const std::string& name, bool isLoop) {
+    objAnimation_->Add("Enemy/" + name + ".gltf");
+    damageReactionAnimations_.push_back({name, isLoop});
 }
 
 float BaseEnemy::CalcDistanceToPlayer() {
@@ -485,8 +495,13 @@ void BaseEnemy::SetCombo(Combo* manager) {
     pCombo_ = manager;
 }
 
+void BaseEnemy::SetKillCounter(KillCounter* killCounter) {
+    pKillCounter_ = killCounter;
+}
+
 void BaseEnemy::BackToDamageRoot() {
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+    ResetToWaitAnimation();
 }
 
 void BaseEnemy::SetParameter(const Type& type, const Parameter& parameter) {
@@ -505,13 +520,13 @@ void BaseEnemy::SetBodyColor(const Vector4& color) {
 void BaseEnemy::SetAnimationName(AnimationType type, const std::string& name) {
 
     if (type == AnimationType::Wait) {
-        objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(name+ ".gltf"));
+        objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("Enemy/" + name + ".gltf"));
         objAnimation_->Init();
         animationNames_[static_cast<size_t>(type)] = name;
         return;
     }
 
-    objAnimation_->Add(name + ".gltf");
+    objAnimation_->Add("Enemy/" + name + ".gltf");
     animationNames_[static_cast<size_t>(type)] = name;
 }
 
@@ -523,4 +538,23 @@ void BaseEnemy::RotateInit() {
 
 void BaseEnemy::ScaleReset() {
     baseTransform_.scale_ = parameter_.baseScale_;
+}
+
+std::vector<std::string> BaseEnemy::GetDamageReactionAnimationNames() const {
+    std::vector<std::string> names;
+    names.reserve(damageReactionAnimations_.size());
+    for (const auto& info : damageReactionAnimations_) {
+        names.push_back(info.name);
+    }
+    return names;
+}
+
+
+bool BaseEnemy::GetDamageReactionAnimationIsLoop(const std::string& name) const {
+    for (const auto& info : damageReactionAnimations_) {
+        if (info.name == name) {
+            return info.isLoop;
+        }
+    }
+    return false;
 }

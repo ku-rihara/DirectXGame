@@ -1,0 +1,16 @@
+{
+    "ComboSupportSpriteUi": {
+        "bg0Offset": [
+            84.0,
+            20.0
+        ],
+        "bg1Offset": [
+            84.0,
+            152.0
+        ],
+        "conditionOffset": [
+            0.0,
+            0.0
+        ]
+    }
+}

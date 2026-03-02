@@ -1,14 +1,14 @@
 #pragma once
+#include "3D/Line3D/Line3D.h"
 #include "3d/WorldTransform.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "Editor/RailEditor/RailManager.h"
 #include "Particle/GPUParticle/Data/GPUParticleEmitterData.h"
-#include "3D/Line3D/Line3D.h"
 #include "utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector3.h"
 #include <memory>
 #include <string>
 
+#include "Base/Material/ModelMaterial.h"
 enum class BlendMode;
 
 namespace KetaEngine {
@@ -19,7 +19,7 @@ public:
         STOPPED,
         WAITING,
         PLAYING,
-        PAUSED 
+        PAUSED
     };
 
     enum class BillboardMode {
@@ -94,7 +94,6 @@ public:
 
     void StartWaiting();
     void Emit();
-    void StartRailEmit();
 
 private:
     //*---------------------------- private Methods ----------------------------*//
@@ -105,7 +104,6 @@ private:
     void ApplyTexture(const std::string& textureName);
     void AdaptTexture();
 
-    void RailMoveUpdate();
     void UpdateEmitTransform();
     void SetEmitLine();
 
@@ -143,15 +141,13 @@ private:
     UVParameters uvParams_;
 
     GlobalParameter* globalParameter_ = nullptr;
-    std::unique_ptr<RailManager> railManager_;
     std::unique_ptr<Line3D> debugLine_;
     WorldTransform emitBoxTransform_;
 
-    float currentTime_    = 0.0f;
-    float elapsedTime_    = 0.0f;
-    float startTime_      = 0.0f;
-    bool shouldEmit_      = false;
-    bool isStartRailMove_ = false;
+    float currentTime_ = 0.0f;
+    float elapsedTime_ = 0.0f;
+    float startTime_   = 0.0f;
+    bool shouldEmit_   = false;
 
     int blendModeIndex_ = 1;
 
@@ -159,10 +155,6 @@ private:
     const std::string textureFilePath_ = "Resources/texture";
     std::string folderPath_;
     std::string selectedTexturePath_;
-
-    bool isMoveForRail_ = false;
-    bool isRailLoop_    = false;
-    float moveSpeed_    = 1.0f;
 
     PlayState playState_ = PlayState::STOPPED;
     TimeModeSelector timeModeSelector_;
@@ -172,7 +164,7 @@ public:
     const std::string& GetSectionName() const { return sectionName_; }
     const EmitterSettings& GetEmitterSettings() const { return emitterSettings_; }
     const GroupSettings& GetGroupSettings() const { return groupSettings_; }
-    PlayState GetPlayState() const { return playState_; } 
+    PlayState GetPlayState() const { return playState_; }
 
     //*----------------------------- setter Methods -----------------------------*//
     void SetTexture(uint32_t textureHandle);

@@ -1,0 +1,32 @@
+{
+    "ComboUnlockNotifier": {
+        "BgSpriteOffset": [
+            -27.0,
+            -23.0
+        ],
+        "BgSpriteScale": [
+            1.2100000381469727,
+            0.7099999785423279
+        ],
+        "ButtonExtraScale": 1.0,
+        "CardSpacingY": 46.0,
+        "CloseOffsetTime": 1.600000023841858,
+        "NotifyBasePositionX": 948.0,
+        "NotifyBasePositionY": 232.0,
+        "RightAnchorX": 1200.0,
+        "SlideStartOffsetX": 600.0,
+        "TextSpriteOffset": [
+            142.0,
+            -46.0
+        ],
+        "TextSpriteScale": [
+            0.3499999940395355,
+            0.3499999940395355
+        ],
+        "arrowOffsetPos": [
+            27.0,
+            0.0
+        ],
+        "spaceColumn": 56.0
+    }
+}

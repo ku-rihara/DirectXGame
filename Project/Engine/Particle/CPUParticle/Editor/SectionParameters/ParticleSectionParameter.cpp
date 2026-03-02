@@ -108,6 +108,9 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     // Texture
     globalParam->Regist(groupName, "selectedTexturePath", &selectedTexturePath_);
 
+    // Dissolve
+    globalParam->Regist(groupName, "dissolveName", &dissolveName_);
+
     // Primitive
     globalParam->Regist(groupName, "useModel", &useModel_);
     globalParam->Regist(groupName, "primitiveTypeInt", &primitiveTypeInt_);
@@ -222,6 +225,9 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
 
     // Texture
     selectedTexturePath_ = globalParam->GetValue<std::string>(groupName, "selectedTexturePath");
+
+    // Dissolve
+    dissolveName_ = globalParam->GetValue<std::string>(groupName, "dissolveName");
 
     // Primitive
     useModel_         = globalParam->GetValue<bool>(groupName, "useModel");
@@ -429,6 +435,46 @@ void ParticleSectionParameter::AdjustParam() {
     }
 
     ImGuiTextureSelection();
+
+    // Dissolve設定
+    if (ImGui::CollapsingHeader("Dissolve")) {
+        std::vector<std::string> dissolveFiles = GetFileNamesForDirectory(dissolveFolderPath_);
+
+        if (!dissolveFiles.empty()) {
+            std::vector<const char*> names;
+            names.push_back("(なし)");
+            for (const auto& file : dissolveFiles) {
+                names.push_back(file.c_str());
+            }
+
+            // 現在のdissolveNameからインデックスを導出
+            int dissolveSelectedIndex = 0;
+            if (!dissolveName_.empty()) {
+                for (int i = 0; i < static_cast<int>(dissolveFiles.size()); ++i) {
+                    if (dissolveFiles[i] == dissolveName_) {
+                        dissolveSelectedIndex = i + 1; // +1 for "(なし)"
+                        break;
+                    }
+                }
+            }
+
+            if (ImGui::ListBox("Dissolve Name", &dissolveSelectedIndex, names.data(), static_cast<int>(names.size()))) {
+                if (dissolveSelectedIndex == 0) {
+                    dissolveName_ = "";
+                } else {
+                    dissolveName_ = dissolveFiles[dissolveSelectedIndex - 1];
+                }
+            }
+
+            if (!dissolveName_.empty()) {
+                ImGui::Text("Selected: %s", dissolveName_.c_str());
+            } else {
+                ImGui::TextDisabled("Dissolveなし");
+            }
+        } else {
+            ImGui::TextDisabled("Dissolveファイルが見つかりません");
+        }
+    }
 
     ImGui::PopID();
 #endif

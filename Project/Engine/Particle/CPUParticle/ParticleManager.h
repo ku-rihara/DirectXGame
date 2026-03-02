@@ -13,6 +13,8 @@
 
 // Easing
 #include "Easing/Easing.h"
+// Dissolve
+#include "Editor/DissolveEditor/DissolvePlayer.h"
 
 // math
 #include "Box.h"
@@ -100,12 +102,28 @@ public:
 
         // UV情報
         UVInfo uvInfo_;
+
+        // Dissolve
+        float dissolveCurrentTime    = 0.0f;
+        float dissolveOffsetTime     = 0.0f;
+        bool isAdaptDissolveEasing   = false;
+        std::unique_ptr<float> dissolveThresholdData_;
+        std::unique_ptr<Easing<float>> dissolveEasing;
     };
 
     struct AccelerationField {
         Vector3 acceleration;
         AABB area;
         bool isAdaption;
+    };
+
+    struct DissolveGroupParams {
+        float startThreshold = 1.0f;
+        float endThreshold   = 0.0f;
+        float maxTime        = 1.0f;
+        float offsetTime     = 0.0f;
+        int32_t easeType     = 0;
+        bool  isActive       = false;
     };
 
     struct ParticleGroup {
@@ -116,9 +134,13 @@ public:
         uint32_t srvIndex;
         uint32_t currentNum;
         uint32_t textureHandle;
+        uint32_t dissolveTextureHandle = 0;
         ParticleFprGPU* instancingData;
         std::list<Particle> particles;
         GroupParameters param;
+        DissolveGroupParams dissolveParams;
+        std::unique_ptr<DissolvePlayer> dissolvePlayer;
+        std::string lastDissolveTexturePath;
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
     };
 
@@ -140,7 +162,7 @@ public:
     void CreateInstancingResource(const std::string& name, uint32_t instanceNum);
     void ResetAllParticles();
 
-    Particle MakeParticle(const Parameters& parameters);
+    Particle MakeParticle(const Parameters& parameters, const DissolveGroupParams* dissolveParams = nullptr);
     void Emit(std::string name, const Parameters& parameters,
         const GroupParameters& groupParameters, int32_t count);
 
@@ -164,6 +186,9 @@ public:
 
     void SetViewProjection(const ViewProjection* view);
     void SetTextureHandle(const std::string name, uint32_t handle);
+    void SetDissolveTextureHandle(const std::string& name, uint32_t handle);
+    void PlayDissolve(const std::string& name, const std::string& dissolveName);
+    void StopDissolve(const std::string& name);
     void SetAllParticleFile();
 };
 

@@ -4,6 +4,7 @@ using namespace KetaEngine;
 #include "Base/TextureManager.h"
 #include "Base/WinApp.h"
 #include "Base/Dx/DirectXCommon.h"
+#include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 #include "SpriteRegistry.h"
 #include <algorithm>
 #include <imgui.h>
@@ -139,17 +140,23 @@ void Sprite::CreateSprite(const std::string& textureName) {
     const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureIndex_);
     textureSize_.x                       = static_cast<float>(metadata.width);
     textureSize_.y                       = static_cast<float>(metadata.height);
+
+    // スプライトイージングアニメーションプレイヤー初期化
+    if (!spriteEaseAnimationPlayer_) {
+        spriteEaseAnimationPlayer_ = std::make_unique<SpriteEaseAnimationPlayer>();
+        spriteEaseAnimationPlayer_->Init();
+    }
 }
 
 void Sprite::Draw() {
     DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 
     ///==========================================================================================
-    //  anchorPoint + ゲージレート対応
+    //  anchorPoint
     ///==========================================================================================
 
     float left   = 0.0f - anchorPoint_.x;
-    float right  = (1.0f * gaugeRate_) - anchorPoint_.x;
+    float right  = 1.0f - anchorPoint_.x;
     float top    = 0.0f - anchorPoint_.y;
     float bottom = 1.0f - anchorPoint_.y;
 
@@ -170,11 +177,11 @@ void Sprite::Draw() {
     }
 
     ///==========================================================================================
-    //  TextureClip + ゲージレート対応
+    //  TextureClip
     ///==========================================================================================
 
     float texLeft   = textureLeftTop_.x / textureSize_.x;
-    float texRight  = (textureLeftTop_.x + textureSize_.x * gaugeRate_) / textureSize_.x; 
+    float texRight  = (textureLeftTop_.x + textureSize_.x) / textureSize_.x;
     float texTop    = textureLeftTop_.y / textureSize_.y;
     float texBottom = (textureLeftTop_.y + textureSize_.y) / textureSize_.y;
 
@@ -184,15 +191,27 @@ void Sprite::Draw() {
     vertexData_[2].texcoord = {texRight, texBottom};
     vertexData_[3].texcoord = {texRight, texTop};
 
+    // ゲージレートをマテリアルに設定
+    material_.GetMaterialData()->gaugeRate = gaugeRate_;
+
+    ///==========================================================================================
+    //  SpriteEaseAnimation
+    ///==========================================================================================
+    UpdateSpriteEaseAnimation();
+
     ///==========================================================================================
     //  Transform
     ///==========================================================================================
 
+    Vector2 animPos   = GetAnimationPosition();
+    Vector3 animRot   = GetAnimationRotation();
+
     Vector3 size      = Vector3(textureSize_.x, textureSize_.y, 0.0f) * Vector3(transform_.scale.x * parameter_.scale_.x, transform_.scale.y * parameter_.scale_.y, 0.0f);
-    Vector3 translate = Vector3(transform_.pos.x, transform_.pos.y, 0.0f);
+    Vector3 translate = Vector3(transform_.pos.x + animPos.x, transform_.pos.y + animPos.y, 0.0f);
+    Vector3 rotate    = Vector3(transform_.rotate.x + animRot.x, transform_.rotate.y + animRot.y, transform_.rotate.z + animRot.z);
 
     // 行列変換
-    Matrix4x4 worldMatrixSprite               = MakeAffineMatrix(size, transform_.rotate, translate);
+    Matrix4x4 worldMatrixSprite               = MakeAffineMatrix(size, rotate, translate);
     Matrix4x4 projectionMatrixSprite          = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
     Matrix4x4 worldViewProjectionMatrixSprite = worldMatrixSprite * projectionMatrixSprite;
 
@@ -252,8 +271,8 @@ void Sprite::AdjustParam() {
         ImGui::InputInt("LayerNum", &parameter_.startLayerNum_);
 
         ImGui::SeparatorText("InitParam");
-        ImGui::DragFloat2("StartPos", &parameter_.position_.x, 0.1f);
-        ImGui::DragFloat2("baseScale", &parameter_.scale_.x, 0.1f);
+        ImGui::DragFloat2("StartPos", &parameter_.position_.x, 0.5f);
+        ImGui::DragFloat2("baseScale", &parameter_.scale_.x, 0.01f);
         ImGui::DragFloat2("StartAnchorPoint", &parameter_.startAnchorPoint_.x, 0.01f);
         ImGui::ColorEdit4("StartColor", &parameter_.color_.x);
         ImGui::SeparatorText("UVParam");
@@ -286,4 +305,92 @@ void Sprite::SetColor(const Vector3& color) {
 
 void Sprite::SetAlpha(float alpha) {
     material_.GetMaterialData()->color.w = alpha;
+}
+
+///============================================================
+/// スプライトイージングアニメーション再生
+///============================================================
+void Sprite::PlaySpriteEaseAnimation(const std::string& animationName, const std::string& categoryName) {
+    if (!spriteEaseAnimationPlayer_) {
+        spriteEaseAnimationPlayer_ = std::make_unique<SpriteEaseAnimationPlayer>();
+        spriteEaseAnimationPlayer_->Init();
+    }
+
+    spriteEaseAnimationPlayer_->Play(animationName, categoryName);
+}
+
+///============================================================
+/// スプライトイージングアニメーション停止
+///============================================================
+void Sprite::StopSpriteEaseAnimation() {
+    if (spriteEaseAnimationPlayer_) {
+        spriteEaseAnimationPlayer_->Stop();
+    }
+}
+
+///============================================================
+/// スプライトイージングアニメーション更新
+///============================================================
+void Sprite::UpdateSpriteEaseAnimation() {
+    if (spriteEaseAnimationPlayer_) {
+        spriteEaseAnimationPlayer_->Update();
+        ApplyAnimationToMaterial();
+    }
+}
+
+///============================================================
+/// アニメーションのColor/Alphaをマテリアルに適用
+///============================================================
+void Sprite::ApplyAnimationToMaterial() {
+    if (!spriteEaseAnimationPlayer_ || !spriteEaseAnimationPlayer_->IsPlaying()) {
+        return;
+    }
+
+    using PropType = SpriteEaseAnimationData::PropertyType;
+
+    // Scale (ベーススケールにアニメーション値を乗算)
+    if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Scale)) {
+        Vector2 scaleOffset = spriteEaseAnimationPlayer_->GetCurrentScale();
+        transform_.scale.x  = parameter_.scale_.x * scaleOffset.x;
+        transform_.scale.y  = parameter_.scale_.y * scaleOffset.y;
+    }
+
+    // Color
+    if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Color)) {
+        Vector3 color = spriteEaseAnimationPlayer_->GetCurrentColor();
+        material_.GetMaterialData()->color.x = color.x;
+        material_.GetMaterialData()->color.y = color.y;
+        material_.GetMaterialData()->color.z = color.z;
+    }
+
+    // Alpha
+    if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Alpha)) {
+        material_.GetMaterialData()->color.w = spriteEaseAnimationPlayer_->GetCurrentAlpha();
+    }
+}
+
+///============================================================
+/// アニメーションの位置オフセットを取得
+///============================================================
+Vector2 Sprite::GetAnimationPosition() const {
+    if (spriteEaseAnimationPlayer_ && spriteEaseAnimationPlayer_->IsPlaying()) {
+        using PropType = SpriteEaseAnimationData::PropertyType;
+        if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Position)) {
+            return spriteEaseAnimationPlayer_->GetCurrentPosition();
+        }
+    }
+    return Vector2::ZeroVector();
+}
+
+///============================================================
+/// アニメーションの回転オフセットを取得
+///============================================================
+Vector3 Sprite::GetAnimationRotation() const {
+    if (spriteEaseAnimationPlayer_ && spriteEaseAnimationPlayer_->IsPlaying()) {
+        using PropType = SpriteEaseAnimationData::PropertyType;
+        if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Rotation)) {
+            return spriteEaseAnimationPlayer_->GetCurrentRotation();
+        }
+    }
+    return Vector3::ZeroVector();
 }

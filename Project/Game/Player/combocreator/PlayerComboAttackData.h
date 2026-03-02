@@ -69,22 +69,18 @@ public:
         int32_t gamePadBottom;
     };
 
-    // 落下パラメータ
-    struct FallParam {
-        bool enableFall;
-    };
-
     // アタックパラメータ
     struct AttackParameter {
         CollisionParam collisionParam;
         MoveParam moveParam;
         TimingParam timingParam;
         TriggerParam triggerParam;
-        FallParam fallParam;
         float knockBackPower;
         float power;
         float blowYPower;
         bool isMotionOnly = false;
+        int32_t ableDefeatLevel = 0; 
+        bool isUnlocked = true;      
     };
 
 public:
@@ -93,10 +89,7 @@ public:
 
     //*-------------------------------- public Method --------------------------------*//
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="attackName">攻撃名</param>
+    // 初期化
     void Init(const std::string& attackName);
 
     // パラメータバインド、調節
@@ -113,10 +106,6 @@ public:
 
     // コンボ分岐の初期化
     void InitComboBranches();
-
-    // コンボ分岐リストへのアクセス
-    const std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() const { return comboBranches_; }
-    std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() { return comboBranches_; }
 
     // コンボ分岐UI
     void DrawComboBranchesUI();
@@ -172,10 +161,12 @@ public:
     const AttackParameter& GetAttackParam() const { return attackParam_; }
     AttackParameter& GetAttackParam() { return attackParam_; }
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
-    KetaEngine::GlobalParameter* GetGlobalParameter() const { return globalParameter_; }
     const std::string& GetFolderPath() const { return folderPath_; }
     Player* GetPlayer() const { return pPlayer_; };
     KetaEngine::TimelineDrawer* GetTimeline();
+  
+    const std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() const { return comboBranches_; }
+   
 
     void SetPlayer(Player* player);
     void SetController(PlayerComboAttackController* controller) { pController_ = controller; }

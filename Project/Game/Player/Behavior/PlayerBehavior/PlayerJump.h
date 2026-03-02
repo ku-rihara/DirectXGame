@@ -18,14 +18,14 @@ private:
 
 private:
     float speed_;
-    bool skipJump_ = false;
+    float initSpeed_ = 0.0f;
 
     // 状態関数
     std::function<void()> currentState_;
 
 public:
     // コンストラクタ
-    PlayerJump(Player* player, const bool& skipJump = false);
+    PlayerJump(Player* player, float initSpeed = 0.0f);
     ~PlayerJump();
 
     void Update([[maybe_unused]] float timeSpeed = 0.0f) override; //< 更新

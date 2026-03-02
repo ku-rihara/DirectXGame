@@ -21,10 +21,14 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.audienceController_->Update();
 
     // 各クラス更新
-    obj.comboScene_->Update();
+    // UI更新
+    obj.killCounter_->Update();
+    obj.comboAsistController_->Update();
+    obj.unlockNotifier_->Update(KetaEngine::Frame::DeltaTime());
+    obj.comboDirector_->Update();
     obj.player_->Update();
     obj.skyBox_->Update();
-    obj.howToOperate_->Update();
+    obj.operateUI_->Update();
     obj.enemySpawner_->Update(timeSpeed);
     obj.continuousEnemySpawner_->Update(timeSpeed);
     obj.enemyManager_->Update();

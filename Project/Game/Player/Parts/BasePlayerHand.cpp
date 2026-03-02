@@ -1,6 +1,7 @@
 #include "BasePlayerHand.h"
-
-/// imgui
+#include "3d/RibbonTrail/RibbonTrail.h"
+#include"Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
+/// imGui
 #include "base/TextureManager.h"
 #include <imgui.h>
 ///=========================================================
@@ -11,12 +12,20 @@ void BasePlayerHand::Init() {
     // グローバルパラメータ
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
-    AddParamGroup();
-    ApplyGlobalParameter();
+    RegisterParams();
+    globalParameter_->SyncParamForGroup(groupName_);
 
     particlePlayer_ = std::make_unique<KetaEngine::ParticlePlayer>();
     particlePlayer_->Init();
     particlePlayer_->SetFollowingPos(&effectFollowPos_);
+
+    // トレイルプレイヤー初期化
+    trailPlayer_.Init();
+
+    // ディゾルブエッジ設定
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.05f;
+    dissolvePlayer_.Init();
 }
 
 ///=========================================================
@@ -24,83 +33,68 @@ void BasePlayerHand::Init() {
 ///==========================================================
 void BasePlayerHand::Update() {
 
+    // 戻り中は進行方向の逆を向くよう WorldTransform に伝える
+    auto* animPlayer = obj3d_->transform_.GetObjEaseAnimationPlayer();
+    obj3d_->transform_.SetReverseDirectionOnReturn(animPlayer->IsTranslationReturning());
+
     obj3d_->SetIsShadow(isShadow_);
 
     // エミッター更新
-    particlePlayer_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
-    effectFollowPos_ = obj3d_->transform_.GetWorldPos();
+    Vector3 handPos  = obj3d_->transform_.GetWorldPos();
+    particlePlayer_->SetTargetPosition(handPos);
+    effectFollowPos_ = handPos;
     particlePlayer_->Update();
+
+    // ディゾルブ更新・適用 
+    dissolvePlayer_.Update();
+    if (dissolvePlayer_.IsPlaying()) {
+        dissolvePlayer_.ApplyToMaterial(*obj3d_->GetModelMaterial());
+    }
 
     BaseObject::Update();
 }
 
 ///=================================================================================
-/// ロード
+/// パラメータ登録
 ///=================================================================================
-void BasePlayerHand::ParamLoadForImGui() {
-
-    // ロードボタン
-    if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
-
-        globalParameter_->LoadFile(groupName_);
-        // セーブ完了メッセージ
-        ImGui::Text("Load Successful: %s", groupName_.c_str());
-        ApplyGlobalParameter();
-    }
-}
-
-///=================================================================================
-/// パラメータをグループに追加
-///=================================================================================
-void BasePlayerHand::AddParamGroup() {
-    globalParameter_->CreateGroup(groupName_);
-
-    // Position
-    globalParameter_->AddItem(groupName_, "Translate", obj3d_->transform_.translation_);
-}
-
-///=================================================================================
-/// パラメータをグループに追加
-///=================================================================================
-void BasePlayerHand::SetValues() {
-
-    // グループを追加
-    globalParameter_->CreateGroup(groupName_);
-
-    // Position
-    globalParameter_->SetValue(groupName_, "Translate", obj3d_->transform_.translation_);
-}
-
-///=====================================================
-///  ImGuiからパラメータを得る
-///=====================================================
-void BasePlayerHand::ApplyGlobalParameter() {
-    // Position
-    obj3d_->transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-}
-
-///=====================================================
-///  セーブロード
-///=====================================================
-void BasePlayerHand::SaveAndLoad() {
-
-    globalParameter_->ParamSaveForImGui(groupName_);
-    ParamLoadForImGui();
-}
-void BasePlayerHand::DissolveAdapt(float dissolve) {
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.05f;
-    obj3d_->GetModelMaterial()->GetMaterialData()->enableDissolve    = true;
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = dissolve;
+void BasePlayerHand::RegisterParams() {
+    globalParameter_->Regist(groupName_, "Translate", &obj3d_->transform_.translation_);
 }
 
 void BasePlayerHand::AdjustParamBase() {
+#ifdef _DEBUG
     ImGui::SeparatorText("Param");
     ImGui::DragFloat3("Position", &obj3d_->transform_.translation_.x, 0.1f);
+    globalParameter_->ParamSaveForImGui(groupName_);
+    globalParameter_->ParamLoadForImGui(groupName_);
+#endif // _DEBUG
+}
+
+
+void BasePlayerHand::PlayDissolve(const std::string& name) {
+    dissolvePlayer_.Play(name);
+}
+
+void BasePlayerHand::SetInitialDissolveHidden() {
+    obj3d_->GetModelMaterial()->GetMaterialData()->enableDissolve    = true;
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = 1.0f;
 }
 
 void BasePlayerHand::SetParent(KetaEngine::WorldTransform* parent) {
     obj3d_->transform_.parent_ = parent;
+}
+
+void BasePlayerHand::StartTrailEmit(const std::string& presetName, const std::string& category) {
+    trailPlayer_.Play(presetName, category);
+
+    // プリセットに合わせてリボントレイルを再生成
+    ribbonTrail_.reset(KetaEngine::RibbonTrail::Create(static_cast<size_t>(trailPlayer_.GetMaxPoints())));
+    ribbonTrail_->SetEndColor(trailPlayer_.GetEndColor());
+    ribbonTrail_->SetEndWidth(trailPlayer_.GetEndWidth());
+    ribbonTrail_->SetTexture(trailPlayer_.GetTexturePath());
+
+    lastTrailPos_ = {1e30f, 1e30f, 1e30f}; // 初回は必ずポイントを追加する
+    isTrailEmit_  = true;
 }
 
 void BasePlayerHand::EffectEmit(const std::string& effectName) {

@@ -28,6 +28,15 @@ public:
     /// <param name="material">適用先のマテリアル</param>
     void ApplyToMaterial(ModelMaterial& material);
 
+    float GetThreshold() const;
+    bool IsEnabled() const;
+    const std::string& GetTexturePath() const;
+    float GetStartThreshold() const;
+    float GetEndThreshold() const;
+    float GetMaxTime() const;
+    float GetOffsetTime() const;
+    int32_t GetEaseType() const;
+
 protected:
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
 

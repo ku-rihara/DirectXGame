@@ -209,6 +209,37 @@ int32_t PlayerComboAttackTimelineParameterApplier::GetFinishWaitStartFrame() con
     return std::max(collisionEndFrame, moveEndFrame);
 }
 
+// TrackType → RenditionData::Type インデックスの逆引きマッピング
+// RibbonTrailEffect(RenditionData index=5) はタイムライン上に存在しないため
+// AudioAttack は RenditionData index=6 に対応する
+static int32_t GetRenditionIndexFromTrackType(PlayerComboAttackTimelineData::TrackType type) {
+    using TT = PlayerComboAttackTimelineData::TrackType;
+    using RT = PlayerAttackRenditionData::Type;
+    switch (type) {
+    case TT::CAMERA_ACTION:   return static_cast<int32_t>(RT::CameraAction);
+    case TT::HIT_STOP:        return static_cast<int32_t>(RT::HitStop);
+    case TT::SHAKE_ACTION:    return static_cast<int32_t>(RT::ShakeAction);
+    case TT::POST_EFFECT:     return static_cast<int32_t>(RT::PostEffect);
+    case TT::PARTICLE_EFFECT: return static_cast<int32_t>(RT::ParticleEffect);
+    case TT::AUDIO_ATTACK:    return static_cast<int32_t>(RT::AudioAttack);
+    default:                  return -1;
+    }
+}
+
+static int32_t GetRenditionOnHitIndexFromTrackType(PlayerComboAttackTimelineData::TrackType type) {
+    using TT = PlayerComboAttackTimelineData::TrackType;
+    using RT = PlayerAttackRenditionData::Type;
+    switch (type) {
+    case TT::CAMERA_ACTION_ON_HIT:   return static_cast<int32_t>(RT::CameraAction);
+    case TT::HIT_STOP_ON_HIT:        return static_cast<int32_t>(RT::HitStop);
+    case TT::SHAKE_ACTION_ON_HIT:    return static_cast<int32_t>(RT::ShakeAction);
+    case TT::POST_EFFECT_ON_HIT:     return static_cast<int32_t>(RT::PostEffect);
+    case TT::PARTICLE_EFFECT_ON_HIT: return static_cast<int32_t>(RT::ParticleEffect);
+    case TT::AUDIO_ATTACK_ON_HIT:    return static_cast<int32_t>(RT::AudioAttack);
+    default:                         return -1;
+    }
+}
+
 void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
     const PlayerComboAttackTimelineData::TrackInfo& trackInfo, float timing) {
 
@@ -216,40 +247,48 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
         return;
     }
 
+    using TT = PlayerComboAttackTimelineData::TrackType;
     auto& renditionData = const_cast<PlayerAttackRenditionData&>(attackData_->GetRenditionData());
     int typeInt         = static_cast<int>(trackInfo.type);
 
     // 通常演出
-    if (typeInt >= static_cast<int>(PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK)) {
+    if (typeInt >= static_cast<int>(TT::CAMERA_ACTION) && typeInt <= static_cast<int>(TT::AUDIO_ATTACK)) {
+        int32_t rendIdx = GetRenditionIndexFromTrackType(trackInfo.type);
+        if (rendIdx < 0) return;
 
         auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
-            renditionData.GetRenditionParamFromIndex(typeInt));
+            renditionData.GetRenditionParamFromIndex(rendIdx));
         param.fileName      = trackInfo.fileName;
         param.startTiming   = timing;
         param.isCameraReset = trackInfo.isCameraReset;
         param.volume        = trackInfo.volume;
-
     }
     // ヒット時演出
-    else if (typeInt >= static_cast<int>(PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK_ON_HIT)) {
+    else if (typeInt >= static_cast<int>(TT::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(TT::AUDIO_ATTACK_ON_HIT)) {
+        int32_t rendIdx = GetRenditionOnHitIndexFromTrackType(trackInfo.type);
+        if (rendIdx < 0) return;
 
-        int baseIndex = typeInt - static_cast<int>(PlayerComboAttackTimelineData::TrackType::CAMERA_ACTION_ON_HIT);
-        auto& param   = const_cast<PlayerAttackRenditionData::RenditionParam&>(
-            renditionData.GetRenditionParamOnHitFromIndex(baseIndex));
+        auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
+            renditionData.GetRenditionParamOnHitFromIndex(rendIdx));
         param.fileName      = trackInfo.fileName;
         param.startTiming   = timing;
         param.isCameraReset = trackInfo.isCameraReset;
         param.volume        = trackInfo.volume;
-
     }
     // オブジェクトアニメーション
-    else if (typeInt >= static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_MAIN_HEAD)) {
-
-        int baseIndex = typeInt - static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD);
+    else if (typeInt >= static_cast<int>(TT::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TT::OBJ_ANIM_MAIN_HEAD)) {
+        int baseIndex = typeInt - static_cast<int>(TT::OBJ_ANIM_HEAD);
         auto& param   = const_cast<PlayerAttackRenditionData::ObjAnimationParam&>(
             renditionData.GetObjAnimationParamFromIndex(baseIndex));
-        param.fileName    = trackInfo.fileName;
-        param.startTiming = timing;
+        param.fileName      = trackInfo.fileName;
+        param.startTiming   = timing;
+        param.trailFileName = trackInfo.trailFileName;
+    }
+    // MainHead追従トレイル（独立トラック）：fileNameをtrailFileNameとして適用
+    else if (trackInfo.type == TT::RIBBON_TRAIL_MAIN_HEAD) {
+        auto& param = const_cast<PlayerAttackRenditionData::ObjAnimationParam&>(
+            renditionData.GetObjAnimationParamFromType(PlayerAttackRenditionData::ObjAnimationType::MainHead));
+        param.trailFileName = trackInfo.fileName;
     }
 }
 

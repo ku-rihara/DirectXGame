@@ -7,12 +7,6 @@ class EnemyDamageReactionController;
 class EnemyDamageReactionData;
 class SideRope;
 
- enum class ReactionState {
-    Normal,
-    Slammed,
-    TakeUpper,
-};
-
 class EnemyDamageReactionRoot : public BaseEnemyDamageReaction {
 public:
     // コンストラクタ

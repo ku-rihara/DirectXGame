@@ -22,6 +22,12 @@ void PlayerAttackRendition::Reset() {
     hasTriggeredHitEffects_ = false;
     previousHasHit_         = false;
 
+    // トレイル停止
+    if (pPlayer_) {
+        pPlayer_->GetRightHand()->StopTrailEmit();
+        pPlayer_->GetLeftHand()->StopTrailEmit();
+    }
+
     // 振動の状態をリセット
     isVibrationPlayed_ = false;
     vibrationTimer_    = 0.0f;
@@ -78,6 +84,11 @@ void PlayerAttackRendition::Update(float deltaTime) {
 
 void PlayerAttackRendition::UpdateNormalRenditions(const PlayerAttackRenditionData& renditionData) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
+        // ヒット音はヒット時のみ再生するためスキップ
+        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::AudioHit) {
+            continue;
+        }
+
         const auto& param = renditionData.GetRenditionParamFromIndex(i);
 
         // すでに再生済みならスキップ
@@ -132,6 +143,11 @@ void PlayerAttackRendition::PlayRenditionEffect(PlayerAttackRenditionData::Type 
         pPlayer_->GetEffects()->Emit(param.fileName);
         break;
 
+    case PlayerAttackRenditionData::Type::RibbonTrailEffect:
+        pPlayer_->GetRightHand()->StartTrailEmit(param.fileName, "Player");
+        pPlayer_->GetLeftHand()->StartTrailEmit(param.fileName, "Player");
+        break;
+
     case PlayerAttackRenditionData::Type::AudioAttack:
     case PlayerAttackRenditionData::Type::AudioHit:
         KetaEngine::Audio::GetInstance()->Play(param.fileName + ".wav", param.volume);
@@ -166,10 +182,16 @@ void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionDa
 
             case PlayerAttackRenditionData::ObjAnimationType::RightHand:
                 pPlayer_->GetRightHand()->GetObject3D()->transform_.PlayObjEaseAnimation(param.fileName, "RightHand");
+                if (!param.trailFileName.empty() && param.trailFileName != "None") {
+                    pPlayer_->GetRightHand()->StartTrailEmit(param.trailFileName, "Player");
+                }
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::LeftHand:
                 pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation(param.fileName, "LeftHand");
+                if (!param.trailFileName.empty() && param.trailFileName != "None") {
+                    pPlayer_->GetLeftHand()->StartTrailEmit(param.trailFileName, "Player");
+                }
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::MainHead:

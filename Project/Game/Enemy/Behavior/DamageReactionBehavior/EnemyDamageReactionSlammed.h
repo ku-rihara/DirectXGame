@@ -35,6 +35,7 @@ private:
 
     // フェーズ関数
     void UpdatePhase();
+    void GetUpPhase();
     void EndPhase();
 
     // 更新処理
@@ -79,6 +80,9 @@ private:
     // 演出管理
     EnemyDamageRendition damageRendition_;
     bool hasPlayedRendition_ = false;
+
+    // GetUpフェーズ管理
+    bool getUpFinished_ = false;
 
 public:
     Vector3 GetKnockBackVelocity() const { return knockBackVelocity_; }

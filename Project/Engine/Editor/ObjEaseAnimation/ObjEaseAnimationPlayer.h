@@ -2,6 +2,7 @@
 #include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
 #include "ObjEaseAnimationData.h"
 #include "Vector3.h"
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -37,8 +38,20 @@ public:
     Vector3 GetCurrentRotation() const;
     Vector3 GetCurrentTranslation() const;
 
+    Vector3 GetCurrentScaleAnchor() const;
+    Vector3 GetCurrentRotationAnchor() const;
+    Vector3 GetCurrentTranslationAnchor() const;
+
     ObjEaseAnimationData* GetAnimationData();
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
+    bool IsLookingAtDirection() const;
+    Vector3 GetMovementDirection() const;
+    bool IsTranslationReturning() const;
+
+    //*----------------------------- setter Methods -----------------------------*//
+    void SetLoop(bool isLoop);
+    void SetLoopEndCallback(const std::function<void()>& callback);
+    void SetPreAnimationOffsetsToOriginalValues();
 };
 
 }; // KetaEngine

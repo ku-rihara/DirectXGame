@@ -1,10 +1,24 @@
 #pragma once
 #include "Combo/Combo.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "EnemyDamageReactionData.h"
+#include "utility/FileSelector/FileSelector.h"
 #include <array>
 #include <memory>
 #include <string>
 #include <vector>
+
+/// <summary>
+/// デフォルトアニメーションの種類
+/// </summary>
+enum class DefaultAnimType {
+    Normal = 0,  // 通常ダメージリアクション
+    TakeUpper,   // 上に飛ばされた時
+    Slammed,     // 叩きつけ
+    Bound,       // バウンド中
+    GetUp,       // 起き上がり
+    Count
+};
 
 /// <summary>
 /// 敵のダメージリアクション
@@ -22,8 +36,9 @@ public:
 
     // 攻撃データの追加、削除
     void AddAttack(const std::string& attackName);
-    void RemoveAttack(const int& index);
+    void RemoveAttack(int index);
 
+    void RegisterParams(); //< パラメータ登録
     void EditorUpdate(); //< エディタ更新
     void AllLoadFile(); //< 全ファイルロード
     void AllSaveFile(); //< 全ファイルセーブ
@@ -39,9 +54,47 @@ private:
     int selectedIndex_    = -1;
     char nameBuffer_[128] = "";
 
+    // デフォルトパラメータ
+    static constexpr int kEnemyTypeCount = 2;
+    // GlobalParameter
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
+    const std::string defaultParamGroupName_ = "EnemyDamageReaction_Default";
+    const std::string defaultParamFolderPath_ = "EnemyDamageReaction";
+
+    // [敵タイプ][アニメーション種類]
+    std::array<std::array<std::string, static_cast<int>(DefaultAnimType::Count)>, kEnemyTypeCount> defaultDamageAnimationNames_;
+
+    // デフォルトダメージクールタイム（敵タイプ別）
+    std::array<float, kEnemyTypeCount> defaultDamageCoolTime_ = {0.0f, 0.0f};
+
+    // イージング系は敵タイプ別のみ
+    std::array<std::string, kEnemyTypeCount> defaultObjEaseAnimationNames_;
+    std::array<float, kEnemyTypeCount> defaultObjEaseAnimationStartTimings_ = {0.0f, 0.0f};
+    std::array<KetaEngine::FileSelector, kEnemyTypeCount> defaultObjEaseFileSelectors_;
+
+    // デフォルトパーティクルエフェクト（敵タイプ別）
+    std::array<std::string, kEnemyTypeCount> defaultParticleEffectNames_;
+    std::array<KetaEngine::FileSelector, kEnemyTypeCount> defaultParticleFileSelectors_;
+
+    // エディター用 利用可能なアニメーション名リスト
+    std::vector<std::string> availableAnimations_;
+
 public:
     EnemyDamageReactionData* GetSelectedAttack();
     EnemyDamageReactionData* GetAttackByTriggerName(const std::string& name);
     const std::vector<std::unique_ptr<EnemyDamageReactionData>>& GetAllAttacks() const { return reactions_; }
-    const int& GetAttackCount() const { return static_cast<int>(reactions_.size()); }
+    int GetAttackCount() const { return static_cast<int>(reactions_.size()); }
+
+    // エディター用 利用可能なアニメーション名リストの設定・取得
+    void SetAvailableAnimations(const std::vector<std::string>& animations) { availableAnimations_ = animations; }
+    const std::vector<std::string>& GetAvailableAnimations() const { return availableAnimations_; }
+
+    // デフォルトパラメータのGetter
+    const std::string& GetDefaultDamageAnimationName(int enemyType, DefaultAnimType animType) const {
+        return defaultDamageAnimationNames_[enemyType][static_cast<int>(animType)];
+    }
+    const std::string& GetDefaultObjEaseAnimationName(int enemyType) const { return defaultObjEaseAnimationNames_[enemyType]; }
+    float GetDefaultObjEaseAnimationStartTiming(int enemyType) const { return defaultObjEaseAnimationStartTimings_[enemyType]; }
+    const std::string& GetDefaultParticleEffectName(int enemyType) const { return defaultParticleEffectNames_[enemyType]; }
+    float GetDefaultDamageCoolTime(int enemyType) const { return defaultDamageCoolTime_[enemyType]; }
  };

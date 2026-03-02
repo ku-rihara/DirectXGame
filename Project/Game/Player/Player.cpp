@@ -5,13 +5,14 @@
 #include "Enemy/Types/BaseEnemy.h"
 // DeathTimer
 #include "DeathTimer/DeathTimer.h"
-
+// ObjEaseAnimation
+#include"Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 /// Behavior
 #include "Behavior/ComboAttackBehavior/ComboAttackRoot.h"
 #include "Behavior/PlayerBehavior/PlayerDeath.h"
 #include "Behavior/PlayerBehavior/PlayerMove.h"
 #include "Behavior/PlayerBehavior/PlayerSpawn.h"
-#include "Behavior/TitleBehavior/TitleFirstFall.h"
+#include "Behavior/TitleBehavior/TitlePlayerBehavior.h"
 
 // light
 #include "Light/AmbientLight.h"
@@ -50,7 +51,7 @@ void Player::Init() {
     rightHand_ = std::make_unique<PlayerHandRight>();
 
     // Playerのモデル
-    obj3d_.reset(KetaEngine::Object3d::CreateModel("Player.obj"));
+    obj3d_.reset(KetaEngine::Object3d::CreateModel("Player/Player.obj"));
     obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = static_cast<int32_t>(KetaEngine::LightingType::Ambient);
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.05f;
 
@@ -75,7 +76,13 @@ void Player::Init() {
     jumpAttackUI_->Init();
 
     // パラメータセット
+    baseTransform_.SetBaseScale(Vector3::OneVector());
     baseTransform_.translation_ = parameters_->GetParameters().startPos_;
+
+    // ディゾルブエッジ設定
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.09f;
+    dissolvePlayer_.Init();
 
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));
@@ -121,6 +128,7 @@ void Player::Update() {
     }
 
     // 移動制限
+    baseTransform_.SetBaseScale(parameters_->GetParameters().baseScale_);
     MoveToLimit();
     UpdateMatrix();
 }
@@ -384,13 +392,20 @@ void Player::ChangeCombBoRoot() {
 /// =========================================================================================
 
 void Player::SetTitleBehavior() {
-    ChangeTitleBehavior(std::make_unique<TitleFirstFall>(this));
+    ChangeTitleBehavior(std::make_unique<TitlePlayerBehavior>(this));
 }
 
 void Player::UpdateMatrix() {
     /// 行列更新
     leftHand_->Update();
     rightHand_->Update();
+
+      // ディゾルブ更新・適用
+    dissolvePlayer_.Update();
+    if (dissolvePlayer_.IsPlaying()) {
+        dissolvePlayer_.ApplyToMaterial(*obj3d_->GetModelMaterial());
+    }
+
     BaseObject::Update();
 }
 
@@ -474,11 +489,19 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 }
 
-void Player::DissolveUpdate(float dissolve) {
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.09f;
+void Player::PlayDissolve(const std::string& name) {
+    dissolvePlayer_.Play(name);
+    leftHand_->PlayDissolve(name);
+    rightHand_->PlayDissolve(name);
+}
+
+bool Player::IsDissolveFinished() const {
+    return dissolvePlayer_.IsFinished();
+}
+
+void Player::SetInitialDissolveHidden() {
     obj3d_->GetModelMaterial()->GetMaterialData()->enableDissolve    = true;
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = dissolve;
+    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = 1.0f;
 }
 
 Vector3 Player::GetCollisionPos() const {
@@ -504,11 +527,50 @@ void Player::MainHeadAnimationStart(const std::string& name) {
     baseTransform_.PlayObjEaseAnimation(name, "MainHead");
 }
 
+void Player::TitleAnimationPlay(const std::string& name) {
+    baseTransform_.PlayObjEaseAnimation(name, "TitlePlayer");
+}
+
+void Player::TitleRightHandAnimationPlay(const std::string& name) {
+    rightHand_->GetObject3D()->transform_.PlayObjEaseAnimation(name, "TitlePlayer");
+}
+
+void Player::TitleLeftHandAnimationPlay(const std::string& name) {
+    leftHand_->GetObject3D()->transform_.PlayObjEaseAnimation(name, "TitlePlayer");
+}
+
+bool Player::IsTitleAnimationFinished() {
+    auto* p = baseTransform_.GetObjEaseAnimationPlayer();
+    return p && p->IsFinished();
+}
+
+bool Player::IsTitleRightHandAnimationFinished() {
+    auto* p = rightHand_->GetObject3D()->transform_.GetObjEaseAnimationPlayer();
+    return p && p->IsFinished();
+}
+
+bool Player::IsTitleLeftHandAnimationFinished() {
+    auto* p = leftHand_->GetObject3D()->transform_.GetObjEaseAnimationPlayer();
+    return p && p->IsFinished();
+}
+
 bool Player::IsDashing() const {
     if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
         return moveState->IsDashing();
     }
     return false;
+}
+
+void Player::StartAutoDash() {
+    if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
+        moveState->SetForceDash(true);
+    }
+}
+
+void Player::ClearAutoDash() {
+    if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
+        moveState->SetForceDash(false);
+    }
 }
 
 void Player::RotateReset() {
@@ -531,10 +593,12 @@ bool Player::IsAbleBehavior() {
 
 void Player::InitInGameScene() {
     Init();
+    baseTransform_.SetBaseScale(parameters_->GetParameters().baseScale_);
 
-    DissolveUpdate(1.0f);
-    leftHand_->DissolveAdapt(1.0f);
-    rightHand_->DissolveAdapt(1.0f);
+    // 初期状態: スポーンアニメーション開始まで非表示
+    SetInitialDissolveHidden();
+    leftHand_->SetInitialDissolveHidden();
+    rightHand_->SetInitialDissolveHidden();
     leftHand_->SetIsEmit(false);
     rightHand_->SetIsEmit(false);
     SetShadowFrag(false);

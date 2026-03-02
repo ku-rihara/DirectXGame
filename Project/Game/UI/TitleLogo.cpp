@@ -1,19 +1,21 @@
 #include "TitleLogo.h"
 #include "base/TextureManager.h"
+#include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 #include "Frame/Frame.h"
 #include <imgui.h>
 
 void TitleLogo::Init() {
-  
+
     punchSprite_.reset(KetaEngine::Sprite::Create("TitleFontPunch.dds", true));
     rushSprite_.reset(KetaEngine::Sprite::Create("TitleFontRush.dds", true));
     bottomSprite_.reset(KetaEngine::Sprite::Create("StartBottomA.dds", true));
-   
+
     punchSprite_->transform_.scale = Vector2::ZeroVector();
     rushSprite_->transform_.scale  = Vector2::ZeroVector();
     bottomSprite_->transform_.scale = Vector2::ZeroVector();
 
-    EasingSet();
+    // パンチから開始
+    punchSprite_->PlaySpriteEaseAnimation("punchSpriteScale", "TitleLogo");
 
     step_ = Step::PUNCH;
 }
@@ -24,62 +26,34 @@ void TitleLogo::Update() {
         ///----------------------------------------------------
         /// パンチ
         ///----------------------------------------------------
-        punchEase_.Update(KetaEngine::Frame::DeltaTime());
-        punchSprite_->transform_.scale = punchSpriteScale_;
-
+        if (punchSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
+            step_ = Step::RUSH;
+            rushSprite_->PlaySpriteEaseAnimation("rushSpriteScale", "TitleLogo");
+        }
         break;
     case TitleLogo::Step::RUSH:
         ///----------------------------------------------------
         /// ラッシュ
         ///----------------------------------------------------
-        rushEase_.Update(KetaEngine::Frame::DeltaTime());
-        rushSprite_->transform_.scale = rushSpriteScale_;
-
+        if (rushSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
+            step_ = Step::BOTTON;
+            bottomSprite_->PlaySpriteEaseAnimation("bottomSpriteScale", "TitleLogo");
+        }
         break;
     case TitleLogo::Step::BOTTON:
         ///----------------------------------------------------
         /// ボタン
         ///----------------------------------------------------
-        bottomEase_.Update(KetaEngine::Frame::DeltaTime());
-        bottomSprite_->transform_.scale = bottomSpriteScale_;
-
+        if (bottomSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
+            step_ = Step::END;
+        }
         break;
     case TitleLogo::Step::END:
         ///----------------------------------------------------
-        /// パンチ
+        /// 完了
         ///----------------------------------------------------
         break;
     default:
         break;
     }
-
-
 }
-
-void TitleLogo::EasingSet() {
-    punchEase_.Init("punchSpriteScale.json");
-    punchEase_.SetAdaptValue(&punchSpriteScale_);
-    punchEase_.Reset();
-
-    punchEase_.SetOnFinishCallback([this]() {
-        step_ = Step::RUSH;
-    });
-
-    rushEase_.Init("rushSpriteScale.json");
-    rushEase_.SetAdaptValue(&rushSpriteScale_);
-    rushEase_.Reset();
-
-    rushEase_.SetOnFinishCallback([this]() {
-        punchEase_.Reset();
-        step_ = Step::BOTTON;
-    });
-
-    bottomEase_.Init("bottomSpriteScale.json");
-    bottomEase_.SetAdaptValue(&bottomSpriteScale_);
-    bottomEase_.Reset();
-
-    bottomEase_.SetOnFinishCallback([this]() {
-        step_ = Step::END;
-    });
-}
-

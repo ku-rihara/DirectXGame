@@ -47,6 +47,11 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
 
         globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
         globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
+
+        // 右手・左手のみトレイルファイル名を登録
+        if (info.type == ObjAnimationType::RightHand || info.type == ObjAnimationType::LeftHand) {
+            globalParam->Regist(groupName, std::string(info.name) + "_TrailFileName", &param.trailFileName);
+        }
     }
 
     // 振動パラメータの登録
@@ -63,6 +68,11 @@ void PlayerAttackRenditionData::AdjustParam() {
         ImGui::PushID((groupName_ + "RenditionParams").c_str());
 
         for (const auto& info : kRenditionTypeInfos) {
+            // ヒット音は通常演出に含めない（ヒット時演出セクションで設定）
+            if (info.type == Type::AudioHit) {
+                continue;
+            }
+
             ImGui::PushID(static_cast<int>(info.type));
             auto& paramPair = renditionParams_[static_cast<size_t>(info.type)];
             auto& param     = paramPair.first;

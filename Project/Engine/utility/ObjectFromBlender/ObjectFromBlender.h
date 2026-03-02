@@ -1,10 +1,9 @@
 #pragma once
 #include "3d/Object3d/Object3d.h"
 #include "3d/WorldTransform.h"
-#include "Easing/EasingSequence.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
-#include <array>
 #include <cstdint>
+#include <functional>
 #include <json.hpp>
 #include <list>
 #include <memory>
@@ -29,16 +28,13 @@ public:
             std::string fileName;
             std::unique_ptr<Object3d> object3d;
             std::list<ObjectData> children;
-            std::vector<std::unique_ptr<EasingSequence>> scalingEasing;
-            std::vector<std::unique_ptr<EasingSequence>> rotationEasing;
-            std::vector<std::unique_ptr<EasingSequence>> translationEasing;
+            std::vector<std::string> animationNames;
+            std::vector<float> easingStartTimes;
+            std::vector<bool> easingLoopFlags;
+            std::vector<bool> groupStarted;
+            std::vector<std::function<void()>> loopEndCallbacks;
             std::unique_ptr<ParticlePlayer> particlePlayer;
             std::string particleName;
-            std::vector<Vector3> preScale;
-            std::vector<Vector3> preRotation;
-            std::vector<Vector3> preTranslation;
-            std::vector<std::array<bool, 3>> isAdaptEasing;
-            std::vector<float> easingStartTimes;
             size_t groupCount = 0;
         };
         std::vector<ObjectData> objects;
@@ -73,41 +69,23 @@ public:
     /// <param name="object">JSONオブジェクト</param>
     void ConvertJSONToObjects(const nlohmann::json& object);
 
-    /// <summary>
-    /// 文字列をプリミティブタイプに変換
-    /// </summary>
-    /// <param name="typeStr">タイプ文字列</param>
-    /// <returns>プリミティブタイプ</returns>
-    PrimitiveType StringToPrimitiveType(const std::string& typeStr);
-
     void EmitterAllUpdate(); //< 全エミッター更新
     void EmitAll(const std::string& particleName = ""); //< 全エミッター放出
-  
+
     void EasingAllReset(); //< 全イージングリセット
 
-private:
     /// <summary>
-    /// イージングの適用
+    /// 全オブジェクトのトランスフォームを更新
     /// </summary>
-    /// <param name="objectData">オブジェクトデータ</param>
-    /// <param name="groupNum">グループ番号</param>
-    void AdaptEasing(LevelData::ObjectData& objectData, int32_t groupNum);
+    void UpdateTransform();
 
+private:
     /// <summary>
     /// イージンググループのロード
     /// </summary>
     /// <param name="easingGroups">イージンググループJSON</param>
     /// <param name="objectData">オブジェクトデータ</param>
     void LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData);
-
-    /// <summary>
-    /// イージングが適用されているか
-    /// </summary>
-    /// <param name="objectData">オブジェクトデータ</param>
-    /// <param name="groupNum">グループ番号</param>
-    /// <param name="type">変換タイプ</param>
-    /// <returns>適用されているか</returns>
-    bool IsAdaptEasing(const LevelData::ObjectData& objectData, int32_t groupNum, const EasingAdaptTransform& type) const;
 
 private:
     const std::string directoryPath_ = "Resources/BlenderObjectPos/";
@@ -120,7 +98,7 @@ public:
     bool GetIsEasingFinish(int32_t groupNum) const;
     bool GetIsEasingPlaying(int32_t groupNum) const;
 
-    void SetLoopEndCallback(int32_t groupNum, const EasingAdaptTransform& transformType, const std::function<void()>& callback);
+    void SetLoopEndCallback(int32_t groupNum, const std::function<void()>& callback);
 };
 
 }; // KetaEngine

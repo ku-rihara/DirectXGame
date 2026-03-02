@@ -5,21 +5,17 @@
 #include "EnemyDamageRenditionData.h"
 #include "utility/FileSelector/FileSelector.h"
 #include "Vector3.h"
+#include <array>
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 /// <summary>
 /// ダメージリアクションデータクラス
 /// </summary>
 class EnemyDamageReactionData {
 public:
-    enum class ReactionState {
-        Normal,
-        Slammed,
-        TakeUpper,
-    };
-
     // Normal状態のパラメータ
     struct NormalParam {
         float knockBackTime;
@@ -45,12 +41,13 @@ public:
         Vector3 rotateSpeed;
     };
 
+    // 敵タイプ数
+    static constexpr int kEnemyTypeCount = 2;
+
     // リアクションパラメータ
     struct ReactionParameter {
         std::string triggerAttackName;
-        std::string damageAnimationName; // ダメージアニメーション名
-        int32_t intReactionState = 0;
-        ReactionState reactionState;
+        std::array<std::string, kEnemyTypeCount> damageAnimationNames; 
         NormalParam normalParam;
         BoundParam boundParam;
         SlammedParam slammedParam;
@@ -68,19 +65,12 @@ public:
     // 初期化
     void Init(const std::string& reactionName);
 
-    // 利用可能なアニメーション名リストを設定（エディター用）
-    static void SetAvailableAnimations(const std::vector<std::string>& animations) {
-        availableAnimations_ = animations;
-    }
-
 private:
-    // 利用可能なアニメーション名リスト（静的、エディター用）
-    static inline std::vector<std::string> availableAnimations_;
 
 public:
 
     // パラメータバインド、調節
-    void AdjustParam();
+    void AdjustParam(const std::vector<std::string>& availableAnimations);
     void RegisterParams();
 
     // データロード、セーブ
@@ -122,7 +112,6 @@ public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
     const ReactionParameter& GetReactionParam() const { return reactionParam_; }
-    ReactionState GetReactionState() const { return static_cast<ReactionState>(reactionParam_.intReactionState); }
 
     // 演出データ取得
     const EnemyDamageRenditionData* GetRendition() const { return rendition_.get(); }

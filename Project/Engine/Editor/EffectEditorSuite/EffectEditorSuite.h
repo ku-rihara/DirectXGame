@@ -13,6 +13,7 @@ namespace KetaEngine {
 class ViewProjection;
 
 class ObjEaseAnimationEditor;
+class SpriteEaseAnimationEditor;
 class CameraEditor;
 class ShakeEditor;
 class RailEditor;
@@ -20,17 +21,20 @@ class GPUParticleEditor;
 class ParticleEditor;
 class DissolveEditor;
 class TimeScaleEditor;
+class RibbonTrailEditor;
 
 // エフェクトタイプ列挙型
 enum class EffectEditorType {
     ObjEaseAnimation,
+    SpriteEaseAnimation,
     Camera,
     Shake,
     Rail,
     GPUParticle,
     Particle,
     Dissolve,
-    TimeScale
+    TimeScale,
+    RibbonTrail
 };
 
 class EffectEditorSuite {
@@ -57,6 +61,7 @@ private:
 
 private:
     std::unique_ptr<ObjEaseAnimationEditor> objEaseAnimationEditor_;
+    std::unique_ptr<SpriteEaseAnimationEditor> spriteEaseAnimationEditor_;
     std::unique_ptr<CameraEditor> cameraEditor_;
     std::unique_ptr<ShakeEditor> shakeEditor_;
     std::unique_ptr<RailEditor> railEditor_;
@@ -64,6 +69,7 @@ private:
     std::unique_ptr<ParticleEditor> particleEditor_;
     std::unique_ptr<DissolveEditor> dissolveEditor_;
     std::unique_ptr<TimeScaleEditor> timeScaleEditor_;
+    std::unique_ptr<RibbonTrailEditor> ribbonTrailEditor_;
 
 public:
     CameraEditor* GetCameraEditor() const { return cameraEditor_.get(); }

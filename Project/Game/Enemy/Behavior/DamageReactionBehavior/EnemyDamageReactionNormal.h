@@ -47,4 +47,8 @@ private:
 
 public:
     Vector3 GetKnockBackVelocity() const { return knockBackVelocity_; }
+
+private:
+    static constexpr float kDefaultKnockBackTime    = 0.5f;
+    static constexpr float kDefaultKnockBackDamping = 5.0f;
 };

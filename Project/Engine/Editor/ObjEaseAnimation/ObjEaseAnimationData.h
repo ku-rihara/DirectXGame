@@ -4,6 +4,7 @@
 #include "Vector3.h"
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -77,6 +78,9 @@ private:
     // 各TransformTypeが全セクション完了したかどうか
     std::array<bool, static_cast<size_t>(TransformType::Count)> srtAllSectionsFinished_ = {false, false, false};
 
+    bool isLoop_ = false; //< ループ再生フラグ
+    std::function<void()> onLoopEndCallback_; //< ループ1周完了コールバック
+
 public:
     //*----------------------------- getter Methods -----------------------------*//
     const std::string& GetCategoryName() const { return categoryName_; }
@@ -84,11 +88,28 @@ public:
         return originalValues_[static_cast<size_t>(type)];
     }
     Vector3 GetActiveKeyFrameValue(const TransformType& type) const;
+    Vector3 GetActiveAnchorValue(const TransformType& type) const;
     bool GetIsUseRailActiveKeyFrame() const;
     RailPlayer* GetCurrentRailPlayer() const;
+    bool IsLookingAtDirection() const;
+    Vector3 GetMovementDirection() const;
+    bool IsTranslationReturning() const;
 
     // アニメーション開始前のオフセット値を設定
     void SetPreAnimationOffsets(const Vector3& scale, const Vector3& rotation, const Vector3& translation);
+
+    // プリアニメーションオフセットをオリジナル値にリセット
+    void SetPreAnimationOffsetsToOriginalValues() {
+        SetPreAnimationOffsets(
+            originalValues_[static_cast<size_t>(TransformType::Scale)],
+            originalValues_[static_cast<size_t>(TransformType::Rotation)],
+            originalValues_[static_cast<size_t>(TransformType::Translation)]);
+    }
+
+    //*----------------------------- setter Methods -----------------------------*//
+    void SetLoop(bool isLoop) { isLoop_ = isLoop; }
+    bool GetIsLoop() const { return isLoop_; }
+    void SetLoopEndCallback(const std::function<void()>& callback) { onLoopEndCallback_ = callback; }
 };
 
 }; // KetaEngine

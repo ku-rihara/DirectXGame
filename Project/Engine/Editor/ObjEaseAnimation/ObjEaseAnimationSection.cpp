@@ -37,7 +37,7 @@ void ObjEaseAnimationSection::Reset() {
         param.ease.Reset();
         param.returnEase.Reset();
         param.currentOffset     = param.startValue;
-        param.state             = param.isActive ? TransformState::INACTIVE : TransformState::INACTIVE;
+        param.state             = TransformState::INACTIVE;
         param.returnElapsedTime = 0.0f;
     }
 
@@ -61,6 +61,8 @@ void ObjEaseAnimationSection::LoadData() {
     // パラメータ読み込み・同期
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
+    // JSONロード後に正しい値でイージングを再設定する
+    AdaptEaseParam();
 }
 
 void ObjEaseAnimationSection::SaveData() {
@@ -172,14 +174,6 @@ void ObjEaseAnimationSection::UpdateTransformPlay(TransformParam& param, Transfo
         isFinished          = param.ease.IsFinished();
     }
 
-    // 進行方向の計算と保存
-    if (type == TransformType::Translation && param.isLookAtDirection) {
-        Vector3 moveDirection = param.currentOffset - previousOffset;
-        if (moveDirection.Length() > 0.001f) {
-            param.previousOffset = moveDirection;
-        }
-    }
-
     param.previousOffset = previousOffset;
 
     if (isFinished) {
@@ -271,6 +265,7 @@ void ObjEaseAnimationSection::StartPlay() {
 void ObjEaseAnimationSection::RegisterParams() {
     globalParameter_->Regist(groupName_, "startTime", &startTime_);
     globalParameter_->Regist(groupName_, "returnStartTime", &returnStartTime_);
+    globalParameter_->Regist(groupName_, "isReturnSection", &isReturnSection_);
     timeModeSelector_.RegisterParam(groupName_, globalParameter_);
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
@@ -282,21 +277,25 @@ void ObjEaseAnimationSection::RegisterParams() {
         globalParameter_->Regist(groupName_, std::string(name) + "_endValue", &param.endValue);
         globalParameter_->Regist(groupName_, std::string(name) + "_MaxTime", &param.maxTime);
         globalParameter_->Regist(groupName_, std::string(name) + "_EaseType", &param.easeType);
+        globalParameter_->Regist(groupName_, std::string(name) + "_BackRatio", &param.backRatio);
         globalParameter_->Regist(groupName_, std::string(name) + "_ReturnMaxTime", &param.returnMaxTime);
         globalParameter_->Regist(groupName_, std::string(name) + "_ReturnEaseType", &param.returnEaseType);
 
         if (i == static_cast<size_t>(TransformType::Translation)) {
             globalParameter_->Regist(groupName_, std::string(name) + "_UseRail", &param.useRail);
             globalParameter_->Regist(groupName_, std::string(name) + "_RailFileName", &param.railFileName);
-            globalParameter_->Regist(groupName_, std::string(name) + "_IsLookAtDirection", &param.isLookAtDirection); // 追加
+            globalParameter_->Regist(groupName_, std::string(name) + "_IsLookAtDirection", &param.isLookAtDirection);
         }
+
+        globalParameter_->Regist(groupName_, std::string(name) + "_Anchor", &param.anchor);
     }
 }
 
 void ObjEaseAnimationSection::GetParams() {
-    startTime_ = globalParameter_->GetValue<float>(groupName_, "startTime");
-    timeModeSelector_.GetParam(groupName_, globalParameter_);
+    startTime_       = globalParameter_->GetValue<float>(groupName_, "startTime");
     returnStartTime_ = globalParameter_->GetValue<float>(groupName_, "returnStartTime");
+    isReturnSection_ = globalParameter_->GetValue<bool>(groupName_, "isReturnSection");
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
         const char* name = GetSRTName(static_cast<TransformType>(i));
@@ -307,14 +306,17 @@ void ObjEaseAnimationSection::GetParams() {
         param.endValue         = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_endValue");
         param.maxTime          = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_MaxTime");
         param.easeType         = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_EaseType");
+        param.backRatio        = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_BackRatio");
         param.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_ReturnMaxTime");
         param.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_ReturnEaseType");
 
         if (i == static_cast<size_t>(TransformType::Translation)) {
             param.useRail           = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
             param.railFileName      = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
-            param.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection"); // 追加
+            param.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection");
         }
+
+        param.anchor = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_Anchor");
     }
 }
 
@@ -330,6 +332,7 @@ void ObjEaseAnimationSection::AdaptEaseParam() {
         param.ease.SetMaxTime(param.maxTime);
         param.ease.SetEndValue(param.endValue);
         param.ease.SetType(static_cast<EasingType>(param.easeType));
+        param.ease.SetBackRatio(param.backRatio);
         param.ease.SetIsStartEndReverse(false);
     }
 }
@@ -347,12 +350,17 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
     // 戻りフラグ
     ImGui::Checkbox((std::string(label) + " Return To Origin").c_str(), &param.isReturnToOrigin);
 
+    // アンカーポイント
+    if (ImGui::DragFloat3("Anchor", &param.anchor.x, 0.01f)) {
+        globalParameter_->SetValue(groupName_, std::string(GetSRTName(type)) + "_Anchor", param.anchor);
+    }
+
     if (type == TransformType::Translation) {
         ImGui::Checkbox("Look At Movement Direction", &param.isLookAtDirection);
         ImGui::Checkbox("Use Rail", &param.useRail);
 
         if (param.useRail) {
-            std::string directory = globalParameter_->GetDirectoryPath() + "RailEditor/Dates";
+            std::string directory = globalParameter_->GetDirectoryPath() + "RailEditor/Common/Dates";
             railFileSelector_.selector.SelectFile("Rail File", directory, param.railFileName, "", true);
             ImGui::PopID();
             return;
@@ -369,6 +377,7 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
 
     ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.0f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
+    ImGui::DragFloat("Back Ratio", &param.backRatio, 0.01f, 0.0f, 10.0f);
 
     // 戻り設定
     if (param.isReturnToOrigin) {
@@ -388,6 +397,7 @@ void ObjEaseAnimationSection::AdjustParam() {
     ImGui::PushID(groupName_.c_str());
 
     ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 100.0f);
+    ImGui::Checkbox("Is Return Section", &isReturnSection_);
     timeModeSelector_.SelectTimeModeImGui("Time Mode");
 
     ImGui::Separator();
@@ -454,7 +464,7 @@ void ObjEaseAnimationSection::StartWaitingForTransform(TransformType type) {
 void ObjEaseAnimationSection::StartPlayingForTransform(TransformType type) {
     auto& param = transformParams_[static_cast<size_t>(type)];
     if (param.isActive) {
-        // セクション全体をPLAYING状態にする（Update()が処理を行うため）
+        // セクション全体をPLAYING状態にする
         playState_ = PlayState::PLAYING;
 
         // この特定のTransformをPLAYING状態にする

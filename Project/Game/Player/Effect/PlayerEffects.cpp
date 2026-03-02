@@ -12,7 +12,7 @@ void PlayerEffects::Init(KetaEngine::WorldTransform* transform) {
    /* starSound_ = KetaEngine::Audio::GetInstance()->LoadWave("starEffect.wav");*/
 
     // debri
-    debriParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("DebriParticle", "debri.obj", 100));
+    debriParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("DebriParticle", "Player/debri.obj", 100));
 
     // star
     starEffect_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 100));
@@ -31,7 +31,7 @@ void PlayerEffects::Init(KetaEngine::WorldTransform* transform) {
 
     // rush
     rushParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("rushParticle", PrimitiveType::Plane, 800));
-    afterGlowEffect_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("afterGlowEffect", "Player.obj", 100));
+    afterGlowEffect_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("afterGlowEffect", "Player/Player.obj", 100));
 }
 
 ///=========================================================

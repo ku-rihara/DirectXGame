@@ -9,9 +9,9 @@
 void PlayerHandRight::Init() {
 
     // グループネーム
-    groupName_ = "RightHand";
+    groupName_ = "PlayerRightHand";
 
-    obj3d_.reset(KetaEngine::Object3d::CreateModel("RHand.obj"));
+    obj3d_.reset(KetaEngine::Object3d::CreateModel("Player/RHand.obj"));
     obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = static_cast<int32_t>(KetaEngine::LightingType::HalfLambert);
     obj3d_->transform_.scale_                                             = {2, 2, 2};
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.15f;
@@ -28,28 +28,13 @@ void PlayerHandRight::Update() {
 }
 
 void PlayerHandRight::AdjustParam() {
-
-    BasePlayerHand::SetValues();
-
+#ifdef _DEBUG
     if (ImGui::CollapsingHeader("RightHand")) {
         ImGui::PushID("RightHand");
         BasePlayerHand::AdjustParamBase();
-
-        SaveAndLoad();
         ImGui::PopID();
     }
-}
-
-void PlayerHandRight::DissolveAdapt(float dissolve) {
-    BasePlayerHand::DissolveAdapt(dissolve);
-}
-
-///=====================================================
-///  セーブロード
-///=====================================================
-void PlayerHandRight::SaveAndLoad() {
-
-    BasePlayerHand::SaveAndLoad();
+#endif // _DEBUG
 }
 
 void PlayerHandRight::SetParent(KetaEngine::WorldTransform* parent) {

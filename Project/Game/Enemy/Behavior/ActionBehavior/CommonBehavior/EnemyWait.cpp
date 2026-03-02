@@ -10,8 +10,6 @@
 #include "Frame/Frame.h"
 /// imGui
 #include <imgui.h>
-/// std
-#include <cmath>
 
 // 初期化
 EnemyWait::EnemyWait(BaseEnemy* boss)
@@ -32,8 +30,6 @@ EnemyWait::EnemyWait(BaseEnemy* boss)
             UpdateEnd();
         };
     });
-
-    escapeDirection_ = Vector3::ZeroVector();
 }
 
 EnemyWait::~EnemyWait() {
@@ -57,18 +53,11 @@ void EnemyWait::UpdateWaiting() {
     // プレイヤーの方向を向く
     pBaseEnemy_->DirectionToPlayer();
 
-    // プレイヤーが発見範囲内にいるか
-    if (distance_ <= param.escapeDistance) {
-        // 逃げる方向を計算（プレイヤーと反対方向）
-        Vector3 direction = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
-        direction.y       = 0.0f;
-        direction.Normalize();
-        escapeDirection_ = -direction; // 反対方向
-
+    // プレイヤーが追跡範囲内にいるか
+    if (distance_ <= param.chaseDistance) {
         // 発見モーションを再生
         pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Discovery, false);
 
-        //
         currentPhase_ = [this]() {
             UpdateDiscovery();
         };
@@ -76,12 +65,12 @@ void EnemyWait::UpdateWaiting() {
 }
 
 void EnemyWait::UpdateDiscovery() {
-   
+
 }
 
 void EnemyWait::UpdateEnd() {
-    // EnemyEscapeに遷移
-    pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyEscape>(pBaseEnemy_, escapeDirection_));
+    // EnemyChaseに遷移
+    pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChase>(pBaseEnemy_));
 }
 
 void EnemyWait::Debug() {

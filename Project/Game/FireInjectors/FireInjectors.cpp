@@ -19,24 +19,7 @@ void FireInjectors::Init() {
 void FireInjectors::Update() {
     ObjectFromBlender_->EmitterAllUpdate();
     ObjectFromBlender_->EmitAll();
-   /* ObjectFromBlender_->EmitterAllEdit();*/
-
-    /*const int currentCombo = pCombo_->GetComboCount();*/
-
-    //if (currentCombo == 0) {
-    //    prevComboCount_ = 0;
-    //    return;
-    //}
-
-    //// 発射
-    //for (int i = prevComboCount_ + 1; i <= currentCombo; ++i) {
-    //    if (i % fireShotComboNum_ == 0) {
-    //        ObjectFromBlender_->StartRailEmitAll();
-    //        break;
-    //    }
-    //}
-
-    //prevComboCount_ = currentCombo;
+ 
 }
 
 void FireInjectors::Spawn() {

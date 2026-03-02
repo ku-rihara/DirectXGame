@@ -17,6 +17,11 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
 
     // ダメージリアクション用アニメーションを追加
     AddDamageReactionAnimation("EnemyNormalDamage");
+    AddDamageReactionAnimation("TakeUpMotion", true);
+    AddDamageReactionAnimation("NormalEnemyBoundDamage");
+    AddDamageReactionAnimation("NormalEnemyKipUp");
+    
+   
 
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);

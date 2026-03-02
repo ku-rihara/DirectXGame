@@ -5,6 +5,7 @@ using namespace KetaEngine;
 #include "Editor/CameraEditor/CameraKeyFrame.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationSection.h"
 #include "Editor/RailEditor/RailControlPoint.h"
+#include"Editor/SpriteEaseAnimation/SpriteEaseAnimationSection.h"
 // particle
 #include "Particle/CPUParticle/Editor/ParticleSection.h"
 #include "Particle/GPUParticle/Editor/GPUParticleSection.h"
@@ -152,6 +153,7 @@ void BaseSequenceEffectData<TSequenceElement>::SetSelectedKeyFrameIndex(int32_t 
 // 明示的なインスタンス化
 template class BaseSequenceEffectData<CameraKeyFrame>;
 template class BaseSequenceEffectData<ObjEaseAnimationSection>;
+template class BaseSequenceEffectData<SpriteEaseAnimationSection>;
 template class BaseSequenceEffectData<RailControlPoint>;
 template class BaseSequenceEffectData<GPUParticleSection>;
 template class BaseSequenceEffectData<ParticleSection>;

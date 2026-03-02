@@ -1,0 +1,10 @@
+{
+    "test": {
+        "easeType": 7,
+        "endThreshold": 1.0,
+        "maxTime": 0.8100000023841858,
+        "offsetTime": 0.0,
+        "selectedTextureIndex": 0,
+        "startThreshold": 0.0
+    }
+}

@@ -9,6 +9,7 @@ struct ParticleForGPU
     float4 color;
     uint isFlipX;
     uint isFlipY;
+    float dissolveThreshold;
 };
 StructuredBuffer<ParticleForGPU> gParticle : register(t0);
 
@@ -38,6 +39,9 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     // 色と法線の設定
     output.color = gParticle[instanceID].color;
     output.normal = normalize(mul(input.normal, (float3x3) gParticle[instanceID].WorldInverseTranspose));
+
+    // パーティクルごとの dissolve 閾値を渡す
+    output.dissolveThreshold = gParticle[instanceID].dissolveThreshold;
 
     return output;
 }

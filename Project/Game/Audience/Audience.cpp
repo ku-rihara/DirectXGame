@@ -36,11 +36,11 @@ void Audience::Init(int32_t index) {
 
 void Audience::CreateObject() {
     // オブジェ生成
-    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("AudienceJump.gltf"));
+    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("BackObj/AudienceJump.gltf"));
     // 初期化
     objAnimation_->Init();
     // アニメーション追加
-    objAnimation_->Add("AudienceDisAppear.gltf");
+    objAnimation_->Add("BackObj/AudienceDisAppear.gltf");
     // transform初期化設定
     objAnimation_->transform_.SetIsAdaptDirectScale(true);
     objAnimation_->transform_.Init();

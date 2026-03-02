@@ -43,6 +43,47 @@ void DissolvePlayer::ApplyToMaterial(ModelMaterial& material) {
     }
 }
 
+float DissolvePlayer::GetThreshold() const {
+    const DissolveData* data = dynamic_cast<const DissolveData*>(effectData_.get());
+    return data ? data->GetCurrentThreshold() : 1.0f;
+}
+
+bool DissolvePlayer::IsEnabled() const {
+    const DissolveData* data = dynamic_cast<const DissolveData*>(effectData_.get());
+    return data ? data->IsDissolveEnabled() : false;
+}
+
+const std::string& DissolvePlayer::GetTexturePath() const {
+    static const std::string empty;
+    const DissolveData* data = dynamic_cast<const DissolveData*>(effectData_.get());
+    return data ? data->GetCurrentTexturePath() : empty;
+}
+
+float DissolvePlayer::GetStartThreshold() const {
+    const DissolveData* data = dynamic_cast<const DissolveData*>(effectData_.get());
+    return data ? data->GetStartThreshold() : 1.0f;
+}
+
+float DissolvePlayer::GetEndThreshold() const {
+    const DissolveData* data = dynamic_cast<const DissolveData*>(effectData_.get());
+    return data ? data->GetEndThreshold() : 0.0f;
+}
+
+float DissolvePlayer::GetMaxTime() const {
+    const DissolveData* data = dynamic_cast<const DissolveData*>(effectData_.get());
+    return data ? data->GetMaxTime() : 1.0f;
+}
+
+float DissolvePlayer::GetOffsetTime() const {
+    const DissolveData* data = dynamic_cast<const DissolveData*>(effectData_.get());
+    return data ? data->GetOffsetTime() : 0.0f;
+}
+
+int32_t DissolvePlayer::GetEaseType() const {
+    const DissolveData* data = dynamic_cast<const DissolveData*>(effectData_.get());
+    return data ? data->GetEaseType() : 0;
+}
+
 std::unique_ptr<BaseEffectData> DissolvePlayer::CreateEffectData() {
     return std::make_unique<DissolveData>();
 }

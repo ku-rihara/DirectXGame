@@ -25,6 +25,7 @@ void PlayerParameter::AdjustParam() {
         /// 位置
         ImGui::SeparatorText("Transform");
         ImGui::DragFloat3("Position", &playerParams_.startPos_.x, 0.1f);
+        ImGui::DragFloat3("BaseScale", &playerParams_.baseScale_.x, 0.01f);
 
         ImGui::SeparatorText("SpawnParam");
         ImGui::DragFloat("spawnParamWaitTime", &playerParams_.spawnParam.waitTime_, 0.01f);
@@ -60,38 +61,7 @@ void PlayerParameter::AdjustParam() {
 
         ImGui::SeparatorText("EasingTime");
 
-        /// コンボパラメータ
-        if (ImGui::CollapsingHeader("NormalCombo")) {
-            ImGui::SeparatorText("FirstCombo"); /// 1コンボ目
-
-            ImGui::DragFloat("PTime1", &normalComboParams_[0].waitTime, 0.01f);
-            ImGui::DragFloat("PunchReach1", &normalComboParams_[0].attackReach, 0.01f);
-
-            ImGui::SeparatorText("SecondCombo"); /// 2コンボ目
-
-            ImGui::DragFloat("PTime2", &normalComboParams_[1].waitTime, 0.01f);
-            ImGui::DragFloat("PunchReach2", &normalComboParams_[1].attackReach, 0.01f);
-
-            ImGui::SeparatorText("ThirdCombo"); /// 3コンボ目
-
-            ImGui::DragFloat("PTime3", &normalComboParams_[2].waitTime, 0.01f);
-
-            ImGui::SeparatorText("ForthCombo"); /// 4コンボ目
-
-            ImGui::DragFloat("PTime4", &normalComboParams_[3].waitTime, 0.01f);
-        }
-
-        if (ImGui::CollapsingHeader("JumpCombo")) {
-            ImGui::SeparatorText("FirstCombo"); /// 1コンボ目
-
-            ImGui::DragFloat("JPTime1", &jumpComboParams_[0].waitTime, 0.01f);
-
-            ImGui::SeparatorText("SecondCombo"); /// 2コンボ目
-
-            ImGui::DragFloat("JPTime2", &jumpComboParams_[1].waitTime, 0.01f);
-            ImGui::DragFloat("JPunchReach2", &jumpComboParams_[1].attackReach, 0.01f);
-        }
-
+      
         /// セーブとロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
@@ -108,6 +78,7 @@ void PlayerParameter::AdjustParam() {
 void PlayerParameter::RegisterParams() {
 
     globalParameter_->Regist(groupName_, "Translate", &playerParams_.startPos_);
+    globalParameter_->Regist(groupName_, "BaseScale", &playerParams_.baseScale_);
     globalParameter_->Regist(groupName_, "JumpSpeed", &playerParams_.normalJump.jumpSpeed);
     globalParameter_->Regist(groupName_, "rushDistance", &playerParams_.rushDistance);
     globalParameter_->Regist(groupName_, "UpperPosY", &playerParams_.upperPosY);
@@ -133,18 +104,5 @@ void PlayerParameter::RegisterParams() {
     globalParameter_->Regist(groupName_, "UpperChargeTime", &playerParams_.upperParam.chargeTime);
 
    
-
-    /// コンボ持続時間
-    for (int32_t i = 0; i < normalComboParams_.size(); ++i) {
-        globalParameter_->Regist(groupName_, "NComboPTime" + std::to_string(int(i + 1)), &normalComboParams_[i].waitTime);
-        globalParameter_->Regist(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)), &normalComboParams_[i].attackReach);
-    }
-
-    /// コンボ持続時間
-    for (int32_t i = 0; i < jumpComboParams_.size(); ++i) {
-        globalParameter_->Regist(groupName_, "JComboPTime" + std::to_string(int(i + 1)), &jumpComboParams_[i].waitTime);
-        globalParameter_->Regist(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), &jumpComboParams_[i].attackReach);
-    }
-
     globalParameter_->Regist(groupName_, "spawnParamWaitTime", &playerParams_.spawnParam.waitTime_);
 }

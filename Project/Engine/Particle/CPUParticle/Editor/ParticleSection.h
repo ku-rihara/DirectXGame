@@ -98,6 +98,7 @@ private:
 
     PlayState playState_ = PlayState::STOPPED;
 
+
 public:
     //*----------------------------- Getters -----------------------------*//
 

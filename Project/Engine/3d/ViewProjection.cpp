@@ -10,6 +10,9 @@ namespace KetaEngine {
 
 void ViewProjection::Init() {
 
+    // parent_の明示的リセット（ビルドの不整合でゴミ値が混入するのを防ぐ）
+    parent_ = nullptr;
+
     // 定数バッファ生成
     CreateConstantBuffer();
     // マッピング

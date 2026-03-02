@@ -52,6 +52,7 @@ public:
         // 通常再生パラメータ
         float maxTime    = 1.0f;
         int32_t easeType = 0;
+        float backRatio  = 0.0f;
 
         // 戻り動作パラメータ
         float returnMaxTime    = 1.0f;
@@ -66,6 +67,9 @@ public:
 
         // 待機中に保持するオフセット値
         Vector3 preAnimationOffset = Vector3::ZeroVector();
+
+        // アンカーポイント (ローカル空間)
+        Vector3 anchor = Vector3::ZeroVector();
 
         // イージング
         Easing<Vector3> ease;
@@ -159,6 +163,9 @@ private:
     // 再生状態
     PlayState playState_ = PlayState::STOPPED;
 
+    // 戻りセクションフラグ
+    bool isReturnSection_ = false;
+
     TimeModeSelector timeModeSelector_;
 
 public:
@@ -171,9 +178,12 @@ public:
     const Vector3& GetEditRotation() const { return transformParams_[static_cast<size_t>(TransformType::Rotation)].endValue; }
     const Vector3& GetEditTranslation() const { return transformParams_[static_cast<size_t>(TransformType::Translation)].endValue; }
 
+    Vector3 GetAnchor(TransformType type) const { return transformParams_[static_cast<size_t>(type)].anchor; }
+
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const;
     bool IsLookingAtDirection() const;
+    bool IsReturnSection() const { return isReturnSection_; }
     Vector3 GetMovementDirection() const;
 
     // デバッグ用：Transformの状態を取得

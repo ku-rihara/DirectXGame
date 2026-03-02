@@ -67,6 +67,9 @@ private:
     float finishWaitTime_;
     Step step_ = Step::START;
 
+    // コンボアシストスライドイン制御
+    bool introSlideStarted_ = false;
+
     // テクスチャスケールイージング
     Vector2 spriteEaseScale_;
     KetaEngine::Easing<Vector2> scaleEasing_;

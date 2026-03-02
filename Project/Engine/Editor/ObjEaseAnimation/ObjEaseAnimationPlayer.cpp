@@ -61,6 +61,75 @@ Vector3 ObjEaseAnimationPlayer::GetCurrentTranslation() const {
     return Vector3::ZeroVector();
 }
 
+Vector3 ObjEaseAnimationPlayer::GetCurrentScaleAnchor() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->GetActiveAnchorValue(ObjEaseAnimationData::TransformType::Scale);
+    }
+    return Vector3::ZeroVector();
+}
+
+Vector3 ObjEaseAnimationPlayer::GetCurrentRotationAnchor() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->GetActiveAnchorValue(ObjEaseAnimationData::TransformType::Rotation);
+    }
+    return Vector3::ZeroVector();
+}
+
+Vector3 ObjEaseAnimationPlayer::GetCurrentTranslationAnchor() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->GetActiveAnchorValue(ObjEaseAnimationData::TransformType::Translation);
+    }
+    return Vector3::ZeroVector();
+}
+
 ObjEaseAnimationData* ObjEaseAnimationPlayer::GetAnimationData() {
     return dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+}
+
+bool ObjEaseAnimationPlayer::IsLookingAtDirection() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->IsLookingAtDirection();
+    }
+    return false;
+}
+
+Vector3 ObjEaseAnimationPlayer::GetMovementDirection() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->GetMovementDirection();
+    }
+    return Vector3::ToForward();
+}
+
+bool ObjEaseAnimationPlayer::IsTranslationReturning() const {
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        return animeData->IsTranslationReturning();
+    }
+    return false;
+}
+
+void ObjEaseAnimationPlayer::SetLoop(bool isLoop) {
+    auto* animeData = GetAnimationData();
+    if (animeData) {
+        animeData->SetLoop(isLoop);
+    }
+}
+
+void ObjEaseAnimationPlayer::SetLoopEndCallback(const std::function<void()>& callback) {
+    auto* animeData = GetAnimationData();
+    if (animeData) {
+        animeData->SetLoopEndCallback(callback);
+    }
+}
+
+void ObjEaseAnimationPlayer::SetPreAnimationOffsetsToOriginalValues() {
+    auto* animeData = GetAnimationData();
+    if (animeData) {
+        animeData->SetPreAnimationOffsetsToOriginalValues();
+    }
 }

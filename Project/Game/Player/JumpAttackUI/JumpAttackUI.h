@@ -35,13 +35,9 @@ public:
         bool isNotOperate;
     };
 
-    struct EasingParam {
+    struct PosEasingParam {
         std::unique_ptr<KetaEngine::Easing<float>> posEasing;
-        std::unique_ptr<KetaEngine::Easing<float>> rotateEasing;
-        std::unique_ptr<KetaEngine::Easing<Vector2>> scaleEasing;
         float posEaseValue;
-        float rotateEaseValue;
-        Vector2 scaleEaseValue;
     };
 
 public:
@@ -93,7 +89,9 @@ private:
     // スプライト
     std::array<BottomParam, static_cast<size_t>(Type::COUNT)> bottoms_;
     State state_ = State::WAIT;
-    EasingParam easingParam_;
+
+    // positionオフセット用（方向ベクトル係数として使用するためEasing<float>のまま）
+    PosEasingParam posEasingParam_;
 
     float notOperateAlpha_;
 

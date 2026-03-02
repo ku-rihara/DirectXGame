@@ -1,0 +1,20 @@
+{
+    "ComboAsistUI": {
+        "arrowOffset": [
+            27.799999237060547,
+            0.0
+        ],
+        "arrowScale": 0.2199999988079071,
+        "basePosition": [
+            17.5,
+            488.8999938964844
+        ],
+        "branchYOffset": 6.900000095367432,
+        "buttonScale": 0.4699999988079071,
+        "columnSpacing": 56.29999923706055,
+        "maxVisibleColumn": 3,
+        "maxVisibleRow": 1,
+        "rowSpacing": 47.79999923706055,
+        "yGroupOffsetY": 130.8000030517578
+    }
+}

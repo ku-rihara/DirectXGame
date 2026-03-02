@@ -5,6 +5,7 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -36,7 +37,7 @@ public:
 
     // 攻撃データの追加、削除
     void AddAttack(const std::string& attackName);
-    void RemoveAttack(const int& index);
+    void RemoveAttack(int index);
 
     void EditorUpdate(); //< エディタ更新
     void AllLoadFile(); //< 全ファイルロード
@@ -45,18 +46,22 @@ public:
     float GetRealAttackSpeed(float baseTimeSpeed) const;
     float GetPowerRate() const;
 
+    /// <summary>
+    /// 指定した攻撃が最初の攻撃かどうかを判定
+    /// </summary>
+    bool IsFirstAttack(const std::string& attackName) const;
+
 private:
     //*-------------------------------- private Method --------------------------------*//
     void BindCommonParams(); //< 共通パラメータバインド
     void AdjustCommonParam(); //< 共通パラメータ調整
 
-    // コンボフロー可視化、チェーン構築
+    // コンボフロー可視化
     void VisualizeComboFlow();
-    std::vector<std::vector<std::string>> BuildComboChains();
-
-    void BuildChainRecursive(
+    void DrawComboFlowTree(
         const std::string& attackName,
-        std::vector<std::string>& chain,
+        const std::string& parentName,
+        const std::vector<std::pair<std::string, int>>& siblingBranches,
         std::unordered_set<std::string>& visited);
 
     // 攻撃名で選択
@@ -81,6 +86,7 @@ private:
     char nameBuffer_[128] = "";
 
     std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
+    std::unordered_map<std::string, int> activeBranchIndices_;
     Combo* pCombo_   = nullptr;
     Player* pPlayer_ = nullptr;
 
@@ -91,13 +97,7 @@ public:
     PlayerComboAttackData* GetSelectedAttack();
     PlayerComboAttackData* GetAttackByName(const std::string& name);
     const std::vector<std::unique_ptr<PlayerComboAttackData>>& GetAllAttacks() const { return attacks_; }
-    const int& GetAttackCount() const { return static_cast<int>(attacks_.size()); }
-
-    /// <summary>
-    /// 指定した攻撃が最初の攻撃かどうかを判定
-    /// 他の攻撃のcomboBranchesから参照されていなければ最初の攻撃
-    /// </summary>
-    bool IsFirstAttack(const std::string& attackName) const;
+    int GetAttackCount() const { return static_cast<int>(attacks_.size()); }
 
     void SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite);
     void SetCombo(Combo* combo);

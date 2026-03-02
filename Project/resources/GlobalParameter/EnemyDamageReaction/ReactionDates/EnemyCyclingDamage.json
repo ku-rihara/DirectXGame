@@ -4,6 +4,7 @@
         "Bound_BoundNum": 0,
         "Bound_InitialBounceRate": 0.0,
         "DamageAnimationName": "EnemyNormalDamage",
+        "Normal_DamageAnimationName": "",
         "Normal_KnockBackDamping": 0.0,
         "Normal_KnockBackTime": 0.0,
         "ReactionState": 0,
@@ -14,6 +15,7 @@
             0.0
         ],
         "Slammed_ThrustRotateSpeed": 0.0,
+        "Strong_DamageAnimationName": "",
         "TakeUpper_FallSpeedLimit": 0.0,
         "TakeUpper_FloatingTime": 0.0,
         "TakeUpper_Gravity": 0.0,
@@ -24,7 +26,7 @@
         ],
         "TakeUpper_ThrustRotateSpeed": 0.0,
         "TriggerAttackName": "ConsecutivePunch",
-        "damageCollingTime": 0.3199999928474426,
+        "damageCollingTime": 0.07999999821186066,
         "isPriorityReaction": false
     }
 }

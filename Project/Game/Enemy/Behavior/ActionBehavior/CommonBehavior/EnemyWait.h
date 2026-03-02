@@ -32,6 +32,4 @@ private:
     std::function<void()> currentPhase_;
     float distance_;
 
-    // プレイヤーからの方向（逃げる方向）
-    Vector3 escapeDirection_;
 };

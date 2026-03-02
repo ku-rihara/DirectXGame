@@ -7,8 +7,10 @@ class Player;
 class FireInjectors;
 class GameBackGroundObject;
 class GameCamera;
-class HowToOperate;
+class OperateUI;
 class DeathTimerGauge;
+class ComboAsistController;
+class ComboSupportSpriteUi;
 
 /// <summary>
 /// ゲームイントロ基底クラス
@@ -42,9 +44,11 @@ protected:
     FireInjectors* pFireInjectors_               = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
     Player* pPlayer_                             = nullptr;
-    HowToOperate* pHowToOperate_                 = nullptr;
+    OperateUI* pHowToOperate_                 = nullptr;
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
     DeathTimerGauge* pDeathTimerGauge_           = nullptr;
+    ComboAsistController* pComboAsistController_   = nullptr;
+    ComboSupportSpriteUi* pComboSupportSpriteUi_  = nullptr;
 
     bool isFinish_                               = false;
     bool isAbleEnemySpawn_                       = false;
@@ -57,10 +61,12 @@ public:
     const bool& GetIsAbleEnemySpawn() const { return isAbleEnemySpawn_; }
 
     // setter
-    void SetHowToOperate(HowToOperate* howToOperate) { pHowToOperate_ = howToOperate; }
+    void SetHowToOperate(OperateUI* howToOperate) { pHowToOperate_ = howToOperate; }
     void SetGameCamera(GameCamera* gameCamera) { pGameCamera_ = gameCamera; }
     void SetPlayer(Player* player) { pPlayer_ = player; }
     void SetDeathTimerGauge(DeathTimerGauge* deathTimerGauge) { pDeathTimerGauge_ = deathTimerGauge; }
     void SetFireInjectors(FireInjectors* fireInjectors) { pFireInjectors_ = fireInjectors; }
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject) { pGameBackGroundObject_ = gameBackGroundObject; }
+    void SetComboAsistController(ComboAsistController* controller) { pComboAsistController_ = controller; }
+    void SetComboSupportSpriteUi(ComboSupportSpriteUi* ui) { pComboSupportSpriteUi_ = ui; }
 };

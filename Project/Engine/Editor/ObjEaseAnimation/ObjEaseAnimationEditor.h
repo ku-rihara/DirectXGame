@@ -7,7 +7,6 @@
 
 /// <summary>
 /// オブジェクトイージングアニメーションエディター
-/// カテゴリーシステムを使用
 /// </summary>
 namespace KetaEngine {
 
@@ -50,7 +49,7 @@ private:
 
     // プレビュー設定
     bool showPreview_                 = true;
-    char previewModelNameBuffer_[128] = "DebugCube.obj";
+    char previewModelNameBuffer_[128] = "Player/Player.obj";
     PreViewTransform previewBaseTransform_;
 
 public:

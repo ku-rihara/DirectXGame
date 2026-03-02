@@ -383,6 +383,29 @@ void GlobalParameter::ClearRegistersForGroup(const std::string& groupName) {
     }
 }
 
+void GlobalParameter::PushParamForGroup(const std::string& groupName) {
+    auto it = registerParams_.find(groupName);
+    if (it != registerParams_.end()) {
+        for (auto& item : it->second) {
+            item.pushVariant();
+        }
+    }
+}
+
+void GlobalParameter::RemoveKeysWithPrefix(const std::string& groupName, const std::string& prefix) {
+    auto it = dates_.find(groupName);
+    if (it == dates_.end()) return;
+
+    Group& group = it->second;
+    for (auto keyIt = group.begin(); keyIt != group.end();) {
+        if (keyIt->first.substr(0, prefix.size()) == prefix) {
+            keyIt = group.erase(keyIt);
+        } else {
+            ++keyIt;
+        }
+    }
+}
+
 void GlobalParameter::RemoveGroup(const std::string& groupName) {
     // 登録情報をクリア
     auto it = registerParams_.find(groupName);

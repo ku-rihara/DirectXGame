@@ -11,8 +11,8 @@ using namespace KetaEngine;
 void CameraEditor::Init(const std::string& animationName) {
     BaseEffectEditor::Init(animationName);
 
-    preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));
-    preViewFollowObj_.reset(Object3d::CreateModel("debugCube.obj"));
+    preViewCameraObj_.reset(Object3d::CreateModel("TestObj/DebugCube.obj"));
+    preViewFollowObj_.reset(Object3d::CreateModel("TestObj/DebugCube.obj"));
 
     preViewCameraObj_->SetIsDraw(false);
     preViewFollowObj_->SetIsDraw(false);

@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Editor/ParameterEditor/GlobalParameter.h"
-
+#include "Editor/DissolveEditor/DissolvePlayer.h"
+#include "Editor/RibbonTrailEditor/RibbonTrailPlayer.h"
 
 #include "3d/Object3D/Object3d.h"
 #include "BaseObject/BaseObject.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
+#include "3d/RibbonTrail/RibbonTrail.h"
 #include <memory>
 #include <string>
 
@@ -22,21 +24,15 @@ public:
     // 初期化、更新
     virtual void Init();
     virtual void Update();
+    virtual void AdjustParam() = 0;
 
-    virtual void AdjustParam() = 0; //< パラメータの調整
 
-    /// <summary>
-    /// ディゾルブ効果の適用
-    /// </summary>
-    /// <param name="dissolve">ディゾルブ値</param>
-    virtual void DissolveAdapt(float dissolve);
-
-    void ParamLoadForImGui(); //< ImGui用パラメータロード
-    void AddParamGroup();         //< パラメータグループの追加
-    void SetValues();            //< 値の設定
-    void ApplyGlobalParameter(); //< グローバルパラメータの適用
+    void RegisterParams(); //< パラメータ登録
     void AdjustParamBase(); //< 基本パラメータの調整
-    virtual void SaveAndLoad(); //< セーブ・ロード
+
+    void PlayDissolve(const std::string& name); //< ディゾルブ再生
+    void SetInitialDissolveHidden(); //< 初期非表示状態設定
+
 protected:
     void EffectEmit(const std::string& effectName);
 
@@ -56,8 +52,16 @@ protected:
     Vector3 direction_;
     Vector3 effectFollowPos_;
 
-    bool isEmit_   = true;
-    bool isShadow_ = true;
+    // リボントレイル
+    std::unique_ptr<KetaEngine::RibbonTrail> ribbonTrail_;
+    KetaEngine::RibbonTrailPlayer            trailPlayer_;
+    Vector3                                  lastTrailPos_{};
+
+    bool isEmit_      = true;
+    bool isTrailEmit_ = false;
+    bool isShadow_    = true;
+
+    KetaEngine::DissolvePlayer dissolvePlayer_;
 
 public:
     ///========================================================
@@ -73,4 +77,15 @@ public:
     void SetObjTranslate(const Vector3& pos) { obj3d_->transform_.translation_ = pos; }
     void SetIsEmit(const bool& isEmit) { isEmit_ = isEmit; }
     void SetIsShadow(const bool& isShadow) { isShadow_ = isShadow; }
+
+    /// トレイルを即座にクリア（攻撃リセット時などに呼ぶ）
+    void ClearTrail() { if (ribbonTrail_) { ribbonTrail_->Clear(); } }
+
+    /// トレイル放出開始（プリセット名でパラメータをロードして開始）
+    void StartTrailEmit(const std::string& presetName, const std::string& category = "Player");
+    /// トレイル放出停止
+    void StopTrailEmit() {
+        isTrailEmit_ = false;
+        ClearTrail();
+    }
 };

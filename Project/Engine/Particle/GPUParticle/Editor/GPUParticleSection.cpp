@@ -32,9 +32,6 @@ void GPUParticleSection::Init(const std::string& particleName, const std::string
         GetParams();
     }
 
-    railManager_ = std::make_unique<RailManager>();
-    railManager_->Init(sectionName_ + "Emit");
-
     debugLine_.reset(Line3D::Create(24));
     emitBoxTransform_.Init();
 
@@ -83,11 +80,6 @@ void GPUParticleSection::RegisterParams() {
     globalParameter_->Regist(sectionName_, "Is Active", &groupSettings_.isActive);
     globalParameter_->Regist(sectionName_, "Texture Path", &selectedTexturePath_);
 
-    // Rail
-    globalParameter_->Regist(sectionName_, "Is Move For Rail", &isMoveForRail_);
-    globalParameter_->Regist(sectionName_, "Is Rail Loop", &isRailLoop_);
-    globalParameter_->Regist(sectionName_, "Move Speed", &moveSpeed_);
-
     // Time
     globalParameter_->Regist(sectionName_, "Start Time", &startTime_);
     timeModeSelector_.RegisterParam(sectionName_, globalParameter_);
@@ -135,10 +127,6 @@ void GPUParticleSection::GetParams() {
     blendModeIndex_         = globalParameter_->GetValue<int>(sectionName_, "Blend Mode");
     groupSettings_.isActive = globalParameter_->GetValue<bool>(sectionName_, "Is Active");
     selectedTexturePath_    = globalParameter_->GetValue<std::string>(sectionName_, "Texture Path");
-
-    isMoveForRail_ = globalParameter_->GetValue<bool>(sectionName_, "Is Move For Rail");
-    isRailLoop_    = globalParameter_->GetValue<bool>(sectionName_, "Is Rail Loop");
-    moveSpeed_     = globalParameter_->GetValue<float>(sectionName_, "Move Speed");
 
     startTime_ = globalParameter_->GetValue<float>(sectionName_, "Start Time");
     timeModeSelector_.GetParam(sectionName_, globalParameter_);
@@ -203,7 +191,6 @@ void GPUParticleSection::Update(float speedRate) {
 
     // PLAYING
     if (playState_ == PlayState::PLAYING) {
-        RailMoveUpdate();
         UpdateEmitTransform();
         SetEmitLine();
 
@@ -221,11 +208,7 @@ void GPUParticleSection::Update(float speedRate) {
         if (group && group->emitSphereData) {
             ParticleEmit emitterData = *group->emitSphereData;
 
-            if (isMoveForRail_) {
-                emitterData.translate = railManager_->GetWorldTransform().GetWorldPos();
-            } else {
-                emitterData.translate = emitterSettings_.position;
-            }
+            emitterData.translate = emitterSettings_.position;
 
             emitterData.count         = emitterSettings_.count;
             emitterData.frequency     = emitterSettings_.frequency;
@@ -251,29 +234,8 @@ void GPUParticleSection::StartPlay() {
     playState_ = PlayState::PLAYING;
 }
 
-void GPUParticleSection::RailMoveUpdate() {
-    if (!isStartRailMove_) {
-        return;
-    }
-    railManager_->Update(moveSpeed_);
-
-    if (railManager_->GetRailMoveTime() < 1.0f) {
-        return;
-    }
-
-    if (!isRailLoop_) {
-        isStartRailMove_ = false;
-    }
-}
-
 void GPUParticleSection::UpdateEmitTransform() {
-    Vector3 basePosition;
-
-    if (isMoveForRail_) {
-        basePosition = railManager_->GetWorldTransform().GetWorldPos();
-    } else {
-        basePosition = emitterSettings_.position;
-    }
+    Vector3 basePosition = emitterSettings_.position;
 
     Vector3 rangeCenter = (transformParams_.translateMax + transformParams_.translateMin) * 0.5f;
     Vector3 rangeSize   = transformParams_.translateMax - transformParams_.translateMin;
@@ -286,14 +248,10 @@ void GPUParticleSection::UpdateEmitTransform() {
 
 void GPUParticleSection::SetEmitLine() {
 #ifdef _DEBUG
-    if (isMoveForRail_) {
-        railManager_->SetCubeLine(emitBoxTransform_.scale_);
-    } else {
-        debugLine_->SetCubeWireframe(
-            emitBoxTransform_.GetWorldPos(),
-            emitBoxTransform_.scale_,
-            Vector4::kWHITE());
-    }
+    debugLine_->SetCubeWireframe(
+        emitBoxTransform_.GetWorldPos(),
+        emitBoxTransform_.scale_,
+        Vector4::kWHITE());
 #endif
 }
 
@@ -318,12 +276,6 @@ void GPUParticleSection::Emit() {
     // エミット後、即座にフラグをリセット
     shouldEmit_ = false;
 }
-void GPUParticleSection::StartRailEmit() {
-    isStartRailMove_ = true;
-    railManager_->SetRailMoveTime(0.0f);
-    railManager_->SetIsRoop(isRailLoop_);
-}
-
 void GPUParticleSection::ApplyParameters() {
     auto group = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
     if (!group || !group->resourceData) {
@@ -392,19 +344,6 @@ void GPUParticleSection::AdjustParam() {
         const char* blendModeItems[] = {"None", "Add", "Multiply", "Subtractive", "Screen"};
         if (ImGui::Combo("Blend Mode", &blendModeIndex_, blendModeItems, IM_ARRAYSIZE(blendModeItems))) {
             groupSettings_.blendMode = static_cast<BlendMode>(blendModeIndex_);
-        }
-    }
-
-    if (ImGui::CollapsingHeader("Rail Movement")) {
-        ImGui::Checkbox("Is Move For Rail", &isMoveForRail_);
-        ImGui::Checkbox("Is Rail Loop", &isRailLoop_);
-        ImGui::DragFloat("Move Speed", &moveSpeed_, 0.1f);
-
-        ImGui::SeparatorText("Control Points:");
-        railManager_->ImGuiEdit();
-
-        if (ImGui::Button("Start Rail Emit")) {
-            StartRailEmit();
         }
     }
 
@@ -574,9 +513,6 @@ void GPUParticleSection::Reset() {
         group->emitSphereData->frequencyTime = 0.0f;
     }
 
-    if (railManager_) {
-        railManager_->SetRailMoveTime(0.0f);
-    }
 }
 
 void GPUParticleSection::Pause() {

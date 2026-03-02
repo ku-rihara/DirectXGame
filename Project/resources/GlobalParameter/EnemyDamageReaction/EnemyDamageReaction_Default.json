@@ -1,0 +1,25 @@
+{
+    "EnemyDamageReaction_Default": {
+        "DefaultDamageAnimationName": "EnemyNormalDamage",
+        "DefaultObjEaseAnimationName": "",
+        "DefaultObjEaseAnimationStartTiming": 0.0,
+        "Normal_Bound_DefaultDamageAnimationName": "NormalEnemyBoundDamage",
+        "Normal_DefaultDamageCoolTime": 0.10999999940395355,
+        "Normal_DefaultObjEaseAnimationName": "",
+        "Normal_DefaultObjEaseAnimationStartTiming": 0.0,
+        "Normal_DefaultParticleEffectName": "NormalDamageEffect",
+        "Normal_GetUp_DefaultDamageAnimationName": "NormalEnemyKipUp",
+        "Normal_Normal_DefaultDamageAnimationName": "EnemyNormalDamage",
+        "Normal_Slammed_DefaultDamageAnimationName": "TakeUpMotion",
+        "Normal_TakeUpper_DefaultDamageAnimationName": "TakeUpMotion",
+        "Strong_Bound_DefaultDamageAnimationName": "NormalEnemyBoundDamage",
+        "Strong_DefaultDamageCoolTime": 0.0,
+        "Strong_DefaultObjEaseAnimationName": "",
+        "Strong_DefaultObjEaseAnimationStartTiming": 0.0,
+        "Strong_DefaultParticleEffectName": "NormalDamageEffect",
+        "Strong_GetUp_DefaultDamageAnimationName": "NormalEnemyKipUp",
+        "Strong_Normal_DefaultDamageAnimationName": "EnemyNormalDamage",
+        "Strong_Slammed_DefaultDamageAnimationName": "TakeUpMotion",
+        "Strong_TakeUpper_DefaultDamageAnimationName": "TakeUpMotion"
+    }
+}

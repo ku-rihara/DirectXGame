@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseGameIntro.h"
 #include "MovieLine.h"
+class ComboAsistController;
+class ComboSupportSpriteUi;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <array>
 #include <cstdint>
@@ -72,7 +74,9 @@ private:
     float currentPlaySpeedRate_                  = 1.0f;
     float fastSpeedRate_                         = 3.0f;
 
-    HowToOperate* pHowToOperate_                 = nullptr;
+    ComboAsistController* pComboAsistController_    = nullptr;
+    ComboSupportSpriteUi* pComboSupportSpriteUi_  = nullptr;
+    OperateUI* pHowToOperate_                      = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
     Player* pPlayer_                             = nullptr;
     FireInjectors* pFireInjectors_               = nullptr;
@@ -87,12 +91,14 @@ public:
     MovieLine* GetMovieLine() const { return movieLine_.get(); }
 
     // setter
-    void SetHowToOperate(HowToOperate* howToOperate);
+    void SetHowToOperate(OperateUI* howToOperate);
     void SetGameCamera(GameCamera* gameCamera);
     void SetPlayer(Player* player);
     void SetFireInjectors(FireInjectors* fireInjectors);
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject);
     void SetDeathTimerGauge(DeathTimerGauge* deathTimerGauge);
     void SetSpeedMultiplier(float multiplier) { currentPlaySpeedRate_ = multiplier; }
+    void SetComboAsistController(ComboAsistController* controller) { pComboAsistController_ = controller; }
+    void SetComboSupportSpriteUi(ComboSupportSpriteUi* ui) { pComboSupportSpriteUi_ = ui; }
     void ClassisSet();
 };

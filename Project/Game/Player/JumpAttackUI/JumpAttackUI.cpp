@@ -1,4 +1,5 @@
 #include "JumpAttackUI.h"
+#include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 #include "Frame/Frame.h"
 #include <imgui.h>
 
@@ -44,9 +45,7 @@ void JumpAttackUI::Update(const Vector3& basePos, const KetaEngine::ViewProjecti
     for (size_t i = 0; i < static_cast<size_t>(Type::COUNT); ++i) {
         Vector2 offset = bottoms_[i].posValueOffset + positionScreenV2;
 
-        bottoms_[i].sprite->transform_.pos      = bottoms_[i].discreteDirection * easingParam_.posEaseValue + offset;
-        bottoms_[i].sprite->transform_.scale    = easingParam_.scaleEaseValue;
-        bottoms_[i].sprite->transform_.rotate.z = easingParam_.rotateEaseValue;
+        bottoms_[i].sprite->transform_.pos      = bottoms_[i].discreteDirection * posEasingParam_.posEaseValue + offset;
 
         // alpha
         if (bottoms_[i].isNotOperate) {
@@ -101,15 +100,10 @@ void JumpAttackUI::Wait() {
 }
 
 void JumpAttackUI::Open() {
-
-    easingParam_.scaleEasing->Update(KetaEngine::Frame::DeltaTime());
-    easingParam_.posEasing->Update(KetaEngine::Frame::DeltaTime());
-    easingParam_.rotateEasing->Update(KetaEngine::Frame::DeltaTime());
+    posEasingParam_.posEasing->Update(KetaEngine::Frame::DeltaTime());
 }
 void JumpAttackUI::Close() {
-    easingParam_.scaleEasing->Update(KetaEngine::Frame::DeltaTime());
-    easingParam_.posEasing->Update(KetaEngine::Frame::DeltaTime());
-    easingParam_.rotateEasing->Update(KetaEngine::Frame::DeltaTime());
+    posEasingParam_.posEasing->Update(KetaEngine::Frame::DeltaTime());
 }
 
 void JumpAttackUI::RegisterParams() {
@@ -140,54 +134,38 @@ void JumpAttackUI::AdjustParam() {
 }
 
 void JumpAttackUI::EasingInit() {
-    easingParam_.scaleEasing  = std::make_unique<KetaEngine::Easing<Vector2>>();
-    easingParam_.posEasing    = std::make_unique<KetaEngine::Easing<float>>();
-    easingParam_.rotateEasing = std::make_unique<KetaEngine::Easing<float>>();
+    posEasingParam_.posEasing = std::make_unique<KetaEngine::Easing<float>>();
 
-    // Init
-    easingParam_.scaleEasing->Init("PlayerOperateUIScaling.json");
-    easingParam_.posEasing->Init("PlayerOperateUIOffsetPos.json");
-    easingParam_.rotateEasing->Init("PlayerOperateUIRotate.json");
-
-    // scale
-    easingParam_.scaleEasing->SetAdaptValue(&easingParam_.scaleEaseValue);
-    easingParam_.scaleEasing->Reset();
-
-    // pos
-    easingParam_.posEasing->SetAdaptValue(&easingParam_.posEaseValue);
-    easingParam_.posEasing->Reset();
-
-    // rotate
-    easingParam_.rotateEasing->SetAdaptValue(&easingParam_.rotateEaseValue);
-    easingParam_.rotateEasing->Reset();
+    // pos (方向ベクトル係数として使用するためEasing<float>のまま)
+    posEasingParam_.posEasing->Init("PlayerOperateUIOffsetPos.json");
+    posEasingParam_.posEasing->SetAdaptValue(&posEasingParam_.posEaseValue);
+    posEasingParam_.posEasing->Reset();
 }
 
 void JumpAttackUI::StartOpen() {
     state_ = State::OPEN;
 
-    // 通常状態に設定 (Start → End)
-    easingParam_.scaleEasing->SetIsStartEndReverse(false);
-    easingParam_.scaleEasing->Reset();
+    // Scale/Rotation は SpriteEaseAnimation で再生
+    for (size_t i = 0; i < static_cast<size_t>(Type::COUNT); ++i) {
+        bottoms_[i].sprite->PlaySpriteEaseAnimation("PlayerOperateUIOpen", "JumpAttackUI");
+    }
 
-    easingParam_.posEasing->SetIsStartEndReverse(false);
-    easingParam_.posEasing->Reset();
-
-    easingParam_.rotateEasing->SetIsStartEndReverse(false);
-    easingParam_.rotateEasing->Reset();
+    // pos: 通常状態に設定 (Start → End)
+    posEasingParam_.posEasing->SetIsStartEndReverse(false);
+    posEasingParam_.posEasing->Reset();
 }
 
 void JumpAttackUI::StartClose() {
     state_ = State::CLOSE;
 
-    // 反転状態に設定 (End → Start)
-    easingParam_.scaleEasing->SetIsStartEndReverse(true);
-    easingParam_.scaleEasing->Reset();
+    // Scale/Rotation は SpriteEaseAnimation で再生
+    for (size_t i = 0; i < static_cast<size_t>(Type::COUNT); ++i) {
+        bottoms_[i].sprite->PlaySpriteEaseAnimation("PlayerOperateUIClose", "JumpAttackUI");
+    }
 
-    easingParam_.posEasing->SetIsStartEndReverse(true);
-    easingParam_.posEasing->Reset();
-
-    easingParam_.rotateEasing->SetIsStartEndReverse(true);
-    easingParam_.rotateEasing->Reset();
+    // pos: 反転状態に設定 (End → Start)
+    posEasingParam_.posEasing->SetIsStartEndReverse(true);
+    posEasingParam_.posEasing->Reset();
 }
 
 void (JumpAttackUI::* JumpAttackUI::spFuncTable_[])() = {

@@ -24,6 +24,7 @@ class LockOn;
 class Combo;
 class GameCamera;
 class EnemySpawner;
+class KillCounter;
 
 class EnemyManager {
 public:
@@ -86,6 +87,7 @@ private:
     Player* pPlayer_;
     GameCamera* pGameCamera_;
     Combo* pCombo_;
+    KillCounter* pKillCounter_ = nullptr;
     EnemySpawner* pEnemySpawner_;
   
     // damageReaction
@@ -134,5 +136,6 @@ public:
     void SetLockOn(LockOn* lockOn);
     void SetGameCamera(GameCamera* gameCamera);
     void SetCombo(Combo* combo);
+    void SetKillCounter(KillCounter* killCounter);
     void SetEnemySpawner(EnemySpawner* enemySpawner);
 };

@@ -1,10 +1,12 @@
 #include "IntroSpawnField.h"
+#include "UI/ComboAsistUI/ComboAsistController.h"
+#include "UI/ComboAsistUI/SupportSprite/ComboSupportSpriteUi.h"
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "DeathTimer/DeathTimerGauge.h"
 #include "FireInjectors/FireInjectors.h"
 #include "GameCamera/GameCamera.h"
 #include "player/Player.h"
-#include "UI/HowToOperate.h"
+#include "UI/OperateUI.h"
 #include <imgui.h>
 
 void IntroSpawnField::Init(const std::string& name) {
@@ -21,6 +23,8 @@ void IntroSpawnField::Init(const std::string& name) {
     spriteEaseScale_ = Vector2::ZeroVector();
     scaleEasing_.SetAdaptValue(&spriteEaseScale_);
     scaleEasing_.Reset();
+
+    introSlideStarted_ = false;
 }
 
 void IntroSpawnField::Update(float playSpeed) {
@@ -63,7 +67,21 @@ void IntroSpawnField::FinishWait() {
         scaleEasing_.Update(playSpeed_);
         pHowToOperate_->SetScale(spriteEaseScale_);
         pDeathTimerGauge_->SetSpriteScales(spriteEaseScale_);
+        if (pComboSupportSpriteUi_) {
+            pComboSupportSpriteUi_->SetScale(spriteEaseScale_);
+        }
     }
+
+    // コンボアシストUIスライドイン
+    if (pComboAsistController_) {
+        if (!introSlideStarted_) {
+            pComboAsistController_->OpenPanel();
+            introSlideStarted_ = true;
+        }
+        pComboAsistController_->UpdateSlide(playSpeed_);
+        pComboAsistController_->ApplySlideOffset();
+    }
+
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }
@@ -73,6 +91,9 @@ void IntroSpawnField::FinishWait() {
 void IntroSpawnField::Finish() {
     pHowToOperate_->SetScale(Vector2::OneVector());
     pDeathTimerGauge_->SetSpriteScales(Vector2::OneVector());
+    if (pComboSupportSpriteUi_) {
+        pComboSupportSpriteUi_->SetScale(Vector2::OneVector());
+    }
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }

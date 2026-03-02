@@ -3,6 +3,8 @@
 #include "EnemyDeath.h"
 #include "Player/CollisionBox/PlayerAttackCollisionBox.h"
 #include "Enemy/Types/BaseEnemy.h"
+#include "Enemy/EnemyManager.h"
+#include "Enemy/DamageReaction/EnemyDamageReactionController.h"
 #include "Player/Player.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Frame/Frame.h"
@@ -47,7 +49,7 @@ void EnemyDamageReactionTakeUpper::UpdatePhase() {
     if (IsReactionFinished()) {
         OnReactionEnd();
         endType_ = EndType::BackToRoot;
-        currentPhase_ = [this]() { EndPhase(); };
+        currentPhase_ = [this]() { GetUpPhase(); };
     }
 }
 
@@ -69,9 +71,20 @@ void EnemyDamageReactionTakeUpper::InitReaction() {
 
     const auto& reactionParam = pReactionData_->GetReactionParam();
 
-    // ダメージアニメーションを再生
-    if (!reactionParam.damageAnimationName.empty()) {
-        pBaseEnemy_->PlayAnimationByName(reactionParam.damageAnimationName, false);
+    // ダメージアニメーションを再生（敵タイプ別）
+    int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+    const auto& animName = reactionParam.damageAnimationNames[enemyType];
+    if (animName == "None") {
+        // "None"が設定されている場合は何もしない
+    } else if (animName.empty()) {
+        // 空の場合はデフォルトアニメーションを再生
+        const auto* controller = pBaseEnemy_->GetManager()->GetDamageReactionController();
+        const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::TakeUpper);
+        if (!defaultAnim.empty()) {
+            pBaseEnemy_->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetDamageReactionAnimationIsLoop(defaultAnim));
+        }
+    } else {
+        pBaseEnemy_->PlayAnimationByName(animName, pBaseEnemy_->GetDamageReactionAnimationIsLoop(animName));
     }
 
     blowYPower_ = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
@@ -173,6 +186,16 @@ void EnemyDamageReactionTakeUpper::UpdateTakeUpper() {
             pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
             hasReachedGround_ = true;
 
+            // バウンドアニメーション再生
+            {
+                const auto* ctrl = pBaseEnemy_->GetManager()->GetDamageReactionController();
+                int eType = static_cast<int>(pBaseEnemy_->GetType());
+                const auto& boundAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::Bound);
+                if (!boundAnim.empty()) {
+                    pBaseEnemy_->PlayAnimationByName(boundAnim, false);
+                }
+            }
+
             // バウンドエフェクト
             pBaseEnemy_->ThrustRenditionInit();
 
@@ -238,10 +261,34 @@ bool EnemyDamageReactionTakeUpper::IsReactionFinished() const {
     return false;
 }
 
+void EnemyDamageReactionTakeUpper::GetUpPhase() {
+    if (getUpFinished_) {
+        EndPhase();
+    }
+}
+
 void EnemyDamageReactionTakeUpper::OnReactionEnd() {
     pBaseEnemy_->RotateInit();
     const auto& enemyParam = pBaseEnemy_->GetParameter();
     pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
+
+    // 起き上がりアニメーション再生
+    const auto* ctrl = pBaseEnemy_->GetManager()->GetDamageReactionController();
+    int eType = static_cast<int>(pBaseEnemy_->GetType());
+    const auto& getUpAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::GetUp);
+
+    if (getUpAnim.empty()) {
+        // GetUpアニメーションが未設定の場合はすぐに終了へ
+        getUpFinished_ = true;
+        return;
+    }
+
+    pBaseEnemy_->PlayAnimationByName(getUpAnim, false);
+
+    // アニメーション終了コールバックで完了フラグを立てる
+    pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(getUpAnim, [this]() {
+        getUpFinished_ = true;
+    });
 }
 
 void EnemyDamageReactionTakeUpper::RotationUpdate() {

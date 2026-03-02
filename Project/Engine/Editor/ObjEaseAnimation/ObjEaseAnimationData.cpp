@@ -39,9 +39,7 @@ void ObjEaseAnimationData::UpdateActiveSection(float speedRate) {
     }
 
     // 各SRTが使用しているセクションを全て更新
-    // どのセクションがアクティブかはSRTごとに異なる可能性があるため、
-    // 使用中の全セクションを更新する
-    std::array<bool, 16> updatedSections = {}; // 最大16セクションまで対応
+    std::array<bool, 16> updatedSections = {};
 
     for (size_t srtType = 0; srtType < static_cast<size_t>(TransformType::Count); ++srtType) {
         int32_t sectionIndex = activeSectionIndices_[srtType];
@@ -94,8 +92,15 @@ void ObjEaseAnimationData::UpdateIndependentSRTProgression() {
 
     // 全SRTが全セクション完了したかチェック
     if (AreAllSRTFinished()) {
-        isAllKeyFramesFinished_ = true;
-        playState_              = PlayState::STOPPED;
+        if (isLoop_) {
+            if (onLoopEndCallback_) {
+                onLoopEndCallback_();
+            }
+            Play(); // リセットして再生
+        } else {
+            isAllKeyFramesFinished_ = true;
+            playState_              = PlayState::STOPPED;
+        }
     }
 }
 
@@ -273,6 +278,57 @@ Vector3 ObjEaseAnimationData::GetActiveKeyFrameValue(const TransformType& type) 
     }
 
     return Vector3::ZeroVector();
+}
+
+Vector3 ObjEaseAnimationData::GetActiveAnchorValue(const TransformType& type) const {
+    if (sectionElements_.empty()) {
+        return Vector3::ZeroVector();
+    }
+
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(type)];
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        auto sectionType = static_cast<ObjEaseAnimationSection::TransformType>(static_cast<size_t>(type));
+        return sectionElements_[sectionIndex]->GetAnchor(sectionType);
+    }
+    return Vector3::ZeroVector();
+}
+
+bool ObjEaseAnimationData::IsLookingAtDirection() const {
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        return sectionElements_[sectionIndex]->IsLookingAtDirection();
+    }
+    return false;
+}
+
+Vector3 ObjEaseAnimationData::GetMovementDirection() const {
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        return sectionElements_[sectionIndex]->GetMovementDirection();
+    }
+    return Vector3::ToForward();
+}
+
+bool ObjEaseAnimationData::IsTranslationReturning() const {
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        // isReturnToOrigin による戻り
+        auto state = sectionElements_[sectionIndex]->GetTransformState(ObjEaseAnimationSection::TransformType::Translation);
+        if (state == ObjEaseAnimationSection::TransformState::RETURNING ||
+            state == ObjEaseAnimationSection::TransformState::RETURN_WAITING) {
+            return true;
+        }
+        //RailPlayer 自体が戻り中かチェック
+        if (sectionElements_[sectionIndex]->IsUsingRail()) {
+            auto* railPlayer = sectionElements_[sectionIndex]->GetRailPlayer();
+            if (railPlayer && railPlayer->IsReturning()) {
+                return true;
+            }
+        }
+        // 別セクションで戻りを実装している場合
+        return sectionElements_[sectionIndex]->IsReturnSection();
+    }
+    return false;
 }
 
 bool ObjEaseAnimationData::GetIsUseRailActiveKeyFrame() const {

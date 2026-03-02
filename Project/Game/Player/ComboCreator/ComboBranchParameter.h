@@ -63,4 +63,5 @@ public:
     // Setter
     void SetCancelTime(float time) { cancelTime_ = time; }
     void SetPrecedeInputTime(float time) { precedeInputTime_ = time; }
+    void SetBranchIndex(int32_t newIndex) { branchIndex_ = newIndex; }
 };

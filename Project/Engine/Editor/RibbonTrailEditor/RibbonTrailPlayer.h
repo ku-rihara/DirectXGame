@@ -1,0 +1,72 @@
+#pragma once
+#include "RibbonTrailData.h"
+#include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
+#include "Vector3.h"
+#include "Vector4.h"
+#include <cstdint>
+#include <memory>
+#include <string>
+
+namespace KetaEngine {
+
+class RibbonTrail; // 前方宣言
+
+/// <summary>
+/// リボントレイル再生クラス
+/// </summary>
+class RibbonTrailPlayer : public BaseEffectPlayer {
+public:
+    RibbonTrailPlayer()           = default;
+    ~RibbonTrailPlayer() override = default;
+
+    void Init() override;
+    void Update(float speedRate = 1.0f) override;
+
+    /// <summary>
+    /// 指定プリセットをロードして再生状態にする
+    /// </summary>
+    void Play(const std::string& presetName, const std::string& categoryName = "Common") override;
+
+    /// <summary>
+    /// 呼び出し
+    /// </summary>
+    void Emit(const Vector3& position, float deltaTime);
+
+
+    RibbonTrail* GetTrail() const { return trail_; }
+
+    /// <summary>
+    /// トレイルをクリアして非表示にする
+    /// </summary>
+    void StopAndClear();
+
+protected:
+    std::unique_ptr<BaseEffectData> CreateEffectData() override;
+
+private:
+    RibbonTrailData* GetData() const;
+
+    /// <summary>
+    /// Play() 時と、エディタでパラメータ変更時に呼ぶ
+    /// </summary>
+    void SyncDataToTrail();
+
+private:
+    RibbonTrail* trail_      = nullptr;
+    float        emitTimer_  = 0.0f;
+
+public:
+    ///========================================================
+    /// Getter
+    ///========================================================
+    Vector4            GetStartColor()   const;
+    Vector4            GetEndColor()     const;
+    float              GetStartWidth()   const;
+    float              GetEndWidth()     const;
+    float              GetLifetime()     const;
+    int32_t            GetMaxPoints()    const;
+    float              GetEmitInterval() const;
+    const std::string& GetTexturePath()  const;
+};
+
+} // KetaEngine

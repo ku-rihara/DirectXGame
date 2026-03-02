@@ -93,8 +93,17 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
     Assimp::Importer importer;
 
     std::filesystem::path path(fileName);
-    std::string stemName = path.stem().string();
-    std::string filePath = directoryPath_ + stemName + "/" + fileName;
+    std::string stemName  = path.stem().string();
+    std::string fileBase  = path.filename().string();
+    std::string parentDir = path.parent_path().string();
+
+    // "Category/ModelName.ext" 形式に対応: Resources/Model/Category/ModelName/
+    std::string filePath;
+    if (parentDir.empty()) {
+        filePath = directoryPath_ + stemName + "/" + fileBase;
+    } else {
+        filePath = directoryPath_ + parentDir + "/" + stemName + "/" + fileBase;
+    }
 
     animation.name = stemName;
 

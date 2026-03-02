@@ -8,6 +8,7 @@
 #include "Scene/Manager/SceneManager.h"
 #include <imgui.h>
 
+
 void EditorScene::Init() {
     //// グローバル変数の読み込み
     KetaEngine::GlobalParameter::GetInstance()->LoadFiles();
@@ -25,6 +26,10 @@ void EditorScene::Update() {
     BaseScene::Update();
 
     effectEditorSuite_->SetCameraPreViewPos(player_->GetWorldPosition());
+
+    // UI更新
+    comboAsistController_->Update();
+    unlockNotifier_->Update(KetaEngine::Frame::DeltaTime());
 
     // Editor
     attackEffect_->Update();
@@ -69,6 +74,9 @@ void EditorScene::Debug() {
     enemyManager_->AdjustParam();
     enemySpawner_->AdjustParam();
     combo_->AdjustParam();
+    killCounter_->AdjustParam();
+    comboAsistController_->AdjustParam();
+    unlockNotifier_->AdjustParam();
     audienceController_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
@@ -122,9 +130,17 @@ void EditorScene::ObjectInit() {
     audienceController_          = std::make_unique<AudienceController>();
     ObjectFromBlender_           = std::make_unique<KetaEngine::ObjectFromBlender>();
     deathTimer_                  = std::make_unique<DeathTimer>();
+    killCounter_                 = std::make_unique<KillCounter>();
+    comboAsistController_        = std::make_unique<ComboAsistController>();
+    unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
+    operateUI_                   = std::make_unique<OperateUI>();
+    unlockNotifier_->Init();
+    operateUI_->Init();
 
     // 初期化
-    player_->InitInGameScene();
+    field_->Init();
+    player_->Init();
+    player_->SetIsIgnoreUnlockState(true);
     lockOnController_->Init();
     skyBox_->Init();
     combo_->Init();
@@ -132,6 +148,8 @@ void EditorScene::ObjectInit() {
     enemySpawner_->Init("enemySpawner.json");
     gameCamera_->Init();
     playerComboAttackController_->Init();
+    killCounter_->SetAttackController(playerComboAttackController_.get());
+    killCounter_->Init();
     attackEffect_->Init();
     sideRopeController_->Init();
     audienceController_->Init();
@@ -146,9 +164,10 @@ void EditorScene::SetClassPointer() {
 
     enemyManager_->SetPlayer(player_.get());
     enemyManager_->SetCombo(combo_.get());
+    enemyManager_->SetKillCounter(killCounter_.get());
     enemyManager_->SetGameCamera(gameCamera_.get());
     enemyManager_->SetEnemySpawner(enemySpawner_.get());
-   
+
     enemySpawner_->SetEnemyManager(enemyManager_.get());
 
     lockOnController_->SetEnemyManager(enemyManager_.get());
@@ -164,4 +183,26 @@ void EditorScene::SetClassPointer() {
 
     playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
     playerComboAttackController_->SetPlayer(player_.get());
+
+    operateUI_->SetPlayer(player_.get());
+
+    comboAsistController_->SetAttackController(playerComboAttackController_.get());
+    comboAsistController_->SetPlayer(player_.get());
+    comboAsistController_->Init();
+
+    // 自動コンボ実行 → アンロック通知UIリアクション の接続
+    ComboUnlockNotifier* notifier = unlockNotifier_.get();
+    player_->SetAutoComboAttackCallback([notifier](const std::string& name) {
+        notifier->NotifyAttackExecuted(name);
+    });
+
+    // 攻撃解放 → アンロック通知UI の接続
+    {
+        ComboAsistController* asist          = comboAsistController_.get();
+        PlayerComboAttackController* atkCtrl = playerComboAttackController_.get();
+        Player* playerPtr                    = player_.get();
+        killCounter_->SetOnAttackUnlockedCallback([notifier, asist, atkCtrl, playerPtr](const std::string& name) {
+            notifier->OnAttackUnlocked(name, asist->GetLayoutParam(), atkCtrl, playerPtr);
+        });
+    }
 }

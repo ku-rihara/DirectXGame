@@ -65,6 +65,9 @@ void ParticleSection::Stop() {
     if (railPlayer_) {
         railPlayer_->Stop();
     }
+
+    // Dissolveリセット
+    ParticleManager::GetInstance()->StopDissolve(groupName_);
 }
 
 void ParticleSection::StartWaiting() {
@@ -120,6 +123,12 @@ void ParticleSection::StartPlay() {
         if (!railFileName.empty()) {
             railPlayer_->Play(railFileName);
         }
+    }
+
+    // Dissolveを起動
+    const std::string& dissolveName = sectionParam_->GetDissolveName();
+    if (!dissolveName.empty()) {
+        ParticleManager::GetInstance()->PlayDissolve(groupName_, dissolveName);
     }
 }
 
@@ -274,3 +283,4 @@ void ParticleSection::SetTextureHandle(uint32_t handle) {
 bool ParticleSection::IsShotJudge() {
     return (sectionParam_->GetGroupParameters().isShot) && (!isPlayByEditor_);
 }
+

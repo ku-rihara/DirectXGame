@@ -25,19 +25,25 @@ void ParticlePipeline::CreateRootSignature() {
     staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
     // DescriptorRangeを設定
-    D3D12_DESCRIPTOR_RANGE descriptorRange[2] = {};
+    D3D12_DESCRIPTOR_RANGE descriptorRange[3] = {};
 
-    // gParticle (t0) - StructuredBuffer
+    // gParticle (t0) - StructuredBuffer (Vertex)
     descriptorRange[0].BaseShaderRegister                = 0;
     descriptorRange[0].NumDescriptors                    = 1;
     descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    // gTexture (t0) - Texture2D
+    // gTexture (t0) - Texture2D (Pixel)
     descriptorRange[1].BaseShaderRegister                = 0;
     descriptorRange[1].NumDescriptors                    = 1;
     descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    // gMaskTexture (t1) - Dissolve Texture (Pixel)
+    descriptorRange[2].BaseShaderRegister                = 1;
+    descriptorRange[2].NumDescriptors                    = 1;
+    descriptorRange[2].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
     D3D12_ROOT_PARAMETER rootParameters[static_cast<UINT>(ParticleRootParameter::Count)] = {};
@@ -58,6 +64,12 @@ void ParticlePipeline::CreateRootSignature() {
     rootParameters[static_cast<UINT>(ParticleRootParameter::Texture)].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[static_cast<UINT>(ParticleRootParameter::Texture)].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
     rootParameters[static_cast<UINT>(ParticleRootParameter::Texture)].DescriptorTable.NumDescriptorRanges = 1;
+
+    // DissolveTexture (t1, Pixel)
+    rootParameters[static_cast<UINT>(ParticleRootParameter::DissolveTexture)].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[static_cast<UINT>(ParticleRootParameter::DissolveTexture)].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(ParticleRootParameter::DissolveTexture)].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
+    rootParameters[static_cast<UINT>(ParticleRootParameter::DissolveTexture)].DescriptorTable.NumDescriptorRanges = 1;
 
     // Root Signature Descriptionを設定
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};

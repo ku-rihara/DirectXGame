@@ -48,7 +48,7 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
     MoveAnimation();
     WaitAnimation();
 
-    if ((KetaEngine::Input::IsPressPad(0, GamepadButton::B))) {
+    if ((KetaEngine::Input::IsPressPad(0, GamepadButton::LB)) || forceDash_) {
         isDashing_ = true;
         pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed *
                       pPlayerParameter_->GetParameters().dashSpeedMultiplier);
@@ -59,7 +59,7 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
 
     // 　ジャンプに切り替え
     if (KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::J)) {
-        pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
+        pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, pPlayerParameter_->GetParameters().normalJump.jumpSpeed));
     } else {
         JumpForJoyState(); // コントローラジャンプ
     }
@@ -71,7 +71,7 @@ void PlayerMove::JumpForJoyState() {
         return;
     }
 
-    pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
+    pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, pPlayerParameter_->GetParameters().normalJump.jumpSpeed));
 }
 
 void PlayerMove::MoveAnimation() {
@@ -79,12 +79,12 @@ void PlayerMove::MoveAnimation() {
         return;
     }
 
-    ///============================================================================
+  /*  ///============================================================================
     /// 移動アニメーション
     ///============================================================================
     moveEase_->Update(KetaEngine::Frame::DeltaTimeRate());
     pOwner_->SetHeadPosY(tempPosY_);
-    pOwner_->SetHeadScale(tempScale_);
+    pOwner_->SetHeadScale(tempScale_);*/
 }
 
 void PlayerMove::WaitAnimation() {

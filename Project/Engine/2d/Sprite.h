@@ -1,4 +1,5 @@
 #pragma once
+// dx
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
@@ -9,12 +10,15 @@
 #include "struct/ModelData.h"
 #include "struct/TransformationMatrix.h"
 #include <cstdint>
+#include <memory>
 #include <string>
 
 /// <summary>
 /// スプライトクラス
 /// </summary>
 namespace KetaEngine {
+
+class SpriteEaseAnimationPlayer;
 
 class Sprite {
 public:
@@ -34,7 +38,7 @@ public:
         Vector2 scale_            = Vector2::OneVector();
         Vector2 uvScale_          = Vector2::OneVector();
         Vector4 color_            = Vector4::kWHITE();
-        Vector2 startAnchorPoint_ = Vector2::OneVector();
+        Vector2 startAnchorPoint_ = Vector2::ZeroVector();
         int32_t startLayerNum_;
     };
 
@@ -50,6 +54,28 @@ public:
     /// <returns>作成されたSpriteのポインタ</returns>
     static Sprite* Create(const std::string& textureName, bool isAbleEdit = true);
     void CreateSprite(const std::string& textureName);
+
+     ///=========================================================================================
+    ///  スプライトイージングアニメーション
+    ///=========================================================================================
+
+    /// <summary>
+    /// スプライトイージングアニメーション再生
+    /// </summary>
+    /// <param name="animationName">アニメーション名</param>
+    /// <param name="categoryName">カテゴリー名</param>
+    void PlaySpriteEaseAnimation(const std::string& animationName, const std::string& categoryName = "Common");
+
+    /// <summary>
+    /// スプライトイージングアニメーション停止
+    /// </summary>
+    void StopSpriteEaseAnimation();
+
+    /// <summary>
+    /// スプライトイージングアニメーション更新
+    /// </summary>
+    void UpdateSpriteEaseAnimation();
+
 
     // パラメータ編集
     void AdjustParam();
@@ -99,6 +125,13 @@ private:
     // ゲージ用の表示割合(0.0f~1.0f)
     float gaugeRate_ = 1.0f;
 
+    // スプライトイージングアニメーション
+    std::unique_ptr<SpriteEaseAnimationPlayer> spriteEaseAnimationPlayer_;
+
+    void ApplyAnimationToMaterial();
+    Vector2 GetAnimationPosition() const;
+    Vector3 GetAnimationRotation() const;
+
     // テクスチャ
     Vector2 textureSize_; //< テクスチャ自体のサイズ
     D3D12_GPU_DESCRIPTOR_HANDLE texture_;
@@ -137,6 +170,12 @@ public:
     // UVTransform
     UVTransform& GetUVTransform() { return uvTransform_; }
     const UVTransform& GetUVTransform() const { return uvTransform_; }
+
+    
+    /// <summary>
+    /// アニメーションプレイヤー取得
+    /// </summary>
+    SpriteEaseAnimationPlayer* GetSpriteEaseAnimationPlayer() { return spriteEaseAnimationPlayer_.get(); }
 
     ///=========================================================================================
     ///  setter

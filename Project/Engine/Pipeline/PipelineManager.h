@@ -19,6 +19,7 @@ class GPUParticlePipeline;
 class ShadowMapPipeline;
 class Line3DPipeline;
 class SkyBoxPipeline;
+class RibbonTrailPipeline;
 
 enum class PipelineType {
     Sprite,
@@ -29,6 +30,7 @@ enum class PipelineType {
     ShadowMap,
     Line3D,
     SkyBox,
+    RibbonTrail,
     Count
 };
 
