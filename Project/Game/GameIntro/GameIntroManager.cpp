@@ -189,5 +189,6 @@ void GameIntroManager::ClassisSet() {
         intro->SetGameBackGroundObject(pGameBackGroundObject_);
         intro->SetDeathTimerGauge(pDeathTimerGauge_);
         intro->SetComboAsistController(pComboAsistController_);
+        intro->SetComboSupportSpriteUi(pComboSupportSpriteUi_);
     }
 }

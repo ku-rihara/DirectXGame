@@ -54,6 +54,12 @@ public:
     /// 通知UIなど外部からレイアウトパラメータが必要な場合に使う
     LayoutParam GetLayoutParam() const { return MakeLayoutParam(); }
 
+    /// コンボアシストUIの基準位置を取得
+    const Vector2& GetBasePosition() const { return basePosition_; }
+
+    /// 現在表示中の発動条件を取得
+    PlayerComboAttackData::TriggerCondition GetCurrentCondition() const { return currentCondition_; }
+
 private:
     //=== 初期化 ===
     void RebuildAllConditions();

@@ -84,6 +84,11 @@ void PlayerAttackRendition::Update(float deltaTime) {
 
 void PlayerAttackRendition::UpdateNormalRenditions(const PlayerAttackRenditionData& renditionData) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
+        // ヒット音はヒット時のみ再生するためスキップ
+        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::AudioHit) {
+            continue;
+        }
+
         const auto& param = renditionData.GetRenditionParamFromIndex(i);
 
         // すでに再生済みならスキップ

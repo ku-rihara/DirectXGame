@@ -278,12 +278,33 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
 
     // 削除処理
     if (removeIndex >= 0 && removeIndex < static_cast<int32_t>(comboBranches_.size())) {
-        // 削除前にbranchCount_を更新
-        branchCount_ = static_cast<int32_t>(comboBranches_.size()) - 1;
+        int32_t oldBranchCount = static_cast<int32_t>(comboBranches_.size());
 
         // イテレータを使って安全に削除
         auto it = comboBranches_.begin() + removeIndex;
         comboBranches_.erase(it);
+
+        // branchCount_を更新
+        branchCount_ = static_cast<int32_t>(comboBranches_.size());
+
+        // 残りの分岐インデックスを振り直す
+        for (int32_t i = 0; i < static_cast<int32_t>(comboBranches_.size()); ++i) {
+            comboBranches_[i]->SetBranchIndex(i);
+        }
+
+        // ダングリングポインタを防ぐため登録をクリアして再登録
+        globalParameter_->ClearRegistersForGroup(groupName_);
+        RegisterParams();
+        for (auto& branch : comboBranches_) {
+            branch->RegisterParams();
+        }
+
+        // 再登録後、メモリ上の現在値をdates_に反映（インデックス変更後の正しい値で上書き）
+        globalParameter_->PushParamForGroup(groupName_);
+
+        // 削除によって不要になった末尾Branch番号のキーをdates_から削除
+        std::string removedPrefix = "Branch_" + std::to_string(oldBranchCount - 1) + "_";
+        globalParameter_->RemoveKeysWithPrefix(groupName_, removedPrefix);
 
         // タイムラインの分岐トラックを再構築
         RebuildBranchTracks();

@@ -1,0 +1,13 @@
+{
+    "JumpingPunchLeft": {
+        "easeType": 22,
+        "isLookAtDirection": false,
+        "isLoop": false,
+        "maxTime": 0.7599999904632568,
+        "returnEaseType": 6,
+        "returnMode": 2,
+        "returnTime": 0.10000000149011612,
+        "startTime": 0.0,
+        "timeMode": 1
+    }
+}

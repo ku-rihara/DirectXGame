@@ -39,6 +39,8 @@ void GameScene::Update() {
 
     ViewProjectionUpdate();
 
+    gameObj_.comboSupportSpriteUi_->Update();
+
     if (GameSceneFinish* finishState = dynamic_cast<GameSceneFinish*>(state_.get())) {
         if (!finishState->GetIsGameEnd()) {
             return;
@@ -79,6 +81,7 @@ void GameScene::Debug() {
     gameObj_.killCounter_->AdjustParam();
     gameObj_.comboAsistController_->AdjustParam();
     gameObj_.unlockNotifier_->AdjustParam();
+    gameObj_.comboSupportSpriteUi_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
@@ -139,6 +142,7 @@ void GameScene::ObjectInit() {
     gameObj_.killCounter_                 = std::make_unique<KillCounter>();
     gameObj_.comboAsistController_        = std::make_unique<ComboAsistController>();
     gameObj_.unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
+    gameObj_.comboSupportSpriteUi_        = std::make_unique<ComboSupportSpriteUi>();
 
     gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
@@ -194,6 +198,7 @@ void GameScene::SetClassPointer() {
     gameObj_.gameIntroManager_->SetHowToOperate(gameObj_.operateUI_.get());
     gameObj_.gameIntroManager_->SetDeathTimerGauge(gameObj_.deathTimer_->GetDeathTimerGauge());
     gameObj_.gameIntroManager_->SetComboAsistController(gameObj_.comboAsistController_.get());
+    gameObj_.gameIntroManager_->SetComboSupportSpriteUi(gameObj_.comboSupportSpriteUi_.get());
     gameObj_.gameIntroManager_->ClassisSet();
 
     gameObj_.comboDirector_->SetPlayer(gameObj_.player_.get());
@@ -216,6 +221,9 @@ void GameScene::SetClassPointer() {
     gameObj_.comboAsistController_->SetAttackController(gameObj_.playerComboAttackController_.get());
     gameObj_.comboAsistController_->SetPlayer(gameObj_.player_.get());
     gameObj_.comboAsistController_->Init();
+
+    gameObj_.comboSupportSpriteUi_->SetComboAsistController(gameObj_.comboAsistController_.get());
+    gameObj_.comboSupportSpriteUi_->Init();
 
     // 自動コンボ実行 → アンロック通知UIリアクション の接続
     ComboUnlockNotifier* notifier = gameObj_.unlockNotifier_.get();

@@ -38,7 +38,7 @@ private:
 
     // ---- 寿命・長さ ----
     float   lifetime_     = 0.25f;  // 各ポイントの生存時間（秒）
-    int32_t maxPoints_    = 48;     // 保持する最大ポイント数（= トレイルの最大長さ）
+    int32_t maxPoints_    = 48;     // 保持する最大ポイント数
     float   emitInterval_ = 0.005f; // ポイントを追加する間隔（秒）
 
     // ---- テクスチャ ----

@@ -2324,18 +2324,6 @@
     <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.cpp">
       <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\BaseSupportSpriteUI.cpp">
-      <Filter>Game\UI\SupportSprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistBackGroundUI.cpp">
-      <Filter>Game\UI\SupportSprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistComboNameUI.cpp">
-      <Filter>Game\UI\SupportSprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.cpp">
-      <Filter>Game\UI\SupportSprite</Filter>
-    </ClCompile>
     <ClCompile Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.cpp">
       <Filter>Game\UI\ComboAsistUI\UnlockNotifier</Filter>
     </ClCompile>
@@ -2377,6 +2365,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.cpp">
       <Filter>Engine\Editor\RibbonTrailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboSupportSpriteUi.cpp">
+      <Filter>Game\UI\SupportSprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2428,18 +2419,6 @@
     <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.h">
       <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\BaseSupportSpriteUI.h">
-      <Filter>Game\UI\SupportSprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistBackGroundUI.h">
-      <Filter>Game\UI\SupportSprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistComboNameUI.h">
-      <Filter>Game\UI\SupportSprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.h">
-      <Filter>Game\UI\SupportSprite</Filter>
-    </ClInclude>
     <ClInclude Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.h">
       <Filter>Game\UI\ComboAsistUI\UnlockNotifier</Filter>
     </ClInclude>
@@ -2481,6 +2460,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.h">
       <Filter>Engine\Editor\RibbonTrailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboSupportSpriteUi.h">
+      <Filter>Game\UI\SupportSprite</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

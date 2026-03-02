@@ -115,6 +115,8 @@ const char* PlayerComboAttackTimelineData::GetTrackTypeName(TrackType type) cons
         return "先行入力";
     case TrackType::FINISH_WAIT_TIME:
         return "攻撃終了待機";
+    case TrackType::RIBBON_TRAIL_MAIN_HEAD:
+        return "MainHead追従トレイル";
     default:
         return "不明";
     }
@@ -192,6 +194,8 @@ std::string PlayerComboAttackTimelineData::GetDirectoryForTrackType(TrackType ty
         return basePath + "ObjEaseAnimation/LeftHand/Dates/";
     case TrackType::OBJ_ANIM_MAIN_HEAD:
         return basePath + "ObjEaseAnimation/MainHead/Dates/";
+    case TrackType::RIBBON_TRAIL_MAIN_HEAD:
+        return basePath + "RibbonTrail/Player/Dates";
     default:
         return basePath;
     }

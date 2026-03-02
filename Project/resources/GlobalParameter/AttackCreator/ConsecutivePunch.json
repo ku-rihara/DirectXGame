@@ -31,8 +31,10 @@
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
         "ObjAnim_LeftHand_StartTiming": 0.0,
+        "ObjAnim_LeftHand_TrailFileName": "",
         "ObjAnim_RightHand_FileName": "",
         "ObjAnim_RightHand_StartTiming": 0.0,
+        "ObjAnim_RightHand_TrailFileName": "",
         "ParticleEffectParam_FileName": "",
         "ParticleEffectParam_OnHit_FileName": "",
         "ParticleEffectParam_OnHit_StartTiming": 0.0,
@@ -41,6 +43,10 @@
         "PostEffectParam_OnHit_FileName": "",
         "PostEffectParam_OnHit_StartTiming": 0.0,
         "PostEffectParam_StartTiming": 0.0,
+        "RibbonTrailEffect_FileName": "",
+        "RibbonTrailEffect_OnHit_FileName": "",
+        "RibbonTrailEffect_OnHit_StartTiming": 0.0,
+        "RibbonTrailEffect_StartTiming": 0.0,
         "ShakeAction_FileName": "",
         "ShakeAction_OnHit_FileName": "",
         "ShakeAction_OnHit_StartTiming": 0.0,
@@ -55,7 +61,7 @@
         "collisionOffsetPos": [
             0.0,
             0.0,
-            0.0
+            5.480000019073486
         ],
         "collisionSize": [
             6.0,
@@ -74,7 +80,7 @@
         "isPositionYSelect": false,
         "keyBordBottom": 0,
         "loopNum": 5,
-        "loopWaitTime": 0.14000000059604645,
+        "loopWaitTime": 0.09000000357627869,
         "moveEaseTime": 0.20000000298023224,
         "moveEaseType": 0,
         "moveStartTime": 0.0,

@@ -366,7 +366,7 @@ bool PlayerComboAttackController::IsFirstAttack(const std::string& attackName) c
             }
         }
     }
-    return true; // 誰からも参照されていない = 最初の攻撃
+    return true;
 }
 
 void PlayerComboAttackController::SelectAttackByName(const std::string& name) {

@@ -8,8 +8,7 @@ namespace KetaEngine {
 class RibbonTrail;
 
 /// <summary>
-/// リボントレイル管理クラス（シングルトン）
-/// 全RibbonTrailの更新・描画を一括管理する
+/// リボントレイル管理クラス
 /// </summary>
 class RibbonTrailManager {
 private:

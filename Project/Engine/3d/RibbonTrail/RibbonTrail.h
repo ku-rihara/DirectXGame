@@ -25,7 +25,6 @@ struct RibbonCBuffer {
 
 /// <summary>
 /// リボントレイル描画クラス
-/// 手や武器などに追従させ、軌跡をリボン状のメッシュで表現する
 /// </summary>
 class RibbonTrail {
 public:
@@ -48,7 +47,7 @@ public:
     void Update(float deltaTime);
 
     /// <summary>
-    /// 描画（マネージャーから呼ばれる）
+    /// 描画
     /// </summary>
     void Draw(const ViewProjection& viewProj);
 
@@ -84,11 +83,7 @@ private:
         float   age = 0.0f;
     };
 
-    /// <summary>
-    /// [Fix] cameraRight を受け取りビルボード対応の垂直ベクトルを返す
-    /// 旧実装はワールド固定upベクトルを使っていたため、
-    /// カメラ角度によってはトレイルが完全に厚み0の平面になって消えていた
-    /// </summary>
+
     static Vector3 CalcPerp(const Vector3& dir, const Vector3& cameraRight);
 
     static inline float Lerp(float a, float b, float t) { return a + (b - a) * t; }

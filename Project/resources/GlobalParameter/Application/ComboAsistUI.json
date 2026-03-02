@@ -1,19 +1,19 @@
 {
     "ComboAsistUI": {
         "arrowOffset": [
-            48.0,
+            27.799999237060547,
             0.0
         ],
-        "arrowScale": 0.6000000238418579,
+        "arrowScale": 0.2199999988079071,
         "basePosition": [
             30.0,
-            382.0
+            488.8999938964844
         ],
-        "branchYOffset": 42.0,
-        "buttonScale": 0.6299999952316284,
-        "columnSpacing": 101.5,
-        "maxVisibleColumn": 2,
+        "branchYOffset": 90.4000015258789,
+        "buttonScale": 0.4699999988079071,
+        "columnSpacing": 56.29999923706055,
+        "maxVisibleColumn": 3,
         "maxVisibleRow": 1,
-        "rowSpacing": 50.0
+        "rowSpacing": 39.0
     }
 }

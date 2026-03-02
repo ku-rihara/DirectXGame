@@ -23,6 +23,7 @@ public:
         Y,
         B,
         A,
+        LB,
         COUNT,
     };
 
@@ -51,6 +52,7 @@ private:
         "OperateUI/Operate_Y.dds",
         "OperateUI/Operate_B.dds",
         "OperateUI/Operate_A.dds",
+        "OperateUI/Operate_LB.dds",
     };
 
     // アウトラインは共通

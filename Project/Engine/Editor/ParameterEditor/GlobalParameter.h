@@ -137,6 +137,16 @@ public:
     void LoadFiles();        //< 全ファイル読み込み
     bool HasRegisters(const std::string& groupName) const;
 
+    /// <summary>
+    /// グループの登録変数値をdates_に書き込む（push方向）
+    /// </summary>
+    void PushParamForGroup(const std::string& groupName);
+
+    /// <summary>
+    /// 指定プレフィックスで始まるキーをグループから削除
+    /// </summary>
+    void RemoveKeysWithPrefix(const std::string& groupName, const std::string& prefix);
+
 private:
     std::unordered_map<std::string, Group> dates_;
     std::unordered_map<std::string, std::vector<BoundItem>> registerParams_;

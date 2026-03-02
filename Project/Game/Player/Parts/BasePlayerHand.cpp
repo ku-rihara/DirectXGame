@@ -45,19 +45,6 @@ void BasePlayerHand::Update() {
     effectFollowPos_ = handPos;
     particlePlayer_->Update();
 
-    // リボントレイル（放出中かつ移動距離が emitInterval 以上のときポイント追加）
-    if (ribbonTrail_ != nullptr && isTrailEmit_) {
-        float dx       = handPos.x - lastTrailPos_.x;
-        float dy       = handPos.y - lastTrailPos_.y;
-        float dz       = handPos.z - lastTrailPos_.z;
-        float distSq   = dx * dx + dy * dy + dz * dz;
-        float interval = trailPlayer_.GetEmitInterval();
-        if (distSq >= interval * interval) {
-            ribbonTrail_->AddPoint(handPos, trailPlayer_.GetStartColor(), trailPlayer_.GetStartWidth(), trailPlayer_.GetLifetime());
-            lastTrailPos_ = handPos;
-        }
-    }
-
     // ディゾルブ更新・適用 
     dissolvePlayer_.Update();
     if (dissolvePlayer_.IsPlaying()) {

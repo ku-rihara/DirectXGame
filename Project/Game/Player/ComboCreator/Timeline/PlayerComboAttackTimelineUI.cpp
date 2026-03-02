@@ -163,6 +163,10 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
         DrawTrackMenuItem("左手アニメーション", TrackType::OBJ_ANIM_LEFT_HAND);
         DrawTrackMenuItem("メイン頭アニメーション", TrackType::OBJ_ANIM_MAIN_HEAD);
 
+        ImGui::SeparatorText("トレイル");
+
+        DrawTrackMenuItem("MainHead追従トレイル", TrackType::RIBBON_TRAIL_MAIN_HEAD);
+
         // 注: キャンセルタイムと先行入力は「コンボ分岐」で各分岐ごとに設定されます
 
         ImGui::EndPopup();
@@ -206,11 +210,12 @@ void PlayerComboAttackTimelineUI::DrawKeyFrameMenuItems(int32_t trackIndex, int3
     auto trackType = data_->GetTrackTypeFromIndex(trackIndex);
 
     // 演出系トラックの場合
-    int typeInt      = static_cast<int>(trackType);
-    bool isRendition = (typeInt >= static_cast<int>(TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(TrackType::AUDIO_ATTACK_ON_HIT));
-    bool isObjAnime  = (typeInt >= static_cast<int>(TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TrackType::OBJ_ANIM_MAIN_HEAD));
+    int typeInt          = static_cast<int>(trackType);
+    bool isRendition     = (typeInt >= static_cast<int>(TrackType::CAMERA_ACTION) && typeInt <= static_cast<int>(TrackType::AUDIO_ATTACK_ON_HIT));
+    bool isObjAnime      = (typeInt >= static_cast<int>(TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TrackType::OBJ_ANIM_MAIN_HEAD));
+    bool isTrailMainHead = (trackType == TrackType::RIBBON_TRAIL_MAIN_HEAD);
 
-    if (isRendition || isObjAnime) {
+    if (isRendition || isObjAnime || isTrailMainHead) {
         ImGui::Text("キーフレーム編集");
         ImGui::Separator();
         DrawRenditionKeyFrameEditor(trackIndex, keyIndex);
@@ -225,7 +230,9 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
         return;
     }
 
-    ImGui::SeparatorText("ファイル選択");
+    bool isTrailOnlyTrack = (trackInfo->type == PlayerComboAttackTimelineData::TrackType::RIBBON_TRAIL_MAIN_HEAD);
+
+    ImGui::SeparatorText(isTrailOnlyTrack ? "トレイルファイル選択" : "ファイル選択");
 
     // ディレクトリパスを取得
     std::string directory = data_->GetDirectoryForTrackType(trackInfo->type);
@@ -241,9 +248,11 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
     // 現在のファイル名を保持
     std::string previousFileName = trackInfo->fileName;
 
+    const char* fileLabel = isTrailOnlyTrack ? "トレイルファイル" : "ファイル名";
+
     // FileSelectorを使ってファイル選択
     fileSelectorMap_[fileSelectorKey].SelectFile(
-        "ファイル名",
+        fileLabel,
         directory,
         trackInfo->fileName,
         "",
@@ -251,10 +260,13 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
 
     // ファイル名が変更された場合、キーフレームのラベルも更新
     if (previousFileName != trackInfo->fileName) {
-        timeline_->SetKeyFrameLabel(trackIndex, keyIndex, "使用ファイル:" + trackInfo->fileName);
+        std::string newLabel = isTrailOnlyTrack
+            ? ("トレイル:" + trackInfo->fileName)
+            : ("使用ファイル:" + trackInfo->fileName);
+        timeline_->SetKeyFrameLabel(trackIndex, keyIndex, newLabel);
     }
 
-    // 右手・左手アニメーションの場合のみトレイルファイル選択を表示
+    // 右手・左手アニメーションの場合のみトレイルファイル選択を表示（ObjAnimと同居）
     if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_RIGHT_HAND ||
         trackInfo->type == PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_LEFT_HAND) {
 
@@ -271,6 +283,12 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
             trackInfo->trailFileName,
             "",
             true);
+    }
+
+    // MainHead追従トレイルは上部の共通ファイルセレクタでトレイルファイルを選択済み
+    // カメラ・オーディオ設定は不要なので早期リターン
+    if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::RIBBON_TRAIL_MAIN_HEAD) {
+        return;
     }
 
     // カメラアクションの場合のみチェックボックスを表示

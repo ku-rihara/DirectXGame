@@ -304,10 +304,7 @@
     <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboPathBuilder.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.cpp" />
-    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\BaseSupportSpriteUI.cpp" />
-    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistBackGroundUI.cpp" />
-    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistComboNameUI.cpp" />
-    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboSupportSpriteUi.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.cpp" />
     <ClCompile Include="Game\UI\OperateUI.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
@@ -635,10 +632,7 @@
     <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboPathBuilder.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.h" />
-    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\BaseSupportSpriteUI.h" />
-    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistBackGroundUI.h" />
-    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistComboNameUI.h" />
-    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboAsistTriggerButtonUI.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboSupportSpriteUi.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.h" />
     <ClInclude Include="Game\UI\OperateUI.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />

@@ -1,5 +1,6 @@
 #include "IntroSpawnField.h"
 #include "UI/ComboAsistUI/ComboAsistController.h"
+#include "UI/ComboAsistUI/SupportSprite/ComboSupportSpriteUi.h"
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "DeathTimer/DeathTimerGauge.h"
 #include "FireInjectors/FireInjectors.h"
@@ -66,6 +67,9 @@ void IntroSpawnField::FinishWait() {
         scaleEasing_.Update(playSpeed_);
         pHowToOperate_->SetScale(spriteEaseScale_);
         pDeathTimerGauge_->SetSpriteScales(spriteEaseScale_);
+        if (pComboSupportSpriteUi_) {
+            pComboSupportSpriteUi_->SetScale(spriteEaseScale_);
+        }
     }
 
     // コンボアシストUIスライドイン
@@ -87,6 +91,9 @@ void IntroSpawnField::FinishWait() {
 void IntroSpawnField::Finish() {
     pHowToOperate_->SetScale(Vector2::OneVector());
     pDeathTimerGauge_->SetSpriteScales(Vector2::OneVector());
+    if (pComboSupportSpriteUi_) {
+        pComboSupportSpriteUi_->SetScale(Vector2::OneVector());
+    }
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }

@@ -46,6 +46,8 @@ public:
         CANCEL_TIME,
         PRECEDE_INPUT,
         FINISH_WAIT_TIME,
+        // MainHead追従トレイル（単独トラック）
+        RIBBON_TRAIL_MAIN_HEAD,
         COUNT
     };
 

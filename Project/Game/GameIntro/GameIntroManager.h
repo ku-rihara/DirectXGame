@@ -2,6 +2,7 @@
 #include "BaseGameIntro.h"
 #include "MovieLine.h"
 class ComboAsistController;
+class ComboSupportSpriteUi;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <array>
 #include <cstdint>
@@ -73,8 +74,9 @@ private:
     float currentPlaySpeedRate_                  = 1.0f;
     float fastSpeedRate_                         = 3.0f;
 
-    ComboAsistController* pComboAsistController_  = nullptr;
-    OperateUI* pHowToOperate_                 = nullptr;
+    ComboAsistController* pComboAsistController_    = nullptr;
+    ComboSupportSpriteUi* pComboSupportSpriteUi_  = nullptr;
+    OperateUI* pHowToOperate_                      = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
     Player* pPlayer_                             = nullptr;
     FireInjectors* pFireInjectors_               = nullptr;
@@ -97,5 +99,6 @@ public:
     void SetDeathTimerGauge(DeathTimerGauge* deathTimerGauge);
     void SetSpeedMultiplier(float multiplier) { currentPlaySpeedRate_ = multiplier; }
     void SetComboAsistController(ComboAsistController* controller) { pComboAsistController_ = controller; }
+    void SetComboSupportSpriteUi(ComboSupportSpriteUi* ui) { pComboSupportSpriteUi_ = ui; }
     void ClassisSet();
 };

@@ -46,10 +46,10 @@ public:
         Vector2 hpBarPosOffset;
         float basePosY;
         float burstTime;
-        // 逃走パラメータ
-        float escapeDistance;
-        float escapeTime;
-        float escapeSpeed;
+        // 追跡パラメータ
+        float chaseDistance;
+        float chaseTime;
+        float chaseSpeed;
         // 死亡パラメータ
         float deathBlowValue;
         float deathBlowValueY;

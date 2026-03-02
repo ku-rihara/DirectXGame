@@ -124,10 +124,10 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "collisionOffset" + indexString, &parameters_[i].collisionOffset);
         globalParameter_->Regist(groupName_, "hpBarPosOffset" + indexString, &parameters_[i].hpBarPosOffset);
 
-        // 逃走パラメータ
-        globalParameter_->Regist(groupName_, "escapeTime" + indexString, &parameters_[i].escapeTime);
-        globalParameter_->Regist(groupName_, "escapeSpeed" + indexString, &parameters_[i].escapeSpeed);
-        globalParameter_->Regist(groupName_, "escapeDistance" + indexString, &parameters_[i].escapeDistance);
+        // 追跡パラメータ
+        globalParameter_->Regist(groupName_, "chaseTime" + indexString, &parameters_[i].chaseTime);
+        globalParameter_->Regist(groupName_, "chaseSpeed" + indexString, &parameters_[i].chaseSpeed);
+        globalParameter_->Regist(groupName_, "chaseDistance" + indexString, &parameters_[i].chaseDistance);
 
         // 死亡パラメータ
         globalParameter_->Regist(groupName_, "deathBlowValue" + indexString, &parameters_[i].deathBlowValue);
@@ -148,10 +148,10 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("basePosY", &parameters_[typeIndex].basePosY, 0.01f);
     ImGui::DragFloat("burstTime", &parameters_[typeIndex].burstTime, 0.01f);
 
-    ImGui::SeparatorText("逃走パラメータ");
-    ImGui::DragFloat("逃避開始距離", &parameters_[typeIndex].escapeDistance, 0.01f, 0.0f);
-    ImGui::DragFloat("逃走時間", &parameters_[typeIndex].escapeTime, 0.1f, 0.0f);
-    ImGui::DragFloat("逃走速度", &parameters_[typeIndex].escapeSpeed, 0.01f, 0.0f);
+    ImGui::SeparatorText("追跡パラメータ");
+    ImGui::DragFloat("追跡開始距離", &parameters_[typeIndex].chaseDistance, 0.01f, 0.0f);
+    ImGui::DragFloat("追跡時間", &parameters_[typeIndex].chaseTime, 0.1f, 0.0f);
+    ImGui::DragFloat("追跡速度", &parameters_[typeIndex].chaseSpeed, 0.01f, 0.0f);
 
     ImGui::SeparatorText("死亡パラメータ");
     ImGui::DragFloat("DeathBlowValue", &parameters_[typeIndex].deathBlowValue, 0.1f);

@@ -10,6 +10,7 @@ class GameCamera;
 class OperateUI;
 class DeathTimerGauge;
 class ComboAsistController;
+class ComboSupportSpriteUi;
 
 /// <summary>
 /// ゲームイントロ基底クラス
@@ -46,7 +47,8 @@ protected:
     OperateUI* pHowToOperate_                 = nullptr;
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
     DeathTimerGauge* pDeathTimerGauge_           = nullptr;
-    ComboAsistController* pComboAsistController_ = nullptr;
+    ComboAsistController* pComboAsistController_   = nullptr;
+    ComboSupportSpriteUi* pComboSupportSpriteUi_  = nullptr;
 
     bool isFinish_                               = false;
     bool isAbleEnemySpawn_                       = false;
@@ -66,4 +68,5 @@ public:
     void SetFireInjectors(FireInjectors* fireInjectors) { pFireInjectors_ = fireInjectors; }
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject) { pGameBackGroundObject_ = gameBackGroundObject; }
     void SetComboAsistController(ComboAsistController* controller) { pComboAsistController_ = controller; }
+    void SetComboSupportSpriteUi(ComboSupportSpriteUi* ui) { pComboSupportSpriteUi_ = ui; }
 };
