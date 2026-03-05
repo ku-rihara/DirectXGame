@@ -1,16 +1,28 @@
 {
     "StrongLeftPunch0": {
+        "Rotation_Anchor": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation_BackRatio": 0.0,
         "Rotation_EaseType": 22,
         "Rotation_IsActive": true,
         "Rotation_IsReturnToOrigin": false,
-        "Rotation_MaxTime": 0.33000001311302185,
+        "Rotation_MaxTime": 0.12999999523162842,
         "Rotation_ReturnEaseType": 0,
         "Rotation_ReturnMaxTime": 0.6200000047683716,
         "Rotation_endValue": [
             -0.282743364572525,
-            -0.36651915311813354,
-            0.30717796087265015
+            0.0,
+            0.0
         ],
+        "Scale_Anchor": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale_BackRatio": 0.0,
         "Scale_EaseType": 0,
         "Scale_IsActive": false,
         "Scale_IsReturnToOrigin": false,
@@ -22,11 +34,17 @@
             1.0,
             1.0
         ],
+        "Translation_Anchor": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Translation_BackRatio": 0.0,
         "Translation_EaseType": 0,
-        "Translation_IsActive": false,
+        "Translation_IsActive": true,
         "Translation_IsLookAtDirection": false,
         "Translation_IsReturnToOrigin": false,
-        "Translation_MaxTime": 1.0,
+        "Translation_MaxTime": 0.11999999731779099,
         "Translation_RailFileName": "",
         "Translation_ReturnEaseType": 0,
         "Translation_ReturnMaxTime": 1.0,
@@ -36,6 +54,7 @@
             0.0,
             0.0
         ],
+        "isReturnSection": false,
         "returnStartTime": 0.0,
         "startTime": 0.0,
         "timeMode": 1

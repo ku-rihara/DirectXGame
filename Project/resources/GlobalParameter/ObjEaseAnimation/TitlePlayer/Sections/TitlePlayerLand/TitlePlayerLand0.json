@@ -1,5 +1,5 @@
 {
-    "TitlePlayer0": {
+    "TitlePlayerLand0": {
         "Rotation_Anchor": [
             0.0,
             0.0,
@@ -8,12 +8,12 @@
         "Rotation_BackRatio": 0.0,
         "Rotation_EaseType": 0,
         "Rotation_IsActive": true,
-        "Rotation_IsReturnToOrigin": false,
-        "Rotation_MaxTime": 0.5799999833106995,
+        "Rotation_IsReturnToOrigin": true,
+        "Rotation_MaxTime": 0.3499999940395355,
         "Rotation_ReturnEaseType": 0,
-        "Rotation_ReturnMaxTime": 1.0,
+        "Rotation_ReturnMaxTime": 0.0,
         "Rotation_endValue": [
-            0.0,
+            6.2831854820251465,
             0.0,
             0.0
         ],
@@ -22,11 +22,11 @@
             0.0,
             0.0
         ],
-        "Scale_BackRatio": 0.0,
-        "Scale_EaseType": 0,
+        "Scale_BackRatio": 0.4399999976158142,
+        "Scale_EaseType": 45,
         "Scale_IsActive": false,
         "Scale_IsReturnToOrigin": false,
-        "Scale_MaxTime": 0.20000000298023224,
+        "Scale_MaxTime": 0.8100000023841858,
         "Scale_ReturnEaseType": 0,
         "Scale_ReturnMaxTime": 1.0,
         "Scale_endValue": [
@@ -40,23 +40,23 @@
             0.0
         ],
         "Translation_BackRatio": 0.0,
-        "Translation_EaseType": 21,
+        "Translation_EaseType": 22,
         "Translation_IsActive": true,
         "Translation_IsLookAtDirection": false,
         "Translation_IsReturnToOrigin": false,
-        "Translation_MaxTime": 0.5799999833106995,
+        "Translation_MaxTime": 0.36000001430511475,
         "Translation_RailFileName": "",
-        "Translation_ReturnEaseType": 0,
-        "Translation_ReturnMaxTime": 1.0,
+        "Translation_ReturnEaseType": 21,
+        "Translation_ReturnMaxTime": 0.5600000023841858,
         "Translation_UseRail": false,
         "Translation_endValue": [
             0.0,
-            0.0,
+            4.0,
             0.0
         ],
         "isReturnSection": false,
         "returnStartTime": 0.0,
-        "startTime": 0.25999999046325684,
+        "startTime": 0.0,
         "timeMode": 1
     }
 }

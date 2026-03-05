@@ -1,8 +1,10 @@
 {
     "bottomSpriteScale": {
-        "Original_Scale": [
-            0.0,
-            0.0
+        "Original_Alpha": 1.0,
+        "Original_Color": [
+            1.0,
+            1.0,
+            1.0
         ],
         "Original_Position": [
             0.0,
@@ -13,11 +15,9 @@
             0.0,
             0.0
         ],
-        "Original_Color": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "Original_Alpha": 1.0
+        "Original_Scale": [
+            0.0,
+            0.0
+        ]
     }
 }

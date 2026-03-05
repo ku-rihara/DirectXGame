@@ -35,6 +35,7 @@ private:
     bool isVibrationPlayed_ = false;
     float vibrationTimer_   = 0.0f;
     bool isVibrating_       = false;
+    int32_t previousLoopCount_ = 0;
 
 public:
     PlayerAttackRendition()  = default;

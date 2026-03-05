@@ -11,8 +11,7 @@ void OperateUI::Init() {
         // スプライト生成
         uiParam_[i].sprite_.reset(KetaEngine::Sprite::Create(kButtonTextures[i], true));
         uiParam_[i].sprite_->transform_.scale = Vector2::ZeroVector();
-       /* uiParam_[i].outLineSprite_.reset(KetaEngine::Sprite::Create(kOutLineTexture));
-        uiParam_[i].uiFrame.reset(KetaEngine::Sprite::Create(frameTexture));*/
+      
     }
 
     // GlobalParameter

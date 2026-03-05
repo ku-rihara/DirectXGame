@@ -10,29 +10,64 @@
 TitlePlayerBehavior::TitlePlayerBehavior(Player* player)
     : BaseTitleBehavior("TitlePlayerBehavior", player) {
 
-    // 本体・左右の手のアニメーションを一括再生
+    // 落下アニメーション（section0のみ）を再生
     pPlayer_->TitleAnimationPlay("TitlePlayer");
-    pPlayer_->TitleRightHandAnimationPlay("TitleRightHand");
-    pPlayer_->TitleLeftHandAnimationPlay("TitleLeftHand");
 }
 
 ///=========================================================
 /// 更新
 ///=========================================================
 void TitlePlayerBehavior::Update() {
-    elapsedTime_ += KetaEngine::Frame::DeltaTime();
 
-    // 落下終了タイミング（0.2s）でがれきパーティクルを発生させる
-    if (!hasLandingParticleEmitted_ && elapsedTime_ >= 0.2f) {
-        hasLandingParticleEmitted_ = true;
-        pPlayer_->GetEffects()->FallEffectRenditionInit();
-    }
+    switch (phase_) {
 
-    // 本体・左右の手、全てのアニメーションが終了したら完了フラグを立てる
-    if (pPlayer_->IsTitleAnimationFinished() &&
-        pPlayer_->IsTitleRightHandAnimationFinished() &&
-        pPlayer_->IsTitleLeftHandAnimationFinished()) {
-        isFinish_ = true;
+    // ─── フェーズ1：落下 ───────────────────────────────────
+    case Phase::FALL:
+        if (pPlayer_->IsTitleAnimationFinished()) {
+            // 着地タイミングでがれきエフェクト
+            pPlayer_->GetEffects()->FallEffectRenditionInit();
+
+            // 着地演出アニメーション開始
+            pPlayer_->TitleAnimationPlay("TitlePlayerLand");
+            phase_ = Phase::LAND;
+        }
+        break;
+
+    // ─── フェーズ2：着地演出 ──────────────────────────────
+    case Phase::LAND:
+        if (pPlayer_->IsTitleAnimationFinished()) {
+            // 左パンチ開始
+            pPlayer_->TitleLeftHandAnimationPlay("TitleLeftHand");
+            phase_ = Phase::LEFT_PUNCH;
+        }
+        break;
+
+    // ─── フェーズ3：左パンチ ──────────────────────────────
+    case Phase::LEFT_PUNCH:
+        if (pPlayer_->IsTitleLeftHandAnimationFinished()) {
+            // 右パンチ開始
+            pPlayer_->TitleRightHandAnimationPlay("TitleRightHand");
+            phase_ = Phase::RIGHT_PUNCH;
+        }
+        break;
+
+    // ─── フェーズ4：右パンチ ──────────────────────────────
+    case Phase::RIGHT_PUNCH:
+        if (pPlayer_->IsTitleRightHandAnimationFinished()) {
+            // 全アニメーション完了 → 待機ループ開始
+            pPlayer_->TitleAnimationPlay("TitleWaiting");
+            phase_    = Phase::WAITING;
+            isFinish_ = true;
+        }
+        break;
+
+    // ─── フェーズ5：待機ループ（無限） ────────────────────
+    case Phase::WAITING:
+        if (pPlayer_->IsTitleAnimationFinished()) {
+            // 終了したら即再生してループ
+            pPlayer_->TitleAnimationPlay("TitleWaiting");
+        }
+        break;
     }
 }
 

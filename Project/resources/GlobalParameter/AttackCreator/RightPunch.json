@@ -70,7 +70,7 @@
         "ShakeAction_OnHit_StartTiming": 0.0,
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": true,
-        "Vibration_Duration": 0.11999999731779099,
+        "Vibration_Duration": 0.18333333730697632,
         "Vibration_Intensity": 0.21899999678134918,
         "Vibration_StartTiming": 0.0,
         "Vibration_TriggerByHit": true,

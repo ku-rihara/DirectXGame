@@ -10,26 +10,31 @@ void TitleLogo::Init() {
     rushSprite_.reset(KetaEngine::Sprite::Create("TitleFontRush.dds", true));
     bottomSprite_.reset(KetaEngine::Sprite::Create("StartBottomA.dds", true));
 
-    punchSprite_->transform_.scale = Vector2::ZeroVector();
-    rushSprite_->transform_.scale  = Vector2::ZeroVector();
+    punchSprite_->transform_.scale  = Vector2::ZeroVector();
+    rushSprite_->transform_.scale   = Vector2::ZeroVector();
     bottomSprite_->transform_.scale = Vector2::ZeroVector();
 
-    // パンチから開始
-    punchSprite_->PlaySpriteEaseAnimation("punchSpriteScale", "TitleLogo");
-
-    step_ = Step::PUNCH;
+    step_ = Step::NONE;
 }
 
 void TitleLogo::Update() {
     switch (step_) {
+    case TitleLogo::Step::NONE:
+        ///----------------------------------------------------
+        /// NONE
+        ///----------------------------------------------------
+
+        step_ = Step::PUNCH;
+        break;
     case TitleLogo::Step::PUNCH:
         ///----------------------------------------------------
         /// パンチ
         ///----------------------------------------------------
-        if (punchSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
-            step_ = Step::RUSH;
-            rushSprite_->PlaySpriteEaseAnimation("rushSpriteScale", "TitleLogo");
-        }
+
+        step_ = Step::RUSH;
+        punchSprite_->PlaySpriteEaseAnimation("punchSpriteScale", "TitleLogo");
+        rushSprite_->PlaySpriteEaseAnimation("rushSpriteScale", "TitleLogo");
+
         break;
     case TitleLogo::Step::RUSH:
         ///----------------------------------------------------

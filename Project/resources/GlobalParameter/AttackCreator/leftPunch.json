@@ -135,7 +135,7 @@
         ],
         "Translation_UseCurrentAsStart": true,
         "Translation_UseRail": false,
-        "Vibration_Duration": 0.11999999731779099,
+        "Vibration_Duration": 0.20000000298023224,
         "Vibration_Intensity": 0.21899999678134918,
         "Vibration_StartTiming": 0.0,
         "Vibration_TriggerByHit": true,

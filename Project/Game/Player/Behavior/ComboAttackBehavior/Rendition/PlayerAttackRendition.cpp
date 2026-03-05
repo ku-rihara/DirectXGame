@@ -32,6 +32,7 @@ void PlayerAttackRendition::Reset() {
     isVibrationPlayed_ = false;
     vibrationTimer_    = 0.0f;
     isVibrating_       = false;
+    previousLoopCount_ = 0;
 
     // 振動を停止
     size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
@@ -209,6 +210,13 @@ void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionDa
 
 void PlayerAttackRendition::UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit, float deltaTime) {
     const auto& vibParam = renditionData.GetVibrationParam();
+
+    // ループカウントが増えた（クールタイム終了）場合、振動フラグをリセット
+    int32_t currentLoopCount = pPlayer_->GetPlayerCollisionInfo()->GetCurrentLoopCount();
+    if (currentLoopCount > previousLoopCount_) {
+        isVibrationPlayed_ = false;
+        previousLoopCount_ = currentLoopCount;
+    }
 
     // トリガー条件のチェック
     bool shouldTrigger = !vibParam.triggerByHit || (vibParam.triggerByHit && hasHit);

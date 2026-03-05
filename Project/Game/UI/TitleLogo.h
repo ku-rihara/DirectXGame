@@ -13,6 +13,7 @@ public:
     void Update();
 private:
     enum class Step {
+        NONE,
         PUNCH,
         RUSH,
         BOTTON,
