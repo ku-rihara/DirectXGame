@@ -160,7 +160,6 @@ public:
     }
 
     // 振動パラメータの取得
-    const VibrationParam& GetVibrationParam() const {
-        return vibrationParam_;
-    }
+    const VibrationParam& GetVibrationParam() const { return vibrationParam_; }
+    VibrationParam& GetVibrationParam() { return vibrationParam_; }
 };
