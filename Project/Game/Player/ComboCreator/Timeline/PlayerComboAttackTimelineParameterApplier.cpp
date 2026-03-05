@@ -290,6 +290,21 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
             renditionData.GetObjAnimationParamFromType(PlayerAttackRenditionData::ObjAnimationType::MainHead));
         param.trailFileName = trackInfo.fileName;
     }
+    // コントローラ振動
+    else if (trackInfo.type == TT::VIBRATION) {
+        const auto& tracks = timelineDrawer_->GetTracks();
+        if (trackInfo.trackIndex < static_cast<int32_t>(tracks.size())) {
+            const auto& keyframes = tracks[trackInfo.trackIndex].keyframes;
+            if (!keyframes.empty()) {
+                float duration = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(keyframes[0].duration));
+                auto& vibParam = renditionData.GetVibrationParam();
+                vibParam.startTiming  = timing;
+                vibParam.duration     = duration;
+                vibParam.intensity    = trackInfo.vibrationIntensity;
+                vibParam.triggerByHit = trackInfo.triggerByHit;
+            }
+        }
+    }
 }
 
 int32_t PlayerComboAttackTimelineParameterApplier::CalculateTotalFrames() const {

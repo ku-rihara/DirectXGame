@@ -12,6 +12,7 @@ void ComboUIBuilder::BuildAllConditions(
     std::vector<PlayerComboAttackData::TriggerCondition>& outAvailableConditions,
     PlayerComboAttackData::TriggerCondition& currentCondition) {
 
+    // TriggerCondition
     using TC = PlayerComboAttackData::TriggerCondition;
     outConditionDataMap.clear();
     outAvailableConditions.clear();
@@ -19,9 +20,14 @@ void ComboUIBuilder::BuildAllConditions(
     // コンディションごとに構築する
     for (TC cond : {TC::GROUND, TC::AIR, TC::DASH}) {
         ConditionUIData data;
+
+        // コンボパスを構築
         data.pathBuilder.Build(attackController, cond);
+
+        // X,Yどちらかがパスを持っていればUI生成対象
         if (!data.pathBuilder.GetXGroup().mainPath.steps.empty() ||
             !data.pathBuilder.GetYGroup().mainPath.steps.empty()) {
+            //
             CreateConditionUI(data, layoutParam);
             outConditionDataMap[cond] = std::move(data);
             outAvailableConditions.push_back(cond);
@@ -39,6 +45,7 @@ void ComboUIBuilder::BuildAllConditions(
 void ComboUIBuilder::CreateConditionUI(ConditionUIData& conditionData, const LayoutParam& layoutParam) {
     // X グループは row=0 始まり
     int32_t xCurrentRow = 0;
+    //グループUI生成
     CreateGroupUI(conditionData.pathBuilder.GetXGroup(), conditionData.xUIGroup, &xCurrentRow, layoutParam);
 
     // Y グループは固定オフセット（yGroupOffsetY）で位置を決定する
@@ -57,6 +64,7 @@ void ComboUIBuilder::CreateGroupUI(
     int32_t* currentRow,
     const LayoutParam& layoutParam) {
 
+    // UIのボタンが無ければ生成不要
     if (pathGroup.mainPath.steps.empty()) {
         return;
     }
@@ -66,27 +74,34 @@ void ComboUIBuilder::CreateGroupUI(
     // メインパスの列マッピング構築
     std::vector<int32_t> mainColMap(pathGroup.mainPath.steps.size(), -1);
     int32_t displayCol = 0;
+
+    // それぞれのコンボステップの表示Column位置を割り当てる
     for (size_t i = 0; i < pathGroup.mainPath.steps.size(); ++i) {
+
+        // 1つ前のステップが次を自動進行にしている場合は表示しない。
         if (i == 0 || !pathGroup.mainPath.steps[i - 1].isAutoAdvance) {
             mainColMap[i] = displayCol++;
         }
     }
 
-    // メインパスのボタン
+    // ボタンUIの作成
     for (size_t i = 0; i < pathGroup.mainPath.steps.size(); ++i) {
         if (mainColMap[i] < 0) {
             continue;
         }
+        // ステップの情報取得と、ボタンUIの生成
         const auto& step = pathGroup.mainPath.steps[i];
         auto btn         = std::make_unique<ComboAsistButtonUI>();
+        // ボタンUIの初期化
         btn->Init(step.gamepadButton, step.isUnlocked, layoutParam, step.attackName);
         btn->SetRowColumn(mainRow, mainColMap[i]);
         btn->ApplyLayout();
         btn->SnapToTarget();
+        // グループに追加
         uiGroup.mainButtonUIs.push_back(std::move(btn));
     }
 
-    // メインパスの矢印
+    // 矢印の生成
     int32_t prevCol = -1;
     for (size_t i = 0; i < pathGroup.mainPath.steps.size(); ++i) {
         if (mainColMap[i] < 0) {
@@ -100,6 +115,7 @@ void ComboUIBuilder::CreateGroupUI(
         prevCol = mainColMap[i];
     }
 
+    // Rowを加算
     (*currentRow)++;
 
     // 分岐パスのUI

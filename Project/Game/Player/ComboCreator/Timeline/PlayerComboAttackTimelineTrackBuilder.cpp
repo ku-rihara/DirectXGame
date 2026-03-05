@@ -249,7 +249,33 @@ void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
 }
 
 void PlayerComboAttackTimelineTrackBuilder::SetupAudioTracks() {
-   
+
+}
+
+void PlayerComboAttackTimelineTrackBuilder::SetupVibrationTrack() {
+    if (!attackData_ || !timelineDrawer_ || !data_)
+        return;
+
+    const auto& vibParam = attackData_->GetRenditionData().GetVibrationParam();
+
+    if (vibParam.intensity <= 0.0f)
+        return;
+
+    int32_t trackIdx = timelineDrawer_->AddTrack("コントローラ振動");
+
+    PlayerComboAttackTimelineData::TrackInfo info;
+    info.type                = PlayerComboAttackTimelineData::TrackType::VIBRATION;
+    info.trackIndex          = trackIdx;
+    info.vibrationIntensity  = vibParam.intensity;
+    info.triggerByHit        = vibParam.triggerByHit;
+    data_->AddTrackInfo(info);
+
+    int32_t startFrame    = KetaEngine::Frame::TimeToFrame(vibParam.startTiming);
+    float durationFrames  = static_cast<float>(KetaEngine::Frame::TimeToFrame(vibParam.duration));
+    if (durationFrames < 1.0f) durationFrames = 1.0f;
+
+    timelineDrawer_->AddKeyFrame(trackIdx, startFrame, vibParam.intensity, durationFrames,
+        "振動強度:" + std::to_string(vibParam.intensity));
 }
 
 void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
@@ -380,6 +406,15 @@ void PlayerComboAttackTimelineTrackBuilder::AddTrack(PlayerComboAttackTimelineDa
     info.type       = type;
     info.trackIndex = trackIdx;
     info.fileName   = "";
+
+    if (type == PlayerComboAttackTimelineData::TrackType::VIBRATION) {
+        info.vibrationIntensity = 0.5f;
+        info.triggerByHit       = false;
+        data_->AddTrackInfo(info);
+        timelineDrawer_->AddKeyFrame(trackIdx, 0, 0.5f, 6.0f, "振動強度:0.5");
+        return;
+    }
+
     data_->AddTrackInfo(info);
 
     // 初期キーフレームを追加

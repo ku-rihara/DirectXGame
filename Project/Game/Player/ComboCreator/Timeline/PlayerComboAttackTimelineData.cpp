@@ -117,6 +117,8 @@ const char* PlayerComboAttackTimelineData::GetTrackTypeName(TrackType type) cons
         return "攻撃終了待機";
     case TrackType::RIBBON_TRAIL_MAIN_HEAD:
         return "MainHead追従トレイル";
+    case TrackType::VIBRATION:
+        return "コントローラ振動";
     default:
         return "不明";
     }

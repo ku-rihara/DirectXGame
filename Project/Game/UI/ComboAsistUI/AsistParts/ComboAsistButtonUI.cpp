@@ -44,6 +44,7 @@ void ComboAsistButtonUI::Update() {
 }
 
 void ComboAsistButtonUI::ApplyLayout() {
+    // 基準位置 + 列・行番号に応じたオフセット + スライドオフセット
     Vector2 pos(
         layout_.basePosition.x + columnNum_ * layout_.columnSpacing + slideOffsetX_,
         layout_.basePosition.y + rowNum_ * layout_.rowSpacing);

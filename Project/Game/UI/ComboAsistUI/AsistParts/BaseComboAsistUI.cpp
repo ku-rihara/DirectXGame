@@ -101,7 +101,7 @@ void BaseComboAsistUI::SetRangeVisible(bool inRange) {
     if (inRange == isInRange_) {
         return;
     }
-    // ScaleOut再生中に範囲内扱いされても無視（シフト後に自動解決）
+    // ScaleOut再生中に範囲内扱いされても無視
     if (inRange && isScaleOutPlaying_) {
         return;
     }

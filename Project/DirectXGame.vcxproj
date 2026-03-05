@@ -304,6 +304,8 @@
     <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboPathBuilder.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIGroup.cpp" />
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ConditionUIData.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboSupportSpriteUi.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.cpp" />
     <ClCompile Include="Game\UI\OperateUI.cpp" />
@@ -632,6 +634,8 @@
     <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboPathBuilder.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIGroup.h" />
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ConditionUIData.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboSupportSpriteUi.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.h" />
     <ClInclude Include="Game\UI\OperateUI.h" />

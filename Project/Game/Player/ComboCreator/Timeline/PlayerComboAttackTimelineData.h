@@ -48,6 +48,8 @@ public:
         FINISH_WAIT_TIME,
         // MainHead追従トレイル（単独トラック）
         RIBBON_TRAIL_MAIN_HEAD,
+        // コントローラ振動
+        VIBRATION,
         COUNT
     };
 
@@ -59,6 +61,9 @@ public:
         std::string trailFileName; // トレイルプリセット名（右手・左手アニメーションのみ使用）
         bool isCameraReset = false;
         float volume       = 1.0f;
+        // 振動トラック用
+        float vibrationIntensity = 0.5f;
+        bool triggerByHit        = false;
     };
 
 public:

@@ -35,7 +35,7 @@ public:
     void SetVisible(bool visible) override;
 
     /// <summary>
-    /// 攻撃名が自分の attackName_ と一致する場合のみプッシュスケーリングを再生する
+    /// 攻撃名が自分の攻撃名と一致する場合のみプッシュスケーリングを再生する
     /// </summary>
     void TryPlayPushScaling(const std::string& attackName);
 

@@ -2369,6 +2369,12 @@
     <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboSupportSpriteUi.cpp">
       <Filter>Game\UI\SupportSprite</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIGroup.cpp">
+      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ConditionUIData.cpp">
+      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2463,6 +2469,12 @@
     </ClInclude>
     <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboSupportSpriteUi.h">
       <Filter>Game\UI\SupportSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIGroup.h">
+      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ConditionUIData.h">
+      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

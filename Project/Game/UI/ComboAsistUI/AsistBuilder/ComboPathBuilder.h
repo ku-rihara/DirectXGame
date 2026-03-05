@@ -51,10 +51,6 @@ public:
 	void Build(PlayerComboAttackController* attackController,
 	           PlayerComboAttackData::TriggerCondition triggerCondition);
 
-	// グループ参照の取得
-	const ComboPathGroup& GetXGroup() const { return xGroup_; }
-	const ComboPathGroup& GetYGroup() const { return yGroup_; }
-
 private:
 	/// 攻撃データを再帰的に辿り、全パスを列挙する
 	void CollectPathsRecursive(
@@ -63,7 +59,7 @@ private:
 		std::unordered_set<std::string>& visited,
 		std::vector<ComboPath>& outPaths);
 
-	/// パス群をメインパス（最長）と分岐に分類してグループに格納する
+	/// パス群をメインパスと分岐に分類してグループに格納する
 	void ClassifyPaths(ComboPathGroup& group, std::vector<ComboPath>& paths);
 
 private:
@@ -72,4 +68,9 @@ private:
 	// X / Y 開始ボタンごとのグループ
 	ComboPathGroup xGroup_;
 	ComboPathGroup yGroup_;
+
+public:
+    // グループ参照の取得
+    const ComboPathGroup& GetXGroup() const { return xGroup_; }
+    const ComboPathGroup& GetYGroup() const { return yGroup_; }
 };

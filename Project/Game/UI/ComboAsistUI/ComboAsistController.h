@@ -22,9 +22,7 @@ class Player;
 class PlayerComboAttackController;
 
 /// <summary>
-/// コンボアシストUI管理クラス（ファサード）
-/// UI生成・表示管理・スクロール・条件切替の各クラスを統合し、
-/// パネル開閉・スライド演出・攻撃発動演出を担当する
+/// コンボアシストUI管理クラス
 /// </summary>
 class ComboAsistController {
 public:

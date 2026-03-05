@@ -47,6 +47,7 @@ public:
 private:
     void DrawAddTrackPopup();
     void DrawRenditionKeyFrameEditor(int32_t trackIndex, int32_t keyIndex);
+    void DrawVibrationKeyFrameEditor(int32_t trackIndex, int32_t keyIndex);
 
     // トラックメニューアイテム描画のヘルパー関数
     void DrawTrackMenuItem(const char* label, PlayerComboAttackTimelineData::TrackType trackType);

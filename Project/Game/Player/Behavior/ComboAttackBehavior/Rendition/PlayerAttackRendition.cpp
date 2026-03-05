@@ -63,8 +63,7 @@ void PlayerAttackRendition::Update(float deltaTime) {
     // 通常演出の更新
     UpdateNormalRenditions(renditionData);
 
-    // ヒット時演出の更新（新しいヒットを検出したら毎回発動）
-    // 前フレームでヒットしていなくて、今フレームでヒットした場合 = 新しいヒット
+    
     bool isNewHit = hasHit && !previousHasHit_;
     if (isNewHit) {
         // ヒット時演出のフラグをリセットして再度発動可能にする
@@ -150,7 +149,7 @@ void PlayerAttackRendition::PlayRenditionEffect(PlayerAttackRenditionData::Type 
 
     case PlayerAttackRenditionData::Type::AudioAttack:
     case PlayerAttackRenditionData::Type::AudioHit:
-        KetaEngine::Audio::GetInstance()->Play(param.fileName + ".wav", param.volume);
+        KetaEngine::Audio::GetInstance()->Play(param.fileName + ".mp3", param.volume);
         break;
 
     default:

@@ -39,7 +39,7 @@ public:
         // ボタン間の矢印UI
         std::vector<std::unique_ptr<ComboAsistArrowUI>> arrowUIs;
 
-        /// このカードのレイアウト基準X（コンボ数に応じて右アンカーから算出）
+        /// このカードのレイアウト基準
         float basePositionX = 0.0f;
 
         // 状態
@@ -145,10 +145,10 @@ private:
     Vector2 notifyBasePosition_;
     float cardSpacingY_     = 0.0f;
 
-    /// 最右列ボタンのX位置（コンボ数に関わらずこの位置に合わせる）
-    float rightAnchorX_     = 1200.0f;
-    /// 画面外スライド量（スライド開始・終了時のX方向オフセット）
-    float slideStartOffsetX_ = 600.0f;
+    /// 最右列ボタンのX位置
+    float rightAnchorX_;
+    /// 画面外スライド量
+    float slideStartOffsetX_;
 
     // 背景スプライト
     std::unique_ptr<KetaEngine::Sprite> backgroundSprite;

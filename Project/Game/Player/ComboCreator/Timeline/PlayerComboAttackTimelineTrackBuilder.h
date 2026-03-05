@@ -23,6 +23,7 @@ public:
     void SetupRenditionTracks();
     void SetupObjectAnimationTracks();
     void SetupAudioTracks();
+    void SetupVibrationTrack();
 
     // トラックの追加・削除
     void AddTrack(PlayerComboAttackTimelineData::TrackType type);

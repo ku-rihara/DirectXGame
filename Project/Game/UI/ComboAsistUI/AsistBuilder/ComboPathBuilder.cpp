@@ -11,18 +11,21 @@ void ComboPathBuilder::Build(
 	PlayerComboAttackController* attackController,
 	PlayerComboAttackData::TriggerCondition triggerCondition) {
 
+	// PlayerComboAttackControllerをセット
 	pAttackController_ = attackController;
 	if (!pAttackController_) {
 		return;
 	}
 
+	// 全ての攻撃を取得
 	const auto& allAttacks = pAttackController_->GetAllAttacks();
 
+	// X/Yのボタン番号を取得
 	int32_t xButton = ToXInputButtonFlag(GamepadButton::X);
 	int32_t yButton = ToXInputButtonFlag(GamepadButton::Y);
 
 	for (const auto& attack : allAttacks) {
-		// 最初の攻撃（コンボの起点）だけを処理する
+		// コンボの起点だけを処理する
 		if (!pAttackController_->IsFirstAttack(attack->GetGroupName())) {
 			continue;
 		}
@@ -53,7 +56,7 @@ void ComboPathBuilder::Build(
 
 		CollectPathsRecursive(attack.get(), currentPath, visited, paths);
 
-		// 分岐が無い場合でも、現在のパス（1ステップだけ）を結果に含める
+		// 分岐が無い場合でも、現在のパスを結果に含める
 		if (paths.empty() && !currentPath.empty()) {
 			paths.push_back({currentPath});
 		}

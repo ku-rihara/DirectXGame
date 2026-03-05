@@ -17,11 +17,13 @@ void ComboAsistController::Init() {
         return;
     }
 
+    // グローバルパラメータの初期化
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
+    // コンディションの初期状態
     currentCondition_ = PlayerComboAttackData::TriggerCondition::GROUND;
     RebuildAllConditions();
 
@@ -119,6 +121,7 @@ void ComboAsistController::Update() {
 /// UI再構築
 ///==========================================================
 void ComboAsistController::RebuildAllConditions() {
+    // 全攻撃発動条件のコンボアシストUIを構築
     uiBuilder_.BuildAllConditions(
         pAttackController_,
         MakeLayoutParam(),

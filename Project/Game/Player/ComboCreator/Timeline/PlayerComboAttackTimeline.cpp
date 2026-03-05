@@ -24,6 +24,7 @@ void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
     trackBuilder_.SetupRenditionTracks();
     trackBuilder_.SetupObjectAnimationTracks();
     trackBuilder_.SetupAudioTracks();
+    trackBuilder_.SetupVibrationTrack();
 
     // すべてのトラックにキーフレームコールバックを設定
     SetupKeyFrameCallbacks();

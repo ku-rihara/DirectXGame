@@ -167,6 +167,10 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
 
         DrawTrackMenuItem("MainHead追従トレイル", TrackType::RIBBON_TRAIL_MAIN_HEAD);
 
+        ImGui::SeparatorText("その他");
+
+        DrawTrackMenuItem("コントローラ振動", TrackType::VIBRATION);
+
         // 注: キャンセルタイムと先行入力は「コンボ分岐」で各分岐ごとに設定されます
 
         ImGui::EndPopup();
@@ -215,10 +219,17 @@ void PlayerComboAttackTimelineUI::DrawKeyFrameMenuItems(int32_t trackIndex, int3
     bool isObjAnime      = (typeInt >= static_cast<int>(TrackType::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TrackType::OBJ_ANIM_MAIN_HEAD));
     bool isTrailMainHead = (trackType == TrackType::RIBBON_TRAIL_MAIN_HEAD);
 
+    bool isVibration = (trackType == TrackType::VIBRATION);
+
     if (isRendition || isObjAnime || isTrailMainHead) {
         ImGui::Text("キーフレーム編集");
         ImGui::Separator();
         DrawRenditionKeyFrameEditor(trackIndex, keyIndex);
+        ImGui::Separator();
+    } else if (isVibration) {
+        ImGui::Text("キーフレーム編集");
+        ImGui::Separator();
+        DrawVibrationKeyFrameEditor(trackIndex, keyIndex);
         ImGui::Separator();
     }
 }
@@ -287,6 +298,7 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
 
     // MainHead追従トレイルは上部の共通ファイルセレクタでトレイルファイルを選択済み
     // カメラ・オーディオ設定は不要なので早期リターン
+    // ※ DrawVibrationKeyFrameEditorは別関数で処理するためここには含まれない
     if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::RIBBON_TRAIL_MAIN_HEAD) {
         return;
     }
@@ -300,4 +312,26 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
     if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK  || trackInfo->type == PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK_ON_HIT ) {
         ImGui::SliderFloat("ボリューム", &trackInfo->volume, 0.0f, 1.0f);
     }
+}
+
+void PlayerComboAttackTimelineUI::DrawVibrationKeyFrameEditor(int32_t trackIndex, int32_t keyIndex) {
+    auto* trackInfo = data_->FindTrackInfo(trackIndex);
+    if (!trackInfo) {
+        return;
+    }
+
+    ImGui::SeparatorText("振動パラメータ");
+
+    // 振動強度スライダー（変更時にキーフレームラベルも更新）
+    float prevIntensity = trackInfo->vibrationIntensity;
+    if (ImGui::SliderFloat("振動強度", &trackInfo->vibrationIntensity, 0.0f, 1.0f)) {
+        if (prevIntensity != trackInfo->vibrationIntensity) {
+            std::string newLabel = "振動強度:" + std::to_string(trackInfo->vibrationIntensity);
+            timeline_->SetKeyFrameLabel(trackIndex, keyIndex, newLabel);
+        }
+    }
+
+    ImGui::Checkbox("ヒット時のみ振動", &trackInfo->triggerByHit);
+
+    ImGui::TextDisabled("※ キーフレームの長さ = 振動の持続時間");
 }
