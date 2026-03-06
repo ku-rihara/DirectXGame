@@ -31,7 +31,7 @@ void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
     // スプライト更新
     pOwner_->GetGameObj().screenSprite_->SetAlpha(alpha_);
 
-    // アニメーション終了判定（コールバックの代替）
+    // アニメーション終了判定
     if (!isWaitingInput_ && clearSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
         isWaitingInput_ = true;
     }

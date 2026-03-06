@@ -209,7 +209,7 @@
     <ClCompile Include="Game\DeathTimer\DeathTimer.cpp" />
     <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.cpp" />
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyEscape.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyChase.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemySpawn.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyWait.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.cpp" />
@@ -538,7 +538,7 @@
     <ClInclude Include="Game\DeathTimer\DeathTimer.h" />
     <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.h" />
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyEscape.h" />
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyChase.h" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemySpawn.h" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyWait.h" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.h" />

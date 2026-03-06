@@ -131,6 +131,7 @@ void PlayerAttackCollisionBox::UpdateOffset() {
 
 void PlayerAttackCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     if (dynamic_cast<BaseEnemy*>(other)) {
+        
         isHit_       = true;
         hasHitEnemy_ = true;
     }

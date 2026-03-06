@@ -14,6 +14,8 @@
 #include "Player/CollisionBox/PlayerAttackCollisionBox.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
+// DeathTimer
+#include"DeathTimer/DeathTimer.h"
 // Combo
 #include "Combo/Combo.h"
 // Field
@@ -311,6 +313,7 @@ void BaseEnemy::TakeDamage(float damageValue) {
 
     // ダメージを受ける
     hp_ -= damageValue;
+    pPlayer_->GetDeathTimer()->RecoverHP();
 
     // コンボをカウント
     pCombo_->ComboCountUP();

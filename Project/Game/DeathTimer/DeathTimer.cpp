@@ -22,6 +22,7 @@ void DeathTimer::Update(float timer) {
 
     // イージング適応
     AdaptEasing();
+    TakeDamage(timer);
 
     // maxHPを超えないようにクランプ
     currentHP_ = std::clamp(currentHP_, 0.0f, maxHP_);
@@ -34,9 +35,9 @@ void DeathTimer::Update(float timer) {
     deathTimerGauge_->SetTimer(currentHP_, maxHP_);
 }
 
-void DeathTimer::TakeDamage(float damage) {
+void DeathTimer::TakeDamage(float timer) {
     // ダメージを受ける
-    currentHP_ -= damage;
+    currentHP_ -= timer;
 
     // 0以下にならないようにクランプ
     if (currentHP_ < 0.0f) {
@@ -113,5 +114,5 @@ void DeathTimer::AdaptEasing() {
             recoveryTimer_  = 0.0f;
         }
     }
-    // 時間経過による減少は削除（敵からのダメージのみ）
+    
 }

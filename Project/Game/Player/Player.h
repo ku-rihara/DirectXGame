@@ -217,6 +217,7 @@ public:
     PlayerAttackCollisionBox* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
+    DeathTimer* GetDeathTimer() const { return pDeathTimer_; }
     bool GetIsIgnoreUnlockState() const { return isIgnoreUnlockState_; }
     KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }

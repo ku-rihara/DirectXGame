@@ -26,10 +26,10 @@ public:
     /// ダメージを受ける
     /// </summary>
     /// <param name="damage">ダメージ量</param>
-    void TakeDamage(float damage);
+    void TakeDamage(float timer);
 
     /// <summary>
-    /// HPを回復する（コンボレベルアップ時）
+    /// HPを回復する
     /// </summary>
     void RecoverHP();
 
@@ -46,7 +46,7 @@ private:
     float currentHP_ = 0.0f;
     float maxHP_;
 
-    // 回復量（コンボレベルアップ時）
+    // 回復量
     float levelUpRecoveryAmount_;
 
     // イージング関連

@@ -36,7 +36,7 @@ void EnemyChase::Update() {
     direction.Normalize();
     pBaseEnemy_->AddPosition(direction * (param.chaseSpeed * KetaEngine::Frame::DeltaTime()));
 
-    // 毎フレームプレイヤーを向く（DirectionToPlayerはLerpShortAngleで滑らかに補間）
+    // 毎フレームプレイヤーを向く
     pBaseEnemy_->DirectionToPlayer();
 
     // 追跡時間が終了したらWaitに戻る

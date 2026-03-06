@@ -66,7 +66,7 @@ void ComboAttackAction::Init() {
 
     order_ = Order::INIT;
 
-    // 攻撃開始を通知（Init確定 = 攻撃実行開始のタイミング）
+    // 攻撃開始を通知
     pOwner_->FireAutoComboAttackCallback(attackData_->GetGroupName());
 }
 
@@ -117,7 +117,7 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
     // 移動適用
     ApplyMovement(atkSpeed);
 
-    // 予約入力（手動 → 自動の順でチェック。手動が優先）
+    // 予約入力
     PreOderNextComboForButton();
     TryAutoSelectNextFromQueue();
 
@@ -170,7 +170,7 @@ void ComboAttackAction::UpdateWait(float atkSpeed) {
 
 void ComboAttackAction::ChangeNextAttack() {
 
-    // 自動進行フラグがtrueの場合も次に進む（最初の分岐を選択）
+    // 自動進行フラグがtrueの場合も次に進む
     bool shouldAdvance = isReserveNextCombo_ || isAutoReservedCombo_ || isAttackCancel_ || attackData_->GetAttackParam().timingParam.isAutoAdvance;
     KetaEngine::Input::SetVibration(0, 0.0f, 0.0f);
 
@@ -294,7 +294,7 @@ void ComboAttackAction::TryAutoSelectNextFromQueue() {
             continue;
         }
 
-        // 自動予約確定（Dequeueはここではせず ChangeNextAttack で行う）
+        // 自動予約確定
         isAutoReservedCombo_     = true;
         autoSelectedBranchIndex_ = static_cast<int32_t>(i);
         isReserveNextCombo_      = true;
