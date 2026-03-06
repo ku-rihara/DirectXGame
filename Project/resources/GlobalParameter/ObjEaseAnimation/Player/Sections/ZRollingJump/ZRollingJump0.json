@@ -1,19 +1,19 @@
 {
-    "TitleLeftHand0": {
+    "ZRollingJump0": {
         "Rotation_Anchor": [
             0.0,
             0.0,
             0.0
         ],
         "Rotation_BackRatio": 0.0,
-        "Rotation_EaseType": 0,
-        "Rotation_IsActive": false,
-        "Rotation_IsReturnToOrigin": false,
-        "Rotation_MaxTime": 1.0,
+        "Rotation_EaseType": 22,
+        "Rotation_IsActive": true,
+        "Rotation_IsReturnToOrigin": true,
+        "Rotation_MaxTime": 0.4399999976158142,
         "Rotation_ReturnEaseType": 0,
-        "Rotation_ReturnMaxTime": 1.0,
+        "Rotation_ReturnMaxTime": 0.009999999776482582,
         "Rotation_endValue": [
-            0.0,
+            6.2831854820251465,
             0.0,
             0.0
         ],
@@ -40,22 +40,22 @@
             0.0
         ],
         "Translation_BackRatio": 0.0,
-        "Translation_EaseType": 0,
+        "Translation_EaseType": 22,
         "Translation_IsActive": true,
         "Translation_IsLookAtDirection": false,
         "Translation_IsReturnToOrigin": true,
-        "Translation_MaxTime": 0.09000000357627869,
+        "Translation_MaxTime": 0.49000000953674316,
         "Translation_RailFileName": "",
-        "Translation_ReturnEaseType": 21,
-        "Translation_ReturnMaxTime": 0.09000000357627869,
+        "Translation_ReturnEaseType": 22,
+        "Translation_ReturnMaxTime": 0.14000000059604645,
         "Translation_UseRail": false,
         "Translation_endValue": [
-            2.0,
             0.0,
-            4.0
+            2.2200000286102295,
+            0.0
         ],
         "isReturnSection": false,
-        "returnStartTime": 0.0,
+        "returnStartTime": 0.05999999865889549,
         "startTime": 0.0,
         "timeMode": 1
     }
