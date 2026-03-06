@@ -24,9 +24,15 @@ private:
     void UpdateDiscovery();
 
     /// <summary>
-    /// 終了状態の処理（次のBehaviorへ遷移）
+    /// 終了状態の処理
     /// </summary>
     void UpdateEnd();
+
+private:
+    /// <summary>
+    /// プレイヤーを発見したか
+    /// </summary>
+    bool IsDiscovery();
 
 private:
     std::function<void()> currentPhase_;

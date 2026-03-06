@@ -1,6 +1,6 @@
 /// behavior
 #include "EnemyWait.h"
-#include "EnemyEscape.h"
+#include "EnemyChase.h"
 /// obj
 #include "Enemy/Types/BaseEnemy.h"
 #include "Player/Player.h"
@@ -48,13 +48,12 @@ void EnemyWait::Update() {
 }
 
 void EnemyWait::UpdateWaiting() {
-    const auto& param = pBaseEnemy_->GetParameter();
 
     // プレイヤーの方向を向く
     pBaseEnemy_->DirectionToPlayer();
 
     // プレイヤーが追跡範囲内にいるか
-    if (distance_ <= param.chaseDistance) {
+    if (IsDiscovery()) {
         // 発見モーションを再生
         pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Discovery, false);
 
@@ -64,8 +63,17 @@ void EnemyWait::UpdateWaiting() {
     }
 }
 
-void EnemyWait::UpdateDiscovery() {
+bool EnemyWait::IsDiscovery() {
+    const auto& param = pBaseEnemy_->GetParameter();
+    bool result       = false;
 
+    if (distance_ <= param.chaseDistance && distance_ >= param.chaseDistanceMin) {
+        result = true;
+    }
+    return result;
+}
+
+void EnemyWait::UpdateDiscovery() {
 }
 
 void EnemyWait::UpdateEnd() {

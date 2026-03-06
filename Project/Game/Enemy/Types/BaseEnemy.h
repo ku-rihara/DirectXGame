@@ -48,7 +48,7 @@ public:
         float burstTime;
         // 追跡パラメータ
         float chaseDistance;
-        float chaseTime;
+        float chaseDistanceMin;
         float chaseSpeed;
         // 死亡パラメータ
         float deathBlowValue;

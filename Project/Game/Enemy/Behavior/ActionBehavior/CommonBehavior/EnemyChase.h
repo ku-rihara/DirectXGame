@@ -14,6 +14,5 @@ public:
     void Debug() override;
 
 private:
-    // 追跡タイマー
-    float chaseTimer_;
+    float chaseDistanceMin_ = 0.0f;
 };

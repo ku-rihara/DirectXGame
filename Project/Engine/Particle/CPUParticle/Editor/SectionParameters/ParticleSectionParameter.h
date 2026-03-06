@@ -1,7 +1,7 @@
 #pragma once
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "../Parameter/ParticleCommonParameters.h"
 #include "3D/Primitive/IPrimitive.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "utility/FileSelector/FileSelector.h"
 #include "utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector3.h"
@@ -55,8 +55,8 @@ public:
 private:
     void SelectRailFile(const char* label, const std::string& directory, std::pair<std::string, FileSelector>* param);
     void ScaleParamEditor();
-    void TranslateParamEditor(); 
-    void RotateParamEditor(); 
+    void TranslateParamEditor();
+    void RotateParamEditor();
     void AdaptIntToType();
 
 private:
@@ -80,7 +80,7 @@ private:
 
     // TypeInt
     int32_t primitiveTypeInt_    = 0;
-    int32_t billboardTypeInt_     = 0;
+    int32_t billboardTypeInt_    = 0;
     int32_t blendModeInt_        = 0;
     int32_t emitPositionModeInt_ = 0;
 

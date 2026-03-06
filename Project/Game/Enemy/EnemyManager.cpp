@@ -125,7 +125,7 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "hpBarPosOffset" + indexString, &parameters_[i].hpBarPosOffset);
 
         // 追跡パラメータ
-        globalParameter_->Regist(groupName_, "chaseTime" + indexString, &parameters_[i].chaseTime);
+        globalParameter_->Regist(groupName_, "chaseDistanceMin" + indexString, &parameters_[i].chaseDistanceMin);
         globalParameter_->Regist(groupName_, "chaseSpeed" + indexString, &parameters_[i].chaseSpeed);
         globalParameter_->Regist(groupName_, "chaseDistance" + indexString, &parameters_[i].chaseDistance);
 
@@ -150,7 +150,7 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
     ImGui::SeparatorText("追跡パラメータ");
     ImGui::DragFloat("追跡開始距離", &parameters_[typeIndex].chaseDistance, 0.01f, 0.0f);
-    ImGui::DragFloat("追跡時間", &parameters_[typeIndex].chaseTime, 0.1f, 0.0f);
+    ImGui::DragFloat("追跡限度", &parameters_[typeIndex].chaseDistanceMin, 0.1f, 0.0f);
     ImGui::DragFloat("追跡速度", &parameters_[typeIndex].chaseSpeed, 0.01f, 0.0f);
 
     ImGui::SeparatorText("死亡パラメータ");
