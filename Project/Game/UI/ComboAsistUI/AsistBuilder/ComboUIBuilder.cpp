@@ -1,6 +1,7 @@
 #include "ComboUIBuilder.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
+#include <unordered_set>
 
 ///==========================================================
 /// 全条件のパス構築＆UI生成
@@ -122,47 +123,84 @@ void ComboUIBuilder::CreateGroupUI(
     uiGroup.branchButtonUIs.resize(pathGroup.branches.size());
     uiGroup.branchInnerArrowUIs.resize(pathGroup.branches.size());
 
+    // 各分岐の列マッピングを事前計算
+    struct BranchLayoutCache {
+        int32_t lastSharedCol = -1;
+        std::vector<int32_t> colMap;
+    };
+    std::vector<BranchLayoutCache> branchLayouts(pathGroup.branches.size());
+
     for (size_t branchIndex = 0; branchIndex < pathGroup.branches.size(); ++branchIndex) {
         const auto& branchInfo = pathGroup.branches[branchIndex];
-        int32_t branchRow      = *currentRow;
-        auto& buttons          = uiGroup.branchButtonUIs[branchIndex];
-        auto& innerArrows      = uiGroup.branchInnerArrowUIs[branchIndex];
+        auto& layout = branchLayouts[branchIndex];
 
-        // 共通部分の最後の表示列
-        int32_t lastSharedCol = -1;
         for (int32_t j = branchInfo.divergeIndex - 1; j >= 0; --j) {
             if (j < static_cast<int32_t>(mainColMap.size()) && mainColMap[j] >= 0) {
-                lastSharedCol = mainColMap[j];
+                layout.lastSharedCol = mainColMap[j];
                 break;
             }
         }
 
-        // 分岐部分の列マッピング
-        std::vector<int32_t> branchColMap(branchInfo.path.steps.size(), -1);
-        int32_t branchCol = lastSharedCol + 1;
+        layout.colMap.assign(branchInfo.path.steps.size(), -1);
+        int32_t branchCol = layout.lastSharedCol + 1;
         for (size_t i = branchInfo.divergeIndex; i < branchInfo.path.steps.size(); ++i) {
             if (i == 0 || !branchInfo.path.steps[i - 1].isAutoAdvance) {
-                branchColMap[i] = branchCol++;
+                layout.colMap[i] = branchCol++;
             }
         }
+    }
+
+    // 列衝突チェックで行スロット割り当て（列が被らない分岐は同じRowに詰める）
+    std::vector<std::unordered_set<int32_t>> rowUsedCols;
+    std::vector<int32_t> branchRowSlots(pathGroup.branches.size(), 0);
+
+    for (size_t branchIndex = 0; branchIndex < pathGroup.branches.size(); ++branchIndex) {
+        const auto& branchInfo = pathGroup.branches[branchIndex];
+        const auto& layout = branchLayouts[branchIndex];
+
+        std::unordered_set<int32_t> neededCols;
+        for (size_t i = branchInfo.divergeIndex; i < branchInfo.path.steps.size(); ++i) {
+            if (layout.colMap[i] >= 0) neededCols.insert(layout.colMap[i]);
+        }
+
+        int32_t slot = 0;
+        while (slot < static_cast<int32_t>(rowUsedCols.size())) {
+            bool conflict = false;
+            for (int32_t c : neededCols) {
+                if (rowUsedCols[slot].count(c)) { conflict = true; break; }
+            }
+            if (!conflict) break;
+            slot++;
+        }
+        if (slot >= static_cast<int32_t>(rowUsedCols.size())) {
+            rowUsedCols.emplace_back();
+        }
+        for (int32_t c : neededCols) rowUsedCols[slot].insert(c);
+        branchRowSlots[branchIndex] = slot;
+    }
+
+    for (size_t branchIndex = 0; branchIndex < pathGroup.branches.size(); ++branchIndex) {
+        const auto& branchInfo = pathGroup.branches[branchIndex];
+        int32_t branchRow      = *currentRow + branchRowSlots[branchIndex];
+        auto& buttons          = uiGroup.branchButtonUIs[branchIndex];
+        auto& innerArrows      = uiGroup.branchInnerArrowUIs[branchIndex];
+        const auto& layout     = branchLayouts[branchIndex];
 
         // 分岐元→分岐先の斜め矢印
         if (branchInfo.divergeIndex > 0 &&
             branchInfo.divergeIndex < static_cast<int32_t>(branchInfo.path.steps.size()) &&
-            lastSharedCol >= 0 && branchColMap[branchInfo.divergeIndex] >= 0) {
+            layout.lastSharedCol >= 0 && layout.colMap[branchInfo.divergeIndex] >= 0) {
             auto arrow = std::make_unique<ComboAsistArrowUI>();
-            arrow->Init(lastSharedCol, mainRow, branchColMap[branchInfo.divergeIndex], branchRow, layoutParam);
+            arrow->Init(layout.lastSharedCol, mainRow, layout.colMap[branchInfo.divergeIndex], branchRow, layoutParam);
             uiGroup.branchArrowUIs.push_back(std::move(arrow));
         }
 
         // 分岐パスのボタン
         for (size_t i = branchInfo.divergeIndex; i < branchInfo.path.steps.size(); ++i) {
-            if (branchColMap[i] < 0) {
-                continue;
-            }
+            if (layout.colMap[i] < 0) continue;
             auto btn = std::make_unique<ComboAsistButtonUI>();
             btn->Init(branchInfo.path.steps[i].gamepadButton, branchInfo.path.steps[i].isUnlocked, layoutParam, branchInfo.path.steps[i].attackName);
-            btn->SetRowColumn(branchRow, branchColMap[i]);
+            btn->SetRowColumn(branchRow, layout.colMap[i]);
             btn->ApplyLayout();
             btn->SnapToTarget();
             buttons.push_back(std::move(btn));
@@ -171,19 +209,18 @@ void ComboUIBuilder::CreateGroupUI(
         // 分岐パス内の矢印
         int32_t prevBCol = -1;
         for (size_t i = branchInfo.divergeIndex; i < branchInfo.path.steps.size(); ++i) {
-            if (branchColMap[i] < 0) {
-                continue;
-            }
+            if (layout.colMap[i] < 0) continue;
             if (prevBCol >= 0) {
                 auto arrow = std::make_unique<ComboAsistArrowUI>();
-                arrow->Init(prevBCol, branchRow, branchColMap[i], branchRow, layoutParam);
+                arrow->Init(prevBCol, branchRow, layout.colMap[i], branchRow, layoutParam);
                 innerArrows.push_back(std::move(arrow));
             }
-            prevBCol = branchColMap[i];
+            prevBCol = layout.colMap[i];
         }
-
-        (*currentRow)++;
     }
+
+    // 使用した行スロット数だけ currentRow を進める
+    *currentRow += static_cast<int32_t>(rowUsedCols.size());
 }
 
 ///==========================================================

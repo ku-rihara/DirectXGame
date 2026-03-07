@@ -154,6 +154,8 @@ public:
     void SetIsStartEndReverse(bool isReverse) { isStartEndReverse_ = isReverse; }
     void SetFinishTimeOffset(float time) { finishTimeOffset_ = time; }
     void SetBackRatio(float ratio) { backRatio_ = ratio; }
+    void SetAmplitude(float amplitude) { amplitude_ = amplitude; }
+    void SetPeriod(float period) { period_ = period; }
 };
 
 }; // KetaEngine

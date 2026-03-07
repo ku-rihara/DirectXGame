@@ -3,14 +3,17 @@
 using namespace KetaEngine;
 #include "3D/RibbonTrail/RibbonTrail.h"
 #include "RibbonTrailData.h"
+#include "Frame/Frame.h"
 
 ///============================================================
 /// 初期化
 ///============================================================
 void RibbonTrailPlayer::Init() {
     BaseEffectPlayer::Init();
-    trail_     = nullptr;
-    emitTimer_ = 0.0f;
+    trail_          = nullptr;
+    emitTimer_      = 0.0f;
+    isActive_       = false;
+    followPosition_ = nullptr;
 }
 
 ///============================================================
@@ -20,7 +23,16 @@ void RibbonTrailPlayer::Update(float speedRate) {
     if (effectData_) {
         effectData_->Update(speedRate);
     }
-  
+
+    // followPosition_ が設定されていればAutoEmit
+    if (isActive_ && trail_ && followPosition_) {
+        float dt = Frame::DeltaTime() * speedRate;
+        emitTimer_ += dt;
+        if (emitTimer_ >= GetEmitInterval()) {
+            emitTimer_ = 0.0f;
+            trail_->AddPoint(*followPosition_, GetStartColor(), GetStartWidth(), GetLifetime());
+        }
+    }
 }
 
 
@@ -44,27 +56,12 @@ void RibbonTrailPlayer::Play(const std::string& presetName, const std::string& c
 
     SyncDataToTrail();
     emitTimer_ = 0.0f;
-}
-
-
-void RibbonTrailPlayer::Emit(const Vector3& position, float deltaTime) {
-    if (!trail_) {
-        return;
-    }
-
-    emitTimer_ += deltaTime;
-    if (emitTimer_ >= GetEmitInterval()) {
-        emitTimer_ = 0.0f;
-        trail_->AddPoint(
-            position,
-            GetStartColor(),
-            GetStartWidth(),
-            GetLifetime());
-    }
+    isActive_  = true;
 }
 
 
 void RibbonTrailPlayer::StopAndClear() {
+    isActive_ = false;
     if (trail_) {
         trail_->Clear();
     }

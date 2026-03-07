@@ -1,6 +1,5 @@
 #include "BasePlayerHand.h"
-#include "3d/RibbonTrail/RibbonTrail.h"
-#include"Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
+#include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 /// imGui
 #include "base/TextureManager.h"
 #include <imgui.h>
@@ -21,6 +20,7 @@ void BasePlayerHand::Init() {
 
     // トレイルプレイヤー初期化
     trailPlayer_.Init();
+    trailPlayer_.SetFollowPosition(&effectFollowPos_);
 
     // ディゾルブエッジ設定
     obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
@@ -45,11 +45,14 @@ void BasePlayerHand::Update() {
     effectFollowPos_ = handPos;
     particlePlayer_->Update();
 
-    // ディゾルブ更新・適用 
+    // ディゾルブ更新・適用
     dissolvePlayer_.Update();
     if (dissolvePlayer_.IsPlaying()) {
         dissolvePlayer_.ApplyToMaterial(*obj3d_->GetModelMaterial());
     }
+
+    // トレイル更新
+    trailPlayer_.Update();
 
     BaseObject::Update();
 }
@@ -86,15 +89,6 @@ void BasePlayerHand::SetParent(KetaEngine::WorldTransform* parent) {
 
 void BasePlayerHand::StartTrailEmit(const std::string& presetName, const std::string& category) {
     trailPlayer_.Play(presetName, category);
-
-    // プリセットに合わせてリボントレイルを再生成
-    ribbonTrail_.reset(KetaEngine::RibbonTrail::Create(static_cast<size_t>(trailPlayer_.GetMaxPoints())));
-    ribbonTrail_->SetEndColor(trailPlayer_.GetEndColor());
-    ribbonTrail_->SetEndWidth(trailPlayer_.GetEndWidth());
-    ribbonTrail_->SetTexture(trailPlayer_.GetTexturePath());
-
-    lastTrailPos_ = {1e30f, 1e30f, 1e30f}; // 初回は必ずポイントを追加する
-    isTrailEmit_  = true;
 }
 
 void BasePlayerHand::EffectEmit(const std::string& effectName) {

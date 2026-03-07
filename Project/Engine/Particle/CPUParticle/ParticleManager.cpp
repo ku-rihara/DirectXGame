@@ -341,7 +341,7 @@ void ParticleManager::SetTextureHandle(const std::string name, uint32_t handle) 
 void ParticleManager::SetDissolveTextureHandle(const std::string& name, uint32_t handle) {
     particleGroups_[name].dissolveTextureHandle = handle;
 }
-
+ 
 void ParticleManager::PlayDissolve(const std::string& name, const std::string& dissolveName) {
     auto it = particleGroups_.find(name);
     if (it == particleGroups_.end()) {

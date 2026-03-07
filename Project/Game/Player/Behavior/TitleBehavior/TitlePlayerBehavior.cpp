@@ -37,6 +37,7 @@ void TitlePlayerBehavior::Update() {
     case Phase::LAND:
         if (pPlayer_->IsTitleAnimationFinished()) {
             // 左パンチ開始
+            pPlayer_->TitleAnimationPlay("TitlePlayerPunchScaling");
             pPlayer_->TitleLeftHandAnimationPlay("TitleLeftHand");
             phase_ = Phase::LEFT_PUNCH;
         }
@@ -46,6 +47,7 @@ void TitlePlayerBehavior::Update() {
     case Phase::LEFT_PUNCH:
         if (pPlayer_->IsTitleLeftHandAnimationFinished()) {
             // 右パンチ開始
+            pPlayer_->TitleAnimationPlay("TitlePlayerPunchScaling");
             pPlayer_->TitleRightHandAnimationPlay("TitleRightHand");
             phase_ = Phase::RIGHT_PUNCH;
         }

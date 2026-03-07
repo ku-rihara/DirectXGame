@@ -49,6 +49,8 @@ public:
 
         float maxTime    = 1.0f;
         int32_t easeType = 0;
+        float amplitude  = 0.0f;
+        float period     = 0.0f;
 
         float returnMaxTime    = 1.0f;
         int32_t returnEaseType = 0;
@@ -74,6 +76,8 @@ public:
 
         float maxTime    = 1.0f;
         int32_t easeType = 0;
+        float amplitude  = 0.0f;
+        float period     = 0.0f;
 
         float returnMaxTime    = 1.0f;
         int32_t returnEaseType = 0;
@@ -99,6 +103,8 @@ public:
 
         float maxTime    = 1.0f;
         int32_t easeType = 0;
+        float amplitude  = 0.0f;
+        float period     = 0.0f;
 
         float returnMaxTime    = 1.0f;
         int32_t returnEaseType = 0;

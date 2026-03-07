@@ -389,6 +389,8 @@ void SpriteEaseAnimationSection::RegisterParams() {
     globalParameter_->Regist(groupName_, "Scale_endValue", &scaleParam_.endValue);
     globalParameter_->Regist(groupName_, "Scale_MaxTime", &scaleParam_.maxTime);
     globalParameter_->Regist(groupName_, "Scale_EaseType", &scaleParam_.easeType);
+    globalParameter_->Regist(groupName_, "Scale_Amplitude", &scaleParam_.amplitude);
+    globalParameter_->Regist(groupName_, "Scale_Period", &scaleParam_.period);
     globalParameter_->Regist(groupName_, "Scale_ReturnMaxTime", &scaleParam_.returnMaxTime);
     globalParameter_->Regist(groupName_, "Scale_ReturnEaseType", &scaleParam_.returnEaseType);
 
@@ -398,6 +400,8 @@ void SpriteEaseAnimationSection::RegisterParams() {
     globalParameter_->Regist(groupName_, "Position_endValue", &positionParam_.endValue);
     globalParameter_->Regist(groupName_, "Position_MaxTime", &positionParam_.maxTime);
     globalParameter_->Regist(groupName_, "Position_EaseType", &positionParam_.easeType);
+    globalParameter_->Regist(groupName_, "Position_Amplitude", &positionParam_.amplitude);
+    globalParameter_->Regist(groupName_, "Position_Period", &positionParam_.period);
     globalParameter_->Regist(groupName_, "Position_ReturnMaxTime", &positionParam_.returnMaxTime);
     globalParameter_->Regist(groupName_, "Position_ReturnEaseType", &positionParam_.returnEaseType);
 
@@ -407,6 +411,8 @@ void SpriteEaseAnimationSection::RegisterParams() {
     globalParameter_->Regist(groupName_, "Rotation_endValue", &rotationParam_.endValue);
     globalParameter_->Regist(groupName_, "Rotation_MaxTime", &rotationParam_.maxTime);
     globalParameter_->Regist(groupName_, "Rotation_EaseType", &rotationParam_.easeType);
+    globalParameter_->Regist(groupName_, "Rotation_Amplitude", &rotationParam_.amplitude);
+    globalParameter_->Regist(groupName_, "Rotation_Period", &rotationParam_.period);
     globalParameter_->Regist(groupName_, "Rotation_ReturnMaxTime", &rotationParam_.returnMaxTime);
     globalParameter_->Regist(groupName_, "Rotation_ReturnEaseType", &rotationParam_.returnEaseType);
 
@@ -416,6 +422,8 @@ void SpriteEaseAnimationSection::RegisterParams() {
     globalParameter_->Regist(groupName_, "Color_endValue", &colorParam_.endValue);
     globalParameter_->Regist(groupName_, "Color_MaxTime", &colorParam_.maxTime);
     globalParameter_->Regist(groupName_, "Color_EaseType", &colorParam_.easeType);
+    globalParameter_->Regist(groupName_, "Color_Amplitude", &colorParam_.amplitude);
+    globalParameter_->Regist(groupName_, "Color_Period", &colorParam_.period);
     globalParameter_->Regist(groupName_, "Color_ReturnMaxTime", &colorParam_.returnMaxTime);
     globalParameter_->Regist(groupName_, "Color_ReturnEaseType", &colorParam_.returnEaseType);
 
@@ -425,6 +433,8 @@ void SpriteEaseAnimationSection::RegisterParams() {
     globalParameter_->Regist(groupName_, "Alpha_endValue", &alphaParam_.endValue);
     globalParameter_->Regist(groupName_, "Alpha_MaxTime", &alphaParam_.maxTime);
     globalParameter_->Regist(groupName_, "Alpha_EaseType", &alphaParam_.easeType);
+    globalParameter_->Regist(groupName_, "Alpha_Amplitude", &alphaParam_.amplitude);
+    globalParameter_->Regist(groupName_, "Alpha_Period", &alphaParam_.period);
     globalParameter_->Regist(groupName_, "Alpha_ReturnMaxTime", &alphaParam_.returnMaxTime);
     globalParameter_->Regist(groupName_, "Alpha_ReturnEaseType", &alphaParam_.returnEaseType);
 }
@@ -440,6 +450,8 @@ void SpriteEaseAnimationSection::GetParams() {
     scaleParam_.endValue         = globalParameter_->GetValue<Vector2>(groupName_, "Scale_endValue");
     scaleParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Scale_MaxTime");
     scaleParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Scale_EaseType");
+    scaleParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Scale_Amplitude");
+    scaleParam_.period           = globalParameter_->GetValue<float>(groupName_, "Scale_Period");
     scaleParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Scale_ReturnMaxTime");
     scaleParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Scale_ReturnEaseType");
 
@@ -449,6 +461,8 @@ void SpriteEaseAnimationSection::GetParams() {
     positionParam_.endValue         = globalParameter_->GetValue<Vector2>(groupName_, "Position_endValue");
     positionParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Position_MaxTime");
     positionParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Position_EaseType");
+    positionParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Position_Amplitude");
+    positionParam_.period           = globalParameter_->GetValue<float>(groupName_, "Position_Period");
     positionParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Position_ReturnMaxTime");
     positionParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Position_ReturnEaseType");
 
@@ -458,6 +472,8 @@ void SpriteEaseAnimationSection::GetParams() {
     rotationParam_.endValue         = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_endValue");
     rotationParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Rotation_MaxTime");
     rotationParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_EaseType");
+    rotationParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Rotation_Amplitude");
+    rotationParam_.period           = globalParameter_->GetValue<float>(groupName_, "Rotation_Period");
     rotationParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Rotation_ReturnMaxTime");
     rotationParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_ReturnEaseType");
 
@@ -467,6 +483,8 @@ void SpriteEaseAnimationSection::GetParams() {
     colorParam_.endValue         = globalParameter_->GetValue<Vector3>(groupName_, "Color_endValue");
     colorParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Color_MaxTime");
     colorParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Color_EaseType");
+    colorParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Color_Amplitude");
+    colorParam_.period           = globalParameter_->GetValue<float>(groupName_, "Color_Period");
     colorParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Color_ReturnMaxTime");
     colorParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Color_ReturnEaseType");
 
@@ -476,6 +494,8 @@ void SpriteEaseAnimationSection::GetParams() {
     alphaParam_.endValue         = globalParameter_->GetValue<float>(groupName_, "Alpha_endValue");
     alphaParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Alpha_MaxTime");
     alphaParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Alpha_EaseType");
+    alphaParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Alpha_Amplitude");
+    alphaParam_.period           = globalParameter_->GetValue<float>(groupName_, "Alpha_Period");
     alphaParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Alpha_ReturnMaxTime");
     alphaParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Alpha_ReturnEaseType");
 }
@@ -485,30 +505,40 @@ void SpriteEaseAnimationSection::AdaptEaseParam() {
     scaleParam_.ease.SetMaxTime(scaleParam_.maxTime);
     scaleParam_.ease.SetEndValue(scaleParam_.endValue);
     scaleParam_.ease.SetType(static_cast<EasingType>(scaleParam_.easeType));
+    scaleParam_.ease.SetAmplitude(scaleParam_.amplitude);
+    scaleParam_.ease.SetPeriod(scaleParam_.period);
     scaleParam_.ease.SetIsStartEndReverse(false);
 
     // Position
     positionParam_.ease.SetMaxTime(positionParam_.maxTime);
     positionParam_.ease.SetEndValue(positionParam_.endValue);
     positionParam_.ease.SetType(static_cast<EasingType>(positionParam_.easeType));
+    positionParam_.ease.SetAmplitude(positionParam_.amplitude);
+    positionParam_.ease.SetPeriod(positionParam_.period);
     positionParam_.ease.SetIsStartEndReverse(false);
 
     // Rotation
     rotationParam_.ease.SetMaxTime(rotationParam_.maxTime);
     rotationParam_.ease.SetEndValue(rotationParam_.endValue);
     rotationParam_.ease.SetType(static_cast<EasingType>(rotationParam_.easeType));
+    rotationParam_.ease.SetAmplitude(rotationParam_.amplitude);
+    rotationParam_.ease.SetPeriod(rotationParam_.period);
     rotationParam_.ease.SetIsStartEndReverse(false);
 
     // Color
     colorParam_.ease.SetMaxTime(colorParam_.maxTime);
     colorParam_.ease.SetEndValue(colorParam_.endValue);
     colorParam_.ease.SetType(static_cast<EasingType>(colorParam_.easeType));
+    colorParam_.ease.SetAmplitude(colorParam_.amplitude);
+    colorParam_.ease.SetPeriod(colorParam_.period);
     colorParam_.ease.SetIsStartEndReverse(false);
 
     // Alpha
     alphaParam_.ease.SetMaxTime(alphaParam_.maxTime);
     alphaParam_.ease.SetEndValue(alphaParam_.endValue);
     alphaParam_.ease.SetType(static_cast<EasingType>(alphaParam_.easeType));
+    alphaParam_.ease.SetAmplitude(alphaParam_.amplitude);
+    alphaParam_.ease.SetPeriod(alphaParam_.period);
     alphaParam_.ease.SetIsStartEndReverse(false);
 }
 
@@ -536,6 +566,8 @@ void SpriteEaseAnimationSection::ImGuiVec2Param(const char* label, Vec2Param& pa
     ImGui::DragFloat2("End Value", &param.endValue.x, 0.01f);
     ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.0f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
+    ImGui::DragFloat("Amplitude", &param.amplitude, 0.01f);
+    ImGui::DragFloat("Period", &param.period, 0.01f);
 
     if (param.isReturnToOrigin) {
         ImGui::Separator();
@@ -570,6 +602,8 @@ void SpriteEaseAnimationSection::ImGuiVec3Param(const char* label, Vec3Param& pa
 
     ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.0f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
+    ImGui::DragFloat("Amplitude", &param.amplitude, 0.01f);
+    ImGui::DragFloat("Period", &param.period, 0.01f);
 
     if (param.isReturnToOrigin) {
         ImGui::Separator();
@@ -596,6 +630,8 @@ void SpriteEaseAnimationSection::ImGuiColorParam(const char* label, Vec3Param& p
     ImGui::ColorEdit3("End Value", &param.endValue.x);
     ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.0f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
+    ImGui::DragFloat("Amplitude", &param.amplitude, 0.01f);
+    ImGui::DragFloat("Period", &param.period, 0.01f);
 
     if (param.isReturnToOrigin) {
         ImGui::Separator();
@@ -628,6 +664,8 @@ void SpriteEaseAnimationSection::ImGuiFloatParam(const char* label, FloatParam& 
 
     ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.0f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
+    ImGui::DragFloat("Amplitude", &param.amplitude, 0.01f);
+    ImGui::DragFloat("Period", &param.period, 0.01f);
 
     if (param.isReturnToOrigin) {
         ImGui::Separator();

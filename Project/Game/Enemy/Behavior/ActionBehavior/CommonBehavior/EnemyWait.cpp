@@ -67,6 +67,7 @@ bool EnemyWait::IsDiscovery() {
     const auto& param = pBaseEnemy_->GetParameter();
     bool result       = false;
 
+    // 追跡開始距離以内＆追跡限界距離以上
     if (distance_ <= param.chaseDistance && distance_ >= param.chaseDistanceMin) {
         result = true;
     }

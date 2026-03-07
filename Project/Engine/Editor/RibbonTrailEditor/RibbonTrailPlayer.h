@@ -28,17 +28,16 @@ public:
     void Play(const std::string& presetName, const std::string& categoryName = "Common") override;
 
     /// <summary>
-    /// 呼び出し
+    /// フォロー位置を設定（Updateで自動Emit）
     /// </summary>
-    void Emit(const Vector3& position, float deltaTime);
-
-
-    RibbonTrail* GetTrail() const { return trail_; }
+    void SetFollowPosition(const Vector3* pos) { followPosition_ = pos; }
 
     /// <summary>
     /// トレイルをクリアして非表示にする
     /// </summary>
     void StopAndClear();
+
+    bool IsActive() const { return isActive_; }
 
 protected:
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
@@ -52,8 +51,10 @@ private:
     void SyncDataToTrail();
 
 private:
-    RibbonTrail* trail_      = nullptr;
-    float        emitTimer_  = 0.0f;
+    RibbonTrail*     trail_          = nullptr;
+    float            emitTimer_      = 0.0f;
+    bool             isActive_       = false;
+    const Vector3*   followPosition_ = nullptr;
 
 public:
     ///========================================================

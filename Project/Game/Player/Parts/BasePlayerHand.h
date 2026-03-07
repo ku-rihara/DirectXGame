@@ -7,7 +7,6 @@
 #include "3d/Object3D/Object3d.h"
 #include "BaseObject/BaseObject.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
-#include "3d/RibbonTrail/RibbonTrail.h"
 #include <memory>
 #include <string>
 
@@ -53,13 +52,10 @@ protected:
     Vector3 effectFollowPos_;
 
     // リボントレイル
-    std::unique_ptr<KetaEngine::RibbonTrail> ribbonTrail_;
-    KetaEngine::RibbonTrailPlayer            trailPlayer_;
-    Vector3                                  lastTrailPos_{};
+    KetaEngine::RibbonTrailPlayer trailPlayer_;
 
-    bool isEmit_      = true;
-    bool isTrailEmit_ = false;
-    bool isShadow_    = true;
+    bool isEmit_   = true;
+    bool isShadow_ = true;
 
     KetaEngine::DissolvePlayer dissolvePlayer_;
 
@@ -79,13 +75,10 @@ public:
     void SetIsShadow(const bool& isShadow) { isShadow_ = isShadow; }
 
     /// トレイルを即座にクリア（攻撃リセット時などに呼ぶ）
-    void ClearTrail() { if (ribbonTrail_) { ribbonTrail_->Clear(); } }
+    void ClearTrail() { trailPlayer_.StopAndClear(); }
 
     /// トレイル放出開始（プリセット名でパラメータをロードして開始）
     void StartTrailEmit(const std::string& presetName, const std::string& category = "Player");
     /// トレイル放出停止
-    void StopTrailEmit() {
-        isTrailEmit_ = false;
-        ClearTrail();
-    }
+    void StopTrailEmit() { trailPlayer_.StopAndClear(); }
 };

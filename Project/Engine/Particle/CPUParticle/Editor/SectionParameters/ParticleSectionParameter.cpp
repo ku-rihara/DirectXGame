@@ -7,9 +7,9 @@
 using namespace KetaEngine;
 
 void ParticleSectionParameter::AdaptIntToType() {
-    groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
+    groupParameters_.blendMode     = static_cast<BlendMode>(blendModeInt_);
     groupParameters_.billboardType = static_cast<BillboardType>(groupParameters_.billboardType);
-    emitPositionMode_             = static_cast<EmitterPositionMode>(emitPositionModeInt_);
+    emitPositionMode_              = static_cast<EmitterPositionMode>(emitPositionModeInt_);
 }
 
 void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, const std::string& groupName) {
@@ -64,6 +64,7 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "LifeTime", &parameters_.lifeTime);
     globalParam->Regist(groupName, "Particle Count", &particleCount_);
     globalParam->Regist(groupName, "Max Particle Num", &maxParticleNum_);
+    globalParam->Regist(groupName, "IsScreenPos", &groupParameters_.isScreenPos);
 
     // Flag
     globalParam->Regist(groupName, "isScalerScale", &parameters_.isScalerScale);
@@ -178,16 +179,17 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.colorDist.min = globalParam->GetValue<Vector4>(groupName, "Color Min");
 
     // その他
-    intervalTime_        = globalParam->GetValue<float>(groupName, "IntervalTime");
-    parameters_.gravity  = globalParam->GetValue<float>(groupName, "Gravity");
-    parameters_.lifeTime = globalParam->GetValue<float>(groupName, "LifeTime");
-    particleCount_       = globalParam->GetValue<int32_t>(groupName, "Particle Count");
-    maxParticleNum_      = globalParam->GetValue<int32_t>(groupName, "Max Particle Num");
+    intervalTime_                = globalParam->GetValue<float>(groupName, "IntervalTime");
+    parameters_.gravity          = globalParam->GetValue<float>(groupName, "Gravity");
+    parameters_.lifeTime         = globalParam->GetValue<float>(groupName, "LifeTime");
+    particleCount_               = globalParam->GetValue<int32_t>(groupName, "Particle Count");
+    maxParticleNum_              = globalParam->GetValue<int32_t>(groupName, "Max Particle Num");
+    groupParameters_.isScreenPos = globalParam->GetValue<bool>(groupName, "IsScreenPos");
 
     // Flag
     parameters_.isScalerScale         = globalParam->GetValue<bool>(groupName, "isScalerScale");
     parameters_.isRotateForDirection  = globalParam->GetValue<bool>(groupName, "isRotateForDirection");
-    groupParameters_.isBillboard       = globalParam->GetValue<bool>(groupName, "isBillboard");
+    groupParameters_.isBillboard      = globalParam->GetValue<bool>(groupName, "isBillboard");
     groupParameters_.adaptRotate_.isX = globalParam->GetValue<bool>(groupName, "AdaptRotateIsX");
     groupParameters_.adaptRotate_.isY = globalParam->GetValue<bool>(groupName, "AdaptRotateIsY");
     groupParameters_.adaptRotate_.isZ = globalParam->GetValue<bool>(groupName, "AdaptRotateIsZ");
@@ -221,7 +223,7 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
 
     // Mode
     billboardTypeInt_ = globalParam->GetValue<int>(groupName, "preBillboardType");
-    blendModeInt_    = globalParam->GetValue<int>(groupName, "blendMode");
+    blendModeInt_     = globalParam->GetValue<int>(groupName, "blendMode");
 
     // Texture
     selectedTexturePath_ = globalParam->GetValue<std::string>(groupName, "selectedTexturePath");
@@ -249,9 +251,9 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     emitPositionModeInt_ = globalParam->GetValue<int32_t>(groupName, "emitPositionMode");
 
     // Apply loaded values
-    groupParameters_.blendMode    = static_cast<BlendMode>(blendModeInt_);
+    groupParameters_.blendMode     = static_cast<BlendMode>(blendModeInt_);
     groupParameters_.billboardType = static_cast<BillboardType>(billboardTypeInt_);
-    groupParameters_.isShot       = isShot_;
+    groupParameters_.isShot        = isShot_;
 
     AdaptIntToType();
 }
@@ -401,6 +403,7 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::DragFloat("Gravity", &parameters_.gravity, 0.1f);
         ImGui::DragFloat("LifeTime", &parameters_.lifeTime, 0.01f);
         ImGui::SliderInt("Particle Count", &particleCount_, 1, 100);
+        ImGui::Checkbox("Is ScreenPos", &groupParameters_.isScreenPos);
     }
 
     // BillBord

@@ -34,7 +34,7 @@
         "HitStop_OnHit_StartTiming": 0.0,
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
-        "KnockBackPower": 52.720001220703125,
+        "KnockBackPower": 13.0,
         "Main_Head_FileName": "",
         "Main_Head_StartTiming": 0.0,
         "ObjAnim_Head_FileName": "FallRandingMotion",
@@ -64,22 +64,22 @@
         "ShakeAction_OnHit_StartTiming": 0.0,
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": false,
-        "Vibration_Duration": 0.3100000023841858,
+        "Vibration_Duration": 0.30000001192092896,
         "Vibration_Intensity": 0.3310000002384186,
         "Vibration_StartTiming": 0.0,
         "Vibration_TriggerByHit": false,
         "ableDefeatLevel": 1,
         "adaptTime": 0.11666666716337204,
-        "blowYPower": 38.86000061035156,
+        "blowYPower": 23.0,
         "collisionOffsetPos": [
             0.0,
             0.0,
             0.0
         ],
         "collisionSize": [
-            9.0,
-            9.0,
-            9.0
+            15.0,
+            15.0,
+            15.0
         ],
         "collisionStartTime": 0.0,
         "enableFall": false,

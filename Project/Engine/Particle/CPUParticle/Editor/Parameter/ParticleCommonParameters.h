@@ -92,6 +92,7 @@ struct GroupParameters {
     bool isBillboard;
     bool isShot;
     bool isAlphaNoMove;
+    bool isScreenPos;
     BillboardType billboardType;
     AdaptRotate adaptRotate_;
 };
