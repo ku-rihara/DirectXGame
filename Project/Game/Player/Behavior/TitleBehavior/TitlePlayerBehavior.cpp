@@ -63,7 +63,7 @@ void TitlePlayerBehavior::Update() {
         }
         break;
 
-    // ─── フェーズ5：待機ループ（無限） ────────────────────
+    // ─── フェーズ5：待機 ────────────────────
     case Phase::WAITING:
         if (pPlayer_->IsTitleAnimationFinished()) {
             // 終了したら即再生してループ

@@ -152,6 +152,7 @@ public:
     void Init(SrvManager* srvManager);
     void Update();
     void Draw(const ViewProjection& viewProjection);
+    void DrawScreenPos();
 
     void ResetInstancingData(const std::string& name);
     void UpdateUV(UVInfo& uvInfo, float deltaTime);

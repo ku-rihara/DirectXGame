@@ -3,6 +3,7 @@
 using namespace KetaEngine;
 // Base
 #include "Base/TextureManager.h"
+#include "Base/WinApp.h"
 // pipeline
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "Pipeline/PipelineManager.h"
@@ -174,6 +175,9 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 
     for (auto& groupPair : particleGroups_) {
         ParticleGroup& group           = groupPair.second;
+        if (group.param.isScreenPos) {
+            continue; // DrawScreenPos() で描画
+        }
         std::string name               = groupPair.first;
         std::list<Particle>& particles = group.particles;
         ParticleFprGPU* instancingData = group.instancingData;
@@ -237,6 +241,78 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             if (group.model) {
                 group.model->DrawInstancing(instanceIndex);
                 // メッシュ描画
+            } else if (group.primitive_->GetMesh()) {
+                group.primitive_->GetMesh()->DrawInstancing(instanceIndex);
+            }
+        }
+    }
+}
+
+///============================================================
+/// スクリーン座標系パーティクル描画
+///============================================================
+void ParticleManager::DrawScreenPos() {
+    ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+
+    // スプライトと同じ正射影行列
+    Matrix4x4 matProj = MakeOrthographicMatrix(
+        0.0f, 0.0f,
+        float(WinApp::kWindowWidth), float(WinApp::kWindowHeight),
+        0.0f, 100.0f);
+    Matrix4x4 matView = MakeIdentity4x4();
+
+    for (auto& groupPair : particleGroups_) {
+        ParticleGroup& group           = groupPair.second;
+        if (!group.param.isScreenPos) {
+            continue;
+        }
+        std::list<Particle>& particles = group.particles;
+        ParticleFprGPU* instancingData = group.instancingData;
+
+        uint32_t instanceIndex = 0;
+
+        for (auto it = particles.begin(); it != particles.end();) {
+            if (it->currentTime_ >= it->lifeTime_) {
+                it = particles.erase(it);
+                continue;
+            }
+            if (instanceIndex >= group.currentNum) {
+                break;
+            }
+
+            instancingData[instanceIndex].World                 = it->worldTransform_->matWorld_;
+            instancingData[instanceIndex].WVP                   = it->worldTransform_->matWorld_ * matView * matProj;
+            instancingData[instanceIndex].WorldInverseTranspose = Inverse(Transpose(it->worldTransform_->matWorld_));
+
+            AlphaAdapt(instancingData[instanceIndex], *it, group);
+
+            instancingData[instanceIndex].UVTransform = MakeAffineMatrix(it->uvInfo_.scale, it->uvInfo_.rotate, it->uvInfo_.pos);
+            instancingData[instanceIndex].isFlipX = it->uvInfo_.isFlipX ? 1u : 0u;
+            instancingData[instanceIndex].isFlipY = it->uvInfo_.isFlipY ? 1u : 0u;
+
+            if (it->isAdaptDissolveEasing && it->dissolveThresholdData_) {
+                instancingData[instanceIndex].dissolveThreshold = *it->dissolveThresholdData_;
+            } else {
+                instancingData[instanceIndex].dissolveThreshold = 1.0f;
+            }
+
+            ++instanceIndex;
+            ++it;
+        }
+
+        if (instanceIndex > 0) {
+            PipelineManager::GetInstance()->PreDraw(PipelineType::Particle, commandList);
+            PipelineManager::GetInstance()->PreBlendSet(PipelineType::Particle, commandList, group.param.blendMode);
+
+            group.material.SetCommandList(commandList);
+            commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(ParticleRootParameter::ParticleData), pSrvManager_->GetGPUDescriptorHandle(group.srvIndex));
+            commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(ParticleRootParameter::Texture), TextureManager::GetInstance()->GetTextureHandle(group.textureHandle));
+
+            uint32_t dTexHandle = (group.dissolveTextureHandle != 0) ? group.dissolveTextureHandle : group.textureHandle;
+            commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(ParticleRootParameter::DissolveTexture), TextureManager::GetInstance()->GetTextureHandle(dTexHandle));
+
+            if (group.model) {
+                group.model->DrawInstancing(instanceIndex);
             } else if (group.primitive_->GetMesh()) {
                 group.primitive_->GetMesh()->DrawInstancing(instanceIndex);
             }
