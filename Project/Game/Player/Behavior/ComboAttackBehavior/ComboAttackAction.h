@@ -54,7 +54,10 @@ private:
 
     // 移動経路上の最も手前にいる敵の目の前の座標を返す
     // 経路上に敵がいなければ defaultTarget をそのまま返す
-    Vector3 CalcStopBeforeEnemyTarget(const Vector3& start, const Vector3& defaultTarget) const;
+    // outFoundEnemyPos が非nullなら、見つかった敵のワールド座標を書き込む
+    Vector3 CalcStopBeforeEnemyTarget(
+        const Vector3& start, const Vector3& defaultTarget,
+        Vector3* outFoundEnemyPos = nullptr) const;
 
 private:
     Order order_;

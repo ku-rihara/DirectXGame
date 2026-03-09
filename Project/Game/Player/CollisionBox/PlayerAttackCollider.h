@@ -46,6 +46,10 @@ private:
     Vector3 offset_;
     float sphereRad_;
 
+    // ヒットした敵の座標（ポインタは持たない）
+    Vector3 hitTargetPos_  = {};
+    bool    hasHitTarget_  = false;
+
     // time
     float adaptTimer_;
     float loopWaitTimer_;
@@ -74,6 +78,8 @@ public:
     const bool& GetIsFinish() const { return isFinish_; }
     const KetaEngine::WorldTransform* GetPlayerTransform() const { return baseTransform_; }
     const bool& GetHasHitEnemy() const { return hasHitEnemy_; }
+    bool            GetHasHitTarget() const  { return hasHitTarget_; }
+    const Vector3&  GetHitTargetPos() const  { return hitTargetPos_; }
 
     void SetIsAbleCollision(const bool& is) { isAbleCollision_ = is; }
     void SetAttackPower(float atkPower) { attackPower_ = atkPower; }

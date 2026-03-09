@@ -235,6 +235,7 @@ public:
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
     void SetIsIgnoreUnlockState(bool isIgnore) { isIgnoreUnlockState_ = isIgnore; }
+    void SetObjectiveAngle(float angle) { objectiveAngle_ = angle; }
 
     AutoComboQueue& GetAutoComboQueue() { return autoComboQueue_; }
 

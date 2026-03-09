@@ -116,9 +116,11 @@ void PlayerAttackCollider::AttackStart(const PlayerComboAttackData* comboAttackD
     currentLoopCount_ = 0;
     loopWaitTimer_    = 0.0f;
     isInLoopWait_     = false;
-    isFinish_         = false;
-    isHit_            = false;
-    hasHitEnemy_      = false;
+    isFinish_      = false;
+    isHit_         = false;
+    hasHitEnemy_   = false;
+    hasHitTarget_  = false;
+    hitTargetPos_  = {};
 
     // サイズセット
     sphereRad_ = collisionParam.sphereRad;
@@ -136,10 +138,14 @@ void PlayerAttackCollider::UpdateOffset() {
 }
 
 void PlayerAttackCollider::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-    if (dynamic_cast<BaseEnemy*>(other)) {
-
-        isHit_       = true;
-        hasHitEnemy_ = true;
+    if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+        isHit_        = true;
+        hasHitEnemy_  = true;
+        // 最初にヒットした敵の座標を記録し、毎フレーム更新する
+        if (!hasHitTarget_) {
+            hasHitTarget_ = true;
+        }
+        hitTargetPos_ = enemy->GetCollisionPos();
     }
 }
 

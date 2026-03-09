@@ -170,8 +170,8 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
         float enemyScale = enemy->GetCollisionRadius();
      
         // 押し出す距離の計算
-        float pushDistanceX = (enemyScale + enemyScale) / 2.0f + 0.5f;
-        float pushDistanceZ = (enemyScale + enemyScale) / 2.0f + 0.5f;
+        float pushDistanceX = (enemyScale + enemyScale) / 2.0f + 1.5f;
+        float pushDistanceZ = (enemyScale + enemyScale) / 2.0f + 1.5f;
 
         // 実際の押し戻し距離を計算
         float pushAmountX = pushDistanceX - std::abs(delta.x);
@@ -217,7 +217,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 void BaseEnemy::MoveToLimit() {
 
     // フィールドの中心とスケールを取得
-    Vector3 fieldCenter = {0.0f, 0.0f, 0.0f}; // フィールド中心
+    Vector3 fieldCenter = Vector3::ZeroVector(); // フィールド中心
     Vector3 fieldScale  = Field::baseScale_; // フィールドのスケール
 
     // プレイヤーのスケールを考慮した半径

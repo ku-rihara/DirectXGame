@@ -1,4 +1,5 @@
 #include "ComboAttackAction.h"
+#include <cmath>
 // Behavior
 #include "ComboAttackRoot.h"
 // Frame
@@ -146,6 +147,15 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
         hasHitEnemy_ = true;
     }
 
+    // ヒットした敵の方向を向き続ける
+    if (pCollisionInfo_->GetHasHitTarget()) {
+        Vector3 dir = pCollisionInfo_->GetHitTargetPos() - pOwner_->GetWorldPosition();
+        if (dir.x != 0.0f || dir.z != 0.0f) {
+            pOwner_->SetObjectiveAngle(std::atan2(dir.x, dir.z));
+        }
+        pOwner_->AdaptRotate();
+    }
+
     // 演出更新
     if (attackRendition_) {
         attackRendition_->Update(atkSpeed);
@@ -160,6 +170,14 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
 void ComboAttackAction::UpdateWait(float atkSpeed) {
 
     AttackCancel();
+
+    // ヒットした敵の方向を向き続ける
+    if (pCollisionInfo_->GetHasHitTarget()) {
+        Vector3 dir = pCollisionInfo_->GetHitTargetPos() - pOwner_->GetWorldPosition();
+        if (dir.x != 0.0f || dir.z != 0.0f) {
+            pOwner_->SetObjectiveAngle(std::atan2(dir.x, dir.z));
+        }
+    }
 
     pOwner_->AdaptRotate();
     waitTime_ += atkSpeed;
@@ -397,7 +415,8 @@ bool ComboAttackAction::IsAttackUnlock(const PlayerComboAttackData& data) const 
 }
 
 Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
-    const Vector3& start, const Vector3& defaultTarget) const {
+    const Vector3& start, const Vector3& defaultTarget,
+    Vector3* outFoundEnemyPos) const {
 
     EnemyManager* enemyManager = attackData_->GetEnemyManager();
     if (!enemyManager) {
@@ -422,8 +441,9 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
     // 敵コリジョン前面から何ユニット手前で止まるか
     const float kStopMargin = 1.5f;
 
-    float closestDot = moveDist; // 初期値 = 移動距離
-    bool  found      = false;
+    float         closestDot      = moveDist; // 初期値 = 移動距離
+    bool          found           = false;
+    Vector3       foundEnemyPos   = {};
 
     for (const auto& enemy : enemies) {
         if (!enemy) continue;
@@ -447,13 +467,18 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
 
         // より手前にいる敵を優先
         if (dot < closestDot) {
-            closestDot = dot;
-            found      = true;
+            closestDot    = dot;
+            found         = true;
+            foundEnemyPos = enemy->GetWorldPosition();
         }
     }
 
     if (!found) {
         return defaultTarget;
+    }
+
+    if (outFoundEnemyPos) {
+        *outFoundEnemyPos = foundEnemyPos;
     }
 
     // 敵の手前 kStopMargin 分の位置を目標にする
