@@ -5,7 +5,7 @@
 #include "EnemyDamageReactionRoot.h"
 #include "EnemyDeath.h"
 #include "Frame/Frame.h"
-#include "Player/CollisionBox/PlayerAttackCollisionBox.h"
+#include "Player/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
 #include <cmath>
@@ -13,7 +13,7 @@
 EnemyDamageReactionSlammed::EnemyDamageReactionSlammed(
     BaseEnemy* boss,
     EnemyDamageReactionData* reactionData,
-    const PlayerAttackCollisionBox* playerCollisionInfo)
+    const PlayerAttackCollider* playerCollisionInfo)
     : BaseEnemyDamageReaction("EnemyDamageReactionSlammed", boss) {
 
     pReactionData_        = reactionData;

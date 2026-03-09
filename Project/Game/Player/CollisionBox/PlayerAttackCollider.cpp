@@ -1,4 +1,4 @@
-#include "PlayerAttackCollisionBox.h"
+#include "PlayerAttackCollider.h"
 // ComboData
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 // enemy
@@ -8,17 +8,17 @@
 // imGui
 #include <imgui.h>
 
-void PlayerAttackCollisionBox::Init() {
+void PlayerAttackCollider::Init() {
     SetIsAbleCollision(false);
     currentLoopCount_ = 0;
     isInLoopWait_     = false;
     loopWaitTimer_    = 0.0f;
-    BaseAABBCollisionBox::Init();
+    transform_.Init();
 }
 
-void PlayerAttackCollisionBox::Update() {
+void PlayerAttackCollider::Update() {
     if (!comboAttackData_) {
-        BaseAABBCollisionBox::Update();
+        AdaptCollision();
         return;
     }
 
@@ -28,10 +28,16 @@ void PlayerAttackCollisionBox::Update() {
     }
 
     // baseの更新
-    BaseAABBCollisionBox::Update();
+    AdaptCollision();
 }
 
-void PlayerAttackCollisionBox::TimerUpdate(float timeSpeed) {
+void PlayerAttackCollider::AdaptCollision() {
+    SetCollisionRadius(sphereRad_);
+    SetIsAdaptCollision(isAbleCollision_);
+    transform_.UpdateMatrix();
+}
+
+void PlayerAttackCollider::TimerUpdate(float timeSpeed) {
     if (!comboAttackData_) {
         return;
     }
@@ -66,7 +72,7 @@ void PlayerAttackCollisionBox::TimerUpdate(float timeSpeed) {
     }
 }
 
-void PlayerAttackCollisionBox::LoopWaiting(float timeSpeed) {
+void PlayerAttackCollider::LoopWaiting(float timeSpeed) {
     // ループ待機中の処理
     if (!isInLoopWait_) {
         return;
@@ -87,7 +93,7 @@ void PlayerAttackCollisionBox::LoopWaiting(float timeSpeed) {
     LoopStart();
 }
 
-void PlayerAttackCollisionBox::LoopStart() {
+void PlayerAttackCollider::LoopStart() {
     // コリジョンパラメータ取得
     const auto& collisionParam = comboAttackData_->GetAttackParam().collisionParam;
 
@@ -99,7 +105,7 @@ void PlayerAttackCollisionBox::LoopStart() {
     UpdateOffset();
 }
 
-void PlayerAttackCollisionBox::AttackStart(const PlayerComboAttackData* comboAttackData) {
+void PlayerAttackCollider::AttackStart(const PlayerComboAttackData* comboAttackData) {
     comboAttackData_ = comboAttackData;
 
     // collision情報を取得
@@ -115,7 +121,7 @@ void PlayerAttackCollisionBox::AttackStart(const PlayerComboAttackData* comboAtt
     hasHitEnemy_      = false;
 
     // サイズセット
-    SetSize(collisionParam.size);
+    sphereRad_ = collisionParam.sphereRad;
 
     // collision位置Offset
     UpdateOffset();
@@ -124,27 +130,29 @@ void PlayerAttackCollisionBox::AttackStart(const PlayerComboAttackData* comboAtt
     SetIsAbleCollision(true);
 }
 
-void PlayerAttackCollisionBox::UpdateOffset() {
+void PlayerAttackCollider::UpdateOffset() {
     Vector3 offSetValue = comboAttackData_->GetAttackParam().collisionParam.offsetPos;
-    SetOffset(offSetValue);
+    offset_             = offSetValue;
 }
 
-void PlayerAttackCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
+void PlayerAttackCollider::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     if (dynamic_cast<BaseEnemy*>(other)) {
-        
+
         isHit_       = true;
         hasHitEnemy_ = true;
     }
 }
 
-void PlayerAttackCollisionBox::SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform) {
+void PlayerAttackCollider::SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform) {
     baseTransform_ = playerBaseTransform;
 }
 
-Vector3 PlayerAttackCollisionBox::GetCollisionPos() const {
-    return BaseAABBCollisionBox::GetCollisionPos();
+Vector3 PlayerAttackCollider::GetCollisionPos() const {
+    // ワールド座標に変換
+    Vector3 worldPos = TransformMatrix(offset_, transform_.matWorld_);
+    return worldPos;
 }
 
-void PlayerAttackCollisionBox::SetParentTransform(KetaEngine::WorldTransform* transform) {
-    BaseAABBCollisionBox::SetParentTransform(transform);
+void PlayerAttackCollider::SetParentTransform(KetaEngine::WorldTransform* transform) {
+    transform_.parent_ = transform;
 }

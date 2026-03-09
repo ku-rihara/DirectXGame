@@ -1114,7 +1114,7 @@
     <ClCompile Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.cpp">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\CollisionBox\PlayerAttackCollisionBox.cpp">
+    <ClCompile Include="Game\Player\CollisionBox\PlayerAttackCollider.cpp">
       <Filter>Game\Player\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp">
@@ -1996,7 +1996,7 @@
     <ClInclude Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.h">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\CollisionBox\PlayerAttackCollisionBox.h">
+    <ClInclude Include="Game\Player\CollisionBox\PlayerAttackCollider.h">
       <Filter>Game\Player\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h">
@@ -2375,6 +2375,9 @@
     <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ConditionUIData.cpp">
       <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Collider\SphereCollider.cpp">
+      <Filter>Engine\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2475,6 +2478,9 @@
     </ClInclude>
     <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ConditionUIData.h">
       <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\SphereCollider.h">
+      <Filter>Engine\Collider</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

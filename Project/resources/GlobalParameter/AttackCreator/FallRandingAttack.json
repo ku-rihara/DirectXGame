@@ -27,6 +27,7 @@
         "CameraAction_OnHit_StartTiming": 0.0,
         "CameraAction_StartTiming": 0.0,
         "CameraAction_TriggerByHit": false,
+        "CollisionRad": 7.0,
         "ComboBranchCount": 1,
         "Condition": 0,
         "HitStop_FileName": "None",

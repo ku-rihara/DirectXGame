@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-class PlayerAttackCollisionBox;
+class PlayerAttackCollider;
 
 /// <summary>
 /// データ駆動型のコンボ攻撃クラス
@@ -59,7 +59,7 @@ private:
 private:
     Order order_;
     PlayerComboAttackData* attackData_        = nullptr;
-    PlayerAttackCollisionBox* pCollisionInfo_ = nullptr;
+    PlayerAttackCollider* pCollisionInfo_ = nullptr;
 
     // 次の攻撃候補リスト
     std::vector<NextAttackCandidate> nextAttackCandidates_;

@@ -63,6 +63,7 @@
     <ClCompile Include="Engine\Collider\CollisionManager.cpp" />
     <ClCompile Include="Engine\Collider\OBBCollider.cpp" />
     <ClCompile Include="Engine\Collider\SpatialGrid\SpatialGrid.cpp" />
+    <ClCompile Include="Engine\Collider\SphereCollider.cpp" />
     <ClCompile Include="Engine\Core\EngineCore.cpp" />
     <ClCompile Include="Engine\Core\KTFramework.cpp" />
     <ClCompile Include="Engine\Core\KTGame.cpp" />
@@ -262,7 +263,7 @@
     <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerSpawn.cpp" />
     <ClCompile Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.cpp" />
     <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitlePlayerBehavior.cpp" />
-    <ClCompile Include="Game\Player\CollisionBox\PlayerAttackCollisionBox.cpp" />
+    <ClCompile Include="Game\Player\CollisionBox\PlayerAttackCollider.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\ComboBranchParameter.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp" />
@@ -379,6 +380,7 @@
     <ClInclude Include="Engine\Collider\CollisionManager.h" />
     <ClInclude Include="Engine\Collider\OBBCollider.h" />
     <ClInclude Include="Engine\Collider\SpatialGrid\SpatialGrid.h" />
+    <ClInclude Include="Engine\Collider\SphereCollider.h" />
     <ClInclude Include="Engine\Core\EngineCore.h" />
     <ClInclude Include="Engine\Core\KTFramework.h" />
     <ClInclude Include="Engine\Core\KTGame.h" />
@@ -592,7 +594,7 @@
     <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerSpawn.h" />
     <ClInclude Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.h" />
     <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitlePlayerBehavior.h" />
-    <ClInclude Include="Game\Player\CollisionBox\PlayerAttackCollisionBox.h" />
+    <ClInclude Include="Game\Player\CollisionBox\PlayerAttackCollider.h" />
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h" />

@@ -1,10 +1,10 @@
 #pragma once
 
 // BaseCollisionBox
-#include "CollisionBox/BaseAABBCollisionBox.h"
+#include "Collider/SphereCollider.h"
 // Combo
 #include "Combo/Combo.h"
-//Parameter
+// Parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // std
 #include <array>
@@ -14,16 +14,15 @@ class PlayerComboAttackData;
 /// <summary>
 /// プレイヤー攻撃の制御クラス
 /// </summary>
-class PlayerAttackCollisionBox : public BaseAABBCollisionBox {
-
+class PlayerAttackCollider : public KetaEngine::SphereCollider {
 
 public:
-    PlayerAttackCollisionBox()           = default;
-    ~PlayerAttackCollisionBox() override = default;
+    PlayerAttackCollider()           = default;
+    ~PlayerAttackCollider() override = default;
 
     // 初期化、更新、描画
     void Init() override;
-    void Update() override;
+    void Update();
     void TimerUpdate(float timeSpeed);
 
     void UpdateOffset();
@@ -35,12 +34,17 @@ public:
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
 private:
+    void AdaptCollision();
     void LoopWaiting(float timeSpeed);
     void LoopStart();
-  
+
 private:
     const KetaEngine::WorldTransform* baseTransform_ = nullptr;
-    const PlayerComboAttackData* comboAttackData_ = nullptr;
+    const PlayerComboAttackData* comboAttackData_    = nullptr;
+
+    KetaEngine::WorldTransform transform_;
+    Vector3 offset_;
+    float sphereRad_;
 
     // time
     float adaptTimer_;
@@ -58,6 +62,8 @@ private:
     bool isHit_        = false;
     bool isFinish_     = false;
 
+    bool isAbleCollision_ = false;
+
 public:
     Vector3 GetCollisionPos() const override;
     const PlayerComboAttackData* GetComboAttackData() const { return comboAttackData_; }
@@ -67,10 +73,14 @@ public:
     const bool& GetIsHit() const { return isHit_; }
     const bool& GetIsFinish() const { return isFinish_; }
     const KetaEngine::WorldTransform* GetPlayerTransform() const { return baseTransform_; }
-   const bool& GetHasHitEnemy() const { return hasHitEnemy_; }
+    const bool& GetHasHitEnemy() const { return hasHitEnemy_; }
 
+    void SetIsAbleCollision(const bool& is) { isAbleCollision_ = is; }
     void SetAttackPower(float atkPower) { attackPower_ = atkPower; }
     void SetIsHit(const bool& is) { isHit_ = is; }
     void SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform);
-    void SetParentTransform(KetaEngine::WorldTransform* transform) override;
+    void SetParentTransform(KetaEngine::WorldTransform* transform);
+    void SetSphereRad(float radius) { sphereRad_ = radius; }
+    void SetPosition(const Vector3& position) { transform_.translation_ = position; }
+   
 };

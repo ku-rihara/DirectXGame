@@ -2,7 +2,7 @@
 
 #include "BaseEnemyDamageReaction.h"
 
-class PlayerAttackCollisionBox;
+class PlayerAttackCollider;
 class EnemyDamageReactionController;
 class EnemyDamageReactionData;
 class SideRope;
@@ -20,7 +20,7 @@ public:
     /// ダメージリアクションを再生
     /// </summary>
     /// <param name="playerCollisionInfo">プレイヤーの攻撃情報</param>
-    void SelectDamageActionBehaviorByAttack(const PlayerAttackCollisionBox* playerCollisionInfo);
+    void SelectDamageActionBehaviorByAttack(const PlayerAttackCollider* playerCollisionInfo);
 
 private:
     /// <summary>
@@ -42,6 +42,6 @@ private:
     void PlayDamageParticleEffect(EnemyDamageReactionData* reactionData);
 
 private:
-    const PlayerAttackCollisionBox* pPlayerCollisionInfo_    = nullptr;
+    const PlayerAttackCollider* pPlayerCollisionInfo_    = nullptr;
     EnemyDamageReactionController* pReactionController_ = nullptr;
 };

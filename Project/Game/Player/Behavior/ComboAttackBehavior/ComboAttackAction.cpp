@@ -6,7 +6,7 @@
 // Input
 #include "input/Input.h"
 // Player
-#include "Player/CollisionBox/PlayerAttackCollisionBox.h"
+#include "Player/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
 // ActionBehavior
@@ -339,7 +339,7 @@ void ComboAttackAction::SetupCollision() {
     pCollisionInfo_->Update();
 
     // コリジョンサイズ設定
-    pOwner_->GetPlayerCollisionInfo()->SetSize(collisionParam.size);
+    pOwner_->GetPlayerCollisionInfo()->SetSphereRad(collisionParam.sphereRad);
 
     // コリジョンを有効化
     pOwner_->GetPlayerCollisionInfo()->SetIsAbleCollision(true);

@@ -1,5 +1,6 @@
 #include "Box.h"
 #include <algorithm>
+#include <cmath>
 
 // 当たり判定
 bool IsCollision(const AABB& aabb, const Vector3& point) {
@@ -108,4 +109,48 @@ bool IsCollision(const OBB& obb, const AABB& aabb) {
         }
     }
     return true; // 衝突している
+}
+
+// Sphere同士の当たり判定
+bool IsCollision(const Sphere& a, const Sphere& b) {
+    float dx = a.center.x - b.center.x;
+    float dy = a.center.y - b.center.y;
+    float dz = a.center.z - b.center.z;
+    float distSq = dx * dx + dy * dy + dz * dz;
+    float radiusSum = a.radius + b.radius;
+    return distSq <= radiusSum * radiusSum;
+}
+
+// SphereとAABBの当たり判定
+bool IsCollision(const Sphere& sphere, const AABB& aabb) {
+    // AABBの最近傍点を求める
+    float cx = (std::max)(aabb.min.x, (std::min)(sphere.center.x, aabb.max.x));
+    float cy = (std::max)(aabb.min.y, (std::min)(sphere.center.y, aabb.max.y));
+    float cz = (std::max)(aabb.min.z, (std::min)(sphere.center.z, aabb.max.z));
+
+    float dx = sphere.center.x - cx;
+    float dy = sphere.center.y - cy;
+    float dz = sphere.center.z - cz;
+    return (dx * dx + dy * dy + dz * dz) <= sphere.radius * sphere.radius;
+}
+
+// SphereとOBBの当たり判定
+bool IsCollision(const Sphere& sphere, const OBB& obb) {
+    // 球の中心をOBBのローカル空間に射影し、最近傍点との距離を求める
+    Vector3 d = sphere.center - obb.center;
+    float sqDist = 0.0f;
+
+    float axes[3] = { obb.size.x, obb.size.y, obb.size.z };
+    for (int i = 0; i < 3; i++) {
+        float dist = d.Dot(obb.orientations[i]);
+        float excess = 0.0f;
+        if (dist < -axes[i]) {
+            excess = dist + axes[i];
+        } else if (dist > axes[i]) {
+            excess = dist - axes[i];
+        }
+        sqDist += excess * excess;
+    }
+
+    return sqDist <= sphere.radius * sphere.radius;
 }

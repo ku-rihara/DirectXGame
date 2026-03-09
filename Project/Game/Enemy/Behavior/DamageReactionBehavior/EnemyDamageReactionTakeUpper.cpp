@@ -1,7 +1,7 @@
 #include "EnemyDamageReactionTakeUpper.h"
 #include "EnemyDamageReactionRoot.h"
 #include "EnemyDeath.h"
-#include "Player/CollisionBox/PlayerAttackCollisionBox.h"
+#include "Player/CollisionBox/PlayerAttackCollider.h"
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/EnemyManager.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionController.h"
@@ -13,7 +13,7 @@
 EnemyDamageReactionTakeUpper::EnemyDamageReactionTakeUpper(
     BaseEnemy* boss,
     EnemyDamageReactionData* reactionData,
-    const PlayerAttackCollisionBox* playerCollisionInfo)
+    const PlayerAttackCollider* playerCollisionInfo)
     : BaseEnemyDamageReaction("EnemyDamageReactionTakeUpper", boss) {
 
     pReactionData_ = reactionData;

@@ -22,8 +22,9 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    // conditionをIntから適応
-    attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
+    // enumのタイプををIntから適応
+    attackParam_.triggerParam.condition      = static_cast<TriggerCondition>(triggerConditionInt_);
+    attackParam_.collisionParam.followTarget = static_cast<CollisionFollowTarget>(collisionFollowTargetInt_);
 
     // 解放フラグ初期化
     attackParam_.isUnlocked = (attackParam_.ableDefeatLevel == 0);
@@ -114,7 +115,7 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "isMotionOnly", &attackParam_.isMotionOnly);
 
     // CollisionParam
-    globalParameter_->Regist(groupName_, "collisionSize", &attackParam_.collisionParam.size);
+    globalParameter_->Regist(groupName_, "CollisionRad", &attackParam_.collisionParam.sphereRad);
     globalParameter_->Regist(groupName_, "collisionOffsetPos", &attackParam_.collisionParam.offsetPos);
     globalParameter_->Regist(groupName_, "collisionStartTime", &attackParam_.collisionParam.startTime);
     globalParameter_->Regist(groupName_, "adaptTime", &attackParam_.collisionParam.adaptTime);
@@ -177,7 +178,7 @@ void PlayerComboAttackData::DrawCollisionParamUI() {
 
     ImGui::SeparatorText("コライダーパラメータ");
 
-    ImGui::DragFloat3("サイズ", &collisionParam.size.x, 0.01f);
+    ImGui::DragFloat("当たり判定の半径", &collisionParam.sphereRad, 0.01f);
     ImGui::DragFloat3("オフセット位置", &collisionParam.offsetPos.x, 0.01f);
     ImGui::InputInt("ループ回数", &collisionParam.loopNum);
 
@@ -204,7 +205,6 @@ void PlayerComboAttackData::DrawMoveParamUI() {
     ImGui::DragFloat3("移動量", &moveParam.value.x, 0.01f);
     ImGui::DragFloat("終了タイムオフセット", &moveParam.finishTimeOffset, 0.01f);
     ImGui::Checkbox("敵の前で止まる", &moveParam.isStopBeforeEnemy);
-   
 
     // Easing Type
     ImGuiEasingTypeSelector("イージング", moveParam.easeType);
@@ -242,7 +242,7 @@ void PlayerComboAttackData::DrawFlagsParamUI() {
 
     ImGui::Checkbox("モーションのみ有効", &attackParam_.isMotionOnly);
     ImGui::Checkbox("自動で次の攻撃に進む", &attackParam_.timingParam.isAutoAdvance);
- 
+
     ImGui::SeparatorText("解放設定");
     ImGui::InputInt("解放に必要なレベル", &attackParam_.ableDefeatLevel);
     if (attackParam_.ableDefeatLevel < 0) {

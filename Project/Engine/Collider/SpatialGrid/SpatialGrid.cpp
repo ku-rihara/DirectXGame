@@ -2,6 +2,7 @@
 #include "Collider/AABBCollider.h"
 #include "Collider/BaseCollider.h"
 #include "Collider/OBBCollider.h"
+#include "Collider/SphereCollider.h"
 #include <algorithm>
 #include <cmath>
 
@@ -25,11 +26,14 @@ void SpatialGrid::Insert(BaseCollider* collider) {
     Vector3 pos  = collider->GetCollisionPos();
     Vector3 size = {1.0f, 1.0f, 1.0f};
 
-    // AABBまたはOBBの場合、実際のサイズを取得
+    // AABBまたはOBBまたはSphereの場合、実際のサイズを取得
     if (auto* aabb = dynamic_cast<AABBCollider*>(collider)) {
         size = aabb->GetCollisonScale();
     } else if (auto* obb = dynamic_cast<OBBCollider*>(collider)) {
         size = obb->GetOBB().size;
+    } else if (auto* sphere = dynamic_cast<SphereCollider*>(collider)) {
+        float r = sphere->GetSphere().radius;
+        size = { r, r, r };
     }
 
     // コライダーが占有する範囲を計算

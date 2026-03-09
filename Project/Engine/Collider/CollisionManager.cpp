@@ -5,6 +5,7 @@ using namespace KetaEngine;
 #include "Box.h"
 #include "Collider/AABBCollider.h"
 #include "Collider/OBBCollider.h"
+#include "Collider/SphereCollider.h"
 #include <imgui.h>
 
 // 静的メンバ変数の初期化
@@ -26,6 +27,9 @@ void CollisionManager::AddCollider(BaseCollider* collider) {
         baseColliders_.push_back(collider);
     } else if (OBBCollider* obbCollider = dynamic_cast<OBBCollider*>(collider)) {
         obbCollider->Init();
+        baseColliders_.push_back(collider);
+    } else if (SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(collider)) {
+        sphereCollider->Init();
         baseColliders_.push_back(collider);
     }
 }
@@ -88,18 +92,30 @@ void CollisionManager::CheckCollisionPair(BaseCollider* colliderA, BaseCollider*
 
     bool collisionDetected = false;
 
-    // dynamic_cast を使用して AABB と OBB の判定
+    // dynamic_cast を使用して AABB / OBB / Sphere の判定
     if (auto* aabbA = dynamic_cast<AABBCollider*>(colliderA)) {
         if (auto* aabbB = dynamic_cast<AABBCollider*>(colliderB)) {
             collisionDetected = IsCollision(aabbA->GetAABB(), aabbB->GetAABB());
         } else if (auto* obbB = dynamic_cast<OBBCollider*>(colliderB)) {
             collisionDetected = IsCollision(obbB->GetOBB(), aabbA->GetAABB());
+        } else if (auto* sphereB = dynamic_cast<SphereCollider*>(colliderB)) {
+            collisionDetected = IsCollision(sphereB->GetSphere(), aabbA->GetAABB());
         }
     } else if (auto* obbA = dynamic_cast<OBBCollider*>(colliderA)) {
         if (auto* obbB = dynamic_cast<OBBCollider*>(colliderB)) {
             collisionDetected = IsCollision(obbA->GetOBB(), obbB->GetOBB());
         } else if (auto* aabbB = dynamic_cast<AABBCollider*>(colliderB)) {
             collisionDetected = IsCollision(obbA->GetOBB(), aabbB->GetAABB());
+        } else if (auto* sphereB = dynamic_cast<SphereCollider*>(colliderB)) {
+            collisionDetected = IsCollision(sphereB->GetSphere(), obbA->GetOBB());
+        }
+    } else if (auto* sphereA = dynamic_cast<SphereCollider*>(colliderA)) {
+        if (auto* sphereB = dynamic_cast<SphereCollider*>(colliderB)) {
+            collisionDetected = IsCollision(sphereA->GetSphere(), sphereB->GetSphere());
+        } else if (auto* aabbB = dynamic_cast<AABBCollider*>(colliderB)) {
+            collisionDetected = IsCollision(sphereA->GetSphere(), aabbB->GetAABB());
+        } else if (auto* obbB = dynamic_cast<OBBCollider*>(colliderB)) {
+            collisionDetected = IsCollision(sphereA->GetSphere(), obbB->GetOBB());
         }
     }
 

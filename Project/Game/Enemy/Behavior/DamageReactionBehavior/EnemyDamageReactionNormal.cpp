@@ -1,6 +1,6 @@
 #include "EnemyDamageReactionNormal.h"
 #include "EnemyDamageReactionRoot.h"
-#include "Player/CollisionBox/PlayerAttackCollisionBox.h"
+#include "Player/CollisionBox/PlayerAttackCollider.h"
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/EnemyManager.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionController.h"
@@ -11,7 +11,7 @@
 EnemyDamageReactionNormal::EnemyDamageReactionNormal(
     BaseEnemy* boss,
     EnemyDamageReactionData* reactionData,
-    const PlayerAttackCollisionBox* playerCollisionInfo)
+    const PlayerAttackCollider* playerCollisionInfo)
     : BaseEnemyDamageReaction("EnemyDamageReactionNormal", boss) {
 
     pReactionData_ = reactionData;

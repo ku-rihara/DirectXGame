@@ -33,6 +33,12 @@ public:
         JUSTACTION // ジャスト回避とかのアクション
     };
 
+    enum class CollisionFollowTarget {
+        PLAYER,
+        LEFTHAND,
+        RIGHTHAND,
+    };
+
 public:
     // 移動パラメータ
     struct MoveParam {
@@ -43,12 +49,13 @@ public:
         bool isAbleInputMoving;
         bool isPositionYSelect;
         float finishTimeOffset;
-        bool isStopBeforeEnemy = false; // trueのとき、移動先に敵がいたら目の前で止まる
+        bool isStopBeforeEnemy = false;
     };
 
     // コリジョンパラメータ
     struct CollisionParam {
-        Vector3 size;
+        CollisionFollowTarget followTarget = CollisionFollowTarget::PLAYER;
+        float sphereRad;
         Vector3 offsetPos;
         float startTime;
         float adaptTime;
@@ -153,6 +160,7 @@ private:
     bool useTimeline_  = true;
 
     // enum class Int
+    int32_t collisionFollowTargetInt_;
     int32_t triggerConditionInt_;
     int32_t branchCount_ = 0;
 

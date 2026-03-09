@@ -5,7 +5,7 @@
 #include "Rendition/EnemyDamageRendition.h"
 #include "Vector3.h"
 
-class PlayerAttackCollisionBox;
+class PlayerAttackCollider;
 
 /// <summary>
 /// Normal ダメージリアクション
@@ -16,7 +16,7 @@ public:
     EnemyDamageReactionNormal(
         BaseEnemy* boss,
         EnemyDamageReactionData* reactionData,
-        const PlayerAttackCollisionBox* playerCollisionInfo);
+        const PlayerAttackCollider* playerCollisionInfo);
     ~EnemyDamageReactionNormal() override;
 
     void Update(float deltaTime) override;
@@ -30,7 +30,7 @@ private:
 
 private:
     EnemyDamageReactionData* pReactionData_ = nullptr;
-    const PlayerAttackCollisionBox* pPlayerCollisionInfo_ = nullptr;
+    const PlayerAttackCollider* pPlayerCollisionInfo_ = nullptr;
 
     // タイマー
     float reactionTimer_ = 0.0f;

@@ -56,7 +56,7 @@ void Player::Init() {
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.05f;
 
     // Playerの攻撃クラス
-    playerCollisionInfo_ = std::make_unique<PlayerAttackCollisionBox>();
+    playerCollisionInfo_ = std::make_unique<PlayerAttackCollider>();
     playerCollisionInfo_->Init();
     playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
     playerCollisionInfo_->SetParentTransform(&baseTransform_);

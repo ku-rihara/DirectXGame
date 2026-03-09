@@ -11,7 +11,7 @@
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 // Player
-#include "Player/CollisionBox/PlayerAttackCollisionBox.h"
+#include "Player/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
 // DeathTimer
@@ -148,7 +148,7 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    if (PlayerAttackCollisionBox* attackController = dynamic_cast<PlayerAttackCollisionBox*>(other)) {
+    if (PlayerAttackCollider* attackController = dynamic_cast<PlayerAttackCollider*>(other)) {
         // プレイヤーとの攻撃コリジョン判定
         ChangeDamageReactionByPlayerAttack(attackController);
         return;
@@ -255,7 +255,7 @@ void BaseEnemy::MoveToLimit() {
     }
 }
 
-void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerAttackCollisionBox* attackController) {
+void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerAttackCollider* attackController) {
 
     if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
         return;

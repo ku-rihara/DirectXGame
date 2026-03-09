@@ -10,7 +10,7 @@
 // Field
 #include "Field/SideRope/SideRope.h"
 // Player
-#include "Player/CollisionBox/PlayerAttackCollisionBox.h"
+#include "Player/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
 /// data
@@ -38,7 +38,7 @@ void EnemyDamageReactionRoot::Update(float deltaTime) {
 void EnemyDamageReactionRoot::Debug() {
 }
 
-void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerAttackCollisionBox* playerCollisionInfo) {
+void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerAttackCollider* playerCollisionInfo) {
     if (!playerCollisionInfo) {
         return;
     }

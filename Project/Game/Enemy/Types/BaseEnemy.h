@@ -26,7 +26,7 @@ class GameCamera;
 class EnemyManager;
 class Combo;
 class KillCounter;
-class PlayerAttackCollisionBox;
+class PlayerAttackCollider;
 
 /// <summary>
 /// 敵の基底クラス
@@ -208,7 +208,7 @@ private:
     void DamageCollingUpdate(float deltaTime);
 
     // ダメージリアクション変更処理
-    void ChangeDamageReactionByPlayerAttack(PlayerAttackCollisionBox* attackController);
+    void ChangeDamageReactionByPlayerAttack(PlayerAttackCollider* attackController);
 
 private:
     void MoveToLimit();

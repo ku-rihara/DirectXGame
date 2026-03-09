@@ -6,7 +6,7 @@
 #include "Vector3.h"
 #include <functional>
 
-class PlayerAttackCollisionBox;
+class PlayerAttackCollider;
 
 /// <summary>
 /// TakeUpper ダメージリアクション
@@ -24,7 +24,7 @@ public:
     EnemyDamageReactionTakeUpper(
         BaseEnemy* boss,
         EnemyDamageReactionData* reactionData,
-        const PlayerAttackCollisionBox* playerCollisionInfo);
+        const PlayerAttackCollider* playerCollisionInfo);
     ~EnemyDamageReactionTakeUpper() override;
 
     void Update(float deltaTime) override;
@@ -48,7 +48,7 @@ private:
 
 private:
     EnemyDamageReactionData* pReactionData_ = nullptr;
-    const PlayerAttackCollisionBox* pPlayerCollisionInfo_ = nullptr;
+    const PlayerAttackCollider* pPlayerCollisionInfo_ = nullptr;
 
     // フェーズ管理
     std::function<void()> currentPhase_;
