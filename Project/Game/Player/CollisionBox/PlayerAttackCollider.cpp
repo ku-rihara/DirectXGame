@@ -144,7 +144,8 @@ void PlayerAttackCollider::OnCollisionStay([[maybe_unused]] BaseCollider* other)
 }
 
 void PlayerAttackCollider::SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform) {
-    baseTransform_ = playerBaseTransform;
+    baseTransform_     = playerBaseTransform;
+    transform_.parent_ = playerBaseTransform;
 }
 
 Vector3 PlayerAttackCollider::GetCollisionPos() const {
@@ -153,6 +154,3 @@ Vector3 PlayerAttackCollider::GetCollisionPos() const {
     return worldPos;
 }
 
-void PlayerAttackCollider::SetParentTransform(KetaEngine::WorldTransform* transform) {
-    transform_.parent_ = transform;
-}

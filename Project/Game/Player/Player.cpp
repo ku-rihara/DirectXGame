@@ -59,8 +59,7 @@ void Player::Init() {
     playerCollisionInfo_ = std::make_unique<PlayerAttackCollider>();
     playerCollisionInfo_->Init();
     playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
-    playerCollisionInfo_->SetParentTransform(&baseTransform_);
-
+  
     // トランスフォーム初期化
     obj3d_->transform_.Init();
     leftHand_->Init();
@@ -441,16 +440,15 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
         Vector3 delta = baseTransform_.translation_ - enemyPosition;
 
         // スケール取得
-        Vector3 enemyScale = enemy->GetCollisonScale();
+        float enemyScale = enemy->GetCollisionRadius();
         Vector3 myScale    = GetCollisonScale();
 
         // 押し出す距離の計算
-        float pushDistanceX = (enemyScale.x + myScale.x) / 2.0f + 0.1f;
-        float pushDistanceZ = (enemyScale.z + myScale.z) / 2.0f + 0.1f;
-
+        float pushDistanceX = (enemyScale + myScale.x) / 2.0f + 0.1f;
+ 
         // 実際の押し戻し距離を計算
         float pushAmountX = pushDistanceX - std::abs(delta.x);
-        float pushAmountZ = pushDistanceZ - std::abs(delta.z);
+        float pushAmountZ = pushDistanceX - std::abs(delta.z);
 
         // ワープを防ぐために0以下の値を無効化
         pushAmountX = max(0.0f, pushAmountX);

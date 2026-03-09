@@ -76,13 +76,13 @@
         "Vibration_StartTiming": 0.0,
         "Vibration_TriggerByHit": true,
         "ableDefeatLevel": 0,
-        "adaptTime": 0.10000000149011612,
+        "adaptTime": 0.20000000298023224,
         "autoReturnToInitial": true,
         "blowYPower": 0.0,
         "collisionOffsetPos": [
             0.0,
             0.0,
-            2.009999990463257
+            3.819999933242798
         ],
         "collisionSize": [
             5.0,
@@ -91,7 +91,7 @@
         ],
         "collisionStartTime": 0.0,
         "enableFall": false,
-        "finishTimeOffset": 0.0,
+        "finishTimeOffset": 0.01666666753590107,
         "finishWaitTime": 0.20000000298023224,
         "gamePadBottom": 16384,
         "isAbleInputMoving": false,
@@ -103,7 +103,7 @@
         "keyBordBottom": 35,
         "loopNum": 0,
         "loopWaitTime": 0.10000000149011612,
-        "moveEaseTime": 0.1666666716337204,
+        "moveEaseTime": 0.18333333730697632,
         "moveEaseType": 0,
         "moveStartTime": 0.0,
         "moveValue": [

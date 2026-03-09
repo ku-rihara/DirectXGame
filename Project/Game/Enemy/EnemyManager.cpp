@@ -116,7 +116,7 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "basePosY_" + indexString, &parameters_[i].basePosY);
         globalParameter_->Regist(groupName_, "burstTime" + indexString, &parameters_[i].burstTime);
         globalParameter_->Regist(groupName_, "initScale" + indexString, &parameters_[i].baseScale_);
-        globalParameter_->Regist(groupName_, "collisionSize" + indexString, &parameters_[i].collisionSize);
+        globalParameter_->Regist(groupName_, "collisionRad" + indexString, &parameters_[i].collisionRad);
         globalParameter_->Regist(groupName_, "collisionOffset" + indexString, &parameters_[i].collisionOffset);
         globalParameter_->Regist(groupName_, "hpBarPosOffset" + indexString, &parameters_[i].hpBarPosOffset);
 
@@ -139,7 +139,7 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
     ImGui::SeparatorText("基本パラメータ");
     ImGui::DragFloat3("initScale", &parameters_[typeIndex].baseScale_.x, 0.01f);
-    ImGui::DragFloat3("collisionSize", &parameters_[typeIndex].collisionSize.x, 0.1f, 0.1f, 20.0f);
+    ImGui::DragFloat("collisionRad", &parameters_[typeIndex].collisionRad, 0.1f, 0.1f, 20.0f);
     ImGui::DragFloat3("collisionOffset", &parameters_[typeIndex].collisionOffset.x, 0.1f);
     ImGui::DragFloat("basePosY", &parameters_[typeIndex].basePosY, 0.01f);
     ImGui::DragFloat("burstTime", &parameters_[typeIndex].burstTime, 0.01f);

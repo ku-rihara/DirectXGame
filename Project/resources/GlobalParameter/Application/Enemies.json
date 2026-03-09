@@ -66,6 +66,8 @@
             0.5,
             0.0
         ],
+        "collisionRad1": 3.0,
+        "collisionRad2": 3.0,
         "collisionSize1": [
             4.5,
             6.800000190734863,

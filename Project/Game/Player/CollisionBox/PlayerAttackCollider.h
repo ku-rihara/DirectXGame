@@ -79,7 +79,6 @@ public:
     void SetAttackPower(float atkPower) { attackPower_ = atkPower; }
     void SetIsHit(const bool& is) { isHit_ = is; }
     void SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform);
-    void SetParentTransform(KetaEngine::WorldTransform* transform);
     void SetSphereRad(float radius) { sphereRad_ = radius; }
     void SetPosition(const Vector3& position) { transform_.translation_ = position; }
    

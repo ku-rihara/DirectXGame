@@ -11,7 +11,7 @@
 #include "../Behavior/DamageReactionBehavior/BaseEnemyDamageReaction.h"
 // Collision
 #include "../CollisionBox/EnemyAttackCollisionBox.h"
-#include "Collider/AABBCollider.h"
+#include "Collider/SphereCollider.h"
 #include "Enemy/Effects/EnemyEffects.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
 
@@ -31,7 +31,7 @@ class PlayerAttackCollider;
 /// <summary>
 /// 敵の基底クラス
 /// </summary>
-class BaseEnemy : public BaseObject, public KetaEngine::AABBCollider {
+class BaseEnemy : public BaseObject, public KetaEngine::SphereCollider {
 public:
     enum class Type {
         NORMAL,
@@ -41,7 +41,7 @@ public:
 
     struct Parameter {
         Vector3 baseScale_;
-        Vector3 collisionSize;
+        float collisionRad;
         Vector3 collisionOffset;
         Vector2 hpBarPosOffset;
         float basePosY;

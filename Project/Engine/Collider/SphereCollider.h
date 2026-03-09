@@ -28,6 +28,7 @@ private:
 public:
     // getter
     const Sphere& GetSphere() const { return sphere_; }
+    float GetCollisionRadius() const { return sphere_.radius; }
     // setter
     void SetCollisionRadius(float radius) { sphere_.radius = radius; }
 };

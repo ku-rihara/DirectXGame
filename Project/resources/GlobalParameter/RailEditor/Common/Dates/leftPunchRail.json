@@ -3,9 +3,9 @@
         "easeType": 7,
         "isLookAtDirection": false,
         "isLoop": false,
-        "maxTime": 0.15000000596046448,
-        "returnEaseType": 6,
-        "returnMode": 1,
+        "maxTime": 0.2199999988079071,
+        "returnEaseType": 21,
+        "returnMode": 2,
         "returnTime": 0.15000000596046448,
         "startTime": 0.0,
         "timeMode": 1

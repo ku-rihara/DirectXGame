@@ -417,12 +417,12 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
     }
     Vector3 moveDirNorm = moveVec.Normalize();
 
-    // 経路の横幅（この半径内にいる敵のみ対象）
-    constexpr float kPathHalfWidth = 3.0f;
+    // 経路の横幅
+    const float kPathHalfWidth = 3.0f;
     // 敵コリジョン前面から何ユニット手前で止まるか
-    constexpr float kStopMargin    = 1.5f;
+    const float kStopMargin = 1.5f;
 
-    float closestDot = moveDist; // 初期値 = 移動距離（これ以下の敵を探す）
+    float closestDot = moveDist; // 初期値 = 移動距離
     bool  found      = false;
 
     for (const auto& enemy : enemies) {
@@ -438,11 +438,11 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
         // 移動方向の前方にいて、かつ移動距離内にいる敵のみ
         if (dot <= 0.0f || dot > moveDist) continue;
 
-        // 移動経路からの横距離（垂直成分）
+        // 移動経路からの横距離
         float perpDist = (toEnemy - moveDirNorm * dot).Length();
 
         // 敵のコリジョン幅の半分 + 経路幅を合わせた判定
-        float enemyHalfWidth = enemy->GetParameter().collisionSize.x * 0.5f;
+        float enemyHalfWidth = enemy->GetParameter().collisionRad * 0.5f;
         if (perpDist > kPathHalfWidth + enemyHalfWidth) continue;
 
         // より手前にいる敵を優先

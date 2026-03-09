@@ -167,12 +167,11 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
         Vector3 delta = baseTransform_.translation_ - enemyPosition;
 
         // スケール取得
-        Vector3 enemyScale = enemy->GetCollisonScale();
-        Vector3 myScale    = GetCollisonScale();
-
+        float enemyScale = enemy->GetCollisionRadius();
+     
         // 押し出す距離の計算
-        float pushDistanceX = (enemyScale.x + myScale.x) / 2.0f + 0.5f;
-        float pushDistanceZ = (enemyScale.z + myScale.z) / 2.0f + 0.5f;
+        float pushDistanceX = (enemyScale + enemyScale) / 2.0f + 0.5f;
+        float pushDistanceZ = (enemyScale + enemyScale) / 2.0f + 0.5f;
 
         // 実際の押し戻し距離を計算
         float pushAmountX = pushDistanceX - std::abs(delta.x);
@@ -511,7 +510,7 @@ void BaseEnemy::SetParameter(const Type& type, const Parameter& parameter) {
     type_      = type;
     parameter_ = parameter;
     // コリジョンサイズを適用
-    SetCollisionScale(parameter_.collisionSize);
+    SetCollisionRadius(parameter_.collisionRad);
 }
 
 void BaseEnemy::SetBodyColor(const Vector4& color) {
