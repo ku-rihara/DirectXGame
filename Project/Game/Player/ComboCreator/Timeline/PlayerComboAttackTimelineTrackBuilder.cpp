@@ -57,12 +57,15 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
         int32_t trackIdx = timelineDrawer_->AddTrack("終了待機時間");
         data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT, trackIdx);
 
+        int32_t collisionEndFrame = KetaEngine::Frame::TimeToFrame(
+            attackParam.collisionParam.startTime + attackParam.collisionParam.adaptTime);
         int32_t moveEndFrame = KetaEngine::Frame::TimeToFrame(
             attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset);
+        int32_t waitStartFrame = (std::max)(collisionEndFrame, moveEndFrame);
 
         int32_t waitDuration = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.finishWaitTime);
 
-        timelineDrawer_->AddKeyFrame(trackIdx, moveEndFrame, 1.0f,
+        timelineDrawer_->AddKeyFrame(trackIdx, waitStartFrame, 1.0f,
             static_cast<float>(waitDuration), "終了待機時間");
     }
 

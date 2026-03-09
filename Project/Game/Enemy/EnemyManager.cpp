@@ -29,8 +29,6 @@ void EnemyManager::Init() {
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    /// パーティクル初期化
-    ParticleInit();
 }
 
 ///========================================================================================
@@ -97,8 +95,6 @@ void EnemyManager::Update() {
             ++i;
         }
     }
-    // パーティクル更新
-    ParticleUpdate();
 }
 
 void EnemyManager::HpBarUpdate(const KetaEngine::ViewProjection& viewProjection) {
@@ -210,64 +206,6 @@ void EnemyManager::DamageReactionCreate() {
     damageReactionController_->EditorUpdate();
 }
 
-///---------------------------------------------------------
-/// Particle Init
-///----------------------------------------------------------
-void EnemyManager::ParticleInit() {
-
-    /// death
-    deathParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathSmoke", PrimitiveType::Plane, 900));
-    deathParticle_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathFireSmoke", PrimitiveType::Plane, 900));
-    deathParticle_[2].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathSpark", PrimitiveType::Plane, 900));
-    deathParticle_[3].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathMiniSpark", PrimitiveType::Plane, 900));
-
-    // ガレキ
-    debriParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("DebriName", "Player/debri.obj", 500));
-
-    // crack
-    fallCrack_.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
-}
-
-///----------------------------------------------------------------------
-/// Emit Init
-///----------------------------------------------------------------------
-
-void EnemyManager::ThrustEmit(const Vector3& pos) {
-    // ガレキパーティクル
-    for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-        debriParticle_[i].emitter->SetTargetPosition(pos);
-        debriParticle_[i].emitter->Emit();
-    }
-    fallCrack_->SetTargetPosition(Vector3(pos.x, 0.0f, pos.z));
-    fallCrack_->Emit();
-}
-
-void EnemyManager::DeathEmit(const Vector3& pos) {
-    // 死亡パーティクル
-    for (uint32_t i = 0; i < deathParticle_.size(); i++) {
-        deathParticle_[i].emitter->SetTargetPosition(pos);
-        deathParticle_[i].emitter->Emit();
-    }
-}
-
-///---------------------------------------------------------
-/// Particle Update
-///----------------------------------------------------------
-void EnemyManager::ParticleUpdate() {
-
-    // ひび
-    fallCrack_->Update();
-
-    // 死亡パーティクル
-    for (uint32_t i = 0; i < deathParticle_.size(); i++) {
-        deathParticle_[i].emitter->Update();
-    }
-
-    // ガレキパーティクル
-    for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-        debriParticle_[i].emitter->Update();
-    }
-}
 
 ///------------------------------------------------------------------------------------------------
 /// クラスセット

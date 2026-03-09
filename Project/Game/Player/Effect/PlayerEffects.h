@@ -3,7 +3,6 @@
 #include "3d/ViewProjection.h"
 
 /// utility
-#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
 
 /// std
@@ -16,12 +15,6 @@
 /// プレイヤーのエフェクト管理クラス
 /// </summary>
 class PlayerEffects {
-public:
-    struct ParticleEffect {
-        std::string name;
-        std::unique_ptr<KetaEngine::ParticleEmitter> emitter;
-    };
-
 public:
     PlayerEffects()  = default;
     ~PlayerEffects() = default;
@@ -53,12 +46,7 @@ private:
     /// private variables
     /// ===================================================
 
-    std::unique_ptr<KetaEngine::ParticleEmitter> fallCrack_;
-    std::array<ParticleEffect, 1> debriParticle_;
-    std::array<ParticleEffect, 1> rushParticle_;
-    std::array<ParticleEffect, 1> rushRingEffect_;
-    std::array<ParticleEffect, 1> afterGlowEffect_;
-    std::array<ParticleEffect, 3> starEffect_;
+   
 
     KetaEngine::ParticlePlayer particlePlayer_;
 

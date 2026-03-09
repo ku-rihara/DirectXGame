@@ -157,33 +157,39 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
 }
 
 void PlayerComboAttackTimelineParameterApplier::UpdateFinishWaitKeyFramePosition() {
-    if (!timelineDrawer_ || !timeLineData_) {
+    if (!timelineDrawer_ || !timeLineData_)
         return;
-    }
 
     int32_t finishWaitTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT);
     int32_t moveTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING);
+    int32_t collisionTrackIdx = timeLineData_->GetDefaultTrackIndex(
+        PlayerComboAttackTimelineData::DefaultTrack::COLLISION);
 
-    if (finishWaitTrackIdx < 0 || moveTrackIdx < 0)
+    if (finishWaitTrackIdx < 0 || moveTrackIdx < 0 || collisionTrackIdx < 0)
         return;
 
     auto& tracks = timelineDrawer_->GetTracks();
-    if (finishWaitTrackIdx >= static_cast<int32_t>(tracks.size()) || moveTrackIdx >= static_cast<int32_t>(tracks.size()))
+    if (finishWaitTrackIdx >= static_cast<int32_t>(tracks.size()) ||
+        moveTrackIdx >= static_cast<int32_t>(tracks.size()) ||
+        collisionTrackIdx >= static_cast<int32_t>(tracks.size()))
         return;
 
-    const auto& moveKeyframes = tracks[moveTrackIdx].keyframes;
-    auto& finishWaitKeyframes = tracks[finishWaitTrackIdx].keyframes;
+    const auto& moveKeyframes      = tracks[moveTrackIdx].keyframes;
+    const auto& collisionKeyframes = tracks[collisionTrackIdx].keyframes;
+    auto& finishWaitKeyframes      = tracks[finishWaitTrackIdx].keyframes;
 
     if (moveKeyframes.empty() || finishWaitKeyframes.empty())
         return;
 
-    // 移動終了位置を計算
     int32_t moveEndFrame = moveKeyframes[0].frame + static_cast<int32_t>(moveKeyframes[0].duration);
 
-    // 終了待機時間のキーフレーム位置を更新
-    finishWaitKeyframes[0].frame = moveEndFrame;
+    int32_t collisionEndFrame = !collisionKeyframes.empty()
+        ? collisionKeyframes[0].frame + static_cast<int32_t>(collisionKeyframes[0].duration)
+        : 0;
+
+    finishWaitKeyframes[0].frame = std::max(moveEndFrame, collisionEndFrame);
 }
 
 void PlayerComboAttackTimelineParameterApplier::UpdateTimelineEndFrame() {

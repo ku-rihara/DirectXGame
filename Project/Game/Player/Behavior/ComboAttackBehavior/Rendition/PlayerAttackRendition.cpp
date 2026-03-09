@@ -254,10 +254,6 @@ void PlayerAttackRendition::PlayRendition() {
     // ごり押し演出追加処理
     std::string name = playerComboAttackData_->GetGroupName();
 
-    if (name == "FallRandingAttack") {
-        pPlayer_->GetEffects()->FallEffectRenditionInit();
-    }
-
     if (name == "RushAttack") {
         rushBlurEase_.Init("RushBlur.json");
         rushBlurEase_.SetAdaptValue(&tempBlurParam_);

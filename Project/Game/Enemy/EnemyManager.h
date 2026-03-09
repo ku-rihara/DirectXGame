@@ -4,8 +4,6 @@
 #include "3D/ViewProjection.h"
 // DamageReaction
 #include "DamageReaction/EnemyDamageReactionController.h"
-// Particle
-#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
 //BaseEnemy
 #include "Types/BaseEnemy.h"
 
@@ -37,7 +35,6 @@ public:
 
     // 初期化、更新
     void Init();
-    void ParticleInit();
     void Update();
 
     // 敵全滅チェック
@@ -47,11 +44,6 @@ public:
     void SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID);
     void HpBarUpdate(const KetaEngine::ViewProjection& viewProjection);
 
-    // Particle Effect
-    void ThrustEmit(const Vector3& pos);
-    void DeathEmit(const Vector3& pos);
-    void ParticleUpdate();
-    
     // Param Edit
     void RegisterParams();
     void AdjustParam();
@@ -65,13 +57,7 @@ public:
     void UpdateAvailableAnimationsForEditor(BaseEnemy* enemy);
 
 private: 
-    // struct
-    struct ParticleEffect {
-        std::string name;
-        std::unique_ptr<KetaEngine::ParticleEmitter> emitter;
-    };
-
-private: 
+private:
     // json
     using json = nlohmann::json;
 
@@ -111,11 +97,6 @@ private:
 
     // debugSpawn用
     int32_t selectedEnemyTypeIndex_;
-
-private: // Particle
-    std::array<ParticleEffect, 4> deathParticle_;
-    std::array<ParticleEffect, 1> debriParticle_;
-    std::unique_ptr<KetaEngine::ParticleEmitter> fallCrack_;
 
 public:
     ///========================================================

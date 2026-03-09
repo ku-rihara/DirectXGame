@@ -83,6 +83,7 @@
         "isAutoAdvance": true,
         "isMotionOnly": true,
         "isPositionYSelect": false,
+        "isStopBeforeEnemy": true,
         "keyBordBottom": 0,
         "loopNum": 0,
         "loopWaitTime": 0.0,

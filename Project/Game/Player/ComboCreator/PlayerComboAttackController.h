@@ -10,6 +10,7 @@
 #include <vector>
 
 class Combo;
+class EnemyManager;
 class Player;
 
 namespace KetaEngine {
@@ -87,8 +88,9 @@ private:
 
     std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
     std::unordered_map<std::string, int> activeBranchIndices_;
-    Combo* pCombo_   = nullptr;
-    Player* pPlayer_ = nullptr;
+    Combo* pCombo_           = nullptr;
+    Player* pPlayer_         = nullptr;
+    EnemyManager* pEnemyManager_ = nullptr;
 
     // プレビュー機能
     PlayerComboAttackPreview preview_;
@@ -102,4 +104,5 @@ public:
     void SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite);
     void SetCombo(Combo* combo);
     void SetPlayer(Player* player);
+    void SetEnemyManager(EnemyManager* em);
 };

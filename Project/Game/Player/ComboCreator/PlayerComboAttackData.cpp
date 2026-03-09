@@ -130,6 +130,7 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "isAbleInputMoving", &attackParam_.moveParam.isAbleInputMoving);
     globalParameter_->Regist(groupName_, "isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
     globalParameter_->Regist(groupName_, "finishTimeOffset", &attackParam_.moveParam.finishTimeOffset);
+    globalParameter_->Regist(groupName_, "isStopBeforeEnemy", &attackParam_.moveParam.isStopBeforeEnemy);
 
     // TriggerParam（最初の攻撃用）
     globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
@@ -202,6 +203,8 @@ void PlayerComboAttackData::DrawMoveParamUI() {
     ImGui::Checkbox("Yの位置を直接指定する", &moveParam.isPositionYSelect);
     ImGui::DragFloat3("移動量", &moveParam.value.x, 0.01f);
     ImGui::DragFloat("終了タイムオフセット", &moveParam.finishTimeOffset, 0.01f);
+    ImGui::Checkbox("敵の前で止まる", &moveParam.isStopBeforeEnemy);
+   
 
     // Easing Type
     ImGuiEasingTypeSelector("イージング", moveParam.easeType);
@@ -299,7 +302,7 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
             branch->RegisterParams();
         }
 
-        // 再登録後、メモリ上の現在値をdates_に反映（インデックス変更後の正しい値で上書き）
+        // 再登録後、メモリ上の現在値をdates_に反映
         globalParameter_->PushParamForGroup(groupName_);
 
         // 削除によって不要になった末尾Branch番号のキーをdates_から削除

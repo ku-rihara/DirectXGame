@@ -85,6 +85,7 @@ void BaseEnemy::Update() {
         enemyEffects_->Update(GetWorldPosition());
     }
 
+
     MoveToLimit();
 
     BaseObject::Update();
@@ -350,12 +351,11 @@ void BaseEnemy::DamageCollingUpdate(float deltaTime) {
 }
 
 void BaseEnemy::ThrustRenditionInit() {
-    // ガレキパーティクル
-    pEnemyManager_->ThrustEmit(GetWorldPosition());
+    enemyEffects_->Emit("EnemyThrust");
 }
 
 void BaseEnemy::DeathRenditionInit() {
-    pEnemyManager_->DeathEmit(GetWorldPosition());
+    enemyEffects_->Emit("EnemyDeath");
 }
 
 void BaseEnemy::DirectionToPlayer(bool isOpposite) {

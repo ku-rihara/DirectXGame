@@ -52,6 +52,10 @@ private:
 
     bool IsAttackUnlock(const PlayerComboAttackData&data) const;
 
+    // 移動経路上の最も手前にいる敵の目の前の座標を返す
+    // 経路上に敵がいなければ defaultTarget をそのまま返す
+    Vector3 CalcStopBeforeEnemyTarget(const Vector3& start, const Vector3& defaultTarget) const;
+
 private:
     Order order_;
     PlayerComboAttackData* attackData_        = nullptr;

@@ -158,10 +158,11 @@
         "finishWaitTime": 0.21666666865348816,
         "gamePadBottom": 16384,
         "isAbleInputMoving": true,
-        "isAlwaysFollowing": false,
+        "isAlwaysFollowing": true,
         "isAutoAdvance": false,
         "isMotionOnly": false,
         "isPositionYSelect": false,
+        "isStopBeforeEnemy": true,
         "keyBordBottom": 35,
         "loopNum": 0,
         "loopWaitTime": 0.0,
@@ -171,7 +172,7 @@
         "moveValue": [
             0.0,
             0.0,
-            2.0
+            12.0
         ],
         "power": 10.0
     }

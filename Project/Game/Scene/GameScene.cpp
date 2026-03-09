@@ -218,6 +218,7 @@ void GameScene::SetClassPointer() {
 
     gameObj_.playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
     gameObj_.playerComboAttackController_->SetPlayer(gameObj_.player_.get());
+    gameObj_.playerComboAttackController_->SetEnemyManager(gameObj_.enemyManager_.get());
 
     gameObj_.comboAsistController_->SetAttackController(gameObj_.playerComboAttackController_.get());
     gameObj_.comboAsistController_->SetPlayer(gameObj_.player_.get());

@@ -1,4 +1,5 @@
 #include "PlayerComboAttackController.h"
+#include "Enemy/EnemyManager.h"
 #include "Frame/Frame.h"
 // std
 #include <algorithm>
@@ -38,6 +39,9 @@ void PlayerComboAttackController::AllLoadFile() {
                 attack->Init(fileName);
                 attack->LoadData(); // Load
                 attack->SetController(this);
+                if (pEnemyManager_) {
+                    attack->SetEnemyManager(pEnemyManager_);
+                }
                 attacks_.push_back(std::move(attack));
             }
         }
@@ -158,6 +162,9 @@ void PlayerComboAttackController::AddAttack(const std::string& attackName) {
     auto attack = std::make_unique<PlayerComboAttackData>();
     attack->Init(attackName);
     attack->SetController(this);
+    if (pEnemyManager_) {
+        attack->SetEnemyManager(pEnemyManager_);
+    }
     if (pPlayer_) {
         attack->SetPlayer(pPlayer_);
     }
@@ -454,6 +461,13 @@ void PlayerComboAttackController::SetEditorSuite(KetaEngine::EffectEditorSuite* 
 
 void PlayerComboAttackController::SetCombo(Combo* combo) {
     pCombo_ = combo;
+}
+
+void PlayerComboAttackController::SetEnemyManager(EnemyManager* em) {
+    pEnemyManager_ = em;
+    for (auto& attack : attacks_) {
+        attack->SetEnemyManager(em);
+    }
 }
 
 void PlayerComboAttackController::SetPlayer(Player* player) {
