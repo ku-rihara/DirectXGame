@@ -43,6 +43,7 @@ public:
         bool isAbleInputMoving;
         bool isPositionYSelect;
         float finishTimeOffset;
+        bool isStopBeforeEnemy = false; // trueのとき、移動先に敵がいたら目の前で止まる
     };
 
     // コリジョンパラメータ
@@ -171,4 +172,5 @@ public:
     void SetPlayer(Player* player);
     void SetController(PlayerComboAttackController* controller) { pController_ = controller; }
     void SetEnemyManager(EnemyManager* enemyManager) { pEnemyManager_ = enemyManager; }
+    EnemyManager* GetEnemyManager() const { return pEnemyManager_; }
 };
