@@ -13,6 +13,7 @@ using namespace KetaEngine;
 #include"Editor/SpriteEaseAnimation/SpriteEaseAnimationData.h"
 #include "Particle/CPUParticle/Editor/ParticleData.h"
 #include "Particle/GPUParticle/Editor/GPUParticleData.h"
+#include "Editor/PostEffectEditor/PostEffectData.h"
 // std
 #include <algorithm>
 #include <filesystem>
@@ -541,3 +542,4 @@ template class BaseEffectEditor<GPUParticleData>;
 template class BaseEffectEditor<ParticleData>;
 template class BaseEffectEditor<DissolveData>;
 template class BaseEffectEditor<SpriteEaseAnimationData>;
+template class BaseEffectEditor<PostEffectData>;

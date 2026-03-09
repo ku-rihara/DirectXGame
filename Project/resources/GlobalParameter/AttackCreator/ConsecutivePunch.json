@@ -1,7 +1,7 @@
 {
     "ConsecutivePunch": {
         "Audio_Attack_FileName": "",
-        "Audio_Attack_OnHit_FileName": "",
+        "Audio_Attack_OnHit_FileName": "ConsectivePunch",
         "Audio_Attack_OnHit_StartTiming": 0.0,
         "Audio_Attack_OnHit_Volume": 1.0,
         "Audio_Attack_StartTiming": 0.0,

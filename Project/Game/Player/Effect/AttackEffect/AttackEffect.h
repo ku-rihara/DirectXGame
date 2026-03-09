@@ -1,5 +1,5 @@
 #pragma once
-#include "Editor/PostEffectEditor/PostEffectController.h"
+#include "Editor/PostEffectEditor/PostEffectEditor.h"
 #include "Editor/TimeScaleEditor/TimeScalePlayer.h"
 #include <memory>
 
@@ -29,5 +29,5 @@ public:
 
 private:
     std::unique_ptr<KetaEngine::TimeScalePlayer> timeScalePlayer_;
-    std::unique_ptr<KetaEngine::PostEffectController> postEffectController_;
+    std::unique_ptr<KetaEngine::PostEffectEditor> postEffectEditor_;
 };

@@ -229,7 +229,7 @@ void PlayerComboAttackTimelineData::UpdateTrackIndicesAfterInsert(int32_t insert
         }
     }
 
-    // デフォルトトラックのインデックスも調整（通常は挿入位置より前なので変更されない）
+    // デフォルトトラックのインデックスも調整
     for (auto& defaultIdx : defaultTrackIndices_) {
         if (defaultIdx >= insertPosition) {
             defaultIdx += count;

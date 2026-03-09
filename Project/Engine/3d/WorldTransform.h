@@ -155,6 +155,9 @@ private:
     bool isAdaptDirectScale_ = false;
     bool reverseDirectionOnReturn_ = false;
     bool applyOriginalOnStop_ = false;
+    bool lookAtDirectionEnabled_ = true;
+
+    Vector3 lastPlayDirection_ = Vector3::ZeroVector(); //< 行き中に記録した進行方向
 
     // アンカーポイント (SRTそれぞれ独立)
     Vector3 anchorScale_       = Vector3::ZeroVector();
@@ -182,6 +185,7 @@ public:
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
     void SetIsAdaptDirectScale(bool is) { isAdaptDirectScale_ = is; }
     void SetReverseDirectionOnReturn(bool reverse) { reverseDirectionOnReturn_ = reverse; }
+    void SetLookAtDirectionEnabled(bool enabled) { lookAtDirectionEnabled_ = enabled; }
   
     // アンカーポイント Setter
     void SetAnchorScale(const Vector3& anchor) { anchorScale_ = anchor; }         

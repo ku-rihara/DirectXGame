@@ -52,6 +52,12 @@ private:
     ParamData* paramData_;
     std::string maskTextureName_;
     uint32_t textureIndex_;
+
+public:
+    void SetThreshold(float threshold) { if (paramData_) paramData_->thresholdValue = threshold; }
+    void SetColor(const Vector3& color) { if (paramData_) paramData_->color = color; }
+    float GetThreshold() const { return paramData_ ? paramData_->thresholdValue : 0.5f; }
+    const Vector3& GetColor() const { static Vector3 def = {1.0f, 0.0f, 0.0f}; return paramData_ ? paramData_->color : def; }
 };
 
 }; // KetaEngine

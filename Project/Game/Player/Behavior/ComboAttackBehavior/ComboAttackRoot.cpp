@@ -68,7 +68,7 @@ void ComboAttackRoot::Update(float atkSpeed) {
                 }
 
                 if (triggerParam.condition == TC::GROUND && attackPatern_ == AttackPatern::JUMP) {
-                    // 空中にいるので着地を待機（キューを保持したまま次フレームで再チェック）
+                    // 空中にいるので着地を待機
                     return;
                 }
 
@@ -135,7 +135,7 @@ void ComboAttackRoot::Update(float atkSpeed) {
 bool ComboAttackRoot::CheckConditionMuch(const PlayerComboAttackData::TriggerCondition& condition) {
     switch (condition) {
     case PlayerComboAttackData::TriggerCondition::GROUND:
-        // 地上のみ（ダッシュ中は除外）
+        // 地上のみ
         return attackPatern_ == AttackPatern::NORMAL && !pOwner_->IsDashing();
 
     case PlayerComboAttackData::TriggerCondition::AIR:

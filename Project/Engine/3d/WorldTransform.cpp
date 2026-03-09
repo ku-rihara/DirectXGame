@@ -433,13 +433,18 @@ void WorldTransform::ApplyAnimationToTransform() {
     }
 
     // 進行方向を向く設定が有効な場合は方向から回転を決定する
-    if (objEaseAnimationPlayer_->IsLookingAtDirection()) {
-        Vector3 dir = objEaseAnimationPlayer_->GetMovementDirection();
-
-        if (reverseDirectionOnReturn_) {
-            dir = dir * -1.0f;
+    if (lookAtDirectionEnabled_ && objEaseAnimationPlayer_->IsLookingAtDirection()) {
+        bool isReturning = objEaseAnimationPlayer_->IsTranslationReturning();
+        if (isReturning) {
+            // 戻り中：行き中に記録したパンチ方向をそのまま向く
+            if (lastPlayDirection_.Length() > 0.001f) {
+                ApplyLookAtDirection(lastPlayDirection_);
+            }
+        } else {
+            Vector3 dir = objEaseAnimationPlayer_->GetMovementDirection();
+            ApplyLookAtDirection(dir);
+            lastPlayDirection_ = dir; // 行き方向を記録
         }
-        ApplyLookAtDirection(dir);
     } else {
         // Rotationをオフセット
         if (rotateOder_ == RotateOder::Quaternion) {
@@ -489,6 +494,7 @@ void WorldTransform::InitOffsetTransform() {
     offsetTransform_.translation = Vector3::ZeroVector();
     offsetTransform_.rotation    = Vector3::ZeroVector();
     offsetTransform_.quaternion  = Quaternion::Identity();
+    lastPlayDirection_           = Vector3::ZeroVector();
 }
 
 

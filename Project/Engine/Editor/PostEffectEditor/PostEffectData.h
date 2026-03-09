@@ -1,6 +1,8 @@
 #pragma once
+#include "Editor/BaseEffectEditor/BaseEffectData.h"
 #include "PostEffect/PostEffectRenderer.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Vector2.h"
+#include "Vector3.h"
 #include <string>
 
 /// <summary>
@@ -8,40 +10,64 @@
 /// </summary>
 namespace KetaEngine {
 
-class PostEffectData {
+class PostEffectData : public BaseEffectData {
 public:
     PostEffectData()  = default;
     ~PostEffectData() = default;
 
-    // 初期化
-    void Init(const std::string& postEffectName);
+    //*----------------------------- public Methods -----------------------------*//
 
-    void AdjustParam(); //< パラメータ調整
-    void LoadData(); //< データロード
-    void SaveData(); //< データセーブ
+    // BaseEffectDataからのオーバーライド
+    void Init(const std::string& name, const std::string& categoryName) override;
+    void Update(float speedRate = 1.0f) override;
+    void Reset() override;
+    void Play() override;
+
+    // ImGuiパラメータ調整
+    void AdjustParam();
+
+    // レンダラーへパラメータを適用してエフェクトを有効化
+    void ApplyToRenderer();
 
 private:
-    void RegisterParams(); //< パラメータのバインド
+    //*---------------------------- private Methods ----------------------------*//
+
+    void RegisterParams() override;
+    void GetParams() override;
+    void InitParams() override;
 
 private:
-    GlobalParameter* globalParameter_;
-    std::string groupName_;
-    std::string folderPath_ = "PostEffect";
+    //*---------------------------- private Variant ----------------------------*//
 
-    int postEffectModeIndex_ = 0;
-    float duration_          = 1.0f;
+    // 共通パラメータ
+    int32_t postEffectModeIndex_ = 0;
+    float startTime_             = 0.0f; //< 再生開始までの遅延時間
 
-    bool showControls_ = true;
+    // GaussianFilter 固有
+    float gaussSigma_ = 1.0f;
+
+    // RadialBlur 固有
+    Vector2 radialCenter_  = {0.5f, 0.5f};
+    float radialBlurWidth_ = 0.01f;
+
+    // Dissolve 固有
+    float dissolveThreshold_ = 0.5f;
+    Vector3 dissolveColor_   = {1.0f, 0.0f, 0.0f};
+
+    // Outline 固有
+    float outlineWeightRate_ = 0.3f;
+
+    // LuminanceOutline 固有
+    float luminanceWeightRate_ = 0.3f;
+
+    // 内部タイマー
+    float currentTime_ = 0.0f;
 
 public:
-    // getter
-    std::string GetGroupName() const { return groupName_; }
-    PostEffectMode GetPostEffectMode() const { return static_cast<PostEffectMode>(postEffectModeIndex_); }
-    float GetDuration() const { return duration_; }
+    //*----------------------------- getter Methods -----------------------------*//
 
-    // setter
-    void SetPostEffectMode(PostEffectMode mode) { postEffectModeIndex_ = static_cast<int>(mode); }
-    void SetDuration(float duration) { duration_ = duration; }
+    PostEffectMode GetPostEffectMode() const { return static_cast<PostEffectMode>(postEffectModeIndex_); }
+    float GetStartTime() const { return startTime_; }
 };
 
-}; // KetaEngine
+} // namespace KetaEngine

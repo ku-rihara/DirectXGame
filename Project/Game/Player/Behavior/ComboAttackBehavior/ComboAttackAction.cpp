@@ -441,14 +441,18 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
     // 敵コリジョン前面から何ユニット手前で止まるか
     const float kStopMargin = 1.5f;
 
-    float         closestDot      = moveDist; // 初期値 = 移動距離
+    float         closestDot      = moveDist; 
     bool          found           = false;
     Vector3       foundEnemyPos   = {};
 
     for (const auto& enemy : enemies) {
-        if (!enemy) continue;
+        if (!enemy) {
+            continue;
+        }
         // 死亡・死亡待機中の敵は無視
-        if (enemy->GetIsDeath() || enemy->GetIsDeathPending()) continue;
+        if (enemy->GetIsDeath() || enemy->GetIsDeathPending()) {
+            continue;
+        }
 
         Vector3 toEnemy = enemy->GetWorldPosition() - start;
 
@@ -456,14 +460,18 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
         float dot = toEnemy.Dot(moveDirNorm);
 
         // 移動方向の前方にいて、かつ移動距離内にいる敵のみ
-        if (dot <= 0.0f || dot > moveDist) continue;
+        if (dot <= 0.0f || dot > moveDist) {
+            continue;
+        }
 
         // 移動経路からの横距離
         float perpDist = (toEnemy - moveDirNorm * dot).Length();
 
         // 敵のコリジョン幅の半分 + 経路幅を合わせた判定
         float enemyHalfWidth = enemy->GetParameter().collisionRad * 0.5f;
-        if (perpDist > kPathHalfWidth + enemyHalfWidth) continue;
+        if (perpDist > kPathHalfWidth + enemyHalfWidth) {
+            continue;
+        }
 
         // より手前にいる敵を優先
         if (dot < closestDot) {

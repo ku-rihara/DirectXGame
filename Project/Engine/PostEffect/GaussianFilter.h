@@ -41,6 +41,10 @@ public:
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
     ParamData* paramData_;
+
+public:
+    void SetSigma(float sigma) { if (paramData_) paramData_->sigma = sigma; }
+    float GetSigma() const { return paramData_ ? paramData_->sigma : 1.0f; }
 };
 
 }; // KetaEngine

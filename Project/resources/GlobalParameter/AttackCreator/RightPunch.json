@@ -1,7 +1,7 @@
 {
     "RightPunch": {
         "Audio_Attack_FileName": "punchAir",
-        "Audio_Attack_OnHit_FileName": "",
+        "Audio_Attack_OnHit_FileName": "PlayerPunch",
         "Audio_Attack_OnHit_StartTiming": 0.0,
         "Audio_Attack_OnHit_Volume": 1.0,
         "Audio_Attack_StartTiming": 0.0,

@@ -51,6 +51,10 @@ private:
     OutLineMaterial* outlineMaterialData_;
 
     D3D12_STATIC_SAMPLER_DESC staticSamplersOutLine_[2];
+
+public:
+    void SetWeightRate(float rate) { if (paramData_) paramData_->wightRate = rate; }
+    float GetWeightRate() const { return paramData_ ? paramData_->wightRate : 0.3f; }
 };
 
 }; // KetaEngine

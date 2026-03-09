@@ -7,7 +7,7 @@ void Field::Init() {
 
     obj3d_.reset(KetaEngine::Object3d::CreateModel("BackObj/Field.obj"));
 
-    obj3d_->transform_.scale_                                             = {1, 1, 1};
+    obj3d_->transform_.scale_                                             = Vector3::OneVector();
     obj3d_->GetModelMaterial()->GetMaterialData()->enableLighting         = static_cast<int32_t>(KetaEngine::LightingType::SpotLight);
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.35f;
 

@@ -652,9 +652,6 @@
     <ClCompile Include="Engine\Editor\ParameterEditor\GlobalParameter.cpp">
       <Filter>Engine\Editor\ParameterEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectController.cpp">
-      <Filter>Engine\Editor\PostEffectEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectData.cpp">
       <Filter>Engine\Editor\PostEffectEditor</Filter>
     </ClCompile>
@@ -1491,9 +1488,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\ParameterEditor\GlobalParameter.h">
       <Filter>Engine\Editor\ParameterEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectController.h">
-      <Filter>Engine\Editor\PostEffectEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectData.h">
       <Filter>Engine\Editor\PostEffectEditor</Filter>
@@ -2378,6 +2372,9 @@
     <ClCompile Include="Engine\Collider\SphereCollider.cpp">
       <Filter>Engine\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectEditor.cpp">
+      <Filter>Engine\Editor\PostEffectEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2481,6 +2478,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Collider\SphereCollider.h">
       <Filter>Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectEditor.h">
+      <Filter>Engine\Editor\PostEffectEditor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

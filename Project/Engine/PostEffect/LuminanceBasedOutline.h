@@ -43,6 +43,10 @@ public:
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
     ParamData* paramData_;
+
+public:
+    void SetWeightRate(float rate) { if (paramData_) paramData_->wightRate = rate; }
+    float GetWeightRate() const { return paramData_ ? paramData_->wightRate : 0.3f; }
 };
 
 }; // KetaEngine
