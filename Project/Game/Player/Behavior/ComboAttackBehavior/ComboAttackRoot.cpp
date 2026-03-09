@@ -135,8 +135,8 @@ void ComboAttackRoot::Update(float atkSpeed) {
 bool ComboAttackRoot::CheckConditionMuch(const PlayerComboAttackData::TriggerCondition& condition) {
     switch (condition) {
     case PlayerComboAttackData::TriggerCondition::GROUND:
-        // 地上のみ
-        return attackPatern_ == AttackPatern::NORMAL;
+        // 地上のみ（ダッシュ中は除外）
+        return attackPatern_ == AttackPatern::NORMAL && !pOwner_->IsDashing();
 
     case PlayerComboAttackData::TriggerCondition::AIR:
         // 空中のみ

@@ -34,12 +34,12 @@
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "IsScreenPos": false,
-        "LifeTime": 1.5499999523162842,
+        "LifeTime": 2.0,
         "Max Particle Num": 1000,
         "Particle Count": 1,
         "Position Base": [
-            0.5,
-            0.20000000298023224,
+            0.0,
+            0.029999999329447746,
             0.0
         ],
         "Position Max": [
@@ -92,8 +92,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 9.0,
-        "Scale Min": 9.0,
+        "Scale Max": 11.0,
+        "Scale Min": 11.0,
         "ScaleV3 Max": [
             1.0,
             1.0,
