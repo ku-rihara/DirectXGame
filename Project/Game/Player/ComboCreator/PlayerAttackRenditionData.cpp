@@ -68,7 +68,7 @@ void PlayerAttackRenditionData::AdjustParam() {
         ImGui::PushID((groupName_ + "RenditionParams").c_str());
 
         for (const auto& info : kRenditionTypeInfos) {
-            // ヒット音は通常演出に含めない（ヒット時演出セクションで設定）
+            // ヒット音は通常演出に含めない
             if (info.type == Type::AudioHit) {
                 continue;
             }

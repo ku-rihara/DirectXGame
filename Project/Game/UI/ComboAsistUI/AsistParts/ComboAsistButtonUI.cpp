@@ -1,5 +1,6 @@
 #include "ComboAsistButtonUI.h"
 #include <XInput.h>
+#include"Audio/Audio.h"
 
 void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const LayoutParam& layout, const std::string& attackName) {
     gamepadButton_ = gamepadButton;
@@ -64,6 +65,7 @@ void ComboAsistButtonUI::Update() {
         if (isUnlockShakePlaying_ && shakePlayer_.IsFinished()) {
             isUnlockShakePlaying_ = false;
             lockUI_->SetIsDraw(false);
+            KetaEngine::Audio::GetInstance()->Play("AttackUnlockSE.mp3", 1.0f);
             unlockParticlePlayer_.Play("AttackUnlockEffect", "UI");
         }
     }
@@ -85,6 +87,7 @@ void ComboAsistButtonUI::SetUnlocked(bool isUnlocked) {
     isUnlocked_ = isUnlocked;
 
     if (lockUI_ && justUnlocked) {
+        KetaEngine::Audio::GetInstance()->Play("PreUnlockES.mp3",1.0f);
         lockUI_->SetUVPosition({0.5f, 0.0f});
         isUnlockShakePlaying_ = true;
         shakePlayer_.Play("UnlockShake", "ComboAsistUI");
@@ -98,7 +101,7 @@ void ComboAsistButtonUI::TryPlayPushScaling(const std::string& attackName) {
 }
 
 void ComboAsistButtonUI::PlayScaleIn() {
-    // uiSpriteのみアニメ再生。
+    // uiSpriteのみアニメ再生
     if (uiSprite_) {
         uiSprite_->transform_.scale = {0.0f, 0.0f};
         uiSprite_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
@@ -106,7 +109,7 @@ void ComboAsistButtonUI::PlayScaleIn() {
 }
 
 void ComboAsistButtonUI::PlayScaleOut() {
-    // uiSpriteのみアニメ再生。
+    // uiSpriteのみアニメ再生
     if (uiSprite_) {
         uiSprite_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAsistUI");
     }
