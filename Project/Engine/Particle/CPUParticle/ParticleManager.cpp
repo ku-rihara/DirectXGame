@@ -792,7 +792,15 @@ void ParticleManager::Emit(
     // 生成、グループ追加
     std::list<Particle> particles;
     for (uint32_t i = 0; i < uint32_t(count); ++i) {
-        particles.emplace_back(MakeParticle(parameters, &particleGroup.dissolveParams));
+        Particle p = MakeParticle(parameters, &particleGroup.dissolveParams);
+        if (groupParameters.isScreenPos) {
+            if (p.isFloatVelocity) {
+                p.speed_ *= Frame::GetFPS();
+            } else {
+                p.speedV3 *= Frame::GetFPS();
+            }
+        }
+        particles.emplace_back(std::move(p));
     }
 
     // グループに追加

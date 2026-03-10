@@ -41,8 +41,8 @@ void BaseComboAsistUI::SetPosition(const Vector2& pos) {
     if (uiSprite_) {
         uiSprite_->transform_.pos = pos;
     }
-    if (outLineUI_) {
-        outLineUI_->transform_.pos = pos;
+    if (lockUI_) {
+        lockUI_->transform_.pos = pos;
     }
     if (activeOutLineUI_) {
         activeOutLineUI_->transform_.pos = pos;
@@ -55,8 +55,8 @@ void BaseComboAsistUI::SetScale(const Vector2& scale) {
     if (uiSprite_) {
         uiSprite_->transform_.scale = s;
     }
-    if (outLineUI_) {
-        outLineUI_->transform_.scale = s;
+    if (lockUI_) {
+        lockUI_->transform_.scale = s;
     }
     if (activeOutLineUI_) {
         activeOutLineUI_->transform_.scale = s;
@@ -67,8 +67,8 @@ void BaseComboAsistUI::SetRotation(float rotZ) {
     if (uiSprite_) {
         uiSprite_->transform_.rotate.z = rotZ;
     }
-    if (outLineUI_) {
-        outLineUI_->transform_.rotate.z = rotZ;
+    if (lockUI_) {
+        lockUI_->transform_.rotate.z = rotZ;
     }
     if (activeOutLineUI_) {
         activeOutLineUI_->transform_.rotate.z = rotZ;
@@ -108,11 +108,11 @@ void BaseComboAsistUI::SetRangeVisible(bool inRange) {
     isInRange_ = inRange;
 
     if (inRange) {
-        // 範囲内に入る: 表示してからScaleIn再生
+        // 範囲内に入る
         SetVisible(true);
         PlayScaleIn();
     } else {
-        // 範囲外に出る: ScaleOut再生、完了後にUpdate()で非表示化
+        // 範囲外に出る
         isScaleOutPlaying_ = true;
         PlayScaleOut();
     }
@@ -123,9 +123,9 @@ void BaseComboAsistUI::PlayScaleIn() {
         uiSprite_->transform_.scale = {0.0f, 0.0f};
         uiSprite_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
     }
-    if (outLineUI_) {
-        outLineUI_->transform_.scale = {0.0f, 0.0f};
-        outLineUI_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
+    if (lockUI_) {
+        lockUI_->transform_.scale = {0.0f, 0.0f};
+        lockUI_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
     }
 }
 
@@ -133,8 +133,8 @@ void BaseComboAsistUI::PlayScaleOut() {
     if (uiSprite_) {
         uiSprite_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAsistUI");
     }
-    if (outLineUI_) {
-        outLineUI_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAsistUI");
+    if (lockUI_) {
+        lockUI_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAsistUI");
     }
 }
 
@@ -142,8 +142,8 @@ void BaseComboAsistUI::SetVisible(bool visible) {
     if (uiSprite_) {
         uiSprite_->SetIsDraw(visible);
     }
-    if (outLineUI_) {
-        outLineUI_->SetIsDraw(visible);
+    if (lockUI_) {
+        lockUI_->SetIsDraw(visible);
     }
     if (activeOutLineUI_) {
 

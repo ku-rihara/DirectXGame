@@ -15,7 +15,7 @@ struct LayoutParam {
     Vector2 arrowOffset;
     float columnSpacing;
     float rowSpacing;
-    float yGroupOffsetY; //< Yボタン始まりコンボグループの基準Y座標オフセット
+    float yGroupOffsetY; 
     float buttonScale;
     float arrowScale;
 };
@@ -63,7 +63,7 @@ protected:
     std::unique_ptr<KetaEngine::Sprite> uiSprite_;
 
     // ロックオーバーレイ
-    std::unique_ptr<KetaEngine::Sprite> outLineUI_;
+    std::unique_ptr<KetaEngine::Sprite> lockUI_;
 
     // 発動中・発動済みの攻撃アウトライン
     std::unique_ptr<KetaEngine::Sprite> activeOutLineUI_;

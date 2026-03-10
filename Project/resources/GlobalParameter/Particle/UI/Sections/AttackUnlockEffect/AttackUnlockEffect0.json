@@ -1,12 +1,12 @@
 {
-    "UITest0": {
+    "AttackUnlockEffect0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
         "BaseColor": [
-            0.992277979850769,
-            0.9501348733901978,
-            0.9501348733901978,
+            1.0,
+            1.0,
+            1.0,
             0.0
         ],
         "Color Max": [
@@ -22,34 +22,34 @@
             0.0
         ],
         "Direction Max": [
-            0.0,
+            1.0,
             1.0,
             1.0
         ],
         "Direction Min": [
-            0.0,
+            -1.0,
             -1.0,
             -1.0
         ],
-        "Gravity": 0.0,
+        "Gravity": 1111.0,
         "IntervalTime": 1.0,
         "IsScreenPos": true,
-        "LifeTime": 0.7799999713897705,
+        "LifeTime": 1.1299999952316284,
         "Max Particle Num": 1000,
-        "Particle Count": 28,
+        "Particle Count": 54,
         "Position Base": [
-            500.0,
-            577.0,
+            0.0,
+            0.0,
             0.0
         ],
         "Position Max": [
-            0.0,
-            0.0,
+            30.0,
+            30.0,
             0.0
         ],
         "Position Min": [
-            0.0,
-            0.0,
+            -30.0,
+            -10.0,
             0.0
         ],
         "RailFileName": "",
@@ -60,12 +60,12 @@
         ],
         "Rotate Max": [
             0.0,
-            0.0,
+            80.0,
             0.0
         ],
         "Rotate Min": [
             0.0,
-            0.0,
+            20.0,
             0.0
         ],
         "RotateEaseParam.backRatio": 0.0,
@@ -85,36 +85,36 @@
         "RotateSpeed Max": [
             0.0,
             0.0,
-            0.0
+            15.0
         ],
         "RotateSpeed Min": [
             0.0,
             0.0,
-            0.0
+            10.0
         ],
-        "Scale Max": 22.0,
-        "Scale Min": 22.0,
+        "Scale Max": 12.0,
+        "Scale Min": 5.0,
         "ScaleV3 Max": [
-            1.0,
-            0.0,
-            0.0
+            10.0,
+            22.0,
+            22.0
         ],
         "ScaleV3 Min": [
-            0.0,
-            0.0,
-            0.0
+            10.0,
+            10.0,
+            10.0
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
         "SpeedV3 Max": [
-            999.0,
-            336.9599914550781,
-            0.0
+            2.799999952316284,
+            -1.3600000143051147,
+            -0.20999999344348907
         ],
         "SpeedV3 Min": [
-            -333.0,
-            -333.0,
-            0.0
+            -2.740000009536743,
+            -10.430000305175781,
+            0.1899999976158142
         ],
         "StartTime": 0.0,
         "TranslateEaseParam.backRatio": 0.0,
@@ -151,13 +151,13 @@
         "afterDuration": 0.0,
         "blendMode": 0,
         "dissolveName": "",
-        "emitPositionMode": 0,
-        "isAlphaNoMove": false,
+        "emitPositionMode": 2,
+        "isAlphaNoMove": true,
         "isBillboard": false,
         "isFloatVelocity": false,
         "isRotateForDirection": false,
         "isScalerScale": true,
-        "isShot": false,
+        "isShot": true,
         "modelFilePath": "",
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
@@ -177,7 +177,7 @@
         ],
         "scaleEaseParam.isScaleEase": false,
         "scaleEaseParam.maxTime": 1.0,
-        "selectedTexturePath": "Resources/texture/Particle/uvChecker.dds",
+        "selectedTexturePath": "Resources/texture/Particle/AttackUnlockGlass.dds",
         "timeMode": 1,
         "useModel": false
     }

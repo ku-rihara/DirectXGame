@@ -39,6 +39,7 @@ private:
     static const float kFPS; //< フレームレート固定値
 
 public:
+    static float GetFPS() { return kFPS; }
     static float GetTimeScale();
     float GetTimeScaleInstance() const {return timeScale_;}
 

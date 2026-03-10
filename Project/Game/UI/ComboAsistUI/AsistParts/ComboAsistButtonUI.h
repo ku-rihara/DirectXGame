@@ -1,5 +1,7 @@
 #pragma once
 #include "BaseComboAsistUI.h"
+#include "Editor/ShakeEditor/ShakePlayer.h"
+#include "Particle/CPUParticle/ParticlePlayer.h"
 #include <cstdint>
 #include <string>
 
@@ -42,8 +44,17 @@ public:
 public:
     const std::string& GetAttackName() const { return attackName_; }
 
+protected:
+    // lockUI_はスケールコピーで同期するため個別アニメは不要
+    void PlayScaleIn() override;
+    void PlayScaleOut() override;
+
 private:
     int32_t gamepadButton_ = 0;
-    bool isUnlocked_       = true;
+    bool isUnlocked_            = true;
+    bool isUnlockShakePlaying_  = false;
     std::string attackName_;
+
+    KetaEngine::ShakePlayer shakePlayer_;
+    KetaEngine::ParticlePlayer unlockParticlePlayer_;
 };
