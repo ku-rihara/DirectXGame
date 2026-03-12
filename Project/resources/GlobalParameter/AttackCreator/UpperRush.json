@@ -90,7 +90,7 @@
         "isAutoAdvance": true,
         "isMotionOnly": true,
         "isPositionYSelect": true,
-        "isStopBeforeEnemy": false,
+        "isStopBeforeEnemy": true,
         "keyBordBottom": 35,
         "loopNum": 0,
         "loopWaitTime": 0.0,
@@ -99,7 +99,7 @@
         "moveStartTime": 0.0,
         "moveValue": [
             0.0,
-            17.09000015258789,
+            19.700000762939453,
             7.369999885559082
         ],
         "power": 0.0

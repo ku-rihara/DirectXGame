@@ -5,7 +5,7 @@
         "Audio_Attack_OnHit_StartTiming": 0.0,
         "Audio_Attack_OnHit_Volume": 1.0,
         "Audio_Attack_StartTiming": 0.0,
-        "Audio_Attack_Volume": 1.0,
+        "Audio_Attack_Volume": 0.4560000002384186,
         "Audio_Hit_FileName": "",
         "Audio_Hit_OnHit_FileName": "",
         "Audio_Hit_OnHit_StartTiming": 0.0,
@@ -100,7 +100,7 @@
         "moveValue": [
             0.0,
             0.0,
-            0.0
+            3.369999885559082
         ],
         "power": 10.0
     }

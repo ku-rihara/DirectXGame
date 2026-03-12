@@ -69,7 +69,7 @@
         "Vibration_Intensity": 0.3310000002384186,
         "Vibration_StartTiming": 0.0,
         "Vibration_TriggerByHit": false,
-        "ableDefeatLevel": 1,
+        "ableDefeatLevel": 0,
         "adaptTime": 0.11666666716337204,
         "blowYPower": 23.0,
         "collisionOffsetPos": [

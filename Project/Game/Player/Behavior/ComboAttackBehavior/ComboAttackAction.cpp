@@ -106,15 +106,9 @@ void ComboAttackAction::Update(float atkSpeed) {
 }
 
 void ComboAttackAction::InitializeAttack() {
-
-    // コリジョン開始時間をチェック
-    float collisionStartTime = attackData_->GetAttackParam().collisionParam.startTime;
-
-    // 開始時間が0より大きい場合は遅延させる
-    if (currentFrame_ >= collisionStartTime) {
-        SetupCollision();
-        order_ = Order::ATTACK;
-    }
+    // 演出・移動イージングをすぐ開始するため即ATTACKへ遷移
+    // コライダーの遅延有効化はUpdateAttack()内で行う
+    order_ = Order::ATTACK;
 }
 
 void ComboAttackAction::UpdateAttack(float atkSpeed) {

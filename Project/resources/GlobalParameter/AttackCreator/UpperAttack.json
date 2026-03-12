@@ -1,9 +1,9 @@
 {
     "UpperAttack": {
-        "Audio_Attack_FileName": "starEffect",
-        "Audio_Attack_OnHit_FileName": "",
+        "Audio_Attack_FileName": "None",
+        "Audio_Attack_OnHit_FileName": "starEffect",
         "Audio_Attack_OnHit_StartTiming": 0.0,
-        "Audio_Attack_OnHit_Volume": 1.0,
+        "Audio_Attack_OnHit_Volume": 0.4560000002384186,
         "Audio_Attack_StartTiming": 0.0,
         "Audio_Attack_TriggerByHit": true,
         "Audio_Attack_Volume": 0.18299999833106995,
@@ -93,7 +93,7 @@
         "isAutoAdvance": false,
         "isMotionOnly": false,
         "isPositionYSelect": false,
-        "isStopBeforeEnemy": false,
+        "isStopBeforeEnemy": true,
         "keyBordBottom": 37,
         "loopNum": 0,
         "loopWaitTime": 0.0,
@@ -103,7 +103,7 @@
         "moveValue": [
             0.0,
             0.0,
-            -4.449999809265137
+            -1.809999942779541
         ],
         "power": 25.0
     }
