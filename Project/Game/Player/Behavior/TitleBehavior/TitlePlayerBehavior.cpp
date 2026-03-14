@@ -11,7 +11,7 @@ TitlePlayerBehavior::TitlePlayerBehavior(Player* player)
     : BaseTitleBehavior("TitlePlayerBehavior", player) {
 
     // 落下アニメーション（section0のみ）を再生
-    pPlayer_->TitleAnimationPlay("TitlePlayer");
+    pPlayer_->GetPlayerAnimator().PlayTitleBodyAnimation("TitlePlayer");
 }
 
 ///=========================================================
@@ -23,41 +23,41 @@ void TitlePlayerBehavior::Update() {
 
     // ─── フェーズ1：落下 ───────────────────────────────────
     case Phase::FALL:
-        if (pPlayer_->IsTitleAnimationFinished()) {
+        if (pPlayer_->GetPlayerAnimator().IsTitleBodyAnimationFinished()) {
             // 着地タイミングでがれきエフェクト
             pPlayer_->GetEffects()->FallEffectRenditionInit();
 
             // 着地演出アニメーション開始
-            pPlayer_->TitleAnimationPlay("TitlePlayerLand");
+            pPlayer_->GetPlayerAnimator().PlayTitleBodyAnimation("TitlePlayerLand");
             phase_ = Phase::LAND;
         }
         break;
 
     // ─── フェーズ2：着地演出 ──────────────────────────────
     case Phase::LAND:
-        if (pPlayer_->IsTitleAnimationFinished()) {
+        if (pPlayer_->GetPlayerAnimator().IsTitleBodyAnimationFinished()) {
             // 左パンチ開始
-            pPlayer_->TitleAnimationPlay("TitlePlayerPunchScaling");
-            pPlayer_->TitleLeftHandAnimationPlay("TitleLeftHand");
+            pPlayer_->GetPlayerAnimator().PlayTitleBodyAnimation("TitlePlayerPunchScaling");
+            pPlayer_->GetPlayerAnimator().PlayTitleLeftHandAnimation("TitleLeftHand");
             phase_ = Phase::LEFT_PUNCH;
         }
         break;
 
     // ─── フェーズ3：左パンチ ──────────────────────────────
     case Phase::LEFT_PUNCH:
-        if (pPlayer_->IsTitleLeftHandAnimationFinished()) {
+        if (pPlayer_->GetPlayerAnimator().IsTitleLeftHandAnimationFinished()) {
             // 右パンチ開始
-            pPlayer_->TitleAnimationPlay("TitlePlayerPunchScaling");
-            pPlayer_->TitleRightHandAnimationPlay("TitleRightHand");
+            pPlayer_->GetPlayerAnimator().PlayTitleBodyAnimation("TitlePlayerPunchScaling");
+            pPlayer_->GetPlayerAnimator().PlayTitleRightHandAnimation("TitleRightHand");
             phase_ = Phase::RIGHT_PUNCH;
         }
         break;
 
     // ─── フェーズ4：右パンチ ──────────────────────────────
     case Phase::RIGHT_PUNCH:
-        if (pPlayer_->IsTitleRightHandAnimationFinished()) {
+        if (pPlayer_->GetPlayerAnimator().IsTitleRightHandAnimationFinished()) {
             // 全アニメーション完了 → 待機ループ開始
-            pPlayer_->TitleAnimationPlay("TitleWaiting");
+            pPlayer_->GetPlayerAnimator().PlayTitleBodyAnimation("TitleWaiting");
             phase_    = Phase::WAITING;
             isFinish_ = true;
         }
@@ -65,9 +65,9 @@ void TitlePlayerBehavior::Update() {
 
     // ─── フェーズ5：待機 ────────────────────
     case Phase::WAITING:
-        if (pPlayer_->IsTitleAnimationFinished()) {
+        if (pPlayer_->GetPlayerAnimator().IsTitleBodyAnimationFinished()) {
             // 終了したら即再生してループ
-            pPlayer_->TitleAnimationPlay("TitleWaiting");
+            pPlayer_->GetPlayerAnimator().PlayTitleBodyAnimation("TitleWaiting");
         }
         break;
     }

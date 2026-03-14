@@ -1,5 +1,5 @@
 #include "PlayerAttackRendition.h"
-#include "Player/Effect/AttackEffect/AttackEffect.h"
+#include "Player/Components/Effect/AttackEffect/AttackEffect.h"
 #include "Audio/Audio.h"
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
@@ -195,7 +195,7 @@ void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionDa
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::MainHead:
-                pPlayer_->MainHeadAnimationStart(param.fileName);
+                pPlayer_->GetPlayerAnimator().PlayMainHeadAnimation(param.fileName);
                 break;
 
             default:

@@ -6,8 +6,6 @@
 #include "Player/Player.h"
 /// frame
 #include "Frame/Frame.h"
-/// inupt
-#include "input/Input.h"
 /// imgui
 #include <imgui.h>
 
@@ -48,7 +46,7 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
     MoveAnimation();
     WaitAnimation();
 
-    if ((KetaEngine::Input::IsPressPad(0, GamepadButton::LB)) || forceDash_) {
+    if (pOwner_->GetInput().IsDashInput() || forceDash_) {
         isDashing_ = true;
         pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed *
                       pPlayerParameter_->GetParameters().dashSpeedMultiplier);
@@ -58,7 +56,7 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
     }
 
     // 　ジャンプに切り替え
-    if (KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::J)) {
+    if (pOwner_->GetInput().IsJumpKeyPressed()) {
         pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, pPlayerParameter_->GetParameters().normalJump.jumpSpeed));
     } else {
         JumpForJoyState(); // コントローラジャンプ
@@ -67,7 +65,7 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
 
 void PlayerMove::JumpForJoyState() {
 
-    if (!(KetaEngine::Input::IsTriggerPad(0, GamepadButton::A))) {
+    if (!pOwner_->GetInput().IsJumpPadTriggered()) {
         return;
     }
 

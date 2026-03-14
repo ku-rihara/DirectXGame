@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Player/Parts/BasePlayerHand.h"
+#include "Player/Components/Parts/BasePlayerHand.h"
 #include"Particle/GPUParticle/GPUParticlePlayer.h"
 
 /// <summary>

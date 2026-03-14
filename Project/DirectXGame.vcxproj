@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -205,6 +205,7 @@
     <ClCompile Include="Game\Combo\ComboUI.cpp" />
     <ClCompile Include="Game\Combo\ComboUIController.cpp" />
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp" />
+    <ClCompile Include="Engine\utility\CollisionPush\CollisionPushUtils.cpp" />
     <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp" />
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp" />
     <ClCompile Include="Game\DeathTimer\DeathTimer.cpp" />
@@ -263,7 +264,9 @@
     <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerSpawn.cpp" />
     <ClCompile Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.cpp" />
     <ClCompile Include="Game\Player\Behavior\TitleBehavior\TitlePlayerBehavior.cpp" />
-    <ClCompile Include="Game\Player\CollisionBox\PlayerAttackCollider.cpp" />
+    <ClCompile Include="Game\Player\Components\Animation\PlayerAnimator.cpp" />
+    <ClCompile Include="Game\Player\Components\Input\PlayerInput.cpp" />
+    <ClCompile Include="Game\Player\Components\CollisionBox\PlayerAttackCollider.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\ComboBranchParameter.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp" />
@@ -274,13 +277,13 @@
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineTrackBuilder.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.cpp" />
-    <ClCompile Include="Game\Player\Effect\AttackEffect\AttackEffect.cpp" />
-    <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp" />
-    <ClCompile Include="Game\Player\JumpAttackUI\JumpAttackUI.cpp" />
-    <ClCompile Include="Game\Player\Parameter\PlayerParameter.cpp" />
-    <ClCompile Include="Game\Player\Parts\BasePlayerHand.cpp" />
-    <ClCompile Include="Game\Player\Parts\PlayerHandLeft.cpp" />
-    <ClCompile Include="Game\Player\Parts\PlayerHandRight.cpp" />
+    <ClCompile Include="Game\Player\Components\Effect\AttackEffect\AttackEffect.cpp" />
+    <ClCompile Include="Game\Player\Components\Effect\PlayerEffects.cpp" />
+    <ClCompile Include="Game\Player\Components\JumpAttackUI\JumpAttackUI.cpp" />
+    <ClCompile Include="Game\Player\Components\Parameter\PlayerParameter.cpp" />
+    <ClCompile Include="Game\Player\Components\Parts\BasePlayerHand.cpp" />
+    <ClCompile Include="Game\Player\Components\Parts\PlayerHandLeft.cpp" />
+    <ClCompile Include="Game\Player\Components\Parts\PlayerHandRight.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\EditorScene.cpp" />
@@ -535,6 +538,7 @@
     <ClInclude Include="Game\Combo\ComboUI.h" />
     <ClInclude Include="Game\Combo\ComboUIController.h" />
     <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h" />
+    <ClInclude Include="Engine\utility\CollisionPush\CollisionPushUtils.h" />
     <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h" />
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h" />
     <ClInclude Include="Game\DeathTimer\DeathTimer.h" />
@@ -594,7 +598,9 @@
     <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerSpawn.h" />
     <ClInclude Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.h" />
     <ClInclude Include="Game\Player\Behavior\TitleBehavior\TitlePlayerBehavior.h" />
-    <ClInclude Include="Game\Player\CollisionBox\PlayerAttackCollider.h" />
+    <ClInclude Include="Game\Player\Components\Animation\PlayerAnimator.h" />
+    <ClInclude Include="Game\Player\Components\Input\PlayerInput.h" />
+    <ClInclude Include="Game\Player\Components\CollisionBox\PlayerAttackCollider.h" />
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h" />
@@ -605,13 +611,13 @@
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.h" />
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.h" />
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.h" />
-    <ClInclude Include="Game\Player\Effect\AttackEffect\AttackEffect.h" />
-    <ClInclude Include="Game\Player\Effect\PlayerEffects.h" />
-    <ClInclude Include="Game\Player\JumpAttackUI\JumpAttackUI.h" />
-    <ClInclude Include="Game\Player\Parameter\PlayerParameter.h" />
-    <ClInclude Include="Game\Player\Parts\BasePlayerHand.h" />
-    <ClInclude Include="Game\Player\Parts\PlayerHandLeft.h" />
-    <ClInclude Include="Game\Player\Parts\PlayerHandRight.h" />
+    <ClInclude Include="Game\Player\Components\Effect\AttackEffect\AttackEffect.h" />
+    <ClInclude Include="Game\Player\Components\Effect\PlayerEffects.h" />
+    <ClInclude Include="Game\Player\Components\JumpAttackUI\JumpAttackUI.h" />
+    <ClInclude Include="Game\Player\Components\Parameter\PlayerParameter.h" />
+    <ClInclude Include="Game\Player\Components\Parts\BasePlayerHand.h" />
+    <ClInclude Include="Game\Player\Components\Parts\PlayerHandLeft.h" />
+    <ClInclude Include="Game\Player\Components\Parts\PlayerHandRight.h" />
     <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\EditorScene.h" />

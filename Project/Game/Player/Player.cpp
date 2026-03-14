@@ -3,10 +3,10 @@
 /// Enemy
 #include "Enemy/CollisionBox/EnemyAttackCollisionBox.h"
 #include "Enemy/Types/BaseEnemy.h"
+// CollisionUtils
+#include "utility/CollisionPush/CollisionPushUtils.h"
 // DeathTimer
 #include "DeathTimer/DeathTimer.h"
-// ObjEaseAnimation
-#include"Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 /// Behavior
 #include "Behavior/ComboAttackBehavior/ComboAttackRoot.h"
 #include "Behavior/PlayerBehavior/PlayerDeath.h"
@@ -24,8 +24,6 @@
 #include "LockOn/LockOnController.h"
 // ComboCreator
 #include "ComboCreator/PlayerComboAttackController.h"
-// input
-#include "input/Input.h"
 // Frame
 #include "Frame/Frame.h"
 // Math
@@ -78,10 +76,7 @@ void Player::Init() {
     baseTransform_.SetBaseScale(Vector3::OneVector());
     baseTransform_.translation_ = parameters_->GetParameters().startPos_;
 
-    // ディゾルブエッジ設定
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.09f;
-    dissolvePlayer_.Init();
+    animator_.Init(obj3d_.get(), leftHand_.get(), rightHand_.get(), &baseTransform_);
 
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));
@@ -165,30 +160,7 @@ void Player::GameIntroUpdate() {
 /// 移動の入力処理
 ///==========================================================
 Vector3 Player::GetInputDirection() {
-
-    Vector3 velocity         = {0.0f, 0.0f, 0.0f};
-    KetaEngine::Input* input = KetaEngine::Input::GetInstance();
-
-    // キーボード入力
-    if (input->PushKey(KeyboardKey::W)) {
-        velocity.z += 1.0f; // 前進
-    }
-    if (input->PushKey(KeyboardKey::S)) {
-        velocity.z -= 1.0f; // 後退
-    }
-    if (input->PushKey(KeyboardKey::A)) {
-        velocity.x -= 1.0f; // 左移動
-    }
-    if (input->PushKey(KeyboardKey::D)) {
-        velocity.x += 1.0f; // 右移動
-    }
-
-    // ジョイスティック入力
-    Vector2 stickInput = KetaEngine::Input::GetPadStick(0, 0);
-    velocity.x += stickInput.x;
-    velocity.z += stickInput.y;
-
-    return velocity;
+    return input_.GetMoveDirection();
 }
 
 ///=========================================================
@@ -237,44 +209,7 @@ void Player::AdaptRotate() {
 /// 動いているか
 ///==========================================================
 bool Player::CheckIsMoving() {
-    KetaEngine::Input* input   = KetaEngine::Input::GetInstance();
-    bool isMoving              = false;
-    const float thresholdValue = 0.3f;
-    Vector3 keyboardVelocity   = {0.0f, 0.0f, 0.0f};
-
-    //---------------------------------------------------------------------
-    // keyboard
-    //---------------------------------------------------------------------
-    if (input->PushKey(KeyboardKey::W) || input->PushKey(KeyboardKey::A) || input->PushKey(KeyboardKey::S) || input->PushKey(KeyboardKey::D)) {
-        // キーボード入力
-        if (input->PushKey(KeyboardKey::W)) {
-            keyboardVelocity.z += 1.0f; // 前進
-        }
-        if (input->PushKey(KeyboardKey::S)) {
-            keyboardVelocity.z -= 1.0f; // 後退
-        }
-        if (input->PushKey(KeyboardKey::A)) {
-            keyboardVelocity.x -= 1.0f; // 左移動
-        }
-        if (input->PushKey(KeyboardKey::D)) {
-            keyboardVelocity.x += 1.0f; // 右移動
-        }
-
-        if (keyboardVelocity.Length() > 0) {
-            isMoving = true;
-        }
-    } else {
-        //----------------------------------------------------------
-        // JoyStick
-        //----------------------------------------------------------
-        Vector2 stickInput = KetaEngine::Input::GetPadStick(0, 0);
-
-        if (stickInput.Length() > thresholdValue) {
-            isMoving = true;
-        }
-    }
-
-    return isMoving;
+    return input_.IsMoving();
 }
 
 ///=========================================================
@@ -399,11 +334,7 @@ void Player::UpdateMatrix() {
     leftHand_->Update();
     rightHand_->Update();
 
-      // ディゾルブ更新・適用
-    dissolvePlayer_.Update();
-    if (dissolvePlayer_.IsPlaying()) {
-        dissolvePlayer_.ApplyToMaterial(*obj3d_->GetModelMaterial());
-    }
+    animator_.Update();
 
     BaseObject::Update();
 }
@@ -433,73 +364,24 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             return;
         }
 
-        // 敵の中心座標を取得
-        const Vector3& enemyPosition = enemy->GetCollisionPos();
-
-        // プレイヤーと敵の位置の差分ベクトルを計算
-        Vector3 delta = baseTransform_.translation_ - enemyPosition;
-
-        // スケール取得
-        float enemyScale = enemy->GetCollisionRadius();
-        Vector3 myScale    = GetCollisonScale();
-
-        // 押し出す距離の計算
-        float pushDistanceX = (enemyScale + myScale.x) / 2.0f + 0.1f;
- 
-        // 実際の押し戻し距離を計算
-        float pushAmountX = pushDistanceX - std::abs(delta.x);
-        float pushAmountZ = pushDistanceX - std::abs(delta.z);
-
-        // ワープを防ぐために0以下の値を無効化
-        pushAmountX = max(0.0f, pushAmountX);
-        pushAmountZ = max(0.0f, pushAmountZ);
-
-        // 押し戻し方向
-        Vector3 pushDirection = {0, 0, 0};
-        float pushDistance    = 0.0f;
-
-        if (pushAmountX > 0.0f && pushAmountZ > 0.0f) {
-            // XとZ両方めり込んでいる場合
-            if (pushAmountX > pushAmountZ) {
-                pushDistance  = pushAmountX;
-                pushDirection = {delta.x > 0 ? 1.0f : -1.0f, 0, 0};
-            } else {
-                pushDistance  = pushAmountZ;
-                pushDirection = {0, 0, delta.z > 0 ? 1.0f : -1.0f};
-            }
-            /// それぞれ片方ずるめり込んでいる
-        } else if (pushAmountX > 0.0f) {
-            pushDistance  = pushAmountX;
-            pushDirection = {delta.x > 0 ? 1.0f : -1.0f, 0, 0};
-        } else if (pushAmountZ > 0.0f) {
-            pushDistance  = pushAmountZ;
-            pushDirection = {0, 0, delta.z > 0 ? 1.0f : -1.0f};
-        }
-
-        // ワープを防ぐため、最大移動量を制限
-        float MAX_PUSH_DISTANCE = 0.5f;
-        pushDistance            = std::min(pushDistance, MAX_PUSH_DISTANCE);
-
-        // 実際に押し戻す
-        if (pushDistance > 0.0f) {
-            baseTransform_.translation_ += pushDirection * pushDistance;
-        }
+        CollisionPushUtils::ApplyAABBSpherePush(
+            baseTransform_.translation_,
+            enemy->GetCollisionPos(),
+            GetCollisonScale(),
+            enemy->GetCollisionRadius());
     }
 }
 
 void Player::PlayDissolve(const std::string& name) {
-    dissolvePlayer_.Play(name);
-    leftHand_->PlayDissolve(name);
-    rightHand_->PlayDissolve(name);
+    animator_.PlayDissolve(name);
 }
 
 bool Player::IsDissolveFinished() const {
-    return dissolvePlayer_.IsFinished();
+    return animator_.IsDissolveFinished();
 }
 
 void Player::SetInitialDissolveHidden() {
-    obj3d_->GetModelMaterial()->GetMaterialData()->enableDissolve    = true;
-    obj3d_->GetModelMaterial()->GetMaterialData()->dissolveThreshold = 1.0f;
+    animator_.SetInitialDissolveHidden();
 }
 
 Vector3 Player::GetCollisionPos() const {
@@ -521,36 +403,6 @@ void Player::HeadLightSetting() {
     }
 }
 
-void Player::MainHeadAnimationStart(const std::string& name) {
-    baseTransform_.PlayObjEaseAnimation(name, "MainHead");
-}
-
-void Player::TitleAnimationPlay(const std::string& name) {
-    baseTransform_.PlayObjEaseAnimation(name, "TitlePlayer");
-}
-
-void Player::TitleRightHandAnimationPlay(const std::string& name) {
-    rightHand_->GetObject3D()->transform_.PlayObjEaseAnimation(name, "TitlePlayer");
-}
-
-void Player::TitleLeftHandAnimationPlay(const std::string& name) {
-    leftHand_->GetObject3D()->transform_.PlayObjEaseAnimation(name, "TitlePlayer");
-}
-
-bool Player::IsTitleAnimationFinished() {
-    auto* p = baseTransform_.GetObjEaseAnimationPlayer();
-    return p && p->IsFinished();
-}
-
-bool Player::IsTitleRightHandAnimationFinished() {
-    auto* p = rightHand_->GetObject3D()->transform_.GetObjEaseAnimationPlayer();
-    return p && p->IsFinished();
-}
-
-bool Player::IsTitleLeftHandAnimationFinished() {
-    auto* p = leftHand_->GetObject3D()->transform_.GetObjEaseAnimationPlayer();
-    return p && p->IsFinished();
-}
 
 bool Player::IsDashing() const {
     if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {

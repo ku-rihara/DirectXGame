@@ -32,7 +32,7 @@
 #include "LockOn/LockOnController.h"
 // Player
 #include "Player/ComboCreator/PlayerComboAttackController.h"
-#include "Player/Effect/AttackEffect/AttackEffect.h"
+#include "Player/Components/Effect/AttackEffect/AttackEffect.h"
 #include "Player/Player.h"
 // SkyBox
 #include "SkyBox/SkyBox.h"

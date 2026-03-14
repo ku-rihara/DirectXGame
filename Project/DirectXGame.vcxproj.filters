@@ -241,6 +241,9 @@
     <Filter Include="Engine\utility\ObjectFromBlender">
       <UniqueIdentifier>{2F592395-D4F7-4A7A-A79E-6D9B0971DBBB}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\utility\CollisionPush">
+      <UniqueIdentifier>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\utility\TimeLine">
       <UniqueIdentifier>{B03E8DF1-E376-4736-8FCD-89F604AA6499}</UniqueIdentifier>
     </Filter>
@@ -286,22 +289,31 @@
     <Filter Include="Game\Player\Behavior">
       <UniqueIdentifier>{0D592060-64E4-4FA8-801B-27704DBCA3DD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\CollisionBox">
+    <Filter Include="Game\Player\Components">
+      <UniqueIdentifier>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Components\Animation">
+      <UniqueIdentifier>{B2C3D4E5-F6A7-8901-BCDE-F12345678901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Components\Input">
+      <UniqueIdentifier>{C3D4E5F6-A7B8-9012-CDEF-123456789012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Components\CollisionBox">
       <UniqueIdentifier>{5BAF6EEB-CFEF-4F00-B9D4-8C10AB4B5809}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player\ComboCreator">
       <UniqueIdentifier>{B714512D-5AEF-4C41-B18C-D05B15019D53}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\Effect">
+    <Filter Include="Game\Player\Components\Effect">
       <UniqueIdentifier>{BAEBFE02-680C-4E72-A90F-778D215456B2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\JumpAttackUI">
+    <Filter Include="Game\Player\Components\JumpAttackUI">
       <UniqueIdentifier>{2481D7D1-4371-4709-8F47-1821296CAA7B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\Parameter">
+    <Filter Include="Game\Player\Components\Parameter">
       <UniqueIdentifier>{9BD0B18C-AA6B-4992-B221-0BFD50257A39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\Parts">
+    <Filter Include="Game\Player\Components\Parts">
       <UniqueIdentifier>{0364828A-8A5A-4EFC-B66D-3433166F9A28}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Scene\GameSceneState">
@@ -364,7 +376,7 @@
     <Filter Include="Game\Player\ComboCreator\Timeline">
       <UniqueIdentifier>{E58961F0-E5C4-4511-9E0F-68B1404AAC8F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\Effect\AttackEffect">
+    <Filter Include="Game\Player\Components\Effect\AttackEffect">
       <UniqueIdentifier>{481CA406-96FA-433F-8A42-379C3FA80A34}</UniqueIdentifier>
     </Filter>
     <Filter Include="resources\Shader\Particle\CS">
@@ -958,6 +970,9 @@
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp">
       <Filter>Engine\utility\ObjectFromBlender</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\CollisionPush\CollisionPushUtils.cpp">
+      <Filter>Engine\utility\CollisionPush</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp">
       <Filter>Engine\utility\TimeLine</Filter>
     </ClCompile>
@@ -1111,8 +1126,14 @@
     <ClCompile Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.cpp">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\CollisionBox\PlayerAttackCollider.cpp">
-      <Filter>Game\Player\CollisionBox</Filter>
+    <ClCompile Include="Game\Player\Components\Animation\PlayerAnimator.cpp">
+      <Filter>Game\Player\Components\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Components\Input\PlayerInput.cpp">
+      <Filter>Game\Player\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Components\CollisionBox\PlayerAttackCollider.cpp">
+      <Filter>Game\Player\Components\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp">
       <Filter>Game\Player\ComboCreator</Filter>
@@ -1141,26 +1162,26 @@
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.cpp">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Effect\AttackEffect\AttackEffect.cpp">
-      <Filter>Game\Player\Effect\AttackEffect</Filter>
+    <ClCompile Include="Game\Player\Components\Effect\AttackEffect\AttackEffect.cpp">
+      <Filter>Game\Player\Components\Effect\AttackEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp">
-      <Filter>Game\Player\Effect</Filter>
+    <ClCompile Include="Game\Player\Components\Effect\PlayerEffects.cpp">
+      <Filter>Game\Player\Components\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\JumpAttackUI\JumpAttackUI.cpp">
-      <Filter>Game\Player\JumpAttackUI</Filter>
+    <ClCompile Include="Game\Player\Components\JumpAttackUI\JumpAttackUI.cpp">
+      <Filter>Game\Player\Components\JumpAttackUI</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Parameter\PlayerParameter.cpp">
-      <Filter>Game\Player\Parameter</Filter>
+    <ClCompile Include="Game\Player\Components\Parameter\PlayerParameter.cpp">
+      <Filter>Game\Player\Components\Parameter</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Parts\BasePlayerHand.cpp">
-      <Filter>Game\Player\Parts</Filter>
+    <ClCompile Include="Game\Player\Components\Parts\BasePlayerHand.cpp">
+      <Filter>Game\Player\Components\Parts</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Parts\PlayerHandLeft.cpp">
-      <Filter>Game\Player\Parts</Filter>
+    <ClCompile Include="Game\Player\Components\Parts\PlayerHandLeft.cpp">
+      <Filter>Game\Player\Components\Parts</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Parts\PlayerHandRight.cpp">
-      <Filter>Game\Player\Parts</Filter>
+    <ClCompile Include="Game\Player\Components\Parts\PlayerHandRight.cpp">
+      <Filter>Game\Player\Components\Parts</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
@@ -1834,6 +1855,9 @@
     <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h">
       <Filter>Engine\utility\ObjectFromBlender</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\utility\CollisionPush\CollisionPushUtils.h">
+      <Filter>Engine\utility\CollisionPush</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h">
       <Filter>Engine\utility\TimeLine</Filter>
     </ClInclude>
@@ -1990,8 +2014,14 @@
     <ClInclude Include="Game\Player\Behavior\TitleBehavior\BaseTitleBehavior.h">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\CollisionBox\PlayerAttackCollider.h">
-      <Filter>Game\Player\CollisionBox</Filter>
+    <ClInclude Include="Game\Player\Components\Animation\PlayerAnimator.h">
+      <Filter>Game\Player\Components\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Components\Input\PlayerInput.h">
+      <Filter>Game\Player\Components\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Components\CollisionBox\PlayerAttackCollider.h">
+      <Filter>Game\Player\Components\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h">
       <Filter>Game\Player\ComboCreator</Filter>
@@ -2020,26 +2050,26 @@
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.h">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Effect\AttackEffect\AttackEffect.h">
-      <Filter>Game\Player\Effect\AttackEffect</Filter>
+    <ClInclude Include="Game\Player\Components\Effect\AttackEffect\AttackEffect.h">
+      <Filter>Game\Player\Components\Effect\AttackEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Effect\PlayerEffects.h">
-      <Filter>Game\Player\Effect</Filter>
+    <ClInclude Include="Game\Player\Components\Effect\PlayerEffects.h">
+      <Filter>Game\Player\Components\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\JumpAttackUI\JumpAttackUI.h">
-      <Filter>Game\Player\JumpAttackUI</Filter>
+    <ClInclude Include="Game\Player\Components\JumpAttackUI\JumpAttackUI.h">
+      <Filter>Game\Player\Components\JumpAttackUI</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Parameter\PlayerParameter.h">
-      <Filter>Game\Player\Parameter</Filter>
+    <ClInclude Include="Game\Player\Components\Parameter\PlayerParameter.h">
+      <Filter>Game\Player\Components\Parameter</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Parts\BasePlayerHand.h">
-      <Filter>Game\Player\Parts</Filter>
+    <ClInclude Include="Game\Player\Components\Parts\BasePlayerHand.h">
+      <Filter>Game\Player\Components\Parts</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Parts\PlayerHandLeft.h">
-      <Filter>Game\Player\Parts</Filter>
+    <ClInclude Include="Game\Player\Components\Parts\PlayerHandLeft.h">
+      <Filter>Game\Player\Components\Parts</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Parts\PlayerHandRight.h">
-      <Filter>Game\Player\Parts</Filter>
+    <ClInclude Include="Game\Player\Components\Parts\PlayerHandRight.h">
+      <Filter>Game\Player\Components\Parts</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\Player.h">
       <Filter>Game\Player</Filter>

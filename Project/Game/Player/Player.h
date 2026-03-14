@@ -6,24 +6,27 @@
 #include "BaseObject/BaseObject.h"
 // Collider
 #include "Collider/AABBCollider.h"
-#include "CollisionBox/PlayerAttackCollider.h"
+#include "Components/CollisionBox/PlayerAttackCollider.h"
 // Behavior
 #include "Behavior/ComboAttackBehavior/BaseComboAttackBehavior.h"
 #include "Behavior/PlayerBehavior/BasePlayerBehavior.h"
 #include "Behavior/TitleBehavior/BaseTitleBehavior.h"
 // Editor
-#include "Editor/DissolveEditor/DissolvePlayer.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+// Animation
+#include "Components/Animation/PlayerAnimator.h"
 // Particle,Effect
-#include "Effect/PlayerEffects.h"
+#include "Components/Effect/PlayerEffects.h"
 #include "Particle/CPUParticle/Editor/ParticleEmitter.h"
 // UI
-#include "JumpAttackUI/JumpAttackUI.h"
+#include "Components/JumpAttackUI/JumpAttackUI.h"
 // Parameter
-#include "Parameter/PlayerParameter.h"
+#include "Components/Parameter/PlayerParameter.h"
+// Input
+#include "Components/Input/PlayerInput.h"
 // Parts
-#include "Parts/PlayerHandLeft.h"
-#include "Parts/PlayerHandRight.h"
+#include "Components/Parts/PlayerHandLeft.h"
+#include "Components/Parts/PlayerHandRight.h"
 // ComboCreator
 #include "Player/AutoComboAttack/AutoComboQueue.h"
 // std
@@ -124,13 +127,6 @@ public:
     void AdjustParam(); //< パラメータ調整
     Vector3 GetCollisionPos() const override; //< 衝突位置取得
 
-    void MainHeadAnimationStart(const std::string& name);
-    void TitleAnimationPlay(const std::string& name); //< タイトル本体アニメーション再生
-    void TitleRightHandAnimationPlay(const std::string& name); //< タイトル右手アニメーション再生
-    void TitleLeftHandAnimationPlay(const std::string& name); //< タイトル左手アニメーション再生
-    bool IsTitleAnimationFinished(); //< 本体アニメーション終了判定
-    bool IsTitleRightHandAnimationFinished(); //< 右手アニメーション終了判定
-    bool IsTitleLeftHandAnimationFinished(); //< 左手アニメーション終了判定
 
     /// <summary>
     /// ダッシュ中かどうかを取得
@@ -145,7 +141,7 @@ private:
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Player";
 
-    KetaEngine::DissolvePlayer dissolvePlayer_;
+    PlayerAnimator animator_;
 
     /// other class
     LockOnController* pLockOn_                          = nullptr;
@@ -180,6 +176,9 @@ private:
     /// ===================================================
     /// private variables
     /// ===================================================
+
+    // input
+    PlayerInput input_;
 
     // move
     float objectiveAngle_;
@@ -219,6 +218,8 @@ public:
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
     DeathTimer* GetDeathTimer() const { return pDeathTimer_; }
     bool GetIsIgnoreUnlockState() const { return isIgnoreUnlockState_; }
+    const PlayerInput& GetInput() const { return input_; }
+    PlayerAnimator& GetPlayerAnimator() { return animator_; }
     KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
     bool GetIsDeathRenditionFinish() const { return *isDeath_; }

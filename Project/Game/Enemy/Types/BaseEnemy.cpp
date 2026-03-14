@@ -2,6 +2,8 @@
 
 // std
 #include <algorithm>
+// CollisionUtils
+#include "utility/CollisionPush/CollisionPushUtils.h"
 // KillCounter
 #include "KillCounter/KillCounter.h"
 // Manager
@@ -11,7 +13,7 @@
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 // Player
-#include "Player/CollisionBox/PlayerAttackCollider.h"
+#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
 // DeathTimer
@@ -160,35 +162,11 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             return;
         }
 
-        // 敵の中心座標を取得
-        const Vector3& enemyPosition = enemy->GetCollisionPos();
-
-        // XZ平面上の差分ベクトルを計算
-        Vector3 delta = baseTransform_.translation_ - enemyPosition;
-        delta.y       = 0.0f;
-
-        float dist = std::sqrt(delta.x * delta.x + delta.z * delta.z);
-
-        // コリジョン半径の取得
-        float myScale    = GetCollisionRadius();
-        float enemyScale = enemy->GetCollisionRadius();
-        float minDist    = myScale + enemyScale;
-
-        // 重なっている場合のみ押し出す
-        if (dist < minDist) {
-            Vector3 pushDirection;
-            if (dist > 0.001f) {
-                // 実際の差分方向（正規化）で押し出す
-                pushDirection = {delta.x / dist, 0.0f, delta.z / dist};
-            } else {
-                // ほぼ同座標の場合は固定方向で押し出す
-                pushDirection = {1.0f, 0.0f, 0.0f};
-            }
-
-            float MAX_PUSH_DISTANCE = 1.0f;
-            float pushDistance      = std::min(minDist - dist, MAX_PUSH_DISTANCE);
-            baseTransform_.translation_ += pushDirection * pushDistance;
-        }
+        CollisionPushUtils::ApplySpherePush(
+            baseTransform_.translation_,
+            enemy->GetCollisionPos(),
+            GetCollisionRadius(),
+            enemy->GetCollisionRadius());
     }
 }
 

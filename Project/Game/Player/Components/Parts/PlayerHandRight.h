@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Player/Parts/BasePlayerHand.h"
+#include "Player/Components/Parts/BasePlayerHand.h"
 
 /// <summary>
 /// プレイヤーの右手クラス
