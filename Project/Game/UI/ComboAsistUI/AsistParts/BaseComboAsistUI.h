@@ -110,6 +110,9 @@ public:
     // Lerpせず即座にターゲット位置へスナップ
     void SnapToTarget();
 
+    // アニメーションなしで範囲状態を即時設定（コンボリセット後など）
+    void SnapRangeState(bool inRange);
+
     // プッシュスケーリングアニメーション再生
     void PlayPushScaling();
 

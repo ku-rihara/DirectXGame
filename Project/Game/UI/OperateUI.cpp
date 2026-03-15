@@ -66,10 +66,10 @@ bool OperateUI::IsPushCondition(OperateButtonType type) {
 /// パラメータ登録
 ///=========================================================
 void OperateUI::RegisterParams() {
-    // 押下時スケール倍率（共通）
+    // 押下時スケール倍率
     globalParameter_->Regist(groupName_, "pressScaleMultiplier", &pressScaleMultiplier_);
 
-    // 押下時カラー（ボタンごとに個別）
+    // 押下時カラー
     const char* buttonNames[] = {"X", "Y", "B", "A", "LB"};
     for (int32_t i = 0; i < static_cast<int32_t>(OperateButtonType::COUNT); ++i) {
         std::string key = std::string("pressColor_") + buttonNames[i];

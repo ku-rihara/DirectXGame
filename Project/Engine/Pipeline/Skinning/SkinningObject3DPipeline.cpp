@@ -81,7 +81,7 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     descriptorRange[6].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[14] = {};
+    D3D12_ROOT_PARAMETER rootParameters[15] = {};
 
     // 0: Material
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -158,6 +158,11 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[13].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[13].DescriptorTable.pDescriptorRanges   = &descriptorRange[6];
     rootParameters[13].DescriptorTable.NumDescriptorRanges = 1;
+
+    // 14: PlayerOcclusion (b6, Pixel)
+    rootParameters[14].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[14].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[14].Descriptor.ShaderRegister = 6;
 
     descriptionRootSignature.pParameters   = rootParameters;
     descriptionRootSignature.NumParameters = _countof(rootParameters);

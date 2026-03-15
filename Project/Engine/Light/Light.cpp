@@ -31,6 +31,12 @@ void Light::Init(DirectXCommon* dxCommon) {
     cameraForGPUData_ = nullptr;
     cameraForGPUResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPUData_));
 
+    // プレイヤーオクルージョン
+    playerOcclusionResource_ = DirectXCommon::GetInstance()->CreateBufferResource(dxCommon_->GetDevice(), sizeof(PlayerOcclusionData));
+    playerOcclusionData_ = nullptr;
+    playerOcclusionResource_->Map(0, nullptr, reinterpret_cast<void**>(&playerOcclusionData_));
+    playerOcclusionData_->enabled = 0;
+
     // ライトカウント
     lightCountResource_ = DirectXCommon::GetInstance()->CreateBufferResource(dxCommon_->GetDevice(), sizeof(LightCountData));
     // データを書き込む
@@ -115,10 +121,15 @@ void Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {
     spotLightManager_->SetLightCommand(commandList);
     areaLightManager_->SetLightCommand(commandList);
     ambientLight_->SetLightCommand(commandList);
+    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Object3DRootParameter::PlayerOcclusion), playerOcclusionResource_->GetGPUVirtualAddress());
 }
 
 void Light::SetWorldCameraPos(const Vector3& pos) {
     cameraForGPUData_->worldPosition_ = pos;
+}
+
+void Light::SetPlayerOcclusion(const PlayerOcclusionData& data) {
+    *playerOcclusionData_ = data;
 }
 
 void Light::AddSpotLight() {

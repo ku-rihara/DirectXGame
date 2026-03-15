@@ -24,10 +24,14 @@ public:
     /// 条件データのX/Y両グループをまとめて更新する
     void UpdateConditionVisibility(ConditionUIData& conditionData);
 
+    /// アニメーションなしで条件データの表示状態をスナップする（コンボリセット後用）
+    void SnapConditionVisibility(ConditionUIData& conditionData);
+
 private:
     bool IsInVisibleRange(int32_t col, int32_t row) const;
     bool IsArrowVisible(const ComboAsistArrowUI& arrow) const;
     void ApplyRangeVisibleToGroup(ComboUIGroup& uiGroup);
+    void SnapGroupVisibility(ComboUIGroup& uiGroup);
 
 private:
     int32_t maxVisibleColumn_ = 5;

@@ -1,0 +1,6 @@
+{
+    "DitherOcclusion": {
+        "ScreenRadius": 150.0,
+        "DitherAlpha": 0.2
+    }
+}

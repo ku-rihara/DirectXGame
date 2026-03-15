@@ -10,6 +10,7 @@
 /// Behavior
 #include "Behavior/ComboAttackBehavior/ComboAttackRoot.h"
 #include "Behavior/PlayerBehavior/PlayerDeath.h"
+#include "Behavior/PlayerBehavior/PlayerJump.h"
 #include "Behavior/PlayerBehavior/PlayerMove.h"
 #include "Behavior/PlayerBehavior/PlayerSpawn.h"
 #include "Behavior/TitleBehavior/TitlePlayerBehavior.h"
@@ -409,6 +410,10 @@ bool Player::IsDashing() const {
         return moveState->IsDashing();
     }
     return false;
+}
+
+bool Player::IsAirborne() const {
+    return dynamic_cast<PlayerJump*>(behavior_.get()) != nullptr;
 }
 
 void Player::StartAutoDash() {

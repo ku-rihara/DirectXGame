@@ -50,7 +50,7 @@ void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
     // タイトルへ遷移
     if (alpha_ >= 1.0f) {
         isGameEnd_ = true;
-
+        KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
     }
 }
 

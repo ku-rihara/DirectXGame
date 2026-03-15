@@ -78,7 +78,11 @@ void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
     case NotifyCard::State::OPENING:
         slideEasing_.Update(deltaTime);
         if (slideEasing_.IsFinished()) {
-            // 自動再生オフ：OPENINGが終わったら即クローズ待機へ
+            // スライドイン完了：最後のボタンにアンロック演出を再生（通知UIなので音なし）
+            if (card.unlockTargetButton) {
+                card.unlockTargetButton->SetUnlockSoundEnabled(false);
+                card.unlockTargetButton->SetUnlocked(true);
+            }
             card.state          = NotifyCard::State::CLOSE_WAITING;
             card.closeWaitTimer = 0.0f;
 
@@ -464,15 +468,20 @@ void ComboUnlockNotifier::PopulateCard(
             }
         }
 
-        const auto& step = steps[i];
-        auto btn         = std::make_unique<ComboAsistButtonUI>();
-        btn->Init(step.gamepadButton, step.isUnlocked, notifyLayout, step.attackName);
+        const auto& step    = steps[i];
+        const bool isLast   = (i == steps.size() - 1);
+        // 最後のボタン（新規開放）はロック状態で生成し、スライドイン後に演出を再生する
+        const bool initUnlocked = isLast ? false : step.isUnlocked;
+
+        auto btn = std::make_unique<ComboAsistButtonUI>();
+        btn->Init(step.gamepadButton, initUnlocked, notifyLayout, step.attackName);
         btn->SetRowColumn(kRow, col);
         btn->ApplyLayout();
         btn->SetExtraScale(buttonExtraScale_);
 
-        if (i == steps.size() - 1) {
+        if (isLast) {
             btn->SetActiveOutLine(true);
+            card.unlockTargetButton = btn.get();
         }
 
         // 初期位置を画面外（スライドイン前）に設定

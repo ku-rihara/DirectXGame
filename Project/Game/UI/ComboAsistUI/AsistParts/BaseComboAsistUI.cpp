@@ -90,6 +90,12 @@ void BaseComboAsistUI::SnapToTarget() {
     SetPosition(currentDisplayPos_);
 }
 
+void BaseComboAsistUI::SnapRangeState(bool inRange) {
+    isInRange_         = inRange;
+    isScaleOutPlaying_ = false;
+    SetVisible(inRange);
+}
+
 void BaseComboAsistUI::PlayPushScaling() {
     if (uiSprite_) {
         uiSprite_->PlaySpriteEaseAnimation("PushScalingUI", "ComboAsistUI");
@@ -139,6 +145,12 @@ void BaseComboAsistUI::PlayScaleOut() {
 }
 
 void BaseComboAsistUI::SetVisible(bool visible) {
+    if (!visible) {
+        // 非表示にする際は範囲状態をリセットする
+        // これにより再表示時に SetRangeVisible(true) が正しく機能する
+        isInRange_         = false;
+        isScaleOutPlaying_ = false;
+    }
     if (uiSprite_) {
         uiSprite_->SetIsDraw(visible);
     }
@@ -146,7 +158,6 @@ void BaseComboAsistUI::SetVisible(bool visible) {
         lockUI_->SetIsDraw(visible);
     }
     if (activeOutLineUI_) {
-
         if (!visible) {
             activeOutLineUI_->SetIsDraw(false);
         }

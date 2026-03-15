@@ -65,7 +65,9 @@ void ComboAsistButtonUI::Update() {
         if (isUnlockShakePlaying_ && shakePlayer_.IsFinished()) {
             isUnlockShakePlaying_ = false;
             lockUI_->SetIsDraw(false);
-            KetaEngine::Audio::GetInstance()->Play("AttackUnlockSE.mp3", 1.0f);
+            if (unlockSoundEnabled_) {
+                KetaEngine::Audio::GetInstance()->Play("AttackUnlockSE.mp3", 1.0f);
+            }
             unlockParticlePlayer_.Play("AttackUnlockEffect", "UI");
         }
     }
@@ -87,7 +89,9 @@ void ComboAsistButtonUI::SetUnlocked(bool isUnlocked) {
     isUnlocked_ = isUnlocked;
 
     if (lockUI_ && justUnlocked) {
-        KetaEngine::Audio::GetInstance()->Play("PreUnlockES.mp3",1.0f);
+        if (unlockSoundEnabled_) {
+            KetaEngine::Audio::GetInstance()->Play("PreUnlockES.mp3", 1.0f);
+        }
         lockUI_->SetUVPosition({0.5f, 0.0f});
         isUnlockShakePlaying_ = true;
         shakePlayer_.Play("UnlockShake", "ComboAsistUI");
@@ -116,15 +120,9 @@ void ComboAsistButtonUI::PlayScaleOut() {
 }
 
 void ComboAsistButtonUI::SetVisible(bool visible) {
-    if (uiSprite_) {
-        uiSprite_->SetIsDraw(visible);
-    }
-    if (lockUI_) {
-        lockUI_->SetIsDraw(visible);
-    }
-    if (activeOutLineUI_) {
-        if (!visible) {
-            activeOutLineUI_->SetIsDraw(false);
-        }
+    BaseComboAsistUI::SetVisible(visible);
+    // 解放済みの場合、SetVisible(true) でロックUIが再表示されるのを防ぐ
+    if (visible && isUnlocked_ && lockUI_) {
+        lockUI_->SetIsDraw(false);
     }
 }

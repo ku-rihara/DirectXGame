@@ -2,6 +2,7 @@
 #include "Frame/Frame.h"
 #include "GameSceneFinish.h"
 #include "Scene/GameScene.h"
+#include "utility/DitherOcclusion/DitherOcclusion.h"
 
 GameScenePlaying::GameScenePlaying(GameScene* gameScene)
     : BaseGameSceneState("GameScenePlaying", gameScene) {
@@ -40,6 +41,12 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
 
     obj.enemyManager_->HpBarUpdate(pOwner_->GetViewProjection());
     obj.lockOnController_->Update(obj.player_.get(), pOwner_->GetViewProjection());
+
+    // ディザオクルージョン更新
+    Vector3 playerPos = obj.player_->GetBaseTransform().GetWorldPos();
+    pOwner_->GetDitherOcclusion()->Update(obj.gameCamera_->GetViewProjection(), playerPos);
+
+    obj.comboSupportSpriteUi_->Update();
 
     // クリア判定
     if (obj.enemyManager_->GetIsAllCleared() && obj.enemySpawner_->GetAllGroupsCompleted()||obj.player_->GetIsDeathRenditionFinish()) {

@@ -3,6 +3,7 @@
 /// base
 #include "BaseScene.h"
 #include "GameSceneState/BaseGameSceneState.h"
+#include "utility/DitherOcclusion/DitherOcclusion.h"
 
 // Audience
 #include "Audience/AudienceController.h"
@@ -110,6 +111,9 @@ private:
     std::unique_ptr<BaseGameSceneState> state_ = nullptr;
     GameObj gameObj_;
 
+    std::unique_ptr<KetaEngine::DitherOcclusion> ditherOcclusion_;
+
 public:
     GameObj& GetGameObj() { return gameObj_; }
+    KetaEngine::DitherOcclusion* GetDitherOcclusion() { return ditherOcclusion_.get(); }
 };

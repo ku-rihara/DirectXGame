@@ -59,7 +59,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineStateScreen_;
 
 public:
-    ID3D12PipelineState* GetGrahipcsPipeLileStateAdd() const { return graphicsPipelineStateAdd_.Get(); }
+    ID3D12PipelineState* GetGraphicsPipelineStateAdd() const { return graphicsPipelineStateAdd_.Get(); }
     ID3D12PipelineState* GetGrahipcsPipeLileStateNone() const { return graphicsPipelineStateNone_.Get(); }
 };
 

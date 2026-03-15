@@ -33,6 +33,11 @@ public:
     /// </summary>
     void SetUnlocked(bool isUnlocked);
 
+    /// <summary>
+    /// 開放演出でのSE再生を有効/無効にする（通知UI用）
+    /// </summary>
+    void SetUnlockSoundEnabled(bool enabled) { unlockSoundEnabled_ = enabled; }
+
     // 表示/非表示（ロック状態を考慮）
     void SetVisible(bool visible) override;
 
@@ -53,6 +58,7 @@ private:
     int32_t gamepadButton_ = 0;
     bool isUnlocked_            = true;
     bool isUnlockShakePlaying_  = false;
+    bool unlockSoundEnabled_    = true;
     std::string attackName_;
 
     KetaEngine::ShakePlayer shakePlayer_;

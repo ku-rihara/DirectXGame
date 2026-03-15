@@ -133,6 +133,11 @@ public:
     /// </summary>
     bool IsDashing() const;
 
+    /// <summary>
+    /// 空中（ジャンプ中）かどうかを取得
+    /// </summary>
+    bool IsAirborne() const;
+
 private:
     void ChangeDeathMode();
     bool IsAbleBehavior();

@@ -1,80 +1,47 @@
 #include "ComboAsistConditionSwitcher.h"
-#include "input/InputData.h"
-#include "Input/Input.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
-#include <algorithm>
 
 void ComboAsistConditionSwitcher::Init(
     PlayerComboAttackController* attackController,
     ComboUIBuilder* uiBuilder,
     std::map<PlayerComboAttackData::TriggerCondition, ConditionUIData>* conditionDataMap,
-    std::vector<PlayerComboAttackData::TriggerCondition>* availableConditions,
     PlayerComboAttackData::TriggerCondition* currentCondition) {
 
-    pAttackController_   = attackController;
-    pUiBuilder_          = uiBuilder;
-    pConditionDataMap_   = conditionDataMap;
-    pAvailableConditions_ = availableConditions;
-    pCurrentCondition_   = currentCondition;
+    pAttackController_ = attackController;
+    pUiBuilder_        = uiBuilder;
+    pConditionDataMap_ = conditionDataMap;
+    pCurrentCondition_ = currentCondition;
 }
 
-///==========================================================
-/// 手動条件切替（十字キー右）
-///==========================================================
-bool ComboAsistConditionSwitcher::CheckConditionSwitchInput(bool isPanelOpen) {
-    if (!isPanelOpen) {
-        return false;
-    }
-    if (!KetaEngine::Input::IsTriggerPad(0, GamepadButton::DPadRight)) {
-        return false;
-    }
-    if (pAvailableConditions_->size() <= 1) {
-        return false;
-    }
-
-    auto found = std::find(pAvailableConditions_->begin(), pAvailableConditions_->end(), *pCurrentCondition_);
-    size_t idx = 0;
-    if (found != pAvailableConditions_->end()) {
-        idx = static_cast<size_t>(found - pAvailableConditions_->begin());
-    }
-
-    isAutoSwitchedCondition_ = false;
-    // 切替はControllerが行うため、次のConditionを返す形にする
-    // ここではSwitchConditionをController経由で呼ぶため、戻り値で知らせる
-    return true; // Controller側でSwitchConditionを呼ぶ
-}
 
 ///==========================================================
-/// 自動条件切替（空中攻撃検知）
+/// 自動条件切替（プレイヤー状態に基づく）
 ///==========================================================
 bool ComboAsistConditionSwitcher::CheckAutoConditionSwitch(
     bool isVisible,
     Player* pPlayer,
-    const std::string& prevBehaviorName) {
+    PlayerComboAttackData::TriggerCondition& outTargetCondition) {
+
+    if (!isVisible || !pPlayer) {
+        return false;
+    }
 
     using TC = PlayerComboAttackData::TriggerCondition;
-    if (!isVisible || !pPlayer || !pAttackController_ || *pCurrentCondition_ != TC::GROUND) {
+    TC desired = TC::GROUND;
+
+    if (pPlayer->IsAirborne() && pConditionDataMap_->count(TC::AIR) > 0) {
+        desired = TC::AIR;
+    } else if (pPlayer->IsDashing() && pConditionDataMap_->count(TC::DASH) > 0) {
+        desired = TC::DASH;
+    }
+
+    if (desired == *pCurrentCondition_) {
         return false;
     }
 
-    auto* comboBehavior = pPlayer->GetComboBehavior();
-    if (!comboBehavior) {
-        return false;
-    }
-    const std::string& name = comboBehavior->GetName();
-    if (name == "ComboAttackRoot" || name == prevBehaviorName) {
-        return false;
-    }
-
-    auto* attackData = pAttackController_->GetAttackByName(name);
-    if (attackData &&
-        attackData->GetAttackParam().triggerParam.condition == TC::AIR &&
-        pConditionDataMap_->count(TC::AIR) > 0) {
-        isAutoSwitchedCondition_ = true;
-        return true;
-    }
-    return false;
+    outTargetCondition = desired;
+    return true;
 }
 
 ///==========================================================

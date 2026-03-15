@@ -13,11 +13,38 @@ void ComboAsistVisibilityController::UpdateConditionVisibility(ConditionUIData& 
     UpdateGroupVisibility(conditionData.yUIGroup);
 }
 
+void ComboAsistVisibilityController::SnapConditionVisibility(ConditionUIData& conditionData) {
+    SnapGroupVisibility(conditionData.xUIGroup);
+    SnapGroupVisibility(conditionData.yUIGroup);
+}
+
 ///==========================================================
 /// グループ内の全UI要素の表示/非表示を可視範囲に基づいて更新
 ///==========================================================
 void ComboAsistVisibilityController::UpdateGroupVisibility(ComboUIGroup& uiGroup) {
     ApplyRangeVisibleToGroup(uiGroup);
+}
+
+void ComboAsistVisibilityController::SnapGroupVisibility(ComboUIGroup& uiGroup) {
+    for (auto& btn : uiGroup.mainButtonUIs) {
+        btn->SnapRangeState(IsInVisibleRange(btn->GetColumnNum(), btn->GetRowNum()));
+    }
+    for (auto& buttonRow : uiGroup.branchButtonUIs) {
+        for (auto& btn : buttonRow) {
+            btn->SnapRangeState(IsInVisibleRange(btn->GetColumnNum(), btn->GetRowNum()));
+        }
+    }
+    for (auto& arrow : uiGroup.mainArrowUIs) {
+        arrow->SnapRangeState(IsArrowVisible(*arrow));
+    }
+    for (auto& arrow : uiGroup.branchArrowUIs) {
+        arrow->SnapRangeState(IsArrowVisible(*arrow));
+    }
+    for (auto& arrowRow : uiGroup.branchInnerArrowUIs) {
+        for (auto& arrow : arrowRow) {
+            arrow->SnapRangeState(IsArrowVisible(*arrow));
+        }
+    }
 }
 
 void ComboAsistVisibilityController::ApplyRangeVisibleToGroup(ComboUIGroup& uiGroup) {

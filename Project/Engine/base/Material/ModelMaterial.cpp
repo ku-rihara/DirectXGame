@@ -31,6 +31,12 @@ void ModelMaterial::Init(DirectXCommon* dxCommon) {
     materialData_->dissolveEdgeWidth = 0.03f;
     materialData_->enableDissolve    = 0;
 
+    // Dither用の初期値
+    materialData_->enableDither = 0;
+    materialData_->padding2[0]  = 0.0f;
+    materialData_->padding2[1]  = 0.0f;
+    materialData_->padding2[2]  = 0.0f;
+
      // DissolvePlayer初期化
     dissolvePlayer_ = std::make_unique<DissolvePlayer>();
     dissolvePlayer_->Init();
@@ -94,6 +100,13 @@ void ModelMaterial::DebugImGui() {
         ImGui::SliderFloat("Dissolve Threshold", &materialData_->dissolveThreshold, 0.0f, 1.0f);
         ImGui::ColorEdit3("Dissolve Edge Color", reinterpret_cast<float*>(&materialData_->dissolveEdgeColor));
         ImGui::SliderFloat("Dissolve Edge Width", &materialData_->dissolveEdgeWidth, 0.01f, 0.1f);
+    }
+
+    ImGui::Separator();
+    ImGui::Text("Dither Settings");
+    bool enableDither = (materialData_->enableDither != 0);
+    if (ImGui::Checkbox("Enable Dither", &enableDither)) {
+        materialData_->enableDither = enableDither ? 1 : 0;
     }
 
 #endif

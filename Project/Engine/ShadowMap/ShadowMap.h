@@ -52,7 +52,7 @@ public:
     void PreDraw(); //< 描画前処理
     void PostDraw(); //< 描画後処理
 
-    void Finalize(); //< 終了処理
+
     void DebugImGui(); //< ImGuiデバッグ
 
 private:

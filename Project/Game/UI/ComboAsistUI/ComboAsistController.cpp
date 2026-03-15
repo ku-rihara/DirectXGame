@@ -37,7 +37,6 @@ void ComboAsistController::Init() {
         pAttackController_,
         &uiBuilder_,
         &conditionDataMap_,
-        &availableConditions_,
         &currentCondition_);
 
     // スライドイージングの初期化
@@ -72,31 +71,18 @@ void ComboAsistController::Update() {
     UpdateComboState();
     CheckToggleInput();
 
-    // 手動条件切替
-    if (conditionSwitcher_.CheckConditionSwitchInput(panelMode_ == PanelMode::Open)) {
-        auto& conditions = availableConditions_;
-        auto found = std::find(conditions.begin(), conditions.end(), currentCondition_);
-        size_t idx = (found != conditions.end())
-                         ? static_cast<size_t>(found - conditions.begin())
-                         : 0;
-        PlayerComboAttackData::TriggerCondition nextCond = conditions[(idx + 1) % conditions.size()];
-        conditionSwitcher_.SwitchCondition(nextCond, [&](ConditionUIData&, ConditionUIData& next) {
-            ApplySlideOffset();
-            uiBuilder_.ApplyToCondition(next, [](BaseComboAsistUI& ui) { ui.SnapToTarget(); });
-            visibilityController_.UpdateConditionVisibility(next);
-            playedAttacks_.clear();
-        });
-    }
-
-    // 自動条件切替（空中攻撃検知）
-    if (conditionSwitcher_.CheckAutoConditionSwitch(isVisible_, pPlayer_, prevBehaviorName_)) {
-        conditionSwitcher_.SwitchCondition(PlayerComboAttackData::TriggerCondition::AIR,
-            [&](ConditionUIData&, ConditionUIData& next) {
-                ApplySlideOffset();
-                uiBuilder_.ApplyToCondition(next, [](BaseComboAsistUI& ui) { ui.SnapToTarget(); });
-                visibilityController_.UpdateConditionVisibility(next);
-                playedAttacks_.clear();
-            });
+// 自動条件切替（プレイヤー状態：空中/ダッシュ/地上）
+    {
+        PlayerComboAttackData::TriggerCondition autoTarget;
+        if (conditionSwitcher_.CheckAutoConditionSwitch(isVisible_, pPlayer_, autoTarget)) {
+            conditionSwitcher_.SwitchCondition(autoTarget,
+                [&](ConditionUIData&, ConditionUIData& next) {
+                    ApplySlideOffset();
+                    uiBuilder_.ApplyToCondition(next, [](BaseComboAsistUI& ui) { ui.SnapToTarget(); });
+                    visibilityController_.UpdateConditionVisibility(next);
+                    playedAttacks_.clear();
+                });
+        }
     }
 
     UpdateSlide(KetaEngine::Frame::DeltaTime());
@@ -232,20 +218,9 @@ void ComboAsistController::UpdateComboState() {
         }
 
         columnScroller_.ResetShifts(*currentData);
-
-        if (conditionSwitcher_.IsAutoSwitched()) {
-            conditionSwitcher_.ClearAutoSwitched();
-            conditionSwitcher_.SwitchCondition(
-                PlayerComboAttackData::TriggerCondition::GROUND,
-                [&](ConditionUIData&, ConditionUIData& next) {
-                    ApplySlideOffset();
-                    uiBuilder_.ApplyToCondition(next, [](BaseComboAsistUI& ui) { ui.SnapToTarget(); });
-                    visibilityController_.UpdateConditionVisibility(next);
-                    playedAttacks_.clear();
-                });
-        }
+        visibilityController_.SnapConditionVisibility(*currentData);
     } else {
-        // 攻撃発動中：アウトライン更新・スケールアニメーション・列シフト
+        // 攻撃発動中
         bool isNew = (name != prevBehaviorName_);
         playedAttacks_.insert(name);
         SetGroupActiveOutLines(currentData->pathBuilder.GetXGroup(), currentData->xUIGroup, playedAttacks_);
@@ -271,6 +246,7 @@ void ComboAsistController::SetGroupActiveOutLines(
     const ComboPathBuilder::ComboPathGroup& pathGroup,
     ComboUIGroup& uiGroup,
     const std::unordered_set<std::string>& activeAttacks) {
+
     uiBuilder_.ForEachStepButton(pathGroup, uiGroup,
         [&](const ComboPathBuilder::ComboStep& step, ComboAsistButtonUI& btn) {
             btn.SetActiveOutLine(activeAttacks.count(step.attackName) > 0);

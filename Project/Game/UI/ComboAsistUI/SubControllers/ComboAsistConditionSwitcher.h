@@ -3,7 +3,6 @@
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include <map>
 #include <string>
-#include <vector>
 
 class Player;
 class PlayerComboAttackController;
@@ -21,19 +20,15 @@ public:
         PlayerComboAttackController* attackController,
         ComboUIBuilder* uiBuilder,
         std::map<PlayerComboAttackData::TriggerCondition, ConditionUIData>* conditionDataMap,
-        std::vector<PlayerComboAttackData::TriggerCondition>* availableConditions,
         PlayerComboAttackData::TriggerCondition* currentCondition);
 
-    /// 十字キー入力による手動条件切替を確認する
-    /// @return 切替が発生したら true
-    bool CheckConditionSwitchInput(bool isPanelOpen);
-
     /// プレイヤーの状態に基づく自動条件切替を確認する
+    /// @param outTargetCondition 切替先の条件（切替が必要な場合のみ設定）
     /// @return 切替が発生したら true
     bool CheckAutoConditionSwitch(
         bool isVisible,
         Player* pPlayer,
-        const std::string& prevBehaviorName);
+        PlayerComboAttackData::TriggerCondition& outTargetCondition);
 
     /// 全条件のロック状態をAttackControllerと同期する
     void SyncUnlockStates();
@@ -44,8 +39,6 @@ public:
         PlayerComboAttackData::TriggerCondition condition,
         const std::function<void(ConditionUIData& prev, ConditionUIData& next)>& onSwitch);
 
-    bool IsAutoSwitched() const { return isAutoSwitchedCondition_; }
-    void ClearAutoSwitched() { isAutoSwitchedCondition_ = false; }
 
 private:
     void SyncGroupUnlockStates(const ComboPathBuilder::ComboPathGroup& pathGroup, ComboUIGroup& uiGroup);
@@ -54,8 +47,6 @@ private:
     PlayerComboAttackController* pAttackController_  = nullptr;
     ComboUIBuilder* pUiBuilder_                      = nullptr;
     std::map<PlayerComboAttackData::TriggerCondition, ConditionUIData>* pConditionDataMap_ = nullptr;
-    std::vector<PlayerComboAttackData::TriggerCondition>* pAvailableConditions_            = nullptr;
     PlayerComboAttackData::TriggerCondition* pCurrentCondition_                            = nullptr;
 
-    bool isAutoSwitchedCondition_ = false;
 };

@@ -72,6 +72,8 @@ private:
         float dissolveEdgeWidth;
         Vector3 dissolveEdgeColor;
         int32_t enableDissolve;
+        int32_t enableDither; // ディザ有効フラグ
+        float padding2[3];
     };
 
 private:
@@ -84,6 +86,9 @@ public:
     MaterialData* GetMaterialData() const { return materialData_; }
     bool IsDissolveFinished() const;
     bool IsDissolvePlaying() const;
+
+    // ディザ抜き
+    void SetEnableDither(bool enable) { materialData_->enableDither = enable ? 1 : 0; }
 };
 
 }; // KetaEngine

@@ -23,6 +23,8 @@ public:
     /// <param name="playSpeed">再生速度</param>
     virtual void Update(float playSpeed) = 0;
 
+    KetaEngine::ObjectFromBlender* GetObjectFromBlender() const { return ObjectFromBlender_.get(); }
+
 protected:
     std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_;
 };

@@ -427,6 +427,9 @@
     <Filter Include="Game\Player\AutoComboAttack">
       <UniqueIdentifier>{b8370061-e785-4f49-aa41-5086ed3367d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\utility\DitherOcclusion">
+      <UniqueIdentifier>{93676bd7-79d6-4358-8e11-fbfa6ed27933}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -2405,6 +2408,9 @@
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectEditor.cpp">
       <Filter>Engine\Editor\PostEffectEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\DitherOcclusion\DitherOcclusion.cpp">
+      <Filter>Engine\utility\DitherOcclusion</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2511,6 +2517,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectEditor.h">
       <Filter>Engine\Editor\PostEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\DitherOcclusion\DitherOcclusion.h">
+      <Filter>Engine\utility\DitherOcclusion</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

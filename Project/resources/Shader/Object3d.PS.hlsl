@@ -17,7 +17,7 @@ struct Material
 {
     float4 color;
     int enableLighting;
- 
+
     float4x4 uvTransform;
     float shininess;
     float environmentCoefficient;
@@ -25,6 +25,8 @@ struct Material
     float dissolveEdgeWidth;
     float3 dissolveEdgeColor;
     int enableDissolve;
+    int enableDither;    
+    float3 _ditherPad;   
 };
 
 struct PixelShaderOutput
@@ -43,6 +45,15 @@ struct LightCountData
     int spotLightCount;
 };
 
+struct PlayerOcclusion
+{
+    float2 screenPos;    
+    float  depth;        
+    float  screenRadius; 
+    float  ditherAlpha;  
+    int    enabled;
+    float2 _pad;
+};
 
 // 各種ライトの構造体と定数バッファ
 ConstantBuffer<Material> gMaterial : register(b0);
@@ -51,14 +62,44 @@ ConstantBuffer<Camera> gCamera : register(b2);
 ConstantBuffer<AreaLight> gAreaLight : register(b3);
 ConstantBuffer<AmbientLight> gAmbientLight : register(b4);
 ConstantBuffer<LightCountData> gLightCountData : register(b5);
+ConstantBuffer<PlayerOcclusion> gPlayerOcclusion : register(b6);
 
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
 
-        // UV変換
+        // UVConversion
     float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
+
+    // スクリーンスペース ディザ抜き処理
+    //対象オブジェクトより手前にある場合のみ適用
+    if (gMaterial.enableDither != 0 && gPlayerOcclusion.enabled != 0)
+    {
+        if (input.position.z < gPlayerOcclusion.depth)
+        {
+            float2 diff = input.position.xy - gPlayerOcclusion.screenPos;
+            float  dist = length(diff);
+
+            // 距離に応じて ditherAlpha を中心→外周でグラデーション
+            float t = saturate(dist / gPlayerOcclusion.screenRadius);
+            float effectiveAlpha = lerp(gPlayerOcclusion.ditherAlpha, 1.0f, t);
+
+            // Bayer 4x4 オーダードディザリング行列
+            static const float bayerMatrix[16] = {
+                 0.0 / 16.0,  8.0 / 16.0,  2.0 / 16.0, 10.0 / 16.0,
+                12.0 / 16.0,  4.0 / 16.0, 14.0 / 16.0,  6.0 / 16.0,
+                 3.0 / 16.0, 11.0 / 16.0,  1.0 / 16.0,  9.0 / 16.0,
+                15.0 / 16.0,  7.0 / 16.0, 13.0 / 16.0,  5.0 / 16.0
+            };
+            int px = (int)input.position.x & 3;
+            int py = (int)input.position.y & 3;
+            if (effectiveAlpha < bayerMatrix[py * 4 + px])
+            {
+                discard;
+            }
+        }
+    }
 
         // テクスチャカラー
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);

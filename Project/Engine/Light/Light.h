@@ -4,6 +4,7 @@
 #include <wrl.h>
 // struct
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Vector2.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <string>
@@ -14,6 +15,16 @@ struct CameraForGPU {
     Vector3 worldPosition_;
 };
 
+struct PlayerOcclusionData {
+    Vector2 screenPos;    // プレイヤーのスクリーン座標
+    float   depth;        // プレイヤーの深度値
+    float   screenRadius; // 判定半径
+    float   ditherAlpha;  // ディザ閾値
+    int32_t enabled;      // 有効フラグ
+    float   pad[2];
+};
+
+// ライトの個数データ
 struct LightCountData {
     int pointLightCount;
     int spotLightCount;
@@ -54,6 +65,11 @@ public:
     void SetWorldCameraPos(const Vector3& pos);
 
     /// <summary>
+    /// プレイヤーオクルージョンデータを設定
+    /// </summary>
+    void SetPlayerOcclusion(const PlayerOcclusionData& data);
+
+    /// <summary>
     /// スポットライトを削除
     /// </summary>
     /// <param name="num">番号</param>
@@ -90,6 +106,10 @@ private:
     // 鏡面反射
     Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
     CameraForGPU* cameraForGPUData_;
+
+    // プレイヤーオクルージョン
+    Microsoft::WRL::ComPtr<ID3D12Resource> playerOcclusionResource_;
+    PlayerOcclusionData* playerOcclusionData_;
 
     // LightsData
     Microsoft::WRL::ComPtr<ID3D12Resource> lightCountResource_;

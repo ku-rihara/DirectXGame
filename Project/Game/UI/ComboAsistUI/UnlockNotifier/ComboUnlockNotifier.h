@@ -54,6 +54,9 @@ public:
         State state          = State::OPENING;
         float closeWaitTimer = 0.0f;
 
+        // スライドイン完了後にアンロック演出を再生するボタン（最後のステップ）
+        ComboAsistButtonUI* unlockTargetButton = nullptr;
+
         // 将来の自動実行再有効化のためデータを保持
         Player* player = nullptr;
         std::vector<PlayerComboAttackData*> pendingAttacks;

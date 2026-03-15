@@ -99,6 +99,8 @@ public:
     bool GetIsEasingPlaying(int32_t groupNum) const;
 
     void SetLoopEndCallback(int32_t groupNum, const std::function<void()>& callback);
+
+    const LevelData* GetLevelData() const { return levelData_.get(); }
 };
 
 }; // KetaEngine

@@ -218,16 +218,3 @@ void ShadowMap::DebugImGui() {
     }
 }
 
-void ShadowMap::Finalize() {
-    if (vertexResource_) {
-        vertexResource_->Unmap(0, nullptr);
-        vertexResource_.Reset();
-    }
-
-    if (shadowMapResource_) {
-        shadowMapResource_.Reset();
-    }
-    if (pipeline_) {
-        pipeline_.reset();
-    }
-}

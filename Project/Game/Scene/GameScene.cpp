@@ -1,6 +1,5 @@
 #include "GameScene.h"
 // state
-#include "GameSceneState/GameSceneFinish.h"
 #include "GameSceneState/GameSceneIntro.h"
 
 // base
@@ -38,15 +37,6 @@ void GameScene::Update() {
     }
 
     ViewProjectionUpdate();
-
-    gameObj_.comboSupportSpriteUi_->Update();
-
-    if (GameSceneFinish* finishState = dynamic_cast<GameSceneFinish*>(state_.get())) {
-        if (!finishState->GetIsGameEnd()) {
-            return;
-        }
-        KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
-    }
 }
 
 /// ===================================================
@@ -68,6 +58,7 @@ void GameScene::Debug() {
     gameObj_.operateUI_->Debug();
 
     ImGui::Begin("ParameterEditor");
+    ditherOcclusion_->AdjustParam();
     gameObj_.player_->AdjustParam();
     gameObj_.sideRopeController_->AdjustParam();
     gameObj_.enemyManager_->AdjustParam();
@@ -173,6 +164,19 @@ void GameScene::ObjectInit() {
     gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");
     gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::SPEAKER, "ComboLevel2.json");
     gameObj_.gameBackGroundObject_->Init("game.json");
+
+    // ディザオクルージョン初期化
+    ditherOcclusion_ = std::make_unique<KetaEngine::DitherOcclusion>();
+    ditherOcclusion_->Init();
+
+    // ObjectFromBlenderで生成したオブジェクトをディザ対象として登録
+    auto* levelData = gameObj_.gameBackGroundObject_->GetObjectFromBlender()->GetLevelData();
+    if (levelData) {
+        for (auto& objData : levelData->objects) {
+            if (objData.fileName == "BackObj/Field.obj") { continue; }
+            ditherOcclusion_->Add(objData.object3d->GetModelMaterial());
+        }
+    }
 }
 
 void GameScene::SetClassPointer() {

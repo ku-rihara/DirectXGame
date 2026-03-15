@@ -47,7 +47,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineStateNone_;
 
 public:
-    ID3D12PipelineState* GetGrahipcsPipeLileStateAdd() const { return graphicsPipelineStateAdd_.Get(); }
+    ID3D12PipelineState* GetGraphicsPipelineStateAdd() const { return graphicsPipelineStateAdd_.Get(); }
 };
 
 }; // KetaEngine
