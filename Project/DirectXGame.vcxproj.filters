@@ -31,9 +31,6 @@
     <Filter Include="Engine\Core">
       <UniqueIdentifier>{3AA123C7-6328-447F-9397-5C868771506D}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Easing">
-      <UniqueIdentifier>{FC242F2B-F928-4026-827E-9746C3ECF8B7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Editor">
       <UniqueIdentifier>{2C9DAAD2-DE2B-40FF-AE9C-9C8BAB7E5EF8}</UniqueIdentifier>
     </Filter>
@@ -159,9 +156,6 @@
     </Filter>
     <Filter Include="Engine\Collider\SpatialGrid">
       <UniqueIdentifier>{88CCA58E-E72C-4F03-8DDD-976749C47961}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Easing\EasingCreator">
-      <UniqueIdentifier>{0E681000-5EC0-43E6-8D5D-B2D22CB2165F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\BaseEffectEditor">
       <UniqueIdentifier>{0F5473B1-9361-4ACC-838D-771C7FBCFC2F}</UniqueIdentifier>
@@ -430,6 +424,12 @@
     <Filter Include="Engine\utility\DitherOcclusion">
       <UniqueIdentifier>{93676bd7-79d6-4358-8e11-fbfa6ed27933}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Editor\Easing">
+      <UniqueIdentifier>{FC242F2B-F928-4026-827E-9746C3ECF8B7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editor\Easing\EasingCreator">
+      <UniqueIdentifier>{0E681000-5EC0-43E6-8D5D-B2D22CB2165F}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -596,25 +596,25 @@
       <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Easing\Easing.cpp">
-      <Filter>Engine\Easing</Filter>
+      <Filter>Engine\Editor\Easing</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Easing\EasingCreator\EasingCreator.cpp">
-      <Filter>Engine\Easing\EasingCreator</Filter>
+      <Filter>Engine\Editor\Easing\EasingCreator</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Easing\EasingCreator\EasingEditor.cpp">
-      <Filter>Engine\Easing\EasingCreator</Filter>
+      <Filter>Engine\Editor\Easing\EasingCreator</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Easing\EasingCreator\EasingParameterData.cpp">
-      <Filter>Engine\Easing\EasingCreator</Filter>
+      <Filter>Engine\Editor\Easing\EasingCreator</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Easing\EasingFunction.cpp">
-      <Filter>Engine\Easing</Filter>
+      <Filter>Engine\Editor\Easing</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Easing\EasingSequence.cpp">
-      <Filter>Engine\Easing</Filter>
+      <Filter>Engine\Editor\Easing</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Easing\EasingStep.cpp">
-      <Filter>Engine\Easing</Filter>
+      <Filter>Engine\Editor\Easing</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectData.cpp">
       <Filter>Engine\Editor\BaseEffectEditor</Filter>
@@ -670,9 +670,6 @@
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectData.cpp">
       <Filter>Engine\Editor\PostEffectEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Editor\RailEditor\ControlPosManager.cpp">
-      <Filter>Engine\Editor\RailEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Editor\RailEditor\Rail.cpp">
       <Filter>Engine\Editor\RailEditor</Filter>
     </ClCompile>
@@ -683,9 +680,6 @@
       <Filter>Engine\Editor\RailEditor</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\RailEditor\RailEditor.cpp">
-      <Filter>Engine\Editor\RailEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Editor\RailEditor\RailManager.cpp">
       <Filter>Engine\Editor\RailEditor</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\RailEditor\RailPlayer.cpp">
@@ -1436,25 +1430,25 @@
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Easing\Easing.h">
-      <Filter>Engine\Easing</Filter>
+      <Filter>Engine\Editor\Easing</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Easing\EasingCreator\EasingCreator.h">
-      <Filter>Engine\Easing\EasingCreator</Filter>
+      <Filter>Engine\Editor\Easing\EasingCreator</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Easing\EasingCreator\EasingEditor.h">
-      <Filter>Engine\Easing\EasingCreator</Filter>
+      <Filter>Engine\Editor\Easing\EasingCreator</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Easing\EasingCreator\EasingParameterData.h">
-      <Filter>Engine\Easing\EasingCreator</Filter>
+      <Filter>Engine\Editor\Easing\EasingCreator</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Easing\EasingFunction.h">
-      <Filter>Engine\Easing</Filter>
+      <Filter>Engine\Editor\Easing</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Easing\EasingSequence.h">
-      <Filter>Engine\Easing</Filter>
+      <Filter>Engine\Editor\Easing</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Easing\EasingStep.h">
-      <Filter>Engine\Easing</Filter>
+      <Filter>Engine\Editor\Easing</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectData.h">
       <Filter>Engine\Editor\BaseEffectEditor</Filter>
@@ -1510,9 +1504,6 @@
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectData.h">
       <Filter>Engine\Editor\PostEffectEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Editor\RailEditor\ControlPosManager.h">
-      <Filter>Engine\Editor\RailEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Editor\RailEditor\Rail.h">
       <Filter>Engine\Editor\RailEditor</Filter>
     </ClInclude>
@@ -1523,9 +1514,6 @@
       <Filter>Engine\Editor\RailEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\RailEditor\RailEditor.h">
-      <Filter>Engine\Editor\RailEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Editor\RailEditor\RailManager.h">
       <Filter>Engine\Editor\RailEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\RailEditor\RailPlayer.h">

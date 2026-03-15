@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Easing/Easing.h"
-#include "Editor/RailEditor/RailManager.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
 #include "Player/ComboCreator/PlayerAttackRenditionData.h"
 
