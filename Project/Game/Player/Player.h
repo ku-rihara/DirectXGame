@@ -17,7 +17,7 @@
 #include "Components/Animation/PlayerAnimator.h"
 // Particle,Effect
 #include "Components/Effect/PlayerEffects.h"
-#include "Particle/CPUParticle/Editor/ParticleEmitter.h"
+
 // UI
 #include "Components/JumpAttackUI/JumpAttackUI.h"
 // Parameter
@@ -47,10 +47,7 @@ class DeathTimer;
 /// </summary>
 class Player : public BaseObject, public KetaEngine::AABBCollider {
 private:
-    struct ParticleEffect {
-        std::string name;
-        std::unique_ptr<KetaEngine::ParticleEmitter> emitter;
-    };
+   
 
 public:
     Player()  = default;
@@ -83,7 +80,7 @@ public:
     void ResetHeadScale(); //< 頭のスケールリセット
 
     /// <summary>
-    /// ディゾルブアニメーション再生 (手も含めて同時再生)
+    /// ディゾルブアニメーション再生 
     /// </summary>
     /// <param name="name">ディゾルブ名</param>
     void PlayDissolve(const std::string& name);
@@ -134,7 +131,7 @@ public:
     bool IsDashing() const;
 
     /// <summary>
-    /// 空中（ジャンプ中）かどうかを取得
+    /// 空中かどうかを取得
     /// </summary>
     bool IsAirborne() const;
 

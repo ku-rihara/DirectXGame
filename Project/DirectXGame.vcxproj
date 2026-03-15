@@ -133,8 +133,6 @@
     <ClCompile Include="Engine\Particle\CPUParticle\Editor\Parameter\ParticleCommonParameters.cpp" />
     <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleData.cpp" />
     <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleEditor.cpp" />
-    <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleEmitter.cpp" />
-    <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleParameter.cpp" />
     <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleSection.cpp" />
     <ClCompile Include="Engine\Particle\CPUParticle\Editor\SectionParameters\ParticleSectionParameter.cpp" />
     <ClCompile Include="Engine\Particle\CPUParticle\ParticleManager.cpp" />
@@ -455,8 +453,6 @@
     <ClInclude Include="Engine\Particle\CPUParticle\Editor\Parameter\ParticleCommonParameters.h" />
     <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleData.h" />
     <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleEditor.h" />
-    <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleEmitter.h" />
-    <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleParameter.h" />
     <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleSection.h" />
     <ClInclude Include="Engine\Particle\CPUParticle\Editor\SectionParameters\ParticleSectionParameter.h" />
     <ClInclude Include="Engine\Particle\CPUParticle\ParticleManager.h" />

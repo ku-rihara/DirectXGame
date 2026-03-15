@@ -766,12 +766,6 @@
     <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleEditor.cpp">
       <Filter>Engine\Particle\CPUParticle\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleEmitter.cpp">
-      <Filter>Engine\Particle\CPUParticle\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleParameter.cpp">
-      <Filter>Engine\Particle\CPUParticle\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleSection.cpp">
       <Filter>Engine\Particle\CPUParticle\Editor</Filter>
     </ClCompile>
@@ -1613,12 +1607,6 @@
       <Filter>Engine\Particle\CPUParticle\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleEditor.h">
-      <Filter>Engine\Particle\CPUParticle\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleEmitter.h">
-      <Filter>Engine\Particle\CPUParticle\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleParameter.h">
       <Filter>Engine\Particle\CPUParticle\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleSection.h">
