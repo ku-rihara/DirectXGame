@@ -25,7 +25,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     // UI更新
     obj.killCounter_->Update();
     obj.comboAsistController_->Update();
-    obj.unlockNotifier_->Update(KetaEngine::Frame::DeltaTime());
+    obj.unlockNotifier_->Update(KetaEngine::Frame::DeltaTime(), &pOwner_->GetViewProjection(), obj.player_.get());
     obj.comboDirector_->Update();
     obj.player_->Update();
     obj.skyBox_->Update();

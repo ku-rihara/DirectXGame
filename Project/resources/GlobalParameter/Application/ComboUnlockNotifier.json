@@ -10,9 +10,13 @@
         ],
         "ButtonExtraScale": 1.0,
         "CardSpacingY": 46.0,
-        "CloseOffsetTime": 1.600000023841858,
+        "CloseOffsetTime": 4.400000095367432,
         "NotifyBasePositionX": 948.0,
         "NotifyBasePositionY": 232.0,
+        "RBHintOffset": [
+            0.0,
+            0.0
+        ],
         "RightAnchorX": 1200.0,
         "SlideStartOffsetX": 600.0,
         "TextSpriteOffset": [

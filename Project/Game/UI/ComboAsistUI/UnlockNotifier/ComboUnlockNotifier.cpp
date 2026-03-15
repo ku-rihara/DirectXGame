@@ -1,4 +1,8 @@
 #include "ComboUnlockNotifier.h"
+#include "Base/WinApp.h"
+#include "Input/Input.h"
+#include "input/InputData.h"
+#include "Math/Matrix4x4.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
@@ -16,7 +20,7 @@ void ComboUnlockNotifier::Init() {
 
     InitBackSprite();
 
-    // 初期状態は画面右端外（通知前は非表示と同等の位置）
+    // 初期状態は画面右端外
     slideNorm_    = 1.0f;
     slideOffsetX_ = slideStartOffsetX_;
     ApplySlideToShared();
@@ -25,7 +29,9 @@ void ComboUnlockNotifier::Init() {
 ///==========================================================
 /// 毎フレーム更新
 ///==========================================================
-void ComboUnlockNotifier::Update(float deltaTime) {
+void ComboUnlockNotifier::Update(float deltaTime,
+    const KetaEngine::ViewProjection* viewProjection,
+    Player* player) {
     // スライドオフセット計算
     slideOffsetX_ = slideNorm_ * slideStartOffsetX_;
 
@@ -54,6 +60,16 @@ void ComboUnlockNotifier::Update(float deltaTime) {
     // 共有スプライト（背景・テキスト）のスライド適用
     ApplySlideToShared();
 
+    // RBヒントスプライトの更新
+    bool anyWaiting = false;
+    for (auto& card : cards_) {
+        if (card && card->state == NotifyCard::State::CLOSE_WAITING) {
+            anyWaiting = true;
+            break;
+        }
+    }
+    UpdateRBHintSprite(anyWaiting, viewProjection, player);
+
     // UIエレメントの更新
     for (auto& card : cards_) {
         if (!card) {
@@ -78,28 +94,13 @@ void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
     case NotifyCard::State::OPENING:
         slideEasing_.Update(deltaTime);
         if (slideEasing_.IsFinished()) {
-            // スライドイン完了：最後のボタンにアンロック演出を再生（通知UIなので音なし）
+            // スライドイン完了：最後のボタンにアンロック演出を再生
             if (card.unlockTargetButton) {
                 card.unlockTargetButton->SetUnlockSoundEnabled(false);
                 card.unlockTargetButton->SetUnlocked(true);
             }
             card.state          = NotifyCard::State::CLOSE_WAITING;
             card.closeWaitTimer = 0.0f;
-
-            /* --- 自動再生（一旦オフ） ---
-            card.state = NotifyCard::State::DISPLAYING;
-            if (card.player) {
-                auto& queue = card.player->GetAutoComboQueue();
-                queue.Clear();
-                for (auto* data : card.pendingAttacks) {
-                    queue.Enqueue(data);
-                }
-            }
-            if (card.totalAttackCount == 0) {
-                card.state          = NotifyCard::State::CLOSE_WAITING;
-                card.closeWaitTimer = 0.0f;
-            }
-            */
         }
         break;
     case NotifyCard::State::DISPLAYING:
@@ -109,7 +110,17 @@ void ComboUnlockNotifier::UpdateCardState(NotifyCard& card, float deltaTime) {
         break;
     case NotifyCard::State::CLOSE_WAITING:
         card.closeWaitTimer += deltaTime;
-        if (card.closeWaitTimer >= closeOffsetTime_) {
+        if (KetaEngine::Input::IsTriggerPad(0, GamepadButton::RB)) {
+            // RBが押されたらコンボプレビュー開始
+            if (card.player) {
+                auto& queue = card.player->GetAutoComboQueue();
+                queue.Clear();
+                for (auto* data : card.pendingAttacks) {
+                    queue.Enqueue(data);
+                }
+            }
+            card.state = NotifyCard::State::DISPLAYING;
+        } else if (card.closeWaitTimer >= closeOffsetTime_) {
             StartSlideOut(card);
         }
         break;
@@ -164,10 +175,42 @@ void ComboUnlockNotifier::ApplySlideToShared() {
 }
 
 ///==========================================================
+/// RBヒントスプライト更新
+///==========================================================
+void ComboUnlockNotifier::UpdateRBHintSprite(bool anyCardWaiting,
+    const KetaEngine::ViewProjection* viewProjection,
+    Player* player) {
+    if (!rbHintSprite_) {
+        return;
+    }
+
+    if (anyCardWaiting && !rbHintVisible_) {
+        // CLOSE_WAITING に入ったタイミングでスケール0→1の演出を開始
+        rbHintVisible_ = true;
+        rbHintSprite_->SetIsDraw(true);
+        rbHintSprite_->transform_.scale = {0.0f, 0.0f};
+        rbHintSprite_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
+    } else if (!anyCardWaiting && rbHintVisible_) {
+        // CLOSE_WAITING から外れたら非表示
+        rbHintVisible_ = false;
+        rbHintSprite_->SetIsDraw(false);
+    }
+
+    // 表示中はプレイヤーのスクリーン座標＋オフセットに追従
+    if (rbHintVisible_ && viewProjection && player) {
+        const Vector3 worldPos        = player->GetBaseTransform().GetWorldPos();
+        const Vector2 screenPos       = ScreenTransform(worldPos, *viewProjection);
+        rbHintSprite_->transform_.pos = {
+            screenPos.x + rbHintOffset_.x,
+            screenPos.y + rbHintOffset_.y};
+    }
+}
+
+///==========================================================
 /// スライドアウト開始（0→1: 定位置→画面右端外）
 ///==========================================================
 void ComboUnlockNotifier::StartSlideOut(NotifyCard& card) {
-    slideEasing_.SetIsStartEndReverse(false); // 0→1（スライドアウト）
+    slideEasing_.SetIsStartEndReverse(false); // 0→1
     slideEasing_.SetAdaptValue(&slideNorm_);
     slideEasing_.Reset();
     card.state = NotifyCard::State::CLOSING;
@@ -201,7 +244,7 @@ void ComboUnlockNotifier::OnAttackUnlocked(
     auto card    = std::make_unique<NotifyCard>();
     card->player = player;
 
-    // 将来の自動実行再有効化のためデータを収集（現在は使用しない）
+    // 将来の自動実行再有効化のためデータを収集
     if (player) {
         for (const auto& step : steps) {
             PlayerComboAttackData* data = attackController->GetAttackByName(step.attackName);
@@ -212,11 +255,11 @@ void ComboUnlockNotifier::OnAttackUnlocked(
         card->totalAttackCount = static_cast<int32_t>(card->pendingAttacks.size());
     }
 
-    // スライドイージング設定（1→0: 画面外→定位置）
+    // スライドイージング設定
     slideEasing_.Init(kSlideEasingFile_);
-    slideEasing_.SetIsStartEndReverse(true); // 1→0（スライドイン）
+    slideEasing_.SetIsStartEndReverse(true);
     slideEasing_.SetAdaptValue(&slideNorm_);
-    slideNorm_ = 1.0f; // 初期状態は画面外（右端）
+    slideNorm_ = 1.0f; // 初期状態は画面外
     slideEasing_.Reset();
 
     int32_t cardIndex = static_cast<int32_t>(cards_.size());
@@ -373,6 +416,14 @@ void ComboUnlockNotifier::InitBackSprite() {
     if (notifierTextSprite) {
         notifierTextSprite->transform_.scale = textSpriteScale_;
     }
+
+    // RBヒントスプライト（初期非表示）
+    rbHintSprite_.reset(KetaEngine::Sprite::Create("OperateUI/Operate_LB.dds", false));
+    if (rbHintSprite_) {
+        rbHintSprite_->SetAnchorPoint({0.5f, 0.5f});
+        rbHintSprite_->SetIsDraw(false);
+    }
+    rbHintVisible_ = false;
 }
 
 ///==========================================================
@@ -402,18 +453,19 @@ void ComboUnlockNotifier::PopulateCard(
         }
         colCount++;
     }
-    // 最後の列インデックス = colCount - 1
-    // 最後の列がrightAnchorX_に来るようにbasePosition.xを算出
-    const float adjustedBaseX =
-        (colCount > 0)
-            ? rightAnchorX_ - static_cast<float>(colCount - 1) * spaceColumn_
-            : rightAnchorX_;
+
+    // 中心点を求める[bgLeftEdgeX,WinApp::kWindowWidth]
+    const float bgLeftEdgeX   = notifyBasePosition_.x + bgSpriteOffset_.x;
+    const float centerX       = (bgLeftEdgeX + KetaEngine::WinApp::kWindowWidth) / 2.0f;
+    // 中心から列総和の半分を引いて、全体を中央揃えする
+    const float totalWidth    = static_cast<float>(colCount - 1) * spaceColumn_;
+    const float adjustedBaseX = centerX - totalWidth / 2.0f;
 
     //------------------------------------------------------
     // 2. 通知UI専用レイアウト設定
     //------------------------------------------------------
-    LayoutParam notifyLayout  = layoutParam;
-    notifyLayout.basePosition = notifyBasePosition_;
+    LayoutParam notifyLayout    = layoutParam;
+    notifyLayout.basePosition   = notifyBasePosition_;
     notifyLayout.basePosition.x = adjustedBaseX;
     notifyLayout.basePosition.y += cardIndex * cardSpacingY_;
     notifyLayout.yGroupOffsetY = 0.0f;
@@ -468,9 +520,9 @@ void ComboUnlockNotifier::PopulateCard(
             }
         }
 
-        const auto& step    = steps[i];
-        const bool isLast   = (i == steps.size() - 1);
-        // 最後のボタン（新規開放）はロック状態で生成し、スライドイン後に演出を再生する
+        const auto& step  = steps[i];
+        const bool isLast = (i == steps.size() - 1);
+        // 最後のボタンはロック状態で生成し、スライドイン後に演出を再生する
         const bool initUnlocked = isLast ? false : step.isUnlocked;
 
         auto btn = std::make_unique<ComboAsistButtonUI>();
@@ -533,8 +585,8 @@ void ComboUnlockNotifier::RegisterParams() {
     globalParameter_->Regist(groupName_, "spaceColumn", &spaceColumn_);
     globalParameter_->Regist(groupName_, "arrowOffsetPos", &arrowOffsetPos_);
     globalParameter_->Regist(groupName_, "CloseOffsetTime", &closeOffsetTime_);
-    globalParameter_->Regist(groupName_, "RightAnchorX", &rightAnchorX_);
     globalParameter_->Regist(groupName_, "SlideStartOffsetX", &slideStartOffsetX_);
+    globalParameter_->Regist(groupName_, "RBHintOffset", &rbHintOffset_);
     globalParameter_->Regist(groupName_, "BgSpriteScale", &bgSpriteScale_);
     globalParameter_->Regist(groupName_, "TextSpriteScale", &textSpriteScale_);
     globalParameter_->Regist(groupName_, "BgSpriteOffset", &bgSpriteOffset_);
@@ -554,8 +606,8 @@ void ComboUnlockNotifier::AdjustParam() {
         ImGui::DragFloat2("矢印オフセット位置", &arrowOffsetPos_.x, 0.1f);
         ImGui::DragFloat("CloseOffsetTime", &closeOffsetTime_, 0.1f, 0.0f, 10.0f);
         ImGui::Separator();
-        ImGui::DragFloat("RightAnchorX（最右列ボタンX）", &rightAnchorX_, 1.0f);
         ImGui::DragFloat("SlideStartOffsetX（スライド幅）", &slideStartOffsetX_, 1.0f, 0.0f);
+        ImGui::DragFloat2("RBHintOffset（プレイヤー右上オフセット）", &rbHintOffset_.x, 1.0f);
         ImGui::Separator();
         ImGui::DragFloat2("BgSpriteScale", &bgSpriteScale_.x, 0.01f, 0.0f, 10.0f);
         ImGui::DragFloat2("BgSpriteOffset", &bgSpriteOffset_.x, 1.0f);

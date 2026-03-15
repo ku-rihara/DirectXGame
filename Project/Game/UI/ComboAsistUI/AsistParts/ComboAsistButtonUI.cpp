@@ -14,9 +14,9 @@ void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const Layo
 
     // ボタンに応じたテクスチャを選択
     if (gamepadButton == XINPUT_GAMEPAD_Y) {
-        uiSprite_.reset(KetaEngine::Sprite::Create("OperateUI/OperateY.dds", false));
+        uiSprite_.reset(KetaEngine::Sprite::Create("ButtomUI/OperateY.dds", false));
     } else {
-        uiSprite_.reset(KetaEngine::Sprite::Create("OperateUI/OperateX.dds", false));
+        uiSprite_.reset(KetaEngine::Sprite::Create("ButtomUI/OperateX.dds", false));
     }
 
     if (uiSprite_) {

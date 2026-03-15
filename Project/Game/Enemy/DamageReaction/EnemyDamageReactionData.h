@@ -57,8 +57,12 @@ public:
     };
 
 public:
-    EnemyDamageReactionData()  = default;
-    ~EnemyDamageReactionData() = default;
+    EnemyDamageReactionData() = default;
+    ~EnemyDamageReactionData() {
+        if (globalParameter_ && !groupName_.empty()) {
+            globalParameter_->ClearRegistersForGroup(groupName_);
+        }
+    }
 
     //*-------------------------------- public Method --------------------------------*//
 

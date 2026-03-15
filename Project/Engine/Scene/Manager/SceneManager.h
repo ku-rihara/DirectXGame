@@ -27,10 +27,16 @@ public:
     void ChangeScene(const std::string& scenemane);
 
 private:
+    void ApplyPendingSceneChange();
+
+private:
     std::unique_ptr<BaseScene> scene_                   = nullptr;
     std::unique_ptr<BaseScene> nextScene_               = nullptr;
     AbstractSceneFactory* sceneFactory_                 = nullptr;
     std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+
+    /// ChangeScene() で予約されたシーン名（次フレーム冒頭で適用）
+    std::string pendingSceneName_;
 
 public:
     ///===========================================================

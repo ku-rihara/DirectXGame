@@ -13,6 +13,8 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Sprite
 #include "2d/Sprite.h"
+// ViewProjection
+#include "3d/ViewProjection.h"
 // std
 #include <memory>
 #include <string>
@@ -54,7 +56,7 @@ public:
         State state          = State::OPENING;
         float closeWaitTimer = 0.0f;
 
-        // スライドイン完了後にアンロック演出を再生するボタン（最後のステップ）
+        // スライドイン完了後にアンロック演出を再生するボタン
         ComboAsistButtonUI* unlockTargetButton = nullptr;
 
         // 将来の自動実行再有効化のためデータを保持
@@ -71,8 +73,10 @@ public:
     /// 初期化
     void Init();
 
-    /// 毎フレーム呼ぶ
-    void Update(float deltaTime);
+    /// 更新
+    void Update(float deltaTime,
+                const KetaEngine::ViewProjection* viewProjection = nullptr,
+                Player* player = nullptr);
 
     /// 攻撃が解放されたときに外部から呼ぶ
     void OnAttackUnlocked(
@@ -118,10 +122,10 @@ private:
     /// カードの状態を更新
     void UpdateCardState(NotifyCard& card, float deltaTime);
 
-    /// カードのUI要素にスライドオフセットを適用（ボタン・矢印・conditionIcon）
+    /// カードのUI要素にスライドオフセットを適用
     void ApplySlideToCard(NotifyCard& card);
 
-    /// 共有スプライト（背景・テキスト）にスライドオフセットを適用
+    /// 背景・テキストにスライドオフセットを適用
     void ApplySlideToShared();
 
     /// スライドアウトアニメーション開始
@@ -132,24 +136,27 @@ private:
     // パラメータ登録
     void RegisterParams();
 
+    /// RBヒントスプライトの表示状態を更新
+    void UpdateRBHintSprite(bool anyCardWaiting,
+                            const KetaEngine::ViewProjection* viewProjection,
+                            Player* player);
+
 private:
     std::vector<std::unique_ptr<NotifyCard>> cards_;
 
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_                  = "ComboUnlockNotifier";
 
-    /// スライドイージング（0→1=スライドアウト方向, 1→0=スライドイン方向）
+    /// スライドイージング
     KetaEngine::Easing<float> slideEasing_;
-    float slideNorm_    = 0.0f; // 0=定位置, 1=画面右端外
-    float slideOffsetX_ = 0.0f; // = slideNorm_ * slideStartOffsetX_
+    float slideNorm_    = 0.0f;
+    float slideOffsetX_ = 0.0f; 
 
-    const std::string kSlideEasingFile_ = "ComboUnlockOpen.json"; // 既存ファイルを再利用
+    const std::string kSlideEasingFile_ = "ComboUnlockOpen.json";
 
     Vector2 notifyBasePosition_;
     float cardSpacingY_     = 0.0f;
 
-    /// 最右列ボタンのX位置
-    float rightAnchorX_;
     /// 画面外スライド量
     float slideStartOffsetX_;
 
@@ -161,15 +168,21 @@ private:
     /// 背景・テキストスプライトのスケール
     Vector2 bgSpriteScale_   = {1.0f, 1.0f};
     Vector2 textSpriteScale_ = {1.0f, 1.0f};
-    /// 背景・テキストスプライトの位置オフセット（notifyBasePosition_からの相対位置）
+
+    /// 背景・テキストスプライトの位置オフセット
     Vector2 bgSpriteOffset_;
     Vector2 textSpriteOffset_;
 
     /// ボタン・矢印UIに追加で掛けるスケール倍率
     float buttonExtraScale_ = 1.0f;
     float spaceColumn_      = 1.0f;
-    float closeOffsetTime_  = 1.0f; //< 表示後、閉じるまでの待機時間
+    float closeOffsetTime_  = 1.0f; 
     Vector2 arrowOffsetPos_;
+
+    // RBヒントスプライト
+    std::unique_ptr<KetaEngine::Sprite> rbHintSprite_;
+    bool    rbHintVisible_ = false;
+    Vector2 rbHintOffset_;
 
 public:
     size_t GetActiveCardCount() const { return cards_.size(); }

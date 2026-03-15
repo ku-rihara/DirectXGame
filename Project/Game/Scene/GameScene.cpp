@@ -173,7 +173,9 @@ void GameScene::ObjectInit() {
     auto* levelData = gameObj_.gameBackGroundObject_->GetObjectFromBlender()->GetLevelData();
     if (levelData) {
         for (auto& objData : levelData->objects) {
-            if (objData.fileName == "BackObj/Field.obj") { continue; }
+            if (objData.fileName == "BackObj/Field.obj") {
+                continue; 
+            }
             ditherOcclusion_->Add(objData.object3d->GetModelMaterial());
         }
     }

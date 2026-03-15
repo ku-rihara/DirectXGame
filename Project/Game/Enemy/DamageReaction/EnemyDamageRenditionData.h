@@ -25,8 +25,8 @@ public:
     };
 
 public:
-    EnemyDamageRenditionData()  = default;
-    ~EnemyDamageRenditionData() = default;
+    EnemyDamageRenditionData();
+    ~EnemyDamageRenditionData();
 
     //*-------------------------------- public Method --------------------------------*//
 

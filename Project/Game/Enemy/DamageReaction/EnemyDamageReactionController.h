@@ -26,7 +26,11 @@ enum class DefaultAnimType {
 class EnemyDamageReactionController {
 public:
     EnemyDamageReactionController() = default;
-    ~EnemyDamageReactionController() = default;
+    ~EnemyDamageReactionController() {
+        if (globalParameter_) {
+            globalParameter_->ClearRegistersForGroup(defaultParamGroupName_);
+        }
+    }
 
     //*-------------------------------- public Method --------------------------------*//
 

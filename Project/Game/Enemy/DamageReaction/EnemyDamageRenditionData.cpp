@@ -2,6 +2,15 @@
 #include <cassert>
 #include <imgui.h>
 
+EnemyDamageRenditionData ::EnemyDamageRenditionData() {
+}
+
+EnemyDamageRenditionData ::~EnemyDamageRenditionData() {
+    if (globalParameter_ && !groupName_.empty()) {
+        globalParameter_->ClearRegistersForGroup(groupName_);
+    }
+}
+
 void EnemyDamageRenditionData::Init(const std::string& groupName) {
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
 
@@ -18,7 +27,6 @@ void EnemyDamageRenditionData::Init(const std::string& groupName) {
 }
 
 void EnemyDamageRenditionData::Reset() {
-    // 必要に応じてリセット処理
 }
 
 void EnemyDamageRenditionData::LoadData() {
