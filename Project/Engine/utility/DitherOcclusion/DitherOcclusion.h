@@ -10,7 +10,7 @@ class ModelMaterial;
 
 /// <summary>
 /// ディザオクルージョン
-/// プレイヤーを隠しているピクセルだけをスクリーンスペースでディザ抜きする
+/// 対象オブジェクトを隠しているピクセルだけをスクリーンスペースでディザ抜きする
 /// </summary>
 class DitherOcclusion {
 public:
@@ -30,7 +30,7 @@ public:
     /// <summary>
     /// 毎フレーム更新
     /// </summary>
-    void Update(const ViewProjection& viewProjection, const Vector3& playerWorldPos);
+    void Update(const ViewProjection& viewProjection, const Vector3& targetWorldPos);
 
     /// <summary>
     /// ImGuiでパラメータを編集するUI

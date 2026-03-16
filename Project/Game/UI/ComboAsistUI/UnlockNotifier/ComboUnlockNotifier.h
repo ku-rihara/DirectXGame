@@ -184,6 +184,9 @@ private:
     bool    rbHintVisible_ = false;
     Vector2 rbHintOffset_;
 
+    /// プレビューボタンの通知ベース位置からのオフセット
+    Vector2 previewButtonOffset_;
+
 public:
     size_t GetActiveCardCount() const { return cards_.size(); }
 

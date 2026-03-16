@@ -71,7 +71,7 @@ void ComboAsistController::Update() {
     UpdateComboState();
     CheckToggleInput();
 
-// 自動条件切替（プレイヤー状態：空中/ダッシュ/地上）
+    // 自動条件切替（プレイヤー状態：空中/ダッシュ/地上）
     {
         PlayerComboAttackData::TriggerCondition autoTarget;
         if (conditionSwitcher_.CheckAutoConditionSwitch(isVisible_, pPlayer_, autoTarget)) {
@@ -279,31 +279,31 @@ LayoutParam ComboAsistController::MakeLayoutParam() const {
 /// パラメータ
 ///==========================================================
 void ComboAsistController::RegisterParams() {
-    globalParameter_->Regist(groupName_, "basePosition",     &basePosition_);
-    globalParameter_->Regist(groupName_, "arrowOffset",      &arrowOffset_);
-    globalParameter_->Regist(groupName_, "columnSpacing",    &columnSpacing_);
-    globalParameter_->Regist(groupName_, "rowSpacing",       &rowSpacing_);
-    globalParameter_->Regist(groupName_, "yGroupOffsetY",    &yGroupOffsetY_);
-    globalParameter_->Regist(groupName_, "buttonScale",      &buttonScale_);
-    globalParameter_->Regist(groupName_, "arrowScale",       &arrowScale_);
+    globalParameter_->Regist(groupName_, "basePosition", &basePosition_);
+    globalParameter_->Regist(groupName_, "arrowOffset", &arrowOffset_);
+    globalParameter_->Regist(groupName_, "columnSpacing", &columnSpacing_);
+    globalParameter_->Regist(groupName_, "rowSpacing", &rowSpacing_);
+    globalParameter_->Regist(groupName_, "yGroupOffsetY", &yGroupOffsetY_);
+    globalParameter_->Regist(groupName_, "buttonScale", &buttonScale_);
+    globalParameter_->Regist(groupName_, "arrowScale", &arrowScale_);
     globalParameter_->Regist(groupName_, "maxVisibleColumn", &maxVisibleColumn_);
-    globalParameter_->Regist(groupName_, "maxVisibleRow",    &maxVisibleRow_);
+    globalParameter_->Regist(groupName_, "maxVisibleRow", &maxVisibleRow_);
 }
 
 void ComboAsistController::AdjustParam() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
-        ImGui::DragFloat2("Base Position",    &basePosition_.x, 0.1f);
-        ImGui::DragFloat2("Arrow Offset",     &arrowOffset_.x,  0.1f);
-        ImGui::DragFloat("Column Spacing",    &columnSpacing_,  0.1f);
-        ImGui::DragFloat("Row Spacing",       &rowSpacing_,     0.1f);
-        ImGui::DragFloat("Y Group Offset Y",   &yGroupOffsetY_,  0.1f);
-        ImGui::DragFloat("Button Scale",      &buttonScale_,    0.01f);
-        ImGui::DragFloat("Arrow Scale",       &arrowScale_,     0.01f);
+        ImGui::DragFloat2("Base Position", &basePosition_.x, 0.1f);
+        ImGui::DragFloat2("Arrow Offset", &arrowOffset_.x, 0.1f);
+        ImGui::DragFloat("Column Spacing", &columnSpacing_, 0.1f);
+        ImGui::DragFloat("Row Spacing", &rowSpacing_, 0.1f);
+        ImGui::DragFloat("Y Group Offset Y", &yGroupOffsetY_, 0.1f);
+        ImGui::DragFloat("Button Scale", &buttonScale_, 0.01f);
+        ImGui::DragFloat("Arrow Scale", &arrowScale_, 0.01f);
         ImGui::Separator();
-        ImGui::DragInt("Max Visible Column",  &maxVisibleColumn_, 1);
-        ImGui::DragInt("Max Visible Row",     &maxVisibleRow_,    1);
+        ImGui::DragInt("Max Visible Column", &maxVisibleColumn_, 1);
+        ImGui::DragInt("Max Visible Row", &maxVisibleRow_, 1);
 
         if (ImGui::Button("Rebuild UI")) {
             RebuildAllConditions();

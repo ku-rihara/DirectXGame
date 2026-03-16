@@ -226,12 +226,15 @@ void ComboAsistColumnScroller::ShiftGroup(ComboUIGroup& uiGroup, int32_t delta) 
 void ComboAsistColumnScroller::ShiftGroupRows(
     ComboUIGroup& uiGroup, int32_t fromRow, int32_t divergeCol, int32_t delta) {
 
+    // ボタンUIのシフト
     for (auto& btn : uiGroup.mainButtonUIs) {
         if (btn->GetRowNum() == fromRow && btn->GetColumnNum() >= divergeCol) {
             btn->SetRowColumn(btn->GetRowNum() + delta, btn->GetColumnNum());
             btn->ApplyLayout();
         }
     }
+
+    // 分岐ボタンUIのシフト
     for (auto& buttonRow : uiGroup.branchButtonUIs) {
         for (auto& btn : buttonRow) {
             if (btn->GetRowNum() == fromRow && btn->GetColumnNum() >= divergeCol) {
@@ -240,18 +243,21 @@ void ComboAsistColumnScroller::ShiftGroupRows(
             }
         }
     }
+    // 矢印UIのシフト
     for (auto& arrow : uiGroup.mainArrowUIs) {
         if (arrow->GetFromRow() == fromRow && arrow->GetFromCol() >= divergeCol) {
             arrow->ShiftRows(delta);
             arrow->ApplyLayout();
         }
     }
+    // 分岐矢印UIのシフト
     for (auto& arrow : uiGroup.branchArrowUIs) {
         if (arrow->GetToRow() == fromRow) {
             arrow->ShiftRows(delta);
             arrow->ApplyLayout();
         }
     }
+    // 分岐内矢印UIのシフト
     for (auto& arrowRow : uiGroup.branchInnerArrowUIs) {
         for (auto& arrow : arrowRow) {
             if (arrow->GetFromRow() == fromRow) {

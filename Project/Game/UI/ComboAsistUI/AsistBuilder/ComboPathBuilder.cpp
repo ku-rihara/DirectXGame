@@ -148,7 +148,7 @@ void ComboPathBuilder::ClassifyPaths(ComboPathGroup& group, std::vector<ComboPat
 		return lhs.steps.size() > rhs.steps.size();
 	});
 
-	// 先頭（最長）をメインパスとして採用
+	// 先頭をメインパスとして採用
 	group.mainPath = std::move(paths[0]);
 
 	// 残りを分岐として登録

@@ -34,9 +34,8 @@ void GameScene::Update() {
     // 現在のステートを更新
     if (state_) {
         state_->Update(KetaEngine::Frame::DeltaTimeRate());
+        ViewProjectionUpdate();
     }
-
-    ViewProjectionUpdate();
 }
 
 /// ===================================================

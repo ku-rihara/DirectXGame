@@ -16,10 +16,6 @@ void DitherOcclusion::Init() {
     globalParameter_->SyncParamForGroup(kGroupName_);
 }
 
-void DitherOcclusion::RegisterParams() {
-    globalParameter_->Regist(kGroupName_, "ScreenRadius", &screenRadius_);
-    globalParameter_->Regist(kGroupName_, "DitherAlpha", &ditherAlpha_);
-}
 
 void DitherOcclusion::Add(ModelMaterial* material) {
     if (!material) {
@@ -33,22 +29,15 @@ void DitherOcclusion::Update(
     const ViewProjection& vp,
     const Vector3&        playerWorldPos)
 {
-    // ビュープロジェクション行列でプレイヤーをクリップ空間へ変換
-    Matrix4x4 vpMatrix = vp.matView_ * vp.matProjection_;
-    Vector4 clipPos = TransformMatrix(Vector4(playerWorldPos.x, playerWorldPos.y, playerWorldPos.z, 1.0f), vpMatrix);
-
     PlayerOcclusionData data{};
 
-    if (clipPos.w > 0.0f) {
-        float invW = 1.0f / clipPos.w;
-        float ndcX = clipPos.x * invW;
-        float ndcY = clipPos.y * invW;
-        float ndcZ = clipPos.z * invW;
+    // ワールド座標をスクリーン座標に変換
+    const Vector3 screen = ScreenTransformWithDepth(playerWorldPos, vp);
 
-        // NDC → スクリーンピクセル座標
-        data.screenPos.x  = (ndcX + 1.0f) * 0.5f * static_cast<float>(WinApp::kWindowWidth);
-        data.screenPos.y  = (1.0f - ndcY) * 0.5f * static_cast<float>(WinApp::kWindowHeight);
-        data.depth        = ndcZ;
+    if (screen.z >= 0.0f && screen.z <= 1.0f) {
+        data.screenPos.x  = screen.x;
+        data.screenPos.y  = screen.y;
+        data.depth        = screen.z;
         data.screenRadius = screenRadius_;
         data.ditherAlpha  = ditherAlpha_;
         data.enabled      = 1;
@@ -59,13 +48,18 @@ void DitherOcclusion::Update(
     Light::GetInstance()->SetPlayerOcclusion(data);
 }
 
+void DitherOcclusion::RegisterParams() {
+    globalParameter_->Regist(kGroupName_, "ScreenRadius", &screenRadius_);
+    globalParameter_->Regist(kGroupName_, "DitherAlpha", &ditherAlpha_);
+}
+
 void DitherOcclusion::AdjustParam() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(kGroupName_.c_str())) {
         ImGui::PushID(kGroupName_.c_str());
 
-        ImGui::DragFloat("ScreenRadius", &screenRadius_, 1.0f,  1.0f, 600.0f);
-        ImGui::DragFloat("DitherAlpha",  &ditherAlpha_,  0.01f, 0.0f,   1.0f);
+        ImGui::DragFloat("ScreenRadius", &screenRadius_, 1.0f);
+        ImGui::DragFloat("DitherAlpha",  &ditherAlpha_,  0.01f, 0.0f,1.0f);
 
       
         globalParameter_->ParamSaveForImGui(kGroupName_);

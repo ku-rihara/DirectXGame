@@ -2,12 +2,11 @@
 #include "3d/ViewProjection.h"
 #include "Base/WinApp.h"
 #include "Quaternion.h"
-#include"Vector2.h"
+#include "Vector2.h"
 #include <assert.h>
 #include <cmath>
 #include <DirectXMath.h>
 #include <numbers>
-
 
 Matrix4x4 MakeIdentity4x4() {
     DirectX::XMMATRIX identity = DirectX::XMMatrixIdentity();
@@ -208,18 +207,14 @@ Vector4 TransformMatrix(const Vector4& vector, const Matrix4x4& matrix) {
     return result;
 }
 
-
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 
     Vector3 result{
         v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0],
         v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1],
-        v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2]
-    };
+        v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2]};
     return result;
 }
-
-
 
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3 translate) {
     Matrix4x4 scaleMatrix;
@@ -237,7 +232,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 }
 
 Matrix4x4 MakeAffineMatrixQuaternion(const Vector3& scale, const Quaternion& rotate, const Vector3 translate) {
-    //Quaternion nRotate = rotate.Normalize(); // Quaternionを正規化
+    // Quaternion nRotate = rotate.Normalize(); // Quaternionを正規化
     return MakeScaleMatrix(scale) * MakeRotateMatrixFromQuaternion(rotate) * MakeTranslateMatrix(translate);
 }
 
@@ -350,11 +345,19 @@ Vector2 ScreenTransform(const Vector3& worldPos, const KetaEngine::ViewProjectio
     // ビュー行列とプロジェクション行列、ビューポート行列を合成する
     Matrix4x4 matViewProjectionViewport = viewProjection.matView_ * viewProjection.matProjection_ * matViewport;
     // ワールド→スクリーン変換
-    const Vector3& result= TransformMatrix(worldPos, matViewProjectionViewport);
+    const Vector3& result = TransformMatrix(worldPos, matViewProjectionViewport);
 
     return Vector2(result.x, result.y);
 }
 
+Vector3 ScreenTransformWithDepth(const Vector3& worldPos, const KetaEngine::ViewProjection& viewProjection) {
+    // ビューポート行列
+    Matrix4x4 matViewport = MakeViewportMatrix(0, 0, KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight, 0, 1);
+    // ビュー行列とプロジェクション行列、ビューポート行列を合成する
+    Matrix4x4 matViewProjectionViewport = viewProjection.matView_ * viewProjection.matProjection_ * matViewport;
+    // ワールド→スクリーン変換
+    return TransformMatrix(worldPos, matViewProjectionViewport);
+}
 
 Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row) {
     Matrix4x4 result = matrix; // 元の行列をコピー
@@ -438,8 +441,6 @@ Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 
     return MakeRotateAxisAngle(axis, angle);
 }
-
-
 
 Vector3 ExtractEulerAngles(const Matrix4x4& rotationMatrix) {
     Vector3 eulerAngles;
@@ -530,25 +531,25 @@ Quaternion QuaternionFromMatrix(const Matrix4x4& m) {
     float trace = m.m[0][0] + m.m[1][1] + m.m[2][2]; // 対角成分の和
 
     if (trace > 0.0f) {
-        float s = std::sqrt(trace + 1.0f) * 2.0f; 
+        float s = std::sqrt(trace + 1.0f) * 2.0f;
         q.w     = 0.25f * s;
         q.x     = (m.m[2][1] - m.m[1][2]) / s;
         q.y     = (m.m[0][2] - m.m[2][0]) / s;
         q.z     = (m.m[1][0] - m.m[0][1]) / s;
     } else if ((m.m[0][0] > m.m[1][1]) && (m.m[0][0] > m.m[2][2])) {
-        float s = std::sqrt(1.0f + m.m[0][0] - m.m[1][1] - m.m[2][2]) * 2.0f; 
+        float s = std::sqrt(1.0f + m.m[0][0] - m.m[1][1] - m.m[2][2]) * 2.0f;
         q.w     = (m.m[2][1] - m.m[1][2]) / s;
         q.x     = 0.25f * s;
         q.y     = (m.m[0][1] + m.m[1][0]) / s;
         q.z     = (m.m[0][2] + m.m[2][0]) / s;
     } else if (m.m[1][1] > m.m[2][2]) {
-        float s = std::sqrt(1.0f + m.m[1][1] - m.m[0][0] - m.m[2][2]) * 2.0f; 
+        float s = std::sqrt(1.0f + m.m[1][1] - m.m[0][0] - m.m[2][2]) * 2.0f;
         q.w     = (m.m[0][2] - m.m[2][0]) / s;
         q.x     = (m.m[0][1] + m.m[1][0]) / s;
         q.y     = 0.25f * s;
         q.z     = (m.m[1][2] + m.m[2][1]) / s;
     } else {
-        float s = std::sqrt(1.0f + m.m[2][2] - m.m[0][0] - m.m[1][1]) * 2.0f; 
+        float s = std::sqrt(1.0f + m.m[2][2] - m.m[0][0] - m.m[1][1]) * 2.0f;
         q.w     = (m.m[1][0] - m.m[0][1]) / s;
         q.x     = (m.m[0][2] + m.m[2][0]) / s;
         q.y     = (m.m[1][2] + m.m[2][1]) / s;
