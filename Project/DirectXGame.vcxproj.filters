@@ -2387,6 +2387,9 @@
     <ClCompile Include="Engine\utility\DitherOcclusion\DitherOcclusion.cpp">
       <Filter>Engine\utility\DitherOcclusion</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\TimeLine\TimelineDrawParameter.cpp">
+      <Filter>Engine\utility\TimeLine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2496,6 +2499,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\DitherOcclusion\DitherOcclusion.h">
       <Filter>Engine\utility\DitherOcclusion</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeLine\TimelineDrawParameter.h">
+      <Filter>Engine\utility\TimeLine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

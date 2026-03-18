@@ -36,7 +36,7 @@ void PlayerComboAttackTimelineData::RemoveTrackInfo(int32_t trackIndex) {
         }
     }
 
-    // デフォルトトラックのインデックスも調整（削除されたトラックより大きいインデックスを持つ場合）
+    // 削除されたトラックより大きいインデックスを持つトラックをデフォルトトラックを調整
     for (auto& defaultIdx : defaultTrackIndices_) {
         if (defaultIdx > trackIndex) {
             defaultIdx--;
@@ -140,9 +140,9 @@ PlayerComboAttackTimelineData::GetTrackTypeFromIndex(int32_t trackIndex) const {
         // 一致したindexがどのトラックか判定
         switch (static_cast<DefaultTrack>(i)) {
         case DefaultTrack::COLLISION:
-            return TrackType::COUNT; // コリジョンは特定のTrackTypeを持たない
+            return TrackType::COUNT; 
         case DefaultTrack::MOVE_EASING:
-            return TrackType::COUNT; // 移動イージングは特定のTrackTypeを持たない
+            return TrackType::COUNT;
         case DefaultTrack::FINISH_WAIT:
             return TrackType::FINISH_WAIT_TIME;
         default:

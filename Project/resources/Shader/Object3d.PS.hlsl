@@ -69,7 +69,7 @@ PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
 
-        // UVConversion
+    // UVConversion
     float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
 
     // スクリーンスペース ディザ抜き処理

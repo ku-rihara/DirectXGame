@@ -16,19 +16,18 @@ void DitherOcclusion::Init() {
     globalParameter_->SyncParamForGroup(kGroupName_);
 }
 
-
 void DitherOcclusion::Add(ModelMaterial* material) {
     if (!material) {
-        return; 
+        return;
     }
 
+    // ディザ抜きを有効
     material->SetEnableDither(true);
 }
 
 void DitherOcclusion::Update(
     const ViewProjection& vp,
-    const Vector3&        playerWorldPos)
-{
+    const Vector3& playerWorldPos) {
     PlayerOcclusionData data{};
 
     // ワールド座標をスクリーン座標に変換
@@ -59,9 +58,8 @@ void DitherOcclusion::AdjustParam() {
         ImGui::PushID(kGroupName_.c_str());
 
         ImGui::DragFloat("ScreenRadius", &screenRadius_, 1.0f);
-        ImGui::DragFloat("DitherAlpha",  &ditherAlpha_,  0.01f, 0.0f,1.0f);
+        ImGui::DragFloat("DitherAlpha", &ditherAlpha_, 0.01f, 0.0f, 1.0f);
 
-      
         globalParameter_->ParamSaveForImGui(kGroupName_);
         globalParameter_->ParamLoadForImGui(kGroupName_);
 

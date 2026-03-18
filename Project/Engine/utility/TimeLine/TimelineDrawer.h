@@ -1,10 +1,11 @@
 #pragma once
+#include "TimelineDrawParameter.h"
 #include "Vector2.h"
 #include <cstdint>
 #include <functional>
+#include <imgui.h>
 #include <string>
 #include <vector>
-#include <imgui.h>
 
 namespace KetaEngine {
 
@@ -38,8 +39,13 @@ public:
 
     //*----------------------------- public Methods -----------------------------*//
 
-    void Init();
+    void Init(const std::string& name);
     void Draw(const std::string& name);
+
+    /// <summary>
+    /// 描画パラメータエディタウィンドウを描画
+    /// </summary>
+    void DrawParamEditor();
 
     /// <summary>
     /// トラック追加
@@ -48,7 +54,7 @@ public:
         std::function<void(float)> callback = nullptr);
 
     /// <summary>
-    /// トラック挿入（指定位置に挿入）
+    /// トラック挿入
     /// </summary>
     uint32_t InsertTrack(uint32_t position, const std::string& trackName,
         std::function<void(float)> callback = nullptr);
@@ -95,7 +101,6 @@ public:
     void SetKeyFrameRightClickCallback(uint32_t trackIndex,
         std::function<void(int32_t, int32_t)> callback);
 
-  
     /// <summary>
     /// トラック数を取得
     /// </summary>
@@ -104,7 +109,7 @@ public:
 private:
     //*---------------------------- private Methods ----------------------------*//
 
-  // キーフレームのドラッグ＆ドロップ処理
+    // キーフレームのドラッグ＆ドロップ処理
     void HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex,
         const Vector2& keyPos);
 
@@ -154,9 +159,11 @@ private:
     // 再生状態更新
     void UpdatePlayback();
 
-
 private:
     //*---------------------------- private Variant ----------------------------*//
+
+    // 描画パラメータ
+    TimelineDrawParameter drawParam_;
 
     // トラック
     std::vector<TimeLineTrack> tracks_;
@@ -165,16 +172,11 @@ private:
 
     int32_t currentFrame_ = 0;
     int32_t startFrame_   = 0;
-    int32_t endFrame_     = 300;
 
     float zoom_       = 1.0f;
     int scrollOffset_ = 0;
 
     bool isPlaying_ = false;
-
-    const float headerWidth_ = 150.0f;
-    const float trackHeight_ = 30.0f;
-    const float rulerHeight_ = 25.0f;
 
     int draggingTrackIndex_ = -1;
     int draggingKeyIndex_   = -1;
@@ -186,7 +188,7 @@ private:
     float dragStartDuration_        = 0.0f;
 
     // 再生ヘッド（縦線）ドラッグ用
-    bool isDraggingPlayhead_        = false;
+    bool isDraggingPlayHead_ = false;
 
     // 右クリックされたトラック
     int rightClickedTrackIndex_ = -1;
@@ -197,7 +199,7 @@ private:
 public:
     //*----------------------------- getter Methods -----------------------------*//
     int32_t GetCurrentFrame() const { return currentFrame_; }
-    int32_t GetEndFrame() const { return endFrame_; }
+    int32_t GetEndFrame() const { return drawParam_.GetEndFrame(); }
     bool IsPlaying() const { return isPlaying_; }
     float GetZoom() const { return zoom_; }
     const std::vector<TimeLineTrack>& GetTracks() const { return tracks_; }
@@ -205,10 +207,10 @@ public:
 
     //*----------------------------- setter Methods -----------------------------*//
     void SetCurrentFrame(int frame) { currentFrame_ = frame; }
-    void SetEndFrame(int frame) { endFrame_ = frame; }
+    void SetEndFrame(int frame) { drawParam_.SetEndFrame(frame); }
     void SetPlaying(bool playing) { isPlaying_ = playing; }
     void SetZoom(float zoom) { zoom_ = zoom; }
     void SetOriginalItemDrawCallBack(std::function<void()> callback) { originalItemDrawCallBack_ = callback; }
 };
 
-}; // KetaEngine#pragma once
+}; // KetaEngine

@@ -11,7 +11,8 @@ void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
         return;
     }
 
-    timeline_.Init();
+
+    timeline_.Init("AttackTimeline");
 
     // 各クラスの初期化
     timelineData_.Init();
@@ -72,6 +73,9 @@ void PlayerComboAttackTimeline::Draw() {
 
     // タイムライン描画
     timeline_.Draw("攻撃タイムライン");
+
+    // 描画パラメータエディタ
+    timeline_.DrawParamEditor();
 
     // 各トラックのコンテキストメニュー処理
     for (size_t i = 0; i < timeline_.GetTrackCount(); ++i) {

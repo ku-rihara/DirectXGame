@@ -37,6 +37,7 @@ void Audience::Init(int32_t index) {
 void Audience::CreateObject() {
     // オブジェ生成
     objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("BackObj/AudienceJump.gltf"));
+    objAnimation_->GetModelMaterial()->SetEnableDither(true);
     // 初期化
     objAnimation_->Init();
     // アニメーション追加

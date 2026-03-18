@@ -177,6 +177,7 @@
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
     <ClCompile Include="Engine\utility\DitherOcclusion\DitherOcclusion.cpp" />
     <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp" />
+    <ClCompile Include="Engine\utility\TimeLine\TimelineDrawParameter.cpp" />
     <ClCompile Include="Game\Audience\Audience.cpp" />
     <ClCompile Include="Game\Audience\AudienceController.cpp" />
     <ClCompile Include="Game\Audience\Behavior\AudienceAppear.cpp" />
@@ -506,6 +507,7 @@
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
     <ClInclude Include="Engine\utility\DitherOcclusion\DitherOcclusion.h" />
     <ClInclude Include="Engine\utility\FileSelector\FileSelector.h" />
+    <ClInclude Include="Engine\utility\TimeLine\TimelineDrawParameter.h" />
     <ClInclude Include="Game\Audience\Audience.h" />
     <ClInclude Include="Game\Audience\AudienceController.h" />
     <ClInclude Include="Game\Audience\Behavior\AudienceAppear.h" />

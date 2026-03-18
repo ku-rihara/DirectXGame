@@ -157,8 +157,9 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
 }
 
 void PlayerComboAttackTimelineParameterApplier::UpdateFinishWaitKeyFramePosition() {
-    if (!timelineDrawer_ || !timeLineData_)
+    if (!timelineDrawer_ || !timeLineData_) {
         return;
+    }
 
     int32_t finishWaitTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT);
@@ -215,9 +216,7 @@ int32_t PlayerComboAttackTimelineParameterApplier::GetFinishWaitStartFrame() con
     return std::max(collisionEndFrame, moveEndFrame);
 }
 
-// TrackType → RenditionData::Type インデックスの逆引きマッピング
-// RibbonTrailEffect(RenditionData index=5) はタイムライン上に存在しないため
-// AudioAttack は RenditionData index=6 に対応する
+
 static int32_t GetRenditionIndexFromTrackType(PlayerComboAttackTimelineData::TrackType type) {
     using TT = PlayerComboAttackTimelineData::TrackType;
     using RT = PlayerAttackRenditionData::Type;
@@ -290,7 +289,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
         param.startTiming   = timing;
         param.trailFileName = trackInfo.trailFileName;
     }
-    // MainHead追従トレイル（独立トラック）：fileNameをtrailFileNameとして適用
+    // MainHead追従トレイル
     else if (trackInfo.type == TT::RIBBON_TRAIL_MAIN_HEAD) {
         auto& param = const_cast<PlayerAttackRenditionData::ObjAnimationParam&>(
             renditionData.GetObjAnimationParamFromType(PlayerAttackRenditionData::ObjAnimationType::MainHead));

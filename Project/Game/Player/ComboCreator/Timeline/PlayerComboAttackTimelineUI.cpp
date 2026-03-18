@@ -171,8 +171,6 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
 
         DrawTrackMenuItem("コントローラ振動", TrackType::VIBRATION);
 
-        // 注: キャンセルタイムと先行入力は「コンボ分岐」で各分岐ごとに設定されます
-
         ImGui::EndPopup();
     }
 }
@@ -277,7 +275,7 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
         timeline_->SetKeyFrameLabel(trackIndex, keyIndex, newLabel);
     }
 
-    // 右手・左手アニメーションの場合のみトレイルファイル選択を表示（ObjAnimと同居）
+    // 右手・左手アニメーションの場合のみトレイルファイル選択を表示
     if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_RIGHT_HAND ||
         trackInfo->type == PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_LEFT_HAND) {
 
@@ -296,9 +294,7 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
             true);
     }
 
-    // MainHead追従トレイルは上部の共通ファイルセレクタでトレイルファイルを選択済み
-    // カメラ・オーディオ設定は不要なので早期リターン
-    // ※ DrawVibrationKeyFrameEditorは別関数で処理するためここには含まれない
+    // MainHead追従トレイル
     if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::RIBBON_TRAIL_MAIN_HEAD) {
         return;
     }
@@ -322,7 +318,7 @@ void PlayerComboAttackTimelineUI::DrawVibrationKeyFrameEditor(int32_t trackIndex
 
     ImGui::SeparatorText("振動パラメータ");
 
-    // 振動強度スライダー（変更時にキーフレームラベルも更新）
+    // 振動強度スライダー
     float prevIntensity = trackInfo->vibrationIntensity;
     if (ImGui::SliderFloat("振動強度", &trackInfo->vibrationIntensity, 0.0f, 1.0f)) {
         if (prevIntensity != trackInfo->vibrationIntensity) {
@@ -332,6 +328,4 @@ void PlayerComboAttackTimelineUI::DrawVibrationKeyFrameEditor(int32_t trackIndex
     }
 
     ImGui::Checkbox("ヒット時のみ振動", &trackInfo->triggerByHit);
-
-    ImGui::TextDisabled("※ キーフレームの長さ = 振動の持続時間");
 }
