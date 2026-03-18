@@ -59,7 +59,7 @@ public:
 
     void InitInGameScene(); //< ゲームシーンでの初期化
     void TitleUpdate(); //< タイトル更新処理
-    void GameIntroUpdate(); //< イントロシーン更新
+    void GameIntroUpdate(float playSpeed = 1.0f); //< イントロシーン更新
 
     // 影適応するかのフラグセット
     void SetShadowFrag(const bool& isShadow);

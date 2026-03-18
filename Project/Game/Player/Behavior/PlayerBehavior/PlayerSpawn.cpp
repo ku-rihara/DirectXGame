@@ -34,7 +34,7 @@ PlayerSpawn ::~PlayerSpawn() {
 }
 
 // 更新
-void PlayerSpawn::Update([[maybe_unused]] float timeSpeed) {
+void PlayerSpawn::Update(float timeSpeed) {
 
     switch (step_) {
 
@@ -43,8 +43,8 @@ void PlayerSpawn::Update([[maybe_unused]] float timeSpeed) {
         ///================================================================
     case PlayerSpawn::Step::WAIT:
 
-       
-        startWaitTime_ += KetaEngine::Frame::DeltaTime();
+
+        startWaitTime_ += timeSpeed;
         if (startWaitTime_ < pPlayerParameter_->GetParameters().spawnParam.waitTime_) {
             break;
         }

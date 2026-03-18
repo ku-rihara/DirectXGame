@@ -17,6 +17,11 @@ void CameraFollowBehavior::Update(float time) {
 }
 
 Vector2 CameraFollowBehavior::InputUpdate() {
+    // 入力無効時は空ベクトルを返す
+    if (!pOwner_->GetIsInputEnabled()) {
+        return {0.0f, 0.0f};
+    }
+
     // 入力処理
     KetaEngine::Input* input = KetaEngine::Input::GetInstance();
     Vector2 inputVector      = {0.0f, 0.0f};

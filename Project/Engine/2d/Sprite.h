@@ -127,6 +127,7 @@ private:
 
     // スプライトイージングアニメーション
     std::unique_ptr<SpriteEaseAnimationPlayer> spriteEaseAnimationPlayer_;
+    float animationSpeedRate_ = 1.0f;
 
     void ApplyAnimationToMaterial();
     Vector2 GetAnimationPosition() const;
@@ -192,6 +193,7 @@ public:
 
     void SetLayerNum(int32_t layerNum) { layerNum_ = layerNum; }
     void SetIsDraw(bool isDraw) { isDraw_ = isDraw; }
+    void SetAnimationSpeedRate(float rate) { animationSpeedRate_ = rate; }
 
     // UVTransform
     void SetUVTransform(const UVTransform& uvTransform) { uvTransform_ = uvTransform; }

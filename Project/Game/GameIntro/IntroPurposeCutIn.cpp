@@ -26,6 +26,14 @@ void IntroPurposeCutIn::Init(const std::string& name) {
 void IntroPurposeCutIn::Update(float playSpeed) {
     BaseGameIntro::Update(playSpeed);
 
+    // スプライトアニメーション速度を早送り倍率に同期
+    const float dt        = KetaEngine::Frame::DeltaTime();
+    const float speedRate = (dt > 0.0f) ? (playSpeed_ / dt) : 1.0f;
+    for (auto& sprite : sprites_) {
+        sprite->SetAnimationSpeedRate(speedRate);
+    }
+    backLineSprite_->SetAnimationSpeedRate(speedRate);
+
     switch (phase_) {
     case Phase::Appear:
         // Appearフェーズ初回のみアニメーション開始

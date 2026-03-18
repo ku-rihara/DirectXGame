@@ -24,8 +24,8 @@ public:
 
     // 初期化、更新
     void Init();
-    void AppearUpdate(); //< 出現更新
-    void ExitUpdate(); //< 退出更新
+    void AppearUpdate(float playSpeed); //< 出現更新
+    void ExitUpdate(float playSpeed); //< 退出更新
 
     // editor
     void AdjustParam(); //< パラメータ調整

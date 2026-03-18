@@ -74,6 +74,7 @@ private:
     std::unique_ptr<BaseCameraBehavior> behavior_;
     const KetaEngine::WorldTransform* target_ = nullptr;
 
+    bool isInputEnabled_ = true; // 入力受付フラグ（イントロ中はfalse）
     Vector3 stickInput_;
     Vector3 interTarget_;     // 補間された注視点位置
     float destinationAngleY_; // 目標Y軸回転角
@@ -99,4 +100,7 @@ public:
     void SetViewProjectionPos(const Vector3& pos) { viewProjection_.translation_ = pos; }
 
     void AddDestinationAngleY(float deltaAngle) { destinationAngleY_ += deltaAngle; }
+
+    void SetInputEnabled(bool enabled) { isInputEnabled_ = enabled; }
+    bool GetIsInputEnabled() const { return isInputEnabled_; }
 };

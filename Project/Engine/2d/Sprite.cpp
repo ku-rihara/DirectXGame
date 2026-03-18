@@ -333,7 +333,7 @@ void Sprite::StopSpriteEaseAnimation() {
 ///============================================================
 void Sprite::UpdateSpriteEaseAnimation() {
     if (spriteEaseAnimationPlayer_) {
-        spriteEaseAnimationPlayer_->Update();
+        spriteEaseAnimationPlayer_->Update(animationSpeedRate_);
         ApplyAnimationToMaterial();
     }
 }

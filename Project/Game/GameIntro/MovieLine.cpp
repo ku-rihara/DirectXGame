@@ -34,16 +34,16 @@ void MovieLine::Init() {
     }
 }
 
-void MovieLine::AppearUpdate() {
+void MovieLine::AppearUpdate(float playSpeed) {
     for (int32_t i = 0; i < static_cast<int32_t>(appearEasing_.size()); ++i) {
-        appearEasing_[i].Update(KetaEngine::Frame::DeltaTime());
+        appearEasing_[i].Update(playSpeed);
         sprite_[i]->transform_.pos = appearAdaptPos_[i];
     }
 }
 
-void MovieLine::ExitUpdate() {
+void MovieLine::ExitUpdate(float playSpeed) {
     for (int32_t i = 0; i < static_cast<int32_t>(exitEasing_.size()); ++i) {
-        exitEasing_[i].Update(KetaEngine::Frame::DeltaTime());
+        exitEasing_[i].Update(playSpeed);
         sprite_[i]->transform_.pos = Vector2(appearPosition_[i].x, exitAdaptPos_[i].y);
     }
 }

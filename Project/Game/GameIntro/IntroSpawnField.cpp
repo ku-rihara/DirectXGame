@@ -35,6 +35,7 @@ void IntroSpawnField::Update(float playSpeed) {
 void IntroSpawnField::Start() {
     if (pGameCamera_) {
         pGameCamera_->PlayAnimation("IntroOverLook",false);
+        pGameCamera_->SetInputEnabled(false);
     }
     step_ = Step::WAIT;
 }
@@ -57,7 +58,7 @@ void IntroSpawnField::ObjSpawn() {
 
 void IntroSpawnField::PlayerSpawn() {
     if (pPlayer_) {
-        pPlayer_->GameIntroUpdate();
+        pPlayer_->GameIntroUpdate(playSpeed_);
     }
     ProcessStep(playerSpawnTime_, Step::FNISHWAIT, true);
 }
@@ -83,7 +84,7 @@ void IntroSpawnField::FinishWait() {
     }
 
     if (pPlayer_) {
-        pPlayer_->GameIntroUpdate();
+        pPlayer_->GameIntroUpdate(playSpeed_);
     }
     ProcessStep(finishWaitTime_, Step::FINISH);
 }
@@ -95,7 +96,10 @@ void IntroSpawnField::Finish() {
         pComboSupportSpriteUi_->SetScale(Vector2::OneVector());
     }
     if (pPlayer_) {
-        pPlayer_->GameIntroUpdate();
+        pPlayer_->GameIntroUpdate(playSpeed_);
+    }
+    if (pGameCamera_) {
+        pGameCamera_->SetInputEnabled(true);
     }
     isFinish_ = true;
 }

@@ -55,14 +55,16 @@ void GameIntroManager::MovieLineUpdate() {
     CheckMovieLineStateTransition();
 
     // 状態ごとの更新処理
+    const float playSpeed = KetaEngine::Frame::DeltaTime() * currentPlaySpeedRate_;
+
     switch (movieLineState_) {
     case GameIntroManager::MovieLineState::NONE:
         break;
     case GameIntroManager::MovieLineState::APPEAR:
-        movieLine_->AppearUpdate();
+        movieLine_->AppearUpdate(playSpeed);
         break;
     case GameIntroManager::MovieLineState::EXIT:
-        movieLine_->ExitUpdate();
+        movieLine_->ExitUpdate(playSpeed);
         break;
     default:
         break;

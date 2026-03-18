@@ -146,12 +146,12 @@ void Player::TitleUpdate() {
     UpdateMatrix();
 }
 
-void Player::GameIntroUpdate() {
+void Player::GameIntroUpdate(float playSpeed) {
 
     effects_->Update(GetWorldPosition());
 
     if (dynamic_cast<PlayerSpawn*>(behavior_.get())) {
-        behavior_->Update();
+        behavior_->Update(playSpeed);
     }
     /// 行列更新
     UpdateMatrix();
