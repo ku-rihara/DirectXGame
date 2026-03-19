@@ -42,6 +42,9 @@ void PlayerComboAttackController::AllLoadFile() {
                 if (pEnemyManager_) {
                     attack->SetEnemyManager(pEnemyManager_);
                 }
+                if (pEditorSuite_) {
+                    attack->SetEffectEditorSuite(pEditorSuite_);
+                }
                 attacks_.push_back(std::move(attack));
             }
         }
@@ -457,6 +460,10 @@ float PlayerComboAttackController::GetPowerRate() const {
 
 void PlayerComboAttackController::SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite) {
     pEditorSuite_ = editorSuite;
+    // 既存の攻撃データへ伝播
+    for (auto& attack : attacks_) {
+        attack->SetEffectEditorSuite(pEditorSuite_);
+    }
 }
 
 void PlayerComboAttackController::SetCombo(Combo* combo) {

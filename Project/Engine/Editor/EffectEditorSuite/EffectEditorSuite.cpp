@@ -14,6 +14,8 @@ using namespace KetaEngine;
 #include "Particle/GPUParticle/Editor/GPUParticleEditor.h"
 // frame
 #include "Frame/Frame.h"
+// imgui
+#include <imgui.h>
 
 EffectEditorSuite::EffectEditorSuite()  = default;
 EffectEditorSuite::~EffectEditorSuite() = default;
@@ -46,6 +48,7 @@ void EffectEditorSuite::Init() {
 
     // SelectFileEditマップを初期化
     InitEditorSelectFileEditMap();
+    InitEditorSaveLoadMaps();
 }
 
 void EffectEditorSuite::Update() {
@@ -72,6 +75,9 @@ void EffectEditorSuite::EditorUpdate() {
     particleEditor_->EditorUpdate();
     timeScaleEditor_->EditorUpdate();
     ribbonTrailEditor_->EditorUpdate();
+
+    // コンボエディターからのインライン編集ウィンドウ
+    DrawInlineEditorWindow();
 }
 
 void EffectEditorSuite::InitEditorSelectFileEditMap() {
@@ -114,6 +120,136 @@ void EffectEditorSuite::SelectFileEdit(EffectEditorType type, const std::string&
     if (it != editorSelectFileEditMap_.end()) {
         it->second(fileName, categoryName);
     }
+}
+
+void EffectEditorSuite::OpenInlineEditor(EffectEditorType type, const std::string& fileName, const std::string& categoryName) {
+    isInlineEditorOpen_      = true;
+    inlineEditorType_        = type;
+    inlineEditorFileName_    = fileName;
+    inlineEditorCategoryName_ = categoryName;
+}
+
+void EffectEditorSuite::DrawInlineEditorWindow() {
+#ifdef _DEBUG
+    if (!isInlineEditorOpen_ || inlineEditorFileName_.empty()) {
+        return;
+    }
+
+    std::string title = "[編集] " + inlineEditorFileName_ + "##ComboEditorInline";
+    bool open         = true;
+
+    ImGui::SetNextWindowSize(ImVec2(400, 500), ImGuiCond_FirstUseEver);
+    if (ImGui::Begin(title.c_str(), &open)) {
+        ImGui::TextDisabled("カテゴリー: %s", inlineEditorCategoryName_.c_str());
+        ImGui::Separator();
+
+        // パラメータUI（AdjustParam）
+        auto adjIt = editorSelectFileEditMap_.find(inlineEditorType_);
+        if (adjIt != editorSelectFileEditMap_.end()) {
+            adjIt->second(inlineEditorFileName_, inlineEditorCategoryName_);
+        }
+
+        ImGui::Separator();
+
+        // Load ボタン
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
+        if (ImGui::Button("Load")) {
+            auto loadIt = editorLoadFileMap_.find(inlineEditorType_);
+            if (loadIt != editorLoadFileMap_.end()) {
+                loadIt->second(inlineEditorFileName_, inlineEditorCategoryName_);
+            }
+        }
+        ImGui::PopStyleColor(3);
+
+        ImGui::SameLine();
+
+        // Save ボタン
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
+        if (ImGui::Button("Save")) {
+            auto saveIt = editorSaveFileMap_.find(inlineEditorType_);
+            if (saveIt != editorSaveFileMap_.end()) {
+                saveIt->second(inlineEditorFileName_, inlineEditorCategoryName_);
+            }
+            MessageBoxA(nullptr, (inlineEditorFileName_ + " を保存しました。").c_str(), "エフェクト編集", 0);
+        }
+        ImGui::PopStyleColor(3);
+    }
+    ImGui::End();
+
+    if (!open) {
+        isInlineEditorOpen_ = false;
+    }
+#endif
+}
+
+void EffectEditorSuite::InitEditorSaveLoadMaps() {
+    // Save マップ
+    editorSaveFileMap_ = {
+        {EffectEditorType::Camera, [this](const std::string& name, const std::string& cat) {
+             auto* e = cameraEditor_->GetEffectByName(cat, name);
+             if (e) e->SaveData();
+         }},
+        {EffectEditorType::Shake, [this](const std::string& name, const std::string& cat) {
+             auto* e = shakeEditor_->GetEffectByName(cat, name);
+             if (e) e->SaveData();
+         }},
+        {EffectEditorType::TimeScale, [this](const std::string& name, const std::string& cat) {
+             auto* e = timeScaleEditor_->GetEffectByName(cat, name);
+             if (e) e->SaveData();
+         }},
+        {EffectEditorType::Particle, [this](const std::string& name, const std::string& cat) {
+             auto* e = particleEditor_->GetEffectByName(cat, name);
+             if (e) e->SaveData();
+         }},
+        {EffectEditorType::GPUParticle, [this](const std::string& name, const std::string& cat) {
+             auto* e = gpuParticleEditor_->GetEffectByName(cat, name);
+             if (e) e->SaveData();
+         }},
+        {EffectEditorType::ObjEaseAnimation, [this](const std::string& name, const std::string& cat) {
+             auto* e = objEaseAnimationEditor_->GetEffectByName(cat, name);
+             if (e) e->SaveData();
+         }},
+        {EffectEditorType::RibbonTrail, [this](const std::string& name, const std::string& cat) {
+             auto* e = ribbonTrailEditor_->GetEffectByName(cat, name);
+             if (e) e->SaveData();
+         }},
+    };
+
+    // Load マップ
+    editorLoadFileMap_ = {
+        {EffectEditorType::Camera, [this](const std::string& name, const std::string& cat) {
+             auto* e = cameraEditor_->GetEffectByName(cat, name);
+             if (e) e->LoadData();
+         }},
+        {EffectEditorType::Shake, [this](const std::string& name, const std::string& cat) {
+             auto* e = shakeEditor_->GetEffectByName(cat, name);
+             if (e) e->LoadData();
+         }},
+        {EffectEditorType::TimeScale, [this](const std::string& name, const std::string& cat) {
+             auto* e = timeScaleEditor_->GetEffectByName(cat, name);
+             if (e) e->LoadData();
+         }},
+        {EffectEditorType::Particle, [this](const std::string& name, const std::string& cat) {
+             auto* e = particleEditor_->GetEffectByName(cat, name);
+             if (e) e->LoadData();
+         }},
+        {EffectEditorType::GPUParticle, [this](const std::string& name, const std::string& cat) {
+             auto* e = gpuParticleEditor_->GetEffectByName(cat, name);
+             if (e) e->LoadData();
+         }},
+        {EffectEditorType::ObjEaseAnimation, [this](const std::string& name, const std::string& cat) {
+             auto* e = objEaseAnimationEditor_->GetEffectByName(cat, name);
+             if (e) e->LoadData();
+         }},
+        {EffectEditorType::RibbonTrail, [this](const std::string& name, const std::string& cat) {
+             auto* e = ribbonTrailEditor_->GetEffectByName(cat, name);
+             if (e) e->LoadData();
+         }},
+    };
 }
 
 void EffectEditorSuite::SetViewProjection(ViewProjection* viewProjection) {

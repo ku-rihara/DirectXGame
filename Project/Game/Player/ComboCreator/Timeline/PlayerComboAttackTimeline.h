@@ -25,6 +25,7 @@ public:
     void Draw();
     void ApplyToParameters();
     void RebuildBranchTracks();
+    void SetEffectEditorSuite(KetaEngine::EffectEditorSuite* suite);
 
 private:
     void SetupKeyFrameCallbacks();

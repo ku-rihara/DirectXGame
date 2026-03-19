@@ -51,13 +51,32 @@ public:
     // 統一されたSelectFileEdit呼び出し
     void SelectFileEdit(EffectEditorType type, const std::string& fileName, const std::string& categoryName);
 
+    /// <summary>
+    /// コンボエディターから特定ファイルのインライン編集ウィンドウを開く
+    /// </summary>
+    void OpenInlineEditor(EffectEditorType type, const std::string& fileName, const std::string& categoryName);
+
+    /// <summary>
+    /// インライン編集ウィンドウを描画（EditorUpdateから毎フレーム呼ばれる）
+    /// </summary>
+    void DrawInlineEditorWindow();
+
 private:
     // エディタへのアクセス用マップ
-    using SelectFileEditFunc = std::function<void(const std::string&, const std::string&)>;
-    std::unordered_map<EffectEditorType, SelectFileEditFunc> editorSelectFileEditMap_;
+    using EffectFileFunc = std::function<void(const std::string&, const std::string&)>;
+    std::unordered_map<EffectEditorType, EffectFileFunc> editorSelectFileEditMap_;
+    std::unordered_map<EffectEditorType, EffectFileFunc> editorSaveFileMap_;
+    std::unordered_map<EffectEditorType, EffectFileFunc> editorLoadFileMap_;
 
     // マップを初期化するヘルパー関数
     void InitEditorSelectFileEditMap();
+    void InitEditorSaveLoadMaps();
+
+    // インラインエディター状態
+    bool isInlineEditorOpen_            = false;
+    EffectEditorType inlineEditorType_  = EffectEditorType::Camera;
+    std::string inlineEditorFileName_;
+    std::string inlineEditorCategoryName_;
 
 private:
     std::unique_ptr<ObjEaseAnimationEditor> objEaseAnimationEditor_;

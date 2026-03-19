@@ -5,6 +5,7 @@
 #include "utility/FileSelector/FileSelector.h"
 #include "Player/Player.h"
 #include <imgui.h>
+#include <optional>
 
 void PlayerComboAttackTimelineUI::Init(
     PlayerComboAttackData* attackData,
@@ -232,6 +233,37 @@ void PlayerComboAttackTimelineUI::DrawKeyFrameMenuItems(int32_t trackIndex, int3
     }
 }
 
+std::optional<KetaEngine::EffectEditorType> PlayerComboAttackTimelineUI::GetEffectEditorType(
+    PlayerComboAttackTimelineData::TrackType type) const {
+
+    using TrackType      = PlayerComboAttackTimelineData::TrackType;
+    using EffectEditorType = KetaEngine::EffectEditorType;
+
+    switch (type) {
+    case TrackType::CAMERA_ACTION:
+    case TrackType::CAMERA_ACTION_ON_HIT:
+        return EffectEditorType::Camera;
+    case TrackType::HIT_STOP:
+    case TrackType::HIT_STOP_ON_HIT:
+        return EffectEditorType::TimeScale;
+    case TrackType::SHAKE_ACTION:
+    case TrackType::SHAKE_ACTION_ON_HIT:
+        return EffectEditorType::Shake;
+    case TrackType::PARTICLE_EFFECT:
+    case TrackType::PARTICLE_EFFECT_ON_HIT:
+        return EffectEditorType::Particle;
+    case TrackType::OBJ_ANIM_HEAD:
+    case TrackType::OBJ_ANIM_RIGHT_HAND:
+    case TrackType::OBJ_ANIM_LEFT_HAND:
+    case TrackType::OBJ_ANIM_MAIN_HEAD:
+        return EffectEditorType::ObjEaseAnimation;
+    case TrackType::RIBBON_TRAIL_MAIN_HEAD:
+        return EffectEditorType::RibbonTrail;
+    default:
+        return std::nullopt; // Audio・PostEffect などは対応エディターなし
+    }
+}
+
 void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex, int32_t keyIndex) {
     auto* trackInfo = data_->FindTrackInfo(trackIndex);
 
@@ -307,6 +339,22 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
     // オーディオの場合のみボリュームスライダーを表示
     if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK  || trackInfo->type == PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK_ON_HIT ) {
         ImGui::SliderFloat("ボリューム", &trackInfo->volume, 0.0f, 1.0f);
+    }
+
+    // 選択ファイルをインラインエディターで編集するボタン
+    if (effectEditorSuite_ && !trackInfo->fileName.empty()) {
+        auto editorType = GetEffectEditorType(trackInfo->type);
+        if (editorType.has_value()) {
+            ImGui::Separator();
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.3f, 0.7f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.75f, 0.45f, 0.85f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.2f, 0.6f, 1.0f));
+            if (ImGui::Button(("選択ファイルを編集##" + fileSelectorKey).c_str())) {
+                std::string category = data_->GetCategoryForTrackType(trackInfo->type);
+                effectEditorSuite_->OpenInlineEditor(editorType.value(), trackInfo->fileName, category);
+            }
+            ImGui::PopStyleColor(3);
+        }
     }
 }
 

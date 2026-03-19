@@ -199,6 +199,7 @@ void ParticleData::AdjustParam() {
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Particle: %s", groupName_.c_str());
 
+    DrawPlayButton();
     ImGui::Separator();
     ImGui::Text("Sections: %d", GetTotalKeyFrameCount());
 

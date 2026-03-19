@@ -360,9 +360,7 @@ void ObjEaseAnimationData::AdjustParam() {
     Vector3 currentTrans = GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Translation);
 
   
-    if (ImGui::Button("Play this Date")) {
-        Play();
-    }
+    DrawPlayButton();
 
     // KeyFrame Controls
     ImGui::Separator();

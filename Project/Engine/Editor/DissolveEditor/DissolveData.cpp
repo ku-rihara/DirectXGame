@@ -162,11 +162,7 @@ void DissolveData::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         // 再生制御
-        if (ImGui::Button("Play"))
-            Play();
-        ImGui::SameLine();
-        if (ImGui::Button("Reset"))
-            Reset();
+        DrawPlayButton();
 
         // 状態表示
         const char* stateText = "";

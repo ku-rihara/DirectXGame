@@ -316,6 +316,9 @@ void CameraAnimationData::AdjustParam() {
         ImGui::SeparatorText(("Camera Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());
 
+        DrawPlayButton();
+        ImGui::Separator();
+
         ImGui::Text("Category: %s", categoryName_.c_str());
         ImGui::Checkbox("Auto Return to Initial", &returnParam_.autoReturnToInitial);
 

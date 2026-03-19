@@ -415,6 +415,10 @@ void PlayerComboAttackData::SetPlayer(Player* player) {
     pPlayer_ = player;
 }
 
+void PlayerComboAttackData::SetEffectEditorSuite(KetaEngine::EffectEditorSuite* suite) {
+    timeLine_.SetEffectEditorSuite(suite);
+}
+
 KetaEngine::TimelineDrawer* PlayerComboAttackData::GetTimeline() {
     return timeLine_.GetTimeline();
 }

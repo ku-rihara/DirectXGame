@@ -83,6 +83,7 @@ public:
     const char* GetTrackTypeName(TrackType type) const;
     TrackType GetTrackTypeFromIndex(int32_t trackIndex) const;
     std::string GetDirectoryForTrackType(TrackType type) const;
+    std::string GetCategoryForTrackType(TrackType type) const;
 
     // デフォルトトラックインデックス管理
     void SetDefaultTrackIndex(DefaultTrack track, int32_t index);

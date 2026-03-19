@@ -103,6 +103,10 @@ void PlayerComboAttackTimeline::RebuildBranchTracks() {
     SetupKeyFrameCallbacks();
 }
 
+void PlayerComboAttackTimeline::SetEffectEditorSuite(KetaEngine::EffectEditorSuite* suite) {
+    ui_.SetEffectEditorSuite(suite);
+}
+
 KetaEngine::TimelineDrawer* PlayerComboAttackTimeline::GetTimeline() {
     return &timeline_;
 }

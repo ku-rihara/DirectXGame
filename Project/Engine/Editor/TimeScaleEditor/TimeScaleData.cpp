@@ -93,6 +93,9 @@ void TimeScaleData::AdjustParam() {
         ImGui::SeparatorText(("TimeScale Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());
 
+        DrawPlayButton();
+        ImGui::Separator();
+
         // 状態表示
         const char* stateText = "";
         switch (playState_) {

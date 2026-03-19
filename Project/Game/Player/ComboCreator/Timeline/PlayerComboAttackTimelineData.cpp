@@ -213,6 +213,31 @@ int32_t PlayerComboAttackTimelineData::GetDefaultTrackIndex(DefaultTrack track) 
     return defaultTrackIndices_[static_cast<size_t>(track)];
 }
 
+std::string PlayerComboAttackTimelineData::GetCategoryForTrackType(TrackType type) const {
+    switch (type) {
+    case TrackType::CAMERA_ACTION:
+    case TrackType::CAMERA_ACTION_ON_HIT:
+    case TrackType::HIT_STOP:
+    case TrackType::HIT_STOP_ON_HIT:
+    case TrackType::SHAKE_ACTION:
+    case TrackType::SHAKE_ACTION_ON_HIT:
+        return "Common";
+    case TrackType::PARTICLE_EFFECT:
+    case TrackType::PARTICLE_EFFECT_ON_HIT:
+    case TrackType::OBJ_ANIM_HEAD:
+    case TrackType::RIBBON_TRAIL_MAIN_HEAD:
+        return "Player";
+    case TrackType::OBJ_ANIM_RIGHT_HAND:
+        return "RightHand";
+    case TrackType::OBJ_ANIM_LEFT_HAND:
+        return "LeftHand";
+    case TrackType::OBJ_ANIM_MAIN_HEAD:
+        return "MainHead";
+    default:
+        return "";
+    }
+}
+
 void PlayerComboAttackTimelineData::UpdateTrackIndicesAfterInsert(int32_t insertPosition, int32_t count) {
     // countが0以下の場合は処理不要
     if (count <= 0) {

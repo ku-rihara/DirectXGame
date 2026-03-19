@@ -86,6 +86,9 @@ void RibbonTrailData::AdjustParam() {
     ImGui::SeparatorText(("RibbonTrail: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());
 
+    DrawPlayButton();
+    ImGui::Separator();
+
     ImGui::SeparatorText("Color");
     ImGui::ColorEdit4("Start Color (Head)", &startColor_.x);
     ImGui::ColorEdit4("End Color   (Tail)", &endColor_.x);

@@ -2,8 +2,10 @@
 
 #include "PlayerComboAttackTimelineData.h"
 #include "utility/FileSelector/FileSelector.h"
+#include "Editor/EffectEditorSuite/EffectEditorSuite.h"
 #include <cstdint>
 #include <functional>
+#include <optional>
 #include <unordered_map>
 
 class PlayerComboAttackData;
@@ -44,6 +46,11 @@ public:
     void DrawTrackContextMenu(int32_t trackIndex);
     void DrawKeyFrameMenuItems(int32_t trackIndex, int32_t keyIndex);
 
+    /// <summary>
+    /// エフェクトエディタースイートをセット（コンボエディターからファイル編集ウィンドウを開くために使用）
+    /// </summary>
+    void SetEffectEditorSuite(KetaEngine::EffectEditorSuite* suite) { effectEditorSuite_ = suite; }
+
 private:
     void DrawAddTrackPopup();
     void DrawRenditionKeyFrameEditor(int32_t trackIndex, int32_t keyIndex);
@@ -56,10 +63,16 @@ private:
     void RegisterParamUIFunctions();
 
 private:
+    // TrackType → EffectEditorType の変換（対応エディターがない場合は nullopt）
+    std::optional<KetaEngine::EffectEditorType> GetEffectEditorType(
+        PlayerComboAttackTimelineData::TrackType type) const;
+
+private:
     PlayerComboAttackData* attackData_                   = nullptr;
     KetaEngine::TimelineDrawer* timeline_                = nullptr;
     PlayerComboAttackTimelineData* data_                 = nullptr;
     PlayerComboAttackTimelineTrackBuilder* trackBuilder_ = nullptr;
+    KetaEngine::EffectEditorSuite* effectEditorSuite_    = nullptr;
 
     ParamEditType selectedParamEditType_ = ParamEditType::NONE;
 

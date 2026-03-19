@@ -181,4 +181,5 @@ public:
     void SetController(PlayerComboAttackController* controller) { pController_ = controller; }
     void SetEnemyManager(EnemyManager* enemyManager) { pEnemyManager_ = enemyManager; }
     EnemyManager* GetEnemyManager() const { return pEnemyManager_; }
+    void SetEffectEditorSuite(KetaEngine::EffectEditorSuite* suite);
 };

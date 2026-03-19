@@ -162,6 +162,9 @@ void GPUParticleData::AdjustParam() {
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Particle: %s", groupName_.c_str());
 
+    DrawPlayButton();
+    ImGui::Separator();
+
     ImGui::Checkbox("Draw All Sections", &drawAllSections_);
 
     ImGui::Separator();

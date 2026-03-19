@@ -34,6 +34,12 @@ public:
     // ポーズ
     void Pause();
 
+    /// <summary>
+    /// 再生ボタンを描画する（派生クラスの AdjustParam 内で呼ぶ）
+    /// ボタン色は基底クラスで統一管理
+    /// </summary>
+    void DrawPlayButton();
+
     // 再生状態取得
     bool IsPlaying() const;
     bool IsFinished() const;

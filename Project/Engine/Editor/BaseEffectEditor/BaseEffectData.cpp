@@ -8,6 +8,25 @@ void BaseEffectData::Play() {
     playState_ = PlayState::PLAYING;
 }
 
+void BaseEffectData::DrawPlayButton() {
+#ifdef _DEBUG
+    // 再生ボタン共通カラー（基底クラスで一元管理）
+    static constexpr ImVec4 kPlay        = {0.08f, 0.72f, 0.18f, 1.0f};
+    static constexpr ImVec4 kPlayHovered = {0.18f, 0.90f, 0.30f, 1.0f};
+    static constexpr ImVec4 kPlayActive  = {0.04f, 0.55f, 0.10f, 1.0f};
+
+    ImGui::PushStyleColor(ImGuiCol_Button,        kPlay);
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, kPlayHovered);
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive,  kPlayActive);
+
+    if (ImGui::Button(("再生プレビュー##" + groupName_).c_str())) {
+        Play();
+    }
+
+    ImGui::PopStyleColor(3);
+#endif
+}
+
 void BaseEffectData::Pause() {
     if (playState_ == PlayState::PLAYING) {
         playState_ = PlayState::PAUSED;
