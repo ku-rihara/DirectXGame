@@ -134,6 +134,10 @@
     <ClCompile Include="Engine\Particle\CPUParticle\Editor\ParticleSection.cpp" />
     <ClCompile Include="Engine\Particle\CPUParticle\Editor\SectionParameters\ParticleSectionParameter.cpp" />
     <ClCompile Include="Engine\Particle\CPUParticle\ParticleManager.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\SubSystems\Factory\ParticleFactory.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\SubSystems\Updater\ParticleUpdater.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\SubSystems\Renderer\ParticleRenderer.cpp" />
+    <ClCompile Include="Engine\Particle\CPUParticle\SubSystems\Registry\ParticleGroupRegistry.cpp" />
     <ClCompile Include="Engine\Particle\CPUParticle\ParticlePlayer.cpp" />
     <ClCompile Include="Engine\Particle\GPUParticle\Editor\GPUParticleData.cpp" />
     <ClCompile Include="Engine\Particle\GPUParticle\Editor\GPUParticleEditor.cpp" />
@@ -453,6 +457,10 @@
     <ClInclude Include="Engine\Particle\CPUParticle\Editor\ParticleSection.h" />
     <ClInclude Include="Engine\Particle\CPUParticle\Editor\SectionParameters\ParticleSectionParameter.h" />
     <ClInclude Include="Engine\Particle\CPUParticle\ParticleManager.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\SubSystems\Factory\ParticleFactory.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\SubSystems\Updater\ParticleUpdater.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\SubSystems\Renderer\ParticleRenderer.h" />
+    <ClInclude Include="Engine\Particle\CPUParticle\SubSystems\Registry\ParticleGroupRegistry.h" />
     <ClInclude Include="Engine\Particle\CPUParticle\ParticlePlayer.h" />
     <ClInclude Include="Engine\Particle\GPUParticle\Data\GPUParticleEmitterData.h" />
     <ClInclude Include="Engine\Particle\GPUParticle\Data\ParticleCSData.h" />

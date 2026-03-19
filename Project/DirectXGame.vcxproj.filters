@@ -193,6 +193,21 @@
     <Filter Include="Engine\Particle\CPUParticle">
       <UniqueIdentifier>{CD39CF85-EC95-4464-BAD0-9A7C9302BD51}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Particle\CPUParticle\SubSystems">
+      <UniqueIdentifier>{e5f6a7b8-c9d0-1234-efab-345678901235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle\CPUParticle\SubSystems\Factory">
+      <UniqueIdentifier>{a1b2c3d4-e5f6-7890-abcd-ef1234567891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle\CPUParticle\SubSystems\Updater">
+      <UniqueIdentifier>{b2c3d4e5-f6a7-8901-bcde-f12345678902}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle\CPUParticle\SubSystems\Renderer">
+      <UniqueIdentifier>{c3d4e5f6-a7b8-9012-cdef-123456789013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle\CPUParticle\SubSystems\Registry">
+      <UniqueIdentifier>{d4e5f6a7-b8c9-0123-defa-234567890124}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Particle\GPUParticle">
       <UniqueIdentifier>{9929062F-49A2-4A1F-BB92-089285CB8A54}</UniqueIdentifier>
     </Filter>
@@ -768,6 +783,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Particle\CPUParticle\ParticleManager.cpp">
       <Filter>Engine\Particle\CPUParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Particle\CPUParticle\SubSystems\Factory\ParticleFactory.cpp">
+      <Filter>Engine\Particle\CPUParticle\SubSystems\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Particle\CPUParticle\SubSystems\Updater\ParticleUpdater.cpp">
+      <Filter>Engine\Particle\CPUParticle\SubSystems\Updater</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Particle\CPUParticle\SubSystems\Renderer\ParticleRenderer.cpp">
+      <Filter>Engine\Particle\CPUParticle\SubSystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Particle\CPUParticle\SubSystems\Registry\ParticleGroupRegistry.cpp">
+      <Filter>Engine\Particle\CPUParticle\SubSystems\Registry</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Particle\CPUParticle\ParticlePlayer.cpp">
       <Filter>Engine\Particle\CPUParticle</Filter>
@@ -1605,6 +1632,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Particle\CPUParticle\ParticleManager.h">
       <Filter>Engine\Particle\CPUParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Particle\CPUParticle\SubSystems\Factory\ParticleFactory.h">
+      <Filter>Engine\Particle\CPUParticle\SubSystems\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Particle\CPUParticle\SubSystems\Updater\ParticleUpdater.h">
+      <Filter>Engine\Particle\CPUParticle\SubSystems\Updater</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Particle\CPUParticle\SubSystems\Renderer\ParticleRenderer.h">
+      <Filter>Engine\Particle\CPUParticle\SubSystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Particle\CPUParticle\SubSystems\Registry\ParticleGroupRegistry.h">
+      <Filter>Engine\Particle\CPUParticle\SubSystems\Registry</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Particle\CPUParticle\ParticlePlayer.h">
       <Filter>Engine\Particle\CPUParticle</Filter>

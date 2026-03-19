@@ -27,12 +27,14 @@
 
 namespace KetaEngine {
 
-/// <summary>
-/// パーティクルマネージャー
-/// </summary>
+// forward declarations
+class ParticleFactory;
+class ParticleUpdater;
+class ParticleRenderer;
+class ParticleGroupRegistry;
+
 class ParticleManager {
 public:
-    // 共通パラメータの型エイリアス
     using GroupParameters = ParticleCommon::GroupParameters;
     using Parameters      = ParticleCommon::Parameters;
     using EaseParm        = ParticleCommon::ScaleEaseParam;
@@ -44,7 +46,6 @@ public:
         EaseParm easeParam;
     };
 
- 
     struct TranslateInfo {
         Vector3 startPosition;
         Vector3 endPosition;
@@ -85,28 +86,23 @@ public:
         const Vector3* followPos = nullptr;
         std::unique_ptr<WorldTransform> worldTransform_;
 
-        // スケール情報
         ScaleInFo scaleInfo;
         bool isAdaptEasing = false;
         std::unique_ptr<Easing<Vector3>> scaleEasing;
 
-        // Translate情報 
         TranslateInfo translateInfo;
         bool isAdaptTranslateEasing = false;
         std::unique_ptr<Easing<Vector3>> translateEasing;
 
-        // Rotate情報
         RotateInfo rotateInfo;
         bool isAdaptRotateEasing = false;
         std::unique_ptr<Easing<Vector3>> rotateEasing;
 
-        // UV情報
         UVInfo uvInfo_;
 
-        // Dissolve
-        float dissolveCurrentTime    = 0.0f;
-        float dissolveOffsetTime     = 0.0f;
-        bool isAdaptDissolveEasing   = false;
+        float dissolveCurrentTime  = 0.0f;
+        float dissolveOffsetTime   = 0.0f;
+        bool isAdaptDissolveEasing = false;
         std::unique_ptr<float> dissolveThresholdData_;
         std::unique_ptr<Easing<float>> dissolveEasing;
     };
@@ -123,7 +119,7 @@ public:
         float maxTime        = 1.0f;
         float offsetTime     = 0.0f;
         int32_t easeType     = 0;
-        bool  isActive       = false;
+        bool isActive        = false;
     };
 
     struct ParticleGroup {
@@ -148,7 +144,6 @@ public:
     ParticleManager()  = default;
     ~ParticleManager() = default;
 
-    // 初期化、更新、描画
     void Init(SrvManager* srvManager);
     void Update();
     void Draw(const ViewProjection& viewProjection);
@@ -176,6 +171,11 @@ private:
 
     std::vector<std::string> particleFiles_;
     const std::string ParticleFolderName_ = "Particle";
+
+    std::unique_ptr<ParticleFactory>       factory_;
+    std::unique_ptr<ParticleUpdater>       updater_;
+    std::unique_ptr<ParticleRenderer>      renderer_;
+    std::unique_ptr<ParticleGroupRegistry> registry_;
 
 public:
     std::unordered_map<std::string, ParticleGroup> particleGroups_;
