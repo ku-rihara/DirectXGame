@@ -299,6 +299,9 @@ void TimelineDrawer::DrawToolbar() {
 
     // 再生の制御
     if (ImGui::Button(isPlaying_ ? "Pause" : "Play")) {
+        if (!isPlaying_) {
+            currentFrame_ = 0; // 再生開始時にフレームを0にリセット
+        }
         isPlaying_ = !isPlaying_;
     }
 

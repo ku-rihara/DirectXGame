@@ -433,6 +433,9 @@
     <Filter Include="Game\UI\ComboAsistUI\SubControllers">
       <UniqueIdentifier>{e5f60718-3c2d-4b1a-90f8-7e6d5c4b3a29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\UI\NextAttackIndicator">
+      <UniqueIdentifier>{f1a2b3c4-5d6e-7f80-9a1b-2c3d4e5f6071}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\Player\AutoComboAttack">
       <UniqueIdentifier>{b8370061-e785-4f49-aa41-5086ed3367d7}</UniqueIdentifier>
     </Filter>
@@ -2429,6 +2432,9 @@
     <ClCompile Include="Engine\utility\TimeLine\TimelineDrawParameter.cpp">
       <Filter>Engine\utility\TimeLine</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\NextAttackIndicator\NextAttackIndicatorUI.cpp">
+      <Filter>Game\UI\NextAttackIndicator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2541,6 +2547,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\TimeLine\TimelineDrawParameter.h">
       <Filter>Engine\utility\TimeLine</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\NextAttackIndicator\NextAttackIndicatorUI.h">
+      <Filter>Game\UI\NextAttackIndicator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

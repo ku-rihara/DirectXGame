@@ -28,6 +28,9 @@ void GameSceneFinish::Init() {
 }
 
 void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
+    // プレイヤー更新
+    pOwner_->GetGameObj().player_->Update();
+
     // スプライト更新
     pOwner_->GetGameObj().screenSprite_->SetAlpha(alpha_);
 

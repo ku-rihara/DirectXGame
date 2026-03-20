@@ -12,6 +12,8 @@
 #include "Player/Player.h"
 // utility
 #include "utility/TimeLine/TimelineDrawer.h"
+// EffectEditorSuite
+#include "Editor/EffectEditorSuite/EffectEditorSuite.h"
 // imGui
 #include <imgui.h>
 // std
@@ -52,19 +54,24 @@ void PlayerComboAttackPreview::Update(float deltaTime) {
     default:
         break;
     }
+
+    // EffectEditor経由での演出再生
+    UpdatePreviewRenditions();
 }
 
 void PlayerComboAttackPreview::UpdateSingleMode() {
+    if (!currentAttackData_) {
+        return;
+    }
 
-    if (!currentAttackData_ || !timeline_) {
+    KetaEngine::TimelineDrawer* tl = currentAttackData_->GetTimeline();
+    if (!tl) {
         return;
     }
 
     // タイムラインが終了したらループ
-    if (timeline_->GetCurrentFrame() >= timeline_->GetEndFrame()) {
-        // 同じ攻撃を再実行
+    if (tl->GetCurrentFrame() >= tl->GetEndFrame()) {
         ExecuteAttack(currentAttackData_);
-        timeline_->SetCurrentFrame(0);
         attackElapsedTime_ = 0.0f;
     }
 }
@@ -78,7 +85,8 @@ void PlayerComboAttackPreview::UpdateContinuousMode() {
     CheckAndAdvanceToNextAttack();
 
     // タイムラインが終了したかチェック
-    if (timeline_ && timeline_->GetCurrentFrame() >= timeline_->GetEndFrame()) {
+    KetaEngine::TimelineDrawer* tl = currentAttackData_->GetTimeline();
+    if (tl && tl->GetCurrentFrame() >= tl->GetEndFrame()) {
 
         // 次の攻撃がある場合
         if (!nextAttackName_.empty() && nextAttackName_ != "None") {
@@ -146,6 +154,11 @@ void PlayerComboAttackPreview::ExecuteAttack(PlayerComboAttackData* attackData) 
         return;
     }
 
+    // 原点スタートが有効なら毎回InitPosに戻す
+    if (startFromOrigin_) {
+        player_->SetWorldPosition(previewInitPos_);
+    }
+
     currentAttackData_ = attackData;
 
     // 次の攻撃名を取得
@@ -161,10 +174,14 @@ void PlayerComboAttackPreview::ExecuteAttack(PlayerComboAttackData* attackData) 
     hasSimulatedInput_   = false;
     isWaitingTransition_ = false;
 
-    // タイムラインをリセット
-    if (timeline_) {
-        timeline_->SetCurrentFrame(0);
-        timeline_->SetPlaying(true);
+    // 演出再生フラグリセット
+    ResetRenditionFlags();
+
+    // タイムラインをリセットして再生
+    KetaEngine::TimelineDrawer* tl = attackData->GetTimeline();
+    if (tl) {
+        tl->SetCurrentFrame(0);
+        tl->SetPlaying(true);
     }
 }
 
@@ -215,15 +232,21 @@ void PlayerComboAttackPreview::StartPreview(PlayerComboAttackData* attackData, A
     // 初期状態を保存
     SaveInitialState();
 
+    // 原点スタートが有効なら初期位置に移動
+    if (startFromOrigin_) {
+        player_->SetWorldPosition(previewInitPos_);
+    }
+
     currentMode_ = mode;
     ExecuteAttack(attackData);
 }
 
 void PlayerComboAttackPreview::StopPreview() {
     // タイムライン停止
-    if (timeline_) {
-        timeline_->SetPlaying(false);
-        timeline_->SetCurrentFrame(0);
+    KetaEngine::TimelineDrawer* tl = currentAttackData_ ? currentAttackData_->GetTimeline() : nullptr;
+    if (tl) {
+        tl->SetPlaying(false);
+        tl->SetCurrentFrame(0);
     }
 
     // プレイヤーを初期状態に戻す
@@ -307,6 +330,14 @@ void PlayerComboAttackPreview::DrawUI() {
 
     ImGui::Separator();
 
+    // 原点スタート設定
+    ImGui::Checkbox("原点(InitPos)からスタート", &startFromOrigin_);
+    if (startFromOrigin_) {
+        ImGui::DragFloat3("InitPos", &previewInitPos_.x, 0.1f);
+    }
+
+    ImGui::Separator();
+
     // ボタン連打間隔の設定（連続モード用）
     ImGui::Text("連続再生設定:");
     ImGui::DragInt("ボタン連打間隔(フレーム)", &buttonInputInterval_, 1.0f, 1, 60);
@@ -338,10 +369,94 @@ void PlayerComboAttackPreview::DrawUI() {
 }
 
 std::string PlayerComboAttackPreview::GetCurrentAttackName() const {
-    // 現在の攻撃名を取得
     if (currentAttackData_) {
         return currentAttackData_->GetGroupName();
-    } else {
-        return "";
     }
+    return "";
+}
+
+void PlayerComboAttackPreview::ResetRenditionFlags() {
+    renditionPlayed_.fill(false);
+    objAnimPlayed_.fill(false);
+    prevFrame_ = 0;
+}
+
+void PlayerComboAttackPreview::UpdatePreviewRenditions() {
+    if (!pEditorSuite_ || !currentAttackData_) {
+        return;
+    }
+
+    KetaEngine::TimelineDrawer* timeline = currentAttackData_->GetTimeline();
+    if (!timeline) {
+        return;
+    }
+
+    int32_t currentFrame = timeline->GetCurrentFrame();
+
+    // フレームが逆行した場合（ループ等）は再生フラグをリセット
+    if (currentFrame < prevFrame_) {
+        ResetRenditionFlags();
+    }
+
+    const auto& renditionData = currentAttackData_->GetRenditionData();
+
+    // 通常演出 (RenditionType → EffectEditorType + category)
+    struct RendMapping {
+        PlayerAttackRenditionData::Type rendType;
+        KetaEngine::EffectEditorType    editorType;
+        const char*                     category;
+    };
+    static const RendMapping kMapping[] = {
+        {PlayerAttackRenditionData::Type::CameraAction,      KetaEngine::EffectEditorType::Camera,     "Common"},
+        {PlayerAttackRenditionData::Type::HitStop,           KetaEngine::EffectEditorType::TimeScale,  "Common"},
+        {PlayerAttackRenditionData::Type::ShakeAction,       KetaEngine::EffectEditorType::Shake,      "Common"},
+        {PlayerAttackRenditionData::Type::ParticleEffect,    KetaEngine::EffectEditorType::Particle,   "Player"},
+        {PlayerAttackRenditionData::Type::RibbonTrailEffect, KetaEngine::EffectEditorType::RibbonTrail,"Player"},
+    };
+
+    for (const auto& m : kMapping) {
+        size_t idx = static_cast<size_t>(m.rendType);
+        if (renditionPlayed_[idx]) {
+            continue;
+        }
+        const auto& param = renditionData.GetRenditionParamFromType(m.rendType);
+        if (param.fileName.empty() || param.fileName == "None") {
+            continue;
+        }
+        int32_t effectFrame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
+            pEditorSuite_->PlayEffect(m.editorType, param.fileName, m.category);
+            renditionPlayed_[idx] = true;
+        }
+    }
+
+    // オブジェクトアニメーション
+    struct ObjAnimMapping {
+        PlayerAttackRenditionData::ObjAnimationType animType;
+        const char*                                 category;
+    };
+    static const ObjAnimMapping kObjMapping[] = {
+        {PlayerAttackRenditionData::ObjAnimationType::Head,      "Player"},
+        {PlayerAttackRenditionData::ObjAnimationType::RightHand, "RightHand"},
+        {PlayerAttackRenditionData::ObjAnimationType::LeftHand,  "LeftHand"},
+        {PlayerAttackRenditionData::ObjAnimationType::MainHead,  "MainHead"},
+    };
+
+    for (const auto& m : kObjMapping) {
+        size_t idx = static_cast<size_t>(m.animType);
+        if (objAnimPlayed_[idx]) {
+            continue;
+        }
+        const auto& param = renditionData.GetObjAnimationParamFromType(m.animType);
+        if (param.fileName.empty() || param.fileName == "None") {
+            continue;
+        }
+        int32_t effectFrame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
+            pEditorSuite_->PlayEffect(KetaEngine::EffectEditorType::ObjEaseAnimation, param.fileName, m.category);
+            objAnimPlayed_[idx] = true;
+        }
+    }
+
+    prevFrame_ = currentFrame;
 }

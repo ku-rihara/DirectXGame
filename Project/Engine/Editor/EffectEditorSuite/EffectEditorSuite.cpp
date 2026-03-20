@@ -115,6 +115,52 @@ void EffectEditorSuite::InitEditorSelectFileEditMap() {
     };
 }
 
+void EffectEditorSuite::PlayEffect(EffectEditorType type, const std::string& fileName, const std::string& categoryName) {
+    if (fileName.empty() || fileName == "None") {
+        return;
+    }
+
+    switch (type) {
+    case EffectEditorType::Camera: {
+        auto* e = cameraEditor_->GetEffectByName(categoryName, fileName);
+        if (e) e->Play();
+        break;
+    }
+    case EffectEditorType::Shake: {
+        auto* e = shakeEditor_->GetEffectByName(categoryName, fileName);
+        if (e) e->Play();
+        break;
+    }
+    case EffectEditorType::TimeScale: {
+        auto* e = timeScaleEditor_->GetEffectByName(categoryName, fileName);
+        if (e) e->Play();
+        break;
+    }
+    case EffectEditorType::Particle: {
+        auto* e = particleEditor_->GetEffectByName(categoryName, fileName);
+        if (e) e->Play();
+        break;
+    }
+    case EffectEditorType::GPUParticle: {
+        auto* e = gpuParticleEditor_->GetEffectByName(categoryName, fileName);
+        if (e) e->Play();
+        break;
+    }
+    case EffectEditorType::ObjEaseAnimation: {
+        auto* e = objEaseAnimationEditor_->GetEffectByName(categoryName, fileName);
+        if (e) e->Play();
+        break;
+    }
+    case EffectEditorType::RibbonTrail: {
+        auto* e = ribbonTrailEditor_->GetEffectByName(categoryName, fileName);
+        if (e) e->Play();
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 void EffectEditorSuite::SelectFileEdit(EffectEditorType type, const std::string& fileName, const std::string& categoryName) {
     auto it = editorSelectFileEditMap_.find(type);
     if (it != editorSelectFileEditMap_.end()) {

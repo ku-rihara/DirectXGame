@@ -52,6 +52,11 @@ public:
     void SelectFileEdit(EffectEditorType type, const std::string& fileName, const std::string& categoryName);
 
     /// <summary>
+    /// エディター経由でエフェクトを再生（プレビュー用）
+    /// </summary>
+    void PlayEffect(EffectEditorType type, const std::string& fileName, const std::string& categoryName);
+
+    /// <summary>
     /// コンボエディターから特定ファイルのインライン編集ウィンドウを開く
     /// </summary>
     void OpenInlineEditor(EffectEditorType type, const std::string& fileName, const std::string& categoryName);

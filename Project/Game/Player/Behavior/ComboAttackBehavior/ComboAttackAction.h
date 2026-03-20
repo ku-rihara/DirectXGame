@@ -29,6 +29,8 @@ public:
         PlayerComboAttackData* attackData;
     };
 
+    const std::vector<NextAttackCandidate>& GetNextAttackCandidates() const { return nextAttackCandidates_; }
+
 private:
     /// 振る舞いオーダー
     enum class Order {

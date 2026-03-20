@@ -30,7 +30,11 @@ void ObjEaseAnimationData::Update(float speedRate) {
         return;
     }
     UpdateActiveSection(speedRate);
-    UpdateIndependentSRTProgression();
+    if (isSyncSectionMode_) {
+        UpdateSyncSRTProgression();
+    } else {
+        UpdateIndependentSRTProgression();
+    }
 }
 
 void ObjEaseAnimationData::UpdateActiveSection(float speedRate) {
@@ -97,6 +101,58 @@ void ObjEaseAnimationData::UpdateIndependentSRTProgression() {
                 onLoopEndCallback_();
             }
             Play(); // リセットして再生
+        } else {
+            isAllKeyFramesFinished_ = true;
+            playState_              = PlayState::STOPPED;
+        }
+    }
+}
+
+void ObjEaseAnimationData::UpdateSyncSRTProgression() {
+    if (sectionElements_.empty() || playState_ != PlayState::PLAYING) {
+        return;
+    }
+
+    int32_t totalSections  = static_cast<int32_t>(sectionElements_.size());
+    // 同期モードでは全SRTが同じセクションインデックスを持つ
+    int32_t currentSection = activeSectionIndices_[0];
+
+    if (currentSection < 0 || currentSection >= totalSections) {
+        return;
+    }
+
+    // 現在のセクションで全SRTが完了したかチェック
+    bool allFinishedInSection = true;
+    for (size_t srtType = 0; srtType < static_cast<size_t>(TransformType::Count); ++srtType) {
+        auto sectionType = static_cast<ObjEaseAnimationSection::TransformType>(srtType);
+        if (!srtAllSectionsFinished_[srtType] &&
+            !sectionElements_[currentSection]->IsTransformFinished(sectionType)) {
+            allFinishedInSection = false;
+            break;
+        }
+    }
+
+    if (allFinishedInSection) {
+        if (currentSection == totalSections - 1) {
+            // 最終セクション完了 → 全SRTを完了としてマーク
+            for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+                srtAllSectionsFinished_[i] = true;
+            }
+        } else {
+            // 全SRTを次のセクションへ同時に進める
+            for (size_t srtType = 0; srtType < static_cast<size_t>(TransformType::Count); ++srtType) {
+                AdvanceTransformToNextSection(static_cast<TransformType>(srtType));
+            }
+        }
+    }
+
+    // 全SRTが全セクション完了したかチェック
+    if (AreAllSRTFinished()) {
+        if (isLoop_) {
+            if (onLoopEndCallback_) {
+                onLoopEndCallback_();
+            }
+            Play();
         } else {
             isAllKeyFramesFinished_ = true;
             playState_              = PlayState::STOPPED;
@@ -346,6 +402,9 @@ void ObjEaseAnimationData::AdjustParam() {
 
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Animation: %s", groupName_.c_str());
+
+    // セクション遷移モード切り替え
+    ImGui::Checkbox("次の再生までSRT全ての再生完了を待つか", &isSyncSectionMode_);
 
     // OriginTransform 編集
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {

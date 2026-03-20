@@ -28,7 +28,11 @@ void SpriteEaseAnimationData::Update(float speedRate) {
         return;
     }
     UpdateActiveSection(speedRate);
-    UpdateIndependentProgression();
+    if (isSyncSectionMode_) {
+        UpdateSyncProgression();
+    } else {
+        UpdateIndependentProgression();
+    }
 }
 
 void SpriteEaseAnimationData::UpdateActiveSection(float speedRate) {
@@ -77,6 +81,50 @@ void SpriteEaseAnimationData::UpdateIndependentProgression() {
                 } else {
                     AdvancePropertyToNextSection(type);
                 }
+            }
+        }
+    }
+
+    if (AreAllPropertiesFinished()) {
+        isAllKeyFramesFinished_ = true;
+        playState_              = PlayState::STOPPED;
+    }
+}
+
+void SpriteEaseAnimationData::UpdateSyncProgression() {
+    if (sectionElements_.empty() || playState_ != PlayState::PLAYING) {
+        return;
+    }
+
+    int32_t totalSections  = static_cast<int32_t>(sectionElements_.size());
+    // 同期モードでは全プロパティが同じセクションインデックスを持つ
+    int32_t currentSection = activeSectionIndices_[0];
+
+    if (currentSection < 0 || currentSection >= totalSections) {
+        return;
+    }
+
+    // 現在のセクションで全プロパティが完了したかチェック
+    bool allFinishedInSection = true;
+    for (size_t propIdx = 0; propIdx < kPropertyCount; ++propIdx) {
+        auto sectionType = static_cast<SpriteEaseAnimationSection::PropertyType>(propIdx);
+        if (!allSectionsFinished_[propIdx] &&
+            !sectionElements_[currentSection]->IsPropertyFinished(sectionType)) {
+            allFinishedInSection = false;
+            break;
+        }
+    }
+
+    if (allFinishedInSection) {
+        if (currentSection == totalSections - 1) {
+            // 最終セクション完了 → 全プロパティを完了としてマーク
+            for (size_t i = 0; i < kPropertyCount; ++i) {
+                allSectionsFinished_[i] = true;
+            }
+        } else {
+            // 全プロパティを次のセクションへ同時に進める
+            for (size_t propIdx = 0; propIdx < kPropertyCount; ++propIdx) {
+                AdvancePropertyToNextSection(static_cast<PropertyType>(propIdx));
             }
         }
     }
@@ -274,6 +322,9 @@ void SpriteEaseAnimationData::AdjustParam() {
 
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Animation: %s", groupName_.c_str());
+
+    // セクション遷移モード切り替え
+    ImGui::Checkbox("次の再生までSRT全ての再生完了を待つか", &isSyncSectionMode_);
 
     // OriginValues 編集
     ImGui::DragFloat2("OriginScale", &originalScale_.x, 0.01f);

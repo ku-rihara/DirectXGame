@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Player/ComboCreator/PlayerAttackRenditionData.h"
 #include "Vector3.h"
+#include <array>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -11,6 +13,7 @@ class PlayerComboAttackController;
 
 namespace KetaEngine {
 class TimelineDrawer;
+class EffectEditorSuite;
 }
 
 enum class AttackPreviewMode {
@@ -54,6 +57,10 @@ private:
     // 入力シミュレーション
     bool ShouldTriggerNextAttack();
 
+    // 演出再生（EffectEditor経由）
+    void UpdatePreviewRenditions();
+    void ResetRenditionFlags();
+
     // 状態リセット
     void ResetState();
     void SaveInitialState();
@@ -65,6 +72,7 @@ private:
     Player* player_                                = nullptr;
     PlayerComboAttackController* attackController_ = nullptr;
     KetaEngine::TimelineDrawer* timeline_          = nullptr;
+    KetaEngine::EffectEditorSuite* pEditorSuite_   = nullptr;
 
     AttackPreviewMode currentMode_ = AttackPreviewMode::NONE;
 
@@ -81,6 +89,15 @@ private:
     bool hasSimulatedInput_   = false;
     bool isWaitingTransition_ = false;
 
+    // 原点スタートフラグ
+    bool startFromOrigin_ = false;
+    Vector3 previewInitPos_;
+
+    // 演出再生フレーム追跡
+    int32_t prevFrame_ = 0;
+    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> renditionPlayed_{};
+    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> objAnimPlayed_{};
+
     // プレイヤーの初期状態保存
     Vector3 initialPosition_;
     Vector3 initialRotation_;
@@ -95,4 +112,5 @@ public:
     // Setter
     void SetButtonInputInterval(int32_t interval) { buttonInputInterval_ = interval; }
     void SetPlayMode(AttackPreviewMode mode) { currentMode_ = mode; }
+    void SetEditorSuite(KetaEngine::EffectEditorSuite* suite) { pEditorSuite_ = suite; }
 };

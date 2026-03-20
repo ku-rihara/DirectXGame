@@ -94,6 +94,7 @@ private:
 
     // プレビュー機能
     PlayerComboAttackPreview preview_;
+    bool prevTimelinePlaying_ = false; //< タイムライン再生状態（前フレーム）
 
 public:
     PlayerComboAttackData* GetSelectedAttack();

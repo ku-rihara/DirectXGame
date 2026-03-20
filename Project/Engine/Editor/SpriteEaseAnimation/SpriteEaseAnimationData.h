@@ -57,6 +57,7 @@ private:
     void UpdateActiveSection(float speedRate);
 
     void UpdateIndependentProgression();
+    void UpdateSyncProgression();
     void AdvancePropertyToNextSection(PropertyType type);
     bool AreAllPropertiesFinished() const;
 
@@ -73,8 +74,10 @@ private:
     float originalAlpha_      = 1.0f;
 
     // 独立進行用
-    std::array<int32_t, kPropertyCount> activeSectionIndices_    = {0, 0, 0, 0, 0};
-    std::array<bool, kPropertyCount> allSectionsFinished_        = {false, false, false, false, false};
+    std::array<int32_t, kPropertyCount> activeSectionIndices_ = {0, 0, 0, 0, 0};
+    std::array<bool, kPropertyCount> allSectionsFinished_     = {false, false, false, false, false};
+
+    bool isSyncSectionMode_ = false; //< 全プロパティ完了待ち同期セクション遷移モード
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
@@ -96,6 +99,9 @@ public:
 
     void SetPreAnimationOffsets(const Vector2& scale, const Vector2& position,
                                 const Vector3& rotation, const Vector3& color, float alpha);
+
+    void SetSyncSectionMode(bool isSync) { isSyncSectionMode_ = isSync; }
+    bool GetIsSyncSectionMode() const { return isSyncSectionMode_; }
 };
 
 }; // KetaEngine

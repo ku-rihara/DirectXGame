@@ -108,6 +108,32 @@ void PlayerComboAttackController::EditorUpdate() {
         AdjustCommonParam();
     }
 
+    // タイムラインの再生状態を監視してプレビューを自動起動/停止
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
+        KetaEngine::TimelineDrawer* tl = attacks_[selectedIndex_]->GetTimeline();
+        if (tl) {
+            bool isNowPlaying = tl->IsPlaying();
+
+            // 停止 → 再生：プレビュー自動開始
+            if (!prevTimelinePlaying_ && isNowPlaying) {
+                auto mode = preview_.GetCurrentMode();
+                if (mode == AttackPreviewMode::NONE) {
+                    mode = AttackPreviewMode::SINGLE;
+                }
+                preview_.StartPreview(attacks_[selectedIndex_].get(), mode);
+            }
+
+            // 再生 → 停止：プレビュー自動停止
+            if (prevTimelinePlaying_ && !isNowPlaying) {
+                if (preview_.IsPlaying()) {
+                    preview_.StopPreview();
+                }
+            }
+
+            prevTimelinePlaying_ = isNowPlaying;
+        }
+    }
+
     // プレビューの更新(常に実行)
     preview_.Update(KetaEngine::Frame::DeltaTime());
 #endif
@@ -134,26 +160,6 @@ void PlayerComboAttackController::DrawPreviewUI() {
     }
 
     ImGui::Separator();
-
-    // 選択された攻撃があればプレビュー開始ボタンを表示
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
-        PlayerComboAttackData* selectedAttack = attacks_[selectedIndex_].get();
-
-        if (!preview_.IsPlaying()) {
-            // プレビュー開始ボタン
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.8f, 0.2f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 1.0f, 0.3f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.6f, 0.1f, 1.0f));
-
-            if (ImGui::Button("プレビュー開始", ImVec2(-1, 0))) {
-                preview_.StartPreview(selectedAttack, currentMode);
-            }
-
-            ImGui::PopStyleColor(3);
-        }
-    } else {
-        ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "攻撃を選択してください");
-    }
 
     // プレビューUIを描画
     preview_.DrawUI();
@@ -464,6 +470,8 @@ void PlayerComboAttackController::SetEditorSuite(KetaEngine::EffectEditorSuite* 
     for (auto& attack : attacks_) {
         attack->SetEffectEditorSuite(pEditorSuite_);
     }
+    // プレビューにも伝播
+    preview_.SetEditorSuite(pEditorSuite_);
 }
 
 void PlayerComboAttackController::SetCombo(Combo* combo) {
