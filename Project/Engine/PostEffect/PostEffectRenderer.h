@@ -6,6 +6,7 @@
 #include <array>
 #include <d3d12.h>
 #include <memory>
+#include <vector>
 namespace KetaEngine {
 
 class ViewProjection;
@@ -77,11 +78,23 @@ public:
 
     void DrawImGui(); //< ImGui描画
 
+    /// <summary>エフェクトをスタックに追加（既に存在する場合は無視）</summary>
+    void EnableEffect(PostEffectMode mode);
+    /// <summary>エフェクトをスタックから除去</summary>
+    void DisableEffect(PostEffectMode mode);
+    /// <summary>スタックをすべてクリア</summary>
+    void ClearEffectStack();
+    /// <summary>エフェクトが有効かどうか</summary>
+    bool IsEffectEnabled(PostEffectMode mode) const;
+
 private:
     const ViewProjection* viewProjection_;
     DirectXCommon* dxCommon_    = nullptr;
     PostEffectMode currentMode_ = PostEffectMode::NONE;
     std::array<std::unique_ptr<BasePostEffect>, static_cast<size_t>(PostEffectMode::COUNT)> effects_;
+
+    // マルチパス用エフェクトスタック（順番に適用される）
+    std::vector<PostEffectMode> effectStack_;
 
 public:
    // getter
@@ -98,9 +111,18 @@ public:
         return GetEffect<Vignette>(PostEffectMode::VIGNETTE);
     }
 
+    const std::vector<PostEffectMode>& GetEffectStack() const { return effectStack_; }
+
     // setter
     void SetViewProjection(const ViewProjection* viewProjection);
-    void SetPostEffectMode(const PostEffectMode& mode) { currentMode_ = mode; }
+    /// <summary>単一エフェクトモード設定（旧API互換。スタックをそのモード1つに置き換える）</summary>
+    void SetPostEffectMode(const PostEffectMode& mode) {
+        currentMode_ = mode;
+        effectStack_.clear();
+        if (mode != PostEffectMode::NONE) {
+            effectStack_.push_back(mode);
+        }
+    }
 };
 
 }; // KetaEngine

@@ -15,6 +15,7 @@ struct TimeLineKeyFrame {
     float value;
     float duration;
     bool isSelected;
+    bool isPositionLocked = false; // trueの場合、ドラッグによる位置変更を無効化
     std::string label;
 };
 

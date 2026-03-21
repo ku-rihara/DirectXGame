@@ -100,8 +100,7 @@ void Distortion::Draw(ID3D12GraphicsCommandList* commandList) {
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // [0] t0: シーンテクスチャ
-    commandList->SetGraphicsRootDescriptorTable(
-        0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
+    commandList->SetGraphicsRootDescriptorTable(0, GetInputSRV());
 
     // [1] t1: 歪みテクスチャ（R16G16F）
     commandList->SetGraphicsRootDescriptorTable(1, distortionSrvHandle_);

@@ -84,7 +84,7 @@ void RadialBlur::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
       // プリミティブトポロジーを設定
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     // テクスチャリソースを設定
-    commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
+    commandList->SetGraphicsRootDescriptorTable(0, GetInputSRV());
 
     //b0:param
     commandList->SetGraphicsRootConstantBufferView(1, paramDataResource_->GetGPUVirtualAddress());

@@ -2,6 +2,7 @@
 
 using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
+#include "Base/Dx/DxRenderTarget.h"
 #include"Base/Dx/DxCompiler.h"
 #include "function/Log.h"
 #include <cassert>
@@ -94,3 +95,10 @@ void BasePostEffect::SetDrawState(ID3D12GraphicsCommandList* commandList) {
 void BasePostEffect::SetViewProjection(const ViewProjection* viewProjection) {
      viewProjection_ = viewProjection;
  }
+
+D3D12_GPU_DESCRIPTOR_HANDLE BasePostEffect::GetInputSRV() const {
+    if (hasCustomInputSRV_) {
+        return inputSrvHandle_;
+    }
+    return dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle();
+}

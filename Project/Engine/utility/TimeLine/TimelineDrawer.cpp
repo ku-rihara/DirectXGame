@@ -209,6 +209,11 @@ void TimelineDrawer::SetKeyFrameRightClickCallback(uint32_t trackIndex, std::fun
 }
 
 void TimelineDrawer::HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex, const Vector2& keyPos) {
+    // 位置ロック中のキーフレームはドラッグ不可
+    if (tracks_[trackIndex].keyframes[keyIndex].isPositionLocked) {
+        return;
+    }
+
     const float rectSize = 8.0f; // 矩形の半分のサイズ
     if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImVec2(keyPos.x - rectSize, keyPos.y - rectSize), ImVec2(keyPos.x + rectSize, keyPos.y + rectSize))) {
 

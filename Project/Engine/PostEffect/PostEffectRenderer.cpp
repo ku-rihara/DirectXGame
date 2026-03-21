@@ -2,6 +2,7 @@
 
 using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
+#include "Base/Dx/DxRenderTarget.h"
 
 #include "BoxFilter.h"
 #include "Dissolve.h"
@@ -14,6 +15,7 @@ using namespace KetaEngine;
 #include "RandomNoize.h"
 #include "Vignette.h"
 
+#include <algorithm>
 #include <imgui.h>
 
 PostEffectRenderer* PostEffectRenderer::GetInstance() {
@@ -44,24 +46,136 @@ void PostEffectRenderer::Init(DirectXCommon* dxCommon) {
 }
 
 void PostEffectRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
-    effects_[static_cast<size_t>(currentMode_)]->SetDrawState(commandList);
-    // 各OffScreenコマンド
-    effects_[static_cast<size_t>(currentMode_)]->Draw(commandList);
+    auto* rt      = dxCommon_->GetDxRenderTarget();
+    const size_t N = effectStack_.size();
+
+    if (N == 0) {
+        // パススルー：シーンRTをそのままバックバッファへ
+        auto* effect = effects_[static_cast<size_t>(PostEffectMode::NONE)].get();
+        effect->SetInputSRV(rt->GetRenderTextureGPUSrvHandle());
+        effect->SetDrawState(commandList);
+        effect->Draw(commandList);
+        return;
+    }
+
+    for (size_t i = 0; i < N; ++i) {
+        const bool isLast = (i == N - 1);
+        auto* effect = effects_[static_cast<size_t>(effectStack_[i])].get();
+
+        // --- 入力SRV設定 ---
+        // pass0: シーンRT
+        // pass1: ピンポンRT (pass0の出力)
+        // pass2: シーンRT (pass1の出力、再利用)
+        // ...（偶数→シーンRT、奇数→ピンポンRT）
+        if (i == 0) {
+            effect->SetInputSRV(rt->GetRenderTextureGPUSrvHandle());
+        } else if (i % 2 == 1) {
+            effect->SetInputSRV(rt->GetPingPongGPUSrvHandle());
+        } else {
+            effect->SetInputSRV(rt->GetRenderTextureGPUSrvHandle());
+        }
+
+        // --- 出力RT設定 ---
+        if (isLast) {
+            // 最終パス：バックバッファへ（N>1 の場合のみ OMSetRenderTargets を戻す）
+            if (N > 1) {
+                rt->SetBackBufferAsRenderTarget(commandList);
+            }
+        } else if (i % 2 == 0) {
+            // 偶数パスの出力：ピンポンRT
+            rt->SetPingPongAsRenderTarget(commandList);
+        } else {
+            // 奇数パスの出力：シーンRT（再利用）
+            rt->SetSceneRTAsRenderTarget(commandList);
+        }
+
+        effect->SetDrawState(commandList);
+        effect->Draw(commandList);
+
+        // --- 中間パス後：出力RTをSRVに遷移（次パスで読み込むため）---
+        if (!isLast) {
+            if (i % 2 == 0) {
+                rt->TransitionPingPongTo(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+            } else {
+                rt->TransitionSceneRTTo(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+            }
+        }
+    }
 }
 
 void PostEffectRenderer::DrawImGui() {
 #ifdef _DEBUG
+    static const char* kEffectNames[] = {
+        "None", "Gray", "Vignette", "Gaus", "BoxFilter",
+        "RadialBlur", "RandomNoize", "Dissolve", "Outline", "LuminanceBasedOutline"};
 
     if (ImGui::Begin("PostEffects")) {
-        const char* modeNames[] = {"None", "Gray", "Vignette", "Gaus", "BoxFilter", "RadiauBlur", "RandomNoize", "Dissolve", "Outline", "LuminanceBasedOutline"};
-        int mode                = static_cast<int>(currentMode_);
-        if (ImGui::Combo("PostEffectMode", &mode, modeNames, IM_ARRAYSIZE(modeNames))) {
-            currentMode_ = static_cast<PostEffectMode>(mode);
+        ImGui::SeparatorText("エフェクトスタック (上から順に適用)");
+
+        // チェックボックスで各エフェクトを有効/無効
+        for (int i = 1; i < static_cast<int>(PostEffectMode::COUNT); ++i) {
+            auto mode    = static_cast<PostEffectMode>(i);
+            bool enabled = IsEffectEnabled(mode);
+            if (ImGui::Checkbox(kEffectNames[i], &enabled)) {
+                if (enabled) {
+                    EnableEffect(mode);
+                } else {
+                    DisableEffect(mode);
+                }
+            }
+        }
+
+        // 現在のスタック順を表示
+        ImGui::SeparatorText("現在のスタック順");
+        if (effectStack_.empty()) {
+            ImGui::TextDisabled("(エフェクトなし)");
+        } else {
+            for (size_t i = 0; i < effectStack_.size(); ++i) {
+                ImGui::Text("%zu: %s", i + 1, kEffectNames[static_cast<int>(effectStack_[i])]);
+            }
+        }
+
+        ImGui::Separator();
+
+        // 有効なエフェクトのパラメータ調整
+        for (auto mode : effectStack_) {
+            effects_[static_cast<size_t>(mode)]->DebugParamImGui();
         }
     }
-    effects_[static_cast<size_t>(currentMode_)]->DebugParamImGui();
     ImGui::End();
 #endif
+}
+
+void PostEffectRenderer::EnableEffect(PostEffectMode mode) {
+    if (mode == PostEffectMode::NONE) {
+        return;
+    }
+    // 既に存在する場合は追加しない
+    for (auto m : effectStack_) {
+        if (m == mode) {
+            return;
+        }
+    }
+    effectStack_.push_back(mode);
+}
+
+void PostEffectRenderer::DisableEffect(PostEffectMode mode) {
+    effectStack_.erase(
+        std::remove(effectStack_.begin(), effectStack_.end(), mode),
+        effectStack_.end());
+}
+
+void PostEffectRenderer::ClearEffectStack() {
+    effectStack_.clear();
+}
+
+bool PostEffectRenderer::IsEffectEnabled(PostEffectMode mode) const {
+    for (auto m : effectStack_) {
+        if (m == mode) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void PostEffectRenderer::SetViewProjection(const ViewProjection* viewProjection) {

@@ -40,9 +40,24 @@ public:
     virtual void CreateConstantBuffer()                                        = 0; //< 定数バッファ作成
     virtual void DebugParamImGui()                                             = 0; //< ImGuiデバッグパラメータ
 
+    /// <summary>
+    /// 入力テクスチャを上書き設定（マルチパス用）
+    /// 未設定の場合はシーンRTのSRVを使用する
+    /// </summary>
+    void SetInputSRV(D3D12_GPU_DESCRIPTOR_HANDLE handle) {
+        inputSrvHandle_    = handle;
+        hasCustomInputSRV_ = true;
+    }
+
 protected:
+    /// <summary>Draw内で使用する入力SRVを返す</summary>
+    D3D12_GPU_DESCRIPTOR_HANDLE GetInputSRV() const;
+
     DirectXCommon* dxCommon_ = nullptr;
     const ViewProjection* viewProjection_;
+
+    D3D12_GPU_DESCRIPTOR_HANDLE inputSrvHandle_{};
+    bool hasCustomInputSRV_ = false;
 
     D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;

@@ -102,11 +102,41 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     // 攻撃パラメータを取得
     auto& attackParam = attackData_->GetAttackParam();
 
-    // コライダー適用
-    ApplyIfPresent(GetKeyFrameInfo(PlayerComboAttackTimelineData::DefaultTrack::COLLISION), [&](const KeyFrameInfo& info) {
-        attackParam.collisionParam.startTime = KetaEngine::Frame::FrameToTime(info.startFrame);
-        attackParam.collisionParam.adaptTime = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(info.duration));
-    });
+    // コライダー適用（複数キーフレーム対応：duration共通・先頭位置連動）
+    {
+        int32_t trackIdx = timeLineData_->GetDefaultTrackIndex(
+            PlayerComboAttackTimelineData::DefaultTrack::COLLISION);
+
+        if (trackIdx >= 0 && trackIdx < static_cast<int32_t>(timelineDrawer_->GetTracks().size())) {
+            auto& keyframes = timelineDrawer_->GetTracks()[trackIdx].keyframes;
+
+            if (!keyframes.empty()) {
+                // 先頭キーフレームの位置 → startTime
+                int32_t startFrame = keyframes[0].frame;
+                attackParam.collisionParam.startTime = KetaEngine::Frame::FrameToTime(startFrame);
+
+                // いずれかのdurationが変更されていたらそれを共通durationとして採用
+                float storedDurFrames = static_cast<float>(
+                    KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.adaptTime));
+                float newDurFrames = keyframes[0].duration;
+                for (const auto& kf : keyframes) {
+                    if (std::abs(kf.duration - storedDurFrames) > 0.5f) {
+                        newDurFrames = kf.duration;
+                        break;
+                    }
+                }
+                int32_t durationFrames = static_cast<int32_t>(newDurFrames);
+                attackParam.collisionParam.adaptTime = KetaEngine::Frame::FrameToTime(durationFrames);
+
+                // 全キーフレームを再配置（先頭位置 + i * (duration + wait)）
+                int32_t waitFrames = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.loopWaitTime);
+                for (int32_t i = 0; i < static_cast<int32_t>(keyframes.size()); ++i) {
+                    keyframes[i].frame    = startFrame + i * (durationFrames + waitFrames);
+                    keyframes[i].duration = static_cast<float>(durationFrames);
+                }
+            }
+        }
+    }
 
     // 移動イージング適用
     ApplyIfPresent(GetKeyFrameInfo(PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING), [&](const KeyFrameInfo& info) {
@@ -186,8 +216,9 @@ void PlayerComboAttackTimelineParameterApplier::UpdateFinishWaitKeyFramePosition
 
     int32_t moveEndFrame = moveKeyframes[0].frame + static_cast<int32_t>(moveKeyframes[0].duration);
 
+    // ループがある場合は最後のキーフレームの終端を使用
     int32_t collisionEndFrame = !collisionKeyframes.empty()
-        ? collisionKeyframes[0].frame + static_cast<int32_t>(collisionKeyframes[0].duration)
+        ? collisionKeyframes.back().frame + static_cast<int32_t>(collisionKeyframes.back().duration)
         : 0;
 
     finishWaitKeyframes[0].frame = std::max(moveEndFrame, collisionEndFrame);

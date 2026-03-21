@@ -38,9 +38,23 @@ public:
     void SetupViewportAndScissor(); //< ビューポートとシザー矩形設定
     void Finalize(); //< 終了処理
 
+    // ポストプロセスマルチパス用
+    /// <summary>ピンポンRTを出力先にセット（→RT遷移+OMSetRenderTargets）</summary>
+    void SetPingPongAsRenderTarget(ID3D12GraphicsCommandList* cmdList);
+    /// <summary>シーンRTを出力先にセット（→RT遷移+OMSetRenderTargets）</summary>
+    void SetSceneRTAsRenderTarget(ID3D12GraphicsCommandList* cmdList);
+    /// <summary>バックバッファを出力先に戻す（OMSetRenderTargets のみ）</summary>
+    void SetBackBufferAsRenderTarget(ID3D12GraphicsCommandList* cmdList);
+    /// <summary>ピンポンRTを任意の状態へ遷移</summary>
+    void TransitionPingPongTo(ID3D12GraphicsCommandList* cmdList, D3D12_RESOURCE_STATES state);
+    /// <summary>シーンRTを任意の状態へ遷移</summary>
+    void TransitionSceneRTTo(ID3D12GraphicsCommandList* cmdList, D3D12_RESOURCE_STATES state);
+
 private:
     void CreateRenderTextureRTV(); //< レンダーテクスチャRTV作成
     void CreateRenderTextureSRV(); //< レンダーテクスチャSRV作成
+    void CreatePingPongRTV(); //< ピンポンRTV作成
+    void CreatePingPongSRV(); //< ピンポンSRV作成
 
     /// <summary>
     /// レンダーテクスチャリソース作成
@@ -68,6 +82,11 @@ private:
     D3D12_CPU_DESCRIPTOR_HANDLE renderTextureCPUSrvHandle_;
     D3D12_CLEAR_VALUE clearValue_;
 
+    // ポストプロセスピンポンバッファ
+    Microsoft::WRL::ComPtr<ID3D12Resource> pingPongResource_;
+    D3D12_GPU_DESCRIPTOR_HANDLE pingPongGPUSrvHandle_{};
+    uint32_t pingPongRtvIndex_ = 0;
+
     UINT backBufferIndex_;
     D3D12_VIEWPORT viewport_{};
     D3D12_RECT scissorRect_{};
@@ -81,6 +100,7 @@ public:
     const D3D12_GPU_DESCRIPTOR_HANDLE& GetRenderTextureGPUSrvHandle() const { return renderTextureGPUSrvHandle_; }
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetRenderTextureCPUSrvHandle() const { return renderTextureCPUSrvHandle_; }
     D3D12_GPU_DESCRIPTOR_HANDLE GetRenderTextureSRVHandle() const { return renderTextureGPUSrvHandle_; }
+    D3D12_GPU_DESCRIPTOR_HANDLE GetPingPongGPUSrvHandle() const { return pingPongGPUSrvHandle_; }
     const D3D12_CLEAR_VALUE& GetClearValue() const { return clearValue_; }
     /// <summary>
     /// 使用するクラスを設定

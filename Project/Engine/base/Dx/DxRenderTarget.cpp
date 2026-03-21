@@ -33,10 +33,95 @@ void DxRenderTarget::Init(Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t 
     // レンダーテクスチャのSRV作成
     CreateRenderTextureSRV();
 
+    // ピンポンバッファの作成（マルチパスポストプロセス用）
+    pingPongResource_ = CreateRenderTextureResource(device, backBufferWidth_, backBufferHeight_,
+        DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor_);
+    CreatePingPongRTV();
+    CreatePingPongSRV();
+    dxResourceBarrier_->RegisterResource(pingPongResource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+
     // ビューポートとシザー矩形の初期化
     SetupViewportAndScissor();
 
     dxResourceBarrier_->RegisterResource(renderTextureResource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+}
+
+///==========================================================
+/// ピンポンRTV作成
+///==========================================================
+void DxRenderTarget::CreatePingPongRTV() {
+    pingPongRtvIndex_ = rtvManager_->Allocate();
+
+    D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+    rtvDesc.Format        = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+    rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+
+    rtvManager_->Create(pingPongRtvIndex_, pingPongResource_.Get(), &rtvDesc);
+}
+
+///==========================================================
+/// ピンポンSRV作成
+///==========================================================
+void DxRenderTarget::CreatePingPongSRV() {
+    uint32_t srvIndex = srvManager_->Allocate();
+
+    pingPongGPUSrvHandle_ = srvManager_->GetGPUDescriptorHandle(srvIndex);
+
+    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+    srvDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+    srvDesc.Texture2D.MipLevels     = 1;
+    srvDesc.ViewDimension           = D3D12_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+    srvManager_->CreateForTexture2D(srvIndex, pingPongResource_.Get(), srvDesc);
+}
+
+///==========================================================
+/// ピンポンRTを出力先にセット
+///==========================================================
+void DxRenderTarget::SetPingPongAsRenderTarget(ID3D12GraphicsCommandList* cmdList) {
+    dxResourceBarrier_->Transition(cmdList, pingPongResource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(pingPongRtvIndex_);
+    cmdList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+    cmdList->RSSetViewports(1, &viewport_);
+    cmdList->RSSetScissorRects(1, &scissorRect_);
+}
+
+///==========================================================
+/// シーンRTを出力先にセット（ピンポン折り返し用）
+///==========================================================
+void DxRenderTarget::SetSceneRTAsRenderTarget(ID3D12GraphicsCommandList* cmdList) {
+    dxResourceBarrier_->Transition(cmdList, renderTextureResource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(renderTextureRtvIndex_);
+    cmdList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+    cmdList->RSSetViewports(1, &viewport_);
+    cmdList->RSSetScissorRects(1, &scissorRect_);
+}
+
+///==========================================================
+/// バックバッファを出力先に戻す（最終パス用）
+///==========================================================
+void DxRenderTarget::SetBackBufferAsRenderTarget(ID3D12GraphicsCommandList* cmdList) {
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(backBufferIndex_);
+    cmdList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+    cmdList->RSSetViewports(1, &viewport_);
+    cmdList->RSSetScissorRects(1, &scissorRect_);
+}
+
+///==========================================================
+/// ピンポンRTの状態遷移
+///==========================================================
+void DxRenderTarget::TransitionPingPongTo(ID3D12GraphicsCommandList* cmdList, D3D12_RESOURCE_STATES state) {
+    dxResourceBarrier_->Transition(cmdList, pingPongResource_.Get(), state);
+}
+
+///==========================================================
+/// シーンRTの状態遷移
+///==========================================================
+void DxRenderTarget::TransitionSceneRTTo(ID3D12GraphicsCommandList* cmdList, D3D12_RESOURCE_STATES state) {
+    dxResourceBarrier_->Transition(cmdList, renderTextureResource_.Get(), state);
 }
 
 ///==========================================================
@@ -215,6 +300,11 @@ void DxRenderTarget::PostDrawTransitionBarrier() {
         renderTextureResource_.Get(),
         D3D12_RESOURCE_STATE_RENDER_TARGET);
 
+    // ピンポンバッファを次フレーム用に準備
+    dxResourceBarrier_->Transition(dxCommand_->GetCommandList(),
+        pingPongResource_.Get(),
+        D3D12_RESOURCE_STATE_RENDER_TARGET);
+
     // 深度バッファを次フレーム用に準備
     depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
 }
@@ -246,6 +336,11 @@ void DxRenderTarget::Finalize() {
         dxResourceBarrier_->UnregisterResource(renderTextureResource_.Get());
     }
     renderTextureResource_.Reset();
+
+    if (pingPongResource_) {
+        dxResourceBarrier_->UnregisterResource(pingPongResource_.Get());
+    }
+    pingPongResource_.Reset();
 }
 
 void DxRenderTarget::SetUseClasses(DxDepthBuffer* depthBuffer, RtvManager* rtvManager, SrvManager* srvManager,

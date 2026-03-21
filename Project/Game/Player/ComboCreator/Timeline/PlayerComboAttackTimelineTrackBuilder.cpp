@@ -28,16 +28,27 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
     int32_t totalFrames = CalculateTotalFrames();
     timelineDrawer_->SetEndFrame(totalFrames);
 
-    // コライダートラック
+    // コライダートラック（ループ数分のキーフレームを追加）
     {
         int32_t trackIdx = timelineDrawer_->AddTrack("コライダー");
         data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::COLLISION, trackIdx);
 
         int32_t startFrame     = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.startTime);
         int32_t durationFrames = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.adaptTime);
+        int32_t waitFrames     = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.loopWaitTime);
+        int32_t totalCount     = attackParam.collisionParam.loopNum + 1; // 初回 + ループ回数
 
-        timelineDrawer_->AddKeyFrame(trackIdx, startFrame, 1.0f,
-            static_cast<float>(durationFrames), "コライダー適応時間");
+        for (int32_t i = 0; i < totalCount; ++i) {
+            int32_t kfFrame = startFrame + i * (durationFrames + waitFrames);
+            timelineDrawer_->AddKeyFrame(trackIdx, kfFrame, 1.0f,
+                static_cast<float>(durationFrames), "コライダー適応時間");
+
+            // 先頭以外のキーフレームは位置をロック（先頭に連動して動く）
+            if (i > 0) {
+                auto& kf            = timelineDrawer_->GetTracks()[trackIdx].keyframes.back();
+                kf.isPositionLocked = true;
+            }
+        }
     }
 
     // 移動イージングトラック

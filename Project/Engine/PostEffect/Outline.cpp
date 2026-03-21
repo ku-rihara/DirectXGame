@@ -156,7 +156,7 @@ void Outline::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
     outlineMaterialData_->projectionInverse = Inverse(viewProjection_->matProjection_);
 
     // colorテクスチャ (t0)
-    commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
+    commandList->SetGraphicsRootDescriptorTable(0, GetInputSRV());
 
     // depthテクスチャ (t1)
     commandList->SetGraphicsRootDescriptorTable(1, dxCommon_->GetDepthBuffer()->GetDepthSrvGPUHandle());

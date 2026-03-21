@@ -83,7 +83,7 @@ void LuminanceBasedOutline::Draw([[maybe_unused]] ID3D12GraphicsCommandList* com
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // colorテクスチャ (t0)
-    commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
+    commandList->SetGraphicsRootDescriptorTable(0, GetInputSRV());
 
     // b0: OutLineParams
     commandList->SetGraphicsRootConstantBufferView(1, paramDataResource_->GetGPUVirtualAddress());

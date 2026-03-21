@@ -97,7 +97,7 @@ void Dissolve::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
     // プリミティブトポロジーを設定
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     // テクスチャリソースを設定
-    commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
+    commandList->SetGraphicsRootDescriptorTable(0, GetInputSRV());
     // t1
     commandList->SetGraphicsRootDescriptorTable(1, TextureManager::GetInstance()->GetTextureHandle(textureIndex_));
     // b0: param

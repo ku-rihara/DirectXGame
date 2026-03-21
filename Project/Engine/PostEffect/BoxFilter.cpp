@@ -30,7 +30,7 @@ void BoxFilter::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
     // プリミティブトポロジーを設定
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     // テクスチャリソースを設定
-    commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
+    commandList->SetGraphicsRootDescriptorTable(0, GetInputSRV());
 
     commandList->DrawInstanced(3, 1, 0, 0);
 }
