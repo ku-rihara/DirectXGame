@@ -158,6 +158,11 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
             });
     });
 
+    // ポストエフェクトリストをクリアして再構築
+    auto& renditionDataForClear = const_cast<PlayerAttackRenditionData&>(attackData_->GetRenditionData());
+    renditionDataForClear.ClearPostEffectList();
+    renditionDataForClear.ClearPostEffectOnHitList();
+
     // 演出系とコンボ分岐タイミングの適用
     auto& branches = attackData_->GetComboBranches();
     for (const auto& trackInfo : timeLineData_->GetAddedTracks()) {
@@ -289,6 +294,15 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
 
     // 通常演出
     if (typeInt >= static_cast<int>(TT::CAMERA_ACTION) && typeInt <= static_cast<int>(TT::AUDIO_ATTACK)) {
+        // ポストエフェクトは複数対応：リストに追加
+        if (trackInfo.type == TT::POST_EFFECT) {
+            PlayerAttackRenditionData::RenditionParam p;
+            p.fileName    = trackInfo.fileName;
+            p.startTiming = timing;
+            renditionData.AddPostEffect(p);
+            return;
+        }
+
         int32_t rendIdx = GetRenditionIndexFromTrackType(trackInfo.type);
         if (rendIdx < 0) return;
 
@@ -301,6 +315,15 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
     }
     // ヒット時演出
     else if (typeInt >= static_cast<int>(TT::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(TT::AUDIO_ATTACK_ON_HIT)) {
+        // ヒット時ポストエフェクトは複数対応：リストに追加
+        if (trackInfo.type == TT::POST_EFFECT_ON_HIT) {
+            PlayerAttackRenditionData::RenditionParam p;
+            p.fileName    = trackInfo.fileName;
+            p.startTiming = timing;
+            renditionData.AddPostEffectOnHit(p);
+            return;
+        }
+
         int32_t rendIdx = GetRenditionOnHitIndexFromTrackType(trackInfo.type);
         if (rendIdx < 0) return;
 

@@ -109,6 +109,11 @@ public:
     virtual void DisplaySprite(const KetaEngine::ViewProjection& viewProjection);
 
     /// <summary>
+    /// HPバーを非表示にする
+    /// </summary>
+    void HideHpBar();
+
+    /// <summary>
     /// ダメージリアクション用アニメーションを追加
     /// </summary>
     /// <param name="name">アニメーション名</param>

@@ -2,6 +2,8 @@
 // Types
 #include "Types/NormalEnemy.h"
 #include "Types/StrongEnemy.h"
+// Player
+#include "Player/Player.h"
 // Combo
 #include "Combo/Combo.h"
 // LockOn
@@ -98,9 +100,17 @@ void EnemyManager::Update() {
 }
 
 void EnemyManager::HpBarUpdate(const KetaEngine::ViewProjection& viewProjection) {
+    Vector3 playerPos = pPlayer_ ? pPlayer_->GetBaseTransform().GetWorldPos() : Vector3{};
 
     for (size_t i = 0; i < enemies_.size(); ++i) {
-        enemies_[i]->DisplaySprite(viewProjection);
+        Vector3 enemyPos = enemies_[i]->GetWorldPosition();
+        float dist = (enemyPos - playerPos).Length();
+
+        if (dist <= hpBarDisplayDistance_) {
+            enemies_[i]->DisplaySprite(viewProjection);
+        } else {
+            enemies_[i]->HideHpBar();
+        }
     }
 }
 
@@ -108,6 +118,9 @@ void EnemyManager::HpBarUpdate(const KetaEngine::ViewProjection& viewProjection)
 /// パラメータをグループに追加
 ///=================================================================================
 void EnemyManager::RegisterParams() {
+
+    // HPバー表示距離（全敵共通）
+    globalParameter_->Regist(groupName_, "hpBarDisplayDistance", &hpBarDisplayDistance_);
 
     for (uint32_t i = 0; i < parameters_.size(); ++i) {
         const std::string& indexString = std::to_string(static_cast<int>(i + 1));
@@ -180,6 +193,9 @@ void EnemyManager::AdjustParam() {
 
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
+
+        ImGui::SeparatorText("HPバー設定");
+        ImGui::DragFloat("HpBar表示距離", &hpBarDisplayDistance_, 0.5f, 0.0f, 200.0f);
 
         // 敵のパラメータ編集
         for (size_t i = 0; i < static_cast<size_t>(BaseEnemy::Type::COUNT); ++i) {

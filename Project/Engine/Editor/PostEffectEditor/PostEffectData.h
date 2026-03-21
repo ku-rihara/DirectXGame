@@ -29,6 +29,9 @@ public:
     // レンダラーへパラメータを適用してエフェクトを有効化
     void ApplyToRenderer();
 
+    // モードの主要パラメータを設定（イージング用）
+    void SetMainParam(float value);
+
 private:
     //*---------------------------- private Methods ----------------------------*//
 
@@ -60,8 +63,15 @@ private:
     // LuminanceOutline 固有
     float luminanceWeightRate_ = 0.3f;
 
+    // イージングパラメータ
+    float durationTime_    = 0.0f;  //< エフェクト持続時間 (0=無制限)
+    float paramStart_      = 0.0f;  //< 主要パラメータのイージング開始値
+    float paramEnd_        = 0.0f;  //< 主要パラメータのイージング終了値
+    int32_t easingTypeIndex_ = 0;   //< イージング種類 (0=Linear,1=EaseIn,2=EaseOut,3=EaseInOut)
+
     // 内部タイマー
     float currentTime_ = 0.0f;
+    float effectTime_  = 0.0f;  //< エフェクト開始からの経過時間
 
 public:
     //*----------------------------- getter Methods -----------------------------*//

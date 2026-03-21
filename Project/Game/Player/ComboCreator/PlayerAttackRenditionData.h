@@ -133,6 +133,10 @@ private:
     // 振動パラメータ
     VibrationParam vibrationParam_;
 
+    // ポストエフェクト（複数対応）
+    std::vector<RenditionParam> postEffectList_;
+    std::vector<RenditionParam> postEffectOnHitList_;
+
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const RenditionParam& GetRenditionParamFromIndex(int32_t index) const {
@@ -162,4 +166,13 @@ public:
     // 振動パラメータの取得
     const VibrationParam& GetVibrationParam() const { return vibrationParam_; }
     VibrationParam& GetVibrationParam() { return vibrationParam_; }
+
+    // ポストエフェクトリスト操作
+    void ClearPostEffectList() { postEffectList_.clear(); }
+    void AddPostEffect(const RenditionParam& param) { postEffectList_.push_back(param); }
+    const std::vector<RenditionParam>& GetPostEffectList() const { return postEffectList_; }
+
+    void ClearPostEffectOnHitList() { postEffectOnHitList_.clear(); }
+    void AddPostEffectOnHit(const RenditionParam& param) { postEffectOnHitList_.push_back(param); }
+    const std::vector<RenditionParam>& GetPostEffectOnHitList() const { return postEffectOnHitList_; }
 };

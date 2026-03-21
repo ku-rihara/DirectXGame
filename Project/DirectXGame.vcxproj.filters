@@ -115,6 +115,9 @@
     <Filter Include="Game\Player">
       <UniqueIdentifier>{0445B7F8-38ED-4CA3-82FC-9AE0A8A86559}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameClearInfo">
+      <UniqueIdentifier>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\Scene">
       <UniqueIdentifier>{C325ABFA-E72A-45F9-8FD6-9E27AA7EB5BB}</UniqueIdentifier>
     </Filter>
@@ -327,6 +330,9 @@
     </Filter>
     <Filter Include="Game\Scene\GameSceneState">
       <UniqueIdentifier>{33D9F4BA-9C0B-46A6-BDA5-61E3AF43F307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\GameSceneState\PauseController">
+      <UniqueIdentifier>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Scene\TitleSceneController">
       <UniqueIdentifier>{FDCC5520-D529-4EC3-AB96-50A3A9FEF7A4}</UniqueIdentifier>
@@ -1213,6 +1219,9 @@
     <ClCompile Include="Game\Scene\EditorScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Scene\GameResultScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Scene\GameScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
@@ -1230,6 +1239,9 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\GameSceneState\GameScenePose.cpp">
       <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\PauseController\PauseController.cpp">
+      <Filter>Game\Scene\GameSceneState\PauseController</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneRoot.cpp">
       <Filter>Game\Scene\GameSceneState</Filter>
@@ -1852,6 +1864,12 @@
     <ClInclude Include="Game\ComboScene\ComboDirector.h">
       <Filter>Game\ComboScene</Filter>
     </ClInclude>
+    <ClCompile Include="Game\GameClearInfo\GameClearInfo.cpp">
+      <Filter>Game\GameClearInfo</Filter>
+    </ClCompile>
+    <ClInclude Include="Game\GameClearInfo\GameClearInfo.h">
+      <Filter>Game\GameClearInfo</Filter>
+    </ClInclude>
     <ClInclude Include="Game\KillCounter\KillCounter.h">
       <Filter>Game\KillCounter</Filter>
     </ClInclude>
@@ -2101,6 +2119,9 @@
     <ClInclude Include="Game\Scene\EditorScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Scene\GameResultScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="Game\Scene\GameScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
@@ -2118,6 +2139,9 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\GameSceneState\GameScenePose.h">
       <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\PauseController\PauseController.h">
+      <Filter>Game\Scene\GameSceneState\PauseController</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneRoot.h">
       <Filter>Game\Scene\GameSceneState</Filter>

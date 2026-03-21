@@ -434,16 +434,22 @@ void WorldTransform::ApplyAnimationToTransform() {
 
     // 進行方向を向く設定が有効な場合は方向から回転を決定する
     if (lookAtDirectionEnabled_ && objEaseAnimationPlayer_->IsLookingAtDirection()) {
-        bool isReturning = objEaseAnimationPlayer_->IsTranslationReturning();
-        if (isReturning) {
-            // 戻り中：行き中に記録したパンチ方向をそのまま向く
-            if (lastPlayDirection_.Length() > 0.001f) {
-                ApplyLookAtDirection(lastPlayDirection_);
+        Vector3 dir = objEaseAnimationPlayer_->GetMovementDirection();
+        if (dir.Length() > 0.001f) {
+            // 内積で行き/戻りを判断：最後の行き方向と逆向きなら戻り中
+            bool isGoingForward = (lastPlayDirection_.Length() < 0.001f) || (dir.Dot(lastPlayDirection_) >= 0.0f);
+            if (isGoingForward) {
+                // 行き中：進行方向を向いて記録
+                ApplyLookAtDirection(dir);
+                lastPlayDirection_ = dir;
+            } else {
+                // 戻り中：進行方向の逆を向く（最新の戻り方向から毎フレーム計算）
+                ApplyLookAtDirection(-dir);
+                lastPlayDirection_ = -dir;
             }
-        } else {
-            Vector3 dir = objEaseAnimationPlayer_->GetMovementDirection();
-            ApplyLookAtDirection(dir);
-            lastPlayDirection_ = dir; // 行き方向を記録
+        } else if (lastPlayDirection_.Length() > 0.001f) {
+            // 移動量が微小：直前の有効な方向を維持
+            ApplyLookAtDirection(lastPlayDirection_);
         }
     } else {
         // Rotationをオフセット

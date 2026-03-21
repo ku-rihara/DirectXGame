@@ -1,8 +1,10 @@
 #include "GameScenePlaying.h"
 #include "Frame/Frame.h"
 #include "GameSceneFinish.h"
+#include "GameScenePose.h"
 #include "Scene/GameScene.h"
 #include "utility/DitherOcclusion/DitherOcclusion.h"
+#include "GameClearInfo/GameClearInfo.h"
 
 GameScenePlaying::GameScenePlaying(GameScene* gameScene)
     : BaseGameSceneState("GameScenePlaying", gameScene) {
@@ -12,7 +14,17 @@ GameScenePlaying::GameScenePlaying(GameScene* gameScene)
 void GameScenePlaying::Init() {
 }
 
+bool GameScenePlaying::CheckPauseTransition() {
+    return pauseController_.IsPauseTriggered();
+}
+
 void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
+    // ポーズ移行チェック
+    if (CheckPauseTransition()) {
+        pOwner_->ChangeState(std::make_unique<GameScenePose>(pOwner_));
+        return;
+    }
+
     auto& obj = pOwner_->GetGameObj();
 
     // Editor
@@ -34,6 +46,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.continuousEnemySpawner_->Update(timeSpeed);
     obj.enemyManager_->Update();
     obj.combo_->Update();
+    GameClearInfo::GetInstance()->RecordCombo(obj.combo_->GetComboCount());
     obj.fireInjectors_->Update();
     obj.gameCamera_->Update();
     obj.comboLevelObjHolder_->Update(timeSpeed);

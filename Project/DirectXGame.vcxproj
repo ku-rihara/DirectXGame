@@ -289,12 +289,14 @@
     <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\EditorScene.cpp" />
+    <ClCompile Include="Game\Scene\GameResultScene.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\BaseGameSceneState.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneFinish.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneIntro.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\GameScenePlaying.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\GameScenePose.cpp" />
+    <ClCompile Include="Game\Scene\GameSceneState\PauseController\PauseController.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneRoot.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\Scene\TitleSceneController\TitleSceneController.cpp" />
@@ -532,6 +534,8 @@
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\ComboScene\ComboDirector.h" />
+    <ClCompile Include="Game\GameClearInfo\GameClearInfo.cpp" />
+    <ClInclude Include="Game\GameClearInfo\GameClearInfo.h" />
     <ClInclude Include="Game\KillCounter\KillCounter.h" />
     <ClInclude Include="Game\KillCounter\KillCountUI.h" />
     <ClInclude Include="Game\KillCounter\KillCountUIController.h" />
@@ -631,7 +635,9 @@
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneIntro.h" />
     <ClInclude Include="Game\Scene\GameSceneState\GameScenePlaying.h" />
     <ClInclude Include="Game\Scene\GameSceneState\GameScenePose.h" />
+    <ClInclude Include="Game\Scene\GameSceneState\PauseController\PauseController.h" />
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneRoot.h" />
+    <ClInclude Include="Game\Scene\GameResultScene.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneController.h" />
     <ClInclude Include="Game\Scene\TitleSceneController\TitleSceneTransition.h" />

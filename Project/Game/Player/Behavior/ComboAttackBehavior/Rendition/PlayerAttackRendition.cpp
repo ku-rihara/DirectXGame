@@ -15,12 +15,17 @@ void PlayerAttackRendition::Init(Player* player, PlayerComboAttackData* playerCo
 }
 
 void PlayerAttackRendition::Reset() {
-    currentTime_ = 0.0f;
+    currentTime_  = 0.0f;
+    isRendition_  = false;
     isPlayed_.fill(false);
     isPlayedOnHit_.fill(false);
     isObjAnimePlayed_.fill(false);
     hasTriggeredHitEffects_ = false;
     previousHasHit_         = false;
+
+    // ポストエフェクトリスト再生フラグをリセット（サイズは Update で設定）
+    isPostEffectPlayed_.clear();
+    isPostEffectOnHitPlayed_.clear();
 
     // トレイル停止
     if (pPlayer_) {
@@ -49,11 +54,6 @@ void PlayerAttackRendition::Update(float deltaTime) {
     if (!isRendition_) {
         PlayRendition();
         isRendition_ = true;
-    }
-
-    if (isBlur_) {
-        rushBlurEase_.Update(KetaEngine::Frame::DeltaTime());
-        KetaEngine::PostEffectRenderer::GetInstance()->GetRadialBlur()->SetBlurWidth(tempBlurParam_);
     }
 
     currentTime_ += deltaTime;
@@ -88,6 +88,10 @@ void PlayerAttackRendition::UpdateNormalRenditions(const PlayerAttackRenditionDa
         if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::AudioHit) {
             continue;
         }
+        // ポストエフェクトはリストで管理するためスキップ
+        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::PostEffect) {
+            continue;
+        }
 
         const auto& param = renditionData.GetRenditionParamFromIndex(i);
 
@@ -102,10 +106,29 @@ void PlayerAttackRendition::UpdateNormalRenditions(const PlayerAttackRenditionDa
             isPlayed_[i] = true;
         }
     }
+
+    // ポストエフェクトリストの更新
+    const auto& postEffectList = renditionData.GetPostEffectList();
+    if (isPostEffectPlayed_.size() != postEffectList.size()) {
+        isPostEffectPlayed_.assign(postEffectList.size(), false);
+    }
+    for (size_t i = 0; i < postEffectList.size(); ++i) {
+        if (isPostEffectPlayed_[i]) continue;
+        const auto& param = postEffectList[i];
+        if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
+            PlayRenditionEffect(PlayerAttackRenditionData::Type::PostEffect, param);
+            isPostEffectPlayed_[i] = true;
+        }
+    }
 }
 
 void PlayerAttackRendition::UpdateHitRenditions(const PlayerAttackRenditionData& renditionData) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
+        // ポストエフェクトはリストで管理するためスキップ
+        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::PostEffect) {
+            continue;
+        }
+
         const auto& param = renditionData.GetRenditionParamOnHitFromIndex(i);
 
         // すでに再生済みならスキップ
@@ -117,6 +140,20 @@ void PlayerAttackRendition::UpdateHitRenditions(const PlayerAttackRenditionData&
         if (currentTime_ >= param.startTiming && param.fileName != "" && param.fileName != "None") {
             PlayRenditionEffect(static_cast<PlayerAttackRenditionData::Type>(i), param);
             isPlayedOnHit_[i] = true;
+        }
+    }
+
+    // ヒット時ポストエフェクトリストの更新
+    const auto& postEffectOnHitList = renditionData.GetPostEffectOnHitList();
+    if (isPostEffectOnHitPlayed_.size() != postEffectOnHitList.size()) {
+        isPostEffectOnHitPlayed_.assign(postEffectOnHitList.size(), false);
+    }
+    for (size_t i = 0; i < postEffectOnHitList.size(); ++i) {
+        if (isPostEffectOnHitPlayed_[i]) continue;
+        const auto& param = postEffectOnHitList[i];
+        if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
+            PlayRenditionEffect(PlayerAttackRenditionData::Type::PostEffect, param);
+            isPostEffectOnHitPlayed_[i] = true;
         }
     }
 }
@@ -255,14 +292,6 @@ void PlayerAttackRendition::PlayRendition() {
     std::string name = playerComboAttackData_->GetGroupName();
 
     if (name == "RushAttack") {
-        rushBlurEase_.Init("RushBlur.json");
-        rushBlurEase_.SetAdaptValue(&tempBlurParam_);
-        isBlur_ = true;
-        KetaEngine::PostEffectRenderer::GetInstance()->SetPostEffectMode(KetaEngine::PostEffectMode::RADIALBLUR);
-
-        rushBlurEase_.SetOnWaitEndCallback([this]() {
-            KetaEngine::PostEffectRenderer::GetInstance()->SetPostEffectMode(KetaEngine::PostEffectMode::NONE);
-        });
         pPlayer_->GetEffects()->RushAttackRingEffectEmit();
     }
 }

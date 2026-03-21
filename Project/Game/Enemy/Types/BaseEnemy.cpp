@@ -122,16 +122,18 @@ void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, const bo
 void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
     // ワールド座標からスクリーン座標に変換
     Vector2 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
-    // Vector2に格納
-    Vector2 positionScreenV2 = positionScreen - parameter_.hpBarPosOffset;
     // Hpバーの座標確定
-    Vector2 hpBarPosition = positionScreenV2;
-    // HPBarスプライト
-    hpBar_->SetPosition(hpBarPosition);
-    // Hpバー更新
-    hpBar_->Update(hp_);
-
+    Vector2 hpBarPosition = positionScreen - parameter_.hpBarPosOffset;
+    // isDraw を先にセット（Update内で参照するため）
     hpBar_->SetIsDraw(IsInView(viewProjection));
+    // HPBarスプライト位置・スケール更新
+    hpBar_->SetPosition(hpBarPosition);
+    hpBar_->Update(hp_);
+}
+
+void BaseEnemy::HideHpBar() {
+    hpBar_->SetIsDraw(false);
+    hpBar_->Update(hp_);
 }
 
 Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {

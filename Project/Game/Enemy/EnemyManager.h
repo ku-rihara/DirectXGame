@@ -95,6 +95,9 @@ private:
     // 敵がすべていなくなったことを示すフラグ
     bool areAllEnemiesCleared_;
 
+    // HPバー表示距離（プレイヤーからこの距離以内の敵にのみ表示）
+    float hpBarDisplayDistance_ = 20.0f;
+
     // debugSpawn用
     int32_t selectedEnemyTypeIndex_;
 

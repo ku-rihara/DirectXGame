@@ -59,9 +59,9 @@ PlayerComboAttackTimelineData::FindTrackInfo(int32_t trackIndex) {
 }
 
 bool PlayerComboAttackTimelineData::IsTrackTypeAlreadyAdded(TrackType type) const {
-    // キャンセルタイムと先行入力は各分岐ごとに複数追加可能なので、
-    // ここでは常にfalseを返す
-    if (type == TrackType::CANCEL_TIME || type == TrackType::PRECEDE_INPUT) {
+    // 複数追加可能なトラックタイプ
+    if (type == TrackType::CANCEL_TIME || type == TrackType::PRECEDE_INPUT ||
+        type == TrackType::POST_EFFECT || type == TrackType::POST_EFFECT_ON_HIT) {
         return false;
     }
 

@@ -537,7 +537,8 @@ Vector3 ObjEaseAnimationSection::GetMovementDirection() const {
     Vector3 direction      = transParam.currentOffset - transParam.previousOffset;
 
     if (direction.Length() < 0.001f) {
-        return Vector3::ToForward();
+        // 移動量が微小な場合はZeroVectorを返す（呼び出し元が無効と判断できるよう）
+        return Vector3::ZeroVector();
     }
 
     return direction.Normalize();

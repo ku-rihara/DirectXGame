@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BaseGameSceneState.h"
+#include "PauseController/PauseController.h"
 
 /// <summary>
 /// ゲームシーン：プレイ中ステート
@@ -15,4 +16,11 @@ public:
     void Debug() override;
 
 private:
+    /// <summary>
+    /// ポーズボタンが押されたか判定し、ポーズステートへ移行する
+    /// </summary>
+    /// <returns>ポーズボタンがトリガーされた場合 true</returns>
+    bool CheckPauseTransition();
+
+    PauseController pauseController_;
 };

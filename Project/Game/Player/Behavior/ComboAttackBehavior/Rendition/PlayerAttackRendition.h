@@ -3,6 +3,7 @@
 #include "Easing/Easing.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
 #include "Player/ComboCreator/PlayerAttackRenditionData.h"
+#include <vector>
 
 class Player;
 class PlayerComboAttackData;
@@ -22,6 +23,10 @@ private:
 
     // ヒット時演出の再生フラグ
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayedOnHit_{};
+
+    // ポストエフェクトリスト用再生フラグ
+    std::vector<bool> isPostEffectPlayed_;
+    std::vector<bool> isPostEffectOnHitPlayed_;
 
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimePlayed_{};
 
@@ -46,9 +51,6 @@ public:
 
     // ごり押し演出再生
     bool isRendition_;
-    bool isBlur_;
-    KetaEngine::Easing<float> rushBlurEase_;
-    float tempBlurParam_;
 
 private:
     void UpdateNormalRenditions(const PlayerAttackRenditionData& renditionData);

@@ -50,10 +50,14 @@ void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
     // フェードアウト
     alpha_ += timeSpeed;
 
-    // タイトルへ遷移
+    // シーン遷移
     if (alpha_ >= 1.0f) {
         isGameEnd_ = true;
-        KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
+        if (pOwner_->GetGameObj().player_->GetIsDeathRenditionFinish()) {
+            KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
+        } else {
+            KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
+        }
     }
 }
 

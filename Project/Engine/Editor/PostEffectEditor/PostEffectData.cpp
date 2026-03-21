@@ -2,6 +2,7 @@
 
 using namespace KetaEngine;
 #include "PostEffect/GaussianFilter.h"
+#include <algorithm>
 #include "PostEffect/RadialBlur.h"
 #include "PostEffect/Dissolve.h"
 #include "PostEffect/Outline.h"
@@ -43,20 +44,58 @@ void PostEffectData::RegisterParams() {
 
     // LuminanceOutline
     globalParameter_->Regist(groupName_, "luminanceWeightRate",    &luminanceWeightRate_);
+
+    // イージング
+    globalParameter_->Regist(groupName_, "durationTime",    &durationTime_);
+    globalParameter_->Regist(groupName_, "paramStart",      &paramStart_);
+    globalParameter_->Regist(groupName_, "paramEnd",        &paramEnd_);
+    globalParameter_->Regist(groupName_, "easingTypeIndex", &easingTypeIndex_);
 }
 
 void PostEffectData::GetParams() {
   
 }
 
+///==========================================================
+/// イージング補間ヘルパー
+///==========================================================
+static float CalcEasedT(float t, int32_t type) {
+    t = std::clamp(t, 0.0f, 1.0f);
+    switch (type) {
+    case 1: return t * t;                          // EaseIn
+    case 2: return t * (2.0f - t);                 // EaseOut
+    case 3: return t < 0.5f ? 2.0f * t * t : -1.0f + (4.0f - 2.0f * t) * t; // EaseInOut
+    default: return t;                             // Linear
+    }
+}
+
+void PostEffectData::SetMainParam(float value) {
+    switch (GetPostEffectMode()) {
+    case PostEffectMode::GAUS:             gaussSigma_         = value; break;
+    case PostEffectMode::RADIALBLUR:       radialBlurWidth_    = value; break;
+    case PostEffectMode::DISSOLVE:         dissolveThreshold_  = value; break;
+    case PostEffectMode::OUTLINE:          outlineWeightRate_  = value; break;
+    case PostEffectMode::LUMINANCEOUTLINE: luminanceWeightRate_ = value; break;
+    default: break;
+    }
+}
+
 void PostEffectData::Play() {
     BaseEffectData::Play();
     currentTime_ = 0.0f;
+    effectTime_  = 0.0f;
 
     // startTime が 0 ならば即時適用
     if (startTime_ <= 0.0f) {
+        // イージングが有効なら開始値を設定してから適用
+        if (durationTime_ > 0.0f) {
+            SetMainParam(paramStart_);
+        }
         ApplyToRenderer();
-        playState_ = PlayState::STOPPED;
+        // durationTime が 0 ならそのまま終了
+        if (durationTime_ <= 0.0f) {
+            playState_ = PlayState::STOPPED;
+        }
     }
 }
 
@@ -67,7 +106,28 @@ void PostEffectData::Update(float speedRate) {
 
     currentTime_ += speedRate;
 
-    if (currentTime_ >= startTime_) {
+    // startTime 待機中
+    if (currentTime_ < startTime_) {
+        return;
+    }
+
+    effectTime_ += speedRate;
+
+    if (durationTime_ > 0.0f) {
+        // イージングによるパラメータ更新
+        float t      = effectTime_ / durationTime_;
+        float easedT = CalcEasedT(t, easingTypeIndex_);
+        float param  = paramStart_ + (paramEnd_ - paramStart_) * easedT;
+        SetMainParam(param);
+        ApplyToRenderer();
+
+        // 持続時間終了 → エフェクト無効化
+        if (effectTime_ >= durationTime_) {
+            PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
+            playState_ = PlayState::STOPPED;
+        }
+    } else {
+        // durationTime が 0 → 一度適用して終了
         ApplyToRenderer();
         playState_ = PlayState::STOPPED;
     }
@@ -75,6 +135,7 @@ void PostEffectData::Update(float speedRate) {
 
 void PostEffectData::Reset() {
     currentTime_ = 0.0f;
+    effectTime_  = 0.0f;
     playState_   = PlayState::STOPPED;
 }
 
@@ -171,6 +232,15 @@ void PostEffectData::AdjustParam() {
     default:
         break;
     }
+
+    // イージングパラメータ
+    ImGui::Separator();
+    ImGui::Text("--- Easing ---");
+    ImGui::DragFloat("Duration Time", &durationTime_, 0.01f, 0.0f, 30.0f);
+    ImGui::DragFloat("Param Start", &paramStart_, 0.001f);
+    ImGui::DragFloat("Param End", &paramEnd_, 0.001f);
+    static const char* kEasingNames[] = {"Linear", "EaseIn", "EaseOut", "EaseInOut"};
+    ImGui::Combo("Easing Type", &easingTypeIndex_, kEasingNames, IM_ARRAYSIZE(kEasingNames));
 
     // プレビュー適用ボタン
     ImGui::Separator();
