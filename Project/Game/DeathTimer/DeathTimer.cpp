@@ -15,6 +15,8 @@ void DeathTimer::Init() {
     deathTimerGauge_ = std::make_unique<DeathTimerGauge>();
     deathTimerGauge_->Init();
 
+    levelUIController_.Init();
+
     // HP初期化
     currentHP_    = maxHP_;
     currentLevel_ = 1;
@@ -36,6 +38,8 @@ void DeathTimer::Update(float deltaTime) {
     // ゲージ更新
     deathTimerGauge_->Update(deltaTime);
     deathTimerGauge_->SetTimer(currentHP_, maxHP_);
+
+    levelUIController_.Update(currentLevel_);
 }
 
 void DeathTimer::TakeDamage(float deltaTime) {
@@ -53,6 +57,14 @@ void DeathTimer::OnEnemyKilled(float gaugeAmount, int32_t comboCount) {
     int32_t step     = (comboStepSize_ > 0) ? (comboCount / comboStepSize_) : 0;
     float multiplier = (std::min)(std::pow(comboMultiplierPerStep_, static_cast<float>(step)), comboMaxMultiplier_);
     RecoverHP(gaugeAmount * multiplier);
+
+    if (onKillCallback_) {
+        onKillCallback_(static_cast<int32_t>(multiplier));
+    }
+}
+
+void DeathTimer::ApplyBonus(float amount) {
+    RecoverHP(amount);
 }
 
 void DeathTimer::RecoverHP(float amount) {
@@ -126,6 +138,7 @@ void DeathTimer::AdjustParam() {
     }
 
     deathTimerGauge_->AdjustParam();
+    levelUIController_.AdjustParam();
 
 #endif // _DEBUG
 }

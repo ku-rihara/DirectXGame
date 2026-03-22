@@ -14,6 +14,18 @@
         "columnSpacing": 56.29999923706055,
         "maxVisibleColumn": 3,
         "maxVisibleRow": 1,
+        "remainCountDigitSpacing": [
+            12.699999809265137,
+            0.0
+        ],
+        "remainCountOffset": [
+            0.0,
+            0.0
+        ],
+        "remainCountScale": [
+            0.20000000298023224,
+            0.20000000298023224
+        ],
         "rowSpacing": 47.79999923706055,
         "yGroupOffsetY": 130.8000030517578
     }

@@ -3,9 +3,11 @@
 #include "Combo/ComboUIController.h"
 #include "DeathTimer/DeathTimerGauge.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "UI/LevelUI/LevelUIController.h"
 // std
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <memory>
 
 /// <summary>
@@ -26,17 +28,11 @@ public:
     void AdjustParam();
     void RegisterParams();
 
-    /// <summary>
-    /// 敵を倒したときに呼び出す（ゲージ増加＋レベルチェック）
-    /// </summary>
-    /// <param name="gaugeAmount">増加量（敵ごとに異なる）</param>
-    /// <param name="comboCount">現在のコンボ数（コンボ倍率計算に使用）</param>
     void OnEnemyKilled(float gaugeAmount, int32_t comboCount);
-
-    /// <summary>
-    /// ダメージを受ける（内部用）
-    /// </summary>
     void TakeDamage(float deltaTime);
+
+    // ゲージ直接回復（シムキルボーナスなど外部から）
+    void ApplyBonus(float amount);
 
 private:
     void RecoverHP(float amount);
@@ -48,6 +44,7 @@ private:
     const std::string groupName_ = "DeathTimer";
 
     std::unique_ptr<DeathTimerGauge> deathTimerGauge_;
+    LevelUIController levelUIController_;
 
     float currentHP_ = 0.0f;
     float maxHP_;
@@ -78,8 +75,12 @@ private:
 
     bool isDeath_ = false;
 
+    // キル通知コールバック（comboMultiplierDisplay）
+    std::function<void(int32_t)> onKillCallback_;
+
 public:
     const bool& GetIsDeath() const { return isDeath_; }
+    void SetOnKillCallback(std::function<void(int32_t)> cb) { onKillCallback_ = std::move(cb); }
     float GetCurrentHP() const { return currentHP_; }
     float GetMaxHP() const { return maxHP_; }
     int32_t GetCurrentLevel() const { return currentLevel_; }

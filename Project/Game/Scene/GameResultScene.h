@@ -3,6 +3,7 @@
 #include "BaseScene.h"
 #include "2d/Sprite.h"
 #include "KillCounter/KillCountUIController.h"
+#include "UI/LevelUI/LevelUIController.h"
 
 #include <memory>
 
@@ -27,7 +28,10 @@ private:
 
 private:
     std::unique_ptr<KetaEngine::Sprite> bgSprite_;
-    std::unique_ptr<KillCountUIController> comboCountUI_;
+
+    std::unique_ptr<KillCountUIController> comboCountUI_;   // 最大コンボ数
+    std::unique_ptr<KillCountUIController> killCountUI_;    // 総キル数
+    LevelUIController levelUI_;                             // 到達レベル
 
     float alpha_         = 0.0f;
     bool isStartFadeOut_ = false;

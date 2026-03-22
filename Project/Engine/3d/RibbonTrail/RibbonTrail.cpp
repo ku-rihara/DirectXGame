@@ -116,15 +116,7 @@ void RibbonTrail::Update(float deltaTime) {
 }
 
 ///============================================================
-/// [Fix] 幅方向ベクトル計算（ビルボード対応）
-///
-/// 旧実装: ワールド固定の up={0,1,0} との外積
-///   → カメラが上から見下ろす角度や、トレイルが真上方向に動くとき
-///     perp がほぼゼロになりトレイルの厚みが消えて不可視になっていた
-///
-/// 新実装: カメラの右ベクトルをビュー行列から取り出して使用
-///   → カメラ視点に対して常に正面を向くビルボード動作になり
-///     どの角度からでもトレイルが見える
+/// 幅方向ベクトル計算（ビルボード対応）
 ///============================================================
 Vector3 RibbonTrail::CalcPerp(const Vector3& dir, const Vector3& cameraRight) {
     // トレイル進行方向 × カメラ右ベクトル = トレイル幅方向
@@ -151,9 +143,7 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
         return;
     }
 
-    // [Fix] ビュー行列の転置から正しくカメラ右ベクトルを取り出す
-    // DirectX の行列は row-major: matView_[行][列]
-    // ビュー行列の0行目 = ワールド空間でのカメラ右ベクトル
+    // カメラ右ベクトル取得（ビュー行列0列目）
     Vector3 cameraRight = {
         viewProj.matView_.m[0][0],
         viewProj.matView_.m[1][0],
@@ -193,13 +183,10 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
             dir = {dir.x / dirLen, dir.y / dirLen, dir.z / dirLen};
         }
 
-        // [Fix] cameraRight を渡してビルボード対応の垂直ベクトルを取得
         Vector3 perp = CalcPerp(dir, cameraRight);
 
-        // head → tail グラデーション（t: 0=head, 1=tail）
         float t = static_cast<float>(i) / countF;
 
-        // 色：startColor → endColor の位置グラデーション × 年齢フェード
         float   aliveRate = 1.0f - (p.age / p.lifetime);
         Vector4 lerpColor = {
             Lerp(p.startColor.x, endColor_.x, t),
@@ -207,11 +194,8 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
             Lerp(p.startColor.z, endColor_.z, t),
             Lerp(p.startColor.w, endColor_.w, t) * aliveRate};
 
-        // 幅：startWidth → endWidth テーパー
         float hw = Lerp(p.startWidth, endWidth_, t) * 0.5f;
-
-        // UV（U: head=0→tail=1, V: left=0, right=1）
-        float u = t;
+        float u  = t;
 
         vertexData_[vertexCount++] = {
             {p.position.x + perp.x * hw, p.position.y + perp.y * hw, p.position.z + perp.z * hw},

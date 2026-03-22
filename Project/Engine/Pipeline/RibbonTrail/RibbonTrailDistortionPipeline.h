@@ -14,7 +14,6 @@ enum class RibbonTrailDistortionRootParameter : UINT {
 
 /// <summary>
 /// リボントレイル 時空歪みパス描画パイプライン
-/// 出力先: R16G16F 歪みレンダーターゲット（UVオフセットXY）
 /// </summary>
 class RibbonTrailDistortionPipeline : public BasePipeline {
 public:

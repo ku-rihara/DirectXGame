@@ -312,6 +312,11 @@
     <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistColumnScroller.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistConditionSwitcher.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistController.cpp" />
+    <ClCompile Include="Game\UI\KillBonus\KillBonusEntry.cpp" />
+    <ClCompile Include="Game\UI\KillBonus\KillBonusController.cpp" />
+    <ClCompile Include="Game\UI\LevelUI\LevelUI.cpp" />
+    <ClCompile Include="Game\UI\LevelUI\LevelUIController.cpp" />
+    <ClCompile Include="Game\UI\NumberDigitUI\NumberDigitUI.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboPathBuilder.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.cpp" />
@@ -655,6 +660,11 @@
     <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistColumnScroller.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistConditionSwitcher.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistController.h" />
+    <ClInclude Include="Game\UI\KillBonus\KillBonusEntry.h" />
+    <ClInclude Include="Game\UI\KillBonus\KillBonusController.h" />
+    <ClInclude Include="Game\UI\LevelUI\LevelUI.h" />
+    <ClInclude Include="Game\UI\LevelUI\LevelUIController.h" />
+    <ClInclude Include="Game\UI\NumberDigitUI\NumberDigitUI.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboPathBuilder.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.h" />

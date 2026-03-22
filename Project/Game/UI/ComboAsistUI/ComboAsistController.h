@@ -20,6 +20,7 @@
 
 class Player;
 class PlayerComboAttackController;
+class KillCounter;
 
 /// <summary>
 /// コンボアシストUI管理クラス
@@ -70,6 +71,7 @@ private:
 private:
     Player* pPlayer_                                = nullptr;
     PlayerComboAttackController* pAttackController_ = nullptr;
+    KillCounter* pKillCounter_                      = nullptr;
     KetaEngine::GlobalParameter* globalParameter_   = nullptr;
     std::string groupName_                          = "ComboAsistUI";
 
@@ -118,6 +120,11 @@ private:
     float buttonScale_;
     float arrowScale_;
 
+    // ロックボタン残りキル数表示パラメータ
+    Vector2 remainCountOffset_;
+    Vector2 remainCountDigitSpacing_;
+    Vector2 remainCountScale_;
+
 public:
     /// Getter
     LayoutParam GetLayoutParam() const { return MakeLayoutParam(); }
@@ -126,4 +133,5 @@ public:
 
     void SetAttackController(PlayerComboAttackController* controller) { pAttackController_ = controller; }
     void SetPlayer(Player* player) { pPlayer_ = player; }
+    void SetKillCounter(KillCounter* killCounter) { pKillCounter_ = killCounter; }
 };

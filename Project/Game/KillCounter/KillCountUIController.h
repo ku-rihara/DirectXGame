@@ -29,7 +29,7 @@ public:
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;
-    const std::string groupName_ = "KillCountUI";
+    std::string groupName_ = "KillCountUI";
 
     // parameter
     Vector2 basePosition_;
@@ -43,6 +43,7 @@ private:
 
 public:
     ///* setter *//
+    void SetGroupName(const std::string& name) { groupName_ = name; }
     void SetBaseScale(const Vector2& scale) { baseScale_ = scale; }
     void SetBasePosition(const Vector2& pos) { basePosition_ = pos; }
     void SetAlpha(float alpha) { alpha_ = alpha; }

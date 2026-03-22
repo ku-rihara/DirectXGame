@@ -1,6 +1,7 @@
 #pragma once
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "KillCountUIController.h"
+#include <algorithm>
 #include <cstdint>
 #include <functional>
 #include <string>
@@ -49,6 +50,11 @@ public:
     // Getter
     int32_t GetCurrentLevel() const { return currentLevel_; }
     int32_t GetKillCount() const { return killCount_; }
+    // ableDefeatLevel に対応するロック解除までの残りキル数
+    int32_t GetRemainingKillsForLevel(int32_t ableDefeatLevel) const {
+        if (ableDefeatLevel <= 0 || ableDefeatLevel > kMaxKillLevel) { return 0; }
+        return (std::max)(0, levelUpThresholds_[ableDefeatLevel - 1] - killCount_);
+    }
     // Setter
     void SetAttackController(PlayerComboAttackController* controller) { pAttackController_ = controller; }
     void SetOnAttackUnlockedCallback(std::function<void(const std::string&)> callback) { onAttackUnlockedCallback_ = std::move(callback); }

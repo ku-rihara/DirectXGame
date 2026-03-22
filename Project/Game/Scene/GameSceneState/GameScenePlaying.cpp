@@ -2,9 +2,9 @@
 #include "Frame/Frame.h"
 #include "GameSceneFinish.h"
 #include "GameScenePose.h"
+#include "GameClearInfo/GameClearInfo.h"
 #include "Scene/GameScene.h"
 #include "utility/DitherOcclusion/DitherOcclusion.h"
-#include "GameClearInfo/GameClearInfo.h"
 
 GameScenePlaying::GameScenePlaying(GameScene* gameScene)
     : BaseGameSceneState("GameScenePlaying", gameScene) {
@@ -47,10 +47,13 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.enemyManager_->Update();
     obj.combo_->Update();
     GameClearInfo::GetInstance()->RecordCombo(obj.combo_->GetComboCount());
+    GameClearInfo::GetInstance()->RecordKillCount(obj.killCounter_->GetKillCount());
+    GameClearInfo::GetInstance()->RecordLevel(obj.deathTimer_->GetCurrentLevel());
     obj.fireInjectors_->Update();
     obj.gameCamera_->Update();
     obj.comboLevelObjHolder_->Update(timeSpeed);
     obj.deathTimer_->Update(timeSpeed);
+    obj.killBonusController_->Update(KetaEngine::Frame::DeltaTime());
 
     obj.enemyManager_->HpBarUpdate(pOwner_->GetViewProjection());
     obj.lockOnController_->Update(obj.player_.get(), pOwner_->GetViewProjection());

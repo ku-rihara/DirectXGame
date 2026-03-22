@@ -72,6 +72,7 @@ void GameScene::Debug() {
     gameObj_.comboAsistController_->AdjustParam();
     gameObj_.unlockNotifier_->AdjustParam();
     gameObj_.comboSupportSpriteUi_->AdjustParam();
+    gameObj_.killBonusController_->AdjustParam();
     gameObj_.operateUI_->Debug();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
@@ -134,6 +135,7 @@ void GameScene::ObjectInit() {
     gameObj_.comboAsistController_        = std::make_unique<ComboAsistController>();
     gameObj_.unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
     gameObj_.comboSupportSpriteUi_        = std::make_unique<ComboSupportSpriteUi>();
+    gameObj_.killBonusController_         = std::make_unique<KillBonusController>();
 
     gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
@@ -158,6 +160,7 @@ void GameScene::ObjectInit() {
     gameObj_.sideRopeController_->Init();
     gameObj_.audienceController_->Init();
     gameObj_.deathTimer_->Init();
+    gameObj_.killBonusController_->Init();
     viewProjection_.Init();
 
     gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");
@@ -228,10 +231,23 @@ void GameScene::SetClassPointer() {
 
     gameObj_.comboAsistController_->SetAttackController(gameObj_.playerComboAttackController_.get());
     gameObj_.comboAsistController_->SetPlayer(gameObj_.player_.get());
+    gameObj_.comboAsistController_->SetKillCounter(gameObj_.killCounter_.get());
     gameObj_.comboAsistController_->Init();
 
     gameObj_.comboSupportSpriteUi_->SetComboAsistController(gameObj_.comboAsistController_.get());
     gameObj_.comboSupportSpriteUi_->Init();
+
+    // キル → KillBonusController 接続
+    {
+        KillBonusController* killBonus = gameObj_.killBonusController_.get();
+        DeathTimer* deathTimer = gameObj_.deathTimer_.get();
+        gameObj_.deathTimer_->SetOnKillCallback([killBonus](int32_t comboMultiplier) {
+            killBonus->OnEnemyKilled(comboMultiplier);
+        });
+        gameObj_.killBonusController_->SetOnSimKillBonusCallback([deathTimer](float bonus) {
+            deathTimer->ApplyBonus(bonus);
+        });
+    }
 
     // 自動コンボ実行 → アンロック通知UIリアクション の接続
     ComboUnlockNotifier* notifier = gameObj_.unlockNotifier_.get();

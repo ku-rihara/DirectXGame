@@ -1,6 +1,6 @@
 #include "ComboAsistButtonUI.h"
 #include <XInput.h>
-#include"Audio/Audio.h"
+#include "Audio/Audio.h"
 
 void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const LayoutParam& layout, const std::string& attackName) {
     gamepadButton_ = gamepadButton;
@@ -11,6 +11,10 @@ void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const Layo
     unlockParticlePlayer_.Init();
 
     const int32_t layerNum = 30;
+
+    for (auto& d : remainingCountDigits_) {
+        d.Init();
+    }
 
     // ボタンに応じたテクスチャを選択
     if (gamepadButton == XINPUT_GAMEPAD_Y) {
@@ -125,4 +129,14 @@ void ComboAsistButtonUI::SetVisible(bool visible) {
     if (visible && isUnlocked_ && lockUI_) {
         lockUI_->SetIsDraw(false);
     }
+}
+
+void ComboAsistButtonUI::UpdateRemainingKillCount(int32_t count, const Vector2& offset, const Vector2& digitSpacing, const Vector2& scale) {
+    // ロック中のみ表示
+    const bool show = !isUnlocked_;
+    const int32_t ones = count % 10;
+    const int32_t tens = (count / 10) % 10;
+
+    remainingCountDigits_[0].Update(ones, currentDisplayPos_ + offset, scale, 1.0f, show);
+    remainingCountDigits_[1].Update(tens, currentDisplayPos_ + offset + digitSpacing, scale, 1.0f, show && (count >= 10));
 }

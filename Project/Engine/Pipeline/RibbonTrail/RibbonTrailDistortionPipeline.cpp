@@ -95,7 +95,6 @@ void RibbonTrailDistortionPipeline::CreateGraphicsPipeline() {
     pixelShaderBlob_  = CompileShader(L"resources/Shader/RibbonTrailDistortion.PS.hlsl", L"ps_6_0");
 
     // ブレンド（加算合成）
-    // SRC_ALPHA + ONE: alphaでUVオフセットを重み付けしつつ歪みを加算累積
     D3D12_BLEND_DESC blendDesc{};
     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_RED | D3D12_COLOR_WRITE_ENABLE_GREEN;
     blendDesc.RenderTarget[0].BlendEnable           = TRUE;
@@ -111,7 +110,7 @@ void RibbonTrailDistortionPipeline::CreateGraphicsPipeline() {
     rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
     rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
-    // 深度テスト: 読み取りのみ（手前のオブジェクトに隠れた部分は歪まない）
+    // 深度テスト（読み取りのみ）
     depthStencilDesc_.DepthEnable    = true;
     depthStencilDesc_.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
     depthStencilDesc_.DepthFunc      = D3D12_COMPARISON_FUNC_LESS_EQUAL;

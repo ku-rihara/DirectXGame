@@ -2,6 +2,7 @@
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 #include "input/InputData.h"
+#include "KillCounter/KillCounter.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
@@ -100,6 +101,26 @@ void ComboAsistController::Update() {
 
         visibilityController_.UpdateConditionVisibility(*currentData);
         uiBuilder_.ApplyToCondition(*currentData, [](BaseComboAsistUI& ui) { ui.Update(); });
+
+        // ロックボタンの残りキル数表示
+        if (pKillCounter_ && pAttackController_) {
+            auto updateGroup = [&](const ComboPathBuilder::ComboPathGroup& pathGroup, ComboUIGroup& uiGroup) {
+                uiBuilder_.ForEachStepButton(pathGroup, uiGroup,
+                    [&](const ComboPathBuilder::ComboStep& step, ComboAsistButtonUI& btn) {
+                        int32_t ableLevel = 0;
+                        for (const auto& atk : pAttackController_->GetAllAttacks()) {
+                            if (atk && atk->GetGroupName() == step.attackName) {
+                                ableLevel = atk->GetAttackParam().ableDefeatLevel;
+                                break;
+                            }
+                        }
+                        const int32_t remaining = pKillCounter_->GetRemainingKillsForLevel(ableLevel);
+                        btn.UpdateRemainingKillCount(remaining, remainCountOffset_, remainCountDigitSpacing_, remainCountScale_);
+                    });
+            };
+            updateGroup(currentData->pathBuilder.GetXGroup(), currentData->xUIGroup);
+            updateGroup(currentData->pathBuilder.GetYGroup(), currentData->yUIGroup);
+        }
     }
 }
 
@@ -288,6 +309,9 @@ void ComboAsistController::RegisterParams() {
     globalParameter_->Regist(groupName_, "arrowScale", &arrowScale_);
     globalParameter_->Regist(groupName_, "maxVisibleColumn", &maxVisibleColumn_);
     globalParameter_->Regist(groupName_, "maxVisibleRow", &maxVisibleRow_);
+    globalParameter_->Regist(groupName_, "remainCountOffset",       &remainCountOffset_);
+    globalParameter_->Regist(groupName_, "remainCountDigitSpacing", &remainCountDigitSpacing_);
+    globalParameter_->Regist(groupName_, "remainCountScale",        &remainCountScale_);
 }
 
 void ComboAsistController::AdjustParam() {
@@ -318,6 +342,11 @@ void ComboAsistController::AdjustParam() {
                 visibilityController_.UpdateConditionVisibility(*currentData);
             }
         }
+
+        ImGui::SeparatorText("残りキル数表示");
+        ImGui::DragFloat2("Remain Count Offset",        &remainCountOffset_.x,       0.1f);
+        ImGui::DragFloat2("Remain Count Digit Spacing", &remainCountDigitSpacing_.x, 0.1f);
+        ImGui::DragFloat2("Remain Count Scale",         &remainCountScale_.x,        0.01f);
 
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);

@@ -1,0 +1,43 @@
+{
+    "KillBonusUI": {
+        "basePos": [
+            90.5,
+            110.5999984741211
+        ],
+        "comboLabelOffset": [
+            0.0,
+            0.0
+        ],
+        "comboOffset": [
+            -61.20000076293945,
+            0.0
+        ],
+        "digitScale": [
+            1.0,
+            1.0
+        ],
+        "digitSpacing": [
+            0.0,
+            0.0
+        ],
+        "entryOffset": [
+            0.0,
+            0.0
+        ],
+        "fadeDuration": 0.0,
+        "recoveryOffset": [
+            0.0,
+            0.0
+        ],
+        "simKillBonusPerKill": 0.5,
+        "simKillLabelOffset": [
+            0.0,
+            0.0
+        ],
+        "simKillOffset": [
+            0.0,
+            0.0
+        ],
+        "toleranceFrames": 6
+    }
+}

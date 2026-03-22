@@ -11,13 +11,23 @@ void GameResultScene::Init() {
     bgSprite_.reset(KetaEngine::Sprite::Create("white1x1.dds"));
 
     comboCountUI_ = std::make_unique<KillCountUIController>();
+    comboCountUI_->SetGroupName("ResultComboCountUI");
     comboCountUI_->Init();
+
+    killCountUI_ = std::make_unique<KillCountUIController>();
+    killCountUI_->SetGroupName("ResultKillCountUI");
+    killCountUI_->Init();
+
+    levelUI_.Init();
 }
 
 void GameResultScene::Update() {
     BaseScene::Update();
 
-    comboCountUI_->Update(GameClearInfo::GetInstance()->GetMaxComboCount());
+    auto* info = GameClearInfo::GetInstance();
+    comboCountUI_->Update(info->GetMaxComboCount());
+    killCountUI_->Update(info->GetTotalKillCount());
+    levelUI_.Update(info->GetReachedLevel());
 
     if (!isStartFadeOut_) {
         CheckEndInput();
@@ -43,6 +53,8 @@ void GameResultScene::Debug() {
 
 #ifdef _DEBUG
     comboCountUI_->AdjustParam();
+    killCountUI_->AdjustParam();
+    levelUI_.AdjustParam();
 #endif
 }
 

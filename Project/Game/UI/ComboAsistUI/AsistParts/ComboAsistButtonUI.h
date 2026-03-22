@@ -1,7 +1,9 @@
 #pragma once
 #include "BaseComboAsistUI.h"
+#include "UI/NumberDigitUI/NumberDigitUI.h"
 #include "Editor/ShakeEditor/ShakePlayer.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
+#include <array>
 #include <cstdint>
 #include <string>
 
@@ -46,6 +48,9 @@ public:
     /// </summary>
     void TryPlayPushScaling(const std::string& attackName);
 
+    // ロック中の残りキル数表示（毎フレーム呼ぶ）
+    void UpdateRemainingKillCount(int32_t count, const Vector2& offset, const Vector2& digitSpacing, const Vector2& scale);
+
 public:
     const std::string& GetAttackName() const { return attackName_; }
 
@@ -63,4 +68,7 @@ private:
 
     KetaEngine::ShakePlayer shakePlayer_;
     KetaEngine::ParticlePlayer unlockParticlePlayer_;
+
+    // ロック中残りキル数表示（1の位, 10の位）
+    std::array<NumberDigitUI, 2> remainingCountDigits_;
 };
