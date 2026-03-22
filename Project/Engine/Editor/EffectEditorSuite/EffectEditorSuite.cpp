@@ -10,6 +10,7 @@ using namespace KetaEngine;
 #include "Editor/ShakeEditor/ShakeEditor.h"
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationEditor.h"
 #include "Editor/TimeScaleEditor/TimeScaleEditor.h"
+#include "Editor/PostEffectEditor/PostEffectEditor.h"
 #include "Particle/CPUParticle/Editor/ParticleEditor.h"
 #include "Particle/GPUParticle/Editor/GPUParticleEditor.h"
 // frame
@@ -33,6 +34,7 @@ void EffectEditorSuite::Init() {
     dissolveEditor_            = std::make_unique<DissolveEditor>();
     timeScaleEditor_           = std::make_unique<TimeScaleEditor>();
     ribbonTrailEditor_         = std::make_unique<RibbonTrailEditor>();
+    postEffectEditor_          = std::make_unique<PostEffectEditor>();
 
     // 初期化
     objEaseAnimationEditor_->Init("ObjEaseAnimation");
@@ -45,6 +47,7 @@ void EffectEditorSuite::Init() {
     dissolveEditor_->Init("Dissolve");
     timeScaleEditor_->Init("TimeScale");
     ribbonTrailEditor_->Init("RibbonTrail");
+    postEffectEditor_->Init("PostEffect");
 
     // SelectFileEditマップを初期化
     InitEditorSelectFileEditMap();
@@ -62,6 +65,7 @@ void EffectEditorSuite::Update() {
     dissolveEditor_->Update();
     timeScaleEditor_->Update(Frame::DeltaTime());
     ribbonTrailEditor_->Update();
+    postEffectEditor_->Update();
 }
 
 void EffectEditorSuite::EditorUpdate() {
@@ -75,6 +79,7 @@ void EffectEditorSuite::EditorUpdate() {
     particleEditor_->EditorUpdate();
     timeScaleEditor_->EditorUpdate();
     ribbonTrailEditor_->EditorUpdate();
+    postEffectEditor_->EditorUpdate();
 
     // コンボエディターからのインライン編集ウィンドウ
     DrawInlineEditorWindow();
@@ -111,6 +116,9 @@ void EffectEditorSuite::InitEditorSelectFileEditMap() {
          }},
         {EffectEditorType::RibbonTrail, [this](const std::string& name, const std::string& category) {
              ribbonTrailEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::PostEffect, [this](const std::string& name, const std::string& category) {
+             postEffectEditor_->SelectFileEdit(name, category);
          }}
     };
 }
@@ -154,6 +162,10 @@ void EffectEditorSuite::PlayEffect(EffectEditorType type, const std::string& fil
     case EffectEditorType::RibbonTrail: {
         auto* e = ribbonTrailEditor_->GetEffectByName(categoryName, fileName);
         if (e) e->Play();
+        break;
+    }
+    case EffectEditorType::PostEffect: {
+        postEffectEditor_->PlayPostEffect(fileName, categoryName);
         break;
     }
     default:
@@ -263,6 +275,10 @@ void EffectEditorSuite::InitEditorSaveLoadMaps() {
              auto* e = ribbonTrailEditor_->GetEffectByName(cat, name);
              if (e) e->SaveData();
          }},
+        {EffectEditorType::PostEffect, [this](const std::string& name, const std::string& cat) {
+             auto* e = postEffectEditor_->GetEffectByName(cat, name);
+             if (e) e->SaveData();
+         }},
     };
 
     // Load マップ
@@ -293,6 +309,10 @@ void EffectEditorSuite::InitEditorSaveLoadMaps() {
          }},
         {EffectEditorType::RibbonTrail, [this](const std::string& name, const std::string& cat) {
              auto* e = ribbonTrailEditor_->GetEffectByName(cat, name);
+             if (e) e->LoadData();
+         }},
+        {EffectEditorType::PostEffect, [this](const std::string& name, const std::string& cat) {
+             auto* e = postEffectEditor_->GetEffectByName(cat, name);
              if (e) e->LoadData();
          }},
     };

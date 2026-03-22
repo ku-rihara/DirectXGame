@@ -102,6 +102,10 @@ public:
     void AdjustParam();
     void RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName);
 
+    // ポストエフェクトリスト ↔ スロット同期
+    void SyncListToSlots();
+    void SyncSlotsToList();
+
 private:
     //*-------------------------------- private Method --------------------------------*//
     void SelectRenditionFile(const char* label, const std::string& directory, std::pair<RenditionParam, KetaEngine::FileSelector>& param);
@@ -136,6 +140,13 @@ private:
     // ポストエフェクト（複数対応）
     std::vector<RenditionParam> postEffectList_;
     std::vector<RenditionParam> postEffectOnHitList_;
+
+    // ポストエフェクト保存用スロット（GlobalParameter登録用）
+    static constexpr int32_t kMaxPostEffects = 4;
+    std::array<RenditionParam, kMaxPostEffects> postEffectSlots_{};
+    std::array<RenditionParam, kMaxPostEffects> postEffectOnHitSlots_{};
+    int32_t postEffectCount_      = 0;
+    int32_t postEffectOnHitCount_ = 0;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//

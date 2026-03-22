@@ -4,6 +4,8 @@
 #include "Types/StrongEnemy.h"
 // Player
 #include "Player/Player.h"
+// DeathTimer
+#include "DeathTimer/DeathTimer.h"
 // Combo
 #include "Combo/Combo.h"
 // LockOn
@@ -88,6 +90,11 @@ void EnemyManager::Update() {
                 pEnemySpawner_->OnEnemyDestroyed(enemies_[i]->GetGroupId());
             }
 
+            if (pDeathTimer_) {
+                int32_t comboCount = pCombo_ ? pCombo_->GetComboCount() : 0;
+                pDeathTimer_->OnEnemyKilled(enemies_[i]->GetParameter().gaugeIncreaseValue, comboCount);
+            }
+
             // vectorから削除
             enemies_[i] = std::move(enemies_.back());
             enemies_.pop_back();
@@ -144,6 +151,8 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "deathGravity" + indexString, &parameters_[i].deathGravity);
         globalParameter_->Regist(groupName_, "deathRotateSpeed" + indexString, &parameters_[i].deathRotateSpeed);
         globalParameter_->Regist(groupName_, "deathBurstTime" + indexString, &parameters_[i].deathBurstTime);
+        // ゲージ増加値
+        globalParameter_->Regist(groupName_, "gaugeIncreaseValue" + indexString, &parameters_[i].gaugeIncreaseValue);
     }
 }
 
@@ -168,6 +177,9 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("DeathGravity", &parameters_[typeIndex].deathGravity, 0.1f);
     ImGui::DragFloat("DeathRotateSpeed", &parameters_[typeIndex].deathRotateSpeed, 0.01f);
     ImGui::DragFloat("DeathBurstTime", &parameters_[typeIndex].deathBurstTime, 0.01f);
+
+    ImGui::SeparatorText("ゲージ設定");
+    ImGui::DragFloat("ゲージ増加値", &parameters_[typeIndex].gaugeIncreaseValue, 0.01f, 0.0f);
 
     ImGui::SeparatorText("スプライト関連");
     ImGui::DragFloat2("HPBarOffsetPos", &parameters_[typeIndex].hpBarPosOffset.x, 0.01f);
@@ -245,6 +257,10 @@ void EnemyManager::SetGameCamera(GameCamera* gameCamera) {
 
 void EnemyManager::SetEnemySpawner(EnemySpawner* enemySpawner) {
     pEnemySpawner_ = enemySpawner;
+}
+
+void EnemyManager::SetDeathTimer(DeathTimer* deathTimer) {
+    pDeathTimer_ = deathTimer;
 }
 
 void EnemyManager::UpdateAvailableAnimationsForEditor(BaseEnemy* enemy) {

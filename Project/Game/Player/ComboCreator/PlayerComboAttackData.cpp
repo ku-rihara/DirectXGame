@@ -21,6 +21,7 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
+    renditionData_.SyncSlotsToList();
 
     // enumのタイプををIntから適応
     attackParam_.triggerParam.condition      = static_cast<TriggerCondition>(triggerConditionInt_);
@@ -40,6 +41,7 @@ void PlayerComboAttackData::LoadData() {
     // JSONファイルからロードして同期
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
+    renditionData_.SyncSlotsToList();
 
     // conditionをIntから適応
     attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
@@ -51,6 +53,9 @@ void PlayerComboAttackData::LoadData() {
 void PlayerComboAttackData::SaveData() {
     // branchCount_を更新
     branchCount_ = static_cast<int32_t>(comboBranches_.size());
+
+    // ポストエフェクトリストをスロットに同期してから保存
+    renditionData_.SyncListToSlots();
 
     globalParameter_->SaveFile(groupName_, folderPath_);
 }

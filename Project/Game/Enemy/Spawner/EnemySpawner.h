@@ -92,6 +92,8 @@ public:
     void AdjustParam(); //< パラメータ調整
     void RegisterParams(); //< パラメータバインド
 
+    void RestartLoop(); //< スポーンをリセットして最初から再開
+
 private:
     using json = nlohmann::json;
     json jsonData_;
@@ -114,6 +116,7 @@ private:
     int currentGroupIndex_;
     bool isSystemActive_;
     bool allGroupsCompleted_;
+    bool shouldLoop_ = false;
 
 public:
     ///=======================================================================================
@@ -128,4 +131,5 @@ public:
     /// setter method
     ///=======================================================================================
     void SetEnemyManager(EnemyManager* enemyManager);
+    void SetShouldLoop(bool loop) { shouldLoop_ = loop; }
 };

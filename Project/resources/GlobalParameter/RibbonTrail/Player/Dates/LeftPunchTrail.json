@@ -1,5 +1,7 @@
 {
     "LeftPunchTrail": {
+        "DistortionStrength": 5.0,
+        "DistortionTexturePath": "",
         "EmitInterval": 0.004999999888241291,
         "EndColor": [
             1.0,
@@ -17,6 +19,7 @@
             1.0
         ],
         "StartWidth": 1.1119999885559082,
-        "TexturePath": ""
+        "TexturePath": "",
+        "UseDistortion": true
     }
 }

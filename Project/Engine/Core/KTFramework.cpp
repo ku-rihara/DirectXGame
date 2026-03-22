@@ -139,10 +139,10 @@ void KTFramework::DisplayFPS() {
 // ========================================================
 void KTFramework::DisplayGameView() {
 #ifdef _DEBUG
-   
-    // レンダーテクスチャのSRVを取得
+
+    // ポストエフェクト適用済みならピンポン、未適用ならシーンRTのSRVを取得
     D3D12_GPU_DESCRIPTOR_HANDLE srvHandle =
-        DirectXCommon::GetInstance()->GetDxRenderTarget()->GetRenderTextureSRVHandle();
+        PostEffectRenderer::GetInstance()->GetPostProcessedSRVHandle();
 
     // 通常モード
     ImGui::Begin("Game View");

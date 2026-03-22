@@ -1,10 +1,14 @@
 #pragma once
 
 #include "3d/ViewProjection.h"
+#include "PostEffect/DistortionRenderTarget.h"
+#include "PostEffect/Distortion.h"
+#include <d3d12.h>
 #include <unordered_set>
 
 namespace KetaEngine {
 
+class DirectXCommon;
 class RibbonTrail;
 
 /// <summary>
@@ -29,11 +33,32 @@ public:
     /// </summary>
     void DrawAll(const ViewProjection& viewProj);
 
+    /// <summary>
+    /// 時空歪みシステムの初期化（DirectX初期化後に一度呼ぶ）
+    /// </summary>
+    void InitDistortion(DirectXCommon* dxCommon, uint32_t width, uint32_t height);
+
+    /// <summary>
+    /// 時空歪みパス描画（DrawAll後・PreDraw前に呼ぶ）
+    /// </summary>
+    void DrawDistortionPass(const ViewProjection& viewProj);
+
+    /// <summary>
+    /// 時空歪みポストエフェクト適用（DrawPostEffect内で呼ぶ）
+    /// </summary>
+    void ApplyDistortionEffect(ID3D12GraphicsCommandList* commandList);
+
     void Clear();
 
 private:
     static bool isDestroyed_;
     std::unordered_set<RibbonTrail*> trails_;
+
+    // 時空歪み
+    DistortionRenderTarget distortionRT_;
+    Distortion             distortionEffect_;
+    bool distortionInitialized_ = false;
+    bool hasAnyDistortion_      = false;
 };
 
 } // namespace KetaEngine

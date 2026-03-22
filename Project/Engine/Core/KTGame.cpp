@@ -11,6 +11,8 @@ using namespace KetaEngine;
 #include "3D/Line3D/Line3DManager.h"
 #include "3D/RibbonTrail/RibbonTrailManager.h"
 #include "Particle/GPUParticle/GPUParticleManager.h"
+#include "Base/Dx/DirectXCommon.h"
+#include "Base/WinApp.h"
 
 // utility
 #include "Collider/CollisionManager.h"
@@ -20,6 +22,11 @@ using namespace KetaEngine;
 // =============================================================
 void KTGame::Init() {
     KTFramework::Init();
+
+    RibbonTrailManager::GetInstance()->InitDistortion(
+        DirectXCommon::GetInstance(),
+        static_cast<uint32_t>(WinApp::kWindowWidth),
+        static_cast<uint32_t>(WinApp::kWindowHeight));
 
     // シーン生成
     sceneFactory_ = std::make_unique<SceneFactory>();
@@ -67,7 +74,9 @@ void KTGame::Draw() {
     Line3DManager::GetInstance()->DrawAll(viewProjection);
     // リボントレイル描画
     RibbonTrailManager::GetInstance()->DrawAll(viewProjection);
-  
+    // 時空歪みパス
+    RibbonTrailManager::GetInstance()->DrawDistortionPass(viewProjection);
+
     // --------------------------------------------------------------------------
     /// スプライト描画
     // --------------------------------------------------------------------------
@@ -95,6 +104,7 @@ void KTGame::DrawPostEffect() {
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
     PostEffectRenderer::GetInstance()->Draw(commandList);
+    RibbonTrailManager::GetInstance()->ApplyDistortionEffect(commandList);
 }
 
 // =============================================================

@@ -187,11 +187,31 @@ bool EnemySpawner::IsGroupCompleted(int groupId) const {
 
 void EnemySpawner::ActivateNextGroup() {
     currentGroupIndex_++;
-    if (currentGroupIndex_ >= spawnGroups_.size()) {
-        // 全てのグループが全滅
-        isSystemActive_     = false;
-        allGroupsCompleted_ = true;
+    if (currentGroupIndex_ >= static_cast<int>(spawnGroups_.size())) {
+        if (shouldLoop_) {
+            RestartLoop();
+        } else {
+            isSystemActive_     = false;
+            allGroupsCompleted_ = true;
+        }
     }
+}
+
+void EnemySpawner::RestartLoop() {
+    for (auto& group : spawnGroups_) {
+        group.isActive       = false;
+        group.isCompleted    = false;
+        group.spawnedCount   = 0;
+        group.aliveCount     = 0;
+        group.groupStartTime = 0.0f;
+    }
+    for (auto& spawn : spawnPoints_) {
+        spawn.hasSpawned = false;
+    }
+    currentGroupIndex_  = 0;
+    currentTime_        = 0.0f;
+    isSystemActive_     = true;
+    allGroupsCompleted_ = false;
 }
 
 void EnemySpawner::OnEnemyDestroyed(int groupId) {

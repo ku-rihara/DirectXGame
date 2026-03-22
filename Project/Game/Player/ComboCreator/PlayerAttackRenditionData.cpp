@@ -1,4 +1,5 @@
 #include "PlayerAttackRenditionData.h"
+#include <algorithm>
 #include <cassert>
 #include <imgui.h>
 
@@ -59,6 +60,54 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
     globalParam->Regist(groupName, "Vibration_Duration", &vibrationParam_.duration);
     globalParam->Regist(groupName, "Vibration_Intensity", &vibrationParam_.intensity);
     globalParam->Regist(groupName, "Vibration_TriggerByHit", &vibrationParam_.triggerByHit);
+
+    // ポストエフェクトスロット（複数保存用）
+    globalParam->Regist(groupName, "PostEffect_Count", &postEffectCount_);
+    globalParam->Regist(groupName, "PostEffect_OnHit_Count", &postEffectOnHitCount_);
+    for (int32_t i = 0; i < kMaxPostEffects; ++i) {
+        std::string suffix = "_" + std::to_string(i);
+        globalParam->Regist(groupName, "PostEffect_Slot" + suffix + "_FileName",     &postEffectSlots_[i].fileName);
+        globalParam->Regist(groupName, "PostEffect_Slot" + suffix + "_StartTiming",  &postEffectSlots_[i].startTiming);
+        globalParam->Regist(groupName, "PostEffect_OnHit_Slot" + suffix + "_FileName",    &postEffectOnHitSlots_[i].fileName);
+        globalParam->Regist(groupName, "PostEffect_OnHit_Slot" + suffix + "_StartTiming", &postEffectOnHitSlots_[i].startTiming);
+    }
+}
+
+void PlayerAttackRenditionData::SyncListToSlots() {
+    postEffectCount_ = static_cast<int32_t>((std::min)(postEffectList_.size(), static_cast<size_t>(kMaxPostEffects)));
+    for (int32_t i = 0; i < postEffectCount_; ++i) {
+        postEffectSlots_[i] = postEffectList_[i];
+    }
+    // 残りスロットをクリア
+    for (int32_t i = postEffectCount_; i < kMaxPostEffects; ++i) {
+        postEffectSlots_[i] = RenditionParam{};
+    }
+
+    postEffectOnHitCount_ = static_cast<int32_t>((std::min)(postEffectOnHitList_.size(), static_cast<size_t>(kMaxPostEffects)));
+    for (int32_t i = 0; i < postEffectOnHitCount_; ++i) {
+        postEffectOnHitSlots_[i] = postEffectOnHitList_[i];
+    }
+    for (int32_t i = postEffectOnHitCount_; i < kMaxPostEffects; ++i) {
+        postEffectOnHitSlots_[i] = RenditionParam{};
+    }
+}
+
+void PlayerAttackRenditionData::SyncSlotsToList() {
+    postEffectList_.clear();
+    int32_t count = (std::min)(postEffectCount_, kMaxPostEffects);
+    for (int32_t i = 0; i < count; ++i) {
+        if (!postEffectSlots_[i].fileName.empty() && postEffectSlots_[i].fileName != "None") {
+            postEffectList_.push_back(postEffectSlots_[i]);
+        }
+    }
+
+    postEffectOnHitList_.clear();
+    int32_t onHitCount = (std::min)(postEffectOnHitCount_, kMaxPostEffects);
+    for (int32_t i = 0; i < onHitCount; ++i) {
+        if (!postEffectOnHitSlots_[i].fileName.empty() && postEffectOnHitSlots_[i].fileName != "None") {
+            postEffectOnHitList_.push_back(postEffectOnHitSlots_[i]);
+        }
+    }
 }
 
 void PlayerAttackRenditionData::AdjustParam() {

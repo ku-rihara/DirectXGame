@@ -23,6 +23,11 @@ struct RibbonCBuffer {
     Matrix4x4 viewProjection;
 };
 
+struct RibbonDistortionCBuffer {
+    float strength;
+    float pad[3]; // 16byte アライン
+};
+
 /// <summary>
 /// リボントレイル描画クラス
 /// </summary>
@@ -67,10 +72,19 @@ public:
     /// テクスチャをパスで設定（空文字列でデフォルト白）
     void SetTexture(const std::string& texturePath);
 
+    /// 時空歪み設定
+    void SetUseDistortion(bool use) { useDistortion_ = use; }
+    void SetDistortionStrength(float strength) { distortionStrength_ = strength; }
+    void SetDistortionTexture(const std::string& texturePath);
+
+    /// 時空歪みパス描画（DrawDistortionPipelineがセット済みの状態で呼ぶ）
+    void DrawDistortion(const ViewProjection& viewProj);
+
     ///========================================================
     /// Getter
     ///========================================================
-    size_t GetPointCount() const { return points_.size(); }
+    size_t GetPointCount()      const { return points_.size(); }
+    bool   IsDistortionEnabled() const { return useDistortion_; }
 
 private:
     void Init(size_t maxPoints);
@@ -105,6 +119,16 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D12Resource> constantBufferResource_;
     RibbonCBuffer*                         cBufferData_ = nullptr;
+
+    // 時空歪み
+    bool     useDistortion_       = false;
+    float    distortionStrength_  = 0.1f;
+    uint32_t distortionTextureHandle_ = UINT32_MAX;
+
+    Microsoft::WRL::ComPtr<ID3D12Resource> distortionConstantBufferResource_;
+    RibbonDistortionCBuffer*               distortionCBufferData_ = nullptr;
+
+    size_t lastVertexCount_ = 0; // Draw() が書き込んだ頂点数（DrawDistortionで再利用）
 
     std::deque<TrailPoint> points_;
 };

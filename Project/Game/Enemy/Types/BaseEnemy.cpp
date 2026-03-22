@@ -271,7 +271,6 @@ void BaseEnemy::TakeDamage(float damageValue) {
 
     // ダメージを受ける
     hp_ -= damageValue;
-    pPlayer_->GetDeathTimer()->RecoverHP();
 
     // コンボをカウント
     pCombo_->ComboCountUP();

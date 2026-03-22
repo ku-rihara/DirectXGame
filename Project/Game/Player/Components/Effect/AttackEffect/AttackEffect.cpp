@@ -10,7 +10,7 @@ void AttackEffect::Init() {
 
 void AttackEffect::Update() {
     timeScalePlayer_->Update(KetaEngine::Frame::DeltaTime());
-    postEffectEditor_->Update(KetaEngine::Frame::DeltaTime());
+    postEffectEditor_->Update();
 }
 
 void AttackEffect::PlayHitStop(const std::string& timeScaleName) {
@@ -18,7 +18,7 @@ void AttackEffect::PlayHitStop(const std::string& timeScaleName) {
 }
 
 void AttackEffect::PlayPostEffect(const std::string& effectName) {
-    postEffectEditor_->PlayPostEffect(effectName);
+    postEffectEditor_->PlayPostEffect(effectName, "Player");
 }
 
 void AttackEffect::EditorUpdate() {

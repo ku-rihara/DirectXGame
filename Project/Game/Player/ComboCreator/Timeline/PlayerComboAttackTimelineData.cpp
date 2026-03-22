@@ -181,7 +181,7 @@ std::string PlayerComboAttackTimelineData::GetDirectoryForTrackType(TrackType ty
         return basePath + "ShakeEditor/Common/Dates";
     case TrackType::POST_EFFECT:
     case TrackType::POST_EFFECT_ON_HIT:
-        return basePath + "PostEffect";
+        return basePath + "PostEffect/Player/Dates";
     case TrackType::PARTICLE_EFFECT:
     case TrackType::PARTICLE_EFFECT_ON_HIT:
         return basePath + "Particle/Player/Dates";
@@ -222,6 +222,8 @@ std::string PlayerComboAttackTimelineData::GetCategoryForTrackType(TrackType typ
     case TrackType::SHAKE_ACTION:
     case TrackType::SHAKE_ACTION_ON_HIT:
         return "Common";
+    case TrackType::POST_EFFECT:
+    case TrackType::POST_EFFECT_ON_HIT:
     case TrackType::PARTICLE_EFFECT:
     case TrackType::PARTICLE_EFFECT_ON_HIT:
     case TrackType::OBJ_ANIM_HEAD:

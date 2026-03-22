@@ -42,12 +42,21 @@ private:
     float   emitInterval_ = 0.005f; // ポイントを追加する間隔（秒）
 
     // ---- テクスチャ ----
-    std::string texturePath_; 
+    std::string texturePath_;
 
     // テクスチャ選択（エディタ用）
     static constexpr const char* kTextureFolderPath = "Resources/EngineTexture";
     FileSelector                 textureSelector_;
     std::string                  textureStem_;
+
+    // ---- 時空歪み ----
+    bool        useDistortion_         = false;
+    float       distortionStrength_    = 0.1f;
+    std::string distortionTexturePath_;
+
+    // 歪みテクスチャ選択（エディタ用）
+    FileSelector distortionTextureSelector_;
+    std::string  distortionTextureStem_;
 
     const std::string baseFolderPath_ = "RibbonTrail/";
 
@@ -60,7 +69,10 @@ public:
     float              GetLifetime()      const { return lifetime_; }
     int32_t            GetMaxPoints()     const { return maxPoints_; }
     float              GetEmitInterval()  const { return emitInterval_; }
-    const std::string& GetTexturePath()   const { return texturePath_; }
+    const std::string& GetTexturePath()           const { return texturePath_; }
+    bool               GetUseDistortion()         const { return useDistortion_; }
+    float              GetDistortionStrength()     const { return distortionStrength_; }
+    const std::string& GetDistortionTexturePath() const { return distortionTexturePath_; }
 };
 
 } // KetaEngine

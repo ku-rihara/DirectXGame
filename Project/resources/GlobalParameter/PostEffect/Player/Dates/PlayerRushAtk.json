@@ -1,0 +1,25 @@
+{
+    "PlayerRushAtk": {
+        "dissolveColor": [
+            1.0,
+            0.0,
+            0.0
+        ],
+        "dissolveThreshold": 0.5,
+        "durationTime": 0.30000001192092896,
+        "easeType": 0,
+        "easingTypeIndex": 0,
+        "gaussSigma": 1.0,
+        "luminanceWeightRate": 0.30000001192092896,
+        "outlineWeightRate": 0.30000001192092896,
+        "paramEnd": 0.0,
+        "paramStart": 0.0430000014603138,
+        "postEffectMode": 5,
+        "radialBlurWidth": 0.013000000268220901,
+        "radialCenter": [
+            0.5,
+            0.5
+        ],
+        "startTime": 0.0
+    }
+}

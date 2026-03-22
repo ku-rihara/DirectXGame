@@ -30,6 +30,16 @@ void RibbonTrailData::Init(const std::string& name, const std::string& categoryN
         size_t dt      = fn.rfind('.');
         textureStem_   = (dt != std::string::npos) ? fn.substr(0, dt) : fn;
     }
+
+    // distortionTexturePath_ の textureStem_ も同期
+    if (distortionTexturePath_.empty()) {
+        distortionTextureStem_ = "None";
+    } else {
+        size_t sl      = distortionTexturePath_.rfind('/');
+        std::string fn = (sl != std::string::npos) ? distortionTexturePath_.substr(sl + 1) : distortionTexturePath_;
+        size_t dt      = fn.rfind('.');
+        distortionTextureStem_ = (dt != std::string::npos) ? fn.substr(0, dt) : fn;
+    }
 }
 
 void RibbonTrailData::Update(float /*speedRate*/) {
@@ -53,6 +63,11 @@ void RibbonTrailData::RegisterParams() {
     globalParameter_->Regist(groupName_, "MaxPoints", &maxPoints_);
     globalParameter_->Regist(groupName_, "EmitInterval", &emitInterval_);
     globalParameter_->Regist(groupName_, "TexturePath", &texturePath_);
+
+    // 時空歪み
+    globalParameter_->Regist(groupName_, "UseDistortion",         &useDistortion_);
+    globalParameter_->Regist(groupName_, "DistortionStrength",    &distortionStrength_);
+    globalParameter_->Regist(groupName_, "DistortionTexturePath", &distortionTexturePath_);
 }
 
 void RibbonTrailData::GetParams() {
@@ -66,7 +81,10 @@ void RibbonTrailData::GetParams() {
     lifetime_     = globalParameter_->GetValue<float>(groupName_, "Lifetime");
     maxPoints_    = globalParameter_->GetValue<int32_t>(groupName_, "MaxPoints");
     emitInterval_ = globalParameter_->GetValue<float>(groupName_, "EmitInterval");
-    texturePath_  = globalParameter_->GetValue<std::string>(groupName_, "TexturePath");
+    texturePath_            = globalParameter_->GetValue<std::string>(groupName_, "TexturePath");
+    useDistortion_          = globalParameter_->GetValue<bool>(groupName_, "UseDistortion");
+    distortionStrength_     = globalParameter_->GetValue<float>(groupName_, "DistortionStrength");
+    distortionTexturePath_  = globalParameter_->GetValue<std::string>(groupName_, "DistortionTexturePath");
 }
 
 void RibbonTrailData::InitParams() {
@@ -77,8 +95,11 @@ void RibbonTrailData::InitParams() {
     endWidth_     = 0.0f;
     lifetime_     = 0.25f;
     maxPoints_    = 48;
-    emitInterval_ = 0.005f;
-    texturePath_  = "";
+    emitInterval_          = 0.005f;
+    texturePath_           = "";
+    useDistortion_         = false;
+    distortionStrength_    = 0.1f;
+    distortionTexturePath_ = "";
 }
 
 void RibbonTrailData::AdjustParam() {
@@ -122,6 +143,31 @@ void RibbonTrailData::AdjustParam() {
 
     if (!texturePath_.empty()) {
         ImGui::TextDisabled("Path: %s", texturePath_.c_str());
+    }
+
+    ImGui::SeparatorText("時空歪み (Distortion)");
+    ImGui::Checkbox("有効化", &useDistortion_);
+
+    if (useDistortion_) {
+        ImGui::DragFloat("歪み強度", &distortionStrength_, 0.01f, 0.0f, 5.0f);
+
+        std::string prevDistStem = distortionTextureStem_;
+        distortionTextureSelector_.SelectFile("##DistTexSelect", kTextureFolderPath, distortionTextureStem_, "", true);
+
+        if (distortionTextureStem_ != prevDistStem) {
+            if (distortionTextureStem_.empty() || distortionTextureStem_ == "None") {
+                distortionTexturePath_ = "";
+            } else {
+                std::string candidate = std::string(kTextureFolderPath) + "/" + distortionTextureStem_ + ".dds";
+                if (std::filesystem::exists(candidate)) {
+                    distortionTexturePath_ = candidate;
+                }
+            }
+        }
+
+        if (!distortionTexturePath_.empty()) {
+            ImGui::TextDisabled("Path: %s", distortionTexturePath_.c_str());
+        }
     }
 
     ImGui::PopID();

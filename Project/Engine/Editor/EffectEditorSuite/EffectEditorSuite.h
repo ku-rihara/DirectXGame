@@ -22,6 +22,7 @@ class ParticleEditor;
 class DissolveEditor;
 class TimeScaleEditor;
 class RibbonTrailEditor;
+class PostEffectEditor;
 
 // エフェクトタイプ列挙型
 enum class EffectEditorType {
@@ -34,7 +35,8 @@ enum class EffectEditorType {
     Particle,
     Dissolve,
     TimeScale,
-    RibbonTrail
+    RibbonTrail,
+    PostEffect
 };
 
 class EffectEditorSuite {
@@ -94,9 +96,11 @@ private:
     std::unique_ptr<DissolveEditor> dissolveEditor_;
     std::unique_ptr<TimeScaleEditor> timeScaleEditor_;
     std::unique_ptr<RibbonTrailEditor> ribbonTrailEditor_;
+    std::unique_ptr<PostEffectEditor> postEffectEditor_;
 
 public:
     CameraEditor* GetCameraEditor() const { return cameraEditor_.get(); }
+    PostEffectEditor* GetPostEffectEditor() const { return postEffectEditor_.get(); }
 
     void SetViewProjection(ViewProjection* viewProjection);
     void SetCameraPreViewPos(const Vector3& pos);

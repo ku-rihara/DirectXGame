@@ -4,6 +4,7 @@ using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Dx/DxRenderTarget.h"
 #include "function/Log.h"
+#include<imgui.h>
 #include <cassert>
 #include <d3dx12.h>
 
@@ -73,7 +74,7 @@ void Distortion::CreateRootSignature() {
 }
 
 ///============================================================
-/// グラフィックスパイプライン作成（基底クラスに委譲）
+/// グラフィックスパイプライン作成
 ///============================================================
 void Distortion::CreateGraphicsPipeline() {
     BasePostEffect::CreateGraphicsPipeline();
@@ -87,10 +88,10 @@ void Distortion::SetDrawState(ID3D12GraphicsCommandList* commandList) {
 }
 
 ///============================================================
-/// 定数バッファ作成（このエフェクトはパラメータ不要）
+/// 定数バッファ作成
 ///============================================================
 void Distortion::CreateConstantBuffer() {
-    // 歪み強度はトレイル側の DistortionParam CB で制御するため不要
+  
 }
 
 ///============================================================
@@ -112,8 +113,5 @@ void Distortion::Draw(ID3D12GraphicsCommandList* commandList) {
 /// ImGuiデバッグ
 ///============================================================
 void Distortion::DebugParamImGui() {
-#ifdef _DEBUG
-    // 歪み強度はトレイル側で調整するためここでは表示のみ
-    ImGui::Text("Distortion PostEffect: active");
-#endif
+
 }

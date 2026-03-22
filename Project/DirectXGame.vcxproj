@@ -158,6 +158,7 @@
     <ClCompile Include="Engine\Pipeline\Particle\ParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\PipelineManager.cpp" />
     <ClCompile Include="Engine\Pipeline\RibbonTrail\RibbonTrailPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\RibbonTrail\RibbonTrailDistortionPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Skinning\SkinningCSPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.cpp" />
@@ -172,6 +173,8 @@
     <ClCompile Include="Engine\PostEffect\NormalScreen.cpp" />
     <ClCompile Include="Engine\PostEffect\Outline.cpp" />
     <ClCompile Include="Engine\PostEffect\PostEffectRenderer.cpp" />
+    <ClCompile Include="Engine\PostEffect\Distortion.cpp" />
+    <ClCompile Include="Engine\PostEffect\DistortionRenderTarget.cpp" />
     <ClCompile Include="Engine\PostEffect\RadialBlur.cpp" />
     <ClCompile Include="Engine\PostEffect\RandomNoize.cpp" />
     <ClCompile Include="Engine\PostEffect\Vignette.cpp" />
@@ -485,6 +488,7 @@
     <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\PipelineManager.h" />
     <ClInclude Include="Engine\Pipeline\RibbonTrail\RibbonTrailPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\RibbonTrail\RibbonTrailDistortionPipeline.h" />
     <ClInclude Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Skinning\SkinningCSPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.h" />
@@ -499,6 +503,8 @@
     <ClInclude Include="Engine\PostEffect\NormalScreen.h" />
     <ClInclude Include="Engine\PostEffect\Outline.h" />
     <ClInclude Include="Engine\PostEffect\PostEffectRenderer.h" />
+    <ClInclude Include="Engine\PostEffect\Distortion.h" />
+    <ClInclude Include="Engine\PostEffect\DistortionRenderTarget.h" />
     <ClInclude Include="Engine\PostEffect\RadialBlur.h" />
     <ClInclude Include="Engine\PostEffect\RandomNoize.h" />
     <ClInclude Include="Engine\PostEffect\Vignette.h" />

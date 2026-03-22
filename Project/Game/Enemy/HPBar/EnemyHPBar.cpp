@@ -5,8 +5,8 @@
 void EnemyHPBar::Init(float hpMax) {
 
     // スプライト生成
-    sprite_.reset(KetaEngine::Sprite::Create("boss_Hpbar01.dds", false));
-    hpSprite_.reset(KetaEngine::Sprite::Create("boss_Hpbar02.dds", false));
+    sprite_.reset(KetaEngine::Sprite::Create("Enemy/EnemyHPBar.dds", false));
+    hpSprite_.reset(KetaEngine::Sprite::Create("Enemy/EnemyHPGauge.dds", false));
 
     hpSprite_->SetAnchorPoint(Vector2::ZeroVector());
     sprite_->SetAnchorPoint(Vector2::ZeroVector());

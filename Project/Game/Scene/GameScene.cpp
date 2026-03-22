@@ -188,6 +188,7 @@ void GameScene::SetClassPointer() {
     gameObj_.enemyManager_->SetKillCounter(gameObj_.killCounter_.get());
     gameObj_.enemyManager_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.enemyManager_->SetEnemySpawner(gameObj_.enemySpawner_.get());
+    gameObj_.enemyManager_->SetDeathTimer(gameObj_.deathTimer_.get());
   
     gameObj_.enemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
     gameObj_.continuousEnemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());

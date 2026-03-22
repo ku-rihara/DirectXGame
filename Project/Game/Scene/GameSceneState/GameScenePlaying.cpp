@@ -61,8 +61,8 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
 
     obj.comboSupportSpriteUi_->Update();
 
-    // クリア判定
-    if (obj.enemyManager_->GetIsAllCleared() && obj.enemySpawner_->GetAllGroupsCompleted()||obj.player_->GetIsDeathRenditionFinish()) {
+    // ゲーム終了判定（ゲージが0になりプレイヤー死亡演出が終了したら）
+    if (obj.player_->GetIsDeathRenditionFinish()) {
         pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
     }
 }

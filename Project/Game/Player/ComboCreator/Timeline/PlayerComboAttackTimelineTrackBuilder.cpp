@@ -137,13 +137,12 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
     using RendType  = PlayerAttackRenditionData::Type;
     using TrackType = PlayerComboAttackTimelineData::TrackType;
 
-    // RenditionData::Type → TrackType の正引きマッピング
+    // RenditionData::Type → TrackType の正引きマッピング（PostEffectはリストから個別処理）
     struct RendToTrack { RendType rendType; TrackType trackType; };
     static constexpr RendToTrack kNormalMapping[] = {
         {RendType::CameraAction,   TrackType::CAMERA_ACTION},
         {RendType::HitStop,        TrackType::HIT_STOP},
         {RendType::ShakeAction,    TrackType::SHAKE_ACTION},
-        {RendType::PostEffect,     TrackType::POST_EFFECT},
         {RendType::ParticleEffect, TrackType::PARTICLE_EFFECT},
         {RendType::AudioAttack,    TrackType::AUDIO_ATTACK},
     };
@@ -151,7 +150,6 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
         {RendType::CameraAction,   TrackType::CAMERA_ACTION_ON_HIT},
         {RendType::HitStop,        TrackType::HIT_STOP_ON_HIT},
         {RendType::ShakeAction,    TrackType::SHAKE_ACTION_ON_HIT},
-        {RendType::PostEffect,     TrackType::POST_EFFECT_ON_HIT},
         {RendType::ParticleEffect, TrackType::PARTICLE_EFFECT_ON_HIT},
         {RendType::AudioAttack,    TrackType::AUDIO_ATTACK_ON_HIT},
     };
@@ -178,6 +176,45 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
 
         int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
         timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
+    }
+
+    // ポストエフェクト（複数対応）— リストから直接再構築
+    {
+        const auto& postEffectList = renditionData.GetPostEffectList();
+        for (const auto& param : postEffectList) {
+            if (param.fileName.empty() || param.fileName == "None") {
+                continue;
+            }
+
+            int32_t trackIdx = timelineDrawer_->AddTrack("ポストエフェクト");
+
+            PlayerComboAttackTimelineData::TrackInfo info;
+            info.type       = TrackType::POST_EFFECT;
+            info.trackIndex = trackIdx;
+            info.fileName   = param.fileName;
+            data_->AddTrackInfo(info);
+
+            int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+            timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
+        }
+
+        const auto& postEffectOnHitList = renditionData.GetPostEffectOnHitList();
+        for (const auto& param : postEffectOnHitList) {
+            if (param.fileName.empty() || param.fileName == "None") {
+                continue;
+            }
+
+            int32_t trackIdx = timelineDrawer_->AddTrack("ポストエフェクト (ヒット時)");
+
+            PlayerComboAttackTimelineData::TrackInfo info;
+            info.type       = TrackType::POST_EFFECT_ON_HIT;
+            info.trackIndex = trackIdx;
+            info.fileName   = param.fileName;
+            data_->AddTrackInfo(info);
+
+            int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+            timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
+        }
     }
 
     // ヒット時演出

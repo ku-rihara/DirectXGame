@@ -1,5 +1,6 @@
 #pragma once
 #include "Editor/BaseEffectEditor/BaseEffectData.h"
+#include "Easing/Easing.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -64,14 +65,17 @@ private:
     float luminanceWeightRate_ = 0.3f;
 
     // イージングパラメータ
-    float durationTime_    = 0.0f;  //< エフェクト持続時間 (0=無制限)
-    float paramStart_      = 0.0f;  //< 主要パラメータのイージング開始値
-    float paramEnd_        = 0.0f;  //< 主要パラメータのイージング終了値
-    int32_t easingTypeIndex_ = 0;   //< イージング種類 (0=Linear,1=EaseIn,2=EaseOut,3=EaseInOut)
+    float durationTime_ = 0.0f; //< エフェクト持続時間 (0=瞬時適用)
+    float paramStart_   = 0.0f; //< 主要パラメータのイージング開始値
+    float paramEnd_     = 0.0f; //< 主要パラメータのイージング終了値
+    int32_t easeType_   = 0;    //< EasingType にキャストして使用
 
-    // 内部タイマー
+    // イージングオブジェクト
+    Easing<float> paramEase_;
+    float easedParam_ = 0.0f;
+
+    // 内部タイマー（startTime 待機用）
     float currentTime_ = 0.0f;
-    float effectTime_  = 0.0f;  //< エフェクト開始からの経過時間
 
 public:
     //*----------------------------- getter Methods -----------------------------*//

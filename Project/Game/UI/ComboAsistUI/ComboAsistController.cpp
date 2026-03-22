@@ -79,7 +79,7 @@ void ComboAsistController::Update() {
                 [&](ConditionUIData&, ConditionUIData& next) {
                     ApplySlideOffset();
                     uiBuilder_.ApplyToCondition(next, [](BaseComboAsistUI& ui) { ui.SnapToTarget(); });
-                    visibilityController_.UpdateConditionVisibility(next);
+                    visibilityController_.SnapConditionVisibility(next);
                     playedAttacks_.clear();
                 });
         }

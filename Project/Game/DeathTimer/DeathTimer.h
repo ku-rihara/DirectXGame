@@ -4,6 +4,7 @@
 #include "DeathTimer/DeathTimerGauge.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // std
+#include <array>
 #include <cstdint>
 #include <memory>
 
@@ -12,30 +13,35 @@
 /// </summary>
 class DeathTimer {
 public:
+    static constexpr int32_t kMaxLevel = 6;
+
+public:
     DeathTimer()  = default;
     ~DeathTimer() = default;
 
     // 初期化、更新
     void Init();
-    void Update(float timer);
+    void Update(float deltaTime);
 
     void AdjustParam();
     void RegisterParams();
 
     /// <summary>
-    /// ダメージを受ける
+    /// 敵を倒したときに呼び出す（ゲージ増加＋レベルチェック）
     /// </summary>
-    /// <param name="damage">ダメージ量</param>
-    void TakeDamage(float timer);
+    /// <param name="gaugeAmount">増加量（敵ごとに異なる）</param>
+    /// <param name="comboCount">現在のコンボ数（コンボ倍率計算に使用）</param>
+    void OnEnemyKilled(float gaugeAmount, int32_t comboCount);
 
     /// <summary>
-    /// HPを回復する
+    /// ダメージを受ける（内部用）
     /// </summary>
-    void RecoverHP();
+    void TakeDamage(float deltaTime);
 
 private:
-    // イージング適応
+    void RecoverHP(float amount);
     void AdaptEasing();
+    void UpdateLevel();
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;
@@ -46,11 +52,25 @@ private:
     float currentHP_ = 0.0f;
     float maxHP_;
 
-    // 回復量
-    float levelUpRecoveryAmount_;
+    // レベル別減少レート（レベル1〜6）
+    std::array<float, kMaxLevel> decreaseRates_;
+
+    // レベルアップキル数閾値（レベル2〜6に上がるキル数、累計）
+    std::array<int32_t, kMaxLevel - 1> levelUpKillCounts_;
+
+    // 現在のゲージ減りレベル（1〜6）
+    int32_t currentLevel_ = 1;
+
+    // 累計キル数
+    int32_t killCount_ = 0;
+
+    // コンボ倍率パラメータ
+    int32_t comboStepSize_          = 10;   // 何コンボおきに倍率が上がるか
+    float comboMultiplierPerStep_   = 1.5f; // 1ステップごとの倍率
+    float comboMaxMultiplier_       = 5.0f; // 倍率の上限
 
     // イージング関連
-    bool isRecovering_        = false;
+    bool isRecovering_         = false;
     float recoveryStartValue_  = 0.0f;
     float recoveryTargetValue_ = 0.0f;
     float recoveryTimer_       = 0.0f;
@@ -59,9 +79,10 @@ private:
     bool isDeath_ = false;
 
 public:
-    // Getter
     const bool& GetIsDeath() const { return isDeath_; }
     float GetCurrentHP() const { return currentHP_; }
     float GetMaxHP() const { return maxHP_; }
+    int32_t GetCurrentLevel() const { return currentLevel_; }
+    int32_t GetKillCount() const { return killCount_; }
     DeathTimerGauge* GetDeathTimerGauge() const { return deathTimerGauge_.get(); }
 };

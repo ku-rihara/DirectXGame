@@ -96,19 +96,22 @@
         "escapeSpeed2": 0.4699999988079071,
         "escapeTime1": 1.2999999523162842,
         "escapeTime2": 1.2999999523162842,
+        "gaugeIncreaseValue1": 5.0,
+        "gaugeIncreaseValue2": 5.0,
         "hitbackRotateBackRatio1": 0.800000011920929,
         "hitbackRotateBackRatio2": 0.800000011920929,
         "hitbackRotateTime1": 0.5400000214576721,
         "hitbackRotateTime2": 0.5400000214576721,
         "hitbackRotateValue1": 0.5934119820594788,
         "hitbackRotateValue2": 0.5934119820594788,
+        "hpBarDisplayDistance": 11.0,
         "hpBarPosOffset1": [
             56.130001068115234,
-            99.29000091552734
+            200.0
         ],
         "hpBarPosOffset2": [
             56.130001068115234,
-            99.29000091552734
+            200.0
         ],
         "initScale1": [
             6.0,

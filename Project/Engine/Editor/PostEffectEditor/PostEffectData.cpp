@@ -1,8 +1,8 @@
 #include "PostEffectData.h"
 
 using namespace KetaEngine;
+#include"Frame/Frame.h"
 #include "PostEffect/GaussianFilter.h"
-#include <algorithm>
 #include "PostEffect/RadialBlur.h"
 #include "PostEffect/Dissolve.h"
 #include "PostEffect/Outline.h"
@@ -11,16 +11,30 @@ using namespace KetaEngine;
 
 void PostEffectData::Init(const std::string& name, const std::string& categoryName) {
     BaseEffectData::Init(name, categoryName);
-    folderPath_ = "PostEffectEditor/" + categoryName + "/Dates";
+    folderPath_ = "PostEffect/" + categoryName + "/Dates";
 
-    globalParameter_->CreateGroup(groupName_);
+    if (!globalParameter_->HasRegisters(groupName_)) {
+        globalParameter_->CreateGroup(groupName_);
+        RegisterParams();
+        globalParameter_->SyncParamForGroup(groupName_);
+    } else {
+        GetParams();
+    }
+
     InitParams();
-    RegisterParams();
-    globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void PostEffectData::InitParams() {
-    // デフォルト値はメンバ変数の初期値で管理
+    paramEase_.SetAdaptValue(&easedParam_);
+    paramEase_.SetStartValue(paramStart_);
+    paramEase_.SetEndValue(paramEnd_);
+
+    paramEase_.SetOnFinishCallback([this]() {
+        PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
+        playState_ = PlayState::STOPPED;
+    });
+
+    playState_ = PlayState::STOPPED;
 }
 
 void PostEffectData::RegisterParams() {
@@ -40,59 +54,52 @@ void PostEffectData::RegisterParams() {
     globalParameter_->Regist(groupName_, "dissolveColor",     &dissolveColor_);
 
     // Outline
-    globalParameter_->Regist(groupName_, "outlineWeightRate",      &outlineWeightRate_);
+    globalParameter_->Regist(groupName_, "outlineWeightRate",   &outlineWeightRate_);
 
     // LuminanceOutline
-    globalParameter_->Regist(groupName_, "luminanceWeightRate",    &luminanceWeightRate_);
+    globalParameter_->Regist(groupName_, "luminanceWeightRate", &luminanceWeightRate_);
 
     // イージング
-    globalParameter_->Regist(groupName_, "durationTime",    &durationTime_);
-    globalParameter_->Regist(groupName_, "paramStart",      &paramStart_);
-    globalParameter_->Regist(groupName_, "paramEnd",        &paramEnd_);
-    globalParameter_->Regist(groupName_, "easingTypeIndex", &easingTypeIndex_);
+    globalParameter_->Regist(groupName_, "durationTime", &durationTime_);
+    globalParameter_->Regist(groupName_, "paramStart",   &paramStart_);
+    globalParameter_->Regist(groupName_, "paramEnd",     &paramEnd_);
+    globalParameter_->Regist(groupName_, "easeType",     &easeType_);
 }
 
 void PostEffectData::GetParams() {
-  
-}
-
-///==========================================================
-/// イージング補間ヘルパー
-///==========================================================
-static float CalcEasedT(float t, int32_t type) {
-    t = std::clamp(t, 0.0f, 1.0f);
-    switch (type) {
-    case 1: return t * t;                          // EaseIn
-    case 2: return t * (2.0f - t);                 // EaseOut
-    case 3: return t < 0.5f ? 2.0f * t * t : -1.0f + (4.0f - 2.0f * t) * t; // EaseInOut
-    default: return t;                             // Linear
-    }
-}
-
-void PostEffectData::SetMainParam(float value) {
-    switch (GetPostEffectMode()) {
-    case PostEffectMode::GAUS:             gaussSigma_         = value; break;
-    case PostEffectMode::RADIALBLUR:       radialBlurWidth_    = value; break;
-    case PostEffectMode::DISSOLVE:         dissolveThreshold_  = value; break;
-    case PostEffectMode::OUTLINE:          outlineWeightRate_  = value; break;
-    case PostEffectMode::LUMINANCEOUTLINE: luminanceWeightRate_ = value; break;
-    default: break;
-    }
+    postEffectModeIndex_  = globalParameter_->GetValue<int32_t>(groupName_, "postEffectMode");
+    startTime_            = globalParameter_->GetValue<float>(groupName_, "startTime");
+    gaussSigma_           = globalParameter_->GetValue<float>(groupName_, "gaussSigma");
+    radialCenter_         = globalParameter_->GetValue<Vector2>(groupName_, "radialCenter");
+    radialBlurWidth_      = globalParameter_->GetValue<float>(groupName_, "radialBlurWidth");
+    dissolveThreshold_    = globalParameter_->GetValue<float>(groupName_, "dissolveThreshold");
+    dissolveColor_        = globalParameter_->GetValue<Vector3>(groupName_, "dissolveColor");
+    outlineWeightRate_    = globalParameter_->GetValue<float>(groupName_, "outlineWeightRate");
+    luminanceWeightRate_  = globalParameter_->GetValue<float>(groupName_, "luminanceWeightRate");
+    durationTime_         = globalParameter_->GetValue<float>(groupName_, "durationTime");
+    paramStart_           = globalParameter_->GetValue<float>(groupName_, "paramStart");
+    paramEnd_             = globalParameter_->GetValue<float>(groupName_, "paramEnd");
+    easeType_             = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
 }
 
 void PostEffectData::Play() {
     BaseEffectData::Play();
     currentTime_ = 0.0f;
-    effectTime_  = 0.0f;
 
-    // startTime が 0 ならば即時適用
+    // イージング設定
+    paramEase_.SetStartValue(paramStart_);
+    paramEase_.SetEndValue(paramEnd_);
+    paramEase_.SetMaxTime(durationTime_);
+    paramEase_.SetType(static_cast<EasingType>(easeType_));
+    paramEase_.Reset();
+    easedParam_ = paramStart_;
+
+    // startTime が 0 なら即時適用
     if (startTime_ <= 0.0f) {
-        // イージングが有効なら開始値を設定してから適用
         if (durationTime_ > 0.0f) {
             SetMainParam(paramStart_);
         }
         ApplyToRenderer();
-        // durationTime が 0 ならそのまま終了
         if (durationTime_ <= 0.0f) {
             playState_ = PlayState::STOPPED;
         }
@@ -104,28 +111,20 @@ void PostEffectData::Update(float speedRate) {
         return;
     }
 
-    currentTime_ += speedRate;
+    const float timeSpeed = speedRate * Frame::DeltaTime();
+
+    currentTime_ += timeSpeed;
 
     // startTime 待機中
     if (currentTime_ < startTime_) {
         return;
     }
 
-    effectTime_ += speedRate;
-
     if (durationTime_ > 0.0f) {
-        // イージングによるパラメータ更新
-        float t      = effectTime_ / durationTime_;
-        float easedT = CalcEasedT(t, easingTypeIndex_);
-        float param  = paramStart_ + (paramEnd_ - paramStart_) * easedT;
-        SetMainParam(param);
+        // Easing<float> によるパラメータ更新
+        paramEase_.Update(timeSpeed);
+        SetMainParam(easedParam_);
         ApplyToRenderer();
-
-        // 持続時間終了 → エフェクト無効化
-        if (effectTime_ >= durationTime_) {
-            PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
-            playState_ = PlayState::STOPPED;
-        }
     } else {
         // durationTime が 0 → 一度適用して終了
         ApplyToRenderer();
@@ -135,8 +134,20 @@ void PostEffectData::Update(float speedRate) {
 
 void PostEffectData::Reset() {
     currentTime_ = 0.0f;
-    effectTime_  = 0.0f;
-    playState_   = PlayState::STOPPED;
+    easedParam_  = 0.0f;
+    paramEase_.Reset();
+    playState_ = PlayState::STOPPED;
+}
+
+void PostEffectData::SetMainParam(float value) {
+    switch (GetPostEffectMode()) {
+    case PostEffectMode::GAUS:             gaussSigma_          = value; break;
+    case PostEffectMode::RADIALBLUR:       radialBlurWidth_     = value; break;
+    case PostEffectMode::DISSOLVE:         dissolveThreshold_   = value; break;
+    case PostEffectMode::OUTLINE:          outlineWeightRate_   = value; break;
+    case PostEffectMode::LUMINANCEOUTLINE: luminanceWeightRate_ = value; break;
+    default: break;
+    }
 }
 
 void PostEffectData::ApplyToRenderer() {
@@ -237,10 +248,9 @@ void PostEffectData::AdjustParam() {
     ImGui::Separator();
     ImGui::Text("--- Easing ---");
     ImGui::DragFloat("Duration Time", &durationTime_, 0.01f, 0.0f, 30.0f);
-    ImGui::DragFloat("Param Start", &paramStart_, 0.001f);
-    ImGui::DragFloat("Param End", &paramEnd_, 0.001f);
-    static const char* kEasingNames[] = {"Linear", "EaseIn", "EaseOut", "EaseInOut"};
-    ImGui::Combo("Easing Type", &easingTypeIndex_, kEasingNames, IM_ARRAYSIZE(kEasingNames));
+    ImGui::DragFloat("Param Start",   &paramStart_,   0.001f);
+    ImGui::DragFloat("Param End",     &paramEnd_,     0.001f);
+    ImGuiEasingTypeSelector("Easing Type", easeType_);
 
     // プレビュー適用ボタン
     ImGui::Separator();

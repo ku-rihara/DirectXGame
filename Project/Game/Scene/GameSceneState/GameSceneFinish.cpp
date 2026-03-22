@@ -17,11 +17,7 @@ void GameSceneFinish::Init() {
     isWaitingInput_ = false;
 
     // スプライト初期化
-    if (pOwner_->GetGameObj().player_->GetIsDeathRenditionFinish()) {
-        clearSprite_.reset(KetaEngine::Sprite::Create("GameOver.dds"));
-    } else {
-      clearSprite_.reset(KetaEngine::Sprite::Create("Clear.dds"));
-    }
+    clearSprite_.reset(KetaEngine::Sprite::Create("Clear.dds"));
 
     // イージングアニメーション再生
     clearSprite_->PlaySpriteEaseAnimation("finishSpritePos", "GameSceneFinish");
@@ -50,14 +46,10 @@ void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
     // フェードアウト
     alpha_ += timeSpeed;
 
-    // シーン遷移
+    // リザルトへ遷移
     if (alpha_ >= 1.0f) {
         isGameEnd_ = true;
-        if (pOwner_->GetGameObj().player_->GetIsDeathRenditionFinish()) {
-            KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
-        } else {
-            KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
-        }
+        KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
     }
 }
 

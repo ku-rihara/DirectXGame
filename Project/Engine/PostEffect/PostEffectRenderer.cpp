@@ -58,15 +58,34 @@ void PostEffectRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
         return;
     }
 
+    if (N == 1) {
+        // 1パス：シーンRT → エフェクト → ピンポン（GameView用SRV）→ NormalScreen → バックバッファ
+        auto* effect = effects_[static_cast<size_t>(effectStack_[0])].get();
+        effect->SetInputSRV(rt->GetRenderTextureGPUSrvHandle());
+        rt->SetPingPongAsRenderTarget(commandList);
+        effect->SetDrawState(commandList);
+        effect->Draw(commandList);
+
+        // ピンポンをSRVに遷移
+        rt->TransitionPingPongTo(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+        // ピンポン → バックバッファへコピー
+        auto* normalScreen = effects_[static_cast<size_t>(PostEffectMode::NONE)].get();
+        normalScreen->SetInputSRV(rt->GetPingPongGPUSrvHandle());
+        rt->SetBackBufferAsRenderTarget(commandList);
+        normalScreen->SetDrawState(commandList);
+        normalScreen->Draw(commandList);
+        return;
+    }
+
     for (size_t i = 0; i < N; ++i) {
         const bool isLast = (i == N - 1);
         auto* effect = effects_[static_cast<size_t>(effectStack_[i])].get();
 
         // --- 入力SRV設定 ---
         // pass0: シーンRT
-        // pass1: ピンポンRT (pass0の出力)
-        // pass2: シーンRT (pass1の出力、再利用)
-        // ...（偶数→シーンRT、奇数→ピンポンRT）
+        // pass1: ピンポンRT 
+        // pass2: シーンRT 
         if (i == 0) {
             effect->SetInputSRV(rt->GetRenderTextureGPUSrvHandle());
         } else if (i % 2 == 1) {
@@ -77,7 +96,7 @@ void PostEffectRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
 
         // --- 出力RT設定 ---
         if (isLast) {
-            // 最終パス：バックバッファへ（N>1 の場合のみ OMSetRenderTargets を戻す）
+            // N>1 の場合のみ OMSetRenderTargets を戻す
             if (N > 1) {
                 rt->SetBackBufferAsRenderTarget(commandList);
             }
@@ -92,7 +111,7 @@ void PostEffectRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
         effect->SetDrawState(commandList);
         effect->Draw(commandList);
 
-        // --- 中間パス後：出力RTをSRVに遷移（次パスで読み込むため）---
+        // --- 出力RTをSRVに遷移 ---
         if (!isLast) {
             if (i % 2 == 0) {
                 rt->TransitionPingPongTo(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
@@ -116,6 +135,7 @@ void PostEffectRenderer::DrawImGui() {
         for (int i = 1; i < static_cast<int>(PostEffectMode::COUNT); ++i) {
             auto mode    = static_cast<PostEffectMode>(i);
             bool enabled = IsEffectEnabled(mode);
+            ImGui::PushID(i);
             if (ImGui::Checkbox(kEffectNames[i], &enabled)) {
                 if (enabled) {
                     EnableEffect(mode);
@@ -123,6 +143,7 @@ void PostEffectRenderer::DrawImGui() {
                     DisableEffect(mode);
                 }
             }
+            ImGui::PopID();
         }
 
         // 現在のスタック順を表示
@@ -183,6 +204,15 @@ void PostEffectRenderer::SetViewProjection(const ViewProjection* viewProjection)
     for (size_t i = 0; i < effects_.size(); ++i) {
         effects_[i]->SetViewProjection(viewProjection_);
     }
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE PostEffectRenderer::GetPostProcessedSRVHandle() const {
+    auto* rt = dxCommon_->GetDxRenderTarget();
+    if (!effectStack_.empty()) {
+        // N==1 時はピンポンにエフェクト済み出力が残る
+        return rt->GetPingPongGPUSrvHandle();
+    }
+    return rt->GetRenderTextureGPUSrvHandle();
 }
 
 // 指定したモードの効果を取得

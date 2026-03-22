@@ -24,7 +24,7 @@ void PostEffectEditor::PlaySelectedAnimation() {
 }
 
 std::string PostEffectEditor::GetFolderName() const {
-    return "PostEffectEditor/";
+    return "PostEffect/";
 }
 
 void PostEffectEditor::PlayPostEffect(const std::string& effectName, const std::string& categoryName) {

@@ -113,6 +113,9 @@ public:
 
     const std::vector<PostEffectMode>& GetEffectStack() const { return effectStack_; }
 
+    /// <summary>GameView表示用SRV：エフェクト適用済みならピンポン、未適用ならシーンRT</summary>
+    D3D12_GPU_DESCRIPTOR_HANDLE GetPostProcessedSRVHandle() const;
+
     // setter
     void SetViewProjection(const ViewProjection* viewProjection);
     /// <summary>単一エフェクトモード設定（旧API互換。スタックをそのモード1つに置き換える）</summary>

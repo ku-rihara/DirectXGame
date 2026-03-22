@@ -17,9 +17,8 @@ class EffectEditorSuite;
 }
 
 enum class AttackPreviewMode {
-    NONE, // プレビュー無効
+    NONE,   // プレビュー無効
     SINGLE, // 単体再生
-    CONTINUOUS, // 連続再生
 };
 
 /// <summary>
@@ -48,14 +47,9 @@ public:
 private:
     // プレビュー更新処理
     void UpdateSingleMode();
-    void UpdateContinuousMode();
 
     // 攻撃実行制御
     void ExecuteAttack(PlayerComboAttackData* attackData);
-    void CheckAndAdvanceToNextAttack();
-
-    // 入力シミュレーション
-    bool ShouldTriggerNextAttack();
 
     // 演出再生（EffectEditor経由）
     void UpdatePreviewRenditions();
@@ -65,8 +59,6 @@ private:
     void ResetState();
     void SaveInitialState();
     void RestoreInitialState();
-
-    PlayerComboAttackData* FindFirstAttackInChain(PlayerComboAttackData* currentAttack);
 
 private:
     Player* player_                                = nullptr;
@@ -78,16 +70,9 @@ private:
 
     // 現在のプレビュー状態
     PlayerComboAttackData* currentAttackData_ = nullptr;
-    std::string nextAttackName_;
 
     // タイマー
-    float attackElapsedTime_     = 0.0f;
-    float buttonInputTimer_      = 0.0f;
-    int32_t buttonInputInterval_ = 5; // ボタン連打間隔（フレーム）
-
-    // フラグ
-    bool hasSimulatedInput_   = false;
-    bool isWaitingTransition_ = false;
+    float attackElapsedTime_ = 0.0f;
 
     // 原点スタートフラグ
     bool startFromOrigin_ = false;
@@ -106,11 +91,8 @@ public:
     // Getter
     AttackPreviewMode GetCurrentMode() const { return currentMode_; }
     bool IsPlaying() const { return currentMode_ != AttackPreviewMode::NONE; }
-    int32_t GetButtonInputInterval() const { return buttonInputInterval_; }
     std::string GetCurrentAttackName() const;
 
     // Setter
-    void SetButtonInputInterval(int32_t interval) { buttonInputInterval_ = interval; }
-    void SetPlayMode(AttackPreviewMode mode) { currentMode_ = mode; }
     void SetEditorSuite(KetaEngine::EffectEditorSuite* suite) { pEditorSuite_ = suite; }
 };

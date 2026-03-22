@@ -23,6 +23,7 @@ class Combo;
 class GameCamera;
 class EnemySpawner;
 class KillCounter;
+class DeathTimer;
 
 class EnemyManager {
 public:
@@ -75,6 +76,7 @@ private:
     Combo* pCombo_;
     KillCounter* pKillCounter_ = nullptr;
     EnemySpawner* pEnemySpawner_;
+    DeathTimer* pDeathTimer_ = nullptr;
   
     // damageReaction
     std::unique_ptr<EnemyDamageReactionController> damageReactionController_;
@@ -122,4 +124,5 @@ public:
     void SetCombo(Combo* combo);
     void SetKillCounter(KillCounter* killCounter);
     void SetEnemySpawner(EnemySpawner* enemySpawner);
+    void SetDeathTimer(DeathTimer* deathTimer);
 };

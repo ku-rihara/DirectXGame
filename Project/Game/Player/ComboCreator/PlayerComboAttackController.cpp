@@ -116,11 +116,7 @@ void PlayerComboAttackController::EditorUpdate() {
 
             // 停止 → 再生：プレビュー自動開始
             if (!prevTimelinePlaying_ && isNowPlaying) {
-                auto mode = preview_.GetCurrentMode();
-                if (mode == AttackPreviewMode::NONE) {
-                    mode = AttackPreviewMode::SINGLE;
-                }
-                preview_.StartPreview(attacks_[selectedIndex_].get(), mode);
+                preview_.StartPreview(attacks_[selectedIndex_].get(), AttackPreviewMode::SINGLE);
             }
 
             // 再生 → 停止：プレビュー自動停止
@@ -140,30 +136,8 @@ void PlayerComboAttackController::EditorUpdate() {
 }
 
 void PlayerComboAttackController::DrawPreviewUI() {
-    if (!ImGui::CollapsingHeader("プレビュー設定")) {
-        return;
-    }
-
     ImGui::PushID("PreviewControl");
-
-    // 再生モード選択
-    ImGui::Text("再生モード:");
-    ImGui::SameLine();
-
-    auto currentMode = preview_.GetCurrentMode();
-    if (ImGui::RadioButton("単体", currentMode == AttackPreviewMode::SINGLE)) {
-        preview_.SetPlayMode(AttackPreviewMode::SINGLE);
-    }
-    ImGui::SameLine();
-    if (ImGui::RadioButton("連続", currentMode == AttackPreviewMode::CONTINUOUS)) {
-        preview_.SetPlayMode(AttackPreviewMode::CONTINUOUS);
-    }
-
-    ImGui::Separator();
-
-    // プレビューUIを描画
     preview_.DrawUI();
-
     ImGui::PopID();
 }
 

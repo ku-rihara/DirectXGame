@@ -106,8 +106,7 @@ void ComboAttackAction::Update(float atkSpeed) {
 }
 
 void ComboAttackAction::InitializeAttack() {
-    // 演出・移動イージングをすぐ開始するため即ATTACKへ遷移
-    // コライダーの遅延有効化はUpdateAttack()内で行う
+
     order_ = Order::ATTACK;
 }
 

@@ -5,7 +5,7 @@ using namespace KetaEngine;
 #include <d3d12.h>
 
 // 最大RTV数の定義
-const uint32_t RtvManager::kMaxCount = 4;
+const uint32_t RtvManager::kMaxCount = 8;
 
 // シングルトンインスタンスの取得
 RtvManager* RtvManager::GetInstance() {

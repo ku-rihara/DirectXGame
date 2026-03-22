@@ -5,6 +5,7 @@ using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/TextureManager.h"
 #include "Pipeline/RibbonTrail/RibbonTrailPipeline.h"
+#include "Pipeline/RibbonTrail/RibbonTrailDistortionPipeline.h"
 #include <cassert>
 #include <cmath>
 #include <d3dx12.h>
@@ -64,6 +65,11 @@ void RibbonTrail::Init(size_t maxPoints) {
     constantBufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&cBufferData_));
     cBufferData_->viewProjection = MakeIdentity4x4();
 
+    // 歪み定数バッファ
+    distortionConstantBufferResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(RibbonDistortionCBuffer));
+    distortionConstantBufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&distortionCBufferData_));
+    distortionCBufferData_->strength = 0.1f;
+
     // デフォルトテクスチャをロード
     SetTexture("");
 }
@@ -74,6 +80,17 @@ void RibbonTrail::Init(size_t maxPoints) {
 void RibbonTrail::SetTexture(const std::string& texturePath) {
     const std::string& path = texturePath.empty() ? kDefaultTexturePath : texturePath;
     textureHandle_ = TextureManager::GetInstance()->LoadTexture(path);
+}
+
+///============================================================
+/// 歪みテクスチャ設定
+///============================================================
+void RibbonTrail::SetDistortionTexture(const std::string& texturePath) {
+    if (texturePath.empty()) {
+        distortionTextureHandle_ = UINT32_MAX;
+    } else {
+        distortionTextureHandle_ = TextureManager::GetInstance()->LoadTexture(texturePath);
+    }
 }
 
 ///============================================================
@@ -206,6 +223,8 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
             {u, 1.0f}};
     }
 
+    lastVertexCount_ = vertexCount;
+
     if (vertexCount < 4) {
         return;
     }
@@ -221,6 +240,38 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
         static_cast<UINT>(RibbonTrailRootParameter::Texture),
         TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
     commandList->DrawInstanced(static_cast<UINT>(vertexCount), 1, 0, 0);
+}
+
+///============================================================
+/// 時空歪みパス描画
+/// RibbonTrailDistortionPipeline がセット済みの状態で呼ぶ
+///============================================================
+void RibbonTrail::DrawDistortion(const ViewProjection& viewProj) {
+    if (!useDistortion_) {
+        return;
+    }
+    if (lastVertexCount_ < 4) {
+        return;
+    }
+    if (distortionTextureHandle_ == UINT32_MAX) {
+        return;
+    }
+
+    distortionCBufferData_->strength = distortionStrength_;
+    cBufferData_->viewProjection     = viewProj.matView_ * viewProj.matProjection_;
+
+    auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+    commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
+    commandList->SetGraphicsRootConstantBufferView(
+        static_cast<UINT>(RibbonTrailDistortionRootParameter::TransformationMatrix),
+        constantBufferResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(
+        static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionParam),
+        distortionConstantBufferResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootDescriptorTable(
+        static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionMap),
+        TextureManager::GetInstance()->GetTextureHandle(distortionTextureHandle_));
+    commandList->DrawInstanced(static_cast<UINT>(lastVertexCount_), 1, 0, 0);
 }
 
 ///============================================================

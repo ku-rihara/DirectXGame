@@ -56,6 +56,8 @@ public:
         float deathGravity;
         float deathRotateSpeed;
         float deathBurstTime;
+        // ゲージ増加値
+        float gaugeIncreaseValue;
     };
 
      struct DamageReactionAnimInfo {

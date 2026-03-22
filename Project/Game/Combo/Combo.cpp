@@ -85,11 +85,6 @@ void Combo::LevelUp() {
         return;
     }
     currentLevel_++; // レベルアップ
-
-    // コンボレベルアップ時にHP回復
-    if (deathTimer_) {
-        deathTimer_->RecoverHP();
-    }
 }
 
 void Combo::ComboTimerDecrement() {

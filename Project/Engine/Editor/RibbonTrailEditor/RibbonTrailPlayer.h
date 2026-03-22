@@ -60,14 +60,17 @@ public:
     ///========================================================
     /// Getter
     ///========================================================
-    Vector4            GetStartColor()   const;
-    Vector4            GetEndColor()     const;
-    float              GetStartWidth()   const;
-    float              GetEndWidth()     const;
-    float              GetLifetime()     const;
-    int32_t            GetMaxPoints()    const;
-    float              GetEmitInterval() const;
-    const std::string& GetTexturePath()  const;
+    Vector4            GetStartColor()             const;
+    Vector4            GetEndColor()               const;
+    float              GetStartWidth()             const;
+    float              GetEndWidth()               const;
+    float              GetLifetime()               const;
+    int32_t            GetMaxPoints()              const;
+    float              GetEmitInterval()           const;
+    const std::string& GetTexturePath()            const;
+    bool               GetUseDistortion()         const;
+    float              GetDistortionStrength()     const;
+    const std::string& GetDistortionTexturePath() const;
 };
 
 } // KetaEngine

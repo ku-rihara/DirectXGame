@@ -904,6 +904,12 @@
     <ClCompile Include="Engine\PostEffect\PostEffectRenderer.cpp">
       <Filter>Engine\PostEffect</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\PostEffect\Distortion.cpp">
+      <Filter>Engine\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\DistortionRenderTarget.cpp">
+      <Filter>Engine\PostEffect</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\PostEffect\RadialBlur.cpp">
       <Filter>Engine\PostEffect</Filter>
     </ClCompile>
@@ -1765,6 +1771,12 @@
     <ClInclude Include="Engine\PostEffect\PostEffectRenderer.h">
       <Filter>Engine\PostEffect</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PostEffect\Distortion.h">
+      <Filter>Engine\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\DistortionRenderTarget.h">
+      <Filter>Engine\PostEffect</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\PostEffect\RadialBlur.h">
       <Filter>Engine\PostEffect</Filter>
     </ClInclude>
@@ -2432,6 +2444,9 @@
     <ClCompile Include="Engine\Pipeline\RibbonTrail\RibbonTrailPipeline.cpp">
       <Filter>Engine\Pipeline\RibbonTrail</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Pipeline\RibbonTrail\RibbonTrailDistortionPipeline.cpp">
+      <Filter>Engine\Pipeline\RibbonTrail</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.cpp">
       <Filter>Engine\Editor\RibbonTrailEditor</Filter>
     </ClCompile>
@@ -2546,6 +2561,9 @@
       <Filter>Engine\3d\RibbonTrail</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\RibbonTrail\RibbonTrailPipeline.h">
+      <Filter>Engine\Pipeline\RibbonTrail</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\RibbonTrail\RibbonTrailDistortionPipeline.h">
       <Filter>Engine\Pipeline\RibbonTrail</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.h">
