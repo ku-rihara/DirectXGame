@@ -13,20 +13,24 @@ Sprite::~Sprite() {
     if (SpriteRegistry::GetInstance()) {
         SpriteRegistry::GetInstance()->UnregisterObject(this);
     }
+    // GlobalParameterのラムダ(生ポインタキャプチャ)をクリアしてダングリング防止
+    if (globalParameter_ && !groupName_.empty()) {
+        globalParameter_->ClearRegistersForGroup(groupName_);
+    }
 }
 
-Sprite* Sprite::Create(const std::string& textureName, bool isAbleEdit) {
+Sprite* Sprite::Create(const std::string& textureName, bool isAbleEdit, const std::string& name) {
     // 新しいSpriteインスタンスを作成
     std::unique_ptr<Sprite> sprite = std::make_unique<Sprite>();
 
-    sprite->ParamEditorSet(textureName, isAbleEdit);
+    sprite->ParamEditorSet(textureName, isAbleEdit, name);
     sprite->CreateSprite(sprite->filePath_ + textureName);
 
     SpriteRegistry::GetInstance()->RegisterObject(sprite.get());
     return sprite.release();
 }
 
-void Sprite::ParamEditorSet(const std::string& textureName, bool isAbleEditor) {
+void Sprite::ParamEditorSet(const std::string& textureName, bool isAbleEditor, const std::string& name) {
     if (!isAbleEditor) {
         return;
     }
@@ -40,13 +44,16 @@ void Sprite::ParamEditorSet(const std::string& textureName, bool isAbleEditor) {
         fileName = textureName.substr(lastSlash + 1);
     }
 
-    std::string uniqueGroupName = fileName;
+    // name が指定されていればファイル名の代わりに使う
+    std::string baseName = name.empty() ? fileName : fileName + "_" + name;
+
+    std::string uniqueGroupName = baseName;
     int32_t index               = 0;
 
     // グループが既に存在する場合、インデックスを追加
     while (SpriteRegistry::GetInstance()->HasGroupName(uniqueGroupName)) {
         index++;
-        uniqueGroupName = fileName + std::to_string(index);
+        uniqueGroupName = baseName + std::to_string(index);
     }
 
     groupName_ = uniqueGroupName;

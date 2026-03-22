@@ -1,42 +1,46 @@
 {
     "KillBonusUI": {
         "basePos": [
-            90.5,
-            110.5999984741211
+            678.0,
+            171.89999389648438
+        ],
+        "baseScale": [
+            0.5,
+            0.5
         ],
         "comboLabelOffset": [
-            0.0,
-            0.0
+            -43.70000076293945,
+            18.399999618530273
         ],
         "comboOffset": [
-            -61.20000076293945,
-            0.0
+            -30.100000381469727,
+            7.0
         ],
         "digitScale": [
-            1.0,
-            1.0
+            0.5,
+            0.5
         ],
         "digitSpacing": [
             0.0,
             0.0
         ],
+        "displayDuration": 2.0,
         "entryOffset": [
-            0.0,
+            -210.10000610351563,
             0.0
         ],
-        "fadeDuration": 0.0,
         "recoveryOffset": [
-            0.0,
-            0.0
+            -118.4000015258789,
+            23.5
         ],
         "simKillBonusPerKill": 0.5,
         "simKillLabelOffset": [
-            0.0,
-            0.0
+            -42.5,
+            45.20000076293945
         ],
         "simKillOffset": [
-            0.0,
-            0.0
+            -24.700000762939453,
+            32.5
         ],
         "toleranceFrames": 6
     }

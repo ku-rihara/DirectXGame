@@ -43,6 +43,9 @@ void DeathTimer::Update(float deltaTime) {
 }
 
 void DeathTimer::TakeDamage(float deltaTime) {
+#ifdef _DEBUG
+    if (isGodMode_) { return; }
+#endif
     currentHP_ -= decreaseRates_[currentLevel_ - 1] * deltaTime;
     if (currentHP_ < 0.0f) {
         currentHP_ = 0.0f;
@@ -116,6 +119,15 @@ void DeathTimer::AdjustParam() {
         for (int32_t i = 0; i < kMaxLevel - 1; ++i) {
             std::string label = "Lv" + std::to_string(i + 2) + " 到達キル数";
             ImGui::InputInt(label.c_str(), &levelUpKillCounts_[i]);
+        }
+
+        ImGui::Separator();
+        if (ImGui::Button(isGodMode_ ? "[DEBUG] HP減少: 停止中  →  再開" : "[DEBUG] HP減少: 動作中  →  停止")) {
+            isGodMode_ = !isGodMode_;
+        }
+        if (isGodMode_) {
+            ImGui::SameLine();
+            ImGui::TextColored({1.0f, 0.4f, 0.4f, 1.0f}, "GOD MODE ON");
         }
 
         ImGui::Separator();

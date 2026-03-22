@@ -46,7 +46,8 @@ void DistortionRenderTarget::CreateResource(uint32_t width, uint32_t height) {
     D3D12_HEAP_PROPERTIES heapProps{};
     heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
 
-    HRESULT hr = dxCommon_->GetDevice()->CreateCommittedResource(
+    HRESULT hr = 0;
+    hr = dxCommon_->GetDevice()->CreateCommittedResource(
         &heapProps,
         D3D12_HEAP_FLAG_NONE,
         &desc,

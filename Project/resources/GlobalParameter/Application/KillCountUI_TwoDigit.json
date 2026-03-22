@@ -1,7 +1,7 @@
 {
-    "KillCountUI_OneDigit": {
+    "KillCountUI_TwoDigit": {
         "positionOffset": [
-            291.1000061035156,
+            245.5,
             0.0
         ],
         "scaleOffset": [

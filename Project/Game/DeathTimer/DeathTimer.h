@@ -75,6 +75,10 @@ private:
 
     bool isDeath_ = false;
 
+#ifdef _DEBUG
+    bool isGodMode_ = true; // デバッグ用: HP減少を止める（初期ON）
+#endif
+
     // キル通知コールバック（comboMultiplierDisplay）
     std::function<void(int32_t)> onKillCallback_;
 

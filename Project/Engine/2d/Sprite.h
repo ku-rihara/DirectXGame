@@ -52,7 +52,7 @@ public:
     /// <param name="textureName">テクスチャのファイル名</param>
     /// <param name="isAbleEdit">パラメータ編集を可能にするかのフラグ</param>
     /// <returns>作成されたSpriteのポインタ</returns>
-    static Sprite* Create(const std::string& textureName, bool isAbleEdit = true);
+    static Sprite* Create(const std::string& textureName, bool isAbleEdit = true, const std::string& name = "");
     void CreateSprite(const std::string& textureName);
 
      ///=========================================================================================
@@ -95,7 +95,7 @@ private:
     /// </summary>
     /// <param name="textureName">テクスチャのファイル名</param>
     /// <param name="isAbleEditor">パラメータ編集を可能にするかのフラグ</param>
-    void ParamEditorSet(const std::string& textureName, bool isAbleEditor);
+    void ParamEditorSet(const std::string& textureName, bool isAbleEditor, const std::string& name = "");
 
 public:
     // Transform

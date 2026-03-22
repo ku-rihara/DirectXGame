@@ -80,7 +80,9 @@ void ComboAsistController::Update() {
                 [&](ConditionUIData&, ConditionUIData& next) {
                     ApplySlideOffset();
                     uiBuilder_.ApplyToCondition(next, [](BaseComboAsistUI& ui) { ui.SnapToTarget(); });
-                    visibilityController_.SnapConditionVisibility(next);
+                    // isInRange_をfalseにリセットしてからUpdateConditionVisibilityでScaleInを発火
+                    uiBuilder_.ApplyToCondition(next, [](BaseComboAsistUI& ui) { ui.SnapRangeState(false); });
+                    visibilityController_.UpdateConditionVisibility(next);
                     playedAttacks_.clear();
                 });
         }
@@ -102,25 +104,6 @@ void ComboAsistController::Update() {
         visibilityController_.UpdateConditionVisibility(*currentData);
         uiBuilder_.ApplyToCondition(*currentData, [](BaseComboAsistUI& ui) { ui.Update(); });
 
-        // ロックボタンの残りキル数表示
-        if (pKillCounter_ && pAttackController_) {
-            auto updateGroup = [&](const ComboPathBuilder::ComboPathGroup& pathGroup, ComboUIGroup& uiGroup) {
-                uiBuilder_.ForEachStepButton(pathGroup, uiGroup,
-                    [&](const ComboPathBuilder::ComboStep& step, ComboAsistButtonUI& btn) {
-                        int32_t ableLevel = 0;
-                        for (const auto& atk : pAttackController_->GetAllAttacks()) {
-                            if (atk && atk->GetGroupName() == step.attackName) {
-                                ableLevel = atk->GetAttackParam().ableDefeatLevel;
-                                break;
-                            }
-                        }
-                        const int32_t remaining = pKillCounter_->GetRemainingKillsForLevel(ableLevel);
-                        btn.UpdateRemainingKillCount(remaining, remainCountOffset_, remainCountDigitSpacing_, remainCountScale_);
-                    });
-            };
-            updateGroup(currentData->pathBuilder.GetXGroup(), currentData->xUIGroup);
-            updateGroup(currentData->pathBuilder.GetYGroup(), currentData->yUIGroup);
-        }
     }
 }
 

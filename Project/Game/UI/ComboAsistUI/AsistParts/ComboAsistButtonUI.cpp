@@ -12,10 +12,6 @@ void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const Layo
 
     const int32_t layerNum = 30;
 
-    for (auto& d : remainingCountDigits_) {
-        d.Init();
-    }
-
     // ボタンに応じたテクスチャを選択
     if (gamepadButton == XINPUT_GAMEPAD_Y) {
         uiSprite_.reset(KetaEngine::Sprite::Create("ButtomUI/OperateY.dds", false));
@@ -28,8 +24,7 @@ void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const Layo
         uiSprite_->SetAnchorPoint({0.5f, 0.5f});
     }
 
-    // ロックUI
-    // 最初から開放済みの場合は生成しない
+    // ロックUI（最初から開放済みの場合は生成しない）
     if (!isUnlocked_) {
         lockUI_.reset(KetaEngine::Sprite::Create("ComboSupportUI/AttackLock.dds", false));
         if (lockUI_) {
@@ -58,14 +53,12 @@ void ComboAsistButtonUI::Update() {
     shakePlayer_.Update();
 
     if (lockUI_) {
-        
         const Vector3& shakeOffset = shakePlayer_.GetTotalShakeOffset();
         lockUI_->transform_.pos = {
             currentDisplayPos_.x + shakeOffset.x,
             currentDisplayPos_.y + shakeOffset.y
         };
 
-        // 開放シェイク終了タイミングで非表示 + パーティクル発生
         if (isUnlockShakePlaying_ && shakePlayer_.IsFinished()) {
             isUnlockShakePlaying_ = false;
             lockUI_->SetIsDraw(false);
@@ -102,6 +95,14 @@ void ComboAsistButtonUI::SetUnlocked(bool isUnlocked) {
     }
 }
 
+void ComboAsistButtonUI::SetVisible(bool visible) {
+    BaseComboAsistUI::SetVisible(visible);
+    // 解放済みの場合、SetVisible(true) でロックUIが再表示されるのを防ぐ
+    if (visible && isUnlocked_ && lockUI_) {
+        lockUI_->SetIsDraw(false);
+    }
+}
+
 void ComboAsistButtonUI::TryPlayPushScaling(const std::string& attackName) {
     if (attackName_ == attackName) {
         PlayPushScaling();
@@ -123,20 +124,3 @@ void ComboAsistButtonUI::PlayScaleOut() {
     }
 }
 
-void ComboAsistButtonUI::SetVisible(bool visible) {
-    BaseComboAsistUI::SetVisible(visible);
-    // 解放済みの場合、SetVisible(true) でロックUIが再表示されるのを防ぐ
-    if (visible && isUnlocked_ && lockUI_) {
-        lockUI_->SetIsDraw(false);
-    }
-}
-
-void ComboAsistButtonUI::UpdateRemainingKillCount(int32_t count, const Vector2& offset, const Vector2& digitSpacing, const Vector2& scale) {
-    // ロック中のみ表示
-    const bool show = !isUnlocked_;
-    const int32_t ones = count % 10;
-    const int32_t tens = (count / 10) % 10;
-
-    remainingCountDigits_[0].Update(ones, currentDisplayPos_ + offset, scale, 1.0f, show);
-    remainingCountDigits_[1].Update(tens, currentDisplayPos_ + offset + digitSpacing, scale, 1.0f, show && (count >= 10));
-}

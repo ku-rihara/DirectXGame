@@ -221,10 +221,10 @@ void Easing<T>::Update(float deltaTime) {
 
     //  終了時間を過ぎたら終了処理
     if (currentTime_ < maxTime_ - finishTimeOffset_) {
-        isPlaying_ = false;
-        return;
+        return; // まだ再生中
     }
 
+    isPlaying_ = false;
     FinishBehavior();
 
     if (onFinishCallback_) { // Easing終了時のコールバック

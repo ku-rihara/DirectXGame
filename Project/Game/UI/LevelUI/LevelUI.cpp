@@ -2,7 +2,8 @@
 #include <imgui.h>
 
 void LevelUI::Init(Digit digit) {
-    sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.dds"));
+    const std::string digitName = (digit == Digit::ONE) ? "Lv_1" : "Lv_2";
+    sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.dds", true, digitName));
     if (sprite_) {
         sprite_->SetUVScale({kUVStep, 1.0f});
     }

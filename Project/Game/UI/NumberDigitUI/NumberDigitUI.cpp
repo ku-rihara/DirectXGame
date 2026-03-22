@@ -1,7 +1,7 @@
 #include "NumberDigitUI.h"
 
-void NumberDigitUI::Init() {
-    sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.dds"));
+void NumberDigitUI::Init(const std::string& name) {
+    sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.dds", false, name));
     if (sprite_) {
         sprite_->SetUVScale({kUVStep, 1.0f});
     }

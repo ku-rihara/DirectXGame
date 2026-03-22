@@ -1,9 +1,7 @@
 #pragma once
 #include "BaseComboAsistUI.h"
-#include "UI/NumberDigitUI/NumberDigitUI.h"
 #include "Editor/ShakeEditor/ShakePlayer.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
-#include <array>
 #include <cstdint>
 #include <string>
 
@@ -21,8 +19,6 @@ public:
     /// </summary>
     /// <param name="gamepadButton">XINPUT_GAMEPAD_* のボタン値</param>
     /// <param name="isUnlocked">開放済みか</param>
-    /// <param name="row">行番号</param>
-    /// <param name="col">列番号</param>
     /// <param name="layout">レイアウト情報</param>
     /// <param name="attackName">対応する攻撃名</param>
     void Init(int32_t gamepadButton, bool isUnlocked, const LayoutParam& layout, const std::string& attackName);
@@ -48,9 +44,6 @@ public:
     /// </summary>
     void TryPlayPushScaling(const std::string& attackName);
 
-    // ロック中の残りキル数表示（毎フレーム呼ぶ）
-    void UpdateRemainingKillCount(int32_t count, const Vector2& offset, const Vector2& digitSpacing, const Vector2& scale);
-
 public:
     const std::string& GetAttackName() const { return attackName_; }
 
@@ -61,14 +54,11 @@ protected:
 
 private:
     int32_t gamepadButton_ = 0;
-    bool isUnlocked_            = true;
-    bool isUnlockShakePlaying_  = false;
-    bool unlockSoundEnabled_    = true;
+    bool isUnlocked_           = true;
+    bool isUnlockShakePlaying_ = false;
+    bool unlockSoundEnabled_   = true;
     std::string attackName_;
 
     KetaEngine::ShakePlayer shakePlayer_;
     KetaEngine::ParticlePlayer unlockParticlePlayer_;
-
-    // ロック中残りキル数表示（1の位, 10の位）
-    std::array<NumberDigitUI, 2> remainingCountDigits_;
 };

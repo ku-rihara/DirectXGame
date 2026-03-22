@@ -21,6 +21,8 @@ void GameScene::Init() {
     // クラスポインタセット
     SetClassPointer();
 
+    easingEditor_.Init();
+
     // 初期ステートを設定
     state_ = std::make_unique<GameSceneIntro>(this);
     state_->Init();
@@ -76,6 +78,10 @@ void GameScene::Debug() {
     gameObj_.operateUI_->Debug();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
+    ImGui::End();
+
+    ImGui::Begin("EasingEditor");
+    easingEditor_.Edit();
     ImGui::End();
 
     ImGui::Begin("Rendition");

@@ -31,6 +31,15 @@ private:
     void RecalculateTargetPositions();
     void FlushSimKillWindow();
 
+    // デバッグプレビュー
+    void SpawnPreview();
+
+private:
+    bool    previewActive_         = false;
+    int32_t previewComboMultiplier_ = 3;
+    bool    previewHasSimKill_     = true;
+    int32_t previewSimKillValue_   = 2;
+
 private:
     // 同時キル検出
     struct SimKillTracker {

@@ -45,6 +45,8 @@
 #include "UI/OperateUI.h"
 // Sprite
 #include "2D/Sprite.h"
+// EasingEditor
+#include "Easing/EasingCreator/EasingEditor.h"
 
 /// <summary>
 /// ゲームシーン
@@ -114,6 +116,7 @@ private:
     GameObj gameObj_;
 
     std::unique_ptr<KetaEngine::DitherOcclusion> ditherOcclusion_;
+    KetaEngine::EasingEditor easingEditor_;
 
 public:
     GameObj& GetGameObj() { return gameObj_; }

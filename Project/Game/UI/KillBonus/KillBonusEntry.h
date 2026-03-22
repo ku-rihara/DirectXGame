@@ -17,11 +17,15 @@ struct KillBonusLayoutParam {
     Vector2 simKillLabelOffset;
     Vector2 digitSpacing;  // 桁間の間隔
     Vector2 digitScale;
-    float   fadeDuration;
+    Vector2 baseScale = {1.0f, 1.0f};  // スプライト全体のベーススケール
+    float   displayDuration = 2.0f;    // スポーン後の表示時間
 };
 
 /// キルボーナス通知1エントリ
 class KillBonusEntry {
+public:
+    enum class State { Spawning, Displaying, Closing, Finished };
+
 public:
     KillBonusEntry()  = default;
     ~KillBonusEntry() = default;
@@ -38,7 +42,7 @@ public:
     // シムキル確定後に遡って設定
     void SetSimKill(int32_t bonusValue);
 
-    bool IsFinished() const { return alpha_ <= 0.0f; }
+    bool IsFinished() const { return state_ == State::Finished; }
 
 private:
     std::unique_ptr<KetaEngine::Sprite> recoverySprite_;
@@ -53,13 +57,16 @@ private:
     int32_t comboMultiplier_   = 1;
     int32_t simKillBonusValue_ = 0;
 
-    float alpha_       = 1.0f;
-    float fadeTimer_   = 0.0f;
+    // ステート
+    State state_        = State::Spawning;
+    float displayTimer_ = 0.0f;
 
-    // スポーンスケールアニメ（0→1 OutBack）
-    float spawnScale_ = 0.0f;
+    // スケールアニメ（spawn: 0→1、close: 1→0）
+    float currentScale_ = 0.0f;
     KetaEngine::Easing<float> spawnEasing_;
+    KetaEngine::Easing<float> closeEasing_;
 
     Vector2 currentPos_;
+    bool posEasingActive_ = false;
     KetaEngine::Easing<Vector2> posEasing_;
 };

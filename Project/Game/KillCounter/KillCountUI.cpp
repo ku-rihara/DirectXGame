@@ -6,7 +6,13 @@
 void KillCountUI::Init(const KillCountDigit& digit) {
 
     /// Sprite create
-    sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.dds"));
+    std::string digitName;
+    switch (digit) {
+    case KillCountDigit::ONE:   digitName = "Kill_1"; break;
+    case KillCountDigit::TWO:   digitName = "Kill_2"; break;
+    case KillCountDigit::THREE: digitName = "Kill_3"; break;
+    }
+    sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.dds", true, digitName));
 
     CreateGroupName(digit);
 
