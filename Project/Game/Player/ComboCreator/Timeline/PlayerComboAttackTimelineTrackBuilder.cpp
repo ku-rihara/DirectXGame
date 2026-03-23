@@ -230,11 +230,12 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
         int32_t trackIdx      = timelineDrawer_->AddTrack(trackName);
 
         PlayerComboAttackTimelineData::TrackInfo info;
-        info.type          = m.trackType;
-        info.trackIndex    = trackIdx;
-        info.fileName      = param.fileName;
-        info.isCameraReset = param.isCameraReset;
-        info.volume        = param.volume;
+        info.type            = m.trackType;
+        info.trackIndex      = trackIdx;
+        info.fileName        = param.fileName;
+        info.isCameraReset   = param.isCameraReset;
+        info.volume          = param.volume;
+        info.repeatOnDamage  = param.repeatOnDamage;
         data_->AddTrackInfo(info);
 
         int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
@@ -317,8 +318,9 @@ void PlayerComboAttackTimelineTrackBuilder::SetupVibrationTrack() {
     PlayerComboAttackTimelineData::TrackInfo info;
     info.type                = PlayerComboAttackTimelineData::TrackType::VIBRATION;
     info.trackIndex          = trackIdx;
-    info.vibrationIntensity  = vibParam.intensity;
-    info.triggerByHit        = vibParam.triggerByHit;
+    info.vibrationIntensity = vibParam.intensity;
+    info.triggerByHit       = vibParam.triggerByHit;
+    info.repeatOnDamage     = vibParam.repeatOnDamage;
     data_->AddTrackInfo(info);
 
     int32_t startFrame    = KetaEngine::Frame::TimeToFrame(vibParam.startTiming);

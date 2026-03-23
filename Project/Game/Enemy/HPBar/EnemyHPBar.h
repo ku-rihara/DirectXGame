@@ -3,6 +3,8 @@
 #include "Vector2.h"
 #include <memory>
 
+class EnemyHPBarColorConfig;
+
 /// <summary>
 /// 敵のHPバー表示クラス
 /// </summary>
@@ -27,6 +29,8 @@ private:
     std::unique_ptr<KetaEngine::Sprite> sprite_;
     std::unique_ptr<KetaEngine::Sprite> hpSprite_;
 
+    EnemyHPBarColorConfig* colorConfig_ = nullptr;
+
     bool isSpawned_ = false;
     bool isDraw_    = false;
     float hpMax_;
@@ -42,4 +46,5 @@ public:
     void SetIsSpawned(const bool& is) { isSpawned_ = is; }
     void SetAlpha(float a) { alpha_ = a; }
     void SetIsDraw(const bool& is) { isDraw_ = is; }
+    void SetColorConfig(EnemyHPBarColorConfig* config) { colorConfig_ = config; }
 };

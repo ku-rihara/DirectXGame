@@ -6,6 +6,8 @@
 #include "DamageReaction/EnemyDamageReactionController.h"
 //BaseEnemy
 #include "Types/BaseEnemy.h"
+// HPBar
+#include "HPBar/EnemyHPBarColorConfig.h"
 
 /// std
 #include <json.hpp>
@@ -96,6 +98,9 @@ private:
 
     // 敵がすべていなくなったことを示すフラグ
     bool areAllEnemiesCleared_;
+
+    // HPバー色設定
+    EnemyHPBarColorConfig hpBarColorConfig_;
 
     // HPバー表示距離（プレイヤーからこの距離以内の敵にのみ表示）
     float hpBarDisplayDistance_ = 20.0f;

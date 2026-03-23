@@ -1,6 +1,6 @@
 {
-    "PlayerDeathGaugeIcon.dds": {
-        "layerNum": 12,
+    "DecimalPoint.dds": {
+        "layerNum": 5,
         "startAnchorPoint": [
             0.5,
             0.5
@@ -12,12 +12,12 @@
             1.0
         ],
         "startPosition": [
-            250.8000030517578,
-            112.5
+            0.0,
+            0.0
         ],
         "startScale": [
-            0.699999988079071,
-            0.699999988079071
+            1.0,
+            1.0
         ],
         "startUVScale": [
             1.0,

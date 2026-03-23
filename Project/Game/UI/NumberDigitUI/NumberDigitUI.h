@@ -7,7 +7,7 @@
 #include <string>
 
 /// <summary>
-/// 数字1桁スプライト（GlobalParameter不使用・動的生成向け）
+/// 数字1桁スプライト
 /// </summary>
 class NumberDigitUI {
 public:
@@ -18,7 +18,7 @@ public:
     void Update(int32_t digit, const Vector2& pos, const Vector2& scale, float alpha, bool isVisible = true);
 
 private:
-    static constexpr float kUVStep = 0.1f;
+    const float kUVStep = 0.1f;
 
     std::unique_ptr<KetaEngine::Sprite> sprite_;
 };

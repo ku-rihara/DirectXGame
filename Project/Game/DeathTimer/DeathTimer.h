@@ -79,12 +79,12 @@ private:
     bool isGodMode_ = true; // デバッグ用: HP減少を止める（初期ON）
 #endif
 
-    // キル通知コールバック（comboMultiplierDisplay）
-    std::function<void(int32_t)> onKillCallback_;
+    // キル通知コールバック（comboMultiplier: float）
+    std::function<void(float)> onKillCallback_;
 
 public:
     const bool& GetIsDeath() const { return isDeath_; }
-    void SetOnKillCallback(std::function<void(int32_t)> cb) { onKillCallback_ = std::move(cb); }
+    void SetOnKillCallback(std::function<void(float)> cb) { onKillCallback_ = std::move(cb); }
     float GetCurrentHP() const { return currentHP_; }
     float GetMaxHP() const { return maxHP_; }
     int32_t GetCurrentLevel() const { return currentLevel_; }

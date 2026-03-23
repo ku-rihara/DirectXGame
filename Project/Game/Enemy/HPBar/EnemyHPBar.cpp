@@ -1,4 +1,5 @@
 #include "EnemyHPBar.h"
+#include "EnemyHPBarColorConfig.h"
 #include "base/TextureManager.h"
 #include "MathFunction.h"
 
@@ -26,6 +27,12 @@ void EnemyHPBar::Update(float hp) {
     float currentScale = Lerp(0.0f, 1.0f, hp / hpMax_);
 
     hpSprite_->transform_.scale.x = currentScale;
+
+    // HP割合に応じた色を適用
+    if (colorConfig_) {
+        float ratio = (hpMax_ > 0.0f) ? (hp / hpMax_) : 1.0f;
+        hpSprite_->SetColor(colorConfig_->GetColor(ratio));
+    }
 
     sprite_->transform_.pos = position_;
 

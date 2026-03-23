@@ -67,6 +67,14 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     // ゲーム終了判定（ゲージが0になりプレイヤー死亡演出が終了したら）
     if (obj.player_->GetIsDeathRenditionFinish()) {
         pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
+        return;
+    }
+
+    // 全敵撃破チェック（スポーン完了済み＆生存敵ゼロ）
+    bool allSpawned = obj.enemySpawner_->GetAllGroupsCompleted() &&
+                      !obj.continuousEnemySpawner_->IsActive();
+    if (allSpawned && obj.enemyManager_->GetIsAllCleared()) {
+        pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
     }
 }
 

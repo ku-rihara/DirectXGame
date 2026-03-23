@@ -68,6 +68,9 @@ private:
 
     bool isAbleCollision_ = false;
 
+    // 実際にダメージが入った回数（敵のダメージインターバル通過時にインクリメント）
+    int32_t damageHitCount_ = 0;
+
 public:
     Vector3 GetCollisionPos() const override;
     const PlayerComboAttackData* GetComboAttackData() const { return comboAttackData_; }
@@ -75,6 +78,10 @@ public:
     int32_t GetCurrentLoopCount() const { return currentLoopCount_; }
     const bool& GetIsInLoopWait() const { return isInLoopWait_; }
     const bool& GetIsHit() const { return isHit_; }
+
+    // ダメージが確定した際に敵側から呼ぶ
+    void NotifyDamageHit() { ++damageHitCount_; }
+    int32_t GetDamageHitCount() const { return damageHitCount_; }
     const bool& GetIsFinish() const { return isFinish_; }
     const KetaEngine::WorldTransform* GetPlayerTransform() const { return baseTransform_; }
     const bool& GetHasHitEnemy() const { return hasHitEnemy_; }

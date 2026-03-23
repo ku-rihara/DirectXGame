@@ -1,12 +1,20 @@
 {
     "KillBonusUI": {
         "basePos": [
-            678.0,
+            887.7000122070313,
             171.89999389648438
         ],
         "baseScale": [
             0.5,
             0.5
+        ],
+        "comboDecimalDigitOffset": [
+            -10.0,
+            7.0
+        ],
+        "comboDecimalPointOffset": [
+            -16.0,
+            7.0
         ],
         "comboLabelOffset": [
             -43.70000076293945,
@@ -29,11 +37,12 @@
             -210.10000610351563,
             0.0
         ],
+        "maxEntries": 6,
         "recoveryOffset": [
             -118.4000015258789,
             23.5
         ],
-        "simKillBonusPerKill": 0.5,
+        "simKillBonusPerKill": 0.8600000143051147,
         "simKillLabelOffset": [
             -42.5,
             45.20000076293945

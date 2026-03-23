@@ -1,7 +1,8 @@
 #include "KillBonusEntry.h"
+#include <cmath>
 
-void KillBonusEntry::Init(int32_t comboMultiplier, bool hasSimKill, int32_t simKillBonusValue, const Vector2& spawnPos) {
-    comboMultiplier_   = comboMultiplier;
+void KillBonusEntry::Init(float comboBonusValue, bool hasSimKill, int32_t simKillBonusValue, const Vector2& spawnPos) {
+    comboBonusValue_   = comboBonusValue;
     hasSimKill_        = hasSimKill;
     simKillBonusValue_ = simKillBonusValue;
     currentPos_       = spawnPos;
@@ -14,8 +15,20 @@ void KillBonusEntry::Init(int32_t comboMultiplier, bool hasSimKill, int32_t simK
         recoverySprite_->SetAnchorPoint({0.5f, 0.5f});
     }
 
+    // コンボボーナス：整数桁
     comboDigit_.Init("ComboMul");
 
+    // コンボボーナス：小数点スプライト
+    comboDecimalPointSprite_.reset(KetaEngine::Sprite::Create("UI/DecimalPoint.dds", false));
+    if (comboDecimalPointSprite_) {
+        comboDecimalPointSprite_->SetAnchorPoint({0.5f, 0.5f});
+    }
+
+    // コンボボーナス：小数桁（十分位・百分位）
+    comboDecimalDigits_[0].Init("ComboDecimal_1");
+    comboDecimalDigits_[1].Init("ComboDecimal_2");
+
+    // コンボボーナスラベル（"コンボボーナスx"）
     comboLabelSprite_.reset(KetaEngine::Sprite::Create("UI/KillComboBonus.dds", false));
     if (comboLabelSprite_) {
         comboLabelSprite_->SetAnchorPoint({0.5f, 0.5f});
@@ -24,6 +37,7 @@ void KillBonusEntry::Init(int32_t comboMultiplier, bool hasSimKill, int32_t simK
     simKillDigits_[0].Init("SimKill_1");
     simKillDigits_[1].Init("SimKill_10");
 
+    // 同時撃破ボーナスラベル（"同時撃破ボーナス"）
     simKillLabelSprite_.reset(KetaEngine::Sprite::Create("UI/SimKillBonus.dds", false));
     if (simKillLabelSprite_) {
         simKillLabelSprite_->SetAnchorPoint({0.5f, 0.5f});
@@ -104,10 +118,28 @@ void KillBonusEntry::Update(float deltaTime, const KillBonusLayoutParam& layout)
         recoverySprite_->SetAlpha(1.0f);
     }
 
-    // コンボ倍率桁
-    comboDigit_.Update(comboMultiplier_, currentPos_ + layout.comboOffset, scaledDigit, 1.0f);
+    // コンボボーナス値の分解（整数部 + 小数2桁）
+    const int32_t intPart  = static_cast<int32_t>(comboBonusValue_);
+    const int32_t decPart  = static_cast<int32_t>(std::round((comboBonusValue_ - static_cast<float>(intPart)) * 100.0f));
+    const int32_t tenths   = decPart / 10;
+    const int32_t hundredths = decPart % 10;
 
-    // コンボラベル
+    // 整数桁
+    comboDigit_.Update(intPart % 10, currentPos_ + layout.comboOffset, scaledDigit, 1.0f);
+
+    // 小数点スプライト
+    if (comboDecimalPointSprite_) {
+        comboDecimalPointSprite_->SetIsDraw(true);
+        comboDecimalPointSprite_->transform_.pos   = currentPos_ + layout.comboDecimalPointOffset;
+        comboDecimalPointSprite_->transform_.scale = spriteScale;
+        comboDecimalPointSprite_->SetAlpha(1.0f);
+    }
+
+    // 小数桁（十分位・百分位）
+    comboDecimalDigits_[0].Update(tenths,    currentPos_ + layout.comboDecimalDigitOffset,                      scaledDigit, 1.0f);
+    comboDecimalDigits_[1].Update(hundredths, currentPos_ + layout.comboDecimalDigitOffset + layout.digitSpacing, scaledDigit, 1.0f);
+
+    // コンボボーナスラベル
     if (comboLabelSprite_) {
         comboLabelSprite_->SetIsDraw(true);
         comboLabelSprite_->transform_.pos   = currentPos_ + layout.comboLabelOffset;
@@ -115,8 +147,8 @@ void KillBonusEntry::Update(float deltaTime, const KillBonusLayoutParam& layout)
         comboLabelSprite_->SetAlpha(1.0f);
     }
 
-    // シムキルボーナス
-    const bool showSim = hasSimKill_;
+    // 同時撃破ボーナス
+    const bool showSim   = hasSimKill_;
     int32_t ones = simKillBonusValue_ % 10;
     int32_t tens = (simKillBonusValue_ / 10) % 10;
 
@@ -136,6 +168,14 @@ void KillBonusEntry::ShiftTo(const Vector2& newTarget) {
     posEasing_.SetEndValue(newTarget);
     posEasing_.Reset();
     posEasingActive_ = true;
+}
+
+void KillBonusEntry::ForceClose() {
+    if (state_ == State::Finished) { return; }
+    posEasingActive_ = false;   // 位置イージングをキャンセル（動かさない）
+    state_           = State::Closing;
+    closeEasing_.SetStartValue(currentScale_);
+    closeEasing_.Reset();
 }
 
 void KillBonusEntry::SetSimKill(int32_t bonusValue) {

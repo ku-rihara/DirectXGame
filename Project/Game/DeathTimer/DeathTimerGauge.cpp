@@ -19,11 +19,13 @@ void DeathTimerGauge::Init() {
 }
 
 void DeathTimerGauge::SpriteInit() {
+
     // 枠のスプライト
     frameSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGaugeFrame.dds", true));
     gaugeSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGauge.dds", true));
     gaugeIcon_.reset(KetaEngine::Sprite::Create("DeathGauge/PlayerDeathGaugeIcon.dds", true));
 
+    // 初期スケールを0
     frameSprite_->transform_.scale = Vector2::ZeroVector();
     gaugeSprite_->transform_.scale = Vector2::ZeroVector();
     gaugeIcon_->transform_.scale   = Vector2::ZeroVector();
@@ -55,7 +57,7 @@ void DeathTimerGauge::UpdateGaugeUV(float deltaTime) {
 
     // スプライトのUV位置を更新
     if (gaugeSprite_) {
-        gaugeSprite_->SetUVPosition(Vector2(uvOffset_,0.0f));
+        gaugeSprite_->SetUVPosition(Vector2(uvOffset_, 0.0f));
     }
 }
 
@@ -85,6 +87,7 @@ void DeathTimerGauge::UpdateGaugeColor() {
     }
 
     // 色を設定
+    gaugeIcon_->SetColor(Vector3(targetColor.x, targetColor.y, targetColor.z));
     gaugeSprite_->SetColor(Vector3(targetColor.x, targetColor.y, targetColor.z));
     gaugeSprite_->SetAlpha(targetColor.w);
 }

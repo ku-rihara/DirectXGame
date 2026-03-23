@@ -1,5 +1,6 @@
 {
     "JumpRotation0": {
+        "Rotation_Amplitude": 0.0,
         "Rotation_Anchor": [
             0.0,
             1.4900000095367432,
@@ -10,6 +11,7 @@
         "Rotation_IsActive": true,
         "Rotation_IsReturnToOrigin": false,
         "Rotation_MaxTime": 0.5299999713897705,
+        "Rotation_Period": 0.0,
         "Rotation_ReturnEaseType": 0,
         "Rotation_ReturnMaxTime": 1.0,
         "Rotation_endValue": [
@@ -17,6 +19,7 @@
             0.05235987901687622,
             0.0
         ],
+        "Scale_Amplitude": 0.0,
         "Scale_Anchor": [
             0.0,
             0.0,
@@ -27,6 +30,7 @@
         "Scale_IsActive": true,
         "Scale_IsReturnToOrigin": true,
         "Scale_MaxTime": 1.0,
+        "Scale_Period": 0.0,
         "Scale_ReturnEaseType": 0,
         "Scale_ReturnMaxTime": 0.0,
         "Scale_endValue": [
@@ -34,6 +38,7 @@
             1.0,
             1.0
         ],
+        "Translation_Amplitude": 0.0,
         "Translation_Anchor": [
             0.0,
             0.0,
@@ -45,6 +50,7 @@
         "Translation_IsLookAtDirection": false,
         "Translation_IsReturnToOrigin": false,
         "Translation_MaxTime": 1.0,
+        "Translation_Period": 0.0,
         "Translation_RailFileName": "",
         "Translation_ReturnEaseType": 0,
         "Translation_ReturnMaxTime": 1.0,

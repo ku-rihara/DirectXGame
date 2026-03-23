@@ -64,6 +64,7 @@ public:
         // 振動トラック用
         float vibrationIntensity = 0.5f;
         bool triggerByHit        = false;
+        bool repeatOnDamage      = false;  // ダメージヒットごとに発動
     };
 
 public:

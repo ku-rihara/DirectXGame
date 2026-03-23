@@ -2,11 +2,13 @@
 #include <imgui.h>
 
 void LevelUIController::Init() {
+    // グローバルパラメータ
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
+    // 
     for (int32_t i = 0; i < static_cast<int32_t>(LevelUI::Digit::Count); ++i) {
         digits_[i] = std::make_unique<LevelUI>();
         digits_[i]->Init(static_cast<LevelUI::Digit>(i));

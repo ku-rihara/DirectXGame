@@ -1,4 +1,5 @@
 #include "BaseEnemy.h"
+#include "Enemy/HPBar/EnemyHPBarColorConfig.h"
 
 // std
 #include <algorithm>
@@ -89,6 +90,13 @@ void BaseEnemy::Update() {
 
 
     MoveToLimit();
+
+    // HP割合に応じてボディカラーを更新
+    if (colorConfig_ && HPMax_ > 0.0f) {
+        float ratio = hp_ / HPMax_;
+        Vector3 c   = colorConfig_->GetColor(ratio);
+        SetBodyColor({c.x, c.y, c.z, 1.0f});
+    }
 
     BaseObject::Update();
 }
@@ -234,6 +242,9 @@ void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerAttackCollider* attackC
     if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
         return;
     }
+
+    // ダメージが確定したことをコライダーに通知（振動・音の連続発動用）
+    attackController->NotifyDamageHit();
 
     // Rootにし、受けたダメージの判定を行う
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));

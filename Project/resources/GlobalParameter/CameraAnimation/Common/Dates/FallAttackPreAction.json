@@ -6,6 +6,7 @@
         "resetRotateEaseType": 6,
         "resetTimePoint": 0.33000001311302185,
         "returnDelayTime": 0.0,
-        "timeMode": 1
+        "timeMode": 1,
+        "useLookAt": false
     }
 }

@@ -2,7 +2,9 @@
 #include <imgui.h>
 
 void LevelUI::Init(Digit digit) {
-    const std::string digitName = (digit == Digit::ONE) ? "Lv_1" : "Lv_2";
+
+    // スプライト初期化
+    const std::string digitName = (digit == Digit::ONE) ? "Lv_Digit1" : "Lv_Digit2";
     sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.dds", true, digitName));
     if (sprite_) {
         sprite_->SetUVScale({kUVStep, 1.0f});
@@ -10,6 +12,7 @@ void LevelUI::Init(Digit digit) {
 
     CreateGroupName(digit);
 
+    // グローバルパラメータ
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();

@@ -247,7 +247,7 @@ void GameScene::SetClassPointer() {
     {
         KillBonusController* killBonus = gameObj_.killBonusController_.get();
         DeathTimer* deathTimer = gameObj_.deathTimer_.get();
-        gameObj_.deathTimer_->SetOnKillCallback([killBonus](int32_t comboMultiplier) {
+        gameObj_.deathTimer_->SetOnKillCallback([killBonus](float comboMultiplier) {
             killBonus->OnEnemyKilled(comboMultiplier);
         });
         gameObj_.killBonusController_->SetOnSimKillBonusCallback([deathTimer](float bonus) {

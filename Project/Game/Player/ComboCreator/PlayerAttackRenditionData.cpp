@@ -36,9 +36,10 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
             globalParam->Regist(groupName, std::string(info.name) + "_OnHit_IsCameraReset", &param.isCameraReset);
         }
 
-        // オーディオの場合のみvolumeを登録
+        // オーディオの場合のみvolumeとrepeatOnDamageを登録
         if (info.type == Type::AudioAttack || info.type == Type::AudioHit) {
             globalParam->Regist(groupName, std::string(info.name) + "_OnHit_Volume", &param.volume);
+            globalParam->Regist(groupName, std::string(info.name) + "_OnHit_RepeatOnDamage", &param.repeatOnDamage);
         }
     }
 
@@ -56,10 +57,11 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
     }
 
     // 振動パラメータの登録
-    globalParam->Regist(groupName, "Vibration_StartTiming", &vibrationParam_.startTiming);
-    globalParam->Regist(groupName, "Vibration_Duration", &vibrationParam_.duration);
-    globalParam->Regist(groupName, "Vibration_Intensity", &vibrationParam_.intensity);
-    globalParam->Regist(groupName, "Vibration_TriggerByHit", &vibrationParam_.triggerByHit);
+    globalParam->Regist(groupName, "Vibration_StartTiming",   &vibrationParam_.startTiming);
+    globalParam->Regist(groupName, "Vibration_Duration",      &vibrationParam_.duration);
+    globalParam->Regist(groupName, "Vibration_Intensity",     &vibrationParam_.intensity);
+    globalParam->Regist(groupName, "Vibration_TriggerByHit",  &vibrationParam_.triggerByHit);
+    globalParam->Regist(groupName, "Vibration_RepeatOnDamage",&vibrationParam_.repeatOnDamage);
 
     // ポストエフェクトスロット（複数保存用）
     globalParam->Regist(groupName, "PostEffect_Count", &postEffectCount_);
@@ -182,9 +184,10 @@ void PlayerAttackRenditionData::AdjustParam() {
                 ImGui::Checkbox("Is Camera Reset", &param.isCameraReset);
             }
 
-            // オーディオの場合のみボリュームスライダーを表示
+            // オーディオの場合のみボリュームスライダーとrepeatOnDamageを表示
             if (info.type == Type::AudioAttack || info.type == Type::AudioHit) {
                 ImGui::SliderFloat("Volume", &param.volume, 0.0f, 1.0f);
+                ImGui::Checkbox("ダメージごとに再生", &param.repeatOnDamage);
             }
 
             ImGui::PopID();
@@ -220,6 +223,7 @@ void PlayerAttackRenditionData::AdjustParam() {
         ImGui::DragFloat("Duration", &vibrationParam_.duration, 0.01f, 0.0f, 5.0f);
         ImGui::SliderFloat("Intensity", &vibrationParam_.intensity, 0.0f, 1.0f);
         ImGui::Checkbox("Trigger By Hit", &vibrationParam_.triggerByHit);
+        ImGui::Checkbox("ダメージごとに振動", &vibrationParam_.repeatOnDamage);
 
         ImGui::PopID();
     }

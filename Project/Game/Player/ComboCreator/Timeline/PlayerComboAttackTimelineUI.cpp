@@ -341,6 +341,11 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
         ImGui::SliderFloat("ボリューム", &trackInfo->volume, 0.0f, 1.0f);
     }
 
+    // OnHitオーディオの場合のみrepeatOnDamageを表示
+    if (trackInfo->type == PlayerComboAttackTimelineData::TrackType::AUDIO_ATTACK_ON_HIT) {
+        ImGui::Checkbox("ダメージごとに再生", &trackInfo->repeatOnDamage);
+    }
+
     // 選択ファイルをインラインエディターで編集するボタン
     if (effectEditorSuite_ && !trackInfo->fileName.empty()) {
         auto editorType = GetEffectEditorType(trackInfo->type);
@@ -376,4 +381,5 @@ void PlayerComboAttackTimelineUI::DrawVibrationKeyFrameEditor(int32_t trackIndex
     }
 
     ImGui::Checkbox("ヒット時のみ振動", &trackInfo->triggerByHit);
+    ImGui::Checkbox("ダメージごとに振動", &trackInfo->repeatOnDamage);
 }

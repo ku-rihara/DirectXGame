@@ -27,6 +27,7 @@ class EnemyManager;
 class Combo;
 class KillCounter;
 class PlayerAttackCollider;
+class EnemyHPBarColorConfig;
 
 /// <summary>
 /// 敵の基底クラス
@@ -271,6 +272,8 @@ protected:
     Type type_;
 
     // HP
+    EnemyHPBarColorConfig* colorConfig_ = nullptr;
+
     float hp_;
     float HPMax_;
 
@@ -321,6 +324,10 @@ public:
     void SetGroupId(int groupId) { groupId_ = groupId; }
     void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
+    void SetHPBarColorConfig(EnemyHPBarColorConfig* config) {
+        hpBar_->SetColorConfig(config);
+        colorConfig_ = config;
+    }
     void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }
     void SetIsAttacking(bool value) { isAttacking_ = value; }
 

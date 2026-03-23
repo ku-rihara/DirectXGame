@@ -41,6 +41,9 @@ private:
     bool isVibrating_       = false;
     int32_t previousLoopCount_ = 0;
 
+    // ダメージヒット検出（連続演出用）
+    int32_t previousDamageHitCount_ = 0;
+
 public:
     PlayerAttackRendition()  = default;
     ~PlayerAttackRendition() = default;
@@ -55,9 +58,10 @@ public:
 private:
     void UpdateNormalRenditions(const PlayerAttackRenditionData& renditionData);
     void UpdateHitRenditions(const PlayerAttackRenditionData& renditionData);
+    void UpdateDamageHitRenditions(const PlayerAttackRenditionData& renditionData);
     void PlayRenditionEffect(PlayerAttackRenditionData::Type type, const PlayerAttackRenditionData::RenditionParam& param);
     void UpdateObjectAnimations(const PlayerAttackRenditionData& renditionData);
-    void UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit, float deltaTime);
+    void UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit, bool isNewDamageHit, float deltaTime);
 
 public:
     void PlayRendition();

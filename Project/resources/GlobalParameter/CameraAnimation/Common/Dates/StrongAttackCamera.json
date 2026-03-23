@@ -1,11 +1,10 @@
 {
-    "PlayerJunmp": {
+    "StrongAttackCamera": {
         "autoReturnToInitial": true,
-        "playbackSpeed": 1.0,
         "resetFovEaseType": 22,
         "resetPosEaseType": 22,
         "resetRotateEaseType": 22,
-        "resetTimePoint": 1.3700000047683716,
+        "resetTimePoint": 1.0,
         "returnDelayTime": 0.0,
         "timeMode": 1,
         "useLookAt": false

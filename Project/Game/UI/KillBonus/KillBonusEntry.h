@@ -11,7 +11,9 @@
 /// レイアウトパラメータ（KillBonusControllerが保持、Updateごとに渡す）
 struct KillBonusLayoutParam {
     Vector2 recoveryOffset;
-    Vector2 comboOffset;
+    Vector2 comboOffset;           // コンボ整数部の桁オフセット
+    Vector2 comboDecimalPointOffset; // 小数点スプライトのオフセット
+    Vector2 comboDecimalDigitOffset; // 小数第1位桁のオフセット（第2位は+digitSpacing）
     Vector2 comboLabelOffset;
     Vector2 simKillOffset;
     Vector2 simKillLabelOffset;
@@ -31,7 +33,7 @@ public:
     ~KillBonusEntry() = default;
 
     // 生成
-    void Init(int32_t comboMultiplier, bool hasSimKill, int32_t simKillBonusValue, const Vector2& spawnPos);
+    void Init(float comboBonusValue, bool hasSimKill, int32_t simKillBonusValue, const Vector2& spawnPos);
 
     // 更新（毎フレーム呼ぶ）
     void Update(float deltaTime, const KillBonusLayoutParam& layout);
@@ -41,6 +43,9 @@ public:
 
     // シムキル確定後に遡って設定
     void SetSimKill(int32_t bonusValue);
+
+    // 表示数超過時：位置を動かさずその場でクローズ
+    void ForceClose();
 
     bool IsFinished() const { return state_ == State::Finished; }
 
@@ -54,7 +59,7 @@ private:
     std::unique_ptr<KetaEngine::Sprite> simKillLabelSprite_;
 
     bool    hasSimKill_        = false;
-    int32_t comboMultiplier_   = 1;
+    float   comboBonusValue_   = 1.0f;
     int32_t simKillBonusValue_ = 0;
 
     // ステート
@@ -69,4 +74,8 @@ private:
     Vector2 currentPos_;
     bool posEasingActive_ = false;
     KetaEngine::Easing<Vector2> posEasing_;
+
+    // コンボボーナス小数表示用
+    std::unique_ptr<KetaEngine::Sprite> comboDecimalPointSprite_;
+    std::array<NumberDigitUI, 2>        comboDecimalDigits_;  // [0]=十分位, [1]=百分位
 };

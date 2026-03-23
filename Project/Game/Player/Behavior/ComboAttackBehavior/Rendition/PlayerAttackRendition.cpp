@@ -34,10 +34,11 @@ void PlayerAttackRendition::Reset() {
     }
 
     // 振動の状態をリセット
-    isVibrationPlayed_ = false;
-    vibrationTimer_    = 0.0f;
-    isVibrating_       = false;
-    previousLoopCount_ = 0;
+    isVibrationPlayed_      = false;
+    vibrationTimer_         = 0.0f;
+    isVibrating_            = false;
+    previousLoopCount_      = 0;
+    previousDamageHitCount_ = 0;
 
     // 振動を停止
     size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
@@ -61,10 +62,13 @@ void PlayerAttackRendition::Update(float deltaTime) {
     auto& renditionData = playerComboAttackData_->GetRenditionData();
     bool hasHit         = pPlayer_->GetPlayerCollisionInfo()->GetIsHit();
 
+    // ダメージヒット検出（実際にダメージが入ったフレームを検知）
+    int32_t currentDamageHitCount = pPlayer_->GetPlayerCollisionInfo()->GetDamageHitCount();
+    bool isNewDamageHit = (currentDamageHitCount != previousDamageHitCount_);
+
     // 通常演出の更新
     UpdateNormalRenditions(renditionData);
 
-    
     bool isNewHit = hasHit && !previousHasHit_;
     if (isNewHit) {
         // ヒット時演出のフラグをリセットして再度発動可能にする
@@ -75,11 +79,17 @@ void PlayerAttackRendition::Update(float deltaTime) {
     // 前フレームのヒット状態を更新
     previousHasHit_ = hasHit;
 
+    // ダメージヒット時演出（repeatOnDamage が有効な演出をダメージごとに再生）
+    if (isNewDamageHit) {
+        UpdateDamageHitRenditions(renditionData);
+        previousDamageHitCount_ = currentDamageHitCount;
+    }
+
     // オブジェクトアニメーションの更新
     UpdateObjectAnimations(renditionData);
 
     // 振動の更新
-    UpdateVibration(renditionData, hasHit, deltaTime);
+    UpdateVibration(renditionData, hasHit, isNewDamageHit, deltaTime);
 }
 
 void PlayerAttackRendition::UpdateNormalRenditions(const PlayerAttackRenditionData& renditionData) {
@@ -245,7 +255,20 @@ void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionDa
     }
 }
 
-void PlayerAttackRendition::UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit, float deltaTime) {
+void PlayerAttackRendition::UpdateDamageHitRenditions(const PlayerAttackRenditionData& renditionData) {
+    // OnHit演出の中でrepeatOnDamage=trueのものをダメージごとに再生
+    for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
+        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::PostEffect) {
+            continue;
+        }
+        const auto& param = renditionData.GetRenditionParamOnHitFromIndex(i);
+        if (param.repeatOnDamage && param.fileName != "" && param.fileName != "None") {
+            PlayRenditionEffect(static_cast<PlayerAttackRenditionData::Type>(i), param);
+        }
+    }
+}
+
+void PlayerAttackRendition::UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit, bool isNewDamageHit, float deltaTime) {
     const auto& vibParam = renditionData.GetVibrationParam();
 
     // ループカウントが増えた（クールタイム終了）場合、振動フラグをリセット
@@ -255,33 +278,40 @@ void PlayerAttackRendition::UpdateVibration(const PlayerAttackRenditionData& ren
         previousLoopCount_ = currentLoopCount;
     }
 
-    // トリガー条件のチェック
-    bool shouldTrigger = !vibParam.triggerByHit || (vibParam.triggerByHit && hasHit);
-
-    if (!shouldTrigger) {
-        return;
-    }
-
-    // すでに再生済みでない場合
-    if (!isVibrationPlayed_) {
-        // startTiming に達したら発動
-        if (currentTime_ >= vibParam.startTiming && vibParam.intensity > 0.0f) {
-            KetaEngine::Input::SetVibration(0, vibParam.intensity, vibParam.intensity);
-
-            // 再生済みに設定
-            isVibrationPlayed_ = true;
-            isVibrating_       = true;
-            vibrationTimer_    = 0.0f;
+    if (vibParam.repeatOnDamage) {
+        // ダメージヒットごとに振動する
+        if (isNewDamageHit && vibParam.intensity > 0.0f) {
+            size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
+            for (size_t padNo = 0; padNo < numGamepads; ++padNo) {
+                KetaEngine::Input::SetVibration(static_cast<int32_t>(padNo), vibParam.intensity, vibParam.intensity);
+            }
+            isVibrating_    = true;
+            vibrationTimer_ = 0.0f;
+        }
+    } else {
+        // 通常：トリガー条件チェックのうえ1回だけ振動
+        bool shouldTrigger = !vibParam.triggerByHit || (vibParam.triggerByHit && hasHit);
+        if (shouldTrigger && !isVibrationPlayed_) {
+            if (currentTime_ >= vibParam.startTiming && vibParam.intensity > 0.0f) {
+                size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
+                for (size_t padNo = 0; padNo < numGamepads; ++padNo) {
+                    KetaEngine::Input::SetVibration(static_cast<int32_t>(padNo), vibParam.intensity, vibParam.intensity);
+                }
+                isVibrationPlayed_ = true;
+                isVibrating_       = true;
+                vibrationTimer_    = 0.0f;
+            }
         }
     }
 
-    // 振動中の場合、タイマーを更新して停止判定
+    // 振動中のタイマー管理（共通）
     if (isVibrating_) {
         vibrationTimer_ += deltaTime;
-
         if (vibrationTimer_ >= vibParam.duration) {
-            // 振動を停止
-            KetaEngine::Input::SetVibration(0, 0.0f, 0.0f);
+            size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
+            for (size_t padNo = 0; padNo < numGamepads; ++padNo) {
+                KetaEngine::Input::SetVibration(static_cast<int32_t>(padNo), 0.0f, 0.0f);
+            }
             isVibrating_ = false;
         }
     }

@@ -21,13 +21,13 @@ public:
     void AdjustParam();
     void RegisterParams();
 
-    // 敵撃破イベント（comboMultiplier: 表示用整数倍率）
-    void OnEnemyKilled(int32_t comboMultiplier);
+    // 敵撃破イベント（comboBonusValue: コンボ倍率float）
+    void OnEnemyKilled(float comboBonusValue);
 
     void SetOnSimKillBonusCallback(std::function<void(float)> cb) { onSimKillBonusCallback_ = std::move(cb); }
 
 private:
-    void SpawnEntry(int32_t comboMultiplier);
+    void SpawnEntry(float comboBonusValue);
     void RecalculateTargetPositions();
     void FlushSimKillWindow();
 
@@ -35,16 +35,16 @@ private:
     void SpawnPreview();
 
 private:
-    bool    previewActive_         = false;
-    int32_t previewComboMultiplier_ = 3;
-    bool    previewHasSimKill_     = true;
-    int32_t previewSimKillValue_   = 2;
+    bool  previewActive_          = false;
+    float previewComboBonusValue_ = 2.0f;
+    bool  previewHasSimKill_      = true;
+    int32_t previewSimKillValue_  = 2;
 
 private:
     // 同時キル検出
     struct SimKillTracker {
-        int32_t           toleranceFrames = 0;  // 残りフレーム
-        int32_t           killCount       = 0;  // ウィンドウ内キル数
+        float             toleranceTime = 0.0f; // 残り時間（秒）
+        int32_t           killCount     = 0;    // ウィンドウ内キル数
         std::vector<int>  entryIndices;          // ウィンドウ内エントリのインデックス
     };
 
@@ -56,7 +56,8 @@ private:
     Vector2 basePos_;
     Vector2 entryOffset_;
 
-    int32_t simKillToleranceFrames_ = 6;   // 同時キル判定フレーム数
+    int32_t maxEntries_             = 3;    // 最大同時表示数（超えたら最古をその場でクローズ）
+    float   simKillToleranceTime_   = 0.1f; // 同時キル判定時間（秒）
     float   simKillBonusPerKill_    = 0.5f; // 1キルあたりのボーナスゲージ量
 
     KetaEngine::GlobalParameter* globalParameter_;

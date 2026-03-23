@@ -116,9 +116,10 @@ void PlayerAttackCollider::AttackStart(const PlayerComboAttackData* comboAttackD
     currentLoopCount_ = 0;
     loopWaitTimer_    = 0.0f;
     isInLoopWait_     = false;
-    isFinish_      = false;
-    isHit_         = false;
-    hasHitEnemy_   = false;
+    isFinish_        = false;
+    isHit_           = false;
+    hasHitEnemy_     = false;
+    damageHitCount_  = 0;
     hasHitTarget_  = false;
     hitTargetPos_  = {};
 

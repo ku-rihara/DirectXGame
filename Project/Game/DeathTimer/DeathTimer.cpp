@@ -44,7 +44,9 @@ void DeathTimer::Update(float deltaTime) {
 
 void DeathTimer::TakeDamage(float deltaTime) {
 #ifdef _DEBUG
-    if (isGodMode_) { return; }
+    if (isGodMode_) {
+        return; 
+    }
 #endif
     currentHP_ -= decreaseRates_[currentLevel_ - 1] * deltaTime;
     if (currentHP_ < 0.0f) {
@@ -62,7 +64,7 @@ void DeathTimer::OnEnemyKilled(float gaugeAmount, int32_t comboCount) {
     RecoverHP(gaugeAmount * multiplier);
 
     if (onKillCallback_) {
-        onKillCallback_(static_cast<int32_t>(multiplier));
+        onKillCallback_(multiplier);
     }
 }
 

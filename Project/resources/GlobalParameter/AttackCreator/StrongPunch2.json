@@ -2,6 +2,7 @@
     "StrongPunch2": {
         "Audio_Attack_FileName": "punchAir",
         "Audio_Attack_OnHit_FileName": "PlayerPunch",
+        "Audio_Attack_OnHit_RepeatOnDamage": false,
         "Audio_Attack_OnHit_StartTiming": 0.0,
         "Audio_Attack_OnHit_Volume": 1.0,
         "Audio_Attack_StartTiming": 0.0,
@@ -9,6 +10,7 @@
         "Audio_Attack_Volume": 0.4180000126361847,
         "Audio_Hit_FileName": "Enemythurst",
         "Audio_Hit_OnHit_FileName": "",
+        "Audio_Hit_OnHit_RepeatOnDamage": false,
         "Audio_Hit_OnHit_StartTiming": 0.0,
         "Audio_Hit_OnHit_Volume": 1.0,
         "Audio_Hit_StartTiming": 0.0,
@@ -56,6 +58,24 @@
         "PostEffectParam_OnHit_StartTiming": 0.0,
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
+        "PostEffect_Count": 0,
+        "PostEffect_OnHit_Count": 0,
+        "PostEffect_OnHit_Slot_0_FileName": "",
+        "PostEffect_OnHit_Slot_0_StartTiming": 0.0,
+        "PostEffect_OnHit_Slot_1_FileName": "",
+        "PostEffect_OnHit_Slot_1_StartTiming": 0.0,
+        "PostEffect_OnHit_Slot_2_FileName": "",
+        "PostEffect_OnHit_Slot_2_StartTiming": 0.0,
+        "PostEffect_OnHit_Slot_3_FileName": "",
+        "PostEffect_OnHit_Slot_3_StartTiming": 0.0,
+        "PostEffect_Slot_0_FileName": "",
+        "PostEffect_Slot_0_StartTiming": 0.0,
+        "PostEffect_Slot_1_FileName": "",
+        "PostEffect_Slot_1_StartTiming": 0.0,
+        "PostEffect_Slot_2_FileName": "",
+        "PostEffect_Slot_2_StartTiming": 0.0,
+        "PostEffect_Slot_3_FileName": "",
+        "PostEffect_Slot_3_StartTiming": 0.0,
         "RibbonTrailEffect_FileName": "",
         "RibbonTrailEffect_OnHit_FileName": "",
         "RibbonTrailEffect_OnHit_StartTiming": 0.0,
@@ -67,6 +87,7 @@
         "ShakeAction_TriggerByHit": true,
         "Vibration_Duration": 0.3166666626930237,
         "Vibration_Intensity": 0.23899999260902405,
+        "Vibration_RepeatOnDamage": false,
         "Vibration_StartTiming": 0.0,
         "Vibration_TriggerByHit": true,
         "ableDefeatLevel": 0,
@@ -104,6 +125,6 @@
             0.0,
             8.5
         ],
-        "power": 15.0
+        "power": 29.6200008392334
     }
 }

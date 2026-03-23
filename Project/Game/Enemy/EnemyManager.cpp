@@ -33,6 +33,9 @@ void EnemyManager::Init() {
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
+    // HPバー色設定初期化
+    hpBarColorConfig_.Init();
+
 }
 
 ///========================================================================================
@@ -59,6 +62,9 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     enemy->SetKillCounter(pKillCounter_);
     enemy->SetGroupId(groupID);
     enemy->Init(position);
+
+    // HPバー色設定を渡す
+    enemy->SetHPBarColorConfig(&hpBarColorConfig_);
 
     // エディター用にアニメーションリストを更新
     UpdateAvailableAnimationsForEditor(enemy.get());
@@ -208,6 +214,7 @@ void EnemyManager::AdjustParam() {
 
         ImGui::SeparatorText("HPバー設定");
         ImGui::DragFloat("HpBar表示距離", &hpBarDisplayDistance_, 0.5f, 0.0f, 200.0f);
+        hpBarColorConfig_.AdjustParam();
 
         // 敵のパラメータ編集
         for (size_t i = 0; i < static_cast<size_t>(BaseEnemy::Type::COUNT); ++i) {

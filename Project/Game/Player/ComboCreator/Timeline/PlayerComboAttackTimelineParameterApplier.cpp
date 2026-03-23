@@ -329,10 +329,11 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
 
         auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
             renditionData.GetRenditionParamOnHitFromIndex(rendIdx));
-        param.fileName      = trackInfo.fileName;
-        param.startTiming   = timing;
-        param.isCameraReset = trackInfo.isCameraReset;
-        param.volume        = trackInfo.volume;
+        param.fileName       = trackInfo.fileName;
+        param.startTiming    = timing;
+        param.isCameraReset  = trackInfo.isCameraReset;
+        param.volume         = trackInfo.volume;
+        param.repeatOnDamage = trackInfo.repeatOnDamage;
     }
     // オブジェクトアニメーション
     else if (typeInt >= static_cast<int>(TT::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TT::OBJ_ANIM_MAIN_HEAD)) {
@@ -357,10 +358,11 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
             if (!keyframes.empty()) {
                 float duration = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(keyframes[0].duration));
                 auto& vibParam = renditionData.GetVibrationParam();
-                vibParam.startTiming  = timing;
-                vibParam.duration     = duration;
-                vibParam.intensity    = trackInfo.vibrationIntensity;
-                vibParam.triggerByHit = trackInfo.triggerByHit;
+                vibParam.startTiming    = timing;
+                vibParam.duration       = duration;
+                vibParam.intensity      = trackInfo.vibrationIntensity;
+                vibParam.triggerByHit   = trackInfo.triggerByHit;
+                vibParam.repeatOnDamage = trackInfo.repeatOnDamage;
             }
         }
     }
