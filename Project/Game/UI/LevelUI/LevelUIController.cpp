@@ -8,7 +8,7 @@ void LevelUIController::Init() {
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    // 
+    // 数字UI初期化
     for (int32_t i = 0; i < static_cast<int32_t>(LevelUI::Digit::Count); ++i) {
         digits_[i] = std::make_unique<LevelUI>();
         digits_[i]->Init(static_cast<LevelUI::Digit>(i));

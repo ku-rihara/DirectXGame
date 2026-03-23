@@ -2,7 +2,7 @@
 #include "Frame/Frame.h"
 #include "GameSceneFinish.h"
 #include "GameScenePose.h"
-#include "GameClearInfo/GameClearInfo.h"
+#include "GameResultInfo/GameResultInfo.h"
 #include "Scene/GameScene.h"
 #include "utility/DitherOcclusion/DitherOcclusion.h"
 
@@ -46,9 +46,9 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.continuousEnemySpawner_->Update(timeSpeed);
     obj.enemyManager_->Update();
     obj.combo_->Update();
-    GameClearInfo::GetInstance()->RecordCombo(obj.combo_->GetComboCount());
-    GameClearInfo::GetInstance()->RecordKillCount(obj.killCounter_->GetKillCount());
-    GameClearInfo::GetInstance()->RecordLevel(obj.deathTimer_->GetCurrentLevel());
+    GameResultInfo::GetInstance()->RecordCombo(obj.combo_->GetComboCount());
+    GameResultInfo::GetInstance()->RecordKillCount(obj.killCounter_->GetKillCount());
+    GameResultInfo::GetInstance()->RecordLevel(obj.deathTimer_->GetCurrentLevel());
     obj.fireInjectors_->Update();
     obj.gameCamera_->Update();
     obj.comboLevelObjHolder_->Update(timeSpeed);

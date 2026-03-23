@@ -35,6 +35,7 @@ void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
         }
     }
 
+
     // gameIntro
     obj.gameIntroManager_->Update();
     obj.operateUI_->Update();

@@ -37,6 +37,11 @@ void SceneManager::Update() {
         ChangeScene("EDITOR");
     }
 
+    // 次のシーンが設定されている場合
+    if (Input::GetInstance()->PushKey(KeyboardKey::R) && Input::GetInstance()->PushKey(KeyboardKey::T)) {
+        ChangeScene("RESULT");
+    }
+
     if (scene_) {
         scene_->Update();
     }

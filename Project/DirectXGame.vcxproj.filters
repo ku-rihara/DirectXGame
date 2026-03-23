@@ -115,7 +115,7 @@
     <Filter Include="Game\Player">
       <UniqueIdentifier>{0445B7F8-38ED-4CA3-82FC-9AE0A8A86559}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\GameClearInfo">
+    <Filter Include="Game\GameResultInfo">
       <UniqueIdentifier>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Scene">
@@ -273,9 +273,6 @@
     </Filter>
     <Filter Include="Game\Enemy\Behavior">
       <UniqueIdentifier>{829F9566-32DE-4B9B-A855-48FC59A09583}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy\CollisionBox">
-      <UniqueIdentifier>{E0D7D2A5-E026-46D6-B573-F4B86F0FF9B7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\DamageReaction">
       <UniqueIdentifier>{3B3F382A-FB9F-430F-AD92-7318AE60A408}</UniqueIdentifier>
@@ -462,6 +459,9 @@
     </Filter>
     <Filter Include="Engine\Editor\Easing\EasingCreator">
       <UniqueIdentifier>{0E681000-5EC0-43E6-8D5D-B2D22CB2165F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\CollisionBox">
+      <UniqueIdentifier>{2334331e-2f2e-4059-9788-1a53d94abe27}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1051,9 +1051,6 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\Rendition\EnemyDamageRendition.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior\Rendition</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.cpp">
-      <Filter>Game\Enemy\CollisionBox</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.cpp">
       <Filter>Game\Enemy\DamageReaction</Filter>
     </ClCompile>
@@ -1070,6 +1067,9 @@
       <Filter>Game\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp">
+      <Filter>Game\Enemy\HPBar</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\HPBar\EnemyHPBarColorConfig.cpp">
       <Filter>Game\Enemy\HPBar</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Spawner\ContinuousEnemySpawner.cpp">
@@ -1885,11 +1885,11 @@
     <ClInclude Include="Game\ComboScene\ComboDirector.h">
       <Filter>Game\ComboScene</Filter>
     </ClInclude>
-    <ClCompile Include="Game\GameClearInfo\GameClearInfo.cpp">
-      <Filter>Game\GameClearInfo</Filter>
+    <ClCompile Include="Game\GameResultInfo\GameResultInfo.cpp">
+      <Filter>Game\GameResultInfo</Filter>
     </ClCompile>
-    <ClInclude Include="Game\GameClearInfo\GameClearInfo.h">
-      <Filter>Game\GameClearInfo</Filter>
+    <ClInclude Include="Game\GameResultInfo\GameResultInfo.h">
+      <Filter>Game\GameResultInfo</Filter>
     </ClInclude>
     <ClInclude Include="Game\KillCounter\KillCounter.h">
       <Filter>Game\KillCounter</Filter>
@@ -1954,9 +1954,6 @@
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\Rendition\EnemyDamageRendition.h">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior\Rendition</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h">
-      <Filter>Game\Enemy\CollisionBox</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.h">
       <Filter>Game\Enemy\DamageReaction</Filter>
     </ClInclude>
@@ -1973,6 +1970,9 @@
       <Filter>Game\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h">
+      <Filter>Game\Enemy\HPBar</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\HPBar\EnemyHPBarColorConfig.h">
       <Filter>Game\Enemy\HPBar</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Spawner\ContinuousEnemySpawner.h">
@@ -2495,8 +2495,8 @@
     <ClCompile Include="Engine\utility\TimeLine\TimelineDrawParameter.cpp">
       <Filter>Engine\utility\TimeLine</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\NextAttackIndicator\NextAttackIndicatorUI.cpp">
-      <Filter>Game\UI\NextAttackIndicator</Filter>
+    <ClCompile Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.cpp">
+      <Filter>Game\Enemy\CollisionBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2629,8 +2629,8 @@
     <ClInclude Include="Engine\utility\TimeLine\TimelineDrawParameter.h">
       <Filter>Engine\utility\TimeLine</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\NextAttackIndicator\NextAttackIndicatorUI.h">
-      <Filter>Game\UI\NextAttackIndicator</Filter>
+    <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h">
+      <Filter>Game\Enemy\CollisionBox</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

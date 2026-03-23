@@ -1,5 +1,5 @@
 #include "GameResultScene.h"
-#include "GameClearInfo/GameClearInfo.h"
+#include "GameResultInfo/GameResultInfo.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 #include "Scene/Manager/SceneManager.h"
@@ -8,7 +8,7 @@
 void GameResultScene::Init() {
     BaseScene::Init();
 
-    bgSprite_.reset(KetaEngine::Sprite::Create("white1x1.dds"));
+    bgSprite_.reset(KetaEngine::Sprite::Create("default.dds"));
 
     comboCountUI_ = std::make_unique<KillCountUIController>();
     comboCountUI_->SetGroupName("ResultComboCountUI");
@@ -24,7 +24,7 @@ void GameResultScene::Init() {
 void GameResultScene::Update() {
     BaseScene::Update();
 
-    auto* info = GameClearInfo::GetInstance();
+    auto* info = GameResultInfo::GetInstance();
     comboCountUI_->Update(info->GetMaxComboCount());
     killCountUI_->Update(info->GetTotalKillCount());
     levelUI_.Update(info->GetReachedLevel());
@@ -34,11 +34,11 @@ void GameResultScene::Update() {
         return;
     }
 
-    alpha_ += KetaEngine::Frame::DeltaTime();
+  /*  alpha_ += KetaEngine::Frame::DeltaTime();
     if (alpha_ >= 1.0f) {
-        GameClearInfo::GetInstance()->Reset();
+        GameResultInfo::GetInstance()->Reset();
         KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
-    }
+    }*/
 }
 
 void GameResultScene::CheckEndInput() {

@@ -200,6 +200,7 @@
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
     <ClCompile Include="Game\ComboScene\ComboDirector.cpp" />
+    <ClCompile Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.cpp" />
     <ClCompile Include="Game\KillCounter\KillCounter.cpp" />
     <ClCompile Include="Game\KillCounter\KillCountUI.cpp" />
     <ClCompile Include="Game\KillCounter\KillCountUIController.cpp" />
@@ -228,7 +229,6 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionTakeUpper.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\Rendition\EnemyDamageRendition.cpp" />
-    <ClCompile Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.cpp" />
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.cpp" />
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionData.cpp" />
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageRenditionData.cpp" />
@@ -546,8 +546,9 @@
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\ComboScene\ComboDirector.h" />
-    <ClCompile Include="Game\GameClearInfo\GameClearInfo.cpp" />
-    <ClInclude Include="Game\GameClearInfo\GameClearInfo.h" />
+    <ClCompile Include="Game\GameResultInfo\GameResultInfo.cpp" />
+    <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h" />
+    <ClInclude Include="Game\GameResultInfo\GameResultInfo.h" />
     <ClInclude Include="Game\KillCounter\KillCounter.h" />
     <ClInclude Include="Game\KillCounter\KillCountUI.h" />
     <ClInclude Include="Game\KillCounter\KillCountUIController.h" />
@@ -576,7 +577,6 @@
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionTakeUpper.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\Rendition\EnemyDamageRendition.h" />
-    <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h" />
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.h" />
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionData.h" />
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageRenditionData.h" />

@@ -59,7 +59,11 @@ void DeathTimer::OnEnemyKilled(float gaugeAmount, int32_t comboCount) {
     UpdateLevel();
 
     // コンボ倍率を計算して回復量に乗算
-    int32_t step     = (comboStepSize_ > 0) ? (comboCount / comboStepSize_) : 0;
+    int32_t step = 0;
+    if (comboStepSize_ > 0) {
+        step = comboCount / comboStepSize_;
+    }
+
     float multiplier = (std::min)(std::pow(comboMultiplierPerStep_, static_cast<float>(step)), comboMaxMultiplier_);
     RecoverHP(gaugeAmount * multiplier);
 

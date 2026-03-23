@@ -17,10 +17,11 @@ class PlayerAttackRenditionData {
 public:
     struct RenditionParam {
         std::string fileName;
-        float startTiming = 0.0f;
+        float startTiming    = 0.0f;
         float currentTime_;
-        bool isCameraReset = false;
-        float volume       = 1.0f; 
+        bool isCameraReset   = false;
+        float volume         = 1.0f;
+        bool repeatOnDamage  = false;  // ダメージヒットごとに再生（音用）
     };
 
     // オブジェクトアニメーションパラメータ
@@ -35,7 +36,8 @@ public:
         float startTiming;
         float duration;
         float intensity;
-        bool triggerByHit = false;
+        bool triggerByHit   = false;
+        bool repeatOnDamage = false;  // ダメージヒットごとに振動する
     };
 
     enum class Type {
