@@ -1891,7 +1891,13 @@
     <ClCompile Include="Game\ResultObj\GameResultInfo.cpp">
       <Filter>Game\ResultObj</Filter>
     </ClCompile>
+    <ClCompile Include="Game\ResultObj\GameResultUI.cpp">
+      <Filter>Game\ResultObj</Filter>
+    </ClCompile>
     <ClInclude Include="Game\ResultObj\GameResultInfo.h">
+      <Filter>Game\ResultObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ResultObj\GameResultUI.h">
       <Filter>Game\ResultObj</Filter>
     </ClInclude>
     <ClInclude Include="Game\KillCounter\KillCounter.h">

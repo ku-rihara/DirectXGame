@@ -40,7 +40,7 @@ void TitleScene::Init() {
 
     // プレイヤー設定
     player_->SetTitleBehavior();
-    player_->SetWorldPositionY(0.0f); // 落下開始位置はObjEaseAnimationのOriginal_Translationで管理
+    player_->SetWorldPositionY(0.0f); 
 
     // 演出・遷移クラス初期化
     sceneController_->Init(player_.get());

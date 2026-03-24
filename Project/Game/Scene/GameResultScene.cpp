@@ -4,31 +4,37 @@
 #include "Input/Input.h"
 #include "Scene/Manager/SceneManager.h"
 #include "Base/TextureManager.h"
+#include <imgui.h>
 
 void GameResultScene::Init() {
     BaseScene::Init();
 
     bgSprite_.reset(KetaEngine::Sprite::Create("default.dds"));
 
-    comboCountUI_ = std::make_unique<KillCountUIController>();
-    comboCountUI_->SetGroupName("ResultComboCountUI");
-    comboCountUI_->Init();
+    skyBox_ = std::make_unique<SkyBox>();
+    skyBox_->Init();
 
-    killCountUI_ = std::make_unique<KillCountUIController>();
-    killCountUI_->SetGroupName("ResultKillCountUI");
-    killCountUI_->Init();
+    resultStage_ = std::make_unique<ResultStage>();
+    resultStage_->Init("ResultScene.json");
 
-    levelUI_.Init();
+    resultRunner_ = std::make_unique<ResultRunner>();
+    resultRunner_->Init();
+
+    resultUI_ = std::make_unique<GameResultUI>();
+    resultUI_->Init();
 }
 
 void GameResultScene::Update() {
     BaseScene::Update();
 
-    auto* info = GameResultInfo::GetInstance();
-    comboCountUI_->Update(info->GetMaxComboCount());
-    killCountUI_->Update(info->GetTotalKillCount());
-    levelUI_.Update(info->GetReachedLevel());
+    skyBox_->Update();
+    resultStage_->Update();
+    resultRunner_->Update();
+    resultUI_->Update();
 
+    ViewProjectionUpdate();
+
+  
     if (!isStartFadeOut_) {
         CheckEndInput();
         return;
@@ -49,15 +55,21 @@ void GameResultScene::CheckEndInput() {
 }
 
 void GameResultScene::Debug() {
-    BaseScene::Debug();
-
 #ifdef _DEBUG
-    comboCountUI_->AdjustParam();
-    killCountUI_->AdjustParam();
-    levelUI_.AdjustParam();
+    BaseScene::Debug();
+    ImGui::Begin("Param");
+    ImGui::End();
 #endif
+}
+
+void GameResultScene::SkyBoxDraw() {
+    skyBox_->Draw(viewProjection_);
 }
 
 void GameResultScene::ViewProjectionUpdate() {
     BaseScene::ViewProjectionUpdate();
+}
+
+void GameResultScene::ViewProcess() {
+    viewProjection_.UpdateMatrix();
 }

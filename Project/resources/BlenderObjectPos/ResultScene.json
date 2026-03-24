@@ -1,0 +1,181 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "MESH",
+            "name": "Terrain_0",
+            "transform": {
+                "translation": [
+                    68.79754638671875,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "ResultObj/ResultRiverbank.obj"
+        },
+        {
+            "type": "MESH",
+            "name": "Terrain_0.001",
+            "transform": {
+                "translation": [
+                    68.79754638671875,
+                    202.22317504882812,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "ResultObj/ResultRiverbank.obj"
+        },
+        {
+            "type": "MESH",
+            "name": "Stairs_0",
+            "transform": {
+                "translation": [
+                    42.102359771728516,
+                    0.0,
+                    37.12788772583008
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "ResultObj/Stairs.obj"
+        },
+        {
+            "type": "MESH",
+            "name": "Bridge_0",
+            "transform": {
+                "translation": [
+                    95.973876953125,
+                    -93.11210632324219,
+                    39.17353820800781
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "ResultObj/bridge.obj"
+        },
+        {
+            "type": "MESH",
+            "name": "street_lamp_0",
+            "transform": {
+                "translation": [
+                    7.928540229797363,
+                    -48.82394790649414,
+                    119.57041931152344
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "ResultObj/street_lamp.obj"
+        },
+        {
+            "type": "MESH",
+            "name": "chair_0",
+            "transform": {
+                "translation": [
+                    66.81858825683594,
+                    -11.034951210021973,
+                    16.051576614379883
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "ResultObj/chair.obj"
+        },
+        {
+            "type": "MESH",
+            "name": "Stone.004_0",
+            "transform": {
+                "translation": [
+                    153.54931640625,
+                    35.040283203125,
+                    4.176437854766846
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "ResultObj/Stone.obj"
+        },
+        {
+            "type": "MESH",
+            "name": "Stone.004_0.001",
+            "transform": {
+                "translation": [
+                    153.54931640625,
+                    194.79298400878906,
+                    4.176437854766846
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "ResultObj/Stone.obj"
+        }
+    ]
+}
