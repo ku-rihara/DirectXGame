@@ -210,6 +210,7 @@
     <ClCompile Include="Game\Combo\Combo.cpp" />
     <ClCompile Include="Game\Combo\ComboUI.cpp" />
     <ClCompile Include="Game\Combo\ComboUIController.cpp" />
+    <ClCompile Include="Game\Combo\ComboChainGauge.cpp" />
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp" />
     <ClCompile Include="Engine\utility\CollisionPush\CollisionPushUtils.cpp" />
     <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp" />
@@ -291,6 +292,8 @@
     <ClCompile Include="Game\Player\Components\Parts\PlayerHandLeft.cpp" />
     <ClCompile Include="Game\Player\Components\Parts\PlayerHandRight.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
+    <ClCompile Include="Game\ResultObj\ResultRunner.cpp" />
+    <ClCompile Include="Game\ResultObj\ResultStage.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\EditorScene.cpp" />
     <ClCompile Include="Game\Scene\GameResultScene.cpp" />
@@ -546,9 +549,9 @@
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\ComboScene\ComboDirector.h" />
-    <ClCompile Include="Game\GameResultInfo\GameResultInfo.cpp" />
+    <ClCompile Include="Game\ResultObj\GameResultInfo.cpp" />
     <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h" />
-    <ClInclude Include="Game\GameResultInfo\GameResultInfo.h" />
+    <ClInclude Include="Game\ResultObj\GameResultInfo.h" />
     <ClInclude Include="Game\KillCounter\KillCounter.h" />
     <ClInclude Include="Game\KillCounter\KillCountUI.h" />
     <ClInclude Include="Game\KillCounter\KillCountUIController.h" />
@@ -558,6 +561,7 @@
     <ClInclude Include="Game\Combo\Combo.h" />
     <ClInclude Include="Game\Combo\ComboUI.h" />
     <ClInclude Include="Game\Combo\ComboUIController.h" />
+    <ClInclude Include="Game\Combo\ComboChainGauge.h" />
     <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h" />
     <ClInclude Include="Engine\utility\CollisionPush\CollisionPushUtils.h" />
     <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h" />
@@ -640,6 +644,8 @@
     <ClInclude Include="Game\Player\Components\Parts\PlayerHandLeft.h" />
     <ClInclude Include="Game\Player\Components\Parts\PlayerHandRight.h" />
     <ClInclude Include="Game\Player\Player.h" />
+    <ClInclude Include="Game\ResultObj\ResultRunner.h" />
+    <ClInclude Include="Game\ResultObj\ResultStage.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\EditorScene.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />

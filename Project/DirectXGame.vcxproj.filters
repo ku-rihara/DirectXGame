@@ -115,9 +115,6 @@
     <Filter Include="Game\Player">
       <UniqueIdentifier>{0445B7F8-38ED-4CA3-82FC-9AE0A8A86559}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\GameResultInfo">
-      <UniqueIdentifier>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Scene">
       <UniqueIdentifier>{C325ABFA-E72A-45F9-8FD6-9E27AA7EB5BB}</UniqueIdentifier>
     </Filter>
@@ -462,6 +459,9 @@
     </Filter>
     <Filter Include="Game\Enemy\CollisionBox">
       <UniqueIdentifier>{2334331e-2f2e-4059-9788-1a53d94abe27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\ResultObj">
+      <UniqueIdentifier>{83996ba3-f0aa-4587-9171-35821b3551e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1007,6 +1007,9 @@
       <Filter>Game\Combo</Filter>
     </ClCompile>
     <ClCompile Include="Game\Combo\ComboUIController.cpp">
+      <Filter>Game\Combo</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Combo\ComboChainGauge.cpp">
       <Filter>Game\Combo</Filter>
     </ClCompile>
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp">
@@ -1885,11 +1888,11 @@
     <ClInclude Include="Game\ComboScene\ComboDirector.h">
       <Filter>Game\ComboScene</Filter>
     </ClInclude>
-    <ClCompile Include="Game\GameResultInfo\GameResultInfo.cpp">
-      <Filter>Game\GameResultInfo</Filter>
+    <ClCompile Include="Game\ResultObj\GameResultInfo.cpp">
+      <Filter>Game\ResultObj</Filter>
     </ClCompile>
-    <ClInclude Include="Game\GameResultInfo\GameResultInfo.h">
-      <Filter>Game\GameResultInfo</Filter>
+    <ClInclude Include="Game\ResultObj\GameResultInfo.h">
+      <Filter>Game\ResultObj</Filter>
     </ClInclude>
     <ClInclude Include="Game\KillCounter\KillCounter.h">
       <Filter>Game\KillCounter</Filter>
@@ -1910,6 +1913,9 @@
       <Filter>Game\Combo</Filter>
     </ClInclude>
     <ClInclude Include="Game\Combo\ComboUIController.h">
+      <Filter>Game\Combo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Combo\ComboChainGauge.h">
       <Filter>Game\Combo</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h">
@@ -2498,6 +2504,12 @@
     <ClCompile Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.cpp">
       <Filter>Game\Enemy\CollisionBox</Filter>
     </ClCompile>
+    <ClCompile Include="Game\ResultObj\ResultRunner.cpp">
+      <Filter>Game\ResultObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ResultObj\ResultStage.cpp">
+      <Filter>Game\ResultObj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2631,6 +2643,12 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h">
       <Filter>Game\Enemy\CollisionBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ResultObj\ResultRunner.h">
+      <Filter>Game\ResultObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ResultObj\ResultStage.h">
+      <Filter>Game\ResultObj</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

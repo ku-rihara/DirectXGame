@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ComboUI.h"
+#include "ComboChainGauge.h"
 
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Easing
@@ -73,6 +74,9 @@ private:
     Vector2 hitSpriteOffset_;
     float hitSpriteRotate_   = 0.0f;
     const std::string kHitEasingFile_ = "HitSpriteScale.json";
+
+    // コンボチェインゲージ
+    std::unique_ptr<ComboChainGauge> chainGauge_;
 
     // behavior
     std::unique_ptr<BaseComboUIBehavior> behavior_;

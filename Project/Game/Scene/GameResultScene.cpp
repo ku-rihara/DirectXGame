@@ -1,5 +1,5 @@
 #include "GameResultScene.h"
-#include "GameResultInfo/GameResultInfo.h"
+#include "ResultObj/GameResultInfo.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 #include "Scene/Manager/SceneManager.h"

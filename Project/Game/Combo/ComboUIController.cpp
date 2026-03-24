@@ -31,6 +31,10 @@ void ComboUIController::Init() {
     hitScaleEasing_.Init(kHitEasingFile_);
     hitScaleEasing_.SetAdaptValue(&hitEaseScale_);
 
+    // コンボチェインゲージ生成
+    chainGauge_ = std::make_unique<ComboChainGauge>();
+    chainGauge_->Init();
+
     ChangeBehavior(std::make_unique<ComboWait>(this));
 }
 
@@ -68,12 +72,16 @@ void ComboUIController::AlphaAdaptForTime(float comboTime, float comboMaxTime) {
 
     if (comboMaxTime <= 0.0f) {
         alpha_ = 0.0f;
+        chainGauge_->Update(0.0f, 0.0f, 0.0f);
         return;
     }
     // 経過時間が増えるほど alpha が 1→0 へ落ちるが、EaseInQuint により
     // 大半の時間は 1 付近を保ち、残り僅かになってから急激にフェードアウトする
     const float elapsed = std::clamp(comboMaxTime - comboTime, 0.0f, comboMaxTime);
     alpha_ = EaseInQuint(1.0f, 0.0f, elapsed, comboMaxTime);
+
+    // ゲージ更新
+    chainGauge_->Update(comboTime, comboMaxTime, alpha_);
 }
 
 ///=========================================================
@@ -113,6 +121,8 @@ void ComboUIController::AdjustParam() {
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
         comboSprites_[i]->AdjustParam();
     }
+
+    chainGauge_->AdjustParam();
 
 #endif
 }

@@ -15,15 +15,16 @@ public:
     void RecordLevel(int32_t level);
     void Reset();
 
-    int32_t GetMaxComboCount() const;
-    int32_t GetTotalKillCount() const;
-    int32_t GetReachedLevel() const;
-
 private:
-    GameResultInfo() = default;
+    GameResultInfo()  = default;
     ~GameResultInfo() = default;
 
     int32_t maxComboCount_ = 0;
     int32_t killCount_     = 0;
     int32_t reachedLevel_  = 1;
+
+public:
+    int32_t GetMaxComboCount() const;
+    int32_t GetTotalKillCount() const;
+    int32_t GetReachedLevel() const;
 };

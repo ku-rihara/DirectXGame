@@ -2,7 +2,7 @@
 #include "Frame/Frame.h"
 #include "GameSceneFinish.h"
 #include "GameScenePose.h"
-#include "GameResultInfo/GameResultInfo.h"
+#include "ResultObj/GameResultInfo.h"
 #include "Scene/GameScene.h"
 #include "utility/DitherOcclusion/DitherOcclusion.h"
 
