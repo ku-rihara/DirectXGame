@@ -1,6 +1,6 @@
 {
-    "Numbers.dds": {
-        "layerNum": 15,
+    "SurvivalTimeCount.dds": {
+        "layerNum": 0,
         "startAnchorPoint": [
             0.5,
             0.5
@@ -12,15 +12,15 @@
             1.0
         ],
         "startPosition": [
-            230.0,
-            110.0
+            0.0,
+            0.0
         ],
         "startScale": [
             1.0,
             1.0
         ],
         "startUVScale": [
-            0.10000000149011612,
+            1.0,
             1.0
         ]
     }

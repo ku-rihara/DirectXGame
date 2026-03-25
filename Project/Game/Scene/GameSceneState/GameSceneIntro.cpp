@@ -56,8 +56,12 @@ void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
 
     // イントロ完了でプレイ状態へ遷移
     if (obj.gameIntroManager_->GetIsFinishStep(GameIntroManager::AppearPurpose)) {
+        ViewUpDate();
         pOwner_->ChangeState(std::make_unique<GameScenePlaying>(pOwner_));
+        return;
     }
+
+    ViewUpDate();
 }
 
 void GameSceneIntro::Debug() {

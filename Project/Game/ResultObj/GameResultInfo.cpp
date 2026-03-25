@@ -21,12 +21,18 @@ void GameResultInfo::RecordLevel(int32_t level) {
     }
 }
 
-void GameResultInfo::Reset() {
-    maxComboCount_ = 0;
-    killCount_     = 0;
-    reachedLevel_  = 1;
+void GameResultInfo::RecordSurvivalTime(int32_t seconds) {
+    survivalTimeSec_ = seconds;
 }
 
-int32_t GameResultInfo::GetMaxComboCount() const { return maxComboCount_; }
+void GameResultInfo::Reset() {
+    maxComboCount_   = 0;
+    killCount_       = 0;
+    reachedLevel_    = 1;
+    survivalTimeSec_ = 0;
+}
+
+int32_t GameResultInfo::GetMaxComboCount()   const { return maxComboCount_; }
 int32_t GameResultInfo::GetTotalKillCount()  const { return killCount_; }
 int32_t GameResultInfo::GetReachedLevel()    const { return reachedLevel_; }
+int32_t GameResultInfo::GetSurvivalTimeSec() const { return survivalTimeSec_; }

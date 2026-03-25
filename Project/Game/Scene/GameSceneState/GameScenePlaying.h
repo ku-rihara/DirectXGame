@@ -23,4 +23,5 @@ private:
     bool CheckPauseTransition();
 
     PauseController pauseController_;
+    float elapsedTimeSec_ = 0.f; ///< プレイ経過時間（秒）
 };

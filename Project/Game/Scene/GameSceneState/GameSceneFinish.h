@@ -2,7 +2,8 @@
 
 #include "2d/Sprite.h"
 #include "BaseGameSceneState.h"
-#include "Vector2.h"
+#include "Easing/Easing.h"
+// std
 #include <memory>
 
 /// <summary>
@@ -18,17 +19,18 @@ public:
     void Debug() override;
 
 private:
-    // フィニッシュステート固有の変数
-    float alpha_         = 0.0f;
-    bool isStartFadeOut_ = false;
-    bool isGameEnd_      = false;
+    enum class Phase {
+        kSpriteFallIn, // 上から降ってくるアニメーション待ち
+        kFadeIn,       // 画面フェードイン（暗転）
+        kDone,
+    };
 
+    Phase phase_ = Phase::kSpriteFallIn;
+    float alpha_ = 0.7f;
+
+    // 上から降ってくるクリアスプライト
     std::unique_ptr<KetaEngine::Sprite> clearSprite_;
 
-    bool isWaitingInput_ = false;
-
-    void CheckEndInput();
-
-public:
-    bool GetIsGameEnd() const { return isGameEnd_; }
+    // フェードイン用イージング（0.7 → 1.0）
+    KetaEngine::Easing<float> fadeEasing_;
 };

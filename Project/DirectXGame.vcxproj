@@ -551,9 +551,11 @@
     <ClInclude Include="Game\ComboScene\ComboDirector.h" />
     <ClCompile Include="Game\ResultObj\GameResultInfo.cpp" />
     <ClCompile Include="Game\ResultObj\GameResultUI.cpp" />
+    <ClCompile Include="Game\ResultObj\ResultUIItem.cpp" />
     <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h" />
     <ClInclude Include="Game\ResultObj\GameResultInfo.h" />
     <ClInclude Include="Game\ResultObj\GameResultUI.h" />
+    <ClInclude Include="Game\ResultObj\ResultUIItem.h" />
     <ClInclude Include="Game\KillCounter\KillCounter.h" />
     <ClInclude Include="Game\KillCounter\KillCountUI.h" />
     <ClInclude Include="Game\KillCounter\KillCountUIController.h" />

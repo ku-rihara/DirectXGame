@@ -1,9 +1,10 @@
 #include "GameResultScene.h"
-#include "ResultObj/GameResultInfo.h"
+#include "2d/SpriteRegistry.h"
+#include "Base/TextureManager.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
+#include "ResultObj/GameResultInfo.h"
 #include "Scene/Manager/SceneManager.h"
-#include "Base/TextureManager.h"
 #include <imgui.h>
 
 void GameResultScene::Init() {
@@ -34,22 +35,20 @@ void GameResultScene::Update() {
 
     ViewProjectionUpdate();
 
-  
     if (!isStartFadeOut_) {
         CheckEndInput();
         return;
     }
 
-  /*  alpha_ += KetaEngine::Frame::DeltaTime();
-    if (alpha_ >= 1.0f) {
-        GameResultInfo::GetInstance()->Reset();
-        KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
-    }*/
+    /*  alpha_ += KetaEngine::Frame::DeltaTime();
+      if (alpha_ >= 1.0f) {
+          GameResultInfo::GetInstance()->Reset();
+          KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
+      }*/
 }
 
 void GameResultScene::CheckEndInput() {
-    if (KetaEngine::Input::GetInstance()->TriggerKey(KeyboardKey::Space) ||
-        KetaEngine::Input::IsTriggerPad(0, GamepadButton::A)) {
+    if (KetaEngine::Input::GetInstance()->TriggerKey(KeyboardKey::Space) || KetaEngine::Input::IsTriggerPad(0, GamepadButton::A)) {
         isStartFadeOut_ = true;
     }
 }
@@ -58,6 +57,8 @@ void GameResultScene::Debug() {
 #ifdef _DEBUG
     BaseScene::Debug();
     ImGui::Begin("Param");
+    resultUI_->AdjustParam();
+    KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 #endif
 }

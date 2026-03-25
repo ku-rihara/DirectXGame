@@ -15,8 +15,12 @@ void GameScenePose::Init() {
 void GameScenePose::Update([[maybe_unused]] float timeSpeed) {
     // ポーズボタンで再びゲームに戻る
     if (pauseController_.IsPauseTriggered()) {
+        ViewUpDate();
         pOwner_->ChangeState(std::make_unique<GameScenePlaying>(pOwner_));
+        return;
     }
+
+    ViewUpDate();
 }
 
 void GameScenePose::Debug() {

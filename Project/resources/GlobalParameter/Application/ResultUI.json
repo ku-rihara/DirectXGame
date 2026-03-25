@@ -1,0 +1,82 @@
+{
+    "ResultUI": {
+        "Kill_basePos": [
+            451.0,
+            400.0
+        ],
+        "Kill_baseScale": [
+            0.8999999761581421,
+            0.8999999761581421
+        ],
+        "Kill_digitScaleOffset": [
+            -0.6899999976158142,
+            0.6800000071525574
+        ],
+        "Kill_digitSpacing": 83.0,
+        "Kill_labelOffset": [
+            0.0,
+            0.0
+        ],
+        "Kill_numberOffset": [
+            341.0,
+            4.0
+        ],
+        "Kill_startDelay": 0.0,
+        "Kill_unitOffset": [
+            537.0,
+            0.0
+        ],
+        "Level_basePos": [
+            451.0,
+            550.0
+        ],
+        "Level_baseScale": [
+            0.8999999761581421,
+            0.8999999761581421
+        ],
+        "Level_digitScaleOffset": [
+            -0.6899999976158142,
+            0.6800000071525574
+        ],
+        "Level_digitSpacing": 83.0,
+        "Level_labelOffset": [
+            0.0,
+            0.0
+        ],
+        "Level_numberOffset": [
+            284.0,
+            -30.0
+        ],
+        "Level_startDelay": 0.0,
+        "Level_unitOffset": [
+            537.0,
+            0.0
+        ],
+        "Survival_basePos": [
+            451.0,
+            250.0
+        ],
+        "Survival_baseScale": [
+            0.8999999761581421,
+            0.8999999761581421
+        ],
+        "Survival_digitScaleOffset": [
+            -0.6899999976158142,
+            0.6800000071525574
+        ],
+        "Survival_digitSpacing": 83.0,
+        "Survival_labelOffset": [
+            0.0,
+            0.0
+        ],
+        "Survival_numberOffset": [
+            341.0,
+            4.0
+        ],
+        "Survival_startDelay": 2.0,
+        "Survival_unitOffset": [
+            537.0,
+            0.0
+        ]
+    }
+}

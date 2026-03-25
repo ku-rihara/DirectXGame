@@ -46,9 +46,11 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.continuousEnemySpawner_->Update(timeSpeed);
     obj.enemyManager_->Update();
     obj.combo_->Update();
+    elapsedTimeSec_ += KetaEngine::Frame::DeltaTime();
     GameResultInfo::GetInstance()->RecordCombo(obj.combo_->GetComboCount());
     GameResultInfo::GetInstance()->RecordKillCount(obj.killCounter_->GetKillCount());
     GameResultInfo::GetInstance()->RecordLevel(obj.deathTimer_->GetCurrentLevel());
+    GameResultInfo::GetInstance()->RecordSurvivalTime(static_cast<int32_t>(elapsedTimeSec_));
     obj.fireInjectors_->Update();
     obj.gameCamera_->Update();
     obj.comboLevelObjHolder_->Update(timeSpeed);
@@ -64,8 +66,8 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
 
     obj.comboSupportSpriteUi_->Update();
 
-    // ゲーム終了判定（ゲージが0になりプレイヤー死亡演出が終了したら）
-    if (obj.player_->GetIsDeathRenditionFinish()) {
+    // ゲーム終了判定（デスタイマーが0になったら即終了）
+    if (obj.deathTimer_->GetIsDeath()) {
         pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
         return;
     }
@@ -73,9 +75,13 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     // 全敵撃破チェック（スポーン完了済み＆生存敵ゼロ）
     bool allSpawned = obj.enemySpawner_->GetAllGroupsCompleted() &&
                       !obj.continuousEnemySpawner_->IsActive();
+
     if (allSpawned && obj.enemyManager_->GetIsAllCleared()) {
         pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
+        return;
     }
+
+    ViewUpDate();
 }
 
 void GameScenePlaying::Debug() {

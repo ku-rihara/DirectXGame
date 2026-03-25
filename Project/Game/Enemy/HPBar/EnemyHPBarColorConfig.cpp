@@ -4,7 +4,10 @@
 
 void EnemyHPBarColorConfig::Init() {
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_);
     RegisterParams();
+    globalParameter_->LoadFile(groupName_, "Application");
+    globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void EnemyHPBarColorConfig::RegisterParams() {

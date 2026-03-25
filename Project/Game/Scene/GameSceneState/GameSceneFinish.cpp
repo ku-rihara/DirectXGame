@@ -1,10 +1,7 @@
 #include "GameSceneFinish.h"
-#include "base/TextureManager.h"
-#include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
-#include "Frame/Frame.h"
-#include "Input/Input.h"
 #include "Scene/GameScene.h"
 #include "Scene/Manager/SceneManager.h"
+#include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 
 GameSceneFinish::GameSceneFinish(GameScene* gameScene)
     : BaseGameSceneState("GameSceneFinish", gameScene) {
@@ -12,51 +9,56 @@ GameSceneFinish::GameSceneFinish(GameScene* gameScene)
 }
 
 void GameSceneFinish::Init() {
-    alpha_ = 0.0f;
-    isStartFadeOut_ = false;
-    isWaitingInput_ = false;
+    phase_ = Phase::kSpriteFallIn;
+    alpha_ = 0.7f;
 
-    // スプライト初期化
+    // 暗転スプライトを即表示（alpha 0.7 の暗いオーバーレイ）
+    auto* screen = pOwner_->GetGameObj().screenSprite_.get();
+    screen->SetIsDraw(true);
+    screen->SetAlpha(alpha_);
+
+    // 上から降ってくるスプライト
     clearSprite_.reset(KetaEngine::Sprite::Create("Clear.dds"));
-
-    // イージングアニメーション再生
     clearSprite_->PlaySpriteEaseAnimation("finishSpritePos", "GameSceneFinish");
+
+    // フェードイン用イージング（0.7 → 1.0）
+    KetaEngine::EasingParameter<float> fadeParam;
+    fadeParam.type       = EasingType::OutCubic;
+    fadeParam.startValue = 0.7f;
+    fadeParam.endValue   = 1.0f;
+    fadeParam.maxTime    = 1.0f;
+    fadeEasing_.SettingValue(fadeParam);
+    fadeEasing_.SetAdaptValue(&alpha_);
 }
 
 void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
-    // プレイヤー更新
-    pOwner_->GetGameObj().player_->Update();
+    auto* screen = pOwner_->GetGameObj().screenSprite_.get();
 
-    // スプライト更新
-    pOwner_->GetGameObj().screenSprite_->SetAlpha(alpha_);
+    switch (phase_) {
+    case Phase::kSpriteFallIn:
+        // 降ってくるアニメーションが終わったらフェードインへ
+        if (clearSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
+            phase_ = Phase::kFadeIn;
+        }
+        break;
 
-    // アニメーション終了判定
-    if (!isWaitingInput_ && clearSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
-        isWaitingInput_ = true;
+    case Phase::kFadeIn:
+        // イージングで alpha 0.7 → 1.0 に更新
+        fadeEasing_.Update(timeSpeed);
+        screen->SetAlpha(alpha_);
+
+        if (fadeEasing_.IsFinished()) {
+            KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
+            phase_ = Phase::kDone;
+            return;
+        }
+        break;
+
+    case Phase::kDone:
+        break;
     }
 
-    if (isWaitingInput_) {
-        CheckEndInput();
-    }
-
-    if (!isStartFadeOut_) {
-        return;
-    }
-
-    // フェードアウト
-    alpha_ += timeSpeed;
-
-    // リザルトへ遷移
-    if (alpha_ >= 1.0f) {
-        isGameEnd_ = true;
-        KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
-    }
-}
-
-void GameSceneFinish::CheckEndInput() {
-    if (KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::Space) || KetaEngine::Input::IsTriggerPad(0, GamepadButton::A)) {
-        isStartFadeOut_ = true;
-    }
+    ViewUpDate();
 }
 
 void GameSceneFinish::Debug() {

@@ -13,18 +13,21 @@ public:
     void RecordCombo(int32_t count);
     void RecordKillCount(int32_t count);
     void RecordLevel(int32_t level);
+    void RecordSurvivalTime(int32_t seconds);
     void Reset();
 
 private:
     GameResultInfo()  = default;
     ~GameResultInfo() = default;
 
-    int32_t maxComboCount_ = 0;
-    int32_t killCount_     = 0;
-    int32_t reachedLevel_  = 1;
+    int32_t maxComboCount_   = 0;
+    int32_t killCount_       = 0;
+    int32_t reachedLevel_    = 1;
+    int32_t survivalTimeSec_ = 0;
 
 public:
     int32_t GetMaxComboCount() const;
     int32_t GetTotalKillCount() const;
     int32_t GetReachedLevel() const;
+    int32_t GetSurvivalTimeSec() const;
 };

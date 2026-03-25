@@ -17,6 +17,8 @@ public:
     virtual void Init()                 = 0;
     virtual void Update(float atkSpeed) = 0;
     virtual void Debug() override       = 0;
+
+    void ViewUpDate();
    
 protected:
   
