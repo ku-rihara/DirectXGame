@@ -12,16 +12,16 @@ void GameSceneFinish::Init() {
     phase_ = Phase::kSpriteFallIn;
     alpha_ = 0.7f;
 
-    // 暗転スプライトを即表示（alpha 0.7 の暗いオーバーレイ）
+    // 暗転スプライトを即表示
     auto* screen = pOwner_->GetGameObj().screenSprite_.get();
     screen->SetIsDraw(true);
     screen->SetAlpha(alpha_);
 
     // 上から降ってくるスプライト
-    clearSprite_.reset(KetaEngine::Sprite::Create("Clear.dds"));
+    clearSprite_.reset(KetaEngine::Sprite::Create("TimeUP.dds"));
     clearSprite_->PlaySpriteEaseAnimation("finishSpritePos", "GameSceneFinish");
 
-    // フェードイン用イージング（0.7 → 1.0）
+    // フェードイン用イージング
     KetaEngine::EasingParameter<float> fadeParam;
     fadeParam.type       = EasingType::OutCubic;
     fadeParam.startValue = 0.7f;
@@ -49,7 +49,7 @@ void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
 
         if (fadeEasing_.IsFinished()) {
             KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
-            phase_ = Phase::kDone;
+         
             return;
         }
         break;

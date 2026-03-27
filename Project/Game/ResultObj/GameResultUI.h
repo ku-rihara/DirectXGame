@@ -1,9 +1,12 @@
 #pragma once
 
 #include "ResultUIItem.h"
+#include "2d/Sprite.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <array>
+#include <memory>
 #include <string>
+#include <vector>
 
 /// <summary>
 /// ゲームリザルトUI
@@ -29,4 +32,6 @@ private:
 
     std::array<ResultUIItem, 3> items_;
     int32_t currentItem_ = 0;
+
+    std::unique_ptr<KetaEngine::Sprite> sprite_;
 };

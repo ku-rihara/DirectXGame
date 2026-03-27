@@ -1,8 +1,8 @@
 {
     "ResultUI": {
         "Kill_basePos": [
-            451.0,
-            400.0
+            560.0,
+            526.0
         ],
         "Kill_baseScale": [
             0.8999999761581421,
@@ -27,8 +27,8 @@
             0.0
         ],
         "Level_basePos": [
-            451.0,
-            550.0
+            560.0,
+            614.0
         ],
         "Level_baseScale": [
             0.8999999761581421,
@@ -49,12 +49,12 @@
         ],
         "Level_startDelay": 0.0,
         "Level_unitOffset": [
-            537.0,
+            1100.0,
             0.0
         ],
         "Survival_basePos": [
-            451.0,
-            250.0
+            560.0,
+            434.0
         ],
         "Survival_baseScale": [
             0.8999999761581421,

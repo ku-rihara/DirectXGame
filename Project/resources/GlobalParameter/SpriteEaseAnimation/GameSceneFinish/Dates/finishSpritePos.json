@@ -1,11 +1,13 @@
 {
     "finishSpritePos": {
-        "Original_Scale": [
+        "Original_Alpha": 1.0,
+        "Original_Color": [
+            1.0,
             1.0,
             1.0
         ],
         "Original_Position": [
-            0.0,
+            640.0,
             -720.0
         ],
         "Original_Rotation": [
@@ -13,11 +15,9 @@
             0.0,
             0.0
         ],
-        "Original_Color": [
-            1.0,
+        "Original_Scale": [
             1.0,
             1.0
-        ],
-        "Original_Alpha": 1.0
+        ]
     }
 }

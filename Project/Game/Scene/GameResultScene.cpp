@@ -10,13 +10,17 @@
 void GameResultScene::Init() {
     BaseScene::Init();
 
-    bgSprite_.reset(KetaEngine::Sprite::Create("default.dds"));
+    bgSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
+    bgSprite_->SetIsDraw(true);
+    bgSprite_->SetAlpha(0.f);
+    alpha_ = 0.f;
 
     skyBox_ = std::make_unique<SkyBox>();
     skyBox_->Init();
 
     resultStage_ = std::make_unique<ResultStage>();
     resultStage_->Init("ResultScene.json");
+    resultStage_->SetViewProjection(&viewProjection_);
 
     resultRunner_ = std::make_unique<ResultRunner>();
     resultRunner_->Init();
@@ -40,11 +44,12 @@ void GameResultScene::Update() {
         return;
     }
 
-    /*  alpha_ += KetaEngine::Frame::DeltaTime();
-      if (alpha_ >= 1.0f) {
-          GameResultInfo::GetInstance()->Reset();
-          KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
-      }*/
+    alpha_ += KetaEngine::Frame::DeltaTime();
+    bgSprite_->SetAlpha(alpha_);
+    if (alpha_ >= 1.0f) {
+        GameResultInfo::GetInstance()->Reset();
+        KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
+    }
 }
 
 void GameResultScene::CheckEndInput() {
@@ -57,6 +62,8 @@ void GameResultScene::Debug() {
 #ifdef _DEBUG
     BaseScene::Debug();
     ImGui::Begin("Param");
+    resultStage_->AdjustParam();
+    resultRunner_->AdjustParam();
     resultUI_->AdjustParam();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
