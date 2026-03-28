@@ -1216,6 +1216,9 @@
     <ClCompile Include="Game\Player\Components\JumpAttackUI\JumpAttackUI.cpp">
       <Filter>Game\Player\Components\JumpAttackUI</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\NextAttackIndicator\NextAttackHintUI.cpp">
+      <Filter>Game\UI\NextAttackIndicator</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Player\Components\Parameter\PlayerParameter.cpp">
       <Filter>Game\Player\Components\Parameter</Filter>
     </ClCompile>
@@ -2136,6 +2139,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\Components\JumpAttackUI\JumpAttackUI.h">
       <Filter>Game\Player\Components\JumpAttackUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\NextAttackIndicator\NextAttackHintUI.h">
+      <Filter>Game\UI\NextAttackIndicator</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\Components\Parameter\PlayerParameter.h">
       <Filter>Game\Player\Components\Parameter</Filter>

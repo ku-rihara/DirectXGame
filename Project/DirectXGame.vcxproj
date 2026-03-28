@@ -287,6 +287,7 @@
     <ClCompile Include="Game\Player\Components\Effect\AttackEffect\AttackEffect.cpp" />
     <ClCompile Include="Game\Player\Components\Effect\PlayerEffects.cpp" />
     <ClCompile Include="Game\Player\Components\JumpAttackUI\JumpAttackUI.cpp" />
+    <ClCompile Include="Game\UI\NextAttackIndicator\NextAttackHintUI.cpp" />
     <ClCompile Include="Game\Player\Components\Parameter\PlayerParameter.cpp" />
     <ClCompile Include="Game\Player\Components\Parts\BasePlayerHand.cpp" />
     <ClCompile Include="Game\Player\Components\Parts\PlayerHandLeft.cpp" />
@@ -643,6 +644,7 @@
     <ClInclude Include="Game\Player\Components\Effect\AttackEffect\AttackEffect.h" />
     <ClInclude Include="Game\Player\Components\Effect\PlayerEffects.h" />
     <ClInclude Include="Game\Player\Components\JumpAttackUI\JumpAttackUI.h" />
+    <ClInclude Include="Game\UI\NextAttackIndicator\NextAttackHintUI.h" />
     <ClInclude Include="Game\Player\Components\Parameter\PlayerParameter.h" />
     <ClInclude Include="Game\Player\Components\Parts\BasePlayerHand.h" />
     <ClInclude Include="Game\Player\Components\Parts\PlayerHandLeft.h" />

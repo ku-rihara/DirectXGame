@@ -20,6 +20,7 @@
 
 // UI
 #include "Components/JumpAttackUI/JumpAttackUI.h"
+#include "UI/NextAttackIndicator/NextAttackHintUI.h"
 // Parameter
 #include "Components/Parameter/PlayerParameter.h"
 // Input
@@ -161,7 +162,8 @@ private:
     std::unique_ptr<PlayerEffects> effects_;
     std::unique_ptr<PlayerParameter> parameters_;
     std::unique_ptr<PlayerAttackCollider> playerCollisionInfo_;
-    std::unique_ptr<JumpAttackUI> jumpAttackUI_;
+    std::unique_ptr<JumpAttackUI>        jumpAttackUI_;
+    std::unique_ptr<NextAttackHintUI>    nextAttackHintUI_;
 
     /// behavior
     std::unique_ptr<BasePlayerBehavior> behavior_           = nullptr;
@@ -217,7 +219,8 @@ public:
     PlayerParameter* GetParameter() const { return parameters_.get(); }
     PlayerAttackCollider* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
-    JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
+    JumpAttackUI*        GetJumpAttackUI()        const { return jumpAttackUI_.get(); }
+    NextAttackHintUI*    GetNextAttackHintUI()    const { return nextAttackHintUI_.get(); }
     DeathTimer* GetDeathTimer() const { return pDeathTimer_; }
     bool GetIsIgnoreUnlockState() const { return isIgnoreUnlockState_; }
     const PlayerInput& GetInput() const { return input_; }

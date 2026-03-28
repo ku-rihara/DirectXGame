@@ -1,0 +1,22 @@
+{
+    "NextAttackHintUI": {
+        "alpha": 1.0,
+        "spriteScale": [
+            1.0,
+            1.0
+        ],
+        "worldOffset": [
+            25.350000381469727,
+            2.5,
+            0.0
+        ],
+        "xLocalOffset": [
+            -30.0,
+            0.0
+        ],
+        "yLocalOffset": [
+            30.0,
+            0.0
+        ]
+    }
+}

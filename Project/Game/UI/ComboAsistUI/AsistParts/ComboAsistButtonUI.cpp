@@ -24,7 +24,7 @@ void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const Layo
         uiSprite_->SetAnchorPoint({0.5f, 0.5f});
     }
 
-    // ロックUI（最初から開放済みの場合は生成しない）
+    // ロックUI
     if (!isUnlocked_) {
         lockUI_.reset(KetaEngine::Sprite::Create("ComboSupportUI/AttackLock.dds", false));
         if (lockUI_) {
