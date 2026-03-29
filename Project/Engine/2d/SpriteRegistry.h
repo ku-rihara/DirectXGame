@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -39,6 +40,11 @@ public:
     void Clear();      //<登録解除
     void DebugImGui(); //<ImGuiデバッグ
 
+    /// 代表スプライト管理
+    void    RegisterRepresentative(const std::string& groupName, Sprite* sprite);
+    void    UnregisterRepresentative(Sprite* sprite);
+    Sprite* GetRepresentative(const std::string& groupName) const;
+
     /// ============================================================
     /// private members
     /// ============================================================
@@ -46,6 +52,8 @@ private:
     static bool isDestroyed_;
 
     std::unordered_set<Sprite*> sprites_;
+    std::unordered_map<std::string, Sprite*> groupRepresentatives_; // groupName → 代表Sprite
+
     static SpriteRegistry* instance_;
 
 public:

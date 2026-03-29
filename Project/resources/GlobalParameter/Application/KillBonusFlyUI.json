@@ -1,0 +1,25 @@
+{
+    "KillBonusFlyUI": {
+        "controlOffset": [
+            0.0,
+            320.0
+        ],
+        "controlOffset2": [
+            0.0,
+            71.0
+        ],
+        "controlXOffsetMax": 504.0,
+        "controlXOffsetMin": 360.0,
+        "controlXOffsetRange": 211.0,
+        "controlXOffsetRange2": 15.0,
+        "duration": 0.8899999856948853,
+        "endPos": [
+            640.0,
+            100.0
+        ],
+        "spriteScale": [
+            0.699999988079071,
+            0.699999988079071
+        ]
+    }
+}

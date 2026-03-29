@@ -19,6 +19,9 @@ struct KillBonusLayoutParam {
     Vector2 simKillLabelOffset;
     Vector2 digitSpacing;  // 桁間の間隔
     Vector2 digitScale;
+    Vector2 bgOffset;                              // 背景スプライトのオフセット
+    Vector2 bgScale        = {1.0f, 1.0f};        // 背景スプライトのスケール倍率
+    Vector4 bgColor        = {1.0f, 1.0f, 1.0f, 1.0f}; // 背景スプライトのカラー(RGBA)
     Vector2 baseScale = {1.0f, 1.0f};  // スプライト全体のベーススケール
     float   displayDuration = 2.0f;    // スポーン後の表示時間
 };
@@ -50,6 +53,7 @@ public:
     bool IsFinished() const { return state_ == State::Finished; }
 
 private:
+    std::unique_ptr<KetaEngine::Sprite> bgSprite_;
     std::unique_ptr<KetaEngine::Sprite> recoverySprite_;
 
     NumberDigitUI                       comboDigit_;

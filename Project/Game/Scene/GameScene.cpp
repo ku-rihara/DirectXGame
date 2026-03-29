@@ -74,6 +74,7 @@ void GameScene::Debug() {
     gameObj_.unlockNotifier_->AdjustParam();
     gameObj_.comboSupportSpriteUi_->AdjustParam();
     gameObj_.killBonusController_->AdjustParam();
+    gameObj_.killBonusFlyController_->AdjustParam();
     gameObj_.operateUI_->Debug();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
@@ -141,6 +142,7 @@ void GameScene::ObjectInit() {
     gameObj_.unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
     gameObj_.comboSupportSpriteUi_        = std::make_unique<ComboSupportSpriteUi>();
     gameObj_.killBonusController_         = std::make_unique<KillBonusController>();
+    gameObj_.killBonusFlyController_      = std::make_unique<KillBonusFlyController>();
 
     gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
@@ -166,6 +168,7 @@ void GameScene::ObjectInit() {
     gameObj_.audienceController_->Init();
     gameObj_.deathTimer_->Init();
     gameObj_.killBonusController_->Init();
+    gameObj_.killBonusFlyController_->Init();
     viewProjection_.Init();
 
     gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");
@@ -242,16 +245,34 @@ void GameScene::SetClassPointer() {
     gameObj_.comboSupportSpriteUi_->SetComboAsistController(gameObj_.comboAsistController_.get());
     gameObj_.comboSupportSpriteUi_->Init();
 
-    // キル → KillBonusController 接続
+    // キル → KillBonusFlyController → KillBonusController 接続
     {
-        KillBonusController* killBonus = gameObj_.killBonusController_.get();
-        DeathTimer* deathTimer = gameObj_.deathTimer_.get();
-        gameObj_.deathTimer_->SetOnKillCallback([killBonus](float comboMultiplier) {
-            killBonus->OnEnemyKilled(comboMultiplier);
+        KillBonusController*    killBonus = gameObj_.killBonusController_.get();
+        KillBonusFlyController* flyCtrl   = gameObj_.killBonusFlyController_.get();
+        DeathTimer*             deathTimer = gameObj_.deathTimer_.get();
+
+        // DeathTimer がコンボ倍率を計算したら FlyController に pending 保存
+        gameObj_.deathTimer_->SetOnKillCallback([flyCtrl](float comboMultiplier) {
+            flyCtrl->SetPendingComboBonusValue(comboMultiplier);
         });
+
+        // スプライトが終点到達したら KillBonusController に通知
+        flyCtrl->SetOnReachCallback([killBonus](float comboBonusValue) {
+            killBonus->OnEnemyKilled(comboBonusValue);
+        });
+
+        // スプライトが終点到達したらゲージスプライトをイージング
+        flyCtrl->SetOnGaugeAnimCallback([deathTimer]() {
+            deathTimer->GetDeathTimerGauge()->PlayTimerRecoveryScaling();
+        });
+
+        // シムキルボーナス → DeathTimer（変更なし）
         gameObj_.killBonusController_->SetOnSimKillBonusCallback([deathTimer](float bonus) {
             deathTimer->ApplyBonus(bonus);
         });
+
+        // EnemyManager に FlyController とViewProjection を渡す
+        gameObj_.enemyManager_->SetKillBonusFly(flyCtrl);
     }
 
     // 自動コンボ実行 → アンロック通知UIリアクション の接続

@@ -1,15 +1,15 @@
 {
-    "ComboAsistColumnOverflow": {
+    "KillBonusFlyT": {
         "StartTimeOffset": 0.0,
         "adaptFloatAxisType": 0,
         "amplitude": 0.0,
         "backRatio": 0.0,
-        "endValue": 0.0,
+        "endValue": 1.0,
         "finishOffsetTime": 0.0,
         "finishType": 1,
-        "maxTime": 0.20000000298023224,
+        "maxTime": 0.6800000071525574,
         "period": 0.0,
-        "startValue": 0.6299999952316284,
+        "startValue": 0.0,
         "type": 16,
         "waitTime": 0.0
     }

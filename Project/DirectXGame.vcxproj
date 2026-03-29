@@ -319,6 +319,8 @@
     <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistController.cpp" />
     <ClCompile Include="Game\UI\KillBonus\KillBonusEntry.cpp" />
     <ClCompile Include="Game\UI\KillBonus\KillBonusController.cpp" />
+    <ClCompile Include="Game\UI\KillBonus\KillBonusFlyEntry.cpp" />
+    <ClCompile Include="Game\UI\KillBonus\KillBonusFlyController.cpp" />
     <ClCompile Include="Game\UI\LevelUI\LevelUI.cpp" />
     <ClCompile Include="Game\UI\LevelUI\LevelUIController.cpp" />
     <ClCompile Include="Game\UI\NumberDigitUI\NumberDigitUI.cpp" />
@@ -676,6 +678,8 @@
     <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistController.h" />
     <ClInclude Include="Game\UI\KillBonus\KillBonusEntry.h" />
     <ClInclude Include="Game\UI\KillBonus\KillBonusController.h" />
+    <ClInclude Include="Game\UI\KillBonus\KillBonusFlyEntry.h" />
+    <ClInclude Include="Game\UI\KillBonus\KillBonusFlyController.h" />
     <ClInclude Include="Game\UI\LevelUI\LevelUI.h" />
     <ClInclude Include="Game\UI\LevelUI\LevelUIController.h" />
     <ClInclude Include="Game\UI\NumberDigitUI\NumberDigitUI.h" />

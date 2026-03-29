@@ -12,11 +12,9 @@ using namespace KetaEngine;
 Sprite::~Sprite() {
     if (SpriteRegistry::GetInstance()) {
         SpriteRegistry::GetInstance()->UnregisterObject(this);
+       
     }
-    // GlobalParameterのラムダ(生ポインタキャプチャ)をクリアしてダングリング防止
-    if (globalParameter_ && !groupName_.empty()) {
-        globalParameter_->ClearRegistersForGroup(groupName_);
-    }
+   
 }
 
 Sprite* Sprite::Create(const std::string& textureName, bool isAbleEdit, const std::string& name) {
@@ -44,24 +42,24 @@ void Sprite::ParamEditorSet(const std::string& textureName, bool isAbleEditor, c
         fileName = textureName.substr(lastSlash + 1);
     }
 
-    // name が指定されていればファイル名の代わりに使う
-    std::string baseName = name.empty() ? fileName : fileName + "_" + name;
-
-    std::string uniqueGroupName = baseName;
-    int32_t index               = 0;
-
-    // グループが既に存在する場合、インデックスを追加
-    while (SpriteRegistry::GetInstance()->HasGroupName(uniqueGroupName)) {
-        index++;
-        uniqueGroupName = baseName + std::to_string(index);
+    // グループ名決定
+    if (!name.empty()) {
+        groupName_ = fileName + "_" + name;
+    } else {
+        groupName_ = fileName;
     }
 
-    groupName_ = uniqueGroupName;
-
-    // グループ作成
-    globalParameter_->CreateGroup(groupName_);
-    RegisterParams();
-    globalParameter_->SyncParamForGroup(groupName_);
+    if (!globalParameter_->HasRegisters(groupName_)) {
+        // グループ作成・登録・同期
+        isRepresentative_ = true;
+        SpriteRegistry::GetInstance()->RegisterRepresentative(groupName_, this);
+        globalParameter_->CreateGroup(groupName_);
+        RegisterParams();
+        globalParameter_->SyncParamForGroup(groupName_);
+    } else {
+        isRepresentative_ = false;
+        GetParams();
+    }
 }
 
 void Sprite::CreateSprite(const std::string& textureName) {
@@ -135,13 +133,14 @@ void Sprite::CreateSprite(const std::string& textureName) {
     ///==========================================================================================
     //  変数初期化
     ///==========================================================================================
-    transform_.pos                     = parameter_.position_;
+    const Parameter& p                 = GetValue();
+    transform_.pos                     = p.position_;
     transform_.scale                   = Vector2::OneVector();
-    uvTransform_.scale                 = parameter_.uvScale_;
-    material_.GetMaterialData()->color = parameter_.color_;
+    uvTransform_.scale                 = p.uvScale_;
+    material_.GetMaterialData()->color = p.color_;
 
-    anchorPoint_ = parameter_.startAnchorPoint_;
-    layerNum_    = parameter_.startLayerNum_;
+    anchorPoint_ = p.startAnchorPoint_;
+    layerNum_    = p.startLayerNum_;
 
     // テクスチャ座標取得
     const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureIndex_);
@@ -213,7 +212,8 @@ void Sprite::Draw() {
     Vector2 animPos   = GetAnimationPosition();
     Vector3 animRot   = GetAnimationRotation();
 
-    Vector3 size      = Vector3(textureSize_.x, textureSize_.y, 0.0f) * Vector3(transform_.scale.x * parameter_.scale_.x, transform_.scale.y * parameter_.scale_.y, 0.0f);
+    const Parameter& sharedP = GetValue();
+    Vector3 size      = Vector3(textureSize_.x, textureSize_.y, 0.0f) * Vector3(transform_.scale.x * sharedP.scale_.x, transform_.scale.y * sharedP.scale_.y, 0.0f);
     Vector3 translate = Vector3(transform_.pos.x + animPos.x, transform_.pos.y + animPos.y, 0.0f);
     Vector3 rotate    = Vector3(transform_.rotate.x + animRot.x, transform_.rotate.y + animRot.y, transform_.rotate.z + animRot.z);
 
@@ -263,12 +263,21 @@ void Sprite::RegisterParams() {
     globalParameter_->Regist(groupName_, "startAnchorPoint", &parameter_.startAnchorPoint_);
 }
 
+void Sprite::GetParams() {
+    parameter_.startLayerNum_    = globalParameter_->GetValue<int32_t>(groupName_, "layerNum");
+    parameter_.position_         = globalParameter_->GetValue<Vector2>(groupName_, "startPosition");
+    parameter_.scale_            = globalParameter_->GetValue<Vector2>(groupName_, "startScale");
+    parameter_.color_            = globalParameter_->GetValue<Vector4>(groupName_, "startColor");
+    parameter_.uvScale_          = globalParameter_->GetValue<Vector2>(groupName_, "startUVScale");
+    parameter_.startAnchorPoint_ = globalParameter_->GetValue<Vector2>(groupName_, "startAnchorPoint");
+}
+
 ///=========================================================
 /// パラメータ調整
 ///==========================================================
 void Sprite::AdjustParam() {
 #ifdef _DEBUG
-    if (groupName_.empty()) {
+    if (groupName_.empty() || !isRepresentative_) {
         return;
     }
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
@@ -355,11 +364,12 @@ void Sprite::ApplyAnimationToMaterial() {
 
     using PropType = SpriteEaseAnimationData::PropertyType;
 
-    // Scale (ベーススケールにアニメーション値を乗算)
+    // Scale (共有ベーススケールにアニメーション値を乗算)
     if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Scale)) {
+        const Parameter& sp = GetValue();
         Vector2 scaleOffset = spriteEaseAnimationPlayer_->GetCurrentScale();
-        transform_.scale.x  = parameter_.scale_.x * scaleOffset.x;
-        transform_.scale.y  = parameter_.scale_.y * scaleOffset.y;
+        transform_.scale.x  = sp.scale_.x * scaleOffset.x;
+        transform_.scale.y  = sp.scale_.y * scaleOffset.y;
     }
 
     // Color

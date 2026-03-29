@@ -56,8 +56,10 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.comboLevelObjHolder_->Update(timeSpeed);
     obj.deathTimer_->Update(timeSpeed);
     obj.killBonusController_->Update(KetaEngine::Frame::DeltaTime());
+    obj.killBonusFlyController_->Update(KetaEngine::Frame::DeltaTime());
 
     obj.enemyManager_->HpBarUpdate(pOwner_->GetViewProjection());
+    obj.enemyManager_->SetViewProjection(&pOwner_->GetViewProjection());
     obj.lockOnController_->Update(obj.player_.get(), pOwner_->GetViewProjection());
 
     // ディザオクルージョン更新

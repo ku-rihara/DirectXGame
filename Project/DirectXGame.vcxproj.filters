@@ -2417,6 +2417,12 @@
     <ClCompile Include="Game\UI\KillBonus\KillBonusController.cpp">
       <Filter>Game\UI\KillBonus</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\KillBonus\KillBonusFlyEntry.cpp">
+      <Filter>Game\UI\KillBonus</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\KillBonus\KillBonusFlyController.cpp">
+      <Filter>Game\UI\KillBonus</Filter>
+    </ClCompile>
     <ClCompile Include="Game\UI\LevelUI\LevelUI.cpp">
       <Filter>Game\UI\LevelUI</Filter>
     </ClCompile>
@@ -2555,6 +2561,12 @@
       <Filter>Game\UI\KillBonus</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\KillBonus\KillBonusController.h">
+      <Filter>Game\UI\KillBonus</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\KillBonus\KillBonusFlyEntry.h">
+      <Filter>Game\UI\KillBonus</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\KillBonus\KillBonusFlyController.h">
       <Filter>Game\UI\KillBonus</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\LevelUI\LevelUI.h">

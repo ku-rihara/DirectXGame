@@ -6,6 +6,8 @@
 #include "Player/Player.h"
 // DeathTimer
 #include "DeathTimer/DeathTimer.h"
+// KillBonusFly
+#include "UI/KillBonus/KillBonusFlyController.h"
 // Combo
 #include "Combo/Combo.h"
 // LockOn
@@ -99,6 +101,10 @@ void EnemyManager::Update() {
             if (pDeathTimer_) {
                 int32_t comboCount = pCombo_ ? pCombo_->GetComboCount() : 0;
                 pDeathTimer_->OnEnemyKilled(enemies_[i]->GetParameter().gaugeIncreaseValue, comboCount);
+            }
+
+            if (pKillBonusFly_ && pViewProjection_) {
+                pKillBonusFly_->SpawnFromPending(enemies_[i]->GetWorldPosition(), *pViewProjection_);
             }
 
             // vectorから削除

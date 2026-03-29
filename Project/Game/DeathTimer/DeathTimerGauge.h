@@ -84,4 +84,5 @@ public:
 
     void SetSpriteScales(const Vector2& scale);
     void SetTimer(float currentTimer, float maxTimer);
+    void PlayTimerRecoveryScaling();
 };

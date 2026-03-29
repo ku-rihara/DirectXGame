@@ -44,11 +44,13 @@ void KillBonusController::Update(float deltaTime) {
 }
 
 void KillBonusController::OnEnemyKilled(float comboBonusValue) {
-    SpawnEntry(comboBonusValue);
-
-    // 同時キルウィンドウに追加
+    if (simKillTracker_.toleranceTime <= 0.0f) {
+        // 新規ウィンドウ：エントリをスポーン
+        SpawnEntry(comboBonusValue);
+        simKillTracker_.entryIndices.push_back(static_cast<int>(entries_.size()) - 1);
+    }
+    // ウィンドウ内の追加キルはエントリを増やさずカウントのみ
     simKillTracker_.killCount++;
-    simKillTracker_.entryIndices.push_back(static_cast<int>(entries_.size()) - 1);
     simKillTracker_.toleranceTime = simKillToleranceTime_;
 }
 
@@ -153,6 +155,10 @@ void KillBonusController::AdjustParam() {
         ImGui::DragFloat2("数字スケール", &layout_.digitScale.x, 0.01f);
         ImGui::DragFloat2("ベーススケール", &layout_.baseScale.x, 0.01f);
         ImGui::DragFloat("表示時間", &layout_.displayDuration, 0.01f);
+        ImGui::SeparatorText("背景スプライト");
+        ImGui::DragFloat2("背景 オフセット", &layout_.bgOffset.x, 0.1f);
+        ImGui::DragFloat2("背景 スケール", &layout_.bgScale.x, 0.01f);
+        ImGui::ColorEdit4("背景 カラー", &layout_.bgColor.x);
         ImGui::SeparatorText("表示制限");
         ImGui::InputInt("最大同時表示数", &maxEntries_);
         ImGui::SeparatorText("同時撃破判定");
@@ -205,4 +211,7 @@ void KillBonusController::RegisterParams() {
     globalParameter_->Regist(groupName_, "maxEntries", &maxEntries_);
     globalParameter_->Regist(groupName_, "simKillBonusPerKill", &simKillBonusPerKill_);
     globalParameter_->Regist(groupName_, "toleranceTime", &simKillToleranceTime_);
+    globalParameter_->Regist(groupName_, "bgOffset", &layout_.bgOffset);
+    globalParameter_->Regist(groupName_, "bgScale", &layout_.bgScale);
+    globalParameter_->Regist(groupName_, "bgColor", &layout_.bgColor);
 }

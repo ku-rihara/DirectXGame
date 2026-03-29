@@ -10,6 +10,12 @@ void KillBonusEntry::Init(float comboBonusValue, bool hasSimKill, int32_t simKil
     state_            = State::Spawning;
     displayTimer_     = 0.0f;
 
+    bgSprite_.reset(KetaEngine::Sprite::Create("UI/KillBonusBG.dds",false));
+    if (bgSprite_) {
+        bgSprite_->SetLayerNum(-1);
+        bgSprite_->SetAnchorPoint({0.5f, 0.5f});
+    }
+
     recoverySprite_.reset(KetaEngine::Sprite::Create("UI/KillRecovery.dds", false));
     if (recoverySprite_) {
         recoverySprite_->SetAnchorPoint({0.5f, 0.5f});
@@ -110,6 +116,15 @@ void KillBonusEntry::Update(float deltaTime, const KillBonusLayoutParam& layout)
     const Vector2 spriteScale = layout.baseScale * currentScale_;
     const Vector2 scaledDigit = layout.digitScale * currentScale_;
 
+    // 背景スプライト
+    if (bgSprite_) {
+        bgSprite_->SetIsDraw(true);
+        bgSprite_->transform_.pos   = currentPos_ + layout.bgOffset;
+        bgSprite_->transform_.scale = spriteScale * layout.bgScale;
+        bgSprite_->SetColor({layout.bgColor.x, layout.bgColor.y, layout.bgColor.z});
+        bgSprite_->SetAlpha(layout.bgColor.w * currentScale_);
+    }
+
     // 回復スプライト
     if (recoverySprite_) {
         recoverySprite_->SetIsDraw(true);
@@ -171,8 +186,10 @@ void KillBonusEntry::ShiftTo(const Vector2& newTarget) {
 }
 
 void KillBonusEntry::ForceClose() {
-    if (state_ == State::Finished) { return; }
-    posEasingActive_ = false;   // 位置イージングをキャンセル（動かさない）
+    if (state_ == State::Finished) { 
+        return;
+    }
+    posEasingActive_ = false;  
     state_           = State::Closing;
     closeEasing_.SetStartValue(currentScale_);
     closeEasing_.Reset();

@@ -5,12 +5,12 @@
 
 void KillCountUI::Init(const KillCountDigit& digit) {
 
-    /// Sprite create
+    /// Sprite create（明示的インデックスで固有グループ）
     std::string digitName;
     switch (digit) {
-    case KillCountDigit::ONE:   digitName = "Kill_1"; break;
-    case KillCountDigit::TWO:   digitName = "Kill_2"; break;
-    case KillCountDigit::THREE: digitName = "Kill_3"; break;
+    case KillCountDigit::ONE:   digitName = "2"; break;
+    case KillCountDigit::TWO:   digitName = "3"; break;
+    case KillCountDigit::THREE: digitName = "4"; break;
     }
     sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.dds", true, digitName));
 

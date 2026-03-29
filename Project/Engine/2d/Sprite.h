@@ -51,6 +51,7 @@ public:
     /// </summary>
     /// <param name="textureName">テクスチャのファイル名</param>
     /// <param name="isAbleEdit">パラメータ編集を可能にするかのフラグ</param>
+    /// <param name="index">明示的インデックス(-1=共有モード, 0以上=固有グループ)</param>
     /// <returns>作成されたSpriteのポインタ</returns>
     static Sprite* Create(const std::string& textureName, bool isAbleEdit = true, const std::string& name = "");
     void CreateSprite(const std::string& textureName);
@@ -89,12 +90,11 @@ public:
     /// <summary>
     void SetGaugeRate(float rate);
 
+
 private:
     /// <summary>
     /// パラメータ編集のグループに登録する
     /// </summary>
-    /// <param name="textureName">テクスチャのファイル名</param>
-    /// <param name="isAbleEditor">パラメータ編集を可能にするかのフラグ</param>
     void ParamEditorSet(const std::string& textureName, bool isAbleEditor, const std::string& name = "");
 
 public:
@@ -112,11 +112,14 @@ private:
     bool isFlipY_ = false;
 
     // パラメータ編集
-    GlobalParameter* globalParameter_;
+    GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_;
     const std::string filePath_   = "Resources/Texture/";
     const std::string folderPath_ = "SpriteParam";
     Parameter parameter_;
+
+    // 共有パラメータ管理
+    bool isRepresentative_ = false;  // 代表スプライトかどうか
 
     int32_t layerNum_;
     bool isDraw_            = true;
@@ -129,6 +132,7 @@ private:
     std::unique_ptr<SpriteEaseAnimationPlayer> spriteEaseAnimationPlayer_;
     float animationSpeedRate_ = 1.0f;
 
+    void GetParams();
     void ApplyAnimationToMaterial();
     Vector2 GetAnimationPosition() const;
     Vector3 GetAnimationRotation() const;
@@ -162,6 +166,10 @@ public:
     const Vector2& GetTextureSize() const { return textureSize_; }
     const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }
     int32_t GetLayerNum() const { return layerNum_; }
+    bool GetIsRepresentative() const { return isRepresentative_; }
+
+    const Parameter& GetValue() const { return parameter_; }
+
     const Parameter& GetStartParameter() const { return parameter_; }
     bool GetIsFlipX() const { return isFlipX_; }
     bool GetIsFlipY() const { return isFlipY_; }
@@ -172,7 +180,7 @@ public:
     UVTransform& GetUVTransform() { return uvTransform_; }
     const UVTransform& GetUVTransform() const { return uvTransform_; }
 
-    
+
     /// <summary>
     /// アニメーションプレイヤー取得
     /// </summary>

@@ -3,8 +3,8 @@
 
 void LevelUI::Init(Digit digit) {
 
-    // スプライト初期化
-    const std::string digitName = (digit == Digit::ONE) ? "Lv_Digit1" : "Lv_Digit2";
+    // スプライト初期化（明示的インデックスで固有グループ）
+    const std::string digitName = (digit == Digit::ONE) ? "0" : "1";
     sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.dds", true, digitName));
     if (sprite_) {
         sprite_->SetUVScale({kUVStep, 1.0f});

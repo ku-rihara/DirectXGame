@@ -95,7 +95,8 @@ void DxRenderTarget::SetSceneRTAsRenderTarget(ID3D12GraphicsCommandList* cmdList
     dxResourceBarrier_->Transition(cmdList, renderTextureResource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
 
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(renderTextureRtvIndex_);
-    cmdList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthBuffer_->GetDsvHandle();
+    cmdList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
     cmdList->RSSetViewports(1, &viewport_);
     cmdList->RSSetScissorRects(1, &scissorRect_);
 }

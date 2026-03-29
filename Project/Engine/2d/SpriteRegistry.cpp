@@ -114,13 +114,35 @@ void SpriteRegistry::DebugImGui() {
 }
 
 ///============================================================
-/// グループ名の重複チェック
+/// グループ名の重複チェック（代表が登録済みか）
 ///============================================================
 bool SpriteRegistry::HasGroupName(const std::string& groupName) const {
-    for (const Sprite* sprite : sprites_) {
-        if (sprite != nullptr && sprite->GetGroupName() == groupName) {
-            return true;
+    return groupRepresentatives_.count(groupName) > 0;
+}
+
+///============================================================
+/// 代表スプライト登録
+///============================================================
+void SpriteRegistry::RegisterRepresentative(const std::string& groupName, Sprite* sprite) {
+    groupRepresentatives_[groupName] = sprite;
+}
+
+///============================================================
+/// 代表スプライト解除（フォロワーの参照もクリア）
+///============================================================
+void SpriteRegistry::UnregisterRepresentative(Sprite* sprite) {
+    for (auto it = groupRepresentatives_.begin(); it != groupRepresentatives_.end(); ++it) {
+        if (it->second == sprite) {
+            groupRepresentatives_.erase(it);
+            return;
         }
     }
-    return false;
+}
+
+///============================================================
+/// 代表スプライト取得
+///============================================================
+Sprite* SpriteRegistry::GetRepresentative(const std::string& groupName) const {
+    auto it = groupRepresentatives_.find(groupName);
+    return (it != groupRepresentatives_.end()) ? it->second : nullptr;
 }

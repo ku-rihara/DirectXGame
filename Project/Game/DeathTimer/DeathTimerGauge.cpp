@@ -162,6 +162,21 @@ void DeathTimerGauge::RegisterParams() {
     }
 }
 
+void DeathTimerGauge::PlayTimerRecoveryScaling() {
+    if (frameSprite_) {
+        frameSprite_->PlaySpriteEaseAnimation("TimerRecoveryGaugeScaling", "EnemyDeath");
+    }
+    if (gaugeSprite_) {
+        gaugeSprite_->PlaySpriteEaseAnimation("TimerRecoveryGaugeScaling", "EnemyDeath");
+    }
+    if (gaugeIcon_) {
+        gaugeIcon_->PlaySpriteEaseAnimation("TimerRecoveryGaugeScaling", "EnemyDeath");
+    }
+    if (bombScrollSprite_) {
+        bombScrollSprite_->PlaySpriteEaseAnimation("TimerRecoveryGaugeScaling", "EnemyDeath");
+    }
+}
+
 void DeathTimerGauge::SetSpriteScales(const Vector2& scale) {
     frameSprite_->transform_.scale = scale;
     gaugeSprite_->transform_.scale = scale;
