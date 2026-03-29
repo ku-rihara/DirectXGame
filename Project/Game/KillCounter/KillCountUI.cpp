@@ -24,7 +24,10 @@ void KillCountUI::Init(const KillCountDigit& digit) {
 
     InitDigitCalculators();
 
-    isVisible_ = true;
+    isVisible_ = false;
+    if (sprite_) {
+        sprite_->transform_.scale = {0.0f, 0.0f};
+    }
 }
 
 void KillCountUI::Update(const Vector2& scale, float alpha) {

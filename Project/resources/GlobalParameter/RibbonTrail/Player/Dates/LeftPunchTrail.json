@@ -1,25 +1,25 @@
 {
     "LeftPunchTrail": {
         "DistortionStrength": 5.0,
-        "DistortionTexturePath": "",
-        "EmitInterval": 0.004999999888241291,
+        "DistortionTexturePath": "Resources/EngineTexture/Noise/noise0.dds",
+        "EmitInterval": 0.04800000041723251,
         "EndColor": [
-            1.0,
-            0.4000000059604645,
-            0.10196078568696976,
+            0.9729729890823364,
+            0.9729729890823364,
+            0.9729729890823364,
             1.0
         ],
-        "EndWidth": 0.5619999766349792,
-        "Lifetime": 0.4699999988079071,
-        "MaxPoints": 48,
+        "EndWidth": 1.5,
+        "Lifetime": 2.3299999237060547,
+        "MaxPoints": 68,
         "StartColor": [
-            1.0,
-            0.800000011920929,
-            0.30000001192092896,
+            0.9498069286346436,
+            0.9498069286346436,
+            0.9498069286346436,
             1.0
         ],
         "StartWidth": 1.1119999885559082,
-        "TexturePath": "",
+        "TexturePath": "Resources/EngineTexture/Noise/noise0.dds",
         "UseDistortion": true
     }
 }

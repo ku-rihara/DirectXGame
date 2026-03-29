@@ -17,6 +17,7 @@ void LevelUIController::Init() {
     labelSprite_.reset(KetaEngine::Sprite::Create("UI/LevelUI.dds", true));
     if (labelSprite_) {
         labelSprite_->SetAnchorPoint({0.5f, 0.5f});
+        labelSprite_->transform_.scale = {0.0f, 0.0f};
     }
 }
 

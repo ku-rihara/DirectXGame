@@ -34,44 +34,44 @@ private:
 
     // ---- 幅 ----
     float startWidth_ = 0.12f; // ヘッドの幅
-    float endWidth_   = 0.0f;  // テールの幅（先端が鋭く消える）
+    float endWidth_   = 0.0f; // テールの幅
 
     // ---- 寿命・長さ ----
-    float   lifetime_     = 0.25f;  // 各ポイントの生存時間（秒）
-    int32_t maxPoints_    = 48;     // 保持する最大ポイント数
-    float   emitInterval_ = 0.005f; // ポイントを追加する間隔（秒）
+    float lifetime_     = 0.25f; // 各ポイントの生存時間（秒）
+    int32_t maxPoints_  = 48; // 保持する最大ポイント数
+    float emitInterval_ = 0.005f; // ポイントを追加する間隔（秒）
 
     // ---- テクスチャ ----
     std::string texturePath_;
 
     // テクスチャ選択（エディタ用）
-    static constexpr const char* kTextureFolderPath = "Resources/EngineTexture";
-    FileSelector                 textureSelector_;
-    std::string                  textureStem_;
+    const std::string kTextureFolderPath = "Resources/EngineTexture/Noise";
+    FileSelector textureSelector_;
+    std::string textureStem_;
 
     // ---- 時空歪み ----
-    bool        useDistortion_         = false;
-    float       distortionStrength_    = 0.1f;
+    bool useDistortion_       = false;
+    float distortionStrength_ = 0.1f;
     std::string distortionTexturePath_;
 
     // 歪みテクスチャ選択（エディタ用）
     FileSelector distortionTextureSelector_;
-    std::string  distortionTextureStem_;
+    std::string distortionTextureStem_;
 
     const std::string baseFolderPath_ = "RibbonTrail/";
 
 public:
     // ---- Getter ----
-    Vector4            GetStartColor()    const { return startColor_; }
-    Vector4            GetEndColor()      const { return endColor_; }
-    float              GetStartWidth()    const { return startWidth_; }
-    float              GetEndWidth()      const { return endWidth_; }
-    float              GetLifetime()      const { return lifetime_; }
-    int32_t            GetMaxPoints()     const { return maxPoints_; }
-    float              GetEmitInterval()  const { return emitInterval_; }
-    const std::string& GetTexturePath()           const { return texturePath_; }
-    bool               GetUseDistortion()         const { return useDistortion_; }
-    float              GetDistortionStrength()     const { return distortionStrength_; }
+    Vector4 GetStartColor() const { return startColor_; }
+    Vector4 GetEndColor() const { return endColor_; }
+    float GetStartWidth() const { return startWidth_; }
+    float GetEndWidth() const { return endWidth_; }
+    float GetLifetime() const { return lifetime_; }
+    int32_t GetMaxPoints() const { return maxPoints_; }
+    float GetEmitInterval() const { return emitInterval_; }
+    const std::string& GetTexturePath() const { return texturePath_; }
+    bool GetUseDistortion() const { return useDistortion_; }
+    float GetDistortionStrength() const { return distortionStrength_; }
     const std::string& GetDistortionTexturePath() const { return distortionTexturePath_; }
 };
 

@@ -1,6 +1,7 @@
 #include "RibbonTrailData.h"
 
 using namespace KetaEngine;
+
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <filesystem>
 #include <imgui.h>
@@ -42,8 +43,9 @@ void RibbonTrailData::Init(const std::string& name, const std::string& categoryN
     }
 }
 
-void RibbonTrailData::Update(float /*speedRate*/) {
-    // パラメータのみのデータなので更新処理なし
+void RibbonTrailData::Update(float speedRate) {
+   // 未使用
+    speedRate;
 }
 
 void RibbonTrailData::Play() {

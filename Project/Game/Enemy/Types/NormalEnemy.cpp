@@ -14,6 +14,7 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     SetAnimationName(AnimationType::Discovery, "NormalEnemyDiscovery");
     SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
     SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
+    SetAnimationName(AnimationType::Death,  "EnemyDeathAnimation");
     
      // ダメージリアクション用アニメーションを追加
     AddDamageReactionAnimation("EnemyNormalDamage");

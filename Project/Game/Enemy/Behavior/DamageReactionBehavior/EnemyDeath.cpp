@@ -11,71 +11,59 @@
 EnemyDeath::EnemyDeath(BaseEnemy* boss)
     : BaseEnemyDamageReaction("EnemyDeath", boss) {
 
-    rotate_          = 0.0f;
-    burstTime_       = 0.0f;
-    blowJumpValue_   = pBaseEnemy_->GetParameter().deathBlowValueY;
-    gravity_         = pBaseEnemy_->GetParameter().deathGravity;
-    kFallSpeedLimit_ = 60.0f;
-    step_            = Step::DIRECTIONSET;
+    step_ = Step::DIRECTIONSET;
 }
 
 void EnemyDeath::AngleCaluclation() {
-    // プレイヤーの位置を取得
     Vector3 playerPos = pBaseEnemy_->GetPlayer()->GetWorldPosition();
 
-    // プレイヤーから敵への方向ベクトルを計算
     direction_   = pBaseEnemy_->GetDirectionToTarget(playerPos);
     direction_.y = 0.0f;
     direction_   = direction_.Normalize();
 
-    // プレイヤーを向く角度を計算
     objectiveAngle_ = std::atan2(direction_.x, direction_.z);
 }
 
 EnemyDeath::~EnemyDeath() {
 }
 
-void EnemyDeath::Update(float deltaTime) {
+void EnemyDeath::Update([[maybe_unused]] float deltaTime) {
     switch (step_) {
     /// ------------------------------------------------------
-    /// 方向計算
+    /// 方向計算 → アニメーションへ
     ///---------------------------------------------------------
     case Step::DIRECTIONSET:
         AngleCaluclation();
-        blowPower_ = Vector3(
-            direction_.x * -pBaseEnemy_->GetParameter().deathBlowValue * deltaTime,
-            0.0f,
-            direction_.z * -pBaseEnemy_->GetParameter().deathBlowValue * deltaTime);
-        step_ = Step::BLOW;
+        pBaseEnemy_->SetRotationY(objectiveAngle_);
+        step_ = Step::ANIMATION;
         break;
 
     /// -------------------------------------------------------
-    /// 吹き飛び
+    /// 死亡アニメーション再生・終了待ち
     ///---------------------------------------------------------
-    case EnemyDeath::Step::BLOW:
-        pBaseEnemy_->SetRotationY(LerpShortAngle(
-            pBaseEnemy_->GetBaseTransform().rotation_.y,
-            objectiveAngle_,
-            0.5f));
-        burstTime_ += deltaTime;
-
-        // 吹っ飛び回転
-        rotate_ += pBaseEnemy_->GetParameter().deathRotateSpeed * deltaTime;
-        pBaseEnemy_->SetRotationX(rotate_);
-
-        // 吹っ飛び適応
-        pBaseEnemy_->AddPosition(blowPower_);
-        pBaseEnemy_->Jump(blowJumpValue_, kFallSpeedLimit_, gravity_);
-
-        if (burstTime_ < pBaseEnemy_->GetParameter().deathBurstTime)
-            break;
-        step_ = Step::BURST;
+    case Step::ANIMATION:
+        if (!deathAnimStarted_) {
+            deathAnimStarted_ = true;
+            const std::string& deathAnim = pBaseEnemy_->GetAnimationName(BaseEnemy::AnimationType::Death);
+            if (!deathAnim.empty()) {
+                pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Death, false);
+                pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(deathAnim, [this]() {
+                    deathAnimFinished_ = true;
+                });
+            } else {
+                // アニメーション未設定の場合はすぐに次へ
+                deathAnimFinished_ = true;
+            }
+        }
+        if (deathAnimFinished_) {
+            step_ = Step::BURST;
+        }
         break;
 
     /// -------------------------------------------------------
     /// 爆散
     ///---------------------------------------------------------
-    case EnemyDeath::Step::BURST:
+    case Step::BURST:
         pBaseEnemy_->DeathRenditionInit();
         step_ = Step::DEATH;
         break;
@@ -83,7 +71,7 @@ void EnemyDeath::Update(float deltaTime) {
     /// -------------------------------------------------------
     /// 死
     ///---------------------------------------------------------
-    case EnemyDeath::Step::DEATH:
+    case Step::DEATH:
         pBaseEnemy_->SetIsDeath(true);
         break;
 

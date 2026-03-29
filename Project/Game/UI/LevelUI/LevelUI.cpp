@@ -19,6 +19,10 @@ void LevelUI::Init(Digit digit) {
     globalParameter_->SyncParamForGroup(groupName_);
 
     InitDigitCalculators();
+
+    if (sprite_) {
+        sprite_->transform_.scale = {0.0f, 0.0f};
+    }
 }
 
 void LevelUI::Update(const Vector2& scale, float alpha) {

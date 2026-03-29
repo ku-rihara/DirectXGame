@@ -6,25 +6,20 @@ class EnemyDeath : public BaseEnemyDamageReaction {
 private:
     enum class Step {
         DIRECTIONSET,
-        BLOW,
+        ANIMATION,
         BURST,
         DEATH,
     };
 
 private:
     Step step_;
-    float rotate_;
-    float burstTime_;
-    Vector3 blowPower_;
-    float blowJumpValue_;
-    float gravity_;
-    float kFallSpeedLimit_;
+    bool deathAnimStarted_  = false;
+    bool deathAnimFinished_ = false;
 
 public:
-    // コンストラクタ
     EnemyDeath(BaseEnemy* boss);
     ~EnemyDeath();
-   void  AngleCaluclation();
+    void AngleCaluclation();
 
     void Update(float deltaTime) override;
     void Debug() override;

@@ -90,6 +90,11 @@ private:
     // GetUpフェーズ管理
     bool getUpFinished_ = false;
 
+    // バウンド死亡フラグ（1バウンド後にアニメなしで死亡）
+    bool  isDeathBounce_     = false;
+    bool  isDeathBurstPhase_ = false;
+    float deathBurstTimer_   = 0.0f;
+
 public:
     Vector3 GetKnockBackVelocity() const { return knockBackVelocity_; }
 };

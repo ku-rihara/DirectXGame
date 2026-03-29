@@ -34,6 +34,15 @@ void EnemyDamageReactionTakeUpper::Update(float deltaTime) {
         return;
     }
 
+    // バウンド死亡のバーストタイマー待ち
+    if (isDeathBurstPhase_) {
+        deathBurstTimer_ -= deltaTime;
+        if (deathBurstTimer_ <= 0.0f) {
+            pBaseEnemy_->SetIsDeath(true);
+        }
+        return;
+    }
+
     damageRendition_.Update(deltaTime, reactionTimer_, hasPlayedRendition_);
     reactionTimer_ += deltaTime;
 
@@ -199,11 +208,10 @@ void EnemyDamageReactionTakeUpper::UpdateTakeUpper() {
             // バウンドエフェクト
             pBaseEnemy_->ThrustRenditionInit();
 
-            // HPが0以下の場合、最初の着地で死亡処理
+            // HPが0以下の場合、1バウンドしてアニメなしで死亡
             if (pBaseEnemy_->GetIsDeathPending()) {
-                endType_ = EndType::Death;
-                currentPhase_ = [this]() { EndPhase(); };
-                return;
+                isDeathBounce_ = true;
+                maxBoundCount_ = 1;
             }
 
             // 最初の着地時のバウンド速度を設定
@@ -242,6 +250,13 @@ void EnemyDamageReactionTakeUpper::UpdateBounce(float basePosY, float gravity) {
 
         if (currentBoundCount_ >= maxBoundCount_) {
             bounceSpeed_ = 0.0f;
+            if (isDeathBounce_) {
+                pBaseEnemy_->ThrustRenditionInit();
+                pBaseEnemy_->DeathRenditionInit();
+                deathBurstTimer_   = pBaseEnemy_->GetParameter().deathBurstTime;
+                isDeathBurstPhase_ = true;
+                return;
+            }
         } else {
             bounceSpeed_ = nextBounceSpeed;
             pBaseEnemy_->ThrustRenditionInit();
