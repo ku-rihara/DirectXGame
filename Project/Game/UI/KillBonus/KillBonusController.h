@@ -1,15 +1,13 @@
 #pragma once
 
-#include "KillBonusEntry.h"
+#include "KillBonusComboUI.h"
+#include "KillBonusSimKillUI.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector2.h"
 #include <cstdint>
 #include <functional>
-#include <memory>
 #include <string>
-#include <vector>
 
-/// キルボーナスUI管理クラス
 class KillBonusController {
 public:
     KillBonusController()  = default;
@@ -17,50 +15,55 @@ public:
 
     void Init();
     void Update(float deltaTime);
-
     void AdjustParam();
     void RegisterParams();
 
-    // 敵撃破イベント（comboBonusValue: コンボ倍率float）
-    void OnEnemyKilled(float comboBonusValue);
+    /// 敵撃破イベント（コンボ倍率、同時キル判定）
+    /// 敵撃破イベント（同時キル判定のみ、EnemyManagerから呼ぶ）
+    void OnEnemyKilled(int32_t comboCount);
+
+    /// BonusFly到着イベント（コンボUIスポーン、flyコールバックから呼ぶ）
+    void OnBonusFlyArrived(float comboBonusValue);
 
     void SetOnSimKillBonusCallback(std::function<void(float)> cb) { onSimKillBonusCallback_ = std::move(cb); }
 
 private:
-    void SpawnEntry(float comboBonusValue);
-    void RecalculateTargetPositions();
     void FlushSimKillWindow();
-
-    // デバッグプレビュー
+    void ResetDisplayTimer();
     void SpawnPreview();
 
 private:
-    bool  previewActive_          = false;
-    float previewComboBonusValue_ = 2.0f;
-    bool  previewHasSimKill_      = true;
-    int32_t previewSimKillValue_  = 2;
+    KillBonusComboUI   comboUI_;
+    KillBonusSimKillUI simKillUI_;
 
-private:
-    // 同時キル検出
+    KillBonusComboUILayout   comboLayout_;
+    KillBonusSimKillUILayout simKillLayout_;
+
+    // 共有表示タイマー
+    float displayTimer_    = 0.0f;
+    float displayDuration_ = 2.0f;
+    bool  displayActive_   = false;
+
+    // 同時キル判定
     struct SimKillTracker {
-        float             toleranceTime = 0.0f; // 残り時間（秒）
-        int32_t           killCount     = 0;    // ウィンドウ内キル数
-        std::vector<int>  entryIndices;          // ウィンドウ内エントリのインデックス
+        float   toleranceTime = 0.0f;
+        int32_t killCount     = 0;
     };
+    SimKillTracker simKillTracker_;
+    float simKillToleranceTime_ = 0.1f;
+    float simKillBonusPerKill_  = 0.5f;
 
-    std::vector<std::unique_ptr<KillBonusEntry>> entries_;
-    SimKillTracker              simKillTracker_;
+    float   lastComboBonusValue_ = 1.0f;
+    int32_t lastComboCount_      = 0;
+    int32_t pendingSimKillCount_ = 0;  // fly到着まで保留する同時キル数
 
-    KillBonusLayoutParam layout_;
+    // デバッグプレビュー
+    bool    previewActive_          = false;
+    float   previewComboBonusValue_ = 2.5f;
+    bool    previewHasSimKill_      = true;
+    int32_t previewSimKillCount_    = 3;
 
-    Vector2 basePos_;
-    Vector2 entryOffset_;
-
-    int32_t maxEntries_             = 3;    // 最大同時表示数（超えたら最古をその場でクローズ）
-    float   simKillToleranceTime_   = 0.1f; // 同時キル判定時間（秒）
-    float   simKillBonusPerKill_    = 0.5f; // 1キルあたりのボーナスゲージ量
-
-    KetaEngine::GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_ = "KillBonusUI";
 
     std::function<void(float)> onSimKillBonusCallback_;

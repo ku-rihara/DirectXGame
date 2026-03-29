@@ -12,7 +12,7 @@ void KillBonusFlyEntry::Init(const Vector2& startPos, const KillBonusFlyParam& p
     const float randX  = Random::Range(-param.controlXOffsetRange,  param.controlXOffsetRange);
     p1_ = startPos + Vector2{param.controlOffset.x  + randX,  param.controlOffset.y};
 
-    // 第2制御点：終点付近・符号含めてランダム（3次ベジエ用）
+    // 第2制御点：終点付近・符号含めてランダム
     const float randX2 = Random::Range(-param.controlXOffsetRange2, param.controlXOffsetRange2);
     p1b_ = p2_ + Vector2{param.controlOffset2.x + randX2, param.controlOffset2.y};
 

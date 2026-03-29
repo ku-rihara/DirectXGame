@@ -258,7 +258,7 @@ void GameScene::SetClassPointer() {
 
         // スプライトが終点到達したら KillBonusController に通知
         flyCtrl->SetOnReachCallback([killBonus](float comboBonusValue) {
-            killBonus->OnEnemyKilled(comboBonusValue);
+            killBonus->OnBonusFlyArrived(comboBonusValue);
         });
 
         // スプライトが終点到達したらゲージスプライトをイージング
@@ -273,6 +273,7 @@ void GameScene::SetClassPointer() {
 
         // EnemyManager に FlyController とViewProjection を渡す
         gameObj_.enemyManager_->SetKillBonusFly(flyCtrl);
+        gameObj_.enemyManager_->SetKillBonusController(killBonus);
     }
 
     // 自動コンボ実行 → アンロック通知UIリアクション の接続

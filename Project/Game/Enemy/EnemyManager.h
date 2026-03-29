@@ -27,6 +27,7 @@ class EnemySpawner;
 class KillCounter;
 class DeathTimer;
 class KillBonusFlyController;
+class KillBonusController;
 
 class EnemyManager {
 public:
@@ -80,7 +81,8 @@ private:
     KillCounter* pKillCounter_ = nullptr;
     EnemySpawner* pEnemySpawner_;
     DeathTimer* pDeathTimer_ = nullptr;
-    KillBonusFlyController* pKillBonusFly_ = nullptr;
+    KillBonusFlyController* pKillBonusFly_        = nullptr;
+    KillBonusController*    pKillBonusController_  = nullptr;
     const KetaEngine::ViewProjection* pViewProjection_ = nullptr;
   
     // damageReaction
@@ -134,5 +136,6 @@ public:
     void SetEnemySpawner(EnemySpawner* enemySpawner);
     void SetDeathTimer(DeathTimer* deathTimer);
     void SetKillBonusFly(KillBonusFlyController* fly) { pKillBonusFly_ = fly; }
+    void SetKillBonusController(KillBonusController* ctrl) { pKillBonusController_ = ctrl; }
     void SetViewProjection(const KetaEngine::ViewProjection* vp) { pViewProjection_ = vp; }
 };

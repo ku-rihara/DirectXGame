@@ -8,6 +8,7 @@
 #include "DeathTimer/DeathTimer.h"
 // KillBonusFly
 #include "UI/KillBonus/KillBonusFlyController.h"
+#include "UI/KillBonus/KillBonusController.h"
 // Combo
 #include "Combo/Combo.h"
 // LockOn
@@ -98,9 +99,14 @@ void EnemyManager::Update() {
                 pEnemySpawner_->OnEnemyDestroyed(enemies_[i]->GetGroupId());
             }
 
+            int32_t comboCount = pCombo_ ? pCombo_->GetComboCount() : 0;
+
             if (pDeathTimer_) {
-                int32_t comboCount = pCombo_ ? pCombo_->GetComboCount() : 0;
                 pDeathTimer_->OnEnemyKilled(enemies_[i]->GetParameter().gaugeIncreaseValue, comboCount);
+            }
+
+            if (pKillBonusController_) {
+                pKillBonusController_->OnEnemyKilled(comboCount);
             }
 
             if (pKillBonusFly_ && pViewProjection_) {

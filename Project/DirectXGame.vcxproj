@@ -318,6 +318,9 @@
     <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistConditionSwitcher.cpp" />
     <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistController.cpp" />
     <ClCompile Include="Game\UI\KillBonus\KillBonusEntry.cpp" />
+    <ClCompile Include="Game\UI\KillBonus\KillBonusComboUI.cpp" />
+    <ClCompile Include="Game\UI\NextAttackUI\NextAttackUI.cpp" />
+    <ClCompile Include="Game\UI\KillBonus\KillBonusSimKillUI.cpp" />
     <ClCompile Include="Game\UI\KillBonus\KillBonusController.cpp" />
     <ClCompile Include="Game\UI\KillBonus\KillBonusFlyEntry.cpp" />
     <ClCompile Include="Game\UI\KillBonus\KillBonusFlyController.cpp" />
@@ -677,6 +680,9 @@
     <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistConditionSwitcher.h" />
     <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistController.h" />
     <ClInclude Include="Game\UI\KillBonus\KillBonusEntry.h" />
+    <ClInclude Include="Game\UI\KillBonus\KillBonusComboUI.h" />
+    <ClInclude Include="Game\UI\NextAttackUI\NextAttackUI.h" />
+    <ClInclude Include="Game\UI\KillBonus\KillBonusSimKillUI.h" />
     <ClInclude Include="Game\UI\KillBonus\KillBonusController.h" />
     <ClInclude Include="Game\UI\KillBonus\KillBonusFlyEntry.h" />
     <ClInclude Include="Game\UI\KillBonus\KillBonusFlyController.h" />

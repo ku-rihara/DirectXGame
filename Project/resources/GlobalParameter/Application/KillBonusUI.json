@@ -38,6 +38,83 @@
             23.700000762939453,
             11.699999809265137
         ],
+        "combo_basePos": [
+            351.70001220703125,
+            199.6999969482422
+        ],
+        "combo_baseScale": [
+            1.2999999523162842,
+            1.2999999523162842
+        ],
+        "combo_bgColor": [
+            1.0,
+            1.0,
+            1.0,
+            0.45490196347236633
+        ],
+        "combo_bgOffset": [
+            37.599998474121094,
+            19.100000381469727
+        ],
+        "combo_bgScale": [
+            0.0,
+            0.0
+        ],
+        "combo_comboCountOffset": [
+            -47.099998474121094,
+            27.600000381469727
+        ],
+        "combo_comboCountScale": [
+            1.0,
+            1.0
+        ],
+        "combo_comboCountSpacing": [
+            39.5,
+            0.0
+        ],
+        "combo_comboTextOffset": [
+            113.9000015258789,
+            53.0
+        ],
+        "combo_decimalDigitOffset": [
+            137.10000610351563,
+            -15.699999809265137
+        ],
+        "combo_decimalPointOffset": [
+            127.19999694824219,
+            6.900000095367432
+        ],
+        "combo_digitOffset": [
+            86.5,
+            -15.699999809265137
+        ],
+        "combo_digitScale": [
+            0.8999999761581421,
+            0.8999999761581421
+        ],
+        "combo_digitSpacing": [
+            32.0,
+            0.0
+        ],
+        "combo_labelOffset": [
+            -24.899999618530273,
+            1.5
+        ],
+        "combo_leftParenOffset": [
+            -79.80000305175781,
+            50.0
+        ],
+        "combo_multiplyIconOffset": [
+            240.89999389648438,
+            4.800000190734863
+        ],
+        "combo_rightParenOffset": [
+            200.89999389648438,
+            50.0
+        ],
+        "combo_tier0_threshold": 2,
+        "combo_tier1_threshold": 100,
+        "combo_tier2_threshold": 250,
         "digitScale": [
             0.30000001192092896,
             0.30000001192092896
@@ -65,6 +142,88 @@
             42.70000076293945,
             39.70000076293945
         ],
+        "simKillToleranceTime": 0.10000000149011612,
+        "simKill_basePos": [
+            768.2000122070313,
+            201.5
+        ],
+        "simKill_baseScale": [
+            1.0,
+            1.0
+        ],
+        "simKill_bodyOffset": [
+            158.3000030517578,
+            51.5
+        ],
+        "simKill_comboDecimalDigitOffset": [
+            174.89999389648438,
+            -15.699999809265137
+        ],
+        "simKill_comboDecimalPointOffset": [
+            169.3000030517578,
+            2.0
+        ],
+        "simKill_comboDecimalSpacing": [
+            28.799999237060547,
+            0.0
+        ],
+        "simKill_comboDigitOffset": [
+            122.0999984741211,
+            -15.699999809265137
+        ],
+        "simKill_comboDigitScale": [
+            0.8999999761581421,
+            0.8999999761581421
+        ],
+        "simKill_digitOffset": [
+            45.400001525878906,
+            27.600000381469727
+        ],
+        "simKill_digitScale": [
+            1.0,
+            1.0
+        ],
+        "simKill_digitSpacing": [
+            34.70000076293945,
+            0.0
+        ],
+        "simKill_labelOffset": [
+            0.0,
+            0.0
+        ],
+        "simKill_leftParenOffset": [
+            28.0,
+            50.0
+        ],
+        "simKill_multiplyIconOffset": [
+            275.29998779296875,
+            4.800000190734863
+        ],
+        "simKill_rightParenOffset": [
+            191.6999969482422,
+            50.0
+        ],
+        "simKill_tier0_color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "simKill_tier0_threshold": 2,
+        "simKill_tier1_color": [
+            1.0,
+            1.0,
+            0.0,
+            1.0
+        ],
+        "simKill_tier1_threshold": 5,
+        "simKill_tier2_color": [
+            1.0,
+            0.30000001192092896,
+            0.0,
+            1.0
+        ],
+        "simKill_tier2_threshold": 10,
         "toleranceFrames": 6,
         "toleranceTime": 0.10000000149011612
     }

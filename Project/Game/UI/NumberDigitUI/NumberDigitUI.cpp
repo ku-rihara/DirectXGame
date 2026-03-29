@@ -7,6 +7,18 @@ void NumberDigitUI::Init(const std::string& name) {
     }
 }
 
+void NumberDigitUI::Hide() {
+    if (sprite_) {
+        sprite_->SetIsDraw(false);
+    }
+}
+
+void NumberDigitUI::SetColor(const Vector3& color) {
+    if (sprite_) {
+        sprite_->SetColor(color);
+    }
+}
+
 void NumberDigitUI::Update(int32_t digit, const Vector2& pos, const Vector2& scale, float alpha, bool isVisible) {
     if (!sprite_) {
         return;

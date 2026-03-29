@@ -1,6 +1,5 @@
 #include "KillBonusController.h"
 #include "Audio/Audio.h"
-#include <algorithm>
 #include <imgui.h>
 
 void KillBonusController::Init() {
@@ -8,6 +7,9 @@ void KillBonusController::Init() {
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
+
+    comboUI_.Init();
+    simKillUI_.Init();
 }
 
 void KillBonusController::Update(float deltaTime) {
@@ -20,118 +22,81 @@ void KillBonusController::Update(float deltaTime) {
         }
     }
 
-    // エントリ更新
-    KillBonusLayoutParam activeLayout = layout_;
-    if (previewActive_) {
-        const float& previewDuration = 9999.0f; // プレビューは常に表示
-        activeLayout.displayDuration = previewDuration;
-    }
-    for (auto& entry : entries_) {
-        entry->Update(deltaTime, activeLayout);
+    // 共有表示タイマー
+    if (displayActive_ && !previewActive_) {
+        displayTimer_ -= deltaTime;
+        if (displayTimer_ <= 0.0f) {
+            displayActive_ = false;
+            comboUI_.Close();
+            simKillUI_.Close();
+        }
     }
 
-    // 終了エントリ除去
-    const size_t before = entries_.size();
-    entries_.erase(
-        std::remove_if(entries_.begin(), entries_.end(),
-            [](const std::unique_ptr<KillBonusEntry>& e) { return e->IsFinished(); }),
-        entries_.end());
-
-    // 除去があれば目標位置を再計算
-    if (entries_.size() != before) {
-        RecalculateTargetPositions();
+    // コンボUIの段階カラー
+    for (int i = 0; i < 3; ++i) {
+        comboLayout_.colorTiers[i].color = simKillLayout_.colorTiers[i].color;
     }
+
+    comboUI_.Update(deltaTime, comboLayout_);
+    simKillUI_.Update(deltaTime, simKillLayout_);
 }
 
-void KillBonusController::OnEnemyKilled(float comboBonusValue) {
-    if (simKillTracker_.toleranceTime <= 0.0f) {
-        // 新規ウィンドウ：エントリをスポーン
-        SpawnEntry(comboBonusValue);
-        simKillTracker_.entryIndices.push_back(static_cast<int>(entries_.size()) - 1);
-    }
-    // ウィンドウ内の追加キルはエントリを増やさずカウントのみ
+void KillBonusController::OnEnemyKilled(int32_t comboCount) {
+    lastComboCount_ = comboCount;
+
     simKillTracker_.killCount++;
     simKillTracker_.toleranceTime = simKillToleranceTime_;
 }
 
-void KillBonusController::SpawnEntry(float comboBonusValue) {
-    if (static_cast<int>(entries_.size()) >= maxEntries_) {
-        // 最古エントリをその場でクローズ
-        entries_[0]->ForceClose();
-        // 残りのエントリは通常通り1スロット分シフト
-        for (int i = 1; i < static_cast<int>(entries_.size()); ++i) {
-            Vector2 target = basePos_ + Vector2(entryOffset_.x * static_cast<float>(i + 1), entryOffset_.y * static_cast<float>(i + 1));
-            entries_[i]->ShiftTo(target);
-        }
-    } else {
-        // 既存エントリを1スロット分シフト
-        for (int i = 0; i < static_cast<int>(entries_.size()); ++i) {
-            Vector2 target = basePos_ + Vector2(entryOffset_.x * static_cast<float>(i + 1), entryOffset_.y * static_cast<float>(i + 1));
-            entries_[i]->ShiftTo(target);
-        }
+void KillBonusController::OnBonusFlyArrived(float comboBonusValue) {
+    lastComboBonusValue_ = comboBonusValue;
+    comboUI_.Spawn(lastComboBonusValue_, lastComboCount_);
+
+    // 保留中の同時キルがあれば同タイミングでSpawn
+    if (pendingSimKillCount_ > 1) {
+        simKillUI_.Spawn(pendingSimKillCount_, lastComboBonusValue_);
+        pendingSimKillCount_ = 0;
     }
 
-    // 新エントリをbasePos_に配置
-    auto entry = std::make_unique<KillBonusEntry>();
-    entry->Init(comboBonusValue, false, 0, basePos_);
-    entries_.push_back(std::move(entry));
+    ResetDisplayTimer();
 
     KetaEngine::Audio::GetInstance()->Play("TimerCure.mp3", 0.5f);
 }
 
-void KillBonusController::RecalculateTargetPositions() {
-    for (int i = 0; i < static_cast<int>(entries_.size()); ++i) {
-        Vector2 target = basePos_ + Vector2(entryOffset_.x * static_cast<float>(i), entryOffset_.y * static_cast<float>(i));
-        entries_[i]->ShiftTo(target);
-    }
-}
-
 void KillBonusController::FlushSimKillWindow() {
-    if (simKillTracker_.killCount <= 1) {
-        simKillTracker_.killCount = 0;
-        simKillTracker_.entryIndices.clear();
+    const int32_t killCount   = simKillTracker_.killCount;
+    simKillTracker_.killCount = 0;
+
+    if (killCount <= 1) {
         return;
     }
 
-    // シムキルボーナス計算・コールバック
-    const float bonus = simKillBonusPerKill_ * static_cast<float>(simKillTracker_.killCount);
+    // ボーナスコールバック
+    const float bonus = simKillBonusPerKill_ * static_cast<float>(killCount);
     if (onSimKillBonusCallback_) {
         onSimKillBonusCallback_(bonus);
     }
 
-    // 対象エントリにシムキル情報を遡及設定
-    const int32_t bonusDisplay = static_cast<int32_t>(bonus);
-    for (int idx : simKillTracker_.entryIndices) {
-        if (idx >= 0 && idx < static_cast<int>(entries_.size())) {
-            entries_[idx]->SetSimKill(bonusDisplay);
-        }
-    }
+    // fly到着まで保留
+    pendingSimKillCount_ = killCount;
+}
 
-    simKillTracker_.killCount = 0;
-    simKillTracker_.entryIndices.clear();
+void KillBonusController::ResetDisplayTimer() {
+    displayTimer_  = displayDuration_;
+    displayActive_ = true;
 }
 
 ///=========================================================
-/// プレビュー生成
+/// デバッグプレビュー
 ///=========================================================
 void KillBonusController::SpawnPreview() {
-    entries_.clear();
-    simKillTracker_ = {};
-
-    auto spawnOne = [&](float bonus, bool hasSimKill, int32_t simKillVal) {
-        for (int i = 0; i < static_cast<int>(entries_.size()); ++i) {
-            Vector2 target = basePos_ + Vector2(entryOffset_.x * static_cast<float>(i + 1), entryOffset_.y * static_cast<float>(i + 1));
-            entries_[i]->ShiftTo(target);
-        }
-        auto entry = std::make_unique<KillBonusEntry>();
-        entry->Init(bonus, hasSimKill, simKillVal, basePos_);
-        entries_.push_back(std::move(entry));
-    };
-
-    spawnOne(previewComboBonusValue_, false, 0);
+    comboUI_.SetShowMaxDigits(true);
+    simKillUI_.SetShowMaxDigits(true);
+    comboUI_.Spawn(previewComboBonusValue_, previewSimKillCount_);
     if (previewHasSimKill_) {
-        spawnOne(previewComboBonusValue_, true, previewSimKillValue_);
+        simKillUI_.Spawn(previewSimKillCount_, previewComboBonusValue_);
     }
+    ResetDisplayTimer();
 }
 
 ///=========================================================
@@ -141,29 +106,62 @@ void KillBonusController::AdjustParam() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
-        ImGui::DragFloat2("基準位置", &basePos_.x, 0.1f);
-        ImGui::DragFloat2("エントリーオフセット", &entryOffset_.x, 0.1f);
-        ImGui::SeparatorText("レイアウト");
-        ImGui::DragFloat2("回復アイコン　オフセット", &layout_.recoveryOffset.x, 0.1f);
-        ImGui::DragFloat2("コンボ整数桁　オフセット", &layout_.comboOffset.x, 0.1f);
-        ImGui::DragFloat2("コンボ小数点　オフセット", &layout_.comboDecimalPointOffset.x, 0.1f);
-        ImGui::DragFloat2("コンボ小数桁　オフセット", &layout_.comboDecimalDigitOffset.x, 0.1f);
-        ImGui::DragFloat2("コンボラベル オフセット", &layout_.comboLabelOffset.x, 0.1f);
-        ImGui::DragFloat2("同時撃破　オフセット", &layout_.simKillOffset.x, 0.1f);
-        ImGui::DragFloat2("同時撃破ラベル オフセット", &layout_.simKillLabelOffset.x, 0.1f);
-        ImGui::DragFloat2("数字間隔", &layout_.digitSpacing.x, 0.1f);
-        ImGui::DragFloat2("数字スケール", &layout_.digitScale.x, 0.01f);
-        ImGui::DragFloat2("ベーススケール", &layout_.baseScale.x, 0.01f);
-        ImGui::DragFloat("表示時間", &layout_.displayDuration, 0.01f);
-        ImGui::SeparatorText("背景スプライト");
-        ImGui::DragFloat2("背景 オフセット", &layout_.bgOffset.x, 0.1f);
-        ImGui::DragFloat2("背景 スケール", &layout_.bgScale.x, 0.01f);
-        ImGui::ColorEdit4("背景 カラー", &layout_.bgColor.x);
-        ImGui::SeparatorText("表示制限");
-        ImGui::InputInt("最大同時表示数", &maxEntries_);
-        ImGui::SeparatorText("同時撃破判定");
+
+        ImGui::DragFloat("表示時間", &displayDuration_, 0.01f, 0.0f, 10.0f);
+        ImGui::SeparatorText("同時キル判定");
         ImGui::DragFloat("同時キル判定時間(秒)", &simKillToleranceTime_, 0.01f, 0.0f, 2.0f);
         ImGui::DragFloat("同時撃破ボーナス/キル", &simKillBonusPerKill_, 0.01f);
+
+        ImGui::SeparatorText("コンボUI レイアウト");
+        ImGui::DragFloat2("コンボ 基準位置", &comboLayout_.basePos.x, 0.1f);
+        ImGui::DragFloat2("コンボ BG オフセット", &comboLayout_.bgOffset.x, 0.1f);
+        ImGui::DragFloat2("コンボ BG スケール", &comboLayout_.bgScale.x, 0.01f);
+        ImGui::ColorEdit4("コンボ BG カラー", &comboLayout_.bgColor.x);
+        ImGui::DragFloat2("コンボ ラベル オフセット", &comboLayout_.labelOffset.x, 0.1f);
+        ImGui::DragFloat2("コンボ テキスト オフセット", &comboLayout_.comboTextOffset.x, 0.1f);
+        ImGui::DragFloat2("コンボ MultiplyIcon オフセット", &comboLayout_.multiplyIconOffset.x, 0.1f);
+        ImGui::DragFloat2("コンボ 整数桁 オフセット", &comboLayout_.digitOffset.x, 0.1f);
+        ImGui::DragFloat2("コンボ 小数点 オフセット", &comboLayout_.decimalPointOffset.x, 0.1f);
+        ImGui::DragFloat2("コンボ 小数桁 オフセット", &comboLayout_.decimalDigitOffset.x, 0.1f);
+        ImGui::DragFloat2("コンボ 小数桁間隔", &comboLayout_.digitSpacing.x, 0.1f);
+        ImGui::DragFloat2("コンボ 数字スケール", &comboLayout_.digitScale.x, 0.01f);
+        ImGui::DragFloat2("コンボ 左カッコ オフセット", &comboLayout_.leftParenOffset.x, 0.1f);
+        ImGui::DragFloat2("コンボ 右カッコ オフセット", &comboLayout_.rightParenOffset.x, 0.1f);
+        ImGui::DragFloat2("コンボ数 オフセット", &comboLayout_.comboCountOffset.x, 0.1f);
+        ImGui::DragFloat2("コンボ数 桁間隔", &comboLayout_.comboCountSpacing.x, 0.1f);
+        ImGui::DragFloat2("コンボ数 スケール", &comboLayout_.comboCountScale.x, 0.01f);
+
+        ImGui::SeparatorText("同時キルUI レイアウト");
+        ImGui::DragFloat2("同時キル 基準位置", &simKillLayout_.basePos.x, 0.1f);
+        ImGui::DragFloat2("同時キル ラベル オフセット", &simKillLayout_.labelOffset.x, 0.1f);
+        ImGui::DragFloat2("同時キル 数字 オフセット", &simKillLayout_.digitOffset.x, 0.1f);
+        ImGui::DragFloat2("同時キル 数字間隔", &simKillLayout_.digitSpacing.x, 0.1f);
+        ImGui::DragFloat2("同時キル 数字スケール", &simKillLayout_.digitScale.x, 0.01f);
+        ImGui::DragFloat2("同時キル 体 オフセット", &simKillLayout_.bodyOffset.x, 0.1f);
+        ImGui::DragFloat2("左カッコ オフセット", &simKillLayout_.leftParenOffset.x, 0.1f);
+        ImGui::DragFloat2("右カッコ オフセット", &simKillLayout_.rightParenOffset.x, 0.1f);
+        ImGui::DragFloat2("倍率 整数桁 オフセット", &simKillLayout_.comboDigitOffset.x, 0.1f);
+        ImGui::DragFloat2("倍率 小数点 オフセット", &simKillLayout_.comboDecimalPointOffset.x, 0.1f);
+        ImGui::DragFloat2("倍率 小数桁 オフセット", &simKillLayout_.comboDecimalDigitOffset.x, 0.1f);
+        ImGui::DragFloat2("倍率 小数桁間隔", &simKillLayout_.comboDecimalSpacing.x, 0.1f);
+        ImGui::DragFloat2("倍率 数字スケール", &simKillLayout_.comboDigitScale.x, 0.01f);
+        ImGui::DragFloat2("同時キル MultiplyIcon オフセット", &simKillLayout_.multiplyIconOffset.x, 0.1f);
+
+        ImGui::SeparatorText("コンボ 段階カラー閾値（色は同時キルと共有）");
+        for (int i = 0; i < 3; ++i) {
+            ImGui::PushID(i);
+            ImGui::InputInt("閾値(コンボ数)", &comboLayout_.colorTiers[i].threshold);
+            ImGui::PopID();
+        }
+
+        ImGui::SeparatorText("同時キル 段階カラー");
+        for (int i = 0; i < 3; ++i) {
+            ImGui::PushID(i);
+            ImGui::InputInt("閾値(キル数)", &simKillLayout_.colorTiers[i].threshold);
+            ImGui::ColorEdit4("カラー", &simKillLayout_.colorTiers[i].color.x);
+            ImGui::PopID();
+        }
+
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
 
@@ -173,8 +171,8 @@ void KillBonusController::AdjustParam() {
             if (previewActive_) {
                 SpawnPreview();
             } else {
-                entries_.clear();
-                simKillTracker_ = {};
+                comboUI_.SetShowMaxDigits(false);
+                simKillUI_.SetShowMaxDigits(false);
             }
         }
         if (previewActive_) {
@@ -182,10 +180,10 @@ void KillBonusController::AdjustParam() {
             if (ImGui::Button("再生成")) {
                 SpawnPreview();
             }
-            ImGui::DragFloat("コンボボーナス値", &previewComboBonusValue_, 0.01f, 1.0f, 100.0f);
-            ImGui::Checkbox("同時撃破あり", &previewHasSimKill_);
+            ImGui::DragFloat("コンボ倍率", &previewComboBonusValue_, 0.01f, 1.0f, 99.99f);
+            ImGui::Checkbox("同時キルあり", &previewHasSimKill_);
             if (previewHasSimKill_) {
-                ImGui::InputInt("同時撃破ボーナス値", &previewSimKillValue_);
+                ImGui::InputInt("同時キル数", &previewSimKillCount_);
             }
         }
 
@@ -195,23 +193,55 @@ void KillBonusController::AdjustParam() {
 }
 
 void KillBonusController::RegisterParams() {
-    globalParameter_->Regist(groupName_, "basePos", &basePos_);
-    globalParameter_->Regist(groupName_, "entryOffset", &entryOffset_);
-    globalParameter_->Regist(groupName_, "recoveryOffset", &layout_.recoveryOffset);
-    globalParameter_->Regist(groupName_, "comboOffset", &layout_.comboOffset);
-    globalParameter_->Regist(groupName_, "comboDecimalPointOffset", &layout_.comboDecimalPointOffset);
-    globalParameter_->Regist(groupName_, "comboDecimalDigitOffset", &layout_.comboDecimalDigitOffset);
-    globalParameter_->Regist(groupName_, "comboLabelOffset", &layout_.comboLabelOffset);
-    globalParameter_->Regist(groupName_, "simKillOffset", &layout_.simKillOffset);
-    globalParameter_->Regist(groupName_, "simKillLabelOffset", &layout_.simKillLabelOffset);
-    globalParameter_->Regist(groupName_, "digitSpacing", &layout_.digitSpacing);
-    globalParameter_->Regist(groupName_, "digitScale", &layout_.digitScale);
-    globalParameter_->Regist(groupName_, "baseScale", &layout_.baseScale);
-    globalParameter_->Regist(groupName_, "displayDuration", &layout_.displayDuration);
-    globalParameter_->Regist(groupName_, "maxEntries", &maxEntries_);
+    globalParameter_->Regist(groupName_, "displayDuration", &displayDuration_);
+    globalParameter_->Regist(groupName_, "simKillToleranceTime", &simKillToleranceTime_);
     globalParameter_->Regist(groupName_, "simKillBonusPerKill", &simKillBonusPerKill_);
-    globalParameter_->Regist(groupName_, "toleranceTime", &simKillToleranceTime_);
-    globalParameter_->Regist(groupName_, "bgOffset", &layout_.bgOffset);
-    globalParameter_->Regist(groupName_, "bgScale", &layout_.bgScale);
-    globalParameter_->Regist(groupName_, "bgColor", &layout_.bgColor);
+
+    // コンボUI
+    globalParameter_->Regist(groupName_, "combo_basePos", &comboLayout_.basePos);
+    globalParameter_->Regist(groupName_, "combo_bgOffset", &comboLayout_.bgOffset);
+    globalParameter_->Regist(groupName_, "combo_bgScale", &comboLayout_.bgScale);
+    globalParameter_->Regist(groupName_, "combo_bgColor", &comboLayout_.bgColor);
+    globalParameter_->Regist(groupName_, "combo_labelOffset", &comboLayout_.labelOffset);
+    globalParameter_->Regist(groupName_, "combo_comboTextOffset", &comboLayout_.comboTextOffset);
+    globalParameter_->Regist(groupName_, "combo_digitOffset", &comboLayout_.digitOffset);
+    globalParameter_->Regist(groupName_, "combo_decimalPointOffset", &comboLayout_.decimalPointOffset);
+    globalParameter_->Regist(groupName_, "combo_decimalDigitOffset", &comboLayout_.decimalDigitOffset);
+    globalParameter_->Regist(groupName_, "combo_multiplyIconOffset", &comboLayout_.multiplyIconOffset);
+    globalParameter_->Regist(groupName_, "combo_digitSpacing", &comboLayout_.digitSpacing);
+    globalParameter_->Regist(groupName_, "combo_digitScale", &comboLayout_.digitScale);
+    globalParameter_->Regist(groupName_, "combo_leftParenOffset", &comboLayout_.leftParenOffset);
+    globalParameter_->Regist(groupName_, "combo_rightParenOffset", &comboLayout_.rightParenOffset);
+    globalParameter_->Regist(groupName_, "combo_comboCountOffset", &comboLayout_.comboCountOffset);
+    globalParameter_->Regist(groupName_, "combo_comboCountSpacing", &comboLayout_.comboCountSpacing);
+    globalParameter_->Regist(groupName_, "combo_comboCountScale", &comboLayout_.comboCountScale);
+
+    // 同時キルUI
+    globalParameter_->Regist(groupName_, "simKill_basePos", &simKillLayout_.basePos);
+    globalParameter_->Regist(groupName_, "simKill_labelOffset", &simKillLayout_.labelOffset);
+    globalParameter_->Regist(groupName_, "simKill_digitOffset", &simKillLayout_.digitOffset);
+    globalParameter_->Regist(groupName_, "simKill_digitSpacing", &simKillLayout_.digitSpacing);
+    globalParameter_->Regist(groupName_, "simKill_digitScale", &simKillLayout_.digitScale);
+    globalParameter_->Regist(groupName_, "simKill_bodyOffset", &simKillLayout_.bodyOffset);
+    globalParameter_->Regist(groupName_, "simKill_leftParenOffset", &simKillLayout_.leftParenOffset);
+    globalParameter_->Regist(groupName_, "simKill_rightParenOffset", &simKillLayout_.rightParenOffset);
+    globalParameter_->Regist(groupName_, "simKill_comboDigitOffset", &simKillLayout_.comboDigitOffset);
+    globalParameter_->Regist(groupName_, "simKill_comboDecimalPointOffset", &simKillLayout_.comboDecimalPointOffset);
+    globalParameter_->Regist(groupName_, "simKill_comboDecimalDigitOffset", &simKillLayout_.comboDecimalDigitOffset);
+    globalParameter_->Regist(groupName_, "simKill_comboDecimalSpacing", &simKillLayout_.comboDecimalSpacing);
+    globalParameter_->Regist(groupName_, "simKill_comboDigitScale", &simKillLayout_.comboDigitScale);
+    globalParameter_->Regist(groupName_, "simKill_multiplyIconOffset", &simKillLayout_.multiplyIconOffset);
+
+    // 段階カラー
+    for (int i = 0; i < 3; ++i) {
+        const std::string prefix = "simKill_tier" + std::to_string(i);
+        globalParameter_->Regist(groupName_, prefix + "_threshold", &simKillLayout_.colorTiers[i].threshold);
+        globalParameter_->Regist(groupName_, prefix + "_color", &simKillLayout_.colorTiers[i].color);
+    }
+
+    // 段階カラー
+    for (int i = 0; i < 3; ++i) {
+        const std::string prefix = "combo_tier" + std::to_string(i);
+        globalParameter_->Regist(groupName_, prefix + "_threshold", &comboLayout_.colorTiers[i].threshold);
+    }
 }
