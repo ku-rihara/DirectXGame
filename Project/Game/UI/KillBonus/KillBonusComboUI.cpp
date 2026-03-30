@@ -43,6 +43,7 @@ void KillBonusComboUI::Init() {
     comboDecimalDigits_[1].Init("ComboDecimal_2");
     comboCountDigits_[0].Init("ComboCount_1");
     comboCountDigits_[1].Init("ComboCount_10");
+    comboCountDigits_[2].Init("ComboCount_100");
 
     spawnEasing_.Init("KillBonusSpawn.json");
     spawnEasing_.SetAdaptValue(&currentScale_);
@@ -177,14 +178,15 @@ void KillBonusComboUI::Update(float deltaTime, const KillBonusComboUILayout& lay
         rightParenSprite_->SetAlpha(currentScale_);
     }
 
-    // カッコ内コンボ数（1の位・10の位）
-    const int32_t countOnes = comboCount_ % 10;
-    const int32_t countTens = (comboCount_ / 10) % 10;
+    // カッコ内コンボ数（1の位・10の位・100の位）
+    const int32_t countOnes     = comboCount_ % 10;
+    const int32_t countTens     = (comboCount_ / 10) % 10;
+    const int32_t countHundreds = (comboCount_ / 100) % 10;
 
-    comboCountDigits_[0].SetColor(tierRGB);
-    comboCountDigits_[1].SetColor(tierRGB);
-    comboCountDigits_[0].Update(countOnes, pos + layout.comboCountOffset, scaledCount, currentScale_);
-    comboCountDigits_[1].Update(countTens, pos + layout.comboCountOffset + layout.comboCountSpacing, scaledCount, currentScale_, comboCount_ >= 10 || showMaxDigits_);
+    for (auto& d : comboCountDigits_) { d.SetColor(tierRGB); }
+    comboCountDigits_[2].Update(countHundreds, pos + layout.comboCountOffset,                               scaledCount, currentScale_, comboCount_ >= 100 || showMaxDigits_);
+    comboCountDigits_[1].Update(countTens,     pos + layout.comboCountOffset + layout.comboCountSpacing,     scaledCount, currentScale_, comboCount_ >= 10  || showMaxDigits_);
+    comboCountDigits_[0].Update(countOnes,     pos + layout.comboCountOffset + layout.comboCountSpacing * 2, scaledCount, currentScale_);
 }
 
 void KillBonusComboUI::SetAllVisible(bool visible) {
@@ -202,5 +204,6 @@ void KillBonusComboUI::SetAllVisible(bool visible) {
         comboDecimalDigits_[1].Hide();
         comboCountDigits_[0].Hide();
         comboCountDigits_[1].Hide();
+        comboCountDigits_[2].Hide();
     }
 }

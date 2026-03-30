@@ -41,16 +41,14 @@ void KillBonusController::Update(float deltaTime) {
     simKillUI_.Update(deltaTime, simKillLayout_);
 }
 
-void KillBonusController::OnEnemyKilled(int32_t comboCount) {
-    lastComboCount_ = comboCount;
-
+void KillBonusController::OnEnemyKilled([[maybe_unused]] int32_t comboCount) {
     simKillTracker_.killCount++;
     simKillTracker_.toleranceTime = simKillToleranceTime_;
 }
 
-void KillBonusController::OnBonusFlyArrived(float comboBonusValue) {
+void KillBonusController::OnBonusFlyArrived(float comboBonusValue, int32_t comboCount) {
     lastComboBonusValue_ = comboBonusValue;
-    comboUI_.Spawn(lastComboBonusValue_, lastComboCount_);
+    comboUI_.Spawn(lastComboBonusValue_, comboCount);
 
     // 保留中の同時キルがあれば同タイミングでSpawn
     if (pendingSimKillCount_ > 1) {

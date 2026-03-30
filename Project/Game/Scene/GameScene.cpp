@@ -257,8 +257,8 @@ void GameScene::SetClassPointer() {
         });
 
         // スプライトが終点到達したら KillBonusController に通知
-        flyCtrl->SetOnReachCallback([killBonus](float comboBonusValue) {
-            killBonus->OnBonusFlyArrived(comboBonusValue);
+        flyCtrl->SetOnReachCallback([killBonus](float comboBonusValue, int32_t comboCount) {
+            killBonus->OnBonusFlyArrived(comboBonusValue, comboCount);
         });
 
         // スプライトが終点到達したらゲージスプライトをイージング

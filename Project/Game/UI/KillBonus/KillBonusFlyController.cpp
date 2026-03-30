@@ -39,13 +39,14 @@ void KillBonusFlyController::SpawnFromPending(
     param.spriteTexture     = "UI/KillRecovery.dds";
     param.worldStartPos     = worldPos;
 
-    const float bonusValue = pendingComboBonusValue_;
+    const float   bonusValue = pendingComboBonusValue_;
+    const int32_t comboCount = pendingComboCount_;
 
     auto entry = std::make_unique<KillBonusFlyEntry>();
     entry->Init(startPos, param);
-    entry->SetOnReachCallback([this, bonusValue]() {
+    entry->SetOnReachCallback([this, bonusValue, comboCount]() {
         if (onReachCallback_) {
-            onReachCallback_(bonusValue);
+            onReachCallback_(bonusValue, comboCount);
         }
         if (onGaugeAnimCallback_) {
             onGaugeAnimCallback_();

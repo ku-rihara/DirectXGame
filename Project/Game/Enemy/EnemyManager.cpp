@@ -110,6 +110,7 @@ void EnemyManager::Update() {
             }
 
             if (pKillBonusFly_ && pViewProjection_) {
+                pKillBonusFly_->SetPendingComboCount(comboCount);
                 pKillBonusFly_->SpawnFromPending(enemies_[i]->GetWorldPosition(), *pViewProjection_);
             }
 

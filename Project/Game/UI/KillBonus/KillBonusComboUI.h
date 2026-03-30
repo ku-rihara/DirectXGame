@@ -86,8 +86,8 @@ private:
     std::unique_ptr<KetaEngine::Sprite> leftParenSprite_;
     std::unique_ptr<KetaEngine::Sprite> rightParenSprite_;
 
-    // カッコ内コンボ数（2桁）
-    std::array<NumberDigitUI, 2> comboCountDigits_;
+    // カッコ内コンボ数（3桁）
+    std::array<NumberDigitUI, 3> comboCountDigits_;
 
     float comboBonusValue_;
     int32_t comboCount_;

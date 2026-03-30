@@ -34,7 +34,8 @@ private:
 private:
     std::vector<std::unique_ptr<KillBonusFlyEntry>> entries_;
 
-    float pendingComboBonusValue_ = 1.0f;
+    float   pendingComboBonusValue_ = 1.0f;
+    int32_t pendingComboCount_      = 0;
 
     // GlobalParameter で調整可能なパラメータ
     Vector2 endPos_;
@@ -48,12 +49,13 @@ private:
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_                  = "KillBonusFlyUI";
 
-    std::function<void(float)> onReachCallback_;
+    std::function<void(float, int32_t)> onReachCallback_;
     std::function<void()>      onGaugeAnimCallback_;
 
 public:
     ///Setter
-    void SetPendingComboBonusValue(float value) { pendingComboBonusValue_ = value; }
-    void SetOnReachCallback(std::function<void(float)> cb) { onReachCallback_ = std::move(cb); }
+    void SetPendingComboBonusValue(float value)   { pendingComboBonusValue_ = value; }
+    void SetPendingComboCount(int32_t count)      { pendingComboCount_ = count; }
+    void SetOnReachCallback(std::function<void(float, int32_t)> cb) { onReachCallback_ = std::move(cb); }
     void SetOnGaugeAnimCallback(std::function<void()> cb)  { onGaugeAnimCallback_ = std::move(cb); }
 };

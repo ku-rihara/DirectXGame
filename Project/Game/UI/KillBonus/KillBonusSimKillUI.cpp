@@ -112,8 +112,8 @@ void KillBonusSimKillUI::Update(float deltaTime, const KillBonusSimKillUILayout&
 
     killCountDigits_[0].SetColor(tierRGB);
     killCountDigits_[1].SetColor(tierRGB);
-    killCountDigits_[0].Update(ones, pos + layout.digitOffset,                       scaledDigit, tierColor.w * currentScale_);
-    killCountDigits_[1].Update(tens, pos + layout.digitOffset + layout.digitSpacing, scaledDigit, tierColor.w * currentScale_, killCount_ >= 10 || showMaxDigits_);
+    killCountDigits_[1].Update(tens, pos + layout.digitOffset,                       scaledDigit, tierColor.w * currentScale_, killCount_ >= 10 || showMaxDigits_);
+    killCountDigits_[0].Update(ones, pos + layout.digitOffset + layout.digitSpacing, scaledDigit, tierColor.w * currentScale_);
 
     // MultiplyIcon
     if (multiplyIconSprite_) {

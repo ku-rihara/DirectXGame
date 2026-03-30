@@ -23,7 +23,7 @@ public:
     void OnEnemyKilled(int32_t comboCount);
 
     /// BonusFly到着イベント（コンボUIスポーン、flyコールバックから呼ぶ）
-    void OnBonusFlyArrived(float comboBonusValue);
+    void OnBonusFlyArrived(float comboBonusValue, int32_t comboCount);
 
     void SetOnSimKillBonusCallback(std::function<void(float)> cb) { onSimKillBonusCallback_ = std::move(cb); }
 
@@ -54,7 +54,6 @@ private:
     float simKillBonusPerKill_  = 0.5f;
 
     float   lastComboBonusValue_ = 1.0f;
-    int32_t lastComboCount_      = 0;
     int32_t pendingSimKillCount_ = 0;  // fly到着まで保留する同時キル数
 
     // デバッグプレビュー
