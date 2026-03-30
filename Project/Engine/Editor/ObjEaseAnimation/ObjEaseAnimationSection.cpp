@@ -61,7 +61,6 @@ void ObjEaseAnimationSection::LoadData() {
     // パラメータ読み込み・同期
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
-    // JSONロード後に正しい値でイージングを再設定する
     AdaptEaseParam();
 }
 
@@ -537,7 +536,7 @@ Vector3 ObjEaseAnimationSection::GetMovementDirection() const {
     Vector3 direction      = transParam.currentOffset - transParam.previousOffset;
 
     if (direction.Length() < 0.001f) {
-        // 移動量が微小な場合はZeroVectorを返す（呼び出し元が無効と判断できるよう）
+        // 移動量が微小な場合はZeroVectorを返す
         return Vector3::ZeroVector();
     }
 

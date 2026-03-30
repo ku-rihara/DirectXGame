@@ -46,7 +46,7 @@
         ],
         "Translation_BackRatio": 0.0,
         "Translation_EaseType": 22,
-        "Translation_IsActive": true,
+        "Translation_IsActive": false,
         "Translation_IsLookAtDirection": false,
         "Translation_IsReturnToOrigin": false,
         "Translation_MaxTime": 0.8999999761581421,

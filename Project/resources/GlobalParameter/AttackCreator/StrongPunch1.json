@@ -28,7 +28,7 @@
         "Branch_1_nextAttackName": "UpperAttack",
         "Branch_1_precedeInputTime": 0.5833333134651184,
         "Branch_1_requireHit": false,
-        "CameraAction_FileName": "StrongAttackCamera",
+        "CameraAction_FileName": "None",
         "CameraAction_IsCameraReset": false,
         "CameraAction_OnHit_FileName": "Enemythurst",
         "CameraAction_OnHit_IsCameraReset": true,
@@ -129,7 +129,7 @@
         "moveValue": [
             0.0,
             0.0,
-            10.25
+            4.0
         ],
         "power": 30.0
     }
