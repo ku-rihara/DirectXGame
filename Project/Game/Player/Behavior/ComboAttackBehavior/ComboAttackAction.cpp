@@ -140,15 +140,6 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
         hasHitEnemy_ = true;
     }
 
-    // ヒットした敵の方向を向き続ける
-    if (pCollisionInfo_->GetHasHitTarget()) {
-        Vector3 dir = pCollisionInfo_->GetHitTargetPos() - pOwner_->GetWorldPosition();
-        if (dir.x != 0.0f || dir.z != 0.0f) {
-            pOwner_->SetObjectiveAngle(std::atan2(dir.x, dir.z));
-        }
-        pOwner_->AdaptRotate();
-    }
-
     // 演出更新
     if (attackRendition_) {
         attackRendition_->Update(atkSpeed);
@@ -410,6 +401,15 @@ bool ComboAttackAction::IsAttackUnlock(const PlayerComboAttackData& data) const 
 Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
     const Vector3& start, const Vector3& defaultTarget,
     Vector3* outFoundEnemyPos) const {
+
+     // ヒットした敵の方向を向き続ける
+    if (pCollisionInfo_->GetHasHitTarget()) {
+        Vector3 dir = pCollisionInfo_->GetHitTargetPos() - pOwner_->GetWorldPosition();
+        if (dir.x != 0.0f || dir.z != 0.0f) {
+            pOwner_->SetObjectiveAngle(std::atan2(dir.x, dir.z));
+        }
+        pOwner_->AdaptRotate();
+    }
 
     EnemyManager* enemyManager = attackData_->GetEnemyManager();
     if (!enemyManager) {
