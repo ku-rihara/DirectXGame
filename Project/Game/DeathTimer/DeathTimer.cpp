@@ -98,6 +98,21 @@ void DeathTimer::UpdateLevel() {
     currentLevel_ = newLevel;
 }
 
+void DeathTimer::RegisterParams() {
+    globalParameter_->Regist(groupName_, "maxHP", &maxHP_);
+    globalParameter_->Regist(groupName_, "recoveryDuration", &recoveryDuration_);
+    globalParameter_->Regist(groupName_, "comboStepSize", &comboStepSize_);
+    globalParameter_->Regist(groupName_, "comboMultiplierPerStep", &comboMultiplierPerStep_);
+    globalParameter_->Regist(groupName_, "comboMaxMultiplier", &comboMaxMultiplier_);
+
+    for (int32_t i = 0; i < kMaxLevel; ++i) {
+        globalParameter_->Regist(groupName_, "decreaseRate" + std::to_string(i + 1), &decreaseRates_[i]);
+    }
+    for (int32_t i = 0; i < kMaxLevel - 1; ++i) {
+        globalParameter_->Regist(groupName_, "levelUpKillCount" + std::to_string(i + 2), &levelUpKillCounts_[i]);
+    }
+}
+
 ///==========================================================
 /// パラメータ調整
 ///==========================================================
@@ -159,21 +174,6 @@ void DeathTimer::AdjustParam() {
     levelUIController_.AdjustParam();
 
 #endif // _DEBUG
-}
-
-void DeathTimer::RegisterParams() {
-    globalParameter_->Regist(groupName_, "maxHP", &maxHP_);
-    globalParameter_->Regist(groupName_, "recoveryDuration", &recoveryDuration_);
-    globalParameter_->Regist(groupName_, "comboStepSize", &comboStepSize_);
-    globalParameter_->Regist(groupName_, "comboMultiplierPerStep", &comboMultiplierPerStep_);
-    globalParameter_->Regist(groupName_, "comboMaxMultiplier", &comboMaxMultiplier_);
-
-    for (int32_t i = 0; i < kMaxLevel; ++i) {
-        globalParameter_->Regist(groupName_, "decreaseRate" + std::to_string(i + 1), &decreaseRates_[i]);
-    }
-    for (int32_t i = 0; i < kMaxLevel - 1; ++i) {
-        globalParameter_->Regist(groupName_, "levelUpKillCount" + std::to_string(i + 2), &levelUpKillCounts_[i]);
-    }
 }
 
 void DeathTimer::AdaptEasing() {

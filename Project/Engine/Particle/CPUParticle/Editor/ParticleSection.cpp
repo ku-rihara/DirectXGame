@@ -237,6 +237,12 @@ void ParticleSection::ApplyTextureToManager() {
         uint32_t textureHandle = TextureManager::GetInstance()->LoadTexture(sectionParam_->GetSelectedTexturePath());
         ParticleManager::GetInstance()->SetTextureHandle(groupName_, textureHandle);
     }
+
+    // 歪みテクスチャを適用
+    if (!sectionParam_->GetDistortionTexturePath().empty()) {
+        uint32_t distortionHandle = TextureManager::GetInstance()->LoadTexture(sectionParam_->GetDistortionTexturePath());
+        ParticleManager::GetInstance()->SetDistortionTextureHandle(groupName_, distortionHandle);
+    }
 }
 
 void ParticleSection::SetTexture(uint32_t textureHandle) {

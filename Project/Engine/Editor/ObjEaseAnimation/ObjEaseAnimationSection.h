@@ -146,7 +146,7 @@ private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     std::string folderPath_;
-    int32_t currenTSequenceElementIndex_ = -1;
+    int32_t currentSequenceElementIndex__ = -1;
 
     // transformParam
     std::array<TransformParam, static_cast<size_t>(TransformType::Count)> transformParams_;

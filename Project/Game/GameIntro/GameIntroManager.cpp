@@ -92,36 +92,6 @@ void GameIntroManager::CheckMovieLineStateTransition() {
     }
 }
 
-void GameIntroManager::BindParam() {
-
-    globalParameter_->Regist(groupName_, "fastSpeed", &fastSpeedRate_);
-}
-
-void GameIntroManager::AdjustParam() {
-#ifdef _DEBUG
-    if (ImGui::CollapsingHeader(groupName_.c_str())) {
-        ImGui::PushID(groupName_.c_str());
-
-        ImGui::DragFloat("Fast Speed", &fastSpeedRate_, 0.01f, 1.0f);
-
-        // セーブ、ロード
-        globalParameter_->ParamSaveForImGui(groupName_);
-        globalParameter_->ParamLoadForImGui(groupName_);
-
-        ImGui::PopID();
-    }
-
-    // 各イントロステップのパラメータ編集
-    for (auto& intro : introSequences_) {
-        intro->AdjustParam();
-    }
-
-    // movieLine
-    movieLine_->AdjustParam();
-
-#endif // _DEBUG
-}
-
 bool GameIntroManager::IsAllIntroFinished() const {
     return currentIndex_ >= static_cast<int>(introSequences_.size());
 }
@@ -150,6 +120,36 @@ void GameIntroManager::UpdateCurrentIntro(float speed) {
 
 void GameIntroManager::MoveToNextIntro() {
     currentIndex_++;
+}
+
+void GameIntroManager::BindParam() {
+
+    globalParameter_->Regist(groupName_, "fastSpeed", &fastSpeedRate_);
+}
+
+void GameIntroManager::AdjustParam() {
+#ifdef _DEBUG
+    if (ImGui::CollapsingHeader(groupName_.c_str())) {
+        ImGui::PushID(groupName_.c_str());
+
+        ImGui::DragFloat("Fast Speed", &fastSpeedRate_, 0.01f, 1.0f);
+
+        // セーブ、ロード
+        globalParameter_->ParamSaveForImGui(groupName_);
+        globalParameter_->ParamLoadForImGui(groupName_);
+
+        ImGui::PopID();
+    }
+
+    // 各イントロステップのパラメータ編集
+    for (auto& intro : introSequences_) {
+        intro->AdjustParam();
+    }
+
+    // movieLine
+    movieLine_->AdjustParam();
+
+#endif // _DEBUG
 }
 
 const bool& GameIntroManager::GetIsFinishStep(const IntroStep& step) {

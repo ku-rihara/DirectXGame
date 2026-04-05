@@ -9,11 +9,12 @@ using namespace KetaEngine;
 void CameraKeyFrame::Init(const std::string& groupName, const std::string& categoryName, int32_t keyNumber) {
     // グローバルパラメータ
     globalParameter_            = GlobalParameter::GetInstance();
-    currenTSequenceElementIndex = keyNumber;
+    currentSequenceElementIndex_ = keyNumber;
     categoryName_               = categoryName;
-    std::string newGroupName    = groupName + std::to_string(currenTSequenceElementIndex);
+    std::string newGroupName    = groupName + std::to_string(currentSequenceElementIndex_);
     groupName_                  = newGroupName;
 
+    // フォルダパス設定
     folderPath_ = "CameraAnimation/" + categoryName_ + "/KeyFrames/" + groupName;
 
     if (!globalParameter_->HasRegisters(groupName_)) {
@@ -66,6 +67,38 @@ void CameraKeyFrame::Update(float speedRate) {
     positionEase_.Update(actualDeltaTime);
     rotationEase_.Update(actualDeltaTime);
     fovEase_.Update(actualDeltaTime);
+}
+
+void CameraKeyFrame::AdaptEaseParam() {
+    // parameterをEasingに適応
+    positionEase_.SetMaxTime(timePoint_);
+    rotationEase_.SetMaxTime(timePoint_);
+    fovEase_.SetMaxTime(timePoint_);
+
+    positionEase_.SetEndValue(keyFrameParam_.position);
+    rotationEase_.SetEndValue(keyFrameParam_.rotation);
+    fovEase_.SetEndValue(keyFrameParam_.fov);
+
+    positionEase_.SetType(static_cast<EasingType>(positionEaseType_));
+    rotationEase_.SetType(static_cast<EasingType>(rotationEaseType_));
+    fovEase_.SetType(static_cast<EasingType>(fovEaseType_));
+}
+
+void CameraKeyFrame::AdaptValueSetting() {
+    // adapt
+    positionEase_.SetAdaptValue(&currenTSequenceElementParam_.position);
+    rotationEase_.SetAdaptValue(&currenTSequenceElementParam_.rotation);
+    fovEase_.SetAdaptValue(&currenTSequenceElementParam_.fov);
+}
+
+bool CameraKeyFrame::IsFinished() const {
+    return positionEase_.IsFinished() && rotationEase_.IsFinished() && fovEase_.IsFinished();
+}
+
+void CameraKeyFrame::SetStartEasing(const Vector3& pos, const Vector3& rotate, float fov) {
+    positionEase_.SetStartValue(pos);
+    rotationEase_.SetStartValue(rotate);
+    fovEase_.SetStartValue(fov);
 }
 
 void CameraKeyFrame::RegisterParams() {
@@ -132,36 +165,4 @@ void CameraKeyFrame::AdjustParam() {
     ImGui::PopID();
 
 #endif // _DEBUG
-}
-
-void CameraKeyFrame::AdaptEaseParam() {
-    // parameterをEasingに適応
-    positionEase_.SetMaxTime(timePoint_);
-    rotationEase_.SetMaxTime(timePoint_);
-    fovEase_.SetMaxTime(timePoint_);
-
-    positionEase_.SetEndValue(keyFrameParam_.position);
-    rotationEase_.SetEndValue(keyFrameParam_.rotation);
-    fovEase_.SetEndValue(keyFrameParam_.fov);
-
-    positionEase_.SetType(static_cast<EasingType>(positionEaseType_));
-    rotationEase_.SetType(static_cast<EasingType>(rotationEaseType_));
-    fovEase_.SetType(static_cast<EasingType>(fovEaseType_));
-}
-
-void CameraKeyFrame::AdaptValueSetting() {
-    // adapt
-    positionEase_.SetAdaptValue(&currenTSequenceElementParam_.position);
-    rotationEase_.SetAdaptValue(&currenTSequenceElementParam_.rotation);
-    fovEase_.SetAdaptValue(&currenTSequenceElementParam_.fov);
-}
-
-bool CameraKeyFrame::IsFinished() const {
-    return positionEase_.IsFinished() && rotationEase_.IsFinished() && fovEase_.IsFinished();
-}
-
-void CameraKeyFrame::SetStartEasing(const Vector3& pos, const Vector3& rotate, float fov) {
-    positionEase_.SetStartValue(pos);
-    rotationEase_.SetStartValue(rotate);
-    fovEase_.SetStartValue(fov);
 }

@@ -6,6 +6,7 @@ using namespace KetaEngine;
 #include "Base/TextureManager.h"
 #include "Base/WinApp.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
+#include "Pipeline/Particle/ParticleDistortionPipeline.h"
 #include "Pipeline/PipelineManager.h"
 #include "MathFunction.h"
 
@@ -129,6 +130,72 @@ void ParticleRenderer::Draw(
 
         if (instanceIndex > 0) {
             DrawGroup(group, instanceIndex, srvManager, commandList);
+        }
+    }
+}
+
+void ParticleRenderer::DrawDistortionGroup(
+    ParticleManager::ParticleGroup& group,
+    uint32_t instanceIndex,
+    SrvManager* srvManager,
+    ID3D12GraphicsCommandList* commandList) {
+
+    PipelineManager::GetInstance()->PreDraw(PipelineType::ParticleDistortion, commandList);
+
+    // インスタンシングデータSRVを設定（ParticleData t0, VS）
+    commandList->SetGraphicsRootDescriptorTable(
+        static_cast<UINT>(ParticleDistortionRootParameter::ParticleData),
+        srvManager->GetGPUDescriptorHandle(group.srvIndex));
+
+    // 歪み強度を設定（32ビット定数 b0, PS）
+    float params[4] = {group.param.distortionStrength, 0.0f, 0.0f, 0.0f};
+    commandList->SetGraphicsRoot32BitConstants(
+        static_cast<UINT>(ParticleDistortionRootParameter::DistortionParam),
+        4, params, 0);
+
+    // 歪みノイズテクスチャを設定（DistortionMap t0, PS）
+    commandList->SetGraphicsRootDescriptorTable(
+        static_cast<UINT>(ParticleDistortionRootParameter::DistortionMap),
+        TextureManager::GetInstance()->GetTextureHandle(group.distortionTextureHandle));
+
+    // モデル描画
+    if (group.model) {
+        group.model->DrawInstancing(instanceIndex);
+    } else if (group.primitive_->GetMesh()) {
+        group.primitive_->GetMesh()->DrawInstancing(instanceIndex);
+    }
+}
+
+void ParticleRenderer::DrawDistortion(
+    std::unordered_map<std::string, ParticleManager::ParticleGroup>& groups,
+    const ViewProjection& viewProjection,
+    SrvManager* srvManager) {
+
+    /// commandList取得
+    ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+
+    for (auto& groupPair : groups) {
+        ParticleManager::ParticleGroup& group = groupPair.second;
+
+        // 歪みエフェクトが無効 or テクスチャ未設定のグループはスキップ
+        if (!group.param.useDistortion || group.distortionTextureHandle == 0) {
+            continue;
+        }
+        // スクリーン座標系パーティクルはスキップ
+        if (group.param.isScreenPos) {
+            continue;
+        }
+
+        ParticleFprGPU* instancingData = group.instancingData;
+
+        uint32_t instanceIndex = BuildInstancingData(
+            group,
+            instancingData,
+            viewProjection.matView_,
+            viewProjection.matProjection_);
+
+        if (instanceIndex > 0) {
+            DrawDistortionGroup(group, instanceIndex, srvManager, commandList);
         }
     }
 }

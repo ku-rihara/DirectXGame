@@ -24,6 +24,24 @@ void Combo::Update() {
     uiController_->AlphaAdaptForTime(comboTime_, comboTimeMax_);
 }
 
+void Combo::DebugMode() {
+
+    if (ImGui::TreeNode("DebugMode")) {
+        if (ImGui::Button("CountUP")) {
+            ComboCountUP();
+        }
+        ImGui::Checkbox("isStopComboTime", &isStopComboTime_);
+        ImGui::TreePop();
+    }
+}
+
+void Combo::RegisterParams() {
+    globalParameter_->Regist(groupName_, "comboTimeMax_", &comboTimeMax_);
+    for (int32_t i = 0; i < kComboLevel; ++i) {
+        globalParameter_->Regist(groupName_, "LevelUpComboNum" + std::to_string(int(i + 1)), &LevelUpNum[i]);
+    }
+}
+
 ///==========================================================
 /// パラメータ調整
 ///==========================================================
@@ -54,24 +72,6 @@ void Combo::AdjustParam() {
 #endif // _DEBUG
 
     uiController_->AdjustParam();
-}
-
-void Combo::DebugMode() {
-
-    if (ImGui::TreeNode("DebugMode")) {
-        if (ImGui::Button("CountUP")) {
-            ComboCountUP();
-        }
-        ImGui::Checkbox("isStopComboTime", &isStopComboTime_);
-        ImGui::TreePop();
-    }
-}
-
-void Combo::RegisterParams() {
-    globalParameter_->Regist(groupName_, "comboTimeMax_", &comboTimeMax_);
-    for (int32_t i = 0; i < kComboLevel; ++i) {
-        globalParameter_->Regist(groupName_, "LevelUpComboNum" + std::to_string(int(i + 1)), &LevelUpNum[i]);
-    }
 }
 
 void Combo::ComboCountUP() {

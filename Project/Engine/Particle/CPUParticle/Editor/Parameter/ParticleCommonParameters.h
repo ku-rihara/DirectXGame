@@ -95,6 +95,10 @@ struct GroupParameters {
     bool isScreenPos;
     BillboardType billboardType;
     AdaptRotate adaptRotate_;
+
+    // 歪みエフェクト
+    bool useDistortion        = false;
+    float distortionStrength  = 0.05f;
 };
 
 } // namespace ParticleCommon

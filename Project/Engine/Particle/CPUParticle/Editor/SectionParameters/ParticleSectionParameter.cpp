@@ -109,6 +109,11 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     // Texture
     globalParam->Regist(groupName, "selectedTexturePath", &selectedTexturePath_);
 
+    // Distortion
+    globalParam->Regist(groupName, "useDistortion", &groupParameters_.useDistortion);
+    globalParam->Regist(groupName, "distortionStrength", &groupParameters_.distortionStrength);
+    globalParam->Regist(groupName, "distortionTexturePath", &distortionTexturePath_);
+
     // Dissolve
     globalParam->Regist(groupName, "dissolveName", &dissolveName_);
 
@@ -227,6 +232,11 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
 
     // Texture
     selectedTexturePath_ = globalParam->GetValue<std::string>(groupName, "selectedTexturePath");
+
+    // Distortion
+    groupParameters_.useDistortion       = globalParam->GetValue<bool>(groupName, "useDistortion");
+    groupParameters_.distortionStrength  = globalParam->GetValue<float>(groupName, "distortionStrength");
+    distortionTexturePath_               = globalParam->GetValue<std::string>(groupName, "distortionTexturePath");
 
     // Dissolve
     dissolveName_ = globalParam->GetValue<std::string>(groupName, "dissolveName");
@@ -438,6 +448,45 @@ void ParticleSectionParameter::AdjustParam() {
     }
 
     ImGuiTextureSelection();
+
+    // 歪みエフェクト設定
+    if (ImGui::CollapsingHeader("Distortion")) {
+        ImGui::Checkbox("Use Distortion", &groupParameters_.useDistortion);
+
+        if (groupParameters_.useDistortion) {
+            ImGui::DragFloat("Distortion Strength", &groupParameters_.distortionStrength, 0.001f, 0.0f, 1.0f);
+
+            ImGui::Separator();
+            ImGui::Text("Distortion Texture (noise/normal map):");
+
+            std::vector<std::string> filenames = GetFileNamesForDirectory(textureFilePath_);
+            if (!filenames.empty()) {
+                static int distortionSelectedIndex       = 0;
+                static std::string lastDistortionTexture = "";
+
+                std::vector<const char*> names;
+                for (const auto& file : filenames) {
+                    names.push_back(file.c_str());
+                }
+
+                if (ImGui::ListBox("##DistortionTextures", &distortionSelectedIndex, names.data(), static_cast<int>(names.size()))) {
+                    std::string newName = filenames[distortionSelectedIndex];
+                    if (newName != lastDistortionTexture) {
+                        distortionTexturePath_ = textureFilePath_ + "/" + newName + ".dds";
+                        lastDistortionTexture  = newName;
+                    }
+                }
+
+                if (!distortionTexturePath_.empty()) {
+                    ImGui::Text("Current: %s", distortionTexturePath_.c_str());
+                } else {
+                    ImGui::TextDisabled("テクスチャ未選択");
+                }
+            } else {
+                ImGui::TextDisabled("テクスチャファイルが見つかりません");
+            }
+        }
+    }
 
     // Dissolve設定
     if (ImGui::CollapsingHeader("Dissolve")) {

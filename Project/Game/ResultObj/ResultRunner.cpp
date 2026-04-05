@@ -45,6 +45,16 @@ void ResultRunner::Update() {
     }
 }
 
+void ResultRunner::RegisterParams() {
+    globalParameter_->Regist(groupName_, "basePos",    &config_.basePos);
+    globalParameter_->Regist(groupName_, "zSpacing",   &config_.zSpacing);
+    globalParameter_->Regist(groupName_, "runSpeed",   &config_.runSpeed);
+    globalParameter_->Regist(groupName_, "loopStartZ", &config_.loopStartZ);
+    globalParameter_->Regist(groupName_, "loopEndZ",   &config_.loopEndZ);
+    globalParameter_->Regist(groupName_, "rotateY",    &config_.rotateY);
+    globalParameter_->Regist(groupName_, "scale",      &config_.scale);
+}
+
 void ResultRunner::AdjustParam() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
@@ -72,14 +82,4 @@ void ResultRunner::AdjustParam() {
         ImGui::PopID();
     }
 #endif
-}
-
-void ResultRunner::RegisterParams() {
-    globalParameter_->Regist(groupName_, "basePos",    &config_.basePos);
-    globalParameter_->Regist(groupName_, "zSpacing",   &config_.zSpacing);
-    globalParameter_->Regist(groupName_, "runSpeed",   &config_.runSpeed);
-    globalParameter_->Regist(groupName_, "loopStartZ", &config_.loopStartZ);
-    globalParameter_->Regist(groupName_, "loopEndZ",   &config_.loopEndZ);
-    globalParameter_->Regist(groupName_, "rotateY",    &config_.rotateY);
-    globalParameter_->Regist(groupName_, "scale",      &config_.scale);
 }

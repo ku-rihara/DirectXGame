@@ -21,6 +21,7 @@ class Line3DPipeline;
 class SkyBoxPipeline;
 class RibbonTrailPipeline;
 class RibbonTrailDistortionPipeline;
+class ParticleDistortionPipeline;
 
 enum class PipelineType {
     Sprite,
@@ -33,6 +34,7 @@ enum class PipelineType {
     SkyBox,
     RibbonTrail,
     RibbonTrailDistortion,
+    ParticleDistortion,
     Count
 };
 

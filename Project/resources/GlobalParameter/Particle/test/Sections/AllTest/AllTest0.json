@@ -33,6 +33,7 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
+        "IsScreenPos": false,
         "LifeTime": 3.2300000190734863,
         "Max Particle Num": 1000,
         "Particle Count": 1,
@@ -149,7 +150,9 @@
         "UseRail": false,
         "afterDuration": 0.0,
         "blendMode": 0,
-        "dissolveName": "test",
+        "dissolveName": "",
+        "distortionStrength": 0.902999997138977,
+        "distortionTexturePath": "",
         "emitPositionMode": 0,
         "isAlphaNoMove": false,
         "isBillboard": true,
@@ -184,6 +187,7 @@
         ],
         "selectedTexturePath": "Resources/texture/Particle/uvChecker.dds",
         "timeMode": 1,
+        "useDistortion": true,
         "useModel": false
     }
 }

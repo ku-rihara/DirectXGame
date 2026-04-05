@@ -14,6 +14,41 @@ void PlayerParameter::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
+///=====================================================
+///  ImGuiからパラメータを得る
+///=====================================================
+void PlayerParameter::RegisterParams() {
+
+    globalParameter_->Regist(groupName_, "Translate", &playerParams_.startPos_);
+    globalParameter_->Regist(groupName_, "BaseScale", &playerParams_.baseScale_);
+    globalParameter_->Regist(groupName_, "JumpSpeed", &playerParams_.normalJump.jumpSpeed);
+    globalParameter_->Regist(groupName_, "rushDistance", &playerParams_.rushDistance);
+    globalParameter_->Regist(groupName_, "UpperPosY", &playerParams_.upperPosY);
+    globalParameter_->Regist(groupName_, "MoveSpeed", &playerParams_.moveSpeed);
+    globalParameter_->Regist(groupName_, "DashSpeedMultiplier", &playerParams_.dashSpeedMultiplier);
+    globalParameter_->Regist(groupName_, "Gravity", &playerParams_.normalJump.gravity);
+    globalParameter_->Regist(groupName_, "FallSpeed", &playerParams_.fallSpeed);
+    globalParameter_->Regist(groupName_, "FallSpeedLimit", &playerParams_.normalJump.fallSpeedLimit);
+    globalParameter_->Regist(groupName_, "attackRotate", &playerParams_.attackRotate);
+    globalParameter_->Regist(groupName_, "attackFloatValue_", &playerParams_.attackFloatValue);
+    globalParameter_->Regist(groupName_, "attackRotateAnit", &playerParams_.attackRotateAnit);
+
+    globalParameter_->Regist(groupName_, "upperBackLashValue_", &playerParams_.upperParam.BackLashValue);
+    globalParameter_->Regist(groupName_, "jumpPowerU", &playerParams_.upperJump.jumpSpeed);
+
+    globalParameter_->Regist(groupName_, "fallSpeedLimitB", &playerParams_.boundJump.fallSpeedLimit);
+    globalParameter_->Regist(groupName_, "gravityB", &playerParams_.boundJump.gravity);
+    globalParameter_->Regist(groupName_, "jumpSpeedB", &playerParams_.boundJump.jumpSpeed);
+
+    globalParameter_->Regist(groupName_, "fallSpeedLimitU", &playerParams_.upperJump.fallSpeedLimit);
+    globalParameter_->Regist(groupName_, "gravityU", &playerParams_.upperJump.gravity);
+    globalParameter_->Regist(groupName_, "jumpPowerU", &playerParams_.upperJump.jumpSpeed);
+    globalParameter_->Regist(groupName_, "UpperChargeTime", &playerParams_.upperParam.chargeTime);
+
+   
+    globalParameter_->Regist(groupName_, "spawnParamWaitTime", &playerParams_.spawnParam.waitTime_);
+}
+
 ///==========================================================
 /// パラメータ調整
 ///==========================================================
@@ -61,7 +96,7 @@ void PlayerParameter::AdjustParam() {
 
         ImGui::SeparatorText("EasingTime");
 
-      
+
         /// セーブとロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
@@ -70,39 +105,4 @@ void PlayerParameter::AdjustParam() {
     }
 
 #endif // _DEBUG
-}
-
-///=====================================================
-///  ImGuiからパラメータを得る
-///=====================================================
-void PlayerParameter::RegisterParams() {
-
-    globalParameter_->Regist(groupName_, "Translate", &playerParams_.startPos_);
-    globalParameter_->Regist(groupName_, "BaseScale", &playerParams_.baseScale_);
-    globalParameter_->Regist(groupName_, "JumpSpeed", &playerParams_.normalJump.jumpSpeed);
-    globalParameter_->Regist(groupName_, "rushDistance", &playerParams_.rushDistance);
-    globalParameter_->Regist(groupName_, "UpperPosY", &playerParams_.upperPosY);
-    globalParameter_->Regist(groupName_, "MoveSpeed", &playerParams_.moveSpeed);
-    globalParameter_->Regist(groupName_, "DashSpeedMultiplier", &playerParams_.dashSpeedMultiplier);
-    globalParameter_->Regist(groupName_, "Gravity", &playerParams_.normalJump.gravity);
-    globalParameter_->Regist(groupName_, "FallSpeed", &playerParams_.fallSpeed);
-    globalParameter_->Regist(groupName_, "FallSpeedLimit", &playerParams_.normalJump.fallSpeedLimit);
-    globalParameter_->Regist(groupName_, "attackRotate", &playerParams_.attackRotate);
-    globalParameter_->Regist(groupName_, "attackFloatValue_", &playerParams_.attackFloatValue);
-    globalParameter_->Regist(groupName_, "attackRotateAnit", &playerParams_.attackRotateAnit);
-
-    globalParameter_->Regist(groupName_, "upperBackLashValue_", &playerParams_.upperParam.BackLashValue);
-    globalParameter_->Regist(groupName_, "jumpPowerU", &playerParams_.upperJump.jumpSpeed);
-
-    globalParameter_->Regist(groupName_, "fallSpeedLimitB", &playerParams_.boundJump.fallSpeedLimit);
-    globalParameter_->Regist(groupName_, "gravityB", &playerParams_.boundJump.gravity);
-    globalParameter_->Regist(groupName_, "jumpSpeedB", &playerParams_.boundJump.jumpSpeed);
-
-    globalParameter_->Regist(groupName_, "fallSpeedLimitU", &playerParams_.upperJump.fallSpeedLimit);
-    globalParameter_->Regist(groupName_, "gravityU", &playerParams_.upperJump.gravity);
-    globalParameter_->Regist(groupName_, "jumpPowerU", &playerParams_.upperJump.jumpSpeed);
-    globalParameter_->Regist(groupName_, "UpperChargeTime", &playerParams_.upperParam.chargeTime);
-
-   
-    globalParameter_->Regist(groupName_, "spawnParamWaitTime", &playerParams_.spawnParam.waitTime_);
 }

@@ -48,22 +48,31 @@ private:
 private:
     // GlobalParam
     GlobalParameter* globalParameter_;
+
+    // グループ名、カテゴリー名、フォルダパス
     std::string groupName_;
     std::string categoryName_;
     std::string folderPath_;
 
-    int32_t currenTSequenceElementIndex = -1;
+    // Sequence内の選択Index
+    int32_t currentSequenceElementIndex_ = -1;
 
+    // 現在の時間ポイント
     float timePoint_ = 0.0f;
+
+    // キーフレームパラメータ
     KeyFrameParam keyFrameParam_;
     KeyFrameParam currenTSequenceElementParam_;
 
+    // 各イージングタイプ
     int32_t positionEaseType_ = 0;
     int32_t rotationEaseType_ = 0;
     int32_t fovEaseType_      = 0;
 
+    // タイムモードセレクター
     TimeModeSelector timeModeSelector_;
 
+    // イージングクラス
     Easing<Vector3> positionEase_;
     Easing<Vector3> rotationEase_;
     Easing<float> fovEase_;

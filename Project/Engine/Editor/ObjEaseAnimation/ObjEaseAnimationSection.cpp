@@ -7,8 +7,8 @@ using namespace KetaEngine;
 
 void ObjEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, int32_t keyNumber) {
     globalParameter_             = GlobalParameter::GetInstance();
-    currenTSequenceElementIndex_ = keyNumber;
-    groupName_                   = animationName + std::to_string(currenTSequenceElementIndex_);
+    currentSequenceElementIndex__ = keyNumber;
+    groupName_                   = animationName + std::to_string(currentSequenceElementIndex__);
     folderPath_                  = "ObjEaseAnimation/" + categoryName + "/" + "Sections/" + animationName + "/";
 
 
@@ -261,68 +261,6 @@ void ObjEaseAnimationSection::StartPlay() {
     }
 }
 
-void ObjEaseAnimationSection::RegisterParams() {
-    globalParameter_->Regist(groupName_, "startTime", &startTime_);
-    globalParameter_->Regist(groupName_, "returnStartTime", &returnStartTime_);
-    globalParameter_->Regist(groupName_, "isReturnSection", &isReturnSection_);
-    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
-
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        const char* name = GetSRTName(static_cast<TransformType>(i));
-        auto& param      = transformParams_[i];
-
-        globalParameter_->Regist(groupName_, std::string(name) + "_IsActive", &param.isActive);
-        globalParameter_->Regist(groupName_, std::string(name) + "_IsReturnToOrigin", &param.isReturnToOrigin);
-        globalParameter_->Regist(groupName_, std::string(name) + "_endValue", &param.endValue);
-        globalParameter_->Regist(groupName_, std::string(name) + "_MaxTime", &param.maxTime);
-        globalParameter_->Regist(groupName_, std::string(name) + "_EaseType", &param.easeType);
-        globalParameter_->Regist(groupName_, std::string(name) + "_BackRatio", &param.backRatio);
-        globalParameter_->Regist(groupName_, std::string(name) + "_Amplitude", &param.amplitude);
-        globalParameter_->Regist(groupName_, std::string(name) + "_Period", &param.period);
-        globalParameter_->Regist(groupName_, std::string(name) + "_ReturnMaxTime", &param.returnMaxTime);
-        globalParameter_->Regist(groupName_, std::string(name) + "_ReturnEaseType", &param.returnEaseType);
-
-        if (i == static_cast<size_t>(TransformType::Translation)) {
-            globalParameter_->Regist(groupName_, std::string(name) + "_UseRail", &param.useRail);
-            globalParameter_->Regist(groupName_, std::string(name) + "_RailFileName", &param.railFileName);
-            globalParameter_->Regist(groupName_, std::string(name) + "_IsLookAtDirection", &param.isLookAtDirection);
-        }
-
-        globalParameter_->Regist(groupName_, std::string(name) + "_Anchor", &param.anchor);
-    }
-}
-
-void ObjEaseAnimationSection::GetParams() {
-    startTime_       = globalParameter_->GetValue<float>(groupName_, "startTime");
-    returnStartTime_ = globalParameter_->GetValue<float>(groupName_, "returnStartTime");
-    isReturnSection_ = globalParameter_->GetValue<bool>(groupName_, "isReturnSection");
-    timeModeSelector_.GetParam(groupName_, globalParameter_);
-
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        const char* name = GetSRTName(static_cast<TransformType>(i));
-        auto& param      = transformParams_[i];
-
-        param.isActive         = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsActive");
-        param.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsReturnToOrigin");
-        param.endValue         = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_endValue");
-        param.maxTime          = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_MaxTime");
-        param.easeType         = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_EaseType");
-        param.backRatio        = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_BackRatio");
-        param.amplitude        = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_Amplitude");
-        param.period           = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_Period");
-        param.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_ReturnMaxTime");
-        param.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_ReturnEaseType");
-
-        if (i == static_cast<size_t>(TransformType::Translation)) {
-            param.useRail           = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
-            param.railFileName      = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
-            param.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection");
-        }
-
-        param.anchor = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_Anchor");
-    }
-}
-
 void ObjEaseAnimationSection::AdaptEaseParam() {
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
         auto& param = transformParams_[i];
@@ -396,27 +334,6 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
     }
 
     ImGui::PopID();
-}
-
-void ObjEaseAnimationSection::AdjustParam() {
-#ifdef _DEBUG
-    ImGui::SeparatorText(("Section: " + groupName_).c_str());
-    ImGui::PushID(groupName_.c_str());
-
-    ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 100.0f);
-    ImGui::Checkbox("Is Return Section", &isReturnSection_);
-    timeModeSelector_.SelectTimeModeImGui("Time Mode");
-
-    ImGui::Separator();
-
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        ImGuiTransformParam(GetSRTName(static_cast<TransformType>(i)), transformParams_[i], static_cast<TransformType>(i));
-    }
-
-    AdaptEaseParam();
-
-    ImGui::PopID();
-#endif
 }
 
 void ObjEaseAnimationSection::AdaptValueSetting() {
@@ -545,4 +462,87 @@ Vector3 ObjEaseAnimationSection::GetMovementDirection() const {
 
 bool ObjEaseAnimationSection::IsTransformActive(TransformType type) const {
     return transformParams_[static_cast<size_t>(type)].isActive;
+}
+
+void ObjEaseAnimationSection::RegisterParams() {
+    globalParameter_->Regist(groupName_, "startTime", &startTime_);
+    globalParameter_->Regist(groupName_, "returnStartTime", &returnStartTime_);
+    globalParameter_->Regist(groupName_, "isReturnSection", &isReturnSection_);
+    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
+
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        const char* name = GetSRTName(static_cast<TransformType>(i));
+        auto& param      = transformParams_[i];
+
+        globalParameter_->Regist(groupName_, std::string(name) + "_IsActive", &param.isActive);
+        globalParameter_->Regist(groupName_, std::string(name) + "_IsReturnToOrigin", &param.isReturnToOrigin);
+        globalParameter_->Regist(groupName_, std::string(name) + "_endValue", &param.endValue);
+        globalParameter_->Regist(groupName_, std::string(name) + "_MaxTime", &param.maxTime);
+        globalParameter_->Regist(groupName_, std::string(name) + "_EaseType", &param.easeType);
+        globalParameter_->Regist(groupName_, std::string(name) + "_BackRatio", &param.backRatio);
+        globalParameter_->Regist(groupName_, std::string(name) + "_Amplitude", &param.amplitude);
+        globalParameter_->Regist(groupName_, std::string(name) + "_Period", &param.period);
+        globalParameter_->Regist(groupName_, std::string(name) + "_ReturnMaxTime", &param.returnMaxTime);
+        globalParameter_->Regist(groupName_, std::string(name) + "_ReturnEaseType", &param.returnEaseType);
+
+        if (i == static_cast<size_t>(TransformType::Translation)) {
+            globalParameter_->Regist(groupName_, std::string(name) + "_UseRail", &param.useRail);
+            globalParameter_->Regist(groupName_, std::string(name) + "_RailFileName", &param.railFileName);
+            globalParameter_->Regist(groupName_, std::string(name) + "_IsLookAtDirection", &param.isLookAtDirection);
+        }
+
+        globalParameter_->Regist(groupName_, std::string(name) + "_Anchor", &param.anchor);
+    }
+}
+
+void ObjEaseAnimationSection::GetParams() {
+    startTime_       = globalParameter_->GetValue<float>(groupName_, "startTime");
+    returnStartTime_ = globalParameter_->GetValue<float>(groupName_, "returnStartTime");
+    isReturnSection_ = globalParameter_->GetValue<bool>(groupName_, "isReturnSection");
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
+
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        const char* name = GetSRTName(static_cast<TransformType>(i));
+        auto& param      = transformParams_[i];
+
+        param.isActive         = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsActive");
+        param.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsReturnToOrigin");
+        param.endValue         = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_endValue");
+        param.maxTime          = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_MaxTime");
+        param.easeType         = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_EaseType");
+        param.backRatio        = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_BackRatio");
+        param.amplitude        = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_Amplitude");
+        param.period           = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_Period");
+        param.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_ReturnMaxTime");
+        param.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_ReturnEaseType");
+
+        if (i == static_cast<size_t>(TransformType::Translation)) {
+            param.useRail           = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
+            param.railFileName      = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
+            param.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection");
+        }
+
+        param.anchor = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_Anchor");
+    }
+}
+
+void ObjEaseAnimationSection::AdjustParam() {
+#ifdef _DEBUG
+    ImGui::SeparatorText(("Section: " + groupName_).c_str());
+    ImGui::PushID(groupName_.c_str());
+
+    ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 100.0f);
+    ImGui::Checkbox("Is Return Section", &isReturnSection_);
+    timeModeSelector_.SelectTimeModeImGui("Time Mode");
+
+    ImGui::Separator();
+
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        ImGuiTransformParam(GetSRTName(static_cast<TransformType>(i)), transformParams_[i], static_cast<TransformType>(i));
+    }
+
+    AdaptEaseParam();
+
+    ImGui::PopID();
+#endif
 }

@@ -64,6 +64,11 @@ void LevelUI::CreateGroupName(Digit digit) {
     digit_ = digit;
 }
 
+void LevelUI::RegisterParams() {
+    globalParameter_->Regist(groupName_, "scaleOffset",    &scaleOffset_);
+    globalParameter_->Regist(groupName_, "positionOffset", &positionOffset_);
+}
+
 ///=========================================================
 /// パラメータ調整
 ///==========================================================
@@ -78,9 +83,4 @@ void LevelUI::AdjustParam() {
         ImGui::PopID();
     }
 #endif
-}
-
-void LevelUI::RegisterParams() {
-    globalParameter_->Regist(groupName_, "scaleOffset",    &scaleOffset_);
-    globalParameter_->Regist(groupName_, "positionOffset", &positionOffset_);
 }

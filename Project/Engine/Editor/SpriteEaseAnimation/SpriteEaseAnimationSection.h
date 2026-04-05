@@ -185,7 +185,7 @@ private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     std::string folderPath_;
-    int32_t currenTSequenceElementIndex_ = -1;
+    int32_t currentSequenceElementIndex__ = -1;
 
     // Vec2 params: Scale, Position
     Vec2Param scaleParam_;

@@ -1,5 +1,7 @@
 #pragma once
 #include "TimelineDrawParameter.h"
+#include "TimelineInteractionHandler.h"
+#include "TimelineRenderer.h"
 #include "Vector2.h"
 #include <cstdint>
 #include <functional>
@@ -110,55 +112,16 @@ public:
 private:
     //*---------------------------- private Methods ----------------------------*//
 
-    // キーフレームのドラッグ＆ドロップ処理
-    void HandleKeyFrameDragDrop(uint32_t trackIndex, uint32_t keyIndex,
-        const Vector2& keyPos);
-
-    // デュレーションバーのドラッグ処理
-    void HandleDurationDrag(uint32_t trackIndex, uint32_t keyIndex,
-        float durationBarX, float trackY);
-
     // キーフレーム間の補間計算
     float InterpolateValue(const TimeLineKeyFrame& key1,
         const TimeLineKeyFrame& key2, int32_t frame) const;
 
-    //*---------------------------- Draw Helper Methods ----------------------------*//
-
     // ツールバー描画
     void DrawToolbar();
 
-    // 背景描画
-    void DrawBackground(::ImDrawList* drawList, const Vector2& canvasPos,
-        const Vector2& canvasSize);
-
-    // ルーラー＆グリッド描画
-    void DrawRulerAndGrid(::ImDrawList* drawList, const Vector2& canvasPos,
-        const Vector2& canvasSize, float frameWidth, float trackAreaHeight,
-        int visibleFrameStart, int visibleFrameEnd);
-
-    // トラック全体描画
-    void DrawTracks(::ImDrawList* drawList, const Vector2& canvasPos,
-        const Vector2& canvasSize, float frameWidth,
-        int visibleFrameStart, int visibleFrameEnd);
-
-    // キーフレーム描画
-    void DrawKeyFrame(::ImDrawList* drawList, uint32_t trackIndex, uint32_t keyIndex,
-        const Vector2& canvasPos, float frameWidth,
-        int visibleFrameStart, int visibleFrameEnd, float trackY);
-
-    // ドラッグ状態の更新
-    void HandleDragUpdates(const Vector2& canvasPos, float frameWidth);
-
-    // 終了フレームライン描画
-    void DrawEndFrameLine(::ImDrawList* drawList, const Vector2& canvasPos,
-        float frameWidth, float trackAreaHeight);
-
-    // キャンバス操作処理
-    void HandleCanvasInteraction(const Vector2& canvasPos, const Vector2& canvasSize,
-        float frameWidth, float trackAreaHeight);
-
-    // 再生状態更新
-    void UpdatePlayback();
+    // キーフレームのコンテキストメニュー処理（右クリックメニュー開閉）
+    void DrawKeyFrameContextMenu(uint32_t trackIndex, uint32_t keyIndex,
+        float kfX, float kfY);
 
 private:
     //*---------------------------- private Variant ----------------------------*//
@@ -179,23 +142,16 @@ private:
 
     bool isPlaying_ = false;
 
-    int draggingTrackIndex_ = -1;
-    int draggingKeyIndex_   = -1;
-    int dragStartFrame_     = 0;
-
-    // duration ドラッグ用
-    int draggingDurationTrackIndex_ = -1;
-    int draggingDurationKeyIndex_   = -1;
-    float dragStartDuration_        = 0.0f;
-
-    // 再生ヘッド（縦線）ドラッグ用
-    bool isDraggingPlayHead_ = false;
-
     // 右クリックされたトラック
     int rightClickedTrackIndex_ = -1;
 
     // トラックID生成用
     uint32_t nextTrackId_ = 0;
+
+    // 描画処理担当
+    TimelineRenderer renderer_;
+    // インタラクション処理担当
+    TimelineInteractionHandler interactionHandler_;
 
 public:
     //*----------------------------- getter Methods -----------------------------*//

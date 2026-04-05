@@ -99,6 +99,16 @@ std::string NextAttackUI::GetButtonTexture(int32_t gamepadButton) {
     return "ButtomUI/OperateX.dds";
 }
 
+void NextAttackUI::RegisterParams() {
+    globalParameter_->Regist(groupName_, "basePos",           &basePos_);
+    globalParameter_->Regist(groupName_, "spriteScale",       &spriteScale_);
+    globalParameter_->Regist(groupName_, "closeAnimDuration", &closeAnimDuration_);
+
+    for (int32_t i = 0; i < kMaxCandidates; ++i) {
+        globalParameter_->Regist(groupName_, "slotOffset" + std::to_string(i), &slotOffsets_[i]);
+    }
+}
+
 ///=========================================================
 /// パラメータ調整
 ///=========================================================
@@ -124,14 +134,4 @@ void NextAttackUI::AdjustParam() {
         ImGui::PopID();
     }
 #endif
-}
-
-void NextAttackUI::RegisterParams() {
-    globalParameter_->Regist(groupName_, "basePos",           &basePos_);
-    globalParameter_->Regist(groupName_, "spriteScale",       &spriteScale_);
-    globalParameter_->Regist(groupName_, "closeAnimDuration", &closeAnimDuration_);
-
-    for (int32_t i = 0; i < kMaxCandidates; ++i) {
-        globalParameter_->Regist(groupName_, "slotOffset" + std::to_string(i), &slotOffsets_[i]);
-    }
 }

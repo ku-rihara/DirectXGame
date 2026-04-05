@@ -100,6 +100,7 @@ private:
     std::string modelFilePath_;
     std::string selectedTexturePath_;
     std::string dissolveName_;
+    std::string distortionTexturePath_; // 歪みノイズテクスチャパス
 
     // テクスチャ変更時のコールバック
     std::function<void()> onTextureChanged_;
@@ -121,6 +122,7 @@ public:
     const std::string& GetModelFilePath() const { return modelFilePath_; }
     const std::string& GetSelectedTexturePath() const { return selectedTexturePath_; }
     const std::string& GetDissolveName() const { return dissolveName_; }
+    const std::string& GetDistortionTexturePath() const { return distortionTexturePath_; }
 
     // Setter
     void SetEmitPos(const Vector3& pos) { parameters_.emitPos = pos; }

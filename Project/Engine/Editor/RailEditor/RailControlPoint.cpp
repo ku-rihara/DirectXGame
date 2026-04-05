@@ -6,9 +6,9 @@ using namespace KetaEngine;
 void RailControlPoint::Init(const std::string& railName, const std::string& categoryName, int32_t keyNumber) {
     // グローバルパラメータ
     globalParameter_            = GlobalParameter::GetInstance();
-    currenTSequenceElementIndex = keyNumber;
+    currentSequenceElementIndex_ = keyNumber;
     categoryName_               = categoryName;
-    std::string newGroupName    = railName + std::to_string(currenTSequenceElementIndex);
+    std::string newGroupName    = railName + std::to_string(currentSequenceElementIndex_);
     groupName_                  = newGroupName;
 
     folderPath_ = "RailEditor/" + categoryName_ + "/ControlPoints/" + railName;

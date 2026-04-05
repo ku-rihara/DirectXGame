@@ -63,6 +63,13 @@ void ParticleManager::DrawScreenPos() {
     renderer_->DrawScreenPos(particleGroups_, pSrvManager_);
 }
 
+///============================================================
+/// 歪みパスパーティクル描画
+///============================================================
+void ParticleManager::DrawDistortion(const ViewProjection& viewProjection) {
+    renderer_->DrawDistortion(particleGroups_, viewProjection, pSrvManager_);
+}
+
 void ParticleManager::UpdateUV(UVInfo& uvInfo, float deltaTime) {
     updater_->UpdateUV(uvInfo, deltaTime);
 }
@@ -87,6 +94,10 @@ void ParticleManager::SetTextureHandle(const std::string name, uint32_t handle) 
 
 void ParticleManager::SetDissolveTextureHandle(const std::string& name, uint32_t handle) {
     particleGroups_[name].dissolveTextureHandle = handle;
+}
+
+void ParticleManager::SetDistortionTextureHandle(const std::string& name, uint32_t handle) {
+    particleGroups_[name].distortionTextureHandle = handle;
 }
 
 void ParticleManager::PlayDissolve(const std::string& name, const std::string& dissolveName) {

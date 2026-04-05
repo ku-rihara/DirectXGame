@@ -32,7 +32,7 @@ private:
     std::string groupName_;
     std::string categoryName_;
     std::string folderPath_;
-    int32_t currenTSequenceElementIndex = -1;
+    int32_t currentSequenceElementIndex_ = -1;
 
     Vector3 position_ = {0.0f, 0.0f, 0.0f};
 

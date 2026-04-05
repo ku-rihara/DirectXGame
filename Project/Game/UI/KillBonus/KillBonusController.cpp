@@ -97,6 +97,60 @@ void KillBonusController::SpawnPreview() {
     ResetDisplayTimer();
 }
 
+void KillBonusController::RegisterParams() {
+    globalParameter_->Regist(groupName_, "displayDuration", &displayDuration_);
+    globalParameter_->Regist(groupName_, "simKillToleranceTime", &simKillToleranceTime_);
+    globalParameter_->Regist(groupName_, "simKillBonusPerKill", &simKillBonusPerKill_);
+
+    // コンボUI
+    globalParameter_->Regist(groupName_, "combo_basePos", &comboLayout_.basePos);
+    globalParameter_->Regist(groupName_, "combo_bgOffset", &comboLayout_.bgOffset);
+    globalParameter_->Regist(groupName_, "combo_bgScale", &comboLayout_.bgScale);
+    globalParameter_->Regist(groupName_, "combo_bgColor", &comboLayout_.bgColor);
+    globalParameter_->Regist(groupName_, "combo_labelOffset", &comboLayout_.labelOffset);
+    globalParameter_->Regist(groupName_, "combo_comboTextOffset", &comboLayout_.comboTextOffset);
+    globalParameter_->Regist(groupName_, "combo_digitOffset", &comboLayout_.digitOffset);
+    globalParameter_->Regist(groupName_, "combo_decimalPointOffset", &comboLayout_.decimalPointOffset);
+    globalParameter_->Regist(groupName_, "combo_decimalDigitOffset", &comboLayout_.decimalDigitOffset);
+    globalParameter_->Regist(groupName_, "combo_multiplyIconOffset", &comboLayout_.multiplyIconOffset);
+    globalParameter_->Regist(groupName_, "combo_digitSpacing", &comboLayout_.digitSpacing);
+    globalParameter_->Regist(groupName_, "combo_digitScale", &comboLayout_.digitScale);
+    globalParameter_->Regist(groupName_, "combo_leftParenOffset", &comboLayout_.leftParenOffset);
+    globalParameter_->Regist(groupName_, "combo_rightParenOffset", &comboLayout_.rightParenOffset);
+    globalParameter_->Regist(groupName_, "combo_comboCountOffset", &comboLayout_.comboCountOffset);
+    globalParameter_->Regist(groupName_, "combo_comboCountSpacing", &comboLayout_.comboCountSpacing);
+    globalParameter_->Regist(groupName_, "combo_comboCountScale", &comboLayout_.comboCountScale);
+
+    // 同時キルUI
+    globalParameter_->Regist(groupName_, "simKill_basePos", &simKillLayout_.basePos);
+    globalParameter_->Regist(groupName_, "simKill_labelOffset", &simKillLayout_.labelOffset);
+    globalParameter_->Regist(groupName_, "simKill_digitOffset", &simKillLayout_.digitOffset);
+    globalParameter_->Regist(groupName_, "simKill_digitSpacing", &simKillLayout_.digitSpacing);
+    globalParameter_->Regist(groupName_, "simKill_digitScale", &simKillLayout_.digitScale);
+    globalParameter_->Regist(groupName_, "simKill_bodyOffset", &simKillLayout_.bodyOffset);
+    globalParameter_->Regist(groupName_, "simKill_leftParenOffset", &simKillLayout_.leftParenOffset);
+    globalParameter_->Regist(groupName_, "simKill_rightParenOffset", &simKillLayout_.rightParenOffset);
+    globalParameter_->Regist(groupName_, "simKill_comboDigitOffset", &simKillLayout_.comboDigitOffset);
+    globalParameter_->Regist(groupName_, "simKill_comboDecimalPointOffset", &simKillLayout_.comboDecimalPointOffset);
+    globalParameter_->Regist(groupName_, "simKill_comboDecimalDigitOffset", &simKillLayout_.comboDecimalDigitOffset);
+    globalParameter_->Regist(groupName_, "simKill_comboDecimalSpacing", &simKillLayout_.comboDecimalSpacing);
+    globalParameter_->Regist(groupName_, "simKill_comboDigitScale", &simKillLayout_.comboDigitScale);
+    globalParameter_->Regist(groupName_, "simKill_multiplyIconOffset", &simKillLayout_.multiplyIconOffset);
+
+    // 段階カラー
+    for (int i = 0; i < 3; ++i) {
+        const std::string prefix = "simKill_tier" + std::to_string(i);
+        globalParameter_->Regist(groupName_, prefix + "_threshold", &simKillLayout_.colorTiers[i].threshold);
+        globalParameter_->Regist(groupName_, prefix + "_color", &simKillLayout_.colorTiers[i].color);
+    }
+
+    // 段階カラー
+    for (int i = 0; i < 3; ++i) {
+        const std::string prefix = "combo_tier" + std::to_string(i);
+        globalParameter_->Regist(groupName_, prefix + "_threshold", &comboLayout_.colorTiers[i].threshold);
+    }
+}
+
 ///=========================================================
 /// パラメータ調整
 ///=========================================================
@@ -188,58 +242,4 @@ void KillBonusController::AdjustParam() {
         ImGui::PopID();
     }
 #endif
-}
-
-void KillBonusController::RegisterParams() {
-    globalParameter_->Regist(groupName_, "displayDuration", &displayDuration_);
-    globalParameter_->Regist(groupName_, "simKillToleranceTime", &simKillToleranceTime_);
-    globalParameter_->Regist(groupName_, "simKillBonusPerKill", &simKillBonusPerKill_);
-
-    // コンボUI
-    globalParameter_->Regist(groupName_, "combo_basePos", &comboLayout_.basePos);
-    globalParameter_->Regist(groupName_, "combo_bgOffset", &comboLayout_.bgOffset);
-    globalParameter_->Regist(groupName_, "combo_bgScale", &comboLayout_.bgScale);
-    globalParameter_->Regist(groupName_, "combo_bgColor", &comboLayout_.bgColor);
-    globalParameter_->Regist(groupName_, "combo_labelOffset", &comboLayout_.labelOffset);
-    globalParameter_->Regist(groupName_, "combo_comboTextOffset", &comboLayout_.comboTextOffset);
-    globalParameter_->Regist(groupName_, "combo_digitOffset", &comboLayout_.digitOffset);
-    globalParameter_->Regist(groupName_, "combo_decimalPointOffset", &comboLayout_.decimalPointOffset);
-    globalParameter_->Regist(groupName_, "combo_decimalDigitOffset", &comboLayout_.decimalDigitOffset);
-    globalParameter_->Regist(groupName_, "combo_multiplyIconOffset", &comboLayout_.multiplyIconOffset);
-    globalParameter_->Regist(groupName_, "combo_digitSpacing", &comboLayout_.digitSpacing);
-    globalParameter_->Regist(groupName_, "combo_digitScale", &comboLayout_.digitScale);
-    globalParameter_->Regist(groupName_, "combo_leftParenOffset", &comboLayout_.leftParenOffset);
-    globalParameter_->Regist(groupName_, "combo_rightParenOffset", &comboLayout_.rightParenOffset);
-    globalParameter_->Regist(groupName_, "combo_comboCountOffset", &comboLayout_.comboCountOffset);
-    globalParameter_->Regist(groupName_, "combo_comboCountSpacing", &comboLayout_.comboCountSpacing);
-    globalParameter_->Regist(groupName_, "combo_comboCountScale", &comboLayout_.comboCountScale);
-
-    // 同時キルUI
-    globalParameter_->Regist(groupName_, "simKill_basePos", &simKillLayout_.basePos);
-    globalParameter_->Regist(groupName_, "simKill_labelOffset", &simKillLayout_.labelOffset);
-    globalParameter_->Regist(groupName_, "simKill_digitOffset", &simKillLayout_.digitOffset);
-    globalParameter_->Regist(groupName_, "simKill_digitSpacing", &simKillLayout_.digitSpacing);
-    globalParameter_->Regist(groupName_, "simKill_digitScale", &simKillLayout_.digitScale);
-    globalParameter_->Regist(groupName_, "simKill_bodyOffset", &simKillLayout_.bodyOffset);
-    globalParameter_->Regist(groupName_, "simKill_leftParenOffset", &simKillLayout_.leftParenOffset);
-    globalParameter_->Regist(groupName_, "simKill_rightParenOffset", &simKillLayout_.rightParenOffset);
-    globalParameter_->Regist(groupName_, "simKill_comboDigitOffset", &simKillLayout_.comboDigitOffset);
-    globalParameter_->Regist(groupName_, "simKill_comboDecimalPointOffset", &simKillLayout_.comboDecimalPointOffset);
-    globalParameter_->Regist(groupName_, "simKill_comboDecimalDigitOffset", &simKillLayout_.comboDecimalDigitOffset);
-    globalParameter_->Regist(groupName_, "simKill_comboDecimalSpacing", &simKillLayout_.comboDecimalSpacing);
-    globalParameter_->Regist(groupName_, "simKill_comboDigitScale", &simKillLayout_.comboDigitScale);
-    globalParameter_->Regist(groupName_, "simKill_multiplyIconOffset", &simKillLayout_.multiplyIconOffset);
-
-    // 段階カラー
-    for (int i = 0; i < 3; ++i) {
-        const std::string prefix = "simKill_tier" + std::to_string(i);
-        globalParameter_->Regist(groupName_, prefix + "_threshold", &simKillLayout_.colorTiers[i].threshold);
-        globalParameter_->Regist(groupName_, prefix + "_color", &simKillLayout_.colorTiers[i].color);
-    }
-
-    // 段階カラー
-    for (int i = 0; i < 3; ++i) {
-        const std::string prefix = "combo_tier" + std::to_string(i);
-        globalParameter_->Regist(groupName_, prefix + "_threshold", &comboLayout_.colorTiers[i].threshold);
-    }
 }

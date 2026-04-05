@@ -36,6 +36,13 @@ void LevelUIController::Update(int32_t level) {
     }
 }
 
+void LevelUIController::RegisterParams() {
+    globalParameter_->Regist(groupName_, "basePosition", &basePosition_);
+    globalParameter_->Regist(groupName_, "baseScale",    &baseScale_);
+    globalParameter_->Regist(groupName_, "digitOffset",  &digitOffset_);
+    globalParameter_->Regist(groupName_, "labelOffset",  &labelOffset_);
+}
+
 ///=========================================================
 /// パラメータ調整
 ///==========================================================
@@ -55,11 +62,4 @@ void LevelUIController::AdjustParam() {
         d->AdjustParam();
     }
 #endif
-}
-
-void LevelUIController::RegisterParams() {
-    globalParameter_->Regist(groupName_, "basePosition", &basePosition_);
-    globalParameter_->Regist(groupName_, "baseScale",    &baseScale_);
-    globalParameter_->Regist(groupName_, "digitOffset",  &digitOffset_);
-    globalParameter_->Regist(groupName_, "labelOffset",  &labelOffset_);
 }

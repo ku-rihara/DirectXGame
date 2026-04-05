@@ -109,75 +109,6 @@ bool PlayerComboAttackData::CheckTriggerCondition(TriggerCondition condition) co
     }
 }
 
-///==========================================================
-/// バインド
-///==========================================================
-void PlayerComboAttackData::RegisterParams() {
-    // simpleParam
-    globalParameter_->Regist(groupName_, "power", &attackParam_.power);
-    globalParameter_->Regist(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
-    globalParameter_->Regist(groupName_, "blowYPower", &attackParam_.blowYPower);
-    globalParameter_->Regist(groupName_, "isMotionOnly", &attackParam_.isMotionOnly);
-
-    // CollisionParam
-    globalParameter_->Regist(groupName_, "CollisionRad", &attackParam_.collisionParam.sphereRad);
-    globalParameter_->Regist(groupName_, "collisionOffsetPos", &attackParam_.collisionParam.offsetPos);
-    globalParameter_->Regist(groupName_, "collisionStartTime", &attackParam_.collisionParam.startTime);
-    globalParameter_->Regist(groupName_, "adaptTime", &attackParam_.collisionParam.adaptTime);
-    globalParameter_->Regist(groupName_, "loopWaitTime", &attackParam_.collisionParam.loopWaitTime);
-    globalParameter_->Regist(groupName_, "loopNum", &attackParam_.collisionParam.loopNum);
-    globalParameter_->Regist(groupName_, "isAlwaysFollowing", &attackParam_.collisionParam.isAlwaysFollowing);
-
-    // MoveParam
-    globalParameter_->Regist(groupName_, "moveValue", &attackParam_.moveParam.value);
-    globalParameter_->Regist(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
-    globalParameter_->Regist(groupName_, "moveStartTime", &attackParam_.moveParam.startTime);
-    globalParameter_->Regist(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
-    globalParameter_->Regist(groupName_, "isAbleInputMoving", &attackParam_.moveParam.isAbleInputMoving);
-    globalParameter_->Regist(groupName_, "isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
-    globalParameter_->Regist(groupName_, "finishTimeOffset", &attackParam_.moveParam.finishTimeOffset);
-    globalParameter_->Regist(groupName_, "isStopBeforeEnemy", &attackParam_.moveParam.isStopBeforeEnemy);
-
-    // TriggerParam（最初の攻撃用）
-    globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
-    globalParameter_->Regist(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
-    globalParameter_->Regist(groupName_, "Condition", &triggerConditionInt_);
-
-    // TimingParam
-    globalParameter_->Regist(groupName_, "finishWaitTime", &attackParam_.timingParam.finishWaitTime);
-    globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance);
-
-    // 解放レベル
-    globalParameter_->Regist(groupName_, "ableDefeatLevel", &attackParam_.ableDefeatLevel);
-
-    // コンボ分岐数
-    globalParameter_->Regist(groupName_, "ComboBranchCount", &branchCount_);
-
-    // 演出のパラメータバインド
-    renditionData_.RegisterParams(globalParameter_, groupName_);
-}
-
-///==========================================================
-/// パラメータ調整
-///==========================================================
-void PlayerComboAttackData::AdjustParam() {
-#ifdef _DEBUG
-
-    ImGui::PushID(groupName_.c_str());
-    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), (groupName_ + " Editing").c_str());
-
-    // セーブ・ロードボタン
-    DrawSaveLoadUI();
-    ImGui::Separator();
-
-    // タイムライン描画
-    timeLine_.Draw();
-
-    ImGui::PopID();
-
-#endif // _DEBUG
-}
-
 void PlayerComboAttackData::DrawCollisionParamUI() {
     auto& collisionParam = attackParam_.collisionParam;
 
@@ -356,6 +287,75 @@ void PlayerComboAttackData::DrawSaveLoadUI() {
 
 void PlayerComboAttackData::RebuildBranchTracks() {
     timeLine_.RebuildBranchTracks();
+}
+
+///==========================================================
+/// バインド
+///==========================================================
+void PlayerComboAttackData::RegisterParams() {
+    // simpleParam
+    globalParameter_->Regist(groupName_, "power", &attackParam_.power);
+    globalParameter_->Regist(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
+    globalParameter_->Regist(groupName_, "blowYPower", &attackParam_.blowYPower);
+    globalParameter_->Regist(groupName_, "isMotionOnly", &attackParam_.isMotionOnly);
+
+    // CollisionParam
+    globalParameter_->Regist(groupName_, "CollisionRad", &attackParam_.collisionParam.sphereRad);
+    globalParameter_->Regist(groupName_, "collisionOffsetPos", &attackParam_.collisionParam.offsetPos);
+    globalParameter_->Regist(groupName_, "collisionStartTime", &attackParam_.collisionParam.startTime);
+    globalParameter_->Regist(groupName_, "adaptTime", &attackParam_.collisionParam.adaptTime);
+    globalParameter_->Regist(groupName_, "loopWaitTime", &attackParam_.collisionParam.loopWaitTime);
+    globalParameter_->Regist(groupName_, "loopNum", &attackParam_.collisionParam.loopNum);
+    globalParameter_->Regist(groupName_, "isAlwaysFollowing", &attackParam_.collisionParam.isAlwaysFollowing);
+
+    // MoveParam
+    globalParameter_->Regist(groupName_, "moveValue", &attackParam_.moveParam.value);
+    globalParameter_->Regist(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
+    globalParameter_->Regist(groupName_, "moveStartTime", &attackParam_.moveParam.startTime);
+    globalParameter_->Regist(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
+    globalParameter_->Regist(groupName_, "isAbleInputMoving", &attackParam_.moveParam.isAbleInputMoving);
+    globalParameter_->Regist(groupName_, "isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
+    globalParameter_->Regist(groupName_, "finishTimeOffset", &attackParam_.moveParam.finishTimeOffset);
+    globalParameter_->Regist(groupName_, "isStopBeforeEnemy", &attackParam_.moveParam.isStopBeforeEnemy);
+
+    // TriggerParam（最初の攻撃用）
+    globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
+    globalParameter_->Regist(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
+    globalParameter_->Regist(groupName_, "Condition", &triggerConditionInt_);
+
+    // TimingParam
+    globalParameter_->Regist(groupName_, "finishWaitTime", &attackParam_.timingParam.finishWaitTime);
+    globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance);
+
+    // 解放レベル
+    globalParameter_->Regist(groupName_, "ableDefeatLevel", &attackParam_.ableDefeatLevel);
+
+    // コンボ分岐数
+    globalParameter_->Regist(groupName_, "ComboBranchCount", &branchCount_);
+
+    // 演出のパラメータバインド
+    renditionData_.RegisterParams(globalParameter_, groupName_);
+}
+
+///==========================================================
+/// パラメータ調整
+///==========================================================
+void PlayerComboAttackData::AdjustParam() {
+#ifdef _DEBUG
+
+    ImGui::PushID(groupName_.c_str());
+    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), (groupName_ + " Editing").c_str());
+
+    // セーブ・ロードボタン
+    DrawSaveLoadUI();
+    ImGui::Separator();
+
+    // タイムライン描画
+    timeLine_.Draw();
+
+    ImGui::PopID();
+
+#endif // _DEBUG
 }
 
 bool PlayerComboAttackData::IsReserveNextAttack(float currentTime, const ComboBranchParameter& branch, bool hasHitEnemy) {

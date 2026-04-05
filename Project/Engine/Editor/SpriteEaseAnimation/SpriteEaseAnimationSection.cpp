@@ -7,8 +7,8 @@ using namespace KetaEngine;
 
 void SpriteEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, int32_t keyNumber) {
     globalParameter_             = GlobalParameter::GetInstance();
-    currenTSequenceElementIndex_ = keyNumber;
-    groupName_                   = animationName + std::to_string(currenTSequenceElementIndex_);
+    currentSequenceElementIndex__ = keyNumber;
+    groupName_                   = animationName + std::to_string(currentSequenceElementIndex__);
     folderPath_                  = "SpriteEaseAnimation/" + categoryName + "/" + "Sections/" + animationName + "/";
 
     // Scaleの初期値を(1,1)に設定
@@ -376,130 +376,6 @@ void SpriteEaseAnimationSection::StartPlay() {
     }
 }
 
-// ======================== Params ========================
-
-void SpriteEaseAnimationSection::RegisterParams() {
-    globalParameter_->Regist(groupName_, "startTime", &startTime_);
-    globalParameter_->Regist(groupName_, "returnStartTime", &returnStartTime_);
-    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
-
-    // Scale (Vec2)
-    globalParameter_->Regist(groupName_, "Scale_IsActive", &scaleParam_.isActive);
-    globalParameter_->Regist(groupName_, "Scale_IsReturnToOrigin", &scaleParam_.isReturnToOrigin);
-    globalParameter_->Regist(groupName_, "Scale_endValue", &scaleParam_.endValue);
-    globalParameter_->Regist(groupName_, "Scale_MaxTime", &scaleParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Scale_EaseType", &scaleParam_.easeType);
-    globalParameter_->Regist(groupName_, "Scale_Amplitude", &scaleParam_.amplitude);
-    globalParameter_->Regist(groupName_, "Scale_Period", &scaleParam_.period);
-    globalParameter_->Regist(groupName_, "Scale_ReturnMaxTime", &scaleParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Scale_ReturnEaseType", &scaleParam_.returnEaseType);
-
-    // Position (Vec2)
-    globalParameter_->Regist(groupName_, "Position_IsActive", &positionParam_.isActive);
-    globalParameter_->Regist(groupName_, "Position_IsReturnToOrigin", &positionParam_.isReturnToOrigin);
-    globalParameter_->Regist(groupName_, "Position_endValue", &positionParam_.endValue);
-    globalParameter_->Regist(groupName_, "Position_MaxTime", &positionParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Position_EaseType", &positionParam_.easeType);
-    globalParameter_->Regist(groupName_, "Position_Amplitude", &positionParam_.amplitude);
-    globalParameter_->Regist(groupName_, "Position_Period", &positionParam_.period);
-    globalParameter_->Regist(groupName_, "Position_ReturnMaxTime", &positionParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Position_ReturnEaseType", &positionParam_.returnEaseType);
-
-    // Rotation (Vec3)
-    globalParameter_->Regist(groupName_, "Rotation_IsActive", &rotationParam_.isActive);
-    globalParameter_->Regist(groupName_, "Rotation_IsReturnToOrigin", &rotationParam_.isReturnToOrigin);
-    globalParameter_->Regist(groupName_, "Rotation_endValue", &rotationParam_.endValue);
-    globalParameter_->Regist(groupName_, "Rotation_MaxTime", &rotationParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Rotation_EaseType", &rotationParam_.easeType);
-    globalParameter_->Regist(groupName_, "Rotation_Amplitude", &rotationParam_.amplitude);
-    globalParameter_->Regist(groupName_, "Rotation_Period", &rotationParam_.period);
-    globalParameter_->Regist(groupName_, "Rotation_ReturnMaxTime", &rotationParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Rotation_ReturnEaseType", &rotationParam_.returnEaseType);
-
-    // Color (Vec3)
-    globalParameter_->Regist(groupName_, "Color_IsActive", &colorParam_.isActive);
-    globalParameter_->Regist(groupName_, "Color_IsReturnToOrigin", &colorParam_.isReturnToOrigin);
-    globalParameter_->Regist(groupName_, "Color_endValue", &colorParam_.endValue);
-    globalParameter_->Regist(groupName_, "Color_MaxTime", &colorParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Color_EaseType", &colorParam_.easeType);
-    globalParameter_->Regist(groupName_, "Color_Amplitude", &colorParam_.amplitude);
-    globalParameter_->Regist(groupName_, "Color_Period", &colorParam_.period);
-    globalParameter_->Regist(groupName_, "Color_ReturnMaxTime", &colorParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Color_ReturnEaseType", &colorParam_.returnEaseType);
-
-    // Alpha (float)
-    globalParameter_->Regist(groupName_, "Alpha_IsActive", &alphaParam_.isActive);
-    globalParameter_->Regist(groupName_, "Alpha_IsReturnToOrigin", &alphaParam_.isReturnToOrigin);
-    globalParameter_->Regist(groupName_, "Alpha_endValue", &alphaParam_.endValue);
-    globalParameter_->Regist(groupName_, "Alpha_MaxTime", &alphaParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Alpha_EaseType", &alphaParam_.easeType);
-    globalParameter_->Regist(groupName_, "Alpha_Amplitude", &alphaParam_.amplitude);
-    globalParameter_->Regist(groupName_, "Alpha_Period", &alphaParam_.period);
-    globalParameter_->Regist(groupName_, "Alpha_ReturnMaxTime", &alphaParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Alpha_ReturnEaseType", &alphaParam_.returnEaseType);
-}
-
-void SpriteEaseAnimationSection::GetParams() {
-    startTime_       = globalParameter_->GetValue<float>(groupName_, "startTime");
-    returnStartTime_ = globalParameter_->GetValue<float>(groupName_, "returnStartTime");
-    timeModeSelector_.GetParam(groupName_, globalParameter_);
-
-    // Scale
-    scaleParam_.isActive         = globalParameter_->GetValue<bool>(groupName_, "Scale_IsActive");
-    scaleParam_.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Scale_IsReturnToOrigin");
-    scaleParam_.endValue         = globalParameter_->GetValue<Vector2>(groupName_, "Scale_endValue");
-    scaleParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Scale_MaxTime");
-    scaleParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Scale_EaseType");
-    scaleParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Scale_Amplitude");
-    scaleParam_.period           = globalParameter_->GetValue<float>(groupName_, "Scale_Period");
-    scaleParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Scale_ReturnMaxTime");
-    scaleParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Scale_ReturnEaseType");
-
-    // Position
-    positionParam_.isActive         = globalParameter_->GetValue<bool>(groupName_, "Position_IsActive");
-    positionParam_.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Position_IsReturnToOrigin");
-    positionParam_.endValue         = globalParameter_->GetValue<Vector2>(groupName_, "Position_endValue");
-    positionParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Position_MaxTime");
-    positionParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Position_EaseType");
-    positionParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Position_Amplitude");
-    positionParam_.period           = globalParameter_->GetValue<float>(groupName_, "Position_Period");
-    positionParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Position_ReturnMaxTime");
-    positionParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Position_ReturnEaseType");
-
-    // Rotation
-    rotationParam_.isActive         = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsActive");
-    rotationParam_.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsReturnToOrigin");
-    rotationParam_.endValue         = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_endValue");
-    rotationParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Rotation_MaxTime");
-    rotationParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_EaseType");
-    rotationParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Rotation_Amplitude");
-    rotationParam_.period           = globalParameter_->GetValue<float>(groupName_, "Rotation_Period");
-    rotationParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Rotation_ReturnMaxTime");
-    rotationParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_ReturnEaseType");
-
-    // Color
-    colorParam_.isActive         = globalParameter_->GetValue<bool>(groupName_, "Color_IsActive");
-    colorParam_.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Color_IsReturnToOrigin");
-    colorParam_.endValue         = globalParameter_->GetValue<Vector3>(groupName_, "Color_endValue");
-    colorParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Color_MaxTime");
-    colorParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Color_EaseType");
-    colorParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Color_Amplitude");
-    colorParam_.period           = globalParameter_->GetValue<float>(groupName_, "Color_Period");
-    colorParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Color_ReturnMaxTime");
-    colorParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Color_ReturnEaseType");
-
-    // Alpha
-    alphaParam_.isActive         = globalParameter_->GetValue<bool>(groupName_, "Alpha_IsActive");
-    alphaParam_.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Alpha_IsReturnToOrigin");
-    alphaParam_.endValue         = globalParameter_->GetValue<float>(groupName_, "Alpha_endValue");
-    alphaParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Alpha_MaxTime");
-    alphaParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Alpha_EaseType");
-    alphaParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Alpha_Amplitude");
-    alphaParam_.period           = globalParameter_->GetValue<float>(groupName_, "Alpha_Period");
-    alphaParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Alpha_ReturnMaxTime");
-    alphaParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Alpha_ReturnEaseType");
-}
-
 void SpriteEaseAnimationSection::AdaptEaseParam() {
     // Scale
     scaleParam_.ease.SetMaxTime(scaleParam_.maxTime);
@@ -676,28 +552,6 @@ void SpriteEaseAnimationSection::ImGuiFloatParam(const char* label, FloatParam& 
     }
 
     ImGui::PopID();
-}
-
-void SpriteEaseAnimationSection::AdjustParam() {
-#ifdef _DEBUG
-    ImGui::SeparatorText(("Section: " + groupName_).c_str());
-    ImGui::PushID(groupName_.c_str());
-
-    ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 100.0f);
-    timeModeSelector_.SelectTimeModeImGui("Time Mode");
-
-    ImGui::Separator();
-
-    ImGuiVec2Param("Scale", scaleParam_);
-    ImGuiVec2Param("Position", positionParam_);
-    ImGuiVec3Param("Rotation", rotationParam_, true);
-    ImGuiColorParam("Color", colorParam_);
-    ImGuiFloatParam("Alpha", alphaParam_, true);
-
-    AdaptEaseParam();
-
-    ImGui::PopID();
-#endif
 }
 
 // ======================== Start Values ========================
@@ -931,4 +785,150 @@ const char* SpriteEaseAnimationSection::GetPropertyName(PropertyType type) const
     case PropertyType::Alpha:    return "Alpha";
     default:                     return "Unknown";
     }
+}
+
+// ======================== Params ========================
+
+void SpriteEaseAnimationSection::RegisterParams() {
+    globalParameter_->Regist(groupName_, "startTime", &startTime_);
+    globalParameter_->Regist(groupName_, "returnStartTime", &returnStartTime_);
+    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
+
+    // Scale (Vec2)
+    globalParameter_->Regist(groupName_, "Scale_IsActive", &scaleParam_.isActive);
+    globalParameter_->Regist(groupName_, "Scale_IsReturnToOrigin", &scaleParam_.isReturnToOrigin);
+    globalParameter_->Regist(groupName_, "Scale_endValue", &scaleParam_.endValue);
+    globalParameter_->Regist(groupName_, "Scale_MaxTime", &scaleParam_.maxTime);
+    globalParameter_->Regist(groupName_, "Scale_EaseType", &scaleParam_.easeType);
+    globalParameter_->Regist(groupName_, "Scale_Amplitude", &scaleParam_.amplitude);
+    globalParameter_->Regist(groupName_, "Scale_Period", &scaleParam_.period);
+    globalParameter_->Regist(groupName_, "Scale_ReturnMaxTime", &scaleParam_.returnMaxTime);
+    globalParameter_->Regist(groupName_, "Scale_ReturnEaseType", &scaleParam_.returnEaseType);
+
+    // Position (Vec2)
+    globalParameter_->Regist(groupName_, "Position_IsActive", &positionParam_.isActive);
+    globalParameter_->Regist(groupName_, "Position_IsReturnToOrigin", &positionParam_.isReturnToOrigin);
+    globalParameter_->Regist(groupName_, "Position_endValue", &positionParam_.endValue);
+    globalParameter_->Regist(groupName_, "Position_MaxTime", &positionParam_.maxTime);
+    globalParameter_->Regist(groupName_, "Position_EaseType", &positionParam_.easeType);
+    globalParameter_->Regist(groupName_, "Position_Amplitude", &positionParam_.amplitude);
+    globalParameter_->Regist(groupName_, "Position_Period", &positionParam_.period);
+    globalParameter_->Regist(groupName_, "Position_ReturnMaxTime", &positionParam_.returnMaxTime);
+    globalParameter_->Regist(groupName_, "Position_ReturnEaseType", &positionParam_.returnEaseType);
+
+    // Rotation (Vec3)
+    globalParameter_->Regist(groupName_, "Rotation_IsActive", &rotationParam_.isActive);
+    globalParameter_->Regist(groupName_, "Rotation_IsReturnToOrigin", &rotationParam_.isReturnToOrigin);
+    globalParameter_->Regist(groupName_, "Rotation_endValue", &rotationParam_.endValue);
+    globalParameter_->Regist(groupName_, "Rotation_MaxTime", &rotationParam_.maxTime);
+    globalParameter_->Regist(groupName_, "Rotation_EaseType", &rotationParam_.easeType);
+    globalParameter_->Regist(groupName_, "Rotation_Amplitude", &rotationParam_.amplitude);
+    globalParameter_->Regist(groupName_, "Rotation_Period", &rotationParam_.period);
+    globalParameter_->Regist(groupName_, "Rotation_ReturnMaxTime", &rotationParam_.returnMaxTime);
+    globalParameter_->Regist(groupName_, "Rotation_ReturnEaseType", &rotationParam_.returnEaseType);
+
+    // Color (Vec3)
+    globalParameter_->Regist(groupName_, "Color_IsActive", &colorParam_.isActive);
+    globalParameter_->Regist(groupName_, "Color_IsReturnToOrigin", &colorParam_.isReturnToOrigin);
+    globalParameter_->Regist(groupName_, "Color_endValue", &colorParam_.endValue);
+    globalParameter_->Regist(groupName_, "Color_MaxTime", &colorParam_.maxTime);
+    globalParameter_->Regist(groupName_, "Color_EaseType", &colorParam_.easeType);
+    globalParameter_->Regist(groupName_, "Color_Amplitude", &colorParam_.amplitude);
+    globalParameter_->Regist(groupName_, "Color_Period", &colorParam_.period);
+    globalParameter_->Regist(groupName_, "Color_ReturnMaxTime", &colorParam_.returnMaxTime);
+    globalParameter_->Regist(groupName_, "Color_ReturnEaseType", &colorParam_.returnEaseType);
+
+    // Alpha (float)
+    globalParameter_->Regist(groupName_, "Alpha_IsActive", &alphaParam_.isActive);
+    globalParameter_->Regist(groupName_, "Alpha_IsReturnToOrigin", &alphaParam_.isReturnToOrigin);
+    globalParameter_->Regist(groupName_, "Alpha_endValue", &alphaParam_.endValue);
+    globalParameter_->Regist(groupName_, "Alpha_MaxTime", &alphaParam_.maxTime);
+    globalParameter_->Regist(groupName_, "Alpha_EaseType", &alphaParam_.easeType);
+    globalParameter_->Regist(groupName_, "Alpha_Amplitude", &alphaParam_.amplitude);
+    globalParameter_->Regist(groupName_, "Alpha_Period", &alphaParam_.period);
+    globalParameter_->Regist(groupName_, "Alpha_ReturnMaxTime", &alphaParam_.returnMaxTime);
+    globalParameter_->Regist(groupName_, "Alpha_ReturnEaseType", &alphaParam_.returnEaseType);
+}
+
+void SpriteEaseAnimationSection::GetParams() {
+    startTime_       = globalParameter_->GetValue<float>(groupName_, "startTime");
+    returnStartTime_ = globalParameter_->GetValue<float>(groupName_, "returnStartTime");
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
+
+    // Scale
+    scaleParam_.isActive         = globalParameter_->GetValue<bool>(groupName_, "Scale_IsActive");
+    scaleParam_.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Scale_IsReturnToOrigin");
+    scaleParam_.endValue         = globalParameter_->GetValue<Vector2>(groupName_, "Scale_endValue");
+    scaleParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Scale_MaxTime");
+    scaleParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Scale_EaseType");
+    scaleParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Scale_Amplitude");
+    scaleParam_.period           = globalParameter_->GetValue<float>(groupName_, "Scale_Period");
+    scaleParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Scale_ReturnMaxTime");
+    scaleParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Scale_ReturnEaseType");
+
+    // Position
+    positionParam_.isActive         = globalParameter_->GetValue<bool>(groupName_, "Position_IsActive");
+    positionParam_.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Position_IsReturnToOrigin");
+    positionParam_.endValue         = globalParameter_->GetValue<Vector2>(groupName_, "Position_endValue");
+    positionParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Position_MaxTime");
+    positionParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Position_EaseType");
+    positionParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Position_Amplitude");
+    positionParam_.period           = globalParameter_->GetValue<float>(groupName_, "Position_Period");
+    positionParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Position_ReturnMaxTime");
+    positionParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Position_ReturnEaseType");
+
+    // Rotation
+    rotationParam_.isActive         = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsActive");
+    rotationParam_.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsReturnToOrigin");
+    rotationParam_.endValue         = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_endValue");
+    rotationParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Rotation_MaxTime");
+    rotationParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_EaseType");
+    rotationParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Rotation_Amplitude");
+    rotationParam_.period           = globalParameter_->GetValue<float>(groupName_, "Rotation_Period");
+    rotationParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Rotation_ReturnMaxTime");
+    rotationParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_ReturnEaseType");
+
+    // Color
+    colorParam_.isActive         = globalParameter_->GetValue<bool>(groupName_, "Color_IsActive");
+    colorParam_.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Color_IsReturnToOrigin");
+    colorParam_.endValue         = globalParameter_->GetValue<Vector3>(groupName_, "Color_endValue");
+    colorParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Color_MaxTime");
+    colorParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Color_EaseType");
+    colorParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Color_Amplitude");
+    colorParam_.period           = globalParameter_->GetValue<float>(groupName_, "Color_Period");
+    colorParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Color_ReturnMaxTime");
+    colorParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Color_ReturnEaseType");
+
+    // Alpha
+    alphaParam_.isActive         = globalParameter_->GetValue<bool>(groupName_, "Alpha_IsActive");
+    alphaParam_.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Alpha_IsReturnToOrigin");
+    alphaParam_.endValue         = globalParameter_->GetValue<float>(groupName_, "Alpha_endValue");
+    alphaParam_.maxTime          = globalParameter_->GetValue<float>(groupName_, "Alpha_MaxTime");
+    alphaParam_.easeType         = globalParameter_->GetValue<int32_t>(groupName_, "Alpha_EaseType");
+    alphaParam_.amplitude        = globalParameter_->GetValue<float>(groupName_, "Alpha_Amplitude");
+    alphaParam_.period           = globalParameter_->GetValue<float>(groupName_, "Alpha_Period");
+    alphaParam_.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, "Alpha_ReturnMaxTime");
+    alphaParam_.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, "Alpha_ReturnEaseType");
+}
+
+void SpriteEaseAnimationSection::AdjustParam() {
+#ifdef _DEBUG
+    ImGui::SeparatorText(("Section: " + groupName_).c_str());
+    ImGui::PushID(groupName_.c_str());
+
+    ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 100.0f);
+    timeModeSelector_.SelectTimeModeImGui("Time Mode");
+
+    ImGui::Separator();
+
+    ImGuiVec2Param("Scale", scaleParam_);
+    ImGuiVec2Param("Position", positionParam_);
+    ImGuiVec3Param("Rotation", rotationParam_, true);
+    ImGuiColorParam("Color", colorParam_);
+    ImGuiFloatParam("Alpha", alphaParam_, true);
+
+    AdaptEaseParam();
+
+    ImGui::PopID();
+#endif
 }

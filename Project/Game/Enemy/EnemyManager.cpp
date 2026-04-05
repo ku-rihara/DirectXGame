@@ -140,6 +140,10 @@ void EnemyManager::HpBarUpdate(const KetaEngine::ViewProjection& viewProjection)
     }
 }
 
+void EnemyManager::DamageReactionCreate() {
+    damageReactionController_->EditorUpdate();
+}
+
 ///=================================================================================
 /// パラメータをグループに追加
 ///=================================================================================
@@ -249,11 +253,6 @@ void EnemyManager::AdjustParam() {
 
 #endif
 }
-
-void EnemyManager::DamageReactionCreate() {
-    damageReactionController_->EditorUpdate();
-}
-
 
 ///------------------------------------------------------------------------------------------------
 /// クラスセット

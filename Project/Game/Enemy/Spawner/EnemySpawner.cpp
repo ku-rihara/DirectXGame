@@ -146,6 +146,15 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
 }
 
 ///=========================================================
+/// パラメータBind
+///==========================================================
+void EnemySpawner::RegisterParams() {
+    for (int32_t i = 0; i < spawnGroups_.size() - 1; ++i) {
+        globalParameter_->Regist(groupName_, "nextFazeEnemyNum" + std::to_string(i), &spawnGroups_[i].nextFazeEnemyNum);
+    }
+}
+
+///=========================================================
 /// パラメータ調整
 ///==========================================================
 void EnemySpawner::AdjustParam() {
@@ -166,15 +175,6 @@ void EnemySpawner::AdjustParam() {
     }
 
 #endif
-}
-
-///=========================================================
-/// パラメータBind
-///==========================================================
-void EnemySpawner::RegisterParams() {
-    for (int32_t i = 0; i < spawnGroups_.size() - 1; ++i) {
-        globalParameter_->Regist(groupName_, "nextFazeEnemyNum" + std::to_string(i), &spawnGroups_[i].nextFazeEnemyNum);
-    }
 }
 
 bool EnemySpawner::IsGroupCompleted(int groupId) const {

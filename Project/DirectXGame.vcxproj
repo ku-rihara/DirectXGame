@@ -159,6 +159,7 @@
     <ClCompile Include="Engine\Pipeline\PipelineManager.cpp" />
     <ClCompile Include="Engine\Pipeline\RibbonTrail\RibbonTrailPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\RibbonTrail\RibbonTrailDistortionPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Particle\ParticleDistortionPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Skinning\SkinningCSPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.cpp" />
@@ -214,6 +215,8 @@
     <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp" />
     <ClCompile Include="Engine\utility\CollisionPush\CollisionPushUtils.cpp" />
     <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp" />
+    <ClCompile Include="Engine\utility\TimeLine\TimelineRenderer.cpp" />
+    <ClCompile Include="Engine\utility\TimeLine\TimelineInteractionHandler.cpp" />
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp" />
     <ClCompile Include="Game\DeathTimer\DeathTimer.cpp" />
     <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp" />
@@ -501,6 +504,7 @@
     <ClInclude Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\GPUParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Particle\ParticleDistortionPipeline.h" />
     <ClInclude Include="Engine\Pipeline\PipelineManager.h" />
     <ClInclude Include="Engine\Pipeline\RibbonTrail\RibbonTrailPipeline.h" />
     <ClInclude Include="Engine\Pipeline\RibbonTrail\RibbonTrailDistortionPipeline.h" />
@@ -575,6 +579,8 @@
     <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h" />
     <ClInclude Include="Engine\utility\CollisionPush\CollisionPushUtils.h" />
     <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h" />
+    <ClInclude Include="Engine\utility\TimeLine\TimelineRenderer.h" />
+    <ClInclude Include="Engine\utility\TimeLine\TimelineInteractionHandler.h" />
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h" />
     <ClInclude Include="Game\DeathTimer\DeathTimer.h" />
     <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h" />

@@ -18,6 +18,11 @@ void ResultStage::Update() {
     }
 }
 
+void ResultStage::RegisterParams() {
+    globalParameter_->Regist(groupName_, "cameraPos", &cameraPos_);
+    globalParameter_->Regist(groupName_, "cameraRot", &cameraRot_);
+}
+
 void ResultStage::AdjustParam() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
@@ -29,9 +34,4 @@ void ResultStage::AdjustParam() {
         ImGui::PopID();
     }
 #endif
-}
-
-void ResultStage::RegisterParams() {
-    globalParameter_->Regist(groupName_, "cameraPos", &cameraPos_);
-    globalParameter_->Regist(groupName_, "cameraRot", &cameraRot_);
 }

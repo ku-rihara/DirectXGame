@@ -130,7 +130,8 @@ public:
         uint32_t srvIndex;
         uint32_t currentNum;
         uint32_t textureHandle;
-        uint32_t dissolveTextureHandle = 0;
+        uint32_t dissolveTextureHandle    = 0;
+        uint32_t distortionTextureHandle  = 0; // 歪みノイズテクスチャ
         ParticleFprGPU* instancingData;
         std::list<Particle> particles;
         GroupParameters param;
@@ -148,6 +149,7 @@ public:
     void Update();
     void Draw(const ViewProjection& viewProjection);
     void DrawScreenPos();
+    void DrawDistortion(const ViewProjection& viewProjection); // 歪みパス描画
 
     void ResetInstancingData(const std::string& name);
     void UpdateUV(UVInfo& uvInfo, float deltaTime);
@@ -188,6 +190,7 @@ public:
     void SetViewProjection(const ViewProjection* view);
     void SetTextureHandle(const std::string name, uint32_t handle);
     void SetDissolveTextureHandle(const std::string& name, uint32_t handle);
+    void SetDistortionTextureHandle(const std::string& name, uint32_t handle); // 歪みテクスチャ設定
     void PlayDissolve(const std::string& name, const std::string& dissolveName);
     void StopDissolve(const std::string& name);
     void SetAllParticleFile();

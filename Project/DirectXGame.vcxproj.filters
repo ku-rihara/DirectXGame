@@ -1024,6 +1024,12 @@
     <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp">
       <Filter>Engine\utility\TimeLine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\TimeLine\TimelineRenderer.cpp">
+      <Filter>Engine\utility\TimeLine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\TimeLine\TimelineInteractionHandler.cpp">
+      <Filter>Engine\utility\TimeLine</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp">
       <Filter>Engine\utility\TimeModeSelector</Filter>
     </ClCompile>
@@ -1744,6 +1750,9 @@
     <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h">
       <Filter>Engine\Pipeline\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Particle\ParticleDistortionPipeline.h">
+      <Filter>Engine\Pipeline\Particle</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Pipeline\PipelineManager.h">
       <Filter>Engine\Pipeline</Filter>
     </ClInclude>
@@ -1943,6 +1952,12 @@
       <Filter>Engine\utility\CollisionPush</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h">
+      <Filter>Engine\utility\TimeLine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeLine\TimelineRenderer.h">
+      <Filter>Engine\utility\TimeLine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeLine\TimelineInteractionHandler.h">
       <Filter>Engine\utility\TimeLine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h">
@@ -2512,6 +2527,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\RibbonTrail\RibbonTrailDistortionPipeline.cpp">
       <Filter>Engine\Pipeline\RibbonTrail</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Particle\ParticleDistortionPipeline.cpp">
+      <Filter>Engine\Pipeline\Particle</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.cpp">
       <Filter>Engine\Editor\RibbonTrailEditor</Filter>

@@ -50,6 +50,38 @@ void GameResultUI::Update() {
     }
 }
 
+void GameResultUI::RegisterParams() {
+    // ① 生き残った時間
+    globalParameter_->Regist(groupName_, "Survival_basePos", &survivalCfg_.basePos);
+    globalParameter_->Regist(groupName_, "Survival_labelOffset", &survivalCfg_.labelOffset);
+    globalParameter_->Regist(groupName_, "Survival_numberOffset", &survivalCfg_.numberBaseOffset);
+    globalParameter_->Regist(groupName_, "Survival_digitSpacing", &survivalCfg_.digitSpacing);
+    globalParameter_->Regist(groupName_, "Survival_unitOffset", &survivalCfg_.unitOffset);
+    globalParameter_->Regist(groupName_, "Survival_baseScale", &survivalCfg_.baseScale);
+    globalParameter_->Regist(groupName_, "Survival_digitScaleOffset", &survivalCfg_.digitScaleOffset);
+    globalParameter_->Regist(groupName_, "Survival_startDelay", &survivalCfg_.startDelay);
+
+    // ② 敵を倒した数
+    globalParameter_->Regist(groupName_, "Kill_basePos", &killCfg_.basePos);
+    globalParameter_->Regist(groupName_, "Kill_labelOffset", &killCfg_.labelOffset);
+    globalParameter_->Regist(groupName_, "Kill_numberOffset", &killCfg_.numberBaseOffset);
+    globalParameter_->Regist(groupName_, "Kill_digitSpacing", &killCfg_.digitSpacing);
+    globalParameter_->Regist(groupName_, "Kill_unitOffset", &killCfg_.unitOffset);
+    globalParameter_->Regist(groupName_, "Kill_baseScale", &killCfg_.baseScale);
+    globalParameter_->Regist(groupName_, "Kill_digitScaleOffset", &killCfg_.digitScaleOffset);
+    globalParameter_->Regist(groupName_, "Kill_startDelay", &killCfg_.startDelay);
+
+    // ③ 到達したレベル
+    globalParameter_->Regist(groupName_, "Level_basePos", &levelCfg_.basePos);
+    globalParameter_->Regist(groupName_, "Level_labelOffset", &levelCfg_.labelOffset);
+    globalParameter_->Regist(groupName_, "Level_numberOffset", &levelCfg_.numberBaseOffset);
+    globalParameter_->Regist(groupName_, "Level_digitSpacing", &levelCfg_.digitSpacing);
+    globalParameter_->Regist(groupName_, "Level_unitOffset", &levelCfg_.unitOffset);
+    globalParameter_->Regist(groupName_, "Level_baseScale", &levelCfg_.baseScale);
+    globalParameter_->Regist(groupName_, "Level_digitScaleOffset", &levelCfg_.digitScaleOffset);
+    globalParameter_->Regist(groupName_, "Level_startDelay", &levelCfg_.startDelay);
+}
+
 void GameResultUI::AdjustParam() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
@@ -94,36 +126,4 @@ void GameResultUI::AdjustParam() {
         ImGui::PopID();
     }
 #endif
-}
-
-void GameResultUI::RegisterParams() {
-    // ① 生き残った時間
-    globalParameter_->Regist(groupName_, "Survival_basePos", &survivalCfg_.basePos);
-    globalParameter_->Regist(groupName_, "Survival_labelOffset", &survivalCfg_.labelOffset);
-    globalParameter_->Regist(groupName_, "Survival_numberOffset", &survivalCfg_.numberBaseOffset);
-    globalParameter_->Regist(groupName_, "Survival_digitSpacing", &survivalCfg_.digitSpacing);
-    globalParameter_->Regist(groupName_, "Survival_unitOffset", &survivalCfg_.unitOffset);
-    globalParameter_->Regist(groupName_, "Survival_baseScale", &survivalCfg_.baseScale);
-    globalParameter_->Regist(groupName_, "Survival_digitScaleOffset", &survivalCfg_.digitScaleOffset);
-    globalParameter_->Regist(groupName_, "Survival_startDelay", &survivalCfg_.startDelay);
-
-    // ② 敵を倒した数
-    globalParameter_->Regist(groupName_, "Kill_basePos", &killCfg_.basePos);
-    globalParameter_->Regist(groupName_, "Kill_labelOffset", &killCfg_.labelOffset);
-    globalParameter_->Regist(groupName_, "Kill_numberOffset", &killCfg_.numberBaseOffset);
-    globalParameter_->Regist(groupName_, "Kill_digitSpacing", &killCfg_.digitSpacing);
-    globalParameter_->Regist(groupName_, "Kill_unitOffset", &killCfg_.unitOffset);
-    globalParameter_->Regist(groupName_, "Kill_baseScale", &killCfg_.baseScale);
-    globalParameter_->Regist(groupName_, "Kill_digitScaleOffset", &killCfg_.digitScaleOffset);
-    globalParameter_->Regist(groupName_, "Kill_startDelay", &killCfg_.startDelay);
-
-    // ③ 到達したレベル
-    globalParameter_->Regist(groupName_, "Level_basePos", &levelCfg_.basePos);
-    globalParameter_->Regist(groupName_, "Level_labelOffset", &levelCfg_.labelOffset);
-    globalParameter_->Regist(groupName_, "Level_numberOffset", &levelCfg_.numberBaseOffset);
-    globalParameter_->Regist(groupName_, "Level_digitSpacing", &levelCfg_.digitSpacing);
-    globalParameter_->Regist(groupName_, "Level_unitOffset", &levelCfg_.unitOffset);
-    globalParameter_->Regist(groupName_, "Level_baseScale", &levelCfg_.baseScale);
-    globalParameter_->Regist(groupName_, "Level_digitScaleOffset", &levelCfg_.digitScaleOffset);
-    globalParameter_->Regist(groupName_, "Level_startDelay", &levelCfg_.startDelay);
 }
