@@ -35,6 +35,12 @@ private:
     /// </summary>
     void SyncPreviewTrail(RibbonTrailData* data);
 
+    /// <summary>
+    /// テクスチャフォルダ内の全テクスチャを事前ロードする
+    /// （フレーム内での初回LoadTexture → コマンドリストリセットを防ぐ）
+    /// </summary>
+    void PreloadTextures();
+
 private:
     const std::string folderName_ = "RibbonTrail/";
 
@@ -42,6 +48,10 @@ private:
     RibbonTrail* previewTrail_   = nullptr;
     float        previewAngle_   = 0.0f; // 円運動用角度（ラジアン）
     float        emitTimer_      = 0.0f; // EmitInterval タイマー
+
+    // プレビュー設定
+    Vector3      previewCenter_  = {0.0f, 0.0f, 0.0f}; // 円運動の中心点
+    float        previewRadius_  = 1.5f;                // 円の半径
 
     // 前フレームで選択していたエフェクト名
     std::string  prevSelectedName_;

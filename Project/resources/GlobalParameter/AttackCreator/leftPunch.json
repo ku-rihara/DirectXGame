@@ -46,7 +46,7 @@
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "leftHandPunch",
         "ObjAnim_LeftHand_StartTiming": 0.0,
-        "ObjAnim_LeftHand_TrailFileName": "None",
+        "ObjAnim_LeftHand_TrailFileName": "LeftPunchTrail",
         "ObjAnim_RightHand_FileName": "",
         "ObjAnim_RightHand_StartTiming": 0.0,
         "ObjAnim_RightHand_TrailFileName": "",

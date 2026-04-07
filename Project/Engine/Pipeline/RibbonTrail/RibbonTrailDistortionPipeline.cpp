@@ -44,7 +44,12 @@ void RibbonTrailDistortionPipeline::CreateRootSignature() {
     rootParameters[static_cast<UINT>(RibbonTrailDistortionRootParameter::TransformationMatrix)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[static_cast<UINT>(RibbonTrailDistortionRootParameter::TransformationMatrix)].Descriptor.ShaderRegister = 0;
 
-    // DistortionParam (b1, PS)
+    // DistortionUVScroll (b1, VS)
+    rootParameters[static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionUVScroll)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionUVScroll)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionUVScroll)].Descriptor.ShaderRegister = 1;
+
+    // DistortionParam (b1, PS) ※VS の b1 と別シェーダーステージなので競合しない
     rootParameters[static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionParam)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionParam)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionParam)].Descriptor.ShaderRegister = 1;

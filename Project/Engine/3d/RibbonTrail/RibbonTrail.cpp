@@ -70,6 +70,16 @@ void RibbonTrail::Init(size_t maxPoints) {
     distortionConstantBufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&distortionCBufferData_));
     distortionCBufferData_->strength = 0.1f;
 
+    // UVスクロール定数バッファ（メイン）
+    uvScrollCBufferResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(RibbonUVScrollCBuffer));
+    uvScrollCBufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&uvScrollCBufferData_));
+    uvScrollCBufferData_->offset = Vector2::ZeroVector();
+
+    // UVスクロール定数バッファ（歪み）
+    distortionUVScrollCBufferResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(RibbonUVScrollCBuffer));
+    distortionUVScrollCBufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&distortionUVScrollCBufferData_));
+    distortionUVScrollCBufferData_->offset = Vector2::ZeroVector();
+
     // デフォルトテクスチャをロード
     SetTexture("");
 }
@@ -113,6 +123,13 @@ void RibbonTrail::Update(float deltaTime) {
     while (!points_.empty() && points_.back().age >= points_.back().lifetime) {
         points_.pop_back();
     }
+
+    // UVオフセット累積（小数部のみ保持してオーバーフロー防止）
+    uvScrollOffset_.x = std::fmod(uvScrollOffset_.x + uvScrollSpeed_.x * deltaTime, 1.0f);
+    uvScrollOffset_.y = std::fmod(uvScrollOffset_.y + uvScrollSpeed_.y * deltaTime, 1.0f);
+
+    distortionUVScrollOffset_.x = std::fmod(distortionUVScrollOffset_.x + distortionUVScrollSpeed_.x * deltaTime, 1.0f);
+    distortionUVScrollOffset_.y = std::fmod(distortionUVScrollOffset_.y + distortionUVScrollSpeed_.y * deltaTime, 1.0f);
 }
 
 ///============================================================
@@ -140,6 +157,7 @@ Vector3 RibbonTrail::CalcPerp(const Vector3& dir, const Vector3& cameraRight) {
 void RibbonTrail::Draw(const ViewProjection& viewProj) {
     size_t count = points_.size();
     if (count < 2) {
+        lastVertexCount_ = 0; // DrawDistortion に古い頂点が使われないようリセット
         return;
     }
 
@@ -158,6 +176,8 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
 
     size_t vertexCount = 0;
     float  countF      = static_cast<float>(count > 1 ? count - 1 : 1);
+
+    Vector3 prevPerp = {0.0f, 0.0f, 0.0f}; // ねじれ防止用：前セグメントのperp
 
     for (size_t i = 0; i < count; ++i) {
         const auto& p = points_[i];
@@ -184,6 +204,15 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
         }
 
         Vector3 perp = CalcPerp(dir, cameraRight);
+
+        // ねじれ防止：前セグメントと逆向きならflip
+        if (i > 0) {
+            float dot = prevPerp.x * perp.x + prevPerp.y * perp.y + prevPerp.z * perp.z;
+            if (dot < 0.0f) {
+                perp = {-perp.x, -perp.y, -perp.z};
+            }
+        }
+        prevPerp = perp;
 
         float t = static_cast<float>(i) / countF;
 
@@ -213,13 +242,17 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
         return;
     }
 
-    cBufferData_->viewProjection = viewProj.matView_ * viewProj.matProjection_;
+    cBufferData_->viewProjection    = viewProj.matView_ * viewProj.matProjection_;
+    uvScrollCBufferData_->offset    = uvScrollOffset_;
 
     auto commandList = DirectXCommon::GetInstance()->GetCommandList();
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
     commandList->SetGraphicsRootConstantBufferView(
         static_cast<UINT>(RibbonTrailRootParameter::TransformationMatrix),
         constantBufferResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(
+        static_cast<UINT>(RibbonTrailRootParameter::UVScroll),
+        uvScrollCBufferResource_->GetGPUVirtualAddress());
     commandList->SetGraphicsRootDescriptorTable(
         static_cast<UINT>(RibbonTrailRootParameter::Texture),
         TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
@@ -241,14 +274,18 @@ void RibbonTrail::DrawDistortion(const ViewProjection& viewProj) {
         return;
     }
 
-    distortionCBufferData_->strength = distortionStrength_;
-    cBufferData_->viewProjection     = viewProj.matView_ * viewProj.matProjection_;
+    distortionCBufferData_->strength           = distortionStrength_;
+    cBufferData_->viewProjection               = viewProj.matView_ * viewProj.matProjection_;
+    distortionUVScrollCBufferData_->offset     = distortionUVScrollOffset_;
 
     auto commandList = DirectXCommon::GetInstance()->GetCommandList();
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
     commandList->SetGraphicsRootConstantBufferView(
         static_cast<UINT>(RibbonTrailDistortionRootParameter::TransformationMatrix),
         constantBufferResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(
+        static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionUVScroll),
+        distortionUVScrollCBufferResource_->GetGPUVirtualAddress());
     commandList->SetGraphicsRootConstantBufferView(
         static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionParam),
         distortionConstantBufferResource_->GetGPUVirtualAddress());

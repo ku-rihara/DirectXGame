@@ -28,6 +28,11 @@ struct RibbonDistortionCBuffer {
     float pad[3]; // 16byte アライン
 };
 
+struct RibbonUVScrollCBuffer {
+    Vector2 offset;
+    float   pad[2]; // 16byte アライン
+};
+
 /// <summary>
 /// リボントレイル描画クラス
 /// </summary>
@@ -76,6 +81,12 @@ public:
     void SetUseDistortion(bool use) { useDistortion_ = use; }
     void SetDistortionStrength(float strength) { distortionStrength_ = strength; }
     void SetDistortionTexture(const std::string& texturePath);
+
+    /// UVスクロール設定（UV/秒）
+    void SetUVScrollSpeed(const Vector2& speed) { uvScrollSpeed_ = speed; }
+
+    /// 歪みテクスチャUVスクロール設定（UV/秒）
+    void SetDistortionUVScrollSpeed(const Vector2& speed) { distortionUVScrollSpeed_ = speed; }
 
     /// 時空歪みパス描画（DrawDistortionPipelineがセット済みの状態で呼ぶ）
     void DrawDistortion(const ViewProjection& viewProj);
@@ -127,6 +138,20 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D12Resource> distortionConstantBufferResource_;
     RibbonDistortionCBuffer*               distortionCBufferData_ = nullptr;
+
+    // UVスクロール（メインテクスチャ）
+    Vector2 uvScrollSpeed_  = Vector2::ZeroVector();
+    Vector2 uvScrollOffset_ = Vector2::ZeroVector();
+
+    Microsoft::WRL::ComPtr<ID3D12Resource> uvScrollCBufferResource_;
+    RibbonUVScrollCBuffer*                 uvScrollCBufferData_ = nullptr;
+
+    // UVスクロール（歪みテクスチャ）
+    Vector2 distortionUVScrollSpeed_  = Vector2::ZeroVector();
+    Vector2 distortionUVScrollOffset_ = Vector2::ZeroVector();
+
+    Microsoft::WRL::ComPtr<ID3D12Resource> distortionUVScrollCBufferResource_;
+    RibbonUVScrollCBuffer*                 distortionUVScrollCBufferData_ = nullptr;
 
     size_t lastVertexCount_ = 0; // Draw() が書き込んだ頂点数（DrawDistortionで再利用）
 

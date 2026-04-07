@@ -272,14 +272,58 @@ bool ParticleSection::IsFinished() const {
     return false;
 }
 
+namespace {
+void RestoreDissolveState(
+    ParticleManager::ParticleGroup& group,
+    std::unique_ptr<DissolvePlayer> savedDissolvePlayer,
+    const ParticleManager::DissolveGroupParams& savedDissolveParams) {
+
+    group.dissolvePlayer = std::move(savedDissolvePlayer);
+    group.dissolveParams = savedDissolveParams;
+
+    // dissolvePlayer が再生中でなくても isActive=true なら enableDissolve を復元
+    if (savedDissolveParams.isActive) {
+        group.material.GetMaterialData()->enableDissolve = 1;
+    }
+}
+} // namespace
+
 void ParticleSection::CreateModelParticle(const std::string& modelFilePath, int32_t maxnum) {
-    ParticleManager::GetInstance()->particleGroups_.erase(groupName_);
+    auto& groups = ParticleManager::GetInstance()->particleGroups_;
+
+    std::unique_ptr<DissolvePlayer> savedDissolvePlayer;
+    ParticleManager::DissolveGroupParams savedDissolveParams;
+    auto it = groups.find(groupName_);
+    if (it != groups.end()) {
+        savedDissolvePlayer = std::move(it->second.dissolvePlayer);
+        savedDissolveParams = it->second.dissolveParams;
+    }
+
+    groups.erase(groupName_);
     ParticleManager::GetInstance()->CreateParticleGroup(groupName_, modelFilePath, maxnum);
+
+    if (savedDissolvePlayer) {
+        RestoreDissolveState(groups[groupName_], std::move(savedDissolvePlayer), savedDissolveParams);
+    }
 }
 
 void ParticleSection::CreatePrimitiveParticle(PrimitiveType primitiveType, int32_t maxnum) {
-    ParticleManager::GetInstance()->particleGroups_.erase(groupName_);
+    auto& groups = ParticleManager::GetInstance()->particleGroups_;
+
+    std::unique_ptr<DissolvePlayer> savedDissolvePlayer;
+    ParticleManager::DissolveGroupParams savedDissolveParams;
+    auto it = groups.find(groupName_);
+    if (it != groups.end()) {
+        savedDissolvePlayer = std::move(it->second.dissolvePlayer);
+        savedDissolveParams = it->second.dissolveParams;
+    }
+
+    groups.erase(groupName_);
     ParticleManager::GetInstance()->CreatePrimitiveParticle(groupName_, primitiveType, maxnum);
+
+    if (savedDissolvePlayer) {
+        RestoreDissolveState(groups[groupName_], std::move(savedDissolvePlayer), savedDissolveParams);
+    }
 }
 
 void ParticleSection::SetTextureHandle(uint32_t handle) {

@@ -7,6 +7,7 @@ namespace KetaEngine {
 
 enum class RibbonTrailDistortionRootParameter : UINT {
     TransformationMatrix, // b0 (VS) - ビュープロジェクション行列
+    DistortionUVScroll,   // b1 (VS) - 歪みテクスチャUVスクロール
     DistortionParam,      // b1 (PS) - 歪み強度パラメータ
     DistortionMap,        // t0 (PS) - ノイズ/法線テクスチャ
     Count

@@ -688,6 +688,9 @@
     <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.cpp">
       <Filter>Engine\Editor\EffectEditorSuite</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectInlineEditRequest.cpp">
+      <Filter>Engine\Editor\EffectEditorSuite</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.cpp">
       <Filter>Engine\Editor\ObjEaseAnimation</Filter>
     </ClCompile>
@@ -1556,6 +1559,9 @@
       <Filter>Engine\Editor\DissolveEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.h">
+      <Filter>Engine\Editor\EffectEditorSuite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectInlineEditRequest.h">
       <Filter>Engine\Editor\EffectEditorSuite</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.h">

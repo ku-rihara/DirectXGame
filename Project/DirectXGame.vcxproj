@@ -87,6 +87,7 @@
     <ClCompile Include="Engine\Editor\DissolveEditor\DissolveEditor.cpp" />
     <ClCompile Include="Engine\Editor\DissolveEditor\DissolvePlayer.cpp" />
     <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.cpp" />
+    <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectInlineEditRequest.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.cpp" />

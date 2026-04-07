@@ -1,9 +1,9 @@
 #pragma once
 #include "Easing/Easing.h"
 #include "Editor/BaseEffectEditor/BaseEffectData.h"
+#include "utility/FileSelector/FileSelector.h"
 #include <cstdint>
 #include <string>
-#include <vector>
 
 /// <summary>
 /// ディゾルブデータクラス
@@ -32,20 +32,18 @@ public:
     void Play() override; //< 再生
     void Reset() override; //< リセット
 private:
-    void RegisterParams() override; //< パラメータバインド
-    void GetParams() override; //< パラメータ取得
-    void InitParams() override; //< パラメータ初期化
-    void UpdateDissolveValues(); //< ディゾルブ値更新
-    void LoadNoiseTextures(); //< ノイズテクスチャ読み込み
+    void RegisterParams() override;
+    void GetParams() override;
+    void InitParams() override;
+    void UpdateDissolveValues();
 
 private:
     // パラメータ
-    float startThreshold_         = 1.0f;
-    float endThreshold_           = 0.0f;
-    float maxTime_                = 1.0f;
-    float offsetTime_             = 0.0f;
-    int32_t easeType_             = 0;
-    int32_t selectedTextureIndex_ = 0;
+    float startThreshold_ = 1.0f;
+    float endThreshold_   = 0.0f;
+    float maxTime_        = 1.0f;
+    float offsetTime_     = 0.0f;
+    int32_t easeType_     = 0;
 
     // 状態
     float currentTime_      = 0.0f;
@@ -58,10 +56,10 @@ private:
     float easedThreshold_ = 1.0f;
 
     // テクスチャ管理
-    const std::string baseFolderPath_ = "DissolveEditor/";
-    std::string textureFilePath_      = "Resources/EngineTexture/Noise";
-    std::vector<std::string> noiseTextureFiles_;
+    const std::string baseFolderPath_  = "DissolveEditor/";
+    const std::string textureFilePath_ = "Resources/EngineTexture/Noise";
     std::string currentTexturePath_;
+    FileSelector textureSelector_;
 
 public:
     // getter
@@ -73,9 +71,6 @@ public:
     float GetMaxTime() const { return maxTime_; }
     float GetOffsetTime() const { return offsetTime_; }
     int32_t GetEaseType() const { return easeType_; }
-
-    // setter
-    void SetTextureIndex(int32_t index);
 };
 
 }; // KetaEngine

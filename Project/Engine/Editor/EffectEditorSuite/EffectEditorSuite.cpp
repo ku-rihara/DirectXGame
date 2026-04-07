@@ -1,4 +1,5 @@
 #include "EffectEditorSuite.h"
+#include "EffectInlineEditRequest.h"
 
 using namespace KetaEngine;
 // editor
@@ -52,6 +53,27 @@ void EffectEditorSuite::Init() {
     // SelectFileEditマップを初期化
     InitEditorSelectFileEditMap();
     InitEditorSaveLoadMaps();
+
+    // インライン編集リクエストを受け取るコールバックを登録
+    static const std::unordered_map<std::string, EffectEditorType> kTypeNameMap = {
+        {"ObjEaseAnimation",    EffectEditorType::ObjEaseAnimation},
+        {"SpriteEaseAnimation", EffectEditorType::SpriteEaseAnimation},
+        {"Camera",              EffectEditorType::Camera},
+        {"Shake",               EffectEditorType::Shake},
+        {"Rail",                EffectEditorType::Rail},
+        {"GPUParticle",         EffectEditorType::GPUParticle},
+        {"Particle",            EffectEditorType::Particle},
+        {"Dissolve",            EffectEditorType::Dissolve},
+        {"TimeScale",           EffectEditorType::TimeScale},
+        {"RibbonTrail",         EffectEditorType::RibbonTrail},
+        {"PostEffect",          EffectEditorType::PostEffect},
+    };
+    EffectInlineEditRequest::SetCallback([this](const std::string& editorType, const std::string& name, const std::string& category) {
+        auto it = kTypeNameMap.find(editorType);
+        if (it != kTypeNameMap.end()) {
+            OpenInlineEditor(it->second, name, category);
+        }
+    });
 }
 
 void EffectEditorSuite::Update() {
@@ -247,73 +269,73 @@ void EffectEditorSuite::DrawInlineEditorWindow() {
 void EffectEditorSuite::InitEditorSaveLoadMaps() {
     // Save マップ
     editorSaveFileMap_ = {
-        {EffectEditorType::Camera, [this](const std::string& name, const std::string& cat) {
-             auto* e = cameraEditor_->GetEffectByName(cat, name);
-             if (e) e->SaveData();
+        {EffectEditorType::Camera, [this](const std::string& name, const std::string& category) {
+             auto* effect = cameraEditor_->GetEffectByName(category, name);
+             if (effect) effect->SaveData();
          }},
-        {EffectEditorType::Shake, [this](const std::string& name, const std::string& cat) {
-             auto* e = shakeEditor_->GetEffectByName(cat, name);
-             if (e) e->SaveData();
+        {EffectEditorType::Shake, [this](const std::string& name, const std::string& category) {
+             auto* effect = shakeEditor_->GetEffectByName(category, name);
+             if (effect) effect->SaveData();
          }},
-        {EffectEditorType::TimeScale, [this](const std::string& name, const std::string& cat) {
-             auto* e = timeScaleEditor_->GetEffectByName(cat, name);
-             if (e) e->SaveData();
+        {EffectEditorType::TimeScale, [this](const std::string& name, const std::string& category) {
+             auto* effect = timeScaleEditor_->GetEffectByName(category, name);
+             if (effect) effect->SaveData();
          }},
-        {EffectEditorType::Particle, [this](const std::string& name, const std::string& cat) {
-             auto* e = particleEditor_->GetEffectByName(cat, name);
-             if (e) e->SaveData();
+        {EffectEditorType::Particle, [this](const std::string& name, const std::string& category) {
+             auto* effect = particleEditor_->GetEffectByName(category, name);
+             if (effect) effect->SaveData();
          }},
-        {EffectEditorType::GPUParticle, [this](const std::string& name, const std::string& cat) {
-             auto* e = gpuParticleEditor_->GetEffectByName(cat, name);
-             if (e) e->SaveData();
+        {EffectEditorType::GPUParticle, [this](const std::string& name, const std::string& category) {
+             auto* effect = gpuParticleEditor_->GetEffectByName(category, name);
+             if (effect) effect->SaveData();
          }},
-        {EffectEditorType::ObjEaseAnimation, [this](const std::string& name, const std::string& cat) {
-             auto* e = objEaseAnimationEditor_->GetEffectByName(cat, name);
-             if (e) e->SaveData();
+        {EffectEditorType::ObjEaseAnimation, [this](const std::string& name, const std::string& category) {
+             auto* effect = objEaseAnimationEditor_->GetEffectByName(category, name);
+             if (effect) effect->SaveData();
          }},
-        {EffectEditorType::RibbonTrail, [this](const std::string& name, const std::string& cat) {
-             auto* e = ribbonTrailEditor_->GetEffectByName(cat, name);
-             if (e) e->SaveData();
+        {EffectEditorType::RibbonTrail, [this](const std::string& name, const std::string& category) {
+             auto* effect = ribbonTrailEditor_->GetEffectByName(category, name);
+             if (effect) effect->SaveData();
          }},
-        {EffectEditorType::PostEffect, [this](const std::string& name, const std::string& cat) {
-             auto* e = postEffectEditor_->GetEffectByName(cat, name);
-             if (e) e->SaveData();
+        {EffectEditorType::PostEffect, [this](const std::string& name, const std::string& category) {
+             auto* effect = postEffectEditor_->GetEffectByName(category, name);
+             if (effect) effect->SaveData();
          }},
     };
 
     // Load マップ
     editorLoadFileMap_ = {
-        {EffectEditorType::Camera, [this](const std::string& name, const std::string& cat) {
-             auto* e = cameraEditor_->GetEffectByName(cat, name);
-             if (e) e->LoadData();
+        {EffectEditorType::Camera, [this](const std::string& name, const std::string& category) {
+             auto* effect = cameraEditor_->GetEffectByName(category, name);
+             if (effect) effect->LoadData();
          }},
-        {EffectEditorType::Shake, [this](const std::string& name, const std::string& cat) {
-             auto* e = shakeEditor_->GetEffectByName(cat, name);
-             if (e) e->LoadData();
+        {EffectEditorType::Shake, [this](const std::string& name, const std::string& category) {
+             auto* effect = shakeEditor_->GetEffectByName(category, name);
+             if (effect) effect->LoadData();
          }},
-        {EffectEditorType::TimeScale, [this](const std::string& name, const std::string& cat) {
-             auto* e = timeScaleEditor_->GetEffectByName(cat, name);
-             if (e) e->LoadData();
+        {EffectEditorType::TimeScale, [this](const std::string& name, const std::string& category) {
+             auto* effect = timeScaleEditor_->GetEffectByName(category, name);
+             if (effect) effect->LoadData();
          }},
-        {EffectEditorType::Particle, [this](const std::string& name, const std::string& cat) {
-             auto* e = particleEditor_->GetEffectByName(cat, name);
-             if (e) e->LoadData();
+        {EffectEditorType::Particle, [this](const std::string& name, const std::string& category) {
+             auto* effect = particleEditor_->GetEffectByName(category, name);
+             if (effect) effect->LoadData();
          }},
-        {EffectEditorType::GPUParticle, [this](const std::string& name, const std::string& cat) {
-             auto* e = gpuParticleEditor_->GetEffectByName(cat, name);
-             if (e) e->LoadData();
+        {EffectEditorType::GPUParticle, [this](const std::string& name, const std::string& category) {
+             auto* effect = gpuParticleEditor_->GetEffectByName(category, name);
+             if (effect) effect->LoadData();
          }},
-        {EffectEditorType::ObjEaseAnimation, [this](const std::string& name, const std::string& cat) {
-             auto* e = objEaseAnimationEditor_->GetEffectByName(cat, name);
-             if (e) e->LoadData();
+        {EffectEditorType::ObjEaseAnimation, [this](const std::string& name, const std::string& category) {
+             auto* effect = objEaseAnimationEditor_->GetEffectByName(category, name);
+             if (effect) effect->LoadData();
          }},
-        {EffectEditorType::RibbonTrail, [this](const std::string& name, const std::string& cat) {
-             auto* e = ribbonTrailEditor_->GetEffectByName(cat, name);
-             if (e) e->LoadData();
+        {EffectEditorType::RibbonTrail, [this](const std::string& name, const std::string& category) {
+             auto* effect = ribbonTrailEditor_->GetEffectByName(category, name);
+             if (effect) effect->LoadData();
          }},
-        {EffectEditorType::PostEffect, [this](const std::string& name, const std::string& cat) {
-             auto* e = postEffectEditor_->GetEffectByName(cat, name);
-             if (e) e->LoadData();
+        {EffectEditorType::PostEffect, [this](const std::string& name, const std::string& category) {
+             auto* effect = postEffectEditor_->GetEffectByName(category, name);
+             if (effect) effect->LoadData();
          }},
     };
 }

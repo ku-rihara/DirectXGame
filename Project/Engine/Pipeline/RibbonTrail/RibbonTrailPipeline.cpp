@@ -44,6 +44,11 @@ void RibbonTrailPipeline::CreateRootSignature() {
     rootParameters[static_cast<UINT>(RibbonTrailRootParameter::TransformationMatrix)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[static_cast<UINT>(RibbonTrailRootParameter::TransformationMatrix)].Descriptor.ShaderRegister = 0;
 
+    // UVScroll (b1, VS)
+    rootParameters[static_cast<UINT>(RibbonTrailRootParameter::UVScroll)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(RibbonTrailRootParameter::UVScroll)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[static_cast<UINT>(RibbonTrailRootParameter::UVScroll)].Descriptor.ShaderRegister = 1;
+
     // Texture (t0, PS)
     rootParameters[static_cast<UINT>(RibbonTrailRootParameter::Texture)].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[static_cast<UINT>(RibbonTrailRootParameter::Texture)].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;

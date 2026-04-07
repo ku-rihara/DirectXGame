@@ -1,6 +1,7 @@
 #pragma once
 #include "Editor/BaseEffectEditor/BaseEffectData.h"
 #include "utility/FileSelector/FileSelector.h"
+#include "Vector2.h"
 #include "Vector4.h"
 #include <cstdint>
 #include <string>
@@ -41,13 +42,17 @@ private:
     int32_t maxPoints_  = 48; // 保持する最大ポイント数
     float emitInterval_ = 0.005f; // ポイントを追加する間隔（秒）
 
+    // ---- UVスクロール ----
+    Vector2 uvScrollSpeed_           = Vector2::ZeroVector(); // メインテクスチャ UV/秒
+    Vector2 distortionUVScrollSpeed_ = Vector2::ZeroVector(); // 歪みテクスチャ UV/秒
+
     // ---- テクスチャ ----
     std::string texturePath_;
 
     // テクスチャ選択（エディタ用）
-    const std::string kTextureFolderPath = "Resources/EngineTexture/Noise";
+    const std::string kTextureFolderPath    = "Resources/EngineTexture/Trail";
+    const std::string kDistortionFolderPath = "Resources/EngineTexture/Noise";
     FileSelector textureSelector_;
-    std::string textureStem_;
 
     // ---- 時空歪み ----
     bool useDistortion_       = false;
@@ -56,7 +61,6 @@ private:
 
     // 歪みテクスチャ選択（エディタ用）
     FileSelector distortionTextureSelector_;
-    std::string distortionTextureStem_;
 
     const std::string baseFolderPath_ = "RibbonTrail/";
 
@@ -69,6 +73,8 @@ public:
     float GetLifetime() const { return lifetime_; }
     int32_t GetMaxPoints() const { return maxPoints_; }
     float GetEmitInterval() const { return emitInterval_; }
+    Vector2 GetUVScrollSpeed() const { return uvScrollSpeed_; }
+    Vector2 GetDistortionUVScrollSpeed() const { return distortionUVScrollSpeed_; }
     const std::string& GetTexturePath() const { return texturePath_; }
     bool GetUseDistortion() const { return useDistortion_; }
     float GetDistortionStrength() const { return distortionStrength_; }

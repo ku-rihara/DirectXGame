@@ -64,7 +64,7 @@ public:
     void OpenInlineEditor(EffectEditorType type, const std::string& fileName, const std::string& categoryName);
 
     /// <summary>
-    /// インライン編集ウィンドウを描画（EditorUpdateから毎フレーム呼ばれる）
+    /// インライン編集ウィンドウを描画
     /// </summary>
     void DrawInlineEditorWindow();
 

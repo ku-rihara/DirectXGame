@@ -3,6 +3,7 @@
 using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "MathFunction.h"
+#include "Editor/EffectEditorSuite/EffectInlineEditRequest.h"
 #include <imgui.h>
 
 void ObjEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, int32_t keyNumber) {
@@ -305,6 +306,12 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
         if (param.useRail) {
             std::string directory = globalParameter_->GetDirectoryPath() + "RailEditor/Common/Dates";
             railFileSelector_.selector.SelectFile("Rail File", directory, param.railFileName, "", true);
+            if (!param.railFileName.empty()) {
+                ImGui::SameLine();
+                if (ImGui::Button("Edit##RailEdit")) {
+                    EffectInlineEditRequest::Request("Rail", param.railFileName, "Common");
+                }
+            }
             ImGui::PopID();
             return;
         }

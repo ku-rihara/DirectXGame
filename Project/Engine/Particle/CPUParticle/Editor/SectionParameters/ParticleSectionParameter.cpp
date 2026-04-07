@@ -2,6 +2,7 @@
 #include "../../ParticleManager.h"
 #include "Base/TextureManager.h"
 #include "Function/GetFile.h"
+#include "Editor/EffectEditorSuite/EffectInlineEditRequest.h"
 #include <imgui.h>
 
 using namespace KetaEngine;
@@ -273,36 +274,36 @@ void ParticleSectionParameter::AdjustParam() {
     ImGui::PushID((groupName_ + "_AllParams").c_str());
 
     // Emit Position Mode
-    ImGui::SeparatorText("PositionMode");
+    ImGui::SeparatorText("位置モード");
     const char* PositionModeItems[] = {"None", "ParentTransform", "TargetPosition", "FollowingPosition", "ParentJoint"};
-    if (ImGui::Combo("Emit Position Mode", &emitPositionModeInt_, PositionModeItems, IM_ARRAYSIZE(PositionModeItems))) {
+    if (ImGui::Combo("エミッター位置モード", &emitPositionModeInt_, PositionModeItems, IM_ARRAYSIZE(PositionModeItems))) {
         emitPositionMode_ = static_cast<EmitterPositionMode>(emitPositionModeInt_);
     }
 
     // Timing Parameters
-    if (ImGui::CollapsingHeader("Timing Settings")) {
-        ImGui::DragFloat("Start Time", &timingParam_.startTime, 0.01f, 0.0f, 100.0f);
-        timeModeSelector_.SelectTimeModeImGui("Time Mode");
-        ImGui::DragFloat("afterDuration", &timingParam_.afterDuration, 0.01f);
+    if (ImGui::CollapsingHeader("タイミング設定")) {
+        ImGui::DragFloat("開始時間", &timingParam_.startTime, 0.01f, 0.0f, 100.0f);
+        timeModeSelector_.SelectTimeModeImGui("タイムモード");
+        ImGui::DragFloat("持続時間", &timingParam_.afterDuration, 0.01f);
     }
 
     // Rail Settings
-    if (ImGui::CollapsingHeader("Rail Settings")) {
-        ImGui::Checkbox("Use Rail", &useRailMoveEmitter_);
+    if (ImGui::CollapsingHeader("レール設定")) {
+        ImGui::Checkbox("レール使用", &useRailMoveEmitter_);
         if (useRailMoveEmitter_) {
-            SelectRailFile("Rail File", railFolderPath_, &railFileParam_);
+            SelectRailFile("レールファイル", railFolderPath_, &railFileParam_);
         }
     }
 
     // Primitive/Model Settings
-    if (ImGui::CollapsingHeader("Primitive/Model Type")) {
-        ImGui::Checkbox("Use Model", &useModel_);
+    if (ImGui::CollapsingHeader("プリミティブ/モデルタイプ")) {
+        ImGui::Checkbox("モデル使用", &useModel_);
 
         if (useModel_) {
             // モデルモード
-            ImGui::Text("Model File Path:");
-            ImGui::Text("Format: ModelFolder/ModelName");
-            ImGui::Text("Example: Suzanne/Suzanne");
+            ImGui::Text("モデルファイルパス:");
+            ImGui::Text("形式: モデルフォルダ/モデル名");
+            ImGui::Text("例: Suzanne/Suzanne");
 
             static char buffer[256]     = "";
             static std::string lastPath = "";
@@ -325,7 +326,7 @@ void ParticleSectionParameter::AdjustParam() {
             // プリミティブモード
             const char* primitiveItems[] = {"Plane", "Sphere", "Cylinder", "Ring", "Box"};
 
-            if (ImGui::Combo("Primitive Type", &primitiveTypeInt_, primitiveItems, IM_ARRAYSIZE(primitiveItems))) {
+            if (ImGui::Combo("プリミティブタイプ", &primitiveTypeInt_, primitiveItems, IM_ARRAYSIZE(primitiveItems))) {
                 if (onPrimitiveChanged_) {
                     onPrimitiveChanged_(static_cast<PrimitiveType>(primitiveTypeInt_));
                 }
@@ -334,41 +335,41 @@ void ParticleSectionParameter::AdjustParam() {
     }
 
     // Color
-    if (ImGui::CollapsingHeader("Color")) {
-        ImGui::SeparatorText("Base Color:");
-        ImGui::ColorEdit4("Base", &parameters_.baseColor.x);
+    if (ImGui::CollapsingHeader("カラー")) {
+        ImGui::SeparatorText("ベースカラー:");
+        ImGui::ColorEdit4("ベース", &parameters_.baseColor.x);
 
-        ImGui::SeparatorText("Color Range:");
-        ImGui::ColorEdit4("Max", &parameters_.colorDist.max.x);
-        ImGui::ColorEdit4("Min", &parameters_.colorDist.min.x);
+        ImGui::SeparatorText("カラー範囲:");
+        ImGui::ColorEdit4("最大", &parameters_.colorDist.max.x);
+        ImGui::ColorEdit4("最小", &parameters_.colorDist.min.x);
     }
 
     // Position
-    if (ImGui::CollapsingHeader("Position")) {
-        ImGui::SeparatorText("Position Base:");
-        ImGui::DragFloat3("Base", &parameters_.emitPos.x, 0.01f);
+    if (ImGui::CollapsingHeader("位置")) {
+        ImGui::SeparatorText("位置ベース:");
+        ImGui::DragFloat3("ベース", &parameters_.emitPos.x, 0.01f);
 
-        ImGui::SeparatorText("Position Range:");
-        ImGui::DragFloat3("Position Max", &parameters_.positionDist.max.x, 0.01f);
-        ImGui::DragFloat3("Position Min", &parameters_.positionDist.min.x, 0.01f);
+        ImGui::SeparatorText("位置範囲:");
+        ImGui::DragFloat3("位置 最大", &parameters_.positionDist.max.x, 0.01f);
+        ImGui::DragFloat3("位置 最小", &parameters_.positionDist.min.x, 0.01f);
     }
 
     // Velocity
-    if (ImGui::CollapsingHeader("Velocity")) {
-        ImGui::Checkbox("IsFloatVelocity", &parameters_.isFloatVelocity);
+    if (ImGui::CollapsingHeader("速度")) {
+        ImGui::Checkbox("スカラー速度", &parameters_.isFloatVelocity);
         if (parameters_.isFloatVelocity) {
-            ImGui::SeparatorText("Velocity Range:");
-            ImGui::DragFloat("Velocity Max", &parameters_.speedDist.max, 0.01f);
-            ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.01f);
+            ImGui::SeparatorText("速度範囲:");
+            ImGui::DragFloat("速度 最大", &parameters_.speedDist.max, 0.01f);
+            ImGui::DragFloat("速度 最小", &parameters_.speedDist.min, 0.01f);
         } else {
-            ImGui::SeparatorText("V3 VelocityRange");
-            ImGui::DragFloat3("VelocityV3 Max", &parameters_.velocityDistV3.max.x, 0.01f);
-            ImGui::DragFloat3("VelocityV3 Min", &parameters_.velocityDistV3.min.x, 0.01f);
+            ImGui::SeparatorText("ベクトル速度範囲");
+            ImGui::DragFloat3("速度V3 最大", &parameters_.velocityDistV3.max.x, 0.01f);
+            ImGui::DragFloat3("速度V3 最小", &parameters_.velocityDistV3.min.x, 0.01f);
         }
 
-        ImGui::SeparatorText("Direction Range:");
-        ImGui::DragFloat3("Direction Max", &parameters_.directionDist.max.x, 0.01f, -1.0f, 1.0f);
-        ImGui::DragFloat3("Direction Min", &parameters_.directionDist.min.x, 0.01f, -1.0f, 1.0f);
+        ImGui::SeparatorText("方向範囲:");
+        ImGui::DragFloat3("方向 最大", &parameters_.directionDist.max.x, 0.01f, -1.0f, 1.0f);
+        ImGui::DragFloat3("方向 最小", &parameters_.directionDist.min.x, 0.01f, -1.0f, 1.0f);
 
         TranslateParamEditor();
     }
@@ -377,154 +378,109 @@ void ParticleSectionParameter::AdjustParam() {
     ScaleParamEditor();
 
     // Rotate
-    if (ImGui::CollapsingHeader("Rotate(Degree)")) {
-        ImGui::DragFloat3("BaseRotate", &parameters_.baseRotate.x, 0.1f, -360, 360);
-        ImGui::DragFloat3("Rotate Max", &parameters_.rotateDist.max.x, 0.1f, -360, 360);
-        ImGui::DragFloat3("Rotate Min", &parameters_.rotateDist.min.x, 0.1f, -360, 360);
+    if (ImGui::CollapsingHeader("回転（度）")) {
+        ImGui::DragFloat3("基準回転", &parameters_.baseRotate.x, 0.1f, -360, 360);
+        ImGui::DragFloat3("回転 最大", &parameters_.rotateDist.max.x, 0.1f, -360, 360);
+        ImGui::DragFloat3("回転 最小", &parameters_.rotateDist.min.x, 0.1f, -360, 360);
     }
 
-    if (ImGui::CollapsingHeader("Rotate Speed(Degree)")) {
-        ImGui::DragFloat3("Rotate Speed Max", &parameters_.rotateSpeedDist.max.x, 0.1f, 0, 720);
-        ImGui::DragFloat3("Rotate Speed Min", &parameters_.rotateSpeedDist.min.x, 0.1f, 0, 720);
+    if (ImGui::CollapsingHeader("回転速度（度）")) {
+        ImGui::DragFloat3("回転速度 最大", &parameters_.rotateSpeedDist.max.x, 0.1f, 0, 720);
+        ImGui::DragFloat3("回転速度 最小", &parameters_.rotateSpeedDist.min.x, 0.1f, 0, 720);
         RotateParamEditor();
     }
 
     // UV
-    if (ImGui::CollapsingHeader("UV Parameters")) {
-        ImGui::SeparatorText("UV Position:");
-        ImGui::DragFloat2("UV_Pos", &parameters_.uvParam.pos.x, 0.01f);
+    if (ImGui::CollapsingHeader("UVパラメータ")) {
+        ImGui::SeparatorText("UV位置:");
+        ImGui::DragFloat2("UV位置", &parameters_.uvParam.pos.x, 0.01f);
 
-        ImGui::SeparatorText("UV Rotation:");
-        ImGui::DragFloat3("UV_Rotate", &parameters_.uvParam.rotate.x, 0.1f);
+        ImGui::SeparatorText("UV回転:");
+        ImGui::DragFloat3("UV回転", &parameters_.uvParam.rotate.x, 0.1f);
 
-        ImGui::SeparatorText("UV Animation:");
-        ImGui::InputInt("Num of Frames", &parameters_.uvParam.numOfFrame);
-        ImGui::DragFloat("Scroll Speed", &parameters_.uvParam.frameScrollSpeed, 0.01f);
-        ImGui::Checkbox("Is Loop", &parameters_.uvParam.isLoop);
-        ImGui::Checkbox("Is ScrollEachPixel", &parameters_.uvParam.isScrollEachPixel);
-        ImGui::Checkbox("Is Scroll", &parameters_.uvParam.isScroll);
-        ImGui::Checkbox("Is IsFlipX", &parameters_.uvParam.isFlipX);
-        ImGui::Checkbox("Is IsFlipY", &parameters_.uvParam.isFlipY);
+        ImGui::SeparatorText("UVアニメーション:");
+        ImGui::InputInt("フレーム数", &parameters_.uvParam.numOfFrame);
+        ImGui::DragFloat("スクロール速度", &parameters_.uvParam.frameScrollSpeed, 0.01f);
+        ImGui::Checkbox("ループ", &parameters_.uvParam.isLoop);
+        ImGui::Checkbox("ピクセル毎スクロール", &parameters_.uvParam.isScrollEachPixel);
+        ImGui::Checkbox("スクロール", &parameters_.uvParam.isScroll);
+        ImGui::Checkbox("X反転", &parameters_.uvParam.isFlipX);
+        ImGui::Checkbox("Y反転", &parameters_.uvParam.isFlipY);
     }
 
     // その他のパラメータ
-    if (ImGui::CollapsingHeader("etcParameter")) {
-        ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
-        ImGui::DragFloat("Gravity", &parameters_.gravity, 0.1f);
-        ImGui::DragFloat("LifeTime", &parameters_.lifeTime, 0.01f);
-        ImGui::SliderInt("Particle Count", &particleCount_, 1, 100);
-        ImGui::Checkbox("Is ScreenPos", &groupParameters_.isScreenPos);
+    if (ImGui::CollapsingHeader("その他のパラメータ")) {
+        ImGui::DragFloat("発生間隔", &intervalTime_, 0.01f, 0.01f, 100.0f);
+        ImGui::DragFloat("重力", &parameters_.gravity, 0.1f);
+        ImGui::DragFloat("寿命", &parameters_.lifeTime, 0.01f);
+        ImGui::SliderInt("パーティクル数", &particleCount_, 1, 100);
+        ImGui::Checkbox("スクリーン座標", &groupParameters_.isScreenPos);
     }
 
     // BillBord
-    if (ImGui::CollapsingHeader("BillBoard")) {
-        ImGui::Checkbox("IsBillBoard", &groupParameters_.isBillboard);
+    if (ImGui::CollapsingHeader("ビルボード")) {
+        ImGui::Checkbox("ビルボード有効", &groupParameters_.isBillboard);
 
-        ImGui::SeparatorText("IsRotateAdapt");
-        ImGui::Checkbox("IsX", &groupParameters_.adaptRotate_.isX);
-        ImGui::Checkbox("IsY", &groupParameters_.adaptRotate_.isY);
-        ImGui::Checkbox("IsZ", &groupParameters_.adaptRotate_.isZ);
+        ImGui::SeparatorText("回転適用軸");
+        ImGui::Checkbox("X軸", &groupParameters_.adaptRotate_.isX);
+        ImGui::Checkbox("Y軸", &groupParameters_.adaptRotate_.isY);
+        ImGui::Checkbox("Z軸", &groupParameters_.adaptRotate_.isZ);
 
-        ImGui::SeparatorText("BillBordType");
+        ImGui::SeparatorText("ビルボードタイプ");
         const char* billBordItems[] = {"XYZ", "Y"};
-        if (ImGui::Combo("Billboard Type", &billboardTypeInt_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
+        if (ImGui::Combo("ビルボードタイプ", &billboardTypeInt_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
             groupParameters_.billboardType = static_cast<BillboardType>(billboardTypeInt_);
         }
     }
 
     // blend mode
-    if (ImGui::CollapsingHeader("BlendMode")) {
+    if (ImGui::CollapsingHeader("ブレンドモード")) {
         const char* blendModeItems[] = {"None", "Add", "Multiply", "Subtractive", "Screen"};
-        if (ImGui::Combo("Blend Mode", &blendModeInt_, blendModeItems, IM_ARRAYSIZE(blendModeItems))) {
+        if (ImGui::Combo("ブレンドモード", &blendModeInt_, blendModeItems, IM_ARRAYSIZE(blendModeItems))) {
             groupParameters_.blendMode = static_cast<BlendMode>(blendModeInt_);
         }
     }
 
     // frag setting
-    if (ImGui::CollapsingHeader("Frag")) {
-        ImGui::Checkbox("IsRotateForDirection", &parameters_.isRotateForDirection);
-        ImGui::Checkbox("IsShot", &isShot_);
-        ImGui::Checkbox("isAlphaNoMove", &groupParameters_.isAlphaNoMove);
+    if (ImGui::CollapsingHeader("フラグ")) {
+        ImGui::Checkbox("方向に合わせて回転", &parameters_.isRotateForDirection);
+        ImGui::Checkbox("ショット", &isShot_);
+        ImGui::Checkbox("アルファのみ動かない", &groupParameters_.isAlphaNoMove);
     }
 
     ImGuiTextureSelection();
 
     // 歪みエフェクト設定
-    if (ImGui::CollapsingHeader("Distortion")) {
-        ImGui::Checkbox("Use Distortion", &groupParameters_.useDistortion);
+    if (ImGui::CollapsingHeader("時空歪み")) {
+        ImGui::Checkbox("歪み有効", &groupParameters_.useDistortion);
 
         if (groupParameters_.useDistortion) {
-            ImGui::DragFloat("Distortion Strength", &groupParameters_.distortionStrength, 0.001f, 0.0f, 1.0f);
+            ImGui::DragFloat("歪み強度", &groupParameters_.distortionStrength, 0.001f, 0.0f, 1.0f);
 
             ImGui::Separator();
-            ImGui::Text("Distortion Texture (noise/normal map):");
-
-            std::vector<std::string> filenames = GetFileNamesForDirectory(textureFilePath_);
-            if (!filenames.empty()) {
-                static int distortionSelectedIndex       = 0;
-                static std::string lastDistortionTexture = "";
-
-                std::vector<const char*> names;
-                for (const auto& file : filenames) {
-                    names.push_back(file.c_str());
-                }
-
-                if (ImGui::ListBox("##DistortionTextures", &distortionSelectedIndex, names.data(), static_cast<int>(names.size()))) {
-                    std::string newName = filenames[distortionSelectedIndex];
-                    if (newName != lastDistortionTexture) {
-                        distortionTexturePath_ = textureFilePath_ + "/" + newName + ".dds";
-                        lastDistortionTexture  = newName;
-                    }
-                }
-
-                if (!distortionTexturePath_.empty()) {
-                    ImGui::Text("Current: %s", distortionTexturePath_.c_str());
-                } else {
-                    ImGui::TextDisabled("テクスチャ未選択");
-                }
-            } else {
-                ImGui::TextDisabled("テクスチャファイルが見つかりません");
+            ImGui::Text("歪みテクスチャ");
+            distortionTextureFileSelector_.SelectFilePath("##DistortionTexture", textureFilePath_, distortionTexturePath_, ".dds", true);
+            if (!distortionTexturePath_.empty()) {
+                ImGui::TextDisabled("Path: %s", distortionTexturePath_.c_str());
             }
         }
     }
 
     // Dissolve設定
-    if (ImGui::CollapsingHeader("Dissolve")) {
-        std::vector<std::string> dissolveFiles = GetFileNamesForDirectory(dissolveFolderPath_);
+    if (ImGui::CollapsingHeader("ディゾルブ")) {
+        dissolveFileSelector_.SelectFile("ディゾルブ名", dissolveFolderPath_, dissolveName_, "", true);
+        if (dissolveName_ == "None") {
+            dissolveName_ = "";
+        }
 
-        if (!dissolveFiles.empty()) {
-            std::vector<const char*> names;
-            names.push_back("(なし)");
-            for (const auto& file : dissolveFiles) {
-                names.push_back(file.c_str());
-            }
-
-            // 現在のdissolveNameからインデックスを導出
-            int dissolveSelectedIndex = 0;
-            if (!dissolveName_.empty()) {
-                for (int i = 0; i < static_cast<int>(dissolveFiles.size()); ++i) {
-                    if (dissolveFiles[i] == dissolveName_) {
-                        dissolveSelectedIndex = i + 1; // +1 for "(なし)"
-                        break;
-                    }
-                }
-            }
-
-            if (ImGui::ListBox("Dissolve Name", &dissolveSelectedIndex, names.data(), static_cast<int>(names.size()))) {
-                if (dissolveSelectedIndex == 0) {
-                    dissolveName_ = "";
-                } else {
-                    dissolveName_ = dissolveFiles[dissolveSelectedIndex - 1];
-                }
-            }
-
-            if (!dissolveName_.empty()) {
-                ImGui::Text("Selected: %s", dissolveName_.c_str());
-            } else {
-                ImGui::TextDisabled("Dissolveなし");
+        if (!dissolveName_.empty()) {
+            ImGui::Text("選択中: %s", dissolveName_.c_str());
+            ImGui::SameLine();
+            if (ImGui::Button("編集##DissolveEdit")) {
+                EffectInlineEditRequest::Request("Dissolve", dissolveName_, "Common");
             }
         } else {
-            ImGui::TextDisabled("Dissolveファイルが見つかりません");
+            ImGui::TextDisabled("Dissolveなし");
         }
     }
 
@@ -533,38 +489,38 @@ void ParticleSectionParameter::AdjustParam() {
 }
 
 void ParticleSectionParameter::ScaleParamEditor() {
-    if (ImGui::CollapsingHeader("Scale")) {
-        ImGui::SeparatorText("Scale Mode");
-        ImGui::Checkbox("IsScalerScale", &parameters_.isScalerScale);
+    if (ImGui::CollapsingHeader("スケール")) {
+        ImGui::SeparatorText("スケールモード");
+        ImGui::Checkbox("スカラーモード", &parameters_.isScalerScale);
 
         if (parameters_.isScalerScale) {
-            ImGui::SeparatorText("Scaler Range");
-            ImGui::DragFloat("Scale Max", &parameters_.scaleDist.max, 0.01f);
-            ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.01f);
+            ImGui::SeparatorText("スカラー範囲");
+            ImGui::DragFloat("スケール 最大", &parameters_.scaleDist.max, 0.01f);
+            ImGui::DragFloat("スケール 最小", &parameters_.scaleDist.min, 0.01f);
         } else {
-            ImGui::SeparatorText("V3 Range");
-            ImGui::DragFloat3("ScaleV3 Max", &parameters_.scaleDistV3.max.x, 0.01f);
-            ImGui::DragFloat3("ScaleV3 Min", &parameters_.scaleDistV3.min.x, 0.01f);
+            ImGui::SeparatorText("ベクトル範囲");
+            ImGui::DragFloat3("スケールV3 最大", &parameters_.scaleDistV3.max.x, 0.01f);
+            ImGui::DragFloat3("スケールV3 最小", &parameters_.scaleDistV3.min.x, 0.01f);
         }
 
         // Scale Easing
-        ImGui::Checkbox("Use Scale Easing", &parameters_.scaleEaseParam.baseParam.isEase);
+        ImGui::Checkbox("スケールイージング使用", &parameters_.scaleEaseParam.baseParam.isEase);
 
         if (parameters_.scaleEaseParam.baseParam.isEase) {
             auto& easeParam = parameters_.scaleEaseParam;
 
-            ImGui::DragFloat("Max Time", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
-            ImGuiEasingTypeSelector("Easing Type", easeParam.baseParam.easeTypeInt);
+            ImGui::DragFloat("最大時間", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
+            ImGuiEasingTypeSelector("イージングタイプ", easeParam.baseParam.easeTypeInt);
 
             if (parameters_.isScalerScale) {
-                ImGui::DragFloat("End Scale Max", &easeParam.endValueF.max, 0.01f);
-                ImGui::DragFloat("End Scale Min", &easeParam.endValueF.min, 0.01f);
+                ImGui::DragFloat("終了スケール 最大", &easeParam.endValueF.max, 0.01f);
+                ImGui::DragFloat("終了スケール 最小", &easeParam.endValueF.min, 0.01f);
             } else {
-                ImGui::DragFloat3("End Scale Max", &easeParam.endValueV3.max.x, 0.01f);
-                ImGui::DragFloat3("End Scale Min", &easeParam.endValueV3.min.x, 0.01f);
+                ImGui::DragFloat3("終了スケール 最大", &easeParam.endValueV3.max.x, 0.01f);
+                ImGui::DragFloat3("終了スケール 最小", &easeParam.endValueV3.min.x, 0.01f);
             }
 
-            ImGui::DragFloat("Back Ratio", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
+            ImGui::DragFloat("戻り割合", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
         }
     }
 }
@@ -572,77 +528,52 @@ void ParticleSectionParameter::ScaleParamEditor() {
 void ParticleSectionParameter::TranslateParamEditor() {
 
     ImGui::Separator();
-    ImGui::Checkbox("Use Translate Easing", &parameters_.translateEaseParam.baseParam.isEase);
+    ImGui::Checkbox("移動イージング使用", &parameters_.translateEaseParam.baseParam.isEase);
 
     if (parameters_.translateEaseParam.baseParam.isEase) {
         auto& easeParam = parameters_.translateEaseParam;
 
-        ImGui::DragFloat("Max Time##Translate", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
-        ImGuiEasingTypeSelector("Easing Type##Translate", easeParam.baseParam.easeTypeInt);
+        ImGui::DragFloat("最大時間##Translate", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
+        ImGuiEasingTypeSelector("イージングタイプ##Translate", easeParam.baseParam.easeTypeInt);
 
-        ImGui::SeparatorText("End Position Range");
-        ImGui::DragFloat3("End Translate Max", &easeParam.endValue.max.x, 0.01f);
-        ImGui::DragFloat3("End Translate Min", &easeParam.endValue.min.x, 0.01f);
+        ImGui::SeparatorText("終了位置範囲");
+        ImGui::DragFloat3("終了移動 最大", &easeParam.endValue.max.x, 0.01f);
+        ImGui::DragFloat3("終了移動 最小", &easeParam.endValue.min.x, 0.01f);
 
-        ImGui::DragFloat("Back Ratio##Translate", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
+        ImGui::DragFloat("戻り割合##Translate", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
     }
 }
 
 void ParticleSectionParameter::RotateParamEditor() {
     ImGui::Separator();
 
-    ImGui::Checkbox("Use Rotate Easing", &parameters_.rotateEaseParam.baseParam.isEase);
+    ImGui::Checkbox("回転イージング使用", &parameters_.rotateEaseParam.baseParam.isEase);
 
     if (parameters_.rotateEaseParam.baseParam.isEase) {
         auto& easeParam = parameters_.rotateEaseParam;
 
-        ImGui::DragFloat("Max Time##Rotate", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
-        ImGuiEasingTypeSelector("Easing Type##Rotate", easeParam.baseParam.easeTypeInt);
+        ImGui::DragFloat("最大時間##Rotate", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
+        ImGuiEasingTypeSelector("イージングタイプ##Rotate", easeParam.baseParam.easeTypeInt);
 
-        ImGui::SeparatorText("End Rotation Range (Degree)");
-        ImGui::DragFloat3("End Rotate Max", &easeParam.endValue.max.x, 0.1f, -360.0f, 360.0f);
-        ImGui::DragFloat3("End Rotate Min", &easeParam.endValue.min.x, 0.1f, -360.0f, 360.0f);
+        ImGui::SeparatorText("終了回転範囲（度）");
+        ImGui::DragFloat3("終了回転 最大", &easeParam.endValue.max.x, 0.1f, -360.0f, 360.0f);
+        ImGui::DragFloat3("終了回転 最小", &easeParam.endValue.min.x, 0.1f, -360.0f, 360.0f);
 
-        ImGui::DragFloat("Back Ratio##Rotate", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
+        ImGui::DragFloat("戻り割合##Rotate", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
     }
 }
 
 void ParticleSectionParameter::ImGuiTextureSelection() {
-    static int selectedIndex               = 0;
-    static std::string lastSelectedTexture = "";
-
-    std::vector<std::string> filenames = GetFileNamesForDirectory(textureFilePath_);
-
-    if (ImGui::CollapsingHeader("SelectTexture")) {
-        if (!filenames.empty()) {
-            std::vector<const char*> names;
-            for (const auto& file : filenames) {
-                names.push_back(file.c_str());
-            }
-
-            if (ImGui::ListBox("Textures", &selectedIndex, names.data(), static_cast<int>(names.size()))) {
-                std::string newTextureName = filenames[selectedIndex];
-                if (newTextureName != lastSelectedTexture) {
-                    ApplyTexture(newTextureName);
-                    lastSelectedTexture = newTextureName;
-
-                    if (onTextureChanged_) {
-                        onTextureChanged_();
-                    }
-                }
-            }
-
-            if (!selectedTexturePath_.empty()) {
-                ImGui::Text("Current: %s", selectedTexturePath_.c_str());
-            }
-        } else {
-            ImGui::Text("No texture files found.");
+    if (ImGui::CollapsingHeader("テクスチャ選択")) {
+        std::string prev = selectedTexturePath_;
+        textureFileSelector_.SelectFilePath("##TextureSelect", textureFilePath_, selectedTexturePath_, ".dds", false);
+        if (selectedTexturePath_ != prev && onTextureChanged_) {
+            onTextureChanged_();
+        }
+        if (!selectedTexturePath_.empty()) {
+            ImGui::TextDisabled("Path: %s", selectedTexturePath_.c_str());
         }
     }
-}
-
-void ParticleSectionParameter::ApplyTexture(const std::string& textureName) {
-    selectedTexturePath_ = textureFilePath_ + "/" + textureName + ".dds";
 }
 
 void ParticleSectionParameter::InitAdaptTexture() {

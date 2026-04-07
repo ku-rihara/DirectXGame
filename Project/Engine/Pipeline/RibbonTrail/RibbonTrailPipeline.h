@@ -7,6 +7,7 @@ namespace KetaEngine {
 
 enum class RibbonTrailRootParameter : UINT {
     TransformationMatrix, // b0 (VS) - ビュープロジェクション行列
+    UVScroll,             // b1 (VS) - UVスクロールオフセット
     Texture,              // t0 (PS) - テクスチャ
     Count
 };

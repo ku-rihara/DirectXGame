@@ -17,29 +17,8 @@ void RibbonTrailData::Init(const std::string& name, const std::string& categoryN
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
-        InitParams();
     } else {
         GetParams();
-    }
-
-    // texturePath_ が確定した後に textureStem_ を同期
-    if (texturePath_.empty()) {
-        textureStem_ = "None";
-    } else {
-        size_t sl      = texturePath_.rfind('/');
-        std::string fn = (sl != std::string::npos) ? texturePath_.substr(sl + 1) : texturePath_;
-        size_t dt      = fn.rfind('.');
-        textureStem_   = (dt != std::string::npos) ? fn.substr(0, dt) : fn;
-    }
-
-    // distortionTexturePath_ の textureStem_ も同期
-    if (distortionTexturePath_.empty()) {
-        distortionTextureStem_ = "None";
-    } else {
-        size_t sl      = distortionTexturePath_.rfind('/');
-        std::string fn = (sl != std::string::npos) ? distortionTexturePath_.substr(sl + 1) : distortionTexturePath_;
-        size_t dt      = fn.rfind('.');
-        distortionTextureStem_ = (dt != std::string::npos) ? fn.substr(0, dt) : fn;
     }
 }
 
@@ -64,7 +43,9 @@ void RibbonTrailData::RegisterParams() {
     globalParameter_->Regist(groupName_, "Lifetime", &lifetime_);
     globalParameter_->Regist(groupName_, "MaxPoints", &maxPoints_);
     globalParameter_->Regist(groupName_, "EmitInterval", &emitInterval_);
-    globalParameter_->Regist(groupName_, "TexturePath", &texturePath_);
+    globalParameter_->Regist(groupName_, "UVScrollSpeed",           &uvScrollSpeed_);
+    globalParameter_->Regist(groupName_, "DistortionUVScrollSpeed", &distortionUVScrollSpeed_);
+    globalParameter_->Regist(groupName_, "TexturePath",             &texturePath_);
 
     // 時空歪み
     globalParameter_->Regist(groupName_, "UseDistortion",         &useDistortion_);
@@ -83,21 +64,24 @@ void RibbonTrailData::GetParams() {
     lifetime_     = globalParameter_->GetValue<float>(groupName_, "Lifetime");
     maxPoints_    = globalParameter_->GetValue<int32_t>(groupName_, "MaxPoints");
     emitInterval_ = globalParameter_->GetValue<float>(groupName_, "EmitInterval");
-    texturePath_            = globalParameter_->GetValue<std::string>(groupName_, "TexturePath");
-    useDistortion_          = globalParameter_->GetValue<bool>(groupName_, "UseDistortion");
-    distortionStrength_     = globalParameter_->GetValue<float>(groupName_, "DistortionStrength");
-    distortionTexturePath_  = globalParameter_->GetValue<std::string>(groupName_, "DistortionTexturePath");
+    uvScrollSpeed_             = globalParameter_->GetValue<Vector2>(groupName_, "UVScrollSpeed");
+    distortionUVScrollSpeed_   = globalParameter_->GetValue<Vector2>(groupName_, "DistortionUVScrollSpeed");
+    texturePath_               = globalParameter_->GetValue<std::string>(groupName_, "TexturePath");
+    useDistortion_         = globalParameter_->GetValue<bool>(groupName_, "UseDistortion");
+    distortionStrength_    = globalParameter_->GetValue<float>(groupName_, "DistortionStrength");
+    distortionTexturePath_ = globalParameter_->GetValue<std::string>(groupName_, "DistortionTexturePath");
 }
 
 void RibbonTrailData::InitParams() {
-
-    startColor_   = {1.0f, 0.8f, 0.3f, 1.0f};
-    endColor_     = {1.0f, 0.4f, 0.1f, 0.0f};
-    startWidth_   = 0.12f;
-    endWidth_     = 0.0f;
-    lifetime_     = 0.25f;
-    maxPoints_    = 48;
+    startColor_            = {1.0f, 0.8f, 0.3f, 1.0f};
+    endColor_              = {1.0f, 0.4f, 0.1f, 0.0f};
+    startWidth_            = 0.12f;
+    endWidth_              = 0.0f;
+    lifetime_              = 0.25f;
+    maxPoints_             = 48;
     emitInterval_          = 0.005f;
+    uvScrollSpeed_             = Vector2::ZeroVector();
+    distortionUVScrollSpeed_   = Vector2::ZeroVector();
     texturePath_           = "";
     useDistortion_         = false;
     distortionStrength_    = 0.1f;
@@ -125,24 +109,12 @@ void RibbonTrailData::AdjustParam() {
     ImGui::DragInt("Max Points", &maxPoints_, 1, 2, 256);
     ImGui::DragFloat("Emit Interval", &emitInterval_, 0.001f, 0.001f, 1.0f);
 
+    ImGui::SeparatorText("UV Scroll");
+    ImGui::DragFloat2("Scroll Speed (U/V)", &uvScrollSpeed_.x, 0.01f, -10.0f, 10.0f);
+
     ImGui::SeparatorText("Texture");
 
-    std::string prevStem = textureStem_;
-    textureSelector_.SelectFile("##TexSelect", kTextureFolderPath, textureStem_, "", true);
-
-    // 選択が変わったら texturePath_ を再構築
-    if (textureStem_ != prevStem) {
-        if (textureStem_.empty() || textureStem_ == "None") {
-            texturePath_ = "";
-        } else {
-
-            std::string candidate = std::string(kTextureFolderPath) + "/" + textureStem_ + ".dds";
-            if (std::filesystem::exists(candidate)) {
-                texturePath_ = candidate;
-            }
-        }
-    }
-
+    textureSelector_.SelectFilePath("##TexSelect", kTextureFolderPath, texturePath_, ".dds", true);
     if (!texturePath_.empty()) {
         ImGui::TextDisabled("Path: %s", texturePath_.c_str());
     }
@@ -152,21 +124,8 @@ void RibbonTrailData::AdjustParam() {
 
     if (useDistortion_) {
         ImGui::DragFloat("歪み強度", &distortionStrength_, 0.01f, 0.0f, 5.0f);
-
-        std::string prevDistStem = distortionTextureStem_;
-        distortionTextureSelector_.SelectFile("##DistTexSelect", kTextureFolderPath, distortionTextureStem_, "", true);
-
-        if (distortionTextureStem_ != prevDistStem) {
-            if (distortionTextureStem_.empty() || distortionTextureStem_ == "None") {
-                distortionTexturePath_ = "";
-            } else {
-                std::string candidate = std::string(kTextureFolderPath) + "/" + distortionTextureStem_ + ".dds";
-                if (std::filesystem::exists(candidate)) {
-                    distortionTexturePath_ = candidate;
-                }
-            }
-        }
-
+        ImGui::DragFloat2("歪みスクロール (U/V)", &distortionUVScrollSpeed_.x, 0.01f, -10.0f, 10.0f);
+        distortionTextureSelector_.SelectFilePath("##DistTexSelect", kDistortionFolderPath, distortionTexturePath_, ".dds", true);
         if (!distortionTexturePath_.empty()) {
             ImGui::TextDisabled("Path: %s", distortionTexturePath_.c_str());
         }

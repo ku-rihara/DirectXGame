@@ -150,7 +150,7 @@
         "UseRail": false,
         "afterDuration": 0.0,
         "blendMode": 0,
-        "dissolveName": "",
+        "dissolveName": "test",
         "distortionStrength": 0.902999997138977,
         "distortionTexturePath": "",
         "emitPositionMode": 0,
@@ -185,7 +185,7 @@
             1.0,
             1.0
         ],
-        "selectedTexturePath": "Resources/texture/Particle/uvChecker.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/uvChecker.dds",
         "timeMode": 1,
         "useDistortion": true,
         "useModel": false

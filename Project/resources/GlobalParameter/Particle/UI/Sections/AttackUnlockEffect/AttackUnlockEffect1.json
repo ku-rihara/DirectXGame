@@ -177,7 +177,7 @@
         ],
         "scaleEaseParam.isScaleEase": true,
         "scaleEaseParam.maxTime": 0.4300000071525574,
-        "selectedTexturePath": "Resources/texture/Particle/UnlockAttackKey.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/UnlockAttackKey.dds",
         "timeMode": 1,
         "useModel": false
     }

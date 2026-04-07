@@ -49,7 +49,6 @@ public:
 
     void AdjustParam();
     void ImGuiTextureSelection();
-    void ApplyTexture(const std::string& textureName);
     void InitAdaptTexture();
 
 private:
@@ -63,7 +62,7 @@ private:
     // Names
     std::string groupName_;
     const std::string railFolderPath_     = "Resources/GlobalParameter/RailEditor/Dates";
-    const std::string textureFilePath_    = "Resources/texture/Particle";
+    const std::string textureFilePath_    = "Resources/EngineTexture/Particle";
     const std::string modelBasePath_      = "Resources/Model/";
     const std::string dissolveFolderPath_ = "Resources/GlobalParameter/DissolveEditor/Common/Dates";
 
@@ -74,9 +73,14 @@ private:
     TimeModeSelector timeModeSelector_;
     EmitterPositionMode emitPositionMode_ = EmitterPositionMode::None;
 
-    // Rail,Model
+    // Rail, Model
     std::pair<std::string, FileSelector> railFileParam_;
     FileSelector modelFileSelector_;
+
+    // テクスチャ選択
+    FileSelector textureFileSelector_;
+    FileSelector distortionTextureFileSelector_;
+    FileSelector dissolveFileSelector_;
 
     // TypeInt
     int32_t primitiveTypeInt_    = 0;

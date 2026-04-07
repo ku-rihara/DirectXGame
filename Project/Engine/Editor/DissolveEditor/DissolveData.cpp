@@ -16,8 +16,6 @@ void DissolveData::Init(const std::string& dissolveName, const std::string& cate
     groupName_  = dissolveName;
     folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
 
-    LoadNoiseTextures();
-
     if (!globalParameter_->HasRegisters(groupName_)) {
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
@@ -94,12 +92,12 @@ void DissolveData::Reset() {
 }
 
 void DissolveData::RegisterParams() {
-    globalParameter_->Regist(groupName_, "startThreshold", &startThreshold_);
-    globalParameter_->Regist(groupName_, "endThreshold", &endThreshold_);
-    globalParameter_->Regist(groupName_, "maxTime", &maxTime_);
-    globalParameter_->Regist(groupName_, "offsetTime", &offsetTime_);
-    globalParameter_->Regist(groupName_, "easeType", &easeType_);
-    globalParameter_->Regist(groupName_, "selectedTextureIndex", &selectedTextureIndex_);
+    globalParameter_->Regist(groupName_, "startThreshold",    &startThreshold_);
+    globalParameter_->Regist(groupName_, "endThreshold",      &endThreshold_);
+    globalParameter_->Regist(groupName_, "maxTime",           &maxTime_);
+    globalParameter_->Regist(groupName_, "offsetTime",        &offsetTime_);
+    globalParameter_->Regist(groupName_, "easeType",          &easeType_);
+    globalParameter_->Regist(groupName_, "currentTexturePath",&currentTexturePath_);
 }
 
 void DissolveData::GetParams() {
@@ -107,52 +105,21 @@ void DissolveData::GetParams() {
         return;
     }
 
-    startThreshold_       = globalParameter_->GetValue<float>(groupName_, "startThreshold");
-    endThreshold_         = globalParameter_->GetValue<float>(groupName_, "endThreshold");
-    maxTime_              = globalParameter_->GetValue<float>(groupName_, "maxTime");
-    offsetTime_           = globalParameter_->GetValue<float>(groupName_, "offsetTime");
-    easeType_             = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
-    selectedTextureIndex_ = globalParameter_->GetValue<int32_t>(groupName_, "selectedTextureIndex");
-
-    if (selectedTextureIndex_ >= 0 && selectedTextureIndex_ < static_cast<int32_t>(noiseTextureFiles_.size())) {
-        currentTexturePath_ = textureFilePath_ + "/" + noiseTextureFiles_[selectedTextureIndex_];
-    }
+    startThreshold_     = globalParameter_->GetValue<float>(groupName_, "startThreshold");
+    endThreshold_       = globalParameter_->GetValue<float>(groupName_, "endThreshold");
+    maxTime_            = globalParameter_->GetValue<float>(groupName_, "maxTime");
+    offsetTime_         = globalParameter_->GetValue<float>(groupName_, "offsetTime");
+    easeType_           = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
+    currentTexturePath_ = globalParameter_->GetValue<std::string>(groupName_, "currentTexturePath");
 }
 
 void DissolveData::InitParams() {
-    startThreshold_       = 1.0f;
-    endThreshold_         = 0.0f;
-    maxTime_              = 1.0f;
-    offsetTime_           = 0.0f;
-    easeType_             = 0;
-    selectedTextureIndex_ = 0;
-}
-
-void DissolveData::LoadNoiseTextures() {
-    noiseTextureFiles_.clear();
-
-    if (!std::filesystem::exists(textureFilePath_)) {
-        return;
-    }
-
-    for (const auto& entry : std::filesystem::directory_iterator(textureFilePath_)) {
-        if (entry.is_regular_file()) {
-            noiseTextureFiles_.push_back(entry.path().filename().string());
-        }
-    }
-
-    std::sort(noiseTextureFiles_.begin(), noiseTextureFiles_.end());
-
-    if (!noiseTextureFiles_.empty() && selectedTextureIndex_ >= 0 && selectedTextureIndex_ < static_cast<int32_t>(noiseTextureFiles_.size())) {
-        currentTexturePath_ = textureFilePath_ + "/" + noiseTextureFiles_[selectedTextureIndex_];
-    }
-}
-
-void DissolveData::SetTextureIndex(int32_t index) {
-    if (index >= 0 && index < static_cast<int32_t>(noiseTextureFiles_.size())) {
-        selectedTextureIndex_ = index;
-        currentTexturePath_   = textureFilePath_ + "/" + noiseTextureFiles_[selectedTextureIndex_];
-    }
+    startThreshold_     = 1.0f;
+    endThreshold_       = 0.0f;
+    maxTime_            = 1.0f;
+    offsetTime_         = 0.0f;
+    easeType_           = 0;
+    currentTexturePath_ = "";
 }
 
 void DissolveData::AdjustParam() {
@@ -167,18 +134,10 @@ void DissolveData::AdjustParam() {
         // 状態表示
         const char* stateText = "";
         switch (playState_) {
-        case PlayState::STOPPED:
-            stateText = "STOPPED";
-            break;
-        case PlayState::PLAYING:
-            stateText = "PLAYING";
-            break;
-        case PlayState::PAUSED:
-            stateText = "PAUSED";
-            break;
-        case PlayState::RETURNING:
-            stateText = "RETURNING";
-            break;
+        case PlayState::STOPPED:   stateText = "STOPPED";   break;
+        case PlayState::PLAYING:   stateText = "PLAYING";   break;
+        case PlayState::PAUSED:    stateText = "PAUSED";    break;
+        case PlayState::RETURNING: stateText = "RETURNING"; break;
         }
         ImGui::Text("State: %s", stateText);
 
@@ -196,12 +155,12 @@ void DissolveData::AdjustParam() {
 
         // Threshold設定
         ImGui::DragFloat("Start Threshold", &startThreshold_, 0.01f, 0.0f, 1.0f);
-        ImGui::DragFloat("End Threshold", &endThreshold_, 0.01f, 0.0f, 1.0f);
+        ImGui::DragFloat("End Threshold",   &endThreshold_,   0.01f, 0.0f, 1.0f);
 
         ImGui::Separator();
 
         // タイミング設定
-        ImGui::DragFloat("Max Time", &maxTime_, 0.01f, 0.1f, 10.0f);
+        ImGui::DragFloat("Max Time",    &maxTime_,    0.01f, 0.1f, 10.0f);
         ImGui::DragFloat("Offset Time", &offsetTime_, 0.01f, 0.0f, 5.0f);
 
         // イージングタイプ
@@ -209,24 +168,11 @@ void DissolveData::AdjustParam() {
 
         ImGui::Separator();
 
-        // テクスチャ選択
-        if (!noiseTextureFiles_.empty()) {
-            ImGui::Text("Noise Texture:");
-            if (ImGui::BeginCombo("##NoiseTexture", noiseTextureFiles_[selectedTextureIndex_].c_str())) {
-                for (int32_t i = 0; i < static_cast<int32_t>(noiseTextureFiles_.size()); i++) {
-                    bool isSelected = (selectedTextureIndex_ == i);
-                    if (ImGui::Selectable(noiseTextureFiles_[i].c_str(), isSelected)) {
-                        SetTextureIndex(i);
-                    }
-                    if (isSelected) {
-                        ImGui::SetItemDefaultFocus();
-                    }
-                }
-                ImGui::EndCombo();
-            }
-            ImGui::Text("Current: %s", currentTexturePath_.c_str());
-        } else {
-            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "No noise textures found!");
+        // テクスチャ選択（FileSelector使用）
+        ImGui::Text("Noise Texture:");
+        textureSelector_.SelectFilePath("##NoiseTexture", textureFilePath_, currentTexturePath_, ".dds", false);
+        if (!currentTexturePath_.empty()) {
+            ImGui::TextDisabled("Path: %s", currentTexturePath_.c_str());
         }
 
         ImGui::PopID();

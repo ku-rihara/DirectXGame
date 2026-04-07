@@ -95,6 +95,8 @@ void RibbonTrailPlayer::SyncDataToTrail() {
     trail_->SetUseDistortion(GetUseDistortion());
     trail_->SetDistortionStrength(GetDistortionStrength());
     trail_->SetDistortionTexture(GetDistortionTexturePath());
+    trail_->SetUVScrollSpeed(GetUVScrollSpeed());
+    trail_->SetDistortionUVScrollSpeed(GetDistortionUVScrollSpeed());
 }
 
 ///============================================================
@@ -155,4 +157,14 @@ const std::string& RibbonTrailPlayer::GetDistortionTexturePath() const {
     static const std::string empty;
     const RibbonTrailData*   data = GetData();
     return data ? data->GetDistortionTexturePath() : empty;
+}
+
+Vector2 RibbonTrailPlayer::GetUVScrollSpeed() const {
+    const RibbonTrailData* data = GetData();
+    return data ? data->GetUVScrollSpeed() : Vector2::ZeroVector();
+}
+
+Vector2 RibbonTrailPlayer::GetDistortionUVScrollSpeed() const {
+    const RibbonTrailData* data = GetData();
+    return data ? data->GetDistortionUVScrollSpeed() : Vector2::ZeroVector();
 }

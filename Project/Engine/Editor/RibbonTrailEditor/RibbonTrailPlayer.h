@@ -1,6 +1,7 @@
 #pragma once
 #include "RibbonTrailData.h"
 #include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
+#include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include <cstdint>
@@ -71,6 +72,8 @@ public:
     bool               GetUseDistortion()         const;
     float              GetDistortionStrength()     const;
     const std::string& GetDistortionTexturePath() const;
+    Vector2            GetUVScrollSpeed()              const;
+    Vector2            GetDistortionUVScrollSpeed()    const;
 };
 
 } // KetaEngine

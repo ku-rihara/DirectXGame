@@ -25,6 +25,28 @@ public:
         const std::string& excludeName = "",
         bool addNoneOption             = false);
 
+    /// <summary>
+    /// フルパスを直接渡してファイルを選択するコンボボックスを表示
+    /// ステム変換・パス再構築を内部で行うため呼び出し側はパスを渡すだけでよい
+    /// </summary>
+    /// <param name="label">表示ラベル</param>
+    /// <param name="directoryPath">検索するディレクトリパス</param>
+    /// <param name="currentPath">現在のフルパス（変更時に更新される）</param>
+    /// <param name="extension">拡張子（例: ".dds"）</param>
+    /// <param name="addNoneOption">先頭に"None"を追加するか</param>
+    void SelectFilePath(
+        const char* label,
+        const std::string& directoryPath,
+        std::string& currentPath,
+        const std::string& extension = ".dds",
+        bool addNoneOption           = false);
+
+    /// <summary>
+    /// ファイルパスからステム名（拡張子なし・ディレクトリなし）を返す
+    /// パスが空の場合は "None" を返す
+    /// </summary>
+    static std::string PathToStem(const std::string& path);
+
 private:
     std::vector<std::string> cachedFiles_;
     std::string cachedDirectory_;

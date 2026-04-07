@@ -7,6 +7,32 @@ using namespace KetaEngine;
 #include <filesystem>
 
 
+void FileSelector::SelectFilePath(
+    const char* label,
+    const std::string& directoryPath,
+    std::string& currentPath,
+    const std::string& extension,
+    bool addNoneOption) {
+
+    std::string stem     = PathToStem(currentPath);
+    std::string prevStem = stem;
+    SelectFile(label, directoryPath, stem, "", addNoneOption);
+    if (stem != prevStem) {
+        currentPath = (stem.empty() || stem == "None")
+            ? ""
+            : directoryPath + "/" + stem + extension;
+    }
+}
+
+std::string FileSelector::PathToStem(const std::string& path) {
+    if (path.empty()) return "None";
+    size_t sl = path.rfind('/');
+    if (sl == std::string::npos) sl = path.rfind('\\');
+    std::string fn = (sl != std::string::npos) ? path.substr(sl + 1) : path;
+    size_t dt = fn.rfind('.');
+    return (dt != std::string::npos) ? fn.substr(0, dt) : fn;
+}
+
 void FileSelector::SelectFile(
     const char* label,
     const std::string& directoryPath,

@@ -177,7 +177,7 @@
         ],
         "scaleEaseParam.isScaleEase": false,
         "scaleEaseParam.maxTime": 1.0,
-        "selectedTexturePath": "Resources/texture/Particle/AttackUnlockGlass.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/AttackUnlockGlass.dds",
         "timeMode": 1,
         "useModel": false
     }
