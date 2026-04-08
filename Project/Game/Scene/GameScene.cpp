@@ -75,6 +75,7 @@ void GameScene::Debug() {
     gameObj_.comboSupportSpriteUi_->AdjustParam();
     gameObj_.killBonusController_->AdjustParam();
     gameObj_.killBonusFlyController_->AdjustParam();
+    gameObj_.nextAttackHintUI_->AdjustParam();
     gameObj_.operateUI_->Debug();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
@@ -143,6 +144,7 @@ void GameScene::ObjectInit() {
     gameObj_.comboSupportSpriteUi_        = std::make_unique<ComboSupportSpriteUi>();
     gameObj_.killBonusController_         = std::make_unique<KillBonusController>();
     gameObj_.killBonusFlyController_      = std::make_unique<KillBonusFlyController>();
+    gameObj_.nextAttackHintUI_            = std::make_unique<NextAttackHintUI>();
 
     gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
@@ -170,6 +172,7 @@ void GameScene::ObjectInit() {
     gameObj_.killBonusController_->Init();
     gameObj_.killBonusFlyController_->Init();
     viewProjection_.Init();
+    gameObj_.nextAttackHintUI_->Init(gameObj_.player_.get());
 
     gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");
     gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::SPEAKER, "ComboLevel2.json");
@@ -225,6 +228,7 @@ void GameScene::SetClassPointer() {
     gameObj_.comboDirector_->SetAudienceController(gameObj_.audienceController_.get());
 
     gameObj_.player_->SetViewProjection(&viewProjection_);
+    gameObj_.nextAttackHintUI_->SetViewProjection(&viewProjection_);
     gameObj_.player_->SetLockOn(gameObj_.lockOnController_.get());
     gameObj_.player_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.player_->SetComboAttackController(gameObj_.playerComboAttackController_.get());

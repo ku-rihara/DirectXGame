@@ -158,20 +158,21 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 }
 
 void TextureManager::LoadAllTextures() {
-    const std::filesystem::path textureDir = "Resources/Texture";
-    if (!std::filesystem::exists(textureDir)) {
-        return;
-    }
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(textureDir)) {
-        if (!entry.is_regular_file()) {
+    for (const std::filesystem::path& textureDir : {"Resources/Texture", "Resources/EngineTexture"}) {
+        if (!std::filesystem::exists(textureDir)) {
             continue;
         }
-        if (entry.path().extension() == ".dds") {
-            std::string filePath = entry.path().generic_string();
-            if (textureDates_.contains(filePath)) {
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(textureDir)) {
+            if (!entry.is_regular_file()) {
                 continue;
             }
-            LoadTexture(filePath);
+            if (entry.path().extension() == ".dds") {
+                std::string filePath = entry.path().generic_string();
+                if (textureDates_.contains(filePath)) {
+                    continue;
+                }
+                LoadTexture(filePath);
+            }
         }
     }
 }

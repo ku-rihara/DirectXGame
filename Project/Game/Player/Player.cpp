@@ -73,10 +73,6 @@ void Player::Init() {
     jumpAttackUI_ = std::make_unique<JumpAttackUI>();
     jumpAttackUI_->Init();
 
-    // NextAttackHintUI
-    nextAttackHintUI_ = std::make_unique<NextAttackHintUI>();
-    nextAttackHintUI_->Init(this);
-
     // パラメータセット
     baseTransform_.SetBaseScale(Vector3::OneVector());
     baseTransform_.translation_ = parameters_->GetParameters().startPos_;
@@ -103,8 +99,9 @@ void Player::Update() {
         behavior_->Update();
     }
 
-    jumpAttackUI_->Update(GetWorldPosition(), *viewProjection_);
-    nextAttackHintUI_->Update();
+    if (viewProjection_) {
+        jumpAttackUI_->Update(GetWorldPosition(), *viewProjection_);
+    }
 
     /// Particle
     effects_->Update(GetWorldPosition());
@@ -304,7 +301,6 @@ void Player::AdjustParam() {
     leftHand_->AdjustParam();
     rightHand_->AdjustParam();
     jumpAttackUI_->AdjustParam();
-    nextAttackHintUI_->AdjustParam();
 
 #endif // _DEBUG
 }
@@ -494,9 +490,6 @@ void Player::SetHitStop(AttackEffect* hitStop) {
 
 void Player::SetViewProjection(const KetaEngine::ViewProjection* viewProjection) {
     viewProjection_ = viewProjection;
-    if (nextAttackHintUI_) {
-        nextAttackHintUI_->SetViewProjection(viewProjection_);
-    }
 }
 
 void Player::SetComboAttackController(PlayerComboAttackController* playerComboAttackController) {

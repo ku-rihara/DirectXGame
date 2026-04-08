@@ -109,6 +109,13 @@ void ComboAsistButtonUI::TryPlayPushScaling(const std::string& attackName) {
     }
 }
 
+void ComboAsistButtonUI::SnapUnlocked(bool isUnlocked) {
+    isUnlocked_ = isUnlocked;
+    if (lockUI_) {
+        lockUI_->SetIsDraw(!isUnlocked_);
+    }
+}
+
 void ComboAsistButtonUI::PlayScaleIn() {
     // uiSpriteのみアニメ再生
     if (uiSprite_) {

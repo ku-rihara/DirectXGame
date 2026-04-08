@@ -169,4 +169,9 @@ std::string ParticleEditor::GetFolderName() const {
 
 void ParticleEditor::PlaySelectedAnimation() {
     BaseEffectEditor::PlaySelectedAnimation();
+
+    auto* particleData = dynamic_cast<ParticleData*>(GetSelectedEffect());
+    if (particleData) {
+        particleData->SetIsPlayByEditor(true);
+    }
 }

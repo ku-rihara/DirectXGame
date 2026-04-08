@@ -43,6 +43,7 @@
 #include "UI/ComboAsistUI/UnlockNotifier/ComboUnlockNotifier.h"
 #include "UI/KillBonus/KillBonusController.h"
 #include "UI/KillBonus/KillBonusFlyController.h"
+#include "UI/NextAttackIndicator/NextAttackHintUI.h"
 #include "UI/OperateUI.h"
 // Sprite
 #include "2D/Sprite.h"
@@ -110,6 +111,7 @@ private:
         std::unique_ptr<ComboSupportSpriteUi> comboSupportSpriteUi_              = nullptr;
         std::unique_ptr<KillBonusController>    killBonusController_              = nullptr;
         std::unique_ptr<KillBonusFlyController> killBonusFlyController_           = nullptr;
+        std::unique_ptr<NextAttackHintUI>       nextAttackHintUI_                 = nullptr;
 
         std::unique_ptr<KetaEngine::Sprite> screenSprite_;
     };

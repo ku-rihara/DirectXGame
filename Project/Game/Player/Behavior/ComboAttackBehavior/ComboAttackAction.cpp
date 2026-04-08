@@ -47,17 +47,26 @@ void ComboAttackAction::Init() {
 
     // 次の攻撃候補リストを構築
     nextAttackCandidates_.clear();
+    allNextAttackCandidates_.clear();
     auto& branches                          = attackData_->GetComboBranches();
     PlayerComboAttackController* controller = pOwner_->GetComboAttackController();
 
     for (auto& branch : branches) {
         if (!branch->GetNextAttackName().empty() && branch->GetNextAttackName() != "None") {
             PlayerComboAttackData* nextAttack = controller->GetAttackByName(branch->GetNextAttackName());
+            if (!nextAttack) {
+                continue;
+            }
 
+            NextAttackCandidate candidate;
+            candidate.branch     = branch.get();
+            candidate.attackData = nextAttack;
+
+            // 全候補（ロック中を含む）はHintUI用
+            allNextAttackCandidates_.push_back(candidate);
+
+            // ロック解除済みのみ入力受付用に追加
             if (IsAttackUnlock(*nextAttack)) {
-                NextAttackCandidate candidate;
-                candidate.branch     = branch.get();
-                candidate.attackData = nextAttack;
                 nextAttackCandidates_.push_back(candidate);
             }
         }

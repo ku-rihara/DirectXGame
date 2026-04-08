@@ -2,10 +2,8 @@
 
 using namespace KetaEngine;
 #include "3D/RibbonTrail/RibbonTrail.h"
-#include "Base/TextureManager.h"
 #include "Frame/Frame.h"
 #include <cmath>
-#include <filesystem>
 #include <imgui.h>
 
 ///============================================================
@@ -17,22 +15,6 @@ void RibbonTrailEditor::Init(const std::string& typeName) {
     emitTimer_        = 0.0f;
     prevSelectedName_ = "";
     previewTrail_     = nullptr;
-
-    // テクスチャを事前ロード（レンダリング中の初回LoadTexture → コマンドリストリセットを防ぐ）
-    PreloadTextures();
-}
-
-void RibbonTrailEditor::PreloadTextures() {
-    for (const std::string& folder : {"Resources/EngineTexture/Trail", "Resources/EngineTexture/Noise"}) {
-        if (!std::filesystem::exists(folder)) {
-            continue;
-        }
-        for (const auto& entry : std::filesystem::directory_iterator(folder)) {
-            if (entry.is_regular_file() && entry.path().extension() == ".dds") {
-                TextureManager::GetInstance()->LoadTexture(entry.path().generic_string());
-            }
-        }
-    }
 }
 
 void RibbonTrailEditor::Update(float speedRate) {

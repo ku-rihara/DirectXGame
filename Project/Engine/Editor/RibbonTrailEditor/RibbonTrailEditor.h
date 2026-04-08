@@ -35,12 +35,6 @@ private:
     /// </summary>
     void SyncPreviewTrail(RibbonTrailData* data);
 
-    /// <summary>
-    /// テクスチャフォルダ内の全テクスチャを事前ロードする
-    /// （フレーム内での初回LoadTexture → コマンドリストリセットを防ぐ）
-    /// </summary>
-    void PreloadTextures();
-
 private:
     const std::string folderName_ = "RibbonTrail/";
 

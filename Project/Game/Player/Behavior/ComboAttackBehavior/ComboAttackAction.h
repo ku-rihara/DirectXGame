@@ -31,6 +31,9 @@ public:
 
     const std::vector<NextAttackCandidate>& GetNextAttackCandidates() const { return nextAttackCandidates_; }
 
+    /// ロック中を含む全分岐候補（HintUI の表示用）
+    const std::vector<NextAttackCandidate>& GetAllNextAttackCandidates() const { return allNextAttackCandidates_; }
+
 private:
     /// 振る舞いオーダー
     enum class Order {
@@ -66,8 +69,10 @@ private:
     PlayerComboAttackData* attackData_        = nullptr;
     PlayerAttackCollider* pCollisionInfo_ = nullptr;
 
-    // 次の攻撃候補リスト
+    // 次の攻撃候補リスト（ロック解除済みのみ）
     std::vector<NextAttackCandidate> nextAttackCandidates_;
+    // ロック中を含む全分岐候補
+    std::vector<NextAttackCandidate> allNextAttackCandidates_;
     int32_t selectedBranchIndex_ = -1; 
 
     // タイミング

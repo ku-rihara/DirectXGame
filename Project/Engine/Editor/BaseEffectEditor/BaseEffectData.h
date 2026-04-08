@@ -49,6 +49,11 @@ public:
     virtual void LoadData();
     virtual void SaveData();
 
+    /// <summary>
+    /// GlobalParameter から最新値を再取得する（エディタ編集の即時反映用）
+    /// </summary>
+    void RefreshParams() { GetParams(); }
+
 protected:
     //*---------------------------- protected Methods ----------------------------*//
 

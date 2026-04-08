@@ -37,6 +37,19 @@ void BaseComboAsistUI::ApplySlideOffset(float offsetX) {
     ApplyLayout();
 }
 
+void BaseComboAsistUI::SetLockUIScale(const Vector2& scale) {
+    if (lockUI_) {
+        lockUI_->transform_.scale = scale;
+    }
+}
+
+void BaseComboAsistUI::SetCurrentPosition(const Vector2& pos) {
+    currentDisplayPos_ = pos;
+    targetPos_         = pos;
+    needsLerpUpdate_   = false;
+    SetPosition(pos);
+}
+
 void BaseComboAsistUI::SetPosition(const Vector2& pos) {
     if (uiSprite_) {
         uiSprite_->transform_.pos = pos;

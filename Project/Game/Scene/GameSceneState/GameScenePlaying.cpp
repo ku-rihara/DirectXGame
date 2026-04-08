@@ -67,6 +67,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     pOwner_->GetDitherOcclusion()->Update(obj.gameCamera_->GetViewProjection(), playerPos);
 
     obj.comboSupportSpriteUi_->Update();
+    obj.nextAttackHintUI_->Update();
 
     // ゲーム終了判定（デスタイマーが0になったら即終了）
     if (obj.deathTimer_->GetIsDeath()) {

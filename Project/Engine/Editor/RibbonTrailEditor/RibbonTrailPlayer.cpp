@@ -24,13 +24,19 @@ void RibbonTrailPlayer::Update(float speedRate) {
         effectData_->Update(speedRate);
     }
 
-    // followPosition_ が設定されていればAutoEmit
-    if (isActive_ && trail_ && followPosition_) {
-        float dt = Frame::DeltaTime() * speedRate;
-        emitTimer_ += dt;
-        if (emitTimer_ >= GetEmitInterval()) {
-            emitTimer_ = 0.0f;
-            trail_->AddPoint(*followPosition_, GetStartColor(), GetStartWidth(), GetLifetime());
+    if (isActive_ && trail_) {
+        // エディタ編集をリアルタイムに反映
+        effectData_->RefreshParams();
+        SyncDataToTrail();
+
+        // followPosition_ が設定されていればAutoEmit
+        if (followPosition_) {
+            float dt = Frame::DeltaTime() * speedRate;
+            emitTimer_ += dt;
+            if (emitTimer_ >= GetEmitInterval()) {
+                emitTimer_ = 0.0f;
+                trail_->AddPoint(*followPosition_, GetStartColor(), GetStartWidth(), GetLifetime());
+            }
         }
     }
 }

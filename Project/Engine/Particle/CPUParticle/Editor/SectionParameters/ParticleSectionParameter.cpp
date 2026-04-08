@@ -434,7 +434,7 @@ void ParticleSectionParameter::AdjustParam() {
     }
 
     // blend mode
-    if (ImGui::CollapsingHeader("ブレンドモード")) {
+    if (ImGui::CollapsingHeader("ブレンドモード設定")) {
         const char* blendModeItems[] = {"None", "Add", "Multiply", "Subtractive", "Screen"};
         if (ImGui::Combo("ブレンドモード", &blendModeInt_, blendModeItems, IM_ARRAYSIZE(blendModeItems))) {
             groupParameters_.blendMode = static_cast<BlendMode>(blendModeInt_);
@@ -459,7 +459,7 @@ void ParticleSectionParameter::AdjustParam() {
 
             ImGui::Separator();
             ImGui::Text("歪みテクスチャ");
-            distortionTextureFileSelector_.SelectFilePath("##DistortionTexture", textureFilePath_, distortionTexturePath_, ".dds", true);
+            distortionTextureFileSelector_.SelectFilePath("##DistortionTexture", noiseFolderPath_, distortionTexturePath_, ".dds", true);
             if (!distortionTexturePath_.empty()) {
                 ImGui::TextDisabled("Path: %s", distortionTexturePath_.c_str());
             }

@@ -46,7 +46,18 @@ public:
 
     //
     void SetPosition(const Vector2& pos);
+
+    /// <summary>
+    /// currentDisplayPos_ も含めて位置を即時設定する（lerp を使わず追従する UI 向け）
+    /// </summary>
+    void SetCurrentPosition(const Vector2& pos);
+
     void SetScale(const Vector2& scale);
+
+    /// <summary>
+    /// ロック UI のスケールを個別に設定する
+    /// </summary>
+    void SetLockUIScale(const Vector2& scale);
 
     void SetExtraScale(float extraScale);
     void SetRotation(float rotZ);

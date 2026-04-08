@@ -41,7 +41,13 @@ public:
     };
 
 public:
-    ParticleSectionParameter()  = default;
+    ParticleSectionParameter() {
+        parameters_.scaleDist.max   = 1.0f;
+        parameters_.scaleDist.min   = 1.0f;
+        parameters_.scaleDistV3.max = {1.0f, 1.0f, 1.0f};
+        parameters_.scaleDistV3.min = {1.0f, 1.0f, 1.0f};
+        parameters_.lifeTime        = 1.0f;
+    }
     ~ParticleSectionParameter() = default;
 
     void RegisterParams(GlobalParameter* globalParam, const std::string& groupName);
@@ -63,6 +69,7 @@ private:
     std::string groupName_;
     const std::string railFolderPath_     = "Resources/GlobalParameter/RailEditor/Dates";
     const std::string textureFilePath_    = "Resources/EngineTexture/Particle";
+    const std::string noiseFolderPath_    = "Resources/EngineTexture/Noise";
     const std::string modelBasePath_      = "Resources/Model/";
     const std::string dissolveFolderPath_ = "Resources/GlobalParameter/DissolveEditor/Common/Dates";
 

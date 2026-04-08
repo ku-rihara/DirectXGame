@@ -36,6 +36,11 @@ public:
     /// </summary>
     void SetUnlockSoundEnabled(bool enabled) { unlockSoundEnabled_ = enabled; }
 
+    /// <summary>
+    /// アニメーションなしでロック状態を即時設定（ヒントUI等の初期表示用）
+    /// </summary>
+    void SnapUnlocked(bool isUnlocked);
+
     // 表示/非表示（ロック状態を考慮）
     void SetVisible(bool visible) override;
 

@@ -4,108 +4,81 @@
 #include "Matrix4x4.h"
 #include "Player/Behavior/ComboAttackBehavior/ComboAttackAction.h"
 #include "Player/Player.h"
+#include "input/InputData.h"
 
 #include <imgui.h>
 
-// GamepadButton enum の X = 2, Y = 3 に対応
-static constexpr int32_t kButtonX = 2;
-static constexpr int32_t kButtonY = 3;
-
 void NextAttackHintUI::Init(Player* player) {
     pPlayer_ = player;
-
-    xSprite_.reset(KetaEngine::Sprite::Create("ButtomUI/OperateX.dds", false));
-    ySprite_.reset(KetaEngine::Sprite::Create("ButtomUI/OperateY.dds", false));
-
-    if (xSprite_) {
-        xSprite_->SetAnchorPoint({0.5f, 0.5f});
-        xSprite_->SetIsDraw(false);
-    }
-    if (ySprite_) {
-        ySprite_->SetAnchorPoint({0.5f, 0.5f});
-        ySprite_->SetIsDraw(false);
-    }
 
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
+
+    // LayoutParam は位置・矢印設定不要（毎フレーム SetPosition で直接指定）
+    LayoutParam layout = {};
+
+    xButtonUI_ = std::make_unique<ComboAsistButtonUI>();
+    xButtonUI_->Init(XINPUT_GAMEPAD_X, false, layout, "");
+    xButtonUI_->SetUnlockSoundEnabled(false);
+    xButtonUI_->SetScale(spriteScale_);
+    xButtonUI_->SetVisible(false);
+
+    yButtonUI_ = std::make_unique<ComboAsistButtonUI>();
+    yButtonUI_->Init(XINPUT_GAMEPAD_Y, false, layout, "");
+    yButtonUI_->SetUnlockSoundEnabled(false);
+    yButtonUI_->SetScale(spriteScale_);
+    yButtonUI_->SetVisible(false);
 }
 
 void NextAttackHintUI::Update() {
-    // 毎フレーム非表示にリセット
-    if (xSprite_) {
-        xSprite_->SetIsDraw(false);
-    }
-    if (ySprite_) {
-        ySprite_->SetIsDraw(false);
-    }
+    const ComboAttackAction::NextAttackCandidate* xCand = nullptr;
+    const ComboAttackAction::NextAttackCandidate* yCand = nullptr;
 
-    if (!pPlayer_ || !pViewProjection_) {
-        return;
-    }
-
-    // ComboAttackAction 中のみ表示
-    auto* behavior = pPlayer_->GetComboBehavior();
-    auto* action   = dynamic_cast<ComboAttackAction*>(behavior);
-    if (!action) {
-        return;
-    }
-
-    const auto& candidates = action->GetNextAttackCandidates();
-    if (candidates.empty()) {
-        return;
-    }
-
-    // X / Y ボタンの候補有無を判定
-    bool hasX = false;
-    bool hasY = false;
-    for (const auto& cand : candidates) {
-        if (!cand.branch) {
-            continue;
-        }
-        const int32_t btn = cand.branch->GetGamepadButton();
-        if (btn == kButtonX) {
-            hasX = true;
-        }
-        if (btn == kButtonY) {
-            hasY = true;
+    if (pPlayer_ && pViewProjection_) {
+        auto* action = dynamic_cast<ComboAttackAction*>(pPlayer_->GetComboBehavior());
+        if (action) {
+            for (const auto& cand : action->GetAllNextAttackCandidates()) {
+                if (!cand.branch) {
+                    continue;
+                }
+                const int32_t btn = cand.branch->GetGamepadButton();
+                if (btn == XINPUT_GAMEPAD_X && !xCand) {
+                    xCand = &cand;
+                }
+                if (btn == XINPUT_GAMEPAD_Y && !yCand) {
+                    yCand = &cand;
+                }
+            }
         }
     }
 
-    if (!hasX && !hasY) {
-        prevXVisible_ = false;
-        prevYVisible_ = false;
-        return;
+    // 候補がある場合のみ位置・ロック状態を更新
+    if ((xCand || yCand) && pPlayer_ && pViewProjection_) {
+        const Vector3 worldPos  = pPlayer_->GetWorldPosition() + worldOffset_;
+        const Vector2 screenPos = ScreenTransform(worldPos, *pViewProjection_);
+
+        if (xCand) {
+            xButtonUI_->SetCurrentPosition(screenPos + xLocalOffset_);
+            // HintUI では開放演出不要のため毎フレーム SnapUnlocked で同期
+            xButtonUI_->SnapUnlocked(xCand->attackData->GetAttackParam().isUnlocked);
+            xButtonUI_->SetLockUIScale(lockScale_);
+        }
+
+        if (yCand) {
+            yButtonUI_->SetCurrentPosition(screenPos + yLocalOffset_);
+            yButtonUI_->SnapUnlocked(yCand->attackData->GetAttackParam().isUnlocked);
+            yButtonUI_->SetLockUIScale(lockScale_);
+        }
     }
 
-    // ワールド座標 → スクリーン座標変換
-    const Vector3 worldPos  = pPlayer_->GetWorldPosition() + worldOffset_;
-    const Vector2 screenPos = ScreenTransform(worldPos, *pViewProjection_);
+    // ScaleIn/ScaleOut イージングはトランジション時のみ発火（SetRangeVisible が管理）
+    xButtonUI_->SetRangeVisible(xCand != nullptr);
+    yButtonUI_->SetRangeVisible(yCand != nullptr);
 
-   /* const bool both = hasX && hasY;*/
-
-    if (hasX && xSprite_) {
-        ApplySprite(xSprite_.get(), screenPos + xLocalOffset_, prevXVisible_);
-    }
-
-    if (hasY && ySprite_) {
-        ApplySprite(ySprite_.get(), screenPos + yLocalOffset_, prevYVisible_);
-    }
-
-    prevXVisible_ = hasX;
-    prevYVisible_ = hasY;
-}
-
-void NextAttackHintUI::ApplySprite(KetaEngine::Sprite* sprite, const Vector2& pos, bool& prevVisible) {
-    sprite->transform_.pos   = pos;
-    sprite->transform_.scale = spriteScale_;
-    sprite->SetAlpha(alpha_);
-    sprite->SetIsDraw(true);
-
-    if (!prevVisible) {
-        sprite->PlaySpriteEaseAnimation(spawnAnimName_, spawnAnimCategory_);
-    }
+    xButtonUI_->Update();
+    yButtonUI_->Update();
 }
 
 void NextAttackHintUI::RegisterParams() {
@@ -113,7 +86,7 @@ void NextAttackHintUI::RegisterParams() {
     globalParameter_->Regist(groupName_, "spriteScale",  &spriteScale_);
     globalParameter_->Regist(groupName_, "xLocalOffset", &xLocalOffset_);
     globalParameter_->Regist(groupName_, "yLocalOffset", &yLocalOffset_);
-    globalParameter_->Regist(groupName_, "alpha",        &alpha_);
+    globalParameter_->Regist(groupName_, "lockScale",    &lockScale_);
 }
 
 void NextAttackHintUI::AdjustParam() {
@@ -121,11 +94,17 @@ void NextAttackHintUI::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::DragFloat3("ワールドオフセット",        &worldOffset_.x,  0.05f);
-        ImGui::DragFloat2("スプライトスケール",           &spriteScale_.x,  0.01f);
-        ImGui::DragFloat2("X ローカルオフセット",       &xLocalOffset_.x, 1.0f);
-        ImGui::DragFloat2("Y ローカルオフセット",       &yLocalOffset_.x, 1.0f);
-        ImGui::SliderFloat("不透明度",                 &alpha_,          0.0f, 1.0f);
+        ImGui::DragFloat3("ワールドオフセット",  &worldOffset_.x,  0.05f);
+
+        bool scaleChanged = ImGui::DragFloat2("スプライトスケール", &spriteScale_.x, 1.0f, 1.0f, 512.0f);
+        if (scaleChanged) {
+            xButtonUI_->SetScale(spriteScale_);
+            yButtonUI_->SetScale(spriteScale_);
+        }
+
+        ImGui::DragFloat2("X ローカルオフセット", &xLocalOffset_.x, 1.0f);
+        ImGui::DragFloat2("Y ローカルオフセット", &yLocalOffset_.x, 1.0f);
+        ImGui::DragFloat2("ロック UI スケール",   &lockScale_.x,    1.0f, 1.0f, 512.0f);
 
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
