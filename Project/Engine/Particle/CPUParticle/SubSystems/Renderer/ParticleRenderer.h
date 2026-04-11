@@ -24,8 +24,7 @@ public:
 
 private:
     void AlphaAdapt(ParticleFprGPU& data,
-                    const ParticleManager::Particle& parm,
-                    const ParticleManager::ParticleGroup& group);
+                    const ParticleManager::Particle& parm);
 
     uint32_t BuildInstancingData(
         ParticleManager::ParticleGroup& group,

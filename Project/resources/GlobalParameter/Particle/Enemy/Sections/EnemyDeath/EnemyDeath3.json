@@ -3,6 +3,12 @@
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
+        "AlphaEaseParam.backRatio": 0.0,
+        "AlphaEaseParam.easeTypeInt": 0,
+        "AlphaEaseParam.endValue.max": 0.0,
+        "AlphaEaseParam.endValue.min": 0.0,
+        "AlphaEaseParam.isEase": false,
+        "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
             0.8088235259056091,
             0.45432186126708984,
@@ -21,6 +27,20 @@
             0.0,
             0.0
         ],
+        "ColorEaseParam.backRatio": 0.0,
+        "ColorEaseParam.easeTypeInt": 0,
+        "ColorEaseParam.endValue.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ColorEaseParam.endValue.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ColorEaseParam.isEase": false,
+        "ColorEaseParam.maxTime": 1.0,
         "Direction Max": [
             1.0,
             1.0,
@@ -149,8 +169,12 @@
         "UV isScrollEachPixel": false,
         "UseRail": false,
         "afterDuration": 0.0,
+        "alphaMode": 1,
         "blendMode": 1,
         "dissolveName": "",
+        "distortionStrength": 0.05000000074505806,
+        "distortionTexturePath": "",
+        "emissiveIntensity": 1.0,
         "emitPositionMode": 2,
         "isAlphaNoMove": false,
         "isBillboard": true,
@@ -186,6 +210,7 @@
         ],
         "selectedTexturePath": "Resources/texture/circle.dds",
         "timeMode": 1,
+        "useDistortion": false,
         "useModel": false
     }
 }

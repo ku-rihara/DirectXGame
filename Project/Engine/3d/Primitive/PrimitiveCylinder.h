@@ -33,6 +33,9 @@ public:
         std::optional<uint32_t> textureHandle = std::nullopt) override;
 
 private:
+ 
+    const int kVerticesPerFace = 6;  
+    const float kFullRotationCoeff  = 2.0f * kVerticesPerFace;
 };
 
 }; // KetaEngine

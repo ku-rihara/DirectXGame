@@ -86,7 +86,9 @@ void BaseEffectEditor<TEffectData>::RenderCategoryUI() {
     ImGui::Separator();
 
     // カテゴリーリスト表示
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.75f, 0.2f, 1.0f));
     ImGui::Text("Categories (%d):", static_cast<int>(categories_.size()));
+    ImGui::PopStyleColor();
     for (int i = 0; i < static_cast<int>(categories_.size()); i++) {
         ImGui::PushID(i);
 
@@ -133,7 +135,9 @@ void BaseEffectEditor<TEffectData>::RenderCategoryEffectListUI() {
     ImGui::Separator();
 
     // エフェクトリスト表示
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.75f, 0.2f, 1.0f));
     ImGui::Text("Effects (%d):", static_cast<int>(selectedCategory.effects.size()));
+    ImGui::PopStyleColor();
     for (int j = 0; j < static_cast<int>(selectedCategory.effects.size()); j++) {
         ImGui::PushID(j);
 

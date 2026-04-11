@@ -6,7 +6,7 @@ using namespace KetaEngine;
 #include <vector>
 
 void PrimitiveCylinder::Init() {
-    vertexNum_ = 32*6;
+    vertexNum_ = 32 * kVerticesPerFace;
     IPrimitive::Init();
 }
 
@@ -14,9 +14,9 @@ void PrimitiveCylinder::Create() {
     const float kTopRadius      = 1.0f;
     const float kBottomRadius   = 1.0f;
     const float kHeight         = 3.0f;
-    const float radianPerDivide = (12.0f * std::numbers::pi_v<float>) / float(vertexNum_);
+    const float radianPerDivide = (kFullRotationCoeff * std::numbers::pi_v<float>) / float(vertexNum_);
 
-    for (uint32_t index = 0; index < vertexNum_/6; ++index) {
+    for (uint32_t index = 0; index < vertexNum_ / kVerticesPerFace; ++index) {
         float sin     = std::sin(index * radianPerDivide);
         float cos     = std::cos(index * radianPerDivide);
         float sinNext = std::sin((index + 1) * radianPerDivide);
@@ -25,7 +25,7 @@ void PrimitiveCylinder::Create() {
         float uNext   = float(index + 1) / float(vertexNum_);
 
         // 各面は2つの三角形 → 6頂点
-        uint32_t baseIndex = index * 6;
+        uint32_t baseIndex = index * kVerticesPerFace;
 
         mesh_->SetVertexPositionData(baseIndex + 0, Vector4(-sin * kTopRadius, kHeight, cos * kTopRadius, 1.0f));
         mesh_->SetVertexTexcoordData(baseIndex + 0, Vector2(u, 0.0f));

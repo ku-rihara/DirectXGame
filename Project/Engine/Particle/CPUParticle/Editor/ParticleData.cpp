@@ -217,23 +217,30 @@ void ParticleData::AdjustParam() {
         bool isSelected = (selectedKeyFrameIndex_ == i);
 
         std::string labelText = "Section " + std::to_string(i);
+        bool isPlaying        = false;
 
-        // セクションの状態を表示
         if (i < static_cast<int>(sectionElements_.size()) && sectionElements_[i]) {
             if (sectionElements_[i]->IsPlaying()) {
                 labelText += " [PLAYING]";
-                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));
+                isPlaying = true;
             }
+        }
+
+        if (isPlaying) {
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));
         }
 
         if (ImGui::Selectable(labelText.c_str(), isSelected)) {
             SetSelectedKeyFrameIndex(i);
         }
 
-        if (i < static_cast<int>(sectionElements_.size()) && sectionElements_[i]) {
-            if (sectionElements_[i]->IsPlaying()) {
-                ImGui::PopStyleColor();
-            }
+        // Selectable描画後に枠線を追加
+        ImVec2 rMin = ImGui::GetItemRectMin();
+        ImVec2 rMax = ImGui::GetItemRectMax();
+        ImGui::GetWindowDrawList()->AddRect(rMin, rMax, IM_COL32(100, 180, 255, 200), 3.0f);
+
+        if (isPlaying) {
+            ImGui::PopStyleColor();
         }
 
         ImGui::PopID();

@@ -11,9 +11,9 @@ void BaseEffectData::Play() {
 void BaseEffectData::DrawPlayButton() {
 #ifdef _DEBUG
     // 再生ボタン共通カラー
-    static constexpr ImVec4 kPlay        = {0.08f, 0.72f, 0.18f, 1.0f};
-    static constexpr ImVec4 kPlayHovered = {0.18f, 0.90f, 0.30f, 1.0f};
-    static constexpr ImVec4 kPlayActive  = {0.04f, 0.55f, 0.10f, 1.0f};
+    const ImVec4 kPlay        = {0.08f, 0.72f, 0.18f, 1.0f};
+    const ImVec4 kPlayHovered = {0.18f, 0.90f, 0.30f, 1.0f};
+    const ImVec4 kPlayActive  = {0.04f, 0.55f, 0.10f, 1.0f};
 
     ImGui::PushStyleColor(ImGuiCol_Button,        kPlay);
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, kPlayHovered);

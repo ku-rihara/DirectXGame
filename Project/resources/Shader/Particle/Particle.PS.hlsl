@@ -9,6 +9,8 @@ struct Material
 {
     float4 color;
     int enableLighting;
+    float emissiveIntensity;
+    float2 padding;
     float4x4 uvTransform;
     float shininess;
     float environmentCoefficient;
@@ -34,6 +36,7 @@ PixelShaderOutput main(VertexShaderOutput input)
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
 
     output.color = gMaterial.color * textureColor * input.color;
+    output.color.rgb *= gMaterial.emissiveIntensity;
 
     if (output.color.a == 0.0)
     {

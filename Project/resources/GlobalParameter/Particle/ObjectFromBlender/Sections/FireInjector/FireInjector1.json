@@ -1,4 +1,4 @@
-﻿{
+{
     "FireInjector1": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
@@ -155,6 +155,28 @@
         ],
         "selectedTexturePath": "",
         "timeMode": 1,
-        "useModel": false
+        "useModel": false,
+        "alphaMode": 1,
+        "AlphaEaseParam.isEase": false,
+        "AlphaEaseParam.maxTime": 1.0,
+        "AlphaEaseParam.easeTypeInt": 0,
+        "AlphaEaseParam.backRatio": 0.0,
+        "AlphaEaseParam.endValue.max": 0.0,
+        "AlphaEaseParam.endValue.min": 0.0,
+        "ColorEaseParam.isEase": false,
+        "ColorEaseParam.maxTime": 1.0,
+        "ColorEaseParam.easeTypeInt": 0,
+        "ColorEaseParam.backRatio": 0.0,
+        "ColorEaseParam.endValue.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ColorEaseParam.endValue.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "emissiveIntensity": 1.0
     }
 }

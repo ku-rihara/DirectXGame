@@ -58,6 +58,19 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "BaseColor", &parameters_.baseColor);
     globalParam->Regist(groupName, "Color Max", &parameters_.colorDist.max);
     globalParam->Regist(groupName, "Color Min", &parameters_.colorDist.min);
+    globalParam->Regist(groupName, "ColorEaseParam.isEase",      &parameters_.colorEaseParam.baseParam.isEase);
+    globalParam->Regist(groupName, "ColorEaseParam.maxTime",     &parameters_.colorEaseParam.baseParam.maxTime);
+    globalParam->Regist(groupName, "ColorEaseParam.easeTypeInt", &parameters_.colorEaseParam.baseParam.easeTypeInt);
+    globalParam->Regist(groupName, "ColorEaseParam.backRatio",   &parameters_.colorEaseParam.baseParam.backRatio);
+    globalParam->Regist(groupName, "ColorEaseParam.endValue.max", &parameters_.colorEaseParam.endValue.max);
+    globalParam->Regist(groupName, "ColorEaseParam.endValue.min", &parameters_.colorEaseParam.endValue.min);
+    globalParam->Regist(groupName, "alphaMode",                   &alphaModeInt_);
+    globalParam->Regist(groupName, "AlphaEaseParam.isEase",       &parameters_.alphaEaseParam.baseParam.isEase);
+    globalParam->Regist(groupName, "AlphaEaseParam.maxTime",      &parameters_.alphaEaseParam.baseParam.maxTime);
+    globalParam->Regist(groupName, "AlphaEaseParam.easeTypeInt",  &parameters_.alphaEaseParam.baseParam.easeTypeInt);
+    globalParam->Regist(groupName, "AlphaEaseParam.backRatio",    &parameters_.alphaEaseParam.baseParam.backRatio);
+    globalParam->Regist(groupName, "AlphaEaseParam.endValue.max", &parameters_.alphaEaseParam.endValue.max);
+    globalParam->Regist(groupName, "AlphaEaseParam.endValue.min", &parameters_.alphaEaseParam.endValue.min);
 
     // その他
     globalParam->Regist(groupName, "IntervalTime", &intervalTime_);
@@ -113,6 +126,9 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     // Distortion
     globalParam->Regist(groupName, "useDistortion", &groupParameters_.useDistortion);
     globalParam->Regist(groupName, "distortionStrength", &groupParameters_.distortionStrength);
+
+    // Emissive
+    globalParam->Regist(groupName, "emissiveIntensity", &groupParameters_.emissiveIntensity);
     globalParam->Regist(groupName, "distortionTexturePath", &distortionTexturePath_);
 
     // Dissolve
@@ -183,6 +199,20 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.baseColor     = globalParam->GetValue<Vector4>(groupName, "BaseColor");
     parameters_.colorDist.max = globalParam->GetValue<Vector4>(groupName, "Color Max");
     parameters_.colorDist.min = globalParam->GetValue<Vector4>(groupName, "Color Min");
+    parameters_.colorEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName,    "ColorEaseParam.isEase");
+    parameters_.colorEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName,   "ColorEaseParam.maxTime");
+    parameters_.colorEaseParam.baseParam.easeTypeInt = globalParam->GetValue<int32_t>(groupName, "ColorEaseParam.easeTypeInt");
+    parameters_.colorEaseParam.baseParam.backRatio   = globalParam->GetValue<float>(groupName,   "ColorEaseParam.backRatio");
+    parameters_.colorEaseParam.endValue.max          = globalParam->GetValue<Vector3>(groupName, "ColorEaseParam.endValue.max");
+    parameters_.colorEaseParam.endValue.min          = globalParam->GetValue<Vector3>(groupName, "ColorEaseParam.endValue.min");
+    alphaModeInt_                                     = globalParam->GetValue<int32_t>(groupName, "alphaMode");
+    parameters_.alphaMode                            = static_cast<ParticleCommon::AlphaMode>(alphaModeInt_);
+    parameters_.alphaEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName,    "AlphaEaseParam.isEase");
+    parameters_.alphaEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName,   "AlphaEaseParam.maxTime");
+    parameters_.alphaEaseParam.baseParam.easeTypeInt = globalParam->GetValue<int32_t>(groupName, "AlphaEaseParam.easeTypeInt");
+    parameters_.alphaEaseParam.baseParam.backRatio   = globalParam->GetValue<float>(groupName,   "AlphaEaseParam.backRatio");
+    parameters_.alphaEaseParam.endValue.max          = globalParam->GetValue<float>(groupName,   "AlphaEaseParam.endValue.max");
+    parameters_.alphaEaseParam.endValue.min          = globalParam->GetValue<float>(groupName,   "AlphaEaseParam.endValue.min");
 
     // その他
     intervalTime_                = globalParam->GetValue<float>(groupName, "IntervalTime");
@@ -237,6 +267,9 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     // Distortion
     groupParameters_.useDistortion       = globalParam->GetValue<bool>(groupName, "useDistortion");
     groupParameters_.distortionStrength  = globalParam->GetValue<float>(groupName, "distortionStrength");
+
+    // Emissive
+    groupParameters_.emissiveIntensity = globalParam->GetValue<float>(groupName, "emissiveIntensity");
     distortionTexturePath_               = globalParam->GetValue<std::string>(groupName, "distortionTexturePath");
 
     // Dissolve
@@ -342,6 +375,39 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::SeparatorText("カラー範囲:");
         ImGui::ColorEdit4("最大", &parameters_.colorDist.max.x);
         ImGui::ColorEdit4("最小", &parameters_.colorDist.min.x);
+
+        // アルファモード
+        ImGui::Separator();
+        ImGui::SeparatorText("アルファ:");
+        const char* alphaModeItems[] = {"None（消えない）", "LifeTime（時間経過）", "Easing（イージング）"};
+        if (ImGui::Combo("アルファモード", &alphaModeInt_, alphaModeItems, IM_ARRAYSIZE(alphaModeItems))) {
+            parameters_.alphaMode = static_cast<ParticleCommon::AlphaMode>(alphaModeInt_);
+        }
+
+        if (parameters_.alphaMode == ParticleCommon::AlphaMode::Easing) {
+            auto& easeParam = parameters_.alphaEaseParam;
+            ImGui::DragFloat("最大時間##Alpha",       &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
+            ImGuiEasingTypeSelector("イージングタイプ##Alpha", easeParam.baseParam.easeTypeInt);
+            ImGui::DragFloat("終了アルファ 最大",     &easeParam.endValue.max, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("終了アルファ 最小",     &easeParam.endValue.min, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("戻り割合##Alpha",       &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
+        }
+
+        ImGui::Separator();
+        ImGui::Checkbox("カラーイージング使用", &parameters_.colorEaseParam.baseParam.isEase);
+
+        if (parameters_.colorEaseParam.baseParam.isEase) {
+            auto& easeParam = parameters_.colorEaseParam;
+
+            ImGui::DragFloat("最大時間##Color", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
+            ImGuiEasingTypeSelector("イージングタイプ##Color", easeParam.baseParam.easeTypeInt);
+
+            ImGui::SeparatorText("終了カラー範囲（RGB）:");
+            ImGui::ColorEdit3("終了カラー 最大", &easeParam.endValue.max.x);
+            ImGui::ColorEdit3("終了カラー 最小", &easeParam.endValue.min.x);
+
+            ImGui::DragFloat("戻り割合##Color", &easeParam.baseParam.backRatio, 0.01f, 0.0f, 5.0f);
+        }
     }
 
     // Position
@@ -449,6 +515,11 @@ void ParticleSectionParameter::AdjustParam() {
     }
 
     ImGuiTextureSelection();
+
+    // 自己発光設定
+    if (ImGui::CollapsingHeader("自己発光")) {
+        ImGui::DragFloat("発光強度", &groupParameters_.emissiveIntensity, 0.1f, 0.0f, 20.0f);
+    }
 
     // 歪みエフェクト設定
     if (ImGui::CollapsingHeader("時空歪み")) {

@@ -56,6 +56,11 @@ public:
         Vector3 endRotation;
     };
 
+    struct ColorInfo {
+        Vector3 startColor;
+        Vector3 endColor;
+    };
+
     struct UVInfo {
         Vector3 pos;
         Vector3 scale;
@@ -97,6 +102,14 @@ public:
         RotateInfo rotateInfo;
         bool isAdaptRotateEasing = false;
         std::unique_ptr<Easing<Vector3>> rotateEasing;
+
+        ColorInfo colorInfo;
+        bool isAdaptColorEasing = false;
+        std::unique_ptr<Easing<Vector3>> colorEasing;
+
+        ParticleCommon::AlphaMode alphaMode = ParticleCommon::AlphaMode::LifeTime;
+        bool isAdaptAlphaEasing = false;
+        std::unique_ptr<Easing<float>> alphaEasing;
 
         UVInfo uvInfo_;
 
@@ -164,7 +177,7 @@ public:
     void Emit(std::string name, const Parameters& parameters,
         const GroupParameters& groupParameters, int32_t count);
 
-    void AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group);
+    void AlphaAdapt(ParticleFprGPU& data, const Particle& parm);
 
 private:
     SrvManager* pSrvManager_;

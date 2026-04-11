@@ -57,6 +57,25 @@ struct EasingParamV3 {
     V3MinMax endValue;
 };
 
+// カラーイージングパラメータ（RGB のみ）
+struct ColorEaseParam {
+    EaseParam baseParam;
+    V3MinMax endValue;
+};
+
+// アルファモード
+enum class AlphaMode {
+    None,     // 消えない（常に1.0）
+    LifeTime, // 時間経過で消える（デフォルト）
+    Easing,   // イージングで消える
+};
+
+// アルファイージングパラメータ
+struct AlphaEaseParam {
+    EaseParam baseParam;
+    FMinMax endValue; // 終了アルファ範囲
+};
+
 // パーティクルパラメータ
 struct Parameters {
     const WorldTransform* parentTransform = nullptr;
@@ -82,6 +101,9 @@ struct Parameters {
     ScaleEaseParam scaleEaseParam;
     EasingParamV3 translateEaseParam;
     EasingParamV3 rotateEaseParam;
+    ColorEaseParam colorEaseParam;
+    AlphaMode alphaMode = AlphaMode::LifeTime;
+    AlphaEaseParam alphaEaseParam;
     UVParam uvParam;
     JointParent jointParent;
 };
@@ -99,6 +121,9 @@ struct GroupParameters {
     // 歪みエフェクト
     bool useDistortion        = false;
     float distortionStrength  = 0.05f;
+
+    // 自己発光
+    float emissiveIntensity = 1.0f;
 };
 
 } // namespace ParticleCommon

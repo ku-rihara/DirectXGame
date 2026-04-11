@@ -231,6 +231,57 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
     particle.color_ = parameters.baseColor + randomColor;
 
     ///------------------------------------------------------------------------
+    ///  カラーイージング設定（RGB のみ）
+    ///------------------------------------------------------------------------
+    if (parameters.colorEaseParam.baseParam.isEase) {
+        particle.colorEasing        = std::make_unique<Easing<Vector3>>();
+        particle.isAdaptColorEasing = true;
+
+        Vector3 endColor = {
+            Random::Range(parameters.colorEaseParam.endValue.min.x, parameters.colorEaseParam.endValue.max.x),
+            Random::Range(parameters.colorEaseParam.endValue.min.y, parameters.colorEaseParam.endValue.max.y),
+            Random::Range(parameters.colorEaseParam.endValue.min.z, parameters.colorEaseParam.endValue.max.z)};
+
+        particle.colorInfo.startColor = {particle.color_.x, particle.color_.y, particle.color_.z};
+        particle.colorInfo.endColor   = endColor;
+
+        EasingParameter<Vector3> easingParam;
+        easingParam.type       = static_cast<EasingType>(parameters.colorEaseParam.baseParam.easeTypeInt);
+        easingParam.startValue = particle.colorInfo.startColor;
+        easingParam.endValue   = particle.colorInfo.endColor;
+        easingParam.maxTime    = parameters.colorEaseParam.baseParam.maxTime;
+        easingParam.backRatio  = parameters.colorEaseParam.baseParam.backRatio;
+        easingParam.finishType = (easingParam.backRatio == 0.0f) ? EasingFinishValueType::End : EasingFinishValueType::Start;
+
+        particle.colorEasing->SettingValue(easingParam);
+        // color_.xyz に直接書き込む
+        particle.colorEasing->SetAdaptValue(reinterpret_cast<Vector3*>(&particle.color_));
+    }
+
+    ///------------------------------------------------------------------------
+    ///  アルファモード・イージング設定
+    ///------------------------------------------------------------------------
+    particle.alphaMode = parameters.alphaMode;
+
+    if (parameters.alphaMode == ParticleCommon::AlphaMode::Easing) {
+        particle.alphaEasing        = std::make_unique<Easing<float>>();
+        particle.isAdaptAlphaEasing = true;
+
+        float endAlpha = Random::Range(parameters.alphaEaseParam.endValue.min, parameters.alphaEaseParam.endValue.max);
+
+        EasingParameter<float> easingParam;
+        easingParam.type       = static_cast<EasingType>(parameters.alphaEaseParam.baseParam.easeTypeInt);
+        easingParam.startValue = particle.color_.w;
+        easingParam.endValue   = endAlpha;
+        easingParam.maxTime    = parameters.alphaEaseParam.baseParam.maxTime;
+        easingParam.backRatio  = parameters.alphaEaseParam.baseParam.backRatio;
+        easingParam.finishType = EasingFinishValueType::End;
+
+        particle.alphaEasing->SettingValue(easingParam);
+        particle.alphaEasing->SetAdaptValue(&particle.color_.w);
+    }
+
+    ///------------------------------------------------------------------------
     /// UVTransform設定
     ///------------------------------------------------------------------------
     float frameWidth = 1.0f;

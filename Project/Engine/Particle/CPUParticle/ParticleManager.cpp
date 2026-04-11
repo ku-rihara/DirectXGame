@@ -236,13 +236,19 @@ void ParticleManager::ResetInstancingData(const std::string& name) {
 ///=================================================================================================
 /// param Adapt
 ///=================================================================================================
-void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group) {
+void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm) {
     data.color = parm.color_;
-    if (group.param.isAlphaNoMove) {
+    switch (parm.alphaMode) {
+    case ParticleCommon::AlphaMode::None:
         data.color.w = 1.0f;
-        return;
+        break;
+    case ParticleCommon::AlphaMode::Easing:
+        break;
+    case ParticleCommon::AlphaMode::LifeTime:
+    default:
+        data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
+        break;
     }
-    data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
 }
 
 void ParticleManager::SetViewProjection(const ViewProjection* view) {

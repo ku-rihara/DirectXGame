@@ -94,6 +94,7 @@ private:
     int32_t billboardTypeInt_    = 0;
     int32_t blendModeInt_        = 0;
     int32_t emitPositionModeInt_ = 0;
+    int32_t alphaModeInt_        = 1; // デフォルト: LifeTime
 
     // frags
     bool isShot_             = false;

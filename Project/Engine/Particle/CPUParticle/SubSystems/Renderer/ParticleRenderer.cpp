@@ -12,15 +12,21 @@ using namespace KetaEngine;
 
 void ParticleRenderer::AlphaAdapt(
     ParticleFprGPU& data,
-    const ParticleManager::Particle& parm,
-    const ParticleManager::ParticleGroup& group) {
+    const ParticleManager::Particle& parm) {
 
     data.color = parm.color_;
-    if (group.param.isAlphaNoMove) {
+    switch (parm.alphaMode) {
+    case ParticleCommon::AlphaMode::None:
         data.color.w = 1.0f;
-        return;
+        break;
+    case ParticleCommon::AlphaMode::Easing:
+        // color_.w はイージングが直接書き込み済み
+        break;
+    case ParticleCommon::AlphaMode::LifeTime:
+    default:
+        data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
+        break;
     }
-    data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
 }
 
 uint32_t ParticleRenderer::BuildInstancingData(
@@ -47,7 +53,7 @@ uint32_t ParticleRenderer::BuildInstancingData(
         instancingData[instanceIndex].WorldInverseTranspose = Inverse(Transpose(it->worldTransform_->matWorld_));
 
         /// Alpha適応
-        AlphaAdapt(instancingData[instanceIndex], *it, group);
+        AlphaAdapt(instancingData[instanceIndex], *it);
 
         ///==========================================================================================
         //  UVTransform
@@ -79,6 +85,9 @@ void ParticleRenderer::DrawGroup(
 
     PipelineManager::GetInstance()->PreDraw(PipelineType::Particle, commandList);
     PipelineManager::GetInstance()->PreBlendSet(PipelineType::Particle, commandList, group.param.blendMode);
+
+    // 自己発光強度をマテリアルに反映
+    group.material.GetMaterialData()->emissiveIntensity = group.param.emissiveIntensity;
 
     // マテリアルのリソースを設定
     group.material.SetCommandList(commandList);

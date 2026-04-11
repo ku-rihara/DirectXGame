@@ -183,7 +183,7 @@ const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureIndex) {
 
     // 指定されたインデックスのエントリを取得
     auto it = textureDates_.begin();
-    //std::advance(it, textureIndex);
+
     for (auto& texData : textureDates_) {
         if (texData.second.index == textureIndex) {
             it = textureDates_.find(texData.first);
@@ -201,7 +201,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) con
 
     // インデックスに対応するエントリを探す
     auto it = textureDates_.begin();
-    //std::advance(it, index);
+
     for(auto& texData : textureDates_){
         if(texData.second.index == index){
             it = textureDates_.find(texData.first);
