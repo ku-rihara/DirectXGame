@@ -131,8 +131,10 @@
     "modelFilePath": "",
     "preBillboardType": 0,
     "primitiveTypeInt": 0,
-    "scaleEaseParam.backRatio": 0.5400000214576721,
-    "scaleEaseParam.easeTypeInt": 32,
+    "scaleEaseParam.easeTypeInt": 22,
+    "scaleEaseParam.isReturnToOrigin": true,
+    "scaleEaseParam.returnEaseTypeInt": 21,
+    "scaleEaseParam.returnMaxTime": 0.18,
     "scaleEaseParam.endValueF.max": 9.0,
     "scaleEaseParam.endValueF.min": 9.0,
     "scaleEaseParam.endValueV3.max": [
@@ -146,7 +148,7 @@
       0.0
     ],
     "scaleEaseParam.isScaleEase": true,
-    "scaleEaseParam.maxTime": 0.38999998569488525,
+    "scaleEaseParam.maxTime": 0.21,
     "scaleEaseParam.startValueF": 1.0,
     "scaleEaseParam.startValueV3": [
       1.0,

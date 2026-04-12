@@ -156,8 +156,18 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         easingParam.type       = static_cast<EasingType>(parameters.scaleEaseParam.baseParam.easeTypeInt);
         easingParam.startValue = particle.scaleInfo.tempScaleV3;
         easingParam.endValue   = particle.scaleInfo.easeEndScale;
+
+        // isReturnToOrigin: maxTime=前進時間, returnMaxTime=後退時間, returnType=後退イージング種類
+        // EasingクラスのSettingValue内で合計時間に変換される
+        const float returnTime = parameters.scaleEaseParam.baseParam.returnMaxTime;
         easingParam.maxTime    = parameters.scaleEaseParam.baseParam.maxTime;
-        easingParam.backRatio  = parameters.scaleEaseParam.baseParam.backRatio;
+        if (parameters.scaleEaseParam.baseParam.isReturnToOrigin && returnTime > 0.0f) {
+            easingParam.returnMaxTime = returnTime;
+            easingParam.returnType    = static_cast<EasingType>(parameters.scaleEaseParam.baseParam.returnEaseTypeInt);
+        } else {
+            easingParam.returnMaxTime = 0.0f;
+        }
+        easingParam.backRatio = 0.0f;
 
         // Easingに設定
         particle.scaleEasing->SettingValue(easingParam);
@@ -189,12 +199,15 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         easingParam.startValue = particle.translateInfo.startPosition;
         easingParam.endValue   = particle.translateInfo.endPosition;
         easingParam.maxTime    = parameters.translateEaseParam.baseParam.maxTime;
-        easingParam.backRatio  = parameters.translateEaseParam.baseParam.backRatio;
+        easingParam.backRatio  = 0.0f;
 
-        if (easingParam.backRatio == 0.0f) {
-            easingParam.finishType = EasingFinishValueType::End;
+        const float translateReturnTime = parameters.translateEaseParam.baseParam.returnMaxTime;
+        if (parameters.translateEaseParam.baseParam.isReturnToOrigin && translateReturnTime > 0.0f) {
+            easingParam.returnMaxTime = translateReturnTime;
+            easingParam.returnType    = static_cast<EasingType>(parameters.translateEaseParam.baseParam.returnEaseTypeInt);
         } else {
-            easingParam.finishType = EasingFinishValueType::Start;
+            easingParam.returnMaxTime = 0.0f;
+            easingParam.finishType    = EasingFinishValueType::End;
         }
 
         // Easingに設定
@@ -230,13 +243,8 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         easingParam.startValue = particle.rotateInfo.startRotation;
         easingParam.endValue   = particle.rotateInfo.endRotation;
         easingParam.maxTime    = parameters.rotateEaseParam.baseParam.maxTime;
-        easingParam.backRatio  = parameters.rotateEaseParam.baseParam.backRatio;
-
-        if (easingParam.backRatio == 0.0f) {
-            easingParam.finishType = EasingFinishValueType::End;
-        } else {
-            easingParam.finishType = EasingFinishValueType::Start;
-        }
+        easingParam.backRatio  = 0.0f;
+        easingParam.finishType = EasingFinishValueType::End;
 
         // Easingに設定
         particle.rotateEasing->SettingValue(easingParam);
@@ -275,8 +283,8 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         easingParam.startValue = particle.colorInfo.startColor;
         easingParam.endValue   = particle.colorInfo.endColor;
         easingParam.maxTime    = parameters.colorEaseParam.baseParam.maxTime;
-        easingParam.backRatio  = parameters.colorEaseParam.baseParam.backRatio;
-        easingParam.finishType = (easingParam.backRatio == 0.0f) ? EasingFinishValueType::End : EasingFinishValueType::Start;
+        easingParam.backRatio  = 0.0f;
+        easingParam.finishType = EasingFinishValueType::End;
 
         particle.colorEasing->SettingValue(easingParam);
         // color_.xyz に直接書き込む
@@ -299,7 +307,7 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         easingParam.startValue = particle.color_.w;
         easingParam.endValue   = endAlpha;
         easingParam.maxTime    = parameters.alphaEaseParam.baseParam.maxTime;
-        easingParam.backRatio  = parameters.alphaEaseParam.baseParam.backRatio;
+        easingParam.backRatio  = 0.0f;
         easingParam.finishType = EasingFinishValueType::End;
 
         particle.alphaEasing->SettingValue(easingParam);

@@ -106,6 +106,10 @@ private:
     float period_    = 0.0f;
     float backRatio_ = 0.0f;
 
+    EasingType returnType_  = EasingType::InSine; // 戻りフェーズのイージング種類
+    float returnMaxTime_    = 0.0f;               // 戻りフェーズの時間（0=戻りなし）
+    float forwardMaxTime_   = 0.0f;               // 前進フェーズの時間（returnMaxTime_>0 のとき使用）
+
     bool isFinished_ = false;
     bool isPlaying_  = false;
 

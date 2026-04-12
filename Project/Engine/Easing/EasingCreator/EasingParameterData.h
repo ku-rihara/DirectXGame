@@ -135,7 +135,9 @@ struct EasingParameter {
     T startValue;
     T endValue;
 
-    float maxTime   = 0.0f;
+    float maxTime        = 0.0f;
+    float returnMaxTime  = 0.0f;             // 戻りフェーズの時間（0=戻りなし）
+    EasingType returnType = EasingType::InSine; // 戻りフェーズのイージング種類
     float amplitude = 0.0f;
     float period    = 0.0f;
     float backRatio = 0.0f;

@@ -38,10 +38,12 @@ struct JointParent {
 };
 
 struct EaseParam {
-    float maxTime       = 1.0f;
-    bool isEase        = false;
-    int32_t easeTypeInt = 0;
-    float backRatio     = 0.0f;
+    float maxTime              = 1.0f;
+    bool isEase                = false;
+    int32_t easeTypeInt        = 0;     // 前進フェーズのイージング種類
+    float returnMaxTime        = 0.0f;  // 戻りフェーズの時間（0=戻りなし）
+    int32_t returnEaseTypeInt  = 0;     // 戻りフェーズのイージング種類
+    bool isReturnToOrigin      = false; // true のとき前進後に起点へ戻るイージングを行う
 };
 
 // スケールイージングパラメータ

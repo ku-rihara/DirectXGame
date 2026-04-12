@@ -41,23 +41,33 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     adaptVector2AxisType_ = easingParam.adaptVec2AxisType;
     finishValueType_      = easingParam.finishType;
 
-    maxTime_    = easingParam.maxTime;
     startValue_ = easingParam.startValue;
     endValue_   = easingParam.endValue;
     amplitude_  = easingParam.amplitude;
     period_     = easingParam.period;
     backRatio_  = easingParam.backRatio;
 
+    returnType_    = easingParam.returnType;
+    returnMaxTime_ = easingParam.returnMaxTime;
+
+    if (easingParam.returnMaxTime > 0.0f) {
+        // 前進＋後退の2フェーズ: maxTime_ は合計時間
+        forwardMaxTime_ = easingParam.maxTime;
+        maxTime_        = easingParam.maxTime + easingParam.returnMaxTime;
+        finishValueType_ = EasingFinishValueType::Start; // 終了時は起点に戻る
+    } else {
+        forwardMaxTime_ = easingParam.maxTime;
+        maxTime_        = easingParam.maxTime;
+        if (easingParam.backRatio == 0.0f) {
+            finishValueType_ = EasingFinishValueType::End;
+        } else {
+            finishValueType_ = EasingFinishValueType::Start;
+        }
+    }
+
     waitTimeMax_      = easingParam.waitTimeMax;
     finishTimeOffset_ = easingParam.finishOffsetTime;
-
-    startTimeOffset_ = easingParam.startTimeOffset;
-
-     if (easingParam.backRatio == 0.0f) {
-        finishValueType_ = EasingFinishValueType::End;
-    } else {
-         finishValueType_ = EasingFinishValueType::Start;
-    }
+    startTimeOffset_  = easingParam.startTimeOffset;
 }
 
 
@@ -280,6 +290,26 @@ void Easing<T>::CalculateValue() {
         return;
     }
 
+    // returnMaxTime_ > 0: 前進フェーズ(type_) + 後退フェーズ(returnType_)
+    // type_/currentTime_/maxTime_ を一時変更してスイッチを共有する
+    float savedTime = currentTime_;
+    float savedMax  = maxTime_;
+    EasingType savedType = type_;
+
+    if (returnMaxTime_ > 0.0f) {
+        if (savedTime <= forwardMaxTime_) {
+            // 前進フェーズ
+            currentTime_ = savedTime;
+            maxTime_     = forwardMaxTime_;
+        } else {
+            // 後退フェーズ: start/end 入れ替え、returnType_ で計算
+            std::swap(startValue, endValue);
+            currentTime_ = savedTime - forwardMaxTime_;
+            maxTime_     = returnMaxTime_;
+            type_        = returnType_;
+        }
+    }
+
     switch (type_) {
 
     case EasingType::InSine:
@@ -433,6 +463,13 @@ void Easing<T>::CalculateValue() {
     case EasingType::BackInOutCircZero:
         *currentOffset_ = Back::InOutCircZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
+    }
+
+    // 2フェーズ計算のために一時変更した値を復元
+    if (returnMaxTime_ > 0.0f) {
+        currentTime_ = savedTime;
+        maxTime_     = savedMax;
+        type_        = savedType;
     }
 }
 
