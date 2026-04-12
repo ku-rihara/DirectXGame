@@ -95,6 +95,7 @@ private:
     int32_t blendModeInt_        = 0;
     int32_t emitPositionModeInt_ = 0;
     int32_t alphaModeInt_        = 1; // デフォルト: LifeTime
+    int32_t emitShapeInt_        = 0; // EmitShape (0=None, 1=Sphere)
 
     // frags
     bool isShot_             = false;

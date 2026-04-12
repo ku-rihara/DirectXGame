@@ -235,11 +235,17 @@ PixelShaderOutput main(VertexShaderOutput input)
    // 影の計算、適用
     float3 posFromLightVP = input.tpos.xyz / input.tpos.w;
     float2 shadowUV = (posFromLightVP.xy + float2(1, -1)) * float2(0.5f, -0.5f);
-    
-    float depthFromLight = gShadowMap.SampleCmp(gShadowSampler, shadowUV, posFromLightVP.z - 0.005f);
-    
-    float shadowWeight = lerp(0.5f, 1.0f, depthFromLight);
-    
+
+    float shadowWeight = 1.0f;
+    // ライト視錐台内にある場合のみ影を適用（範囲外は影なし）
+    if (shadowUV.x >= 0.0f && shadowUV.x <= 1.0f &&
+        shadowUV.y >= 0.0f && shadowUV.y <= 1.0f &&
+        posFromLightVP.z >= 0.0f && posFromLightVP.z <= 1.0f)
+    {
+        float depthFromLight = gShadowMap.SampleCmp(gShadowSampler, shadowUV, posFromLightVP.z - 0.005f);
+        shadowWeight = lerp(0.5f, 1.0f, depthFromLight);
+    }
+
     output.color.rgb *= shadowWeight;
     
     return output;

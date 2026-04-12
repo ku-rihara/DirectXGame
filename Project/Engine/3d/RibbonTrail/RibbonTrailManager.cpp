@@ -95,10 +95,11 @@ void RibbonTrailManager::InitDistortion(DirectXCommon* dxCommon, uint32_t width,
 ///============================================================
 /// 時空歪みパス描画
 ///============================================================
-void RibbonTrailManager::DrawDistortionPass(const ViewProjection& viewProj) {
-    hasAnyDistortion_ = false;
+void RibbonTrailManager::DrawDistortionPass(const ViewProjection& viewProj, bool hasExternalDistortion) {
+    hasAnyDistortion_   = false;
+    distortionPassOpen_ = false;
 
-    if (!distortionInitialized_ || trails_.empty()) {
+    if (!distortionInitialized_) {
         return;
     }
 
@@ -110,9 +111,11 @@ void RibbonTrailManager::DrawDistortionPass(const ViewProjection& viewProj) {
         }
     }
 
-    if (!hasAnyDistortion_) {
+    // リボンもパーティクルも歪みなし → パスを開かない
+    if (!hasAnyDistortion_ && !hasExternalDistortion) {
         return;
     }
+    hasAnyDistortion_ = true; // ポストエフェクト適用のためtrueにする
 
     auto  dxCommon    = DirectXCommon::GetInstance();
     auto  commandList = dxCommon->GetCommandList();
@@ -120,17 +123,33 @@ void RibbonTrailManager::DrawDistortionPass(const ViewProjection& viewProj) {
 
     // 歪みRTに切り替え・クリア
     distortionRT_.BeginDistortionPass(commandList, dsvHandle);
+    distortionPassOpen_ = true;
 
-    // 歪みパイプラインをセット
-    PipelineManager::GetInstance()->PreDraw(PipelineType::RibbonTrailDistortion, commandList);
+    // 歪み有効なトレイルがあれば描画
+    if (!trails_.empty()) {
+        PipelineManager::GetInstance()->PreDraw(PipelineType::DistortionRibbon, commandList);
 
-    // 歪み有効なトレイルを描画
-    auto trailsCopy = trails_;
-    for (RibbonTrail* trail : trailsCopy) {
-        if (trail && trails_.find(trail) != trails_.end()) {
-            trail->DrawDistortion(viewProj);
+        auto trailsCopy = trails_;
+        for (RibbonTrail* trail : trailsCopy) {
+            if (trail && trails_.find(trail) != trails_.end()) {
+                trail->DrawDistortion(viewProj);
+            }
         }
     }
+    // RTは開いたまま（CloseDistortionPassで閉じる）
+}
+
+///============================================================
+/// 時空歪みパス終了
+///============================================================
+void RibbonTrailManager::CloseDistortionPass() {
+    if (!distortionPassOpen_) {
+        return;
+    }
+    distortionPassOpen_ = false;
+
+    auto  dxCommon    = DirectXCommon::GetInstance();
+    auto  commandList = dxCommon->GetCommandList();
 
     // 歪みRTをSRVとして遷移
     distortionRT_.EndDistortionPass(commandList);

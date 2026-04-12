@@ -23,11 +23,6 @@ struct RibbonCBuffer {
     Matrix4x4 viewProjection;
 };
 
-struct RibbonDistortionCBuffer {
-    float strength;
-    float pad[3]; // 16byte アライン
-};
-
 struct RibbonUVScrollCBuffer {
     Vector2 offset;
     float   pad[2]; // 16byte アライン
@@ -135,9 +130,6 @@ private:
     bool     useDistortion_       = false;
     float    distortionStrength_  = 0.1f;
     uint32_t distortionTextureHandle_ = UINT32_MAX;
-
-    Microsoft::WRL::ComPtr<ID3D12Resource> distortionConstantBufferResource_;
-    RibbonDistortionCBuffer*               distortionCBufferData_ = nullptr;
 
     // UVスクロール（メインテクスチャ）
     Vector2 uvScrollSpeed_  = Vector2::ZeroVector();

@@ -29,8 +29,8 @@ void RibbonTrailPlayer::Update(float speedRate) {
         effectData_->RefreshParams();
         SyncDataToTrail();
 
-        // followPosition_ が設定されていればAutoEmit
-        if (followPosition_) {
+        // Follow モードのみ自動追従でポイントを追加
+        if (followPosition_ && GetData()->GetFollowMode() == TrailFollowMode::Follow) {
             float dt = Frame::DeltaTime() * speedRate;
             emitTimer_ += dt;
             if (emitTimer_ >= GetEmitInterval()) {

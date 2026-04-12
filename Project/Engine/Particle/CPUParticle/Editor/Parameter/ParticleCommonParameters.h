@@ -76,6 +76,12 @@ struct AlphaEaseParam {
     FMinMax endValue; // 終了アルファ範囲
 };
 
+// エミット形状
+enum class EmitShape {
+    None,   ///< 通常（ベクトル指定）
+    Sphere, ///< 球面から全方向に放射
+};
+
 // パーティクルパラメータ
 struct Parameters {
     const WorldTransform* parentTransform = nullptr;
@@ -106,6 +112,9 @@ struct Parameters {
     AlphaEaseParam alphaEaseParam;
     UVParam uvParam;
     JointParent jointParent;
+    // Shape
+    EmitShape emitShape = EmitShape::None;
+    FMinMax sphereRadius; // Sphere 形状のときの半径範囲
 };
 
 // グループパラメータ

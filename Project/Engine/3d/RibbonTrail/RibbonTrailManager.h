@@ -40,8 +40,14 @@ public:
 
     /// <summary>
     /// 時空歪みパス描画（DrawAll後・PreDraw前に呼ぶ）
+    /// hasExternalDistortion: パーティクルなど外部の歪み描画がある場合true
     /// </summary>
-    void DrawDistortionPass(const ViewProjection& viewProj);
+    void DrawDistortionPass(const ViewProjection& viewProj, bool hasExternalDistortion = false);
+
+    /// <summary>
+    /// 時空歪みパス終了（DrawDistortionPass後に外部描画がある場合に呼ぶ）
+    /// </summary>
+    void CloseDistortionPass();
 
     /// <summary>
     /// 時空歪みポストエフェクト適用（DrawPostEffect内で呼ぶ）
@@ -59,6 +65,7 @@ private:
     Distortion             distortionEffect_;
     bool distortionInitialized_ = false;
     bool hasAnyDistortion_      = false;
+    bool distortionPassOpen_    = false;
 };
 
 } // namespace KetaEngine

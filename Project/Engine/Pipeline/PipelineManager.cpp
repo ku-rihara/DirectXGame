@@ -5,8 +5,7 @@ using namespace KetaEngine;
 // Pipeline includes
 #include "Pipeline/Line3D/Line3DPipeline.h"
 #include "Pipeline/RibbonTrail/RibbonTrailPipeline.h"
-#include "Pipeline/RibbonTrail/RibbonTrailDistortionPipeline.h"
-#include "Pipeline/Particle/ParticleDistortionPipeline.h"
+#include "Pipeline/Distortion/DistortionPipeline.h"
 #include "Pipeline/Object3D/Object3DPipeline.h"
 #include "Pipeline/Particle/GPUParticlePipeline.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
@@ -37,9 +36,9 @@ void PipelineManager::Init(DirectXCommon* dxCommon) {
     pipelines_[static_cast<size_t>(PipelineType::ShadowMap)]        = std::make_unique<ShadowMapPipeline>();
     pipelines_[static_cast<size_t>(PipelineType::Line3D)]           = std::make_unique<Line3DPipeline>();
     pipelines_[static_cast<size_t>(PipelineType::SkyBox)]           = std::make_unique<SkyBoxPipeline>();
-    pipelines_[static_cast<size_t>(PipelineType::RibbonTrail)]            = std::make_unique<RibbonTrailPipeline>();
-    pipelines_[static_cast<size_t>(PipelineType::RibbonTrailDistortion)] = std::make_unique<RibbonTrailDistortionPipeline>();
-    pipelines_[static_cast<size_t>(PipelineType::ParticleDistortion)]    = std::make_unique<ParticleDistortionPipeline>();
+    pipelines_[static_cast<size_t>(PipelineType::RibbonTrail)]        = std::make_unique<RibbonTrailPipeline>();
+    pipelines_[static_cast<size_t>(PipelineType::DistortionRibbon)]   = std::make_unique<DistortionPipeline>(DistortionMode::Ribbon);
+    pipelines_[static_cast<size_t>(PipelineType::DistortionParticle)] = std::make_unique<DistortionPipeline>(DistortionMode::Particle);
 
     // 全パイプラインを作成・初期化
     for (size_t i = 0; i < static_cast<size_t>(PipelineType::Count); ++i) {

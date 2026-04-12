@@ -153,6 +153,11 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     // Parent Setting Flags
     globalParam->Regist(groupName, "emitPositionMode", &emitPositionModeInt_);
 
+    // Shape
+    globalParam->Regist(groupName, "emitShape",          &emitShapeInt_);
+    globalParam->Regist(groupName, "sphereRadius.min",   &parameters_.sphereRadius.min);
+    globalParam->Regist(groupName, "sphereRadius.max",   &parameters_.sphereRadius.max);
+
     AdaptIntToType();
 }
 
@@ -294,6 +299,12 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     // Parent Setting Flags
     emitPositionModeInt_ = globalParam->GetValue<int32_t>(groupName, "emitPositionMode");
 
+    // Shape
+    emitShapeInt_                 = globalParam->GetValue<int32_t>(groupName, "emitShape");
+    parameters_.emitShape         = static_cast<ParticleCommon::EmitShape>(emitShapeInt_);
+    parameters_.sphereRadius.min  = globalParam->GetValue<float>(groupName, "sphereRadius.min");
+    parameters_.sphereRadius.max  = globalParam->GetValue<float>(groupName, "sphereRadius.max");
+
     // Apply loaded values
     groupParameters_.blendMode     = static_cast<BlendMode>(blendModeInt_);
     groupParameters_.billboardType = static_cast<BillboardType>(billboardTypeInt_);
@@ -410,14 +421,31 @@ void ParticleSectionParameter::AdjustParam() {
         }
     }
 
+    // Shape
+    if (ImGui::CollapsingHeader("形状 (Shape)")) {
+        const char* shapeItems[] = {"None（ベクトル）", "Sphere（球面放射）"};
+        if (ImGui::Combo("エミット形状", &emitShapeInt_, shapeItems, IM_ARRAYSIZE(shapeItems))) {
+            parameters_.emitShape = static_cast<ParticleCommon::EmitShape>(emitShapeInt_);
+        }
+
+        if (parameters_.emitShape == ParticleCommon::EmitShape::Sphere) {
+            ImGui::SeparatorText("Sphere 設定");
+            ImGui::DragFloat("半径 最小", &parameters_.sphereRadius.min, 0.01f, 0.0f, 100.0f);
+            ImGui::DragFloat("半径 最大", &parameters_.sphereRadius.max, 0.01f, 0.0f, 100.0f);
+            ImGui::TextDisabled("※ 速度は「速度」セクションの スカラー速度 min/max を使用");
+        }
+    }
+
     // Position
     if (ImGui::CollapsingHeader("位置")) {
         ImGui::SeparatorText("位置ベース:");
         ImGui::DragFloat3("ベース", &parameters_.emitPos.x, 0.01f);
 
-        ImGui::SeparatorText("位置範囲:");
-        ImGui::DragFloat3("位置 最大", &parameters_.positionDist.max.x, 0.01f);
-        ImGui::DragFloat3("位置 最小", &parameters_.positionDist.min.x, 0.01f);
+        if (parameters_.emitShape == ParticleCommon::EmitShape::None) {
+            ImGui::SeparatorText("位置範囲:");
+            ImGui::DragFloat3("位置 最大", &parameters_.positionDist.max.x, 0.01f);
+            ImGui::DragFloat3("位置 最小", &parameters_.positionDist.min.x, 0.01f);
+        }
     }
 
     // Velocity
@@ -530,7 +558,13 @@ void ParticleSectionParameter::AdjustParam() {
 
             ImGui::Separator();
             ImGui::Text("歪みテクスチャ");
-            distortionTextureFileSelector_.SelectFilePath("##DistortionTexture", noiseFolderPath_, distortionTexturePath_, ".dds", true);
+            {
+                std::string prevDistortion = distortionTexturePath_;
+                distortionTextureFileSelector_.SelectFilePath("##DistortionTexture", noiseFolderPath_, distortionTexturePath_, ".dds", true);
+                if (distortionTexturePath_ != prevDistortion && onTextureChanged_) {
+                    onTextureChanged_();
+                }
+            }
             if (!distortionTexturePath_.empty()) {
                 ImGui::TextDisabled("Path: %s", distortionTexturePath_.c_str());
             }

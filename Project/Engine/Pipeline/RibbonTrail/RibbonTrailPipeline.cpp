@@ -91,8 +91,8 @@ void RibbonTrailPipeline::CreateGraphicsPipeline() {
     inputLayoutDesc.NumElements        = _countof(inputElementDescs);
 
     // シェーダーコンパイル
-    vertexShaderBlob_ = CompileShader(L"resources/Shader/RibbonTrail.VS.hlsl", L"vs_6_0");
-    pixelShaderBlob_  = CompileShader(L"resources/Shader/RibbonTrail.PS.hlsl", L"ps_6_0");
+    vertexShaderBlob_ = CompileShader(L"resources/Shader/RibbonTrail/RibbonTrail.VS.hlsl", L"vs_6_0");
+    pixelShaderBlob_  = CompileShader(L"resources/Shader/RibbonTrail/RibbonTrail.PS.hlsl", L"ps_6_0");
 
     // ブレンド（加算合成）
     D3D12_BLEND_DESC blendDesc{};

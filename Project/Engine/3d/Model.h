@@ -109,6 +109,7 @@ public:
     /// <param name="wvpResource">WVPリソース</param>
     /// <param name="shadowMap">シャドウマップ</param>
     void DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap);
+    void DrawForShadowMapSkinned(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, const D3D12_VERTEX_BUFFER_VIEW& skinnedVBV);
 
 private:
     TextureManager* textureManager_ = nullptr;

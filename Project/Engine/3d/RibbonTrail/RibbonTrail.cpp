@@ -5,7 +5,7 @@ using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/TextureManager.h"
 #include "Pipeline/RibbonTrail/RibbonTrailPipeline.h"
-#include "Pipeline/RibbonTrail/RibbonTrailDistortionPipeline.h"
+#include "Pipeline/Distortion/DistortionPipeline.h"
 #include <cassert>
 #include <cmath>
 #include <d3dx12.h>
@@ -64,11 +64,6 @@ void RibbonTrail::Init(size_t maxPoints) {
     constantBufferResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(RibbonCBuffer));
     constantBufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&cBufferData_));
     cBufferData_->viewProjection = MakeIdentity4x4();
-
-    // 歪み定数バッファ
-    distortionConstantBufferResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(RibbonDistortionCBuffer));
-    distortionConstantBufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&distortionCBufferData_));
-    distortionCBufferData_->strength = 0.1f;
 
     // UVスクロール定数バッファ（メイン）
     uvScrollCBufferResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(RibbonUVScrollCBuffer));
@@ -261,7 +256,7 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
 
 ///============================================================
 /// 時空歪みパス描画
-/// RibbonTrailDistortionPipeline がセット済みの状態で呼ぶ
+/// DistortionPipeline(Ribbon) がセット済みの状態で呼ぶ
 ///============================================================
 void RibbonTrail::DrawDistortion(const ViewProjection& viewProj) {
     if (!useDistortion_) {
@@ -274,23 +269,24 @@ void RibbonTrail::DrawDistortion(const ViewProjection& viewProj) {
         return;
     }
 
-    distortionCBufferData_->strength           = distortionStrength_;
-    cBufferData_->viewProjection               = viewProj.matView_ * viewProj.matProjection_;
-    distortionUVScrollCBufferData_->offset     = distortionUVScrollOffset_;
+    cBufferData_->viewProjection           = viewProj.matView_ * viewProj.matProjection_;
+    distortionUVScrollCBufferData_->offset = distortionUVScrollOffset_;
+
+    float distortionParams[4] = {distortionStrength_, 0.0f, 0.0f, 0.0f};
 
     auto commandList = DirectXCommon::GetInstance()->GetCommandList();
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
     commandList->SetGraphicsRootConstantBufferView(
-        static_cast<UINT>(RibbonTrailDistortionRootParameter::TransformationMatrix),
+        static_cast<UINT>(DistortionRibbonRootParam::TransformationMatrix),
         constantBufferResource_->GetGPUVirtualAddress());
     commandList->SetGraphicsRootConstantBufferView(
-        static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionUVScroll),
+        static_cast<UINT>(DistortionRibbonRootParam::DistortionUVScroll),
         distortionUVScrollCBufferResource_->GetGPUVirtualAddress());
-    commandList->SetGraphicsRootConstantBufferView(
-        static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionParam),
-        distortionConstantBufferResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRoot32BitConstants(
+        static_cast<UINT>(DistortionRibbonRootParam::DistortionParam),
+        4, distortionParams, 0);
     commandList->SetGraphicsRootDescriptorTable(
-        static_cast<UINT>(RibbonTrailDistortionRootParameter::DistortionMap),
+        static_cast<UINT>(DistortionRibbonRootParam::DistortionMap),
         TextureManager::GetInstance()->GetTextureHandle(distortionTextureHandle_));
     commandList->DrawInstanced(static_cast<UINT>(lastVertexCount_), 1, 0, 0);
 }

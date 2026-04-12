@@ -6,7 +6,7 @@ using namespace KetaEngine;
 #include "Base/TextureManager.h"
 #include "Base/WinApp.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
-#include "Pipeline/Particle/ParticleDistortionPipeline.h"
+#include "Pipeline/Distortion/DistortionPipeline.h"
 #include "Pipeline/PipelineManager.h"
 #include "MathFunction.h"
 
@@ -149,22 +149,22 @@ void ParticleRenderer::DrawDistortionGroup(
     SrvManager* srvManager,
     ID3D12GraphicsCommandList* commandList) {
 
-    PipelineManager::GetInstance()->PreDraw(PipelineType::ParticleDistortion, commandList);
+    PipelineManager::GetInstance()->PreDraw(PipelineType::DistortionParticle, commandList);
 
     // インスタンシングデータSRVを設定（ParticleData t0, VS）
     commandList->SetGraphicsRootDescriptorTable(
-        static_cast<UINT>(ParticleDistortionRootParameter::ParticleData),
+        static_cast<UINT>(DistortionParticleRootParam::ParticleData),
         srvManager->GetGPUDescriptorHandle(group.srvIndex));
 
     // 歪み強度を設定（32ビット定数 b0, PS）
     float params[4] = {group.param.distortionStrength, 0.0f, 0.0f, 0.0f};
     commandList->SetGraphicsRoot32BitConstants(
-        static_cast<UINT>(ParticleDistortionRootParameter::DistortionParam),
+        static_cast<UINT>(DistortionParticleRootParam::DistortionParam),
         4, params, 0);
 
     // 歪みノイズテクスチャを設定（DistortionMap t0, PS）
     commandList->SetGraphicsRootDescriptorTable(
-        static_cast<UINT>(ParticleDistortionRootParameter::DistortionMap),
+        static_cast<UINT>(DistortionParticleRootParam::DistortionMap),
         TextureManager::GetInstance()->GetTextureHandle(group.distortionTextureHandle));
 
     // モデル描画

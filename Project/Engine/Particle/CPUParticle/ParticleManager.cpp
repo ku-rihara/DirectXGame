@@ -251,6 +251,16 @@ void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm) {
     }
 }
 
+bool ParticleManager::HasDistortionParticles() const {
+    for (const auto& pair : particleGroups_) {
+        const ParticleGroup& group = pair.second;
+        if (group.param.useDistortion && group.distortionTextureHandle != 0 && !group.param.isScreenPos) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void ParticleManager::SetViewProjection(const ViewProjection* view) {
     viewProjection_ = view;
 }

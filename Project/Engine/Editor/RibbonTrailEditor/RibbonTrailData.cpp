@@ -47,6 +47,9 @@ void RibbonTrailData::RegisterParams() {
     globalParameter_->Regist(groupName_, "DistortionUVScrollSpeed", &distortionUVScrollSpeed_);
     globalParameter_->Regist(groupName_, "TexturePath",             &texturePath_);
 
+    // 追従モード
+    globalParameter_->Regist(groupName_, "FollowMode", &followModeInt_);
+
     // 時空歪み
     globalParameter_->Regist(groupName_, "UseDistortion",         &useDistortion_);
     globalParameter_->Regist(groupName_, "DistortionStrength",    &distortionStrength_);
@@ -67,6 +70,8 @@ void RibbonTrailData::GetParams() {
     uvScrollSpeed_             = globalParameter_->GetValue<Vector2>(groupName_, "UVScrollSpeed");
     distortionUVScrollSpeed_   = globalParameter_->GetValue<Vector2>(groupName_, "DistortionUVScrollSpeed");
     texturePath_               = globalParameter_->GetValue<std::string>(groupName_, "TexturePath");
+    followModeInt_ = globalParameter_->GetValue<int32_t>(groupName_, "FollowMode");
+    followMode_    = static_cast<TrailFollowMode>(followModeInt_);
     useDistortion_         = globalParameter_->GetValue<bool>(groupName_, "UseDistortion");
     distortionStrength_    = globalParameter_->GetValue<float>(groupName_, "DistortionStrength");
     distortionTexturePath_ = globalParameter_->GetValue<std::string>(groupName_, "DistortionTexturePath");
@@ -83,6 +88,8 @@ void RibbonTrailData::InitParams() {
     uvScrollSpeed_             = Vector2::ZeroVector();
     distortionUVScrollSpeed_   = Vector2::ZeroVector();
     texturePath_           = "";
+    followMode_    = TrailFollowMode::Follow;
+    followModeInt_ = 0;
     useDistortion_         = false;
     distortionStrength_    = 0.1f;
     distortionTexturePath_ = "";
@@ -103,6 +110,12 @@ void RibbonTrailData::AdjustParam() {
     ImGui::SeparatorText("Width");
     ImGui::DragFloat("Start Width (Head)", &startWidth_, 0.001f, 0.001f, 10.0f);
     ImGui::DragFloat("End Width   (Tail)", &endWidth_, 0.001f, 0.0f, 10.0f);
+
+    ImGui::SeparatorText("追従モード");
+    const char* followModeItems[] = {"Follow（追従）", "StayInPlace（その場に留まる）"};
+    if (ImGui::Combo("モード", &followModeInt_, followModeItems, IM_ARRAYSIZE(followModeItems))) {
+        followMode_ = static_cast<TrailFollowMode>(followModeInt_);
+    }
 
     ImGui::SeparatorText("Life / Length");
     ImGui::DragFloat("Lifetime", &lifetime_, 0.01f, 0.01f, 10.0f);

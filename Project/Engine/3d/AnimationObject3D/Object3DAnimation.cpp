@@ -349,15 +349,15 @@ void Object3DAnimation::Draw(const ViewProjection& viewProjection) {
 /// シャドウ描画
 ///=====================================================================
 void Object3DAnimation::DrawShadow(const ViewProjection& viewProjection) {
-    if (!model_ || !isDraw_) {
+    if (!model_ || !isShadow_ || !isDraw_) {
         return;
     }
 
     // WVPデータ更新
     UpdateWVPData(viewProjection);
 
-    // シャドウマップ用描画
-    model_->DrawForShadowMap(wvpResource_, *shadowMap_);
+    // スキン済み頂点バッファでシャドウマップ描画（アニメーションに追従した影）
+    model_->DrawForShadowMapSkinned(wvpResource_, *shadowMap_, skinCluster_.outputVertexBufferView);
 }
 
 ///============================================================

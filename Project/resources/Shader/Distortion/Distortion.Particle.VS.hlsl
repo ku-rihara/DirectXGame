@@ -1,4 +1,10 @@
-#include "ParticleDistortion.hlsli"
+#include "Distortion.hlsli"
+
+struct VSInput {
+    float4 position : POSITION0;
+    float2 texcoord : TEXCOORD0;
+    float3 normal   : NORMAL0;
+};
 
 struct ParticleForGPU {
     float4x4 WVP;
@@ -12,12 +18,12 @@ struct ParticleForGPU {
 };
 StructuredBuffer<ParticleForGPU> gParticle : register(t0);
 
-VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID) {
-    VertexShaderOutput output;
+VSOutput main(VSInput input, uint instanceID : SV_InstanceID) {
+    VSOutput output;
 
     output.position = mul(input.position, gParticle[instanceID].WVP);
 
-    // Flip処理
+    // Flip 処理
     float2 texcoord = input.texcoord;
     if (gParticle[instanceID].isFlipX != 0) {
         texcoord.x = 1.0f - texcoord.x;
@@ -26,10 +32,9 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
         texcoord.y = 1.0f - texcoord.y;
     }
 
-    // UVTransformを適用
+    // UVTransform を適用
     float4 transformedUV = mul(float4(texcoord, 0.0f, 1.0f), gParticle[instanceID].UVTransform);
     output.texcoord = transformedUV.xy;
-
-    output.color = gParticle[instanceID].color;
+    output.color    = gParticle[instanceID].color;
     return output;
 }

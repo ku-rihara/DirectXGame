@@ -200,6 +200,8 @@ public:
     const std::vector<std::string>& GetParticleFiles() const { return particleFiles_; }
     const std::string& getDirectory() const { return ParticleFolderName_; }
 
+    bool HasDistortionParticles() const; // 歪みパーティクルが存在するか確認
+
     void SetViewProjection(const ViewProjection* view);
     void SetTextureHandle(const std::string name, uint32_t handle);
     void SetDissolveTextureHandle(const std::string& name, uint32_t handle);

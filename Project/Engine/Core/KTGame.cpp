@@ -74,8 +74,11 @@ void KTGame::Draw() {
     Line3DManager::GetInstance()->DrawAll(viewProjection);
     // リボントレイル描画
     RibbonTrailManager::GetInstance()->DrawAll(viewProjection);
-    // 時空歪みパス
-    RibbonTrailManager::GetInstance()->DrawDistortionPass(viewProjection);
+    // 時空歪みパス（リボン + パーティクルを同一RTで描画）
+    bool hasParticleDistortion = ParticleManager::GetInstance()->HasDistortionParticles();
+    RibbonTrailManager::GetInstance()->DrawDistortionPass(viewProjection, hasParticleDistortion);
+    ParticleManager::GetInstance()->DrawDistortion(viewProjection);
+    RibbonTrailManager::GetInstance()->CloseDistortionPass();
 
     // --------------------------------------------------------------------------
     /// スプライト描画
@@ -95,6 +98,7 @@ void KTGame::DrawShadow() {
     ShadowMap::GetInstance()->PreDraw();
     // 影描画
     Object3DRegistry::GetInstance()->DrawAllShadow(viewProjection);
+    AnimationRegistry::GetInstance()->DrawAllShadow(viewProjection);
     // 影描画後処理
     ShadowMap::GetInstance()->PostDraw();
 }

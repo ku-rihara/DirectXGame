@@ -8,6 +8,12 @@
 
 namespace KetaEngine {
 
+/// トレイルの追従モード
+enum class TrailFollowMode {
+    Follow,       ///< 対象に追従しながらポイントを追加し続ける（デフォルト）
+    StayInPlace,  ///< 自動追従しない。ポイントはその場に留まり消えていく
+};
+
 /// <summary>
 /// リボントレイルデータクラス
 /// トレイルの外観パラメータを保持・保存する汎用データ
@@ -54,6 +60,10 @@ private:
     const std::string kDistortionFolderPath = "Resources/EngineTexture/Noise";
     FileSelector textureSelector_;
 
+    // ---- 追従モード ----
+    TrailFollowMode followMode_ = TrailFollowMode::Follow;
+    int32_t followModeInt_      = 0; // JSON保存用
+
     // ---- 時空歪み ----
     bool useDistortion_       = false;
     float distortionStrength_ = 0.1f;
@@ -76,6 +86,7 @@ public:
     Vector2 GetUVScrollSpeed() const { return uvScrollSpeed_; }
     Vector2 GetDistortionUVScrollSpeed() const { return distortionUVScrollSpeed_; }
     const std::string& GetTexturePath() const { return texturePath_; }
+    TrailFollowMode GetFollowMode() const { return followMode_; }
     bool GetUseDistortion() const { return useDistortion_; }
     float GetDistortionStrength() const { return distortionStrength_; }
     const std::string& GetDistortionTexturePath() const { return distortionTexturePath_; }

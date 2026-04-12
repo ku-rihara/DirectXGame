@@ -35,38 +35,63 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
     ///------------------------------------------------------------------------
     /// 座標設定
     ///------------------------------------------------------------------------
-    Vector3 randomTranslate = {
-        Random::Range(parameters.positionDist.min.x, parameters.positionDist.max.x),
-        Random::Range(parameters.positionDist.min.y, parameters.positionDist.max.y),
-        Random::Range(parameters.positionDist.min.z, parameters.positionDist.max.z)};
+    if (parameters.emitShape == ParticleCommon::EmitShape::Sphere) {
+        // 球面上のランダム方向を生成
+        Vector3 sphereDir;
+        do {
+            sphereDir = {
+                Random::Range(-1.0f, 1.0f),
+                Random::Range(-1.0f, 1.0f),
+                Random::Range(-1.0f, 1.0f)};
+        } while (sphereDir.Dot(sphereDir) < 0.0001f);
+        sphereDir = sphereDir.Normalize();
 
-    particle.worldTransform_->translation_ = parameters.targetPos + parameters.emitPos + randomTranslate;
-    particle.offSet                        = parameters.targetPos + parameters.emitPos + randomTranslate;
+        float radius = Random::Range(parameters.sphereRadius.min, parameters.sphereRadius.max);
+        Vector3 sphereOffset = sphereDir * radius;
 
-    ///------------------------------------------------------------------------
-    /// 速度、向き設定
-    ///------------------------------------------------------------------------
-    if (parameters.isFloatVelocity) {
-        Vector3 direction = {
-            Random::Range(parameters.directionDist.min.x, parameters.directionDist.max.x),
-            Random::Range(parameters.directionDist.min.y, parameters.directionDist.max.y),
-            Random::Range(parameters.directionDist.min.z, parameters.directionDist.max.z)};
-        direction                      = direction.Normalize();
-        float speed                    = Random::Range(parameters.speedDist.min, parameters.speedDist.max);
-        Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection->rotation_);
-        particle.direction_            = TransformNormal(direction, cameraRotationMatrix);
-        particle.speed_                = speed;
+        particle.worldTransform_->translation_ = parameters.targetPos + parameters.emitPos + sphereOffset;
+        particle.offSet                        = particle.worldTransform_->translation_;
+
+        // 速度方向は球面の外向き
+        float speed = Random::Range(parameters.speedDist.min, parameters.speedDist.max);
+        particle.direction_      = sphereDir;
+        particle.speed_          = speed;
+        particle.speedV3         = sphereDir * speed;
+        particle.isFloatVelocity = true;
     } else {
-        Vector3 velocity = {
-            Random::Range(parameters.velocityDistV3.min.x, parameters.velocityDistV3.max.x),
-            Random::Range(parameters.velocityDistV3.min.y, parameters.velocityDistV3.max.y),
-            Random::Range(parameters.velocityDistV3.min.z, parameters.velocityDistV3.max.z)};
-        Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection->rotation_);
-        velocity                       = TransformNormal(velocity, cameraRotationMatrix);
-        particle.direction_            = velocity;
-        particle.speedV3               = velocity;
+        Vector3 randomTranslate = {
+            Random::Range(parameters.positionDist.min.x, parameters.positionDist.max.x),
+            Random::Range(parameters.positionDist.min.y, parameters.positionDist.max.y),
+            Random::Range(parameters.positionDist.min.z, parameters.positionDist.max.z)};
+
+        particle.worldTransform_->translation_ = parameters.targetPos + parameters.emitPos + randomTranslate;
+        particle.offSet                        = parameters.targetPos + parameters.emitPos + randomTranslate;
+
+        ///------------------------------------------------------------------------
+        /// 速度、向き設定
+        ///------------------------------------------------------------------------
+        if (parameters.isFloatVelocity) {
+            Vector3 direction = {
+                Random::Range(parameters.directionDist.min.x, parameters.directionDist.max.x),
+                Random::Range(parameters.directionDist.min.y, parameters.directionDist.max.y),
+                Random::Range(parameters.directionDist.min.z, parameters.directionDist.max.z)};
+            direction                      = direction.Normalize();
+            float speed                    = Random::Range(parameters.speedDist.min, parameters.speedDist.max);
+            Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection->rotation_);
+            particle.direction_            = TransformNormal(direction, cameraRotationMatrix);
+            particle.speed_                = speed;
+        } else {
+            Vector3 velocity = {
+                Random::Range(parameters.velocityDistV3.min.x, parameters.velocityDistV3.max.x),
+                Random::Range(parameters.velocityDistV3.min.y, parameters.velocityDistV3.max.y),
+                Random::Range(parameters.velocityDistV3.min.z, parameters.velocityDistV3.max.z)};
+            Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection->rotation_);
+            velocity                       = TransformNormal(velocity, cameraRotationMatrix);
+            particle.direction_            = velocity;
+            particle.speedV3               = velocity;
+        }
+        particle.isFloatVelocity = parameters.isFloatVelocity;
     }
-    particle.isFloatVelocity = parameters.isFloatVelocity;
 
     ///------------------------------------------------------------------------
     /// 回転設定

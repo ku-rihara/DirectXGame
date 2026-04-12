@@ -309,6 +309,23 @@ void Model::DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
+void Model::DrawForShadowMapSkinned(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, const D3D12_VERTEX_BUFFER_VIEW& skinnedVBV) {
+    auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+
+    // スキン済み頂点バッファとインデックスバッファの設定
+    commandList->IASetVertexBuffers(0, 1, &skinnedVBV);
+    commandList->IASetIndexBuffer(&indexBufferView_);
+    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    // b0: ワールド行列
+    commandList->SetGraphicsRootConstantBufferView(0, wvpResource->GetGPUVirtualAddress());
+    // b1: ライト行列
+    commandList->SetGraphicsRootConstantBufferView(1, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
+
+    // 描画コール
+    commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
+}
+
 void Model::Finalize() {
     dxCommon_       = nullptr;
     textureManager_ = nullptr;
