@@ -1,4 +1,4 @@
-﻿{
+{
     "name": "scene",
     "objects": [
         {
@@ -22,41 +22,12 @@
                 ]
             },
             "file_name": "BackObj/FireInjector.obj",
-            "emitters": [
-                {
-                    "particle_name": "comboFireCenter",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleLeft",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleRigth",
-                    "primitive_type": "PLANE"
-                }
-            ],
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "FirePollSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "FirePollSpawnR.json",
-                                    "srt_type": "Rotation"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.30000001192092896
+                    "animation_name": "FireInjectorSpawn.json",
+                    "start_time": 0.0,
+                    "is_loop": false
                 }
             ]
         },
@@ -81,41 +52,12 @@
                 ]
             },
             "file_name": "BackObj/FireInjector.obj",
-            "emitters": [
-                {
-                    "particle_name": "comboFireCenter",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleLeft",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleRigth",
-                    "primitive_type": "PLANE"
-                }
-            ],
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "FirePollSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "FirePollSpawnR.json",
-                                    "srt_type": "Rotation"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.20000000298023224
+                    "animation_name": "FireInjectorSpawn.json",
+                    "start_time": 0.0,
+                    "is_loop": false
                 }
             ]
         },
@@ -140,41 +82,12 @@
                 ]
             },
             "file_name": "BackObj/FireInjector.obj",
-            "emitters": [
-                {
-                    "particle_name": "comboFireCenter",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleLeft",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleRigth",
-                    "primitive_type": "PLANE"
-                }
-            ],
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "FirePollSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "FirePollSpawnR.json",
-                                    "srt_type": "Rotation"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.699999988079071
+                    "animation_name": "FireInjectorSpawn.json",
+                    "start_time": 0.0,
+                    "is_loop": false
                 }
             ]
         },
@@ -199,41 +112,12 @@
                 ]
             },
             "file_name": "BackObj/FireInjector.obj",
-            "emitters": [
-                {
-                    "particle_name": "comboFireCenter",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleLeft",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleRigth",
-                    "primitive_type": "PLANE"
-                }
-            ],
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "FirePollSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "FirePollSpawnR.json",
-                                    "srt_type": "Rotation"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.6000000238418579
+                    "animation_name": "FireInjectorSpawn.json",
+                    "start_time": 0.0,
+                    "is_loop": false
                 }
             ]
         },
@@ -258,41 +142,12 @@
                 ]
             },
             "file_name": "BackObj/FireInjector.obj",
-            "emitters": [
-                {
-                    "particle_name": "comboFireCenter",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleLeft",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleRigth",
-                    "primitive_type": "PLANE"
-                }
-            ],
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "FirePollSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "FirePollSpawnR.json",
-                                    "srt_type": "Rotation"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.0
+                    "animation_name": "FireInjectorSpawn.json",
+                    "start_time": 0.0,
+                    "is_loop": false
                 }
             ]
         },
@@ -317,41 +172,12 @@
                 ]
             },
             "file_name": "BackObj/FireInjector.obj",
-            "emitters": [
-                {
-                    "particle_name": "comboFireCenter",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleLeft",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleRigth",
-                    "primitive_type": "PLANE"
-                }
-            ],
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "FirePollSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "FirePollSpawnR.json",
-                                    "srt_type": "Rotation"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.10000000149011612
+                    "animation_name": "FireInjectorSpawn.json",
+                    "start_time": 0.0,
+                    "is_loop": false
                 }
             ]
         },
@@ -376,41 +202,12 @@
                 ]
             },
             "file_name": "BackObj/FireInjector.obj",
-            "emitters": [
-                {
-                    "particle_name": "comboFireCenter",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleLeft",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleRigth",
-                    "primitive_type": "PLANE"
-                }
-            ],
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "FirePollSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "FirePollSpawnR.json",
-                                    "srt_type": "Rotation"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.4000000059604645
+                    "animation_name": "FireInjectorSpawn.json",
+                    "start_time": 0.0,
+                    "is_loop": false
                 }
             ]
         },
@@ -435,41 +232,12 @@
                 ]
             },
             "file_name": "BackObj/FireInjector.obj",
-            "emitters": [
-                {
-                    "particle_name": "comboFireCenter",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleLeft",
-                    "primitive_type": "PLANE"
-                },
-                {
-                    "particle_name": "comboFireNozzleRigth",
-                    "primitive_type": "PLANE"
-                }
-            ],
             "easing_groups": [
                 {
                     "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "FirePollSpawnScale.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "FirePollSpawnR.json",
-                                    "srt_type": "Rotation"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.5
+                    "animation_name": "FireInjectorSpawn.json",
+                    "start_time": 0.0,
+                    "is_loop": false
                 }
             ]
         }

@@ -3,45 +3,24 @@
 #include "PlayerDash.h"
 #include "PlayerJump.h"
 
-/// boss
+/// player
 #include "Player/Player.h"
+#include "Player/Components/Animation/PlayerAnimator.h"
 /// frame
 #include "Frame/Frame.h"
 /// imgui
 #include <imgui.h>
 
-// 初期化
 PlayerMove::PlayerMove(Player* player)
     : BasePlayerBehavior("PlayerMove", player) {
-
-    /// ===================================================
-    /// 変数初期化
-    /// ===================================================
-
-    // waitEase
-    waitEase_.Init("PlayerWait.json");
-    waitEase_.SetAdaptValue(&tempWaitScaleY_);
-    waitEase_.SetOnWaitEndCallback([this]() {
-        waitEase_.Reset();
-    });
-
-    // MoveAnimation
-    easeAnimationPlayer_.Init();
-
-    // 移動スピード、アニメーションステップセット
-    speed_ = pPlayerParameter_->GetParameters().moveSpeed;
-    animationStep_ = AnimationStep::INIT;
 }
 
-PlayerMove ::~PlayerMove() {
+PlayerMove::~PlayerMove() {
 }
 
-// 更新
 void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
 
-    // イージングアニメーション
-    MoveAnimation();
-    WaitAnimation();
+    CheckAndSwitchAnimation();
 
     // ダッシュ入力 → PlayerDash へ
     if (pOwner_->GetInput().IsDashInput()) {
@@ -55,38 +34,32 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
     if (pOwner_->GetInput().IsJumpKeyPressed()) {
         pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, pPlayerParameter_->GetParameters().normalJump.jumpSpeed));
     } else {
-        JumpForJoyState(); // コントローラジャンプ
+        JumpForJoyState();
     }
 }
 
 void PlayerMove::JumpForJoyState() {
-
     if (!pOwner_->GetInput().IsJumpPadTriggered()) {
         return;
     }
-
     pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, pPlayerParameter_->GetParameters().normalJump.jumpSpeed));
 }
 
-void PlayerMove::MoveAnimation() {
-    if (!pOwner_->CheckIsMoving()) {
+void PlayerMove::CheckAndSwitchAnimation() {
+    // 移動状態を取得
+    bool isMoving = pOwner_->CheckIsMoving();
+
+    // 移動状態が変わってるかチェック
+    if (isMoving == wasMoving_) {
         return;
     }
+    wasMoving_ = isMoving;
 
-  
-}
-
-void PlayerMove::WaitAnimation() {
-
-    if (pOwner_->CheckIsMoving()) {
-        return;
+    if (isMoving) {
+        pOwner_->GetPlayerAnimator().PlayMoveAnimation();
+    } else {
+        pOwner_->GetPlayerAnimator().PlayWaitAnimation();
     }
-
-    ///============================================================================
-    /// 待機アニメーション
-    ///============================================================================
-    waitEase_.Update(KetaEngine::Frame::DeltaTimeRate());
-    pOwner_->SetScaleY(tempWaitScaleY_);
 }
 
 void PlayerMove::Debug() {

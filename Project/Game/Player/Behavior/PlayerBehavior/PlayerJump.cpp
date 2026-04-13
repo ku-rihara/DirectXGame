@@ -2,8 +2,9 @@
 #include "PlayerJump.h"
 #include "PlayerMove.h"
 
-/// boss
+/// player
 #include "GameCamera/GameCamera.h"
+#include "Player/Components/Animation/PlayerAnimator.h"
 #include "Player/Player.h"
 /// frame
 #include "Frame/Frame.h"
@@ -18,11 +19,11 @@ PlayerJump::PlayerJump(Player* player, float initSpeed)
     /// ===================================================
     speed_ = initSpeed;
 
-    if (speed_==0.0f) {
+    if (speed_ == 0.0f) {
         ChangeState([this]() { FallOnlyState(); });
     } else {
-        pOwner_->GetGameCamera()->PlayAnimation("PlayerJunmp", false);
-        pOwner_->GetObject3D()->transform_.PlayObjEaseAnimation("JumpRotation", "Player");
+        pOwner_->GetGameCamera()->PlayAnimation("PlayerJump", false);
+        pOwner_->GetPlayerAnimator().PlayJumpAnimation();
 
         ChangeState([this]() { StartState(); });
     }
@@ -46,7 +47,7 @@ void PlayerJump::ChangeState(std::function<void()> newState) {
 }
 
 void PlayerJump::StartState() {
-   
+
     ChangeState([this]() { JumpState(); });
 }
 

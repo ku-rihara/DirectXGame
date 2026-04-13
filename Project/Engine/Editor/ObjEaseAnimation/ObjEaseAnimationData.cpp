@@ -14,6 +14,9 @@ void ObjEaseAnimationData::Init(const std::string& animationName, const std::str
     groupName_  = animationName;
     folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
 
+    // Scale のデフォルトは (1,1,1)。ファイルが存在しない場合でも安全な値になるよう、登録前に設定する
+    originalValues_[static_cast<size_t>(TransformType::Scale)] = Vector3::OneVector();
+
     if (!globalParameter_->HasRegisters(groupName_)) {
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
@@ -61,7 +64,14 @@ void ObjEaseAnimationData::UpdateKeyFrameProgression() {
 }
 
 void ObjEaseAnimationData::UpdateIndependentSRTProgression() {
-    if (sectionElements_.empty() || playState_ != PlayState::PLAYING) {
+    if (playState_ != PlayState::PLAYING) {
+        return;
+    }
+
+    // セクションが存在しないアニメーション（ファイル未存在など）は即座に完了させる
+    if (sectionElements_.empty()) {
+        isAllKeyFramesFinished_ = true;
+        playState_              = PlayState::STOPPED;
         return;
     }
 
@@ -109,7 +119,14 @@ void ObjEaseAnimationData::UpdateIndependentSRTProgression() {
 }
 
 void ObjEaseAnimationData::UpdateSyncSRTProgression() {
-    if (sectionElements_.empty() || playState_ != PlayState::PLAYING) {
+    if (playState_ != PlayState::PLAYING) {
+        return;
+    }
+
+    // セクションが存在しないアニメーション（ファイル未存在など）は即座に完了させる
+    if (sectionElements_.empty()) {
+        isAllKeyFramesFinished_ = true;
+        playState_              = PlayState::STOPPED;
         return;
     }
 
@@ -254,6 +271,7 @@ void ObjEaseAnimationData::RegisterParams() {
         std::string srtName = GetSRTName(static_cast<TransformType>(i));
         globalParameter_->Regist(groupName_, "Original_" + srtName, &originalValues_[i]);
     }
+    globalParameter_->Regist(groupName_, "IsLoop", &isLoop_);
 }
 
 void ObjEaseAnimationData::GetParams() {
@@ -261,6 +279,7 @@ void ObjEaseAnimationData::GetParams() {
         std::string srtName = GetSRTName(static_cast<TransformType>(i));
         originalValues_[i]  = globalParameter_->GetValue<Vector3>(groupName_, "Original_" + srtName);
     }
+    isLoop_ = globalParameter_->GetValue<bool>(groupName_, "IsLoop");
 }
 
 void ObjEaseAnimationData::InitParams() {

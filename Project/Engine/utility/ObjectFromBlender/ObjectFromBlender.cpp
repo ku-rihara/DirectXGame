@@ -323,7 +323,7 @@ void ObjectFromBlender::SetLoopEndCallback(int32_t groupNum, const std::function
         if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
             continue;
         }
-        // コールバックを保存（Play前でも後でも対応）
+        // コールバックを保存
         objectData.loopEndCallbacks[groupNum] = callback;
         // 既に再生開始済みならば即座に設定
         if (objectData.groupStarted[groupNum]) {

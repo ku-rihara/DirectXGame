@@ -27,6 +27,12 @@ void ObjEaseAnimationPlayer::Play(const std::string& animationName, const std::s
         animeData->Init(animationName, categoryName);
         animeData->LoadData();
         animeData->Play();
+
+        // アニメーション名単位のコールバックを適用
+        auto it = namedLoopEndCallbacks_.find(animationName);
+        if (it != namedLoopEndCallbacks_.end()) {
+            animeData->SetLoopEndCallback(it->second);
+        }
     }
 
     currentCategoryName_ = categoryName;
@@ -117,6 +123,18 @@ void ObjEaseAnimationPlayer::SetLoop(bool isLoop) {
     auto* animeData = GetAnimationData();
     if (animeData) {
         animeData->SetLoop(isLoop);
+    }
+}
+
+void ObjEaseAnimationPlayer::SetLoopEndCallback(const std::string& animationName, std::function<void()> callback) {
+    namedLoopEndCallbacks_[animationName] = std::move(callback);
+
+    // 現在そのアニメーションが再生中なら即座に適用
+    if (currentEffectName_ == animationName) {
+        auto* animeData = GetAnimationData();
+        if (animeData) {
+            animeData->SetLoopEndCallback(namedLoopEndCallbacks_[animationName]);
+        }
     }
 }
 

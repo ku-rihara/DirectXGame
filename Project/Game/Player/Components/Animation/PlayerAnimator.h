@@ -1,5 +1,6 @@
 #pragma once
 #include "Editor/DissolveEditor/DissolvePlayer.h"
+#include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 #include <string>
 
 namespace KetaEngine {
@@ -22,7 +23,7 @@ public:
         PlayerHandRight* rightHand,
         KetaEngine::WorldTransform* baseTransform);
 
-    /// 毎フレーム更新 (ディゾルブ更新・適用)
+    /// 毎フレーム更新
     void Update();
 
     // -------------------------------------------------------
@@ -33,7 +34,19 @@ public:
     void SetInitialDissolveHidden();
 
     // -------------------------------------------------------
-    // ObjEase アニメーション
+    // 移動 / 待機アニメーション
+    // 状態が切り替わった時だけ PlayerMove から呼ぶ
+    // -------------------------------------------------------
+    void PlayMoveAnimation();
+    void PlayWaitAnimation();
+
+    // -------------------------------------------------------
+    // ジャンプアニメーション
+    // -------------------------------------------------------
+    void PlayJumpAnimation();
+
+    // -------------------------------------------------------
+    // ObjEase アニメーション (タイトル等)
     // -------------------------------------------------------
     void PlayMainHeadAnimation(const std::string& name);
     void PlayTitleBodyAnimation(const std::string& name);
@@ -47,8 +60,11 @@ public:
 private:
     KetaEngine::DissolvePlayer dissolvePlayer_;
 
-    KetaEngine::Object3d*      obj3d_         = nullptr;
-    PlayerHandLeft*            leftHand_       = nullptr;
-    PlayerHandRight*           rightHand_      = nullptr;
-    KetaEngine::WorldTransform* baseTransform_ = nullptr;
+    // 移動・待機アニメーション共用プレイヤー
+    KetaEngine::ObjEaseAnimationPlayer moveAnimationPlayer_;
+
+    KetaEngine::Object3d*       obj3d_         = nullptr;
+    PlayerHandLeft*             leftHand_       = nullptr;
+    PlayerHandRight*            rightHand_      = nullptr;
+    KetaEngine::WorldTransform* baseTransform_  = nullptr;
 };

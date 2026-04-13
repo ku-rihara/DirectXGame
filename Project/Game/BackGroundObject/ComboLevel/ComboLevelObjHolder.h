@@ -20,9 +20,9 @@ public:
 
     /// <summary>
     /// オブジェクトの追加
-    /// </summary>
+    /// </summary> 
     /// <param name="filename">Blenderシーンファイル名</param>
-    /// <param name="comboLevel">出現するコンボレベル（0始まり）</param>
+    /// <param name="comboLevel">出現するコンボレベル</param>
     /// <param name="isPulseMaster">PULSEタイミングの基準オブジェクトか</param>
     void Add(const std::string& filename, int32_t comboLevel, bool isPulseMaster = false);
 

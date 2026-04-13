@@ -5,6 +5,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 /// <summary>
 /// オブジェクトイージングアニメーションプレイヤー
@@ -29,7 +30,7 @@ protected:
 
 private:
     //*---------------------------- private Variant ----------------------------*//
-    
+    std::unordered_map<std::string, std::function<void()>> namedLoopEndCallbacks_;
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
@@ -50,7 +51,13 @@ public:
 
     //*----------------------------- setter Methods -----------------------------*//
     void SetLoop(bool isLoop);
+
+    /// アニメーション名単位でループ終了コールバックを登録
+    void SetLoopEndCallback(const std::string& animationName, std::function<void()> callback);
+
+    /// 現在再生中のアニメーションにコールバックを直接セット
     void SetLoopEndCallback(const std::function<void()>& callback);
+
     void SetPreAnimationOffsetsToOriginalValues();
 };
 

@@ -83,7 +83,6 @@ void ComboDirector::SetAudienceController(AudienceController* audienceController
     audienceController_ = audienceController;
 }
 
-
 /// --------------------------------------------------------------------------------
 // メンバ関数のポインタ配列
 /// --------------------------------------------------------------------------------
