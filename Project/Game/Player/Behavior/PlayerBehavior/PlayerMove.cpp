@@ -13,6 +13,9 @@
 
 PlayerMove::PlayerMove(Player* player)
     : BasePlayerBehavior("PlayerMove", player) {
+    // 攻撃等から復帰した時に確実にアニメーションを再開するため
+    // 現在の移動状態と逆の値を入れて次のUpdateで必ず差分が生じるようにする
+    wasMoving_ = !pOwner_->CheckIsMoving();
 }
 
 PlayerMove::~PlayerMove() {

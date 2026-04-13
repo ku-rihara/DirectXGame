@@ -75,6 +75,9 @@ void ComboAttackAction::Init() {
     attackRendition_ = std::make_unique<PlayerAttackRendition>();
     attackRendition_->Init(pOwner_, attackData_);
 
+    // アニメーションを止めてから移動イージングを設定する
+    pOwner_->GetPlayerAnimator().StopMoveAnimation();
+
     SetMoveEasing();
 
     order_ = Order::INIT;
@@ -373,6 +376,14 @@ void ComboAttackAction::SetMoveEasing() {
     // targetPosを計算
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
     startPosition_                                    = pOwner_->GetWorldPosition();
+
+    // 攻撃条件がAIRでなく、かつジャンプ中でもないのに浮いている場合はYを地上に補正する
+    const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
+    bool isAirAttack    = attackData_->GetAttackParam().triggerParam.condition == PlayerComboAttackData::TriggerCondition::AIR;
+    bool isJumping      = dynamic_cast<PlayerJump*>(pOwner_->GetBehavior()) != nullptr;
+    if (!isAirAttack && !isJumping && startPosition_.y > groundY) {
+        startPosition_.y = groundY;
+    }
 
     // オフセット計算
     targetPosition_ = startPosition_ + pOwner_->GetBaseTransform().CalcForwardOffset(moveParam.value);

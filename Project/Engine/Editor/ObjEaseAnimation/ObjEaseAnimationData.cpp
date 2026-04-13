@@ -422,7 +422,8 @@ void ObjEaseAnimationData::AdjustParam() {
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Animation: %s", groupName_.c_str());
 
-    // セクション遷移モード切り替え
+    // ループ・セクション遷移モード切り替え
+    ImGui::Checkbox("IsLoop", &isLoop_);
     ImGui::Checkbox("次の再生までSRT全ての再生完了を待つか", &isSyncSectionMode_);
 
     // OriginTransform 編集

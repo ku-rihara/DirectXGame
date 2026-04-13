@@ -20,8 +20,6 @@ void PlayerAnimator::Init(
     obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
     obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.09f;
     dissolvePlayer_.Init();
-
-    moveAnimationPlayer_.Init();
 }
 
 void PlayerAnimator::Update() {
@@ -29,22 +27,27 @@ void PlayerAnimator::Update() {
     if (dissolvePlayer_.IsPlaying()) {
         dissolvePlayer_.ApplyToMaterial(*obj3d_->GetModelMaterial());
     }
-
-    moveAnimationPlayer_.Update(KetaEngine::Frame::DeltaTimeRate());
 }
 
 ///=============================================================
 /// 移動アニメーション再生
 ///=============================================================
 void PlayerAnimator::PlayMoveAnimation() {
-    moveAnimationPlayer_.Play("Moving", "Player");
+    baseTransform_->PlayObjEaseAnimation("Moving", "Player");
 }
 
 ///=============================================================
 /// 待機アニメーション再生
 ///=============================================================
 void PlayerAnimator::PlayWaitAnimation() {
-    moveAnimationPlayer_.Play("Waiting", "Player");
+    baseTransform_->PlayObjEaseAnimation("Waiting", "Player");
+}
+
+///=============================================================
+/// 移動・待機アニメーション停止
+///=============================================================
+void PlayerAnimator::StopMoveAnimation() {
+    baseTransform_->StopObjEaseAnimation();
 }
 
 ///=============================================================

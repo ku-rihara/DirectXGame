@@ -39,6 +39,7 @@ public:
     // -------------------------------------------------------
     void PlayMoveAnimation();
     void PlayWaitAnimation();
+    void StopMoveAnimation();
 
     // -------------------------------------------------------
     // ジャンプアニメーション
@@ -59,9 +60,6 @@ public:
 
 private:
     KetaEngine::DissolvePlayer dissolvePlayer_;
-
-    // 移動・待機アニメーション共用プレイヤー
-    KetaEngine::ObjEaseAnimationPlayer moveAnimationPlayer_;
 
     KetaEngine::Object3d*       obj3d_         = nullptr;
     PlayerHandLeft*             leftHand_       = nullptr;

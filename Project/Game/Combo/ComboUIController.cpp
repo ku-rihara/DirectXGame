@@ -75,8 +75,7 @@ void ComboUIController::AlphaAdaptForTime(float comboTime, float comboMaxTime) {
         chainGauge_->Update(0.0f, 0.0f, 0.0f);
         return;
     }
-    // 経過時間が増えるほど alpha が 1→0 へ落ちるが、EaseInQuint により
-    // 大半の時間は 1 付近を保ち、残り僅かになってから急激にフェードアウトする
+
     const float elapsed = std::clamp(comboMaxTime - comboTime, 0.0f, comboMaxTime);
     alpha_ = EaseInQuint(1.0f, 0.0f, elapsed, comboMaxTime);
 
