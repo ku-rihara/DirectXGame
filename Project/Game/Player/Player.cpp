@@ -12,6 +12,7 @@
 #include "Behavior/PlayerBehavior/PlayerDeath.h"
 #include "Behavior/PlayerBehavior/PlayerJump.h"
 #include "Behavior/PlayerBehavior/PlayerMove.h"
+#include "Behavior/PlayerBehavior/PlayerDash.h"
 #include "Behavior/PlayerBehavior/PlayerSpawn.h"
 #include "Behavior/TitleBehavior/TitlePlayerBehavior.h"
 
@@ -408,10 +409,7 @@ void Player::HeadLightSetting() {
 
 
 bool Player::IsDashing() const {
-    if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
-        return moveState->IsDashing();
-    }
-    return false;
+    return dynamic_cast<PlayerDash*>(behavior_.get()) != nullptr;
 }
 
 bool Player::IsAirborne() const {
@@ -419,14 +417,14 @@ bool Player::IsAirborne() const {
 }
 
 void Player::StartAutoDash() {
-    if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
-        moveState->SetForceDash(true);
+    if (dynamic_cast<PlayerMove*>(behavior_.get())) {
+        ChangeBehavior(std::make_unique<PlayerDash>(this, true));
     }
 }
 
 void Player::ClearAutoDash() {
-    if (auto* moveState = dynamic_cast<PlayerMove*>(behavior_.get())) {
-        moveState->SetForceDash(false);
+    if (auto* dashState = dynamic_cast<PlayerDash*>(behavior_.get())) {
+        dashState->SetForceDash(false);
     }
 }
 

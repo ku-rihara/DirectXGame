@@ -28,24 +28,10 @@ private:
         COOLING,
     };
 
-public:
-    /// <summary>
-    /// ダッシュ中かどうかを取得
-    /// </summary>
-    bool IsDashing() const { return isDashing_; }
-
-    /// <summary>
-    /// 自動実行用ダッシュ強制フラグのセット
-    /// </summary>
-    void SetForceDash(bool force) { forceDash_ = force; }
-
 private:
     /// ===================================================
     /// private variable
     /// ===================================================
-
-    bool isDashing_ = false; // ダッシュ中フラグ
-    bool forceDash_ = false; // 自動実行用ダッシュ強制フラグ
 
     AnimationStep animationStep_;
     float speed_;

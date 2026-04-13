@@ -1,5 +1,6 @@
 /// behavior
 #include "PlayerMove.h"
+#include "PlayerDash.h"
 #include "PlayerJump.h"
 
 /// boss
@@ -42,17 +43,15 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
     MoveAnimation();
     WaitAnimation();
 
-    // ダッシュ
-    if (pOwner_->GetInput().IsDashInput() || forceDash_) {
-        isDashing_ = true;
-        pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed *
-                      pPlayerParameter_->GetParameters().dashSpeedMultiplier);
-    } else {
-        isDashing_ = false;
-        pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed);
+    // ダッシュ入力 → PlayerDash へ
+    if (pOwner_->GetInput().IsDashInput()) {
+        pOwner_->ChangeBehavior(std::make_unique<PlayerDash>(pOwner_));
+        return;
     }
 
-    // 　ジャンプに切り替え
+    pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed);
+
+    // ジャンプに切り替え
     if (pOwner_->GetInput().IsJumpKeyPressed()) {
         pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, pPlayerParameter_->GetParameters().normalJump.jumpSpeed));
     } else {

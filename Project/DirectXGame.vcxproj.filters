@@ -2588,6 +2588,9 @@
     <ClCompile Include="Game\ResultObj\ResultStage.cpp">
       <Filter>Game\ResultObj</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerDash.cpp">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2742,6 +2745,9 @@
     </ClInclude>
     <ClInclude Include="Game\ResultObj\ResultStage.h">
       <Filter>Game\ResultObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerDash.h">
+      <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
