@@ -12,8 +12,8 @@
         "Rotation_IsReturnToOrigin": true,
         "Rotation_MaxTime": 0.20999999344348907,
         "Rotation_Period": 0.0,
-        "Rotation_ReturnEaseType": 0,
-        "Rotation_ReturnMaxTime": 0.0,
+        "Rotation_ReturnEaseType": 21,
+        "Rotation_ReturnMaxTime": 0.4,
         "Rotation_endValue": [
             6.2831854820251465,
             0.0,
@@ -52,8 +52,8 @@
         "Translation_MaxTime": 0.10000000149011612,
         "Translation_Period": 0.0,
         "Translation_RailFileName": "",
-        "Translation_ReturnEaseType": 6,
-        "Translation_ReturnMaxTime": 0.18000000715255737,
+        "Translation_ReturnEaseType": 21,
+        "Translation_ReturnMaxTime": 0.4,
         "Translation_UseRail": false,
         "Translation_endValue": [
             0.0,

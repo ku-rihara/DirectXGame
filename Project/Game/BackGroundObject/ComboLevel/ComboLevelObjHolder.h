@@ -1,14 +1,8 @@
 #pragma once
 #include "BaseComboLevelBackObj.h"
-#include <array>
 #include <memory>
 #include <string>
-
-enum class ComboLevelObjType {
-    STADIUM_LIGHT,
-    SPEAKER,
-    COUNT
-};
+#include <vector>
 
 /// <summary>
 /// コンボレベルオブジェクトの保持、管理クラス
@@ -19,54 +13,43 @@ public:
     ~ComboLevelObjHolder() = default;
 
     /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="filename">ファイル名</param>
-    void Init(const std::string& filename);
-
-    /// <summary>
     /// 更新
     /// </summary>
     /// <param name="playSpeed">再生速度</param>
     void Update(float playSpeed);
 
     /// <summary>
-    /// 指定グループのイージングリセット
+    /// オブジェクトの追加
     /// </summary>
-    /// <param name="groupNum">グループ番号</param>
-    void EasingResetSelectGroup(int32_t groupNum);
+    /// <param name="filename">Blenderシーンファイル名</param>
+    /// <param name="comboLevel">出現するコンボレベル（0始まり）</param>
+    /// <param name="isPulseMaster">PULSEタイミングの基準オブジェクトか</param>
+    void Add(const std::string& filename, int32_t comboLevel, bool isPulseMaster = false);
 
     /// <summary>
-    /// コンボレベルに応じたクローズ処理
+    /// 指定コンボレベル以下のオブジェクトをCloseモードに設定
     /// </summary>
     /// <param name="level">コンボレベル</param>
     void CloseForComboLevel(int32_t level);
 
     /// <summary>
-    /// オブジェクトの追加
+    /// 指定コンボレベルのエフェクトモードを設定
     /// </summary>
-    /// <param name="type">オブジェクトタイプ</param>
-    /// <param name="filename">ファイル名</param>
-    void Add(const ComboLevelObjType& type, const std::string& filename);
-
-    /// <summary>
-    /// エフェクトモードの設定
-    /// </summary>
-    /// <param name="type">オブジェクトタイプ</param>
+    /// <param name="comboLevel">コンボレベル</param>
     /// <param name="mode">エフェクトモード</param>
-    void SetEffectMode(int32_t level, const ObjEffectMode& mode);
+    void SetEffectMode(int32_t comboLevel, const ObjEffectMode& mode);
 
-    void EasingAllReset(); //< 全イージングリセット
+    void EasingResetSelectGroup(int32_t groupNum); //< 指定グループのイージングリセット
+    void EasingAllReset();                         //< 全イージングリセット
+
+    bool GetIsEasingFinish(int32_t comboLevel, int32_t groupNum) const; //< イージング完了フラグ取得
 
 private:
-    std::array<std::unique_ptr<BaseComboLevelBackObj>, static_cast<size_t>(ComboLevelObjType::COUNT)> objects_;
+    struct Entry {
+        std::unique_ptr<BaseComboLevelBackObj> obj;
+        int32_t comboLevel = 0;
+    };
 
-public:
-    /// <summary>
-    /// イージング完了フラグ取得
-    /// </summary>
-    /// <param name="type">オブジェクトタイプ</param>
-    /// <param name="groupNum">グループ番号</param>
-    bool GetIsEasingFinish(const ComboLevelObjType& type, int32_t groupNum) const;
-    size_t ToIndex(const ComboLevelObjType& type) const { return static_cast<size_t>(type); }
+    std::vector<Entry> entries_;
+    BaseComboLevelBackObj* pulseMaster_ = nullptr;
 };

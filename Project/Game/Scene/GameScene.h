@@ -3,13 +3,11 @@
 /// base
 #include "BaseScene.h"
 #include "GameSceneState/BaseGameSceneState.h"
-#include "utility/DitherOcclusion/DitherOcclusion.h"
 
 // Audience
 #include "Audience/AudienceController.h"
 // BackGroundObj
-#include "BackGroundObject/ComboLevel/ComboLevelObjHolder.h"
-#include "BackGroundObject/GameBackGroundObject.h"
+#include "BackGroundObject/BackGroundObjectManager.h"
 // Combo
 #include "Combo/Combo.h"
 #include "ComboScene/ComboDirector.h"
@@ -95,11 +93,10 @@ private:
         std::unique_ptr<EnemySpawner> enemySpawner_                               = nullptr;
         std::unique_ptr<OperateUI> operateUI_                                     = nullptr;
         std::unique_ptr<FireInjectors> fireInjectors_                             = nullptr;
-        std::unique_ptr<GameBackGroundObject> gameBackGroundObject_               = nullptr;
+        std::unique_ptr<BackGroundObjectManager> backGroundObjectManager_         = nullptr;
         std::unique_ptr<ComboDirector> comboDirector_                             = nullptr;
         std::unique_ptr<AttackEffect> attackEffect_                               = nullptr;
         std::unique_ptr<GameIntroManager> gameIntroManager_                       = nullptr;
-        std::unique_ptr<ComboLevelObjHolder> comboLevelObjHolder_                 = nullptr;
         std::unique_ptr<ContinuousEnemySpawner> continuousEnemySpawner_           = nullptr;
         std::unique_ptr<PlayerComboAttackController> playerComboAttackController_ = nullptr;
         std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
@@ -119,10 +116,9 @@ private:
     std::unique_ptr<BaseGameSceneState> state_ = nullptr;
     GameObj gameObj_;
 
-    std::unique_ptr<KetaEngine::DitherOcclusion> ditherOcclusion_;
     KetaEngine::EasingEditor easingEditor_;
 
 public:
     GameObj& GetGameObj() { return gameObj_; }
-    KetaEngine::DitherOcclusion* GetDitherOcclusion() { return ditherOcclusion_.get(); }
+    KetaEngine::DitherOcclusion* GetDitherOcclusion() { return gameObj_.backGroundObjectManager_->GetDitherOcclusion(); }
 };

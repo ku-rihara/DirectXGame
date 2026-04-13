@@ -2,7 +2,6 @@
     "PlayerLandingScale": {
         "StartTimeOffset": 0.0,
         "amplitude": 0.0,
-        "backRatio": 0.0,
         "endValue": [
             1.399999976158142,
             0.5,
@@ -11,13 +10,15 @@
         "finishOffsetTime": 0.0,
         "finishType": 0,
         "maxTime": 0.20000000298023224,
+        "returnMaxTime": 0.4,
+        "returnType": 21,
         "period": 0.0,
         "startValue": [
             1.0,
             1.0,
             1.0
         ],
-        "type": 46,
+        "type": 22,
         "waitTime": 0.0
     }
 }

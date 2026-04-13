@@ -2,22 +2,23 @@
     "StadiumLightCloseT": {
         "StartTimeOffset": 0.0,
         "amplitude": 0.0,
-        "backRatio": 0.5,
         "endValue": [
             0.0,
             3.299999952316284,
             0.0
         ],
         "finishOffsetTime": 0.0,
-        "finishType": 0,
-        "maxTime": 1.0,
+        "finishType": 1,
+        "maxTime": 0.5,
         "period": 0.0,
+        "returnMaxTime": 0.5,
+        "returnType": 7,
         "startValue": [
             0.0,
             0.0,
             0.0
         ],
-        "type": 34,
+        "type": 6,
         "waitTime": 0.0
     }
 }

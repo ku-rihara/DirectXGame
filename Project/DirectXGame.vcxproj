@@ -194,9 +194,8 @@
     <ClCompile Include="Game\Audience\Behavior\BaseAudienceBehavior.cpp" />
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp" />
     <ClCompile Include="Game\BackGroundObject\ComboLevel\BaseComboLevelBackObj.cpp" />
+    <ClCompile Include="Game\BackGroundObject\BackGroundObjectManager.cpp" />
     <ClCompile Include="Game\BackGroundObject\ComboLevel\ComboLevelObjHolder.cpp" />
-    <ClCompile Include="Game\BackGroundObject\ComboLevel\SpeakerEffect.cpp" />
-    <ClCompile Include="Game\BackGroundObject\ComboLevel\StadiumLightEffect.cpp" />
     <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
@@ -550,9 +549,8 @@
     <ClInclude Include="Game\Audience\Behavior\BaseAudienceBehavior.h" />
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h" />
     <ClInclude Include="Game\BackGroundObject\ComboLevel\BaseComboLevelBackObj.h" />
+    <ClInclude Include="Game\BackGroundObject\BackGroundObjectManager.h" />
     <ClInclude Include="Game\BackGroundObject\ComboLevel\ComboLevelObjHolder.h" />
-    <ClInclude Include="Game\BackGroundObject\ComboLevel\SpeakerEffect.h" />
-    <ClInclude Include="Game\BackGroundObject\ComboLevel\StadiumLightEffect.h" />
     <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h" />
     <ClInclude Include="Game\BaseBehavior\BaseBehavior.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />

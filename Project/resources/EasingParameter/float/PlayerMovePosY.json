@@ -3,14 +3,15 @@
         "StartTimeOffset": 0.0,
         "adaptFloatAxisType": 1,
         "amplitude": 0.0,
-        "backRatio": 0.5,
         "endValue": 1.2000000476837158,
         "finishOffsetTime": 0.0,
-        "finishType": 0,
-        "maxTime": 0.20000000298023224,
+        "finishType": 1,
+        "maxTime": 0.1,
         "period": 0.0,
+        "returnMaxTime": 0.1,
+        "returnType": 19,
         "startValue": 0.0,
-        "type": 46,
+        "type": 18,
         "waitTime": 0.0
     }
 }

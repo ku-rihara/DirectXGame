@@ -20,19 +20,15 @@ PlayerMove::PlayerMove(Player* player)
     // waitEase
     waitEase_.Init("PlayerWait.json");
     waitEase_.SetAdaptValue(&tempWaitScaleY_);
-
     waitEase_.SetOnWaitEndCallback([this]() {
         waitEase_.Reset();
     });
-    
-    // moveEase
-    moveEase_ = std::make_unique<KetaEngine::EasingSequence>();
-    moveEase_->AddStep("PlayerMovePosY.json", &tempPosY_);
-    moveEase_->AddStep("PlayerLandingScale.json", &tempScale_);
-    moveEase_->SetLoop(true);
 
+    // MoveAnimation
+    easeAnimationPlayer_.Init();
+
+    // 移動スピード、アニメーションステップセット
     speed_ = pPlayerParameter_->GetParameters().moveSpeed;
-
     animationStep_ = AnimationStep::INIT;
 }
 
@@ -42,10 +38,11 @@ PlayerMove ::~PlayerMove() {
 // 更新
 void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
 
-    // アニメーション
+    // イージングアニメーション
     MoveAnimation();
     WaitAnimation();
 
+    // ダッシュ
     if (pOwner_->GetInput().IsDashInput() || forceDash_) {
         isDashing_ = true;
         pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed *
@@ -77,12 +74,7 @@ void PlayerMove::MoveAnimation() {
         return;
     }
 
-  /*  ///============================================================================
-    /// 移動アニメーション
-    ///============================================================================
-    moveEase_->Update(KetaEngine::Frame::DeltaTimeRate());
-    pOwner_->SetHeadPosY(tempPosY_);
-    pOwner_->SetHeadScale(tempScale_);*/
+  
 }
 
 void PlayerMove::WaitAnimation() {

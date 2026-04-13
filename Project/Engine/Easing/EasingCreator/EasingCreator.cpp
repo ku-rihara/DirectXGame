@@ -166,12 +166,13 @@ void EasingCreator<T>::ToJson(nlohmann::json& j, const std::string& name, const 
         jsonParam["adaptFloatAxisType"] = static_cast<int>(param.adaptFloatAxisType);
     }
 
-    jsonParam["type"]       = static_cast<int>(param.type);
-    jsonParam["finishType"] = static_cast<int>(param.finishType);
-    jsonParam["maxTime"]    = param.maxTime;
-    jsonParam["amplitude"]  = param.amplitude;
-    jsonParam["period"]     = param.period;
-    jsonParam["backRatio"]  = param.backRatio;
+    jsonParam["type"]        = static_cast<int>(param.type);
+    jsonParam["finishType"]  = static_cast<int>(param.finishType);
+    jsonParam["maxTime"]     = param.maxTime;
+    jsonParam["returnMaxTime"] = param.returnMaxTime;
+    jsonParam["returnType"]  = static_cast<int>(param.returnType);
+    jsonParam["amplitude"]   = param.amplitude;
+    jsonParam["period"]      = param.period;
 
     jsonParam["finishOffsetTime"]    = param.finishOffsetTime;
     jsonParam["waitTime"] = param.waitTimeMax;
@@ -188,12 +189,13 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
             continue;
         
         EasingParameter<T> param;
-        param.type       = static_cast<EasingType>(val["type"].get<int>());
-        param.finishType = static_cast<EasingFinishValueType>(val["finishType"].get<int>());
-        param.maxTime    = val["maxTime"].get<float>();
-        param.amplitude  = val.value("amplitude", 0.0f);
-        param.period     = val.value("period", 0.0f);
-        param.backRatio  = val.value("backRatio", 0.0f);
+        param.type        = static_cast<EasingType>(val["type"].get<int>());
+        param.finishType  = static_cast<EasingFinishValueType>(val["finishType"].get<int>());
+        param.maxTime     = val["maxTime"].get<float>();
+        param.returnMaxTime = val.value("returnMaxTime", 0.0f);
+        param.returnType  = static_cast<EasingType>(val.value("returnType", 0));
+        param.amplitude   = val.value("amplitude", 0.0f);
+        param.period      = val.value("period", 0.0f);
         param.finishOffsetTime = val.value("finishOffsetTime", 0.0f);
         param.waitTimeMax         = val.value("waitTime", 0.0f);
 
@@ -269,7 +271,6 @@ void EasingCreator<T>::Edit() {
         ImGui::DragFloat("Max Time", &editingParam_.maxTime, 0.01f);
         ImGui::DragFloat("Amplitude", &editingParam_.amplitude, 0.01f);
         ImGui::DragFloat("Period", &editingParam_.period, 0.01f);
-        ImGui::DragFloat("Back Ratio", &editingParam_.backRatio, 0.01f);
 
         int adaptFloatAxisType = static_cast<int>(editingParam_.adaptFloatAxisType);
         int adaptVec2AxisType  = static_cast<int>(editingParam_.adaptVec2AxisType);

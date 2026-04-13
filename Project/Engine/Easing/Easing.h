@@ -104,7 +104,6 @@ private:
 
     float amplitude_ = 0.0f;
     float period_    = 0.0f;
-    float backRatio_ = 0.0f;
 
     EasingType returnType_  = EasingType::InSine; // 戻りフェーズのイージング種類
     float returnMaxTime_    = 0.0f;               // 戻りフェーズの時間（0=戻りなし）
@@ -157,7 +156,6 @@ public:
     void SetMaxTime(float time) { maxTime_ = time; }
     void SetIsStartEndReverse(bool isReverse) { isStartEndReverse_ = isReverse; }
     void SetFinishTimeOffset(float time) { finishTimeOffset_ = time; }
-    void SetBackRatio(float ratio) { backRatio_ = ratio; }
     void SetAmplitude(float amplitude) { amplitude_ = amplitude; }
     void SetPeriod(float period) { period_ = period; }
 };

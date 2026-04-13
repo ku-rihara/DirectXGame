@@ -39,13 +39,9 @@ void ComboDirector::LevelUp() {
     pCombo_->LevelUp();
 
     // レベル対象のオブジェクト、観客をスポーン
-    if (pCombo_->GetCurrentLevel() <= static_cast<int32_t>(ComboLevelObjType::COUNT)) {
-
-        int32_t comboLevel = GetComboLevelZeroStart();
-
-        comboLevelObjHolder_->SetEffectMode(comboLevel, ObjEffectMode::SPAWN);
-        audienceController_->AppearAudienceByLevel(comboLevel);
-    }
+    int32_t comboLevel = GetComboLevelZeroStart();
+    comboLevelObjHolder_->SetEffectMode(comboLevel, ObjEffectMode::SPAWN);
+    audienceController_->AppearAudienceByLevel(comboLevel);
 
     // チェックに戻す
     state_ = State::CHECK;

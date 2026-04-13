@@ -2,7 +2,7 @@
 
 #include "BasePlayerBehavior.h"
 #include "Easing/Easing.h"
-#include "Easing/EasingSequence.h"
+#include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 
 /// <summary>
 /// プレイヤー移動振る舞いクラス
@@ -13,8 +13,9 @@ public:
     PlayerMove(Player* player);
     ~PlayerMove();
 
-    void Update([[maybe_unused]] float timeSpeed = 0.0f) override; //< 更新
-    void Debug() override; //< デバッグ
+    // 更新、デバッグ
+    void Update([[maybe_unused]] float timeSpeed = 0.0f) override;
+    void Debug() override;
 
     void MoveAnimation(); //< 移動アニメーション
     void WaitAnimation(); //< 待機アニメーション
@@ -51,9 +52,11 @@ private:
 
     float animationCollTime_;
     KetaEngine::Easing<float> waitEase_;
-    std::unique_ptr<KetaEngine::EasingSequence> moveEase_;
-    float tempWaitScaleY_;
+    float tempWaitScaleY_ = 1.0f;
     float moveEaseTime_;
+
+    //イージングアニメーション
+    KetaEngine::ObjEaseAnimationPlayer easeAnimationPlayer_;
 
     float tempPosY_ = 0.0f;
     Vector3 tempScale_;

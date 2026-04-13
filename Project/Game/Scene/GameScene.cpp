@@ -58,7 +58,7 @@ void GameScene::Debug() {
     gameObj_.operateUI_->Debug();
 
     ImGui::Begin("ParameterEditor");
-    ditherOcclusion_->AdjustParam();
+    gameObj_.backGroundObjectManager_->AdjustParam();
     gameObj_.player_->AdjustParam();
     gameObj_.sideRopeController_->AdjustParam();
     gameObj_.enemyManager_->AdjustParam();
@@ -124,15 +124,14 @@ void GameScene::ObjectInit() {
     gameObj_.gameCamera_                  = std::make_unique<GameCamera>();
     gameObj_.enemyManager_                = std::make_unique<EnemyManager>();
     gameObj_.enemySpawner_                = std::make_unique<EnemySpawner>();
-    gameObj_.operateUI_                = std::make_unique<OperateUI>();
+    gameObj_.operateUI_                   = std::make_unique<OperateUI>();
     gameObj_.skyBox_                      = std::make_unique<SkyBox>();
     gameObj_.combo_                       = std::make_unique<Combo>();
     gameObj_.fireInjectors_               = std::make_unique<FireInjectors>();
-    gameObj_.gameBackGroundObject_        = std::make_unique<GameBackGroundObject>();
-    gameObj_.comboDirector_                  = std::make_unique<ComboDirector>();
+    gameObj_.backGroundObjectManager_     = std::make_unique<BackGroundObjectManager>();
+    gameObj_.comboDirector_               = std::make_unique<ComboDirector>();
     gameObj_.attackEffect_                = std::make_unique<AttackEffect>();
     gameObj_.gameIntroManager_            = std::make_unique<GameIntroManager>();
-    gameObj_.comboLevelObjHolder_         = std::make_unique<ComboLevelObjHolder>();
     gameObj_.continuousEnemySpawner_      = std::make_unique<ContinuousEnemySpawner>();
     gameObj_.playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
     gameObj_.sideRopeController_          = std::make_unique<SideRopeController>();
@@ -174,24 +173,7 @@ void GameScene::ObjectInit() {
     viewProjection_.Init();
     gameObj_.nextAttackHintUI_->Init(gameObj_.player_.get());
 
-    gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");
-    gameObj_.comboLevelObjHolder_->Add(ComboLevelObjType::SPEAKER, "ComboLevel2.json");
-    gameObj_.gameBackGroundObject_->Init("game.json");
-
-    // ディザオクルージョン初期化
-    ditherOcclusion_ = std::make_unique<KetaEngine::DitherOcclusion>();
-    ditherOcclusion_->Init();
-
-    // ObjectFromBlenderで生成したオブジェクトをディザ対象として登録
-    auto* levelData = gameObj_.gameBackGroundObject_->GetObjectFromBlender()->GetLevelData();
-    if (levelData) {
-        for (auto& objData : levelData->objects) {
-            if (objData.fileName == "BackObj/Field.obj") {
-                continue; 
-            }
-            ditherOcclusion_->Add(objData.object3d->GetModelMaterial());
-        }
-    }
+    gameObj_.backGroundObjectManager_->Init();
 }
 
 void GameScene::SetClassPointer() {
@@ -203,7 +185,7 @@ void GameScene::SetClassPointer() {
     gameObj_.enemyManager_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.enemyManager_->SetEnemySpawner(gameObj_.enemySpawner_.get());
     gameObj_.enemyManager_->SetDeathTimer(gameObj_.deathTimer_.get());
-  
+
     gameObj_.enemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
     gameObj_.continuousEnemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
     gameObj_.continuousEnemySpawner_->SetPlayer(gameObj_.player_.get());
@@ -214,7 +196,7 @@ void GameScene::SetClassPointer() {
     gameObj_.gameIntroManager_->SetFireInjectors(gameObj_.fireInjectors_.get());
     gameObj_.gameIntroManager_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.gameIntroManager_->SetPlayer(gameObj_.player_.get());
-    gameObj_.gameIntroManager_->SetGameBackGroundObject(gameObj_.gameBackGroundObject_.get());
+    gameObj_.gameIntroManager_->SetGameBackGroundObject(gameObj_.backGroundObjectManager_->GetGameBackGroundObject());
     gameObj_.operateUI_->SetPlayer(gameObj_.player_.get());
     gameObj_.gameIntroManager_->SetHowToOperate(gameObj_.operateUI_.get());
     gameObj_.gameIntroManager_->SetDeathTimerGauge(gameObj_.deathTimer_->GetDeathTimerGauge());
@@ -224,7 +206,7 @@ void GameScene::SetClassPointer() {
 
     gameObj_.comboDirector_->SetPlayer(gameObj_.player_.get());
     gameObj_.comboDirector_->SetComboAndDeathTimer(gameObj_.combo_.get(), gameObj_.deathTimer_.get());
-    gameObj_.comboDirector_->SetComboLevelObjHolder(gameObj_.comboLevelObjHolder_.get());
+    gameObj_.comboDirector_->SetComboLevelObjHolder(gameObj_.backGroundObjectManager_->GetComboLevelObjHolder());
     gameObj_.comboDirector_->SetAudienceController(gameObj_.audienceController_.get());
 
     gameObj_.player_->SetViewProjection(&viewProjection_);
@@ -249,38 +231,34 @@ void GameScene::SetClassPointer() {
     gameObj_.comboSupportSpriteUi_->SetComboAsistController(gameObj_.comboAsistController_.get());
     gameObj_.comboSupportSpriteUi_->Init();
 
-    // キル → KillBonusFlyController → KillBonusController 接続
-    {
-        KillBonusController*    killBonus = gameObj_.killBonusController_.get();
-        KillBonusFlyController* flyCtrl   = gameObj_.killBonusFlyController_.get();
-        DeathTimer*             deathTimer = gameObj_.deathTimer_.get();
+    KillBonusController* killBonus  = gameObj_.killBonusController_.get();
+    KillBonusFlyController* flyCtrl = gameObj_.killBonusFlyController_.get();
+    DeathTimer* deathTimer          = gameObj_.deathTimer_.get();
 
-        // DeathTimer がコンボ倍率を計算したら FlyController に pending 保存
-        gameObj_.deathTimer_->SetOnKillCallback([flyCtrl](float comboMultiplier) {
-            flyCtrl->SetPendingComboBonusValue(comboMultiplier);
-        });
+    // DeathTimer がコンボ倍率を計算したら FlyController に pending 保存
+    gameObj_.deathTimer_->SetOnKillCallback([flyCtrl](float comboMultiplier) {
+        flyCtrl->SetPendingComboBonusValue(comboMultiplier);
+    });
 
-        // スプライトが終点到達したら KillBonusController に通知
-        flyCtrl->SetOnReachCallback([killBonus](float comboBonusValue, int32_t comboCount) {
-            killBonus->OnBonusFlyArrived(comboBonusValue, comboCount);
-        });
+    // スプライトが終点到達したら KillBonusController に通知
+    flyCtrl->SetOnReachCallback([killBonus](float comboBonusValue, int32_t comboCount) {
+        killBonus->OnBonusFlyArrived(comboBonusValue, comboCount);
+    });
 
-        // スプライトが終点到達したらゲージスプライトをイージング
-        flyCtrl->SetOnGaugeAnimCallback([deathTimer]() {
-            deathTimer->GetDeathTimerGauge()->PlayTimerRecoveryScaling();
-        });
+    // スプライトが終点到達したらゲージスプライトをイージング
+    flyCtrl->SetOnGaugeAnimCallback([deathTimer]() {
+        deathTimer->GetDeathTimerGauge()->PlayTimerRecoveryScaling();
+    });
 
-        // シムキルボーナス → DeathTimer（変更なし）
-        gameObj_.killBonusController_->SetOnSimKillBonusCallback([deathTimer](float bonus) {
-            deathTimer->ApplyBonus(bonus);
-        });
+    // シムキルボーナス → DeathTimer（変更なし）
+    gameObj_.killBonusController_->SetOnSimKillBonusCallback([deathTimer](float bonus) {
+        deathTimer->ApplyBonus(bonus);
+    });
 
-        // EnemyManager に FlyController とViewProjection を渡す
-        gameObj_.enemyManager_->SetKillBonusFly(flyCtrl);
-        gameObj_.enemyManager_->SetKillBonusController(killBonus);
-    }
+    // EnemyManager に FlyController とViewProjection を渡す
+    gameObj_.enemyManager_->SetKillBonusFly(flyCtrl);
+    gameObj_.enemyManager_->SetKillBonusController(killBonus);
 
-    // 自動コンボ実行 → アンロック通知UIリアクション の接続
     ComboUnlockNotifier* notifier = gameObj_.unlockNotifier_.get();
     gameObj_.player_->SetAutoComboAttackCallback([notifier](const std::string& name) {
         notifier->NotifyAttackExecuted(name);
@@ -288,9 +266,9 @@ void GameScene::SetClassPointer() {
 
     // 攻撃解放 → アンロック通知UI の接続
     {
-        ComboAsistController* asist = gameObj_.comboAsistController_.get();
+        ComboAsistController* asist          = gameObj_.comboAsistController_.get();
         PlayerComboAttackController* atkCtrl = gameObj_.playerComboAttackController_.get();
-        Player* player = gameObj_.player_.get();
+        Player* player                       = gameObj_.player_.get();
         gameObj_.killCounter_->SetOnAttackUnlockedCallback([notifier, asist, atkCtrl, player](const std::string& name) {
             notifier->OnAttackUnlocked(name, asist->GetLayoutParam(), atkCtrl, player);
         });

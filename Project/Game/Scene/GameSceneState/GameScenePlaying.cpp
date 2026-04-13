@@ -53,7 +53,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     GameResultInfo::GetInstance()->RecordSurvivalTime(static_cast<int32_t>(elapsedTimeSec_));
     obj.fireInjectors_->Update();
     obj.gameCamera_->Update();
-    obj.comboLevelObjHolder_->Update(timeSpeed);
+    obj.backGroundObjectManager_->Update(timeSpeed);
     obj.deathTimer_->Update(timeSpeed);
     obj.killBonusController_->Update(KetaEngine::Frame::DeltaTime());
     obj.killBonusFlyController_->Update(KetaEngine::Frame::DeltaTime());

@@ -1,8 +1,8 @@
 #include "ParticleSectionParameter.h"
 #include "../../ParticleManager.h"
 #include "Base/TextureManager.h"
-#include "Function/GetFile.h"
 #include "Editor/EffectEditorSuite/EffectInlineEditRequest.h"
+#include "Function/GetFile.h"
 #include <imgui.h>
 
 using namespace KetaEngine;
@@ -58,15 +58,15 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "BaseColor", &parameters_.baseColor);
     globalParam->Regist(groupName, "Color Max", &parameters_.colorDist.max);
     globalParam->Regist(groupName, "Color Min", &parameters_.colorDist.min);
-    globalParam->Regist(groupName, "ColorEaseParam.isEase",      &parameters_.colorEaseParam.baseParam.isEase);
-    globalParam->Regist(groupName, "ColorEaseParam.maxTime",     &parameters_.colorEaseParam.baseParam.maxTime);
+    globalParam->Regist(groupName, "ColorEaseParam.isEase", &parameters_.colorEaseParam.baseParam.isEase);
+    globalParam->Regist(groupName, "ColorEaseParam.maxTime", &parameters_.colorEaseParam.baseParam.maxTime);
     globalParam->Regist(groupName, "ColorEaseParam.easeTypeInt", &parameters_.colorEaseParam.baseParam.easeTypeInt);
     globalParam->Regist(groupName, "ColorEaseParam.endValue.max", &parameters_.colorEaseParam.endValue.max);
     globalParam->Regist(groupName, "ColorEaseParam.endValue.min", &parameters_.colorEaseParam.endValue.min);
-    globalParam->Regist(groupName, "alphaMode",                   &alphaModeInt_);
-    globalParam->Regist(groupName, "AlphaEaseParam.isEase",       &parameters_.alphaEaseParam.baseParam.isEase);
-    globalParam->Regist(groupName, "AlphaEaseParam.maxTime",      &parameters_.alphaEaseParam.baseParam.maxTime);
-    globalParam->Regist(groupName, "AlphaEaseParam.easeTypeInt",  &parameters_.alphaEaseParam.baseParam.easeTypeInt);
+    globalParam->Regist(groupName, "alphaMode", &alphaModeInt_);
+    globalParam->Regist(groupName, "AlphaEaseParam.isEase", &parameters_.alphaEaseParam.baseParam.isEase);
+    globalParam->Regist(groupName, "AlphaEaseParam.maxTime", &parameters_.alphaEaseParam.baseParam.maxTime);
+    globalParam->Regist(groupName, "AlphaEaseParam.easeTypeInt", &parameters_.alphaEaseParam.baseParam.easeTypeInt);
     globalParam->Regist(groupName, "AlphaEaseParam.endValue.max", &parameters_.alphaEaseParam.endValue.max);
     globalParam->Regist(groupName, "AlphaEaseParam.endValue.min", &parameters_.alphaEaseParam.endValue.min);
 
@@ -96,7 +96,7 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "scaleEaseParam.endValueF.min", &parameters_.scaleEaseParam.endValueF.min);
     globalParam->Regist(groupName, "scaleEaseParam.endValueV3.max", &parameters_.scaleEaseParam.endValueV3.max);
     globalParam->Regist(groupName, "scaleEaseParam.endValueV3.min", &parameters_.scaleEaseParam.endValueV3.min);
-    globalParam->Regist(groupName, "scaleEaseParam.returnMaxTime",    &parameters_.scaleEaseParam.baseParam.returnMaxTime);
+    globalParam->Regist(groupName, "scaleEaseParam.returnMaxTime", &parameters_.scaleEaseParam.baseParam.returnMaxTime);
     globalParam->Regist(groupName, "scaleEaseParam.returnEaseTypeInt", &parameters_.scaleEaseParam.baseParam.returnEaseTypeInt);
     globalParam->Regist(groupName, "scaleEaseParam.isReturnToOrigin", &parameters_.scaleEaseParam.baseParam.isReturnToOrigin);
 
@@ -104,11 +104,11 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "TranslateEaseParam.isScaleEase", &parameters_.translateEaseParam.baseParam.isEase);
     globalParam->Regist(groupName, "TranslateEaseParam.maxTime", &parameters_.translateEaseParam.baseParam.maxTime);
     globalParam->Regist(groupName, "TranslateEaseParam.easeTypeInt", &parameters_.translateEaseParam.baseParam.easeTypeInt);
-    globalParam->Regist(groupName, "TranslateEaseParam.endValueV3.max",    &parameters_.translateEaseParam.endValue.max);
-    globalParam->Regist(groupName, "TranslateEaseParam.endValueV3.min",    &parameters_.translateEaseParam.endValue.min);
-    globalParam->Regist(groupName, "TranslateEaseParam.returnMaxTime",     &parameters_.translateEaseParam.baseParam.returnMaxTime);
+    globalParam->Regist(groupName, "TranslateEaseParam.endValueV3.max", &parameters_.translateEaseParam.endValue.max);
+    globalParam->Regist(groupName, "TranslateEaseParam.endValueV3.min", &parameters_.translateEaseParam.endValue.min);
+    globalParam->Regist(groupName, "TranslateEaseParam.returnMaxTime", &parameters_.translateEaseParam.baseParam.returnMaxTime);
     globalParam->Regist(groupName, "TranslateEaseParam.returnEaseTypeInt", &parameters_.translateEaseParam.baseParam.returnEaseTypeInt);
-    globalParam->Regist(groupName, "TranslateEaseParam.isReturnToOrigin",  &parameters_.translateEaseParam.baseParam.isReturnToOrigin);
+    globalParam->Regist(groupName, "TranslateEaseParam.isReturnToOrigin", &parameters_.translateEaseParam.baseParam.isReturnToOrigin);
 
     // ease Rotate
     globalParam->Regist(groupName, "RotateEaseParam.isScaleEase", &parameters_.rotateEaseParam.baseParam.isEase);
@@ -155,9 +155,9 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "emitPositionMode", &emitPositionModeInt_);
 
     // Shape
-    globalParam->Regist(groupName, "emitShape",          &emitShapeInt_);
-    globalParam->Regist(groupName, "sphereRadius.min",   &parameters_.sphereRadius.min);
-    globalParam->Regist(groupName, "sphereRadius.max",   &parameters_.sphereRadius.max);
+    globalParam->Regist(groupName, "emitShape", &emitShapeInt_);
+    globalParam->Regist(groupName, "sphereRadius.min", &parameters_.sphereRadius.min);
+    globalParam->Regist(groupName, "sphereRadius.max", &parameters_.sphereRadius.max);
 
     AdaptIntToType();
 }
@@ -202,21 +202,21 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.isFloatVelocity    = globalParam->GetValue<bool>(groupName, "isFloatVelocity");
 
     // Color
-    parameters_.baseColor     = globalParam->GetValue<Vector4>(groupName, "BaseColor");
-    parameters_.colorDist.max = globalParam->GetValue<Vector4>(groupName, "Color Max");
-    parameters_.colorDist.min = globalParam->GetValue<Vector4>(groupName, "Color Min");
-    parameters_.colorEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName,    "ColorEaseParam.isEase");
-    parameters_.colorEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName,   "ColorEaseParam.maxTime");
+    parameters_.baseColor                            = globalParam->GetValue<Vector4>(groupName, "BaseColor");
+    parameters_.colorDist.max                        = globalParam->GetValue<Vector4>(groupName, "Color Max");
+    parameters_.colorDist.min                        = globalParam->GetValue<Vector4>(groupName, "Color Min");
+    parameters_.colorEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName, "ColorEaseParam.isEase");
+    parameters_.colorEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName, "ColorEaseParam.maxTime");
     parameters_.colorEaseParam.baseParam.easeTypeInt = globalParam->GetValue<int32_t>(groupName, "ColorEaseParam.easeTypeInt");
     parameters_.colorEaseParam.endValue.max          = globalParam->GetValue<Vector3>(groupName, "ColorEaseParam.endValue.max");
     parameters_.colorEaseParam.endValue.min          = globalParam->GetValue<Vector3>(groupName, "ColorEaseParam.endValue.min");
-    alphaModeInt_                                     = globalParam->GetValue<int32_t>(groupName, "alphaMode");
+    alphaModeInt_                                    = globalParam->GetValue<int32_t>(groupName, "alphaMode");
     parameters_.alphaMode                            = static_cast<ParticleCommon::AlphaMode>(alphaModeInt_);
-    parameters_.alphaEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName,    "AlphaEaseParam.isEase");
-    parameters_.alphaEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName,   "AlphaEaseParam.maxTime");
+    parameters_.alphaEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName, "AlphaEaseParam.isEase");
+    parameters_.alphaEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName, "AlphaEaseParam.maxTime");
     parameters_.alphaEaseParam.baseParam.easeTypeInt = globalParam->GetValue<int32_t>(groupName, "AlphaEaseParam.easeTypeInt");
-    parameters_.alphaEaseParam.endValue.max          = globalParam->GetValue<float>(groupName,   "AlphaEaseParam.endValue.max");
-    parameters_.alphaEaseParam.endValue.min          = globalParam->GetValue<float>(groupName,   "AlphaEaseParam.endValue.min");
+    parameters_.alphaEaseParam.endValue.max          = globalParam->GetValue<float>(groupName, "AlphaEaseParam.endValue.max");
+    parameters_.alphaEaseParam.endValue.min          = globalParam->GetValue<float>(groupName, "AlphaEaseParam.endValue.min");
 
     // その他
     intervalTime_                = globalParam->GetValue<float>(groupName, "IntervalTime");
@@ -237,25 +237,25 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     groupParameters_.isAlphaNoMove    = globalParam->GetValue<bool>(groupName, "isAlphaNoMove");
 
     // EaseParam
-    parameters_.scaleEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName, "scaleEaseParam.isScaleEase");
-    parameters_.scaleEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName, "scaleEaseParam.maxTime");
-    parameters_.scaleEaseParam.baseParam.easeTypeInt = globalParam->GetValue<int32_t>(groupName, "scaleEaseParam.easeTypeInt");
-    parameters_.scaleEaseParam.endValueF.max         = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.max");
-    parameters_.scaleEaseParam.endValueF.min         = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.min");
+    parameters_.scaleEaseParam.baseParam.isEase            = globalParam->GetValue<bool>(groupName, "scaleEaseParam.isScaleEase");
+    parameters_.scaleEaseParam.baseParam.maxTime           = globalParam->GetValue<float>(groupName, "scaleEaseParam.maxTime");
+    parameters_.scaleEaseParam.baseParam.easeTypeInt       = globalParam->GetValue<int32_t>(groupName, "scaleEaseParam.easeTypeInt");
+    parameters_.scaleEaseParam.endValueF.max               = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.max");
+    parameters_.scaleEaseParam.endValueF.min               = globalParam->GetValue<float>(groupName, "scaleEaseParam.endValueF.min");
     parameters_.scaleEaseParam.endValueV3.max              = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.max");
     parameters_.scaleEaseParam.endValueV3.min              = globalParam->GetValue<Vector3>(groupName, "scaleEaseParam.endValueV3.min");
-    parameters_.scaleEaseParam.baseParam.returnMaxTime     = globalParam->GetValue<float>(groupName,   "scaleEaseParam.returnMaxTime");
+    parameters_.scaleEaseParam.baseParam.returnMaxTime     = globalParam->GetValue<float>(groupName, "scaleEaseParam.returnMaxTime");
     parameters_.scaleEaseParam.baseParam.returnEaseTypeInt = globalParam->GetValue<int32_t>(groupName, "scaleEaseParam.returnEaseTypeInt");
-    parameters_.scaleEaseParam.baseParam.isReturnToOrigin  = globalParam->GetValue<bool>(groupName,   "scaleEaseParam.isReturnToOrigin");
+    parameters_.scaleEaseParam.baseParam.isReturnToOrigin  = globalParam->GetValue<bool>(groupName, "scaleEaseParam.isReturnToOrigin");
 
-    parameters_.translateEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName, "TranslateEaseParam.isScaleEase");
-    parameters_.translateEaseParam.baseParam.maxTime     = globalParam->GetValue<float>(groupName, "TranslateEaseParam.maxTime");
-    parameters_.translateEaseParam.baseParam.easeTypeInt = globalParam->GetValue<int32_t>(groupName, "TranslateEaseParam.easeTypeInt");
-    parameters_.translateEaseParam.endValue.max                    = globalParam->GetValue<Vector3>(groupName,  "TranslateEaseParam.endValueV3.max");
-    parameters_.translateEaseParam.endValue.min                    = globalParam->GetValue<Vector3>(groupName,  "TranslateEaseParam.endValueV3.min");
-    parameters_.translateEaseParam.baseParam.returnMaxTime         = globalParam->GetValue<float>(groupName,    "TranslateEaseParam.returnMaxTime");
-    parameters_.translateEaseParam.baseParam.returnEaseTypeInt     = globalParam->GetValue<int32_t>(groupName,  "TranslateEaseParam.returnEaseTypeInt");
-    parameters_.translateEaseParam.baseParam.isReturnToOrigin      = globalParam->GetValue<bool>(groupName,     "TranslateEaseParam.isReturnToOrigin");
+    parameters_.translateEaseParam.baseParam.isEase            = globalParam->GetValue<bool>(groupName, "TranslateEaseParam.isScaleEase");
+    parameters_.translateEaseParam.baseParam.maxTime           = globalParam->GetValue<float>(groupName, "TranslateEaseParam.maxTime");
+    parameters_.translateEaseParam.baseParam.easeTypeInt       = globalParam->GetValue<int32_t>(groupName, "TranslateEaseParam.easeTypeInt");
+    parameters_.translateEaseParam.endValue.max                = globalParam->GetValue<Vector3>(groupName, "TranslateEaseParam.endValueV3.max");
+    parameters_.translateEaseParam.endValue.min                = globalParam->GetValue<Vector3>(groupName, "TranslateEaseParam.endValueV3.min");
+    parameters_.translateEaseParam.baseParam.returnMaxTime     = globalParam->GetValue<float>(groupName, "TranslateEaseParam.returnMaxTime");
+    parameters_.translateEaseParam.baseParam.returnEaseTypeInt = globalParam->GetValue<int32_t>(groupName, "TranslateEaseParam.returnEaseTypeInt");
+    parameters_.translateEaseParam.baseParam.isReturnToOrigin  = globalParam->GetValue<bool>(groupName, "TranslateEaseParam.isReturnToOrigin");
 
     // ease Rotate
     parameters_.rotateEaseParam.baseParam.isEase      = globalParam->GetValue<bool>(groupName, "RotateEaseParam.isScaleEase");
@@ -272,12 +272,12 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     selectedTexturePath_ = globalParam->GetValue<std::string>(groupName, "selectedTexturePath");
 
     // Distortion
-    groupParameters_.useDistortion       = globalParam->GetValue<bool>(groupName, "useDistortion");
-    groupParameters_.distortionStrength  = globalParam->GetValue<float>(groupName, "distortionStrength");
+    groupParameters_.useDistortion      = globalParam->GetValue<bool>(groupName, "useDistortion");
+    groupParameters_.distortionStrength = globalParam->GetValue<float>(groupName, "distortionStrength");
 
     // Emissive
     groupParameters_.emissiveIntensity = globalParam->GetValue<float>(groupName, "emissiveIntensity");
-    distortionTexturePath_               = globalParam->GetValue<std::string>(groupName, "distortionTexturePath");
+    distortionTexturePath_             = globalParam->GetValue<std::string>(groupName, "distortionTexturePath");
 
     // Dissolve
     dissolveName_ = globalParam->GetValue<std::string>(groupName, "dissolveName");
@@ -302,10 +302,10 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     emitPositionModeInt_ = globalParam->GetValue<int32_t>(groupName, "emitPositionMode");
 
     // Shape
-    emitShapeInt_                 = globalParam->GetValue<int32_t>(groupName, "emitShape");
-    parameters_.emitShape         = static_cast<ParticleCommon::EmitShape>(emitShapeInt_);
-    parameters_.sphereRadius.min  = globalParam->GetValue<float>(groupName, "sphereRadius.min");
-    parameters_.sphereRadius.max  = globalParam->GetValue<float>(groupName, "sphereRadius.max");
+    emitShapeInt_                = globalParam->GetValue<int32_t>(groupName, "emitShape");
+    parameters_.emitShape        = static_cast<ParticleCommon::EmitShape>(emitShapeInt_);
+    parameters_.sphereRadius.min = globalParam->GetValue<float>(groupName, "sphereRadius.min");
+    parameters_.sphereRadius.max = globalParam->GetValue<float>(groupName, "sphereRadius.max");
 
     // Apply loaded values
     groupParameters_.blendMode     = static_cast<BlendMode>(blendModeInt_);
@@ -398,10 +398,10 @@ void ParticleSectionParameter::AdjustParam() {
 
         if (parameters_.alphaMode == ParticleCommon::AlphaMode::Easing) {
             auto& easeParam = parameters_.alphaEaseParam;
-            ImGui::DragFloat("最大時間##Alpha",       &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
+            ImGui::DragFloat("最大時間##Alpha", &easeParam.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
             ImGuiEasingTypeSelector("イージングタイプ##Alpha", easeParam.baseParam.easeTypeInt);
-            ImGui::DragFloat("終了アルファ 最大",     &easeParam.endValue.max, 0.01f, 0.0f, 1.0f);
-            ImGui::DragFloat("終了アルファ 最小",     &easeParam.endValue.min, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("終了アルファ 最大", &easeParam.endValue.max, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("終了アルファ 最小", &easeParam.endValue.min, 0.01f, 0.0f, 1.0f);
         }
 
         ImGui::Separator();
@@ -416,7 +416,6 @@ void ParticleSectionParameter::AdjustParam() {
             ImGui::SeparatorText("終了カラー範囲（RGB）:");
             ImGui::ColorEdit3("終了カラー 最大", &easeParam.endValue.max.x);
             ImGui::ColorEdit3("終了カラー 最小", &easeParam.endValue.min.x);
-
         }
     }
 
@@ -431,7 +430,6 @@ void ParticleSectionParameter::AdjustParam() {
             ImGui::SeparatorText("Sphere 設定");
             ImGui::DragFloat("半径 最小", &parameters_.sphereRadius.min, 0.01f, 0.0f, 100.0f);
             ImGui::DragFloat("半径 最大", &parameters_.sphereRadius.max, 0.01f, 0.0f, 100.0f);
-        
         }
     }
 
@@ -670,7 +668,6 @@ void ParticleSectionParameter::RotateParamEditor() {
         ImGui::SeparatorText("終了回転範囲（度）");
         ImGui::DragFloat3("終了回転 最大", &easeParam.endValue.max.x, 0.1f, -360.0f, 360.0f);
         ImGui::DragFloat3("終了回転 最小", &easeParam.endValue.min.x, 0.1f, -360.0f, 360.0f);
-
     }
 }
 

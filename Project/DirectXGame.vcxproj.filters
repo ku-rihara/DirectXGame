@@ -982,13 +982,10 @@
     <ClCompile Include="Game\BackGroundObject\ComboLevel\BaseComboLevelBackObj.cpp">
       <Filter>Game\BackGroundObject\ComboLevel</Filter>
     </ClCompile>
+    <ClCompile Include="Game\BackGroundObject\BackGroundObjectManager.cpp">
+      <Filter>Game\BackGroundObject</Filter>
+    </ClCompile>
     <ClCompile Include="Game\BackGroundObject\ComboLevel\ComboLevelObjHolder.cpp">
-      <Filter>Game\BackGroundObject\ComboLevel</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\BackGroundObject\ComboLevel\SpeakerEffect.cpp">
-      <Filter>Game\BackGroundObject\ComboLevel</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\BackGroundObject\ComboLevel\StadiumLightEffect.cpp">
       <Filter>Game\BackGroundObject\ComboLevel</Filter>
     </ClCompile>
     <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp">
@@ -1570,9 +1567,6 @@
     <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.h">
       <Filter>Engine\Editor\EffectEditorSuite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectInlineEditRequest.h">
-      <Filter>Engine\Editor\EffectEditorSuite</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.h">
       <Filter>Engine\Editor\ObjEaseAnimation</Filter>
     </ClInclude>
@@ -1891,13 +1885,10 @@
     <ClInclude Include="Game\BackGroundObject\ComboLevel\BaseComboLevelBackObj.h">
       <Filter>Game\BackGroundObject\ComboLevel</Filter>
     </ClInclude>
+    <ClInclude Include="Game\BackGroundObject\BackGroundObjectManager.h">
+      <Filter>Game\BackGroundObject</Filter>
+    </ClInclude>
     <ClInclude Include="Game\BackGroundObject\ComboLevel\ComboLevelObjHolder.h">
-      <Filter>Game\BackGroundObject\ComboLevel</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\BackGroundObject\ComboLevel\SpeakerEffect.h">
-      <Filter>Game\BackGroundObject\ComboLevel</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\BackGroundObject\ComboLevel\StadiumLightEffect.h">
       <Filter>Game\BackGroundObject\ComboLevel</Filter>
     </ClInclude>
     <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h">

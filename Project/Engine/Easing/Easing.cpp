@@ -45,7 +45,6 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     endValue_   = easingParam.endValue;
     amplitude_  = easingParam.amplitude;
     period_     = easingParam.period;
-    backRatio_  = easingParam.backRatio;
 
     returnType_    = easingParam.returnType;
     returnMaxTime_ = easingParam.returnMaxTime;
@@ -56,13 +55,9 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
         maxTime_        = easingParam.maxTime + easingParam.returnMaxTime;
         finishValueType_ = EasingFinishValueType::Start; // 終了時は起点に戻る
     } else {
-        forwardMaxTime_ = easingParam.maxTime;
-        maxTime_        = easingParam.maxTime;
-        if (easingParam.backRatio == 0.0f) {
-            finishValueType_ = EasingFinishValueType::End;
-        } else {
-            finishValueType_ = EasingFinishValueType::Start;
-        }
+        forwardMaxTime_  = easingParam.maxTime;
+        maxTime_         = easingParam.maxTime;
+        finishValueType_ = EasingFinishValueType::End;
     }
 
     waitTimeMax_      = easingParam.waitTimeMax;
@@ -120,10 +115,11 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
         param.adaptFloatAxisType = static_cast<AdaptFloatAxisType>(inner.at("adaptFloatAxisType").get<int>());
     }
 
-    param.maxTime   = inner.at("maxTime").get<float>();
-    param.amplitude = inner.value("amplitude", 0.0f);
-    param.period    = inner.value("period", 0.0f);
-    param.backRatio = inner.value("backRatio", 0.0f);
+    param.maxTime       = inner.at("maxTime").get<float>();
+    param.returnMaxTime = inner.value("returnMaxTime", 0.0f);
+    param.returnType    = static_cast<EasingType>(inner.value("returnType", 0));
+    param.amplitude     = inner.value("amplitude", 0.0f);
+    param.period        = inner.value("period", 0.0f);
 
     param.finishOffsetTime = inner.value("finishOffsetTime", 0.0f);
     param.waitTimeMax      = inner.value("waitTime", 0.0f);
@@ -399,70 +395,6 @@ void Easing<T>::CalculateValue() {
         *currentOffset_ = EaseAmplitudeScale(startValue, currentTime_, maxTime_, amplitude_, period_);
         break;
 
-    //  Back
-    case EasingType::BackInSineZero:
-        *currentOffset_ = Back::InSineZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackOutSineZero:
-        *currentOffset_ = Back::OutSineZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInOutSineZero:
-        *currentOffset_ = Back::InOutSineZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInQuadZero:
-        *currentOffset_ = Back::InQuadZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackOutQuadZero:
-        *currentOffset_ = Back::OutQuadZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInOutQuadZero:
-        *currentOffset_ = Back::InOutQuadZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInCubicZero:
-        *currentOffset_ = Back::InCubicZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackOutCubicZero:
-        *currentOffset_ = Back::OutCubicZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInOutCubicZero:
-        *currentOffset_ = Back::InOutCubicZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInQuartZero:
-        *currentOffset_ = Back::InQuartZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackOutQuartZero:
-        *currentOffset_ = Back::OutQuartZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInOutQuartZero:
-        *currentOffset_ = Back::InOutQuartZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInQuintZero:
-        *currentOffset_ = Back::InQuintZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackOutQuintZero:
-        *currentOffset_ = Back::OutQuintZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInOutQuintZero:
-        *currentOffset_ = Back::InOutQuintZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInExpoZero:
-        *currentOffset_ = Back::InExpoZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackOutExpoZero:
-        *currentOffset_ = Back::OutExpoZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInOutExpoZero:
-        *currentOffset_ = Back::InOutExpoZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInCircZero:
-        *currentOffset_ = Back::InCircZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackOutCircZero:
-        *currentOffset_ = Back::OutCircZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
-    case EasingType::BackInOutCircZero:
-        *currentOffset_ = Back::InOutCircZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
-        break;
     }
 
     // 2フェーズ計算のために一時変更した値を復元

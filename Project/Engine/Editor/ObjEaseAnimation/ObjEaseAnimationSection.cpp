@@ -274,7 +274,6 @@ void ObjEaseAnimationSection::AdaptEaseParam() {
         param.ease.SetMaxTime(param.maxTime);
         param.ease.SetEndValue(param.endValue);
         param.ease.SetType(static_cast<EasingType>(param.easeType));
-        param.ease.SetBackRatio(param.backRatio);
         param.ease.SetAmplitude(param.amplitude);
         param.ease.SetPeriod(param.period);
         param.ease.SetIsStartEndReverse(false);
@@ -327,7 +326,6 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
 
     ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.0f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
-    ImGui::DragFloat("Back Ratio", &param.backRatio, 0.01f, 0.0f, 10.0f);
     ImGui::DragFloat("Amplitude", &param.amplitude, 0.01f);
     ImGui::DragFloat("Period", &param.period, 0.01f);
 
@@ -486,7 +484,6 @@ void ObjEaseAnimationSection::RegisterParams() {
         globalParameter_->Regist(groupName_, std::string(name) + "_endValue", &param.endValue);
         globalParameter_->Regist(groupName_, std::string(name) + "_MaxTime", &param.maxTime);
         globalParameter_->Regist(groupName_, std::string(name) + "_EaseType", &param.easeType);
-        globalParameter_->Regist(groupName_, std::string(name) + "_BackRatio", &param.backRatio);
         globalParameter_->Regist(groupName_, std::string(name) + "_Amplitude", &param.amplitude);
         globalParameter_->Regist(groupName_, std::string(name) + "_Period", &param.period);
         globalParameter_->Regist(groupName_, std::string(name) + "_ReturnMaxTime", &param.returnMaxTime);
@@ -517,7 +514,6 @@ void ObjEaseAnimationSection::GetParams() {
         param.endValue         = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_endValue");
         param.maxTime          = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_MaxTime");
         param.easeType         = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_EaseType");
-        param.backRatio        = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_BackRatio");
         param.amplitude        = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_Amplitude");
         param.period           = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_Period");
         param.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_ReturnMaxTime");

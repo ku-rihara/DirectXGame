@@ -1,99 +1,79 @@
 #include "ComboLevelObjHolder.h"
-#include "StadiumLightEffect.h"
-#include"SpeakerEffect.h"
-
-void ComboLevelObjHolder::Init(const std::string& filename) {
-    // 各オブジェクトの初期化
-    for (auto& obj : objects_) {
-        if (obj) {
-            obj->Init(filename);
-        }
-    }
-}
 
 void ComboLevelObjHolder::Update(float playSpeed) {
-    // 各オブジェクトの更新
-    for (auto& obj : objects_) {
-        if (obj) {
-            obj->Update(playSpeed);
-
-            // PULSEのタイミングを合わせる処理
-            if (dynamic_cast<StadiumLightEffect*>(obj.get())) {
-                StadiumLightEffect* stadiumLight = dynamic_cast<StadiumLightEffect*>(obj.get());
-                if (stadiumLight->GetIsPulseOneCycleEnd()) {
-                    // PULSEが一周期終了したら他のオブジェクトのPULSEを開始
-                    for (auto& otherObj : objects_) {
-                        if (otherObj && otherObj.get() != obj.get()) {
-                            otherObj->SetIsPulseCycleStart(true);
-                        }
-                    }
-                 
-                    stadiumLight->SetIsPulseOneCycleEnd(false); // フラグリセット
-                }
-            }
+    for (auto& entry : entries_) {
+        if (entry.obj) {
+            entry.obj->Update(playSpeed);
         }
     }
 }
 
-void ComboLevelObjHolder::Add(const ComboLevelObjType& type, const std::string& filename) {
-    size_t index = ToIndex(type);
+void ComboLevelObjHolder::Add(const std::string& filename, int32_t comboLevel, bool isPulseMaster) {
+    auto obj = std::make_unique<BaseComboLevelBackObj>();
+    obj->Init(filename);
 
-    // typeに応じて適切なオブジェクトを生成
-    switch (type) {
-    case ComboLevelObjType::STADIUM_LIGHT:
-        objects_[index] = std::make_unique<StadiumLightEffect>();
-        break;
-    case ComboLevelObjType::SPEAKER:
-        objects_[index] = std::make_unique<SpeakerEffect>();
-        break;
-    default:
-        break;
+    if (isPulseMaster) {
+        pulseMaster_ = obj.get();
+        obj->SetIsPulseCycleStart(true);
+
+        // PULSEが一周期終わったら他のオブジェクトのPULSEを開始
+        obj->GetObjectFromBlender()->SetLoopEndCallback(
+            static_cast<int32_t>(ObjEffectMode::PULSE),
+            [this]() {
+                for (auto& entry : entries_) {
+                    if (entry.obj.get() != pulseMaster_) {
+                        entry.obj->SetIsPulseCycleStart(true);
+                    }
+                }
+            }
+        );
     }
 
-    // 生成したオブジェクトを初期化
-    if (objects_[index]) {
-        objects_[index]->Init(filename);
+    entries_.push_back({ std::move(obj), comboLevel });
+}
+
+void ComboLevelObjHolder::CloseForComboLevel(int32_t level) {
+    for (auto& entry : entries_) {
+        if (entry.comboLevel <= level) {
+            entry.obj->SetEffectMode(ObjEffectMode::CLOSE);
+        }
+    }
+}
+
+void ComboLevelObjHolder::SetEffectMode(int32_t comboLevel, const ObjEffectMode& mode) {
+    for (auto& entry : entries_) {
+        if (entry.comboLevel == comboLevel) {
+            entry.obj->SetEffectMode(mode);
+            // マスターが再スポーン時にPULSEを再開できるようにする
+            if (mode == ObjEffectMode::SPAWN && entry.obj.get() == pulseMaster_) {
+                entry.obj->SetIsPulseCycleStart(true);
+            }
+            return;
+        }
     }
 }
 
 void ComboLevelObjHolder::EasingResetSelectGroup(int32_t groupNum) {
-    for (auto& obj : objects_) {
-        if (obj) {
-            obj->EasingResetSelectGroup(groupNum);
+    for (auto& entry : entries_) {
+        if (entry.obj) {
+            entry.obj->EasingResetSelectGroup(groupNum);
         }
     }
 }
 
 void ComboLevelObjHolder::EasingAllReset() {
-    for (auto& obj : objects_) {
-        if (obj) {
-            obj->EasingAllReset();
+    for (auto& entry : entries_) {
+        if (entry.obj) {
+            entry.obj->EasingAllReset();
         }
     }
 }
 
-void ComboLevelObjHolder::CloseForComboLevel(int32_t level) {
-    // レベルに応じたオブジェクトのエフェクトモードをCLOSEに設定
-    for (int32_t i = 0; i <= level; ++i) {
-
-        if (i >= static_cast<int32_t>(ComboLevelObjType::COUNT)) {
-            continue;
+bool ComboLevelObjHolder::GetIsEasingFinish(int32_t comboLevel, int32_t groupNum) const {
+    for (const auto& entry : entries_) {
+        if (entry.comboLevel == comboLevel && entry.obj) {
+            return entry.obj->GetIsEasingFinish(groupNum);
         }
-
-        objects_[i]->SetEffectMode(ObjEffectMode::CLOSE);
-    }
-}
-
-bool ComboLevelObjHolder::GetIsEasingFinish(const ComboLevelObjType& type, int32_t groupNum) const {
-    if (objects_[ToIndex(type)]) {
-        return objects_[ToIndex(type)]->GetIsEasingFinish(groupNum);
     }
     return true;
-}
-
-void ComboLevelObjHolder::SetEffectMode(int32_t level, const ObjEffectMode& mode) {
-
-    if (objects_[level]) {
-        objects_[level]->SetEffectMode(mode);
-    }
 }

@@ -3,20 +3,21 @@
         "StartTimeOffset": 0.0,
         "adaptVec2AxisType": 0,
         "amplitude": 0.0,
-        "backRatio": 0.44999998807907104,
         "endValue": [
             1.2999999523162842,
             1.2999999523162842
         ],
         "finishOffsetTime": 0.0,
         "finishType": 1,
-        "maxTime": 0.5299999713897705,
+        "maxTime": 0.23849999114037,
         "period": 0.0,
+        "returnMaxTime": 0.29149997234345,
+        "returnType": 16,
         "startValue": [
             1.0,
             1.0
         ],
-        "type": 43,
+        "type": 15,
         "waitTime": 0.0
     }
 }

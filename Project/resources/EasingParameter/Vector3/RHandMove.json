@@ -2,22 +2,23 @@
     "RHandMove": {
         "StartTimeOffset": 0.0,
         "amplitude": 0.0,
-        "backRatio": 0.5,
         "endValue": [
             1.5,
             0.0,
             4.0
         ],
         "finishOffsetTime": 0.0,
-        "finishType": 0,
-        "maxTime": 0.5,
+        "finishType": 1,
+        "maxTime": 0.25,
         "period": 0.0,
+        "returnMaxTime": 0.25,
+        "returnType": 19,
         "startValue": [
             0.0,
             0.0,
             0.0
         ],
-        "type": 46,
+        "type": 18,
         "waitTime": 0.0
     }
 }

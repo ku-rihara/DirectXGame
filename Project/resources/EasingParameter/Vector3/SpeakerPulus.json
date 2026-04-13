@@ -2,22 +2,23 @@
     "SpeakerPulus": {
         "StartTimeOffset": 0.0,
         "amplitude": 0.0,
-        "backRatio": 0.5,
         "endValue": [
             1.100000023841858,
             1.100000023841858,
             1.100000023841858
         ],
         "finishOffsetTime": 0.0,
-        "finishType": 0,
-        "maxTime": 0.4399999976158142,
+        "finishType": 1,
+        "maxTime": 0.21999999880791,
         "period": 0.0,
+        "returnMaxTime": 0.21999999880791,
+        "returnType": 2,
         "startValue": [
             1.0,
             1.0,
             1.0
         ],
-        "type": 30,
+        "type": 2,
         "waitTime": 0.0
     }
 }

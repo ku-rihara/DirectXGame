@@ -35,28 +35,6 @@ enum class EasingType {
     // ぷにぷにするイージング
     SquishyScaling,
 
-    // 行って戻ってくるイージング
-    BackInSineZero,
-    BackOutSineZero,
-    BackInOutSineZero,
-    BackInQuadZero,
-    BackOutQuadZero,
-    BackInOutQuadZero,
-    BackInCubicZero,
-    BackOutCubicZero,
-    BackInOutCubicZero,
-    BackInQuartZero,
-    BackOutQuartZero,
-    BackInOutQuartZero,
-    BackInQuintZero,
-    BackOutQuintZero,
-    BackInOutQuintZero,
-    BackInExpoZero,
-    BackOutExpoZero,
-    BackInOutExpoZero,
-    BackInCircZero,
-    BackOutCircZero,
-    BackInOutCircZero,
     COUNT,
 };
 
@@ -90,14 +68,7 @@ constexpr std::array<const char*, static_cast<int>(EasingType::COUNT)> EasingTyp
     "InQuart", "OutQuart", "InOutQuart",
     "InBack", "OutBack", "InOutBack",
     "InBounce", "OutBounce", "InOutBounce",
-    "SquishyScaling",
-    "BackInSineZero", "BackOutSineZero", "BackInOutSineZero",
-    "BackInQuadZero", "BackOutQuadZero", "BackInOutQuadZero",
-    "BackInCubicZero", "BackOutCubicZero", "BackInOutCubicZero",
-    "BackInQuartZero", "BackOutQuartZero", "BackInOutQuartZero",
-    "BackInQuintZero", "BackOutQuintZero", "BackInOutQuintZero",
-    "BackInExpoZero", "BackOutExpoZero", "BackInOutExpoZero",
-    "BackInCircZero", "BackOutCircZero", "BackInOutCircZero"};
+    "SquishyScaling"};
 
 constexpr std::array<const char*, static_cast<int>(AdaptFloatAxisType::COUNT)> AdaptFloatAxisTypeLabels = {
     "X",
@@ -136,11 +107,10 @@ struct EasingParameter {
     T endValue;
 
     float maxTime        = 0.0f;
-    float returnMaxTime  = 0.0f;             // 戻りフェーズの時間（0=戻りなし）
+    float returnMaxTime  = 0.0f;                // 戻りフェーズの時間（0=戻りなし）
     EasingType returnType = EasingType::InSine; // 戻りフェーズのイージング種類
     float amplitude = 0.0f;
     float period    = 0.0f;
-    float backRatio = 0.0f;
 
     float waitTimeMax      = 0.0f;
     float finishOffsetTime = 0.0f;

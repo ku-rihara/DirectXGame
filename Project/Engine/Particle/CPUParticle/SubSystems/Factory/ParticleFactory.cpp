@@ -167,7 +167,6 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         } else {
             easingParam.returnMaxTime = 0.0f;
         }
-        easingParam.backRatio = 0.0f;
 
         // Easingに設定
         particle.scaleEasing->SettingValue(easingParam);
@@ -199,7 +198,6 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         easingParam.startValue = particle.translateInfo.startPosition;
         easingParam.endValue   = particle.translateInfo.endPosition;
         easingParam.maxTime    = parameters.translateEaseParam.baseParam.maxTime;
-        easingParam.backRatio  = 0.0f;
 
         const float translateReturnTime = parameters.translateEaseParam.baseParam.returnMaxTime;
         if (parameters.translateEaseParam.baseParam.isReturnToOrigin && translateReturnTime > 0.0f) {
@@ -243,7 +241,6 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         easingParam.startValue = particle.rotateInfo.startRotation;
         easingParam.endValue   = particle.rotateInfo.endRotation;
         easingParam.maxTime    = parameters.rotateEaseParam.baseParam.maxTime;
-        easingParam.backRatio  = 0.0f;
         easingParam.finishType = EasingFinishValueType::End;
 
         // Easingに設定
@@ -283,7 +280,6 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         easingParam.startValue = particle.colorInfo.startColor;
         easingParam.endValue   = particle.colorInfo.endColor;
         easingParam.maxTime    = parameters.colorEaseParam.baseParam.maxTime;
-        easingParam.backRatio  = 0.0f;
         easingParam.finishType = EasingFinishValueType::End;
 
         particle.colorEasing->SettingValue(easingParam);
@@ -307,7 +303,6 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         easingParam.startValue = particle.color_.w;
         easingParam.endValue   = endAlpha;
         easingParam.maxTime    = parameters.alphaEaseParam.baseParam.maxTime;
-        easingParam.backRatio  = 0.0f;
         easingParam.finishType = EasingFinishValueType::End;
 
         particle.alphaEasing->SettingValue(easingParam);
@@ -355,7 +350,6 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         dissolveEasingParam.startValue = dissolveParams->startThreshold;
         dissolveEasingParam.endValue   = dissolveParams->endThreshold;
         dissolveEasingParam.maxTime    = dissolveParams->maxTime;
-        dissolveEasingParam.backRatio  = 0.0f;
         dissolveEasingParam.finishType = EasingFinishValueType::End;
 
         particle.dissolveEasing->SettingValue(dissolveEasingParam);
