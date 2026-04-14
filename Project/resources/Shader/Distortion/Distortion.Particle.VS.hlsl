@@ -4,6 +4,7 @@ struct VSInput {
     float4 position : POSITION0;
     float2 texcoord : TEXCOORD0;
     float3 normal   : NORMAL0;
+    float4 color    : COLOR0;
 };
 
 struct ParticleForGPU {
@@ -35,6 +36,6 @@ VSOutput main(VSInput input, uint instanceID : SV_InstanceID) {
     // UVTransform を適用
     float4 transformedUV = mul(float4(texcoord, 0.0f, 1.0f), gParticle[instanceID].UVTransform);
     output.texcoord = transformedUV.xy;
-    output.color    = gParticle[instanceID].color;
+    output.color    = gParticle[instanceID].color * input.color;
     return output;
 }

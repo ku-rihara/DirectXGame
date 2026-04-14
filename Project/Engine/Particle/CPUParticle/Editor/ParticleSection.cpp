@@ -16,23 +16,8 @@ void ParticleSection::Init(const std::string& particleName, const std::string& c
     groupName_    = particleName + std::to_string(sectionIndex);
     folderPath_   = baseFolderPath_ + categoryName + "/" + "Sections/" + particleName_ + "/";
 
-    sectionParam_ = std::make_unique<ParticleSectionParameter>();
-
-    // テクスチャ変更コールバックを設定
-    sectionParam_->SetTextureChangedCallback([this]() {
-        ApplyTextureToManager();
-    });
-
-    globalParameter_ = GlobalParameter::GetInstance();
-
-    // グループ作成
-    if (!globalParameter_->HasRegisters(groupName_)) {
-        globalParameter_->CreateGroup(groupName_);
-        sectionParam_->RegisterParams(globalParameter_, groupName_);
-        globalParameter_->SyncParamForGroup(groupName_);
-    } else {
-        sectionParam_->AdaptParameters(globalParameter_, groupName_);
-    }
+    InitSectionParam();
+    InitGlobalParameter();
 
     // Rail初期化
     railPlayer_ = std::make_unique<RailPlayer>();
@@ -42,9 +27,47 @@ void ParticleSection::Init(const std::string& particleName, const std::string& c
     debugLine_.reset(Line3D::Create(24));
     emitBoxTransform_.Init();
 
-    // パーティクルグループが存在しない場合は作成
+    InitParticleGroup();
+}
+
+void ParticleSection::InitSectionParam() {
+    sectionParam_ = std::make_unique<ParticleSectionParameter>();
+
+    // テクスチャ変更コールバック
+    sectionParam_->SetTextureChangedCallback([this]() {
+        ApplyTextureToManager();
+    });
+
+    // プリミティブ変更コールバック
+    sectionParam_->SetPrimitiveChangedCallback([this](PrimitiveType type) {
+        // 形状切り替え
+        ChangePrimitive(type);
+        // Cylinderに切り替えた直後、保存済みパラメータを適用
+        if (type == PrimitiveType::Cylinder) {
+            RebuildCylinder(sectionParam_->GetCylinderParams());
+        }
+    });
+
+    // Cylinder形状パラメータ変更コールバック
+    sectionParam_->SetCylinderParamsChangedCallback([this](const PrimitiveCylinder::CylinderParams& params) {
+        RebuildCylinder(params);
+    });
+}
+
+void ParticleSection::InitGlobalParameter() {
+    globalParameter_ = GlobalParameter::GetInstance();
+
+    if (!globalParameter_->HasRegisters(groupName_)) {
+        globalParameter_->CreateGroup(groupName_);
+        sectionParam_->RegisterParams(globalParameter_, groupName_);
+        globalParameter_->SyncParamForGroup(groupName_);
+    } else {
+        sectionParam_->AdaptParameters(globalParameter_, groupName_);
+    }
+}
+
+void ParticleSection::InitParticleGroup() {
     if (ParticleManager::GetInstance()->particleGroups_.find(groupName_) == ParticleManager::GetInstance()->particleGroups_.end()) {
-        // デフォルトでPlaneプリミティブを作成
         CreatePrimitiveParticle(PrimitiveType::Plane, sectionParam_->GetMaxParticleNum());
     }
 }
@@ -191,6 +214,19 @@ void ParticleSection::ChangePrimitive(const PrimitiveType& primitiveType) {
     ApplyTextureToManager();
 }
 
+void ParticleSection::RebuildCylinder(const PrimitiveCylinder::CylinderParams& params) {
+    auto& groups = ParticleManager::GetInstance()->particleGroups_;
+    auto it      = groups.find(groupName_);
+    if (it == groups.end())
+        return;
+
+    auto* cyl = dynamic_cast<PrimitiveCylinder*>(it->second.primitive_.get());
+    if (cyl) {
+        cyl->SetParams(params);
+        cyl->Rebuild();
+    }
+}
+
 //*----------------------------- Editor UI -----------------------------*//
 
 void ParticleSection::AdjustParam() {
@@ -333,4 +369,3 @@ void ParticleSection::SetTextureHandle(uint32_t handle) {
 bool ParticleSection::IsShotJudge() {
     return (sectionParam_->GetGroupParameters().isShot) && (!isPlayByEditor_);
 }
-

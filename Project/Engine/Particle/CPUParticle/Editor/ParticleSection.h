@@ -7,6 +7,7 @@
 #include "SectionParameters/ParticleSectionParameter.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "3D/Primitive/IPrimitive.h"
+#include "3D/Primitive/PrimitiveCylinder.h"
 #include "utility/FileSelector/FileSelector.h"
 #include <memory>
 #include <string>
@@ -54,11 +55,17 @@ public:
     void CreateModelParticle(const std::string& modelFilePath, int32_t maxnum);
     void CreatePrimitiveParticle(PrimitiveType primitiveType, int32_t maxnum);
     void ChangePrimitive(const PrimitiveType& primitiveType);
+    /// Cylinderプリミティブのパラメータをリアルタイムに反映する
+    void RebuildCylinder(const KetaEngine::PrimitiveCylinder::CylinderParams& params);
     void SetTextureHandle(uint32_t handle);
     void InitAdaptTexture();
 
 private:
     //*---------------------------- Internal Methods ----------------------------*//
+
+    void InitSectionParam();
+    void InitGlobalParameter();
+    void InitParticleGroup();
 
     void ApplyTextureToManager();
     void UpdateEmitTransform();

@@ -36,8 +36,8 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     float4 transformedUV = mul(float4(texcoord, 0.0f, 1.0f), gParticle[instanceID].UVTransform);
     output.texcoord = transformedUV.xy;
 
-    // 色と法線の設定
-    output.color = gParticle[instanceID].color;
+    // 色と法線の設定 (インスタンスカラー × 頂点カラー)
+    output.color = gParticle[instanceID].color * input.color;
     output.normal = normalize(mul(input.normal, (float3x3) gParticle[instanceID].WorldInverseTranspose));
 
     // パーティクルごとの dissolve 閾値を渡す

@@ -43,7 +43,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         discard;
     }
 
-    // Dissolve処理 (閾値はパーティクルごとに独立)
+    // Dissolve処理 
     if (gMaterial.enableDissolve != 0 && input.dissolveThreshold < 1.0f)
     {
         float mask = gMaskTexture.Sample(gSampler, transformedUV.xy);

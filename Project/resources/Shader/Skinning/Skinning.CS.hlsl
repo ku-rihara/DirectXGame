@@ -6,6 +6,7 @@ struct Vertex
     float4 position;
     float2 texcoord;
     float3 normal;
+    float4 color; ///< 頂点カラー (VertexData と一致させる)
 };
 
 struct VertexInfluence
@@ -51,7 +52,8 @@ Vertex Skinning(Vertex vertex, VertexInfluence input)
     skinned.normal = normalize(skinned.normal); //正規化してもどす
     
     skinned.texcoord = vertex.texcoord;
-    
+    skinned.color    = vertex.color;
+
     return skinned;
 }
 

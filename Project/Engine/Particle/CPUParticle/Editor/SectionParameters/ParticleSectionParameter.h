@@ -1,6 +1,7 @@
 #pragma once
 #include "../Parameter/ParticleCommonParameters.h"
 #include "3D/Primitive/IPrimitive.h"
+#include "3D/Primitive/PrimitiveCylinder.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "utility/FileSelector/FileSelector.h"
 #include "utility/TimeModeSelector/TimeModeSelector.h"
@@ -63,6 +64,7 @@ private:
     void TranslateParamEditor();
     void RotateParamEditor();
     void AdaptIntToType();
+    void CylinderParamEditor(); ///< Cylinder形状パラメータ編集UI
 
 private:
     // Names
@@ -115,9 +117,13 @@ private:
     std::string dissolveName_;
     std::string distortionTexturePath_; // 歪みノイズテクスチャパス
 
-    // テクスチャ変更時のコールバック
+    // Cylinderパラメータ
+    KetaEngine::PrimitiveCylinder::CylinderParams cylinderParams_;
+
+    // コールバック
     std::function<void()> onTextureChanged_;
     std::function<void(PrimitiveType)> onPrimitiveChanged_;
+    std::function<void(const KetaEngine::PrimitiveCylinder::CylinderParams&)> onCylinderParamsChanged_;
 
 public:
     // Getter
@@ -154,6 +160,10 @@ public:
     void SetPrimitiveChangedCallback(std::function<void(PrimitiveType)> callback) {
         onPrimitiveChanged_ = callback;
     }
+    void SetCylinderParamsChangedCallback(std::function<void(const KetaEngine::PrimitiveCylinder::CylinderParams&)> callback) {
+        onCylinderParamsChanged_ = std::move(callback);
+    }
+    const KetaEngine::PrimitiveCylinder::CylinderParams& GetCylinderParams() const { return cylinderParams_; }
 };
 
 } // namespace KetaEngine

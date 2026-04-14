@@ -159,6 +159,20 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "sphereRadius.min", &parameters_.sphereRadius.min);
     globalParam->Regist(groupName, "sphereRadius.max", &parameters_.sphereRadius.max);
 
+    // Cylinder Params
+    globalParam->Regist(groupName, "Cyl.topRadiusX", &cylinderParams_.topRadiusX);
+    globalParam->Regist(groupName, "Cyl.topRadiusZ", &cylinderParams_.topRadiusZ);
+    globalParam->Regist(groupName, "Cyl.bottomRadiusX", &cylinderParams_.bottomRadiusX);
+    globalParam->Regist(groupName, "Cyl.bottomRadiusZ", &cylinderParams_.bottomRadiusZ);
+    globalParam->Regist(groupName, "Cyl.height", &cylinderParams_.height);
+    globalParam->Regist(groupName, "Cyl.divisions", &cylinderParams_.divisions);
+    globalParam->Regist(groupName, "Cyl.heightDivisions", &cylinderParams_.heightDivisions);
+    globalParam->Regist(groupName, "Cyl.startAngleDeg", &cylinderParams_.startAngleDeg);
+    globalParam->Regist(groupName, "Cyl.endAngleDeg", &cylinderParams_.endAngleDeg);
+    globalParam->Regist(groupName, "Cyl.uvModeInt", &cylinderParams_.uvModeInt);
+    globalParam->Regist(groupName, "Cyl.topColor", &cylinderParams_.topColor);
+    globalParam->Regist(groupName, "Cyl.bottomColor", &cylinderParams_.bottomColor);
+
     AdaptIntToType();
 }
 
@@ -307,6 +321,20 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.sphereRadius.min = globalParam->GetValue<float>(groupName, "sphereRadius.min");
     parameters_.sphereRadius.max = globalParam->GetValue<float>(groupName, "sphereRadius.max");
 
+    // Cylinder Params
+    cylinderParams_.topRadiusX      = globalParam->GetValue<float>(groupName, "Cyl.topRadiusX");
+    cylinderParams_.topRadiusZ      = globalParam->GetValue<float>(groupName, "Cyl.topRadiusZ");
+    cylinderParams_.bottomRadiusX   = globalParam->GetValue<float>(groupName, "Cyl.bottomRadiusX");
+    cylinderParams_.bottomRadiusZ   = globalParam->GetValue<float>(groupName, "Cyl.bottomRadiusZ");
+    cylinderParams_.height          = globalParam->GetValue<float>(groupName, "Cyl.height");
+    cylinderParams_.divisions       = globalParam->GetValue<int32_t>(groupName, "Cyl.divisions");
+    cylinderParams_.heightDivisions = globalParam->GetValue<int32_t>(groupName, "Cyl.heightDivisions");
+    cylinderParams_.startAngleDeg   = globalParam->GetValue<float>(groupName, "Cyl.startAngleDeg");
+    cylinderParams_.endAngleDeg     = globalParam->GetValue<float>(groupName, "Cyl.endAngleDeg");
+    cylinderParams_.uvModeInt       = globalParam->GetValue<int32_t>(groupName, "Cyl.uvModeInt");
+    cylinderParams_.topColor        = globalParam->GetValue<Vector4>(groupName, "Cyl.topColor");
+    cylinderParams_.bottomColor     = globalParam->GetValue<Vector4>(groupName, "Cyl.bottomColor");
+
     // Apply loaded values
     groupParameters_.blendMode     = static_cast<BlendMode>(blendModeInt_);
     groupParameters_.billboardType = static_cast<BillboardType>(billboardTypeInt_);
@@ -375,6 +403,11 @@ void ParticleSectionParameter::AdjustParam() {
                 if (onPrimitiveChanged_) {
                     onPrimitiveChanged_(static_cast<PrimitiveType>(primitiveTypeInt_));
                 }
+            }
+
+            // Cylinder選択中のみ形状パラメータを表示
+            if (primitiveTypeInt_ == static_cast<int32_t>(PrimitiveType::Cylinder)) {
+                CylinderParamEditor();
             }
         }
     }
@@ -745,4 +778,58 @@ void ParticleSectionParameter::SetTargetPosition(const Vector3& targetPos) {
 void ParticleSectionParameter::SetTextureChangedCallback(std::function<void()> callback) {
 
     onTextureChanged_ = callback;
+}
+
+///=============================================================
+/// Cylinder 形状パラメータ ImGui UI
+///=============================================================
+void ParticleSectionParameter::CylinderParamEditor() {
+    ImGui::PushID("CylinderParams");
+    ImGui::SeparatorText("シリンダー形状設定");
+
+    bool changed = false;
+
+    // 半径
+    if (ImGui::TreeNodeEx("半径設定", ImGuiTreeNodeFlags_DefaultOpen)) {
+        changed |= ImGui::DragFloat("上半径X", &cylinderParams_.topRadiusX, 0.01f, 0.0f, 200.0f);
+        changed |= ImGui::DragFloat("上半径Z", &cylinderParams_.topRadiusZ, 0.01f, 0.0f, 200.0f);
+        changed |= ImGui::DragFloat("下半径X", &cylinderParams_.bottomRadiusX, 0.01f, 0.0f, 200.0f);
+        changed |= ImGui::DragFloat("下半径Z", &cylinderParams_.bottomRadiusZ, 0.01f, 0.0f, 200.0f);
+        ImGui::TreePop();
+    }
+
+    // 高さ・分割数
+    if (ImGui::TreeNodeEx("形状設定", ImGuiTreeNodeFlags_DefaultOpen)) {
+        changed |= ImGui::DragFloat("高さ", &cylinderParams_.height, 0.01f, 0.0f, 200.0f);
+        changed |= ImGui::DragInt("周方向分割数", &cylinderParams_.divisions, 1, 3, 512);
+        changed |= ImGui::DragInt("縦分割数", &cylinderParams_.heightDivisions, 1, 1, 128);
+        ImGui::TreePop();
+    }
+
+    // 角度範囲
+    if (ImGui::TreeNodeEx("角度範囲", ImGuiTreeNodeFlags_DefaultOpen)) {
+        changed |= ImGui::DragFloat("開始角度 (度)", &cylinderParams_.startAngleDeg, 1.0f, -360.0f, 360.0f);
+        changed |= ImGui::DragFloat("終了角度 (度)", &cylinderParams_.endAngleDeg, 1.0f, -360.0f, 720.0f);
+        ImGui::TreePop();
+    }
+
+    // UV方向
+    if (ImGui::TreeNodeEx("UV設定", ImGuiTreeNodeFlags_DefaultOpen)) {
+        const char* uvModes[] = {"上→下 (デフォルト)", "下→上 (フリップ)", "横方向"};
+        changed |= ImGui::Combo("UV方向", &cylinderParams_.uvModeInt, uvModes, IM_ARRAYSIZE(uvModes));
+        ImGui::TreePop();
+    }
+
+    // 頂点カラー
+    if (ImGui::TreeNodeEx("頂点カラー", ImGuiTreeNodeFlags_DefaultOpen)) {
+        changed |= ImGui::ColorEdit4("上端カラー", &cylinderParams_.topColor.x);
+        changed |= ImGui::ColorEdit4("下端カラー", &cylinderParams_.bottomColor.x);
+        ImGui::TreePop();
+    }
+
+    if (changed && onCylinderParamsChanged_) {
+        onCylinderParamsChanged_(cylinderParams_);
+    }
+
+    ImGui::PopID();
 }

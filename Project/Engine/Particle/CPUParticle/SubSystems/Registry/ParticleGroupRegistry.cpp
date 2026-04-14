@@ -144,6 +144,9 @@ void ParticleGroupRegistry::CreatePrimitiveParticle(
     CreateInstancingResource(name, maxnum, groups[name], srvManager);
     CreateMaterialResource(groups[name]);
 
+    // デフォルトテクスチャを設定 
+    groups[name].textureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.dds");
+
     groups[name].instanceNum = 0;
 }
 
@@ -162,7 +165,7 @@ void ParticleGroupRegistry::ResetAllParticles(
             group.instancingData[index].World                 = MakeIdentity4x4();
             group.instancingData[index].WorldInverseTranspose = MakeIdentity4x4();
             group.instancingData[index].UVTransform           = MakeIdentity4x4();
-            group.instancingData[index].color                 = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+            group.instancingData[index].color                 = Vector4::kWHITE();
             group.instancingData[index].isFlipX               = 0u;
             group.instancingData[index].isFlipY               = 0u;
             group.instancingData[index].dissolveThreshold     = 1.0f;

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "3D/Primitive/IPrimitive.h"
+#include "Vector4.h"
+#include <cstdint>
 
 /// <summary>
 /// シリンダープリミティブクラス
@@ -9,33 +11,49 @@ namespace KetaEngine {
 
 class PrimitiveCylinder : public IPrimitive {
 public:
+    /// <summary>
+    /// シリンダー形状パラメータ
+    /// </summary>
+    struct CylinderParams {
+        float   topRadiusX      = 1.0f;  ///< 上半径X
+        float   topRadiusZ      = 1.0f;  ///< 上半径Z (楕円時)
+        float   bottomRadiusX   = 1.0f;  ///< 下半径X
+        float   bottomRadiusZ   = 1.0f;  ///< 下半径Z (楕円時)
+        float   height          = 3.0f;  ///< 高さ
+        int32_t divisions       = 32;    ///< 周方向分割数
+        int32_t heightDivisions = 1;     ///< 縦方向分割数
+        float   startAngleDeg   = 0.0f;  ///< 開始角度 (度)
+        float   endAngleDeg     = 360.0f;///< 終了角度 (度)
+        int32_t uvModeInt       = 0;     ///< 0=上→下 1=下→上 2=横方向
+        Vector4 topColor    = Vector4(1.0f, 1.0f, 1.0f, 1.0f); ///< 上端頂点カラー
+        Vector4 bottomColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f); ///< 下端頂点カラー
+    };
+
+public:
     PrimitiveCylinder()  = default;
     ~PrimitiveCylinder() = default;
 
     void Init() override;   //< 初期化
     void Create() override; //< シリンダー生成
 
-    /// <summary>
-    /// テクスチャ設定
-    /// </summary>
-    /// <param name="name">テクスチャ名</param>
     void SetTexture(const std::string& name) override;
-
-    /// <summary>
-    /// 描画
-    /// </summary>
-    /// <param name="worldTransform">ワールドトランスフォーム</param>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    /// <param name="textureHandle">テクスチャハンドル</param>
     void Draw(
         const WorldTransform& worldTransform,
         const ViewProjection& viewProjection,
         std::optional<uint32_t> textureHandle = std::nullopt) override;
 
+    /// パラメータを設定してメッシュを再構築する
+    void SetParams(const CylinderParams& params) { params_ = params; }
+    const CylinderParams& GetParams() const { return params_; }
+    void Rebuild();
+
 private:
- 
-    const int kVerticesPerFace = 6;  
-    const float kFullRotationCoeff  = 2.0f * kVerticesPerFace;
+    static Vector4 LerpColor(const Vector4& a, const Vector4& b, float t);
+    Vector2        GetUV(float u, float v) const;
+
+    const int kVerticesPerFace = 6;
+
+    CylinderParams params_;
 };
 
 }; // KetaEngine

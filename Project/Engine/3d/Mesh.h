@@ -76,6 +76,7 @@ public:
     void SetVertexPositionData(uint32_t index, const Vector4& pos) { vertexDate_[index].position = pos; }
     void SetVertexNormData(uint32_t index, const Vector3& norm) { vertexDate_[index].normal = norm; }
     void SetVertexTexcoordData(uint32_t index, const Vector2& texcoord) { vertexDate_[index].texcoord = texcoord; }
+    void SetVertexColorData(uint32_t index, const Vector4& color) { vertexDate_[index].color = color; }
 };
 
 }; // KetaEngine

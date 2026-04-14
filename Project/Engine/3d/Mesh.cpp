@@ -1,8 +1,9 @@
 #include "Mesh.h"
 
 using namespace KetaEngine;
-#include"Base/Dx/DirectXCommon.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "Base/TextureManager.h"
+#include "Vector4.h"
 
 void Mesh::Init(DirectXCommon* directXCommon, uint32_t vertexNum) {
     directXCommon_ = directXCommon;
@@ -10,14 +11,13 @@ void Mesh::Init(DirectXCommon* directXCommon, uint32_t vertexNum) {
 
     // Resource作成
     CreateVertexResource();
-   
-    //デフォルトテクスチャ設定
+
+    // デフォルトテクスチャ設定
     textureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.dds");
 }
 
-void Mesh::SetIndexData(const uint32_t* indices,uint32_t indexCount) {
+void Mesh::SetIndexData(const uint32_t* indices, uint32_t indexCount) {
     indexNum_ = indexCount;
-
 
     // インデックスバッファを作成
     indexResource_ = directXCommon_->CreateBufferResource(
@@ -53,8 +53,11 @@ void Mesh::CreateVertexResource() {
     vertexBufferView_.StrideInBytes = sizeof(VertexData);
     // 書き込むためのアドレスを取得
     vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate_));
+    // 頂点カラーをデフォルト白で初期化 
+    for (uint32_t i = 0; i < vertexNum_; ++i) {
+        vertexDate_[i].color = Vector4::kWHITE();
+    }
 }
-
 
 void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, const std::optional<uint32_t>& textureHandle) {
     auto commandList = directXCommon_->GetCommandList();
@@ -76,7 +79,6 @@ void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial
     commandList->DrawIndexedInstanced(indexNum_, 1, 0, 0, 0);
 }
 
-
 void Mesh::DrawInstancing(uint32_t instanceNum) {
 
     auto commandList = directXCommon_->GetCommandList();
@@ -89,4 +91,3 @@ void Mesh::DrawInstancing(uint32_t instanceNum) {
     // インデックス描画
     commandList->DrawIndexedInstanced(indexNum_, instanceNum, 0, 0, 0);
 }
-
