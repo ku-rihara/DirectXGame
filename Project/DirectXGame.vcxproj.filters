@@ -544,6 +544,9 @@
     <ClCompile Include="Engine\3d\ViewProjection.cpp">
       <Filter>Engine\3d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\ObjEaseTransformApplier.cpp">
+      <Filter>Engine\3d</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\3d\WorldTransform.cpp">
       <Filter>Engine\3d</Filter>
     </ClCompile>
@@ -1412,6 +1415,9 @@
       <Filter>Engine\3d\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\ViewProjection.h">
+      <Filter>Engine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\ObjEaseTransformApplier.h">
       <Filter>Engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\WorldTransform.h">

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BasePlayerBehavior.h"
+#include <functional>
 
 /// <summary>
 /// プレイヤーダッシュ振る舞いクラス
@@ -18,5 +19,14 @@ public:
     void SetForceDash(bool force) { forceDash_ = force; }
 
 private:
+    // ダッシュ開始
+    void StartDash();
+    /// 最初のダッシュ状態
+    void UpdateStartDash();
+    /// 通常ダッシュ状態
+    void UpdateNormalDash();
+
+private:
     bool forceDash_ = false;
+    std::function<void()> currentState_;
 };

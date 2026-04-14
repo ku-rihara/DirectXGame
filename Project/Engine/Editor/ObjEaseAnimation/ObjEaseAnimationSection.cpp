@@ -300,6 +300,7 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
 
     if (type == TransformType::Translation) {
         ImGui::Checkbox("Look At Movement Direction", &param.isLookAtDirection);
+        ImGui::Checkbox("Move Along Forward Direction", &param.isMoveAlongForward);
         ImGui::Checkbox("Use Rail", &param.useRail);
 
         if (param.useRail) {
@@ -453,6 +454,11 @@ bool ObjEaseAnimationSection::IsLookingAtDirection() const {
     return transParam.isLookAtDirection && transParam.isActive;
 }
 
+bool ObjEaseAnimationSection::IsMoveAlongForward() const {
+    const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
+    return transParam.isMoveAlongForward && transParam.isActive;
+}
+
 Vector3 ObjEaseAnimationSection::GetMovementDirection() const {
     const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
     Vector3 direction      = transParam.currentOffset - transParam.previousOffset;
@@ -493,6 +499,7 @@ void ObjEaseAnimationSection::RegisterParams() {
             globalParameter_->Regist(groupName_, std::string(name) + "_UseRail", &param.useRail);
             globalParameter_->Regist(groupName_, std::string(name) + "_RailFileName", &param.railFileName);
             globalParameter_->Regist(groupName_, std::string(name) + "_IsLookAtDirection", &param.isLookAtDirection);
+            globalParameter_->Regist(groupName_, std::string(name) + "_IsMoveAlongForward", &param.isMoveAlongForward);
         }
 
         globalParameter_->Regist(groupName_, std::string(name) + "_Anchor", &param.anchor);
@@ -520,9 +527,10 @@ void ObjEaseAnimationSection::GetParams() {
         param.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_ReturnEaseType");
 
         if (i == static_cast<size_t>(TransformType::Translation)) {
-            param.useRail           = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
-            param.railFileName      = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
-            param.isLookAtDirection = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection");
+            param.useRail             = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
+            param.railFileName        = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
+            param.isLookAtDirection   = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsLookAtDirection");
+            param.isMoveAlongForward  = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsMoveAlongForward");
         }
 
         param.anchor = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_Anchor");

@@ -47,6 +47,12 @@ public:
     void PlayJumpAnimation();
 
     // -------------------------------------------------------
+    // ダッシュアニメーション
+    // -------------------------------------------------------
+    void PlayDashStartAnimation();
+    bool IsDashStartAnimationFinished() const;
+
+    // -------------------------------------------------------
     // ObjEase アニメーション (タイトル等)
     // -------------------------------------------------------
     void PlayMainHeadAnimation(const std::string& name);

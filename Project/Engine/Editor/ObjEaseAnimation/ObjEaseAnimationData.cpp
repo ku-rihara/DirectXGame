@@ -376,6 +376,14 @@ bool ObjEaseAnimationData::IsLookingAtDirection() const {
     return false;
 }
 
+bool ObjEaseAnimationData::IsTranslationAlongForward() const {
+    int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
+    if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {
+        return sectionElements_[sectionIndex]->IsMoveAlongForward();
+    }
+    return false;
+}
+
 Vector3 ObjEaseAnimationData::GetMovementDirection() const {
     int32_t sectionIndex = activeSectionIndices_[static_cast<size_t>(TransformType::Translation)];
     if (sectionIndex >= 0 && sectionIndex < static_cast<int32_t>(sectionElements_.size())) {

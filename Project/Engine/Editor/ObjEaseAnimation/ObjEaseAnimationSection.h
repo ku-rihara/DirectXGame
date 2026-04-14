@@ -42,10 +42,11 @@ public:
     };
 
     struct TransformParam {
-        bool isActive          = false;
-        bool isReturnToOrigin  = false;
-        bool useRail           = false;
-        bool isLookAtDirection = false;
+        bool isActive            = false;
+        bool isReturnToOrigin    = false;
+        bool useRail             = false;
+        bool isLookAtDirection   = false;
+        bool isMoveAlongForward  = false; //< 対象の向いてる方向を進行方向として動くフラグ
 
         Vector3 endValue = Vector3::ZeroVector();
 
@@ -184,6 +185,7 @@ public:
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const;
     bool IsLookingAtDirection() const;
+    bool IsMoveAlongForward() const;
     bool IsReturnSection() const { return isReturnSection_; }
     Vector3 GetMovementDirection() const;
 

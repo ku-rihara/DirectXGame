@@ -76,6 +76,18 @@ void PlayerAnimator::SetInitialDissolveHidden() {
 }
 
 ///=============================================================
+/// ダッシュアニメーション
+///=============================================================
+void PlayerAnimator::PlayDashStartAnimation() {
+    baseTransform_->PlayObjEaseAnimation("DashStart", "Player");
+}
+
+bool PlayerAnimator::IsDashStartAnimationFinished() const {
+    auto* player = baseTransform_->GetObjEaseAnimationPlayer();
+    return player && player->IsFinished();
+}
+
+///=============================================================
 /// ObjEase アニメーション (タイトル等)
 ///=============================================================
 void PlayerAnimator::PlayMainHeadAnimation(const std::string& name) {

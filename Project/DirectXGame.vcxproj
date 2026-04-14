@@ -35,6 +35,7 @@
     <ClCompile Include="Engine\3d\RibbonTrail\RibbonTrail.cpp" />
     <ClCompile Include="Engine\3d\RibbonTrail\RibbonTrailManager.cpp" />
     <ClCompile Include="Engine\3d\ViewProjection.cpp" />
+    <ClCompile Include="Engine\3d\ObjEaseTransformApplier.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Base\Descriptors\DsvManager.cpp" />
@@ -380,6 +381,7 @@
     <ClInclude Include="Engine\3d\RibbonTrail\RibbonTrail.h" />
     <ClInclude Include="Engine\3d\RibbonTrail\RibbonTrailManager.h" />
     <ClInclude Include="Engine\3d\ViewProjection.h" />
+    <ClInclude Include="Engine\3d\ObjEaseTransformApplier.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\Base\Descriptors\DsvManager.h" />

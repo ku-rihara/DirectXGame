@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix4x4.h"
+#include "ObjEaseTransformApplier.h"
 #include "Quaternion.h"
 #include "Vector3.h"
 #include "ViewProjection.h"
@@ -33,7 +34,6 @@ enum class RotateOder {
     Quaternion, //< クォータニオン
 };
 
-class ObjEaseAnimationPlayer;
 class Object3DAnimation;
 
 /// <summary>
@@ -153,19 +153,14 @@ private:
     Matrix4x4 backToFrontMatrix_;
 
     bool isAdaptDirectScale_ = false;
-    bool reverseDirectionOnReturn_ = false;
-    bool applyOriginalOnStop_ = false;
-    bool lookAtDirectionEnabled_ = true;
-
-    Vector3 lastPlayDirection_ = Vector3::ZeroVector(); //< 行き中に記録した進行方向
 
     // アンカーポイント (SRTそれぞれ独立)
     Vector3 anchorScale_       = Vector3::ZeroVector();
     Vector3 anchorRotation_    = Vector3::ZeroVector();
     Vector3 anchorTranslation_ = Vector3::ZeroVector();
 
-    // オブジェクトイージングアニメーション
-    std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;
+    // ObjEaseAnimation 適用クラス
+    ObjEaseTransformApplier objEaseApplier_;
 
 public:
     // Getter
@@ -177,15 +172,15 @@ public:
     Vector3 GetUpVector() const; //< 上方向ベクトル取得
     Vector3 GetForwardVector() const; //< 前方向ベクトル取得
 
-    ObjEaseAnimationPlayer* GetObjEaseAnimationPlayer() { return objEaseAnimationPlayer_.get(); }
+    ObjEaseAnimationPlayer* GetObjEaseAnimationPlayer() { return objEaseApplier_.GetPlayer(); }
 
     // Setter
     void SetParent(const WorldTransform* parent);
     void SetBaseScale(const Vector3& scale) { baseScale_ = scale; }
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
     void SetIsAdaptDirectScale(bool is) { isAdaptDirectScale_ = is; }
-    void SetReverseDirectionOnReturn(bool reverse) { reverseDirectionOnReturn_ = reverse; }
-    void SetLookAtDirectionEnabled(bool enabled) { lookAtDirectionEnabled_ = enabled; }
+    void SetReverseDirectionOnReturn(bool reverse) { objEaseApplier_.SetReverseDirectionOnReturn(reverse); }
+    void SetLookAtDirectionEnabled(bool enabled) { objEaseApplier_.SetLookAtDirectionEnabled(enabled); }
   
     // アンカーポイント Setter
     void SetAnchorScale(const Vector3& anchor) { anchorScale_ = anchor; }         

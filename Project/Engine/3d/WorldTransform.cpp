@@ -2,7 +2,6 @@
 
 using namespace KetaEngine;
 #include "3D/AnimationObject3D/Object3DAnimation.h"
-#include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 
 WorldTransform::WorldTransform()  = default;
 WorldTransform::~WorldTransform() = default;
@@ -17,11 +16,8 @@ void WorldTransform::Init() {
     InitOffsetTransform();
     UpdateMatrix();
 
-    // オブジェクトイージングアニメーションプレイヤー初期化
-    if (!objEaseAnimationPlayer_) {
-        objEaseAnimationPlayer_ = std::make_unique<ObjEaseAnimationPlayer>();
-        objEaseAnimationPlayer_->Init();
-    }
+    // ObjEaseAnimation 適用クラス初期化
+    objEaseApplier_.Init();
 }
 
 void WorldTransform::UpdateMatrix() {
@@ -341,150 +337,62 @@ Vector3 WorldTransform::ScaleCalc(bool isDirectScale) {
 /// オブジェクトイージングアニメーション再生
 ///============================================================
 void WorldTransform::PlayObjEaseAnimation(const std::string& animationName, const std::string& categoryName) {
-    if (!objEaseAnimationPlayer_) {
-        objEaseAnimationPlayer_ = std::make_unique<ObjEaseAnimationPlayer>();
-        objEaseAnimationPlayer_->Init();
-    }
-
-    // 待機中に保持する現在のオフセット値を保存
-    Vector3 currentScale       = offsetTransform_.scale;
-    Vector3 currentRotation    = offsetTransform_.rotation;
-    Vector3 currentTranslation = offsetTransform_.translation;
-
-    applyOriginalOnStop_ = false;
-    objEaseAnimationPlayer_->Play(animationName, categoryName);
-
-    // 待機中に使用するオフセット値を設定
-    auto* animeData = objEaseAnimationPlayer_->GetAnimationData();
-    if (animeData) {
-        animeData->SetPreAnimationOffsets(currentScale, currentRotation, currentTranslation);
-    }
-
-    // Rail使用時、親を設定
-    if (animeData && animeData->GetIsUseRailActiveKeyFrame()) {
-        auto* railPlayer = animeData->GetCurrentRailPlayer();
-        if (railPlayer) {
-            railPlayer->SetParent(this);
-        }
-    }
+    objEaseApplier_.Play(
+        animationName, categoryName,
+        offsetTransform_.scale,
+        offsetTransform_.rotation,
+        offsetTransform_.translation,
+        this);
 }
 
 ///============================================================
 /// オブジェクトイージングアニメーション停止
 ///============================================================
 void WorldTransform::StopObjEaseAnimation() {
-    if (objEaseAnimationPlayer_) {
-        objEaseAnimationPlayer_->Stop();
-    }
+    objEaseApplier_.Stop();
 }
 
 ///============================================================
 /// アニメーション更新
 ///============================================================
 void WorldTransform::UpdateObjEaseAnimation() {
-    if (objEaseAnimationPlayer_) {
-        objEaseAnimationPlayer_->Update();
-        ApplyAnimationToTransform();
-    }
+    objEaseApplier_.Update();
+    ApplyAnimationToTransform();
 }
 
 ///============================================================
 /// アニメーション適用後のTransform更新
 ///============================================================
 void WorldTransform::ApplyAnimationToTransform() {
-    if (!objEaseAnimationPlayer_ || !objEaseAnimationPlayer_->IsPlaying()) {
-        if (applyOriginalOnStop_) {
-            auto* animeData = objEaseAnimationPlayer_ ? objEaseAnimationPlayer_->GetAnimationData() : nullptr;
-            if (animeData) {
-                offsetTransform_.scale       = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Scale);
-                offsetTransform_.rotation    = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Rotation);
-                offsetTransform_.translation = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Translation);
-                anchorScale_ = anchorRotation_ = anchorTranslation_ = Vector3::ZeroVector();
-                return;
-            }
-        }
-        InitOffsetTransform();
-        anchorScale_ = anchorRotation_ = anchorTranslation_ = Vector3::ZeroVector();
-        return;
-    }
+    ObjEaseTransformApplier::OffsetResult result;
+    objEaseApplier_.Apply(result, rotation_, quaternion_, isAdaptDirectScale_, rotateOder_ == RotateOder::Quaternion);
 
-    auto* animeData = objEaseAnimationPlayer_->GetAnimationData();
-    if (!animeData) {
-        InitOffsetTransform();
-        anchorScale_ = anchorRotation_ = anchorTranslation_ = Vector3::ZeroVector();
-        return;
-    }
-
-    // Scaleをオフセット
-    if (isAdaptDirectScale_) {
-        scale_ = objEaseAnimationPlayer_->GetCurrentScale();
+    if (result.overwriteDirectScale) {
+        scale_ = result.directScaleValue;
     } else {
-        offsetTransform_.scale = objEaseAnimationPlayer_->GetCurrentScale();
+        offsetTransform_.scale = result.scale;
     }
-
-    // Translationをオフセット
-    if (!animeData->GetIsUseRailActiveKeyFrame()) {
-        offsetTransform_.translation = objEaseAnimationPlayer_->GetCurrentTranslation();
-    } else {
-        auto* railPlayer = animeData->GetCurrentRailPlayer();
-        if (railPlayer) {
-            offsetTransform_.translation = railPlayer->GetCurrentPosition();
-        }
-    }
-
-    // 進行方向を向く設定が有効な場合は方向から回転を決定する
-    if (lookAtDirectionEnabled_ && objEaseAnimationPlayer_->IsLookingAtDirection()) {
-        Vector3 dir = objEaseAnimationPlayer_->GetMovementDirection();
-        if (dir.Length() > 0.001f) {
-            // 内積で行き/戻りを判断：最後の行き方向と逆向きなら戻り中
-            bool isGoingForward = (lastPlayDirection_.Length() < 0.001f) || (dir.Dot(lastPlayDirection_) >= 0.0f);
-            if (isGoingForward) {
-                // 行き中：進行方向を向いて記録
-                ApplyLookAtDirection(dir);
-                lastPlayDirection_ = dir;
-            } else {
-                // 戻り中：進行方向の逆を向く（最新の戻り方向から毎フレーム計算）
-                ApplyLookAtDirection(-dir);
-                lastPlayDirection_ = -dir;
-            }
-        } else if (lastPlayDirection_.Length() > 0.001f) {
-            // 移動量が微小：直前の有効な方向を維持
-            ApplyLookAtDirection(lastPlayDirection_);
-        }
-    } else {
-        // Rotationをオフセット
-        if (rotateOder_ == RotateOder::Quaternion) {
-            Vector3 rotationOffset      = objEaseAnimationPlayer_->GetCurrentRotation();
-            offsetTransform_.quaternion = Quaternion::EulerToQuaternion(rotationOffset);
-        } else {
-            offsetTransform_.rotation = objEaseAnimationPlayer_->GetCurrentRotation();
-        }
-    }
-
-    // アニメーションセクションのアンカーポイントを適用
-    anchorScale_       = objEaseAnimationPlayer_->GetCurrentScaleAnchor();
-    anchorRotation_    = objEaseAnimationPlayer_->GetCurrentRotationAnchor();
-    anchorTranslation_ = objEaseAnimationPlayer_->GetCurrentTranslationAnchor();
+    offsetTransform_.rotation    = result.rotation;
+    offsetTransform_.translation = result.translation;
+    offsetTransform_.quaternion  = result.quaternion;
+    anchorScale_                 = result.anchorScale;
+    anchorRotation_              = result.anchorRotation;
+    anchorTranslation_           = result.anchorTranslation;
 }
 
 ///============================================================
 /// アニメーションのオリジナル値をtransformに直接適応
 ///============================================================
 void WorldTransform::ApplyOriginalAnimationValuesToTransform() {
-    if (!objEaseAnimationPlayer_) {
-        return;
-    }
-    auto* animeData = objEaseAnimationPlayer_->GetAnimationData();
-    if (!animeData) {
+    ObjEaseTransformApplier::OffsetResult result;
+    if (!objEaseApplier_.ApplyOriginalValues(result)) {
         return;
     }
 
-    offsetTransform_.scale       = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Scale);
-    offsetTransform_.rotation    = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Rotation);
-    offsetTransform_.translation = animeData->GetOriginalValue(ObjEaseAnimationData::TransformType::Translation);
+    offsetTransform_.scale       = result.scale;
+    offsetTransform_.rotation    = result.rotation;
+    offsetTransform_.translation = result.translation;
     anchorScale_ = anchorRotation_ = anchorTranslation_ = Vector3::ZeroVector();
-
-    applyOriginalOnStop_ = true;
 
     // UpdateObjEaseAnimation をスキップしてアフィン行列のみ再計算
     UpdateAffineMatrix();
@@ -500,42 +408,12 @@ void WorldTransform::InitOffsetTransform() {
     offsetTransform_.translation = Vector3::ZeroVector();
     offsetTransform_.rotation    = Vector3::ZeroVector();
     offsetTransform_.quaternion  = Quaternion::Identity();
-    lastPlayDirection_           = Vector3::ZeroVector();
 }
 
 
 void WorldTransform::ApplyLookAtDirection(const Vector3& direction) {
-    // 方向ベクトルが小さすぎる場合は処理しない
-    if (direction.Length() < 0.001f) {
-        return;
-    }
-
-    Vector3 normalizedDir = direction.Normalize();
-
-    if (rotateOder_ == RotateOder::Quaternion) {
-        // Quaternionモードの場合
-        Vector3 forward = Vector3::ToForward();
-
-        // 前方向から目標方向への回転を計算
-        Matrix4x4 rotationMatrix = DirectionToDirection(forward, normalizedDir);
-
-        // 行列からQuaternionに変換
-        Quaternion lookAtQuat = QuaternionFromMatrix(rotationMatrix);
-
-        // 現在の回転に適用
-        offsetTransform_.quaternion = lookAtQuat * quaternion_;
-
-    } else {
-
-        // Y軸回転
-        float rotateY = std::atan2(normalizedDir.x, normalizedDir.z);
-
-        // X軸回転
-        float horizontalLength = std::sqrt(normalizedDir.x * normalizedDir.x + normalizedDir.z * normalizedDir.z);
-        float rotateX          = std::atan2(-normalizedDir.y, horizontalLength);
-
-        // オフセットとして設定
-        offsetTransform_.rotation.y = rotateY;
-        offsetTransform_.rotation.x = rotateX;
-    }
+    ObjEaseTransformApplier::OffsetResult result;
+    objEaseApplier_.ApplyLookAtDirection(result, direction, rotateOder_ == RotateOder::Quaternion, quaternion_);
+    offsetTransform_.rotation   = result.rotation;
+    offsetTransform_.quaternion = result.quaternion;
 }

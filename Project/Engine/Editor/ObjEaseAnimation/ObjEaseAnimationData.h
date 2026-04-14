@@ -94,6 +94,7 @@ public:
     bool GetIsUseRailActiveKeyFrame() const;
     RailPlayer* GetCurrentRailPlayer() const;
     bool IsLookingAtDirection() const;
+    bool IsTranslationAlongForward() const;
     Vector3 GetMovementDirection() const;
     bool IsTranslationReturning() const;
 
