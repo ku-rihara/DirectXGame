@@ -36,12 +36,12 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
 
     // UV
     globalParam->Regist(groupName, "UV Pos", &parameters_.uvParam.pos);
+    globalParam->Regist(groupName, "UV Scale", &parameters_.uvParam.scale);
     globalParam->Regist(groupName, "UV Rotate", &parameters_.uvParam.rotate);
     globalParam->Regist(groupName, "UV NumOfFrame", &parameters_.uvParam.numOfFrame);
     globalParam->Regist(groupName, "UV ScrollSpeed", &parameters_.uvParam.frameScrollSpeed);
     globalParam->Regist(groupName, "UV IsLoop", &parameters_.uvParam.isLoop);
-    globalParam->Regist(groupName, "UV isScrollEachPixel", &parameters_.uvParam.isScrollEachPixel);
-    globalParam->Regist(groupName, "UV isScroll", &parameters_.uvParam.isScroll);
+    globalParam->Regist(groupName, "UV ScrollMode", &parameters_.uvParam.uvScrollModeInt);
     globalParam->Regist(groupName, "UV isFlipX", &parameters_.uvParam.isFlipX);
     globalParam->Regist(groupName, "UV isFlipY", &parameters_.uvParam.isFlipY);
 
@@ -196,15 +196,15 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.rotateSpeedDist.min = globalParam->GetValue<Vector3>(groupName, "RotateSpeed Min");
 
     // UV
-    parameters_.uvParam.pos               = globalParam->GetValue<Vector2>(groupName, "UV Pos");
-    parameters_.uvParam.rotate            = globalParam->GetValue<Vector3>(groupName, "UV Rotate");
-    parameters_.uvParam.numOfFrame        = globalParam->GetValue<int32_t>(groupName, "UV NumOfFrame");
-    parameters_.uvParam.frameScrollSpeed  = globalParam->GetValue<float>(groupName, "UV ScrollSpeed");
-    parameters_.uvParam.isLoop            = globalParam->GetValue<bool>(groupName, "UV IsLoop");
-    parameters_.uvParam.isScrollEachPixel = globalParam->GetValue<bool>(groupName, "UV isScrollEachPixel");
-    parameters_.uvParam.isScroll          = globalParam->GetValue<bool>(groupName, "UV isScroll");
-    parameters_.uvParam.isFlipX           = globalParam->GetValue<bool>(groupName, "UV isFlipX");
-    parameters_.uvParam.isFlipY           = globalParam->GetValue<bool>(groupName, "UV isFlipY");
+    parameters_.uvParam.pos              = globalParam->GetValue<Vector2>(groupName, "UV Pos");
+    parameters_.uvParam.scale            = globalParam->GetValue<Vector2>(groupName, "UV Scale");
+    parameters_.uvParam.rotate           = globalParam->GetValue<Vector3>(groupName, "UV Rotate");
+    parameters_.uvParam.numOfFrame       = globalParam->GetValue<int32_t>(groupName, "UV NumOfFrame");
+    parameters_.uvParam.frameScrollSpeed = globalParam->GetValue<float>  (groupName, "UV ScrollSpeed");
+    parameters_.uvParam.isLoop           = globalParam->GetValue<bool>   (groupName, "UV IsLoop");
+    parameters_.uvParam.uvScrollModeInt  = globalParam->GetValue<int32_t>(groupName, "UV ScrollMode");
+    parameters_.uvParam.isFlipX          = globalParam->GetValue<bool>   (groupName, "UV isFlipX");
+    parameters_.uvParam.isFlipY          = globalParam->GetValue<bool>   (groupName, "UV isFlipY");
 
     // Velocity
     parameters_.speedDist.max      = globalParam->GetValue<float>(groupName, "Speed Max");
@@ -516,18 +516,22 @@ void ParticleSectionParameter::AdjustParam() {
 
     // UV
     if (ImGui::CollapsingHeader("UVパラメータ")) {
-        ImGui::SeparatorText("UV位置:");
+        ImGui::SeparatorText("UV Transform:");
         ImGui::DragFloat2("UV位置", &parameters_.uvParam.pos.x, 0.01f);
-
-        ImGui::SeparatorText("UV回転:");
+        ImGui::DragFloat2("UVスケール", &parameters_.uvParam.scale.x, 0.01f, 0.01f, 100.0f);
         ImGui::DragFloat3("UV回転", &parameters_.uvParam.rotate.x, 0.1f);
 
-        ImGui::SeparatorText("UVアニメーション:");
-        ImGui::InputInt("フレーム数", &parameters_.uvParam.numOfFrame);
-        ImGui::DragFloat("スクロール速度", &parameters_.uvParam.frameScrollSpeed, 0.01f);
-        ImGui::Checkbox("ループ", &parameters_.uvParam.isLoop);
-        ImGui::Checkbox("ピクセル毎スクロール", &parameters_.uvParam.isScrollEachPixel);
-        ImGui::Checkbox("スクロール", &parameters_.uvParam.isScroll);
+        ImGui::SeparatorText("UVスクロール:");
+        const char* scrollModes[] = {"None (なし)", "Scroll (コマ送り)", "ScrollEachPixel (ピクセル毎)"};
+        ImGui::Combo("スクロールモード", &parameters_.uvParam.uvScrollModeInt, scrollModes, IM_ARRAYSIZE(scrollModes));
+
+        if (parameters_.uvParam.uvScrollModeInt != 0) {
+            ImGui::InputInt("フレーム数", &parameters_.uvParam.numOfFrame);
+            ImGui::DragFloat("スクロール速度", &parameters_.uvParam.frameScrollSpeed, 0.01f);
+            ImGui::Checkbox("ループ", &parameters_.uvParam.isLoop);
+        }
+
+        ImGui::SeparatorText("UV反転:");
         ImGui::Checkbox("X反転", &parameters_.uvParam.isFlipX);
         ImGui::Checkbox("Y反転", &parameters_.uvParam.isFlipY);
     }

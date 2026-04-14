@@ -118,7 +118,7 @@ void ParticleUpdater::UpdateGroup(
         ///------------------------------------------------------------------------
         /// UV更新
         ///------------------------------------------------------------------------
-        if (it->uvInfo_.isScroll) {
+        if (it->uvInfo_.uvScrollModeInt != 0) {
             UpdateUV(it->uvInfo_, Frame::DeltaTime());
         }
 
@@ -150,7 +150,7 @@ void ParticleUpdater::UpdateGroup(
 }
 
 void ParticleUpdater::UpdateUV(ParticleManager::UVInfo& uvInfo, float deltaTime) {
-    if (uvInfo.isScrollEachPixel) {
+    if (uvInfo.uvScrollModeInt == static_cast<int32_t>(ParticleCommon::UVScrollMode::ScrollEachPixel)) {
         // 毎フレーム、速度に応じて移動
         uvInfo.pos.x += uvInfo.frameScrollSpeed * deltaTime;
 

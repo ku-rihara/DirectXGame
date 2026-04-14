@@ -24,6 +24,9 @@ void PlayerDash::Update([[maybe_unused]] float timeSpeed) {
 void PlayerDash::StartDash() {
     // DashStart イージングアニメーション再生
     pOwner_->GetPlayerAnimator().PlayDashStartAnimation();
+    // ダッシュエフェクト開始
+    pOwner_->GetEffects()->DashEffectStart();
+
     currentState_ = [this]() {
         UpdateNormalDash();
     };

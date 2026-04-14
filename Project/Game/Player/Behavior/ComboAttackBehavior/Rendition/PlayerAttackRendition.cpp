@@ -16,14 +16,13 @@ void PlayerAttackRendition::Init(Player* player, PlayerComboAttackData* playerCo
 
 void PlayerAttackRendition::Reset() {
     currentTime_  = 0.0f;
-    isRendition_  = false;
     isPlayed_.fill(false);
     isPlayedOnHit_.fill(false);
     isObjAnimePlayed_.fill(false);
     hasTriggeredHitEffects_ = false;
     previousHasHit_         = false;
 
-    // ポストエフェクトリスト再生フラグをリセット（サイズは Update で設定）
+    // ポストエフェクトリスト再生フラグをリセット
     isPostEffectPlayed_.clear();
     isPostEffectOnHitPlayed_.clear();
 
@@ -52,17 +51,12 @@ void PlayerAttackRendition::Update(float deltaTime) {
         return;
     }
 
-    if (!isRendition_) {
-        PlayRendition();
-        isRendition_ = true;
-    }
-
     currentTime_ += deltaTime;
 
     auto& renditionData = playerComboAttackData_->GetRenditionData();
     bool hasHit         = pPlayer_->GetPlayerCollisionInfo()->GetIsHit();
 
-    // ダメージヒット検出（実際にダメージが入ったフレームを検知）
+    // ダメージヒット検出
     int32_t currentDamageHitCount = pPlayer_->GetPlayerCollisionInfo()->GetDamageHitCount();
     bool isNewDamageHit = (currentDamageHitCount != previousDamageHitCount_);
 
@@ -79,7 +73,7 @@ void PlayerAttackRendition::Update(float deltaTime) {
     // 前フレームのヒット状態を更新
     previousHasHit_ = hasHit;
 
-    // ダメージヒット時演出（repeatOnDamage が有効な演出をダメージごとに再生）
+    // ダメージヒット時演出
     if (isNewDamageHit) {
         UpdateDamageHitRenditions(renditionData);
         previousDamageHitCount_ = currentDamageHitCount;
@@ -271,7 +265,7 @@ void PlayerAttackRendition::UpdateDamageHitRenditions(const PlayerAttackRenditio
 void PlayerAttackRendition::UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit, bool isNewDamageHit, float deltaTime) {
     const auto& vibParam = renditionData.GetVibrationParam();
 
-    // ループカウントが増えた（クールタイム終了）場合、振動フラグをリセット
+    // クールタイム終了した場合、振動フラグをリセット
     int32_t currentLoopCount = pPlayer_->GetPlayerCollisionInfo()->GetCurrentLoopCount();
     if (currentLoopCount > previousLoopCount_) {
         isVibrationPlayed_ = false;
@@ -314,14 +308,5 @@ void PlayerAttackRendition::UpdateVibration(const PlayerAttackRenditionData& ren
             }
             isVibrating_ = false;
         }
-    }
-}
-
-void PlayerAttackRendition::PlayRendition() {
-    // ごり押し演出追加処理
-    std::string name = playerComboAttackData_->GetGroupName();
-
-    if (name == "RushAttack") {
-        pPlayer_->GetEffects()->RushAttackRingEffectEmit();
     }
 }

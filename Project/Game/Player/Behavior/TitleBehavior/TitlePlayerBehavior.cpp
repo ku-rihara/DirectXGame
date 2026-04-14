@@ -25,7 +25,7 @@ void TitlePlayerBehavior::Update() {
     case Phase::FALL:
         if (pPlayer_->GetPlayerAnimator().IsTitleBodyAnimationFinished()) {
             // 着地タイミングでがれきエフェクト
-            pPlayer_->GetEffects()->FallEffectRenditionInit();
+            pPlayer_->GetEffects()->FallEffectStart();
 
             // 着地演出アニメーション開始
             pPlayer_->GetPlayerAnimator().PlayTitleBodyAnimation("TitlePlayerLand");

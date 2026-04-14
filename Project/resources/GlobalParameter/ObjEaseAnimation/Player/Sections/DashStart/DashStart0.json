@@ -3,16 +3,16 @@
         "Rotation_Amplitude": 0.0,
         "Rotation_Anchor": [
             0.0,
-            0.0,
+            1.3700000047683716,
             0.0
         ],
-        "Rotation_EaseType": 0,
-        "Rotation_IsActive": false,
-        "Rotation_IsReturnToOrigin": false,
-        "Rotation_MaxTime": 1.0,
+        "Rotation_EaseType": 22,
+        "Rotation_IsActive": true,
+        "Rotation_IsReturnToOrigin": true,
+        "Rotation_MaxTime": 0.3499999940395355,
         "Rotation_Period": 0.0,
         "Rotation_ReturnEaseType": 0,
-        "Rotation_ReturnMaxTime": 1.0,
+        "Rotation_ReturnMaxTime": 0.05000000074505806,
         "Rotation_endValue": [
             0.0,
             0.0,
@@ -42,12 +42,12 @@
             0.0,
             0.0
         ],
-        "Translation_EaseType": 7,
+        "Translation_EaseType": 9,
         "Translation_IsActive": true,
-        "Translation_IsLookAtDirection": true,
-        "Translation_IsMoveAlongForward": false,
+        "Translation_IsLookAtDirection": false,
+        "Translation_IsMoveAlongForward": true,
         "Translation_IsReturnToOrigin": false,
-        "Translation_MaxTime": 0.23999999463558197,
+        "Translation_MaxTime": 0.30000001192092896,
         "Translation_Period": 0.0,
         "Translation_RailFileName": "",
         "Translation_ReturnEaseType": 0,
@@ -56,7 +56,7 @@
         "Translation_endValue": [
             0.0,
             0.0,
-            8.770000457763672
+            6.489999771118164
         ],
         "isReturnSection": false,
         "returnStartTime": 0.0,

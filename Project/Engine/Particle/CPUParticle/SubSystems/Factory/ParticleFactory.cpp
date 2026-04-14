@@ -320,13 +320,12 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
 
     particle.uvInfo_.pos               = Vector3(parameters.uvParam.pos.x, parameters.uvParam.pos.y, 1.0f);
     particle.uvInfo_.rotate            = parameters.uvParam.rotate;
-    particle.uvInfo_.scale             = Vector3(frameWidth, 1.0f, 1.0f);
+    particle.uvInfo_.scale             = Vector3(frameWidth * parameters.uvParam.scale.x, parameters.uvParam.scale.y, 1.0f);
     particle.uvInfo_.frameDistance_    = frameWidth;
     particle.uvInfo_.frameScrollSpeed  = parameters.uvParam.frameScrollSpeed;
     particle.uvInfo_.uvStopPos_        = stopPosition;
-    particle.uvInfo_.isScrollEachPixel = parameters.uvParam.isScrollEachPixel;
+    particle.uvInfo_.uvScrollModeInt   = parameters.uvParam.uvScrollModeInt;
     particle.uvInfo_.isLoop            = parameters.uvParam.isLoop;
-    particle.uvInfo_.isScroll          = parameters.uvParam.isScroll;
     particle.uvInfo_.isFlipX           = parameters.uvParam.isFlipX;
     particle.uvInfo_.isFlipY           = parameters.uvParam.isFlipY;
     particle.uvInfo_.currentScrollTime = 0.0f;

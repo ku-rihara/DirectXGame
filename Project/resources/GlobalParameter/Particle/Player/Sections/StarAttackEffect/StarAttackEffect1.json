@@ -163,8 +163,6 @@
         "UV ScrollSpeed": 0.0,
         "UV isFlipX": false,
         "UV isFlipY": false,
-        "UV isScroll": false,
-        "UV isScrollEachPixel": false,
         "UseRail": false,
         "afterDuration": 0.0,
         "alphaMode": 1,
@@ -214,6 +212,11 @@
         "sphereRadius.min": 0.0,
         "timeMode": 1,
         "useDistortion": false,
-        "useModel": false
+        "useModel": false,
+        "UV ScrollMode": 0,
+        "UV Scale": [
+            1.0,
+            1.0
+        ]
     }
 }

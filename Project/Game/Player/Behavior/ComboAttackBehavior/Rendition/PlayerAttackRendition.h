@@ -46,14 +46,11 @@ private:
 
 public:
     PlayerAttackRendition()  = default;
-    ~PlayerAttackRendition() = default;
+    ~PlayerAttackRendition() { Reset(); } // 破棄時にトレイルを確実に停止
 
     void Init(Player* player, PlayerComboAttackData* playerComboAttackData);
     void Update(float deltaTime);
     void Reset();
-
-    // ごり押し演出再生
-    bool isRendition_;
 
 private:
     void UpdateNormalRenditions(const PlayerAttackRenditionData& renditionData);
@@ -63,6 +60,4 @@ private:
     void UpdateObjectAnimations(const PlayerAttackRenditionData& renditionData);
     void UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit, bool isNewDamageHit, float deltaTime);
 
-public:
-    void PlayRendition();
 };

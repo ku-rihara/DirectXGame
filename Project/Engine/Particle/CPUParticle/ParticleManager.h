@@ -62,18 +62,17 @@ public:
     };
 
     struct UVInfo {
-        Vector3 pos;
-        Vector3 scale;
-        Vector3 rotate;
-        float frameDistance_;
-        float frameScrollSpeed;
-        float uvStopPos_;
-        float currentScrollTime;
-        bool isScrollEachPixel;
-        bool isScroll;
-        bool isLoop;
-        bool isFlipX;
-        bool isFlipY;
+        Vector3 pos             = {};
+        Vector3 scale           = {1.0f, 1.0f, 1.0f};
+        Vector3 rotate          = {};
+        float frameDistance_    = 0.0f;
+        float frameScrollSpeed  = 0.0f;
+        float uvStopPos_        = 0.0f;
+        float currentScrollTime = 0.0f;
+        bool isLoop             = false;
+        bool isFlipX            = false;
+        bool isFlipY            = false;
+        int32_t uvScrollModeInt = 0; ///< UVScrollMode の int 値
     };
 
     struct Particle {

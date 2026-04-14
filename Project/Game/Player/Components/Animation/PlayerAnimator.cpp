@@ -40,7 +40,7 @@ void PlayerAnimator::PlayMoveAnimation() {
 /// 待機アニメーション再生
 ///=============================================================
 void PlayerAnimator::PlayWaitAnimation() {
-    baseTransform_->PlayObjEaseAnimation("Waiting", "Player");
+    baseTransform_->PlayObjEaseAnimation("WaitingMotion", "Player");
 }
 
 ///=============================================================

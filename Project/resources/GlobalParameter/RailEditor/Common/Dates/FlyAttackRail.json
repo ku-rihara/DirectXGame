@@ -1,0 +1,13 @@
+{
+    "FlyAttackRail": {
+        "easeType": 8,
+        "isLookAtDirection": true,
+        "isLoop": false,
+        "maxTime": 0.6899999976158142,
+        "returnEaseType": 0,
+        "returnMode": 0,
+        "returnTime": 1.0,
+        "startTime": 0.0,
+        "timeMode": 1
+    }
+}

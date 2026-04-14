@@ -57,8 +57,13 @@ void ParticleSection::InitSectionParam() {
 void ParticleSection::InitGlobalParameter() {
     globalParameter_ = GlobalParameter::GetInstance();
 
+    // グループが存在しない場合は作成してパラメータを登録、存在する場合はパラメータを適応
     if (!globalParameter_->HasRegisters(groupName_)) {
         globalParameter_->CreateGroup(groupName_);
+        // セクションJSONはLoadFiles()が探索しない深さにあるため個別にロードする
+        // RegisterParams→AddItem が呼ばれる前にdates_へ書き込んでおくことで
+        // 保存済み値が初期値として採用される
+        globalParameter_->LoadFile(groupName_, folderPath_);
         sectionParam_->RegisterParams(globalParameter_, groupName_);
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
@@ -68,7 +73,13 @@ void ParticleSection::InitGlobalParameter() {
 
 void ParticleSection::InitParticleGroup() {
     if (ParticleManager::GetInstance()->particleGroups_.find(groupName_) == ParticleManager::GetInstance()->particleGroups_.end()) {
-        CreatePrimitiveParticle(PrimitiveType::Plane, sectionParam_->GetMaxParticleNum());
+        auto primitiveType = static_cast<PrimitiveType>(sectionParam_->GetPrimitiveTypeInt());
+        CreatePrimitiveParticle(primitiveType, sectionParam_->GetMaxParticleNum());
+
+        // Cylinder の場合、保存済みパラメータをメッシュに反映
+        if (primitiveType == PrimitiveType::Cylinder) {
+            RebuildCylinder(sectionParam_->GetCylinderParams());
+        }
     }
 }
 
@@ -291,6 +302,14 @@ void ParticleSection::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
     sectionParam_->AdaptParameters(globalParameter_, groupName_);
+
+    // ロード後、保存されていた形状を再生成・再適用する
+    auto primitiveType = static_cast<PrimitiveType>(sectionParam_->GetPrimitiveTypeInt());
+    ChangePrimitive(primitiveType);
+    if (primitiveType == PrimitiveType::Cylinder) {
+        RebuildCylinder(sectionParam_->GetCylinderParams());
+    }
+
     ApplyTextureToManager();
 }
 

@@ -36,10 +36,10 @@ public:
 
     void Emit(const std::string&name);
 
-    void SpecialAttackRenditionInit(); //< 必殺技演出の初期化
-    void FallEffectRenditionInit(); //< 落下エフェクト演出の初期化
-    void RushAttackEmit(); //< ラッシュ攻撃エフェクトの放出
-    void RushAttackRingEffectEmit(); //< ラッシュ攻撃リングエフェクトの放出
+    // 落下エフェクト開始処理
+    void FallEffectStart(); 
+    // ダッシュエフェクト開始処理
+    void DashEffectStart();
 
 private:
     /// ===================================================

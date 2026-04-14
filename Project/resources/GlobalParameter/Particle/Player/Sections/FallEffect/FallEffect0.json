@@ -1,216 +1,219 @@
 {
-  "FallEffect0": {
-    "AdaptRotateIsX": false,
-    "AdaptRotateIsY": false,
-    "AdaptRotateIsZ": false,
-    "BaseColor": [
-      0.20588237047195435,
-      0.19143207371234894,
-      0.19074395298957825,
-      1.0
-    ],
-    "Color Max": [
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "Color Min": [
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "Direction Max": [
-      0.30000001192092896,
-      1.0,
-      0.30000001192092896
-    ],
-    "Direction Min": [
-      -0.30000001192092896,
-      0.8100000023841858,
-      -0.30000001192092896
-    ],
-    "Gravity": -221.10000610351562,
-    "IntervalTime": 1.0,
-    "IsScreenPos": false,
-    "LifeTime": 1.2599999904632568,
-    "Max Particle Num": 1000,
-    "Particle Count": 43,
-    "Position Base": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "Position Max": [
-      11.0,
-      0.0,
-      11.0
-    ],
-    "Position Min": [
-      -11.0,
-      0.0,
-      -11.0
-    ],
-    "RailFileName": "",
-    "Rotate Base": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "Rotate Max": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "Rotate Min": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "RotateEaseParam.backRatio": 0.0,
-    "RotateEaseParam.easeTypeInt": 0,
-    "RotateEaseParam.endValueV3.max": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "RotateEaseParam.endValueV3.min": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "RotateEaseParam.isScaleEase": false,
-    "RotateEaseParam.maxTime": 1.0,
-    "RotateSpeed Max": [
-      0.0,
-      0.0,
-      11.0
-    ],
-    "RotateSpeed Min": [
-      0.0,
-      0.0,
-      11.0
-    ],
-    "Scale Max": 1.0,
-    "Scale Min": 0.20000000298023224,
-    "ScaleV3 Max": [
-      1.5,
-      1.5,
-      1.5
-    ],
-    "ScaleV3 Min": [
-      1.0,
-      1.0,
-      1.0
-    ],
-    "Speed Max": 100.0999984741211,
-    "Speed Min": 99.30000305175781,
-    "SpeedV3 Max": [
-      21.040000915527344,
-      87.0,
-      16.479999542236328
-    ],
-    "SpeedV3 Min": [
-      -17.040000915527344,
-      0.0,
-      -14.359999656677246
-    ],
-    "StartTime": 0.0,
-    "TranslateEaseParam.backRatio": 0.0,
-    "TranslateEaseParam.easeTypeInt": 0,
-    "TranslateEaseParam.endValueV3.max": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "TranslateEaseParam.endValueV3.min": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "TranslateEaseParam.isScaleEase": false,
-    "TranslateEaseParam.maxTime": 1.0,
-    "UV IsLoop": false,
-    "UV NumOfFrame": 1,
-    "UV Pos": [
-      0.0,
-      0.0
-    ],
-    "UV Rotate": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "UV ScrollSpeed": 0.0,
-    "UV isFlipX": false,
-    "UV isFlipY": false,
-    "UV isScroll": false,
-    "UV isScrollEachPixel": false,
-    "UseRail": false,
-    "afterDuration": 0.0,
-    "blendMode": 0,
-    "dissolveName": "",
-    "emitPositionMode": 2,
-    "isAlphaNoMove": true,
-    "isBillboard": false,
-    "isFloatVelocity": false,
-    "isMoveForRail": false,
-    "isRotateForDirection": false,
-    "isScalerScale": true,
-    "isShot": true,
-    "modelFilePath": "Player/debri.obj",
-    "preBillboardType": 0,
-    "primitiveTypeInt": 0,
-    "scaleEaseParam.backRatio": 0.0,
-    "scaleEaseParam.easeTypeInt": 0,
-    "scaleEaseParam.endValueF.max": 0.0,
-    "scaleEaseParam.endValueF.min": 0.0,
-    "scaleEaseParam.endValueV3.max": [
-      0.5,
-      4.0,
-      0.0
-    ],
-    "scaleEaseParam.endValueV3.min": [
-      0.5,
-      3.0,
-      0.0
-    ],
-    "scaleEaseParam.isScaleEase": false,
-    "scaleEaseParam.maxTime": 0.27000001072883606,
-    "scaleEaseParam.startValueF": 1.0,
-    "scaleEaseParam.startValueV3": [
-      1.0,
-      1.0,
-      1.0
-    ],
-    "selectedTexturePath": "Resources/EngineTexture/Particle/default.dds",
-    "timeMode": 1,
-    "useModel": true,
-    "alphaMode": 0,
-    "AlphaEaseParam.isEase": false,
-    "AlphaEaseParam.maxTime": 1.0,
-    "AlphaEaseParam.easeTypeInt": 0,
-    "AlphaEaseParam.backRatio": 0.0,
-    "AlphaEaseParam.endValue.max": 0.0,
-    "AlphaEaseParam.endValue.min": 0.0,
-    "ColorEaseParam.isEase": false,
-    "ColorEaseParam.maxTime": 1.0,
-    "ColorEaseParam.easeTypeInt": 0,
-    "ColorEaseParam.backRatio": 0.0,
-    "ColorEaseParam.endValue.max": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "ColorEaseParam.endValue.min": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "emissiveIntensity": 1.0
-  },
-  "emitShape": 0,
-  "sphereRadius.min": 0.0,
-  "sphereRadius.max": 1.0
+    "FallEffect0": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": false,
+        "BaseColor": [
+            0.20588237047195435,
+            0.19143207371234894,
+            0.19074395298957825,
+            1.0
+        ],
+        "Color Max": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Max": [
+            0.30000001192092896,
+            1.0,
+            0.30000001192092896
+        ],
+        "Direction Min": [
+            -0.30000001192092896,
+            0.8100000023841858,
+            -0.30000001192092896
+        ],
+        "Gravity": -221.10000610351562,
+        "IntervalTime": 1.0,
+        "IsScreenPos": false,
+        "LifeTime": 1.2599999904632568,
+        "Max Particle Num": 1000,
+        "Particle Count": 43,
+        "Position Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Max": [
+            11.0,
+            0.0,
+            11.0
+        ],
+        "Position Min": [
+            -11.0,
+            0.0,
+            -11.0
+        ],
+        "RailFileName": "",
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateEaseParam.backRatio": 0.0,
+        "RotateEaseParam.easeTypeInt": 0,
+        "RotateEaseParam.endValueV3.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateEaseParam.endValueV3.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateEaseParam.isScaleEase": false,
+        "RotateEaseParam.maxTime": 1.0,
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            11.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            11.0
+        ],
+        "Scale Max": 1.0,
+        "Scale Min": 0.20000000298023224,
+        "ScaleV3 Max": [
+            1.5,
+            1.5,
+            1.5
+        ],
+        "ScaleV3 Min": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Speed Max": 100.0999984741211,
+        "Speed Min": 99.30000305175781,
+        "SpeedV3 Max": [
+            21.040000915527344,
+            87.0,
+            16.479999542236328
+        ],
+        "SpeedV3 Min": [
+            -17.040000915527344,
+            0.0,
+            -14.359999656677246
+        ],
+        "StartTime": 0.0,
+        "TranslateEaseParam.backRatio": 0.0,
+        "TranslateEaseParam.easeTypeInt": 0,
+        "TranslateEaseParam.endValueV3.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "TranslateEaseParam.endValueV3.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "TranslateEaseParam.isScaleEase": false,
+        "TranslateEaseParam.maxTime": 1.0,
+        "UV IsLoop": false,
+        "UV NumOfFrame": 1,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScrollSpeed": 0.0,
+        "UV isFlipX": false,
+        "UV isFlipY": false,
+        "UseRail": false,
+        "afterDuration": 0.0,
+        "blendMode": 0,
+        "dissolveName": "",
+        "emitPositionMode": 2,
+        "isAlphaNoMove": true,
+        "isBillboard": false,
+        "isFloatVelocity": false,
+        "isMoveForRail": false,
+        "isRotateForDirection": false,
+        "isScalerScale": true,
+        "isShot": true,
+        "modelFilePath": "Player/debri.obj",
+        "preBillboardType": 0,
+        "primitiveTypeInt": 0,
+        "scaleEaseParam.backRatio": 0.0,
+        "scaleEaseParam.easeTypeInt": 0,
+        "scaleEaseParam.endValueF.max": 0.0,
+        "scaleEaseParam.endValueF.min": 0.0,
+        "scaleEaseParam.endValueV3.max": [
+            0.5,
+            4.0,
+            0.0
+        ],
+        "scaleEaseParam.endValueV3.min": [
+            0.5,
+            3.0,
+            0.0
+        ],
+        "scaleEaseParam.isScaleEase": false,
+        "scaleEaseParam.maxTime": 0.27000001072883606,
+        "scaleEaseParam.startValueF": 1.0,
+        "scaleEaseParam.startValueV3": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "selectedTexturePath": "Resources/EngineTexture/Particle/default.dds",
+        "timeMode": 1,
+        "useModel": true,
+        "alphaMode": 0,
+        "AlphaEaseParam.isEase": false,
+        "AlphaEaseParam.maxTime": 1.0,
+        "AlphaEaseParam.easeTypeInt": 0,
+        "AlphaEaseParam.backRatio": 0.0,
+        "AlphaEaseParam.endValue.max": 0.0,
+        "AlphaEaseParam.endValue.min": 0.0,
+        "ColorEaseParam.isEase": false,
+        "ColorEaseParam.maxTime": 1.0,
+        "ColorEaseParam.easeTypeInt": 0,
+        "ColorEaseParam.backRatio": 0.0,
+        "ColorEaseParam.endValue.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ColorEaseParam.endValue.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "emissiveIntensity": 1.0,
+        "UV ScrollMode": 0,
+        "UV Scale": [
+            1.0,
+            1.0
+        ]
+    },
+    "emitShape": 0,
+    "sphereRadius.min": 0.0,
+    "sphereRadius.max": 1.0
 }

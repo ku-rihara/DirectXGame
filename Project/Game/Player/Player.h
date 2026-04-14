@@ -47,8 +47,6 @@ class DeathTimer;
 /// </summary>
 class Player : public BaseObject, public KetaEngine::AABBCollider {
 private:
-   
-
 public:
     Player()  = default;
     ~Player() = default;
@@ -80,7 +78,7 @@ public:
     void ResetHeadScale(); //< 頭のスケールリセット
 
     /// <summary>
-    /// ディゾルブアニメーション再生 
+    /// ディゾルブアニメーション再生
     /// </summary>
     /// <param name="name">ディゾルブ名</param>
     void PlayDissolve(const std::string& name);
@@ -117,13 +115,28 @@ public:
     // 衝突コールバック
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
+    /// <summary>
+    /// 自動実行コールバックを登録
+    /// </summary>
+    void SetAutoComboAttackCallback(std::function<void(const std::string&)> callback) {
+        autoComboAttackCallback_ = std::move(callback);
+    }
+
+    /// <summary>
+    /// 自動実行攻撃発火を通知
+    /// </summary>
+    void FireAutoComboAttackCallback(const std::string& attackName) {
+        if (autoComboAttackCallback_) {
+            autoComboAttackCallback_(attackName);
+        }
+    }
+
     void ChangeCombBoRoot(); //< コンボルート変更
     void FaceToTarget(); //< ターゲット方向を向く
     void AdaptRotate(); //< 回転適用
     bool CheckIsChargeMax() const; //< チャージ最大判定
     void AdjustParam(); //< パラメータ調整
     Vector3 GetCollisionPos() const override; //< 衝突位置取得
-
 
     /// <summary>
     /// ダッシュ中かどうかを取得
@@ -161,7 +174,7 @@ private:
     std::unique_ptr<PlayerEffects> effects_;
     std::unique_ptr<PlayerParameter> parameters_;
     std::unique_ptr<PlayerAttackCollider> playerCollisionInfo_;
-    std::unique_ptr<JumpAttackUI>        jumpAttackUI_;
+    std::unique_ptr<JumpAttackUI> jumpAttackUI_;
 
     /// behavior
     std::unique_ptr<BasePlayerBehavior> behavior_           = nullptr;
@@ -217,7 +230,7 @@ public:
     PlayerParameter* GetParameter() const { return parameters_.get(); }
     PlayerAttackCollider* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
-    JumpAttackUI*        GetJumpAttackUI()        const { return jumpAttackUI_.get(); }
+    JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
     DeathTimer* GetDeathTimer() const { return pDeathTimer_; }
     bool GetIsIgnoreUnlockState() const { return isIgnoreUnlockState_; }
     const PlayerInput& GetInput() const { return input_; }
@@ -242,30 +255,9 @@ public:
 
     AutoComboQueue& GetAutoComboQueue() { return autoComboQueue_; }
 
-    /// <summary>
-    /// 自動実行コールバックを登録
-    /// </summary>
-    void SetAutoComboAttackCallback(std::function<void(const std::string&)> callback) {
-        autoComboAttackCallback_ = std::move(callback);
-    }
-
-    /// <summary>
-    /// 自動実行攻撃発火を通知
-    /// </summary>
-    void FireAutoComboAttackCallback(const std::string& attackName) {
-        if (autoComboAttackCallback_) {
-            autoComboAttackCallback_(attackName);
-        }
-    }
-
-    /// <summary>
     /// 自動ダッシュ開始（アンロック演出用）
-    /// </summary>
     void StartAutoDash();
-
-    /// <summary>
     /// 自動ダッシュ解除
-    /// </summary>
     void ClearAutoDash();
 
     void SetTitleBehavior();

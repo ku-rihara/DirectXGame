@@ -14,6 +14,7 @@
             1.0
         ],
         "EndWidth": 3.0,
+        "FollowMode": 0,
         "Lifetime": 1.1100000143051147,
         "MaxPoints": 256,
         "StartColor": [
