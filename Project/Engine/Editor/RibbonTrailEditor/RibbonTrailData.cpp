@@ -144,8 +144,8 @@ void RibbonTrailData::AdjustParam() {
         }
     }
 
-    // ImGui編集値を GlobalParameter に即時反映（Playerへのリアルタイム同期用）
-    globalParameter_->SyncParamForGroup(groupName_);
+    // ImGui編集値を GlobalParameter に即時反映
+    globalParameter_->PushParamForGroup(groupName_);
 
     ImGui::PopID();
 #endif

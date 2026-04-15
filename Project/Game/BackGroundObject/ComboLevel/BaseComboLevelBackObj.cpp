@@ -32,8 +32,9 @@ void BaseComboLevelBackObj::Update(float playSpeed) {
         if (ObjectFromBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::CLOSE))) {
             EasingAllReset();
             isPulseCycleStart_ = false;
-           
-            effectMode_ = ObjEffectMode::NONE;       
+            // イージングリセット後にスケール0を適用して非表示状態を維持
+            ObjectFromBlender_->SetAllObjectsScaleZero();
+            effectMode_ = ObjEffectMode::NONE;
         }
     }
 

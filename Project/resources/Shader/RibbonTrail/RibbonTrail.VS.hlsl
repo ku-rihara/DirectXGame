@@ -6,7 +6,7 @@ struct ViewProjection {
 
 struct UVScroll {
     float2 offset;
-    float2 pad; // 16byte align
+    float2 pad;
 };
 
 ConstantBuffer<ViewProjection> gViewProjection : register(b0);

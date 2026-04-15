@@ -35,10 +35,10 @@ public:
     // エミッター位置制御タイプ
     enum class EmitterPositionMode {
         None = 0,
-        ParentTransform,
+        ParentTransform,   // S/R/T チェックボックスで詳細設定
         TargetPosition,
-        FollowingPosition,
-        ParentJoint
+        // 3 = FollowingPosition (廃止済み。JSONロード時にParentTransform+T-onlyへ移行)
+        ParentJoint = 4
     };
 
 public:
@@ -90,6 +90,11 @@ private:
     FileSelector textureFileSelector_;
     FileSelector distortionTextureFileSelector_;
     FileSelector dissolveFileSelector_;
+
+    // ParentTransform の S/R/T 追従フラグ（mode=1 の詳細設定）
+    bool parentFollowS_ = true;
+    bool parentFollowR_ = true;
+    bool parentFollowT_ = true;
 
     // TypeInt
     int32_t primitiveTypeInt_    = 0;

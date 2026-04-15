@@ -50,8 +50,8 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
         globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
         globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
 
-        // 右手・左手のみトレイルファイル名を登録
-        if (info.type == ObjAnimationType::RightHand || info.type == ObjAnimationType::LeftHand) {
+        // 右手・左手・メイン頭のトレイルファイル名を登録
+        if (info.type == ObjAnimationType::RightHand || info.type == ObjAnimationType::LeftHand || info.type == ObjAnimationType::MainHead) {
             globalParam->Regist(groupName, std::string(info.name) + "_TrailFileName", &param.trailFileName);
         }
     }
@@ -73,6 +73,17 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
         globalParam->Regist(groupName, "PostEffect_OnHit_Slot" + suffix + "_FileName",    &postEffectOnHitSlots_[i].fileName);
         globalParam->Regist(groupName, "PostEffect_OnHit_Slot" + suffix + "_StartTiming", &postEffectOnHitSlots_[i].startTiming);
     }
+
+    // パーティクルエフェクトスロット（複数保存用）
+    globalParam->Regist(groupName, "ParticleEffect_Count", &particleEffectCount_);
+    globalParam->Regist(groupName, "ParticleEffect_OnHit_Count", &particleEffectOnHitCount_);
+    for (int32_t i = 0; i < kMaxParticleEffects; ++i) {
+        std::string suffix = "_" + std::to_string(i);
+        globalParam->Regist(groupName, "ParticleEffect_Slot" + suffix + "_FileName",    &particleEffectSlots_[i].fileName);
+        globalParam->Regist(groupName, "ParticleEffect_Slot" + suffix + "_StartTiming", &particleEffectSlots_[i].startTiming);
+        globalParam->Regist(groupName, "ParticleEffect_OnHit_Slot" + suffix + "_FileName",    &particleEffectOnHitSlots_[i].fileName);
+        globalParam->Regist(groupName, "ParticleEffect_OnHit_Slot" + suffix + "_StartTiming", &particleEffectOnHitSlots_[i].startTiming);
+    }
 }
 
 void PlayerAttackRenditionData::SyncListToSlots() {
@@ -92,6 +103,8 @@ void PlayerAttackRenditionData::SyncListToSlots() {
     for (int32_t i = postEffectOnHitCount_; i < kMaxPostEffects; ++i) {
         postEffectOnHitSlots_[i] = RenditionParam{};
     }
+
+    SyncParticleListToSlots();
 }
 
 void PlayerAttackRenditionData::SyncSlotsToList() {
@@ -108,6 +121,58 @@ void PlayerAttackRenditionData::SyncSlotsToList() {
     for (int32_t i = 0; i < onHitCount; ++i) {
         if (!postEffectOnHitSlots_[i].fileName.empty() && postEffectOnHitSlots_[i].fileName != "None") {
             postEffectOnHitList_.push_back(postEffectOnHitSlots_[i]);
+        }
+    }
+
+    SyncParticleSlotsToList();
+}
+
+void PlayerAttackRenditionData::SyncParticleListToSlots() {
+    particleEffectCount_ = static_cast<int32_t>((std::min)(particleEffectList_.size(), static_cast<size_t>(kMaxParticleEffects)));
+    for (int32_t i = 0; i < particleEffectCount_; ++i) {
+        particleEffectSlots_[i] = particleEffectList_[i];
+    }
+    for (int32_t i = particleEffectCount_; i < kMaxParticleEffects; ++i) {
+        particleEffectSlots_[i] = RenditionParam{};
+    }
+
+    particleEffectOnHitCount_ = static_cast<int32_t>((std::min)(particleEffectOnHitList_.size(), static_cast<size_t>(kMaxParticleEffects)));
+    for (int32_t i = 0; i < particleEffectOnHitCount_; ++i) {
+        particleEffectOnHitSlots_[i] = particleEffectOnHitList_[i];
+    }
+    for (int32_t i = particleEffectOnHitCount_; i < kMaxParticleEffects; ++i) {
+        particleEffectOnHitSlots_[i] = RenditionParam{};
+    }
+}
+
+void PlayerAttackRenditionData::SyncParticleSlotsToList() {
+    particleEffectList_.clear();
+    int32_t count = (std::min)(particleEffectCount_, kMaxParticleEffects);
+    for (int32_t i = 0; i < count; ++i) {
+        if (!particleEffectSlots_[i].fileName.empty() && particleEffectSlots_[i].fileName != "None") {
+            particleEffectList_.push_back(particleEffectSlots_[i]);
+        }
+    }
+    // 旧フォーマット移行: スロットが空の場合は旧単体パラメータをリストに追加
+    if (particleEffectList_.empty()) {
+        const auto& legacy = renditionParams_[static_cast<size_t>(Type::ParticleEffect)].first;
+        if (!legacy.fileName.empty() && legacy.fileName != "None") {
+            particleEffectList_.push_back(legacy);
+        }
+    }
+
+    particleEffectOnHitList_.clear();
+    int32_t onHitCount = (std::min)(particleEffectOnHitCount_, kMaxParticleEffects);
+    for (int32_t i = 0; i < onHitCount; ++i) {
+        if (!particleEffectOnHitSlots_[i].fileName.empty() && particleEffectOnHitSlots_[i].fileName != "None") {
+            particleEffectOnHitList_.push_back(particleEffectOnHitSlots_[i]);
+        }
+    }
+    // 旧フォーマット移行: OnHit スロットが空の場合は旧単体パラメータをリストに追加
+    if (particleEffectOnHitList_.empty()) {
+        const auto& legacyOnHit = renditionParamsOnHit_[static_cast<size_t>(Type::ParticleEffect)].first;
+        if (!legacyOnHit.fileName.empty() && legacyOnHit.fileName != "None") {
+            particleEffectOnHitList_.push_back(legacyOnHit);
         }
     }
 }

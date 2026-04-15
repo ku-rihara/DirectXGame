@@ -324,7 +324,7 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
     particle.uvInfo_.frameDistance_    = frameWidth;
     particle.uvInfo_.frameScrollSpeed  = parameters.uvParam.frameScrollSpeed;
     particle.uvInfo_.uvStopPos_        = stopPosition;
-    particle.uvInfo_.uvScrollModeInt   = parameters.uvParam.uvScrollModeInt;
+    particle.uvInfo_.numOfFrame        = parameters.uvParam.numOfFrame;
     particle.uvInfo_.isLoop            = parameters.uvParam.isLoop;
     particle.uvInfo_.isFlipX           = parameters.uvParam.isFlipX;
     particle.uvInfo_.isFlipY           = parameters.uvParam.isFlipY;

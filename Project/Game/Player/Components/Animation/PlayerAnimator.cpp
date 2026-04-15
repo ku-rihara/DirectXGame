@@ -20,6 +20,10 @@ void PlayerAnimator::Init(
     obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
     obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeWidth = 0.09f;
     dissolvePlayer_.Init();
+
+    // MainHead トレイル初期化
+    mainHeadTrailPlayer_.Init();
+    mainHeadTrailPlayer_.SetFollowPosition(&headTrailFollowPos_);
 }
 
 void PlayerAnimator::Update() {
@@ -27,6 +31,12 @@ void PlayerAnimator::Update() {
     if (dissolvePlayer_.IsPlaying()) {
         dissolvePlayer_.ApplyToMaterial(*obj3d_->GetModelMaterial());
     }
+
+    // MainHead トレイル更新
+    if (baseTransform_) {
+        headTrailFollowPos_ = baseTransform_->GetWorldPos();
+    }
+    mainHeadTrailPlayer_.Update();
 }
 
 ///=============================================================
@@ -92,6 +102,14 @@ bool PlayerAnimator::IsDashStartAnimationFinished() const {
 ///=============================================================
 void PlayerAnimator::PlayMainHeadAnimation(const std::string& name) {
     baseTransform_->PlayObjEaseAnimation(name, "MainHead");
+}
+
+void PlayerAnimator::StartMainHeadTrailEmit(const std::string& presetName, const std::string& category) {
+    mainHeadTrailPlayer_.Play(presetName, category);
+}
+
+void PlayerAnimator::StopMainHeadTrailEmit() {
+    mainHeadTrailPlayer_.StopEmit();
 }
 
 void PlayerAnimator::PlayTitleBodyAnimation(const std::string& name) {

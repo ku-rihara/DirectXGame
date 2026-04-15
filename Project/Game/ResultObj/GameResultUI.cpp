@@ -17,6 +17,7 @@ void GameResultUI::Init() {
         info->GetTotalKillCount(), survivalCfg_);
     items_[1].Init("ResultUI/SurvivalTimeCount.dds", "ResultUI/SurvivalTimeCountUnit.dds",
         info->GetSurvivalTimeSec(), killCfg_);
+    levelCfg_.digitCount = 1;
     items_[2].Init("ResultUI/MaxLevelCount.dds", "circle.dds",
         info->GetReachedLevel(), levelCfg_);
 

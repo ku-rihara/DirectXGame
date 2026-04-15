@@ -103,7 +103,7 @@
         ],
         "StartTime": 0.0,
         "UV IsLoop": false,
-        "UV NumOfFrame": 0,
+        "UV NumOfFrame": 1,
         "UV Pos": [
             0.0,
             0.0
@@ -176,7 +176,6 @@
             0.0
         ],
         "emissiveIntensity": 1.0,
-        "UV ScrollMode": 0,
         "UV Scale": [
             1.0,
             1.0

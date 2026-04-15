@@ -28,6 +28,10 @@ private:
     std::vector<bool> isPostEffectPlayed_;
     std::vector<bool> isPostEffectOnHitPlayed_;
 
+    // パーティクルエフェクトリスト用再生フラグ
+    std::vector<bool> isParticleEffectPlayed_;
+    std::vector<bool> isParticleEffectOnHitPlayed_;
+
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimePlayed_{};
 
     // ヒットエフェクトがトリガーされたかどうか

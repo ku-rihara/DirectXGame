@@ -12,7 +12,7 @@ enum class DistortionMode { Ribbon, Particle };
 enum class DistortionRibbonRootParam : UINT {
     TransformationMatrix, // b0 (VS) - ビュープロジェクション行列
     DistortionUVScroll,   // b1 (VS) - 歪みテクスチャUVスクロール
-    DistortionParam,      // b0 (PS) - 歪み強度（32ビット定数）
+    DistortionParam,      // b0 (PS) - 歪み強度
     DistortionMap,        // t0 (PS) - ノイズ/法線テクスチャ
     Count
 };
@@ -20,14 +20,13 @@ enum class DistortionRibbonRootParam : UINT {
 /// CPUParticle 歪みパス用ルートパラメータ
 enum class DistortionParticleRootParam : UINT {
     ParticleData,    // t0 (VS) - インスタンシングデータ
-    DistortionParam, // b0 (PS) - 歪み強度（32ビット定数）
+    DistortionParam, // b0 (PS) - 歪み強度
     DistortionMap,   // t0 (PS) - ノイズテクスチャ
     Count
 };
 
 /// <summary>
-/// 歪みパス描画パイプライン（RibbonTrail / CPUParticle 共通クラス）
-/// DistortionMode を渡してインスタンスを作り分ける。
+/// 歪みパス描画パイプライン
 /// </summary>
 class DistortionPipeline : public BasePipeline {
 public:

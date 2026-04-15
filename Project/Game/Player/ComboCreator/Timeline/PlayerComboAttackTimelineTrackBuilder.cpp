@@ -137,20 +137,18 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
     using RendType  = PlayerAttackRenditionData::Type;
     using TrackType = PlayerComboAttackTimelineData::TrackType;
 
-    // RenditionData::Type → TrackType の正引きマッピング（PostEffectはリストから個別処理）
+    // RenditionData::Type → TrackType の正引きマッピング（PostEffect/ParticleEffectはリストから個別処理）
     struct RendToTrack { RendType rendType; TrackType trackType; };
     static constexpr RendToTrack kNormalMapping[] = {
         {RendType::CameraAction,   TrackType::CAMERA_ACTION},
         {RendType::HitStop,        TrackType::HIT_STOP},
         {RendType::ShakeAction,    TrackType::SHAKE_ACTION},
-        {RendType::ParticleEffect, TrackType::PARTICLE_EFFECT},
         {RendType::AudioAttack,    TrackType::AUDIO_ATTACK},
     };
     static constexpr RendToTrack kOnHitMapping[] = {
         {RendType::CameraAction,   TrackType::CAMERA_ACTION_ON_HIT},
         {RendType::HitStop,        TrackType::HIT_STOP_ON_HIT},
         {RendType::ShakeAction,    TrackType::SHAKE_ACTION_ON_HIT},
-        {RendType::ParticleEffect, TrackType::PARTICLE_EFFECT_ON_HIT},
         {RendType::AudioAttack,    TrackType::AUDIO_ATTACK_ON_HIT},
     };
 
@@ -208,6 +206,45 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
 
             PlayerComboAttackTimelineData::TrackInfo info;
             info.type       = TrackType::POST_EFFECT_ON_HIT;
+            info.trackIndex = trackIdx;
+            info.fileName   = param.fileName;
+            data_->AddTrackInfo(info);
+
+            int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+            timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
+        }
+    }
+
+    // パーティクルエフェクト（複数対応）— リストから直接再構築
+    {
+        const auto& particleEffectList = renditionData.GetParticleEffectList();
+        for (const auto& param : particleEffectList) {
+            if (param.fileName.empty() || param.fileName == "None") {
+                continue;
+            }
+
+            int32_t trackIdx = timelineDrawer_->AddTrack("パーティクルエフェクト");
+
+            PlayerComboAttackTimelineData::TrackInfo info;
+            info.type       = TrackType::PARTICLE_EFFECT;
+            info.trackIndex = trackIdx;
+            info.fileName   = param.fileName;
+            data_->AddTrackInfo(info);
+
+            int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+            timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
+        }
+
+        const auto& particleEffectOnHitList = renditionData.GetParticleEffectOnHitList();
+        for (const auto& param : particleEffectOnHitList) {
+            if (param.fileName.empty() || param.fileName == "None") {
+                continue;
+            }
+
+            int32_t trackIdx = timelineDrawer_->AddTrack("パーティクルエフェクト (ヒット時)");
+
+            PlayerComboAttackTimelineData::TrackInfo info;
+            info.type       = TrackType::PARTICLE_EFFECT_ON_HIT;
             info.trackIndex = trackIdx;
             info.fileName   = param.fileName;
             data_->AddTrackInfo(info);

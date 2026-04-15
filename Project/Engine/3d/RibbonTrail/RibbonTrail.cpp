@@ -35,7 +35,7 @@ RibbonTrail* RibbonTrail::Create(size_t maxPoints) {
 void RibbonTrail::Init(size_t maxPoints) {
     maxPoints_ = maxPoints;
 
-    // 頂点バッファは「各ポイントにつき左右2頂点」なので maxPoints * 2
+    // 頂点バッファは maxPoints * 2
     UINT bufferSize = static_cast<UINT>(sizeof(RibbonVertex) * maxPoints * 2);
     auto dxCommon   = DirectXCommon::GetInstance();
 
@@ -152,7 +152,7 @@ Vector3 RibbonTrail::CalcPerp(const Vector3& dir, const Vector3& cameraRight) {
 void RibbonTrail::Draw(const ViewProjection& viewProj) {
     size_t count = points_.size();
     if (count < 2) {
-        lastVertexCount_ = 0; // DrawDistortion に古い頂点が使われないようリセット
+        lastVertexCount_ = 0; 
         return;
     }
 
@@ -172,12 +172,13 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
     size_t vertexCount = 0;
     float  countF      = static_cast<float>(count > 1 ? count - 1 : 1);
 
-    Vector3 prevPerp = {0.0f, 0.0f, 0.0f}; // ねじれ防止用：前セグメントのperp
+    // ねじれ防止用：前セグメントのperp
+    Vector3 prevPerp = {0.0f, 0.0f, 0.0f}; 
 
     for (size_t i = 0; i < count; ++i) {
         const auto& p = points_[i];
 
-        // 移動方向（前後点から補間）
+        // 移動方向
         Vector3 dir;
         if (i == 0) {
             dir = {p.position.x - points_[1].position.x,
@@ -256,7 +257,6 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
 
 ///============================================================
 /// 時空歪みパス描画
-/// DistortionPipeline(Ribbon) がセット済みの状態で呼ぶ
 ///============================================================
 void RibbonTrail::DrawDistortion(const ViewProjection& viewProj) {
     if (!useDistortion_) {

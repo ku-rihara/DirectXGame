@@ -66,6 +66,12 @@ void RibbonTrailPlayer::Play(const std::string& presetName, const std::string& c
 }
 
 
+void RibbonTrailPlayer::StopEmit() {
+    isActive_  = false;
+    emitTimer_ = 0.0f;
+    // 既存ポイントはLifeTimeまで自然に消えるため trail_->Clear() は呼ばない
+}
+
 void RibbonTrailPlayer::StopAndClear() {
     isActive_ = false;
     if (trail_) {

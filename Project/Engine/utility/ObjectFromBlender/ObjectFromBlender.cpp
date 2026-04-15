@@ -314,6 +314,16 @@ bool ObjectFromBlender::GetIsEasingFinish(int32_t groupNum) const {
     return true;
 }
 
+void ObjectFromBlender::SetAllObjectsScaleZero() {
+    if (!levelData_) {
+        return;
+    }
+    for (auto& objectData : levelData_->objects) {
+        objectData.object3d->transform_.scale_ = {0.0f, 0.0f, 0.0f};
+        objectData.object3d->transform_.UpdateMatrix();
+    }
+}
+
 void ObjectFromBlender::SetLoopEndCallback(int32_t groupNum, const std::function<void()>& callback) {
     if (!levelData_) {
         return;

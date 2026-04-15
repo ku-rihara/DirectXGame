@@ -100,6 +100,11 @@ public:
 
     void SetLoopEndCallback(int32_t groupNum, const std::function<void()>& callback);
 
+    /// <summary>
+    /// 全オブジェクトのスケールを0に設定（非表示化）
+    /// </summary>
+    void SetAllObjectsScaleZero();
+
     const LevelData* GetLevelData() const { return levelData_.get(); }
 };
 

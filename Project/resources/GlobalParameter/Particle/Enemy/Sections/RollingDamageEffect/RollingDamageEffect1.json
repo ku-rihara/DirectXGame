@@ -1,19 +1,18 @@
 {
-    "EnemyDeath1": {
+    "RollingDamageEffect1": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
-        "AlphaEaseParam.backRatio": 0.0,
         "AlphaEaseParam.easeTypeInt": 0,
         "AlphaEaseParam.endValue.max": 0.0,
         "AlphaEaseParam.endValue.min": 0.0,
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            0.8627451062202454,
-            0.06766627728939056,
-            0.06766627728939056,
-            1.0
+            0.84555983543396,
+            0.47896695137023926,
+            0.09794130176305771,
+            0.0
         ],
         "Color Max": [
             0.0,
@@ -27,7 +26,6 @@
             0.0,
             0.0
         ],
-        "ColorEaseParam.backRatio": 0.0,
         "ColorEaseParam.easeTypeInt": 0,
         "ColorEaseParam.endValue.max": [
             0.0,
@@ -41,22 +39,44 @@
         ],
         "ColorEaseParam.isEase": false,
         "ColorEaseParam.maxTime": 1.0,
+        "Cyl.bottomColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Cyl.bottomRadiusX": 1.0,
+        "Cyl.bottomRadiusZ": 1.0,
+        "Cyl.divisions": 32,
+        "Cyl.endAngleDeg": 360.0,
+        "Cyl.height": 3.0,
+        "Cyl.heightDivisions": 1,
+        "Cyl.startAngleDeg": 0.0,
+        "Cyl.topColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Cyl.topRadiusX": 1.0,
+        "Cyl.topRadiusZ": 1.0,
+        "Cyl.uvModeInt": 0,
         "Direction Max": [
-            1.0,
-            1.0,
+            0.0,
+            0.0,
             0.0
         ],
         "Direction Min": [
-            -1.0,
-            -1.0,
+            0.0,
+            0.0,
             0.0
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "IsScreenPos": false,
-        "LifeTime": 0.49000000953674316,
+        "LifeTime": 1.0,
         "Max Particle Num": 1000,
-        "Particle Count": 20,
+        "Particle Count": 8,
         "Position Base": [
             0.0,
             0.0,
@@ -81,14 +101,13 @@
         "Rotate Max": [
             0.0,
             0.0,
-            0.0
+            20.0
         ],
         "Rotate Min": [
             0.0,
             0.0,
-            0.0
+            360.0
         ],
-        "RotateEaseParam.backRatio": 0.0,
         "RotateEaseParam.easeTypeInt": 0,
         "RotateEaseParam.endValueV3.max": [
             0.0,
@@ -112,8 +131,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 10.0,
-        "Scale Min": 10.0,
+        "Scale Max": 1.0,
+        "Scale Min": 1.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -124,20 +143,19 @@
             0.0,
             0.0
         ],
-        "Speed Max": 0.6000000238418579,
-        "Speed Min": 0.5,
+        "Speed Max": 0.0,
+        "Speed Min": 0.0,
         "SpeedV3 Max": [
-            0.5,
-            0.5,
-            0.5
+            0.0,
+            0.0,
+            0.0
         ],
         "SpeedV3 Min": [
-            -0.5,
-            -0.5,
-            -0.5
+            0.0,
+            0.0,
+            0.0
         ],
         "StartTime": 0.0,
-        "TranslateEaseParam.backRatio": 0.0,
         "TranslateEaseParam.easeTypeInt": 0,
         "TranslateEaseParam.endValueV3.max": [
             0.0,
@@ -149,10 +167,13 @@
             0.0,
             0.0
         ],
+        "TranslateEaseParam.isReturnToOrigin": false,
         "TranslateEaseParam.isScaleEase": false,
         "TranslateEaseParam.maxTime": 1.0,
+        "TranslateEaseParam.returnEaseTypeInt": 0,
+        "TranslateEaseParam.returnMaxTime": 0.0,
         "UV IsLoop": false,
-        "UV NumOfFrame": 1,
+        "UV NumOfFrame": 0,
         "UV Pos": [
             0.0,
             0.0
@@ -161,6 +182,10 @@
             0.0,
             0.0,
             0.0
+        ],
+        "UV Scale": [
+            1.0,
+            1.0
         ],
         "UV ScrollSpeed": 0.0,
         "UV isFlipX": false,
@@ -172,50 +197,44 @@
         "dissolveName": "",
         "distortionStrength": 0.05000000074505806,
         "distortionTexturePath": "",
-        "emissiveIntensity": 1.0,
+        "emissiveIntensity": 2.299999952316284,
         "emitPositionMode": 2,
+        "emitShape": 0,
         "isAlphaNoMove": false,
-        "isBillboard": true,
-        "isFloatVelocity": true,
-        "isMoveForRail": false,
+        "isBillboard": false,
+        "isFloatVelocity": false,
         "isRotateForDirection": false,
-        "isScalerScale": true,
+        "isScalerScale": false,
         "isShot": true,
         "modelFilePath": "",
+        "parentFollowR": true,
+        "parentFollowS": true,
+        "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
-        "scaleEaseParam.backRatio": 0.0,
-        "scaleEaseParam.easeTypeInt": 0,
+        "scaleEaseParam.easeTypeInt": 22,
         "scaleEaseParam.endValueF.max": 0.0,
         "scaleEaseParam.endValueF.min": 0.0,
         "scaleEaseParam.endValueV3.max": [
-            0.0,
-            0.0,
-            0.0
+            0.7699999809265137,
+            7.920000076293945,
+            0.3499999940395355
         ],
         "scaleEaseParam.endValueV3.min": [
-            0.0,
-            0.0,
-            0.0
+            0.5600000023841858,
+            7.480000019073486,
+            0.5699999928474426
         ],
+        "scaleEaseParam.isReturnToOrigin": false,
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.1599999964237213,
-        "scaleEaseParam.startValueF": 1.0,
-        "scaleEaseParam.startValueV3": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "selectedTexturePath": "Resources/texture/circle.dds",
+        "scaleEaseParam.maxTime": 0.4300000071525574,
+        "scaleEaseParam.returnEaseTypeInt": 0,
+        "scaleEaseParam.returnMaxTime": 0.0,
+        "selectedTexturePath": "Resources/EngineTexture/Particle/circle.dds",
+        "sphereRadius.max": 0.0,
+        "sphereRadius.min": 0.0,
         "timeMode": 1,
         "useDistortion": false,
-        "useModel": false,
-        "UV Scale": [
-            1.0,
-            1.0
-        ]
-    },
-    "emitShape": 0,
-    "sphereRadius.min": 0.0,
-    "sphereRadius.max": 1.0
+        "useModel": false
+    }
 }

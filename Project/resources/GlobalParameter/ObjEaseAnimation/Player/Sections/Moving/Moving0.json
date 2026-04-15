@@ -18,7 +18,7 @@
             0.0,
             0.0
         ],
-        "Scale_Amplitude": 2.180000066757202,
+        "Scale_Amplitude": 1.2999999523162842,
         "Scale_Anchor": [
             0.0,
             0.0,
@@ -27,10 +27,10 @@
         "Scale_EaseType": 27,
         "Scale_IsActive": true,
         "Scale_IsReturnToOrigin": false,
-        "Scale_MaxTime": 0.41999998688697815,
-        "Scale_Period": 0.20999999344348907,
-        "Scale_ReturnEaseType": 0,
-        "Scale_ReturnMaxTime": 1.0,
+        "Scale_MaxTime": 0.36000001430511475,
+        "Scale_Period": 0.3100000023841858,
+        "Scale_ReturnEaseType": 21,
+        "Scale_ReturnMaxTime": 0.10999999940395355,
         "Scale_endValue": [
             1.0,
             1.0,
@@ -47,7 +47,7 @@
         "Translation_IsLookAtDirection": false,
         "Translation_IsMoveAlongForward": false,
         "Translation_IsReturnToOrigin": true,
-        "Translation_MaxTime": 0.10000000149011612,
+        "Translation_MaxTime": 0.23999999463558197,
         "Translation_Period": 0.0,
         "Translation_RailFileName": "",
         "Translation_ReturnEaseType": 22,
@@ -55,7 +55,7 @@
         "Translation_UseRail": false,
         "Translation_endValue": [
             0.0,
-            1.7000000476837158,
+            1.4299999475479126,
             0.0
         ],
         "isReturnSection": false,

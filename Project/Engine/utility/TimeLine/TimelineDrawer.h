@@ -163,6 +163,7 @@ public:
     std::vector<TimeLineTrack>& GetTracks() { return tracks_; }
 
     //*----------------------------- setter Methods -----------------------------*//
+    void ClearTracks() { tracks_.clear(); nextTrackId_ = 0; }
     void SetCurrentFrame(int frame) { currentFrame_ = frame; }
     void SetEndFrame(int frame) { drawParam_.SetEndFrame(frame); }
     void SetPlaying(bool playing) { isPlaying_ = playing; }

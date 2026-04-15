@@ -282,7 +282,14 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
 void PlayerComboAttackData::DrawSaveLoadUI() {
 
     globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
-    globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
+
+    // ロードボタン：パラメータ読み込み後にタイムラインも再構築する
+    if (ImGui::Button(("Load " + groupName_).c_str())) {
+        globalParameter_->LoadFile(groupName_, folderPath_);
+        globalParameter_->SyncParamForGroup(groupName_);
+        renditionData_.SyncSlotsToList();
+        timeLine_.Init(this);
+    }
 }
 
 void PlayerComboAttackData::RebuildBranchTracks() {

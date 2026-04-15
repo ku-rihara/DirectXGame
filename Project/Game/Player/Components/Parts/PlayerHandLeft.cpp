@@ -23,7 +23,7 @@ void PlayerHandLeft::Init() {
 /// 　更新
 ///==========================================================
 void PlayerHandLeft::Update() {
-    BasePlayerHand::EffectEmit("DefaultFireAura");
+    BasePlayerHand::EffectEmit("DefaultFireAuraBlue");
     BasePlayerHand::Update();
 }
 

@@ -18,13 +18,6 @@ class WorldTransform;
 /// </summary>
 namespace ParticleCommon {
 
-// UVスクロールモード
-enum class UVScrollMode : int32_t {
-    None,            ///< スクロールなし
-    Scroll,          ///< コマ送りスクロール
-    ScrollEachPixel, ///< ピクセル毎スクロール
-};
-
 // UVパラメータ
 struct UVParam {
     float frameScrollSpeed  = 0.0f;
@@ -35,7 +28,6 @@ struct UVParam {
     Vector2 scale           = {1.0f, 1.0f}; ///< UVスケール
     Vector3 rotate          = {};
     int32_t numOfFrame      = 0;
-    int32_t uvScrollModeInt = 0; ///< UVScrollMode の int 値
 };
 
 // ジョイント親

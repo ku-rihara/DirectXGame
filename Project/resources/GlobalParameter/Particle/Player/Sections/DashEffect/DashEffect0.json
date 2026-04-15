@@ -49,7 +49,7 @@
         "Cyl.bottomRadiusZ": 1.590000033378601,
         "Cyl.divisions": 18,
         "Cyl.endAngleDeg": 360.0,
-        "Cyl.height": 7.239999771118164,
+        "Cyl.height": 4.360000133514404,
         "Cyl.heightDivisions": 1,
         "Cyl.startAngleDeg": 0.0,
         "Cyl.topColor": [
@@ -173,7 +173,7 @@
         "TranslateEaseParam.returnEaseTypeInt": 0,
         "TranslateEaseParam.returnMaxTime": 0.0,
         "UV IsLoop": false,
-        "UV NumOfFrame": 0,
+        "UV NumOfFrame": 1,
         "UV Pos": [
             0.0,
             0.0
@@ -187,7 +187,6 @@
             0.44999998807907104,
             1.0
         ],
-        "UV ScrollMode": 0,
         "UV ScrollSpeed": -0.15000000596046448,
         "UV isFlipX": false,
         "UV isFlipY": false,
@@ -208,6 +207,9 @@
         "isScalerScale": true,
         "isShot": true,
         "modelFilePath": "",
+        "parentFollowR": true,
+        "parentFollowS": true,
+        "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 2,
         "scaleEaseParam.easeTypeInt": 5,

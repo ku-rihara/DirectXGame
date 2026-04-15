@@ -34,6 +34,11 @@ public:
     void SetFollowPosition(const Vector3* pos) { followPosition_ = pos; }
 
     /// <summary>
+    /// エミットを停止するが既存ポイントはLifeTimeまで残す
+    /// </summary>
+    void StopEmit();
+
+    /// <summary>
     /// トレイルをクリアして非表示にする
     /// </summary>
     void StopAndClear();

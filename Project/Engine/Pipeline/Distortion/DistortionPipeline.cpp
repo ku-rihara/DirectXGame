@@ -23,7 +23,7 @@ void DistortionPipeline::Init(DirectXCommon* dxCommon) {
 }
 
 ///============================================================
-/// ルートシグネチャ作成（モード別に委譲）
+/// ルートシグネチャ作成
 ///============================================================
 void DistortionPipeline::CreateRootSignature() {
     if (mode_ == DistortionMode::Ribbon) {
@@ -34,7 +34,7 @@ void DistortionPipeline::CreateRootSignature() {
 }
 
 ///============================================================
-/// グラフィックスパイプライン作成（モード別に委譲）
+/// グラフィックスパイプライン作成
 ///============================================================
 void DistortionPipeline::CreateGraphicsPipeline() {
     if (mode_ == DistortionMode::Ribbon) {
@@ -96,7 +96,7 @@ void DistortionPipeline::CreateRibbonRootSignature() {
     rootParameters[static_cast<UINT>(DistortionRibbonRootParam::DistortionUVScroll)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[static_cast<UINT>(DistortionRibbonRootParam::DistortionUVScroll)].Descriptor.ShaderRegister = 1;
 
-    // DistortionParam (b0, PS) - 32ビット定数 (strength + padding x3)
+    // DistortionParam (b0, PS) 
     rootParameters[static_cast<UINT>(DistortionRibbonRootParam::DistortionParam)].ParameterType            = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
     rootParameters[static_cast<UINT>(DistortionRibbonRootParam::DistortionParam)].ShaderVisibility         = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[static_cast<UINT>(DistortionRibbonRootParam::DistortionParam)].Constants.ShaderRegister = 0;
@@ -156,7 +156,7 @@ void DistortionPipeline::CreateParticleRootSignature() {
     rootParameters[static_cast<UINT>(DistortionParticleRootParam::ParticleData)].DescriptorTable.pDescriptorRanges   = &particleDataRange;
     rootParameters[static_cast<UINT>(DistortionParticleRootParam::ParticleData)].DescriptorTable.NumDescriptorRanges = 1;
 
-    // DistortionParam (b0, PS) - 32ビット定数
+    // DistortionParam (b0, PS)
     rootParameters[static_cast<UINT>(DistortionParticleRootParam::DistortionParam)].ParameterType            = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
     rootParameters[static_cast<UINT>(DistortionParticleRootParam::DistortionParam)].ShaderVisibility         = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[static_cast<UINT>(DistortionParticleRootParam::DistortionParam)].Constants.ShaderRegister = 0;
@@ -183,7 +183,7 @@ void DistortionPipeline::CreateParticleRootSignature() {
 /// RibbonTrail 用 PSO
 ///============================================================
 void DistortionPipeline::CreateRibbonPipeline() {
-    // 入力レイアウト（RibbonVertex: POSITION / COLOR / TEXCOORD）
+    // 入力レイアウト
     D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
     inputElementDescs[0].SemanticName      = "POSITION";
     inputElementDescs[0].SemanticIndex     = 0;
@@ -204,11 +204,11 @@ void DistortionPipeline::CreateRibbonPipeline() {
     inputLayoutDesc.pInputElementDescs = inputElementDescs;
     inputLayoutDesc.NumElements        = _countof(inputElementDescs);
 
-    // シェーダーコンパイル（共通PS）
+    // シェーダーコンパイル
     vertexShaderBlob_ = CompileShader(L"resources/Shader/Distortion/Distortion.Ribbon.VS.hlsl", L"vs_6_0");
     pixelShaderBlob_  = CompileShader(L"resources/Shader/Distortion/Distortion.PS.hlsl", L"ps_6_0");
 
-    // ブレンド（加算合成）
+    // ブレンド
     D3D12_BLEND_DESC blendDesc{};
     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_RED | D3D12_COLOR_WRITE_ENABLE_GREEN;
     blendDesc.RenderTarget[0].BlendEnable           = TRUE;
@@ -219,12 +219,12 @@ void DistortionPipeline::CreateRibbonPipeline() {
     blendDesc.RenderTarget[0].BlendOpAlpha          = D3D12_BLEND_OP_ADD;
     blendDesc.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ZERO;
 
-    // ラスタライザー（両面描画）
+    // ラスタライザー
     D3D12_RASTERIZER_DESC rasterizerDesc{};
     rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
     rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
-    // 深度テスト（読み取りのみ）
+    // 深度テスト
     depthStencilDesc_.DepthEnable    = true;
     depthStencilDesc_.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
     depthStencilDesc_.DepthFunc      = D3D12_COMPARISON_FUNC_LESS_EQUAL;
@@ -254,7 +254,7 @@ void DistortionPipeline::CreateRibbonPipeline() {
 /// CPUParticle 用 PSO
 ///============================================================
 void DistortionPipeline::CreateParticlePipeline() {
-    // 入力レイアウト（ParticleVertex: POSITION / TEXCOORD / NORMAL / COLOR）
+    // 入力レイアウト
     D3D12_INPUT_ELEMENT_DESC inputElementDescs[4] = {};
     inputElementDescs[0].SemanticName      = "POSITION";
     inputElementDescs[0].SemanticIndex     = 0;
@@ -280,11 +280,11 @@ void DistortionPipeline::CreateParticlePipeline() {
     inputLayoutDesc.pInputElementDescs = inputElementDescs;
     inputLayoutDesc.NumElements        = _countof(inputElementDescs);
 
-    // シェーダーコンパイル（共通PS）
+    // シェーダーコンパイル
     vertexShaderBlob_ = CompileShader(L"resources/Shader/Distortion/Distortion.Particle.VS.hlsl", L"vs_6_0");
     pixelShaderBlob_  = CompileShader(L"resources/Shader/Distortion/Distortion.PS.hlsl", L"ps_6_0");
 
-    // ブレンド（加算合成 - Ribbon と同一）
+    // ブレンド
     D3D12_BLEND_DESC blendDesc{};
     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_RED | D3D12_COLOR_WRITE_ENABLE_GREEN;
     blendDesc.RenderTarget[0].BlendEnable           = TRUE;
@@ -295,12 +295,12 @@ void DistortionPipeline::CreateParticlePipeline() {
     blendDesc.RenderTarget[0].BlendOpAlpha          = D3D12_BLEND_OP_ADD;
     blendDesc.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ZERO;
 
-    // ラスタライザー（両面描画）
+    // ラスタライザー
     D3D12_RASTERIZER_DESC rasterizerDesc{};
     rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
     rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
-    // 深度テスト（読み取りのみ）
+    // 深度テスト
     depthStencilDesc_.DepthEnable    = true;
     depthStencilDesc_.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
     depthStencilDesc_.DepthFunc      = D3D12_COMPARISON_FUNC_LESS_EQUAL;

@@ -158,10 +158,12 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
             });
     });
 
-    // ポストエフェクトリストをクリアして再構築
+    // ポストエフェクト・パーティクルエフェクトリストをクリアして再構築
     auto& renditionDataForClear = const_cast<PlayerAttackRenditionData&>(attackData_->GetRenditionData());
     renditionDataForClear.ClearPostEffectList();
     renditionDataForClear.ClearPostEffectOnHitList();
+    renditionDataForClear.ClearParticleEffectList();
+    renditionDataForClear.ClearParticleEffectOnHitList();
 
     // 演出系とコンボ分岐タイミングの適用
     auto& branches = attackData_->GetComboBranches();
@@ -302,6 +304,14 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
             renditionData.AddPostEffect(p);
             return;
         }
+        // パーティクルエフェクトは複数対応：リストに追加
+        if (trackInfo.type == TT::PARTICLE_EFFECT) {
+            PlayerAttackRenditionData::RenditionParam p;
+            p.fileName    = trackInfo.fileName;
+            p.startTiming = timing;
+            renditionData.AddParticleEffect(p);
+            return;
+        }
 
         int32_t rendIdx = GetRenditionIndexFromTrackType(trackInfo.type);
         if (rendIdx < 0) return;
@@ -321,6 +331,14 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
             p.fileName    = trackInfo.fileName;
             p.startTiming = timing;
             renditionData.AddPostEffectOnHit(p);
+            return;
+        }
+        // ヒット時パーティクルエフェクトは複数対応：リストに追加
+        if (trackInfo.type == TT::PARTICLE_EFFECT_ON_HIT) {
+            PlayerAttackRenditionData::RenditionParam p;
+            p.fileName    = trackInfo.fileName;
+            p.startTiming = timing;
+            renditionData.AddParticleEffectOnHit(p);
             return;
         }
 

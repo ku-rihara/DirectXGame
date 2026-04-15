@@ -1,0 +1,10 @@
+{
+    "RollingAttackDissolve": {
+        "currentTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
+        "easeType": 6,
+        "endThreshold": 1.0,
+        "maxTime": 1.3799999952316284,
+        "offsetTime": 1.0099999904632568,
+        "startThreshold": 0.0
+    }
+}

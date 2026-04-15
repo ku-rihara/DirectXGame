@@ -119,7 +119,7 @@
         "UseRail": false,
         "afterDuration": 0.0,
         "blendMode": 1,
-        "emitPositionMode": 3,
+        "emitPositionMode": 1,
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": false,
@@ -176,11 +176,13 @@
             0.0
         ],
         "emissiveIntensity": 1.0,
-        "UV ScrollMode": 0,
         "UV Scale": [
             1.0,
             1.0
-        ]
+        ],
+        "parentFollowS": false,
+        "parentFollowR": false,
+        "parentFollowT": true
     },
     "emitShape": 0,
     "sphereRadius.min": 0.0,

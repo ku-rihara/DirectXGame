@@ -79,6 +79,6 @@ public:
 
     /// トレイル放出開始（プリセット名でパラメータをロードして開始）
     void StartTrailEmit(const std::string& presetName, const std::string& category = "Player");
-    /// トレイル放出停止
-    void StopTrailEmit() { trailPlayer_.StopAndClear(); }
+    /// トレイル放出停止（既存ポイントはLifeTimeまで残してフェードアウト）
+    void StopTrailEmit() { trailPlayer_.StopEmit(); }
 };

@@ -1,0 +1,34 @@
+{
+    "FieldRollingAttackTrail": {
+        "DistortionStrength": 0.10000000149011612,
+        "DistortionTexturePath": "",
+        "DistortionUVScrollSpeed": [
+            0.0,
+            0.0
+        ],
+        "EmitInterval": 0.004999999888241291,
+        "EndColor": [
+            0.9803921580314636,
+            0.0941176488995552,
+            0.05098039284348488,
+            1.0
+        ],
+        "EndWidth": 0.1340000033378601,
+        "FollowMode": 0,
+        "Lifetime": 1.559999942779541,
+        "MaxPoints": 75,
+        "StartColor": [
+            1.0,
+            0.800000011920929,
+            0.30000001192092896,
+            1.0
+        ],
+        "StartWidth": 0.11999999731779099,
+        "TexturePath": "",
+        "UVScrollSpeed": [
+            0.0,
+            0.0
+        ],
+        "UseDistortion": false
+    }
+}

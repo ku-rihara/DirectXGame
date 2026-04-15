@@ -118,7 +118,7 @@ void ParticleUpdater::UpdateGroup(
         ///------------------------------------------------------------------------
         /// UV更新
         ///------------------------------------------------------------------------
-        if (it->uvInfo_.uvScrollModeInt != 0) {
+        if (it->uvInfo_.numOfFrame > 0) {
             UpdateUV(it->uvInfo_, Frame::DeltaTime());
         }
 
@@ -150,25 +150,18 @@ void ParticleUpdater::UpdateGroup(
 }
 
 void ParticleUpdater::UpdateUV(ParticleManager::UVInfo& uvInfo, float deltaTime) {
-    if (uvInfo.uvScrollModeInt == static_cast<int32_t>(ParticleCommon::UVScrollMode::ScrollEachPixel)) {
-        // 毎フレーム、速度に応じて移動
+    if (uvInfo.numOfFrame == 1) {
+        // 連続スクロール（ScrollEachPixel相当）
         uvInfo.pos.x += uvInfo.frameScrollSpeed * deltaTime;
-
-        if (!uvInfo.isLoop) {
-            // 停止位置を上限にする
-            uvInfo.pos.x = std::min(uvInfo.pos.x, uvInfo.uvStopPos_);
-        }
     } else {
-        // コマ送り制御
+        // コマ送り制御（スプライトシート）
         uvInfo.currentScrollTime += deltaTime;
 
-        // フレームごとの更新タイミングに達したら
         if (uvInfo.currentScrollTime >= uvInfo.frameScrollSpeed) {
-            uvInfo.currentScrollTime = 0.0f; // リセット
+            uvInfo.currentScrollTime = 0.0f;
             uvInfo.pos.x += uvInfo.frameDistance_;
 
             if (!uvInfo.isLoop) {
-                // 停止位置に達したらストップ
                 uvInfo.pos.x = std::min(uvInfo.pos.x, uvInfo.uvStopPos_);
             }
         }

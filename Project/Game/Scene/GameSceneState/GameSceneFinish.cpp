@@ -38,6 +38,11 @@ void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
     case Phase::kSpriteFallIn:
         // 降ってくるアニメーションが終わったらフェードインへ
         if (clearSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
+            // アニメーション終了時の位置を transform_.pos に焼き込む
+            // (IsFinished後は GetAnimationPosition が {0,0} を返すため、最後の位置を確定させる)
+            Vector2 finalPos = clearSprite_->GetSpriteEaseAnimationPlayer()->GetCurrentPosition();
+            clearSprite_->transform_.pos += finalPos;
+            clearSprite_->StopSpriteEaseAnimation();
             phase_ = Phase::kFadeIn;
         }
         break;

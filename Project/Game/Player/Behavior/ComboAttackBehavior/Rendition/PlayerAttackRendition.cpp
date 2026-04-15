@@ -22,14 +22,17 @@ void PlayerAttackRendition::Reset() {
     hasTriggeredHitEffects_ = false;
     previousHasHit_         = false;
 
-    // ポストエフェクトリスト再生フラグをリセット
+    // ポストエフェクト・パーティクルエフェクトリスト再生フラグをリセット
     isPostEffectPlayed_.clear();
     isPostEffectOnHitPlayed_.clear();
+    isParticleEffectPlayed_.clear();
+    isParticleEffectOnHitPlayed_.clear();
 
     // トレイル停止
     if (pPlayer_) {
         pPlayer_->GetRightHand()->StopTrailEmit();
         pPlayer_->GetLeftHand()->StopTrailEmit();
+        pPlayer_->GetPlayerAnimator().StopMainHeadTrailEmit();
     }
 
     // 振動の状態をリセット
@@ -92,8 +95,9 @@ void PlayerAttackRendition::UpdateNormalRenditions(const PlayerAttackRenditionDa
         if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::AudioHit) {
             continue;
         }
-        // ポストエフェクトはリストで管理するためスキップ
-        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::PostEffect) {
+        // ポストエフェクト・パーティクルエフェクトはリストで管理するためスキップ
+        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::PostEffect ||
+            static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::ParticleEffect) {
             continue;
         }
 
@@ -124,12 +128,27 @@ void PlayerAttackRendition::UpdateNormalRenditions(const PlayerAttackRenditionDa
             isPostEffectPlayed_[i] = true;
         }
     }
+
+    // パーティクルエフェクトリストの更新
+    const auto& particleEffectList = renditionData.GetParticleEffectList();
+    if (isParticleEffectPlayed_.size() != particleEffectList.size()) {
+        isParticleEffectPlayed_.assign(particleEffectList.size(), false);
+    }
+    for (size_t i = 0; i < particleEffectList.size(); ++i) {
+        if (isParticleEffectPlayed_[i]) continue;
+        const auto& param = particleEffectList[i];
+        if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
+            PlayRenditionEffect(PlayerAttackRenditionData::Type::ParticleEffect, param);
+            isParticleEffectPlayed_[i] = true;
+        }
+    }
 }
 
 void PlayerAttackRendition::UpdateHitRenditions(const PlayerAttackRenditionData& renditionData) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
-        // ポストエフェクトはリストで管理するためスキップ
-        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::PostEffect) {
+        // ポストエフェクト・パーティクルエフェクトはリストで管理するためスキップ
+        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::PostEffect ||
+            static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::ParticleEffect) {
             continue;
         }
 
@@ -158,6 +177,20 @@ void PlayerAttackRendition::UpdateHitRenditions(const PlayerAttackRenditionData&
         if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
             PlayRenditionEffect(PlayerAttackRenditionData::Type::PostEffect, param);
             isPostEffectOnHitPlayed_[i] = true;
+        }
+    }
+
+    // ヒット時パーティクルエフェクトリストの更新
+    const auto& particleEffectOnHitList = renditionData.GetParticleEffectOnHitList();
+    if (isParticleEffectOnHitPlayed_.size() != particleEffectOnHitList.size()) {
+        isParticleEffectOnHitPlayed_.assign(particleEffectOnHitList.size(), false);
+    }
+    for (size_t i = 0; i < particleEffectOnHitList.size(); ++i) {
+        if (isParticleEffectOnHitPlayed_[i]) continue;
+        const auto& param = particleEffectOnHitList[i];
+        if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
+            PlayRenditionEffect(PlayerAttackRenditionData::Type::ParticleEffect, param);
+            isParticleEffectOnHitPlayed_[i] = true;
         }
     }
 }
@@ -237,6 +270,9 @@ void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionDa
 
             case PlayerAttackRenditionData::ObjAnimationType::MainHead:
                 pPlayer_->GetPlayerAnimator().PlayMainHeadAnimation(param.fileName);
+                if (!param.trailFileName.empty() && param.trailFileName != "None") {
+                    pPlayer_->GetPlayerAnimator().StartMainHeadTrailEmit(param.trailFileName, "Player");
+                }
                 break;
 
             default:
@@ -301,7 +337,8 @@ void PlayerAttackRendition::UpdateVibration(const PlayerAttackRenditionData& ren
     // 振動中のタイマー管理（共通）
     if (isVibrating_) {
         vibrationTimer_ += deltaTime;
-        if (vibrationTimer_ >= vibParam.duration) {
+        float effectiveDuration = (vibParam.duration > 0.0f) ? vibParam.duration : 0.1f;
+        if (vibrationTimer_ >= effectiveDuration) {
             size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
             for (size_t padNo = 0; padNo < numGamepads; ++padNo) {
                 KetaEngine::Input::SetVibration(static_cast<int32_t>(padNo), 0.0f, 0.0f);
