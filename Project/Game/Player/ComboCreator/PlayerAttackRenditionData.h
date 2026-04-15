@@ -33,9 +33,9 @@ public:
 
     // 振動パラメータ
     struct VibrationParam {
-        float startTiming;
-        float duration;
-        float intensity;
+        float startTiming   = 0.0f;
+        float duration      = 0.3f;
+        float intensity     = 0.0f;
         bool triggerByHit   = false;
         bool repeatOnDamage = false;  // ダメージヒットごとに振動する
     };
@@ -107,6 +107,9 @@ public:
     // ポストエフェクトリスト ↔ スロット同期
     void SyncListToSlots();
     void SyncSlotsToList();
+    // パーティクルエフェクトリスト ↔ スロット同期
+    void SyncParticleListToSlots();
+    void SyncParticleSlotsToList();
 
 private:
     //*-------------------------------- private Method --------------------------------*//
@@ -150,6 +153,17 @@ private:
     int32_t postEffectCount_      = 0;
     int32_t postEffectOnHitCount_ = 0;
 
+    // パーティクルエフェクト（複数対応）
+    std::vector<RenditionParam> particleEffectList_;
+    std::vector<RenditionParam> particleEffectOnHitList_;
+
+    // パーティクルエフェクト保存用スロット（GlobalParameter登録用）
+    static constexpr int32_t kMaxParticleEffects = 4;
+    std::array<RenditionParam, kMaxParticleEffects> particleEffectSlots_{};
+    std::array<RenditionParam, kMaxParticleEffects> particleEffectOnHitSlots_{};
+    int32_t particleEffectCount_      = 0;
+    int32_t particleEffectOnHitCount_ = 0;
+
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const RenditionParam& GetRenditionParamFromIndex(int32_t index) const {
@@ -188,4 +202,13 @@ public:
     void ClearPostEffectOnHitList() { postEffectOnHitList_.clear(); }
     void AddPostEffectOnHit(const RenditionParam& param) { postEffectOnHitList_.push_back(param); }
     const std::vector<RenditionParam>& GetPostEffectOnHitList() const { return postEffectOnHitList_; }
+
+    // パーティクルエフェクトリスト操作
+    void ClearParticleEffectList() { particleEffectList_.clear(); }
+    void AddParticleEffect(const RenditionParam& param) { particleEffectList_.push_back(param); }
+    const std::vector<RenditionParam>& GetParticleEffectList() const { return particleEffectList_; }
+
+    void ClearParticleEffectOnHitList() { particleEffectOnHitList_.clear(); }
+    void AddParticleEffectOnHit(const RenditionParam& param) { particleEffectOnHitList_.push_back(param); }
+    const std::vector<RenditionParam>& GetParticleEffectOnHitList() const { return particleEffectOnHitList_; }
 };
