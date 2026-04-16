@@ -1,32 +1,32 @@
 {
     "LeftPunchTrail": {
-        "DistortionStrength": 0.07000000029802322,
+        "DistortionStrength": 0.019999999552965164,
         "DistortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
         "DistortionUVScrollSpeed": [
             0.10000000149011612,
             0.0
         ],
-        "EmitInterval": 0.03999999910593033,
+        "EmitInterval": 0.03500000014901161,
         "EndColor": [
-            0.8918918967247009,
-            0.013774414546787739,
-            0.013774414546787739,
+            0.9498069286346436,
+            0.20888927578926086,
+            0.04033929854631424,
             1.0
         ],
-        "EndWidth": 3.0,
+        "EndWidth": 5.0,
         "FollowMode": 0,
         "Lifetime": 1.1100000143051147,
         "MaxPoints": 256,
         "StartColor": [
-            1.0,
-            0.16539710760116577,
-            0.0038610100746154785,
+            0.969111979007721,
+            0.1122523620724678,
+            0.0,
             1.0
         ],
-        "StartWidth": 3.0,
-        "TexturePath": "Resources/EngineTexture/Trail/trailFile.dds",
+        "StartWidth": 5.0,
+        "TexturePath": "Resources/EngineTexture/Trail/SlashNoise.dds",
         "UVScrollSpeed": [
-            0.5600000023841858,
+            0.14000000059604645,
             0.0
         ],
         "UseDistortion": true
