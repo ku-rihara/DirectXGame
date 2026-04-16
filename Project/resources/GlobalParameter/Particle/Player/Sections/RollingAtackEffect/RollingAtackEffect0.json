@@ -41,6 +41,7 @@
         ],
         "ColorEaseParam.isEase": false,
         "ColorEaseParam.maxTime": 1.0,
+        "Cyl.axisInt": 1,
         "Cyl.bottomColor": [
             0.8803088665008545,
             0.8595481514930725,
@@ -98,7 +99,7 @@
         "Rotate Base": [
             0.0,
             0.0,
-            90.0
+            0.0
         ],
         "Rotate Max": [
             0.0,

@@ -25,6 +25,7 @@ public:
         float   startAngleDeg   = 0.0f;  ///< 開始角度 (度)
         float   endAngleDeg     = 360.0f;///< 終了角度 (度)
         int32_t uvModeInt       = 0;     ///< 0=上→下 1=下→上 2=横方向
+        int32_t axisInt         = 0;     ///< 回転軸 0=Y軸 1=X軸 2=Z軸
         Vector4 topColor    = Vector4(1.0f, 1.0f, 1.0f, 1.0f); ///< 上端頂点カラー
         Vector4 bottomColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f); ///< 下端頂点カラー
     };
@@ -50,6 +51,7 @@ public:
 private:
     static Vector4 LerpColor(const Vector4& a, const Vector4& b, float t);
     Vector2        GetUV(float u, float v) const;
+    Vector4        ApplyAxis(float circX, float circY, float h) const;
 
     const int kVerticesPerFace = 6;
 

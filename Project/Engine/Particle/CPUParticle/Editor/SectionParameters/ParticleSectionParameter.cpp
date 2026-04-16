@@ -178,6 +178,7 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "Cyl.startAngleDeg", &cylinderParams_.startAngleDeg);
     globalParam->Regist(groupName, "Cyl.endAngleDeg", &cylinderParams_.endAngleDeg);
     globalParam->Regist(groupName, "Cyl.uvModeInt", &cylinderParams_.uvModeInt);
+    globalParam->Regist(groupName, "Cyl.axisInt", &cylinderParams_.axisInt); // 追加
     globalParam->Regist(groupName, "Cyl.topColor", &cylinderParams_.topColor);
     globalParam->Regist(groupName, "Cyl.bottomColor", &cylinderParams_.bottomColor);
 
@@ -346,6 +347,7 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     cylinderParams_.startAngleDeg   = globalParam->GetValue<float>(groupName, "Cyl.startAngleDeg");
     cylinderParams_.endAngleDeg     = globalParam->GetValue<float>(groupName, "Cyl.endAngleDeg");
     cylinderParams_.uvModeInt       = globalParam->GetValue<int32_t>(groupName, "Cyl.uvModeInt");
+    cylinderParams_.axisInt         = globalParam->GetValue<int32_t>(groupName, "Cyl.axisInt"); // 追加
     cylinderParams_.topColor        = globalParam->GetValue<Vector4>(groupName, "Cyl.topColor");
     cylinderParams_.bottomColor     = globalParam->GetValue<Vector4>(groupName, "Cyl.bottomColor");
 
@@ -363,16 +365,13 @@ void ParticleSectionParameter::AdjustParam() {
 
     // Emit Position Mode
     ImGui::SeparatorText("位置モード");
-    // コンボ表示用
     const char* PositionModeItems[] = {"None", "ParentTransform", "TargetPosition", "ParentJoint"};
 
     int displayModeInt = emitPositionModeInt_;
     if (ImGui::Combo("エミッター位置モード", &displayModeInt, PositionModeItems, IM_ARRAYSIZE(PositionModeItems))) {
-
         emitPositionModeInt_ = displayModeInt;
         emitPositionMode_    = static_cast<EmitterPositionMode>(emitPositionModeInt_);
     }
-    // ParentTransform モードの場合、S/R/T チェックボックスを表示
     if (emitPositionMode_ == EmitterPositionMode::ParentTransform) {
         ImGui::Indent();
         ImGui::Text("追従軸:");
@@ -384,7 +383,6 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::Checkbox("Translation", &parentFollowT_);
         ImGui::Unindent();
     }
-    // TargetPosition モードの場合、Position/Rotation チェックボックスを表示
     if (emitPositionMode_ == EmitterPositionMode::TargetPosition) {
         ImGui::Indent();
         ImGui::Text("適用:");
@@ -415,7 +413,6 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::Checkbox("モデル使用", &useModel_);
 
         if (useModel_) {
-            // モデルモード
             ImGui::Text("モデルファイルパス:");
             ImGui::Text("形式: モデルフォルダ/モデル名");
 
@@ -437,7 +434,6 @@ void ParticleSectionParameter::AdjustParam() {
                 ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Full: %s", fullPath.c_str());
             }
         } else {
-            // プリミティブモード
             const char* primitiveItems[] = {"Plane", "Sphere", "Cylinder", "Ring", "Box"};
 
             if (ImGui::Combo("プリミティブタイプ", &primitiveTypeInt_, primitiveItems, IM_ARRAYSIZE(primitiveItems))) {
@@ -446,7 +442,6 @@ void ParticleSectionParameter::AdjustParam() {
                 }
             }
 
-            // Cylinder選択中のみ形状パラメータを表示
             if (primitiveTypeInt_ == static_cast<int32_t>(PrimitiveType::Cylinder)) {
                 CylinderParamEditor();
             }
@@ -462,7 +457,6 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::ColorEdit4("最大", &parameters_.colorDist.max.x);
         ImGui::ColorEdit4("最小", &parameters_.colorDist.min.x);
 
-        // アルファモード
         ImGui::Separator();
         ImGui::SeparatorText("アルファ:");
         const char* alphaModeItems[] = {"None（消えない）", "LifeTime（時間経過）", "Easing（イージング）"};
@@ -678,7 +672,6 @@ void ParticleSectionParameter::ScaleParamEditor() {
             ImGui::DragFloat3("スケールV3 最小", &parameters_.scaleDistV3.min.x, 0.01f);
         }
 
-        // Scale Easing
         ImGui::Checkbox("スケールイージング使用", &parameters_.scaleEaseParam.baseParam.isEase);
 
         if (parameters_.scaleEaseParam.baseParam.isEase) {
@@ -705,7 +698,6 @@ void ParticleSectionParameter::ScaleParamEditor() {
 }
 
 void ParticleSectionParameter::TranslateParamEditor() {
-
     ImGui::Separator();
     ImGui::Checkbox("移動イージング使用", &parameters_.translateEaseParam.baseParam.isEase);
 
@@ -791,17 +783,14 @@ void ParticleSectionParameter::SetParentTransform(const WorldTransform* transfor
         return;
     }
 
-    // まず両方クリア
     parameters_.parentTransform = nullptr;
     parameters_.followingPos_   = nullptr;
 
-    // 全フラグOFF → 追従なし
     if (!parentFollowS_ && !parentFollowR_ && !parentFollowT_) {
         return;
     }
 
     if (parentFollowR_) {
-
         parameters_.parentTransform = transform;
     } else if (parentFollowT_) {
         parameters_.followingPos_ = transform ? &transform->translation_ : nullptr;
@@ -817,7 +806,6 @@ void ParticleSectionParameter::SetParentJoint(const Object3DAnimation* animation
 }
 
 void ParticleSectionParameter::SetFollowingPos(const Vector3* pos) {
-    // R=false かつ T=true の ParentTransform モードで followingPos を直接設定
     if (emitPositionMode_ == EmitterPositionMode::ParentTransform && !parentFollowR_ && parentFollowT_) {
         parameters_.followingPos_ = pos;
     }
@@ -843,7 +831,6 @@ void ParticleSectionParameter::SetTargetRotation(const Vector3& targetRotate) {
 }
 
 void ParticleSectionParameter::SetTextureChangedCallback(std::function<void()> callback) {
-
     onTextureChanged_ = callback;
 }
 
@@ -877,6 +864,13 @@ void ParticleSectionParameter::CylinderParamEditor() {
     if (ImGui::TreeNodeEx("角度範囲", ImGuiTreeNodeFlags_DefaultOpen)) {
         changed |= ImGui::DragFloat("開始角度 (度)", &cylinderParams_.startAngleDeg, 1.0f, -360.0f, 360.0f);
         changed |= ImGui::DragFloat("終了角度 (度)", &cylinderParams_.endAngleDeg, 1.0f, -360.0f, 720.0f);
+        ImGui::TreePop();
+    }
+
+    // 回転軸 
+    if (ImGui::TreeNodeEx("回転軸設定", ImGuiTreeNodeFlags_DefaultOpen)) {
+        const char* axisItems[] = {"Y軸（デフォルト）", "X軸", "Z軸"};
+        changed |= ImGui::Combo("回転軸", &cylinderParams_.axisInt, axisItems, IM_ARRAYSIZE(axisItems));
         ImGui::TreePop();
     }
 
