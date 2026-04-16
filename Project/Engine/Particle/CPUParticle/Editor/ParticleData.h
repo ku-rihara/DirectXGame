@@ -84,6 +84,7 @@ public:
     void SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName);
     void SetFollowingPos(const Vector3* pos);
     void SetTargetPosition(const Vector3& targetPos);
+    void SetTargetRotation(const Vector3& targetRotate);
 };
 
 }

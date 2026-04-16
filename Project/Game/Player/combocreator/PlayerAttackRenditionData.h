@@ -21,7 +21,7 @@ public:
         float currentTime_;
         bool isCameraReset   = false;
         float volume         = 1.0f;
-        bool repeatOnDamage  = false;  // ダメージヒットごとに再生（音用）
+        bool repeatOnDamage  = false;  
     };
 
     // オブジェクトアニメーションパラメータ
@@ -37,7 +37,7 @@ public:
         float duration      = 0.3f;
         float intensity     = 0.0f;
         bool triggerByHit   = false;
-        bool repeatOnDamage = false;  // ダメージヒットごとに振動する
+        bool repeatOnDamage = false; 
     };
 
     enum class Type {
@@ -142,25 +142,26 @@ private:
     // 振動パラメータ
     VibrationParam vibrationParam_;
 
-    // ポストエフェクト（複数対応）
+    // ポストエフェクト
     std::vector<RenditionParam> postEffectList_;
     std::vector<RenditionParam> postEffectOnHitList_;
 
-    // ポストエフェクト保存用スロット（GlobalParameter登録用）
-    static constexpr int32_t kMaxPostEffects = 4;
-    std::array<RenditionParam, kMaxPostEffects> postEffectSlots_{};
-    std::array<RenditionParam, kMaxPostEffects> postEffectOnHitSlots_{};
+    // スロット数
+    static constexpr int32_t kMaxEffectSlots = 2; 
+
+    // ポストエフェクト保存用スロット
+    std::array<RenditionParam, kMaxEffectSlots> postEffectSlots_{};
+    std::array<RenditionParam, kMaxEffectSlots> postEffectOnHitSlots_{};
     int32_t postEffectCount_      = 0;
     int32_t postEffectOnHitCount_ = 0;
 
-    // パーティクルエフェクト（複数対応）
+    // パーティクルエフェクト
     std::vector<RenditionParam> particleEffectList_;
     std::vector<RenditionParam> particleEffectOnHitList_;
 
-    // パーティクルエフェクト保存用スロット（GlobalParameter登録用）
-    static constexpr int32_t kMaxParticleEffects = 4;
-    std::array<RenditionParam, kMaxParticleEffects> particleEffectSlots_{};
-    std::array<RenditionParam, kMaxParticleEffects> particleEffectOnHitSlots_{};
+    // パーティクルエフェクト保存用スロット
+    std::array<RenditionParam, kMaxEffectSlots> particleEffectSlots_{};
+    std::array<RenditionParam, kMaxEffectSlots> particleEffectOnHitSlots_{};
     int32_t particleEffectCount_      = 0;
     int32_t particleEffectOnHitCount_ = 0;
 

@@ -8,6 +8,7 @@ using namespace KetaEngine;
 // function
 #include "function/Convert.h"
 // std
+#include <algorithm>
 #include <cstdlib>
 #include <d3dx12.h>
 #include <stdexcept>
@@ -90,23 +91,27 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureDate(Microso
     barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
     barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_GENERIC_READ;
     commandList->ResourceBarrier(1, &barrier);
-    return intermediateResource.Get();
+    return intermediateResource;
 }
 
 uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
+    // パスを正規化 (バックスラッシュをスラッシュに変換)
+    std::string normalizedPath = filePath;
+    std::replace(normalizedPath.begin(), normalizedPath.end(), '\\', '/');
+
     // 読み込み済みテクスチャを検索
-    if (textureDates_.contains(filePath)) {
-        return textureDates_[filePath].index; // インデックスを返す
+    if (textureDates_.contains(normalizedPath)) {
+        return textureDates_[normalizedPath].index; // インデックスを返す
     }
 
     // テクスチャ上限枚数をチェック
     assert(pSrvManager_->IsAbleSecure());
 
     // テクスチャファイルを読み、MipMapの作成
-    DirectX::ScratchImage mipImage = LoadTextureFile(filePath);
+    DirectX::ScratchImage mipImage = LoadTextureFile(normalizedPath);
 
-    TextureData& textureData = textureDates_[filePath];
+    TextureData& textureData = textureDates_[normalizedPath];
 
     // メタデータとリソースの初期化
     textureData.metadata = mipImage.GetMetadata();
@@ -151,6 +156,8 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
     directXCommon_->GetDxCommand()->ExecuteCommand();
     directXCommon_->GetDxCommand()->WaitForGPU();
     directXCommon_->GetDxCommand()->ResetCommand();
+    // リセット後にデスクリプタヒープを再設定
+    pSrvManager_->PreDraw();
 
     // 新しく読み込んだテクスチャのインデックスを設定し、返す
     textureData.index = static_cast<uint32_t>(textureDates_.size() - 1);

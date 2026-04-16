@@ -211,6 +211,9 @@
         "isScalerScale": true,
         "isShot": true,
         "modelFilePath": "",
+        "parentFollowR": true,
+        "parentFollowS": true,
+        "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 2,
         "scaleEaseParam.backRatio": 0.0,
@@ -235,6 +238,8 @@
         "selectedTexturePath": "Resources/EngineTexture/Particle/FireEffect.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
+        "targetApplyPos": true,
+        "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": true,
         "useModel": false

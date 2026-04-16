@@ -3,6 +3,7 @@
 #include "Base/TextureManager.h"
 #include "Editor/EffectEditorSuite/EffectInlineEditRequest.h"
 #include "Function/GetFile.h"
+#include "MathFunction.h"
 #include <imgui.h>
 
 using namespace KetaEngine;
@@ -11,13 +12,6 @@ void ParticleSectionParameter::AdaptIntToType() {
     groupParameters_.blendMode     = static_cast<BlendMode>(blendModeInt_);
     groupParameters_.billboardType = static_cast<BillboardType>(billboardTypeInt_);
 
-    // 旧 FollowingPosition (mode=3) → ParentTransform + T-only に自動移行
-    if (emitPositionModeInt_ == 3) {
-        emitPositionModeInt_ = 1;
-        parentFollowS_       = false;
-        parentFollowR_       = false;
-        parentFollowT_       = true;
-    }
     emitPositionMode_ = static_cast<EmitterPositionMode>(emitPositionModeInt_);
 }
 
@@ -164,6 +158,10 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "parentFollowR", &parentFollowR_);
     globalParam->Regist(groupName, "parentFollowT", &parentFollowT_);
 
+    // TargetPosition Flags
+    globalParam->Regist(groupName, "targetApplyPos", &targetApplyPos_);
+    globalParam->Regist(groupName, "targetApplyR", &targetApplyR_);
+
     // Shape
     globalParam->Regist(groupName, "emitShape", &emitShapeInt_);
     globalParam->Regist(groupName, "sphereRadius.min", &parameters_.sphereRadius.min);
@@ -210,10 +208,10 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.uvParam.scale            = globalParam->GetValue<Vector2>(groupName, "UV Scale");
     parameters_.uvParam.rotate           = globalParam->GetValue<Vector3>(groupName, "UV Rotate");
     parameters_.uvParam.numOfFrame       = globalParam->GetValue<int32_t>(groupName, "UV NumOfFrame");
-    parameters_.uvParam.frameScrollSpeed = globalParam->GetValue<float>  (groupName, "UV ScrollSpeed");
-    parameters_.uvParam.isLoop           = globalParam->GetValue<bool>   (groupName, "UV IsLoop");
-    parameters_.uvParam.isFlipX          = globalParam->GetValue<bool>   (groupName, "UV isFlipX");
-    parameters_.uvParam.isFlipY          = globalParam->GetValue<bool>   (groupName, "UV isFlipY");
+    parameters_.uvParam.frameScrollSpeed = globalParam->GetValue<float>(groupName, "UV ScrollSpeed");
+    parameters_.uvParam.isLoop           = globalParam->GetValue<bool>(groupName, "UV IsLoop");
+    parameters_.uvParam.isFlipX          = globalParam->GetValue<bool>(groupName, "UV isFlipX");
+    parameters_.uvParam.isFlipY          = globalParam->GetValue<bool>(groupName, "UV isFlipY");
 
     // Velocity
     parameters_.speedDist.max      = globalParam->GetValue<float>(groupName, "Speed Max");
@@ -327,6 +325,10 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parentFollowR_       = globalParam->GetValue<bool>(groupName, "parentFollowR");
     parentFollowT_       = globalParam->GetValue<bool>(groupName, "parentFollowT");
 
+    // TargetPosition Flags
+    targetApplyPos_ = globalParam->GetValue<bool>(groupName, "targetApplyPos");
+    targetApplyR_   = globalParam->GetValue<bool>(groupName, "targetApplyR");
+
     // Shape
     emitShapeInt_                = globalParam->GetValue<int32_t>(groupName, "emitShape");
     parameters_.emitShape        = static_cast<ParticleCommon::EmitShape>(emitShapeInt_);
@@ -361,22 +363,35 @@ void ParticleSectionParameter::AdjustParam() {
 
     // Emit Position Mode
     ImGui::SeparatorText("位置モード");
-    // コンボ表示用（値は None=0, ParentTransform=1, TargetPosition=2, ParentJoint=4）
+    // コンボ表示用
     const char* PositionModeItems[] = {"None", "ParentTransform", "TargetPosition", "ParentJoint"};
-    // emitPositionModeInt_ の 4 を 3 に変換して表示
-    int displayModeInt = (emitPositionModeInt_ == 4) ? 3 : emitPositionModeInt_;
+
+    int displayModeInt = emitPositionModeInt_;
     if (ImGui::Combo("エミッター位置モード", &displayModeInt, PositionModeItems, IM_ARRAYSIZE(PositionModeItems))) {
-        // 表示インデックス 3 → ParentJoint (値=4)
-        emitPositionModeInt_ = (displayModeInt == 3) ? 4 : displayModeInt;
-        emitPositionMode_ = static_cast<EmitterPositionMode>(emitPositionModeInt_);
+
+        emitPositionModeInt_ = displayModeInt;
+        emitPositionMode_    = static_cast<EmitterPositionMode>(emitPositionModeInt_);
     }
     // ParentTransform モードの場合、S/R/T チェックボックスを表示
     if (emitPositionMode_ == EmitterPositionMode::ParentTransform) {
         ImGui::Indent();
         ImGui::Text("追従軸:");
-        ImGui::SameLine(); ImGui::Checkbox("Scale", &parentFollowS_);
-        ImGui::SameLine(); ImGui::Checkbox("Rotation", &parentFollowR_);
-        ImGui::SameLine(); ImGui::Checkbox("Translation", &parentFollowT_);
+        ImGui::SameLine();
+        ImGui::Checkbox("Scale", &parentFollowS_);
+        ImGui::SameLine();
+        ImGui::Checkbox("Rotation", &parentFollowR_);
+        ImGui::SameLine();
+        ImGui::Checkbox("Translation", &parentFollowT_);
+        ImGui::Unindent();
+    }
+    // TargetPosition モードの場合、Position/Rotation チェックボックスを表示
+    if (emitPositionMode_ == EmitterPositionMode::TargetPosition) {
+        ImGui::Indent();
+        ImGui::Text("適用:");
+        ImGui::SameLine();
+        ImGui::Checkbox("Position##target", &targetApplyPos_);
+        ImGui::SameLine();
+        ImGui::Checkbox("Rotation##target", &targetApplyR_);
         ImGui::Unindent();
     }
 
@@ -775,14 +790,21 @@ void ParticleSectionParameter::SetParentTransform(const WorldTransform* transfor
     if (emitPositionMode_ != EmitterPositionMode::ParentTransform) {
         return;
     }
-    // Rotation を追従しない場合は親行列を使わず Translation のみ追従
-    if (!parentFollowR_) {
-        parameters_.followingPos_   = transform ? &transform->translation_ : nullptr;
-        parameters_.parentTransform = nullptr;
-    } else {
-        // Rotation を含む場合は親 WorldTransform をそのままセット
+
+    // まず両方クリア
+    parameters_.parentTransform = nullptr;
+    parameters_.followingPos_   = nullptr;
+
+    // 全フラグOFF → 追従なし
+    if (!parentFollowS_ && !parentFollowR_ && !parentFollowT_) {
+        return;
+    }
+
+    if (parentFollowR_) {
+
         parameters_.parentTransform = transform;
-        parameters_.followingPos_   = nullptr;
+    } else if (parentFollowT_) {
+        parameters_.followingPos_ = transform ? &transform->translation_ : nullptr;
     }
 }
 
@@ -795,8 +817,8 @@ void ParticleSectionParameter::SetParentJoint(const Object3DAnimation* animation
 }
 
 void ParticleSectionParameter::SetFollowingPos(const Vector3* pos) {
-    // Rotation を追従しない ParentTransform モードで followingPos を直接設定
-    if (emitPositionMode_ == EmitterPositionMode::ParentTransform && !parentFollowR_) {
+    // R=false かつ T=true の ParentTransform モードで followingPos を直接設定
+    if (emitPositionMode_ == EmitterPositionMode::ParentTransform && !parentFollowR_ && parentFollowT_) {
         parameters_.followingPos_ = pos;
     }
 }
@@ -805,7 +827,19 @@ void ParticleSectionParameter::SetTargetPosition(const Vector3& targetPos) {
     if (emitPositionMode_ != EmitterPositionMode::TargetPosition) {
         return;
     }
-    parameters_.targetPos = targetPos;
+    if (targetApplyPos_) {
+        parameters_.targetPos = targetPos;
+    }
+}
+
+void ParticleSectionParameter::SetTargetRotation(const Vector3& targetRotate) {
+    if (emitPositionMode_ != EmitterPositionMode::TargetPosition) {
+        return;
+    }
+
+    if (targetApplyR_) {
+        parameters_.targetRotate = targetRotate;
+    }
 }
 
 void ParticleSectionParameter::SetTextureChangedCallback(std::function<void()> callback) {

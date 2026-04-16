@@ -1,0 +1,20 @@
+{
+    "RollingPunchCamera0": {
+        "fov": 55.349998474121094,
+        "fovEaseType": 22,
+        "position": [
+            -26.799999237060547,
+            1.2000000476837158,
+            -5.199999809265137
+        ],
+        "positionEaseType": 22,
+        "rotation": [
+            -0.01745329238474369,
+            0.6981315016746521,
+            0.0
+        ],
+        "rotationEaseType": 22,
+        "timeMode": 1,
+        "timePoint": 1.350000023841858
+    }
+}

@@ -102,7 +102,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     // 攻撃パラメータを取得
     auto& attackParam = attackData_->GetAttackParam();
 
-    // コライダー適用（複数キーフレーム対応：duration共通・先頭位置連動）
+    // コライダー適用
     {
         int32_t trackIdx = timeLineData_->GetDefaultTrackIndex(
             PlayerComboAttackTimelineData::DefaultTrack::COLLISION);
@@ -298,18 +298,18 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
     if (typeInt >= static_cast<int>(TT::CAMERA_ACTION) && typeInt <= static_cast<int>(TT::AUDIO_ATTACK)) {
         // ポストエフェクトは複数対応：リストに追加
         if (trackInfo.type == TT::POST_EFFECT) {
-            PlayerAttackRenditionData::RenditionParam p;
-            p.fileName    = trackInfo.fileName;
-            p.startTiming = timing;
-            renditionData.AddPostEffect(p);
+            PlayerAttackRenditionData::RenditionParam param;
+            param.fileName    = trackInfo.fileName;
+            param.startTiming = timing;
+            renditionData.AddPostEffect(param);
             return;
         }
         // パーティクルエフェクトは複数対応：リストに追加
         if (trackInfo.type == TT::PARTICLE_EFFECT) {
-            PlayerAttackRenditionData::RenditionParam p;
-            p.fileName    = trackInfo.fileName;
-            p.startTiming = timing;
-            renditionData.AddParticleEffect(p);
+            PlayerAttackRenditionData::RenditionParam param;
+            param.fileName    = trackInfo.fileName;
+            param.startTiming = timing;
+            renditionData.AddParticleEffect(param);
             return;
         }
 
@@ -325,7 +325,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
     }
     // ヒット時演出
     else if (typeInt >= static_cast<int>(TT::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(TT::AUDIO_ATTACK_ON_HIT)) {
-        // ヒット時ポストエフェクトは複数対応：リストに追加
+        // ヒット時ポストエフェクトは複数対応
         if (trackInfo.type == TT::POST_EFFECT_ON_HIT) {
             PlayerAttackRenditionData::RenditionParam p;
             p.fileName    = trackInfo.fileName;
@@ -333,7 +333,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
             renditionData.AddPostEffectOnHit(p);
             return;
         }
-        // ヒット時パーティクルエフェクトは複数対応：リストに追加
+        // ヒット時パーティクルエフェクトは複数対応
         if (trackInfo.type == TT::PARTICLE_EFFECT_ON_HIT) {
             PlayerAttackRenditionData::RenditionParam p;
             p.fileName    = trackInfo.fileName;

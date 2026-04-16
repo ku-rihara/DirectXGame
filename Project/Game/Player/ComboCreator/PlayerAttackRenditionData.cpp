@@ -63,10 +63,10 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
     globalParam->Regist(groupName, "Vibration_TriggerByHit",  &vibrationParam_.triggerByHit);
     globalParam->Regist(groupName, "Vibration_RepeatOnDamage",&vibrationParam_.repeatOnDamage);
 
-    // ポストエフェクトスロット（複数保存用）
+    // ポストエフェクトスロット
     globalParam->Regist(groupName, "PostEffect_Count", &postEffectCount_);
     globalParam->Regist(groupName, "PostEffect_OnHit_Count", &postEffectOnHitCount_);
-    for (int32_t i = 0; i < kMaxPostEffects; ++i) {
+    for (int32_t i = 0; i < kMaxEffectSlots; ++i) {
         std::string suffix = "_" + std::to_string(i);
         globalParam->Regist(groupName, "PostEffect_Slot" + suffix + "_FileName",     &postEffectSlots_[i].fileName);
         globalParam->Regist(groupName, "PostEffect_Slot" + suffix + "_StartTiming",  &postEffectSlots_[i].startTiming);
@@ -74,10 +74,10 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
         globalParam->Regist(groupName, "PostEffect_OnHit_Slot" + suffix + "_StartTiming", &postEffectOnHitSlots_[i].startTiming);
     }
 
-    // パーティクルエフェクトスロット（複数保存用）
+    // パーティクルエフェクトスロット
     globalParam->Regist(groupName, "ParticleEffect_Count", &particleEffectCount_);
     globalParam->Regist(groupName, "ParticleEffect_OnHit_Count", &particleEffectOnHitCount_);
-    for (int32_t i = 0; i < kMaxParticleEffects; ++i) {
+    for (int32_t i = 0; i < kMaxEffectSlots; ++i) {
         std::string suffix = "_" + std::to_string(i);
         globalParam->Regist(groupName, "ParticleEffect_Slot" + suffix + "_FileName",    &particleEffectSlots_[i].fileName);
         globalParam->Regist(groupName, "ParticleEffect_Slot" + suffix + "_StartTiming", &particleEffectSlots_[i].startTiming);
@@ -87,20 +87,20 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
 }
 
 void PlayerAttackRenditionData::SyncListToSlots() {
-    postEffectCount_ = static_cast<int32_t>((std::min)(postEffectList_.size(), static_cast<size_t>(kMaxPostEffects)));
+    postEffectCount_ = static_cast<int32_t>((std::min)(postEffectList_.size(), static_cast<size_t>(kMaxEffectSlots)));
     for (int32_t i = 0; i < postEffectCount_; ++i) {
         postEffectSlots_[i] = postEffectList_[i];
     }
     // 残りスロットをクリア
-    for (int32_t i = postEffectCount_; i < kMaxPostEffects; ++i) {
+    for (int32_t i = postEffectCount_; i < kMaxEffectSlots; ++i) {
         postEffectSlots_[i] = RenditionParam{};
     }
 
-    postEffectOnHitCount_ = static_cast<int32_t>((std::min)(postEffectOnHitList_.size(), static_cast<size_t>(kMaxPostEffects)));
+    postEffectOnHitCount_ = static_cast<int32_t>((std::min)(postEffectOnHitList_.size(), static_cast<size_t>(kMaxEffectSlots)));
     for (int32_t i = 0; i < postEffectOnHitCount_; ++i) {
         postEffectOnHitSlots_[i] = postEffectOnHitList_[i];
     }
-    for (int32_t i = postEffectOnHitCount_; i < kMaxPostEffects; ++i) {
+    for (int32_t i = postEffectOnHitCount_; i < kMaxEffectSlots; ++i) {
         postEffectOnHitSlots_[i] = RenditionParam{};
     }
 
@@ -109,7 +109,7 @@ void PlayerAttackRenditionData::SyncListToSlots() {
 
 void PlayerAttackRenditionData::SyncSlotsToList() {
     postEffectList_.clear();
-    int32_t count = (std::min)(postEffectCount_, kMaxPostEffects);
+    int32_t count = (std::min)(postEffectCount_, kMaxEffectSlots);
     for (int32_t i = 0; i < count; ++i) {
         if (!postEffectSlots_[i].fileName.empty() && postEffectSlots_[i].fileName != "None") {
             postEffectList_.push_back(postEffectSlots_[i]);
@@ -117,7 +117,7 @@ void PlayerAttackRenditionData::SyncSlotsToList() {
     }
 
     postEffectOnHitList_.clear();
-    int32_t onHitCount = (std::min)(postEffectOnHitCount_, kMaxPostEffects);
+    int32_t onHitCount = (std::min)(postEffectOnHitCount_, kMaxEffectSlots);
     for (int32_t i = 0; i < onHitCount; ++i) {
         if (!postEffectOnHitSlots_[i].fileName.empty() && postEffectOnHitSlots_[i].fileName != "None") {
             postEffectOnHitList_.push_back(postEffectOnHitSlots_[i]);
@@ -128,32 +128,32 @@ void PlayerAttackRenditionData::SyncSlotsToList() {
 }
 
 void PlayerAttackRenditionData::SyncParticleListToSlots() {
-    particleEffectCount_ = static_cast<int32_t>((std::min)(particleEffectList_.size(), static_cast<size_t>(kMaxParticleEffects)));
+    particleEffectCount_ = static_cast<int32_t>((std::min)(particleEffectList_.size(), static_cast<size_t>(kMaxEffectSlots)));
     for (int32_t i = 0; i < particleEffectCount_; ++i) {
         particleEffectSlots_[i] = particleEffectList_[i];
     }
-    for (int32_t i = particleEffectCount_; i < kMaxParticleEffects; ++i) {
+    for (int32_t i = particleEffectCount_; i < kMaxEffectSlots; ++i) {
         particleEffectSlots_[i] = RenditionParam{};
     }
 
-    particleEffectOnHitCount_ = static_cast<int32_t>((std::min)(particleEffectOnHitList_.size(), static_cast<size_t>(kMaxParticleEffects)));
+    particleEffectOnHitCount_ = static_cast<int32_t>((std::min)(particleEffectOnHitList_.size(), static_cast<size_t>(kMaxEffectSlots)));
     for (int32_t i = 0; i < particleEffectOnHitCount_; ++i) {
         particleEffectOnHitSlots_[i] = particleEffectOnHitList_[i];
     }
-    for (int32_t i = particleEffectOnHitCount_; i < kMaxParticleEffects; ++i) {
+    for (int32_t i = particleEffectOnHitCount_; i < kMaxEffectSlots; ++i) {
         particleEffectOnHitSlots_[i] = RenditionParam{};
     }
 }
 
 void PlayerAttackRenditionData::SyncParticleSlotsToList() {
     particleEffectList_.clear();
-    int32_t count = (std::min)(particleEffectCount_, kMaxParticleEffects);
+    int32_t count = (std::min)(particleEffectCount_, kMaxEffectSlots);
     for (int32_t i = 0; i < count; ++i) {
         if (!particleEffectSlots_[i].fileName.empty() && particleEffectSlots_[i].fileName != "None") {
             particleEffectList_.push_back(particleEffectSlots_[i]);
         }
     }
-    // 旧フォーマット移行: スロットが空の場合は旧単体パラメータをリストに追加
+    // スロットが空の場合は旧単体パラメータをリストに追加
     if (particleEffectList_.empty()) {
         const auto& legacy = renditionParams_[static_cast<size_t>(Type::ParticleEffect)].first;
         if (!legacy.fileName.empty() && legacy.fileName != "None") {
@@ -162,13 +162,13 @@ void PlayerAttackRenditionData::SyncParticleSlotsToList() {
     }
 
     particleEffectOnHitList_.clear();
-    int32_t onHitCount = (std::min)(particleEffectOnHitCount_, kMaxParticleEffects);
+    int32_t onHitCount = (std::min)(particleEffectOnHitCount_, kMaxEffectSlots);
     for (int32_t i = 0; i < onHitCount; ++i) {
         if (!particleEffectOnHitSlots_[i].fileName.empty() && particleEffectOnHitSlots_[i].fileName != "None") {
             particleEffectOnHitList_.push_back(particleEffectOnHitSlots_[i]);
         }
     }
-    // 旧フォーマット移行: OnHit スロットが空の場合は旧単体パラメータをリストに追加
+    // OnHit スロットが空の場合は旧単体パラメータをリストに追加
     if (particleEffectOnHitList_.empty()) {
         const auto& legacyOnHit = renditionParamsOnHit_[static_cast<size_t>(Type::ParticleEffect)].first;
         if (!legacyOnHit.fileName.empty() && legacyOnHit.fileName != "None") {

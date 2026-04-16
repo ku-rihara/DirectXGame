@@ -30,6 +30,7 @@
         "KnockBackPower": 17.8700008392334,
         "Main_Head_FileName": "FieldCyclingAttackMotion",
         "Main_Head_StartTiming": 0.0,
+        "Main_Head_TrailFileName": "FieldRollingAttackTrail",
         "ObjAnim_Head_FileName": "",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "None",

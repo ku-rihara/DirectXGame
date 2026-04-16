@@ -14,9 +14,10 @@ void PlayerEffects::Init(KetaEngine::WorldTransform* transform) {
 ///=========================================================
 /// 　更新
 ///==========================================================
-void PlayerEffects::Update(const Vector3& position) {
+void PlayerEffects::Update(const Vector3& position,const Vector3& rotation) {
 
     particlePlayer_.SetTargetPosition(position);
+    particlePlayer_.SetTargetRotation(rotation);
     particlePlayer_.Update();
 }
 

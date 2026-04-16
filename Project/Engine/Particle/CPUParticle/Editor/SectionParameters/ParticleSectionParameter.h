@@ -35,10 +35,9 @@ public:
     // エミッター位置制御タイプ
     enum class EmitterPositionMode {
         None = 0,
-        ParentTransform,   // S/R/T チェックボックスで詳細設定
+        ParentTransform,
         TargetPosition,
-        // 3 = FollowingPosition (廃止済み。JSONロード時にParentTransform+T-onlyへ移行)
-        ParentJoint = 4
+        ParentJoint
     };
 
 public:
@@ -64,7 +63,7 @@ private:
     void TranslateParamEditor();
     void RotateParamEditor();
     void AdaptIntToType();
-    void CylinderParamEditor(); ///< Cylinder形状パラメータ編集UI
+    void CylinderParamEditor();
 
 private:
     // Names
@@ -91,10 +90,14 @@ private:
     FileSelector distortionTextureFileSelector_;
     FileSelector dissolveFileSelector_;
 
-    // ParentTransform の S/R/T 追従フラグ（mode=1 の詳細設定）
+    // ParentTransform の S/R/T 追従フラグ
     bool parentFollowS_ = true;
     bool parentFollowR_ = true;
     bool parentFollowT_ = true;
+
+    // TargetPosition の適用フラグ
+    bool targetApplyPos_ = true;   // 位置を適用するか
+    bool targetApplyR_   = false;  // 回転を適用するか
 
     // TypeInt
     int32_t primitiveTypeInt_    = 0;
@@ -161,6 +164,7 @@ public:
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
     void SetFollowingPos(const Vector3* pos);
     void SetTargetPosition(const Vector3& targetPos);
+    void SetTargetRotation(const Vector3& targetRotate);
     void SetTextureChangedCallback(std::function<void()> callback);
     void SetPrimitiveChangedCallback(std::function<void(PrimitiveType)> callback) {
         onPrimitiveChanged_ = callback;

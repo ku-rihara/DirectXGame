@@ -202,7 +202,7 @@
         "distortionStrength": 0.10999999940395355,
         "distortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
         "emissiveIntensity": 1.100000023841858,
-        "emitPositionMode": 1,
+        "emitPositionMode": 2,
         "emitShape": 0,
         "isAlphaNoMove": false,
         "isBillboard": false,
@@ -238,6 +238,8 @@
         "selectedTexturePath": "Resources/EngineTexture/Particle/ShockWave.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
+        "targetApplyPos": true,
+        "targetApplyR": true,
         "timeMode": 1,
         "useDistortion": true,
         "useModel": false

@@ -233,6 +233,8 @@
         "selectedTexturePath": "Resources/EngineTexture/Particle/ShockWave.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
+        "targetApplyPos": true,
+        "targetApplyR": true,
         "timeMode": 1,
         "useDistortion": true,
         "useModel": false

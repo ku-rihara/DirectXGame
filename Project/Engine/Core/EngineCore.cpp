@@ -126,6 +126,9 @@ void EngineCore::BeginFrame() {
 #endif
     input_->Update();
     light_->Update();
+    // コマンドリストの先頭でデスクリプタヒープを設定
+    // (Update内のGPUパーティクルCSディスパッチより前に必要)
+    srvManager_->PreDraw();
 }
 
 ///=======================================================================
@@ -134,7 +137,6 @@ void EngineCore::BeginFrame() {
 
 void EngineCore::PreRenderTexture() {
     directXCommon_->PreRenderTexture();
-    srvManager_->PreDraw();
 }
 
 void EngineCore::PreDraw() {

@@ -46,14 +46,14 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
         } while (sphereDir.Dot(sphereDir) < 0.0001f);
         sphereDir = sphereDir.Normalize();
 
-        float radius = Random::Range(parameters.sphereRadius.min, parameters.sphereRadius.max);
+        float radius         = Random::Range(parameters.sphereRadius.min, parameters.sphereRadius.max);
         Vector3 sphereOffset = sphereDir * radius;
 
         particle.worldTransform_->translation_ = parameters.targetPos + parameters.emitPos + sphereOffset;
         particle.offSet                        = particle.worldTransform_->translation_;
 
         // 速度方向は球面の外向き
-        float speed = Random::Range(parameters.speedDist.min, parameters.speedDist.max);
+        float speed              = Random::Range(parameters.speedDist.min, parameters.speedDist.max);
         particle.direction_      = sphereDir;
         particle.speed_          = speed;
         particle.speedV3         = sphereDir * speed;
@@ -104,6 +104,8 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
             Random::Range(parameters.rotateDist.min.y, parameters.rotateDist.max.y),
             Random::Range(parameters.rotateDist.min.z, parameters.rotateDist.max.z)};
         particle.worldTransform_->rotation_ = ToRadian(parameters.baseRotate + rotate);
+        // TargetRotaeは元々Radianなので加算するだけ
+        particle.worldTransform_->rotation_ += parameters.targetRotate;
     }
 
     ///------------------------------------------------------------------------

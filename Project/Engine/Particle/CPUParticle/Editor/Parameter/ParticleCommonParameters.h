@@ -25,7 +25,7 @@ struct UVParam {
     bool isFlipX            = false;
     bool isFlipY            = false;
     Vector2 pos             = {};
-    Vector2 scale           = {1.0f, 1.0f}; ///< UVスケール
+    Vector2 scale           = {1.0f, 1.0f}; 
     Vector3 rotate          = {};
     int32_t numOfFrame      = 0;
 };
@@ -40,7 +40,7 @@ struct EaseParam {
     float maxTime              = 1.0f;
     bool isEase                = false;
     int32_t easeTypeInt        = 0;     // 前進フェーズのイージング種類
-    float returnMaxTime        = 0.0f;  // 戻りフェーズの時間（0=戻りなし）
+    float returnMaxTime        = 0.0f;  // 戻りフェーズの時間
     int32_t returnEaseTypeInt  = 0;     // 戻りフェーズのイージング種類
     bool isReturnToOrigin      = false; // true のとき前進後に起点へ戻るイージングを行う
 };
@@ -58,7 +58,7 @@ struct EasingParamV3 {
     V3MinMax endValue;
 };
 
-// カラーイージングパラメータ（RGB のみ）
+// カラーイージングパラメータ
 struct ColorEaseParam {
     EaseParam baseParam;
     V3MinMax endValue;
@@ -66,8 +66,8 @@ struct ColorEaseParam {
 
 // アルファモード
 enum class AlphaMode {
-    None,     // 消えない（常に1.0）
-    LifeTime, // 時間経過で消える（デフォルト）
+    None,     // 消えない
+    LifeTime, // 時間経過で消える
     Easing,   // イージングで消える
 };
 
@@ -79,7 +79,7 @@ struct AlphaEaseParam {
 
 // エミット形状
 enum class EmitShape {
-    None,   ///< 通常（ベクトル指定）
+    None,   ///< 通常
     Sphere, ///< 球面から全方向に放射
 };
 
@@ -89,6 +89,7 @@ struct Parameters {
     const Vector3* followingPos_          = nullptr;
     Vector3 targetPos;
     Vector3 emitPos;
+    Vector3 targetRotate;
     Vector3 baseRotate;
     Vector4 baseColor;
     V3MinMax scaleDistV3;
@@ -115,7 +116,7 @@ struct Parameters {
     JointParent jointParent;
     // Shape
     EmitShape emitShape = EmitShape::None;
-    FMinMax sphereRadius; // Sphere 形状のときの半径範囲
+    FMinMax sphereRadius; 
 };
 
 // グループパラメータ

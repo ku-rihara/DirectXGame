@@ -105,7 +105,7 @@ void Player::Update() {
     }
 
     /// Particle
-    effects_->Update(GetWorldPosition());
+    effects_->Update(GetWorldPosition(), baseTransform_.rotation_);
 
     // ダメージクールダウン更新
     if (isDamageColling_) {
@@ -142,7 +142,7 @@ void Player::ChangeDeathMode() {
 void Player::TitleUpdate() {
 
     /// Particle
-    effects_->Update(GetWorldPosition());
+    effects_->Update(GetWorldPosition(), baseTransform_.rotation_);
 
     titleBehavior_->Update();
     /// 行列更新
@@ -151,7 +151,7 @@ void Player::TitleUpdate() {
 
 void Player::GameIntroUpdate(float playSpeed) {
 
-    effects_->Update(GetWorldPosition());
+    effects_->Update(GetWorldPosition(), baseTransform_.rotation_);
 
     if (dynamic_cast<PlayerSpawn*>(behavior_.get())) {
         behavior_->Update(playSpeed);

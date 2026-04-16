@@ -1,0 +1,12 @@
+{
+    "RollingPunchCamera": {
+        "autoReturnToInitial": true,
+        "resetFovEaseType": 22,
+        "resetPosEaseType": 22,
+        "resetRotateEaseType": 22,
+        "resetTimePoint": 1.1200000047683716,
+        "returnDelayTime": 0.0,
+        "timeMode": 1,
+        "useLookAt": false
+    }
+}

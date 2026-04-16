@@ -170,6 +170,12 @@ void ParticleData::SetTargetPosition(const Vector3& targetPos) {
     }
 }
 
+void ParticleData::SetTargetRotation(const Vector3& targetRotate) {
+    for (auto& section : sectionElements_) {
+        section->GetSectionParam()->SetTargetRotation(targetRotate);
+    }
+}
+
 void ParticleData::RegisterParams() {
     globalParameter_->Regist(groupName_, "playSpeed", &playSpeed_);
 }

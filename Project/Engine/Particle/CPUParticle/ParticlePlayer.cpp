@@ -13,6 +13,19 @@ void ParticlePlayer::Update(float speedRate) {
     // Play関数が呼ばれていたか確認
     UpdatePlayState();
 
+    // TargetParam ポインタが設定されていれば毎フレーム自動適用
+    if (targetParam_.pos_ || targetParam_.rotate_) {
+        auto* particleData = GetParticleData();
+        if (particleData) {
+            if (targetParam_.pos_) {
+                particleData->SetTargetPosition(*targetParam_.pos_);
+            }
+            if (targetParam_.rotate_) {
+                particleData->SetTargetRotation(*targetParam_.rotate_);
+            }
+        }
+    }
+
     if (effectData_) {
         effectData_->Update(speedRate);
     }
@@ -132,8 +145,38 @@ void ParticlePlayer::SetFollowingPos(const Vector3* pos) {
 
 void ParticlePlayer::SetTargetPosition(const Vector3& targetPos) {
     auto* particleData = GetParticleData();
-    if (!particleData)
+    if (!particleData) {
         return;
-
+    }
     particleData->SetTargetPosition(targetPos);
+}
+
+void ParticlePlayer::SetTargetRotation(const Vector3& targetRotate) {
+    auto* particleData = GetParticleData();
+    if (!particleData) {
+        return;
+    }
+    particleData->SetTargetRotation(targetRotate);
+}
+
+void ParticlePlayer::SetTargetPosPtr(const Vector3* pos) {
+    targetParam_.pos_ = pos;
+    // 即時適用
+    if (pos) {
+        auto* particleData = GetParticleData();
+        if (particleData) {
+            particleData->SetTargetPosition(*pos);
+        }
+    }
+}
+
+void ParticlePlayer::SetTargetRotatePtr(const Vector3* rotate) {
+    targetParam_.rotate_ = rotate;
+    // 即時適用
+    if (rotate) {
+        auto* particleData = GetParticleData();
+        if (particleData) {
+            particleData->SetTargetRotation(*rotate);
+        }
+    }
 }

@@ -60,8 +60,7 @@ void ParticleSection::InitGlobalParameter() {
     // グループが存在しない場合は作成してパラメータを登録、存在する場合はパラメータを適応
     if (!globalParameter_->HasRegisters(groupName_)) {
         globalParameter_->CreateGroup(groupName_);
-        // セクションJSONはLoadFiles()が探索しない深さにあるため個別にロードする
-        // RegisterParams→AddItem が呼ばれる前にdates_へ書き込んでおくことで
+
         // 保存済み値が初期値として採用される
         globalParameter_->LoadFile(groupName_, folderPath_);
         sectionParam_->RegisterParams(globalParameter_, groupName_);

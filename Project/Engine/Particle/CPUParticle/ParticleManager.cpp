@@ -197,7 +197,7 @@ void ParticleManager::Emit(
 
     // パーティクルグループが存在するか確認
     assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
-
+   
     // 指定されたパーティクルグループを取得
     ParticleGroup& particleGroup = particleGroups_[name];
     particleGroup.param          = groupParameters;

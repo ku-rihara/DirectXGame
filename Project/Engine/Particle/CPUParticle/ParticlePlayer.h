@@ -22,6 +22,15 @@ public:
         std::string jointName;
     };
 
+    /// <summary>
+    /// TargetPosition 用パラメータ
+    /// pos_ / rotate_ にポインタをセットしておくと Update() で毎フレーム自動適用される
+    /// </summary>
+    struct TargetParam {
+        const Vector3* pos_    = nullptr;  ///< 毎フレーム参照する TargetPosition ポインタ
+        const Vector3* rotate_ = nullptr;  ///< 毎フレーム参照する TargetRotation ポインタ
+    };
+
 public:
     ParticlePlayer()           = default;
     ~ParticlePlayer() override = default;
@@ -50,6 +59,7 @@ private:
     bool wasPlayCalledThisFrame_ = false;
 
     ParentParam parentParam_;
+    TargetParam targetParam_;
 
 public:
     ParticleData* GetParticleData();
@@ -58,10 +68,18 @@ public:
 
     //*----------------------------- Runtime Settings  -----------------------------*//
 
-    void SetTargetPosition(const Vector3& targetPos);
+    // --- Parent ---
     void SetParentTransform(const WorldTransform* transform);
     void SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& jointName);
     void SetFollowingPos(const Vector3* pos);
+
+    // --- TargetPosition (値渡し：1回だけ適用) ---
+    void SetTargetPosition(const Vector3& targetPos);
+    void SetTargetRotation(const Vector3& targetRotate);
+
+    // --- TargetPosition (ポインタ渡し：Update で毎フレーム自動適用) ---
+    void SetTargetPosPtr(const Vector3* pos);
+    void SetTargetRotatePtr(const Vector3* rotate);
 };
 
 }

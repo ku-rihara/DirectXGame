@@ -1,5 +1,6 @@
 #include "PlayerComboAttackData.h"
 #include "PlayerComboAttackController.h"
+#include <Windows.h>
 // Easing
 #include "Easing/EasingCreator/EasingParameterData.h"
 // Enemy
@@ -48,14 +49,23 @@ void PlayerComboAttackData::LoadData() {
 
     // 解放フラグ初期化
     attackParam_.isUnlocked = (attackParam_.ableDefeatLevel == 0);
+
+    // 既存分岐を破棄せずリサイズ
+    ResizeComboBranches();
+
+    // タイムラインをロード後データで再構築
+    timeLine_.Init(this);
 }
 
 void PlayerComboAttackData::SaveData() {
     // branchCount_を更新
     branchCount_ = static_cast<int32_t>(comboBranches_.size());
 
-    // ポストエフェクトリストをスロットに同期してから保存
+    // エフェクトリストをスロットに同期してから保存
     renditionData_.SyncListToSlots();
+
+    // 登録変数の現在値をdates_に書き込んでから保存
+    globalParameter_->PushParamForGroup(groupName_);
 
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
@@ -78,6 +88,22 @@ void PlayerComboAttackData::InitComboBranches() {
         auto branch = std::make_unique<ComboBranchParameter>();
         branch->Init(groupName_, i);
         comboBranches_.push_back(std::move(branch));
+    }
+}
+
+void PlayerComboAttackData::ResizeComboBranches() {
+    int32_t currentCount = static_cast<int32_t>(comboBranches_.size());
+
+    // 分岐が増えた場合：新しい分岐のみ追加
+    for (int32_t i = currentCount; i < branchCount_; ++i) {
+        auto branch = std::make_unique<ComboBranchParameter>();
+        branch->Init(groupName_, i);
+        comboBranches_.push_back(std::move(branch));
+    }
+
+    // 分岐が減った場合：末尾から削除
+    while (static_cast<int32_t>(comboBranches_.size()) > branchCount_) {
+        comboBranches_.pop_back();
     }
 }
 
@@ -281,7 +307,15 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
 
 void PlayerComboAttackData::DrawSaveLoadUI() {
 
-    globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
+    // セーブボタン：エフェクトリスト→スロット同期 → 変数値→dates_反映 → ファイル保存
+    if (ImGui::Button(("Save " + groupName_).c_str())) {
+        branchCount_ = static_cast<int32_t>(comboBranches_.size());
+        renditionData_.SyncListToSlots();
+        globalParameter_->PushParamForGroup(groupName_);
+        globalParameter_->SaveFile(groupName_, folderPath_);
+        std::string message = groupName_ + ".json saved.";
+        MessageBoxA(nullptr, message.c_str(), "GlobalParameter", 0);
+    }
 
     // ロードボタン：パラメータ読み込み後にタイムラインも再構築する
     if (ImGui::Button(("Load " + groupName_).c_str())) {

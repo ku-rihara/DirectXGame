@@ -32,7 +32,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="position">位置座標</param>
-    void Update(const Vector3& position);
+    void Update(const Vector3& position, const Vector3& rotation);
 
     void Emit(const std::string&name);
 

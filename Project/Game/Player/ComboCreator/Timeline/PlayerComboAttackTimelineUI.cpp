@@ -260,7 +260,7 @@ std::optional<KetaEngine::EffectEditorType> PlayerComboAttackTimelineUI::GetEffe
     case TrackType::RIBBON_TRAIL_MAIN_HEAD:
         return EffectEditorType::RibbonTrail;
     default:
-        return std::nullopt; // Audio・PostEffect などは対応エディターなし
+        return std::nullopt; 
     }
 }
 

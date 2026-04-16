@@ -41,6 +41,28 @@
         ],
         "ColorEaseParam.isEase": false,
         "ColorEaseParam.maxTime": 1.0,
+        "Cyl.bottomColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Cyl.bottomRadiusX": 1.0,
+        "Cyl.bottomRadiusZ": 1.0,
+        "Cyl.divisions": 32,
+        "Cyl.endAngleDeg": 360.0,
+        "Cyl.height": 3.0,
+        "Cyl.heightDivisions": 1,
+        "Cyl.startAngleDeg": 0.0,
+        "Cyl.topColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Cyl.topRadiusX": 1.0,
+        "Cyl.topRadiusZ": 1.0,
+        "Cyl.uvModeInt": 0,
         "Direction Max": [
             1.0,
             1.0,
@@ -149,8 +171,11 @@
             0.0,
             0.0
         ],
+        "TranslateEaseParam.isReturnToOrigin": false,
         "TranslateEaseParam.isScaleEase": false,
         "TranslateEaseParam.maxTime": 1.0,
+        "TranslateEaseParam.returnEaseTypeInt": 0,
+        "TranslateEaseParam.returnMaxTime": 0.0,
         "UV IsLoop": false,
         "UV NumOfFrame": 1,
         "UV Pos": [
@@ -161,6 +186,10 @@
             0.0,
             0.0,
             0.0
+        ],
+        "UV Scale": [
+            1.0,
+            1.0
         ],
         "UV ScrollSpeed": 0.0,
         "UV isFlipX": false,
@@ -174,6 +203,7 @@
         "distortionTexturePath": "",
         "emissiveIntensity": 7.5,
         "emitPositionMode": 2,
+        "emitShape": 0,
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": true,
@@ -182,6 +212,9 @@
         "isScalerScale": false,
         "isShot": true,
         "modelFilePath": "",
+        "parentFollowR": true,
+        "parentFollowS": true,
+        "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
         "scaleEaseParam.backRatio": 0.0,
@@ -198,24 +231,24 @@
             3.0,
             0.0
         ],
+        "scaleEaseParam.isReturnToOrigin": false,
         "scaleEaseParam.isScaleEase": true,
         "scaleEaseParam.maxTime": 0.20000000298023224,
+        "scaleEaseParam.returnEaseTypeInt": 0,
+        "scaleEaseParam.returnMaxTime": 0.0,
         "scaleEaseParam.startValueF": 1.0,
         "scaleEaseParam.startValueV3": [
             1.0,
             1.0,
             1.0
         ],
-        "selectedTexturePath": "Resources/texture/smoke.dds",
+        "selectedTexturePath": "Resources/Texture/smoke.dds",
+        "sphereRadius.max": 0.0,
+        "sphereRadius.min": 0.0,
+        "targetApplyPos": true,
+        "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": false,
-        "useModel": false,
-        "UV Scale": [
-            1.0,
-            1.0
-        ]
-    },
-    "emitShape": 0,
-    "sphereRadius.min": 0.0,
-    "sphereRadius.max": 1.0
+        "useModel": false
+    }
 }
