@@ -112,8 +112,10 @@ public:
     bool IsWaitFinish(float currentTime);
     bool IsCancelAttack(float currentTime, const ComboBranchParameter& branch, bool hasHitEnemy);
 
-    // コンボ分岐の初期化
+    // コンボ分岐の初期化（全クリア＆再生成）
     void InitComboBranches();
+    // コンボ分岐のリサイズ（既存分岐を破棄せず追加・削除のみ）
+    void ResizeComboBranches();
 
     // コンボ分岐UI
     void DrawComboBranchesUI();
