@@ -16,17 +16,17 @@
         "Audio_Hit_StartTiming": 0.0,
         "Audio_Hit_TriggerByHit": false,
         "Audio_Hit_Volume": 1.0,
-        "Branch_0_cancelTime": 0.2666666805744171,
+        "Branch_0_cancelTime": 0.21666666865348816,
         "Branch_0_gamepadButton": 16384,
         "Branch_0_keyboardButton": 35,
         "Branch_0_nextAttackName": "JunpingPunch",
-        "Branch_0_precedeInputTime": 0.2666666805744171,
+        "Branch_0_precedeInputTime": 0.21666666865348816,
         "Branch_0_requireHit": false,
-        "Branch_1_cancelTime": 0.1666666716337204,
+        "Branch_1_cancelTime": 0.15000000596046448,
         "Branch_1_gamepadButton": 32768,
         "Branch_1_keyboardButton": 37,
         "Branch_1_nextAttackName": "FieldCycleAttack",
-        "Branch_1_precedeInputTime": 0.1666666716337204,
+        "Branch_1_precedeInputTime": 0.15000000596046448,
         "Branch_1_requireHit": false,
         "CameraAction_FileName": "",
         "CameraAction_IsCameraReset": false,
@@ -35,7 +35,7 @@
         "CameraAction_OnHit_StartTiming": 0.0,
         "CameraAction_StartTiming": 0.0,
         "CameraAction_TriggerByHit": false,
-        "CollisionRad": 4.0,
+        "CollisionRad": 6.0,
         "ComboBranchCount": 2,
         "Condition": 0,
         "HitStop_FileName": "",
@@ -122,7 +122,7 @@
         "collisionOffsetPos": [
             0.0,
             0.0,
-            3.819999933242798
+            5.0
         ],
         "collisionSize": [
             5.0,
@@ -152,7 +152,7 @@
             2.0
         ],
         "playbackSpeed": 1.0,
-        "power": 5.0,
+        "power": 10.0,
         "resetFovEaseType": 1,
         "resetPosEaseType": 1,
         "resetRotateEaseType": 1,

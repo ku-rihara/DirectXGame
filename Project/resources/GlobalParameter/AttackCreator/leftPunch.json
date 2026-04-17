@@ -16,7 +16,7 @@
         "Audio_Hit_StartTiming": 0.0,
         "Audio_Hit_TriggerByHit": false,
         "Audio_Hit_Volume": 1.0,
-        "Branch_0_cancelTime": 0.20000000298023224,
+        "Branch_0_cancelTime": 0.13333334028720856,
         "Branch_0_gamepadButton": 16384,
         "Branch_0_keyboardButton": 35,
         "Branch_0_nextAttackName": "RightPunch",
@@ -30,7 +30,7 @@
         "CameraAction_OnHit_StartTiming": 0.0,
         "CameraAction_StartTiming": 0.0,
         "CameraAction_TriggerByHit": false,
-        "CollisionRad": 4.0,
+        "CollisionRad": 6.0,
         "ComboBranchCount": 1,
         "Condition": 0,
         "HitStop_Duration": 0.0,
@@ -42,6 +42,7 @@
         "KnockBackPower": 5.0,
         "Main_Head_FileName": "",
         "Main_Head_StartTiming": 0.0,
+        "Main_Head_TrailFileName": "",
         "ObjAnim_Head_FileName": "leftPunchMove",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "leftHandPunch",
@@ -70,6 +71,16 @@
         "ParticleEffectParam_OnHit_StartTiming": 0.0,
         "ParticleEffectParam_StartTiming": 0.0,
         "ParticleEffectParam_TriggerByHit": false,
+        "ParticleEffect_Count": 0,
+        "ParticleEffect_OnHit_Count": 0,
+        "ParticleEffect_OnHit_Slot_0_FileName": "",
+        "ParticleEffect_OnHit_Slot_0_StartTiming": 0.0,
+        "ParticleEffect_OnHit_Slot_1_FileName": "",
+        "ParticleEffect_OnHit_Slot_1_StartTiming": 0.0,
+        "ParticleEffect_Slot_0_FileName": "",
+        "ParticleEffect_Slot_0_StartTiming": 0.0,
+        "ParticleEffect_Slot_1_FileName": "",
+        "ParticleEffect_Slot_1_StartTiming": 0.0,
         "PostEffectParam_FileName": "",
         "PostEffectParam_OnHit_FileName": "",
         "PostEffectParam_OnHit_StartTiming": 0.0,
@@ -196,6 +207,6 @@
             0.0,
             16.18000030517578
         ],
-        "power": 5.0
+        "power": 10.0
     }
 }

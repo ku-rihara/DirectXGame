@@ -31,6 +31,7 @@ void GameResultScene::Init() {
 
 void GameResultScene::Update() {
     BaseScene::Update();
+    KetaEngine::Frame::SetTimeScale(1.0f);
 
     skyBox_->Update();
     resultStage_->Update();
