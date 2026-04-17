@@ -1,0 +1,32 @@
+{
+  "FlyRandingDamage": {
+    "Bound_BounceDamping": 0.20000000298023224,
+    "Bound_BoundNum": 2,
+    "Bound_InitialBounceRate": 0.8100000023841858,
+    "DamageAnimationName": "EnemyNormalDamage",
+    "Normal_DamageAnimationName": "",
+    "Normal_KnockBackDamping": 0.20000000298023224,
+    "Normal_KnockBackTime": 0.41999998688697815,
+    "ReactionState": 2,
+    "Slammed_Gravity": 0.0,
+    "Slammed_RotateSpeed": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Slammed_ThrustRotateSpeed": 0.0,
+    "Strong_DamageAnimationName": "",
+    "TakeUpper_FallSpeedLimit": 257.29998779296875,
+    "TakeUpper_FloatingTime": 0.0,
+    "TakeUpper_Gravity": 105.5,
+    "TakeUpper_RotateSpeed": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "TakeUpper_ThrustRotateSpeed": 0.0,
+    "TriggerAttackName": "FlyRandingAttack",
+    "damageCollingTime": 1.3600000143051147,
+    "isPriorityReaction": false
+  }
+}

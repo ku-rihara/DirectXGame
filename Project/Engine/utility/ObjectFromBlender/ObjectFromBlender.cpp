@@ -319,7 +319,7 @@ void ObjectFromBlender::SetAllObjectsScaleZero() {
         return;
     }
     for (auto& objectData : levelData_->objects) {
-        objectData.object3d->transform_.scale_ = {0.0f, 0.0f, 0.0f};
+        objectData.object3d->transform_.scale_ = Vector3::ZeroVector();
         objectData.object3d->transform_.UpdateMatrix();
     }
 }

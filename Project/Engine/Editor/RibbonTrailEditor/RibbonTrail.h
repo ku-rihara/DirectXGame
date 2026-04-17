@@ -13,19 +13,6 @@
 
 namespace KetaEngine {
 
-/// 弧の回転方向
-enum class ArcDirection {
-    CounterClockwise, ///< 左回転（反時計回り）
-    Clockwise,        ///< 右回転（時計回り）
-};
-
-/// 弧を描く平面の基準軸
-enum class ArcPlane {
-    XZ, ///< 水平面（XZ平面）
-    XY, ///< 正面（XY平面）
-    YZ, ///< 側面（YZ平面）
-};
-
 struct RibbonVertex {
     Vector3 pos;
     Vector4 color;
@@ -39,6 +26,19 @@ struct RibbonCBuffer {
 struct RibbonUVScrollCBuffer {
     Vector2 offset;
     float   pad[2]; // 16byte アライン
+};
+
+/// 弧の回転方向
+enum class ArcDirection {
+    CounterClockwise, ///< 左回転（反時計回り）
+    Clockwise,        ///< 右回転（時計回り）
+};
+
+/// 弧を描く平面の基準軸
+enum class ArcPlane {
+    XZ, ///< 水平面（XZ平面）
+    XY, ///< 正面（XY平面）
+    YZ, ///< 側面（YZ平面）
 };
 
 /// <summary>
@@ -61,6 +61,13 @@ public:
 
     /// <summary>
     /// 弧状にポイントを一括生成する
+    /// basePos    : 弧の中心点（SetBasePosで渡された値 or 直接指定）
+    /// startAngle : 弧の開始角度（ラジアン、平面内）
+    /// endAngle   : 弧の終了角度（ラジアン、平面内）
+    /// radius     : 弧の半径
+    /// direction  : 回転方向（左回転 / 右回転）
+    /// plane      : 弧を描く平面
+    /// segments   : 分割数（省略時は maxPoints_ を使用）
     /// </summary>
     void SetArc(
         const Vector3& basePos,
@@ -114,7 +121,7 @@ public:
     ///========================================================
     /// Getter
     ///========================================================
-    size_t GetPointCount()      const { return points_.size(); }
+    size_t GetPointCount()       const { return points_.size(); }
     bool   IsDistortionEnabled() const { return useDistortion_; }
 
 private:
@@ -128,9 +135,7 @@ private:
         float   age = 0.0f;
     };
 
-
     static Vector3 CalcPerp(const Vector3& dir, const Vector3& cameraRight);
-
     static inline float Lerp(float a, float b, float t) { return a + (b - a) * t; }
 
 private:
@@ -152,8 +157,8 @@ private:
     RibbonCBuffer*                         cBufferData_ = nullptr;
 
     // 時空歪み
-    bool     useDistortion_       = false;
-    float    distortionStrength_  = 0.1f;
+    bool     useDistortion_           = false;
+    float    distortionStrength_      = 0.1f;
     uint32_t distortionTextureHandle_ = UINT32_MAX;
 
     // UVスクロール（メインテクスチャ）

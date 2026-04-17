@@ -1,18 +1,18 @@
 {
-    "RollingDamageEffect1": {
+    "RollingDamageEffect2": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
-        "AdaptRotateIsZ": true,
+        "AdaptRotateIsZ": false,
         "AlphaEaseParam.easeTypeInt": 0,
         "AlphaEaseParam.endValue.max": 0.0,
         "AlphaEaseParam.endValue.min": 0.0,
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            0.84555983543396,
-            0.47896695137023926,
-            0.09794130176305771,
-            0.0
+            0.8313725590705872,
+            0.7803921699523926,
+            0.7803921699523926,
+            0.6470588445663452
         ],
         "Color Max": [
             0.0,
@@ -75,12 +75,12 @@
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "IsScreenPos": false,
-        "LifeTime": 1.0,
+        "LifeTime": 0.7900000214576721,
         "Max Particle Num": 1000,
-        "Particle Count": 8,
+        "Particle Count": 7,
         "Position Base": [
             0.0,
-            2.009999990463257,
+            1.590000033378601,
             0.0
         ],
         "Position Max": [
@@ -102,12 +102,12 @@
         "Rotate Max": [
             0.0,
             0.0,
-            20.0
+            0.0
         ],
         "Rotate Min": [
             0.0,
             0.0,
-            360.0
+            0.0
         ],
         "RotateEaseParam.easeTypeInt": 0,
         "RotateEaseParam.endValueV3.max": [
@@ -132,17 +132,17 @@
             0.0,
             0.0
         ],
-        "Scale Max": 1.0,
-        "Scale Min": 1.0,
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
         "ScaleV3 Max": [
-            0.0,
-            0.0,
-            0.0
+            1.0,
+            1.0,
+            1.0
         ],
         "ScaleV3 Min": [
-            0.0,
-            0.0,
-            0.0
+            1.0,
+            1.0,
+            1.0
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
@@ -196,16 +196,16 @@
         "alphaMode": 1,
         "blendMode": 1,
         "dissolveName": "",
-        "distortionStrength": 0.05000000074505806,
-        "distortionTexturePath": "",
-        "emissiveIntensity": 2.299999952316284,
+        "distortionStrength": 0.0020000000949949026,
+        "distortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
+        "emissiveIntensity": 3.4000000953674316,
         "emitPositionMode": 2,
         "emitShape": 0,
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": false,
         "isRotateForDirection": false,
-        "isScalerScale": false,
+        "isScalerScale": true,
         "isShot": true,
         "modelFilePath": "",
         "parentFollowR": true,
@@ -214,21 +214,21 @@
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
         "scaleEaseParam.easeTypeInt": 22,
-        "scaleEaseParam.endValueF.max": 0.0,
-        "scaleEaseParam.endValueF.min": 0.0,
+        "scaleEaseParam.endValueF.max": 5.0,
+        "scaleEaseParam.endValueF.min": 5.0,
         "scaleEaseParam.endValueV3.max": [
-            0.7699999809265137,
-            11.479999542236328,
-            0.3499999940395355
+            0.0,
+            0.0,
+            0.0
         ],
         "scaleEaseParam.endValueV3.min": [
-            0.5600000023841858,
-            12.579999923706055,
-            0.5699999928474426
+            0.0,
+            0.0,
+            0.0
         ],
         "scaleEaseParam.isReturnToOrigin": false,
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.4300000071525574,
+        "scaleEaseParam.maxTime": 0.49000000953674316,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
         "selectedTexturePath": "Resources/EngineTexture/Particle/circle.dds",
@@ -237,7 +237,7 @@
         "targetApplyPos": true,
         "targetApplyR": false,
         "timeMode": 1,
-        "useDistortion": false,
+        "useDistortion": true,
         "useModel": false
     }
 }

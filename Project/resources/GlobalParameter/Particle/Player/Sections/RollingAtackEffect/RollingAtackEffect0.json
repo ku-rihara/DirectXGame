@@ -50,9 +50,9 @@
         ],
         "Cyl.bottomRadiusX": 1.0,
         "Cyl.bottomRadiusZ": 1.0,
-        "Cyl.divisions": 41,
+        "Cyl.divisions": 46,
         "Cyl.endAngleDeg": 360.0,
-        "Cyl.height": 0.6600000262260437,
+        "Cyl.height": 1.340000033378601,
         "Cyl.heightDivisions": 1,
         "Cyl.startAngleDeg": 0.0,
         "Cyl.topColor": [
@@ -61,7 +61,7 @@
             0.03667208552360535,
             1.0
         ],
-        "Cyl.topRadiusX": 1.0,
+        "Cyl.topRadiusX": 0.9800000190734863,
         "Cyl.topRadiusZ": 1.0,
         "Cyl.uvModeInt": 0,
         "Direction Max": [
@@ -81,9 +81,9 @@
         "Max Particle Num": 1000,
         "Particle Count": 2,
         "Position Base": [
-            0.0,
+            -2.990000009536743,
             2.130000114440918,
-            3.549999952316284
+            0.0
         ],
         "Position Max": [
             0.0,
@@ -135,8 +135,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 5.0,
-        "Scale Min": 5.0,
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
         "ScaleV3 Max": [
             1.0,
             1.0,
@@ -189,20 +189,20 @@
             0.0
         ],
         "UV Scale": [
-            3.2300000190734863,
+            1.4199999570846558,
             1.0
         ],
-        "UV ScrollSpeed": 0.5400000214576721,
+        "UV ScrollSpeed": 2.0299999713897705,
         "UV isFlipX": false,
         "UV isFlipY": false,
         "UseRail": false,
         "afterDuration": 0.0,
-        "alphaMode": 0,
+        "alphaMode": 1,
         "blendMode": 1,
         "dissolveName": "RollingAttackDissolve",
-        "distortionStrength": 0.10999999940395355,
-        "distortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
-        "emissiveIntensity": 1.100000023841858,
+        "distortionStrength": 0.00800000037997961,
+        "distortionTexturePath": "Resources/EngineTexture/Noise/noise0.dds",
+        "emissiveIntensity": 8.5,
         "emitPositionMode": 2,
         "emitShape": 0,
         "isAlphaNoMove": false,
@@ -218,9 +218,9 @@
         "preBillboardType": 0,
         "primitiveTypeInt": 2,
         "scaleEaseParam.backRatio": 0.0,
-        "scaleEaseParam.easeTypeInt": 0,
-        "scaleEaseParam.endValueF.max": 0.0,
-        "scaleEaseParam.endValueF.min": 0.0,
+        "scaleEaseParam.easeTypeInt": 19,
+        "scaleEaseParam.endValueF.max": 9.0,
+        "scaleEaseParam.endValueF.min": 9.0,
         "scaleEaseParam.endValueV3.max": [
             0.0,
             0.0,
@@ -232,11 +232,11 @@
             0.0
         ],
         "scaleEaseParam.isReturnToOrigin": false,
-        "scaleEaseParam.isScaleEase": false,
-        "scaleEaseParam.maxTime": 1.0,
+        "scaleEaseParam.isScaleEase": true,
+        "scaleEaseParam.maxTime": 0.17000000178813934,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
-        "selectedTexturePath": "Resources/EngineTexture/Particle/ShockWave.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/SlashNoise.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,

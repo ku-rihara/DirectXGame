@@ -1,17 +1,18 @@
 {
-    "RollingDamageEffect1": {
+    "SpecialFlyEffect0": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
+        "AlphaEaseParam.backRatio": 0.0,
         "AlphaEaseParam.easeTypeInt": 0,
         "AlphaEaseParam.endValue.max": 0.0,
         "AlphaEaseParam.endValue.min": 0.0,
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            0.84555983543396,
-            0.47896695137023926,
-            0.09794130176305771,
+            0.6910368800163269,
+            0.8494208455085754,
+            0.0754312127828598,
             0.0
         ],
         "Color Max": [
@@ -26,6 +27,7 @@
             0.0,
             0.0
         ],
+        "ColorEaseParam.backRatio": 0.0,
         "ColorEaseParam.easeTypeInt": 0,
         "ColorEaseParam.endValue.max": [
             0.0,
@@ -75,13 +77,13 @@
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "IsScreenPos": false,
-        "LifeTime": 1.0,
+        "LifeTime": 0.38999998569488525,
         "Max Particle Num": 1000,
-        "Particle Count": 8,
+        "Particle Count": 16,
         "Position Base": [
+            0.5400000214576721,
             0.0,
-            2.009999990463257,
-            0.0
+            -1.3300000429153442
         ],
         "Position Max": [
             0.0,
@@ -102,12 +104,12 @@
         "Rotate Max": [
             0.0,
             0.0,
-            20.0
+            0.0
         ],
         "Rotate Min": [
             0.0,
             0.0,
-            360.0
+            0.0
         ],
         "RotateEaseParam.easeTypeInt": 0,
         "RotateEaseParam.endValueV3.max": [
@@ -125,15 +127,15 @@
         "RotateSpeed Max": [
             0.0,
             0.0,
-            0.0
+            6.0
         ],
         "RotateSpeed Min": [
             0.0,
             0.0,
-            0.0
+            6.0
         ],
-        "Scale Max": 1.0,
-        "Scale Min": 1.0,
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -198,14 +200,14 @@
         "dissolveName": "",
         "distortionStrength": 0.05000000074505806,
         "distortionTexturePath": "",
-        "emissiveIntensity": 2.299999952316284,
-        "emitPositionMode": 2,
+        "emissiveIntensity": 3.200000047683716,
+        "emitPositionMode": 1,
         "emitShape": 0,
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": false,
         "isRotateForDirection": false,
-        "isScalerScale": false,
+        "isScalerScale": true,
         "isShot": true,
         "modelFilePath": "",
         "parentFollowR": true,
@@ -214,24 +216,30 @@
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
         "scaleEaseParam.easeTypeInt": 22,
-        "scaleEaseParam.endValueF.max": 0.0,
-        "scaleEaseParam.endValueF.min": 0.0,
+        "scaleEaseParam.endValueF.max": 9.0,
+        "scaleEaseParam.endValueF.min": 9.0,
         "scaleEaseParam.endValueV3.max": [
-            0.7699999809265137,
-            11.479999542236328,
-            0.3499999940395355
+            0.0,
+            0.0,
+            0.0
         ],
         "scaleEaseParam.endValueV3.min": [
-            0.5600000023841858,
-            12.579999923706055,
-            0.5699999928474426
+            0.0,
+            0.0,
+            0.0
         ],
-        "scaleEaseParam.isReturnToOrigin": false,
+        "scaleEaseParam.isReturnToOrigin": true,
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.4300000071525574,
-        "scaleEaseParam.returnEaseTypeInt": 0,
-        "scaleEaseParam.returnMaxTime": 0.0,
-        "selectedTexturePath": "Resources/EngineTexture/Particle/circle.dds",
+        "scaleEaseParam.maxTime": 0.20999999344348907,
+        "scaleEaseParam.returnEaseTypeInt": 21,
+        "scaleEaseParam.returnMaxTime": 0.18000000715255737,
+        "scaleEaseParam.startValueF": 1.0,
+        "scaleEaseParam.startValueV3": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "selectedTexturePath": "Resources/EngineTexture/Particle/texture_Glare.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,

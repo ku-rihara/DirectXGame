@@ -1,7 +1,7 @@
 {
     "RollingDamageEffect0": {
-        "AdaptRotateIsX": true,
-        "AdaptRotateIsY": true,
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
         "AlphaEaseParam.easeTypeInt": 0,
         "AlphaEaseParam.endValue.max": 0.0,
@@ -9,10 +9,10 @@
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            0.9266409277915955,
-            0.35935115814208984,
-            0.057244207710027695,
-            0.0
+            0.9189189076423645,
+            0.25545233488082886,
+            0.0,
+            1.0
         ],
         "Color Max": [
             0.0,
@@ -26,19 +26,20 @@
             0.0,
             0.0
         ],
-        "ColorEaseParam.easeTypeInt": 0,
+        "ColorEaseParam.easeTypeInt": 5,
         "ColorEaseParam.endValue.max": [
-            0.0,
-            0.0,
-            0.0
+            1.0,
+            1.0,
+            1.0
         ],
         "ColorEaseParam.endValue.min": [
-            0.0,
-            0.0,
-            0.0
+            1.0,
+            1.0,
+            1.0
         ],
-        "ColorEaseParam.isEase": false,
-        "ColorEaseParam.maxTime": 1.0,
+        "ColorEaseParam.isEase": true,
+        "ColorEaseParam.maxTime": 0.1899999976158142,
+        "Cyl.axisInt": 0,
         "Cyl.bottomColor": [
             1.0,
             1.0,
@@ -64,31 +65,31 @@
         "Direction Max": [
             1.0,
             1.0,
-            1.0
+            0.0
         ],
         "Direction Min": [
-            1.0,
-            1.0,
-            1.0
+            -1.0,
+            -1.0,
+            0.0
         ],
-        "Gravity": -106.19999694824219,
-        "IntervalTime": 1.0,
+        "Gravity": -9.199999809265137,
+        "IntervalTime": 0.8799999952316284,
         "IsScreenPos": false,
         "LifeTime": 0.3499999940395355,
         "Max Particle Num": 1000,
-        "Particle Count": 11,
+        "Particle Count": 28,
         "Position Base": [
+            0.0,
+            3.5199999809265137,
+            0.0
+        ],
+        "Position Max": [
             0.0,
             0.0,
             0.0
         ],
-        "Position Max": [
-            5.440000057220459,
-            6.670000076293945,
-            2.930000066757202
-        ],
         "Position Min": [
-            -5.360000133514404,
+            0.0,
             0.0,
             0.0
         ],
@@ -134,42 +135,42 @@
         "Scale Max": 1.0,
         "Scale Min": 1.0,
         "ScaleV3 Max": [
-            0.4000000059604645,
-            5.0,
+            0.20000000298023224,
+            4.309999942779541,
             1.0
         ],
         "ScaleV3 Min": [
-            0.27000001072883606,
-            3.0,
+            0.20000000298023224,
+            3.9100000858306885,
             1.0
         ],
-        "Speed Max": 0.0,
+        "Speed Max": 26.0,
         "Speed Min": 0.0,
         "SpeedV3 Max": [
-            2.0,
-            33.0,
-            30.34000015258789
+            38.81999969482422,
+            42.7400016784668,
+            0.0
         ],
         "SpeedV3 Min": [
             0.0,
-            33.0,
-            20.0
+            -38.790000915527344,
+            0.0
         ],
         "StartTime": 0.0,
-        "TranslateEaseParam.easeTypeInt": 0,
+        "TranslateEaseParam.easeTypeInt": 6,
         "TranslateEaseParam.endValueV3.max": [
             0.0,
-            0.0,
-            0.0
+            33.0,
+            25.0
         ],
         "TranslateEaseParam.endValueV3.min": [
             0.0,
-            0.0,
-            0.0
+            -35.0,
+            35.0
         ],
         "TranslateEaseParam.isReturnToOrigin": false,
         "TranslateEaseParam.isScaleEase": false,
-        "TranslateEaseParam.maxTime": 1.0,
+        "TranslateEaseParam.maxTime": 0.3400000035762787,
         "TranslateEaseParam.returnEaseTypeInt": 0,
         "TranslateEaseParam.returnMaxTime": 0.0,
         "UV IsLoop": false,
@@ -230,7 +231,7 @@
         "scaleEaseParam.maxTime": 1.0,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
-        "selectedTexturePath": "Resources/EngineTexture/Particle/circle.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/SlashNoise.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,

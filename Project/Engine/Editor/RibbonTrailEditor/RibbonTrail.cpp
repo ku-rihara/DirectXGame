@@ -42,7 +42,7 @@ void RibbonTrail::Init(size_t maxPoints) {
     D3D12_HEAP_PROPERTIES heapProps = {D3D12_HEAP_TYPE_UPLOAD};
     D3D12_RESOURCE_DESC   vbDesc    = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
 
-   HRESULT hr = dxCommon->GetDevice()->CreateCommittedResource(
+    HRESULT hr = dxCommon->GetDevice()->CreateCommittedResource(
         &heapProps,
         D3D12_HEAP_FLAG_NONE,
         &vbDesc,
@@ -51,7 +51,6 @@ void RibbonTrail::Init(size_t maxPoints) {
         IID_PPV_ARGS(&vertexBuffer_));
 
     if (FAILED(hr)) {
-       
         throw std::runtime_error("CreateCommittedResource failed");
     }
 
@@ -122,9 +121,11 @@ void RibbonTrail::SetArc(
 {
     points_.clear();
 
+    // セグメント数決定（未指定時は maxPoints_ を使用）
     int seg = (segments > 1) ? segments : static_cast<int>(maxPoints_);
     if (seg < 2) { seg = 2; }
 
+    // 角度の正規化：回転方向に合わせて endAngle を調整
     constexpr float kPi    = 3.14159265358979323846f;
     constexpr float kTwoPi = kPi * 2.0f;
 
@@ -132,14 +133,18 @@ void RibbonTrail::SetArc(
     float to   = endAngle;
 
     if (direction == ArcDirection::CounterClockwise) {
+        // 反時計回り：from → to が増加する方向
         while (to < from) { to += kTwoPi; }
     } else {
+        // 時計回り：from → to が減少する方向
         while (to > from) { to -= kTwoPi; }
     }
 
+    // ヘッドが先頭になるよう終点→始点の順で push_front
+    // i=0 が始点（head）、i=seg-1 が終点（tail）
     for (int i = 0; i < seg; ++i) {
         float t     = static_cast<float>(i) / static_cast<float>(seg - 1);
-        float angle = from + (to - from) * t;
+        float angle = Lerp(from, to, t);
 
         float cosA = std::cos(angle);
         float sinA = std::sin(angle);
@@ -160,6 +165,10 @@ void RibbonTrail::SetArc(
             break;
         }
 
+        // lifetime は仮に大きな値（弧は静的に保持したい場合）
+        // 呼び出し側で別途 Update を呼ばなければ消えない
+        // 実際の lifetime は AddPoint 相当の値を外から渡したい場合は
+        // SetArcLifetime() などで事前に設定する運用にする
         points_.push_back({pos, {1.0f, 1.0f, 1.0f, 1.0f}, 1.0f, 9999.0f, 0.0f});
     }
 }
@@ -195,7 +204,6 @@ Vector3 RibbonTrail::CalcPerp(const Vector3& dir, const Vector3& cameraRight) {
     float len = std::sqrt(perp.x * perp.x + perp.y * perp.y + perp.z * perp.z);
 
     if (len < 0.001f) {
-        // フォールバック: カメラ右ベクトルをそのまま使用
         return cameraRight;
     }
 
@@ -208,7 +216,7 @@ Vector3 RibbonTrail::CalcPerp(const Vector3& dir, const Vector3& cameraRight) {
 void RibbonTrail::Draw(const ViewProjection& viewProj) {
     size_t count = points_.size();
     if (count < 2) {
-        lastVertexCount_ = 0; 
+        lastVertexCount_ = 0;
         return;
     }
 
@@ -228,13 +236,11 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
     size_t vertexCount = 0;
     float  countF      = static_cast<float>(count > 1 ? count - 1 : 1);
 
-    // ねじれ防止用：前セグメントのperp
-    Vector3 prevPerp = {0.0f, 0.0f, 0.0f}; 
+    Vector3 prevPerp = {0.0f, 0.0f, 0.0f};
 
     for (size_t i = 0; i < count; ++i) {
         const auto& p = points_[i];
 
-        // 移動方向
         Vector3 dir;
         if (i == 0) {
             dir = {p.position.x - points_[1].position.x,
@@ -257,7 +263,6 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
 
         Vector3 perp = CalcPerp(dir, cameraRight);
 
-        // ねじれ防止：前セグメントと逆向きならflip
         if (i > 0) {
             float dot = prevPerp.x * perp.x + prevPerp.y * perp.y + prevPerp.z * perp.z;
             if (dot < 0.0f) {
@@ -294,8 +299,8 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
         return;
     }
 
-    cBufferData_->viewProjection    = viewProj.matView_ * viewProj.matProjection_;
-    uvScrollCBufferData_->offset    = uvScrollOffset_;
+    cBufferData_->viewProjection = viewProj.matView_ * viewProj.matProjection_;
+    uvScrollCBufferData_->offset = uvScrollOffset_;
 
     auto commandList = DirectXCommon::GetInstance()->GetCommandList();
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);

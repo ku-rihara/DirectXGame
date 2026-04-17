@@ -72,7 +72,7 @@ public:
         bool isLoop             = false;
         bool isFlipX            = false;
         bool isFlipY            = false;
-        int32_t numOfFrame      = 0; ///< UV スクロール有効判定用 (>0 で有効)
+        int32_t numOfFrame      = 0; ///< UV スクロール有効判定用
     };
 
     struct Particle {

@@ -1,0 +1,20 @@
+{
+    "WarpAttackFirst": {
+        "IsLoop": false,
+        "Original_Rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Original_Scale": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Original_Translation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}
