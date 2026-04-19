@@ -1,7 +1,6 @@
 #pragma once
 
 #include "BackGroundObject/GameBackGroundObject.h"
-#include "BackGroundObject/ComboLevel/ComboLevelObjHolder.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "utility/DitherOcclusion/DitherOcclusion.h"
 
@@ -12,10 +11,12 @@
 /// <summary>
 /// ゲーム内の背景オブジェクトを一括管理するクラス
 /// </summary>
+class ComboLevelObjHolder;
+
 class BackGroundObjectManager {
 public:
     BackGroundObjectManager()  = default;
-    ~BackGroundObjectManager() = default;
+    ~BackGroundObjectManager();
 
     // 初期化、更新、パラメータ編集
     void Init();

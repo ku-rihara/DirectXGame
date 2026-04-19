@@ -245,6 +245,7 @@ void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm) {
     case ParticleCommon::AlphaMode::Easing:
         break;
     case ParticleCommon::AlphaMode::LifeTime:
+        [[fallthrough]];
     default:
         data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
         break;

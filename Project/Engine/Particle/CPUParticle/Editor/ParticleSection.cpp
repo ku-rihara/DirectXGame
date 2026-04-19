@@ -122,6 +122,7 @@ void ParticleSection::Update(float speedRate) {
         actualDeltaTime = Frame::DeltaTime() * speedRate;
         break;
     case TimeMode::DELTA_TIME_RATE:
+        [[fallthrough]];
     default:
         actualDeltaTime = Frame::DeltaTimeRate() * speedRate;
         break;

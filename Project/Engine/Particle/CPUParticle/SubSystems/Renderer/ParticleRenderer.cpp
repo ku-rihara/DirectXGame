@@ -23,6 +23,7 @@ void ParticleRenderer::AlphaAdapt(
         // color_.w はイージングが直接書き込み済み
         break;
     case ParticleCommon::AlphaMode::LifeTime:
+        [[fallthrough]];
     default:
         data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
         break;

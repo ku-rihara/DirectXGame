@@ -48,7 +48,7 @@ struct EaseParam {
 // スケールイージングパラメータ
 struct ScaleEaseParam {
     EaseParam baseParam;
-    FMinMax endValueF;
+    FMinMax endValueF = {};
     V3MinMax endValueV3;
 };
 
@@ -74,7 +74,7 @@ enum class AlphaMode {
 // アルファイージングパラメータ
 struct AlphaEaseParam {
     EaseParam baseParam;
-    FMinMax endValue; // 終了アルファ範囲
+    FMinMax endValue = {}; // 終了アルファ範囲
 };
 
 // エミット形状
@@ -98,14 +98,14 @@ struct Parameters {
     V3MinMax rotateDist;
     V3MinMax rotateSpeedDist;
     V3MinMax velocityDistV3;
-    FMinMax scaleDist;
-    FMinMax speedDist;
+    FMinMax scaleDist              = {};
+    FMinMax speedDist              = {};
     V4MinMax colorDist;
-    float lifeTime;
-    float gravity;
-    bool isFloatVelocity;
-    bool isScalerScale;
-    bool isRotateForDirection;
+    float lifeTime = 0.0f;
+    float gravity  = 0.0f;
+    bool isFloatVelocity        = false;
+    bool isScalerScale          = false;
+    bool isRotateForDirection   = false;
     ScaleEaseParam scaleEaseParam;
     EasingParamV3 translateEaseParam;
     EasingParamV3 rotateEaseParam;
@@ -116,18 +116,18 @@ struct Parameters {
     JointParent jointParent;
     // Shape
     EmitShape emitShape = EmitShape::None;
-    FMinMax sphereRadius; 
+    FMinMax sphereRadius = {};
 };
 
 // グループパラメータ
 struct GroupParameters {
-    BlendMode blendMode;
-    bool isBillboard;
-    bool isShot;
-    bool isAlphaNoMove;
-    bool isScreenPos;
-    BillboardType billboardType;
-    AdaptRotate adaptRotate_;
+    BlendMode blendMode         = BlendMode::None;
+    bool isBillboard            = false;
+    bool isShot                 = false;
+    bool isAlphaNoMove          = false;
+    bool isScreenPos            = false;
+    BillboardType billboardType = BillboardType::XYZ;
+    AdaptRotate adaptRotate_    = {};
 
     // 歪みエフェクト
     bool useDistortion        = false;

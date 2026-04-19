@@ -88,10 +88,10 @@ private:
     AdaptVector2AxisType adaptVector2AxisType_ = AdaptVector2AxisType::XY;
 
 private:
-    T startValue_;
-    T endValue_;
-    T baseValue_;
-    T* currentOffset_;
+    T startValue_ = {};
+    T endValue_   = {};
+    T baseValue_  = {};
+    T* currentOffset_ = nullptr;
 
     float maxTime_     = 0.0f;
     float currentTime_ = 0.0f;
@@ -115,15 +115,15 @@ private:
 private:
     const std::string FilePath_ = "Resources/EasingParameter/";
 
-    int32_t selectedFileIndex_;
+    int32_t selectedFileIndex_ = 0;
     std::vector<std::string> easingFiles_;
     std::string currentAppliedFileName_;
     std::string filePathForType_;
     std::string currentSelectedFileName_;
     std::string easingName_;
 
-    AdaptVector2AxisType oldTypeVector2_;
-    AdaptFloatAxisType oldTypeFloat_;
+    AdaptVector2AxisType oldTypeVector2_ = AdaptVector2AxisType::XY;
+    AdaptFloatAxisType oldTypeFloat_     = AdaptFloatAxisType::X;
     Vector2* adaptTargetVec2_ = nullptr;
     Vector3* adaptTargetVec3_ = nullptr;
     std::unique_ptr<IVector2Proxy> vector2Proxy_;

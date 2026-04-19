@@ -24,7 +24,7 @@
         "ComboBranchCount": 0,
         "Condition": 0,
         "HitStop_FileName": "",
-        "HitStop_OnHit_FileName": "CyclingAttackStop",
+        "HitStop_OnHit_FileName": "None",
         "HitStop_OnHit_StartTiming": 0.0,
         "HitStop_StartTiming": 0.0,
         "KnockBackPower": 3.0,

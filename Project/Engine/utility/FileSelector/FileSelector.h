@@ -50,7 +50,7 @@ public:
 private:
     std::vector<std::string> cachedFiles_;
     std::string cachedDirectory_;
-    bool needsRefresh_;
+    bool needsRefresh_ = false;
 
 public:
     const std::vector<std::string>& GetCachedFiles() const { return cachedFiles_; }
