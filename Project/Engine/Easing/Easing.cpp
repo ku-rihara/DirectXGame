@@ -286,6 +286,12 @@ void Easing<T>::CalculateValue() {
         return;
     }
 
+    // maxTime_ が 0 の場合は終端値を即セットして終了（0除算NaN防止）
+    if (maxTime_ <= 0.0f) {
+        *currentOffset_ = endValue;
+        return;
+    }
+
     // returnMaxTime_ > 0: 前進フェーズ(type_) + 後退フェーズ(returnType_)
     // type_/currentTime_/maxTime_ を一時変更してスイッチを共有する
     float savedTime = currentTime_;

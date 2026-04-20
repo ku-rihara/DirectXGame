@@ -8,7 +8,7 @@
         "Audio_Attack_StartTiming": 0.5333333611488342,
         "Audio_Attack_TriggerByHit": false,
         "Audio_Attack_Volume": 0.4180000126361847,
-        "Audio_Hit_FileName": "Enemythurst",
+        "Audio_Hit_FileName": "",
         "Audio_Hit_OnHit_FileName": "",
         "Audio_Hit_OnHit_RepeatOnDamage": false,
         "Audio_Hit_OnHit_StartTiming": 0.0,

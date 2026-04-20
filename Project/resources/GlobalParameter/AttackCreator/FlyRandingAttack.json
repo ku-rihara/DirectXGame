@@ -128,7 +128,7 @@
     "keyBordBottom": 35,
     "loopNum": 0,
     "loopWaitTime": 0.0,
-    "moveEaseTime": 0.0,
+    "moveEaseTime": 0.016,
     "moveEaseType": 0,
     "moveStartTime": 0.0,
     "moveValue": [

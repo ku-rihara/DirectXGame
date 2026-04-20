@@ -223,7 +223,7 @@ void ComboAttackAction::ChangeNextAttack() {
 
     } else {
         // 落下フラグがある場合はPlayerJumpに移行
-        if (pOwner_->GetWorldPosition().y >= pOwner_->GetParameter()->GetParameters().startPos_.y) {
+        if (pOwner_->GetWorldPosition().y > pOwner_->GetParameter()->GetParameters().startPos_.y) {
             pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
             pOwner_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pOwner_));
             return;

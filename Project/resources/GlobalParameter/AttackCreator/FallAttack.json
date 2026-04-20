@@ -12,7 +12,7 @@
         "Audio_Hit_OnHit_Volume": 1.0,
         "Audio_Hit_StartTiming": 0.0,
         "Audio_Hit_Volume": 1.0,
-        "Branch_0_cancelTime": 0.0,
+        "Branch_0_cancelTime": 0.1,
         "Branch_0_gamepadButton": 32768,
         "Branch_0_keyboardButton": 37,
         "Branch_0_nextAttackName": "FallRandingAttack",
