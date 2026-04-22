@@ -27,7 +27,7 @@ void ComboBranchParameter::RegisterParams() {
 bool ComboBranchParameter::DrawParameterUI(const std::string& attackFolderPath, const std::string& parentGroupName) {
     attackFolderPath;
     parentGroupName;
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     bool requestDelete = false;
 
     // 分岐ヘッダー

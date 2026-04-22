@@ -56,7 +56,7 @@ void ResultRunner::RegisterParams() {
 }
 
 void ResultRunner::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
         ImGui::DragFloat3("BasePos",    &config_.basePos.x,   0.1f);

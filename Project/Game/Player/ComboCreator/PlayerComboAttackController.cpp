@@ -52,7 +52,7 @@ void PlayerComboAttackController::AllLoadFile() {
 }
 
 void PlayerComboAttackController::EditorUpdate() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("攻撃作成エディター")) {
         ImGui::PushID("Attack Creator Manager");
 
@@ -182,7 +182,7 @@ void PlayerComboAttackController::AllSaveFile() {
 }
 
 void PlayerComboAttackController::VisualizeComboFlow() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::PushID("ComboFlowVisualization");
 
     if (attacks_.empty()) {
@@ -382,7 +382,7 @@ void PlayerComboAttackController::BindCommonParams() {
 /// 共通パラメータ調整
 ///==========================================================
 void PlayerComboAttackController::AdjustCommonParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("Common Combo Parameters")) {
         ImGui::PushID("CommonComboParams");
 

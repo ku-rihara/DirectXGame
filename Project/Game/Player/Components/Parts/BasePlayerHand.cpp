@@ -65,7 +65,7 @@ void BasePlayerHand::RegisterParams() {
 }
 
 void BasePlayerHand::AdjustParamBase() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::SeparatorText("Param");
     ImGui::DragFloat3("Position", &obj3d_->transform_.translation_.x, 0.1f);
     globalParameter_->ParamSaveForImGui(groupName_);

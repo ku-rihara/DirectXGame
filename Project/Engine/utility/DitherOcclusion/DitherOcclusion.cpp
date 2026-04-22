@@ -53,7 +53,7 @@ void DitherOcclusion::RegisterParams() {
 }
 
 void DitherOcclusion::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader(kGroupName_.c_str())) {
         ImGui::PushID(kGroupName_.c_str());
 

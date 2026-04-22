@@ -23,7 +23,7 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
     winApp;
     dxCommon_    = dxCommon;
     pSrvManager_ = srvManager;
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     // ImGuiの初期化
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -83,7 +83,7 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
 /// 開始
 ///===========================================================
 void ImGuiManager::Begin() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     // ImGuiフレーム開始
     ImGui_ImplDX12_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -98,7 +98,7 @@ void ImGuiManager::Begin() {
 /// ドッキングスペース設定
 ///===========================================================
 void ImGuiManager::SetupDockSpace() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     // フルスクリーンのドッキングスペースを作成
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(viewport->Pos);
@@ -145,7 +145,7 @@ void ImGuiManager::SetupDockSpace() {
 /// 終わり
 ///===========================================================
 void ImGuiManager::preDraw() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::Render();
 #endif
 }
@@ -154,7 +154,7 @@ void ImGuiManager::preDraw() {
 /// 解放処理
 ///===========================================================
 void ImGuiManager::Finalizer() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui_ImplDX12_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
@@ -162,7 +162,7 @@ void ImGuiManager::Finalizer() {
 }
 
 void ImGuiManager::Draw() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
     // デスクリプタヒープの配列をセットするコマンド

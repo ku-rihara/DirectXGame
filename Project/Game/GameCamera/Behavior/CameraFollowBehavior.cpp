@@ -65,7 +65,7 @@ void CameraFollowBehavior::MoveUpdate() {
 }
 
 void CameraFollowBehavior::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
 #endif
 }

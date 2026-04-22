@@ -45,7 +45,7 @@ public: // 静的メンバ変数
     // アスペクト比
     static constexpr float aspectRatio = static_cast<float>(kWindowWidth) / kWindowHeight;
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     // Debug時のウィンドウサイズ（ImGui含む画面全体）
     static inline int kDebugWindowWidth = 1850;
     static inline int kDebugWindowHeight = 950;

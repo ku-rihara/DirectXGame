@@ -178,7 +178,7 @@ void PlayerAttackRenditionData::SyncParticleSlotsToList() {
 }
 
 void PlayerAttackRenditionData::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     // 通常演出パラメータのUI
     if (ImGui::CollapsingHeader("Rendition Parameters (Normal)")) {
         ImGui::PushID((groupName_ + "RenditionParams").c_str());

@@ -49,7 +49,7 @@ void EnemyDamageRenditionData::RegisterParams() {
 }
 
 void EnemyDamageRenditionData::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::SeparatorText("Rendition Parameters");
     ImGui::PushID(groupName_.c_str());
 

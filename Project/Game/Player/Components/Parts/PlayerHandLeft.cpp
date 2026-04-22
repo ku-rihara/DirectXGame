@@ -31,7 +31,7 @@ void PlayerHandLeft::Update() {
 ///  パラメータ調節
 ///=====================================================
 void PlayerHandLeft::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("LeftHand")) {
         ImGui::PushID("LeftHand");
         BasePlayerHand::AdjustParamBase();

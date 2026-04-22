@@ -47,7 +47,7 @@ void BaseObject3d::CreateShadowMap() {
 }
 
 void BaseObject3d::DebugImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     material_->DebugImGui();
 #endif
 }

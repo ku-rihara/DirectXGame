@@ -69,7 +69,7 @@ void EnemyDamageReactionController::Update(float deltaTime) {
 }
 
 void EnemyDamageReactionController::EditorUpdate() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("Damage Reaction Manager")) {
         ImGui::PushID("Damage Reaction Manager");
 

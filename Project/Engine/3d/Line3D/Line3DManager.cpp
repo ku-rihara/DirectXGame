@@ -61,7 +61,7 @@ void Line3DManager::UnregisterLine(Line3D* line) {
 ///============================================================
 void Line3DManager::DrawAll(const ViewProjection& viewProj) {
     viewProj;
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (lines_.empty()) {
         return;
     }

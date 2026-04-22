@@ -32,7 +32,7 @@ void SideRopeController::RegisterParams() {
 }
 
 void SideRopeController::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     for (auto& sideRope : sideRopes_) {
         sideRope->AdjustParam();

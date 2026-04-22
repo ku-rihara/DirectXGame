@@ -276,7 +276,7 @@ void Sprite::GetParams() {
 /// パラメータ調整
 ///==========================================================
 void Sprite::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (groupName_.empty() || !isRepresentative_) {
         return;
     }

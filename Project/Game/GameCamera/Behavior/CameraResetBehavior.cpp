@@ -66,7 +66,7 @@ void CameraResetBehavior::Reset() {
 }
 
 void CameraResetBehavior::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     // デバッグ表示が必要な場合はここに実装
 #endif
 }

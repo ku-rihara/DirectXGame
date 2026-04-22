@@ -94,7 +94,7 @@ void RadialBlur::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
 
 
 void RadialBlur::DebugParamImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("RadialBlur")) {
         ImGui::DragFloat2("center", &paramData_->center.x, 0.01f);
         ImGui::DragFloat("blurWidth", &paramData_->blurWidth, 0.01f);

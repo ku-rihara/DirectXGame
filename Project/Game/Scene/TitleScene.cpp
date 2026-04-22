@@ -78,7 +78,7 @@ void TitleScene::SkyBoxDraw() {
 }
 
 void TitleScene::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::Begin("Param");
     effectEditorSuite_->EditorUpdate();
     KetaEngine::Light::GetInstance()->DebugImGui();

@@ -51,7 +51,7 @@ void BackGroundObjectManager::InitDitherOcclusion() {
 }
 
 void BackGroundObjectManager::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ditherOcclusion_->AdjustParam();
 
     if (ImGui::CollapsingHeader(groupName_.c_str())) {

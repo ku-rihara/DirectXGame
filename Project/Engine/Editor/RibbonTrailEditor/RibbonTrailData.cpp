@@ -115,7 +115,7 @@ void RibbonTrailData::InitParams() {
 }
 
 void RibbonTrailData::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::SeparatorText(("RibbonTrail: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());
 

@@ -538,7 +538,7 @@ void ObjEaseAnimationSection::GetParams() {
 }
 
 void ObjEaseAnimationSection::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::SeparatorText(("Section: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());
 

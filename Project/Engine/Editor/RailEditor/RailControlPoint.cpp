@@ -47,7 +47,7 @@ void RailControlPoint::GetParams() {
 }
 
 void RailControlPoint::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::SeparatorText(("Rail KeyFrame: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());
 

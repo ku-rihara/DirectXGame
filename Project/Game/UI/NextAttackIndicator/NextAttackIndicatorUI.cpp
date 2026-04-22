@@ -126,7 +126,7 @@ void NextAttackIndicatorUI::Draw() {
 }
 
 void NextAttackIndicatorUI::DrawEditorUI() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (!ImGui::CollapsingHeader("次の攻撃インジケーター")) {
         return;
     }

@@ -56,7 +56,7 @@ void DxDevice::CreateDevice() {
 }
 
 void DxDevice::SetupDebugLayer() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ID3D12InfoQueue* infoQueue = nullptr;
     if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
         // エラーレベルでブレイクポイントを設定

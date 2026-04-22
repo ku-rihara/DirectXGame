@@ -47,7 +47,7 @@ void GameScene::SkyBoxDraw() {
 }
 
 void GameScene::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::Begin("Camera");
     gameObj_.gameCamera_->AdjustParam();
     ImGui::End();

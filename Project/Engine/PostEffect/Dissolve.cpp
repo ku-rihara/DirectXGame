@@ -107,7 +107,7 @@ void Dissolve::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
 }
 
 void Dissolve::DebugParamImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("Dissolve")) {
         ImGui::DragFloat("thresholdValue", &paramData_->thresholdValue, 0.01f);
         ImGui::ColorEdit3("color", &paramData_->color.x);

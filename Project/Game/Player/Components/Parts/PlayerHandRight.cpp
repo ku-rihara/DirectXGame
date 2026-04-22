@@ -28,7 +28,7 @@ void PlayerHandRight::Update() {
 }
 
 void PlayerHandRight::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("RightHand")) {
         ImGui::PushID("RightHand");
         BasePlayerHand::AdjustParamBase();

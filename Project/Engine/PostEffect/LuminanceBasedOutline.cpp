@@ -92,7 +92,7 @@ void LuminanceBasedOutline::Draw([[maybe_unused]] ID3D12GraphicsCommandList* com
 }
 
 void LuminanceBasedOutline::DebugParamImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("LuminanceBasedOutline")) {
         ImGui::DragFloat("widthRate", &paramData_->wightRate, 0.01f);
     }

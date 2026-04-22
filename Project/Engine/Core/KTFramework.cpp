@@ -29,7 +29,7 @@ void KTFramework::Init() {
     // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     // Debug時：ウィンドウは大きく、ゲーム描画は1280x720
     engineCore_->Initialize(
         kWindowTitle,
@@ -122,7 +122,7 @@ void KTFramework::Finalize() {
 // FPS表示
 // ========================================================
 void KTFramework::DisplayFPS() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGuiIO& io = ImGui::GetIO();
 
     // FPSウィンドウ
@@ -138,7 +138,7 @@ void KTFramework::DisplayFPS() {
 // ゲームビュー表示
 // ========================================================
 void KTFramework::DisplayGameView() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     // ポストエフェクト適用済みならピンポン、未適用ならシーンRTのSRVを取得
     D3D12_GPU_DESCRIPTOR_HANDLE srvHandle =

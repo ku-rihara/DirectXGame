@@ -121,7 +121,7 @@ int EngineCore::ProcessMessage() {
 /// フレーム開始処理
 ///========================================================================
 void EngineCore::BeginFrame() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     imGuiManager_->Begin();
 #endif
     input_->Update();
@@ -148,7 +148,7 @@ void EngineCore::PreDraw() {
 /// 　フレーム終わり処理
 ///========================================================================
 void EngineCore::EndFrame() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     imGuiManager_->preDraw();
     imGuiManager_->Draw();
@@ -168,7 +168,7 @@ void EngineCore::Finalize() {
     directXCommon_->Finalize();
     modelManager_->Finalize();
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     imGuiManager_->Finalizer();
 #endif
 }
