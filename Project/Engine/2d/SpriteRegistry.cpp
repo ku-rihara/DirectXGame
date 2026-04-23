@@ -91,7 +91,7 @@ void SpriteRegistry::Clear() {
 /// デバッグ表示
 ///============================================================
 void SpriteRegistry::DebugImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("Sprite Registry")) {
         ImGui::Text("Registered Objects: %zu", sprites_.size());
 

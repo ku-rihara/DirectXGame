@@ -99,7 +99,7 @@ void EnemyDamageReactionData::RegisterParams() {
 ///==========================================================
 void EnemyDamageReactionData::AdjustParam(const std::vector<std::string>& availableAnimations) {
     availableAnimations;
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     ImGui::PushID(groupName_.c_str());
 

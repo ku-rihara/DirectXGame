@@ -294,7 +294,7 @@ std::string RailData::GetSequenceElementFolderPath() const {
 }
 
 void RailData::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (showControls_) {
         ImGui::SeparatorText(("Rail Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());

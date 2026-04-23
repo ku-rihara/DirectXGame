@@ -425,7 +425,7 @@ bool ObjEaseAnimationData::GetIsUseRailActiveKeyFrame() const {
 }
 
 void ObjEaseAnimationData::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Animation: %s", groupName_.c_str());

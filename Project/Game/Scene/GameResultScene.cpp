@@ -60,7 +60,7 @@ void GameResultScene::CheckEndInput() {
 }
 
 void GameResultScene::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     BaseScene::Debug();
     ImGui::Begin("Param");
     resultStage_->AdjustParam();

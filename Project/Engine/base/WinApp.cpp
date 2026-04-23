@@ -5,7 +5,7 @@ using namespace KetaEngine;
 
 const wchar_t WinApp::kWindowClassName[] = L"DirectXGame";
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 #include <imgui_impl_win32.h>
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -13,7 +13,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 
 // ウィンドウプロシージャ
 LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam)) {
         return (LRESULT) true;
     }
@@ -68,7 +68,7 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
         wc_.hInstance, // インスタンスハンドル
         nullptr); // オプション
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     debugController_ = nullptr;
     if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
         // デバッグレイヤーを有効化する

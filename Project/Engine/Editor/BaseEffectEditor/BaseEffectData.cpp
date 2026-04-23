@@ -9,7 +9,7 @@ void BaseEffectData::Play() {
 }
 
 void BaseEffectData::DrawPlayButton() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     // 再生ボタン共通カラー
     const ImVec4 kPlay        = {0.08f, 0.72f, 0.18f, 1.0f};
     const ImVec4 kPlayHovered = {0.18f, 0.90f, 0.30f, 1.0f};

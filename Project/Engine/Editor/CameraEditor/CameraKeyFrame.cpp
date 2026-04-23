@@ -131,7 +131,7 @@ void CameraKeyFrame::GetParams() {
 }
 
 void CameraKeyFrame::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     ImGui::SeparatorText(("Camera KeyFrame: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());

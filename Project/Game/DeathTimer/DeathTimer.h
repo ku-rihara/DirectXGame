@@ -75,7 +75,7 @@ private:
 
     bool isDeath_ = false;
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     bool isGodMode_ = true; // デバッグ用: HP減少を止める（初期ON）
 #endif
 

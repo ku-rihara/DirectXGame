@@ -141,7 +141,7 @@ void SpatialGrid::SetParam(float cellSize, const Vector3& worldMin, const Vector
 }
 
 void SpatialGrid::DrawGrid() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     Vector4 gridColor   = Vector4(0.3f, 0.3f, 0.3f, 0.5f);
     Vector4 activeColor = Vector4(0.0f, 1.0f, 0.0f, 0.8f);

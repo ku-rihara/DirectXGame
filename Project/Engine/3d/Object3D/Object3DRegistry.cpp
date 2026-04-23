@@ -110,7 +110,7 @@ void Object3DRegistry::Clear() {
 /// デバッグ表示
 ///============================================================
 void Object3DRegistry::DebugImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("Object3D Registry")) {
         ImGui::Text("Registered Objects: %zu", objects_.size());
 

@@ -513,7 +513,7 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
 }
 
 void ComboAttackAction::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
 #endif
 }

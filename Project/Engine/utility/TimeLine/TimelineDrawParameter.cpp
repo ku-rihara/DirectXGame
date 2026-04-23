@@ -20,7 +20,7 @@ void TimelineDrawParameter::RegisterParams() {
 }
 
 void TimelineDrawParameter::DrawImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     std::string windowName = "TimelineDrawParameter: " + groupName_;
     if (ImGui::Begin(windowName.c_str())) {
         ImGui::PushID(groupName_.c_str());

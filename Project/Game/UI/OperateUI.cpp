@@ -81,7 +81,7 @@ void OperateUI::RegisterParams() {
 /// デバッグ
 ///=========================================================
 void OperateUI::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("OperateUI")) {
         ImGui::PushID("OperateUI");
 

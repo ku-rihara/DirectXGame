@@ -43,7 +43,7 @@ void DeathTimer::Update(float deltaTime) {
 }
 
 void DeathTimer::TakeDamage(float deltaTime) {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (isGodMode_) {
         return; 
     }
@@ -118,7 +118,7 @@ void DeathTimer::RegisterParams() {
 ///==========================================================
 void DeathTimer::AdjustParam() {
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 

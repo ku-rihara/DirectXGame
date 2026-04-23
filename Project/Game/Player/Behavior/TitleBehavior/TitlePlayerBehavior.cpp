@@ -77,7 +77,7 @@ void TitlePlayerBehavior::Update() {
 /// デバッグ
 ///=========================================================
 void TitlePlayerBehavior::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
 #endif
 }

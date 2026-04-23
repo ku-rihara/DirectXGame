@@ -59,7 +59,7 @@ void EditorScene::SkyBoxDraw() {
 }
 
 void EditorScene::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::Begin("Camera");
     gameCamera_->AdjustParam();
     ImGui::End();

@@ -27,7 +27,7 @@ void SkyBox::Draw(KetaEngine::ViewProjection& viewProjection) {
 }
 
 void SkyBox::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 	if (ImGui::CollapsingHeader("SkyBox")) {
 		ImGui::PushID("SkyBox");
 		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);

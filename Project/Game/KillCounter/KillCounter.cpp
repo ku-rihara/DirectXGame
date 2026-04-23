@@ -78,7 +78,7 @@ void KillCounter::RegisterParams() {
 }
 
 void KillCounter::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("KillCounter")) {
         ImGui::PushID("KillCounter");
 

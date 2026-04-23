@@ -27,7 +27,7 @@ void EasingEditor::SaveAll() {
 }
 
 void EasingEditor::Edit() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     ImGui::Begin("Easing Editor");
 

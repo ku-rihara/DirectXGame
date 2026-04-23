@@ -91,7 +91,7 @@ void GaussianFilter::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandLis
 }
 
 void GaussianFilter::DebugParamImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("GaussianFilter")) {
         ImGui::DragFloat("sigma", &paramData_->sigma, 0.01f);
     }

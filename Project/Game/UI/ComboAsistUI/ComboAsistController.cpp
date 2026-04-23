@@ -298,7 +298,7 @@ void ComboAsistController::RegisterParams() {
 }
 
 void ComboAsistController::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
         ImGui::DragFloat2("Base Position", &basePosition_.x, 0.1f);

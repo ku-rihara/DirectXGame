@@ -24,7 +24,7 @@ void ResultStage::RegisterParams() {
 }
 
 void ResultStage::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
         ImGui::DragFloat3("CameraPos", &cameraPos_.x, 0.1f);

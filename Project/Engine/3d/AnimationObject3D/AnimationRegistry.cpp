@@ -111,7 +111,7 @@ void AnimationRegistry::Clear() {
 /// デバッグ表示
 ///============================================================
 void AnimationRegistry::DebugImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("Animation Registry")) {
         ImGui::Text("Registered Animations: %zu", animations_.size());
 

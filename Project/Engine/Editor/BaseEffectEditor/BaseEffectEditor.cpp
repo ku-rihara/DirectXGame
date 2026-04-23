@@ -44,7 +44,7 @@ void BaseEffectEditor<TEffectData>::Update(float speedRate) {
 
 template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::EditorUpdate() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader((effectTypeName_ + " Editor").c_str())) {
         isEditing_ = true;
 
@@ -275,7 +275,7 @@ void BaseEffectEditor<TEffectData>::RenderPlayBack() {
 
 template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::SelectFileEdit([[maybe_unused]] const std::string& fileName, [[maybe_unused]] const std::string& categoryName) {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     // カテゴリーを検索
     auto catIt = std::find_if(categories_.begin(), categories_.end(),
         [&categoryName](const Category& cat) {

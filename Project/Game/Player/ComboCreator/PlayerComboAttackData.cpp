@@ -382,7 +382,7 @@ void PlayerComboAttackData::RegisterParams() {
 /// パラメータ調整
 ///==========================================================
 void PlayerComboAttackData::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     ImGui::PushID(groupName_.c_str());
     ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), (groupName_ + " Editing").c_str());

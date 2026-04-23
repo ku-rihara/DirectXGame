@@ -196,7 +196,7 @@ void Model::CreateModel(const std::string& ModelFileName) {
 }
 
 void Model::DebugImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
 #endif
 }

@@ -53,7 +53,7 @@ void PlayerParameter::RegisterParams() {
 /// パラメータ調整
 ///==========================================================
 void PlayerParameter::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 

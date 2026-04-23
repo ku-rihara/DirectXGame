@@ -115,7 +115,7 @@ void JumpAttackUI::RegisterParams() {
 
 void JumpAttackUI::AdjustParam() {
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 

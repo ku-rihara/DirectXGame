@@ -223,7 +223,7 @@ void EffectEditorSuite::OpenInlineEditor(EffectEditorType type, const std::strin
 }
 
 void EffectEditorSuite::DrawInlineEditorWindow() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (!isInlineEditorOpen_ || inlineEditorFileName_.empty()) {
         return;
     }

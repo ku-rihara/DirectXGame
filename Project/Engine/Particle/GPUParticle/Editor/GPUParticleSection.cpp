@@ -248,7 +248,7 @@ void GPUParticleSection::UpdateEmitTransform() {
 }
 
 void GPUParticleSection::SetEmitLine() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     debugLine_->SetCubeWireframe(
         emitBoxTransform_.GetWorldPos(),
         emitBoxTransform_.scale_,
@@ -329,7 +329,7 @@ void GPUParticleSection::ApplyParameters() {
 }
 
 void GPUParticleSection::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::SeparatorText(("Section: " + sectionName_).c_str());
     ImGui::PushID(sectionName_.c_str());
 

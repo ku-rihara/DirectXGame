@@ -181,7 +181,7 @@ void Easing<T>::ApplyForImGui() {
     for (const auto& name : easingFiles_) {
         fileNamesCStr.push_back(name.c_str());
     }
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     // 現在適用されているファイル名を表示
     if (!currentAppliedFileName_.empty()) {

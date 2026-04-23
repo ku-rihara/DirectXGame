@@ -19,7 +19,7 @@ void EnemyHPBarColorConfig::RegisterParams() {
 }
 
 void EnemyHPBarColorConfig::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::SeparatorText("HPバー色設定（3段階）");
     const std::array<const char*, 3> labels = {"高HP", "中HP", "低HP"};
     for (int i = 0; i < 3; ++i) {

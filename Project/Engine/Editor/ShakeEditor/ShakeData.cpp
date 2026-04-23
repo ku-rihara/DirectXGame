@@ -130,7 +130,7 @@ void ShakeData::GetParams() {
 }
 
 void ShakeData::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (showControls_) {
         ImGui::SeparatorText(("Shake Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());

@@ -123,7 +123,7 @@ void PostEffectRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
 }
 
 void PostEffectRenderer::DrawImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     static const char* kEffectNames[] = {
         "None", "Gray", "Vignette", "Gaus", "BoxFilter",
         "RadialBlur", "RandomNoize", "Dissolve", "Outline", "LuminanceBasedOutline"};

@@ -182,7 +182,7 @@ void ParticleSection::UpdateEmitTransform() {
 }
 
 void ParticleSection::SetEmitLine() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     debugLine_->SetCubeWireframe(
         emitBoxTransform_.GetWorldPos(),
         emitBoxTransform_.scale_,
@@ -241,7 +241,7 @@ void ParticleSection::RebuildCylinder(const PrimitiveCylinder::CylinderParams& p
 //*----------------------------- Editor UI -----------------------------*//
 
 void ParticleSection::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::SeparatorText(("Section: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());
 

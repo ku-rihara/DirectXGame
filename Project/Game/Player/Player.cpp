@@ -293,7 +293,7 @@ void Player::Fall(float& speed, float fallSpeedLimit, float gravity, const bool&
 /// パラメータ調整
 ///==========================================================
 void Player::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     // プレイヤーのパラメータ
     parameters_->AdjustParam();

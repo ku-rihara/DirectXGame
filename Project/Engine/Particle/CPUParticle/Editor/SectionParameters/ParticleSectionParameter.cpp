@@ -360,7 +360,7 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
 }
 
 void ParticleSectionParameter::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::PushID((groupName_ + "_AllParams").c_str());
 
     // Emit Position Mode

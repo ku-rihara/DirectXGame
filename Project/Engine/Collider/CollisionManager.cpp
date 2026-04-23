@@ -66,7 +66,7 @@ void CollisionManager::UpdateWorldTransform() {
 }
 
 void CollisionManager::LineAllSet() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     if (spatialGrid_ && isGridVisible_) {
         spatialGrid_->DrawGrid();
@@ -215,7 +215,7 @@ void CollisionManager::RegisterParams() {
 }
 
 void CollisionManager::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
 
     ImGui::Begin("Collision");
 

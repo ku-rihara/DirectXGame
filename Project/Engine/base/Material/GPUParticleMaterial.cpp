@@ -44,7 +44,7 @@ void GPUParticleMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList)
 }
 
 void GPUParticleMaterial::DebugImGui() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&materialData_->color));
     ImGui::DragFloat("Shininess", &materialData_->shininess, 0.01f);
     ImGui::DragFloat("environmentCoefficient", &materialData_->environmentCoefficient, 0.01f);

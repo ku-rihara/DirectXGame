@@ -46,14 +46,14 @@ void BaseScene::Update() {
 }
 
 void BaseScene::EditorClassUpdate() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     debugCamera_->Update();
     effectEditorSuite_->Update();
 #endif
 }
 
 void BaseScene::Debug() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::Begin("Camera");
     ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
     ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
@@ -70,7 +70,7 @@ void BaseScene::Debug() {
 
 // ビュープロジェクション更新
 void BaseScene::ViewProjectionUpdate() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     // シーンごとの切り替え処理------------------------------
     bool isTriggerSpace = input_->TriggerKey(KeyboardKey::Space);
     switch (cameraMode_) {

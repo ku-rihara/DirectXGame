@@ -201,7 +201,7 @@ std::string ParticleData::GetSequenceElementFolderPath() const {
 }
 
 void ParticleData::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Particle: %s", groupName_.c_str());
 

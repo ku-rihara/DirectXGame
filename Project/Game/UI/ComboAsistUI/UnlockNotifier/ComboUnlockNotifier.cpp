@@ -597,7 +597,7 @@ void ComboUnlockNotifier::RegisterParams() {
 /// ImGui調整
 ///==========================================================
 void ComboUnlockNotifier::AdjustParam() {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader("ComboUnlockNotifier")) {
         ImGui::DragFloat2("NotifyBasePosition", &notifyBasePosition_.x, 1.0f);
         ImGui::DragFloat("CardSpacingY", &cardSpacingY_, 1.0f);
