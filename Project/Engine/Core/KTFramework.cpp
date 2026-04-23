@@ -17,7 +17,7 @@ using namespace KetaEngine;
 #include "2D/ImGuiManager.h"
 #include <imgui.h>
 
-const char kWindowTitle[] = "LE3A_11_クリハラ_ケイタ";
+const char kWindowTitle[] = "LE4A_13_クリハラ_ケイタ";
 
 // ========================================================
 // 初期化
