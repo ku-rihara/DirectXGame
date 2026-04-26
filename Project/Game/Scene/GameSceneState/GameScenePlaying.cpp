@@ -30,7 +30,6 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     // Editor
     obj.attackEffect_->Update();
     obj.field_->Update();
-   /* obj.sideRopeController_->Update();*/
     obj.audienceController_->Update();
 
     // 各クラス更新
@@ -69,13 +68,13 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.comboSupportSpriteUi_->Update();
     obj.nextAttackHintUI_->Update();
 
-    // ゲーム終了判定（デスタイマーが0になったら即終了）
+    // ゲーム終了判定
     if (obj.deathTimer_->GetIsDeath()) {
         pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
         return;
     }
 
-    // 全敵撃破チェック（スポーン完了済み＆生存敵ゼロ）
+    // 全敵撃破チェック
     bool allSpawned = obj.enemySpawner_->GetAllGroupsCompleted() &&
                       !obj.continuousEnemySpawner_->IsActive();
 

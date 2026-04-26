@@ -55,6 +55,11 @@ void EnemyDamageReactionTakeUpper::UpdatePhase() {
     UpdateNormal();
     UpdateTakeUpper();
 
+    // 死亡予約済みの場合は起き上がりフェーズに移行しない（死亡パスを上書きしない）
+    if (pBaseEnemy_->GetIsDeathPending()) {
+        return;
+    }
+
     if (IsReactionFinished()) {
         OnReactionEnd();
         endType_ = EndType::BackToRoot;

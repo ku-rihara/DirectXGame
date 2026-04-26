@@ -16,6 +16,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <unordered_map>
 
 enum class Type;
 struct BaseEnemy::Parameter;
@@ -48,6 +49,15 @@ public:
     // 敵の生成
     void SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID);
     void HpBarUpdate(const KetaEngine::ViewProjection& viewProjection);
+
+    // 事前生成（描画/更新/当たり判定off、次ウェーブ用）
+    void PreGenerateEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID);
+
+    // 待機中の敵を1体アクティブ化（時間制御に従って呼ばれる）、成功したらtrue
+    bool ActivateSingleWaitingEnemy(int32_t groupID);
+
+    // 全待機敵を破棄（ループリセット時）
+    void ClearAllWaitingEnemies();
 
     // Param Edit
     void RegisterParams();
@@ -96,6 +106,9 @@ private:
     // 敵リスト
     std::vector<std::unique_ptr<BaseEnemy>> enemies_;
     std::vector<std::string> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
+
+    // 事前生成待機リスト（グループID → 待機中の敵）
+    std::unordered_map<int32_t, std::vector<std::unique_ptr<BaseEnemy>>> waitingEnemies_;
 
     // 一時的な敵生成用データ
     std::string selectedEnemyType_;

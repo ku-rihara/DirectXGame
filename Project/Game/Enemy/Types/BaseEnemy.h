@@ -97,6 +97,7 @@ public:
     virtual void Init(const Vector3& spownPos);
     virtual void Update();
 
+
     // 振る舞い個別処理
     virtual void SpawnRenditionInit() = 0;
 
@@ -332,4 +333,5 @@ public:
     void SetIsAttacking(bool value) { isAttacking_ = value; }
 
     void SetAnimationName(AnimationType type, const std::string& name);
+    void SetAnimationActive(bool active) { if (objAnimation_) { objAnimation_->SetIsActive(active); } }
 };

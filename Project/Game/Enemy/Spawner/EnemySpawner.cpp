@@ -114,6 +114,9 @@ void EnemySpawner::UpdateCurrentGroup() {
     if (currentGroup.isActive && !currentGroup.isCompleted) {
         SpawnEnemiesInGroup(currentGroup);
 
+        // 次グループの敵を1フレーム1体ずつ事前生成
+        PreGenerateNextGroupEnemy();
+
         // グループが全滅したかチェック
         if (IsGroupCompleted(currentGroup.id)) {
             currentGroup.isCompleted = true;
@@ -132,9 +135,12 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
             float adjustedSpawnTime = spawn->spawnTime + spawn->spawnOffset;
 
             if (groupElapsedTime >= adjustedSpawnTime) {
-                // 敵をスポーン
                 if (pEnemyManager_) {
-                    pEnemyManager_->SpawnEnemy(spawn->enemyType, spawn->position, spawn->groupId);
+                    // 事前生成済みがあればそれをアクティブ化、なければフルInit
+                    bool used = pEnemyManager_->ActivateSingleWaitingEnemy(spawn->groupId);
+                    if (!used) {
+                        pEnemyManager_->SpawnEnemy(spawn->enemyType, spawn->position, spawn->groupId);
+                    }
                 }
 
                 spawn->hasSpawned = true;
@@ -194,7 +200,10 @@ void EnemySpawner::ActivateNextGroup() {
             isSystemActive_     = false;
             allGroupsCompleted_ = true;
         }
+        return;
     }
+
+   
 }
 
 void EnemySpawner::RestartLoop() {
@@ -206,12 +215,18 @@ void EnemySpawner::RestartLoop() {
         group.groupStartTime = 0.0f;
     }
     for (auto& spawn : spawnPoints_) {
-        spawn.hasSpawned = false;
+        spawn.hasSpawned   = false;
+        spawn.preGenerated = false;
     }
     currentGroupIndex_  = 0;
     currentTime_        = 0.0f;
     isSystemActive_     = true;
     allGroupsCompleted_ = false;
+
+    // 事前生成された待機中の敵を破棄
+    if (pEnemyManager_) {
+        pEnemyManager_->ClearAllWaitingEnemies();
+    }
 }
 
 void EnemySpawner::OnEnemyDestroyed(int groupId) {
@@ -219,6 +234,29 @@ void EnemySpawner::OnEnemyDestroyed(int groupId) {
         spawnGroups_[groupId].aliveCount--;
         if (spawnGroups_[groupId].aliveCount < 0) {
             spawnGroups_[groupId].aliveCount = 0;
+        }
+    }
+}
+
+void EnemySpawner::PreGenerateNextGroupEnemy() {
+    int32_t nextGroupId = currentGroupIndex_ + 1;
+    if (nextGroupId >= static_cast<int32_t>(spawnGroups_.size())) {
+        return; // 次グループなし
+    }
+
+    auto it = groupSpawnPoints_.find(nextGroupId);
+    if (it == groupSpawnPoints_.end()) {
+        return;
+    }
+
+    // preGeneratedフラグが立っていないSpawnPointを1つ選んで事前生成
+    for (auto* spawn : it->second) {
+        if (!spawn->preGenerated) {
+            if (pEnemyManager_) {
+                pEnemyManager_->PreGenerateEnemy(spawn->enemyType, spawn->position, nextGroupId);
+            }
+            spawn->preGenerated = true;
+            return;
         }
     }
 }

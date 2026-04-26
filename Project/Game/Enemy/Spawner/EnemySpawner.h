@@ -25,7 +25,8 @@ private:
         Vector3 scale;
         std::string enemyType;
         float spawnOffset;
-        bool hasSpawned = false;
+        bool hasSpawned   = false;
+        bool preGenerated = false; // 事前生成キュー済みフラグ
     };
 
     struct SpawnGroup {
@@ -88,6 +89,7 @@ public:
     void ActivateNextGroup(); //< 次のグループをアクティブ化
     void SettingGroupSpawnPos(); //< グループスポーン位置設定
     void UpdateCurrentGroup(); //< 現在のグループ更新
+    void PreGenerateNextGroupEnemy(); //< 次グループの敵を1体事前生成
 
     void AdjustParam(); //< パラメータ調整
     void RegisterParams(); //< パラメータバインド

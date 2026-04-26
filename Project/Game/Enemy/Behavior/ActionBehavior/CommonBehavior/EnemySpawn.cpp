@@ -13,7 +13,7 @@
 
 // 初期化
 EnemySpawn::EnemySpawn(BaseEnemy* boss)
-    : BaseEnemyBehavior("EnemySpawn", boss) {
+    : BaseEnemyBehavior("EnemySpawn", boss), step_(Step::EFFECTEMIT) {
 
     /// spawn
     spawnEasing_.Init("SpawnScaling.json");

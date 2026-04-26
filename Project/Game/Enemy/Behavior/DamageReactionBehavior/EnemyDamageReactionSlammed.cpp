@@ -48,6 +48,11 @@ void EnemyDamageReactionSlammed::UpdatePhase() {
     UpdateNormal();
     UpdateSlammed();
 
+    // 死亡予約済みの場合は起き上がりフェーズに移行しない
+    if (pBaseEnemy_->GetIsDeathPending()) {
+        return;
+    }
+
     if (IsReactionFinished()) {
         OnReactionEnd();
         endType_      = EndType::BackToRoot;
@@ -75,7 +80,7 @@ void EnemyDamageReactionSlammed::InitReaction() {
 
     const auto& reactionParam = pReactionData_->GetReactionParam();
 
-    // ダメージアニメーションを再生（敵タイプ別）
+    // ダメージアニメーションを再生
     int enemyType = static_cast<int>(pBaseEnemy_->GetType());
     const auto& animName = reactionParam.damageAnimationNames[enemyType];
     if (animName == "None") {

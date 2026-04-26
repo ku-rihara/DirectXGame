@@ -62,6 +62,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
 }
 
+
 ///========================================================
 /// 更新
 ///========================================================
@@ -132,7 +133,7 @@ void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) 
     Vector2 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
     // Hpバーの座標確定
     Vector2 hpBarPosition = positionScreen - parameter_.hpBarPosOffset;
-    // isDraw を先にセット（Update内で参照するため）
+    // isDraw を先にセット
     hpBar_->SetIsDraw(IsInView(viewProjection));
     // HPBarスプライト位置・スケール更新
     hpBar_->SetPosition(hpBarPosition);
@@ -243,7 +244,7 @@ void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerAttackCollider* attackC
         return;
     }
 
-    // ダメージが確定したことをコライダーに通知（振動・音の連続発動用）
+    // ダメージが確定したことをコライダーに通知
     attackController->NotifyDamageHit();
 
     // Rootにし、受けたダメージの判定を行う

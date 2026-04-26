@@ -18,6 +18,7 @@ void EnemyHPBar::Init(float hpMax) {
     hpMax_ = hpMax;
 }
 
+
 void EnemyHPBar::Update(float hp) {
 
     // positionセット

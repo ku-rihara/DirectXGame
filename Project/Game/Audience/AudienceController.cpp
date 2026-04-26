@@ -1,5 +1,4 @@
 #include "AudienceController.h"
-#include "Frame/Frame.h"
 #include <imGui.h>
 
 void AudienceController::Init() {
@@ -10,12 +9,8 @@ void AudienceController::Init() {
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    for (int32_t i = 0; i < audienceMaxNum_; i++) {
-        audiences_[i] = std::make_unique<Audience>();
-        audiences_[i]->Init(i);
-        audiences_[i]->SetBaseScale(baseTransformScale_);
-        AdaptPositions(i);
-    }
+
+    createdCount_ = 0;
 }
 
 void AudienceController::AdaptPositions(int32_t index) {
@@ -26,23 +21,64 @@ void AudienceController::AdaptPositions(int32_t index) {
     }
 }
 
-void AudienceController::Update() {
-    for (int32_t i = 0; i < audienceMaxNum_; i++) {
-        audiences_[i]->Update();
+void AudienceController::DeferredCreate() {
+    if (createdCount_ >= audienceMaxNum_) {
+        return;
+    }
+
+    int32_t i     = createdCount_;
+    audiences_[i] = std::make_unique<Audience>();
+    audiences_[i]->Init(i);
+    audiences_[i]->SetBaseScale(baseTransformScale_);
+    AdaptPositions(i);
+
+    audiences_[i]->ForceUpdateTransforms();
+    createdCount_++;
+}
+
+void AudienceController::ProcessPendingDisappear() {
+    if (pendingDisappearLevel_ < 0) {
+        return;
+    }
+
+    int32_t end = std::min(pendingDisappearIndex_ + kDisappearPerFrame_, audienceMaxNum_);
+    for (int32_t i = pendingDisappearIndex_; i < end; i++) {
+        if (audiences_[i]) {
+            audiences_[i]->DisAppearByComboLevel(pendingDisappearLevel_);
+        }
+    }
+    pendingDisappearIndex_ = end;
+
+    if (pendingDisappearIndex_ >= audienceMaxNum_) {
+        pendingDisappearLevel_ = -1;
     }
 }
 
+void AudienceController::Update() {
+    // 段階的DisAppear処理
+    ProcessPendingDisappear();
+
+    for (int32_t i = 0; i < createdCount_; i++) {
+        audiences_[i]->Update();
+    }
+
+    // 分散生成
+    DeferredCreate();
+}
+
 void AudienceController::AppearAudienceByLevel(int32_t level) {
-    for (int32_t i = 0; i < audienceMaxNum_; i++) {
-        audiences_[i]->AppearByComboLevel(level);
+    for (int32_t i = 0; i < createdCount_; i++) {
+        if (audiences_[i]) {
+            audiences_[i]->AppearByComboLevel(level);
+        }
     }
 }
 
 void AudienceController::DisAppearAudience(int32_t level) {
-    for (int32_t i = 0; i < audienceMaxNum_; i++) {
-        audiences_[i]->DisAppearByComboLevel(level);
-    }
- }
+    // 段階処理キューにセット
+    pendingDisappearLevel_ = level;
+    pendingDisappearIndex_ = 0;
+}
 
 void AudienceController::RegisterParams() {
     globalParameter_->Regist<Vector2>(groupName_, "BaseSeatsZYPos", &baseSeatsZYPos_);
@@ -70,9 +106,11 @@ void AudienceController::AdjustParam() {
         // オフセット
         ImGui::DragFloat2("Seats Row ZY Offset", &seatsRowZYOffset_.x, 0.1f);
 
-        for (int32_t i = 0; i < audienceMaxNum_; i++) {
-            audiences_[i]->SetBaseScale(baseTransformScale_);
-            AdaptPositions(i);
+        for (int32_t i = 0; i < createdCount_; i++) {
+            if (audiences_[i]) {
+                audiences_[i]->SetBaseScale(baseTransformScale_);
+                AdaptPositions(i);
+            }
         }
 
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -82,8 +120,10 @@ void AudienceController::AdjustParam() {
     }
 
     if (ImGui::CollapsingHeader("Audiences")) {
-        for (int32_t i = 0; i < audienceMaxNum_; i++) {
-            audiences_[i]->AdjustParam();
+        for (int32_t i = 0; i < createdCount_; i++) {
+            if (audiences_[i]) {
+                audiences_[i]->AdjustParam();
+            }
         }
     }
 

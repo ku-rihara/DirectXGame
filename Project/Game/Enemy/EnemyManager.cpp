@@ -2,6 +2,8 @@
 // Types
 #include "Types/NormalEnemy.h"
 #include "Types/StrongEnemy.h"
+// Behavior
+#include "Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 // Player
 #include "Player/Player.h"
 // DeathTimer
@@ -51,13 +53,13 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) {
         enemy = std::make_unique<NormalEnemy>();
         enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
-    }
-    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)]) {
+    } else if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)]) {
         enemy = std::make_unique<StrongEnemy>();
         enemy->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
     }
 
-    // 初期化とvectorに追加
+    if (!enemy) { return; }
+
     enemy->SetPlayer(pPlayer_);
     enemy->SetGameCamera(pGameCamera_);
     enemy->SetManager(this);
@@ -65,14 +67,77 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     enemy->SetKillCounter(pKillCounter_);
     enemy->SetGroupId(groupID);
     enemy->Init(position);
-
-    // HPバー色設定を渡す
     enemy->SetHPBarColorConfig(&hpBarColorConfig_);
-
-    // エディター用にアニメーションリストを更新
     UpdateAvailableAnimationsForEditor(enemy.get());
 
     enemies_.push_back(std::move(enemy));
+}
+
+///========================================================================================
+///  事前生成
+///========================================================================================
+void EnemyManager::PreGenerateEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID) {
+
+    std::unique_ptr<BaseEnemy> enemy;
+
+    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) {
+        enemy = std::make_unique<NormalEnemy>();
+        enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+    } else if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)]) {
+        enemy = std::make_unique<StrongEnemy>();
+        enemy->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+    }
+
+    if (!enemy) { return; }
+
+    enemy->SetPlayer(pPlayer_);
+    enemy->SetGameCamera(pGameCamera_);
+    enemy->SetManager(this);
+    enemy->SetCombo(pCombo_);
+    enemy->SetKillCounter(pKillCounter_);
+    enemy->SetGroupId(groupID);
+    enemy->Init(position);
+    enemy->SetHPBarColorConfig(&hpBarColorConfig_);
+    UpdateAvailableAnimationsForEditor(enemy.get());
+
+    // 非アクティブ化
+    enemy->SetScale(Vector3::ZeroVector());
+    enemy->SetAnimationActive(false);
+    enemy->SetIsAdaptCollision(false);
+
+    waitingEnemies_[groupID].push_back(std::move(enemy));
+}
+
+///========================================================================================
+///  待機中の敵を1体アクティブ化
+///========================================================================================
+bool EnemyManager::ActivateSingleWaitingEnemy(int32_t groupID) {
+    auto it = waitingEnemies_.find(groupID);
+    if (it == waitingEnemies_.end() || it->second.empty()) { return false; }
+
+    auto& enemy = it->second.front();
+
+    // コールバックをクリアしてからEnemySpawnを再設定
+    if (auto* anim = enemy->GetAnimationObject()) {
+        anim->ClearAllAnimationEndCallbacks();
+    }
+    enemy->SetAnimationActive(true);
+    enemy->SetIsAdaptCollision(true);
+    enemy->ChangeBehavior(std::make_unique<EnemySpawn>(enemy.get()));
+    enemies_.push_back(std::move(enemy));
+
+    it->second.erase(it->second.begin());
+    if (it->second.empty()) {
+        waitingEnemies_.erase(it);
+    }
+    return true;
+}
+
+///========================================================================================
+///  全待機敵を破棄
+///========================================================================================
+void EnemyManager::ClearAllWaitingEnemies() {
+    waitingEnemies_.clear();
 }
 
 ///========================================================================================
@@ -114,7 +179,7 @@ void EnemyManager::Update() {
                 pKillBonusFly_->SpawnFromPending(enemies_[i]->GetWorldPosition(), *pViewProjection_);
             }
 
-            // vectorから削除
+            // unique_ptrを破棄して削除
             enemies_[i] = std::move(enemies_.back());
             enemies_.pop_back();
 

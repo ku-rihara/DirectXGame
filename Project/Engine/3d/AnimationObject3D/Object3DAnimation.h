@@ -176,6 +176,9 @@ private:
     bool isLoop_             = true;
     bool hasLoopedThisFrame_ = false;
 
+    // プール対応：非アクティブ時はUpdateAll/DrawAllでスキップ
+    bool isActive_ = true;
+
     // コールバック - アニメーション名をキーとしたマップ
     std::unordered_map<std::string, std::function<void()>> animationEndCallbacks_;
 
@@ -195,6 +198,8 @@ public:
 
     void SetTransitionDuration(float duration) { transitionDuration_ = duration; }
     void SetLoop(bool loop) { isLoop_ = loop; }
+    void SetIsActive(bool active) { isActive_ = active; isDraw_ = active; }
+    bool IsActive() const { return isActive_; }
     
     /// <summary>
     /// 特定のアニメーション終了時のコールバックを設定

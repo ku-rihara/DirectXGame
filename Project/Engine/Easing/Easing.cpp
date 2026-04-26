@@ -7,13 +7,25 @@ using namespace KetaEngine;
 #include <fstream>
 #include <imGui.h>
 #include <Windows.h>
+#include <unordered_map>
+
+// ファイルI/Oキャッシュ
+static std::unordered_map<std::string, nlohmann::json> s_easingJsonCache;
+static std::unordered_map<std::string, std::vector<std::string>> s_easingDirCache;
 
 template <typename T>
 void Easing<T>::Init(const std::string& adaptFile) {
 
     // 初期化、ファイル読み込み
     FilePathChangeForType();
-    easingFiles_ = GetFileNamesForDirectory(FilePath_ + filePathForType_);
+    const std::string dirKey = FilePath_ + filePathForType_;
+    auto dirIt = s_easingDirCache.find(dirKey);
+    if (dirIt != s_easingDirCache.end()) {
+        easingFiles_ = dirIt->second;
+    } else {
+        easingFiles_ = GetFileNamesForDirectory(dirKey);
+        s_easingDirCache[dirKey] = easingFiles_;
+    }
   
     if (!adaptFile.empty()) {
         ApplyFromJson(adaptFile);
@@ -72,13 +84,21 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
 
     currentSelectedFileName_ = FilePath_ + filePathForType_ + "/" + fileName;
 
-    std::ifstream ifs(currentSelectedFileName_);
-    if (!ifs.is_open()) {
-        return;
-    }
-
     nlohmann::json easingJson;
-    ifs >> easingJson;
+    auto cacheIt = s_easingJsonCache.find(currentSelectedFileName_);
+    if (cacheIt != s_easingJsonCache.end()) {
+        easingJson = cacheIt->second;
+    } else {
+        std::ifstream ifs(currentSelectedFileName_);
+        if (!ifs.is_open()) {
+            return;
+        }
+        ifs >> easingJson;
+        if (easingJson.empty()) {
+            return;
+        }
+        s_easingJsonCache[currentSelectedFileName_] = easingJson;
+    }
 
     if (easingJson.empty()) {
         return;
@@ -286,14 +306,12 @@ void Easing<T>::CalculateValue() {
         return;
     }
 
-    // maxTime_ が 0 の場合は終端値を即セットして終了（0除算NaN防止）
+    // maxTime_ が 0 の場合は終端値を即セットして終了
     if (maxTime_ <= 0.0f) {
         *currentOffset_ = endValue;
         return;
     }
 
-    // returnMaxTime_ > 0: 前進フェーズ(type_) + 後退フェーズ(returnType_)
-    // type_/currentTime_/maxTime_ を一時変更してスイッチを共有する
     float savedTime = currentTime_;
     float savedMax  = maxTime_;
     EasingType savedType = type_;
@@ -304,7 +322,7 @@ void Easing<T>::CalculateValue() {
             currentTime_ = savedTime;
             maxTime_     = forwardMaxTime_;
         } else {
-            // 後退フェーズ: start/end 入れ替え、returnType_ で計算
+            // 後退フェーズ
             std::swap(startValue, endValue);
             currentTime_ = savedTime - forwardMaxTime_;
             maxTime_     = returnMaxTime_;

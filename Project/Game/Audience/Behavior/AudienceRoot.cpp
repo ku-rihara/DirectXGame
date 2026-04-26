@@ -21,7 +21,7 @@ AudienceRoot::~AudienceRoot() {
 // 更新
 void AudienceRoot::Update([[maybe_unused]] float timeSpeed) {
 
-   pOwner_->GetObjAnimation()->SetIsDraw(isDraw_);
+    pOwner_->GetObjAnimation()->SetIsActive(isDraw_);
 }
 
 
