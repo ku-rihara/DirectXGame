@@ -57,6 +57,7 @@
     <ClCompile Include="Engine\Base\Material\BaseMaterial.cpp" />
     <ClCompile Include="Engine\Base\Material\GPUParticleMaterial.cpp" />
     <ClCompile Include="Engine\Base\Material\MeshMaterial.cpp" />
+    <ClCompile Include="Engine\Base\Material\PrimitiveMaterial.cpp" />
     <ClCompile Include="Engine\Base\Material\ModelMaterial.cpp" />
     <ClCompile Include="Engine\Base\Material\ParticleMaterial.cpp" />
     <ClCompile Include="Engine\Base\Material\SkyBoxMaterial.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="Engine\Pipeline\CSPipelineManager.cpp" />
     <ClCompile Include="Engine\Pipeline\Line3D\Line3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Object3D\Object3DPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Primitive\PrimitivePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.cpp" />
@@ -403,6 +405,7 @@
     <ClInclude Include="Engine\Base\Material\BaseMaterial.h" />
     <ClInclude Include="Engine\Base\Material\GPUParticleMaterial.h" />
     <ClInclude Include="Engine\Base\Material\MeshMaterial.h" />
+    <ClInclude Include="Engine\Base\Material\PrimitiveMaterial.h" />
     <ClInclude Include="Engine\Base\Material\ModelMaterial.h" />
     <ClInclude Include="Engine\Base\Material\ParticleMaterial.h" />
     <ClInclude Include="Engine\Base\Material\SkyBoxMaterial.h" />
@@ -505,6 +508,7 @@
     <ClInclude Include="Engine\Pipeline\CSPipelineManager.h" />
     <ClInclude Include="Engine\Pipeline\Line3D\Line3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Object3D\Object3DPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Primitive\PrimitivePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.h" />

@@ -116,7 +116,13 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     param.type       = static_cast<EasingType>(inner.at("type").get<int>());
     param.finishType = static_cast<EasingFinishValueType>(inner.at("finishType").get<int>());
 
-    if constexpr (std::is_same_v<T, Vector3>) {
+    if constexpr (std::is_same_v<T, Vector4>) {
+        const auto& sv   = inner.at("startValue");
+        const auto& ev   = inner.at("endValue");
+        param.startValue = Vector4{sv[0].get<float>(), sv[1].get<float>(), sv[2].get<float>(), sv[3].get<float>()};
+        param.endValue   = Vector4{ev[0].get<float>(), ev[1].get<float>(), ev[2].get<float>(), ev[3].get<float>()};
+
+    } else if constexpr (std::is_same_v<T, Vector3>) {
         const auto& sv   = inner.at("startValue");
         const auto& ev   = inner.at("endValue");
         param.startValue = Vector3{sv[0].get<float>(), sv[1].get<float>(), sv[2].get<float>()};
@@ -285,6 +291,9 @@ void Easing<T>::FilePathChangeForType() {
 
     } else if constexpr (std::is_same_v<T, Vector3>) {
         filePathForType_ = "Vector3";
+
+    } else if constexpr (std::is_same_v<T, Vector4>) {
+        filePathForType_ = "Vector4";
     }
 }
 
@@ -534,3 +543,4 @@ bool Easing<T>::IsEasingStarted() const {
 template class Easing<float>;
 template class Easing<Vector2>;
 template class Easing<Vector3>;
+template class Easing<Vector4>;

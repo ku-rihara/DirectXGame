@@ -9,6 +9,11 @@
         "AlphaEaseParam.endValue.min": 0.0,
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 0.6100000143051147,
+        "AngleEase.easeType": 2,
+        "AngleEase.endDeg": 360.0,
+        "AngleEase.isEase": true,
+        "AngleEase.maxTime": 4.570000171661377,
+        "AngleEase.startDeg": 360.0,
         "BaseColor": [
             0.830115795135498,
             0.6051785349845886,
@@ -81,8 +86,8 @@
         "Max Particle Num": 1000,
         "Particle Count": 2,
         "Position Base": [
-            -2.990000009536743,
-            2.130000114440918,
+            4.110000133514404,
+            15.6899995803833,
             0.0
         ],
         "Position Max": [

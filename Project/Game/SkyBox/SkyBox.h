@@ -1,7 +1,12 @@
 #pragma once
 #include "3d/WorldTransform.h"
+#include "3d/ViewProjection.h"
 #include "3D/Primitive/PrimitiveBox.h"
+#include "Base/Material/SkyBoxMaterial.h"
+#include "struct/TransformationMatrix.h"
+#include <d3d12.h>
 #include <memory>
+#include <wrl.h>
 
 /// <summary>
 /// スカイボックス管理クラス
@@ -11,10 +16,9 @@ public:
     SkyBox();
     ~SkyBox();
 
-    // 初期化、更新、デバッグ
     void Init();
     void Update();
-    void Debug(); 
+    void Debug();
 
     /// <summary>
     /// 描画
@@ -23,8 +27,11 @@ public:
     void Draw(KetaEngine::ViewProjection& viewProjection);
 
 private:
-	// ワールド変換データ
     KetaEngine::WorldTransform transform_;
-	// モデル
     std::unique_ptr<KetaEngine::PrimitiveBox> primitiveBox_ = nullptr;
+
+    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
+    KetaEngine::TransformationMatrix* wvpDate_ = nullptr;
+    KetaEngine::SkyBoxMaterial skyBoxMaterial_;
+    uint32_t textureHandle_ = 0;
 };

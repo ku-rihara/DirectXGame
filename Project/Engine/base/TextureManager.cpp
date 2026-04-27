@@ -27,8 +27,21 @@ TextureManager* TextureManager::GetInstance() {
 void TextureManager::Init(DirectXCommon* dxCommon, SrvManager* srvManager) {
     directXCommon_ = dxCommon;
     pSrvManager_   = srvManager;
-    // SRVと同様
     textureDates_.reserve(SrvManager::kMaxCount);
+
+    // プリミティブ用 null Texture2D SRV を先頭に確保（GBV が Texture2D 型と認識する空ディスクリプタ）
+    TextureData& nullTex  = textureDates_[kNullTexKey_];
+    nullTex.srvIndex      = pSrvManager_->Allocate();
+    nullTex.srvCPUHandle  = pSrvManager_->GetCPUDescriptorHandle(nullTex.srvIndex);
+    nullTex.srvGPUHandle  = pSrvManager_->GetGPUDescriptorHandle(nullTex.srvIndex);
+    nullTex.index         = 0; // 論理インデックス 0 を占有
+
+    D3D12_SHADER_RESOURCE_VIEW_DESC nullDesc = {};
+    nullDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;
+    nullDesc.ViewDimension           = D3D12_SRV_DIMENSION_TEXTURE2D;
+    nullDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+    nullDesc.Texture2D.MipLevels     = 1;
+    directXCommon_->GetDevice()->CreateShaderResourceView(nullptr, &nullDesc, nullTex.srvCPUHandle);
 }
 
 DirectX::ScratchImage TextureManager::LoadTextureFile(const std::string& filePath) {
@@ -218,6 +231,10 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) con
 
     const TextureData& textureData = it->second; // マップの値部分を取得
     return textureData.srvGPUHandle;
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetNullTexture2DHandle() const {
+    return textureDates_.at(kNullTexKey_).srvGPUHandle;
 }
 
 uint32_t TextureManager::GetSrvIndex(const std::string& filePath) {

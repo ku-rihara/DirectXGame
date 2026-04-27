@@ -105,6 +105,8 @@ private:
 
     PlayState playState_ = PlayState::STOPPED;
 
+    bool isCylAngleEasing_ = false;
+
 
 public:
     //*----------------------------- Getters -----------------------------*//

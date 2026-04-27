@@ -128,6 +128,52 @@ void ParticleManager::StopDissolve(const std::string& name) {
     group.dissolveParams                             = DissolveGroupParams{};
 }
 
+void ParticleManager::PlayAngleEase(const std::string& name, float matStartAngle01, float fromDeg, float toDeg, float maxTime, int32_t easeType) {
+    auto it = particleGroups_.find(name);
+    if (it == particleGroups_.end()) {
+        return;
+    }
+    auto& group = it->second;
+
+    group.endAngleEaseValue  = fromDeg;
+    group.endAngleEasing     = std::make_unique<Easing<float>>();
+    group.isAdaptAngleEasing = true;
+
+    EasingParameter<float> ep;
+    ep.type       = static_cast<EasingType>(easeType);
+    ep.startValue = fromDeg;
+    ep.endValue   = toDeg;
+    ep.maxTime    = maxTime;
+    ep.finishType = EasingFinishValueType::End;
+
+    group.endAngleEasing->SettingValue(ep);
+    group.endAngleEasing->SetAdaptValue(&group.endAngleEaseValue);
+
+    auto* matData            = group.material.GetMaterialData();
+    matData->enableAngleClip = 1;
+    matData->startAngle      = matStartAngle01;
+    matData->endAngle        = fromDeg / 360.0f;
+}
+
+void ParticleManager::StopAngleEase(const std::string& name) {
+    auto it = particleGroups_.find(name);
+    if (it == particleGroups_.end()) {
+        return;
+    }
+    auto& group              = it->second;
+    group.endAngleEasing.reset();
+    group.isAdaptAngleEasing                    = false;
+    group.material.GetMaterialData()->enableAngleClip = 0;
+}
+
+void ParticleManager::ResetAngleEase(const std::string& name) {
+    StopAngleEase(name);
+    auto it = particleGroups_.find(name);
+    if (it != particleGroups_.end()) {
+        it->second.angleEaseStarted = false;
+    }
+}
+
 ///============================================================
 /// モデルセット
 ///============================================================
@@ -201,6 +247,28 @@ void ParticleManager::Emit(
     // 指定されたパーティクルグループを取得
     ParticleGroup& particleGroup = particleGroups_[name];
     particleGroup.param          = groupParameters;
+
+    // 初回Emit時に角度イージングを自動起動 (Positionイージングと同じFactory/Updaterパターン)
+    if (groupParameters.cylAngleEase.baseParam.isEase && !particleGroup.angleEaseStarted) {
+        particleGroup.angleEaseStarted   = true;
+        particleGroup.endAngleEaseValue  = groupParameters.cylAngleEaseFromDeg;
+        particleGroup.isAdaptAngleEasing = true;
+        particleGroup.endAngleEasing     = std::make_unique<Easing<float>>();
+
+        EasingParameter<float> ep;
+        ep.type       = static_cast<EasingType>(groupParameters.cylAngleEase.baseParam.easeTypeInt);
+        ep.startValue = groupParameters.cylAngleEaseFromDeg;
+        ep.endValue   = groupParameters.cylAngleEase.endAngleDeg;
+        ep.maxTime    = groupParameters.cylAngleEase.baseParam.maxTime;
+        ep.finishType = EasingFinishValueType::End;
+        particleGroup.endAngleEasing->SettingValue(ep);
+        particleGroup.endAngleEasing->SetAdaptValue(&particleGroup.endAngleEaseValue);
+
+        auto* matData            = particleGroup.material.GetMaterialData();
+        matData->enableAngleClip = 1;
+        matData->startAngle      = groupParameters.cylAngleEaseMatStartNorm;
+        matData->endAngle        = groupParameters.cylAngleEaseFromDeg / 360.0f;
+    }
 
     // 生成、グループ追加
     std::list<Particle> particles;

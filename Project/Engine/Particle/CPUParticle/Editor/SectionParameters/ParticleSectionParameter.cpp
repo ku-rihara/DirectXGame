@@ -15,6 +15,17 @@ void ParticleSectionParameter::AdaptIntToType() {
     emitPositionMode_ = static_cast<EmitterPositionMode>(emitPositionModeInt_);
 }
 
+ParticleCommon::GroupParameters ParticleSectionParameter::GetGroupParameters() const {
+    GroupParameters gp = groupParameters_;
+    // Cylinderかつ角度イージングONの場合のみ注入
+    if (static_cast<PrimitiveType>(primitiveTypeInt_) == PrimitiveType::Cylinder && angleEaseParam_.baseParam.isEase) {
+        gp.cylAngleEase             = angleEaseParam_;
+        gp.cylAngleEaseFromDeg      = angleEaseStartDeg_;
+        gp.cylAngleEaseMatStartNorm = cylinderParams_.startAngleDeg / 360.0f;
+    }
+    return gp;
+}
+
 void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, const std::string& groupName) {
     groupName_ = groupName;
 
@@ -181,6 +192,13 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "Cyl.axisInt", &cylinderParams_.axisInt); // 追加
     globalParam->Regist(groupName, "Cyl.topColor", &cylinderParams_.topColor);
     globalParam->Regist(groupName, "Cyl.bottomColor", &cylinderParams_.bottomColor);
+
+    // 角度マテリアルイージング
+    globalParam->Regist(groupName, "AngleEase.isEase",   &angleEaseParam_.baseParam.isEase);
+    globalParam->Regist(groupName, "AngleEase.maxTime",  &angleEaseParam_.baseParam.maxTime);
+    globalParam->Regist(groupName, "AngleEase.easeType", &angleEaseParam_.baseParam.easeTypeInt);
+    globalParam->Regist(groupName, "AngleEase.startDeg", &angleEaseStartDeg_);
+    globalParam->Regist(groupName, "AngleEase.endDeg",   &angleEaseParam_.endAngleDeg);
 
     AdaptIntToType();
 }
@@ -350,6 +368,13 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     cylinderParams_.axisInt         = globalParam->GetValue<int32_t>(groupName, "Cyl.axisInt"); // 追加
     cylinderParams_.topColor        = globalParam->GetValue<Vector4>(groupName, "Cyl.topColor");
     cylinderParams_.bottomColor     = globalParam->GetValue<Vector4>(groupName, "Cyl.bottomColor");
+
+    // 角度マテリアルイージング
+    angleEaseParam_.baseParam.isEase      = globalParam->GetValue<bool>(groupName, "AngleEase.isEase");
+    angleEaseParam_.baseParam.maxTime     = globalParam->GetValue<float>(groupName, "AngleEase.maxTime");
+    angleEaseParam_.baseParam.easeTypeInt = globalParam->GetValue<int32_t>(groupName, "AngleEase.easeType");
+    angleEaseStartDeg_                    = globalParam->GetValue<float>(groupName, "AngleEase.startDeg");
+    angleEaseParam_.endAngleDeg           = globalParam->GetValue<float>(groupName, "AngleEase.endDeg");
 
     // Apply loaded values
     groupParameters_.blendMode     = static_cast<BlendMode>(blendModeInt_);
@@ -863,7 +888,15 @@ void ParticleSectionParameter::CylinderParamEditor() {
     // 角度範囲
     if (ImGui::TreeNodeEx("角度範囲", ImGuiTreeNodeFlags_DefaultOpen)) {
         changed |= ImGui::DragFloat("開始角度 (度)", &cylinderParams_.startAngleDeg, 1.0f, -360.0f, 360.0f);
-        changed |= ImGui::DragFloat("終了角度 (度)", &cylinderParams_.endAngleDeg, 1.0f, -360.0f, 720.0f);
+
+        if (angleEaseParam_.baseParam.isEase) {
+            // isEase ON: ジオメトリは常に360°なのでこのスライダーは無効
+            ImGui::BeginDisabled();
+            ImGui::DragFloat("終了角度 (度)", &cylinderParams_.endAngleDeg, 1.0f, -360.0f, 720.0f);
+            ImGui::EndDisabled();
+        } else {
+            changed |= ImGui::DragFloat("終了角度 (度)", &cylinderParams_.endAngleDeg, 1.0f, -360.0f, 720.0f);
+        }
         ImGui::TreePop();
     }
 
@@ -890,6 +923,26 @@ void ParticleSectionParameter::CylinderParamEditor() {
 
     if (changed && onCylinderParamsChanged_) {
         onCylinderParamsChanged_(cylinderParams_);
+    }
+
+    // 角度マテリアルイージング
+    if (ImGui::TreeNodeEx("角度イージング（マテリアル）", ImGuiTreeNodeFlags_DefaultOpen)) {
+        bool isEaseChanged = ImGui::Checkbox("角度イージング使用", &angleEaseParam_.baseParam.isEase);
+        if (isEaseChanged && onCylinderParamsChanged_) {
+            // isEase切替 → 即コールバック (ジオメトリモード切替)
+            onCylinderParamsChanged_(cylinderParams_);
+        }
+        if (angleEaseParam_.baseParam.isEase) {
+            ImGui::DragFloat("開始角度（度）##AE", &angleEaseStartDeg_, 1.0f, 0.0f, 360.0f);
+            // 終了角度（目標値）: Rebuildなし、マテリアルのみ更新
+            bool easeEndChanged = ImGui::DragFloat("終了角度（目標値）##AE", &angleEaseParam_.endAngleDeg, 1.0f, 0.0f, 720.0f);
+            if (easeEndChanged && onCylEndAngleMaterialChanged_) {
+                onCylEndAngleMaterialChanged_(cylinderParams_.startAngleDeg, angleEaseParam_.endAngleDeg);
+            }
+            ImGui::DragFloat("イージング時間##AE", &angleEaseParam_.baseParam.maxTime, 0.01f, 0.0f, 10.0f);
+            ImGuiEasingTypeSelector("イージングタイプ##AE", angleEaseParam_.baseParam.easeTypeInt);
+        }
+        ImGui::TreePop();
     }
 
     ImGui::PopID();

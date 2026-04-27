@@ -217,6 +217,9 @@
     <Filter Include="Engine\Pipeline\Object3D">
       <UniqueIdentifier>{2711E5F8-C495-468F-BFF1-EB377176309C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Pipeline\Primitive">
+      <UniqueIdentifier>{A3C12F84-D701-4B5E-9F2A-3E8B6C1D0F47}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Pipeline\Particle">
       <UniqueIdentifier>{342F0F52-BDB2-4D6A-A497-62967CBBD160}</UniqueIdentifier>
     </Filter>
@@ -598,6 +601,9 @@
     <ClCompile Include="Engine\Base\Material\MeshMaterial.cpp">
       <Filter>Engine\Base\Material</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Base\Material\PrimitiveMaterial.cpp">
+      <Filter>Engine\Base\Material</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Base\Material\ModelMaterial.cpp">
       <Filter>Engine\Base\Material</Filter>
     </ClCompile>
@@ -870,6 +876,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\Object3D\Object3DPipeline.cpp">
       <Filter>Engine\Pipeline\Object3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Primitive\PrimitivePipeline.cpp">
+      <Filter>Engine\Pipeline\Primitive</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.cpp">
       <Filter>Engine\Pipeline\Particle\CS</Filter>
@@ -1471,6 +1480,9 @@
     <ClInclude Include="Engine\Base\Material\MeshMaterial.h">
       <Filter>Engine\Base\Material</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Base\Material\PrimitiveMaterial.h">
+      <Filter>Engine\Base\Material</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Base\Material\ModelMaterial.h">
       <Filter>Engine\Base\Material</Filter>
     </ClInclude>
@@ -1749,6 +1761,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\Object3D\Object3DPipeline.h">
       <Filter>Engine\Pipeline\Object3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Primitive\PrimitivePipeline.h">
+      <Filter>Engine\Pipeline\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.h">
       <Filter>Engine\Pipeline\Particle\CS</Filter>

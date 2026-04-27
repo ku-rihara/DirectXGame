@@ -7,6 +7,7 @@
 #include "3d/Mesh.h"
 #include "3d/WorldTransform.h"
 #include "struct/TransformationMatrix.h"
+#include "Base/Material/PrimitiveMaterial.h"
 
 #include <optional>
 #include <string>
@@ -53,10 +54,15 @@ public:
     void CreateMaterialResource(); //< マテリアルリソース作成
 
 protected:
+    void RebuildInternal(uint32_t newVertexNum); //< Rebuild 共通処理
+
     std::unique_ptr<Mesh> mesh_ = nullptr;
+    std::string currentTexturePath_;
+
     uint32_t vertexNum_;
     uint32_t indexNum_;
-    MeshMaterial material_;
+    uint32_t primitiveTextureHandle_ = 0; 
+    PrimitiveMaterial material_;
 
     Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
     TransformationMatrix* wvpDate_;
@@ -66,6 +72,10 @@ public:
 
     void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
     void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
+
+    void SetColor(const Vector4& color);
+    PrimitiveMaterial& GetMaterial() { return material_; }
+    virtual void EnableAngleClip() {}
 };
 
 }; // KetaEngine

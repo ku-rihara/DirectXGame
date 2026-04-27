@@ -82,7 +82,11 @@ public:
 
     void Finalize(); //< 終了処理
 
+    D3D12_GPU_DESCRIPTOR_HANDLE GetNullTexture2DHandle() const;
+
 private:
+    static constexpr const char* kNullTexKey_ = "__null_texture2d__";
+
     std::unordered_map<std::string, TextureData> textureDates_;
 
     DirectXCommon* directXCommon_;

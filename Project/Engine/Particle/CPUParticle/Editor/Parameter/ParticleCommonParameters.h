@@ -77,6 +77,18 @@ struct AlphaEaseParam {
     FMinMax endValue = {}; // 終了アルファ範囲
 };
 
+// カラー+アルファ(RGBA)イージングパラメータ
+struct ColorAlphaEaseParam {
+    EaseParam baseParam;
+    V4MinMax endValue;
+};
+
+// 角度イージングパラメータ（グループレベル）
+struct AngleEaseParam {
+    EaseParam baseParam;
+    float endAngleDeg = 360.0f; ///< 終了角度(度)
+};
+
 // エミット形状
 enum class EmitShape {
     None,   ///< 通常
@@ -110,6 +122,7 @@ struct Parameters {
     EasingParamV3 translateEaseParam;
     EasingParamV3 rotateEaseParam;
     ColorEaseParam colorEaseParam;
+    ColorAlphaEaseParam colorAlphaEaseParam;
     AlphaMode alphaMode = AlphaMode::LifeTime;
     AlphaEaseParam alphaEaseParam;
     UVParam uvParam;
@@ -135,6 +148,11 @@ struct GroupParameters {
 
     // 自己発光
     float emissiveIntensity = 1.0f;
+
+    // Cylinder角度イージング (初回Emit時に自動起動)
+    AngleEaseParam cylAngleEase;
+    float cylAngleEaseFromDeg      = 0.0f;  // 開始角度（度）
+    float cylAngleEaseMatStartNorm = 0.0f;  // マテリアル開始角度（0~1正規化）
 };
 
 } // namespace ParticleCommon

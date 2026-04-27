@@ -50,7 +50,42 @@ void ParticleSection::InitSectionParam() {
 
     // Cylinder形状パラメータ変更コールバック
     sectionParam_->SetCylinderParamsChangedCallback([this](const PrimitiveCylinder::CylinderParams& params) {
-        RebuildCylinder(params);
+        auto& groups = ParticleManager::GetInstance()->particleGroups_;
+        auto it      = groups.find(groupName_);
+        if (it == groups.end()) return;
+        auto* cyl = dynamic_cast<PrimitiveCylinder*>(it->second.primitive_.get());
+
+        if (sectionParam_->GetAngleEaseParam().baseParam.isEase) {
+            // イージングON: 360°でRebuild (1回のみ)、マテリアルクリップで表示制御
+            if (cyl) {
+                auto fullParams        = params;
+                fullParams.endAngleDeg = 360.0f;
+                cyl->SetParams(fullParams);
+                cyl->Rebuild();
+            }
+            auto* matData            = it->second.material.GetMaterialData();
+            matData->enableAngleClip = 1;
+            matData->startAngle      = params.startAngleDeg / 360.0f;
+            // プレビューはイージング目標角度 (angleEaseParam_.endAngleDeg) を表示
+            matData->endAngle        = sectionParam_->GetAngleEaseParam().endAngleDeg / 360.0f;
+        } else {
+            // イージングOFF: 通常Rebuild
+            if (cyl) {
+                cyl->SetParams(params);
+                cyl->Rebuild();
+            }
+            it->second.material.GetMaterialData()->enableAngleClip = 0;
+        }
+    });
+
+    // 終了角度イージング時のマテリアルのみ更新コールバック (Rebuildなし)
+    sectionParam_->SetCylEndAngleMaterialChangedCallback([this](float startDeg, float endDeg) {
+        auto& groups = ParticleManager::GetInstance()->particleGroups_;
+        auto it      = groups.find(groupName_);
+        if (it == groups.end()) return;
+        auto* matData       = it->second.material.GetMaterialData();
+        matData->startAngle = startDeg / 360.0f;
+        matData->endAngle   = endDeg   / 360.0f;
     });
 }
 
@@ -75,9 +110,24 @@ void ParticleSection::InitParticleGroup() {
         auto primitiveType = static_cast<PrimitiveType>(sectionParam_->GetPrimitiveTypeInt());
         CreatePrimitiveParticle(primitiveType, sectionParam_->GetMaxParticleNum());
 
-        // Cylinder の場合、保存済みパラメータをメッシュに反映
         if (primitiveType == PrimitiveType::Cylinder) {
-            RebuildCylinder(sectionParam_->GetCylinderParams());
+            const auto& cylParams = sectionParam_->GetCylinderParams();
+            if (sectionParam_->GetAngleEaseParam().baseParam.isEase) {
+                // イージングON: 360°でRebuild、マテリアルクリップでプレビュー
+                auto fullParams        = cylParams;
+                fullParams.endAngleDeg = 360.0f;
+                RebuildCylinder(fullParams);
+                auto& groups = ParticleManager::GetInstance()->particleGroups_;
+                auto it      = groups.find(groupName_);
+                if (it != groups.end()) {
+                    auto* matData            = it->second.material.GetMaterialData();
+                    matData->enableAngleClip = 1;
+                    matData->startAngle      = cylParams.startAngleDeg / 360.0f;
+                    matData->endAngle        = sectionParam_->GetAngleEaseParam().endAngleDeg / 360.0f;
+                }
+            } else {
+                RebuildCylinder(cylParams);
+            }
         }
     }
 }
@@ -101,6 +151,37 @@ void ParticleSection::Stop() {
 
     // Dissolveリセット
     ParticleManager::GetInstance()->StopDissolve(groupName_);
+
+    // 角度イージングリセット
+    if (isCylAngleEasing_) {
+        isCylAngleEasing_ = false;
+        ParticleManager::GetInstance()->ResetAngleEase(groupName_);  // enableAngleClip = 0, angleEaseStarted = false
+
+        // 停止後はエディタの isEase 状態に合わせて復元
+        const auto& params    = sectionParam_->GetCylinderParams();
+        const bool editorEase = sectionParam_->GetAngleEaseParam().baseParam.isEase;
+        auto& groups          = ParticleManager::GetInstance()->particleGroups_;
+        auto it               = groups.find(groupName_);
+        if (it != groups.end()) {
+            auto* cyl = dynamic_cast<PrimitiveCylinder*>(it->second.primitive_.get());
+            if (editorEase) {
+                // クリッププレビュー状態を復元
+                if (cyl) {
+                    auto fullParams        = params;
+                    fullParams.endAngleDeg = 360.0f;
+                    cyl->SetParams(fullParams);
+                    cyl->Rebuild();
+                }
+                auto* matData            = it->second.material.GetMaterialData();
+                matData->enableAngleClip = 1;
+                matData->startAngle      = params.startAngleDeg / 360.0f;
+                matData->endAngle        = sectionParam_->GetAngleEaseParam().endAngleDeg / 360.0f;
+            } else {
+                // 通常ジオメトリに戻す (enableAngleClip は StopAngleEase で既に 0)
+                RebuildCylinder(params);
+            }
+        }
+    }
 }
 
 void ParticleSection::StartWaiting() {
@@ -164,6 +245,16 @@ void ParticleSection::StartPlay() {
     if (!dissolveName.empty()) {
         ParticleManager::GetInstance()->PlayDissolve(groupName_, dissolveName);
     }
+
+    // Cylinder角度イージング: ジオメトリを360°にセットアップ
+    // イージング本体はEmit()の初回呼び出し時にParticleManagerが自動起動する
+    const auto& angleEase = sectionParam_->GetAngleEaseParam();
+    if (angleEase.baseParam.isEase) {
+        isCylAngleEasing_ = true;
+        auto fullParams        = sectionParam_->GetCylinderParams();
+        fullParams.endAngleDeg = 360.0f;
+        RebuildCylinder(fullParams);
+    }
 }
 
 void ParticleSection::UpdateEmitterPosition(float speedRate) {
@@ -224,6 +315,7 @@ void ParticleSection::ChangePrimitive(const PrimitiveType& primitiveType) {
     CreatePrimitiveParticle(primitiveType, sectionParam_->GetMaxParticleNum());
     ApplyTextureToManager();
 }
+
 
 void ParticleSection::RebuildCylinder(const PrimitiveCylinder::CylinderParams& params) {
     auto& groups = ParticleManager::GetInstance()->particleGroups_;

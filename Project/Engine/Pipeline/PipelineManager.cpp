@@ -7,6 +7,7 @@ using namespace KetaEngine;
 #include "Pipeline/RibbonTrail/RibbonTrailPipeline.h"
 #include "Pipeline/Distortion/DistortionPipeline.h"
 #include "Pipeline/Object3D/Object3DPipeline.h"
+#include "Pipeline/Primitive/PrimitivePipeline.h"
 #include "Pipeline/Particle/GPUParticlePipeline.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "Pipeline/ShadowMap/ShadowMapPipeline.h"
@@ -39,6 +40,7 @@ void PipelineManager::Init(DirectXCommon* dxCommon) {
     pipelines_[static_cast<size_t>(PipelineType::RibbonTrail)]        = std::make_unique<RibbonTrailPipeline>();
     pipelines_[static_cast<size_t>(PipelineType::DistortionRibbon)]   = std::make_unique<DistortionPipeline>(DistortionMode::Ribbon);
     pipelines_[static_cast<size_t>(PipelineType::DistortionParticle)] = std::make_unique<DistortionPipeline>(DistortionMode::Particle);
+    pipelines_[static_cast<size_t>(PipelineType::Primitive)]          = std::make_unique<PrimitivePipeline>();
 
     // 全パイプラインを作成・初期化
     for (size_t i = 0; i < static_cast<size_t>(PipelineType::Count); ++i) {

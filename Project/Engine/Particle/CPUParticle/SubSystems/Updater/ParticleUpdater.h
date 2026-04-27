@@ -16,6 +16,7 @@ public:
 
 private:
     void UpdateDissolvePlayer(ParticleManager::ParticleGroup& group);
+    void UpdateAngleEasing(ParticleManager::ParticleGroup& group);
 };
 
 } // namespace KetaEngine

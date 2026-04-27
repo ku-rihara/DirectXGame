@@ -64,6 +64,11 @@ template<typename T> T EaseAmplitudeScale(const T& initScale, float easeT, float
 		newScale.x = initScale.x + -EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
 		newScale.y = initScale.y + EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
 		newScale.z = initScale.z + -EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
+	} else if constexpr (std::is_same<T, Vector4>::value) {
+		newScale.x = initScale.x + -EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
+		newScale.y = initScale.y + EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
+		newScale.z = initScale.z + -EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
+		newScale.w = initScale.w;
 	}
 
 	return newScale;
@@ -338,110 +343,137 @@ template<typename T> T EaseInOutBounce(const T& start, const T& end, float x, fl
 	return Lerp(start, end, easeT);
 }
 
+template Vector4 EaseAmplitudeScale<Vector4>(const Vector4& initScale, float easeT, float easeTime, float amplitude, float period);
 template Vector3 EaseAmplitudeScale<Vector3>(const Vector3& initScale, float easeT, float easeTime, float amplitude, float period);
 template Vector2 EaseAmplitudeScale<Vector2>(const Vector2& initScale, float easeT, float easeTime, float amplitude, float period);
 template float EaseAmplitudeScale<float>(const float& initScale, float easeT, float easeTime, float amplitude, float period);
 
+template Vector4 EaseInSine<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInSine<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInSine<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInSine<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseOutSine<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseOutSine<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseOutSine<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseOutSine<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseInOutSine<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInOutSine<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInOutSine<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInOutSine<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseInQuint<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInQuint<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInQuint<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInQuint<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseOutQuint<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseOutQuint<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseOutQuint<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseOutQuint<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseInOutQuint<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInOutQuint<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInOutQuint<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInOutQuint<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseInCirc<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInCirc<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInCirc<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInCirc<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseOutCirc<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseOutCirc<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseOutCirc<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseOutCirc<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseInOutCirc<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInOutCirc<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInOutCirc<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInOutCirc<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseInExpo<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInExpo<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInExpo<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInExpo<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseOutExpo<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseOutExpo<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseOutExpo<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseOutExpo<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseInOutExpo<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInOutExpo<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInOutExpo<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInOutExpo<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseOutCubic<Vector4>(const Vector4& start, const Vector4& end, float x, float totalx);
 template Vector3 EaseOutCubic<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
 template Vector2 EaseOutCubic<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
 template float EaseOutCubic<float>(const float& start, const float& end, float x, float totalx);
 
+template Vector4 EaseInCubic<Vector4>(const Vector4& start, const Vector4& end, float x, float totalx);
 template Vector3 EaseInCubic<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
 template Vector2 EaseInCubic<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
 template float EaseInCubic<float>(const float& start, const float& end, float x, float totalx);
 
+template Vector4 EaseInOutCubic<Vector4>(const Vector4& start, const Vector4& end, float x, float totalx);
 template Vector3 EaseInOutCubic<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
 template Vector2 EaseInOutCubic<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
 template float EaseInOutCubic<float>(const float& start, const float& end, float x, float totalx);
 
+template Vector4 EaseInQuad<Vector4>(const Vector4& start, const Vector4& end, float x, float totalx);
 template Vector3 EaseInQuad<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
 template Vector2 EaseInQuad<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
 template float EaseInQuad<float>(const float& start, const float& end, float x, float totalx);
 
+template Vector4 EaseOutQuad<Vector4>(const Vector4& start, const Vector4& end, float x, float totalx);
 template Vector3 EaseOutQuad<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
 template Vector2 EaseOutQuad<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
 template float EaseOutQuad<float>(const float& start, const float& end, float x, float totalx);
 
+template Vector4 EaseInOutQuad<Vector4>(const Vector4& start, const Vector4& end, float x, float totalx);
 template Vector3 EaseInOutQuad<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
 template Vector2 EaseInOutQuad<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
 template float EaseInOutQuad<float>(const float& start, const float& end, float x, float totalx);
 
+template Vector4 EaseInQuart<Vector4>(const Vector4& start, const Vector4& end, float x, float totalx);
 template Vector3 EaseInQuart<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
 template Vector2 EaseInQuart<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
 template float EaseInQuart<float>(const float& start, const float& end, float x, float totalx);
 
+template Vector4 EaseOutQuart<Vector4>(const Vector4& start, const Vector4& end, float x, float totalx);
 template Vector3 EaseOutQuart<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
 template Vector2 EaseOutQuart<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
 template float EaseOutQuart<float>(const float& start, const float& end, float x, float totalx);
 
+template Vector4 EaseInBounce<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInBounce<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInBounce<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInBounce<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseOutBounce<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseOutBounce<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseOutBounce<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseOutBounce<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseInOutBounce<Vector4>(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInOutBounce<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInOutBounce<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInOutBounce<float>(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseInBack(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInBack(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInBack(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInBack(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseOutBack(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseOutBack(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseOutBack(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseOutBack(const float& start, const float& end, float x, float totalX);
 
+template Vector4 EaseInOutBack(const Vector4& start, const Vector4& end, float x, float totalX);
 template Vector3 EaseInOutBack(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInOutBack(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInOutBack(const float& start, const float& end, float x, float totalX);

@@ -290,6 +290,30 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
     }
 
     ///------------------------------------------------------------------------
+    ///  カラー+アルファ(RGBA)イージング設定
+    ///------------------------------------------------------------------------
+    if (parameters.colorAlphaEaseParam.baseParam.isEase) {
+        particle.colorAlphaEasing        = std::make_unique<Easing<Vector4>>();
+        particle.isAdaptColorAlphaEasing = true;
+
+        Vector4 endColorAlpha = {
+            Random::Range(parameters.colorAlphaEaseParam.endValue.min.x, parameters.colorAlphaEaseParam.endValue.max.x),
+            Random::Range(parameters.colorAlphaEaseParam.endValue.min.y, parameters.colorAlphaEaseParam.endValue.max.y),
+            Random::Range(parameters.colorAlphaEaseParam.endValue.min.z, parameters.colorAlphaEaseParam.endValue.max.z),
+            Random::Range(parameters.colorAlphaEaseParam.endValue.min.w, parameters.colorAlphaEaseParam.endValue.max.w)};
+
+        EasingParameter<Vector4> easingParam;
+        easingParam.type       = static_cast<EasingType>(parameters.colorAlphaEaseParam.baseParam.easeTypeInt);
+        easingParam.startValue = particle.color_;
+        easingParam.endValue   = endColorAlpha;
+        easingParam.maxTime    = parameters.colorAlphaEaseParam.baseParam.maxTime;
+        easingParam.finishType = EasingFinishValueType::End;
+
+        particle.colorAlphaEasing->SettingValue(easingParam);
+        particle.colorAlphaEasing->SetAdaptValue(&particle.color_);
+    }
+
+    ///------------------------------------------------------------------------
     ///  アルファモード・イージング設定
     ///------------------------------------------------------------------------
     particle.alphaMode = parameters.alphaMode;

@@ -106,6 +106,9 @@ public:
         bool isAdaptColorEasing = false;
         std::unique_ptr<Easing<Vector3>> colorEasing;
 
+        bool isAdaptColorAlphaEasing = false;
+        std::unique_ptr<Easing<Vector4>> colorAlphaEasing;
+
         ParticleCommon::AlphaMode alphaMode = ParticleCommon::AlphaMode::LifeTime;
         bool isAdaptAlphaEasing = false;
         std::unique_ptr<Easing<float>> alphaEasing;
@@ -151,6 +154,12 @@ public:
         std::unique_ptr<DissolvePlayer> dissolvePlayer;
         std::string lastDissolveTexturePath;
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
+
+        // 角度イージング（グループレベル）
+        bool isAdaptAngleEasing = false;
+        bool angleEaseStarted   = false;
+        float endAngleEaseValue = 360.0f;
+        std::unique_ptr<Easing<float>> endAngleEasing;
     };
 
 public:
@@ -207,6 +216,9 @@ public:
     void SetDistortionTextureHandle(const std::string& name, uint32_t handle); // 歪みテクスチャ設定
     void PlayDissolve(const std::string& name, const std::string& dissolveName);
     void StopDissolve(const std::string& name);
+    void PlayAngleEase(const std::string& name, float matStartAngle01, float fromDeg, float toDeg, float maxTime, int32_t easeType = 0);
+    void StopAngleEase(const std::string& name);
+    void ResetAngleEase(const std::string& name);
     void SetAllParticleFile();
 };
 

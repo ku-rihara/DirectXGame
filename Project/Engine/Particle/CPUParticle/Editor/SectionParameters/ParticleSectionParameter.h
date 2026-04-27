@@ -128,16 +128,21 @@ private:
     // Cylinderパラメータ
     KetaEngine::PrimitiveCylinder::CylinderParams cylinderParams_;
 
+    // 角度マテリアルイージング
+    ParticleCommon::AngleEaseParam angleEaseParam_;
+    float angleEaseStartDeg_ = 0.0f;
+
     // コールバック
     std::function<void()> onTextureChanged_;
     std::function<void(PrimitiveType)> onPrimitiveChanged_;
     std::function<void(const KetaEngine::PrimitiveCylinder::CylinderParams&)> onCylinderParamsChanged_;
+    std::function<void(float startDeg, float endDeg)> onCylEndAngleMaterialChanged_;
 
 public:
     // Getter
     const TimingParam& GetTimingParam() const { return timingParam_; }
     const TimeModeSelector& GetTimeModeSelector() const { return timeModeSelector_; }
-    const GroupParameters& GetGroupParameters() const { return groupParameters_; }
+    GroupParameters GetGroupParameters() const;
     const Parameters& GetParticleParameters() const { return parameters_; }
     float GetIntervalTime() const { return intervalTime_; }
     int32_t GetParticleCount() const { return particleCount_; }
@@ -172,7 +177,12 @@ public:
     void SetCylinderParamsChangedCallback(std::function<void(const KetaEngine::PrimitiveCylinder::CylinderParams&)> callback) {
         onCylinderParamsChanged_ = std::move(callback);
     }
+    void SetCylEndAngleMaterialChangedCallback(std::function<void(float startDeg, float endDeg)> cb) {
+        onCylEndAngleMaterialChanged_ = std::move(cb);
+    }
     const KetaEngine::PrimitiveCylinder::CylinderParams& GetCylinderParams() const { return cylinderParams_; }
+    const ParticleCommon::AngleEaseParam& GetAngleEaseParam() const { return angleEaseParam_; }
+    float GetAngleEaseStartDeg() const { return angleEaseStartDeg_; }
 };
 
 } // namespace KetaEngine

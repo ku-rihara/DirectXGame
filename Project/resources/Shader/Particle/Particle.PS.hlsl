@@ -10,7 +10,8 @@ struct Material
     float4 color;
     int enableLighting;
     float emissiveIntensity;
-    float2 padding;
+    float startAngle;
+    float endAngle;
     float4x4 uvTransform;
     float shininess;
     float environmentCoefficient;
@@ -18,6 +19,8 @@ struct Material
     float dissolveEdgeWidth;
     float3 dissolveEdgeColor;
     int enableDissolve;
+    int enableAngleClip;
+    float3 padding2;
 };
 
 ConstantBuffer<Material> gMaterial : register(b0);
@@ -34,6 +37,16 @@ PixelShaderOutput main(VertexShaderOutput input)
     PixelShaderOutput output;
     float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
+
+    // 角度クリップ: texcoord.x が正規化角度 (0-1)
+    if (gMaterial.enableAngleClip != 0)
+    {
+        float angle = input.texcoord.x;
+        if (angle < gMaterial.startAngle || angle > gMaterial.endAngle)
+        {
+            discard;
+        }
+    }
 
     output.color = gMaterial.color * textureColor * input.color;
     output.color.rgb *= gMaterial.emissiveIntensity;

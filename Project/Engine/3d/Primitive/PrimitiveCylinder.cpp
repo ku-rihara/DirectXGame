@@ -3,6 +3,7 @@
 using namespace KetaEngine;
 #include "3d/Mesh.h"
 #include "Base/Dx/DirectXCommon.h"
+#include "MathFunction.h"
 #include <numbers>
 #include <vector>
 
@@ -12,10 +13,24 @@ void PrimitiveCylinder::Init() {
 }
 
 void PrimitiveCylinder::Rebuild() {
-    vertexNum_ = params_.divisions * params_.heightDivisions * kVerticesPerFace;
-    mesh_      = std::make_unique<Mesh>();
-    mesh_->Init(DirectXCommon::GetInstance(), vertexNum_);
+    RebuildInternal(params_.divisions * params_.heightDivisions * kVerticesPerFace);
     Create();
+}
+
+void PrimitiveCylinder::SetAngleClipRange(float startDeg, float endDeg) {
+    material_.SetAngleClipRange(startDeg, endDeg);
+}
+
+void PrimitiveCylinder::DisableAngleClip() {
+    material_.DisableAngleClip();
+}
+
+void PrimitiveCylinder::EnableAngleClip() {
+    // フル360°でリビルドし、以降は角度変更をシェーダー側のみで処理
+    params_.startAngleDeg = 0.0f;
+    params_.endAngleDeg   = 360.0f;
+    Rebuild();
+    material_.GetMaterialData()->enableAngleClip = 1;
 }
 
 /// 軸に応じて (円周X, 円周Y, 高さ方向) を座標に変換する
@@ -40,16 +55,16 @@ void PrimitiveCylinder::Create() {
     for (int32_t j = 0; j < params_.heightDivisions; ++j) {
         float tTop = float(j)     * hStep;
         float tBot = float(j + 1) * hStep;
-        float yTop = params_.height * (1.0f - tTop);
-        float yBot = params_.height * (1.0f - tBot);
+        float yTop = params_.height * (0.5f - tTop);
+        float yBot = params_.height * (0.5f - tBot);
 
         float rxTop = params_.topRadiusX + (params_.bottomRadiusX - params_.topRadiusX) * tTop;
         float rzTop = params_.topRadiusZ + (params_.bottomRadiusZ - params_.topRadiusZ) * tTop;
         float rxBot = params_.topRadiusX + (params_.bottomRadiusX - params_.topRadiusX) * tBot;
         float rzBot = params_.topRadiusZ + (params_.bottomRadiusZ - params_.topRadiusZ) * tBot;
 
-        Vector4 colorTop = LerpColor(params_.topColor, params_.bottomColor, tTop);
-        Vector4 colorBot = LerpColor(params_.topColor, params_.bottomColor, tBot);
+        Vector4 colorTop = Lerp(params_.topColor, params_.bottomColor, tTop);
+        Vector4 colorBot = Lerp(params_.topColor, params_.bottomColor, tBot);
 
         for (int32_t i = 0; i < params_.divisions; ++i) {
             float angle0 = startRad + float(i)     * angleStep;
@@ -102,13 +117,6 @@ void PrimitiveCylinder::Create() {
     mesh_->SetIndexData(indices.data(), static_cast<uint32_t>(indices.size()));
 }
 
-Vector4 PrimitiveCylinder::LerpColor(const Vector4& a, const Vector4& b, float t) {
-    return Vector4(
-        a.x + (b.x - a.x) * t,
-        a.y + (b.y - a.y) * t,
-        a.z + (b.z - a.z) * t,
-        a.w + (b.w - a.w) * t);
-}
 
 Vector2 PrimitiveCylinder::GetUV(float u, float v) const {
     switch (params_.uvModeInt) {
@@ -118,10 +126,3 @@ Vector2 PrimitiveCylinder::GetUV(float u, float v) const {
     }
 }
 
-void PrimitiveCylinder::SetTexture(const std::string& name) {
-    IPrimitive::SetTexture(name);
-}
-
-void PrimitiveCylinder::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-    IPrimitive::Draw(worldTransform, viewProjection, textureHandle);
-}

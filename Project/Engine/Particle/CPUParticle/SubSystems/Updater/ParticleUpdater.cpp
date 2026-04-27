@@ -28,6 +28,14 @@ void ParticleUpdater::UpdateDissolvePlayer(ParticleManager::ParticleGroup& group
     }
 }
 
+void ParticleUpdater::UpdateAngleEasing(ParticleManager::ParticleGroup& group) {
+    if (!group.isAdaptAngleEasing || !group.endAngleEasing) {
+        return;
+    }
+    group.endAngleEasing->Update(Frame::DeltaTimeRate());
+    group.material.GetMaterialData()->endAngle = group.endAngleEaseValue / 360.0f;
+}
+
 void ParticleUpdater::UpdateGroup(
     ParticleManager::ParticleGroup& group,
     const ParticleManager::AccelerationField& field,
@@ -37,6 +45,11 @@ void ParticleUpdater::UpdateGroup(
     /// Dissolveプレイヤー更新 (グループレベル)
     ///------------------------------------------------------------------------
     UpdateDissolvePlayer(group);
+
+    ///------------------------------------------------------------------------
+    /// 角度イージング更新 (グループレベル)
+    ///------------------------------------------------------------------------
+    UpdateAngleEasing(group);
 
     std::list<ParticleManager::Particle>& particles = group.particles;
 
@@ -69,6 +82,13 @@ void ParticleUpdater::UpdateGroup(
         ///------------------------------------------------------------------------
         if (it->isAdaptColorEasing) {
             it->colorEasing->Update(Frame::DeltaTimeRate());
+        }
+
+        ///------------------------------------------------------------------------
+        /// カラー+アルファ(RGBA)イージング更新
+        ///------------------------------------------------------------------------
+        if (it->isAdaptColorAlphaEasing) {
+            it->colorAlphaEasing->Update(Frame::DeltaTimeRate());
         }
 
         ///------------------------------------------------------------------------
