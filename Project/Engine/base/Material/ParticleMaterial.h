@@ -44,8 +44,7 @@ private:
         Vector4 color;
         int32_t enableLighting;
         float emissiveIntensity = 1.0f;
-        float startAngle        = 0.0f; ///< 角度クリップ開始 (0-1)
-        float endAngle          = 1.0f; ///< 角度クリップ終了 (0-1)
+        float padding[2];
         Matrix4x4 uvMatrix;
         float shininess;
         float environmentCoefficient;
@@ -53,8 +52,6 @@ private:
         float dissolveEdgeWidth;
         Vector3 dissolveEdgeColor;
         int32_t enableDissolve;
-        int32_t enableAngleClip = 0;
-        float   padding2[3]     = {};
     };
 
 private:

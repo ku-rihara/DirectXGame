@@ -27,10 +27,6 @@ public:
     const RingParams& GetParams() const { return params_; }
     void Rebuild();
 
-    /// 角度範囲を設定
-    void SetAngleClipRange(float startDeg, float endDeg);
-    void DisableAngleClip();
-
 private:
     RingParams params_;
 };

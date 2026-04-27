@@ -75,7 +75,6 @@ public:
 
     void SetColor(const Vector4& color);
     PrimitiveMaterial& GetMaterial() { return material_; }
-    virtual void EnableAngleClip() {}
 };
 
 }; // KetaEngine

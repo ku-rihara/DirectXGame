@@ -42,12 +42,6 @@ public:
     const CylinderParams& GetParams() const { return params_; }
     void Rebuild();
 
-    /// 角度クリップモードを有効化
-    void EnableAngleClip();
-    /// 角度範囲を設定
-    void SetAngleClipRange(float startDeg, float endDeg);
-    void DisableAngleClip();
-
 private:
     Vector2 GetUV(float u, float v) const;
     Vector4 ApplyAxis(float circX, float circY, float h) const;

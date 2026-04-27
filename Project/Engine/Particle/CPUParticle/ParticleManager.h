@@ -141,13 +141,13 @@ public:
         Model* model                           = nullptr;
         std::unique_ptr<IPrimitive> primitive_ = nullptr;
         ParticleMaterial material;
-        uint32_t instanceNum;
-        uint32_t srvIndex;
-        uint32_t currentNum;
-        uint32_t textureHandle;
-        uint32_t dissolveTextureHandle    = 0;
-        uint32_t distortionTextureHandle  = 0; // 歪みノイズテクスチャ
-        ParticleFprGPU* instancingData;
+        uint32_t instanceNum                  = 0;
+        uint32_t srvIndex                     = 0;
+        uint32_t currentNum                   = 0;
+        uint32_t textureHandle                = 0;
+        uint32_t dissolveTextureHandle        = 0;
+        uint32_t distortionTextureHandle      = 0; // 歪みノイズテクスチャ
+        ParticleFprGPU* instancingData        = nullptr;
         std::list<Particle> particles;
         GroupParameters param;
         DissolveGroupParams dissolveParams;
@@ -155,11 +155,6 @@ public:
         std::string lastDissolveTexturePath;
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
 
-        // 角度イージング（グループレベル）
-        bool isAdaptAngleEasing = false;
-        bool angleEaseStarted   = false;
-        float endAngleEaseValue = 360.0f;
-        std::unique_ptr<Easing<float>> endAngleEasing;
     };
 
 public:
@@ -176,6 +171,8 @@ public:
     void UpdateUV(UVInfo& uvInfo, float deltaTime);
     void CreateParticleGroup(const std::string name, const std::string modelFilePath, uint32_t maxnum);
     void CreatePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum);
+    void ReplacePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum);
+    void ReplaceModelParticle(const std::string& name, const std::string& modelFilePath, uint32_t maxnum);
     void SetModel(const std::string& name, const std::string& modelName);
     void CreateMaterialResource(const std::string& name);
     void CreateInstancingResource(const std::string& name, uint32_t instanceNum);
@@ -216,9 +213,6 @@ public:
     void SetDistortionTextureHandle(const std::string& name, uint32_t handle); // 歪みテクスチャ設定
     void PlayDissolve(const std::string& name, const std::string& dissolveName);
     void StopDissolve(const std::string& name);
-    void PlayAngleEase(const std::string& name, float matStartAngle01, float fromDeg, float toDeg, float maxTime, int32_t easeType = 0);
-    void StopAngleEase(const std::string& name);
-    void ResetAngleEase(const std::string& name);
     void SetAllParticleFile();
 };
 

@@ -26,9 +26,6 @@ void ParticleMaterial::Init(DirectXCommon* dxCommon) {
     materialData_->dissolveEdgeWidth      = 0.03f;
     materialData_->dissolveEdgeColor      = Vector3(1.0f, 0.5f, 0.0f);
     materialData_->enableDissolve         = 0;
-    materialData_->enableAngleClip        = 0;
-    materialData_->startAngle             = 0.0f;
-    materialData_->endAngle               = 1.0f;
 }
 
 void ParticleMaterial::UpdateMaterialData(const Vector4& Color) {

@@ -17,21 +17,6 @@ void PrimitiveCylinder::Rebuild() {
     Create();
 }
 
-void PrimitiveCylinder::SetAngleClipRange(float startDeg, float endDeg) {
-    material_.SetAngleClipRange(startDeg, endDeg);
-}
-
-void PrimitiveCylinder::DisableAngleClip() {
-    material_.DisableAngleClip();
-}
-
-void PrimitiveCylinder::EnableAngleClip() {
-    // フル360°でリビルドし、以降は角度変更をシェーダー側のみで処理
-    params_.startAngleDeg = 0.0f;
-    params_.endAngleDeg   = 360.0f;
-    Rebuild();
-    material_.GetMaterialData()->enableAngleClip = 1;
-}
 
 /// 軸に応じて (円周X, 円周Y, 高さ方向) を座標に変換する
 Vector4 PrimitiveCylinder::ApplyAxis(float circX, float circY, float h) const {
@@ -55,8 +40,8 @@ void PrimitiveCylinder::Create() {
     for (int32_t j = 0; j < params_.heightDivisions; ++j) {
         float tTop = float(j)     * hStep;
         float tBot = float(j + 1) * hStep;
-        float yTop = params_.height * (0.5f - tTop);
-        float yBot = params_.height * (0.5f - tBot);
+        float yTop = params_.height * (1.0f - tTop);
+        float yBot = params_.height * (1.0f - tBot);
 
         float rxTop = params_.topRadiusX + (params_.bottomRadiusX - params_.topRadiusX) * tTop;
         float rzTop = params_.topRadiusZ + (params_.bottomRadiusZ - params_.topRadiusZ) * tTop;

@@ -60,10 +60,3 @@ void PrimitiveRing::Create() {
     mesh_->SetIndexData(indices.data(), static_cast<uint32_t>(indices.size()));
 }
 
-void PrimitiveRing::SetAngleClipRange(float startDeg, float endDeg) {
-    material_.SetAngleClipRange(startDeg, endDeg);
-}
-
-void PrimitiveRing::DisableAngleClip() {
-    material_.DisableAngleClip();
-}
