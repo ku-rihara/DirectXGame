@@ -3,6 +3,7 @@
 // timeline
 #include "PlayerComboAttackTimelineData.h"
 #include "PlayerComboAttackTimelineParameterApplier.h"
+#include "PlayerComboAttackTimelinePhase.h"
 #include "PlayerComboAttackTimelineTrackBuilder.h"
 #include "PlayerComboAttackTimelineUI.h"
 // utility
@@ -20,7 +21,7 @@ public:
     PlayerComboAttackTimeline()  = default;
     ~PlayerComboAttackTimeline() = default;
 
-    void Init(PlayerComboAttackData* attackData);
+    void Init(PlayerComboAttackData* attackData, AttackTimelinePhase phase = AttackTimelinePhase::MAIN);
     void Update(float deltaTime);
     void Draw();
     void ApplyToParameters();
@@ -32,6 +33,7 @@ private:
 
 private:
     PlayerComboAttackData* attackData_ = nullptr;
+    AttackTimelinePhase phase_         = AttackTimelinePhase::MAIN;
     KetaEngine::TimelineDrawer timeline_;
 
     // 各責務を持つクラス

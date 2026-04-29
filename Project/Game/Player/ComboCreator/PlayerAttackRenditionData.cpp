@@ -3,24 +3,24 @@
 #include <cassert>
 #include <imgui.h>
 
-void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName) {
+void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName, const std::string& prefix) {
     groupName_ = groupName;
 
     // 通常演出パラメータの登録
     for (const auto& info : kRenditionTypeInfos) {
         auto& param = renditionParams_[static_cast<size_t>(info.type)].first;
 
-        globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
-        globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
+        globalParam->Regist(groupName, prefix + std::string(info.name) + "_FileName", &param.fileName);
+        globalParam->Regist(groupName, prefix + std::string(info.name) + "_StartTiming", &param.startTiming);
 
         // CameraActionの場合のみisCameraResetを登録
         if (info.type == Type::CameraAction) {
-            globalParam->Regist(groupName, std::string(info.name) + "_IsCameraReset", &param.isCameraReset);
+            globalParam->Regist(groupName, prefix + std::string(info.name) + "_IsCameraReset", &param.isCameraReset);
         }
 
         // オーディオの場合のみvolumeを登録
         if (info.type == Type::AudioAttack || info.type == Type::AudioHit) {
-            globalParam->Regist(groupName, std::string(info.name) + "_Volume", &param.volume);
+            globalParam->Regist(groupName, prefix + std::string(info.name) + "_Volume", &param.volume);
         }
     }
 
@@ -28,18 +28,18 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
     for (const auto& info : kRenditionTypeInfos) {
         auto& param = renditionParamsOnHit_[static_cast<size_t>(info.type)].first;
 
-        globalParam->Regist(groupName, std::string(info.name) + "_OnHit_FileName", &param.fileName);
-        globalParam->Regist(groupName, std::string(info.name) + "_OnHit_StartTiming", &param.startTiming);
+        globalParam->Regist(groupName, prefix + std::string(info.name) + "_OnHit_FileName", &param.fileName);
+        globalParam->Regist(groupName, prefix + std::string(info.name) + "_OnHit_StartTiming", &param.startTiming);
 
         // CameraActionの場合のみisCameraResetを登録
         if (info.type == Type::CameraAction) {
-            globalParam->Regist(groupName, std::string(info.name) + "_OnHit_IsCameraReset", &param.isCameraReset);
+            globalParam->Regist(groupName, prefix + std::string(info.name) + "_OnHit_IsCameraReset", &param.isCameraReset);
         }
 
         // オーディオの場合のみvolumeとrepeatOnDamageを登録
         if (info.type == Type::AudioAttack || info.type == Type::AudioHit) {
-            globalParam->Regist(groupName, std::string(info.name) + "_OnHit_Volume", &param.volume);
-            globalParam->Regist(groupName, std::string(info.name) + "_OnHit_RepeatOnDamage", &param.repeatOnDamage);
+            globalParam->Regist(groupName, prefix + std::string(info.name) + "_OnHit_Volume", &param.volume);
+            globalParam->Regist(groupName, prefix + std::string(info.name) + "_OnHit_RepeatOnDamage", &param.repeatOnDamage);
         }
     }
 
@@ -47,42 +47,42 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
     for (const auto& info : kObjAnimationTypeInfos) {
         auto& param = objAnimationParams_[static_cast<size_t>(info.type)].first;
 
-        globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
-        globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
+        globalParam->Regist(groupName, prefix + std::string(info.name) + "_FileName", &param.fileName);
+        globalParam->Regist(groupName, prefix + std::string(info.name) + "_StartTiming", &param.startTiming);
 
         // 右手・左手・メイン頭のトレイルファイル名を登録
         if (info.type == ObjAnimationType::RightHand || info.type == ObjAnimationType::LeftHand || info.type == ObjAnimationType::MainHead) {
-            globalParam->Regist(groupName, std::string(info.name) + "_TrailFileName", &param.trailFileName);
+            globalParam->Regist(groupName, prefix + std::string(info.name) + "_TrailFileName", &param.trailFileName);
         }
     }
 
     // 振動パラメータの登録
-    globalParam->Regist(groupName, "Vibration_StartTiming",   &vibrationParam_.startTiming);
-    globalParam->Regist(groupName, "Vibration_Duration",      &vibrationParam_.duration);
-    globalParam->Regist(groupName, "Vibration_Intensity",     &vibrationParam_.intensity);
-    globalParam->Regist(groupName, "Vibration_TriggerByHit",  &vibrationParam_.triggerByHit);
-    globalParam->Regist(groupName, "Vibration_RepeatOnDamage",&vibrationParam_.repeatOnDamage);
+    globalParam->Regist(groupName, prefix + "Vibration_StartTiming",    &vibrationParam_.startTiming);
+    globalParam->Regist(groupName, prefix + "Vibration_Duration",       &vibrationParam_.duration);
+    globalParam->Regist(groupName, prefix + "Vibration_Intensity",      &vibrationParam_.intensity);
+    globalParam->Regist(groupName, prefix + "Vibration_TriggerByHit",   &vibrationParam_.triggerByHit);
+    globalParam->Regist(groupName, prefix + "Vibration_RepeatOnDamage", &vibrationParam_.repeatOnDamage);
 
     // ポストエフェクトスロット
-    globalParam->Regist(groupName, "PostEffect_Count", &postEffectCount_);
-    globalParam->Regist(groupName, "PostEffect_OnHit_Count", &postEffectOnHitCount_);
+    globalParam->Regist(groupName, prefix + "PostEffect_Count", &postEffectCount_);
+    globalParam->Regist(groupName, prefix + "PostEffect_OnHit_Count", &postEffectOnHitCount_);
     for (int32_t i = 0; i < kMaxEffectSlots; ++i) {
         std::string suffix = "_" + std::to_string(i);
-        globalParam->Regist(groupName, "PostEffect_Slot" + suffix + "_FileName",     &postEffectSlots_[i].fileName);
-        globalParam->Regist(groupName, "PostEffect_Slot" + suffix + "_StartTiming",  &postEffectSlots_[i].startTiming);
-        globalParam->Regist(groupName, "PostEffect_OnHit_Slot" + suffix + "_FileName",    &postEffectOnHitSlots_[i].fileName);
-        globalParam->Regist(groupName, "PostEffect_OnHit_Slot" + suffix + "_StartTiming", &postEffectOnHitSlots_[i].startTiming);
+        globalParam->Regist(groupName, prefix + "PostEffect_Slot" + suffix + "_FileName",          &postEffectSlots_[i].fileName);
+        globalParam->Regist(groupName, prefix + "PostEffect_Slot" + suffix + "_StartTiming",       &postEffectSlots_[i].startTiming);
+        globalParam->Regist(groupName, prefix + "PostEffect_OnHit_Slot" + suffix + "_FileName",    &postEffectOnHitSlots_[i].fileName);
+        globalParam->Regist(groupName, prefix + "PostEffect_OnHit_Slot" + suffix + "_StartTiming", &postEffectOnHitSlots_[i].startTiming);
     }
 
     // パーティクルエフェクトスロット
-    globalParam->Regist(groupName, "ParticleEffect_Count", &particleEffectCount_);
-    globalParam->Regist(groupName, "ParticleEffect_OnHit_Count", &particleEffectOnHitCount_);
+    globalParam->Regist(groupName, prefix + "ParticleEffect_Count", &particleEffectCount_);
+    globalParam->Regist(groupName, prefix + "ParticleEffect_OnHit_Count", &particleEffectOnHitCount_);
     for (int32_t i = 0; i < kMaxEffectSlots; ++i) {
         std::string suffix = "_" + std::to_string(i);
-        globalParam->Regist(groupName, "ParticleEffect_Slot" + suffix + "_FileName",    &particleEffectSlots_[i].fileName);
-        globalParam->Regist(groupName, "ParticleEffect_Slot" + suffix + "_StartTiming", &particleEffectSlots_[i].startTiming);
-        globalParam->Regist(groupName, "ParticleEffect_OnHit_Slot" + suffix + "_FileName",    &particleEffectOnHitSlots_[i].fileName);
-        globalParam->Regist(groupName, "ParticleEffect_OnHit_Slot" + suffix + "_StartTiming", &particleEffectOnHitSlots_[i].startTiming);
+        globalParam->Regist(groupName, prefix + "ParticleEffect_Slot" + suffix + "_FileName",          &particleEffectSlots_[i].fileName);
+        globalParam->Regist(groupName, prefix + "ParticleEffect_Slot" + suffix + "_StartTiming",       &particleEffectSlots_[i].startTiming);
+        globalParam->Regist(groupName, prefix + "ParticleEffect_OnHit_Slot" + suffix + "_FileName",    &particleEffectOnHitSlots_[i].fileName);
+        globalParam->Regist(groupName, prefix + "ParticleEffect_OnHit_Slot" + suffix + "_StartTiming", &particleEffectOnHitSlots_[i].startTiming);
     }
 }
 

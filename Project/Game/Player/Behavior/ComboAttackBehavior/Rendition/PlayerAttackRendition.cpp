@@ -8,9 +8,10 @@
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
 
-void PlayerAttackRendition::Init(Player* player, PlayerComboAttackData* playerComboAttackData) {
+void PlayerAttackRendition::Init(Player* player, PlayerComboAttackData* playerComboAttackData, AttackTimelinePhase phase) {
     pPlayer_               = player;
     playerComboAttackData_ = playerComboAttackData;
+    phase_                 = phase;
     Reset();
 }
 
@@ -56,7 +57,7 @@ void PlayerAttackRendition::Update(float deltaTime) {
 
     currentTime_ += deltaTime;
 
-    auto& renditionData = playerComboAttackData_->GetRenditionData();
+    auto& renditionData = playerComboAttackData_->GetRenditionDataForPhase(phase_);
     bool hasHit         = pPlayer_->GetPlayerCollisionInfo()->GetIsHit();
 
     // ダメージヒット検出

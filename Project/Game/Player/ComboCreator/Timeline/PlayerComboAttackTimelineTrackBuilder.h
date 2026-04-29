@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PlayerComboAttackTimelineData.h"
+#include "PlayerComboAttackTimelinePhase.h"
 #include "utility/TimeLine/TimelineDrawer.h"
 #include <string>
 
@@ -16,7 +17,8 @@ public:
 
     void Init(PlayerComboAttackData* attackData,
         KetaEngine::TimelineDrawer* timeline,
-        PlayerComboAttackTimelineData* data);
+        PlayerComboAttackTimelineData* data,
+        AttackTimelinePhase phase = AttackTimelinePhase::MAIN);
 
     // トラックセットアップ
     void SetupDefaultTracks();
@@ -45,4 +47,5 @@ private:
     PlayerComboAttackData* attackData_          = nullptr;
     KetaEngine::TimelineDrawer* timelineDrawer_ = nullptr;
     PlayerComboAttackTimelineData* data_        = nullptr;
+    AttackTimelinePhase phase_                  = AttackTimelinePhase::MAIN;
 };

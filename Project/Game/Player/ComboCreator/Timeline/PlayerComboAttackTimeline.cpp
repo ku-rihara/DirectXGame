@@ -4,21 +4,21 @@
 #include "Player/Player.h"
 #include <imgui.h>
 
-void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData) {
+void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData, AttackTimelinePhase phase) {
     attackData_ = attackData;
+    phase_      = phase;
 
     if (!attackData_) {
         return;
     }
 
-
     timeline_.Init("AttackTimeline");
 
     // 各クラスの初期化
     timelineData_.Init();
-    trackBuilder_.Init(attackData_, &timeline_, &timelineData_);
-    parameterApplier_.Init(attackData_, &timeline_, &timelineData_);
-    ui_.Init(attackData_, &timeline_, &timelineData_, &trackBuilder_);
+    trackBuilder_.Init(attackData_, &timeline_, &timelineData_, phase_);
+    parameterApplier_.Init(attackData_, &timeline_, &timelineData_, phase_);
+    ui_.Init(attackData_, &timeline_, &timelineData_, &trackBuilder_, phase_);
 
     // トラックのセットアップ
     trackBuilder_.SetupDefaultTracks();

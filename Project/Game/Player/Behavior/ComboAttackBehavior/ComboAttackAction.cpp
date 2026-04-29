@@ -73,14 +73,30 @@ void ComboAttackAction::Init() {
     }
 
     attackRendition_ = std::make_unique<PlayerAttackRendition>();
-    attackRendition_->Init(pOwner_, attackData_);
+    attackRendition_->Init(pOwner_, attackData_, AttackTimelinePhase::MAIN);
+
+    prepRendition_.reset();
+    finishRendition_.reset();
+
+    if (attackData_->HasPrepPhase()) {
+        prepRendition_ = std::make_unique<PlayerAttackRendition>();
+        prepRendition_->Init(pOwner_, attackData_, AttackTimelinePhase::PREPARATION);
+    }
+    if (attackData_->HasFinishPhase()) {
+        finishRendition_ = std::make_unique<PlayerAttackRendition>();
+        finishRendition_->Init(pOwner_, attackData_, AttackTimelinePhase::FINISH);
+    }
 
     // アニメーションを止めてから移動イージングを設定する
     pOwner_->GetPlayerAnimator().StopMoveAnimation();
 
-    SetMoveEasing();
+    if (attackData_->HasPrepPhase()) {
+        SetPrepMoveEasing();
+    } else {
+        SetMoveEasing();
+    }
 
-    order_ = Order::INIT;
+    SetOrder(Order::INIT);
 
     // 攻撃開始を通知
     pOwner_->FireAutoComboAttackCallback(attackData_->GetGroupName());
@@ -95,31 +111,47 @@ void ComboAttackAction::Update(float atkSpeed) {
 
     currentFrame_ += atkSpeed;
 
-    switch (order_) {
+    if (orderFunc_) {
+        orderFunc_(atkSpeed);
+    }
+}
 
-        // 攻撃初期化
-    case Order::INIT:
-        InitializeAttack();
-        break;
-
-        // 攻撃更新
-    case Order::ATTACK:
-        UpdateAttack(atkSpeed);
-        break;
-
-    case Order::WAIT:
-        UpdateWait(atkSpeed);
-        break;
-
-    case Order::CHANGE:
-        ChangeNextAttack();
-        break;
+void ComboAttackAction::SetOrder(Order order) {
+    order_ = order;
+    switch (order) {
+    case Order::INIT:          orderFunc_ = [this](float)  { InitializeAttack(); };    break;
+    case Order::PREP_ATTACK:   orderFunc_ = [this](float speed){ UpdatePrepAttack(speed); };   break;
+    case Order::ATTACK:        orderFunc_ = [this](float speed){ UpdateAttack(speed); };        break;
+    case Order::FINISH_ATTACK: orderFunc_ = [this](float speed){ UpdateFinishAttack(speed); }; break;
+    case Order::WAIT:          orderFunc_ = [this](float speed){ UpdateWait(speed); };          break;
+    case Order::CHANGE:        orderFunc_ = [this](float)  { ChangeNextAttack(); };    break;
     }
 }
 
 void ComboAttackAction::InitializeAttack() {
+    if (attackData_->HasPrepPhase()) {
+        SetOrder(Order::PREP_ATTACK);
+    } else {
+        SetOrder(Order::ATTACK);
+    }
+}
 
-    order_ = Order::ATTACK;
+void ComboAttackAction::UpdatePrepAttack(float atkSpeed) {
+    prepMoveEasing_.Update(atkSpeed);
+    pOwner_->SetWorldPosition(prepCurrentMoveValue_);
+
+    if (prepRendition_) {
+        prepRendition_->Update(atkSpeed);
+    }
+
+    const float prepFinishWait = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).timingParam.finishWaitTime;
+    if (prepMoveEasing_.IsFinished() && currentFrame_ >= prepFinishWait) {
+        // 予備動作完了 → メインフェーズへ
+        currentFrame_ = 0.0f;
+        isCollisionActive_ = false;
+        SetMoveEasing();
+        SetOrder(Order::ATTACK);
+    }
 }
 
 void ComboAttackAction::UpdateAttack(float atkSpeed) {
@@ -157,9 +189,29 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
         attackRendition_->Update(atkSpeed);
     }
 
-    // イージングが完了したらWaitへ
+    // イージングが完了したら次フェーズへ
     if (moveEasing_.IsFinished() && pCollisionInfo_->GetIsFinish()) {
-        order_ = Order::WAIT;
+        if (attackData_->HasFinishPhase()) {
+            currentFrame_ = 0.0f;
+            SetFinishMoveEasing();
+            SetOrder(Order::FINISH_ATTACK);
+        } else {
+            SetOrder(Order::WAIT);
+        }
+    }
+}
+
+void ComboAttackAction::UpdateFinishAttack(float atkSpeed) {
+    finishMoveEasing_.Update(atkSpeed);
+    pOwner_->SetWorldPosition(finishCurrentMoveValue_);
+
+    if (finishRendition_) {
+        finishRendition_->Update(atkSpeed);
+    }
+
+    const float finishWait = attackData_->GetAttackParamForPhase(AttackTimelinePhase::FINISH).timingParam.finishWaitTime;
+    if (finishMoveEasing_.IsFinished() && currentFrame_ >= finishWait) {
+        SetOrder(Order::WAIT);
     }
 }
 
@@ -182,7 +234,7 @@ void ComboAttackAction::UpdateWait(float atkSpeed) {
         return;
     }
 
-    order_ = Order::CHANGE;
+    SetOrder(Order::CHANGE);
 }
 
 void ComboAttackAction::ChangeNextAttack() {
@@ -334,7 +386,7 @@ void ComboAttackAction::AttackCancel() {
         if (attackData_->IsCancelAttack(currentFrame_, *candidate.branch, hasHitEnemy_)) {
             isAttackCancel_      = true;
             selectedBranchIndex_ = static_cast<int32_t>(i);
-            order_               = Order::CHANGE;
+            SetOrder(Order::CHANGE);
             return;
         }
     }
@@ -411,6 +463,60 @@ void ComboAttackAction::SetMoveEasing() {
 
     // 開始時間を設定
     moveEasing_.SetStartTimeOffset(moveParam.startTime);
+}
+
+void ComboAttackAction::SetPrepMoveEasing() {
+    const auto& moveParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).moveParam;
+    Vector3 start         = pOwner_->GetWorldPosition();
+
+    const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
+    bool isAirAttack    = attackData_->GetAttackParam().triggerParam.condition == PlayerComboAttackData::TriggerCondition::AIR;
+    bool isJumping      = dynamic_cast<PlayerJump*>(pOwner_->GetBehavior()) != nullptr;
+    if (!isAirAttack && !isJumping && start.y > groundY) {
+        start.y = groundY;
+    }
+
+    Vector3 target = start + pOwner_->GetBaseTransform().CalcForwardOffset(moveParam.value);
+    if (moveParam.isPositionYSelect) {
+        target.y = moveParam.value.y;
+    }
+
+    prepCurrentMoveValue_ = start;
+
+    prepMoveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
+    prepMoveEasing_.SetStartValue(start);
+    prepMoveEasing_.SetEndValue(target);
+    prepMoveEasing_.SetMaxTime(moveParam.easeTime);
+    prepMoveEasing_.SetAdaptValue(&prepCurrentMoveValue_);
+    prepMoveEasing_.SetFinishTimeOffset(moveParam.finishTimeOffset);
+    prepMoveEasing_.SetStartTimeOffset(moveParam.startTime);
+}
+
+void ComboAttackAction::SetFinishMoveEasing() {
+    const auto& moveParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::FINISH).moveParam;
+    Vector3 start         = pOwner_->GetWorldPosition();
+
+    const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
+    bool isAirAttack    = attackData_->GetAttackParam().triggerParam.condition == PlayerComboAttackData::TriggerCondition::AIR;
+    bool isJumping      = dynamic_cast<PlayerJump*>(pOwner_->GetBehavior()) != nullptr;
+    if (!isAirAttack && !isJumping && start.y > groundY) {
+        start.y = groundY;
+    }
+
+    Vector3 target = start + pOwner_->GetBaseTransform().CalcForwardOffset(moveParam.value);
+    if (moveParam.isPositionYSelect) {
+        target.y = moveParam.value.y;
+    }
+
+    finishCurrentMoveValue_ = start;
+
+    finishMoveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
+    finishMoveEasing_.SetStartValue(start);
+    finishMoveEasing_.SetEndValue(target);
+    finishMoveEasing_.SetMaxTime(moveParam.easeTime);
+    finishMoveEasing_.SetAdaptValue(&finishCurrentMoveValue_);
+    finishMoveEasing_.SetFinishTimeOffset(moveParam.finishTimeOffset);
+    finishMoveEasing_.SetStartTimeOffset(moveParam.startTime);
 }
 
 bool ComboAttackAction::IsAttackUnlock(const PlayerComboAttackData& data) const {

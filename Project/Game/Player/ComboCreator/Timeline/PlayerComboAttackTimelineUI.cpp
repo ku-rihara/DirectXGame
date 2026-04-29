@@ -11,13 +11,15 @@ void PlayerComboAttackTimelineUI::Init(
     PlayerComboAttackData* attackData,
     KetaEngine::TimelineDrawer* timeline,
     PlayerComboAttackTimelineData* data,
-    PlayerComboAttackTimelineTrackBuilder* trackBuilder) {
+    PlayerComboAttackTimelineTrackBuilder* trackBuilder,
+    AttackTimelinePhase phase) {
 
     // クラスセット
     attackData_   = attackData;
     timeline_     = timeline;
     data_         = data;
     trackBuilder_ = trackBuilder;
+    phase_        = phase;
 
     fileSelectorMap_.clear();
     RegisterParamUIFunctions();
@@ -29,27 +31,29 @@ void PlayerComboAttackTimelineUI::RegisterParamUIFunctions() {
     }
 
     paramUIDrawFunctions_[ParamEditType::COLLISION] = [this]() {
-        attackData_->DrawCollisionParamUI();
+        attackData_->DrawCollisionParamUIForPhase(phase_);
     };
 
     paramUIDrawFunctions_[ParamEditType::MOVE] = [this]() {
-        attackData_->DrawMoveParamUI();
+        attackData_->DrawMoveParamUIForPhase(phase_);
     };
 
-    paramUIDrawFunctions_[ParamEditType::TRIGGER] = [this]() {
-        // コントローラーからIsFirstAttackを取得
-        bool isFirstAttack = true;  // デフォルトはtrue
-        if (attackData_->GetPlayer()) {
-            auto* controller = attackData_->GetPlayer()->GetComboAttackController();
-            if (controller) {
-                isFirstAttack = controller->IsFirstAttack(attackData_->GetGroupName());
+    // 攻撃発動パラメータはMAINフェーズのみ
+    if (phase_ == AttackTimelinePhase::MAIN) {
+        paramUIDrawFunctions_[ParamEditType::TRIGGER] = [this]() {
+            bool isFirstAttack = true;
+            if (attackData_->GetPlayer()) {
+                auto* controller = attackData_->GetPlayer()->GetComboAttackController();
+                if (controller) {
+                    isFirstAttack = controller->IsFirstAttack(attackData_->GetGroupName());
+                }
             }
-        }
-        attackData_->DrawTriggerParamUI(isFirstAttack);
-    };
+            attackData_->DrawTriggerParamUI(isFirstAttack);
+        };
+    }
 
     paramUIDrawFunctions_[ParamEditType::FLAGS] = [this]() {
-        attackData_->DrawFlagsParamUI();
+        attackData_->DrawFlagsParamUIForPhase(phase_);
     };
 
     paramUIDrawFunctions_[ParamEditType::NEXT_ATTACK] = [this]() {
@@ -75,12 +79,14 @@ void PlayerComboAttackTimelineUI::DrawParamEditButtons() {
     }
     ImGui::SameLine();
 
-    if (ImGui::RadioButton("攻撃発動", selectedParamEditType_ == ParamEditType::TRIGGER)) {
-        selectedParamEditType_ = (selectedParamEditType_ == ParamEditType::TRIGGER)
-                                     ? ParamEditType::NONE
-                                     : ParamEditType::TRIGGER;
+    if (phase_ == AttackTimelinePhase::MAIN) {
+        if (ImGui::RadioButton("攻撃発動", selectedParamEditType_ == ParamEditType::TRIGGER)) {
+            selectedParamEditType_ = (selectedParamEditType_ == ParamEditType::TRIGGER)
+                                         ? ParamEditType::NONE
+                                         : ParamEditType::TRIGGER;
+        }
+        ImGui::SameLine();
     }
-    ImGui::SameLine();
 
     if (ImGui::RadioButton("フラグ設定", selectedParamEditType_ == ParamEditType::FLAGS)) {
         selectedParamEditType_ = (selectedParamEditType_ == ParamEditType::FLAGS)

@@ -102,7 +102,7 @@ public:
     //*-------------------------------- public Method --------------------------------*//
 
     void AdjustParam();
-    void RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName);
+    void RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName, const std::string& prefix = "");
 
     // ポストエフェクトリスト ↔ スロット同期
     void SyncListToSlots();

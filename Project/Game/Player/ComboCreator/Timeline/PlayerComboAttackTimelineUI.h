@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PlayerComboAttackTimelineData.h"
+#include "PlayerComboAttackTimelinePhase.h"
 #include "utility/FileSelector/FileSelector.h"
 #include "Editor/EffectEditorSuite/EffectEditorSuite.h"
 #include <cstdint>
@@ -36,7 +37,8 @@ public:
     void Init(PlayerComboAttackData* attackData,
         KetaEngine::TimelineDrawer* timeline,
         PlayerComboAttackTimelineData* data,
-        PlayerComboAttackTimelineTrackBuilder* trackBuilder);
+        PlayerComboAttackTimelineTrackBuilder* trackBuilder,
+        AttackTimelinePhase phase = AttackTimelinePhase::MAIN);
 
     // メインUI描画
     void DrawParamEditButtons();
@@ -75,6 +77,7 @@ private:
     KetaEngine::EffectEditorSuite* effectEditorSuite_    = nullptr;
 
     ParamEditType selectedParamEditType_ = ParamEditType::NONE;
+    AttackTimelinePhase phase_           = AttackTimelinePhase::MAIN;
 
     // 各キーフレーム用のFileSelector
     std::unordered_map<std::string, KetaEngine::FileSelector> fileSelectorMap_;

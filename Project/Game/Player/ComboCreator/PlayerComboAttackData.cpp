@@ -53,8 +53,20 @@ void PlayerComboAttackData::LoadData() {
     // 既存分岐を破棄せずリサイズ
     ResizeComboBranches();
 
-    // タイムラインをロード後データで再構築
+    // メインタイムラインをロード後データで再構築
     timeLine_.Init(this);
+
+    // 予備動作フェーズ
+    if (hasPrep_) {
+        prepRenditionData_.SyncSlotsToList();
+        prepTimeline_.Init(this, TimelinePhase::PREPARATION);
+    }
+
+    // 終了処理フェーズ
+    if (hasFinish_) {
+        finishRenditionData_.SyncSlotsToList();
+        finishTimeline_.Init(this, TimelinePhase::FINISH);
+    }
 }
 
 void PlayerComboAttackData::SaveData() {
@@ -63,6 +75,12 @@ void PlayerComboAttackData::SaveData() {
 
     // エフェクトリストをスロットに同期してから保存
     renditionData_.SyncListToSlots();
+    if (hasPrep_) {
+        prepRenditionData_.SyncListToSlots();
+    }
+    if (hasFinish_) {
+        finishRenditionData_.SyncListToSlots();
+    }
 
     // 登録変数の現在値をdates_に書き込んでから保存
     globalParameter_->PushParamForGroup(groupName_);
@@ -317,12 +335,20 @@ void PlayerComboAttackData::DrawSaveLoadUI() {
         MessageBoxA(nullptr, message.c_str(), "GlobalParameter", 0);
     }
 
-    // ロードボタン：パラメータ読み込み後にタイムラインも再構築する
+    // ロードボタン
     if (ImGui::Button(("Load " + groupName_).c_str())) {
         globalParameter_->LoadFile(groupName_, folderPath_);
         globalParameter_->SyncParamForGroup(groupName_);
         renditionData_.SyncSlotsToList();
         timeLine_.Init(this);
+        if (hasPrep_) {
+            prepRenditionData_.SyncSlotsToList();
+            prepTimeline_.Init(this, TimelinePhase::PREPARATION);
+        }
+        if (hasFinish_) {
+            finishRenditionData_.SyncSlotsToList();
+            finishTimeline_.Init(this, TimelinePhase::FINISH);
+        }
     }
 }
 
@@ -374,8 +400,18 @@ void PlayerComboAttackData::RegisterParams() {
     // コンボ分岐数
     globalParameter_->Regist(groupName_, "ComboBranchCount", &branchCount_);
 
-    // 演出のパラメータバインド
+    // フェーズフラグ
+    globalParameter_->Regist(groupName_, "hasPrep",   &hasPrep_);
+    globalParameter_->Regist(groupName_, "hasFinish", &hasFinish_);
+
+    // メインフェーズ演出のパラメータバインド
     renditionData_.RegisterParams(globalParameter_, groupName_);
+
+    // 予備動作フェーズのパラメータバインド
+    RegisterPhaseParams("Prep_", prepAttackParam_, prepRenditionData_);
+
+    // 終了処理フェーズのパラメータバインド
+    RegisterPhaseParams("Finish_", finishAttackParam_, finishRenditionData_);
 }
 
 ///==========================================================
@@ -391,8 +427,22 @@ void PlayerComboAttackData::AdjustParam() {
     DrawSaveLoadUI();
     ImGui::Separator();
 
-    // タイムライン描画
-    timeLine_.Draw();
+    // フェーズコントロール（ADD/削除ボタン＋フェーズタブ）
+    DrawPhaseControls();
+    ImGui::Separator();
+
+    // 現在のフェーズのタイムラインを描画
+    switch (currentDisplayPhase_) {
+    case TimelinePhase::PREPARATION:
+        if (hasPrep_) { prepTimeline_.Draw(); }
+        break;
+    case TimelinePhase::MAIN:
+        timeLine_.Draw();
+        break;
+    case TimelinePhase::FINISH:
+        if (hasFinish_) { finishTimeline_.Draw(); }
+        break;
+    }
 
     ImGui::PopID();
 
@@ -463,8 +513,216 @@ void PlayerComboAttackData::SetPlayer(Player* player) {
 
 void PlayerComboAttackData::SetEffectEditorSuite(KetaEngine::EffectEditorSuite* suite) {
     timeLine_.SetEffectEditorSuite(suite);
+    prepTimeline_.SetEffectEditorSuite(suite);
+    finishTimeline_.SetEffectEditorSuite(suite);
 }
 
 KetaEngine::TimelineDrawer* PlayerComboAttackData::GetTimeline() {
     return timeLine_.GetTimeline();
+}
+
+///==========================================================
+/// フェーズ別パラメータ取得
+///==========================================================
+PlayerComboAttackData::AttackParameter& PlayerComboAttackData::GetAttackParamForPhase(TimelinePhase phase) {
+    switch (phase) {
+    case TimelinePhase::PREPARATION: return prepAttackParam_;
+    case TimelinePhase::FINISH:      return finishAttackParam_;
+    default:                         return attackParam_;
+    }
+}
+
+const PlayerComboAttackData::AttackParameter& PlayerComboAttackData::GetAttackParamForPhase(TimelinePhase phase) const {
+    switch (phase) {
+    case TimelinePhase::PREPARATION: return prepAttackParam_;
+    case TimelinePhase::FINISH:      return finishAttackParam_;
+    default:                         return attackParam_;
+    }
+}
+
+PlayerAttackRenditionData& PlayerComboAttackData::GetRenditionDataForPhase(TimelinePhase phase) {
+    switch (phase) {
+    case TimelinePhase::PREPARATION: return prepRenditionData_;
+    case TimelinePhase::FINISH:      return finishRenditionData_;
+    default:                         return renditionData_;
+    }
+}
+
+const PlayerAttackRenditionData& PlayerComboAttackData::GetRenditionDataForPhase(TimelinePhase phase) const {
+    switch (phase) {
+    case TimelinePhase::PREPARATION: return prepRenditionData_;
+    case TimelinePhase::FINISH:      return finishRenditionData_;
+    default:                         return renditionData_;
+    }
+}
+
+///==========================================================
+/// フェーズ別パラメータ登録
+///==========================================================
+void PlayerComboAttackData::RegisterPhaseParams(
+    const std::string& prefix,
+    AttackParameter& param,
+    PlayerAttackRenditionData& rendition) {
+
+    // CollisionParam
+    globalParameter_->Regist(groupName_, prefix + "CollisionRad",         &param.collisionParam.sphereRad);
+    globalParameter_->Regist(groupName_, prefix + "collisionOffsetPos",   &param.collisionParam.offsetPos);
+    globalParameter_->Regist(groupName_, prefix + "collisionStartTime",   &param.collisionParam.startTime);
+    globalParameter_->Regist(groupName_, prefix + "adaptTime",            &param.collisionParam.adaptTime);
+    globalParameter_->Regist(groupName_, prefix + "loopWaitTime",         &param.collisionParam.loopWaitTime);
+    globalParameter_->Regist(groupName_, prefix + "loopNum",              &param.collisionParam.loopNum);
+    globalParameter_->Regist(groupName_, prefix + "isAlwaysFollowing",    &param.collisionParam.isAlwaysFollowing);
+
+    // MoveParam
+    globalParameter_->Regist(groupName_, prefix + "moveValue",            &param.moveParam.value);
+    globalParameter_->Regist(groupName_, prefix + "moveEaseType",         &param.moveParam.easeType);
+    globalParameter_->Regist(groupName_, prefix + "moveStartTime",        &param.moveParam.startTime);
+    globalParameter_->Regist(groupName_, prefix + "moveEaseTime",         &param.moveParam.easeTime);
+    globalParameter_->Regist(groupName_, prefix + "isAbleInputMoving",    &param.moveParam.isAbleInputMoving);
+    globalParameter_->Regist(groupName_, prefix + "isPositionYSelect",    &param.moveParam.isPositionYSelect);
+    globalParameter_->Regist(groupName_, prefix + "finishTimeOffset",     &param.moveParam.finishTimeOffset);
+    globalParameter_->Regist(groupName_, prefix + "isStopBeforeEnemy",    &param.moveParam.isStopBeforeEnemy);
+
+    // TimingParam
+    globalParameter_->Regist(groupName_, prefix + "finishWaitTime",       &param.timingParam.finishWaitTime);
+    globalParameter_->Regist(groupName_, prefix + "isAutoAdvance",        &param.timingParam.isAutoAdvance);
+
+    // 攻撃力等
+    globalParameter_->Regist(groupName_, prefix + "power",                &param.power);
+    globalParameter_->Regist(groupName_, prefix + "KnockBackPower",       &param.knockBackPower);
+    globalParameter_->Regist(groupName_, prefix + "blowYPower",           &param.blowYPower);
+    globalParameter_->Regist(groupName_, prefix + "isMotionOnly",         &param.isMotionOnly);
+
+    // 演出データ
+    rendition.RegisterParams(globalParameter_, groupName_, prefix);
+}
+
+///==========================================================
+/// フェーズ別UI描画
+///==========================================================
+void PlayerComboAttackData::DrawCollisionParamUIForPhase(TimelinePhase phase) {
+    auto& p = GetAttackParamForPhase(phase);
+    auto& collisionParam = p.collisionParam;
+
+    ImGui::SeparatorText("コライダーパラメータ");
+
+    ImGui::DragFloat("当たり判定の半径", &collisionParam.sphereRad, 0.01f);
+    ImGui::DragFloat3("オフセット位置", &collisionParam.offsetPos.x, 0.01f);
+    ImGui::InputInt("ループ回数", &collisionParam.loopNum);
+
+    if (collisionParam.loopNum > 0) {
+        ImGui::DragFloat("ループ待機時間", &collisionParam.loopWaitTime, 0.01f);
+    }
+
+    ImGui::Checkbox("プレイヤーに追従する", &collisionParam.isAlwaysFollowing);
+
+    ImGui::Separator();
+    ImGui::DragFloat("攻撃力", &p.power, 0.01f);
+    ImGui::DragFloat("正面のノックバック力", &p.knockBackPower, 0.01f);
+    ImGui::DragFloat("Y方向のノックバック力", &p.blowYPower, 0.01f);
+}
+
+void PlayerComboAttackData::DrawMoveParamUIForPhase(TimelinePhase phase) {
+    auto& moveParam = GetAttackParamForPhase(phase).moveParam;
+
+    ImGui::SeparatorText("移動パラメータ");
+
+    ImGui::Checkbox("攻撃中入力による移動ができる", &moveParam.isAbleInputMoving);
+    ImGui::DragFloat("開始時間", &moveParam.startTime, 0.01f);
+    ImGui::Checkbox("Yの位置を直接指定する", &moveParam.isPositionYSelect);
+    ImGui::DragFloat3("移動量", &moveParam.value.x, 0.01f);
+    ImGui::DragFloat("終了タイムオフセット", &moveParam.finishTimeOffset, 0.01f);
+    ImGui::Checkbox("敵の前で止まる", &moveParam.isStopBeforeEnemy);
+
+    ImGuiEasingTypeSelector("イージング", moveParam.easeType);
+}
+
+void PlayerComboAttackData::DrawFlagsParamUIForPhase(TimelinePhase phase) {
+    auto& p = GetAttackParamForPhase(phase);
+
+    ImGui::SeparatorText("その他フラグ設定");
+
+    ImGui::Checkbox("モーションのみ有効", &p.isMotionOnly);
+    ImGui::Checkbox("自動で次の攻撃に進む", &p.timingParam.isAutoAdvance);
+}
+
+///==========================================================
+/// フェーズコントロールUI
+///==========================================================
+void PlayerComboAttackData::DrawPhaseControls() {
+    // フェーズタブ（存在するフェーズのみ表示）
+    if (hasPrep_) {
+        bool isPrep = (currentDisplayPhase_ == TimelinePhase::PREPARATION);
+        if (ImGui::RadioButton("予備動作", isPrep)) {
+            currentDisplayPhase_ = TimelinePhase::PREPARATION;
+        }
+        ImGui::SameLine();
+    }
+
+    {
+        bool isMain = (currentDisplayPhase_ == TimelinePhase::MAIN);
+        if (ImGui::RadioButton("メイン", isMain)) {
+            currentDisplayPhase_ = TimelinePhase::MAIN;
+        }
+    }
+
+    if (hasFinish_) {
+        ImGui::SameLine();
+        bool isFinish = (currentDisplayPhase_ == TimelinePhase::FINISH);
+        if (ImGui::RadioButton("終了処理", isFinish)) {
+            currentDisplayPhase_ = TimelinePhase::FINISH;
+        }
+    }
+
+    ImGui::Separator();
+
+    // ADD予備動作 / 削除ボタン
+    if (!hasPrep_) {
+        ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
+        if (ImGui::Button("+ ADD予備動作")) {
+            hasPrep_ = true;
+            prepTimeline_.Init(this, TimelinePhase::PREPARATION);
+            currentDisplayPhase_ = TimelinePhase::PREPARATION;
+        }
+        ImGui::PopStyleColor(3);
+    } else {
+        ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.5f, 0.15f, 0.15f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.25f, 0.25f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.4f, 0.1f,  0.1f,  1.0f));
+        if (ImGui::Button("予備動作を削除")) {
+            hasPrep_ = false;
+            if (currentDisplayPhase_ == TimelinePhase::PREPARATION) {
+                currentDisplayPhase_ = TimelinePhase::MAIN;
+            }
+        }
+        ImGui::PopStyleColor(3);
+    }
+
+    ImGui::SameLine();
+
+    // ADD終了処理 / 削除ボタン
+    if (!hasFinish_) {
+        ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
+        if (ImGui::Button("+ ADD終了処理")) {
+            hasFinish_ = true;
+            finishTimeline_.Init(this, TimelinePhase::FINISH);
+            currentDisplayPhase_ = TimelinePhase::FINISH;
+        }
+        ImGui::PopStyleColor(3);
+    } else {
+        ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.5f, 0.15f, 0.15f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.25f, 0.25f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive,  ImVec4(0.4f, 0.1f,  0.1f,  1.0f));
+        if (ImGui::Button("終了処理を削除")) {
+            hasFinish_ = false;
+            if (currentDisplayPhase_ == TimelinePhase::FINISH) {
+                currentDisplayPhase_ = TimelinePhase::MAIN;
+            }
+        }
+        ImGui::PopStyleColor(3);
+    }
 }
