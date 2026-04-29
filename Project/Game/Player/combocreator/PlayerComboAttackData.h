@@ -6,6 +6,7 @@
 #include "ComboBranchParameter.h"
 #include "PlayerAttackRenditionData.h"
 #include "Timeline/PlayerComboAttackTimeline.h"
+#include "Timeline/PlayerComboAttackTimelinePhase.h"
 // utility
 #include "utility/FileSelector/FileSelector.h"
 // math
@@ -25,6 +26,8 @@ class EnemyManager;
 /// </summary>
 class PlayerComboAttackData {
 public:
+    using TimelinePhase = AttackTimelinePhase;
+
     enum class TriggerCondition {
         GROUND, // 地上のみ
         AIR, // 空中のみ
@@ -112,10 +115,16 @@ public:
     bool IsWaitFinish(float currentTime);
     bool IsCancelAttack(float currentTime, const ComboBranchParameter& branch, bool hasHitEnemy);
 
-    // コンボ分岐の初期化（全クリア＆再生成）
+    // コンボ分岐の初期化
     void InitComboBranches();
-    // コンボ分岐のリサイズ（既存分岐を破棄せず追加・削除のみ）
+    // コンボ分岐のリサイズ
     void ResizeComboBranches();
+
+    // フェーズ別パラメータ取得
+    AttackParameter& GetAttackParamForPhase(TimelinePhase phase);
+    const AttackParameter& GetAttackParamForPhase(TimelinePhase phase) const;
+    PlayerAttackRenditionData& GetRenditionDataForPhase(TimelinePhase phase);
+    const PlayerAttackRenditionData& GetRenditionDataForPhase(TimelinePhase phase) const;
 
     // コンボ分岐UI
     void DrawComboBranchesUI();
@@ -123,6 +132,12 @@ public:
     void DrawMoveParamUI();
     void DrawTriggerParamUI(bool isFirstAttack);
     void DrawFlagsParamUI();
+
+    // フェーズ別UI
+    void DrawCollisionParamUIForPhase(TimelinePhase phase);
+    void DrawMoveParamUIForPhase(TimelinePhase phase);
+    void DrawFlagsParamUIForPhase(TimelinePhase phase);
+    void DrawPhaseControls();
 
     // 分岐トラックの再構築
     void RebuildBranchTracks();
@@ -133,6 +148,9 @@ public:
 private:
     // TriggerConditionのチェック
     bool CheckTriggerCondition(TriggerCondition condition) const;
+
+    // フェーズ別パラメータ登録
+    void RegisterPhaseParams(const std::string& prefix, AttackParameter& param, PlayerAttackRenditionData& rendition);
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
@@ -149,12 +167,26 @@ private:
     // コンボ分岐リスト
     std::vector<std::unique_ptr<ComboBranchParameter>> comboBranches_;
 
-    // 包含
+    // メインフェーズ
     PlayerAttackRenditionData renditionData_;
     PlayerComboAttackTimeline timeLine_;
-
-    // 攻撃パラメータ
     AttackParameter attackParam_;
+
+    // 予備動作フェーズ
+    AttackParameter prepAttackParam_;
+    PlayerAttackRenditionData prepRenditionData_;
+    PlayerComboAttackTimeline prepTimeline_;
+
+    // 終了処理フェーズ
+    AttackParameter finishAttackParam_;
+    PlayerAttackRenditionData finishRenditionData_;
+    PlayerComboAttackTimeline finishTimeline_;
+
+    // フェーズフラグ
+    bool hasPrep_              = false;
+    bool hasFinish_            = false;
+    TimelinePhase currentDisplayPhase_ = TimelinePhase::MAIN;
+
     std::vector<std::string> attackFileNames_;
 
     // frags
@@ -172,9 +204,14 @@ public:
     const AttackParameter& GetAttackParam() const { return attackParam_; }
     AttackParameter& GetAttackParam() { return attackParam_; }
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
+    PlayerAttackRenditionData& GetRenditionData() { return renditionData_; }
     const std::string& GetFolderPath() const { return folderPath_; }
     Player* GetPlayer() const { return pPlayer_; };
     KetaEngine::TimelineDrawer* GetTimeline();
+
+    bool HasPrepPhase() const { return hasPrep_; }
+    bool HasFinishPhase() const { return hasFinish_; }
+    TimelinePhase GetCurrentDisplayPhase() const { return currentDisplayPhase_; }
   
     const std::vector<std::unique_ptr<ComboBranchParameter>>& GetComboBranches() const { return comboBranches_; }
    
