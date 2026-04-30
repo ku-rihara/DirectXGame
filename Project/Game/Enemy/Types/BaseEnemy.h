@@ -18,6 +18,7 @@
 // std
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -28,6 +29,7 @@ class Combo;
 class KillCounter;
 class PlayerAttackCollider;
 class EnemyHPBarColorConfig;
+class BaseEnemyBehavior;
 
 /// <summary>
 /// 敵の基底クラス
@@ -51,6 +53,8 @@ public:
         float chaseDistance;
         float chaseDistanceMin;
         float chaseSpeed;
+        // 逃走パラメータ
+        float fleeSpeed = 5.0f;
         // 死亡パラメータ
         float deathBlowValue;
         float deathBlowValueY;
@@ -75,6 +79,7 @@ public:
         Attack,
         DamageReaction,
         Death,
+        Taunt,
         Count
     };
 
@@ -97,9 +102,13 @@ public:
     virtual void Init(const Vector3& spownPos);
     virtual void Update();
 
-
     // 振る舞い個別処理
     virtual void SpawnRenditionInit() = 0;
+
+    /// <summary>
+    /// スポーン後の行動を生成
+    /// </summary>
+    virtual std::unique_ptr<BaseEnemyBehavior> CreatePostSpawnBehavior();
 
     void ThrustRenditionInit(); //< 突き飛ばし演出初期化
     void DeathRenditionInit(); //< 死亡演出初期化
@@ -182,6 +191,9 @@ public:
     // ヒットクールタイム開始
     void StartDamageColling(float collingTime, const std::string& reactiveAttackName);
 
+    // ダメージを受けたときのコールバックを設定
+    void SetOnDamageTakenCallback(std::function<void()> cb) { onDamageTaken_ = std::move(cb); }
+
     // behavior変更
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
@@ -235,6 +247,9 @@ private:
     KillCounter* pKillCounter_ = nullptr;
     GameCamera* pGameCamera_;
     EnemyManager* pEnemyManager_;
+
+    // ダメージコールバック
+    std::function<void()> onDamageTaken_;
 
     // flags
     bool isDeathPending_ = false;

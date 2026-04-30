@@ -48,14 +48,11 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     elapsedTimeSec_ += KetaEngine::Frame::DeltaTime();
     GameResultInfo::GetInstance()->RecordCombo(obj.combo_->GetComboCount());
     GameResultInfo::GetInstance()->RecordKillCount(obj.killCounter_->GetKillCount());
-    GameResultInfo::GetInstance()->RecordLevel(obj.deathTimer_->GetCurrentLevel());
     GameResultInfo::GetInstance()->RecordSurvivalTime(static_cast<int32_t>(elapsedTimeSec_));
     obj.fireInjectors_->Update();
     obj.gameCamera_->Update();
     obj.backGroundObjectManager_->Update(timeSpeed);
     obj.deathTimer_->Update(timeSpeed);
-    obj.killBonusController_->Update(KetaEngine::Frame::DeltaTime());
-    obj.killBonusFlyController_->Update(KetaEngine::Frame::DeltaTime());
 
     obj.enemyManager_->HpBarUpdate(pOwner_->GetViewProjection());
     obj.enemyManager_->SetViewProjection(&pOwner_->GetViewProjection());

@@ -1,22 +1,17 @@
 #pragma once
 
-#include "Combo/ComboUIController.h"
 #include "DeathTimer/DeathTimerGauge.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "UI/LevelUI/LevelUIController.h"
 // std
-#include <array>
 #include <cstdint>
 #include <functional>
 #include <memory>
 
 /// <summary>
-/// プレイヤーHP管理クラス
+/// ストレスゲージ管理クラス
+/// - ボスがプレイヤーに近づきザコが煽ると増加
 /// </summary>
 class DeathTimer {
-public:
-    static constexpr int32_t kMaxLevel = 6;
-
 public:
     DeathTimer()  = default;
     ~DeathTimer() = default;
@@ -28,66 +23,71 @@ public:
     void AdjustParam();
     void RegisterParams();
 
-    void OnEnemyKilled(float gaugeAmount, int32_t comboCount);
-    void TakeDamage(float deltaTime);
+    /// <summary>
+    /// 敵の攻撃を受けた時に呼ぶ
+    /// </summary>
+    void TakeDamage(float amount);
 
-    // ゲージ直接回復（シムキルボーナスなど外部から）
-    void ApplyBonus(float amount);
+    /// <summary>
+    /// 煽り状態をセット
+    /// </summary>
+    /// <param name="isTaunting">ボスがトリガー距離内にいるか</param>
+    /// <param name="tauntingCount">現在煽り中のザコ数</param>
+    void SetTauntState(bool isTaunting, int32_t tauntingCount);
 
-private:
-    void RecoverHP(float amount);
-    void AdaptEasing();
-    void UpdateLevel();
+    /// <summary>
+    /// ボスが倒された瞬間に呼ぶ
+    /// </summary>
+    void OnBossDead();
+
+    /// <summary>
+    /// ボス撃破後にザコへ攻撃が当たった時に呼ぶ
+    /// </summary>
+    void OnNormalEnemyHit();
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "DeathTimer";
 
     std::unique_ptr<DeathTimerGauge> deathTimerGauge_;
-    LevelUIController levelUIController_;
 
-    float currentHP_ = 0.0f;
-    float maxHP_;
+    // ストレス量（0 → maxStress_ でゲームオーバー）
+    float currentStress_ = 0.0f;
+    float maxStress_     = 100.0f;
 
-    // レベル別減少レート（レベル1〜6）
-    std::array<float, kMaxLevel> decreaseRates_;
+    // 煽り中のストレス増加レート
+    float baseStressRate_       = 5.0f;  // 基準増加量
+    float stressRatePerEnemy_   = 2.0f;  // ザコ1体あたりの追加増加量
 
-    // レベルアップキル数閾値（レベル2〜6に上がるキル数、累計）
-    std::array<int32_t, kMaxLevel - 1> levelUpKillCounts_;
+    // ボス撃破後のストレス減少
+    float decayTickInterval_     = 1.0f;   // 何秒ごとに1回減らすか
+    float decayAmountPerTick_    = 3.0f;   // 1チックで減るストレス量
+    float decayTickTimer_        = 0.0f;   // チック用タイマー
+    float stressReductionPerHit_ = 5.0f;   // ザコ攻撃1回あたりの減少量
 
-    // 現在のゲージ減りレベル（1〜6）
-    int32_t currentLevel_ = 1;
+    // コールバック（ボス位置エフェクト・UI等に使う）
+    std::function<void()> onDecayTick_;    // ストレス減少チック時に呼ばれる
+    std::function<void()> onBossKilled_;   // ボス撃破時に呼ばれる
 
-    // 累計キル数
-    int32_t killCount_ = 0;
+    // 煽り状態
+    bool    isTaunting_         = false;
+    int32_t tauntingEnemyCount_ = 0;
 
-    // コンボ倍率パラメータ
-    int32_t comboStepSize_          = 10;   // 何コンボおきに倍率が上がるか
-    float comboMultiplierPerStep_   = 1.5f; // 1ステップごとの倍率
-    float comboMaxMultiplier_       = 5.0f; // 倍率の上限
-
-    // イージング関連
-    bool isRecovering_         = false;
-    float recoveryStartValue_  = 0.0f;
-    float recoveryTargetValue_ = 0.0f;
-    float recoveryTimer_       = 0.0f;
-    float recoveryDuration_    = 0.0f;
-
-    bool isDeath_ = false;
+    bool isBossDead_ = false;
+    bool isDeath_    = false;
 
 #if defined(_DEBUG) || defined(DEVELOPMENT)
-    bool isGodMode_ = true; // デバッグ用: HP減少を止める（初期ON）
+    bool isGodMode_ = true; // デバッグ用: ストレス増加を止める
 #endif
-
-    // キル通知コールバック（comboMultiplier: float）
-    std::function<void(float)> onKillCallback_;
 
 public:
     const bool& GetIsDeath() const { return isDeath_; }
-    void SetOnKillCallback(std::function<void(float)> cb) { onKillCallback_ = std::move(cb); }
-    float GetCurrentHP() const { return currentHP_; }
-    float GetMaxHP() const { return maxHP_; }
-    int32_t GetCurrentLevel() const { return currentLevel_; }
-    int32_t GetKillCount() const { return killCount_; }
+    float GetCurrentStress() const { return currentStress_; }
+    float GetMaxStress() const { return maxStress_; }
+    bool GetIsBossDead() const { return isBossDead_; }
     DeathTimerGauge* GetDeathTimerGauge() const { return deathTimerGauge_.get(); }
+
+    // コールバック設定
+    void SetOnDecayTickCallback(std::function<void()> cb) { onDecayTick_  = std::move(cb); }
+    void SetOnBossKilledCallback(std::function<void()> cb) { onBossKilled_ = std::move(cb); }
 };

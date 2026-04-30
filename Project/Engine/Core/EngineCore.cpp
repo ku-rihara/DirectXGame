@@ -46,7 +46,7 @@ void EngineCore::Initialize(const char* title, int windowWidth, int windowHeight
     winApp_ = std::make_unique<WinApp>();
     winApp_->MakeWindow(titleString.c_str(), windowWidth, windowHeight);
 
-    // DirectX初期化（ウィンドウサイズとレンダーサイズを分離）
+    // DirectX初期化
     directXCommon_ = DirectXCommon::GetInstance();
     directXCommon_->Init(winApp_.get(), windowWidth, windowHeight, renderWidth, renderHeight);
 
@@ -127,7 +127,6 @@ void EngineCore::BeginFrame() {
     input_->Update();
     light_->Update();
     // コマンドリストの先頭でデスクリプタヒープを設定
-    // (Update内のGPUパーティクルCSディスパッチより前に必要)
     srvManager_->PreDraw();
 }
 
@@ -164,11 +163,13 @@ void EngineCore::Finalize() {
 
     CoUninitialize();
     audio_->Finalize();
-    textureManager_->Finalize();
-    directXCommon_->Finalize();
-    modelManager_->Finalize();
 
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     imGuiManager_->Finalizer();
 #endif
+    particleManager_->Finalize();
+    gpuParticleManager_->Finalize();
+    modelManager_->Finalize();
+    textureManager_->Finalize();
+    directXCommon_->Finalize();
 }

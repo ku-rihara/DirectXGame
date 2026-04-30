@@ -162,6 +162,7 @@ public:
     ~ParticleManager() = default;
 
     void Init(SrvManager* srvManager);
+    void Finalize() { particleGroups_.clear(); }
     void Update();
     void Draw(const ViewProjection& viewProjection);
     void DrawScreenPos();

@@ -97,7 +97,7 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
     std::string fileBase  = path.filename().string();
     std::string parentDir = path.parent_path().string();
 
-    // "Category/ModelName.ext" 形式に対応: Resources/Model/Category/ModelName/
+    // Resources/Model/Category/ModelName/
     std::string filePath;
     if (parentDir.empty()) {
         filePath = directoryPath_ + stemName + "/" + fileBase;

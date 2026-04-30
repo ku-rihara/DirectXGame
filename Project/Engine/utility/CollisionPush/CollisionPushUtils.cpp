@@ -4,7 +4,7 @@
 
 void CollisionPushUtils::ApplySpherePush(
     Vector3& translation, const Vector3& otherPos,
-    float myRadius, float otherRadius, float maxPush)
+    float myRadius, float otherRadius, float maxPush, float smoothing)
 {
     Vector3 delta = translation - otherPos;
     delta.y       = 0.0f;
@@ -19,7 +19,9 @@ void CollisionPushUtils::ApplySpherePush(
         } else {
             pushDirection = {1.0f, 0.0f, 0.0f};
         }
-        translation += pushDirection * std::min(minDist - dist, maxPush);
+        // smoothing係数で1フレームの補正量を制限し、ガクガクを防ぐ
+        float pushAmount = std::min(minDist - dist, maxPush) * smoothing;
+        translation += pushDirection * pushAmount;
     }
 }
 

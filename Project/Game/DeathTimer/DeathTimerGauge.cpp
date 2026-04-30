@@ -69,11 +69,11 @@ void DeathTimerGauge::UpdateGaugeColor() {
     GaugeState newState = GaugeState::Safe;
     Vector4 targetColor = safeColor_;
 
-    // timerRatio_に基づいて状態を判定
-    if (timerRatio_ <= dangerThreshold_) {
+    // timerRatio_はストレス比率
+    if (timerRatio_ >= dangerThreshold_) {
         newState    = GaugeState::Danger;
         targetColor = dangerColor_;
-    } else if (timerRatio_ <= normalThreshold_) {
+    } else if (timerRatio_ >= normalThreshold_) {
         newState    = GaugeState::Normal;
         targetColor = normalColor_;
     } else {

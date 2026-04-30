@@ -11,6 +11,7 @@
 #include "Enemy/EnemyManager.h"
 // behavior
 #include "../Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
+#include "../Behavior/ActionBehavior/CommonBehavior/EnemyWait.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 // Player
@@ -168,16 +169,16 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 
     if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
-        // 攻撃中は押し戻し無効
-        if (isAttacking_ || enemy->IsAttacking()) {
-            return;
-        }
+        if (isAttacking_ || enemy->IsAttacking()) { return; }
 
+        // 敵同士の押し戻し処理
         CollisionPushUtils::ApplySpherePush(
             baseTransform_.translation_,
             enemy->GetCollisionPos(),
             GetCollisionRadius(),
-            enemy->GetCollisionRadius());
+            enemy->GetCollisionRadius(),
+            1.0f,   // maxPush
+            0.3f);  // smoothing
     }
 }
 
@@ -284,8 +285,10 @@ void BaseEnemy::TakeDamage(float damageValue) {
     // ダメージを受ける
     hp_ -= damageValue;
 
-    // コンボをカウント
-    pCombo_->ComboCountUP();
+    // ダメージコールバック
+    if (onDamageTaken_) {
+        onDamageTaken_();
+    }
 
     if (hp_ <= 0.0f && !isDeathPending_) {
         // 撃破カウント
@@ -297,6 +300,10 @@ void BaseEnemy::TakeDamage(float damageValue) {
     if (hp_ < 0.0f) {
         hp_ = 0.0f;
     }
+}
+
+std::unique_ptr<BaseEnemyBehavior> BaseEnemy::CreatePostSpawnBehavior() {
+    return std::make_unique<EnemyWait>(this);
 }
 
 void BaseEnemy::StartDamageColling(float collingTime, const std::string& reactiveAttackName) {

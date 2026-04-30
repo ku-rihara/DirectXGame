@@ -59,7 +59,7 @@ void EnemySpawn::Update() {
         ///------------------------------------------------------------------
     case EnemySpawn::Step::ChangeNextBehavior:
 
-        pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
+        pBaseEnemy_->ChangeBehavior(pBaseEnemy_->CreatePostSpawnBehavior());
 
         break;
     default:

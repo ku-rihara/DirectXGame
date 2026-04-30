@@ -2,28 +2,28 @@
   "groups": [
     {
       "id": 0,
-      "spawn_time": 0.7000000476837158,
-      "object_count": 5
+      "spawn_time": 0.0,
+      "object_count": 6
     },
     {
       "id": 1,
       "spawn_time": 1.2999999523162842,
-      "object_count": 18
+      "object_count": 26
     },
     {
       "id": 2,
       "spawn_time": 1.5999999046325684,
-      "object_count": 10
+      "object_count": 13
     }
   ],
   "spawn_points": [
     {
-      "name": "NormalEnemySpawn",
+      "name": "BossEnemySpawn",
       "group_id": 0,
-      "spawnTime": 0.7000000476837158,
+      "spawnTime": 0.0,
       "position": [
-        -11.942499160766602,
-        31.585058212280273,
+        -0.3524599075317383,
+        34.13058090209961,
         0.0
       ],
       "rotation": [
@@ -38,8 +38,203 @@
       ],
       "transform": {
         "translation": [
-          -11.942499160766602,
-          31.585058212280273,
+          -0.3524599075317383,
+          34.13058090209961,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "BossEnemy",
+      "spawn_offset": 0.0
+    },
+    {
+      "name": "BossEnemySpawn.001",
+      "group_id": 1,
+      "spawnTime": 1.2999999523162842,
+      "position": [
+        -23.908714294433594,
+        31.514179229736328,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -23.908714294433594,
+          31.514179229736328,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "BossEnemy",
+      "spawn_offset": 0.0
+    },
+    {
+      "name": "BossEnemySpawn.002",
+      "group_id": 1,
+      "spawnTime": 2.799999952316284,
+      "position": [
+        36.12012481689453,
+        31.514179229736328,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          36.12012481689453,
+          31.514179229736328,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "BossEnemy",
+      "spawn_offset": 1.5
+    },
+    {
+      "name": "BossEnemySpawn.003",
+      "group_id": 1,
+      "spawnTime": 1.2999999523162842,
+      "position": [
+        0.5641281604766846,
+        -26.726638793945312,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          0.5641281604766846,
+          -26.726638793945312,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "BossEnemy",
+      "spawn_offset": 0.0
+    },
+    {
+      "name": "BossEnemySpawn.004",
+      "group_id": 2,
+      "spawnTime": 1.5999999046325684,
+      "position": [
+        0.567037045955658,
+        34.964202880859375,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          0.567037045955658,
+          34.964202880859375,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "BossEnemy",
+      "spawn_offset": 0.0
+    },
+    {
+      "name": "NormalEnemySpawn",
+      "group_id": 0,
+      "spawnTime": 0.20000000298023224,
+      "position": [
+        10.739599227905273,
+        33.67620086669922,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          10.739599227905273,
+          33.67620086669922,
           0.0
         ],
         "rotation": [
@@ -54,15 +249,16 @@
         ]
       },
       "enemy_type": "NormalEnemy",
-      "spawn_offset": 0.0
+      "spawn_offset": 0.20000000298023224,
+      "parent_boss_name": "BossEnemySpawn"
     },
     {
       "name": "NormalEnemySpawn.001",
       "group_id": 0,
-      "spawnTime": 0.7000000476837158,
+      "spawnTime": 0.20000000298023224,
       "position": [
-        0.085540771484375,
-        31.585058212280273,
+        -11.572013854980469,
+        34.261566162109375,
         0.0
       ],
       "rotation": [
@@ -77,8 +273,8 @@
       ],
       "transform": {
         "translation": [
-          0.085540771484375,
-          31.585058212280273,
+          -11.572013854980469,
+          34.261566162109375,
           0.0
         ],
         "rotation": [
@@ -93,15 +289,16 @@
         ]
       },
       "enemy_type": "NormalEnemy",
-      "spawn_offset": 0.0
+      "spawn_offset": 0.20000000298023224,
+      "parent_boss_name": "BossEnemySpawn"
     },
     {
       "name": "NormalEnemySpawn.002",
       "group_id": 0,
-      "spawnTime": 0.7000000476837158,
+      "spawnTime": 0.5,
       "position": [
-        12.688720703125,
-        31.585058212280273,
+        -7.599897384643555,
+        44.67635726928711,
         0.0
       ],
       "rotation": [
@@ -116,8 +313,8 @@
       ],
       "transform": {
         "translation": [
-          12.688720703125,
-          31.585058212280273,
+          -7.599897384643555,
+          44.67635726928711,
           0.0
         ],
         "rotation": [
@@ -132,15 +329,16 @@
         ]
       },
       "enemy_type": "NormalEnemy",
-      "spawn_offset": 0.0
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn"
     },
     {
       "name": "NormalEnemySpawn.003",
       "group_id": 1,
-      "spawnTime": 1.2999999523162842,
+      "spawnTime": 1.7999999523162842,
       "position": [
-        -30.27480697631836,
-        36.55479049682617,
+        -7.721217632293701,
+        28.980850219726562,
         0.0
       ],
       "rotation": [
@@ -155,8 +353,8 @@
       ],
       "transform": {
         "translation": [
-          -30.27480697631836,
-          36.55479049682617,
+          -7.721217632293701,
+          28.980850219726562,
           0.0
         ],
         "rotation": [
@@ -171,15 +369,16 @@
         ]
       },
       "enemy_type": "NormalEnemy",
-      "spawn_offset": 0.0
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.001"
     },
     {
       "name": "NormalEnemySpawn.004",
       "group_id": 1,
-      "spawnTime": 1.3999999538064003,
+      "spawnTime": 1.7999999523162842,
       "position": [
-        -20.563913345336914,
-        45.51425552368164,
+        -15.528826713562012,
+        41.58184814453125,
         0.0
       ],
       "rotation": [
@@ -194,8 +393,8 @@
       ],
       "transform": {
         "translation": [
-          -20.563913345336914,
-          45.51425552368164,
+          -15.528826713562012,
+          41.58184814453125,
           0.0
         ],
         "rotation": [
@@ -210,15 +409,16 @@
         ]
       },
       "enemy_type": "NormalEnemy",
-      "spawn_offset": 0.10000000149011612
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.001"
     },
     {
       "name": "NormalEnemySpawn.005",
       "group_id": 1,
-      "spawnTime": 1.4999999552965164,
+      "spawnTime": 1.7999999523162842,
       "position": [
-        -10.007434844970703,
-        52.16524887084961,
+        -37.71865463256836,
+        36.285789489746094,
         0.0
       ],
       "rotation": [
@@ -233,8 +433,8 @@
       ],
       "transform": {
         "translation": [
-          -10.007434844970703,
-          52.16524887084961,
+          -37.71865463256836,
+          36.285789489746094,
           0.0
         ],
         "rotation": [
@@ -249,15 +449,16 @@
         ]
       },
       "enemy_type": "NormalEnemy",
-      "spawn_offset": 0.20000000298023224
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "StrongEnemySpawn",
+      "name": "NormalEnemySpawn.006",
       "group_id": 0,
-      "spawnTime": 1.1000000536441803,
+      "spawnTime": 0.5,
       "position": [
-        -5.347129821777344,
-        47.35047149658203,
+        -0.4961681365966797,
+        44.67635726928711,
         0.0
       ],
       "rotation": [
@@ -272,8 +473,8 @@
       ],
       "transform": {
         "translation": [
-          -5.347129821777344,
-          47.35047149658203,
+          -0.4961681365966797,
+          44.67635726928711,
           0.0
         ],
         "rotation": [
@@ -287,16 +488,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 0.4000000059604645
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn"
     },
     {
-      "name": "StrongEnemySpawn.001",
+      "name": "NormalEnemySpawn.007",
       "group_id": 0,
-      "spawnTime": 1.1000000536441803,
+      "spawnTime": 0.5,
       "position": [
-        6.744119644165039,
-        47.35047149658203,
+        6.997682571411133,
+        44.67635726928711,
         0.0
       ],
       "rotation": [
@@ -311,8 +513,8 @@
       ],
       "transform": {
         "translation": [
-          6.744119644165039,
-          47.35047149658203,
+          6.997682571411133,
+          44.67635726928711,
           0.0
         ],
         "rotation": [
@@ -326,16 +528,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 0.4000000059604645
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn"
     },
     {
-      "name": "StrongEnemySpawn.002",
+      "name": "NormalEnemySpawn.008",
       "group_id": 1,
-      "spawnTime": 1.2999999523162842,
+      "spawnTime": 1.7999999523162842,
       "position": [
-        30.56055450439453,
-        34.980224609375,
+        -37.75122833251953,
+        27.655664443969727,
         0.0
       ],
       "rotation": [
@@ -350,8 +553,8 @@
       ],
       "transform": {
         "translation": [
-          30.56055450439453,
-          34.980224609375,
+          -37.75122833251953,
+          27.655664443969727,
           0.0
         ],
         "rotation": [
@@ -365,16 +568,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 0.0
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "StrongEnemySpawn.003",
+      "name": "NormalEnemySpawn.009",
       "group_id": 1,
-      "spawnTime": 1.3999999538064003,
+      "spawnTime": 1.7999999523162842,
       "position": [
-        20.47670555114746,
-        44.47307205200195,
+        -22.962203979492188,
+        42.18467330932617,
         0.0
       ],
       "rotation": [
@@ -389,8 +593,8 @@
       ],
       "transform": {
         "translation": [
-          20.47670555114746,
-          44.47307205200195,
+          -22.962203979492188,
+          42.18467330932617,
           0.0
         ],
         "rotation": [
@@ -404,16 +608,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 0.10000000149011612
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "StrongEnemySpawn.004",
+      "name": "NormalEnemySpawn.010",
       "group_id": 1,
-      "spawnTime": 2.299999952316284,
+      "spawnTime": 1.7999999523162842,
       "position": [
-        -16.542394638061523,
-        20.635042190551758,
+        -30.6663818359375,
+        42.18467330932617,
         0.0
       ],
       "rotation": [
@@ -428,8 +633,8 @@
       ],
       "transform": {
         "translation": [
-          -16.542394638061523,
-          20.635042190551758,
+          -30.6663818359375,
+          42.18467330932617,
           0.0
         ],
         "rotation": [
@@ -443,16 +648,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "StrongEnemySpawn.005",
+      "name": "NormalEnemySpawn.011",
       "group_id": 1,
-      "spawnTime": 1.4999999552965164,
+      "spawnTime": 1.7999999523162842,
       "position": [
-        -0.03874778747558594,
-        61.80177688598633,
+        -8.905601501464844,
+        36.285789489746094,
         0.0
       ],
       "rotation": [
@@ -467,8 +673,8 @@
       ],
       "transform": {
         "translation": [
-          -0.03874778747558594,
-          61.80177688598633,
+          -8.905601501464844,
+          36.285789489746094,
           0.0
         ],
         "rotation": [
@@ -482,16 +688,57 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 0.20000000298023224
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "StrongEnemySpawn.006",
+      "name": "NormalEnemySpawn.012",
+      "group_id": 1,
+      "spawnTime": 1.7999999523162842,
+      "position": [
+        -30.4206600189209,
+        22.47986602783203,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -30.4206600189209,
+          22.47986602783203,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.001"
+    },
+    {
+      "name": "NormalEnemySpawn.013",
       "group_id": 2,
-      "spawnTime": 1.5999999046325684,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        27.562118530273438,
-        48.30057144165039,
+        8.151187896728516,
+        29.7391357421875,
         0.0
       ],
       "rotation": [
@@ -506,8 +753,8 @@
       ],
       "transform": {
         "translation": [
-          27.562118530273438,
-          48.30057144165039,
+          8.151187896728516,
+          29.7391357421875,
           0.0
         ],
         "rotation": [
@@ -521,16 +768,617 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 0.0
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.007",
+      "name": "NormalEnemySpawn.014",
+      "group_id": 1,
+      "spawnTime": 1.7999999523162842,
+      "position": [
+        -13.11811637878418,
+        22.47986602783203,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -13.11811637878418,
+          22.47986602783203,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.001"
+    },
+    {
+      "name": "NormalEnemySpawn.015",
+      "group_id": 1,
+      "spawnTime": 3.299999952316284,
+      "position": [
+        46.91072082519531,
+        22.47986602783203,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          46.91072082519531,
+          22.47986602783203,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 2.0,
+      "parent_boss_name": "BossEnemySpawn.002"
+    },
+    {
+      "name": "NormalEnemySpawn.016",
+      "group_id": 1,
+      "spawnTime": 3.299999952316284,
+      "position": [
+        29.608179092407227,
+        22.47986602783203,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          29.608179092407227,
+          22.47986602783203,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 2.0,
+      "parent_boss_name": "BossEnemySpawn.002"
+    },
+    {
+      "name": "NormalEnemySpawn.017",
+      "group_id": 1,
+      "spawnTime": 3.299999952316284,
+      "position": [
+        51.12323760986328,
+        36.285789489746094,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          51.12323760986328,
+          36.285789489746094,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 2.0,
+      "parent_boss_name": "BossEnemySpawn.002"
+    },
+    {
+      "name": "NormalEnemySpawn.018",
+      "group_id": 1,
+      "spawnTime": 3.299999952316284,
+      "position": [
+        29.362457275390625,
+        42.18467330932617,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          29.362457275390625,
+          42.18467330932617,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 2.0,
+      "parent_boss_name": "BossEnemySpawn.002"
+    },
+    {
+      "name": "NormalEnemySpawn.019",
+      "group_id": 1,
+      "spawnTime": 3.299999952316284,
+      "position": [
+        37.06663513183594,
+        42.18467330932617,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          37.06663513183594,
+          42.18467330932617,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 2.0,
+      "parent_boss_name": "BossEnemySpawn.002"
+    },
+    {
+      "name": "NormalEnemySpawn.020",
+      "group_id": 1,
+      "spawnTime": 3.299999952316284,
+      "position": [
+        22.277610778808594,
+        27.655664443969727,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          22.277610778808594,
+          27.655664443969727,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 2.0,
+      "parent_boss_name": "BossEnemySpawn.002"
+    },
+    {
+      "name": "NormalEnemySpawn.021",
+      "group_id": 1,
+      "spawnTime": 3.299999952316284,
+      "position": [
+        22.310184478759766,
+        36.285789489746094,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          22.310184478759766,
+          36.285789489746094,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 2.0,
+      "parent_boss_name": "BossEnemySpawn.002"
+    },
+    {
+      "name": "NormalEnemySpawn.022",
+      "group_id": 1,
+      "spawnTime": 3.299999952316284,
+      "position": [
+        44.5000114440918,
+        41.58184814453125,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          44.5000114440918,
+          41.58184814453125,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 2.0,
+      "parent_boss_name": "BossEnemySpawn.002"
+    },
+    {
+      "name": "NormalEnemySpawn.023",
+      "group_id": 1,
+      "spawnTime": 3.299999952316284,
+      "position": [
+        52.307621002197266,
+        28.980850219726562,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          52.307621002197266,
+          28.980850219726562,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 2.0,
+      "parent_boss_name": "BossEnemySpawn.002"
+    },
+    {
+      "name": "NormalEnemySpawn.024",
+      "group_id": 1,
+      "spawnTime": 1.7999999523162842,
+      "position": [
+        -10.03242015838623,
+        -18.65399169921875,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -10.03242015838623,
+          -18.65399169921875,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.003"
+    },
+    {
+      "name": "NormalEnemySpawn.025",
+      "group_id": 1,
+      "spawnTime": 1.7999999523162842,
+      "position": [
+        0.590343713760376,
+        -18.65399169921875,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          0.590343713760376,
+          -18.65399169921875,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.003"
+    },
+    {
+      "name": "NormalEnemySpawn.026",
+      "group_id": 1,
+      "spawnTime": 1.7999999523162842,
+      "position": [
+        10.036491394042969,
+        -18.65399169921875,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          10.036491394042969,
+          -18.65399169921875,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.003"
+    },
+    {
+      "name": "NormalEnemySpawn.027",
+      "group_id": 1,
+      "spawnTime": 1.7999999523162842,
+      "position": [
+        20.35616111755371,
+        -18.65399169921875,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          20.35616111755371,
+          -18.65399169921875,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.003"
+    },
+    {
+      "name": "NormalEnemySpawn.028",
+      "group_id": 1,
+      "spawnTime": 1.7999999523162842,
+      "position": [
+        -20.04931640625,
+        -18.65399169921875,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -20.04931640625,
+          -18.65399169921875,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.003"
+    },
+    {
+      "name": "NormalEnemySpawn.029",
       "group_id": 2,
-      "spawnTime": 2.4999998807907104,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        -30.123851776123047,
-        48.30057144165039,
+        14.092975616455078,
+        23.456890106201172,
         0.0
       ],
       "rotation": [
@@ -545,8 +1393,8 @@
       ],
       "transform": {
         "translation": [
-          -30.123851776123047,
-          48.30057144165039,
+          14.092975616455078,
+          23.456890106201172,
           0.0
         ],
         "rotation": [
@@ -560,16 +1408,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 0.8999999761581421
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.008",
+      "name": "NormalEnemySpawn.030",
       "group_id": 2,
-      "spawnTime": 2.4999998807907104,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        -30.123851776123047,
-        41.77949142456055,
+        -7.127987384796143,
+        41.31605529785156,
         0.0
       ],
       "rotation": [
@@ -584,8 +1433,8 @@
       ],
       "transform": {
         "translation": [
-          -30.123851776123047,
-          41.77949142456055,
+          -7.127987384796143,
+          41.31605529785156,
           0.0
         ],
         "rotation": [
@@ -599,16 +1448,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 0.8999999761581421
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.009",
+      "name": "NormalEnemySpawn.031",
       "group_id": 2,
-      "spawnTime": 2.4999998807907104,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        26.983470916748047,
-        41.77949142456055,
+        -14.353026390075684,
+        49.154579162597656,
         0.0
       ],
       "rotation": [
@@ -623,8 +1473,8 @@
       ],
       "transform": {
         "translation": [
-          26.983470916748047,
-          41.77949142456055,
+          -14.353026390075684,
+          49.154579162597656,
           0.0
         ],
         "rotation": [
@@ -638,16 +1488,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 0.8999999761581421
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.010",
+      "name": "NormalEnemySpawn.032",
       "group_id": 2,
-      "spawnTime": 2.5999999046325684,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        -30.123851776123047,
-        34.4337272644043,
+        -14.353026390075684,
+        23.54674530029297,
         0.0
       ],
       "rotation": [
@@ -662,8 +1513,8 @@
       ],
       "transform": {
         "translation": [
-          -30.123851776123047,
-          34.4337272644043,
+          -14.353026390075684,
+          23.54674530029297,
           0.0
         ],
         "rotation": [
@@ -677,16 +1528,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.011",
+      "name": "NormalEnemySpawn.033",
       "group_id": 2,
-      "spawnTime": 2.5999999046325684,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        27.215591430664062,
-        34.4337272644043,
+        -6.541994571685791,
+        29.7391357421875,
         0.0
       ],
       "rotation": [
@@ -701,8 +1553,8 @@
       ],
       "transform": {
         "translation": [
-          27.215591430664062,
-          34.4337272644043,
+          -6.541994571685791,
+          29.7391357421875,
           0.0
         ],
         "rotation": [
@@ -716,16 +1568,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.012",
+      "name": "NormalEnemySpawn.034",
       "group_id": 2,
-      "spawnTime": 2.6999999284744263,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        27.215591430664062,
-        26.871719360351562,
+        7.996340274810791,
+        41.31605529785156,
         0.0
       ],
       "rotation": [
@@ -740,8 +1593,8 @@
       ],
       "transform": {
         "translation": [
-          27.215591430664062,
-          26.871719360351562,
+          7.996340274810791,
+          41.31605529785156,
           0.0
         ],
         "rotation": [
@@ -755,16 +1608,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.100000023841858
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.013",
+      "name": "NormalEnemySpawn.035",
       "group_id": 2,
-      "spawnTime": 2.6999999284744263,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        -30.123851776123047,
-        26.871719360351562,
+        15.695759773254395,
+        49.154579162597656,
         0.0
       ],
       "rotation": [
@@ -779,8 +1633,8 @@
       ],
       "transform": {
         "translation": [
-          -30.123851776123047,
-          26.871719360351562,
+          15.695759773254395,
+          49.154579162597656,
           0.0
         ],
         "rotation": [
@@ -794,16 +1648,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.100000023841858
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.014",
+      "name": "NormalEnemySpawn.036",
       "group_id": 2,
-      "spawnTime": 2.799999952316284,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        -30.123851776123047,
-        20.46535301208496,
+        -21.980283737182617,
+        55.07311248779297,
         0.0
       ],
       "rotation": [
@@ -818,8 +1673,8 @@
       ],
       "transform": {
         "translation": [
-          -30.123851776123047,
-          20.46535301208496,
+          -21.980283737182617,
+          55.07311248779297,
           0.0
         ],
         "rotation": [
@@ -833,16 +1688,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.2000000476837158
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.015",
+      "name": "NormalEnemySpawn.037",
       "group_id": 2,
-      "spawnTime": 2.799999952316284,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        27.215591430664062,
-        20.46535301208496,
+        -21.980283737182617,
+        17.75436782836914,
         0.0
       ],
       "rotation": [
@@ -857,8 +1713,8 @@
       ],
       "transform": {
         "translation": [
-          27.215591430664062,
-          20.46535301208496,
+          -21.980283737182617,
+          17.75436782836914,
           0.0
         ],
         "rotation": [
@@ -872,16 +1728,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.2000000476837158
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.016",
-      "group_id": 1,
-      "spawnTime": 1.9999999403953552,
+      "name": "NormalEnemySpawn.038",
+      "group_id": 2,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        8.145729064941406,
-        52.43397903442383,
+        19.823083877563477,
+        17.75436782836914,
         0.0
       ],
       "rotation": [
@@ -896,8 +1753,8 @@
       ],
       "transform": {
         "translation": [
-          8.145729064941406,
-          52.43397903442383,
+          19.823083877563477,
+          17.75436782836914,
           0.0
         ],
         "rotation": [
@@ -911,16 +1768,17 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 0.699999988079071
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "StrongEnemySpawn.017",
-      "group_id": 1,
-      "spawnTime": 2.299999952316284,
+      "name": "NormalEnemySpawn.039",
+      "group_id": 2,
+      "spawnTime": 2.0999999046325684,
       "position": [
-        -2.9312896728515625,
-        20.635042190551758,
+        22.209524154663086,
+        55.07311248779297,
         0.0
       ],
       "rotation": [
@@ -935,8 +1793,8 @@
       ],
       "transform": {
         "translation": [
-          -2.9312896728515625,
-          20.635042190551758,
+          22.209524154663086,
+          55.07311248779297,
           0.0
         ],
         "rotation": [
@@ -950,359 +1808,9 @@
           1.5
         ]
       },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
-    },
-    {
-      "name": "StrongEnemySpawn.018",
-      "group_id": 1,
-      "spawnTime": 2.299999952316284,
-      "position": [
-        10.905786514282227,
-        20.635042190551758,
-        0.0
-      ],
-      "rotation": [
-        0.0,
-        -0.0,
-        0.0
-      ],
-      "scaling": [
-        1.5,
-        1.5,
-        1.5
-      ],
-      "transform": {
-        "translation": [
-          10.905786514282227,
-          20.635042190551758,
-          0.0
-        ],
-        "rotation": [
-          0.0,
-          -0.0,
-          0.0
-        ],
-        "scaling": [
-          1.5,
-          1.5,
-          1.5
-        ]
-      },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
-    },
-    {
-      "name": "StrongEnemySpawn.019",
-      "group_id": 1,
-      "spawnTime": 2.299999952316284,
-      "position": [
-        26.35186004638672,
-        20.635042190551758,
-        0.0
-      ],
-      "rotation": [
-        0.0,
-        -0.0,
-        0.0
-      ],
-      "scaling": [
-        1.5,
-        1.5,
-        1.5
-      ],
-      "transform": {
-        "translation": [
-          26.35186004638672,
-          20.635042190551758,
-          0.0
-        ],
-        "rotation": [
-          0.0,
-          -0.0,
-          0.0
-        ],
-        "scaling": [
-          1.5,
-          1.5,
-          1.5
-        ]
-      },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
-    },
-    {
-      "name": "StrongEnemySpawn.020",
-      "group_id": 1,
-      "spawnTime": 2.299999952316284,
-      "position": [
-        -26.918346405029297,
-        20.635042190551758,
-        0.0
-      ],
-      "rotation": [
-        0.0,
-        -0.0,
-        0.0
-      ],
-      "scaling": [
-        1.5,
-        1.5,
-        1.5
-      ],
-      "transform": {
-        "translation": [
-          -26.918346405029297,
-          20.635042190551758,
-          0.0
-        ],
-        "rotation": [
-          0.0,
-          -0.0,
-          0.0
-        ],
-        "scaling": [
-          1.5,
-          1.5,
-          1.5
-        ]
-      },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
-    },
-    {
-      "name": "StrongEnemySpawn.021",
-      "group_id": 1,
-      "spawnTime": 2.299999952316284,
-      "position": [
-        -2.9312896728515625,
-        37.968360900878906,
-        0.0
-      ],
-      "rotation": [
-        0.0,
-        -0.0,
-        0.0
-      ],
-      "scaling": [
-        1.5,
-        1.5,
-        1.5
-      ],
-      "transform": {
-        "translation": [
-          -2.9312896728515625,
-          37.968360900878906,
-          0.0
-        ],
-        "rotation": [
-          0.0,
-          -0.0,
-          0.0
-        ],
-        "scaling": [
-          1.5,
-          1.5,
-          1.5
-        ]
-      },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
-    },
-    {
-      "name": "StrongEnemySpawn.022",
-      "group_id": 1,
-      "spawnTime": 2.299999952316284,
-      "position": [
-        -2.9312896728515625,
-        -13.421405792236328,
-        0.0
-      ],
-      "rotation": [
-        0.0,
-        -0.0,
-        0.0
-      ],
-      "scaling": [
-        1.5,
-        1.5,
-        1.5
-      ],
-      "transform": {
-        "translation": [
-          -2.9312896728515625,
-          -13.421405792236328,
-          0.0
-        ],
-        "rotation": [
-          0.0,
-          -0.0,
-          0.0
-        ],
-        "scaling": [
-          1.5,
-          1.5,
-          1.5
-        ]
-      },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
-    },
-    {
-      "name": "StrongEnemySpawn.023",
-      "group_id": 1,
-      "spawnTime": 2.299999952316284,
-      "position": [
-        15.318843841552734,
-        -13.421405792236328,
-        0.0
-      ],
-      "rotation": [
-        0.0,
-        -0.0,
-        0.0
-      ],
-      "scaling": [
-        1.5,
-        1.5,
-        1.5
-      ],
-      "transform": {
-        "translation": [
-          15.318843841552734,
-          -13.421405792236328,
-          0.0
-        ],
-        "rotation": [
-          0.0,
-          -0.0,
-          0.0
-        ],
-        "scaling": [
-          1.5,
-          1.5,
-          1.5
-        ]
-      },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
-    },
-    {
-      "name": "StrongEnemySpawn.024",
-      "group_id": 1,
-      "spawnTime": 2.299999952316284,
-      "position": [
-        -19.309751510620117,
-        -13.421405792236328,
-        0.0
-      ],
-      "rotation": [
-        0.0,
-        -0.0,
-        0.0
-      ],
-      "scaling": [
-        1.5,
-        1.5,
-        1.5
-      ],
-      "transform": {
-        "translation": [
-          -19.309751510620117,
-          -13.421405792236328,
-          0.0
-        ],
-        "rotation": [
-          0.0,
-          -0.0,
-          0.0
-        ],
-        "scaling": [
-          1.5,
-          1.5,
-          1.5
-        ]
-      },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
-    },
-    {
-      "name": "StrongEnemySpawn.025",
-      "group_id": 1,
-      "spawnTime": 2.299999952316284,
-      "position": [
-        -32.268497467041016,
-        -13.792383193969727,
-        0.0
-      ],
-      "rotation": [
-        0.0,
-        -0.0,
-        0.0
-      ],
-      "scaling": [
-        1.5,
-        1.5,
-        1.5
-      ],
-      "transform": {
-        "translation": [
-          -32.268497467041016,
-          -13.792383193969727,
-          0.0
-        ],
-        "rotation": [
-          0.0,
-          -0.0,
-          0.0
-        ],
-        "scaling": [
-          1.5,
-          1.5,
-          1.5
-        ]
-      },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
-    },
-    {
-      "name": "StrongEnemySpawn.026",
-      "group_id": 1,
-      "spawnTime": 2.299999952316284,
-      "position": [
-        30.800743103027344,
-        -13.421405792236328,
-        0.0
-      ],
-      "rotation": [
-        0.0,
-        -0.0,
-        0.0
-      ],
-      "scaling": [
-        1.5,
-        1.5,
-        1.5
-      ],
-      "transform": {
-        "translation": [
-          30.800743103027344,
-          -13.421405792236328,
-          0.0
-        ],
-        "rotation": [
-          0.0,
-          -0.0,
-          0.0
-        ],
-        "scaling": [
-          1.5,
-          1.5,
-          1.5
-        ]
-      },
-      "enemy_type": "StrongEnemy",
-      "spawn_offset": 1.0
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.5,
+      "parent_boss_name": "BossEnemySpawn.004"
     }
   ]
 }

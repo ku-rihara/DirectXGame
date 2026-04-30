@@ -47,6 +47,7 @@ public:
 
     // 初期化、更新、描画
     void Init(SrvManager* srvManager);
+    void Finalize() { particleGroups_.clear(); }
     void Update();
     void Draw(const ViewProjection& viewProjection);
 

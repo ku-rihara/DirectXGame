@@ -1,12 +1,10 @@
 #include "DeathTimer.h"
-#include "Easing/EasingFunction.h"
 #include "Frame/Frame.h"
-#include <cmath>
+#include <algorithm>
 #include <imgui.h>
 
 void DeathTimer::Init() {
 
-    // グローバルパラメータ
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
@@ -14,156 +12,118 @@ void DeathTimer::Init() {
 
     deathTimerGauge_ = std::make_unique<DeathTimerGauge>();
     deathTimerGauge_->Init();
+    deathTimerGauge_->SetTimer(0.0f, maxStress_);
 
-    levelUIController_.Init();
-
-    // HP初期化
-    currentHP_    = maxHP_;
-    currentLevel_ = 1;
-    killCount_    = 0;
+    currentStress_ = 0.0f;
+    isBossDead_    = false;
+    isDeath_       = false;
 }
 
 void DeathTimer::Update(float deltaTime) {
 
-    // イージング適応
-    AdaptEasing();
-    TakeDamage(deltaTime);
+#if defined(_DEBUG) || defined(DEVELOPMENT)
+    if (!isGodMode_) {
+#endif
 
-    // maxHPを超えないようにクランプ
-    currentHP_ = std::clamp(currentHP_, 0.0f, maxHP_);
-    if (currentHP_ <= 0.0f) {
+        if (!isBossDead_) {
+            // ボスが生きている間：煽り中はストレス増加
+            if (isTaunting_) {
+                float rate = baseStressRate_ + static_cast<float>(tauntingEnemyCount_) * stressRatePerEnemy_;
+                currentStress_ += rate * deltaTime;
+            }
+        } else {
+            // ボス撃破後：一定間隔チックでストレス減少（コールバック付き）
+            decayTickTimer_ += deltaTime;
+            if (decayTickTimer_ >= decayTickInterval_) {
+                decayTickTimer_ -= decayTickInterval_;
+                currentStress_ -= decayAmountPerTick_;
+                if (onDecayTick_) {
+                    onDecayTick_();
+                }
+            }
+        }
+
+#if defined(_DEBUG) || defined(DEVELOPMENT)
+    }
+#endif
+
+    currentStress_ = std::clamp(currentStress_, 0.0f, maxStress_);
+
+    if (currentStress_ >= maxStress_) {
         isDeath_ = true;
     }
 
-    // ゲージ更新
     deathTimerGauge_->Update(deltaTime);
-    deathTimerGauge_->SetTimer(currentHP_, maxHP_);
-
-    levelUIController_.Update(currentLevel_);
+    deathTimerGauge_->SetTimer(currentStress_, maxStress_);
 }
 
-void DeathTimer::TakeDamage(float deltaTime) {
+void DeathTimer::TakeDamage(float amount) {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
-    if (isGodMode_) {
-        return; 
-    }
+    if (isGodMode_) { return; }
 #endif
-    currentHP_ -= decreaseRates_[currentLevel_ - 1] * deltaTime;
-    if (currentHP_ < 0.0f) {
-        currentHP_ = 0.0f;
+    currentStress_ = (std::min)(currentStress_ + amount, maxStress_);
+}
+
+void DeathTimer::SetTauntState(bool isTaunting, int32_t tauntingCount) {
+    isTaunting_         = isTaunting;
+    tauntingEnemyCount_ = tauntingCount;
+}
+
+void DeathTimer::OnBossDead() {
+    isBossDead_         = true;
+    isTaunting_         = false;
+    tauntingEnemyCount_ = 0;
+    decayTickTimer_     = 0.0f;
+
+    if (onBossKilled_) {
+        onBossKilled_();
     }
 }
 
-void DeathTimer::OnEnemyKilled(float gaugeAmount, int32_t comboCount) {
-    killCount_++;
-    UpdateLevel();
-
-    // コンボ倍率を計算して回復量に乗算
-    int32_t step = 0;
-    if (comboStepSize_ > 0) {
-        step = comboCount / comboStepSize_;
+void DeathTimer::OnNormalEnemyHit() {
+    if (!isBossDead_) {
+        return;
     }
-
-    float multiplier = (std::min)(std::pow(comboMultiplierPerStep_, static_cast<float>(step)), comboMaxMultiplier_);
-    RecoverHP(gaugeAmount * multiplier);
-
-    if (onKillCallback_) {
-        onKillCallback_(multiplier);
-    }
-}
-
-void DeathTimer::ApplyBonus(float amount) {
-    RecoverHP(amount);
-}
-
-void DeathTimer::RecoverHP(float amount) {
-    if (isRecovering_) {
-        recoveryTargetValue_ += amount;
-    } else {
-        recoveryStartValue_  = currentHP_;
-        recoveryTargetValue_ = currentHP_ + amount;
-        recoveryTimer_       = 0.0f;
-        isRecovering_        = true;
-    }
-    recoveryTargetValue_ = (std::min)(recoveryTargetValue_, maxHP_);
-}
-
-void DeathTimer::UpdateLevel() {
-    int32_t newLevel = 1;
-    for (int32_t i = 0; i < kMaxLevel - 1; ++i) {
-        if (killCount_ >= levelUpKillCounts_[i]) {
-            newLevel = i + 2;
-        }
-    }
-    currentLevel_ = newLevel;
+    currentStress_ = (std::max)(0.0f, currentStress_ - stressReductionPerHit_);
 }
 
 void DeathTimer::RegisterParams() {
-    globalParameter_->Regist(groupName_, "maxHP", &maxHP_);
-    globalParameter_->Regist(groupName_, "recoveryDuration", &recoveryDuration_);
-    globalParameter_->Regist(groupName_, "comboStepSize", &comboStepSize_);
-    globalParameter_->Regist(groupName_, "comboMultiplierPerStep", &comboMultiplierPerStep_);
-    globalParameter_->Regist(groupName_, "comboMaxMultiplier", &comboMaxMultiplier_);
-
-    for (int32_t i = 0; i < kMaxLevel; ++i) {
-        globalParameter_->Regist(groupName_, "decreaseRate" + std::to_string(i + 1), &decreaseRates_[i]);
-    }
-    for (int32_t i = 0; i < kMaxLevel - 1; ++i) {
-        globalParameter_->Regist(groupName_, "levelUpKillCount" + std::to_string(i + 2), &levelUpKillCounts_[i]);
-    }
+    globalParameter_->Regist(groupName_, "maxStress",             &maxStress_);
+    globalParameter_->Regist(groupName_, "baseStressRate",        &baseStressRate_);
+    globalParameter_->Regist(groupName_, "stressRatePerEnemy",    &stressRatePerEnemy_);
+    globalParameter_->Regist(groupName_, "decayTickInterval",     &decayTickInterval_);
+    globalParameter_->Regist(groupName_, "decayAmountPerTick",    &decayAmountPerTick_);
+    globalParameter_->Regist(groupName_, "stressReductionPerHit", &stressReductionPerHit_);
 }
 
-///==========================================================
-/// パラメータ調整
-///==========================================================
 void DeathTimer::AdjustParam() {
-
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::DragFloat("最大HP", &maxHP_, 0.01f);
-        ImGui::DragFloat("回復イージング時間", &recoveryDuration_, 0.01f);
-
-        ImGui::SeparatorText("ゲージ減少レート（レベル別）");
-        for (int32_t i = 0; i < kMaxLevel; ++i) {
-            std::string label = "Lv" + std::to_string(i + 1) + " 減少レート";
-            ImGui::DragFloat(label.c_str(), &decreaseRates_[i], 0.001f, 0.0f, 10.0f);
-        }
-
-        ImGui::SeparatorText("コンボ倍率設定");
-        ImGui::InputInt("コンボステップ数（N コンボおきに倍率UP）", &comboStepSize_);
-        ImGui::DragFloat("1ステップごとの倍率", &comboMultiplierPerStep_, 0.01f, 1.0f, 10.0f);
-        ImGui::DragFloat("倍率の上限", &comboMaxMultiplier_, 0.01f, 1.0f, 100.0f);
-
-        ImGui::SeparatorText("レベルアップ閾値（累計キル数）");
-        for (int32_t i = 0; i < kMaxLevel - 1; ++i) {
-            std::string label = "Lv" + std::to_string(i + 2) + " 到達キル数";
-            ImGui::InputInt(label.c_str(), &levelUpKillCounts_[i]);
-        }
+        ImGui::DragFloat("最大ストレス",                    &maxStress_,             0.1f, 1.0f, 10000.0f);
+        ImGui::SeparatorText("ストレス増加（煽り中）");
+        ImGui::DragFloat("基準増加量（/秒）",               &baseStressRate_,        0.1f, 0.0f, 100.0f);
+        ImGui::DragFloat("ザコ1体あたり追加増加量（/秒）", &stressRatePerEnemy_,    0.1f, 0.0f, 50.0f);
+        ImGui::SeparatorText("ストレス減少（ボス撃破後・チック方式）");
+        ImGui::DragFloat("チック間隔（秒）",     &decayTickInterval_,     0.05f, 0.1f, 10.0f);
+        ImGui::DragFloat("チックあたり減少量", &decayAmountPerTick_,    0.1f,  0.0f, 100.0f);
+        ImGui::DragFloat("ザコ攻撃1回の減少量", &stressReductionPerHit_, 0.1f,  0.0f, 100.0f);
 
         ImGui::Separator();
-        if (ImGui::Button(isGodMode_ ? "[DEBUG] HP減少: 停止中  →  再開" : "[DEBUG] HP減少: 動作中  →  停止")) {
+        if (ImGui::Button(isGodMode_ ? "[DEBUG] ストレス増加: 停止中 → 再開" : "[DEBUG] ストレス増加: 動作中 → 停止")) {
             isGodMode_ = !isGodMode_;
         }
         if (isGodMode_) {
             ImGui::SameLine();
-            ImGui::TextColored({1.0f, 0.4f, 0.4f, 1.0f}, "GOD MODE ON");
+            ImGui::TextColored({0.4f, 1.0f, 0.4f, 1.0f}, "GOD MODE ON");
         }
 
         ImGui::Separator();
-        ImGui::Text("現在のHP: %.2f / %.2f", currentHP_, maxHP_);
-        ImGui::Text("現在のレベル: %d / %d", currentLevel_, kMaxLevel);
-        ImGui::Text("累計キル数: %d", killCount_);
-        // コンボ倍率表示
-        if (comboStepSize_ > 0) {
-            ImGui::Text("倍率ステップ: 0コンボ=x1.00 / %dコンボ=x%.2f / %dコンボ=x%.2f / %dコンボ=x%.2f",
-                comboStepSize_,  std::pow(comboMultiplierPerStep_, 1.0f),
-                comboStepSize_ * 2, std::pow(comboMultiplierPerStep_, 2.0f),
-                comboStepSize_ * 3, std::pow(comboMultiplierPerStep_, 3.0f));
-        }
+        ImGui::Text("現在のストレス: %.1f / %.1f", currentStress_, maxStress_);
+        ImGui::Text("煽り中: %s  煽りザコ数: %d", isTaunting_ ? "YES" : "NO", tauntingEnemyCount_);
+        ImGui::Text("ボス撃破: %s", isBossDead_ ? "YES" : "NO");
 
-        // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
 
@@ -171,25 +131,5 @@ void DeathTimer::AdjustParam() {
     }
 
     deathTimerGauge_->AdjustParam();
-    levelUIController_.AdjustParam();
-
-#endif // _DEBUG
-}
-
-void DeathTimer::AdaptEasing() {
-    if (isRecovering_) {
-        recoveryTimer_ += KetaEngine::Frame::DeltaTimeRate();
-
-        currentHP_ = EaseOutQuad(
-            recoveryStartValue_,
-            recoveryTargetValue_,
-            recoveryTimer_,
-            recoveryDuration_);
-
-        if (recoveryTimer_ >= recoveryDuration_) {
-            currentHP_     = recoveryTargetValue_;
-            isRecovering_  = false;
-            recoveryTimer_ = 0.0f;
-        }
-    }
+#endif
 }

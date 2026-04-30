@@ -71,8 +71,8 @@ void DxCommand::Finalize() {
         CloseHandle(fenceEvent_);
         fenceEvent_ = nullptr;
     }
-    if (fence_) {
-        fence_.Reset();
-    }
+    fence_.Reset();
+    commandList_.Reset();
+    commandAllocator_.Reset();
     commandQueue_.Reset();
 }

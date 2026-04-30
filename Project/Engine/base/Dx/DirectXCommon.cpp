@@ -205,10 +205,10 @@ ID3D12GraphicsCommandList* DirectXCommon::GetCommandList() const {
 void DirectXCommon::Finalize() {
 
     dxCompiler_->Finalize();
+    dxRenderTarget_->Finalize();
+    dxSwapChain_->Finalize();
     dxCommand_->Finalize();
     dxDevice_->Finalize();
-    dxSwapChain_->Finalize();
-    dxRenderTarget_->Finalize();
 
     CloseWindow(winApp_->GetHwnd());
 }

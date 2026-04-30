@@ -6,7 +6,7 @@
             0.05098039284348488,
             1.0
         ],
-        "dangerThreshold": 0.3199999928474426,
+        "dangerThreshold": 0.699999988079071,
         "heatBeatSpeedRate0": 0.6899999976158142,
         "heatBeatSpeedRate1": 1.5,
         "heatBeatSpeedRate2": 2.1500000953674316,
@@ -16,7 +16,7 @@
             0.19281168282032013,
             1.0
         ],
-        "normalThreshold": 0.6000000238418579,
+        "normalThreshold": 0.4000000059604645,
         "safeColor": [
             0.125490203499794,
             0.8941176533699036,
