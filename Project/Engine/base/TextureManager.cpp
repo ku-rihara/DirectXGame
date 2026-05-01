@@ -109,7 +109,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureDate(Microso
 
 uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
-    // パスを正規化 (バックスラッシュをスラッシュに変換)
+    // パスを正規化
     std::string normalizedPath = filePath;
     std::replace(normalizedPath.begin(), normalizedPath.end(), '\\', '/');
 

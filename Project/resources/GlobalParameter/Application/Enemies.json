@@ -48,7 +48,7 @@
         "burstTime1": 0.5,
         "burstTime2": 0.5,
         "chaseDistance1": 44.970001220703125,
-        "chaseDistance2": 45.56999969482422,
+        "chaseDistance2": 61.04999923706055,
         "chaseDistanceMin1": 16.899999618530273,
         "chaseDistanceMin2": 19.600000381469727,
         "chaseResetTime1": 2.0,
@@ -122,9 +122,9 @@
             6.0
         ],
         "initScale2": [
-            6.0,
-            6.0,
-            6.0
+            9.0,
+            9.0,
+            9.0
         ],
         "maxChaseTime1": 5.0,
         "maxChaseTime2": 5.0,
@@ -138,6 +138,7 @@
         "ropeReboundJumpValue2": 15.0,
         "startTime1": 0.0,
         "startTime2": 0.0,
+        "strong_tauntRange": 25.5,
         "thrustRotateSpeed1": 43.560001373291016,
         "thrustRotateSpeed2": 43.560001373291016,
         "upperFallSpeedLimit1": 1.2000000476837158,

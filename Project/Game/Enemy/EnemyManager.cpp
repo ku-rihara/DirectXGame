@@ -47,8 +47,10 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
         enemy = std::make_unique<NormalEnemy>();
         enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
     } else if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)] || enemyType == "BossEnemy") {
-        enemy = std::make_unique<StrongEnemy>();
-        enemy->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        auto strong = std::make_unique<StrongEnemy>();
+        strong->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        strong->SetStrongParameter(strongEnemyParam_); 
+        enemy = std::move(strong);
     }
 
     if (!enemy) {
@@ -65,14 +67,12 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     enemy->SetHPBarColorConfig(&hpBarColorConfig_);
     UpdateAvailableAnimationsForEditor(enemy.get());
 
-    // JSONから渡されたローカルオフセットを設定
     if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
         NormalEnemy* ne = static_cast<NormalEnemy*>(enemy.get());
         ne->SetSpawnOffset(localOffset);
         ne->SetNormalParameter(normalEnemyParam_);
     }
 
-    // ダメージコールバック設定
     BaseEnemy* rawPtr = enemy.get();
     if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
         rawPtr->SetOnDamageTakenCallback([this]() {
@@ -82,7 +82,6 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
         });
     }
 
-    // ボスの場合はボス名→ポインタのテーブルに登録する
     if (enemy->GetType() == BaseEnemy::Type::STRONG && !parentBossName.empty()) {
         bossByName_[parentBossName] = enemy.get();
     }
@@ -94,7 +93,6 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 
     enemies_.push_back(std::move(enemy));
 
-    // ボス・取り巻きのリンク
     LinkBossAndMinions(groupID, newMinion, parentBossName);
 }
 
@@ -103,7 +101,6 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 ///========================================================================================
 void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, const std::string& parentBossName) {
 
-    // このウェーブグループに属する全ボスを収集・登録
     for (auto& e : enemies_) {
         if (e->GetGroupId() == groupID && e->GetType() == BaseEnemy::Type::STRONG) {
             if (minionsByBoss_.find(e.get()) == minionsByBoss_.end()) {
@@ -112,17 +109,15 @@ void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, c
         }
     }
 
-    // 新しく生成されたザコのみをリンク対象とする
     if (!newMinion) {
         return;
     }
     if (newMinion->GetBoss() != nullptr) {
         return;
-    } // 既にリンク済み
+    }
 
     BaseEnemy* targetBoss = nullptr;
 
-    //  JSON で parent_boss_name が指定されている場合はボス名で直接引く
     if (!parentBossName.empty()) {
         auto it = bossByName_.find(parentBossName);
         if (it != bossByName_.end()) {
@@ -130,7 +125,6 @@ void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, c
         }
     }
 
-    // parentBossName が空またはボスがまだスポーンしていない場合は
     if (!targetBoss) {
         for (auto& enemy : enemies_) {
             if (enemy->GetGroupId() == groupID && enemy->GetType() == BaseEnemy::Type::STRONG) {
@@ -142,11 +136,10 @@ void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, c
 
     if (!targetBoss) {
         return;
-    } // ボスがまだ生成されていない
+    }
 
     newMinion->SetBoss(targetBoss);
 
-    // オフセットが未設定の場合のみ現在位置差から計算する
     const Vector3& knownOffset = newMinion->GetSpawnOffset();
     bool hasPresetOffset       = (knownOffset.x != 0.0f || knownOffset.z != 0.0f);
     if (!hasPresetOffset) {
@@ -155,7 +148,6 @@ void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, c
         newMinion->SetSpawnOffset(offset);
     }
 
-    // ミニオンリストに追加
     minionsByBoss_[targetBoss].push_back(newMinion);
 }
 
@@ -178,6 +170,15 @@ void EnemyManager::UpdateTauntState() {
 
         float dist   = (boss->GetWorldPosition() - playerPos).Length();
         bool inRange = (dist <= bossPlayerTriggerDistance_);
+
+        // StrongEnemyの煽り状態も更新
+        if (StrongEnemy* strong = dynamic_cast<StrongEnemy*>(boss)) {
+            if (inRange) {
+                strong->StartTaunt();
+            } else {
+                strong->StopTaunt();
+            }
+        }
 
         for (NormalEnemy* zako : minions) {
             if (!zako || zako->GetIsDeath()) {
@@ -207,7 +208,6 @@ void EnemyManager::OnBossKilled(BaseEnemy* dyingBoss) {
         pDeathTimer_->OnBossDead();
     }
 
-    // そのボスの取り巻きのみ逃走させる
     auto it = minionsByBoss_.find(dyingBoss);
     if (it != minionsByBoss_.end()) {
         for (NormalEnemy* zako : it->second) {
@@ -218,7 +218,6 @@ void EnemyManager::OnBossKilled(BaseEnemy* dyingBoss) {
         minionsByBoss_.erase(it);
     }
 
-    //  bossByName_ からも削除する
     for (auto bit = bossByName_.begin(); bit != bossByName_.end(); ++bit) {
         if (bit->second == dyingBoss) {
             bossByName_.erase(bit);
@@ -239,8 +238,10 @@ void EnemyManager::PreGenerateEnemy(const std::string& enemyType, const Vector3&
         enemy = std::make_unique<NormalEnemy>();
         enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
     } else if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)] || enemyType == "BossEnemy") {
-        enemy = std::make_unique<StrongEnemy>();
-        enemy->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        auto strong = std::make_unique<StrongEnemy>();
+        strong->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        strong->SetStrongParameter(strongEnemyParam_);
+        enemy = std::move(strong);
     }
 
     if (!enemy) {
@@ -257,14 +258,12 @@ void EnemyManager::PreGenerateEnemy(const std::string& enemyType, const Vector3&
     enemy->SetHPBarColorConfig(&hpBarColorConfig_);
     UpdateAvailableAnimationsForEditor(enemy.get());
 
-    // JSONから渡されたローカルオフセットを設定
     if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
         NormalEnemy* ne = static_cast<NormalEnemy*>(enemy.get());
         ne->SetSpawnOffset(localOffset);
         ne->SetNormalParameter(normalEnemyParam_);
     }
 
-    // ダメージコールバック設定
     if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
         enemy->SetOnDamageTakenCallback([this]() {
             if (pDeathTimer_) {
@@ -273,18 +272,14 @@ void EnemyManager::PreGenerateEnemy(const std::string& enemyType, const Vector3&
         });
     }
 
-    //  事前生成のボスも bossByName_ に登録しておく
     if (enemy->GetType() == BaseEnemy::Type::STRONG && !parentBossName.empty()) {
-        // waitingEnemies_ に入る前に raw ポインタを退避して登録
         bossByName_[parentBossName] = enemy.get();
     }
 
-    // parentBossName を NormalEnemy に保存しておく
     if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
         static_cast<NormalEnemy*>(enemy.get())->SetParentBossName(parentBossName);
     }
 
-    // 非アクティブ化
     enemy->SetScale(Vector3::ZeroVector());
     enemy->SetAnimationActive(false);
     enemy->SetIsAdaptCollision(false);
@@ -306,29 +301,34 @@ bool EnemyManager::ActivateSingleWaitingEnemy(int32_t groupID) {
     if (auto* anim = enemy->GetAnimationObject()) {
         anim->ClearAllAnimationEndCallbacks();
     }
+
+    // Refresh parameters so EnemySpawn reads the correct baseScale_
+    if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
+        enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+    } else if (enemy->GetType() == BaseEnemy::Type::STRONG) {
+        enemy->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        static_cast<StrongEnemy*>(enemy.get())->SetStrongParameter(strongEnemyParam_);
+    }
+
     enemy->SetAnimationActive(true);
     enemy->SetIsAdaptCollision(true);
     enemy->ChangeBehavior(std::make_unique<EnemySpawn>(enemy.get()));
 
-    // アクティブ化時にボスなら bossByName_ のポインタを正式に更新する
     NormalEnemy* newMinion = nullptr;
     std::string bossName   = "";
 
-    if (enemy->GetType() == BaseEnemy::Type::STRONG) {
-        // ボスのアクティブ化：bossByName_ の登録ポインタを更新
-    } else if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
+    if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
         newMinion = static_cast<NormalEnemy*>(enemy.get());
         bossName  = newMinion->GetParentBossName();
     }
 
     enemies_.push_back(std::move(enemy));
 
-    // move 後の最後尾ポインタで bossByName_ を更新
     BaseEnemy* activated = enemies_.back().get();
     if (activated->GetType() == BaseEnemy::Type::STRONG) {
         for (auto& [name, ptr] : bossByName_) {
             if (ptr == activated) {
-                bossByName_[name] = activated; 
+                bossByName_[name] = activated;
                 break;
             }
         }
@@ -339,7 +339,6 @@ bool EnemyManager::ActivateSingleWaitingEnemy(int32_t groupID) {
         waitingEnemies_.erase(it);
     }
 
-    // ザコのみリンクを試みる
     LinkBossAndMinions(groupID, newMinion, bossName);
     return true;
 }
@@ -348,7 +347,6 @@ bool EnemyManager::ActivateSingleWaitingEnemy(int32_t groupID) {
 ///  全待機敵を破棄
 ///========================================================================================
 void EnemyManager::ClearAllWaitingEnemies() {
-    //  待機中のボスが bossByName_ に登録されていたら合わせて削除する
     for (auto& [groupID, waitingList] : waitingEnemies_) {
         for (auto& e : waitingList) {
             if (e->GetType() == BaseEnemy::Type::STRONG) {
@@ -370,7 +368,6 @@ void EnemyManager::ClearAllWaitingEnemies() {
 ///========================================================================================
 void EnemyManager::Update() {
 
-    // 煽り状態を毎フレーム評価
     UpdateTauntState();
 
     for (size_t i = 0; i < enemies_.size();) {
@@ -379,6 +376,8 @@ void EnemyManager::Update() {
             enemies_[i]->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
         } else if (enemies_[i]->GetType() == BaseEnemy::Type::STRONG) {
             enemies_[i]->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+            // StrongParameterも毎フレーム同期
+            static_cast<StrongEnemy*>(enemies_[i].get())->SetStrongParameter(strongEnemyParam_);
         }
 
         enemies_[i]->Update();
@@ -386,17 +385,14 @@ void EnemyManager::Update() {
         if (enemies_[i]->GetIsDeath()) {
             int32_t groupID = enemies_[i]->GetGroupId();
 
-            // ボス撃破通知
             if (enemies_[i]->GetType() == BaseEnemy::Type::STRONG) {
                 OnBossKilled(enemies_[i].get());
             }
 
-            // スポーナーへ通知
             if (pEnemySpawner_) {
                 pEnemySpawner_->OnEnemyDestroyed(groupID);
             }
 
-            // 死亡した取り巻きをミニオンリストから除去
             if (enemies_[i]->GetType() == BaseEnemy::Type::NORMAL) {
                 NormalEnemy* dying = static_cast<NormalEnemy*>(enemies_[i].get());
                 BaseEnemy* boss    = dying->GetBoss();
@@ -440,9 +436,9 @@ void EnemyManager::DamageReactionCreate() {
     damageReactionController_->EditorUpdate();
 }
 
-///=================================================================================
-/// パラメータをグループに追加
-///=================================================================================
+///========================================================================================
+///  パラメータ登録
+///========================================================================================
 void EnemyManager::RegisterParams() {
 
     globalParameter_->Regist(groupName_, "hpBarDisplayDistance", &hpBarDisplayDistance_);
@@ -472,7 +468,10 @@ void EnemyManager::RegisterParams() {
 
     // NormalEnemy専用パラメータ
     globalParameter_->Regist(groupName_, "normal_fleeSpeed", &normalEnemyParam_.fleeSpeed);
-    globalParameter_->Regist(groupName_, "normal_fleeTime",  &normalEnemyParam_.fleeTime);
+    globalParameter_->Regist(groupName_, "normal_fleeTime", &normalEnemyParam_.fleeTime);
+
+    // StrongEnemy専用パラメータ
+    globalParameter_->Regist(groupName_, "strong_tauntRange", &strongEnemyParam_.tauntRange);
 }
 
 void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
@@ -493,7 +492,12 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     if (type == BaseEnemy::Type::NORMAL) {
         ImGui::SeparatorText("逃走パラメータ（NormalEnemy）");
         ImGui::DragFloat("逃走速度", &normalEnemyParam_.fleeSpeed, 0.1f, 0.0f, 20.0f);
-        ImGui::DragFloat("逃走時間", &normalEnemyParam_.fleeTime,  0.1f, 0.0f, 60.0f);
+        ImGui::DragFloat("逃走時間", &normalEnemyParam_.fleeTime, 0.1f, 0.0f, 60.0f);
+    }
+
+    if (type == BaseEnemy::Type::STRONG) {
+        ImGui::SeparatorText("煽りパラメータ（StrongEnemy）");
+        ImGui::DragFloat("煽り継続範囲", &strongEnemyParam_.tauntRange, 0.5f, 0.0f, 100.0f);
     }
 
     ImGui::SeparatorText("死亡パラメータ");
@@ -544,7 +548,6 @@ void EnemyManager::AdjustParam() {
             ImGui::PopID();
         }
 
-        // デバッグ情報
         ImGui::SeparatorText("ボス・取り巻き状態");
         ImGui::Text("煽りトリガー距離: %.1f", bossPlayerTriggerDistance_);
         if (minionsByBoss_.empty()) {
@@ -574,9 +577,9 @@ void EnemyManager::AdjustParam() {
 #endif
 }
 
-///------------------------------------------------------------------------------------------------
-/// クラスセット
-///------------------------------------------------------------------------------------------------
+///========================================================================================
+///  クラスセット
+///========================================================================================
 void EnemyManager::SetPlayer(Player* player) {
     pPlayer_ = player;
 }

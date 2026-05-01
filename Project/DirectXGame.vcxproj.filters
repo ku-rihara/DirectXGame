@@ -2621,6 +2621,9 @@
     <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerDash.cpp">
       <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2787,6 +2790,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerDash.h">
       <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

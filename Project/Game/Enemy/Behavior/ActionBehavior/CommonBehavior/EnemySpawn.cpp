@@ -58,9 +58,9 @@ void EnemySpawn::Update() {
         ///  移動Behaviorに切り替え
         ///------------------------------------------------------------------
     case EnemySpawn::Step::ChangeNextBehavior:
-
+        // Ensure scale is at baseScale_ regardless of whether the easing completed
+        pBaseEnemy_->ScaleReset();
         pBaseEnemy_->ChangeBehavior(pBaseEnemy_->CreatePostSpawnBehavior());
-
         break;
     default:
         break;

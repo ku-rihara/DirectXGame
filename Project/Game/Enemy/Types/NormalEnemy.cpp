@@ -133,9 +133,13 @@ void NormalEnemy::BackToDamageRoot() {
     if (zakoState_ == ZakoState::CrawlBackwards) {
         PlayNormalAnimation(NormalAnimationType::CrawlBackwards, true);
         return;
+    } else if (zakoState_ == ZakoState::Taunt) {
+        // Taunt状態ならTauntアニメーションに戻す
+        BaseEnemy::PlayAnimation(AnimationType::Taunt, true);
+        return;
     }
 
-    // ResetToWaitAnimation
+    // 通常のBehaviorに戻る
     BaseEnemy::ResetToWaitAnimation();
 }
 
