@@ -18,7 +18,7 @@ void ResultRunner::Init() {
     runnerAnimations_.resize(kRunnerCount);
     for (int32_t i = 0; i < kRunnerCount; ++i) {
         runnerAnimations_[i].reset(
-            KetaEngine::Object3DAnimation::CreateModel("Enemy/NormalEnemyRun.gltf"));
+            KetaEngine::Object3DAnimation::CreateModel("NormalEnemy/NormalEnemyRun.gltf"));
         runnerAnimations_[i]->Init();
         runnerAnimations_[i]->SetLoop(true);
         runnerAnimations_[i]->transform_.translation_ = {config_.basePos.x, config_.basePos.y, currentZ_[i]};

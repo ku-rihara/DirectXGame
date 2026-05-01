@@ -25,6 +25,7 @@ private:
         Vector3 scale;
         std::string enemyType;
         float spawnOffset;
+        std::string parentBossName; // JSONで指定されたボス名
         bool hasSpawned   = false;
         bool preGenerated = false; // 事前生成キュー済みフラグ
     };
@@ -111,6 +112,7 @@ private:
     std::vector<SpawnPoint> spawnPoints_;
     std::vector<SpawnGroup> spawnGroups_;
     std::unordered_map<int, std::vector<SpawnPoint*>> groupSpawnPoints_;
+    std::unordered_map<std::string, Vector3> bossSpawnPositions_; // ボス名 → スポーン位置
 
     int32_t maxFazeNum_;
 

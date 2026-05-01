@@ -70,8 +70,19 @@ void EnemySpawner::ParseJsonData(const std::string& filename) {
         // etcParams
         spawn.enemyType   = spawnData["enemy_type"];
         spawn.spawnOffset = spawnData["spawn_offset"];
+        if (spawnData.contains("parent_boss_name")) {
+            spawn.parentBossName = spawnData["parent_boss_name"];
+        }
 
         spawnPoints_.push_back(spawn);
+    }
+
+    // ボス名 → スポーン位置のルックアップテーブルを構築
+    bossSpawnPositions_.clear();
+    for (const auto& sp : spawnPoints_) {
+        if (sp.enemyType == "BossEnemy" || sp.enemyType == "StrongEnemy") {
+            bossSpawnPositions_[sp.name] = sp.position;
+        }
     }
 }
 
@@ -136,10 +147,32 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
 
             if (groupElapsedTime >= adjustedSpawnTime) {
                 if (pEnemyManager_) {
-                    // 事前生成済みがあればそれをアクティブ化、なければフルInit
+                    // 事前生成済みがあればそれをアクティブ化
                     bool used = pEnemyManager_->ActivateSingleWaitingEnemy(spawn->groupId);
                     if (!used) {
-                        pEnemyManager_->SpawnEnemy(spawn->enemyType, spawn->position, spawn->groupId);
+                        // ボスの場合は spawn->name を parentBossName として渡す
+                        // ザコの場合は spawn->parentBossName を渡す
+                        std::string nameForManager = "";
+                        if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "StrongEnemy") {
+                            // ボス自身の名前を登録用として渡す
+                            nameForManager = spawn->name;
+                        } else {
+                            // ザコはJSONで決まった親ボス名を渡す
+                            nameForManager = spawn->parentBossName;
+                        }
+
+                        // JSONのparent_boss_nameからローカルオフセットを計算して渡す
+                        Vector3 localOffset = {};
+                        if (!spawn->parentBossName.empty()) {
+                            auto it = bossSpawnPositions_.find(spawn->parentBossName);
+                            if (it != bossSpawnPositions_.end()) {
+                                localOffset   = spawn->position - it->second;
+                                localOffset.y = 0.0f;
+                            }
+                        }
+
+                        pEnemyManager_->SpawnEnemy(spawn->enemyType, spawn->position, spawn->groupId,
+                            localOffset, nameForManager);
                     }
                 }
 
@@ -202,8 +235,6 @@ void EnemySpawner::ActivateNextGroup() {
         }
         return;
     }
-
-   
 }
 
 void EnemySpawner::RestartLoop() {
@@ -253,7 +284,26 @@ void EnemySpawner::PreGenerateNextGroupEnemy() {
     for (auto* spawn : it->second) {
         if (!spawn->preGenerated) {
             if (pEnemyManager_) {
-                pEnemyManager_->PreGenerateEnemy(spawn->enemyType, spawn->position, nextGroupId);
+                //  ボスの場合は spawn->name を、ザコの場合は spawn->parentBossName を渡す
+                std::string nameForManager = "";
+                if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "StrongEnemy") {
+                    nameForManager = spawn->name;
+                } else {
+                    nameForManager = spawn->parentBossName;
+                }
+
+                // JSONのparent_boss_nameからローカルオフセットを計算して渡す
+                Vector3 localOffset = {};
+                if (!spawn->parentBossName.empty()) {
+                    auto bit = bossSpawnPositions_.find(spawn->parentBossName);
+                    if (bit != bossSpawnPositions_.end()) {
+                        localOffset   = spawn->position - bit->second;
+                        localOffset.y = 0.0f;
+                    }
+                }
+
+                pEnemyManager_->PreGenerateEnemy(spawn->enemyType, spawn->position, nextGroupId,
+                    localOffset, nameForManager);
             }
             spawn->preGenerated = true;
             return;

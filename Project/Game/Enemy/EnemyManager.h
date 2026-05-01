@@ -6,6 +6,7 @@
 #include "DamageReaction/EnemyDamageReactionController.h"
 // BaseEnemy
 #include "Types/BaseEnemy.h"
+#include "Types/NormalEnemy.h"
 // HPBar
 #include "HPBar/EnemyHPBarColorConfig.h"
 
@@ -26,7 +27,6 @@ class GameCamera;
 class EnemySpawner;
 class KillCounter;
 class DeathTimer;
-class NormalEnemy;
 
 class EnemyManager {
 public:
@@ -45,16 +45,20 @@ public:
     void CheckIsEnemiesCleared();
 
     // 敵の生成
-    void SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID);
+    // JSONで親ボスが決まっている場合に渡す
+    void SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID,
+                    const Vector3& localOffset = {}, const std::string& parentBossName = "");
     void HpBarUpdate(const KetaEngine::ViewProjection& viewProjection);
 
     // 事前生成（描画/更新/当たり判定off、次ウェーブ用）
-    void PreGenerateEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID);
+    //JSONで親ボスが決まっている場合に渡す
+    void PreGenerateEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID,
+                          const Vector3& localOffset = {}, const std::string& parentBossName = "");
 
-    // 待機中の敵を1体アクティブ化（時間制御に従って呼ばれる）、成功したらtrue
+    // 待機中の敵を1体アクティブ化
     bool ActivateSingleWaitingEnemy(int32_t groupID);
 
-    // 全待機敵を破棄（ループリセット時）
+    // 全待機敵を破棄
     void ClearAllWaitingEnemies();
 
     // Param Edit
@@ -71,7 +75,8 @@ public:
 
 private:
     // ボス・取り巻きリンク設定
-    void LinkBossAndMinions(int32_t groupID);
+    // JSONで親ボスが決まっている場合に渡す
+    void LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion = nullptr, const std::string& parentBossName = "");
 
     // ボスとプレイヤーの距離チェック → 煽り状態更新
     void UpdateTauntState();
@@ -90,6 +95,7 @@ private:
 
     // パラメータ
     std::array<BaseEnemy::Parameter, 2> parameters_;
+    NormalEnemy::NormalParameter normalEnemyParam_;
 
     // ohter class
     Player* pPlayer_;
@@ -118,6 +124,9 @@ private:
     // ボス別取り巻き管理
     std::unordered_map<BaseEnemy*, std::vector<NormalEnemy*>> minionsByBoss_;
 
+    // ボス名(JSON上の名前) → ランタイムのボスポインタ のルックアップテーブル
+    std::unordered_map<std::string, BaseEnemy*> bossByName_;
+
     // ボスがプレイヤーのこの距離以内に入ったら煽り発動
     float bossPlayerTriggerDistance_ = 15.0f;
 
@@ -131,7 +140,7 @@ private:
     // HPバー色設定
     EnemyHPBarColorConfig hpBarColorConfig_;
 
-    // HPバー表示距離（プレイヤーからこの距離以内の敵にのみ表示）
+    // プレイヤーからのHPバー表示距離
     float hpBarDisplayDistance_ = 20.0f;
 
     // debugSpawn用

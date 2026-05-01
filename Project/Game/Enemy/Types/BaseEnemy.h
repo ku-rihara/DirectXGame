@@ -53,8 +53,6 @@ public:
         float chaseDistance;
         float chaseDistanceMin;
         float chaseSpeed;
-        // 逃走パラメータ
-        float fleeSpeed = 5.0f;
         // 死亡パラメータ
         float deathBlowValue;
         float deathBlowValueY;
@@ -65,7 +63,7 @@ public:
         float gaugeIncreaseValue;
     };
 
-     struct DamageReactionAnimInfo {
+    struct DamageReactionAnimInfo {
         std::string name;
         bool isLoop = false;
     };
@@ -197,7 +195,7 @@ public:
     // behavior変更
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
-    void BackToDamageRoot();
+    virtual void BackToDamageRoot();
 
     /// <summary>
     /// プレイヤーの方向を向く
@@ -217,6 +215,10 @@ public:
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
     Vector3 GetCollisionPos() const override;
+
+protected:
+    // タイプに応じたモデルフォルダ名を返す
+    std::string GetModelFolder() const;
 
 private:
     /// <summary>
@@ -272,7 +274,7 @@ protected:
 
     // アニメーション関連
     std::array<std::string, static_cast<size_t>(AnimationType::Count)> animationNames_;
-   
+
     std::vector<DamageReactionAnimInfo> damageReactionAnimations_;
     ChaseAnimationState chaseAnimeState_ = ChaseAnimationState::NONE;
     bool isPreDashFinished_              = false;
@@ -348,5 +350,9 @@ public:
     void SetIsAttacking(bool value) { isAttacking_ = value; }
 
     void SetAnimationName(AnimationType type, const std::string& name);
-    void SetAnimationActive(bool active) { if (objAnimation_) { objAnimation_->SetIsActive(active); } }
+    void SetAnimationActive(bool active) {
+        if (objAnimation_) {
+            objAnimation_->SetIsActive(active);
+        }
+    }
 };

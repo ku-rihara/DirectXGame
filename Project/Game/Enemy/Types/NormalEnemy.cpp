@@ -1,9 +1,10 @@
 #include "NormalEnemy.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyWait.h"
+#include "Enemy/Behavior/ActionBehavior/NormalEnemyBehavior/ZakoCrawlBackwardsBehavior.h"
 #include "Enemy/Behavior/ActionBehavior/NormalEnemyBehavior/ZakoFlockBehavior.h"
 #include "Enemy/Behavior/ActionBehavior/NormalEnemyBehavior/ZakoTauntBehavior.h"
-#include "Enemy/Behavior/ActionBehavior/NormalEnemyBehavior/ZakoFleeBehavior.h"
+#include "Enemy/Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Light/LightingType.h"
 
 ///========================================================
@@ -13,13 +14,17 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     BaseEnemy::Init(spawnPos);
 
     // アニメーション名を設定
-    SetAnimationName(AnimationType::Wait,           "NormalEnemyWaiting");
-    SetAnimationName(AnimationType::Spawn,          "NormalEnemySpawn");
-    SetAnimationName(AnimationType::Discovery,      "NormalEnemyDiscovery");
-    SetAnimationName(AnimationType::Dash,           "NormalEnemyRun");
-    SetAnimationName(AnimationType::Attack,         "NormalEnemyAttack");
-    SetAnimationName(AnimationType::Death,          "EnemyDeathAnimation");
-    SetAnimationName(AnimationType::Taunt,          "NormalEnemyTaunt");
+    SetAnimationName(AnimationType::Wait, "NormalEnemyWaiting");
+    SetAnimationName(AnimationType::Spawn, "NormalEnemySpawn");
+    SetAnimationName(AnimationType::Discovery, "NormalEnemyDiscovery");
+    SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
+    SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
+    SetAnimationName(AnimationType::Death, "EnemyDeathAnimation");
+    SetAnimationName(AnimationType::Taunt, "NormalEnemyTaunt");
+
+    // NormalEnemy固有アニメーション
+    AddNormalAnimation(NormalAnimationType::StumbleBackwards, "StumbleBackwards");
+    AddNormalAnimation(NormalAnimationType::CrawlBackwards, "CrawlBackwards");
 
     // ダメージリアクション用アニメーションを追加
     AddDamageReactionAnimation("EnemyNormalDamage");
@@ -44,16 +49,15 @@ void NormalEnemy::Update() {
 
 ///========================================================
 /// スポーン後のビヘイビア生成
-/// ボスが設定されていれば群れ行動、なければ通常待機
 ///========================================================
 std::unique_ptr<BaseEnemyBehavior> NormalEnemy::CreatePostSpawnBehavior() {
     if (pBoss_ && !pBoss_->GetIsDeath()) {
         zakoState_ = ZakoState::Flock;
         return std::make_unique<ZakoFlockBehavior>(this);
     }
-    // ボスなし or ボス撃破済み → 即逃走
-    zakoState_ = ZakoState::Flee;
-    return std::make_unique<ZakoFleeBehavior>(this);
+    // ボスがいない場合は逃げる
+    zakoState_ = ZakoState::CrawlBackwards;
+    return std::make_unique<ZakoCrawlBackwardsBehavior>(this);
 }
 
 void NormalEnemy::SpawnRenditionInit() {
@@ -90,11 +94,49 @@ void NormalEnemy::StopTaunt() {
 /// 逃走開始
 ///========================================================
 void NormalEnemy::StartFlee() {
-    if (zakoState_ == ZakoState::Flee || zakoState_ == ZakoState::Spawning) {
+    if (zakoState_ == ZakoState::CrawlBackwards || zakoState_ == ZakoState::Spawning) {
         return;
     }
-    zakoState_ = ZakoState::Flee;
-    ChangeBehavior(std::make_unique<ZakoFleeBehavior>(this));
+    zakoState_ = ZakoState::CrawlBackwards;
+    ChangeBehavior(std::make_unique<ZakoCrawlBackwardsBehavior>(this));
+}
+
+///========================================================
+/// NormalEnemy固有アニメーション追加
+///========================================================
+void NormalEnemy::AddNormalAnimation(NormalAnimationType type, const std::string& name) {
+    objAnimation_->Add(GetModelFolder() + name + ".gltf");
+    normalAnimationNames_[static_cast<size_t>(type)] = name;
+}
+
+///========================================================
+/// NormalEnemy固有アニメーション再生
+///========================================================
+bool NormalEnemy::PlayNormalAnimation(NormalAnimationType type, bool isLoop) {
+    const std::string& name = normalAnimationNames_[static_cast<size_t>(type)];
+    return PlayAnimationByName(name, isLoop);
+}
+
+///========================================================
+/// ダメージRoot復帰
+///========================================================
+void NormalEnemy::BackToDamageRoot() {
+
+    // DamageReactin
+    BaseEnemy::ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+
+    if (isInStumblePhase_) {
+        return;
+    }
+
+    // CrawlBackwards状態だった場合はCrawlBackwardsアニメーションに戻す
+    if (zakoState_ == ZakoState::CrawlBackwards) {
+        PlayNormalAnimation(NormalAnimationType::CrawlBackwards, true);
+        return;
+    }
+
+    // ResetToWaitAnimation
+    BaseEnemy::ResetToWaitAnimation();
 }
 
 ///========================================================
@@ -102,4 +144,9 @@ void NormalEnemy::StartFlee() {
 ///========================================================
 void NormalEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
     BaseEnemy::DisplaySprite(viewProjection);
+}
+
+void NormalEnemy::SetSlot(int32_t index, int32_t count) {
+    slotIndex_ = index;
+    slotCount_ = count;
 }

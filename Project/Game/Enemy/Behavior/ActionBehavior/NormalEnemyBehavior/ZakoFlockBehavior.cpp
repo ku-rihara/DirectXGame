@@ -6,7 +6,6 @@
 #include "MathFunction.h"
 
 #include <cmath>
-#include <numbers>
 
 ZakoFlockBehavior::ZakoFlockBehavior(NormalEnemy* enemy)
     : BaseEnemyBehavior("ZakoFlock", static_cast<BaseEnemy*>(enemy)), pNormalEnemy_(enemy) {
@@ -22,13 +21,19 @@ void ZakoFlockBehavior::Update() {
         return;
     }
 
-    // スロット角度からフォーメーション目標位置を計算
-    int32_t slotIdx   = pNormalEnemy_->GetSlotIndex();
-    int32_t slotTotal = (std::max)(pNormalEnemy_->GetSlotCount(), 1);
-    float angle       = static_cast<float>(slotIdx) * (2.0f * std::numbers::pi_v<float> / static_cast<float>(slotTotal));
-    Vector3 slotOffset(cosf(angle) * kFormationRadius, 0.0f, sinf(angle) * kFormationRadius);
+    // スポーン時のローカルオフセットをボスの現在Y回転で変換してワールド目標位置を算出
+    Vector3 localOffset = pNormalEnemy_->GetSpawnOffset();
+    localOffset.y       = 0.0f;
 
-    Vector3 targetPos = boss->GetWorldPosition() + slotOffset;
+    float bossRotY = boss->GetBaseRotationY();
+    float cosY     = cosf(bossRotY);
+    float sinY     = sinf(bossRotY);
+    Vector3 worldOffset(
+         cosY * localOffset.x + sinY * localOffset.z,
+        0.0f,
+        -sinY * localOffset.x + cosY * localOffset.z);
+
+    Vector3 targetPos = boss->GetWorldPosition() + worldOffset;
     targetPos.y       = pBaseEnemy_->GetWorldPosition().y;
 
     Vector3 diff = targetPos - pBaseEnemy_->GetWorldPosition();
@@ -38,8 +43,13 @@ void ZakoFlockBehavior::Update() {
     if (dist > kCloseEnough) {
         Vector3 dir = diff;
         dir.Normalize();
-        float speed = (std::min)(dist * kSpringFactor, kMaxFlockSpeed);
+        float speed = pBaseEnemy_->GetParameter().chaseSpeed;
         pBaseEnemy_->AddPosition(dir * (speed * dt));
+
+        // 移動中は進行方向を向く
+        float targetAngle  = std::atan2(-dir.x, -dir.z);
+        float currentAngle = pBaseEnemy_->GetBaseRotationY();
+        pBaseEnemy_->SetRotationY(LerpShortAngle(currentAngle, targetAngle, 0.8f));
 
         if (!isRunning_) {
             pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
@@ -50,10 +60,9 @@ void ZakoFlockBehavior::Update() {
             pBaseEnemy_->ResetToWaitAnimation();
             isRunning_ = false;
         }
+        // 停止中はプレイヤーを向く
+        pBaseEnemy_->DirectionToPlayer();
     }
-
-    // 常にプレイヤーを向く
-    pBaseEnemy_->DirectionToPlayer();
 }
 
 void ZakoFlockBehavior::Debug() {

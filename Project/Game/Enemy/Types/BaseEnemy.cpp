@@ -428,8 +428,12 @@ std::vector<std::string> BaseEnemy::GetAnimationNames() const {
     return {};
 }
 
+std::string BaseEnemy::GetModelFolder() const {
+    return (type_ == Type::NORMAL) ? "NormalEnemy/" : "StrongEnemy/";
+}
+
 void BaseEnemy::AddDamageReactionAnimation(const std::string& name, bool isLoop) {
-    objAnimation_->Add("Enemy/" + name + ".gltf");
+    objAnimation_->Add(GetModelFolder() + name + ".gltf");
     damageReactionAnimations_.push_back({name, isLoop});
 }
 
@@ -498,13 +502,13 @@ void BaseEnemy::SetBodyColor(const Vector4& color) {
 void BaseEnemy::SetAnimationName(AnimationType type, const std::string& name) {
 
     if (type == AnimationType::Wait) {
-        objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("Enemy/" + name + ".gltf"));
+        objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(GetModelFolder() + name + ".gltf"));
         objAnimation_->Init();
         animationNames_[static_cast<size_t>(type)] = name;
         return;
     }
 
-    objAnimation_->Add("Enemy/" + name + ".gltf");
+    objAnimation_->Add(GetModelFolder() + name + ".gltf");
     animationNames_[static_cast<size_t>(type)] = name;
 }
 

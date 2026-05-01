@@ -233,7 +233,7 @@
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoFlockBehavior.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoTauntBehavior.cpp" />
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoFleeBehavior.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoCrawlBackwardsBehavior.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionNormal.cpp" />
@@ -602,7 +602,7 @@
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.h" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoFlockBehavior.h" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoTauntBehavior.h" />
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoFleeBehavior.h" />
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoCrawlBackwardsBehavior.h" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionNormal.h" />
