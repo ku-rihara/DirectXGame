@@ -283,9 +283,6 @@
     <Filter Include="Game\Enemy\Effects">
       <UniqueIdentifier>{3ECFE67B-F1EB-4245-948B-2CC1232A7819}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\HPBar">
-      <UniqueIdentifier>{1F660BC1-D946-4EAE-BF48-35DEB5AB3BF7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Enemy\Spawner">
       <UniqueIdentifier>{A2905447-6A3D-4B59-B4D2-A0C5BE95768A}</UniqueIdentifier>
     </Filter>
@@ -477,6 +474,15 @@
     </Filter>
     <Filter Include="Game\ResultObj">
       <UniqueIdentifier>{83996ba3-f0aa-4587-9171-35821b3551e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\UIs">
+      <UniqueIdentifier>{1F660BC1-D946-4EAE-BF48-35DEB5AB3BF7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\UIs\HPBar">
+      <UniqueIdentifier>{6c84ff0c-8cc2-4313-a414-f68c067a8da8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\UIs\GroupIcon">
+      <UniqueIdentifier>{d88868ea-ad93-4116-9c8d-d41c5cd99524}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1098,12 +1104,6 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\EnemyManager.cpp">
       <Filter>Game\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp">
-      <Filter>Game\Enemy\HPBar</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\HPBar\EnemyHPBarColorConfig.cpp">
-      <Filter>Game\Enemy\HPBar</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Spawner\ContinuousEnemySpawner.cpp">
       <Filter>Game\Enemy\Spawner</Filter>
@@ -2029,15 +2029,6 @@
     <ClInclude Include="Game\Enemy\Effects\EnemyEffects.h">
       <Filter>Game\Enemy\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\EnemyManager.h">
-      <Filter>Game\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h">
-      <Filter>Game\Enemy\HPBar</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\HPBar\EnemyHPBarColorConfig.h">
-      <Filter>Game\Enemy\HPBar</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\Spawner\ContinuousEnemySpawner.h">
       <Filter>Game\Enemy\Spawner</Filter>
     </ClInclude>
@@ -2624,6 +2615,18 @@
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\UIs\HPBar\EnemyHPBar.cpp">
+      <Filter>Game\Enemy\UIs\HPBar</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\UIs\HPBar\EnemyHPBarColorConfig.cpp">
+      <Filter>Game\Enemy\UIs\HPBar</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\UIs\EnemyUIs.cpp">
+      <Filter>Game\Enemy\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\UIs\GroupIcon\GroupIcon.cpp">
+      <Filter>Game\Enemy\UIs\GroupIcon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2793,6 +2796,21 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\UIs\HPBar\EnemyHPBar.h">
+      <Filter>Game\Enemy\UIs\HPBar</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\UIs\HPBar\EnemyHPBarColorConfig.h">
+      <Filter>Game\Enemy\UIs\HPBar</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\UIs\EnemyUIs.h">
+      <Filter>Game\Enemy\UIs</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\UIs\GroupIcon\GroupIcon.h">
+      <Filter>Game\Enemy\UIs\GroupIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\EnemyManager.h">
+      <Filter>Game\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

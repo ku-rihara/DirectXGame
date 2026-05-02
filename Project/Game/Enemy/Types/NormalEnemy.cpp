@@ -32,11 +32,13 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     AddDamageReactionAnimation("NormalEnemyBoundDamage");
     AddDamageReactionAnimation("NormalEnemyKipUp");
 
+    // アニメーションの初期化
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
     objAnimation_->transform_.scale_                                     = Vector3::OneVector();
     objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
 
+    // スポーン後の行動を生成
     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
 
@@ -141,13 +143,6 @@ void NormalEnemy::BackToDamageRoot() {
 
     // 通常のBehaviorに戻る
     BaseEnemy::ResetToWaitAnimation();
-}
-
-///========================================================
-/// HpBar表示
-///========================================================
-void NormalEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
-    BaseEnemy::DisplaySprite(viewProjection);
 }
 
 void NormalEnemy::SetSlot(int32_t index, int32_t count) {

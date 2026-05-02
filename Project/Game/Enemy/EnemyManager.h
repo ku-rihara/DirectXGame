@@ -9,7 +9,7 @@
 #include "Types/NormalEnemy.h"
 #include "Types/StrongEnemy.h" 
 // HPBar
-#include "HPBar/EnemyHPBarColorConfig.h"
+#include "UIs/HPBar/EnemyHPBarColorConfig.h"
 
 /// std
 #include <array>
@@ -105,6 +105,8 @@ private:
     std::unordered_map<int32_t, std::vector<std::unique_ptr<BaseEnemy>>> waitingEnemies_;
     std::unordered_map<BaseEnemy*, std::vector<NormalEnemy*>> minionsByBoss_;
     std::unordered_map<std::string, BaseEnemy*> bossByName_;
+    std::unordered_map<BaseEnemy*, int32_t> bossGroupIndex_;
+    int32_t nextBossGroupIndex_ = 0;
 
     float bossPlayerTriggerDistance_ = 15.0f;
 
@@ -115,7 +117,7 @@ private:
 
     EnemyHPBarColorConfig hpBarColorConfig_;
 
-    float hpBarDisplayDistance_ = 20.0f;
+    float hpBarDisplayDistance_;
 
     int32_t selectedEnemyTypeIndex_;
 
@@ -123,6 +125,7 @@ public:
     const bool& GetIsAllCleared() const { return areAllEnemiesCleared_; }
     const std::vector<std::unique_ptr<BaseEnemy>>& GetEnemies() const { return enemies_; }
     EnemyDamageReactionController* GetDamageReactionController() const { return damageReactionController_.get(); }
+    float GetHpBarDisplayDistance() const { return hpBarDisplayDistance_; } 
 
     bool IsAnyEnemyInAnticipation() const;
 

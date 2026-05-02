@@ -18,8 +18,7 @@ public:
     void Init(const Vector3& spownPos) override;
     void Update() override;
     void SpawnRenditionInit() override;
-    void DisplaySprite(const KetaEngine::ViewProjection& viewProjection) override;
-
+   
     void StartTaunt();
     void StopTaunt();
 

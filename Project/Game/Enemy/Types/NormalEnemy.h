@@ -51,11 +51,7 @@ public:
     /// </summary>
     std::unique_ptr<BaseEnemyBehavior> CreatePostSpawnBehavior() override;
 
-    /// <summary>
-    /// スプライト表示
-    /// </summary>
-    void DisplaySprite(const KetaEngine::ViewProjection& viewProjection) override;
-
+   
     /// Behavior
     void StartTaunt(); //< 煽り開始
     void StopTaunt(); //< 煽り停止 → Flockに戻す

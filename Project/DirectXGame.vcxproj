@@ -209,6 +209,10 @@
     <ClCompile Include="Game\ComboScene\ComboDirector.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.cpp" />
     <ClCompile Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.cpp" />
+    <ClCompile Include="Game\Enemy\UIs\EnemyUIs.cpp" />
+    <ClCompile Include="Game\Enemy\UIs\GroupIcon\GroupIcon.cpp" />
+    <ClCompile Include="Game\Enemy\UIs\HPBar\EnemyHPBar.cpp" />
+    <ClCompile Include="Game\Enemy\UIs\HPBar\EnemyHPBarColorConfig.cpp" />
     <ClCompile Include="Game\KillCounter\KillCounter.cpp" />
     <ClCompile Include="Game\KillCounter\KillCountUI.cpp" />
     <ClCompile Include="Game\KillCounter\KillCountUIController.cpp" />
@@ -248,8 +252,6 @@
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageRenditionData.cpp" />
     <ClCompile Include="Game\Enemy\Effects\EnemyEffects.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
-    <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp" />
-    <ClCompile Include="Game\Enemy\HPBar\EnemyHPBarColorConfig.cpp" />
     <ClCompile Include="Game\Enemy\Spawner\ContinuousEnemySpawner.cpp" />
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp" />
     <ClCompile Include="Game\Enemy\Types\BaseEnemy.cpp" />
@@ -576,6 +578,10 @@
     <ClCompile Include="Game\ResultObj\ResultUIItem.cpp" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.h" />
     <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h" />
+    <ClInclude Include="Game\Enemy\UIs\EnemyUIs.h" />
+    <ClInclude Include="Game\Enemy\UIs\GroupIcon\GroupIcon.h" />
+    <ClInclude Include="Game\Enemy\UIs\HPBar\EnemyHPBar.h" />
+    <ClInclude Include="Game\Enemy\UIs\HPBar\EnemyHPBarColorConfig.h" />
     <ClInclude Include="Game\ResultObj\GameResultInfo.h" />
     <ClInclude Include="Game\ResultObj\GameResultUI.h" />
     <ClInclude Include="Game\ResultObj\ResultUIItem.h" />
@@ -618,8 +624,6 @@
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageRenditionData.h" />
     <ClInclude Include="Game\Enemy\Effects\EnemyEffects.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
-    <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h" />
-    <ClInclude Include="Game\Enemy\HPBar\EnemyHPBarColorConfig.h" />
     <ClInclude Include="Game\Enemy\Spawner\ContinuousEnemySpawner.h" />
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h" />
     <ClInclude Include="Game\Enemy\Types\BaseEnemy.h" />

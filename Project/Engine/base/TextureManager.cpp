@@ -29,7 +29,7 @@ void TextureManager::Init(DirectXCommon* dxCommon, SrvManager* srvManager) {
     pSrvManager_   = srvManager;
     textureDates_.reserve(SrvManager::kMaxCount);
 
-    // プリミティブ用 null Texture2D SRV を先頭に確保（GBV が Texture2D 型と認識する空ディスクリプタ）
+    // プリミティブ用 null Texture2D SRV を先頭に確保
     TextureData& nullTex  = textureDates_[kNullTexKey_];
     nullTex.srvIndex      = pSrvManager_->Allocate();
     nullTex.srvCPUHandle  = pSrvManager_->GetCPUDescriptorHandle(nullTex.srvIndex);

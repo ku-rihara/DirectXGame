@@ -13,7 +13,7 @@
 #include "../CollisionBox/EnemyAttackCollisionBox.h"
 #include "Collider/SphereCollider.h"
 #include "Enemy/Effects/EnemyEffects.h"
-#include "Enemy/HPBar/EnemyHPBar.h"
+#include "Enemy/UIs/EnemyUIs.h"
 
 // std
 #include <array>
@@ -47,6 +47,8 @@ public:
         float collisionRad;
         Vector3 collisionOffset;
         Vector2 hpBarPosOffset;
+        float hpBarWorldOffsetY     = 1.5f;
+        float groupIconWorldOffsetY = 2.0f;
         float basePosY;
         float burstTime;
         // 追跡パラメータ
@@ -117,12 +119,7 @@ public:
     /// スプライトUIの表示
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    virtual void DisplaySprite(const KetaEngine::ViewProjection& viewProjection);
-
-    /// <summary>
-    /// HPバーを非表示にする
-    /// </summary>
-    void HideHpBar();
+    void DisplaySprite(const KetaEngine::ViewProjection& viewProjection,float distanceToPlayer);
 
     /// <summary>
     /// ダメージリアクション用アニメーションを追加
@@ -269,7 +266,7 @@ protected:
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
 
     std::unique_ptr<EnemyAttackCollisionBox> attackCollisionBox_;
-    std::unique_ptr<EnemyHPBar> hpBar_;
+    std::unique_ptr<EnemyUIs> enemyUIs_;
     std::unique_ptr<EnemyEffects> enemyEffects_;
 
     // アニメーション関連
@@ -289,7 +286,7 @@ protected:
     // Type
     Type type_;
 
-    // HP
+    // ボディカラー更新用
     EnemyHPBarColorConfig* colorConfig_ = nullptr;
 
     float hp_;
@@ -343,8 +340,11 @@ public:
     void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
     void SetHPBarColorConfig(EnemyHPBarColorConfig* config) {
-        hpBar_->SetColorConfig(config);
         colorConfig_ = config;
+        if (enemyUIs_) { enemyUIs_->SetColorConfig(config); }
+    }
+    void SetGroupIconIndex(int32_t index) {
+        if (enemyUIs_) { enemyUIs_->SetGroupIndex(index); }
     }
     void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }
     void SetIsAttacking(bool value) { isAttacking_ = value; }

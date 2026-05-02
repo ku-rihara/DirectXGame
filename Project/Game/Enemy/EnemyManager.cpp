@@ -1,4 +1,6 @@
 #include "EnemyManager.h"
+// UIs
+#include "UIs/GroupIcon/GroupIcon.h"
 // Types
 #include "Types/NormalEnemy.h"
 #include "Types/StrongEnemy.h"
@@ -49,7 +51,7 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     } else if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)] || enemyType == "BossEnemy") {
         auto strong = std::make_unique<StrongEnemy>();
         strong->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
-        strong->SetStrongParameter(strongEnemyParam_); 
+        strong->SetStrongParameter(strongEnemyParam_);
         enemy = std::move(strong);
     }
 
@@ -104,7 +106,8 @@ void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, c
     for (auto& e : enemies_) {
         if (e->GetGroupId() == groupID && e->GetType() == BaseEnemy::Type::STRONG) {
             if (minionsByBoss_.find(e.get()) == minionsByBoss_.end()) {
-                minionsByBoss_[e.get()] = {};
+                minionsByBoss_[e.get()]  = {};
+                bossGroupIndex_[e.get()] = nextBossGroupIndex_++;
             }
         }
     }
@@ -139,6 +142,13 @@ void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, c
     }
 
     newMinion->SetBoss(targetBoss);
+
+    auto idxIt = bossGroupIndex_.find(targetBoss);
+    if (idxIt != bossGroupIndex_.end()) {
+        int32_t iconIdx = static_cast<int32_t>(idxIt->second % GroupIcon::kGroupCount);
+        newMinion->SetGroupIconIndex(iconIdx);
+        targetBoss->SetGroupIconIndex(iconIdx);
+    }
 
     const Vector3& knownOffset = newMinion->GetSpawnOffset();
     bool hasPresetOffset       = (knownOffset.x != 0.0f || knownOffset.z != 0.0f);
@@ -217,6 +227,7 @@ void EnemyManager::OnBossKilled(BaseEnemy* dyingBoss) {
         }
         minionsByBoss_.erase(it);
     }
+    bossGroupIndex_.erase(dyingBoss);
 
     for (auto bit = bossByName_.begin(); bit != bossByName_.end(); ++bit) {
         if (bit->second == dyingBoss) {
@@ -418,17 +429,13 @@ void EnemyManager::Update() {
 }
 
 void EnemyManager::HpBarUpdate(const KetaEngine::ViewProjection& viewProjection) {
-    Vector3 playerPos = pPlayer_ ? pPlayer_->GetBaseTransform().GetWorldPos() : Vector3{};
+    Vector3 playerPos = pPlayer_->GetBaseTransform().GetWorldPos();
 
     for (size_t i = 0; i < enemies_.size(); ++i) {
         Vector3 enemyPos = enemies_[i]->GetWorldPosition();
-        float dist       = (enemyPos - playerPos).Length();
+        float distance       = (enemyPos - playerPos).Length();
 
-        if (dist <= hpBarDisplayDistance_) {
-            enemies_[i]->DisplaySprite(viewProjection);
-        } else {
-            enemies_[i]->HideHpBar();
-        }
+        enemies_[i]->DisplaySprite(viewProjection, distance);
     }
 }
 
@@ -453,6 +460,8 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "collisionRad" + indexString, &parameters_[i].collisionRad);
         globalParameter_->Regist(groupName_, "collisionOffset" + indexString, &parameters_[i].collisionOffset);
         globalParameter_->Regist(groupName_, "hpBarPosOffset" + indexString, &parameters_[i].hpBarPosOffset);
+        globalParameter_->Regist(groupName_, "hpBarWorldOffsetY" + indexString, &parameters_[i].hpBarWorldOffsetY);
+        globalParameter_->Regist(groupName_, "groupIconWorldOffsetY" + indexString, &parameters_[i].groupIconWorldOffsetY);
 
         globalParameter_->Regist(groupName_, "chaseDistanceMin" + indexString, &parameters_[i].chaseDistanceMin);
         globalParameter_->Regist(groupName_, "chaseSpeed" + indexString, &parameters_[i].chaseSpeed);
@@ -509,6 +518,8 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
     ImGui::SeparatorText("スプライト関連");
     ImGui::DragFloat2("HPBarOffsetPos", &parameters_[typeIndex].hpBarPosOffset.x, 0.01f);
+    ImGui::DragFloat("HPBarWorldOffsetY", &parameters_[typeIndex].hpBarWorldOffsetY, 0.01f);
+    ImGui::DragFloat("GroupIconWorldOffsetY", &parameters_[typeIndex].groupIconWorldOffsetY, 0.01f);
 }
 
 void EnemyManager::DebugEnemySpawn() {

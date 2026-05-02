@@ -33,8 +33,8 @@ private:
 
     bool isSpawned_ = false;
     bool isDraw_    = false;
-    float hpMax_;
-    float alpha_;
+    float hpMax_    = 0.0f;
+    float alpha_    = 1.0f;
     Vector2 position_;
 
 public:

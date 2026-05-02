@@ -31,7 +31,12 @@ void EnemyHPBar::Update(float hp) {
 
     // HP割合に応じた色を適用
     if (colorConfig_) {
-        float ratio = (hpMax_ > 0.0f) ? (hp / hpMax_) : 1.0f;
+        float ratio;
+        if (hpMax_ > 0.0f) {
+            ratio = hp / hpMax_;
+        } else {
+            ratio = 1.0f;
+        }
         hpSprite_->SetColor(colorConfig_->GetColor(ratio));
     }
 

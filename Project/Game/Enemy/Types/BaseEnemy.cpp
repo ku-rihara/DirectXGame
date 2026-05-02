@@ -1,5 +1,4 @@
 #include "BaseEnemy.h"
-#include "Enemy/HPBar/EnemyHPBarColorConfig.h"
 
 // std
 #include <algorithm>
@@ -15,11 +14,11 @@
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 // Player
-#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
+#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/Player.h"
 // DeathTimer
-#include"DeathTimer/DeathTimer.h"
+#include "DeathTimer/DeathTimer.h"
 // Combo
 #include "Combo/Combo.h"
 // Field
@@ -38,16 +37,16 @@
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // HP
-    HPMax_ = 115.0f;
-    hp_    = HPMax_;
-    hpBar_ = std::make_unique<EnemyHPBar>();
-    hpBar_->Init(HPMax_);
+    HPMax_    = 115.0f;
+    hp_       = HPMax_;
+    enemyUIs_ = std::make_unique<EnemyUIs>();
+    enemyUIs_->Init(HPMax_);
 
     /// transform
     baseTransform_.translation_   = spawnPos;
     baseTransform_.translation_.y = parameter_.basePosY;
     baseTransform_.SetAnchorRotation(Vector3(0.0f, 1.5f, 0.0f));
-    baseTransform_.scale_         = Vector3::ZeroVector();
+    baseTransform_.scale_ = Vector3::ZeroVector();
 
     /// attack collision
     attackCollisionBox_ = std::make_unique<EnemyAttackCollisionBox>();
@@ -62,7 +61,6 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     // 振る舞い初期化
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
 }
-
 
 ///========================================================
 /// 更新
@@ -89,7 +87,6 @@ void BaseEnemy::Update() {
     if (enemyEffects_) {
         enemyEffects_->Update(GetWorldPosition());
     }
-
 
     MoveToLimit();
 
@@ -129,21 +126,27 @@ void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, const bo
 ///========================================================
 /// HpBar表示
 ///========================================================
-void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
-    // ワールド座標からスクリーン座標に変換
-    Vector2 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
-    // Hpバーの座標確定
-    Vector2 hpBarPosition = positionScreen - parameter_.hpBarPosOffset;
-    // isDraw を先にセット
-    hpBar_->SetIsDraw(IsInView(viewProjection));
-    // HPBarスプライト位置・スケール更新
-    hpBar_->SetPosition(hpBarPosition);
-    hpBar_->Update(hp_);
-}
+void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection, float distanceToPlayer) {
+    Vector3 worldPos = GetWorldPosition();
 
-void BaseEnemy::HideHpBar() {
-    hpBar_->SetIsDraw(false);
-    hpBar_->Update(hp_);
+    // HPバーの位置計算
+    Vector3 hpBarWorldPos  = worldPos + Vector3{0.0f, parameter_.hpBarWorldOffsetY, 0.0f};
+    Vector2 hpBarScreenPos = ScreenTransform(hpBarWorldPos, viewProjection);
+
+    // グループアイコンの位置計算
+    Vector3 iconWorldPos  = worldPos + Vector3{0.0f, parameter_.groupIconWorldOffsetY, 0.0f};
+    Vector2 iconScreenPos = ScreenTransform(iconWorldPos, viewProjection);
+
+     // UI更新
+     enemyUIs_->Update(hp_, hpBarScreenPos, IsInView(viewProjection));
+
+    if (distanceToPlayer <= pEnemyManager_->GetHpBarDisplayDistance()) {
+        enemyUIs_->SetHPBarOffset(parameter_.hpBarPosOffset);
+    } else {
+        enemyUIs_->Hide(hp_);
+    }
+ 
+    enemyUIs_->UpdateGroupIcon(iconScreenPos, IsInView(viewProjection));
 }
 
 Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
@@ -169,7 +172,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 
     if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
-        if (isAttacking_ || enemy->IsAttacking()) { return; }
+        if (isAttacking_ || enemy->IsAttacking()) {
+            return;
+        }
 
         // 敵同士の押し戻し処理
         CollisionPushUtils::ApplySpherePush(
@@ -177,8 +182,8 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             enemy->GetCollisionPos(),
             GetCollisionRadius(),
             enemy->GetCollisionRadius(),
-            1.0f,   // maxPush
-            0.3f);  // smoothing
+            1.0f, // maxPush
+            0.3f); // smoothing
     }
 }
 
@@ -530,7 +535,6 @@ std::vector<std::string> BaseEnemy::GetDamageReactionAnimationNames() const {
     }
     return names;
 }
-
 
 bool BaseEnemy::GetDamageReactionAnimationIsLoop(const std::string& name) const {
     for (const auto& info : damageReactionAnimations_) {
