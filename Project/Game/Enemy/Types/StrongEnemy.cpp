@@ -41,8 +41,13 @@ void StrongEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection
 }
 
 void StrongEnemy::StartTaunt() {
-    if (isTaunting_)
+    if (isTaunting_) {
         return;
+    }
+    if (dynamic_cast<EnemySpawn*>(moveBehavior_.get())) {
+        return;
+    }
+
     isTaunting_ = true;
     ChangeBehavior(std::make_unique<StrongEnemyTauntBehavior>(this));
 }
