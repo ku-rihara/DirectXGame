@@ -23,15 +23,26 @@ void DeathTimerGauge::SpriteInit() {
     // 枠のスプライト
     frameSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGaugeFrame.dds", true));
     gaugeSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGauge.dds", true));
-    gaugeIcon_.reset(KetaEngine::Sprite::Create("DeathGauge/PlayerDeathGaugeIcon.dds", true));
+    nameSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGaugeName.dds", true));
+    iconFrameSprite_.reset(KetaEngine::Sprite::Create("DeathGauge/DeathGaugeIconFrame.dds", true));
+
+    // アイコン3種 (Safe=Happy, Normal=Normal, Danger=Angry)
+    const char* iconTextures[static_cast<int32_t>(GaugeState::Count)] = {
+        "DeathGauge/DeathGaugeIcon_Happy.dds",
+        "DeathGauge/DeathGaugeIcon_Normal.dds",
+        "DeathGauge/DeathGaugeIcon_Angry.dds",
+    };
+    for (int32_t i = 0; i < static_cast<int32_t>(GaugeState::Count); ++i) {
+        gaugeIcons_[i].reset(KetaEngine::Sprite::Create(iconTextures[i], true));
+        gaugeIcons_[i]->transform_.scale = Vector2::ZeroVector();
+    }
 
     // 初期スケールを0
     frameSprite_->transform_.scale = Vector2::ZeroVector();
     gaugeSprite_->transform_.scale = Vector2::ZeroVector();
-    gaugeIcon_->transform_.scale   = Vector2::ZeroVector();
 
     heatBeat_.heatBeatEase.Init("UIHeatBeat.json");
-    heatBeat_.heatBeatEase.SetAdaptValue(&gaugeIcon_->transform_.scale);
+    heatBeat_.heatBeatEase.SetAdaptValue(&gaugeIcons_[static_cast<int32_t>(currentState_)]->transform_.scale);
     heatBeat_.heatBeatEase.SetOnFinishCallback([this] {
         heatBeat_.heatBeatEase.Reset();
     });
@@ -81,13 +92,15 @@ void DeathTimerGauge::UpdateGaugeColor() {
         targetColor = safeColor_;
     }
 
-    // 状態が変わった場合のみ色を更新
+    // 状態が変わった場合のみアイコンを切り替え
     if (newState != currentState_) {
+        gaugeIcons_[static_cast<int32_t>(currentState_)]->transform_.scale = Vector2::ZeroVector();
         currentState_ = newState;
+        heatBeat_.heatBeatEase.SetAdaptValue(&gaugeIcons_[static_cast<int32_t>(currentState_)]->transform_.scale);
     }
 
     // 色を設定
-    gaugeIcon_->SetColor(Vector3(targetColor.x, targetColor.y, targetColor.z));
+    gaugeIcons_[static_cast<int32_t>(currentState_)]->SetColor(Vector3(targetColor.x, targetColor.y, targetColor.z));
     gaugeSprite_->SetColor(Vector3(targetColor.x, targetColor.y, targetColor.z));
     gaugeSprite_->SetAlpha(targetColor.w);
 }
@@ -169,8 +182,14 @@ void DeathTimerGauge::PlayTimerRecoveryScaling() {
     if (gaugeSprite_) {
         gaugeSprite_->PlaySpriteEaseAnimation("TimerRecoveryGaugeScaling", "EnemyDeath");
     }
-    if (gaugeIcon_) {
-        gaugeIcon_->PlaySpriteEaseAnimation("TimerRecoveryGaugeScaling", "EnemyDeath");
+    if (gaugeIcons_[static_cast<int32_t>(currentState_)]) {
+        gaugeIcons_[static_cast<int32_t>(currentState_)]->PlaySpriteEaseAnimation("TimerRecoveryGaugeScaling", "EnemyDeath");
+    }
+    if (nameSprite_) {
+        nameSprite_->PlaySpriteEaseAnimation("TimerRecoveryGaugeScaling", "EnemyDeath");
+    }
+    if (iconFrameSprite_) {
+        iconFrameSprite_->PlaySpriteEaseAnimation("TimerRecoveryGaugeScaling", "EnemyDeath");
     }
     if (bombScrollSprite_) {
         bombScrollSprite_->PlaySpriteEaseAnimation("TimerRecoveryGaugeScaling", "EnemyDeath");
@@ -178,7 +197,9 @@ void DeathTimerGauge::PlayTimerRecoveryScaling() {
 }
 
 void DeathTimerGauge::SetSpriteScales(const Vector2& scale) {
-    frameSprite_->transform_.scale = scale;
-    gaugeSprite_->transform_.scale = scale;
-    gaugeIcon_->transform_.scale   = scale;
+    frameSprite_->transform_.scale                                         = scale;
+    gaugeSprite_->transform_.scale                                         = scale;
+    gaugeIcons_[static_cast<int32_t>(currentState_)]->transform_.scale    = scale;
+    nameSprite_->transform_.scale                                          = scale;
+    iconFrameSprite_->transform_.scale                                     = scale;
 }

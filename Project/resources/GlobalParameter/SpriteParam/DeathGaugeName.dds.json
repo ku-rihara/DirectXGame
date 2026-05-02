@@ -1,22 +1,22 @@
 {
-    "DeathGaugeFrame.dds": {
-        "layerNum": 10,
+    "DeathGaugeName.dds": {
+        "layerNum": 21,
         "startAnchorPoint": [
-            0.5,
+            0.3400000035762787,
             0.5
         ],
         "startColor": [
-            0.8398749232292175,
-            0.7117066979408264,
-            0.84555983543396,
+            1.0,
+            1.0,
+            1.0,
             1.0
         ],
         "startPosition": [
-            218.0,
-            115.5999984741211
+            102.5,
+            85.0
         ],
         "startScale": [
-            1.0,
+            1.190000057220459,
             1.0
         ],
         "startUVScale": [

@@ -47,8 +47,8 @@ public:
         float collisionRad;
         Vector3 collisionOffset;
         Vector2 hpBarPosOffset;
-        float hpBarWorldOffsetY     = 1.5f;
-        float groupIconWorldOffsetY = 2.0f;
+        float hpBarWorldOffsetY;
+        float groupIconWorldOffsetY;
         float basePosY;
         float burstTime;
         // 追跡パラメータ

@@ -1,23 +1,23 @@
 {
-    "DeathGaugeFrame.dds": {
-        "layerNum": 10,
+    "DeathGaugeIcon_Angry.dds": {
+        "layerNum": 17,
         "startAnchorPoint": [
             0.5,
             0.5
         ],
         "startColor": [
-            0.8398749232292175,
-            0.7117066979408264,
-            0.84555983543396,
+            1.0,
+            1.0,
+            1.0,
             1.0
         ],
         "startPosition": [
-            218.0,
-            115.5999984741211
+            0.0,
+            0.0
         ],
         "startScale": [
-            1.0,
-            1.0
+            0.09000000357627869,
+            0.09000000357627869
         ],
         "startUVScale": [
             1.0,

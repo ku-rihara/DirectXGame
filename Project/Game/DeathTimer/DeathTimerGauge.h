@@ -51,8 +51,12 @@ private:
     // スプライト
     std::unique_ptr<KetaEngine::Sprite> frameSprite_      = nullptr;
     std::unique_ptr<KetaEngine::Sprite> gaugeSprite_      = nullptr;
-    std::unique_ptr<KetaEngine::Sprite> gaugeIcon_        = nullptr;
     std::unique_ptr<KetaEngine::Sprite> bombScrollSprite_ = nullptr;
+    // アイコン (Safe=Happy, Normal=Normal, Danger=Angry)
+    std::array<std::unique_ptr<KetaEngine::Sprite>, static_cast<int32_t>(GaugeState::Count)> gaugeIcons_;
+    // 静的スプライト
+    std::unique_ptr<KetaEngine::Sprite> nameSprite_      = nullptr;
+    std::unique_ptr<KetaEngine::Sprite> iconFrameSprite_ = nullptr;
 
     // タイマー関連
     float timerRatio_ = 1.0f;
