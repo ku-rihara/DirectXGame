@@ -14,9 +14,10 @@ void DeathTimer::Init() {
     deathTimerGauge_->Init();
     deathTimerGauge_->SetTimer(0.0f, maxStress_);
 
-    currentStress_ = 0.0f;
-    isBossDead_    = false;
-    isDeath_       = false;
+    currentStress_  = 0.0f;
+    tauntTickTimer_ = 0.0f;
+    isBossDead_     = false;
+    isDeath_        = false;
 }
 
 void DeathTimer::Update(float deltaTime) {
@@ -26,10 +27,14 @@ void DeathTimer::Update(float deltaTime) {
 #endif
 
         if (!isBossDead_) {
-            // ボスが生きている間：煽り中はストレス増加
+            // ボスが生きている間：煽り中はチック間隔でストレス増加
             if (isTaunting_) {
-                float rate = baseStressRate_ + static_cast<float>(tauntingEnemyCount_) * stressRatePerEnemy_;
-                currentStress_ += rate * deltaTime;
+                tauntTickTimer_ += deltaTime;
+                if (tauntTickTimer_ >= tauntTickInterval_) {
+                    tauntTickTimer_ -= tauntTickInterval_;
+                    float amount = baseStressRate_ + static_cast<float>(tauntingEnemyCount_) * stressRatePerEnemy_;
+                    currentStress_ += amount;
+                }
             }
         } else {
             // ボス撃破後：一定間隔チックでストレス減少（コールバック付き）
@@ -73,7 +78,11 @@ void DeathTimer::OnBossDead() {
     isBossDead_         = true;
     isTaunting_         = false;
     tauntingEnemyCount_ = 0;
+    tauntTickTimer_     = 0.0f;
     decayTickTimer_     = 0.0f;
+
+    // ボス撃破（ビビりBehavior中）でも即時回復
+    currentStress_ = (std::max)(0.0f, currentStress_ - stressReductionPerHit_);
 
     if (onBossKilled_) {
         onBossKilled_();
@@ -89,6 +98,7 @@ void DeathTimer::OnNormalEnemyHit() {
 
 void DeathTimer::RegisterParams() {
     globalParameter_->Regist(groupName_, "maxStress",             &maxStress_);
+    globalParameter_->Regist(groupName_, "tauntTickInterval",     &tauntTickInterval_);
     globalParameter_->Regist(groupName_, "baseStressRate",        &baseStressRate_);
     globalParameter_->Regist(groupName_, "stressRatePerEnemy",    &stressRatePerEnemy_);
     globalParameter_->Regist(groupName_, "decayTickInterval",     &decayTickInterval_);
@@ -102,9 +112,10 @@ void DeathTimer::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         ImGui::DragFloat("最大ストレス",                    &maxStress_,             0.1f, 1.0f, 10000.0f);
-        ImGui::SeparatorText("ストレス増加（煽り中）");
-        ImGui::DragFloat("基準増加量（/秒）",               &baseStressRate_,        0.1f, 0.0f, 100.0f);
-        ImGui::DragFloat("ザコ1体あたり追加増加量（/秒）", &stressRatePerEnemy_,    0.1f, 0.0f, 50.0f);
+        ImGui::SeparatorText("ストレス増加（煽り中・チック方式）");
+        ImGui::DragFloat("増加間隔（秒）",                 &tauntTickInterval_,     0.05f, 0.1f, 30.0f);
+        ImGui::DragFloat("基準増加量（チックごと）",       &baseStressRate_,        0.1f, 0.0f, 100.0f);
+        ImGui::DragFloat("ザコ1体あたり追加増加量",       &stressRatePerEnemy_,    0.1f, 0.0f, 50.0f);
         ImGui::SeparatorText("ストレス減少（ボス撃破後・チック方式）");
         ImGui::DragFloat("チック間隔（秒）",     &decayTickInterval_,     0.05f, 0.1f, 10.0f);
         ImGui::DragFloat("チックあたり減少量", &decayAmountPerTick_,    0.1f,  0.0f, 100.0f);

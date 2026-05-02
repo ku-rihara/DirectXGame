@@ -55,9 +55,11 @@ private:
     float currentStress_ = 0.0f;
     float maxStress_     = 100.0f;
 
-    // 煽り中のストレス増加レート
-    float baseStressRate_       = 5.0f;  // 基準増加量
-    float stressRatePerEnemy_   = 2.0f;  // ザコ1体あたりの追加増加量
+    // 煽り中のストレス増加（チック方式）
+    float tauntTickInterval_    = 1.0f;  // 何秒間隔で1回増加するか
+    float tauntTickTimer_       = 0.0f;  // チック用タイマー
+    float baseStressRate_       = 5.0f;  // 基準増加量（チックごと）
+    float stressRatePerEnemy_   = 2.0f;  // ザコ1体あたりの追加増加量（チックごと）
 
     // ボス撃破後のストレス減少
     float decayTickInterval_     = 1.0f;   // 何秒ごとに1回減らすか
