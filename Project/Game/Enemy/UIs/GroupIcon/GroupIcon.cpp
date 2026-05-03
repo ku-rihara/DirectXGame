@@ -11,9 +11,7 @@ void GroupIcon::SetGroupIndex(int32_t index) {
         sprite_ = nullptr;
         return;
     }
-    sprite_.reset(KetaEngine::Sprite::Create(kTexturePaths[index], false));
-    sprite_->SetAnchorPoint({0.5f, 0.5f});
-    sprite_->SetLayerNum(3);
+    sprite_.reset(KetaEngine::Sprite::Create(kTexturePaths[index], true));
 }
 
 void GroupIcon::Update(const Vector2& screenPos, bool isDraw) {
