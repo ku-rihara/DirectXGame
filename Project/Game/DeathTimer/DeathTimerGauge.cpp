@@ -95,7 +95,7 @@ void DeathTimerGauge::UpdateGaugeColor() {
     // 状態が変わった場合のみアイコンを切り替え
     if (newState != currentState_) {
         gaugeIcons_[static_cast<int32_t>(currentState_)]->transform_.scale = Vector2::ZeroVector();
-        currentState_ = newState;
+        currentState_                                                      = newState;
         heatBeat_.heatBeatEase.SetAdaptValue(&gaugeIcons_[static_cast<int32_t>(currentState_)]->transform_.scale);
     }
 
@@ -197,9 +197,9 @@ void DeathTimerGauge::PlayTimerRecoveryScaling() {
 }
 
 void DeathTimerGauge::SetSpriteScales(const Vector2& scale) {
-    frameSprite_->transform_.scale                                         = scale;
-    gaugeSprite_->transform_.scale                                         = scale;
-    gaugeIcons_[static_cast<int32_t>(currentState_)]->transform_.scale    = scale;
-    nameSprite_->transform_.scale                                          = scale;
-    iconFrameSprite_->transform_.scale                                     = scale;
+    frameSprite_->transform_.scale                                     = scale;
+    gaugeSprite_->transform_.scale                                     = scale;
+    gaugeIcons_[static_cast<int32_t>(currentState_)]->transform_.scale = scale;
+    nameSprite_->transform_.scale                                      = scale;
+    iconFrameSprite_->transform_.scale                                 = scale;
 }

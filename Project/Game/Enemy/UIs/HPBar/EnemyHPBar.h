@@ -26,7 +26,7 @@ public:
     void Update(float hp);
 
 private:
-    std::unique_ptr<KetaEngine::Sprite> sprite_;
+    std::unique_ptr<KetaEngine::Sprite> barSprite_;
     std::unique_ptr<KetaEngine::Sprite> hpSprite_;
 
     EnemyHPBarColorConfig* colorConfig_ = nullptr;

@@ -34,8 +34,7 @@ public:
     // 初期化、更新
     void Init();
     void Update(float deltaTime);
-    void Draw();
-
+   
     void AdjustParam();
     void RegisterParams();
 
