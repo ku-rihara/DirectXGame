@@ -6,16 +6,16 @@
             0.0,
             0.0
         ],
-        "Rotation_EaseType": 6,
+        "Rotation_EaseType": 1,
         "Rotation_IsActive": true,
         "Rotation_IsReturnToOrigin": false,
-        "Rotation_MaxTime": 0.6000000238418579,
+        "Rotation_MaxTime": 0.7300000190734863,
         "Rotation_Period": 0.0,
         "Rotation_ReturnEaseType": 0,
         "Rotation_ReturnMaxTime": 1.0,
         "Rotation_endValue": [
             0.0,
-            6.2831854820251465,
+            12.566370964050293,
             0.0
         ],
         "Scale_Amplitude": 0.0,
@@ -27,7 +27,7 @@
         "Scale_EaseType": 21,
         "Scale_IsActive": true,
         "Scale_IsReturnToOrigin": false,
-        "Scale_MaxTime": 0.6100000143051147,
+        "Scale_MaxTime": 0.5299999713897705,
         "Scale_Period": 0.0,
         "Scale_ReturnEaseType": 0,
         "Scale_ReturnMaxTime": 1.0,
