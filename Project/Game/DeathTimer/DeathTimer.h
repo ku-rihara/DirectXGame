@@ -9,7 +9,6 @@
 
 /// <summary>
 /// ストレスゲージ管理クラス
-/// - ボスがプレイヤーに近づきザコが煽ると増加
 /// </summary>
 class DeathTimer {
 public:
@@ -36,12 +35,7 @@ public:
     void SetTauntState(bool isTaunting, int32_t tauntingCount);
 
     /// <summary>
-    /// ボスが倒された瞬間に呼ぶ
-    /// </summary>
-    void OnBossDead();
-
-    /// <summary>
-    /// ボス撃破後にザコへ攻撃が当たった時に呼ぶ
+    /// CrawlBackwards状態の敵へ攻撃が当たった時に呼ぶ
     /// </summary>
     void OnNormalEnemyHit();
 
@@ -55,41 +49,32 @@ private:
     float currentStress_ = 0.0f;
     float maxStress_     = 100.0f;
 
-    // 煽り中のストレス増加（チック方式）
-    float tauntTickInterval_    = 1.0f;  // 何秒間隔で1回増加するか
-    float tauntTickTimer_       = 0.0f;  // チック用タイマー
-    float baseStressRate_       = 5.0f;  // 基準増加量（チックごと）
-    float stressRatePerEnemy_   = 2.0f;  // ザコ1体あたりの追加増加量（チックごと）
+    // 煽り中のストレス増加（秒方式）
+    float tauntTickInterval_  = 1.0f; // 何秒間隔で1回増加するか
+    float tauntTickTimer_     = 0.0f; // 秒用タイマー
+    float baseStressRate_     = 5.0f; // 基準増加量（秒ごと）
+    float stressRatePerEnemy_ = 2.0f; // ザコ1体あたりの追加増加量（秒ごと）
 
     // ボス撃破後のストレス減少
-    float decayTickInterval_     = 1.0f;   // 何秒ごとに1回減らすか
-    float decayAmountPerTick_    = 3.0f;   // 1チックで減るストレス量
-    float decayTickTimer_        = 0.0f;   // チック用タイマー
-    float stressReductionPerHit_ = 5.0f;   // ザコ攻撃1回あたりの減少量
+    float stressReductionPerHit_ = 5.0f; // ザコ攻撃1回あたりの減少量
 
-    // コールバック（ボス位置エフェクト・UI等に使う）
-    std::function<void()> onDecayTick_;    // ストレス減少チック時に呼ばれる
-    std::function<void()> onBossKilled_;   // ボス撃破時に呼ばれる
+    // コールバック
+    std::function<void()> onDecayTick_; // ストレス減少時に呼ばれる
 
     // 煽り状態
-    bool    isTaunting_         = false;
+    bool isTaunting_            = false;
     int32_t tauntingEnemyCount_ = 0;
 
-    bool isBossDead_ = false;
-    bool isDeath_    = false;
+    bool isDeath_ = false;
 
-#if defined(_DEBUG) || defined(DEVELOPMENT)
     bool isGodMode_ = true; // デバッグ用: ストレス増加を止める
-#endif
 
 public:
     const bool& GetIsDeath() const { return isDeath_; }
     float GetCurrentStress() const { return currentStress_; }
     float GetMaxStress() const { return maxStress_; }
-    bool GetIsBossDead() const { return isBossDead_; }
     DeathTimerGauge* GetDeathTimerGauge() const { return deathTimerGauge_.get(); }
 
     // コールバック設定
-    void SetOnDecayTickCallback(std::function<void()> cb) { onDecayTick_  = std::move(cb); }
-    void SetOnBossKilledCallback(std::function<void()> cb) { onBossKilled_ = std::move(cb); }
+    void SetOnDecayTickCallback(std::function<void()> cb) { onDecayTick_ = std::move(cb); }
 };

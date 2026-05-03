@@ -1,8 +1,11 @@
 {
     "DeathTimer": {
+        "baseStressRate": 0.6000000238418579,
         "comboMaxMultiplier": 5.0,
         "comboMultiplierPerStep": 1.090000033378601,
         "comboStepSize": 50,
+        "decayAmountPerTick": 1.0,
+        "decayTickInterval": 1.0,
         "decreaseRate1": 1.100000023841858,
         "decreaseRate2": 1.5,
         "decreaseRate3": 2.0,
@@ -20,7 +23,11 @@
         "levelUpKillCount6": 25,
         "levelUpRecoveryAmount": 0.1599999964237213,
         "maxHP": 100.0,
+        "maxStress": 100.0,
         "maxTimer": 10.0,
-        "recoveryDuration": 0.47999998927116394
+        "recoveryDuration": 0.47999998927116394,
+        "stressRatePerEnemy": 1.2999999523162842,
+        "stressReductionPerHit": 1.600000023841858,
+        "tauntTickInterval": 1.0
     }
 }

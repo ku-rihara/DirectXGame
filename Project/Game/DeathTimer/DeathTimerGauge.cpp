@@ -57,8 +57,8 @@ void DeathTimerGauge::Update(float deltaTime) {
     // UVスクロール更新
     UpdateGaugeUV(deltaTime);
 
-    // ゲージのイージング（displayRatio_をtimerRatio_へ滑らかに近づける）
-    displayRatio_ += (timerRatio_ - displayRatio_) * std::min(1.0f, gaugeEaseSpeed_ * deltaTime);
+    // ゲージのイージング
+    displayRatio_ += (timerRatio_ - displayRatio_) * (std::min)(1.0f, gaugeEaseSpeed_ * deltaTime);
     displayRatio_ = std::clamp(displayRatio_, 0.0f, 1.0f);
 
     // ゲージ表示更新
@@ -144,9 +144,9 @@ void DeathTimerGauge::AdjustParam() {
         ImGui::Text("timerRatio: %.3f  displayRatio: %.3f", timerRatio_, displayRatio_);
 
         ImGui::SeparatorText("Stress Percent UI");
-        ImGui::DragFloat2("Percent Base Pos",     &percentBasePos_.x,      0.5f);
-        ImGui::DragFloat2("Percent Base Scale",   &percentBaseScale_.x,    0.01f);
-        ImGui::DragFloat2("Percent Digit Offset", &percentDigitOffset_.x,  0.5f);
+        ImGui::DragFloat2("Percent Base Pos", &percentBasePos_.x, 0.5f);
+        ImGui::DragFloat2("Percent Base Scale", &percentBaseScale_.x, 0.01f);
+        ImGui::DragFloat2("Percent Digit Offset", &percentDigitOffset_.x, 0.5f);
         ImGui::Text("Display Percent: %d%%", static_cast<int32_t>(displayRatio_ * 100.0f));
 
         ImGui::SeparatorText("UV Scroll");
@@ -179,19 +179,19 @@ void DeathTimerGauge::AdjustParam() {
 }
 
 void DeathTimerGauge::RegisterParams() {
-    globalParameter_->Regist(groupName_, "uvScrollSpeed",       &uvScrollSpeed_);
-    globalParameter_->Regist(groupName_, "dangerThreshold",     &dangerThreshold_);
-    globalParameter_->Regist(groupName_, "normalThreshold",     &normalThreshold_);
-    globalParameter_->Regist(groupName_, "safeColor",           &safeColor_);
-    globalParameter_->Regist(groupName_, "normalColor",         &normalColor_);
-    globalParameter_->Regist(groupName_, "dangerColor",         &dangerColor_);
+    globalParameter_->Regist(groupName_, "uvScrollSpeed", &uvScrollSpeed_);
+    globalParameter_->Regist(groupName_, "dangerThreshold", &dangerThreshold_);
+    globalParameter_->Regist(groupName_, "normalThreshold", &normalThreshold_);
+    globalParameter_->Regist(groupName_, "safeColor", &safeColor_);
+    globalParameter_->Regist(groupName_, "normalColor", &normalColor_);
+    globalParameter_->Regist(groupName_, "dangerColor", &dangerColor_);
     for (int32_t i = 0; i < static_cast<int32_t>(heatBeat_.heatBeatSpeedRate.size()); ++i) {
         globalParameter_->Regist(groupName_, "heatBeatSpeedRate" + std::to_string(i), &heatBeat_.heatBeatSpeedRate[i]);
     }
-    globalParameter_->Regist(groupName_, "gaugeEaseSpeed",      &gaugeEaseSpeed_);
-    globalParameter_->Regist(groupName_, "percentBasePos",      &percentBasePos_);
-    globalParameter_->Regist(groupName_, "percentBaseScale",    &percentBaseScale_);
-    globalParameter_->Regist(groupName_, "percentDigitOffset",  &percentDigitOffset_);
+    globalParameter_->Regist(groupName_, "gaugeEaseSpeed", &gaugeEaseSpeed_);
+    globalParameter_->Regist(groupName_, "percentBasePos", &percentBasePos_);
+    globalParameter_->Regist(groupName_, "percentBaseScale", &percentBaseScale_);
+    globalParameter_->Regist(groupName_, "percentDigitOffset", &percentDigitOffset_);
 }
 
 void DeathTimerGauge::PlayTimerRecoveryScaling() {
@@ -218,14 +218,14 @@ void DeathTimerGauge::PlayTimerRecoveryScaling() {
 void DeathTimerGauge::UpdatePercentDigits() {
     int32_t percent = std::clamp(static_cast<int32_t>(displayRatio_ * 100.0f), 0, 100);
 
-    std::array<int32_t, kPercentDigitCount> digits  = {percent / 100, (percent / 10) % 10, percent % 10};
-    std::array<bool,    kPercentDigitCount> visible  = {percent >= 100, percent >= 10, true};
+    std::array<int32_t, kPercentDigitCount> digits = {percent / 100, (percent / 10) % 10, percent % 10};
+    std::array<bool, kPercentDigitCount> visible   = {percent >= 100, percent >= 10, true};
 
     for (int32_t i = 0; i < kPercentDigitCount; ++i) {
-        Vector2 pos = percentBasePos_ + Vector2(percentDigitOffset_.x * static_cast<float>(i),
-                                                percentDigitOffset_.y * static_cast<float>(i));
+        Vector2 pos         = percentBasePos_ + Vector2(percentDigitOffset_.x * static_cast<float>(i), percentDigitOffset_.y * static_cast<float>(i));
         Vector2 scaledScale = {percentBaseScale_.x * percentSpriteMultiplier_.x,
-                               percentBaseScale_.y * percentSpriteMultiplier_.y};
+            percentBaseScale_.y * percentSpriteMultiplier_.y};
+
         percentDigits_[i].Update(digits[i], pos, scaledScale, 1.0f, visible[i]);
     }
 }

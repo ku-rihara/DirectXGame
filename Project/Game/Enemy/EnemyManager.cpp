@@ -77,10 +77,10 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
         ne->SetNormalParameter(normalEnemyParam_);
     }
 
-    BaseEnemy* rawPtr = enemy.get();
     if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
-        rawPtr->SetOnDamageTakenCallback([this]() {
-            if (pDeathTimer_) {
+        NormalEnemy* ne = static_cast<NormalEnemy*>(enemy.get());
+        ne->SetOnDamageTakenCallback([this, ne]() {
+            if (pDeathTimer_ && ne->GetZakoState() == NormalEnemy::ZakoState::CrawlBackwards) {
                 pDeathTimer_->OnNormalEnemyHit();
             }
         });
@@ -216,9 +216,6 @@ void EnemyManager::UpdateTauntState() {
 ///  ボス撃破処理
 ///========================================================================================
 void EnemyManager::OnBossKilled(BaseEnemy* dyingBoss) {
-    if (pDeathTimer_) {
-        pDeathTimer_->OnBossDead();
-    }
 
     auto it = minionsByBoss_.find(dyingBoss);
     if (it != minionsByBoss_.end()) {
@@ -278,8 +275,9 @@ void EnemyManager::PreGenerateEnemy(const std::string& enemyType, const Vector3&
     }
 
     if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
-        enemy->SetOnDamageTakenCallback([this]() {
-            if (pDeathTimer_) {
+        NormalEnemy* ne2 = static_cast<NormalEnemy*>(enemy.get());
+        ne2->SetOnDamageTakenCallback([this, ne2]() {
+            if (pDeathTimer_ && ne2->GetZakoState() == NormalEnemy::ZakoState::CrawlBackwards) {
                 pDeathTimer_->OnNormalEnemyHit();
             }
         });
@@ -458,9 +456,9 @@ void EnemyManager::UIUpdate(const KetaEngine::ViewProjection& viewProjection) {
                 if (occNdc.z <= 0.0f || occNdc.z >= targetNdc.z) {
                     continue;
                 }
-                float dx = targetNdc.x - occNdc.x;
-                float dy = targetNdc.y - occNdc.y;
-                if (dx * dx + dy * dy <= radiusSq) {
+                float distanceX = targetNdc.x - occNdc.x;
+                float distanceY = targetNdc.y - occNdc.y;
+                if (distanceX * distanceX + distanceY * distanceY <= radiusSq) {
                     idDraw = true;
                     break;
                 }
@@ -601,19 +599,7 @@ void EnemyManager::AdjustParam() {
         if (minionsByBoss_.empty()) {
             ImGui::TextColored({1.0f, 0.4f, 0.4f, 1.0f}, "ボスが未リンク");
         }
-        Vector3 playerPos = pPlayer_ ? pPlayer_->GetBaseTransform().GetWorldPos() : Vector3{};
-        int32_t bossIdx   = 0;
-        for (auto& [boss, minions] : minionsByBoss_) {
-            bool alive   = boss && !boss->GetIsDeath();
-            float dist   = alive ? (boss->GetWorldPosition() - playerPos).Length() : -1.0f;
-            int taunting = 0;
-            for (auto* m : minions) {
-                if (m && m->IsTaunting())
-                    ++taunting;
-            }
-            ImGui::Text("Boss[%d]: alive=%s ToPlayer=%.1f Minions=%d Taunting=%d",
-                bossIdx++, alive ? "YES" : "NO", dist, (int)minions.size(), taunting);
-        }
+       
 
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
