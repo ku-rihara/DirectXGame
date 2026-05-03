@@ -2,6 +2,7 @@
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyChase.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 #include "Enemy/Behavior/ActionBehavior/StrongEnemyBehavior/StrongEnemyTauntBehavior.h"
+#include "Enemy/Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Light/LightingType.h"
 
 void StrongEnemy::Init(const Vector3& spawnPos) {
@@ -51,6 +52,7 @@ void StrongEnemy::StartTaunt() {
     isTaunting_ = true;
     ChangeBehavior(std::make_unique<StrongEnemyTauntBehavior>(this));
 }
+
 
 void StrongEnemy::StopTaunt() {
     if (!isTaunting_) {

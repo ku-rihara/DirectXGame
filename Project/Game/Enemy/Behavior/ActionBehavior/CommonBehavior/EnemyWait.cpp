@@ -15,6 +15,8 @@
 EnemyWait::EnemyWait(BaseEnemy* boss)
     : BaseEnemyBehavior("EnemyWait", boss) {
 
+    cooldownTimer_ = pBaseEnemy_->GetParameter().waitCooldownTime;
+
     // 待機アニメーションにリセット
     pBaseEnemy_->ResetToWaitAnimation();
 
@@ -38,6 +40,10 @@ EnemyWait::~EnemyWait() {
 }
 
 void EnemyWait::Update() {
+    if (cooldownTimer_ > 0.0f) {
+        cooldownTimer_ -= KetaEngine::Frame::DeltaTime();
+    }
+
     // 距離を計算
     distance_ = pBaseEnemy_->CalcDistanceToPlayer();
 
@@ -51,6 +57,9 @@ void EnemyWait::UpdateWaiting() {
 
     // プレイヤーの方向を向く
     pBaseEnemy_->DirectionToPlayer();
+
+    // クールダウン中は発見しない
+    if (cooldownTimer_ > 0.0f) { return; }
 
     // プレイヤーが追跡範囲内にいるか
     if (IsDiscovery()) {
@@ -68,7 +77,7 @@ bool EnemyWait::IsDiscovery() {
     bool result       = false;
 
     // 追跡開始距離以内＆追跡限界距離以上
-    if (distance_ <= param.chaseDistance && distance_ >= param.chaseDistanceMin) {
+    if (distance_ <= param.chaseDistance) {
         result = true;
     }
     return result;

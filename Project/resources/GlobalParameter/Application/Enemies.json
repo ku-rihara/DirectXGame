@@ -111,13 +111,15 @@
         "hitbackRotateValue2": 0.5934119820594788,
         "hpBarDisplayDistance": 11.0,
         "hpBarPosOffset1": [
-            56.130001068115234,
-            200.0
+            90.11000061035156,
+            198.5
         ],
         "hpBarPosOffset2": [
             56.130001068115234,
             324.9700012207031
         ],
+        "hpBarWorldOffsetY1": 0.0,
+        "hpBarWorldOffsetY2": 0.0,
         "initScale1": [
             6.0,
             6.0,
@@ -140,7 +142,7 @@
         "ropeReboundJumpValue2": 15.0,
         "startTime1": 0.0,
         "startTime2": 0.0,
-        "strong_tauntRange": 25.5,
+        "strong_tauntRange": 37.5,
         "thrustRotateSpeed1": 43.560001373291016,
         "thrustRotateSpeed2": 43.560001373291016,
         "upperFallSpeedLimit1": 1.2000000476837158,
@@ -148,6 +150,8 @@
         "upperGravity1": 3.509999990463257,
         "upperGravity2": 3.509999990463257,
         "upperJumpPower1": 1.350000023841858,
-        "upperJumpPower2": 1.350000023841858
+        "upperJumpPower2": 1.350000023841858,
+        "waitCooldownTime1": 0.4000000059604645,
+        "waitCooldownTime2": 1.0
     }
 }

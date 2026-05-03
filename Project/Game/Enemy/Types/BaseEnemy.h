@@ -53,7 +53,6 @@ public:
         float burstTime;
         // 追跡パラメータ
         float chaseDistance;
-        float chaseDistanceMin;
         float chaseSpeed;
         // 死亡パラメータ
         float deathBlowValue;
@@ -63,6 +62,8 @@ public:
         float deathBurstTime;
         // ゲージ増加値
         float gaugeIncreaseValue;
+        // Wait遷移後に追跡を開始するまでの待機時間(秒)
+        float waitCooldownTime;
     };
 
     struct DamageReactionAnimInfo {

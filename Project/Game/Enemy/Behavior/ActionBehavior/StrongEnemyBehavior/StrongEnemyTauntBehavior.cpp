@@ -1,6 +1,6 @@
 #include "StrongEnemyTauntBehavior.h"
 
-#include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyChase.h"
+#include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyWait.h"
 #include "Enemy/Types/StrongEnemy.h"
 
 StrongEnemyTauntBehavior::StrongEnemyTauntBehavior(StrongEnemy* enemy)
@@ -14,7 +14,7 @@ void StrongEnemyTauntBehavior::Update() {
 
     float tauntRange = GetEnemy()->GetStrongParameter().tauntRange;
     if (pBaseEnemy_->CalcDistanceToPlayer() > tauntRange) {
-        pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChase>(pBaseEnemy_));
+        pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
     }
 }
 

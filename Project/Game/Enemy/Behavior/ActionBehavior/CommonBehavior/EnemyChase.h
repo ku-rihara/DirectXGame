@@ -14,5 +14,4 @@ public:
     void Debug() override;
 
 private:
-    float chaseDistanceMin_ = 0.0f;
 };

@@ -463,9 +463,9 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "hpBarWorldOffsetY" + indexString, &parameters_[i].hpBarWorldOffsetY);
         globalParameter_->Regist(groupName_, "groupIconWorldOffsetY" + indexString, &parameters_[i].groupIconWorldOffsetY);
 
-        globalParameter_->Regist(groupName_, "chaseDistanceMin" + indexString, &parameters_[i].chaseDistanceMin);
         globalParameter_->Regist(groupName_, "chaseSpeed" + indexString, &parameters_[i].chaseSpeed);
         globalParameter_->Regist(groupName_, "chaseDistance" + indexString, &parameters_[i].chaseDistance);
+        globalParameter_->Regist(groupName_, "waitCooldownTime" + indexString, &parameters_[i].waitCooldownTime);
 
         globalParameter_->Regist(groupName_, "deathBlowValue" + indexString, &parameters_[i].deathBlowValue);
         globalParameter_->Regist(groupName_, "deathBlowValueY" + indexString, &parameters_[i].deathBlowValueY);
@@ -495,8 +495,8 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
     ImGui::SeparatorText("追跡パラメータ");
     ImGui::DragFloat("追跡開始距離", &parameters_[typeIndex].chaseDistance, 0.01f, 0.0f);
-    ImGui::DragFloat("追跡限度", &parameters_[typeIndex].chaseDistanceMin, 0.1f, 0.0f);
     ImGui::DragFloat("追跡速度", &parameters_[typeIndex].chaseSpeed, 0.01f, 0.0f);
+    ImGui::DragFloat("Wait後追跡クールダウン(秒)", &parameters_[typeIndex].waitCooldownTime, 0.1f, 0.0f);
 
     if (type == BaseEnemy::Type::NORMAL) {
         ImGui::SeparatorText("逃走パラメータ（NormalEnemy）");

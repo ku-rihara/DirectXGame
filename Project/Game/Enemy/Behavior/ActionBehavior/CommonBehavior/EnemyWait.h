@@ -37,5 +37,6 @@ private:
 private:
     std::function<void()> currentPhase_;
     float distance_;
+    float cooldownTimer_;
 
 };

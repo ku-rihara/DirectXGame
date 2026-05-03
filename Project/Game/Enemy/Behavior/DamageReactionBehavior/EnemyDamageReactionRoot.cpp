@@ -35,6 +35,7 @@ void EnemyDamageReactionRoot::Update(float deltaTime) {
 
     // 死亡予約済みのままRootに戻った場合のフォールバック
     if (pBaseEnemy_->GetIsDeathPending() && !pBaseEnemy_->GetIsDeath()) {
+        pBaseEnemy_->SetIsAdaptCollision(false);
         pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
     }
 }
