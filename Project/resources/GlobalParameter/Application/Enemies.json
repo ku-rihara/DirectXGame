@@ -101,8 +101,8 @@
         "fleeSpeed2": 0.5,
         "gaugeIncreaseValue1": 1.0,
         "gaugeIncreaseValue2": 1.0,
-        "groupIconWorldOffsetY1": 8.930000305175781,
-        "groupIconWorldOffsetY2": 11.819999694824219,
+        "groupIconWorldOffsetY1": 9.0,
+        "groupIconWorldOffsetY2": 17.0,
         "hitbackRotateBackRatio1": 0.800000011920929,
         "hitbackRotateBackRatio2": 0.800000011920929,
         "hitbackRotateTime1": 0.5400000214576721,
@@ -115,11 +115,13 @@
             198.5
         ],
         "hpBarPosOffset2": [
-            56.130001068115234,
-            324.9700012207031
+            93.20999908447266,
+            353.0199890136719
         ],
         "hpBarWorldOffsetY1": 0.0,
         "hpBarWorldOffsetY2": 0.0,
+        "hpMax1": 115.0,
+        "hpMax2": 115.0,
         "initScale1": [
             6.0,
             6.0,
@@ -145,6 +147,7 @@
         "strong_tauntRange": 37.5,
         "thrustRotateSpeed1": 43.560001373291016,
         "thrustRotateSpeed2": 43.560001373291016,
+        "uiOcclusionRadius": 80.0,
         "upperFallSpeedLimit1": 1.2000000476837158,
         "upperFallSpeedLimit2": 1.2000000476837158,
         "upperGravity1": 3.509999990463257,

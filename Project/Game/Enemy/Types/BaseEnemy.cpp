@@ -36,8 +36,8 @@
 ///========================================================
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
-    // HP
-    HPMax_    = 115.0f;
+    // HP (Typeごとのhpmax使用)
+    HPMax_    = (parameter_.hpMax > 0.0f) ? parameter_.hpMax : 115.0f;
     hp_       = HPMax_;
     enemyUIs_ = std::make_unique<EnemyUIs>();
     enemyUIs_->Init(HPMax_);
@@ -126,7 +126,15 @@ void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, const bo
 ///========================================================
 /// HpBar表示
 ///========================================================
-void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection, float distanceToPlayer) {
+void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection, float distanceToPlayer, bool isOccluded) {
+ 
+    // オクルージョン時はUI非表示
+    if (isOccluded) {
+        enemyUIs_->Hide(hp_);
+        enemyUIs_->UpdateGroupIcon({}, false);
+        return;
+    }
+
     Vector3 worldPos = GetWorldPosition();
 
     // HPバーの位置計算
@@ -137,15 +145,16 @@ void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection, 
     Vector3 iconWorldPos  = worldPos + Vector3{0.0f, parameter_.groupIconWorldOffsetY, 0.0f};
     Vector2 iconScreenPos = ScreenTransform(iconWorldPos, viewProjection);
 
-     // UI更新
-     enemyUIs_->Update(hp_, hpBarScreenPos, IsInView(viewProjection));
+    // UI更新
+    enemyUIs_->Update(hp_, hpBarScreenPos, IsInView(viewProjection));
 
+    // 
     if (distanceToPlayer <= pEnemyManager_->GetHpBarDisplayDistance()) {
         enemyUIs_->SetHPBarOffset(parameter_.hpBarPosOffset);
     } else {
         enemyUIs_->Hide(hp_);
     }
- 
+
     enemyUIs_->UpdateGroupIcon(iconScreenPos, IsInView(viewProjection));
 }
 

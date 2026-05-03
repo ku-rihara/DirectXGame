@@ -48,7 +48,7 @@ public:
     // 敵の生成
     void SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID,
         const Vector3& localOffset = {}, const std::string& parentBossName = "");
-    void HpBarUpdate(const KetaEngine::ViewProjection& viewProjection);
+    void UIUpdate(const KetaEngine::ViewProjection& viewProjection);
 
     // 事前生成
     void PreGenerateEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID,
@@ -118,6 +118,7 @@ private:
     EnemyHPBarColorConfig hpBarColorConfig_;
 
     float hpBarDisplayDistance_;
+    float uiOcclusionRadius_ = 80.0f;
 
     int32_t selectedEnemyTypeIndex_;
 
@@ -125,7 +126,8 @@ public:
     const bool& GetIsAllCleared() const { return areAllEnemiesCleared_; }
     const std::vector<std::unique_ptr<BaseEnemy>>& GetEnemies() const { return enemies_; }
     EnemyDamageReactionController* GetDamageReactionController() const { return damageReactionController_.get(); }
-    float GetHpBarDisplayDistance() const { return hpBarDisplayDistance_; } 
+    float GetHpBarDisplayDistance() const { return hpBarDisplayDistance_; }
+    float GetUIocclusionRadius() const { return uiOcclusionRadius_; }
 
     bool IsAnyEnemyInAnticipation() const;
 

@@ -37,11 +37,10 @@ void DeathTimer::Update(float deltaTime) {
                 }
             }
         } else {
-            // ボス撃破後：一定間隔チックでストレス減少（コールバック付き）
+            // ボス撃破後：チックコールバックのみ（ストレス自動減少はOnNormalEnemyHit経由のみ）
             decayTickTimer_ += deltaTime;
             if (decayTickTimer_ >= decayTickInterval_) {
                 decayTickTimer_ -= decayTickInterval_;
-                currentStress_ -= decayAmountPerTick_;
                 if (onDecayTick_) {
                     onDecayTick_();
                 }
@@ -58,8 +57,9 @@ void DeathTimer::Update(float deltaTime) {
         isDeath_ = true;
     }
 
-    deathTimerGauge_->Update(deltaTime);
+    // SetTimer で目標値を先に更新し、Update でイージング処理する
     deathTimerGauge_->SetTimer(currentStress_, maxStress_);
+    deathTimerGauge_->Update(deltaTime);
 }
 
 void DeathTimer::TakeDamage(float amount) {
@@ -72,6 +72,10 @@ void DeathTimer::TakeDamage(float amount) {
 void DeathTimer::SetTauntState(bool isTaunting, int32_t tauntingCount) {
     isTaunting_         = isTaunting;
     tauntingEnemyCount_ = tauntingCount;
+    // 新しいボスが煽り始めたら撃破フラグをリセット（再戦時対応）
+    if (isTaunting) {
+        isBossDead_ = false;
+    }
 }
 
 void DeathTimer::OnBossDead() {

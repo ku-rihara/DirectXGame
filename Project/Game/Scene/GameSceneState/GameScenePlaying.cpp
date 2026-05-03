@@ -54,7 +54,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.backGroundObjectManager_->Update(timeSpeed);
     obj.deathTimer_->Update(timeSpeed);
 
-    obj.enemyManager_->HpBarUpdate(pOwner_->GetViewProjection());
+    obj.enemyManager_->UIUpdate(pOwner_->GetViewProjection());
     obj.enemyManager_->SetViewProjection(&pOwner_->GetViewProjection());
     obj.lockOnController_->Update(obj.player_.get(), pOwner_->GetViewProjection());
 

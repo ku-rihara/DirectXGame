@@ -1,6 +1,8 @@
 #include "EnemyManager.h"
 // UIs
 #include "UIs/GroupIcon/GroupIcon.h"
+// Math
+#include "Matrix4x4.h"
 // Types
 #include "Types/NormalEnemy.h"
 #include "Types/StrongEnemy.h"
@@ -428,14 +430,44 @@ void EnemyManager::Update() {
     }
 }
 
-void EnemyManager::HpBarUpdate(const KetaEngine::ViewProjection& viewProjection) {
+void EnemyManager::UIUpdate(const KetaEngine::ViewProjection& viewProjection) {
     Vector3 playerPos = pPlayer_->GetBaseTransform().GetWorldPos();
+    float radiusSq    = uiOcclusionRadius_ * uiOcclusionRadius_;
 
     for (size_t i = 0; i < enemies_.size(); ++i) {
-        Vector3 enemyPos = enemies_[i]->GetWorldPosition();
-        float distance       = (enemyPos - playerPos).Length();
+        if (enemies_[i]->GetIsDeath()) {
+            continue;
+        }
 
-        enemies_[i]->DisplaySprite(viewProjection, distance);
+        Vector3 enemyPos = enemies_[i]->GetWorldPosition();
+        float distance   = (enemyPos - playerPos).Length();
+
+        //  StrongEnemyがカメラとNormalEnemyのUIの間に重なるか
+        bool idDraw   = false;
+        bool isNormalTarget = enemies_[i]->GetType() == BaseEnemy::Type::NORMAL;
+        Vector3 targetNdc = ScreenTransformWithDepth(enemyPos, viewProjection);
+        if (isNormalTarget && targetNdc.z > 0.0f && targetNdc.z <= 1.0f) {
+            for (size_t j = 0; j < enemies_.size(); ++j) {
+                if (i == j || enemies_[j]->GetIsDeath()) {
+                    continue;
+                }
+                if (enemies_[j]->GetType() != BaseEnemy::Type::STRONG) {
+                    continue;
+                }
+                Vector3 occNdc = ScreenTransformWithDepth(enemies_[j]->GetWorldPosition(), viewProjection);
+                if (occNdc.z <= 0.0f || occNdc.z >= targetNdc.z) {
+                    continue;
+                }
+                float dx = targetNdc.x - occNdc.x;
+                float dy = targetNdc.y - occNdc.y;
+                if (dx * dx + dy * dy <= radiusSq) {
+                    idDraw = true;
+                    break;
+                }
+            }
+        }
+
+        enemies_[i]->DisplaySprite(viewProjection, distance, idDraw);
     }
 }
 
@@ -450,6 +482,7 @@ void EnemyManager::RegisterParams() {
 
     globalParameter_->Regist(groupName_, "hpBarDisplayDistance", &hpBarDisplayDistance_);
     globalParameter_->Regist(groupName_, "bossPlayerTriggerDistance", &bossPlayerTriggerDistance_);
+    globalParameter_->Regist(groupName_, "uiOcclusionRadius", &uiOcclusionRadius_);
 
     for (uint32_t i = 0; i < parameters_.size(); ++i) {
         const std::string& indexString = std::to_string(static_cast<int>(i + 1));
@@ -459,6 +492,7 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "initScale" + indexString, &parameters_[i].baseScale_);
         globalParameter_->Regist(groupName_, "collisionRad" + indexString, &parameters_[i].collisionRad);
         globalParameter_->Regist(groupName_, "collisionOffset" + indexString, &parameters_[i].collisionOffset);
+        globalParameter_->Regist(groupName_, "hpMax" + indexString, &parameters_[i].hpMax);
         globalParameter_->Regist(groupName_, "hpBarPosOffset" + indexString, &parameters_[i].hpBarPosOffset);
         globalParameter_->Regist(groupName_, "hpBarWorldOffsetY" + indexString, &parameters_[i].hpBarWorldOffsetY);
         globalParameter_->Regist(groupName_, "groupIconWorldOffsetY" + indexString, &parameters_[i].groupIconWorldOffsetY);
@@ -516,10 +550,13 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("DeathRotateSpeed", &parameters_[typeIndex].deathRotateSpeed, 0.01f);
     ImGui::DragFloat("DeathBurstTime", &parameters_[typeIndex].deathBurstTime, 0.01f);
 
+    ImGui::SeparatorText("HPパラメータ");
+    ImGui::DragFloat("hpMax", &parameters_[typeIndex].hpMax, 1.0f, 1.0f, 9999.0f);
+
     ImGui::SeparatorText("スプライト関連");
     ImGui::DragFloat2("HPBarOffsetPos", &parameters_[typeIndex].hpBarPosOffset.x, 0.01f);
     ImGui::DragFloat("HPBarWorldOffsetY", &parameters_[typeIndex].hpBarWorldOffsetY, 0.01f);
-    ImGui::DragFloat("GroupIconWorldOffsetY", &parameters_[typeIndex].groupIconWorldOffsetY, 0.01f);
+    ImGui::DragFloat("GroupIconScreenOffsetY", &parameters_[typeIndex].groupIconWorldOffsetY, 1.0f);
 }
 
 void EnemyManager::DebugEnemySpawn() {

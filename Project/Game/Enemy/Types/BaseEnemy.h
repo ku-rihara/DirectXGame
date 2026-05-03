@@ -48,9 +48,11 @@ public:
         Vector3 collisionOffset;
         Vector2 hpBarPosOffset;
         float hpBarWorldOffsetY;
-        float groupIconWorldOffsetY;
+        float groupIconWorldOffsetY; // screen-space Y offset (pixels)
         float basePosY;
         float burstTime;
+        // HPパラメータ
+        float hpMax = 115.0f;
         // 追跡パラメータ
         float chaseDistance;
         float chaseSpeed;
@@ -120,7 +122,7 @@ public:
     /// スプライトUIの表示
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    void DisplaySprite(const KetaEngine::ViewProjection& viewProjection,float distanceToPlayer);
+    void DisplaySprite(const KetaEngine::ViewProjection& viewProjection, float distanceToPlayer, bool isOccluded = false);
 
     /// <summary>
     /// ダメージリアクション用アニメーションを追加

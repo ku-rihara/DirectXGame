@@ -136,8 +136,8 @@ void NormalEnemy::BackToDamageRoot() {
         PlayNormalAnimation(NormalAnimationType::CrawlBackwards, true);
         return;
     } else if (zakoState_ == ZakoState::Taunt) {
-        // Taunt状態ならTauntアニメーションに戻す
-        BaseEnemy::PlayAnimation(AnimationType::Taunt, true);
+        // Taunt状態ならZakoTauntBehaviorを再生成してリセット
+        ChangeBehavior(std::make_unique<ZakoTauntBehavior>(this));
         return;
     }
 

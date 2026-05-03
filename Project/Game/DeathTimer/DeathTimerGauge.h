@@ -3,6 +3,7 @@
 #include "2d/Sprite.h"
 #include "Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "UI/NumberDigitUI/NumberDigitUI.h"
 #include "Vector2.h"
 // std
 #include <array>
@@ -41,6 +42,7 @@ public:
 private:
     void UpdateGaugeUV(float deltaTime);
     void UpdateGaugeColor();
+    void UpdatePercentDigits();
     void SpriteInit();
 
 private:
@@ -58,7 +60,9 @@ private:
     std::unique_ptr<KetaEngine::Sprite> iconFrameSprite_ = nullptr;
 
     // タイマー関連
-    float timerRatio_ = 1.0f;
+    float timerRatio_   = 0.0f; // 実際のストレス比率（目標値）
+    float displayRatio_ = 0.0f; // 表示用イージング値
+    float gaugeEaseSpeed_ = 3.0f; // イージング速度
 
     // UVスクロール関連
     float uvScrollSpeed_; // スクロール速度
@@ -79,9 +83,18 @@ private:
     Vector4 normalColor_;
     Vector4 dangerColor_;
 
+    // ストレス%数字表示
+    static constexpr int32_t kPercentDigitCount = 3;
+    std::array<NumberDigitUI, kPercentDigitCount> percentDigits_;
+    Vector2 percentBasePos_         = {0.0f, 0.0f};
+    Vector2 percentBaseScale_       = {1.0f, 1.0f};
+    Vector2 percentDigitOffset_     = {30.0f, 0.0f};
+    Vector2 percentSpriteMultiplier_ = {1.0f, 1.0f};
+
 public:
     // Getter
     float GetTimerRatio() const { return timerRatio_; }
+    float GetDisplayRatio() const { return displayRatio_; }
     GaugeState GetCurrentState() const { return currentState_; }
 
     void SetSpriteScales(const Vector2& scale);
