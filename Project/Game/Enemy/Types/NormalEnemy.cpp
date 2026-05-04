@@ -18,7 +18,6 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     SetAnimationName(AnimationType::Spawn, "NormalEnemySpawn");
     SetAnimationName(AnimationType::Discovery, "NormalEnemyDiscovery");
     SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
-    SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
     SetAnimationName(AnimationType::Death, "EnemyDeathAnimation");
     SetAnimationName(AnimationType::Taunt, "NormalEnemyTaunt");
 

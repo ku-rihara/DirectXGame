@@ -5,11 +5,13 @@
 
 void DeathTimer::Init() {
 
+    // globalParameter初期化
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
-
+    
+    // DeathTimerGauge初期化
     deathTimerGauge_ = std::make_unique<DeathTimerGauge>();
     deathTimerGauge_->Init();
     deathTimerGauge_->SetTimer(0.0f, maxStress_);

@@ -48,7 +48,7 @@ public:
         Vector3 collisionOffset;
         Vector2 hpBarPosOffset;
         float hpBarWorldOffsetY;
-        float groupIconWorldOffsetY; // screen-space Y offset (pixels)
+        float groupIconWorldOffsetY; 
         float basePosY;
         float burstTime;
         // HPパラメータ
@@ -79,7 +79,6 @@ public:
         Spawn,
         Discovery,
         Dash,
-        Attack,
         DamageReaction,
         Death,
         Taunt,

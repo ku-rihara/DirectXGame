@@ -11,17 +11,16 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     // アニメーション名の設定
     SetAnimationName(AnimationType::Wait, "StrongEnemyWaiting");
     SetAnimationName(AnimationType::Spawn, "StrongEnemySpawn");
-    SetAnimationName(AnimationType::Discovery, "NormalEnemyDiscovery");
+    SetAnimationName(AnimationType::Discovery, "StrongEnemyDiscovery");
     SetAnimationName(AnimationType::Dash, "StrongEnemyRun");
-    SetAnimationName(AnimationType::Attack, "NormalEnemyAttack");
-    SetAnimationName(AnimationType::Death, "EnemyDeathAnimation");
+    SetAnimationName(AnimationType::Death, "StrongEnemyDeath");
     SetAnimationName(AnimationType::Taunt, "StrongEnemyTaunt");
 
     // ダメージリアクションのアニメーションを追加
-    AddDamageReactionAnimation("EnemyNormalDamage");
+    AddDamageReactionAnimation("StrongEnemyDefaultDamage");
     AddDamageReactionAnimation("TakeUpMotion", true);
-    AddDamageReactionAnimation("NormalEnemyBoundDamage");
-    AddDamageReactionAnimation("NormalEnemyKipUp");
+    AddDamageReactionAnimation("StrongEnemyBoundDamage");
+    AddDamageReactionAnimation("StrongEnemyKipUp");
 
     // アニメーションの初期化
     objAnimation_->transform_.Init();
