@@ -58,6 +58,9 @@ public:
     /// 現在再生中のアニメーションにコールバックを直接セット
     void SetLoopEndCallback(const std::function<void()>& callback);
 
+    /// 現在再生中の非ループアニメーション完了時コールバック
+    void SetEndCallback(const std::function<void()>& callback);
+
     void SetPreAnimationOffsetsToOriginalValues();
 };
 

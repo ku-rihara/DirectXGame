@@ -38,6 +38,10 @@ void EnemyUIs::SetHPBarOffset(const Vector2& offset) {
     hpBarOffset_ = offset;
 }
 
+void EnemyUIs::SetHPGaugeOffset(const Vector2& offset) {
+    hpBar_->SetGaugeOffset(offset);
+}
+
 void EnemyUIs::SetGroupIconOffset(const Vector2& offset) {
     groupIconOffset_ = offset;
 }

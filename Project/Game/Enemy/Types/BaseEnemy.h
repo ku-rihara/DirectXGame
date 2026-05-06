@@ -47,6 +47,7 @@ public:
         float collisionRad;
         Vector3 collisionOffset;
         Vector2 hpBarPosOffset;
+        Vector2 hpGaugePosOffset;
         float hpBarWorldOffsetY;
         float groupIconWorldOffsetY; 
         float basePosY;

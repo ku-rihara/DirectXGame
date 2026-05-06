@@ -27,8 +27,8 @@ public:
     };
 
     struct NormalParameter {
-        float fleeSpeed = 5.0f;
-        float fleeTime  = 6.0f;
+        float fleeSpeed    = 5.0f;
+        float fleeDistance = 15.0f;
     };
 
 public:
@@ -61,6 +61,8 @@ public:
     /// ダメージリアクション終了後にRootへ戻る
     /// </summary>
     void BackToDamageRoot() override;
+
+    void OnCollisionStay(BaseCollider* other) override;
 
     void AddNormalAnimation(NormalAnimationType type, const std::string& name);
     bool PlayNormalAnimation(NormalAnimationType type, bool isLoop = false);

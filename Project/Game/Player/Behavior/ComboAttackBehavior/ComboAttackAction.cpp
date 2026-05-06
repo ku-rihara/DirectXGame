@@ -129,6 +129,7 @@ void ComboAttackAction::SetOrder(Order order) {
 }
 
 void ComboAttackAction::InitializeAttack() {
+    currentFrame_ = 0.0f;
     if (attackData_->HasPrepPhase()) {
         SetOrder(Order::PREP_ATTACK);
     } else {

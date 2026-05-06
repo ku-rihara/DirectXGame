@@ -2,6 +2,7 @@
 
 #include "BasePostEffect.h"
 #include <d3d12.h>
+#include <wrl/client.h>
 
 /// <summary>
 /// ビネットポストエフェクトクラス
@@ -9,6 +10,11 @@
 namespace KetaEngine {
 
 class Vignette : public BasePostEffect {
+public:
+    struct ParamData {
+        float redIntensity = 0.0f;
+    };
+
 private:
     void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
     void CreateRootSignature() override; //< ルートシグネチャ作成
@@ -34,6 +40,15 @@ public:
     void DebugParamImGui() override; //< ImGuiデバッグパラメータ
 
 private:
+    Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
+    ParamData* paramData_ = nullptr;
+
+public:
+    void SetRedIntensity(float intensity) {
+        if (paramData_) {
+            paramData_->redIntensity = intensity;
+        }
+    }
 };
 
 }; // KetaEngine

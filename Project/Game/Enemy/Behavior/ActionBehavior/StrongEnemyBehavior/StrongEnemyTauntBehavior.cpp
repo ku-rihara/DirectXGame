@@ -1,7 +1,7 @@
 #include "StrongEnemyTauntBehavior.h"
 
-#include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyWait.h"
 #include "Enemy/Types/StrongEnemy.h"
+#include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 
 StrongEnemyTauntBehavior::StrongEnemyTauntBehavior(StrongEnemy* enemy)
     : StrongEnemyBehaviorBase("StrongEnemyTauntBehavior", enemy) {
@@ -9,13 +9,29 @@ StrongEnemyTauntBehavior::StrongEnemyTauntBehavior(StrongEnemy* enemy)
     pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Taunt, true);
 }
 
+StrongEnemyTauntBehavior::~StrongEnemyTauntBehavior() {
+    if (onBehaviorEnd_) {
+        onBehaviorEnd_();
+    }
+}
+
 void StrongEnemyTauntBehavior::Update() {
     pBaseEnemy_->DirectionToPlayer();
 
-    float tauntRange = GetEnemy()->GetStrongParameter().tauntRange;
-    if (pBaseEnemy_->CalcDistanceToPlayer() > tauntRange) {
-        pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
+    // SpawnTauntFont終了後にTauntFontMovingへ切り替え
+    if (!fontMovingPlayed_) {
+        if (auto* font = GetEnemy()->GetTauntFont()) {
+            auto* player = font->transform_.GetObjEaseAnimationPlayer();
+            if (player && player->IsFinished()) {
+                if (onFontMovingStart_) {
+                    onFontMovingStart_();
+                }
+                fontMovingPlayed_ = true;
+            }
+        }
     }
+
+ 
 }
 
 void StrongEnemyTauntBehavior::Debug() {

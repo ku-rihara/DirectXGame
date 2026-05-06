@@ -12,7 +12,8 @@ class ZakoCrawlBackwardsBehavior : public BaseEnemyBehavior {
     enum class Phase { STUMBLE, CRAWL };
 
 public:
-    ZakoCrawlBackwardsBehavior(NormalEnemy* enemy);
+    /// @param skipStumble true ならStumbleBackwardsをスキップして直接Crawlフェーズへ
+    ZakoCrawlBackwardsBehavior(NormalEnemy* enemy, bool skipStumble = false);
     ~ZakoCrawlBackwardsBehavior() override;
 
     void Update() override;
@@ -20,6 +21,5 @@ public:
 
 private:
     NormalEnemy* pNormalEnemy_;
-    float fleeTimer_ = 0.0f;
-    Phase phase_     = Phase::STUMBLE;
+    Phase phase_ = Phase::STUMBLE;
 };

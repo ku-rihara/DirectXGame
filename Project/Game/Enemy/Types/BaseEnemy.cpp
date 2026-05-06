@@ -151,6 +151,7 @@ void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection, 
     // 
     if (distanceToPlayer <= pEnemyManager_->GetHpBarDisplayDistance()) {
         enemyUIs_->SetHPBarOffset(parameter_.hpBarPosOffset);
+        enemyUIs_->SetHPGaugeOffset(parameter_.hpGaugePosOffset);
     } else {
         enemyUIs_->Hide(hp_);
     }
@@ -175,24 +176,8 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
     if (PlayerAttackCollider* attackController = dynamic_cast<PlayerAttackCollider*>(other)) {
-        // プレイヤーとの攻撃コリジョン判定
         ChangeDamageReactionByPlayerAttack(attackController);
         return;
-    }
-
-    if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
-        if (isAttacking_ || enemy->IsAttacking()) {
-            return;
-        }
-
-        // 敵同士の押し戻し処理
-        CollisionPushUtils::ApplySpherePush(
-            baseTransform_.translation_,
-            enemy->GetCollisionPos(),
-            GetCollisionRadius(),
-            enemy->GetCollisionRadius(),
-            1.0f, // maxPush
-            0.3f); // smoothing
     }
 }
 

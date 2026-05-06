@@ -37,9 +37,12 @@ void DeathTimerGauge::SpriteInit() {
         gaugeIcons_[i]->transform_.scale = Vector2::ZeroVector();
     }
 
-    // 初期スケールを0
-    frameSprite_->transform_.scale = Vector2::ZeroVector();
-    gaugeSprite_->transform_.scale = Vector2::ZeroVector();
+    // 初期スケールを0（イントロ終了時にSetSpriteScalesで0→1にイージングされる）
+    frameSprite_->transform_.scale     = Vector2::ZeroVector();
+    gaugeSprite_->transform_.scale     = Vector2::ZeroVector();
+    nameSprite_->transform_.scale      = Vector2::ZeroVector();
+    iconFrameSprite_->transform_.scale = Vector2::ZeroVector();
+    percentSpriteMultiplier_           = Vector2::ZeroVector();
 
     heatBeat_.heatBeatEase.Init("UIHeatBeat.json");
     heatBeat_.heatBeatEase.SetAdaptValue(&gaugeIcons_[static_cast<int32_t>(currentState_)]->transform_.scale);
@@ -48,6 +51,7 @@ void DeathTimerGauge::SpriteInit() {
     });
 
     displayRatio_ = 0.0f;
+    gaugeSprite_->SetGaugeRate(0.0f);
     for (int32_t i = 0; i < kPercentDigitCount; ++i) {
         percentDigits_[i].Init("StressPercent" + std::to_string(i));
     }

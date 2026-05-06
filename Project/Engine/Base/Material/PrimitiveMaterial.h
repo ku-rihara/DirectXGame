@@ -23,8 +23,10 @@ public:
 
 private:
     struct MaterialData {
-        Vector4  color      = {1.0f, 1.0f, 1.0f, 1.0f};
-        int32_t  useTexture = 0; ///< 1=テクスチャサンプリング有効
+        Vector4  color          = {1.0f, 1.0f, 1.0f, 1.0f};
+        int32_t  useTexture     = 0;       ///< 1=テクスチャサンプリング有効
+        float    angleMaskRatio = 1.0f;    ///< 角度マスク比率 0〜1 (1=全体表示)
+        int32_t  pad[2]         = {0, 0};  ///< 16byte アライメント
     };
 
     MaterialData* materialData_ = nullptr;

@@ -4,6 +4,7 @@ using namespace KetaEngine;
 #include "3d/Mesh.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "MathFunction.h"
+#include <algorithm>
 #include <numbers>
 #include <vector>
 
@@ -102,6 +103,39 @@ void PrimitiveCylinder::Create() {
     mesh_->SetIndexData(indices.data(), static_cast<uint32_t>(indices.size()));
 }
 
+
+void PrimitiveCylinder::SetEndAngleMask(float endDeg) {
+    const float range = params_.endAngleDeg - params_.startAngleDeg;
+    if (range <= 0.0f) {
+        return;
+    }
+    float ratio = std::clamp((endDeg - params_.startAngleDeg) / range, 0.0f, 1.0f);
+    material_.GetMaterialData()->angleMaskRatio = ratio;
+}
+
+void PrimitiveCylinder::StartEndAngleEasing(float targetEndDeg, float duration) {
+    const float range = params_.endAngleDeg - params_.startAngleDeg;
+    if (range <= 0.0f) {
+        return;
+    }
+    easingStartRatio_  = material_.GetMaterialData()->angleMaskRatio;
+    easingTargetRatio_ = std::clamp((targetEndDeg - params_.startAngleDeg) / range, 0.0f, 1.0f);
+    easingDuration_    = duration;
+    easingTimer_       = 0.0f;
+    isEasing_          = true;
+}
+
+void PrimitiveCylinder::UpdateEasing(float deltaTime) {
+    if (!isEasing_) {
+        return;
+    }
+    easingTimer_ += deltaTime;
+    float t = (easingDuration_ > 0.0f) ? (std::min)(easingTimer_ / easingDuration_, 1.0f) : 1.0f;
+    material_.GetMaterialData()->angleMaskRatio = easingStartRatio_ + (easingTargetRatio_ - easingStartRatio_) * t;
+    if (t >= 1.0f) {
+        isEasing_ = false;
+    }
+}
 
 Vector2 PrimitiveCylinder::GetUV(float u, float v) const {
     switch (params_.uvModeInt) {

@@ -7,6 +7,7 @@
 class EnemyWait : public BaseEnemyBehavior {
 public:
     EnemyWait(BaseEnemy* boss);
+    EnemyWait(BaseEnemy* boss, float waitTime);
     ~EnemyWait();
 
     void Update() override;

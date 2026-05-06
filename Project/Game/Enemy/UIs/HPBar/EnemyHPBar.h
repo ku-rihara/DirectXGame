@@ -36,6 +36,7 @@ private:
     float hpMax_    = 0.0f;
     float alpha_    = 1.0f;
     Vector2 position_;
+    Vector2 gaugeOffset_;
 
 public:
     // getter
@@ -43,6 +44,7 @@ public:
 
     // setter
     void SetPosition(const Vector2& pos) { position_ = pos; }
+    void SetGaugeOffset(const Vector2& offset) { gaugeOffset_ = offset; }
     void SetIsSpawned(const bool& is) { isSpawned_ = is; }
     void SetAlpha(float a) { alpha_ = a; }
     void SetIsDraw(const bool& is) { isDraw_ = is; }

@@ -30,6 +30,7 @@ public:
     void SetGroupIndex(int32_t index);
     void SetColorConfig(EnemyHPBarColorConfig* config);
     void SetHPBarOffset(const Vector2& offset);
+    void SetHPGaugeOffset(const Vector2& offset);
     void SetGroupIconOffset(const Vector2& offset);
 
 private:

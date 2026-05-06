@@ -108,8 +108,6 @@ private:
     std::unordered_map<BaseEnemy*, int32_t> bossGroupIndex_;
     int32_t nextBossGroupIndex_ = 0;
 
-    float bossPlayerTriggerDistance_ = 15.0f;
-
     std::string selectedEnemyType_;
     Vector3 spawnPosition_;
 

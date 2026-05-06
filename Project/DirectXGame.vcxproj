@@ -207,6 +207,7 @@
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
     <ClCompile Include="Game\ComboScene\ComboDirector.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyFleeBehavior.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.cpp" />
     <ClCompile Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.cpp" />
     <ClCompile Include="Game\Enemy\UIs\EnemyUIs.cpp" />
@@ -576,6 +577,7 @@
     <ClCompile Include="Game\ResultObj\GameResultInfo.cpp" />
     <ClCompile Include="Game\ResultObj\GameResultUI.cpp" />
     <ClCompile Include="Game\ResultObj\ResultUIItem.cpp" />
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyFleeBehavior.h" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.h" />
     <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h" />
     <ClInclude Include="Game\Enemy\UIs\EnemyUIs.h" />

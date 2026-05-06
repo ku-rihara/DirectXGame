@@ -9,15 +9,15 @@
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 0.3700000047683716,
         "BaseColor": [
-            0.9343629479408264,
-            0.1354304850101471,
-            0.0757591649889946,
+            0.0,
+            0.13725490868091583,
+            0.07450980693101883,
             0.0
         ],
         "Color Max": [
-            0.0,
-            0.0,
-            0.0,
+            1.0,
+            1.0,
+            1.0,
             0.0
         ],
         "Color Min": [
@@ -73,11 +73,11 @@
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 1.0,
+        "IntervalTime": 0.3799999952316284,
         "IsScreenPos": false,
-        "LifeTime": 0.44999998807907104,
+        "LifeTime": 0.33000001311302185,
         "Max Particle Num": 1000,
-        "Particle Count": 2,
+        "Particle Count": 1,
         "Position Base": [
             0.0,
             0.019999999552965164,
@@ -198,7 +198,7 @@
         "dissolveName": "",
         "distortionStrength": 0.6669999957084656,
         "distortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
-        "emissiveIntensity": 3.700000047683716,
+        "emissiveIntensity": 1.399999976158142,
         "emitPositionMode": 2,
         "emitShape": 0,
         "isAlphaNoMove": false,

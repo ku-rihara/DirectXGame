@@ -6,20 +6,25 @@
 #include "MathFunction.h"
 #include "Player/Player.h"
 
-ZakoCrawlBackwardsBehavior::ZakoCrawlBackwardsBehavior(NormalEnemy* enemy)
+ZakoCrawlBackwardsBehavior::ZakoCrawlBackwardsBehavior(NormalEnemy* enemy, bool skipStumble)
     : BaseEnemyBehavior("ZakoCrawlBackwardsBehavior", static_cast<BaseEnemy*>(enemy)), pNormalEnemy_(enemy) {
 
-    // StumbleBackwards再生。終了後にCrawlBackwardsへ移行
-    pNormalEnemy_->PlayNormalAnimation(NormalEnemy::NormalAnimationType::StumbleBackwards, false);
-    pNormalEnemy_->SetIsInStumblePhase(true);
-
-    const std::string stumbleName = "StumbleBackwards";
-    pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(stumbleName, [this]() {
+    if (skipStumble) {
+        // ダメージリアクション後の復帰時: StumbleBackwardsを省略してCrawlへ直行
         phase_ = Phase::CRAWL;
-        pNormalEnemy_->SetIsInStumblePhase(false);
         pNormalEnemy_->PlayNormalAnimation(NormalEnemy::NormalAnimationType::CrawlBackwards, true);
+    } else {
+        // 通常: StumbleBackwards再生。終了後にCrawlBackwardsへ移行
+        pNormalEnemy_->PlayNormalAnimation(NormalEnemy::NormalAnimationType::StumbleBackwards, false);
+        pNormalEnemy_->SetIsInStumblePhase(true);
 
-    });
+        const std::string stumbleName = "StumbleBackwards";
+        pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(stumbleName, [this]() {
+            phase_ = Phase::CRAWL;
+            pNormalEnemy_->SetIsInStumblePhase(false);
+            pNormalEnemy_->PlayNormalAnimation(NormalEnemy::NormalAnimationType::CrawlBackwards, true);
+        });
+    }
 }
 
 ZakoCrawlBackwardsBehavior::~ZakoCrawlBackwardsBehavior() {
@@ -34,7 +39,7 @@ ZakoCrawlBackwardsBehavior::~ZakoCrawlBackwardsBehavior() {
 void ZakoCrawlBackwardsBehavior::Update() {
     float deltaTime = KetaEngine::Frame::DeltaTimeRate();
 
-    // プレイヤー方向を計算（両フェーズ共通）
+    // プレイヤー方向を計算
     Vector3 toPlayer = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
     toPlayer.y       = 0.0f;
     toPlayer.Normalize();
@@ -56,9 +61,8 @@ void ZakoCrawlBackwardsBehavior::Update() {
         pNormalEnemy_->PlayNormalAnimation(NormalEnemy::NormalAnimationType::CrawlBackwards, true);
     }
 
-    // CRAWLフェーズ：逃走時間制限チェック
-    fleeTimer_ += deltaTime;
-    if (fleeTimer_ >= pNormalEnemy_->GetNormalParameter().fleeTime) {
+    // CRAWLフェーズ：プレイヤーから十分離れたら停止
+    if (pBaseEnemy_->CalcDistanceToPlayer() >= pNormalEnemy_->GetNormalParameter().fleeDistance) {
         return;
     }
 

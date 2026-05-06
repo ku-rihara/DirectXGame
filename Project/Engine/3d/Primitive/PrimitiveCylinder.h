@@ -42,6 +42,18 @@ public:
     const CylinderParams& GetParams() const { return params_; }
     void Rebuild();
 
+    /// シェーダーマスクで終点角度を直接設定 (Rebuildなし)
+    /// endDeg: startAngleDeg〜endAngleDeg の範囲で指定
+    void SetEndAngleMask(float endDeg);
+
+    /// 終点角度をイージングで動かす (シンプル線形補間)
+    /// targetEndDeg: 目標終点角度 (startAngleDeg〜endAngleDeg の範囲)
+    /// duration    : 秒数
+    void StartEndAngleEasing(float targetEndDeg, float duration);
+
+    /// イージング更新 (毎フレーム呼ぶ)
+    void UpdateEasing(float deltaTime);
+
 private:
     Vector2 GetUV(float u, float v) const;
     Vector4 ApplyAxis(float circX, float circY, float h) const;
@@ -49,6 +61,13 @@ private:
     const int kVerticesPerFace = 6;
 
     CylinderParams params_;
+
+    // 終点角度イージング
+    float easingStartRatio_  = 1.0f;
+    float easingTargetRatio_ = 1.0f;
+    float easingDuration_    = 0.0f;
+    float easingTimer_       = 0.0f;
+    bool  isEasing_          = false;
 };
 
 }; // KetaEngine

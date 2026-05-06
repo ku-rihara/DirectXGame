@@ -34,6 +34,12 @@ EnemyWait::EnemyWait(BaseEnemy* boss)
     });
 }
 
+EnemyWait::EnemyWait(BaseEnemy* boss, float waitTime)
+    : EnemyWait(boss) {
+
+    cooldownTimer_ = waitTime;
+}
+
 EnemyWait::~EnemyWait() {
     // コールバックをクリア
     pBaseEnemy_->GetAnimationObject()->ClearAllAnimationEndCallbacks();

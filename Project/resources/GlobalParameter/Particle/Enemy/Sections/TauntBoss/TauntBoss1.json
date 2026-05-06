@@ -73,7 +73,7 @@
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 0.20999999344348907,
+        "IntervalTime": 0.25999999046325684,
         "IsScreenPos": false,
         "LifeTime": 1.25,
         "Max Particle Num": 1000,
@@ -214,8 +214,8 @@
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
         "scaleEaseParam.easeTypeInt": 16,
-        "scaleEaseParam.endValueF.max": 3.0,
-        "scaleEaseParam.endValueF.min": 2.0,
+        "scaleEaseParam.endValueF.max": 1.5,
+        "scaleEaseParam.endValueF.min": 1.0,
         "scaleEaseParam.endValueV3.max": [
             0.0,
             0.0,
@@ -228,7 +228,7 @@
         ],
         "scaleEaseParam.isReturnToOrigin": false,
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.47999998927116394,
+        "scaleEaseParam.maxTime": 0.5400000214576721,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
         "selectedTexturePath": "Resources/EngineTexture/Particle/SmileEnemy.dds",

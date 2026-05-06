@@ -2627,6 +2627,9 @@
     <ClCompile Include="Game\Enemy\UIs\GroupIcon\GroupIcon.cpp">
       <Filter>Game\Enemy\UIs\GroupIcon</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyFleeBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2811,6 +2814,9 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\EnemyManager.h">
       <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyFleeBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

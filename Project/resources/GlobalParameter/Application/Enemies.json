@@ -44,7 +44,7 @@
         "blowValueY_2": 50.0,
         "blowValue_1": 2.2799999713897705,
         "blowValue_2": 2.2799999713897705,
-        "bossPlayerTriggerDistance": 22.0,
+        "bossPlayerTriggerDistance": 41.5,
         "burstTime1": 0.5,
         "burstTime2": 0.5,
         "chaseDistance1": 58.63999938964844,
@@ -63,12 +63,12 @@
             0.0
         ],
         "collisionOffset2": [
-            0.0,
+            -0.10000000149011612,
             0.5,
             0.0
         ],
         "collisionRad1": 3.0,
-        "collisionRad2": 3.0,
+        "collisionRad2": 6.099999904632568,
         "collisionSize1": [
             4.5,
             6.800000190734863,
@@ -120,8 +120,16 @@
         ],
         "hpBarWorldOffsetY1": 0.0,
         "hpBarWorldOffsetY2": 0.0,
+        "hpGaugePosOffset1": [
+            36.02000045776367,
+            15.520000457763672
+        ],
+        "hpGaugePosOffset2": [
+            36.04999923706055,
+            15.479999542236328
+        ],
         "hpMax1": 115.0,
-        "hpMax2": 115.0,
+        "hpMax2": 259.0,
         "initScale1": [
             6.0,
             6.0,
@@ -134,6 +142,7 @@
         ],
         "maxChaseTime1": 5.0,
         "maxChaseTime2": 5.0,
+        "normal_fleeDistance": 15.0,
         "normal_fleeSpeed": 0.05000000074505806,
         "normal_fleeTime": 9.0,
         "ropeReboundFallSpeedLimit1": 109.44000244140625,
@@ -144,7 +153,21 @@
         "ropeReboundJumpValue2": 15.0,
         "startTime1": 0.0,
         "startTime2": 0.0,
+        "strong_fleeCooldownTime": 0.75,
+        "strong_fleeDistance": 40.0,
+        "strong_fleeSpeed": 1.2000000476837158,
+        "strong_separationDistance": 20.899999618530273,
+        "strong_separationStrength": 3.0,
+        "strong_tauntContinueRange": 27.5,
+        "strong_tauntFontOffset": [
+            0.0,
+            19.5,
+            5.650000095367432
+        ],
+        "strong_tauntFontRotateSpeed": 1.4500000476837158,
         "strong_tauntRange": 66.0,
+        "strong_tauntTriggerDistance": 31.5,
+        "strong_waitAfterTauntTime": 2.0,
         "thrustRotateSpeed1": 43.560001373291016,
         "thrustRotateSpeed2": 43.560001373291016,
         "uiOcclusionRadius": 80.0,
@@ -154,7 +177,7 @@
         "upperGravity2": 3.509999990463257,
         "upperJumpPower1": 1.350000023841858,
         "upperJumpPower2": 1.350000023841858,
-        "waitCooldownTime1": 0.4000000059604645,
-        "waitCooldownTime2": 1.0
+        "waitCooldownTime1": 0.20000000298023224,
+        "waitCooldownTime2": 0.30000001192092896
     }
 }

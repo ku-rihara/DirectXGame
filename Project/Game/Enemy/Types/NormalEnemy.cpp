@@ -1,4 +1,5 @@
 #include "NormalEnemy.h"
+#include "utility/CollisionPush/CollisionPushUtils.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyWait.h"
 #include "Enemy/Behavior/ActionBehavior/NormalEnemyBehavior/ZakoCrawlBackwardsBehavior.h"
@@ -123,19 +124,22 @@ bool NormalEnemy::PlayNormalAnimation(NormalAnimationType type, bool isLoop) {
 ///========================================================
 void NormalEnemy::BackToDamageRoot() {
 
-    // DamageReactin
+    // DamageReaction
     BaseEnemy::ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
 
+    // ダメージリアクションによってStumbleが中断された場合はフラグをリセット
     if (isInStumblePhase_) {
-        return;
+        isInStumblePhase_ = false;
+        if (auto* anim = GetAnimationObject()) {
+            anim->RemoveAnimationEndCallback("StumbleBackwards");
+        }
     }
 
-    // CrawlBackwards状態だった場合はCrawlBackwardsアニメーションに戻す
+    // CrawlBackwards状態だった場合: Stumble省略でCrawlから再開
     if (zakoState_ == ZakoState::CrawlBackwards) {
-        PlayNormalAnimation(NormalAnimationType::CrawlBackwards, true);
+        ChangeBehavior(std::make_unique<ZakoCrawlBackwardsBehavior>(this, true));
         return;
     } else if (zakoState_ == ZakoState::Taunt) {
-        // Taunt状態ならZakoTauntBehaviorを再生成してリセット
         ChangeBehavior(std::make_unique<ZakoTauntBehavior>(this));
         return;
     }
@@ -147,4 +151,24 @@ void NormalEnemy::BackToDamageRoot() {
 void NormalEnemy::SetSlot(int32_t index, int32_t count) {
     slotIndex_ = index;
     slotCount_ = count;
+}
+
+void NormalEnemy::OnCollisionStay(BaseCollider* other) {
+    // PlayerAttackCollider 処理
+    BaseEnemy::OnCollisionStay(other); 
+
+    if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+        if (IsAttacking() || enemy->IsAttacking()) {
+            return;
+        }
+
+        // 押し戻し
+        CollisionPushUtils::ApplySpherePush(
+            baseTransform_.translation_,
+            enemy->GetCollisionPos(),
+            GetCollisionRadius(),
+            enemy->GetCollisionRadius(),
+            1.0f,
+            0.3f);
+    }
 }

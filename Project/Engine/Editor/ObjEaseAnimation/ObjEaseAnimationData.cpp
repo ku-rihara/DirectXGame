@@ -114,6 +114,9 @@ void ObjEaseAnimationData::UpdateIndependentSRTProgression() {
         } else {
             isAllKeyFramesFinished_ = true;
             playState_              = PlayState::STOPPED;
+            if (onEndCallback_) {
+                onEndCallback_();
+            }
         }
     }
 }
@@ -173,6 +176,9 @@ void ObjEaseAnimationData::UpdateSyncSRTProgression() {
         } else {
             isAllKeyFramesFinished_ = true;
             playState_              = PlayState::STOPPED;
+            if (onEndCallback_) {
+                onEndCallback_();
+            }
         }
     }
 }

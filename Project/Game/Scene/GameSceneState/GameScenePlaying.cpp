@@ -1,10 +1,13 @@
 #include "GameScenePlaying.h"
+#include "DeathTimer/DeathTimerGauge.h"
 #include "Frame/Frame.h"
 #include "GameSceneFinish.h"
 #include "GameScenePose.h"
+#include "PostEffect/PostEffectRenderer.h"
 #include "ResultObj/GameResultInfo.h"
 #include "Scene/GameScene.h"
 #include "utility/DitherOcclusion/DitherOcclusion.h"
+#include <cmath>
 
 GameScenePlaying::GameScenePlaying(GameScene* gameScene)
     : BaseGameSceneState("GameScenePlaying", gameScene) {
@@ -64,6 +67,26 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
 
     obj.comboSupportSpriteUi_->Update();
     obj.nextAttackHintUI_->Update();
+
+    // 危険状態の赤ビネット更新
+    {
+        auto* renderer = KetaEngine::PostEffectRenderer::GetInstance();
+        auto* vignette = renderer->GetVignette();
+        if (vignette) {
+            bool isDanger = obj.deathTimer_->GetDeathTimerGauge()->GetCurrentState() == DeathTimerGauge::GaugeState::Danger;
+            if (isDanger) {
+                renderer->EnableEffect(KetaEngine::PostEffectMode::VIGNETTE);
+                redPulseTimer_ += KetaEngine::Frame::DeltaTime();
+                float phase     = std::fmod(redPulseTimer_, redPulsePeriod_) / redPulsePeriod_;
+                float intensity = 0.5f - 0.5f * std::cos(phase * 2.0f * 3.14159265f);
+                vignette->SetRedIntensity(intensity);
+            } else {
+                redPulseTimer_ = 0.0f;
+                vignette->SetRedIntensity(0.0f);
+                renderer->DisableEffect(KetaEngine::PostEffectMode::VIGNETTE);
+            }
+        }
+    }
 
     // ゲーム終了判定
     if (obj.deathTimer_->GetIsDeath()) {

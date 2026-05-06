@@ -2,6 +2,7 @@
 
 // target
 #include "Enemy/Types/BaseEnemy.h"
+#include "Enemy/Types/StrongEnemy.h"
 #include "Enemy/EnemyManager.h"
 
 void LockOnController::Init() {
@@ -15,7 +16,7 @@ void LockOnController::Update(Player* pPlayer, const KetaEngine::ViewProjection&
     const auto& enemies = pEnemyManager_->GetEnemies();
 
     for (const auto& enemy : enemies) {
-        if (enemy) {
+        if (enemy && dynamic_cast<StrongEnemy*>(enemy.get())) {
             targets.emplace_back(enemy.get());
         }
     }

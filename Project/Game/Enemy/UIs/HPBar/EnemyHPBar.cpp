@@ -21,8 +21,8 @@ void EnemyHPBar::Init(float hpMax) {
 
 void EnemyHPBar::Update(float hp) {
 
-    // positionセット
-    hpSprite_->transform_.pos = position_;
+    // positionセット 
+    hpSprite_->transform_.pos = position_ + gaugeOffset_;
 
     // HP割合を計算してゲージ表示範囲をセット
     float ratio = 1.0f;

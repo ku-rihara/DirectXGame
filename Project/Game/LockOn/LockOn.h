@@ -149,6 +149,9 @@ private:
     float autoSearchInterval_ = 0.1f;
     float autoSearchTimer_    = 0.0f;
 
+    // ロックオン有効フラグ
+    bool isActive_ = false;
+
     // 切り替え
     float lerpTime_;
     bool prevSwitchInput_ = false;
@@ -169,7 +172,8 @@ private:
 
 public:
     // getter
-    const bool& ExistTarget() const { return currentTarget_.has_value(); }
+    bool ExistTarget() const { return currentTarget_.has_value(); }
+    bool GetIsActive() const { return isActive_; }
     Vector3 GetCurrentTargetPosition() const;
     const LockOnVariant* GetIsCurrentTarget() const;
 

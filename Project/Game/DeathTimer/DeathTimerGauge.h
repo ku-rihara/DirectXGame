@@ -60,7 +60,7 @@ private:
     std::unique_ptr<KetaEngine::Sprite> iconFrameSprite_ = nullptr;
 
     // タイマー関連
-    float timerRatio_   = 0.0f; // 実際のストレス比率（目標値）
+    float timerRatio_   = 0.0f; // 実際のストレス比率
     float displayRatio_ = 0.0f; // 表示用イージング値
     float gaugeEaseSpeed_ = 3.0f; // イージング速度
 

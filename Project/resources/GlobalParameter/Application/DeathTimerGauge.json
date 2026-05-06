@@ -7,6 +7,7 @@
             1.0
         ],
         "dangerThreshold": 0.699999988079071,
+        "gaugeEaseSpeed": 3.0,
         "heatBeatSpeedRate0": 0.6899999976158142,
         "heatBeatSpeedRate1": 1.5,
         "heatBeatSpeedRate2": 2.1500000953674316,
@@ -17,6 +18,18 @@
             1.0
         ],
         "normalThreshold": 0.4000000059604645,
+        "percentBasePos": [
+            264.0,
+            77.0
+        ],
+        "percentBaseScale": [
+            0.800000011920929,
+            0.800000011920929
+        ],
+        "percentDigitOffset": [
+            31.5,
+            0.0
+        ],
         "safeColor": [
             0.125490203499794,
             0.8941176533699036,

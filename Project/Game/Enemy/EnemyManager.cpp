@@ -171,7 +171,6 @@ void EnemyManager::UpdateTauntState() {
         return;
     }
 
-    Vector3 playerPos   = pPlayer_->GetBaseTransform().GetWorldPos();
     bool anyBossInRange = false;
     int32_t tauntCount  = 0;
 
@@ -180,16 +179,10 @@ void EnemyManager::UpdateTauntState() {
             continue;
         }
 
-        float dist   = (boss->GetWorldPosition() - playerPos).Length();
-        bool inRange = (dist <= bossPlayerTriggerDistance_);
-
-        // StrongEnemyの煽り状態も更新
+        // StrongEnemyがTaunt中ならザコも連動してTaunt
+        bool bossIsTaunting = false;
         if (StrongEnemy* strong = dynamic_cast<StrongEnemy*>(boss)) {
-            if (inRange) {
-                strong->StartTaunt();
-            } else {
-                strong->StopTaunt();
-            }
+            bossIsTaunting = strong->IsTaunting();
         }
 
         for (NormalEnemy* zako : minions) {
@@ -197,7 +190,7 @@ void EnemyManager::UpdateTauntState() {
                 continue;
             }
 
-            if (inRange) {
+            if (bossIsTaunting) {
                 zako->StartTaunt();
                 if (zako->IsTaunting()) {
                     ++tauntCount;
@@ -479,7 +472,6 @@ void EnemyManager::DamageReactionCreate() {
 void EnemyManager::RegisterParams() {
 
     globalParameter_->Regist(groupName_, "hpBarDisplayDistance", &hpBarDisplayDistance_);
-    globalParameter_->Regist(groupName_, "bossPlayerTriggerDistance", &bossPlayerTriggerDistance_);
     globalParameter_->Regist(groupName_, "uiOcclusionRadius", &uiOcclusionRadius_);
 
     for (uint32_t i = 0; i < parameters_.size(); ++i) {
@@ -492,6 +484,7 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "collisionOffset" + indexString, &parameters_[i].collisionOffset);
         globalParameter_->Regist(groupName_, "hpMax" + indexString, &parameters_[i].hpMax);
         globalParameter_->Regist(groupName_, "hpBarPosOffset" + indexString, &parameters_[i].hpBarPosOffset);
+        globalParameter_->Regist(groupName_, "hpGaugePosOffset" + indexString, &parameters_[i].hpGaugePosOffset);
         globalParameter_->Regist(groupName_, "hpBarWorldOffsetY" + indexString, &parameters_[i].hpBarWorldOffsetY);
         globalParameter_->Regist(groupName_, "groupIconWorldOffsetY" + indexString, &parameters_[i].groupIconWorldOffsetY);
 
@@ -509,10 +502,16 @@ void EnemyManager::RegisterParams() {
 
     // NormalEnemy専用パラメータ
     globalParameter_->Regist(groupName_, "normal_fleeSpeed", &normalEnemyParam_.fleeSpeed);
-    globalParameter_->Regist(groupName_, "normal_fleeTime", &normalEnemyParam_.fleeTime);
+    globalParameter_->Regist(groupName_, "normal_fleeDistance", &normalEnemyParam_.fleeDistance);
 
     // StrongEnemy専用パラメータ
-    globalParameter_->Regist(groupName_, "strong_tauntRange", &strongEnemyParam_.tauntRange);
+    globalParameter_->Regist(groupName_, "strong_fleeSpeed", &strongEnemyParam_.fleeSpeed);
+    globalParameter_->Regist(groupName_, "strong_fleeDistance", &strongEnemyParam_.fleeDistance);
+    globalParameter_->Regist(groupName_, "strong_fleeCooldownTime", &strongEnemyParam_.fleeCooldownTime);
+    globalParameter_->Regist(groupName_, "strong_separationDistance", &strongEnemyParam_.separationDistance);
+    globalParameter_->Regist(groupName_, "strong_separationStrength", &strongEnemyParam_.separationStrength);
+    globalParameter_->Regist(groupName_, "strong_tauntFontOffset", &strongEnemyParam_.tauntFontOffset);
+    globalParameter_->Regist(groupName_, "strong_tauntFontRotateSpeed", &strongEnemyParam_.tauntFontRotateSpeed);
 }
 
 void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
@@ -533,12 +532,22 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     if (type == BaseEnemy::Type::NORMAL) {
         ImGui::SeparatorText("逃走パラメータ（NormalEnemy）");
         ImGui::DragFloat("逃走速度", &normalEnemyParam_.fleeSpeed, 0.1f, 0.0f, 20.0f);
-        ImGui::DragFloat("逃走時間", &normalEnemyParam_.fleeTime, 0.1f, 0.0f, 60.0f);
+        ImGui::DragFloat("逃走距離", &normalEnemyParam_.fleeDistance, 0.5f, 0.0f, 100.0f);
     }
 
     if (type == BaseEnemy::Type::STRONG) {
-        ImGui::SeparatorText("煽りパラメータ（StrongEnemy）");
-        ImGui::DragFloat("煽り継続範囲", &strongEnemyParam_.tauntRange, 0.5f, 0.0f, 100.0f);
+        ImGui::SeparatorText("逃走パラメータ（StrongEnemy）");
+        ImGui::DragFloat("逃走速度", &strongEnemyParam_.fleeSpeed, 0.1f, 0.0f, 30.0f);
+        ImGui::DragFloat("Taunt遷移距離（境界から）", &strongEnemyParam_.fleeDistance, 0.5f, 0.0f, 100.0f);
+        ImGui::DragFloat("逃走開始クールタイム(秒)", &strongEnemyParam_.fleeCooldownTime, 0.05f, 0.0f, 5.0f);
+
+        ImGui::SeparatorText("分離パラメータ（StrongEnemy）");
+        ImGui::DragFloat("分離距離", &strongEnemyParam_.separationDistance, 0.1f, 0.0f, 50.0f);
+        ImGui::DragFloat("分離強度", &strongEnemyParam_.separationStrength, 0.1f, 0.0f, 20.0f);
+
+        ImGui::SeparatorText("TauntFont");
+        ImGui::DragFloat3("FontOffset", &strongEnemyParam_.tauntFontOffset.x, 0.05f);
+        ImGui::DragFloat("FontRotateSpeed", &strongEnemyParam_.tauntFontRotateSpeed, 0.05f);
     }
 
     ImGui::SeparatorText("死亡パラメータ");
@@ -552,7 +561,8 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("hpMax", &parameters_[typeIndex].hpMax, 1.0f, 1.0f, 9999.0f);
 
     ImGui::SeparatorText("スプライト関連");
-    ImGui::DragFloat2("HPBarOffsetPos", &parameters_[typeIndex].hpBarPosOffset.x, 0.01f);
+    ImGui::DragFloat2("HPBarOffsetPos",   &parameters_[typeIndex].hpBarPosOffset.x,   0.01f);
+    ImGui::DragFloat2("HPGaugeOffsetPos", &parameters_[typeIndex].hpGaugePosOffset.x, 0.01f);
     ImGui::DragFloat("HPBarWorldOffsetY", &parameters_[typeIndex].hpBarWorldOffsetY, 0.01f);
     ImGui::DragFloat("GroupIconScreenOffsetY", &parameters_[typeIndex].groupIconWorldOffsetY, 1.0f);
 }
@@ -581,7 +591,6 @@ void EnemyManager::AdjustParam() {
 
         ImGui::SeparatorText("HPバー設定");
         ImGui::DragFloat("HpBar表示距離", &hpBarDisplayDistance_, 0.5f, 0.0f, 200.0f);
-        ImGui::DragFloat("ボス煽りトリガー距離", &bossPlayerTriggerDistance_, 0.5f, 0.0f, 100.0f);
         hpBarColorConfig_.AdjustParam();
 
         for (size_t i = 0; i < static_cast<size_t>(BaseEnemy::Type::COUNT); ++i) {
@@ -595,7 +604,6 @@ void EnemyManager::AdjustParam() {
         }
 
         ImGui::SeparatorText("ボス・取り巻き状態");
-        ImGui::Text("煽りトリガー距離: %.1f", bossPlayerTriggerDistance_);
         if (minionsByBoss_.empty()) {
             ImGui::TextColored({1.0f, 0.4f, 0.4f, 1.0f}, "ボスが未リンク");
         }
