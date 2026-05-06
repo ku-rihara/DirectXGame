@@ -104,4 +104,5 @@ public:
 
     void SetInputEnabled(bool enabled) { isInputEnabled_ = enabled; }
     bool GetIsInputEnabled() const { return isInputEnabled_; }
+    bool IsRenditionFinished() const { return rendition_ && rendition_->IsAnimationFinished(); }
 };

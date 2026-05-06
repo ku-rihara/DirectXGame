@@ -1,5 +1,6 @@
 #include "ZakoCrawlBackwardsBehavior.h"
 
+#include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/Types/NormalEnemy.h"
 #include "Frame/Frame.h"
@@ -37,6 +38,13 @@ ZakoCrawlBackwardsBehavior::~ZakoCrawlBackwardsBehavior() {
 }
 
 void ZakoCrawlBackwardsBehavior::Update() {
+    if (pBaseEnemy_->GetHP() <= 0.0f) {
+        pBaseEnemy_->SetIsDeathPending(true);
+        pBaseEnemy_->SetIsAdaptCollision(false);
+        pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
+        return;
+    }
+
     float deltaTime = KetaEngine::Frame::DeltaTimeRate();
 
     // プレイヤー方向を計算

@@ -126,7 +126,8 @@ void Player::Update() {
     }
 
     // 移動制限
-    baseTransform_.SetBaseScale(parameters_->GetParameters().baseScale_);
+    baseTransform_.SetBaseScale(
+        isDeathHidePlayer_ ? Vector3::ZeroVector() : parameters_->GetParameters().baseScale_);
     MoveToLimit();
     UpdateMatrix();
 }

@@ -207,6 +207,7 @@ private:
     //
     const bool* isDeath_;
     bool isDeathRenditionFinish_ = false;
+    bool isDeathHidePlayer_      = false;
 
     // ダメージクールダウン
     bool isDamageColling_     = false;
@@ -250,6 +251,7 @@ public:
     void SetDeathTimer(DeathTimer* deathTimer);
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
+    void SetDeathHidePlayer(bool hide) { isDeathHidePlayer_ = hide; }
     void SetIsIgnoreUnlockState(bool isIgnore) { isIgnoreUnlockState_ = isIgnore; }
     void SetObjectiveAngle(float angle) { objectiveAngle_ = angle; }
 

@@ -1,0 +1,23 @@
+{
+    "GameOverAppear": {
+        "Original_Alpha": 0.0,
+        "Original_Color": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Original_Position": [
+            640.0,
+            360.0
+        ],
+        "Original_Rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Original_Scale": [
+            0.5,
+            0.5
+        ]
+    }
+}

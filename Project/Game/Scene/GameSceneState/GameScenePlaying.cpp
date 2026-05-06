@@ -2,11 +2,13 @@
 #include "DeathTimer/DeathTimerGauge.h"
 #include "Frame/Frame.h"
 #include "GameSceneFinish.h"
+#include "GameSceneGameOver.h"
 #include "GameScenePose.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include "ResultObj/GameResultInfo.h"
 #include "Scene/GameScene.h"
 #include "Scene/Manager/SceneManager.h"
+#include "input/Input.h"
 #include "utility/DitherOcclusion/DitherOcclusion.h"
 #include <cmath>
 
@@ -58,6 +60,16 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.backGroundObjectManager_->Update(timeSpeed);
     obj.deathTimer_->Update(timeSpeed);
 
+    // ゲームオーバー時にコントローラ振動を一度だけ停止
+    if (obj.deathTimer_->GetIsDeath() && !gameOverHandled_) {
+        gameOverHandled_ = true;
+
+        size_t numPads = KetaEngine::Input::GetNumberOfJoysticks();
+        for (size_t i = 0; i < numPads; ++i) {
+            KetaEngine::Input::SetVibration(static_cast<int32_t>(i), 0.0f, 0.0f);
+        }
+    }
+
     obj.enemyManager_->UIUpdate(pOwner_->GetViewProjection());
     obj.enemyManager_->SetViewProjection(&pOwner_->GetViewProjection());
     obj.lockOnController_->Update(obj.player_.get(), pOwner_->GetViewProjection());
@@ -69,31 +81,12 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.comboSupportSpriteUi_->Update();
     obj.nextAttackHintUI_->Update();
 
-    // 危険状態の赤ビネット更新
-    {
-        auto* renderer = KetaEngine::PostEffectRenderer::GetInstance();
-        auto* vignette = renderer->GetVignette();
-        if (vignette) {
-            bool isDanger = obj.deathTimer_->GetDeathTimerGauge()->GetCurrentState() == DeathTimerGauge::GaugeState::Danger;
-            if (isDanger) {
-                renderer->EnableEffect(KetaEngine::PostEffectMode::VIGNETTE);
-                redPulseTimer_ += KetaEngine::Frame::DeltaTime();
-                float phase     = std::fmod(redPulseTimer_, redPulsePeriod_) / redPulsePeriod_;
-                float intensity = 0.5f - 0.5f * std::cos(phase * 2.0f * 3.14159265f);
-                vignette->SetRedIntensity(intensity);
-            } else {
-                redPulseTimer_ = 0.0f;
-                vignette->SetRedIntensity(0.0f);
-                renderer->DisableEffect(KetaEngine::PostEffectMode::VIGNETTE);
-            }
-        }
-    }
+    // 危険状態の赤ビネット：エラーのため無効化中
+    // if (!obj.deathTimer_->GetIsDeath()) { ... }
 
-    // ゲーム終了判定（死亡演出が完了してから遷移）
+    // ゲーム終了判定（死亡演出が完了してからゲームオーバー演出へ遷移）
     if (obj.deathTimer_->GetIsDeath() && obj.player_->GetIsDeathRenditionFinish()) {
-        pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_, []() {
-            KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
-        }));
+        pOwner_->ChangeState(std::make_unique<GameSceneGameOver>(pOwner_));
         return;
     }
 

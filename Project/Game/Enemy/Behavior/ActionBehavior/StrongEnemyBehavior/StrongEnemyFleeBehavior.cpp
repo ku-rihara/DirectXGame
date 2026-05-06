@@ -73,7 +73,7 @@ void StrongEnemyFleeBehavior::Update() {
     float bestScore = -1e9f;
 
     for (int i = 0; i < kSamples; ++i) {
-        // baseAngle に近い順（0, +1, -1, +2, -2, …）に評価
+        // baseAngle に近い順
         const int offset        = (i % 2 == 0) ? (i / 2) : -(i / 2 + 1);
         const float angle       = baseAngle + offset * kAngleStep;
         const Vector3 candidate = {std::sin(angle), 0.0f, std::cos(angle)};

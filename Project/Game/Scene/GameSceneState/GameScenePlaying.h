@@ -23,7 +23,6 @@ private:
     bool CheckPauseTransition();
 
     PauseController pauseController_;
-    float elapsedTimeSec_    = 0.f; ///< プレイ経過時間（秒）
-    float redPulseTimer_     = 0.0f;
-    float redPulsePeriod_    = 1.2f;
+    float elapsedTimeSec_ = 0.f; ///< プレイ経過時間（秒）
+    bool gameOverHandled_ = false; ///< ゲームオーバー時の後処理（一度だけ実行）
 };

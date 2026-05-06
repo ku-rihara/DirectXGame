@@ -254,15 +254,15 @@ private:
     std::function<void()> onDamageTaken_;
 
     // flags
-    bool isDeathPending_ = false;
-    bool isDamageColling_;
-    bool isDeath_;
-    bool isCollisionRope_;
-    bool isInAnticipation_ = false; // 現在前隙中かどうか
-    bool isAttacking_      = false; // 攻撃中かどうか
+    bool isDeathPending_   = false;
+    bool isDamageColling_  = false;
+    bool isDeath_          = false;
+    bool isCollisionRope_  = false;
+    bool isInAnticipation_ = false;
+    bool isAttacking_      = false;
 
     // damageInfo
-    float damageCollTime_;
+    float damageCollTime_ = 0.0f;
     std::string lastReceivedAttackName_;
 
 protected:

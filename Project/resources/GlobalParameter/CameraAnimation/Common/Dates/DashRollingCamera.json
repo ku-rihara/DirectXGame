@@ -1,0 +1,12 @@
+{
+    "DashRollingCamera": {
+        "autoReturnToInitial": true,
+        "resetFovEaseType": 22,
+        "resetPosEaseType": 22,
+        "resetRotateEaseType": 22,
+        "resetTimePoint": 0.800000011920929,
+        "returnDelayTime": 0.0,
+        "timeMode": 1,
+        "useLookAt": false
+    }
+}

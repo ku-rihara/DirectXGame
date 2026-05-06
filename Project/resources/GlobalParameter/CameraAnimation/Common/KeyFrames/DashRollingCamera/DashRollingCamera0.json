@@ -1,0 +1,20 @@
+{
+    "DashRollingCamera0": {
+        "fov": 67.41999816894531,
+        "fovEaseType": 22,
+        "position": [
+            -13.0,
+            -23.200000762939453,
+            18.5
+        ],
+        "positionEaseType": 22,
+        "rotation": [
+            -0.5061452984809875,
+            0.2617993950843811,
+            0.0
+        ],
+        "rotationEaseType": 22,
+        "timeMode": 1,
+        "timePoint": 0.8199999928474426
+    }
+}

@@ -1,58 +1,58 @@
 /// behavior
 #include "PlayerDeath.h"
-#include "PlayerMove.h"
 
-/// boss
+/// camera
 #include "GameCamera/GameCamera.h"
+/// player
 #include "Player/Player.h"
 /// frame
 #include "Frame/Frame.h"
-/// imGui
+/// imgui
 #include <imgui.h>
 
-// 初期化
 PlayerDeath::PlayerDeath(Player* player)
     : BasePlayerBehavior("PlayerDeath", player) {
 
-    /// ===================================================
-    /// 変数初期化
-    /// ===================================================
-    ChangeState([this](float timeSpeed) { StartDeathRendition(timeSpeed); });
+    // 当たり判定を無効化
+    pOwner_->SetIsAdaptCollision(false);
 
-    baseRotateYEase_.Init("PlayerDeathBaseRotateY.json");
-    baseRotateYEase_.SetStartValue(pOwner_->GetBaseTransform().rotation_.y);
-    baseRotateYEase_.SetAdaptValue(&tempBaseRotateY_);
-   
-    pOwner_->GetGameCamera()->Reset();
+    ChangeState([this](float t) { StartDeathRendition(t); });
 }
 
-PlayerDeath ::~PlayerDeath() {
+PlayerDeath::~PlayerDeath() {
 }
 
-// 更新
 void PlayerDeath::Update([[maybe_unused]] float timeSpeed) {
     if (currentState_) {
         currentState_(KetaEngine::Frame::DeltaTime());
     }
 }
 
-void PlayerDeath::StartDeathRendition(float timeSpeed) {
-
-    timeSpeed;
-
-    pOwner_->GetGameCamera()->PlayAnimation("GameOverCamera", false);
-
-    pOwner_->GetBaseTransform().PlayObjEaseAnimation("AAA", "Player");
-    pOwner_->GetBaseTransform().GetObjEaseAnimationPlayer()->SetEndCallback([this]() {
-        pOwner_->SetIsDeathRenditionFinish(true);
-    });
-
-    ChangeState([this](float timeSpeed) { PlayerTurningAround(timeSpeed); });
+void PlayerDeath::StartDeathRendition(float) {
+    pOwner_->GetGameCamera()->PlayAnimation("GameOverCamera", true);
+    ChangeState([this](float t) { WaitCameraEnd(t); });
 }
 
-void PlayerDeath::PlayerTurningAround(float timeSpeed) {
-    baseRotateYEase_.Update(timeSpeed);
-    pOwner_->SetRotationY(tempBaseRotateY_);
+void PlayerDeath::WaitCameraEnd(float) {
+    if (!pOwner_->GetGameCamera()->IsRenditionFinished()) {
+        return;
+    }
+
+    pOwner_->GetBaseTransform().PlayObjEaseAnimation("PlayerPreDeath", "Player");
+    pOwner_->GetBaseTransform().GetObjEaseAnimationPlayer()->SetEndCallback([this]() {
+        isPreDeathAnimDone_ = true;
+    });
+
+    ChangeState([this](float t) { WaitPreDeath(t); });
+}
+
+void PlayerDeath::WaitPreDeath(float) {
+    if (isPreDeathAnimDone_ && !isDeathActionsTriggered_) {
+        isDeathActionsTriggered_ = true;
+        pOwner_->SetDeathHidePlayer(true);
+        pOwner_->GetEffects()->Emit("PlayerDeath");
+        pOwner_->SetIsDeathRenditionFinish(true);
+    }
 }
 
 void PlayerDeath::ChangeState(std::function<void(float)> newState) {

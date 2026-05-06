@@ -12,7 +12,20 @@
 ZakoFlockBehavior::ZakoFlockBehavior(NormalEnemy* enemy)
     : BaseEnemyBehavior("ZakoFlock", static_cast<BaseEnemy*>(enemy)), pNormalEnemy_(enemy) {
 
-    pBaseEnemy_->ResetToWaitAnimation();
+    // 生成時点でボスとの距離を見てアニメーションを決定する
+    BaseEnemy* boss = pNormalEnemy_->GetBoss();
+    if (boss && !boss->GetIsDeath()) {
+        Vector3 diff = boss->GetWorldPosition() - pBaseEnemy_->GetWorldPosition();
+        diff.y       = 0.0f;
+        if (diff.Length() > kCloseEnough) {
+            pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
+            isRunning_ = true;
+        } else {
+            pBaseEnemy_->ResetToWaitAnimation();
+        }
+    } else {
+        pBaseEnemy_->ResetToWaitAnimation();
+    }
 }
 
 void ZakoFlockBehavior::Update() {
@@ -31,19 +44,22 @@ void ZakoFlockBehavior::Update() {
     float cosY     = cosf(bossRotY);
     float sinY     = sinf(bossRotY);
     Vector3 worldOffset(
-         cosY * localOffset.x + sinY * localOffset.z,
+        cosY * localOffset.x + sinY * localOffset.z,
         0.0f,
         -sinY * localOffset.x + cosY * localOffset.z);
 
     Vector3 targetPos = boss->GetWorldPosition() + worldOffset;
     targetPos.y       = pBaseEnemy_->GetWorldPosition().y;
 
-    // 目標位置をフィールド境界内に制限（ボスが境界付近にいてもザコが壁に張り付かないように）
-    {
-        const float rx = Field::baseScale_.x - pBaseEnemy_->GetParameter().baseScale_.x;
-        const float rz = Field::baseScale_.z - pBaseEnemy_->GetParameter().baseScale_.z;
-        if (rx > 0.0f) { targetPos.x = std::clamp(targetPos.x, -rx, rx); }
-        if (rz > 0.0f) { targetPos.z = std::clamp(targetPos.z, -rz, rz); }
+    // 目標位置をフィールド境界内に制限
+
+    const float rx = Field::baseScale_.x - pBaseEnemy_->GetParameter().baseScale_.x;
+    const float rz = Field::baseScale_.z - pBaseEnemy_->GetParameter().baseScale_.z;
+    if (rx > 0.0f) {
+        targetPos.x = std::clamp(targetPos.x, -rx, rx);
+    }
+    if (rz > 0.0f) {
+        targetPos.z = std::clamp(targetPos.z, -rz, rz);
     }
 
     Vector3 diff = targetPos - pBaseEnemy_->GetWorldPosition();

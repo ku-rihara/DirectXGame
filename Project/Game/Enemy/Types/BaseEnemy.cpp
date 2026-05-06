@@ -439,11 +439,16 @@ void BaseEnemy::SetPlayer(Player* player) {
 }
 
 void BaseEnemy::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior) {
-    // 引数で受け取った状態を次の状態としてセット
+    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+        return;
+    }
     damageBehavior_ = std::move(behavior);
 }
 
 void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
+    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+        return;
+    }
     moveBehavior_ = std::move(behavior);
 }
 
@@ -464,6 +469,7 @@ void BaseEnemy::SetKillCounter(KillCounter* killCounter) {
 }
 
 void BaseEnemy::BackToDamageRoot() {
+    isDamageColling_ = false;
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
     ResetToWaitAnimation();
 }

@@ -1,0 +1,20 @@
+{
+    "GameOverCamera0": {
+        "fov": 45.84000015258789,
+        "fovEaseType": 0,
+        "position": [
+            2.0,
+            -3.799999952316284,
+            11.600000381469727
+        ],
+        "positionEaseType": 22,
+        "rotation": [
+            0.1745329201221466,
+            0.0,
+            0.0
+        ],
+        "rotationEaseType": 0,
+        "timeMode": 1,
+        "timePoint": 0.6800000071525574
+    }
+}

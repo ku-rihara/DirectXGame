@@ -143,7 +143,7 @@
         "maxChaseTime1": 5.0,
         "maxChaseTime2": 5.0,
         "normal_fleeDistance": 15.0,
-        "normal_fleeSpeed": 0.05000000074505806,
+        "normal_fleeSpeed": 0.4000000059604645,
         "normal_fleeTime": 9.0,
         "ropeReboundFallSpeedLimit1": 109.44000244140625,
         "ropeReboundFallSpeedLimit2": 109.44000244140625,
