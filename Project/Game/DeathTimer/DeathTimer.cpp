@@ -31,6 +31,9 @@ void DeathTimer::Update(float deltaTime) {
                 tauntTickTimer_ -= tauntTickInterval_;
                 float amount = baseStressRate_ + static_cast<float>(tauntingEnemyCount_) * stressRatePerEnemy_;
                 currentStress_ += amount;
+                if (onStressTick_) {
+                    onStressTick_();
+                }
             }
         }
     }
@@ -53,6 +56,9 @@ void DeathTimer::TakeDamage(float amount) {
     }
 #endif
     currentStress_ = (std::min)(currentStress_ + amount, maxStress_);
+    if (onStressTick_) {
+        onStressTick_();
+    }
 }
 
 void DeathTimer::SetTauntState(bool isTaunting, int32_t tauntingCount) {

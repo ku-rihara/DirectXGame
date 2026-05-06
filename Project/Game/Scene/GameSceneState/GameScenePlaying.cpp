@@ -6,6 +6,7 @@
 #include "PostEffect/PostEffectRenderer.h"
 #include "ResultObj/GameResultInfo.h"
 #include "Scene/GameScene.h"
+#include "Scene/Manager/SceneManager.h"
 #include "utility/DitherOcclusion/DitherOcclusion.h"
 #include <cmath>
 
@@ -88,9 +89,11 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
         }
     }
 
-    // ゲーム終了判定
-    if (obj.deathTimer_->GetIsDeath()) {
-        pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
+    // ゲーム終了判定（死亡演出が完了してから遷移）
+    if (obj.deathTimer_->GetIsDeath() && obj.player_->GetIsDeathRenditionFinish()) {
+        pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_, []() {
+            KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
+        }));
         return;
     }
 
@@ -99,7 +102,9 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
                       !obj.continuousEnemySpawner_->IsActive();
 
     if (allSpawned && obj.enemyManager_->GetIsAllCleared()) {
-        pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
+        pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_, []() {
+            KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
+        }));
         return;
     }
 

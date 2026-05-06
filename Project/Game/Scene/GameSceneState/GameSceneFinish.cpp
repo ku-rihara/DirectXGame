@@ -1,10 +1,10 @@
 #include "GameSceneFinish.h"
 #include "Scene/GameScene.h"
-#include "Scene/Manager/SceneManager.h"
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 
-GameSceneFinish::GameSceneFinish(GameScene* gameScene)
-    : BaseGameSceneState("GameSceneFinish", gameScene) {
+GameSceneFinish::GameSceneFinish(GameScene* gameScene, std::function<void()> onFinished)
+    : BaseGameSceneState("GameSceneFinish", gameScene)
+    , onFinished_(std::move(onFinished)) {
     Init();
 }
 
@@ -53,8 +53,9 @@ void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
         screen->SetAlpha(alpha_);
 
         if (fadeEasing_.IsFinished()) {
-            KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
-         
+            if (onFinished_) {
+                onFinished_();
+            }
             return;
         }
         break;

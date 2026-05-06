@@ -2,9 +2,11 @@
 
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/Types/NormalEnemy.h"
+#include "Field/Field.h"
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 
+#include <algorithm>
 #include <cmath>
 
 ZakoFlockBehavior::ZakoFlockBehavior(NormalEnemy* enemy)
@@ -35,6 +37,14 @@ void ZakoFlockBehavior::Update() {
 
     Vector3 targetPos = boss->GetWorldPosition() + worldOffset;
     targetPos.y       = pBaseEnemy_->GetWorldPosition().y;
+
+    // 目標位置をフィールド境界内に制限（ボスが境界付近にいてもザコが壁に張り付かないように）
+    {
+        const float rx = Field::baseScale_.x - pBaseEnemy_->GetParameter().baseScale_.x;
+        const float rz = Field::baseScale_.z - pBaseEnemy_->GetParameter().baseScale_.z;
+        if (rx > 0.0f) { targetPos.x = std::clamp(targetPos.x, -rx, rx); }
+        if (rz > 0.0f) { targetPos.z = std::clamp(targetPos.z, -rz, rz); }
+    }
 
     Vector3 diff = targetPos - pBaseEnemy_->GetWorldPosition();
     diff.y       = 0.0f;

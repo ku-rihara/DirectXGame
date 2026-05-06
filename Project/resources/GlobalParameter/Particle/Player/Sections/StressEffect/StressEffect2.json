@@ -1,19 +1,18 @@
 {
-    "FallEffect1": {
+    "StressEffect2": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
-        "AlphaEaseParam.backRatio": 0.0,
         "AlphaEaseParam.easeTypeInt": 0,
         "AlphaEaseParam.endValue.max": 0.0,
         "AlphaEaseParam.endValue.min": 0.0,
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            0.5882352590560913,
-            0.5882352590560913,
-            0.5882352590560913,
-            1.0
+            0.96138995885849,
+            0.19269073009490967,
+            0.17446072399616241,
+            0.0
         ],
         "Color Max": [
             0.0,
@@ -27,7 +26,6 @@
             0.0,
             0.0
         ],
-        "ColorEaseParam.backRatio": 0.0,
         "ColorEaseParam.easeTypeInt": 0,
         "ColorEaseParam.endValue.max": [
             0.0,
@@ -77,13 +75,13 @@
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "IsScreenPos": false,
-        "LifeTime": 2.0,
+        "LifeTime": 1.2999999523162842,
         "Max Particle Num": 1000,
         "Particle Count": 1,
         "Position Base": [
             0.0,
-            0.019999999552965164,
-            0.0
+            6.489999771118164,
+            -5.239999771118164
         ],
         "Position Max": [
             0.0,
@@ -97,21 +95,20 @@
         ],
         "RailFileName": "",
         "Rotate Base": [
-            90.0,
+            0.0,
             0.0,
             0.0
         ],
         "Rotate Max": [
             0.0,
-            179.1999969482422,
+            0.0,
             0.0
         ],
         "Rotate Min": [
             0.0,
-            -151.89999389648438,
+            0.0,
             0.0
         ],
-        "RotateEaseParam.backRatio": 0.0,
         "RotateEaseParam.easeTypeInt": 0,
         "RotateEaseParam.endValueV3.max": [
             0.0,
@@ -135,17 +132,17 @@
             0.0,
             0.0
         ],
-        "Scale Max": 15.15999984741211,
-        "Scale Min": 15.609999656677246,
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
         "ScaleV3 Max": [
-            1.0,
-            1.0,
-            1.0
+            0.0,
+            0.0,
+            0.0
         ],
         "ScaleV3 Min": [
-            1.0,
-            1.0,
-            1.0
+            0.0,
+            0.0,
+            0.0
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
@@ -160,25 +157,24 @@
             0.0
         ],
         "StartTime": 0.0,
-        "TranslateEaseParam.backRatio": 0.0,
-        "TranslateEaseParam.easeTypeInt": 0,
+        "TranslateEaseParam.easeTypeInt": 22,
         "TranslateEaseParam.endValueV3.max": [
             0.0,
-            0.0,
+            5.0,
             0.0
         ],
         "TranslateEaseParam.endValueV3.min": [
             0.0,
-            0.0,
+            5.0,
             0.0
         ],
         "TranslateEaseParam.isReturnToOrigin": false,
-        "TranslateEaseParam.isScaleEase": false,
-        "TranslateEaseParam.maxTime": 1.0,
+        "TranslateEaseParam.isScaleEase": true,
+        "TranslateEaseParam.maxTime": 0.5,
         "TranslateEaseParam.returnEaseTypeInt": 0,
         "TranslateEaseParam.returnMaxTime": 0.0,
         "UV IsLoop": false,
-        "UV NumOfFrame": 1,
+        "UV NumOfFrame": 0,
         "UV Pos": [
             0.0,
             0.0
@@ -197,53 +193,45 @@
         "UV isFlipY": false,
         "UseRail": false,
         "afterDuration": 0.0,
-        "alphaMode": 1,
+        "alphaMode": 0,
         "blendMode": 0,
         "dissolveName": "",
-        "distortionStrength": 0.2150000035762787,
-        "distortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
+        "distortionStrength": 0.05000000074505806,
+        "distortionTexturePath": "",
         "emissiveIntensity": 1.0,
         "emitPositionMode": 2,
         "emitShape": 0,
-        "isAlphaNoMove": false,
-        "isBillboard": false,
-        "isFloatVelocity": true,
-        "isMoveForRail": false,
+        "isAlphaNoMove": true,
+        "isBillboard": true,
+        "isFloatVelocity": false,
         "isRotateForDirection": false,
-        "isScalerScale": true,
+        "isScalerScale": false,
         "isShot": true,
-        "modelFilePath": "debri",
+        "modelFilePath": "",
         "parentFollowR": true,
         "parentFollowS": true,
         "parentFollowT": true,
-        "preBillboardType": 2,
+        "preBillboardType": 0,
         "primitiveTypeInt": 0,
-        "scaleEaseParam.backRatio": 0.0,
-        "scaleEaseParam.easeTypeInt": 3,
-        "scaleEaseParam.endValueF.max": 0.0,
-        "scaleEaseParam.endValueF.min": 0.0,
+        "scaleEaseParam.easeTypeInt": 22,
+        "scaleEaseParam.endValueF.max": 5.0,
+        "scaleEaseParam.endValueF.min": 2.0,
         "scaleEaseParam.endValueV3.max": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "scaleEaseParam.endValueV3.min": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "scaleEaseParam.isReturnToOrigin": false,
-        "scaleEaseParam.isScaleEase": false,
-        "scaleEaseParam.maxTime": 1.059999942779541,
-        "scaleEaseParam.returnEaseTypeInt": 0,
-        "scaleEaseParam.returnMaxTime": 0.0,
-        "scaleEaseParam.startValueF": 1.0,
-        "scaleEaseParam.startValueV3": [
-            1.0,
-            1.0,
+            6.0,
+            2.0,
             1.0
         ],
-        "selectedTexturePath": "Resources/Texture/Crack.dds",
+        "scaleEaseParam.endValueV3.min": [
+            6.0,
+            2.0,
+            1.0
+        ],
+        "scaleEaseParam.isReturnToOrigin": true,
+        "scaleEaseParam.isScaleEase": true,
+        "scaleEaseParam.maxTime": 0.7900000214576721,
+        "scaleEaseParam.returnEaseTypeInt": 21,
+        "scaleEaseParam.returnMaxTime": 0.3799999952316284,
+        "selectedTexturePath": "Resources/EngineTexture/Particle/StressUpUI.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,

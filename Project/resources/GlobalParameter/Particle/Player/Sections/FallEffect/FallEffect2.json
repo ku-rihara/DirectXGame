@@ -1,19 +1,18 @@
 {
-    "FallEffect1": {
+    "FallEffect2": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
-        "AlphaEaseParam.backRatio": 0.0,
         "AlphaEaseParam.easeTypeInt": 0,
         "AlphaEaseParam.endValue.max": 0.0,
         "AlphaEaseParam.endValue.min": 0.0,
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            0.5882352590560913,
-            0.5882352590560913,
-            0.5882352590560913,
-            1.0
+            0.9459459185600281,
+            0.12052595615386963,
+            0.12052595615386963,
+            0.0
         ],
         "Color Max": [
             0.0,
@@ -27,7 +26,6 @@
             0.0,
             0.0
         ],
-        "ColorEaseParam.backRatio": 0.0,
         "ColorEaseParam.easeTypeInt": 0,
         "ColorEaseParam.endValue.max": [
             0.0,
@@ -77,7 +75,7 @@
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "IsScreenPos": false,
-        "LifeTime": 2.0,
+        "LifeTime": 0.38999998569488525,
         "Max Particle Num": 1000,
         "Particle Count": 1,
         "Position Base": [
@@ -103,15 +101,14 @@
         ],
         "Rotate Max": [
             0.0,
-            179.1999969482422,
+            0.0,
             0.0
         ],
         "Rotate Min": [
             0.0,
-            -151.89999389648438,
+            0.0,
             0.0
         ],
-        "RotateEaseParam.backRatio": 0.0,
         "RotateEaseParam.easeTypeInt": 0,
         "RotateEaseParam.endValueV3.max": [
             0.0,
@@ -135,8 +132,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 15.15999984741211,
-        "Scale Min": 15.609999656677246,
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
         "ScaleV3 Max": [
             1.0,
             1.0,
@@ -160,7 +157,6 @@
             0.0
         ],
         "StartTime": 0.0,
-        "TranslateEaseParam.backRatio": 0.0,
         "TranslateEaseParam.easeTypeInt": 0,
         "TranslateEaseParam.endValueV3.max": [
             0.0,
@@ -178,7 +174,7 @@
         "TranslateEaseParam.returnEaseTypeInt": 0,
         "TranslateEaseParam.returnMaxTime": 0.0,
         "UV IsLoop": false,
-        "UV NumOfFrame": 1,
+        "UV NumOfFrame": 0,
         "UV Pos": [
             0.0,
             0.0
@@ -198,30 +194,28 @@
         "UseRail": false,
         "afterDuration": 0.0,
         "alphaMode": 1,
-        "blendMode": 0,
+        "blendMode": 3,
         "dissolveName": "",
-        "distortionStrength": 0.2150000035762787,
+        "distortionStrength": 0.22499999403953552,
         "distortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
-        "emissiveIntensity": 1.0,
+        "emissiveIntensity": 0.0,
         "emitPositionMode": 2,
         "emitShape": 0,
         "isAlphaNoMove": false,
         "isBillboard": false,
-        "isFloatVelocity": true,
-        "isMoveForRail": false,
+        "isFloatVelocity": false,
         "isRotateForDirection": false,
         "isScalerScale": true,
         "isShot": true,
-        "modelFilePath": "debri",
+        "modelFilePath": "",
         "parentFollowR": true,
         "parentFollowS": true,
         "parentFollowT": true,
-        "preBillboardType": 2,
+        "preBillboardType": 0,
         "primitiveTypeInt": 0,
-        "scaleEaseParam.backRatio": 0.0,
-        "scaleEaseParam.easeTypeInt": 3,
-        "scaleEaseParam.endValueF.max": 0.0,
-        "scaleEaseParam.endValueF.min": 0.0,
+        "scaleEaseParam.easeTypeInt": 22,
+        "scaleEaseParam.endValueF.max": 35.0,
+        "scaleEaseParam.endValueF.min": 35.0,
         "scaleEaseParam.endValueV3.max": [
             0.0,
             0.0,
@@ -233,23 +227,17 @@
             0.0
         ],
         "scaleEaseParam.isReturnToOrigin": false,
-        "scaleEaseParam.isScaleEase": false,
-        "scaleEaseParam.maxTime": 1.059999942779541,
+        "scaleEaseParam.isScaleEase": true,
+        "scaleEaseParam.maxTime": 0.5400000214576721,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
-        "scaleEaseParam.startValueF": 1.0,
-        "scaleEaseParam.startValueV3": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "selectedTexturePath": "Resources/Texture/Crack.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/circle.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,
         "targetApplyR": false,
         "timeMode": 1,
-        "useDistortion": false,
+        "useDistortion": true,
         "useModel": false
     }
 }

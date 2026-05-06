@@ -494,6 +494,13 @@ void Player::SetComboAttackController(PlayerComboAttackController* playerComboAt
     comboAttackController_ = playerComboAttackController;
 }
 
+void Player::SetDeathTimer(DeathTimer* deathTimer) {
+    pDeathTimer_ = deathTimer;
+    pDeathTimer_->SetOnStressTickCallback([this]() {
+        effects_->Emit("StressEffect");
+    });
+}
+
 bool Player::CheckIsChargeMax() const {
     return currentUpperChargeTime_ >= parameters_->GetParameters().upperParam.chargeTime;
 }

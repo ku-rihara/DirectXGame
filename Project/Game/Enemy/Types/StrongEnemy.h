@@ -55,7 +55,6 @@ private:
 
     static Vector3 RandomBrightColor();
     void StartNextColorTransition();
-    Vector3 CalcSeparationVector() const;
 
 public:
     const StrongParameter& GetStrongParameter() const { return strongParam_; }

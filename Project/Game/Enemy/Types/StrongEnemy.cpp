@@ -57,39 +57,8 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
 
-Vector3 StrongEnemy::CalcSeparationVector() const {
-    Vector3 sep = Vector3::ZeroVector();
-    for (const auto& e : GetManager()->GetEnemies()) {
-
-        // StrongEnemy同士のみ分離を計算
-        const auto* other = dynamic_cast<const StrongEnemy*>(e.get());
-        if (!other || other == this || other->GetIsDeath()) {
-            continue;
-        }
-
-        // 水平方向の距離を計算
-        Vector3 diff = baseTransform_.translation_ - other->baseTransform_.translation_;
-        diff.y       = 0.0f;
-        float dist   = diff.Length();
-
-        // 一定距離以内なら押し返す
-        if (dist < strongParam_.separationDistance && dist > 0.001f) {
-            // 近いほど強く押し返す
-            float t = Clamp(1.0f - (dist / strongParam_.separationDistance), 0.0f, 1.0f);
-            sep += diff.Normalize() * t * strongParam_.separationStrength;
-        }
-    }
-    return sep;
-}
-
 void StrongEnemy::Update() {
     BaseEnemy::Update();
-
-    // StrongEnemy同士の分離ステアリング
-    Vector3 sep = CalcSeparationVector();
-    if (sep.Length() > 0.001f) {
-        AddPosition(sep * KetaEngine::Frame::DeltaTime());
-    }
 
     // フォント位置を毎フレームbaseTransformに追従
     if (tauntFont_) {

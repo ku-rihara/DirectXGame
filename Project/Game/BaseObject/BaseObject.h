@@ -33,6 +33,7 @@ public:
     /// ===================================================
     /// getter
     /// ===================================================
+    KetaEngine::WorldTransform& GetBaseTransform() { return baseTransform_; }
     const KetaEngine::WorldTransform& GetBaseTransform() const { return baseTransform_; }
     const Vector3& GetScale() const { return baseTransform_.scale_; }
 

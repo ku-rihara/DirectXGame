@@ -37,10 +37,16 @@ void PlayerDeath::Update([[maybe_unused]] float timeSpeed) {
 }
 
 void PlayerDeath::StartDeathRendition(float timeSpeed) {
-  
-     timeSpeed;
 
-    pOwner_->GetGameCamera()->PlayAnimation("GameOverCamera",false);
+    timeSpeed;
+
+    pOwner_->GetGameCamera()->PlayAnimation("GameOverCamera", false);
+
+    pOwner_->GetBaseTransform().PlayObjEaseAnimation("AAA", "Player");
+    pOwner_->GetBaseTransform().GetObjEaseAnimationPlayer()->SetEndCallback([this]() {
+        pOwner_->SetIsDeathRenditionFinish(true);
+    });
+
     ChangeState([this](float timeSpeed) { PlayerTurningAround(timeSpeed); });
 }
 
