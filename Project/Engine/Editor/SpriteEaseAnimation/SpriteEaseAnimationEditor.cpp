@@ -18,6 +18,7 @@ void SpriteEaseAnimationEditor::InitPreviewSprite() {
         previewSprite_->transform_.rotate = previewBaseTransform_.rotation;
         previewSprite_->SetColor(previewBaseTransform_.color);
         previewSprite_->SetAlpha(previewBaseTransform_.alpha);
+        previewSprite_->SetAnchorPoint(previewBaseTransform_.anchorPoint);
         previewSprite_->SetIsDraw(false);
     }
 }
@@ -40,6 +41,7 @@ void SpriteEaseAnimationEditor::UpdatePreviewSprite() {
     previewSprite_->transform_.rotate = previewBaseTransform_.rotation;
     previewSprite_->SetColor(previewBaseTransform_.color);
     previewSprite_->SetAlpha(previewBaseTransform_.alpha);
+    previewSprite_->SetAnchorPoint(previewBaseTransform_.anchorPoint);
 
     // 選択中のアニメーションを適用
     if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
@@ -88,13 +90,15 @@ void SpriteEaseAnimationEditor::RenderSpecificUI() {
         ImGui::DragFloat3("Base Rotation", &previewBaseTransform_.rotation.x, 0.01f);
         ImGui::ColorEdit3("Base Color", &previewBaseTransform_.color.x);
         ImGui::SliderFloat("Base Alpha", &previewBaseTransform_.alpha, 0.0f, 1.0f);
+        ImGui::DragFloat2("Anchor Point", &previewBaseTransform_.anchorPoint.x, 0.01f);
 
         if (ImGui::Button("Reset Preview Transform")) {
-            previewBaseTransform_.scale    = Vector2::OneVector();
-            previewBaseTransform_.position = Vector2::ZeroVector();
-            previewBaseTransform_.rotation = Vector3::ZeroVector();
-            previewBaseTransform_.color    = {1.0f, 1.0f, 1.0f};
-            previewBaseTransform_.alpha    = 1.0f;
+            previewBaseTransform_.scale       = Vector2::OneVector();
+            previewBaseTransform_.position    = Vector2::ZeroVector();
+            previewBaseTransform_.rotation    = Vector3::ZeroVector();
+            previewBaseTransform_.color       = {1.0f, 1.0f, 1.0f};
+            previewBaseTransform_.alpha       = 1.0f;
+            previewBaseTransform_.anchorPoint = Vector2::ZeroVector();
         }
     }
 

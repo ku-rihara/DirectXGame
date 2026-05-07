@@ -86,6 +86,7 @@ public:
     /// <param name="groupId">グループID</param>
     /// <returns>完了していればtrue</returns>
     bool IsGroupCompleted(int groupId) const;
+    bool IsGroupFullyPreGenerated(int32_t groupId) const; //< グループの全敵が事前生成済みか確認
 
     void ActivateNextGroup(); //< 次のグループをアクティブ化
     void SettingGroupSpawnPos(); //< グループスポーン位置設定

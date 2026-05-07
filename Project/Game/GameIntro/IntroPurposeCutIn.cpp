@@ -12,6 +12,7 @@ void IntroPurposeCutIn::Init(const std::string& name) {
         sprites_[i].reset(KetaEngine::Sprite::Create("PurposeUI/gamePurposeNo" + std::to_string(i + 1) + ".dds"));
         sprites_[i]->transform_.scale = Vector2::ZeroVector();
     }
+    sprites_[CENTER]->transform_.pos = centerPos_;
 
     backLineSprite_.reset(KetaEngine::Sprite::Create("PurposeUI/gamePurposeLine.dds"));
     backLineSprite_->transform_.scale = Vector2::ZeroVector();
@@ -114,6 +115,7 @@ void IntroPurposeCutIn::ResetAllSpritesScale() {
 
 void IntroPurposeCutIn::RegisterParams() {
     BaseGameIntro::RegisterParams();
+    globalParameter_->Regist(groupName_, "centerPos", &centerPos_);
 }
 
 void IntroPurposeCutIn::AdjustParam() {
@@ -121,4 +123,18 @@ void IntroPurposeCutIn::AdjustParam() {
 }
 
 void IntroPurposeCutIn::AdjustUniqueParam() {
+#if defined(_DEBUG) || defined(DEVELOPMENT)
+    if (ImGui::DragFloat2("Center Pos", &centerPos_.x, 1.0f)) {
+        sprites_[CENTER]->transform_.pos = centerPos_;
+    }
+
+    ImGui::Checkbox("Preview", &isPreview_);
+    if (isPreview_) {
+        for (auto& sprite : sprites_) {
+            sprite->transform_.scale = {1.0f, 1.0f};
+        }
+        backLineSprite_->transform_.scale = {1.0f, 1.0f};
+        sprites_[CENTER]->transform_.pos  = centerPos_;
+    }
+#endif
 }

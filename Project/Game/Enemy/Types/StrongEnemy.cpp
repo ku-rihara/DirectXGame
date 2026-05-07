@@ -43,6 +43,7 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     objAnimation_->transform_.SetParent(&baseTransform_);
     objAnimation_->transform_.scale_                                     = Vector3::OneVector();
     objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
+ 
 
     // Tauntフォントオブジェクト初期化
     tauntFont_.reset(KetaEngine::Object3d::CreateModel("Font/IrairaDance.obj"));

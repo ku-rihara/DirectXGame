@@ -37,7 +37,7 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     objAnimation_->transform_.SetParent(&baseTransform_);
     objAnimation_->transform_.scale_                                     = Vector3::OneVector();
     objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
-
+    
     // スポーン後の行動を生成
     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }

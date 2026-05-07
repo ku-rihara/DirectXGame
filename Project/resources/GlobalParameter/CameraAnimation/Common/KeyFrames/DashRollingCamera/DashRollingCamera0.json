@@ -1,11 +1,11 @@
 {
     "DashRollingCamera0": {
-        "fov": 67.41999816894531,
+        "fov": 76.05999755859375,
         "fovEaseType": 22,
         "position": [
             -13.0,
             -23.200000762939453,
-            18.5
+            15.699999809265137
         ],
         "positionEaseType": 22,
         "rotation": [

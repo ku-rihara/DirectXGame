@@ -2630,6 +2630,9 @@
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyFleeBehavior.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneGameOver.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2817,6 +2820,9 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyFleeBehavior.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneGameOver.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

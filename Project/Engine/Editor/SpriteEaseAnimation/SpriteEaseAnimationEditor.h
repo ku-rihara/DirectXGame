@@ -13,11 +13,12 @@ namespace KetaEngine {
 class SpriteEaseAnimationEditor : public BaseEffectEditor<SpriteEaseAnimationData> {
 public:
     struct PreViewTransform {
-        Vector2 scale    = Vector2::OneVector();
-        Vector2 position = Vector2::ZeroVector();
-        Vector3 rotation = Vector3::ZeroVector();
-        Vector3 color    = {1.0f, 1.0f, 1.0f};
-        float alpha      = 1.0f;
+        Vector2 scale       = Vector2::OneVector();
+        Vector2 position    = Vector2::ZeroVector();
+        Vector3 rotation    = Vector3::ZeroVector();
+        Vector3 color       = {1.0f, 1.0f, 1.0f};
+        float alpha         = 1.0f;
+        Vector2 anchorPoint = Vector2::ZeroVector();
     };
 
 public:

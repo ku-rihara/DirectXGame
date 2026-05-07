@@ -37,7 +37,7 @@
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // HP 
-    HPMax_    = (parameter_.hpMax > 0.0f) ? parameter_.hpMax : 115.0f;
+    HPMax_    = parameter_.hpMax;
     hp_       = HPMax_;
     enemyUIs_ = std::make_unique<EnemyUIs>();
     enemyUIs_->Init(HPMax_);
@@ -67,6 +67,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
 ///========================================================
 void BaseEnemy::Update() {
 
+    // ダメージリアクション外で移動Behavior更新
     if (dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
         moveBehavior_->Update();
     }
@@ -88,6 +89,7 @@ void BaseEnemy::Update() {
         enemyEffects_->Update(GetWorldPosition());
     }
 
+    // 移動制限
     MoveToLimit();
 
     // HP割合に応じてボディカラーを更新

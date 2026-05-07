@@ -109,9 +109,12 @@ void EnemySpawner::UpdateCurrentGroup() {
     // 進行中グループの確認
     if (!currentGroup.isActive) {
         if (currentGroupIndex_ == 0) {
-            // 最初のグループは即座にアクティブ
-            currentGroup.isActive       = true;
-            currentGroup.groupStartTime = currentTime_;
+            // 最初のグループ: 事前生成が完了してからアクティブ化
+            PreGenerateCurrentGroupEnemy();
+            if (IsGroupFullyPreGenerated(0)) {
+                currentGroup.isActive       = true;
+                currentGroup.groupStartTime = currentTime_;
+            }
         } else {
             // 前のグループの全滅を確認
             if (spawnGroups_[currentGroupIndex_ - 1].isCompleted) {
@@ -217,6 +220,15 @@ void EnemySpawner::AdjustParam() {
     }
 
 #endif
+}
+
+bool EnemySpawner::IsGroupFullyPreGenerated(int32_t groupId) const {
+    auto it = groupSpawnPoints_.find(groupId);
+    if (it == groupSpawnPoints_.end()) return true;
+    for (const auto* spawn : it->second) {
+        if (!spawn->preGenerated) return false;
+    }
+    return true;
 }
 
 bool EnemySpawner::IsGroupCompleted(int groupId) const {

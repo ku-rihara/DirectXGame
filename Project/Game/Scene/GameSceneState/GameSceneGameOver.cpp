@@ -16,6 +16,7 @@ void GameSceneGameOver::Init() {
     // TimeUpスプライト生成・アニメーション再生
     gameOverSprite_.reset(KetaEngine::Sprite::Create("TimeUp.dds"));
     gameOverSprite_->PlaySpriteEaseAnimation("finishSpritePos", "GameSceneFinish");
+    gameOverSprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));
 
     // フェードイン用イージング
     fadeEasing_.Init("GameSceneFadeIn.json");
@@ -33,7 +34,7 @@ void GameSceneGameOver::Update([[maybe_unused]] float timeSpeed) {
     case Phase::kSpriteAnim:
         if (gameOverSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
             Vector2 finalPos = gameOverSprite_->GetSpriteEaseAnimationPlayer()->GetCurrentPosition();
-            gameOverSprite_->transform_.pos += finalPos;
+            gameOverSprite_->transform_.pos = finalPos;
             gameOverSprite_->StopSpriteEaseAnimation();
 
             screen->SetIsDraw(true);
