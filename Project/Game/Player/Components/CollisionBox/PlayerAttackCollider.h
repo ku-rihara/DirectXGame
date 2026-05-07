@@ -94,5 +94,14 @@ public:
     void SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform);
     void SetSphereRad(float radius) { sphereRad_ = radius; }
     void SetPosition(const Vector3& position) { transform_.translation_ = position; }
+
+    void PrepareForNewAttack() {
+        isFinish_      = false;
+        hasHitEnemy_   = false;
+        isHit_         = false;
+        hasHitTarget_  = false;
+        damageHitCount_ = 0;
+        SetIsAbleCollision(false);
+    }
    
 };

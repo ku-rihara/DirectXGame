@@ -1,6 +1,6 @@
 {
     "EnemyHPGauge.dds": {
-        "layerNum": 1,
+        "layerNum": 3,
         "startAnchorPoint": [
             0.5,
             0.5
@@ -16,8 +16,8 @@
             0.0
         ],
         "startScale": [
-            0.20000000298023224,
-            0.20000000298023224
+            0.5,
+            0.5
         ],
         "startUVScale": [
             1.0,

@@ -1,6 +1,5 @@
 #include "GameSceneGameOver.h"
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
-#include "Easing/Easing.h"
 #include "Frame/Frame.h"
 #include "Scene/GameScene.h"
 #include "Scene/Manager/SceneManager.h"
@@ -19,16 +18,15 @@ void GameSceneGameOver::Init() {
     gameOverSprite_->PlaySpriteEaseAnimation("finishSpritePos", "GameSceneFinish");
 
     // フェードイン用イージング
-    KetaEngine::EasingParameter<float> fadeParam;
-    fadeParam.type       = EasingType::OutCubic;
-    fadeParam.startValue = 0.7f;
-    fadeParam.endValue   = 1.0f;
-    fadeParam.maxTime    = 1.0f;
-    fadeEasing_.SettingValue(fadeParam);
+    fadeEasing_.Init("GameSceneFadeIn.json");
     fadeEasing_.SetAdaptValue(&alpha_);
 }
 
 void GameSceneGameOver::Update([[maybe_unused]] float timeSpeed) {
+
+    // HitStopタイマーを更新
+    pOwner_->GetGameObj().attackEffect_->Update();
+
     auto* screen = pOwner_->GetGameObj().screenSprite_.get();
 
     switch (phase_) {

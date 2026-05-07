@@ -36,7 +36,7 @@
 ///========================================================
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
-    // HP (Typeごとのhpmax使用)
+    // HP 
     HPMax_    = (parameter_.hpMax > 0.0f) ? parameter_.hpMax : 115.0f;
     hp_       = HPMax_;
     enemyUIs_ = std::make_unique<EnemyUIs>();

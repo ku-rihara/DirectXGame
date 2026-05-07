@@ -117,4 +117,9 @@ private:
     // コリジョン
     bool isCollisionActive_;
     float collisionTimer_;
+
+    // ATTACKフェーズの生時間カウンタ（HitStop非依存）
+    // 長時間スタック時の安全脱出用
+    float attackRawTimer_                   = 0.0f;
+    static constexpr float kAttackTimeout   = 5.0f;
 };

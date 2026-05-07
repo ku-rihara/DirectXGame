@@ -33,6 +33,11 @@ ComboAttackAction::~ComboAttackAction() {}
 
 void ComboAttackAction::Init() {
 
+    // 前の攻撃の残留状態をクリア（新攻撃が始まる前にリセット）
+    if (pCollisionInfo_) {
+        pCollisionInfo_->PrepareForNewAttack();
+    }
+
     // タイミングのリセット
     currentFrame_            = 0.0f;
     waitTime_                = 0.0f;
@@ -129,7 +134,8 @@ void ComboAttackAction::SetOrder(Order order) {
 }
 
 void ComboAttackAction::InitializeAttack() {
-    currentFrame_ = 0.0f;
+    currentFrame_    = 0.0f;
+    attackRawTimer_  = 0.0f;
     if (attackData_->HasPrepPhase()) {
         SetOrder(Order::PREP_ATTACK);
     } else {
@@ -156,6 +162,13 @@ void ComboAttackAction::UpdatePrepAttack(float atkSpeed) {
 }
 
 void ComboAttackAction::UpdateAttack(float atkSpeed) {
+    // 安全タイムアウト（HitStop等で長時間スタックした場合の脱出）
+    attackRawTimer_ += KetaEngine::Frame::DeltaTime();
+    if (attackRawTimer_ >= kAttackTimeout) {
+        SetOrder(Order::WAIT);
+        return;
+    }
+
     // 移動適用
     ApplyMovement(atkSpeed);
 

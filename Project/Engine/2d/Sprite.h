@@ -56,7 +56,7 @@ public:
     static Sprite* Create(const std::string& textureName, bool isAbleEdit = true, const std::string& name = "");
     void CreateSprite(const std::string& textureName);
 
-     ///=========================================================================================
+    ///=========================================================================================
     ///  スプライトイージングアニメーション
     ///=========================================================================================
 
@@ -77,7 +77,6 @@ public:
     /// </summary>
     void UpdateSpriteEaseAnimation();
 
-
     // パラメータ編集
     void AdjustParam();
     void RegisterParams();
@@ -90,12 +89,16 @@ public:
     /// <summary>
     void SetGaugeRate(float rate);
 
-
 private:
     /// <summary>
     /// パラメータ編集のグループに登録する
     /// </summary>
     void ParamEditorSet(const std::string& textureName, bool isAbleEditor, const std::string& name = "");
+
+    /// <summary>
+    /// Transformのパラメータを適用する
+    /// </summary>
+    void ApplyParameterToTransform();
 
 public:
     // Transform
@@ -119,7 +122,7 @@ private:
     Parameter parameter_;
 
     // 共有パラメータ管理
-    bool isRepresentative_ = false;  // 代表スプライトかどうか
+    bool isRepresentative_ = false; // 代表スプライトかどうか
 
     int32_t layerNum_;
     bool isDraw_            = true;
@@ -148,8 +151,8 @@ private:
 
     // Resource
     Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_; //< 頂点リソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;    //< wvpリソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;  //<indexリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; //< wvpリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_; //<indexリソース
 
     // データ
     TransformationMatrix2D* wvpData_;
@@ -179,7 +182,6 @@ public:
     // UVTransform
     UVTransform& GetUVTransform() { return uvTransform_; }
     const UVTransform& GetUVTransform() const { return uvTransform_; }
-
 
     /// <summary>
     /// アニメーションプレイヤー取得

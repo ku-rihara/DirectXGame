@@ -22,16 +22,15 @@ void GameSceneFinish::Init() {
     clearSprite_->PlaySpriteEaseAnimation("finishSpritePos", "GameSceneFinish");
 
     // フェードイン用イージング
-    KetaEngine::EasingParameter<float> fadeParam;
-    fadeParam.type       = EasingType::OutCubic;
-    fadeParam.startValue = 0.7f;
-    fadeParam.endValue   = 1.0f;
-    fadeParam.maxTime    = 1.0f;
-    fadeEasing_.SettingValue(fadeParam);
+    fadeEasing_.Init("GameSceneFadeIn.json");
     fadeEasing_.SetAdaptValue(&alpha_);
 }
 
 void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
+    // HitStopタイマーをここでも更新することで、GameScenePlaying終了時に
+    // HitStop中だった場合でも正しくタイムスケールが戻る
+    pOwner_->GetGameObj().attackEffect_->Update();
+
     auto* screen = pOwner_->GetGameObj().screenSprite_.get();
 
     switch (phase_) {
