@@ -118,8 +118,11 @@ private:
 
     int32_t maxFazeNum_;
 
+    static constexpr int32_t kPreGenFrameInterval = 5; // 何フレームに1体事前生成するか
+
     float currentTime_;
     int currentGroupIndex_;
+    int32_t preGenFrameCount_ = 0;
     bool isSystemActive_;
     bool allGroupsCompleted_;
     bool shouldLoop_ = false;

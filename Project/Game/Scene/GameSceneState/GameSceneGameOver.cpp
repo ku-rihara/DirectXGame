@@ -32,11 +32,13 @@ void GameSceneGameOver::Update([[maybe_unused]] float timeSpeed) {
 
     switch (phase_) {
     case Phase::kSpriteAnim:
+        // TimeUpスプライトのイージングアニメーション更新
         if (gameOverSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
             Vector2 finalPos = gameOverSprite_->GetSpriteEaseAnimationPlayer()->GetCurrentPosition();
             gameOverSprite_->transform_.pos = finalPos;
             gameOverSprite_->StopSpriteEaseAnimation();
 
+            // 画面フェードイン開始
             screen->SetIsDraw(true);
             screen->SetAlpha(alpha_);
             phase_ = Phase::kFadeIn;
@@ -44,9 +46,11 @@ void GameSceneGameOver::Update([[maybe_unused]] float timeSpeed) {
         break;
 
     case Phase::kFadeIn:
+        // 画面フェードイン更新
         fadeEasing_.Update(timeSpeed);
         screen->SetAlpha(alpha_);
 
+        // フェードインが完了したらシーン遷移
         if (fadeEasing_.IsFinished()) {
             KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
             return;

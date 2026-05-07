@@ -97,6 +97,7 @@ void EnemySpawner::SettingGroupSpawnPos() {
 void EnemySpawner::Update(float deltaTime) {
 
     currentTime_ += deltaTime;
+    ++preGenFrameCount_;
 
     if (currentGroupIndex_ < spawnGroups_.size()) {
         UpdateCurrentGroup();
@@ -110,7 +111,9 @@ void EnemySpawner::UpdateCurrentGroup() {
     if (!currentGroup.isActive) {
         if (currentGroupIndex_ == 0) {
             // 最初のグループ: 事前生成が完了してからアクティブ化
-            PreGenerateCurrentGroupEnemy();
+            if (preGenFrameCount_ % kPreGenFrameInterval == 0) {
+                PreGenerateCurrentGroupEnemy();
+            }
             if (IsGroupFullyPreGenerated(0)) {
                 currentGroup.isActive       = true;
                 currentGroup.groupStartTime = currentTime_;
@@ -128,11 +131,12 @@ void EnemySpawner::UpdateCurrentGroup() {
     if (currentGroup.isActive && !currentGroup.isCompleted) {
         SpawnEnemiesInGroup(currentGroup);
 
-        // 現グループの未スポーン敵を1フレーム1体ずつ事前生成（初回グループの負荷分散）
-        PreGenerateCurrentGroupEnemy();
-
-        // 次グループの敵を1フレーム1体ずつ事前生成
-        PreGenerateNextGroupEnemy();
+        if (preGenFrameCount_ % kPreGenFrameInterval == 0) {
+            // 現グループの未スポーン敵を事前生成
+            PreGenerateCurrentGroupEnemy();
+            // 次グループの敵を事前生成
+            PreGenerateNextGroupEnemy();
+        }
 
         // グループが全滅したかチェック
         if (IsGroupCompleted(currentGroup.id)) {
@@ -266,6 +270,7 @@ void EnemySpawner::RestartLoop() {
     }
     currentGroupIndex_  = 0;
     currentTime_        = 0.0f;
+    preGenFrameCount_   = 0;
     isSystemActive_     = true;
     allGroupsCompleted_ = false;
 
