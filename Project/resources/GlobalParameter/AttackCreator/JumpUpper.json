@@ -2,7 +2,7 @@
     "JumpUpper": {
         "Audio_Attack_FileName": "",
         "Audio_Attack_OnHit_FileName": "PlayerPunch",
-        "Audio_Attack_OnHit_RepeatOnDamage": false,
+        "Audio_Attack_OnHit_RepeatOnDamage": true,
         "Audio_Attack_OnHit_StartTiming": 0.0,
         "Audio_Attack_OnHit_Volume": 1.0,
         "Audio_Attack_StartTiming": 0.0,
@@ -293,7 +293,7 @@
         "ShakeAction_StartTiming": 0.0,
         "Vibration_Duration": 0.6499999761581421,
         "Vibration_Intensity": 0.5,
-        "Vibration_RepeatOnDamage": false,
+        "Vibration_RepeatOnDamage": true,
         "Vibration_StartTiming": 0.0,
         "Vibration_TriggerByHit": true,
         "ableDefeatLevel": 0,

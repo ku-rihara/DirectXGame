@@ -16,9 +16,9 @@ void GameSceneGameOver::Init() {
 
     // TimeUpスプライト生成・アニメーション再生
     gameOverSprite_.reset(KetaEngine::Sprite::Create("TimeUp.dds"));
-    gameOverSprite_->PlaySpriteEaseAnimation("GameOverAppear", "GameOver");
+    gameOverSprite_->PlaySpriteEaseAnimation("finishSpritePos", "GameSceneFinish");
 
-    // フェードイン用イージング（0.7 → 1.0）
+    // フェードイン用イージング
     KetaEngine::EasingParameter<float> fadeParam;
     fadeParam.type       = EasingType::OutCubic;
     fadeParam.startValue = 0.7f;

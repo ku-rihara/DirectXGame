@@ -1,8 +1,8 @@
 {
     "DashRollingDamage_Rendition": {
-        "ObjAnim_FileName": "",
+        "ObjAnim_FileName": "None",
         "ObjAnim_StartTiming": 0.0,
-        "Particle_FileName": "",
+        "Particle_FileName": "RollingDamageEffect",
         "Particle_StartTiming": 0.0
     }
 }

@@ -4,8 +4,8 @@
         "Bound_BoundNum": 0,
         "Bound_InitialBounceRate": 0.0,
         "Normal_DamageAnimationName": "",
-        "Normal_KnockBackDamping": 0.0,
-        "Normal_KnockBackTime": 0.20999999344348907,
+        "Normal_KnockBackDamping": 0.5,
+        "Normal_KnockBackTime": 0.46000000834465027,
         "Slammed_Gravity": 0.0,
         "Slammed_RotateSpeed": [
             0.0,
@@ -22,7 +22,7 @@
             0.0
         ],
         "TriggerAttackName": "JumpUpper",
-        "damageCollingTime": 0.07999999821186066,
+        "damageCollingTime": 0.10999999940395355,
         "isPriorityReaction": false
     }
 }
