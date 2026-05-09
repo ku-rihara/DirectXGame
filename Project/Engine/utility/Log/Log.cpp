@@ -58,4 +58,8 @@ void Log::Error(const std::string& message) {
     }
 }
 
+void Log::Finalize() {
+    spdlog::shutdown();
+}
+
 } // namespace KetaEngine
