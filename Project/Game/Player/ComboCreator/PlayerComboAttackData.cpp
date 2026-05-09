@@ -222,6 +222,7 @@ void PlayerComboAttackData::DrawFlagsParamUI() {
 
     ImGui::Checkbox("モーションのみ有効", &attackParam_.isMotionOnly);
     ImGui::Checkbox("自動で次の攻撃に進む", &attackParam_.timingParam.isAutoAdvance);
+    ImGui::Checkbox("ヒット時に終了処理へスキップ", &attackParam_.timingParam.isSkipToFinishOnHit);
 
     ImGui::SeparatorText("解放設定");
     ImGui::InputInt("解放に必要なレベル", &attackParam_.ableDefeatLevel);
@@ -393,6 +394,7 @@ void PlayerComboAttackData::RegisterParams() {
     // TimingParam
     globalParameter_->Regist(groupName_, "finishWaitTime", &attackParam_.timingParam.finishWaitTime);
     globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance);
+    globalParameter_->Regist(groupName_, "isSkipToFinishOnHit", &attackParam_.timingParam.isSkipToFinishOnHit);
 
     // 解放レベル
     globalParameter_->Regist(groupName_, "ableDefeatLevel", &attackParam_.ableDefeatLevel);
@@ -644,6 +646,10 @@ void PlayerComboAttackData::DrawFlagsParamUIForPhase(TimelinePhase phase) {
 
     ImGui::Checkbox("モーションのみ有効", &p.isMotionOnly);
     ImGui::Checkbox("自動で次の攻撃に進む", &p.timingParam.isAutoAdvance);
+
+    if (phase == TimelinePhase::MAIN) {
+        ImGui::Checkbox("ヒット時に終了処理へスキップ", &attackParam_.timingParam.isSkipToFinishOnHit);
+    }
 }
 
 ///==========================================================

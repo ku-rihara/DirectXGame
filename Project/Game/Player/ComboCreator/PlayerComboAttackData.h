@@ -71,6 +71,7 @@ public:
     struct TimingParam {
         float finishWaitTime;
         bool isAutoAdvance;
+        bool isSkipToFinishOnHit = false; // ヒット時に即終了処理へ移行
     };
 
     // 攻撃発動に関するパラメータ

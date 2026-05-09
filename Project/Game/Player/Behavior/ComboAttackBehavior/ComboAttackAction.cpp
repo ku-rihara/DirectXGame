@@ -154,8 +154,6 @@ void ComboAttackAction::UpdatePrepAttack(float atkSpeed) {
 
     // イージングとコリジョンタイムライン両方が完了したら次フェーズへ
     if (prepMoveEasing_.IsFinished() && pCollisionInfo_->GetIsFinish()) {
-        std::string attackName = attackData_ ? attackData_->GetGroupName() : "Unknown";
-        KetaEngine::Log::Info("[" + attackName + "] Prep finish: collision timeline done");
         currentFrame_      = 0.0f;
         isCollisionActive_ = false;
         SetMoveEasing();
@@ -164,7 +162,7 @@ void ComboAttackAction::UpdatePrepAttack(float atkSpeed) {
 }
 
 void ComboAttackAction::UpdateAttack(float atkSpeed) {
-    // 安全タイムアウト（HitStop等で長時間スタックした場合の脱出）
+    // （HitStop等で長時間スタックした場合の脱出）
     attackRawTimer_ += KetaEngine::Frame::DeltaTime();
     if (attackRawTimer_ >= kAttackTimeout) {
         SetOrder(Order::WAIT);
@@ -198,6 +196,19 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
     // 敵にヒットしたかをチェック
     if (pCollisionInfo_->GetHasHitEnemy()) {
         hasHitEnemy_ = true;
+    }
+
+    // ヒット時に終了処理へ即移行
+    if (hasHitEnemy_ && attackData_->GetAttackParam().timingParam.isSkipToFinishOnHit) {
+        isCollisionActive_ = false;
+        if (attackData_->HasFinishPhase()) {
+            currentFrame_ = 0.0f;
+            SetFinishMoveEasing();
+            SetOrder(Order::FINISH_ATTACK);
+        } else {
+            SetOrder(Order::WAIT);
+        }
+        return;
     }
 
     // 演出更新
