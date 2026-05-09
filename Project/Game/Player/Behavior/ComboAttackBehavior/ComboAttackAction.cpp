@@ -1,5 +1,6 @@
 #include "ComboAttackAction.h"
 #include <cmath>
+#include "utility/Log/Log.h" 
 // Behavior
 #include "ComboAttackRoot.h"
 // Frame
@@ -33,7 +34,7 @@ ComboAttackAction::~ComboAttackAction() {}
 
 void ComboAttackAction::Init() {
 
-    // 前の攻撃の残留状態をクリア（新攻撃が始まる前にリセット）
+    // 前の攻撃の残留状態をクリア
     if (pCollisionInfo_) {
         pCollisionInfo_->PrepareForNewAttack();
     }
@@ -121,18 +122,6 @@ void ComboAttackAction::Update(float atkSpeed) {
     }
 }
 
-void ComboAttackAction::SetOrder(Order order) {
-    order_ = order;
-    switch (order) {
-    case Order::INIT:          orderFunc_ = [this](float)  { InitializeAttack(); };    break;
-    case Order::PREP_ATTACK:   orderFunc_ = [this](float speed){ UpdatePrepAttack(speed); };   break;
-    case Order::ATTACK:        orderFunc_ = [this](float speed){ UpdateAttack(speed); };        break;
-    case Order::FINISH_ATTACK: orderFunc_ = [this](float speed){ UpdateFinishAttack(speed); }; break;
-    case Order::WAIT:          orderFunc_ = [this](float speed){ UpdateWait(speed); };          break;
-    case Order::CHANGE:        orderFunc_ = [this](float)  { ChangeNextAttack(); };    break;
-    }
-}
-
 void ComboAttackAction::InitializeAttack() {
     currentFrame_    = 0.0f;
     attackRawTimer_  = 0.0f;
@@ -151,10 +140,23 @@ void ComboAttackAction::UpdatePrepAttack(float atkSpeed) {
         prepRendition_->Update(atkSpeed);
     }
 
-    const float prepFinishWait = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).timingParam.finishWaitTime;
-    if (prepMoveEasing_.IsFinished() && currentFrame_ >= prepFinishWait) {
-        // 予備動作完了 → メインフェーズへ
-        currentFrame_ = 0.0f;
+    // コリジョン開始時間のチェック
+    const float prepCollisionStartTime = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).collisionParam.startTime;
+    if (!isCollisionActive_ && currentFrame_ >= prepCollisionStartTime) {
+        SetupCollision(AttackTimelinePhase::PREPARATION);
+    }
+
+    // コリジョン判定
+    if (isCollisionActive_) {
+        pCollisionInfo_->TimerUpdate(atkSpeed);
+        pCollisionInfo_->Update();
+    }
+
+    // イージングとコリジョンタイムライン両方が完了したら次フェーズへ
+    if (prepMoveEasing_.IsFinished() && pCollisionInfo_->GetIsFinish()) {
+        std::string attackName = attackData_ ? attackData_->GetGroupName() : "Unknown";
+        KetaEngine::Log::Info("[" + attackName + "] Prep finish: collision timeline done");
+        currentFrame_      = 0.0f;
         isCollisionActive_ = false;
         SetMoveEasing();
         SetOrder(Order::ATTACK);
@@ -411,8 +413,8 @@ void ComboAttackAction::ApplyMovement(float atkSpeed) {
     pOwner_->SetWorldPosition(currentMoveValue_);
 }
 
-void ComboAttackAction::SetupCollision() {
-    auto& attackParam    = attackData_->GetAttackParam();
+void ComboAttackAction::SetupCollision(AttackTimelinePhase phase) {
+    auto& attackParam    = attackData_->GetAttackParamForPhase(phase);
     auto& collisionParam = attackParam.collisionParam;
 
     // あらかじめコリジョンボックスを更新
@@ -428,11 +430,11 @@ void ComboAttackAction::SetupCollision() {
     const PlayerComboAttackController* attackController = pOwner_->GetComboAttackController();
 
     // 攻撃力
-    float power = attackData_->GetAttackParam().power * attackController->GetPowerRate();
+    float power = attackParam.power * attackController->GetPowerRate();
     pCollisionInfo_->SetAttackPower(power);
 
     // アタックスタート
-    pCollisionInfo_->AttackStart(attackData_);
+    pCollisionInfo_->AttackStart(attackData_, phase);
 
     collisionTimer_    = 0.0f;
     isCollisionActive_ = true;
@@ -480,8 +482,14 @@ void ComboAttackAction::SetMoveEasing() {
 }
 
 void ComboAttackAction::SetPrepMoveEasing() {
-    const auto& moveParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).moveParam;
-    Vector3 start         = pOwner_->GetWorldPosition();
+    const auto& moveParam    = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).moveParam;
+    const float finishWait   = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).timingParam.finishWaitTime;
+    std::string attackName   = attackData_ ? attackData_->GetGroupName() : "Unknown";
+    KetaEngine::Log::Info("[" + attackName + "] Prep easeTime=" + std::to_string(moveParam.easeTime)
+        + " startTime=" + std::to_string(moveParam.startTime)
+        + " finishTimeOffset=" + std::to_string(moveParam.finishTimeOffset)
+        + " finishWaitTime=" + std::to_string(finishWait));
+    Vector3 start = pOwner_->GetWorldPosition();
 
     const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
     bool isAirAttack    = attackData_->GetAttackParam().triggerParam.condition == PlayerComboAttackData::TriggerCondition::AIR;
@@ -636,4 +644,66 @@ void ComboAttackAction::Debug() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
 
 #endif
+}
+
+
+void ComboAttackAction::SetOrder(Order order) {
+    order_ = order;
+    std::string orderName;
+    switch (order) {
+    case Order::INIT:
+        orderName = "INIT";
+        break;
+    case Order::PREP_ATTACK:
+        orderName = "PREP_ATTACK";
+        break;
+    case Order::ATTACK:
+        orderName = "ATTACK";
+        break;
+    case Order::FINISH_ATTACK:
+        orderName = "FINISH_ATTACK";
+        break;
+    case Order::WAIT:
+        orderName = "WAIT";
+        break;
+    case Order::CHANGE:
+        orderName = "CHANGE";
+        break;
+    }
+
+    std::string attackName = attackData_ ? attackData_->GetGroupName() : "Unknown";
+    KetaEngine::Log::Info("ComboAttackAction [" + attackName + "] SetOrder: " + orderName);
+
+    switch (order) {
+    case Order::INIT:
+        orderFunc_ = [this](float) {
+            InitializeAttack();
+        };
+        break;
+    case Order::PREP_ATTACK:
+        orderFunc_ = [this](float speed) {
+            UpdatePrepAttack(speed);
+        };
+        break;
+    case Order::ATTACK:
+        orderFunc_ = [this](float speed) {
+            UpdateAttack(speed);
+        };
+        break;
+    case Order::FINISH_ATTACK:
+        orderFunc_ = [this](float speed) {
+            UpdateFinishAttack(speed);
+        };
+        break;
+    case Order::WAIT:
+        orderFunc_ = [this](float speed) {
+            UpdateWait(speed);
+        };
+        break;
+    case Order::CHANGE:
+        orderFunc_ = [this](float) {
+            ChangeNextAttack();
+        };
+        break;
+    }
 }

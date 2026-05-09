@@ -6,6 +6,8 @@
 #include "Combo/Combo.h"
 // Parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
+// Phase
+#include "Player/ComboCreator/Timeline/PlayerComboAttackTimelinePhase.h"
 // std
 #include <array>
 #include <string>
@@ -28,7 +30,7 @@ public:
     void UpdateOffset();
 
     // 攻撃情報取得
-    void AttackStart(const PlayerComboAttackData* comboAttackData);
+    void AttackStart(const PlayerComboAttackData* comboAttackData, AttackTimelinePhase phase = AttackTimelinePhase::MAIN);
 
     // コリジョンコールバック
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
@@ -67,6 +69,8 @@ private:
     bool isFinish_     = false;
 
     bool isAbleCollision_ = false;
+
+    AttackTimelinePhase phase_ = AttackTimelinePhase::MAIN;
 
     // 実際にダメージが入った回数（敵のダメージインターバル通過時にインクリメント）
     int32_t damageHitCount_ = 0;

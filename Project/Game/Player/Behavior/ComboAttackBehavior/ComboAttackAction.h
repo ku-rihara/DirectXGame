@@ -24,7 +24,7 @@ public:
     void Update(float atkSpeed) override;
     void Debug() override;
 
-    // 次の攻撃候補（分岐と攻撃データのペア）
+    // 次の攻撃候補
     struct NextAttackCandidate {
         ComboBranchParameter* branch;
         PlayerComboAttackData* attackData;
@@ -32,7 +32,7 @@ public:
 
     const std::vector<NextAttackCandidate>& GetNextAttackCandidates() const { return nextAttackCandidates_; }
 
-    /// ロック中を含む全分岐候補（HintUI の表示用）
+    /// ロック中を含む全分岐候補
     const std::vector<NextAttackCandidate>& GetAllNextAttackCandidates() const { return allNextAttackCandidates_; }
 
 private:
@@ -55,7 +55,7 @@ private:
     void UpdateWait(float atkSpeed);
     void ChangeNextAttack();
     void ApplyMovement(float atkSpeed);
-    void SetupCollision();
+    void SetupCollision(AttackTimelinePhase phase = AttackTimelinePhase::MAIN);
     void SetMoveEasing();
     void SetPrepMoveEasing();
     void SetFinishMoveEasing();
@@ -67,8 +67,6 @@ private:
     bool IsAttackUnlock(const PlayerComboAttackData&data) const;
 
     // 移動経路上の最も手前にいる敵の目の前の座標を返す
-    // 経路上に敵がいなければ defaultTarget をそのまま返す
-    // outFoundEnemyPos が非nullなら、見つかった敵のワールド座標を書き込む
     Vector3 CalcStopBeforeEnemyTarget(
         const Vector3& start, const Vector3& defaultTarget,
         Vector3* outFoundEnemyPos = nullptr) const;
@@ -118,7 +116,7 @@ private:
     bool isCollisionActive_;
     float collisionTimer_;
 
-    // ATTACKフェーズの生時間カウンタ（HitStop非依存）
+    // ATTACKフェーズの生時間カウンタ
     // 長時間スタック時の安全脱出用
     float attackRawTimer_                   = 0.0f;
     static constexpr float kAttackTimeout   = 5.0f;

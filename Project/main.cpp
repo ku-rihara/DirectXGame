@@ -4,6 +4,7 @@
 
 // windowアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+    KetaEngine::Log::Init();
     KetaEngine::Log::Info("Engine Initialize");
 
     std::unique_ptr<KetaEngine::KTFramework> game = std::make_unique<KetaEngine::KTGame>();

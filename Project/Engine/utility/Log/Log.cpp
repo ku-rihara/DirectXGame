@@ -36,6 +36,7 @@ void Log::Init() {
         spdlog::sinks_init_list{fileSink, msvcSink});
     s_logger->set_level(spdlog::level::trace);
     s_logger->set_pattern("[%Y-%m-%d %H:%M:%S] [%l] %v");
+    s_logger->flush_on(spdlog::level::trace); // 全レベルで即フラッシュ
     spdlog::register_logger(s_logger);
 }
 

@@ -229,7 +229,7 @@
         "Prep_CameraAction_OnHit_IsCameraReset": false,
         "Prep_CameraAction_OnHit_StartTiming": 0.0,
         "Prep_CameraAction_StartTiming": 0.0,
-        "Prep_CollisionRad": 0.0,
+        "Prep_CollisionRad": 0.4000000059604645,
         "Prep_HitStop_FileName": "",
         "Prep_HitStop_OnHit_FileName": "",
         "Prep_HitStop_OnHit_StartTiming": 0.0,
@@ -287,7 +287,7 @@
         "Prep_Vibration_RepeatOnDamage": false,
         "Prep_Vibration_StartTiming": 0.0,
         "Prep_Vibration_TriggerByHit": false,
-        "Prep_adaptTime": 1.2000000476837158,
+        "Prep_adaptTime": 0.5333333611488342,
         "Prep_blowYPower": 0.0,
         "Prep_collisionOffsetPos": [
             0.0,
@@ -295,8 +295,8 @@
             0.0
         ],
         "Prep_collisionStartTime": 0.0,
-        "Prep_finishTimeOffset": 1.2000000476837158,
-        "Prep_finishWaitTime": 0.0,
+        "Prep_finishTimeOffset": 0.5333333611488342,
+        "Prep_finishWaitTime": 0.01666666753590107,
         "Prep_isAbleInputMoving": false,
         "Prep_isAlwaysFollowing": false,
         "Prep_isAutoAdvance": false,
@@ -313,7 +313,7 @@
             0.0,
             0.0
         ],
-        "Prep_power": 0.0,
+        "Prep_power": 2.5999999046325684,
         "RibbonTrailEffect_FileName": "",
         "RibbonTrailEffect_OnHit_FileName": "",
         "RibbonTrailEffect_OnHit_StartTiming": 0.0,
