@@ -206,6 +206,13 @@ void PostEffectRenderer::SetViewProjection(const ViewProjection* viewProjection)
     }
 }
 
+void PostEffectRenderer::Finalize() {
+    for (auto& effect : effects_) {
+        effect.reset();
+    }
+    effectStack_.clear();
+}
+
 D3D12_GPU_DESCRIPTOR_HANDLE PostEffectRenderer::GetPostProcessedSRVHandle() const {
     auto* rt = dxCommon_->GetDxRenderTarget();
     if (!effectStack_.empty()) {
@@ -223,4 +230,3 @@ BasePostEffect* PostEffectRenderer::GetEffect(PostEffectMode mode) {
     }
     return effects_[index].get();
 }
-

@@ -41,6 +41,10 @@ uint32_t RtvManager::Allocate() {
     return useIndex_;
 }
 
+void RtvManager::Finalize() {
+    descriptorHeap_.Reset();
+}
+
 bool RtvManager::IsAbleSecure() {
     if (useIndex_ >= RtvManager::kMaxCount) {
         return false;

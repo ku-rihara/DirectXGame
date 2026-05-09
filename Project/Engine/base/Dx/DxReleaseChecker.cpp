@@ -7,6 +7,10 @@ using namespace KetaEngine;
 #include "wrl.h"
 
 DxReleaseChecker::~DxReleaseChecker() {
+    CheckLeaks();
+}
+
+void DxReleaseChecker::CheckLeaks() {
     // リソースリークチェック
     Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
     if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {

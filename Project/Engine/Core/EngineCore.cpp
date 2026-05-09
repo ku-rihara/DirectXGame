@@ -24,6 +24,7 @@ using namespace KetaEngine;
 #include "Particle/GPUParticle/GPUParticleManager.h"
 /// imGui,function
 #include "function/Convert.h"
+#include "Base/Dx/DxReleaseChecker.h"
 #include <imgui_impl_dx12.h>
 /// std
 #include <string>
@@ -171,5 +172,17 @@ void EngineCore::Finalize() {
     gpuParticleManager_->Finalize();
     modelManager_->Finalize();
     textureManager_->Finalize();
+
+    pipelineManager_->Finalize();
+    csPipelineManager_->Finalize();
+
+    light_->Finalize();
+    shadowMap_->Finalize();
+    PostEffectRenderer_->Finalize();
+
+    srvManager_->Finalize();
+    rtvManager_->Finalize();
+    dsvManager_->Finalize();
+
     directXCommon_->Finalize();
 }

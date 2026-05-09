@@ -49,4 +49,10 @@ void CSPipelineManager::DisPatch(const CSPipelineType& type, ID3D12GraphicsComma
     size_t index = static_cast<size_t>(type);
     assert(pipelines_[index]);
     pipelines_[index]->Dispatch(commandList,numThreadsX);
- }
+}
+
+void CSPipelineManager::Finalize() {
+    for (auto& pipeline : pipelines_) {
+        pipeline.reset();
+    }
+}

@@ -11,6 +11,11 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 
 #endif
 
+WinApp::~WinApp() {
+    timeEndPeriod(1);
+    debugController_.Reset();
+}
+
 // ウィンドウプロシージャ
 LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 #if defined(_DEBUG) || defined(DEVELOPMENT)

@@ -15,7 +15,7 @@ class WinApp {
 
 public:
     WinApp()  = default;
-    ~WinApp() = default;
+    ~WinApp();
 
     /// <summary>
     /// ウィンドウプロシージャ

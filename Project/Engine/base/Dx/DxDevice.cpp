@@ -62,11 +62,15 @@ void DxDevice::SetupDebugLayer() {
         // エラーレベルでブレイクポイントを設定
         infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
         infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
-        infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+        infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, false);
 
         // 特定のメッセージを抑制
         D3D12_MESSAGE_ID denyIds[] = {
-            D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE};
+            D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE,
+            D3D12_MESSAGE_ID_LIVE_DEVICE,
+            D3D12_MESSAGE_ID_LIVE_OBJECT_SUMMARY,
+            D3D12_MESSAGE_ID_UNKNOWN,
+        };
         D3D12_MESSAGE_SEVERITY severities[] = {D3D12_MESSAGE_SEVERITY_INFO};
         D3D12_INFO_QUEUE_FILTER filter{};
         filter.DenyList.NumIDs        = _countof(denyIds);

@@ -41,6 +41,10 @@ uint32_t DsvManager::Allocate() {
     return useIndex_;
 }
 
+void DsvManager::Finalize() {
+    descriptorHeap_.Reset();
+}
+
 bool DsvManager::IsAbleSecure() {
     if (useIndex_ >= DsvManager::kMaxCount) {
         return false;

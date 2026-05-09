@@ -35,6 +35,8 @@ public:
     /// <returns>割り当てられたインデックス</returns>
     uint32_t Allocate();
 
+    void Finalize(); //< 終了処理
+
     /// <summary>
     /// 確保可能かチェック
     /// </summary>

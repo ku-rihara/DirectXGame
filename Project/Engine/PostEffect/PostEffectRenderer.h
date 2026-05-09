@@ -126,6 +126,8 @@ public:
             effectStack_.push_back(mode);
         }
     }
+
+    void Finalize(); //< 終了処理
 };
 
 }; // KetaEngine
