@@ -23,7 +23,7 @@ void PlayerAttackCollider::Update() {
     }
 
     // プレイヤーを常に追従
-    if (comboAttackData_->GetAttackParam().collisionParam.isAlwaysFollowing) {
+    if (comboAttackData_->GetAttackParamForPhase(phase_).collisionParam.isAlwaysFollowing) {
         UpdateOffset();
     }
 
@@ -42,7 +42,7 @@ void PlayerAttackCollider::TimerUpdate(float timeSpeed) {
         return;
     }
 
-    const auto& collisionParam = comboAttackData_->GetAttackParam().collisionParam;
+    const auto& collisionParam = comboAttackData_->GetAttackParamForPhase(phase_).collisionParam;
 
     LoopWaiting(timeSpeed);
 
@@ -95,7 +95,7 @@ void PlayerAttackCollider::LoopWaiting(float timeSpeed) {
 
 void PlayerAttackCollider::LoopStart() {
     // コリジョンパラメータ取得
-    const auto& collisionParam = comboAttackData_->GetAttackParam().collisionParam;
+    const auto& collisionParam = comboAttackData_->GetAttackParamForPhase(phase_).collisionParam;
 
     isInLoopWait_ = false;
     adaptTimer_   = collisionParam.adaptTime;
@@ -105,11 +105,12 @@ void PlayerAttackCollider::LoopStart() {
     UpdateOffset();
 }
 
-void PlayerAttackCollider::AttackStart(const PlayerComboAttackData* comboAttackData) {
+void PlayerAttackCollider::AttackStart(const PlayerComboAttackData* comboAttackData, AttackTimelinePhase phase) {
     comboAttackData_ = comboAttackData;
+    phase_           = phase;
 
     // collision情報を取得
-    const auto& collisionParam = comboAttackData_->GetAttackParam().collisionParam;
+    const auto& collisionParam = comboAttackData_->GetAttackParamForPhase(phase_).collisionParam;
 
     // 初期パラメータセット
     adaptTimer_       = collisionParam.adaptTime;
@@ -134,7 +135,7 @@ void PlayerAttackCollider::AttackStart(const PlayerComboAttackData* comboAttackD
 }
 
 void PlayerAttackCollider::UpdateOffset() {
-    Vector3 offSetValue = comboAttackData_->GetAttackParam().collisionParam.offsetPos;
+    Vector3 offSetValue = comboAttackData_->GetAttackParamForPhase(phase_).collisionParam.offsetPos;
     offset_             = offSetValue;
 }
 

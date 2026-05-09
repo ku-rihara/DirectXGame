@@ -3,6 +3,7 @@
 #include "Easing/Easing.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
 #include "Player/ComboCreator/PlayerAttackRenditionData.h"
+#include "Player/ComboCreator/Timeline/PlayerComboAttackTimelinePhase.h"
 #include <vector>
 
 class Player;
@@ -15,6 +16,7 @@ class PlayerAttackRendition {
 private:
     Player* pPlayer_                              = nullptr;
     PlayerComboAttackData* playerComboAttackData_ = nullptr;
+    AttackTimelinePhase phase_                    = AttackTimelinePhase::MAIN;
 
     float currentTime_ = 0.0f;
 
@@ -52,7 +54,7 @@ public:
     PlayerAttackRendition()  = default;
     ~PlayerAttackRendition() { Reset(); } // 破棄時にトレイルを確実に停止
 
-    void Init(Player* player, PlayerComboAttackData* playerComboAttackData);
+    void Init(Player* player, PlayerComboAttackData* playerComboAttackData, AttackTimelinePhase phase = AttackTimelinePhase::MAIN);
     void Update(float deltaTime);
     void Reset();
 

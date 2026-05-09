@@ -127,7 +127,7 @@ void ParticleRenderer::Draw(
     for (auto& groupPair : groups) {
         ParticleManager::ParticleGroup& group = groupPair.second;
         if (group.param.isScreenPos) {
-            continue; // DrawScreenPos() で描画
+            continue;
         }
 
         ParticleFprGPU* instancingData = group.instancingData;

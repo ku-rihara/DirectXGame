@@ -137,7 +137,7 @@ public:
     // Getter
     const TimingParam& GetTimingParam() const { return timingParam_; }
     const TimeModeSelector& GetTimeModeSelector() const { return timeModeSelector_; }
-    const GroupParameters& GetGroupParameters() const { return groupParameters_; }
+    GroupParameters GetGroupParameters() const;
     const Parameters& GetParticleParameters() const { return parameters_; }
     float GetIntervalTime() const { return intervalTime_; }
     int32_t GetParticleCount() const { return particleCount_; }

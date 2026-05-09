@@ -70,8 +70,19 @@ void EnemySpawner::ParseJsonData(const std::string& filename) {
         // etcParams
         spawn.enemyType   = spawnData["enemy_type"];
         spawn.spawnOffset = spawnData["spawn_offset"];
+        if (spawnData.contains("parent_boss_name")) {
+            spawn.parentBossName = spawnData["parent_boss_name"];
+        }
 
         spawnPoints_.push_back(spawn);
+    }
+
+    // ボス名 → スポーン位置のルックアップテーブルを構築
+    bossSpawnPositions_.clear();
+    for (const auto& sp : spawnPoints_) {
+        if (sp.enemyType == "BossEnemy" || sp.enemyType == "StrongEnemy") {
+            bossSpawnPositions_[sp.name] = sp.position;
+        }
     }
 }
 
@@ -86,6 +97,7 @@ void EnemySpawner::SettingGroupSpawnPos() {
 void EnemySpawner::Update(float deltaTime) {
 
     currentTime_ += deltaTime;
+    ++preGenFrameCount_;
 
     if (currentGroupIndex_ < spawnGroups_.size()) {
         UpdateCurrentGroup();
@@ -98,9 +110,14 @@ void EnemySpawner::UpdateCurrentGroup() {
     // 進行中グループの確認
     if (!currentGroup.isActive) {
         if (currentGroupIndex_ == 0) {
-            // 最初のグループは即座にアクティブ
-            currentGroup.isActive       = true;
-            currentGroup.groupStartTime = currentTime_;
+            // 最初のグループ: 事前生成が完了してからアクティブ化
+            if (preGenFrameCount_ % kPreGenFrameInterval == 0) {
+                PreGenerateCurrentGroupEnemy();
+            }
+            if (IsGroupFullyPreGenerated(0)) {
+                currentGroup.isActive       = true;
+                currentGroup.groupStartTime = currentTime_;
+            }
         } else {
             // 前のグループの全滅を確認
             if (spawnGroups_[currentGroupIndex_ - 1].isCompleted) {
@@ -113,6 +130,13 @@ void EnemySpawner::UpdateCurrentGroup() {
     // 進行中グループの敵をスポーン
     if (currentGroup.isActive && !currentGroup.isCompleted) {
         SpawnEnemiesInGroup(currentGroup);
+
+        if (preGenFrameCount_ % kPreGenFrameInterval == 0) {
+            // 現グループの未スポーン敵を事前生成
+            PreGenerateCurrentGroupEnemy();
+            // 次グループの敵を事前生成
+            PreGenerateNextGroupEnemy();
+        }
 
         // グループが全滅したかチェック
         if (IsGroupCompleted(currentGroup.id)) {
@@ -132,9 +156,34 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
             float adjustedSpawnTime = spawn->spawnTime + spawn->spawnOffset;
 
             if (groupElapsedTime >= adjustedSpawnTime) {
-                // 敵をスポーン
                 if (pEnemyManager_) {
-                    pEnemyManager_->SpawnEnemy(spawn->enemyType, spawn->position, spawn->groupId);
+                    // 事前生成済みがあればそれをアクティブ化
+                    bool used = pEnemyManager_->ActivateSingleWaitingEnemy(spawn->groupId);
+                    if (!used) {
+                        // ボスの場合は spawn->name を parentBossName として渡す
+                        // ザコの場合は spawn->parentBossName を渡す
+                        std::string nameForManager = "";
+                        if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "StrongEnemy") {
+                            // ボス自身の名前を登録用として渡す
+                            nameForManager = spawn->name;
+                        } else {
+                            // ザコはJSONで決まった親ボス名を渡す
+                            nameForManager = spawn->parentBossName;
+                        }
+
+                        // JSONのparent_boss_nameからローカルオフセットを計算して渡す
+                        Vector3 localOffset = {};
+                        if (!spawn->parentBossName.empty()) {
+                            auto it = bossSpawnPositions_.find(spawn->parentBossName);
+                            if (it != bossSpawnPositions_.end()) {
+                                localOffset   = spawn->position - it->second;
+                                localOffset.y = 0.0f;
+                            }
+                        }
+
+                        pEnemyManager_->SpawnEnemy(spawn->enemyType, spawn->position, spawn->groupId,
+                            localOffset, nameForManager);
+                    }
                 }
 
                 spawn->hasSpawned = true;
@@ -177,6 +226,15 @@ void EnemySpawner::AdjustParam() {
 #endif
 }
 
+bool EnemySpawner::IsGroupFullyPreGenerated(int32_t groupId) const {
+    auto it = groupSpawnPoints_.find(groupId);
+    if (it == groupSpawnPoints_.end()) return true;
+    for (const auto* spawn : it->second) {
+        if (!spawn->preGenerated) return false;
+    }
+    return true;
+}
+
 bool EnemySpawner::IsGroupCompleted(int groupId) const {
     if (groupId >= 0 && groupId < spawnGroups_.size()) {
         const SpawnGroup& group = spawnGroups_[groupId];
@@ -194,6 +252,7 @@ void EnemySpawner::ActivateNextGroup() {
             isSystemActive_     = false;
             allGroupsCompleted_ = true;
         }
+        return;
     }
 }
 
@@ -206,12 +265,19 @@ void EnemySpawner::RestartLoop() {
         group.groupStartTime = 0.0f;
     }
     for (auto& spawn : spawnPoints_) {
-        spawn.hasSpawned = false;
+        spawn.hasSpawned   = false;
+        spawn.preGenerated = false;
     }
     currentGroupIndex_  = 0;
     currentTime_        = 0.0f;
+    preGenFrameCount_   = 0;
     isSystemActive_     = true;
     allGroupsCompleted_ = false;
+
+    // 事前生成された待機中の敵を破棄
+    if (pEnemyManager_) {
+        pEnemyManager_->ClearAllWaitingEnemies();
+    }
 }
 
 void EnemySpawner::OnEnemyDestroyed(int groupId) {
@@ -219,6 +285,84 @@ void EnemySpawner::OnEnemyDestroyed(int groupId) {
         spawnGroups_[groupId].aliveCount--;
         if (spawnGroups_[groupId].aliveCount < 0) {
             spawnGroups_[groupId].aliveCount = 0;
+        }
+    }
+}
+
+void EnemySpawner::PreGenerateNextGroupEnemy() {
+    int32_t nextGroupId = currentGroupIndex_ + 1;
+    if (nextGroupId >= static_cast<int32_t>(spawnGroups_.size())) {
+        return; // 次グループなし
+    }
+
+    auto it = groupSpawnPoints_.find(nextGroupId);
+    if (it == groupSpawnPoints_.end()) {
+        return;
+    }
+
+    // preGeneratedフラグが立っていないSpawnPointを1つ選んで事前生成
+    for (auto* spawn : it->second) {
+        if (!spawn->preGenerated) {
+            if (pEnemyManager_) {
+                //  ボスの場合は spawn->name を、ザコの場合は spawn->parentBossName を渡す
+                std::string nameForManager = "";
+                if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "StrongEnemy") {
+                    nameForManager = spawn->name;
+                } else {
+                    nameForManager = spawn->parentBossName;
+                }
+
+                // JSONのparent_boss_nameからローカルオフセットを計算して渡す
+                Vector3 localOffset = {};
+                if (!spawn->parentBossName.empty()) {
+                    auto bit = bossSpawnPositions_.find(spawn->parentBossName);
+                    if (bit != bossSpawnPositions_.end()) {
+                        localOffset   = spawn->position - bit->second;
+                        localOffset.y = 0.0f;
+                    }
+                }
+
+                pEnemyManager_->PreGenerateEnemy(spawn->enemyType, spawn->position, nextGroupId,
+                    localOffset, nameForManager);
+            }
+            spawn->preGenerated = true;
+            return;
+        }
+    }
+}
+
+void EnemySpawner::PreGenerateCurrentGroupEnemy() {
+    int32_t groupId = currentGroupIndex_;
+
+    auto it = groupSpawnPoints_.find(groupId);
+    if (it == groupSpawnPoints_.end()) {
+        return;
+    }
+
+    for (auto* spawn : it->second) {
+        if (!spawn->preGenerated && !spawn->hasSpawned) {
+            if (pEnemyManager_) {
+                std::string nameForManager = "";
+                if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "StrongEnemy") {
+                    nameForManager = spawn->name;
+                } else {
+                    nameForManager = spawn->parentBossName;
+                }
+
+                Vector3 localOffset = {};
+                if (!spawn->parentBossName.empty()) {
+                    auto bit = bossSpawnPositions_.find(spawn->parentBossName);
+                    if (bit != bossSpawnPositions_.end()) {
+                        localOffset   = spawn->position - bit->second;
+                        localOffset.y = 0.0f;
+                    }
+                }
+
+                pEnemyManager_->PreGenerateEnemy(spawn->enemyType, spawn->position, groupId,
+                    localOffset, nameForManager);
+            }
+            spawn->preGenerated = true;
+            return;
         }
     }
 }

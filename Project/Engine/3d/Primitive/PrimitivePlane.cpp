@@ -34,15 +34,9 @@ void PrimitivePlane::Create() {
     mesh_->SetVertexTexcoordData(5, Vector2(1.0f, 1.0f));
     mesh_->SetVertexNormData(5, Vector3(0.0f, 0.0f, -1.0f));
 
-    // インデックスデータ（6頂点をそのまま使う場合）
+    // インデックスデータ
     uint32_t indices[6] = {0, 1, 2, 3, 4, 5};
     mesh_->SetIndexData(indices, 6);
 }
 
-void PrimitivePlane::SetTexture(const std::string& name) {
-    IPrimitive::SetTexture(name);
-}
 
-void PrimitivePlane::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-    IPrimitive::Draw(worldTransform, viewProjection, textureHandle);
-}

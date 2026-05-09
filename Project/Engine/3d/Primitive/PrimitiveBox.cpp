@@ -61,11 +61,3 @@ void PrimitiveBox::Create() {
     // インデックスをセット
     mesh_->SetIndexData(indices, static_cast<uint32_t>(std::size(indices)));
 }
-
-void PrimitiveBox::SetTexture(const std::string& name) {
-    IPrimitive::SetTexture(name);
-}
-
-void PrimitiveBox::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-    IPrimitive::Draw(worldTransform, viewProjection, textureHandle);
-}

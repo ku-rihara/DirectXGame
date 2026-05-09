@@ -25,7 +25,9 @@ private:
         Vector3 scale;
         std::string enemyType;
         float spawnOffset;
-        bool hasSpawned = false;
+        std::string parentBossName; // JSONで指定されたボス名
+        bool hasSpawned   = false;
+        bool preGenerated = false; // 事前生成キュー済みフラグ
     };
 
     struct SpawnGroup {
@@ -84,10 +86,13 @@ public:
     /// <param name="groupId">グループID</param>
     /// <returns>完了していればtrue</returns>
     bool IsGroupCompleted(int groupId) const;
+    bool IsGroupFullyPreGenerated(int32_t groupId) const; //< グループの全敵が事前生成済みか確認
 
     void ActivateNextGroup(); //< 次のグループをアクティブ化
     void SettingGroupSpawnPos(); //< グループスポーン位置設定
     void UpdateCurrentGroup(); //< 現在のグループ更新
+    void PreGenerateNextGroupEnemy(); //< 次グループの敵を1体事前生成
+    void PreGenerateCurrentGroupEnemy(); //< 現グループの未スポーン敵を1体事前生成
 
     void AdjustParam(); //< パラメータ調整
     void RegisterParams(); //< パラメータバインド
@@ -109,11 +114,15 @@ private:
     std::vector<SpawnPoint> spawnPoints_;
     std::vector<SpawnGroup> spawnGroups_;
     std::unordered_map<int, std::vector<SpawnPoint*>> groupSpawnPoints_;
+    std::unordered_map<std::string, Vector3> bossSpawnPositions_; // ボス名 → スポーン位置
 
     int32_t maxFazeNum_;
 
+    static constexpr int32_t kPreGenFrameInterval = 5; // 何フレームに1体事前生成するか
+
     float currentTime_;
     int currentGroupIndex_;
+    int32_t preGenFrameCount_ = 0;
     bool isSystemActive_;
     bool allGroupsCompleted_;
     bool shouldLoop_ = false;

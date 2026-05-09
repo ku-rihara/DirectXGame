@@ -10,9 +10,11 @@ namespace CollisionPushUtils {
     /// @param myRadius       自分のコリジョン半径
     /// @param otherRadius    相手のコリジョン半径
     /// @param maxPush        ワープ防止用の最大移動量
+    /// @param smoothing      補間係数 0〜1
     void ApplySpherePush(Vector3& translation, const Vector3& otherPos,
                          float myRadius, float otherRadius,
-                         float maxPush = 1.0f);
+                         float maxPush  = 1.0f,
+                         float smoothing = 0.3f);
 
     /// @brief AABB-球 押し戻し
     /// @param translation    押し戻す対象の座標

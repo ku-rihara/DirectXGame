@@ -23,12 +23,15 @@ void CameraResetBehavior::Update(float time) {
 }
 
 void CameraResetBehavior::Init() {
+
+    // 目標Y軸回転角を設定するフェーズに移行
     phase_ = [this]() {
         SetTargetRotate();
     };
 }
 
 void CameraResetBehavior::SetTargetRotate() {
+    // 追従対象のY軸回転角を取得
     targetRotationY_ = pOwner_->GetTarget()->rotation_.y;
 
     phase_ = [this]() {
@@ -37,6 +40,8 @@ void CameraResetBehavior::SetTargetRotate() {
 }
 
 void CameraResetBehavior::Reset() {
+
+    // Y軸回転を追従対象の角度に向けて補間
     pOwner_->RotateYInterpolation(targetRotationY_);
     pOwner_->SetDestinationAngleY(pOwner_->GetViewProjection().rotation_.y);
 
@@ -49,9 +54,12 @@ void CameraResetBehavior::Reset() {
 
     // 角度差を[-π, π]の範囲に正規化
     const float pi = std::numbers::pi_v<float>;
+    // 180度以上の差分がある場合は、回転方向を考慮して差分を修正
     while (rotationDifference > pi) {
         rotationDifference -= ToRadian(360.0f);
     }
+
+    // 差分の絶対値を取る
     rotationDifference = std::abs(rotationDifference);
 
     // 許容範囲

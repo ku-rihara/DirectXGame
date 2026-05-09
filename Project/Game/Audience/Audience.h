@@ -43,6 +43,8 @@ public:
 
     // adaptPos
     void AdaptPosition(const Vector2& ZXBasePos);
+    // 生成直後に行列を強制確定
+    void ForceUpdateTransforms();
 
     // changeBehavior
     void ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior);
@@ -69,20 +71,20 @@ private:
     int32_t audienceIndex_ = 0;
 
     //
-    int32_t seatRowNum_;
-    int32_t appearComboLevel_;
+    int32_t seatRowNum_      = 0;
+    int32_t appearComboLevel_ = 0;
 
     // enum
     SeatSide seatSide_ = SeatSide::LEFT;
 
     // animationObj
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
-    float positionX_;
+    float positionX_ = 0.0f;
 
     // Particle
     std::unique_ptr<KetaEngine::ParticlePlayer> particlePlayer_;
 
-    float cheerAnimationTimer_;
+    float cheerAnimationTimer_ = 0.0f;
 
     // behavior
     std::unique_ptr<BaseAudienceBehavior> behavior_;

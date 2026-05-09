@@ -217,6 +217,9 @@
     <Filter Include="Engine\Pipeline\Object3D">
       <UniqueIdentifier>{2711E5F8-C495-468F-BFF1-EB377176309C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Pipeline\Primitive">
+      <UniqueIdentifier>{A3C12F84-D701-4B5E-9F2A-3E8B6C1D0F47}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Pipeline\Particle">
       <UniqueIdentifier>{342F0F52-BDB2-4D6A-A497-62967CBBD160}</UniqueIdentifier>
     </Filter>
@@ -279,9 +282,6 @@
     </Filter>
     <Filter Include="Game\Enemy\Effects">
       <UniqueIdentifier>{3ECFE67B-F1EB-4245-948B-2CC1232A7819}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy\HPBar">
-      <UniqueIdentifier>{1F660BC1-D946-4EAE-BF48-35DEB5AB3BF7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\Spawner">
       <UniqueIdentifier>{A2905447-6A3D-4B59-B4D2-A0C5BE95768A}</UniqueIdentifier>
@@ -475,6 +475,18 @@
     <Filter Include="Game\ResultObj">
       <UniqueIdentifier>{83996ba3-f0aa-4587-9171-35821b3551e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\UIs">
+      <UniqueIdentifier>{1F660BC1-D946-4EAE-BF48-35DEB5AB3BF7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\UIs\HPBar">
+      <UniqueIdentifier>{6c84ff0c-8cc2-4313-a414-f68c067a8da8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\UIs\GroupIcon">
+      <UniqueIdentifier>{d88868ea-ad93-4116-9c8d-d41c5cd99524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\utility\Log">
+      <UniqueIdentifier>{2b632ecd-0848-4610-8231-9a53f35cbef4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -596,6 +608,9 @@
       <Filter>Engine\Base\Material</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Base\Material\MeshMaterial.cpp">
+      <Filter>Engine\Base\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\Material\PrimitiveMaterial.cpp">
       <Filter>Engine\Base\Material</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Base\Material\ModelMaterial.cpp">
@@ -871,6 +886,9 @@
     <ClCompile Include="Engine\Pipeline\Object3D\Object3DPipeline.cpp">
       <Filter>Engine\Pipeline\Object3D</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Primitive\PrimitivePipeline.cpp">
+      <Filter>Engine\Pipeline\Primitive</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.cpp">
       <Filter>Engine\Pipeline\Particle\CS</Filter>
     </ClCompile>
@@ -1089,12 +1107,6 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\EnemyManager.cpp">
       <Filter>Game\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp">
-      <Filter>Game\Enemy\HPBar</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\HPBar\EnemyHPBarColorConfig.cpp">
-      <Filter>Game\Enemy\HPBar</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Spawner\ContinuousEnemySpawner.cpp">
       <Filter>Game\Enemy\Spawner</Filter>
@@ -1471,6 +1483,9 @@
     <ClInclude Include="Engine\Base\Material\MeshMaterial.h">
       <Filter>Engine\Base\Material</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Base\Material\PrimitiveMaterial.h">
+      <Filter>Engine\Base\Material</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Base\Material\ModelMaterial.h">
       <Filter>Engine\Base\Material</Filter>
     </ClInclude>
@@ -1750,6 +1765,9 @@
     <ClInclude Include="Engine\Pipeline\Object3D\Object3DPipeline.h">
       <Filter>Engine\Pipeline\Object3D</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Primitive\PrimitivePipeline.h">
+      <Filter>Engine\Pipeline\Primitive</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.h">
       <Filter>Engine\Pipeline\Particle\CS</Filter>
     </ClInclude>
@@ -2013,15 +2031,6 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Effects\EnemyEffects.h">
       <Filter>Game\Enemy\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\EnemyManager.h">
-      <Filter>Game\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h">
-      <Filter>Game\Enemy\HPBar</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\HPBar\EnemyHPBarColorConfig.h">
-      <Filter>Game\Enemy\HPBar</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Spawner\ContinuousEnemySpawner.h">
       <Filter>Game\Enemy\Spawner</Filter>
@@ -2447,6 +2456,15 @@
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoFlockBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoTauntBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoCrawlBackwardsBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
     </ClCompile>
@@ -2597,12 +2615,45 @@
     <ClCompile Include="Game\Player\Behavior\PlayerBehavior\PlayerDash.cpp">
       <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\UIs\HPBar\EnemyHPBar.cpp">
+      <Filter>Game\Enemy\UIs\HPBar</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\UIs\HPBar\EnemyHPBarColorConfig.cpp">
+      <Filter>Game\Enemy\UIs\HPBar</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\UIs\EnemyUIs.cpp">
+      <Filter>Game\Enemy\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\UIs\GroupIcon\GroupIcon.cpp">
+      <Filter>Game\Enemy\UIs\GroupIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyFleeBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameSceneState\GameSceneGameOver.cpp">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\Log\Log.cpp">
+      <Filter>Engine\utility\Log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
       <Filter>Game\Player\ComboCreator</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoFlockBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoTauntBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoCrawlBackwardsBehavior.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.h">
@@ -2754,6 +2805,33 @@
     </ClInclude>
     <ClInclude Include="Game\Player\Behavior\PlayerBehavior\PlayerDash.h">
       <Filter>Game\Player\Behavior\PlayerBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\UIs\HPBar\EnemyHPBar.h">
+      <Filter>Game\Enemy\UIs\HPBar</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\UIs\HPBar\EnemyHPBarColorConfig.h">
+      <Filter>Game\Enemy\UIs\HPBar</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\UIs\EnemyUIs.h">
+      <Filter>Game\Enemy\UIs</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\UIs\GroupIcon\GroupIcon.h">
+      <Filter>Game\Enemy\UIs\GroupIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\EnemyManager.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyFleeBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameSceneState\GameSceneGameOver.h">
+      <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Log\Log.h">
+      <Filter>Engine\utility\Log</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

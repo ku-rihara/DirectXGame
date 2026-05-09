@@ -1,0 +1,27 @@
+{
+    "DeathGaugeIcon_Happy.dds": {
+        "layerNum": 17,
+        "startAnchorPoint": [
+            0.5,
+            0.5
+        ],
+        "startColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "startPosition": [
+            53.0,
+            118.0
+        ],
+        "startScale": [
+            0.07999999821186066,
+            0.07999999821186066
+        ],
+        "startUVScale": [
+            1.0,
+            1.0
+        ]
+    }
+}

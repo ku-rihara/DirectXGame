@@ -15,6 +15,11 @@ void ParticleSectionParameter::AdaptIntToType() {
     emitPositionMode_ = static_cast<EmitterPositionMode>(emitPositionModeInt_);
 }
 
+ParticleCommon::GroupParameters ParticleSectionParameter::GetGroupParameters() const {
+    GroupParameters gp = groupParameters_;
+    return gp;
+}
+
 void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, const std::string& groupName) {
     groupName_ = groupName;
 

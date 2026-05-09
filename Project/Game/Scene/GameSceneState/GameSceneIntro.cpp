@@ -43,7 +43,7 @@ void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
     if (obj.gameIntroManager_->GetIsFinishStep(GameIntroManager::SpawnField)) {
         obj.enemySpawner_->Update(KetaEngine::Frame::DeltaTimeRate());
         obj.enemyManager_->Update();
-        obj.enemyManager_->HpBarUpdate(pOwner_->GetViewProjection());
+        obj.enemyManager_->UIUpdate(pOwner_->GetViewProjection());
     }
 
     // Editor

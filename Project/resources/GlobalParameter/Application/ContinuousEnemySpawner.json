@@ -9,7 +9,7 @@
         "maxRetryCount": 6,
         "maxSpawnCount": 10,
         "minDistanceFromEnemies": 10.199999809265137,
-        "spawnInterval": 8.600000381469727,
+        "spawnInterval": 15.0,
         "spawnRandomOffset.max": [
             10.899999618530273,
             11.699999809265137

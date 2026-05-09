@@ -44,6 +44,7 @@ private:
 public:
     // getter
     const Vector3& GetShakeOffset() const { return shakePlayer_->GetTotalShakeOffset(); }
+    bool IsAnimationFinished() const { return cameraAnimation_ && cameraAnimation_->IsFinished(); }
 
     // setter
     void SetGameCamera(GameCamera* camera) { pGameCamera_ = camera; }

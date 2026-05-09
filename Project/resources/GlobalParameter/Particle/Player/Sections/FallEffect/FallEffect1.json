@@ -41,6 +41,7 @@
         ],
         "ColorEaseParam.isEase": false,
         "ColorEaseParam.maxTime": 1.0,
+        "Cyl.axisInt": 0,
         "Cyl.bottomColor": [
             1.0,
             1.0,
@@ -81,7 +82,7 @@
         "Particle Count": 1,
         "Position Base": [
             0.0,
-            0.029999999329447746,
+            0.019999999552965164,
             0.0
         ],
         "Position Max": [
@@ -134,8 +135,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 11.0,
-        "Scale Min": 11.0,
+        "Scale Max": 15.15999984741211,
+        "Scale Min": 15.609999656677246,
         "ScaleV3 Max": [
             1.0,
             1.0,
@@ -199,8 +200,8 @@
         "alphaMode": 1,
         "blendMode": 0,
         "dissolveName": "",
-        "distortionStrength": 0.05000000074505806,
-        "distortionTexturePath": "",
+        "distortionStrength": 0.2150000035762787,
+        "distortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
         "emissiveIntensity": 1.0,
         "emitPositionMode": 2,
         "emitShape": 0,

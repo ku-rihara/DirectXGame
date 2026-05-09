@@ -8,11 +8,13 @@
 void PlayerComboAttackTimelineParameterApplier::Init(
     PlayerComboAttackData* attackData,
     KetaEngine::TimelineDrawer* timeline,
-    PlayerComboAttackTimelineData* data) {
+    PlayerComboAttackTimelineData* data,
+    AttackTimelinePhase phase) {
 
     attackData_     = attackData;
     timelineDrawer_ = timeline;
     timeLineData_   = data;
+    phase_          = phase;
 }
 
 ///==========================================================
@@ -99,8 +101,8 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
         return;
     }
 
-    // 攻撃パラメータを取得
-    auto& attackParam = attackData_->GetAttackParam();
+    // フェーズ別攻撃パラメータを取得
+    auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
 
     // コライダー適用
     {
@@ -159,7 +161,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     });
 
     // ポストエフェクト・パーティクルエフェクトリストをクリアして再構築
-    auto& renditionDataForClear = const_cast<PlayerAttackRenditionData&>(attackData_->GetRenditionData());
+    auto& renditionDataForClear = attackData_->GetRenditionDataForPhase(phase_);
     renditionDataForClear.ClearPostEffectList();
     renditionDataForClear.ClearPostEffectOnHitList();
     renditionDataForClear.ClearParticleEffectList();
@@ -243,7 +245,7 @@ int32_t PlayerComboAttackTimelineParameterApplier::GetFinishWaitStartFrame() con
     if (!attackData_)
         return 0;
 
-    auto& attackParam = attackData_->GetAttackParam();
+    auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
 
     int32_t collisionEndFrame = KetaEngine::Frame::TimeToFrame(
         attackParam.collisionParam.startTime + attackParam.collisionParam.adaptTime);
@@ -291,7 +293,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
     }
 
     using TT = PlayerComboAttackTimelineData::TrackType;
-    auto& renditionData = const_cast<PlayerAttackRenditionData&>(attackData_->GetRenditionData());
+    auto& renditionData = attackData_->GetRenditionDataForPhase(phase_);
     int typeInt         = static_cast<int>(trackInfo.type);
 
     // 通常演出
@@ -391,7 +393,7 @@ int32_t PlayerComboAttackTimelineParameterApplier::CalculateTotalFrames() const 
         return 0;
     }
 
-    auto& attackParam = attackData_->GetAttackParam();
+    auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
 
     float totalTime = attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset + attackParam.timingParam.finishWaitTime;
 

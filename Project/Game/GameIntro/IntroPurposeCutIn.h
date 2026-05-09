@@ -67,4 +67,7 @@ private:
     std::array<std::unique_ptr<KetaEngine::Sprite>, static_cast<size_t>(SpritePos::COUNT)> sprites_;
     Phase phase_            = Phase::Appear;
     bool appearAnimStarted_ = false;
+
+    Vector2 centerPos_  = {};
+    bool isPreview_     = false;
 };

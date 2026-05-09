@@ -13,7 +13,7 @@
 
 // 初期化
 EnemySpawn::EnemySpawn(BaseEnemy* boss)
-    : BaseEnemyBehavior("EnemySpawn", boss) {
+    : BaseEnemyBehavior("EnemySpawn", boss), step_(Step::EFFECTEMIT) {
 
     /// spawn
     spawnEasing_.Init("SpawnScaling.json");
@@ -58,9 +58,10 @@ void EnemySpawn::Update() {
         ///  移動Behaviorに切り替え
         ///------------------------------------------------------------------
     case EnemySpawn::Step::ChangeNextBehavior:
-
-        pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
-
+        // Ensure scale is at baseScale_ regardless of whether the easing completed
+        pBaseEnemy_->ScaleReset();
+        pBaseEnemy_->OnSpawnCompleted();
+        pBaseEnemy_->ChangeBehavior(pBaseEnemy_->CreatePostSpawnBehavior());
         break;
     default:
         break;

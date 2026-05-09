@@ -32,6 +32,9 @@ void Audience::Init(int32_t index) {
 
     // behavior
     ChangeBehavior(std::make_unique<AudienceRoot>(this,false));
+
+    // 初期は非アクティブ
+    objAnimation_->SetIsActive(false);
 }
 
 void Audience::CreateObject() {
@@ -53,10 +56,6 @@ void Audience::Update() {
 
     // Behavior更新
     behavior_->Update();
-  
-    // Particleの更新処理
-    particlePlayer_->Update();
-    particlePlayer_->SetTargetPosition(objAnimation_->transform_.GetWorldPos());
 
     // XPositionを設定
     objAnimation_->transform_.translation_.x = positionX_;
@@ -65,6 +64,10 @@ void Audience::Update() {
 
     // 行列更新など
     BaseObject::Update();
+
+    // Particleの更新処理
+    particlePlayer_->Update();
+    particlePlayer_->SetTargetPosition(objAnimation_->transform_.GetWorldPos());
 }
 
 void Audience::RotateYChangeBySeatSide(SeatSide seatSide) {
@@ -99,6 +102,7 @@ void Audience::AppearByComboLevel(int32_t level) {
     }
 
     // スポーンモードに移行
+    particlePlayer_->SetTargetPosition(objAnimation_->transform_.GetWorldPos());
     particlePlayer_->Play("AppearEffect", "Audience");
     audienceRoot->ChangeAppearMode();
 }
@@ -118,6 +122,37 @@ void Audience::DisAppearByComboLevel(int32_t level) {
 
     // クローズモードに移行
     audienceRoot->ChangeCloseMode();
+}
+
+
+
+void Audience::AdaptPosition(const Vector2& ZYBasePos) {
+    // Position適応
+    objAnimation_->transform_.translation_.y = ZYBasePos.y;
+    objAnimation_->transform_.translation_.z = ZYBasePos.x;
+}
+
+void Audience::ForceUpdateTransforms() {
+    objAnimation_->transform_.translation_.x = positionX_;
+    RotateYChangeBySeatSide(seatSide_);
+    baseTransform_.UpdateMatrix();
+    objAnimation_->transform_.UpdateMatrix();
+}
+
+void Audience::ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior) {
+    // Behavior切り替え
+    behavior_ = std::move(behavior);
+}
+
+AudienceRoot* Audience::GetAudienceRoot() const {
+    if (AudienceRoot* audienceRoot = dynamic_cast<AudienceRoot*>(behavior_.get())) {
+        return audienceRoot;
+    }
+    return nullptr;
+}
+
+void Audience::SetBaseScale(Vector3 scale) {
+    baseTransform_.scale_ = scale;
 }
 
 void Audience::RegisterParams() {
@@ -152,26 +187,4 @@ void Audience::AdjustParam() {
     globalParameter_->ParamLoadForImGui(groupName_, folderName_);
 
     ImGui::PopID();
-}
-
-void Audience::AdaptPosition(const Vector2& ZYBasePos) {
-    // Position適応
-    objAnimation_->transform_.translation_.y = ZYBasePos.y;
-    objAnimation_->transform_.translation_.z = ZYBasePos.x;
-}
-
-void Audience::ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior) {
-    // Behavior切り替え
-    behavior_ = std::move(behavior);
-}
-
-AudienceRoot* Audience::GetAudienceRoot() const {
-    if (AudienceRoot* audienceRoot = dynamic_cast<AudienceRoot*>(behavior_.get())) {
-        return audienceRoot;
-    }
-    return nullptr;
-}
-
-void Audience::SetBaseScale(Vector3 scale) {
-    baseTransform_.scale_ = scale;
 }

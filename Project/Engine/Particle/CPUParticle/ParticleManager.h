@@ -106,6 +106,9 @@ public:
         bool isAdaptColorEasing = false;
         std::unique_ptr<Easing<Vector3>> colorEasing;
 
+        bool isAdaptColorAlphaEasing = false;
+        std::unique_ptr<Easing<Vector4>> colorAlphaEasing;
+
         ParticleCommon::AlphaMode alphaMode = ParticleCommon::AlphaMode::LifeTime;
         bool isAdaptAlphaEasing = false;
         std::unique_ptr<Easing<float>> alphaEasing;
@@ -138,19 +141,20 @@ public:
         Model* model                           = nullptr;
         std::unique_ptr<IPrimitive> primitive_ = nullptr;
         ParticleMaterial material;
-        uint32_t instanceNum;
-        uint32_t srvIndex;
-        uint32_t currentNum;
-        uint32_t textureHandle;
-        uint32_t dissolveTextureHandle    = 0;
-        uint32_t distortionTextureHandle  = 0; // 歪みノイズテクスチャ
-        ParticleFprGPU* instancingData;
+        uint32_t instanceNum                  = 0;
+        uint32_t srvIndex                     = 0;
+        uint32_t currentNum                   = 0;
+        uint32_t textureHandle                = 0;
+        uint32_t dissolveTextureHandle        = 0;
+        uint32_t distortionTextureHandle      = 0; // 歪みノイズテクスチャ
+        ParticleFprGPU* instancingData        = nullptr;
         std::list<Particle> particles;
         GroupParameters param;
         DissolveGroupParams dissolveParams;
         std::unique_ptr<DissolvePlayer> dissolvePlayer;
         std::string lastDissolveTexturePath;
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
+
     };
 
 public:
@@ -158,6 +162,7 @@ public:
     ~ParticleManager() = default;
 
     void Init(SrvManager* srvManager);
+    void Finalize() { particleGroups_.clear(); }
     void Update();
     void Draw(const ViewProjection& viewProjection);
     void DrawScreenPos();
@@ -167,6 +172,8 @@ public:
     void UpdateUV(UVInfo& uvInfo, float deltaTime);
     void CreateParticleGroup(const std::string name, const std::string modelFilePath, uint32_t maxnum);
     void CreatePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum);
+    void ReplacePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum);
+    void ReplaceModelParticle(const std::string& name, const std::string& modelFilePath, uint32_t maxnum);
     void SetModel(const std::string& name, const std::string& modelName);
     void CreateMaterialResource(const std::string& name);
     void CreateInstancingResource(const std::string& name, uint32_t instanceNum);

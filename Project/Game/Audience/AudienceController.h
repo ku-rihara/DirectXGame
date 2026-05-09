@@ -39,6 +39,12 @@ private:
     // 列番号から位置を計算
     Vector2 GetSeatsRowZYPos(int32_t row) const;
 
+    // 毎フレーム1体ずつ生成
+    void DeferredCreate();
+
+    // DisAppear を毎フレーム数体ずつ処理
+    void ProcessPendingDisappear();
+
 private:
     // 観客の最大数
     const int32_t audienceMaxNum_ = 50;
@@ -49,6 +55,14 @@ private:
 
     // 観客の配列
     std::array<std::unique_ptr<Audience>, 50> audiences_;
+
+    // 分散生成用カウンタ
+    int32_t createdCount_ = 0;
+
+    // DisAppear 段階処理用
+    int32_t pendingDisappearLevel_ = -1;
+    int32_t pendingDisappearIndex_ = 0;
+    static constexpr int32_t kDisappearPerFrame_ = 3;
 
     // 列の設定
     Vector2 baseSeatsZYPos_   = {0.0f, 0.0f};

@@ -61,7 +61,7 @@ void AnimationRegistry::UnregisterAnimation(Object3DAnimation* animation) {
 void AnimationRegistry::UpdateAll(float deltaTime) {
 
     for (Object3DAnimation* animation : animations_) {
-        if (animation != nullptr && animations_.find(animation) != animations_.end()) {
+        if (animation != nullptr && animation->IsActive()) {
             animation->Update(deltaTime);
         }
     }
@@ -72,7 +72,7 @@ void AnimationRegistry::UpdateAll(float deltaTime) {
 ///============================================================
 void AnimationRegistry::DrawAll(const ViewProjection& viewProjection) {
     for (Object3DAnimation* animation : animations_) {
-        if (animation != nullptr && animations_.find(animation) != animations_.end()) {
+        if (animation != nullptr && animation->IsActive()) {
             animation->Draw(viewProjection);
         }
     }
@@ -83,7 +83,7 @@ void AnimationRegistry::DrawAll(const ViewProjection& viewProjection) {
 ///============================================================
 void AnimationRegistry::DrawAllShadow(const ViewProjection& viewProjection) {
     for (Object3DAnimation* animation : animations_) {
-        if (animation != nullptr && animations_.find(animation) != animations_.end()) {
+        if (animation != nullptr && animation->IsActive()) {
             animation->DrawShadow(viewProjection);
         }
     }
@@ -94,7 +94,7 @@ void AnimationRegistry::DrawAllShadow(const ViewProjection& viewProjection) {
 ///============================================================
 void AnimationRegistry::DebugLineAllSet() {
     for (Object3DAnimation* animation : animations_) {
-        if (animation != nullptr) {
+        if (animation != nullptr && animation->IsActive()) {
             animation->DebugLineSet();
         }
     }

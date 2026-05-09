@@ -4,6 +4,7 @@
 #include "BaseGameSceneState.h"
 #include "Easing/Easing.h"
 // std
+#include <functional>
 #include <memory>
 
 /// <summary>
@@ -11,7 +12,7 @@
 /// </summary>
 class GameSceneFinish : public BaseGameSceneState {
 public:
-    GameSceneFinish(GameScene* gameScene);
+    GameSceneFinish(GameScene* gameScene, std::function<void()> onFinished = nullptr);
     ~GameSceneFinish() override = default;
 
     void Init() override;
@@ -33,4 +34,7 @@ private:
 
     // フェードイン用イージング（0.7 → 1.0）
     KetaEngine::Easing<float> fadeEasing_;
+
+    // シーン遷移コールバック
+    std::function<void()> onFinished_;
 };

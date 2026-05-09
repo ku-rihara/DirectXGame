@@ -31,6 +31,22 @@ void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* pla
     float deltaTime = KetaEngine::Frame::DeltaTime();
     autoSearchTimer_ += deltaTime;
 
+    // BボタンまたはRキーでロックオン切り替え
+    bool toggleTriggered = KetaEngine::Input::IsTriggerPad(0, GamepadButton::B) ||
+                           KetaEngine::Input::GetInstance()->TriggerKey(KeyboardKey::R);
+    if (toggleTriggered) {
+        isActive_ = !isActive_;
+        if (!isActive_) {
+            currentTarget_.reset();
+            currentTargetIndex_ = 0;
+        }
+    }
+
+    if (!isActive_) {
+        ableLockOnMarkers_.clear();
+        return;
+    }
+
     // 現在のターゲットの有効性チェック
     if (currentTarget_.has_value()) {
 

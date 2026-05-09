@@ -4,30 +4,30 @@
 #include "3D/ViewProjection.h"
 // DamageReaction
 #include "DamageReaction/EnemyDamageReactionController.h"
-//BaseEnemy
+// BaseEnemy
 #include "Types/BaseEnemy.h"
+#include "Types/NormalEnemy.h"
+#include "Types/StrongEnemy.h" 
 // HPBar
-#include "HPBar/EnemyHPBarColorConfig.h"
+#include "UIs/HPBar/EnemyHPBarColorConfig.h"
 
 /// std
+#include <array>
 #include <json.hpp>
 #include <list>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
-#include <array>
 
 enum class Type;
 struct BaseEnemy::Parameter;
 class Player;
-class LockOn;
 class Combo;
 class GameCamera;
 class EnemySpawner;
 class KillCounter;
 class DeathTimer;
-class KillBonusFlyController;
-class KillBonusController;
 
 class EnemyManager {
 public:
@@ -46,8 +46,19 @@ public:
     void CheckIsEnemiesCleared();
 
     // 敵の生成
-    void SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID);
-    void HpBarUpdate(const KetaEngine::ViewProjection& viewProjection);
+    void SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID,
+        const Vector3& localOffset = {}, const std::string& parentBossName = "");
+    void UIUpdate(const KetaEngine::ViewProjection& viewProjection);
+
+    // 事前生成
+    void PreGenerateEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID,
+        const Vector3& localOffset = {}, const std::string& parentBossName = "");
+
+    // 待機中の敵を1体アクティブ化
+    bool ActivateSingleWaitingEnemy(int32_t groupID);
+
+    // 全待機敵を破棄
+    void ClearAllWaitingEnemies();
 
     // Param Edit
     void RegisterParams();
@@ -61,81 +72,68 @@ public:
     // エディター用にアニメーションリストを更新
     void UpdateAvailableAnimationsForEditor(BaseEnemy* enemy);
 
-private: 
 private:
-    // json
+    void LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion = nullptr, const std::string& parentBossName = "");
+    void UpdateTauntState();
+    void OnBossKilled(BaseEnemy* dyingBoss);
+
+private:
     using json = nlohmann::json;
 
 private:
-    // globalParameter
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Enemies";
 
-    // パラメータ
     std::array<BaseEnemy::Parameter, 2> parameters_;
+    NormalEnemy::NormalParameter normalEnemyParam_;
+    StrongEnemy::StrongParameter strongEnemyParam_; 
 
-    // ohter class
     Player* pPlayer_;
     GameCamera* pGameCamera_;
-    Combo* pCombo_;
+    Combo* pCombo_             = nullptr;
     KillCounter* pKillCounter_ = nullptr;
     EnemySpawner* pEnemySpawner_;
-    DeathTimer* pDeathTimer_ = nullptr;
-    KillBonusFlyController* pKillBonusFly_        = nullptr;
-    KillBonusController*    pKillBonusController_  = nullptr;
+    DeathTimer* pDeathTimer_                           = nullptr;
     const KetaEngine::ViewProjection* pViewProjection_ = nullptr;
-  
-    // damageReaction
+
     std::unique_ptr<EnemyDamageReactionController> damageReactionController_;
 
 private:
-    ///========================================================
-    /// Private variants
-    ///========================================================
-
-    // 敵リスト
     std::vector<std::unique_ptr<BaseEnemy>> enemies_;
     std::vector<std::string> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
 
-    // 一時的な敵生成用データ
+    std::unordered_map<int32_t, std::vector<std::unique_ptr<BaseEnemy>>> waitingEnemies_;
+    std::unordered_map<BaseEnemy*, std::vector<NormalEnemy*>> minionsByBoss_;
+    std::unordered_map<std::string, BaseEnemy*> bossByName_;
+    std::unordered_map<BaseEnemy*, int32_t> bossGroupIndex_;
+    int32_t nextBossGroupIndex_ = 0;
+
     std::string selectedEnemyType_;
     Vector3 spawnPosition_;
 
-    // 敵がすべていなくなったことを示すフラグ
     bool areAllEnemiesCleared_;
 
-    // HPバー色設定
     EnemyHPBarColorConfig hpBarColorConfig_;
 
-    // HPバー表示距離（プレイヤーからこの距離以内の敵にのみ表示）
-    float hpBarDisplayDistance_ = 20.0f;
+    float hpBarDisplayDistance_;
+    float uiOcclusionRadius_ = 80.0f;
 
-    // debugSpawn用
     int32_t selectedEnemyTypeIndex_;
 
 public:
-    ///========================================================
-    /// getter method
-    ///========================================================
     const bool& GetIsAllCleared() const { return areAllEnemiesCleared_; }
     const std::vector<std::unique_ptr<BaseEnemy>>& GetEnemies() const { return enemies_; }
     EnemyDamageReactionController* GetDamageReactionController() const { return damageReactionController_.get(); }
+    float GetHpBarDisplayDistance() const { return hpBarDisplayDistance_; }
+    float GetUIocclusionRadius() const { return uiOcclusionRadius_; }
 
-    /// <summary>
-    /// いずれかの敵が前隙中かどうかを確認
-    /// </summary>
     bool IsAnyEnemyInAnticipation() const;
-    ///========================================================
-    /// setter method
-    ///========================================================
-    void SetPlayer(Player* plyaer);
-    void SetLockOn(LockOn* lockOn);
+
+    void SetPlayer(Player* player);
     void SetGameCamera(GameCamera* gameCamera);
     void SetCombo(Combo* combo);
     void SetKillCounter(KillCounter* killCounter);
     void SetEnemySpawner(EnemySpawner* enemySpawner);
     void SetDeathTimer(DeathTimer* deathTimer);
-    void SetKillBonusFly(KillBonusFlyController* fly) { pKillBonusFly_ = fly; }
-    void SetKillBonusController(KillBonusController* ctrl) { pKillBonusController_ = ctrl; }
     void SetViewProjection(const KetaEngine::ViewProjection* vp) { pViewProjection_ = vp; }
 };

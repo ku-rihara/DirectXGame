@@ -11,18 +11,20 @@
 void PlayerComboAttackTimelineTrackBuilder::Init(
     PlayerComboAttackData* attackData,
     KetaEngine::TimelineDrawer* timeline,
-    PlayerComboAttackTimelineData* data) {
+    PlayerComboAttackTimelineData* data,
+    AttackTimelinePhase phase) {
 
     attackData_     = attackData;
     timelineDrawer_ = timeline;
     data_           = data;
+    phase_          = phase;
 }
 
 void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
     if (!attackData_ || !timelineDrawer_ || !data_)
         return;
 
-    auto& attackParam = attackData_->GetAttackParam();
+    auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
 
     // 総フレーム数を計算して設定
     int32_t totalFrames = CalculateTotalFrames();
@@ -85,7 +87,11 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
         totalFrames = 1;
     }
 
-    // コンボ分岐ごとのトラックを作成
+    // コンボ分岐トラックはMAINフェーズのみ
+    if (phase_ != AttackTimelinePhase::MAIN) {
+        return;
+    }
+
     const auto& branches = attackData_->GetComboBranches();
     for (size_t i = 0; i < branches.size(); ++i) {
         const auto& branch = branches[i];
@@ -132,7 +138,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
         return;
     }
 
-    auto& renditionData = attackData_->GetRenditionData();
+    auto& renditionData = attackData_->GetRenditionDataForPhase(phase_);
 
     using RendType  = PlayerAttackRenditionData::Type;
     using TrackType = PlayerComboAttackTimelineData::TrackType;
@@ -284,7 +290,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
     if (!attackData_ || !timelineDrawer_ || !data_)
         return;
 
-    auto& renditionData = attackData_->GetRenditionData();
+    auto& renditionData = attackData_->GetRenditionDataForPhase(phase_);
 
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::Count); ++i) {
         const auto& param = renditionData.GetObjAnimationParamFromIndex(i);
@@ -345,7 +351,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupVibrationTrack() {
     if (!attackData_ || !timelineDrawer_ || !data_)
         return;
 
-    const auto& vibParam = attackData_->GetRenditionData().GetVibrationParam();
+    const auto& vibParam = attackData_->GetRenditionDataForPhase(phase_).GetVibrationParam();
 
     if (vibParam.intensity <= 0.0f)
         return;
@@ -370,6 +376,10 @@ void PlayerComboAttackTimelineTrackBuilder::SetupVibrationTrack() {
 
 void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
     if (!attackData_ || !timelineDrawer_ || !data_) {
+        return;
+    }
+
+    if (phase_ != AttackTimelinePhase::MAIN) {
         return;
     }
 
@@ -525,7 +535,7 @@ int32_t PlayerComboAttackTimelineTrackBuilder::CalculateTotalFrames() const {
         return 0;
     }
 
-    auto& attackParam = attackData_->GetAttackParam();
+    auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
 
     float totalTime = attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset + attackParam.timingParam.finishWaitTime;
 

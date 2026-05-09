@@ -85,6 +85,7 @@ private:
 public:
     // getter
     const KetaEngine::ViewProjection& GetViewProjection() { return viewProjection_; }
+    LockOn* GetLockOn() const { return lockOn_; }
     KetaEngine::ViewProjection& GetViewProjectionRef() { return viewProjection_; }
     const Parameter& GetParameter() const { return parameter_; }
     Vector3 GetWorldPos() const;
@@ -103,4 +104,5 @@ public:
 
     void SetInputEnabled(bool enabled) { isInputEnabled_ = enabled; }
     bool GetIsInputEnabled() const { return isInputEnabled_; }
+    bool IsRenditionFinished() const { return rendition_ && rendition_->IsAnimationFinished(); }
 };

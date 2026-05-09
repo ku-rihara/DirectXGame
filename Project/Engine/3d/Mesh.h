@@ -1,4 +1,5 @@
 #pragma once
+#include "Base/Material/BaseMaterial.h"
 #include "Base/Material/MeshMaterial.h"
 #include "Base/Material/ParticleMaterial.h"
 #include "struct/VertexData.h"
@@ -49,7 +50,8 @@ public:
     /// <param name="wvpResource">WVPリソース</param>
     /// <param name="material">マテリアル</param>
     /// <param name="textureHandle">テクスチャハンドル(オプション)</param>
-    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, const std::optional<uint32_t>& textureHandle = std::nullopt);
+    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, BaseMaterial& material, const std::optional<uint32_t>& textureHandle = std::nullopt);
+    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, BaseMaterial& material, D3D12_GPU_DESCRIPTOR_HANDLE texGpuHandle);
 
     /// <summary>
     /// テクスチャを設定
@@ -60,17 +62,17 @@ public:
 private:
     DirectXCommon* directXCommon_ = nullptr;
 
-    D3D12_VERTEX_BUFFER_VIEW vertexBufferView_; //< 頂点バッファビュー
+    D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{}; //< 頂点バッファビュー
     D3D12_INDEX_BUFFER_VIEW indexBufferView_{}; //< インデックスバッファビュー
-    uint32_t indexNum_; //< インデックス数
+    uint32_t indexNum_ = 0; //< インデックス数
 
     Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_; //< 頂点リソース
     Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_; //< インデックスリソース
 
     VertexData* vertexDate_ = nullptr; //< 頂点データ
 
-    uint32_t vertexNum_;     //< 頂点数
-    uint32_t textureHandle_; //< テクスチャハンドル
+    uint32_t vertexNum_     = 0; //< 頂点数
+    uint32_t textureHandle_ = 0; //< テクスチャハンドル
 
 public:
     void SetVertexPositionData(uint32_t index, const Vector4& pos) { vertexDate_[index].position = pos; }

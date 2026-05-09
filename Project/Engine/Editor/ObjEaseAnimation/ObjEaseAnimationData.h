@@ -82,6 +82,7 @@ private:
     bool isLoop_ = false; //< ループ再生フラグ
     bool isSyncSectionMode_ = false; //< SRT同期セクション遷移モード（全SRT完了待ち）
     std::function<void()> onLoopEndCallback_; //< ループ1周完了コールバック
+    std::function<void()> onEndCallback_;     //< 非ループ完了コールバック
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
@@ -115,6 +116,7 @@ public:
     void SetSyncSectionMode(bool isSync) { isSyncSectionMode_ = isSync; }
     bool GetIsSyncSectionMode() const { return isSyncSectionMode_; }
     void SetLoopEndCallback(const std::function<void()>& callback) { onLoopEndCallback_ = callback; }
+    void SetEndCallback(const std::function<void()>& callback) { onEndCallback_ = callback; }
 };
 
 }; // KetaEngine

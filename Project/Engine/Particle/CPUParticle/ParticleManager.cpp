@@ -85,6 +85,50 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
     registry_->CreatePrimitiveParticle(name, type, maxnum, particleGroups_, pSrvManager_);
 }
 
+void ParticleManager::ReplacePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum) {
+    std::unique_ptr<DissolvePlayer> savedPlayer;
+    DissolveGroupParams savedParams;
+    auto it = particleGroups_.find(name);
+    if (it != particleGroups_.end()) {
+        savedPlayer = std::move(it->second.dissolvePlayer);
+        savedParams = it->second.dissolveParams;
+        particleGroups_.erase(it);
+    }
+
+    registry_->CreatePrimitiveParticle(name, type, maxnum, particleGroups_, pSrvManager_);
+
+    if (savedPlayer) {
+        auto& group          = particleGroups_[name];
+        group.dissolvePlayer = std::move(savedPlayer);
+        group.dissolveParams = savedParams;
+        if (savedParams.isActive) {
+            group.material.GetMaterialData()->enableDissolve = 1;
+        }
+    }
+}
+
+void ParticleManager::ReplaceModelParticle(const std::string& name, const std::string& modelFilePath, uint32_t maxnum) {
+    std::unique_ptr<DissolvePlayer> savedPlayer;
+    DissolveGroupParams savedParams;
+    auto it = particleGroups_.find(name);
+    if (it != particleGroups_.end()) {
+        savedPlayer = std::move(it->second.dissolvePlayer);
+        savedParams = it->second.dissolveParams;
+        particleGroups_.erase(it);
+    }
+
+    registry_->CreateParticleGroup(name, modelFilePath, maxnum, particleGroups_, pSrvManager_);
+
+    if (savedPlayer) {
+        auto& group          = particleGroups_[name];
+        group.dissolvePlayer = std::move(savedPlayer);
+        group.dissolveParams = savedParams;
+        if (savedParams.isActive) {
+            group.material.GetMaterialData()->enableDissolve = 1;
+        }
+    }
+}
+
 ///============================================================
 /// テクスチャセット
 ///============================================================
@@ -127,6 +171,8 @@ void ParticleManager::StopDissolve(const std::string& name) {
     group.lastDissolveTexturePath.clear();
     group.dissolveParams                             = DissolveGroupParams{};
 }
+
+
 
 ///============================================================
 /// モデルセット

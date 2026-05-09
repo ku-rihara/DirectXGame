@@ -1,0 +1,27 @@
+{
+    "DeathGaugeIcon_Normal.dds": {
+        "layerNum": 17,
+        "startAnchorPoint": [
+            0.5,
+            0.5
+        ],
+        "startColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "startPosition": [
+            50.5,
+            120.0
+        ],
+        "startScale": [
+            0.05000000074505806,
+            0.05000000074505806
+        ],
+        "startUVScale": [
+            1.0,
+            1.0
+        ]
+    }
+}

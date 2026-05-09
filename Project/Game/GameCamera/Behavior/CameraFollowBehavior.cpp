@@ -1,6 +1,8 @@
 #include "CameraFollowBehavior.h"
 #include "GameCamera/GameCamera.h"
+#include "LockOn/LockOn.h"
 #include "input/Input.h"
+#include <cmath>
 
 CameraFollowBehavior::CameraFollowBehavior(GameCamera* owner)
     : BaseCameraBehavior("CameraFollow", owner) {
@@ -40,9 +42,8 @@ Vector2 CameraFollowBehavior::InputUpdate() {
         inputVector = KetaEngine::Input::GetPadStick(0, 1);
     }
 
-    // リセット
-    if (input->PushKey(KeyboardKey::R) || KetaEngine::Input::IsPressPad(0, GamepadButton::RS)) {
-
+    // RSボタンでカメラリセット（Rキーはロックオントグルに変更）
+    if (KetaEngine::Input::IsPressPad(0, GamepadButton::RS)) {
         isReset_ = true;
     }
 
@@ -53,10 +54,26 @@ void CameraFollowBehavior::MoveUpdate() {
     // 入力更新
     Vector2 inputVector = InputUpdate();
 
-    //---------------------------入力による回転処理 ---------------------------//
-    if (inputVector.Length() > 0.1f) {
-        inputVector = inputVector.Normalize();
-        pOwner_->AddDestinationAngleY(inputVector.x * pOwner_->GetParameter().rotateYSpeed);
+    LockOn* lockOn = pOwner_->GetLockOn();
+    if (lockOn && lockOn->GetIsActive() && lockOn->ExistTarget()) {
+        // ロックオン中はターゲット方向にカメラを向ける
+        const KetaEngine::WorldTransform* camTarget = pOwner_->GetTarget();
+        if (camTarget) {
+            Vector3 playerPos  = camTarget->GetWorldPos();
+            Vector3 targetPos  = lockOn->GetCurrentTargetPosition();
+            Vector3 toTarget   = targetPos - playerPos;
+            toTarget.y         = 0.0f;
+            if (toTarget.Length() > 0.001f) {
+                float angle = std::atan2(toTarget.x, toTarget.z);
+                pOwner_->SetDestinationAngleY(angle);
+            }
+        }
+    } else {
+        //---------------------------入力による回転処理 ---------------------------//
+        if (inputVector.Length() > 0.1f) {
+            inputVector = inputVector.Normalize();
+            pOwner_->AddDestinationAngleY(inputVector.x * pOwner_->GetParameter().rotateYSpeed);
+        }
     }
 
     //--------------------------- 回転、変位の適応 ---------------------------//

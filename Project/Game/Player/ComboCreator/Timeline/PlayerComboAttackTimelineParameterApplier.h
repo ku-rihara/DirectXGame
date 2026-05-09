@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PlayerComboAttackTimelineData.h"
+#include "PlayerComboAttackTimelinePhase.h"
 #include "utility/TimeLine/TimelineDrawer.h"
 #include <cstdint>
 #include <optional>
@@ -30,7 +31,8 @@ public:
     /// <param name="data">タイムラインデータへのポインタ</param>
     void Init(PlayerComboAttackData* attackData,
         KetaEngine::TimelineDrawer* timeline,
-        PlayerComboAttackTimelineData* data);
+        PlayerComboAttackTimelineData* data,
+        AttackTimelinePhase phase = AttackTimelinePhase::MAIN);
 
     /// <summary>
     /// タイムラインの情報を攻撃パラメータに適用
@@ -93,4 +95,5 @@ private:
     PlayerComboAttackData* attackData_           = nullptr; // 攻撃データ
     KetaEngine::TimelineDrawer* timelineDrawer_  = nullptr; // タイムラインDrawer
     PlayerComboAttackTimelineData* timeLineData_ = nullptr; // タイムラインデータ管理
+    AttackTimelinePhase phase_                   = AttackTimelinePhase::MAIN;
 };

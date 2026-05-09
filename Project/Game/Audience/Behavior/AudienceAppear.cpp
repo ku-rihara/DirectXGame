@@ -31,7 +31,7 @@ void AudienceAppear::Update([[maybe_unused]] float timeSpeed) {
 void AudienceAppear::Init() {
 
     // 出現状態に設定
-    pOwner_->GetObjAnimation()->SetIsDraw(true);
+    pOwner_->GetObjAnimation()->SetIsActive(true);
     pOwner_->GetObjAnimation()->ChangeAnimation("AudienceJump");
     pOwner_->GetObjAnimation()->SetLoop(true);
 

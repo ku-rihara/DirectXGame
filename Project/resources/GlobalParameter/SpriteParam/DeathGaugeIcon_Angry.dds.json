@@ -1,0 +1,27 @@
+{
+    "DeathGaugeIcon_Angry.dds": {
+        "layerNum": 17,
+        "startAnchorPoint": [
+            0.5,
+            0.5
+        ],
+        "startColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "startPosition": [
+            52.0,
+            121.0
+        ],
+        "startScale": [
+            0.15000000596046448,
+            0.15000000596046448
+        ],
+        "startUVScale": [
+            1.0,
+            1.0
+        ]
+    }
+}

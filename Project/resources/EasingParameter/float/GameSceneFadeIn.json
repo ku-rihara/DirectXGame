@@ -1,0 +1,17 @@
+{
+    "GameSceneFadeIn": {
+        "StartTimeOffset": 0.0,
+        "adaptFloatAxisType": 0,
+        "amplitude": 0.0,
+        "endValue": 1.0,
+        "finishOffsetTime": 0.0,
+        "finishType": 1,
+        "maxTime": 1.0,
+        "period": 0.0,
+        "returnMaxTime": 0.0,
+        "returnType": 0,
+        "startValue": 0.69999999,
+        "type": 13,
+        "waitTime": 0.0
+    }
+}

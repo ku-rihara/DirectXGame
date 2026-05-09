@@ -24,4 +24,5 @@ private:
 
     PauseController pauseController_;
     float elapsedTimeSec_ = 0.f; ///< プレイ経過時間（秒）
+    bool gameOverHandled_ = false; ///< ゲームオーバー時の後処理（一度だけ実行）
 };

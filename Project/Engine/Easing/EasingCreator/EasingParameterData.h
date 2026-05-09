@@ -103,8 +103,8 @@ struct EasingParameter {
     AdaptFloatAxisType adaptFloatAxisType  = AdaptFloatAxisType::X;
     AdaptVector2AxisType adaptVec2AxisType = AdaptVector2AxisType::XY;
 
-    T startValue;
-    T endValue;
+    T startValue = {};
+    T endValue   = {};
 
     float maxTime        = 0.0f;
     float returnMaxTime  = 0.0f;                // 戻りフェーズの時間（0=戻りなし）

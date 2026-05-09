@@ -7,6 +7,7 @@
 class EnemyWait : public BaseEnemyBehavior {
 public:
     EnemyWait(BaseEnemy* boss);
+    EnemyWait(BaseEnemy* boss, float waitTime);
     ~EnemyWait();
 
     void Update() override;
@@ -37,5 +38,6 @@ private:
 private:
     std::function<void()> currentPhase_;
     float distance_;
+    float cooldownTimer_;
 
 };

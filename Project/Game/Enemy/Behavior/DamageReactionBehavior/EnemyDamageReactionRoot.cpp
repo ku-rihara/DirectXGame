@@ -31,8 +31,13 @@ EnemyDamageReactionRoot::~EnemyDamageReactionRoot() {
 }
 
 void EnemyDamageReactionRoot::Update(float deltaTime) {
-    // 待機
     deltaTime;
+
+    // 死亡予約済みのままRootに戻った場合のフォールバック（HP > 0 の健全な敵には適用しない）
+    if (pBaseEnemy_->GetIsDeathPending() && !pBaseEnemy_->GetIsDeath() && pBaseEnemy_->GetHP() <= 0.0f) {
+        pBaseEnemy_->SetIsAdaptCollision(false);
+        pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
+    }
 }
 
 void EnemyDamageReactionRoot::Debug() {
@@ -97,7 +102,7 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
         ChangeDeathReaction(reactionData);
     } else {
         // blowYPowerでリアクション種別を自動判定
-        // blowYPower > 0 → TakeUpper、blowYPower < 0 → Slammed、0 → Normal
+    
         float blowYPower = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
 
         if (blowYPower > 0.0f) {

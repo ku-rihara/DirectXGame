@@ -64,6 +64,7 @@ void EnemyDeath::Update([[maybe_unused]] float deltaTime) {
     /// 爆散
     ///---------------------------------------------------------
     case Step::BURST:
+        pBaseEnemy_->SetScale(Vector3::ZeroVector());
         pBaseEnemy_->DeathRenditionInit();
         step_ = Step::DEATH;
         break;

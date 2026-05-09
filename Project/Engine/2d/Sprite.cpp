@@ -1,9 +1,9 @@
 #include "Sprite.h"
 
 using namespace KetaEngine;
+#include "Base/Dx/DirectXCommon.h"
 #include "Base/TextureManager.h"
 #include "Base/WinApp.h"
-#include "Base/Dx/DirectXCommon.h"
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 #include "SpriteRegistry.h"
 #include <algorithm>
@@ -12,9 +12,7 @@ using namespace KetaEngine;
 Sprite::~Sprite() {
     if (SpriteRegistry::GetInstance()) {
         SpriteRegistry::GetInstance()->UnregisterObject(this);
-       
     }
-   
 }
 
 Sprite* Sprite::Create(const std::string& textureName, bool isAbleEdit, const std::string& name) {
@@ -130,17 +128,8 @@ void Sprite::CreateSprite(const std::string& textureName) {
     // 単位行列を書き込んでおく
     wvpData_->WVP = MakeIdentity4x4();
 
-    ///==========================================================================================
     //  変数初期化
-    ///==========================================================================================
-    const Parameter& p                 = GetValue();
-    transform_.pos                     = p.position_;
-    transform_.scale                   = Vector2::OneVector();
-    uvTransform_.scale                 = p.uvScale_;
-    material_.GetMaterialData()->color = p.color_;
-
-    anchorPoint_ = p.startAnchorPoint_;
-    layerNum_    = p.startLayerNum_;
+    ApplyParameterToTransform();
 
     // テクスチャ座標取得
     const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureIndex_);
@@ -209,13 +198,13 @@ void Sprite::Draw() {
     //  Transform
     ///==========================================================================================
 
-    Vector2 animPos   = GetAnimationPosition();
-    Vector3 animRot   = GetAnimationRotation();
+    Vector2 animPos = GetAnimationPosition();
+    Vector3 animRot = GetAnimationRotation();
 
     const Parameter& sharedP = GetValue();
-    Vector3 size      = Vector3(textureSize_.x, textureSize_.y, 0.0f) * Vector3(transform_.scale.x * sharedP.scale_.x, transform_.scale.y * sharedP.scale_.y, 0.0f);
-    Vector3 translate = Vector3(transform_.pos.x + animPos.x, transform_.pos.y + animPos.y, 0.0f);
-    Vector3 rotate    = Vector3(transform_.rotate.x + animRot.x, transform_.rotate.y + animRot.y, transform_.rotate.z + animRot.z);
+    Vector3 size             = Vector3(textureSize_.x, textureSize_.y, 0.0f) * Vector3(transform_.scale.x * sharedP.scale_.x, transform_.scale.y * sharedP.scale_.y, 0.0f);
+    Vector3 translate        = Vector3(transform_.pos.x + animPos.x, transform_.pos.y + animPos.y, 0.0f);
+    Vector3 rotate           = Vector3(transform_.rotate.x + animRot.x, transform_.rotate.y + animRot.y, transform_.rotate.z + animRot.z);
 
     // 行列変換
     Matrix4x4 worldMatrixSprite               = MakeAffineMatrix(size, rotate, translate);
@@ -272,6 +261,16 @@ void Sprite::GetParams() {
     parameter_.startAnchorPoint_ = globalParameter_->GetValue<Vector2>(groupName_, "startAnchorPoint");
 }
 
+void Sprite::ApplyParameterToTransform() {
+    const Parameter& p                 = GetValue();
+    transform_.pos                     = p.position_;
+    transform_.scale                   = p.scale_;
+    uvTransform_.scale                 = p.uvScale_;
+    material_.GetMaterialData()->color = p.color_;
+    anchorPoint_                       = p.startAnchorPoint_;
+    layerNum_                          = p.startLayerNum_;
+}
+
 ///=========================================================
 /// パラメータ調整
 ///==========================================================
@@ -295,13 +294,10 @@ void Sprite::AdjustParam() {
         ImGui::DragFloat2("UVScale", &parameter_.uvScale_.x, 0.01f);
 
         ImGui::Checkbox("isAdaptStartParam", &isAdaptStartParam_);
+
+        // パラメータをTransformに適用
         if (isAdaptStartParam_) {
-            // 適応
-            transform_.pos                     = parameter_.position_;
-            transform_.scale                   = parameter_.scale_;
-            uvTransform_.scale                 = parameter_.uvScale_;
-            material_.GetMaterialData()->color = parameter_.color_;
-            anchorPoint_                       = parameter_.startAnchorPoint_;
+            ApplyParameterToTransform();
         }
 
         // セーブ・ロード
@@ -364,7 +360,7 @@ void Sprite::ApplyAnimationToMaterial() {
 
     using PropType = SpriteEaseAnimationData::PropertyType;
 
-    // Scale (共有ベーススケールにアニメーション値を乗算)
+    // Scale 
     if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Scale)) {
         const Parameter& sp = GetValue();
         Vector2 scaleOffset = spriteEaseAnimationPlayer_->GetCurrentScale();
@@ -374,7 +370,7 @@ void Sprite::ApplyAnimationToMaterial() {
 
     // Color
     if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Color)) {
-        Vector3 color = spriteEaseAnimationPlayer_->GetCurrentColor();
+        Vector3 color                        = spriteEaseAnimationPlayer_->GetCurrentColor();
         material_.GetMaterialData()->color.x = color.x;
         material_.GetMaterialData()->color.y = color.y;
         material_.GetMaterialData()->color.z = color.z;

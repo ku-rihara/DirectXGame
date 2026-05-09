@@ -13,11 +13,12 @@
 #include "../CollisionBox/EnemyAttackCollisionBox.h"
 #include "Collider/SphereCollider.h"
 #include "Enemy/Effects/EnemyEffects.h"
-#include "Enemy/HPBar/EnemyHPBar.h"
+#include "Enemy/UIs/EnemyUIs.h"
 
 // std
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -28,6 +29,7 @@ class Combo;
 class KillCounter;
 class PlayerAttackCollider;
 class EnemyHPBarColorConfig;
+class BaseEnemyBehavior;
 
 /// <summary>
 /// 敵の基底クラス
@@ -45,11 +47,15 @@ public:
         float collisionRad;
         Vector3 collisionOffset;
         Vector2 hpBarPosOffset;
+        Vector2 hpGaugePosOffset;
+        float hpBarWorldOffsetY;
+        float groupIconWorldOffsetY; 
         float basePosY;
         float burstTime;
+        // HPパラメータ
+        float hpMax = 115.0f;
         // 追跡パラメータ
         float chaseDistance;
-        float chaseDistanceMin;
         float chaseSpeed;
         // 死亡パラメータ
         float deathBlowValue;
@@ -59,9 +65,11 @@ public:
         float deathBurstTime;
         // ゲージ増加値
         float gaugeIncreaseValue;
+        // Wait遷移後に追跡を開始するまでの待機時間(秒)
+        float waitCooldownTime;
     };
 
-     struct DamageReactionAnimInfo {
+    struct DamageReactionAnimInfo {
         std::string name;
         bool isLoop = false;
     };
@@ -72,9 +80,9 @@ public:
         Spawn,
         Discovery,
         Dash,
-        Attack,
         DamageReaction,
         Death,
+        Taunt,
         Count
     };
 
@@ -100,6 +108,11 @@ public:
     // 振る舞い個別処理
     virtual void SpawnRenditionInit() = 0;
 
+    /// <summary>
+    /// スポーン後の行動を生成
+    /// </summary>
+    virtual std::unique_ptr<BaseEnemyBehavior> CreatePostSpawnBehavior();
+
     void ThrustRenditionInit(); //< 突き飛ばし演出初期化
     void DeathRenditionInit(); //< 死亡演出初期化
     void ScaleReset(); //< スケールリセット
@@ -109,12 +122,7 @@ public:
     /// スプライトUIの表示
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    virtual void DisplaySprite(const KetaEngine::ViewProjection& viewProjection);
-
-    /// <summary>
-    /// HPバーを非表示にする
-    /// </summary>
-    void HideHpBar();
+    void DisplaySprite(const KetaEngine::ViewProjection& viewProjection, float distanceToPlayer, bool isOccluded = false);
 
     /// <summary>
     /// ダメージリアクション用アニメーションを追加
@@ -181,10 +189,13 @@ public:
     // ヒットクールタイム開始
     void StartDamageColling(float collingTime, const std::string& reactiveAttackName);
 
+    // ダメージを受けたときのコールバックを設定
+    void SetOnDamageTakenCallback(std::function<void()> cb) { onDamageTaken_ = std::move(cb); }
+
     // behavior変更
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
-    void BackToDamageRoot();
+    virtual void BackToDamageRoot();
 
     /// <summary>
     /// プレイヤーの方向を向く
@@ -204,6 +215,10 @@ public:
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
     Vector3 GetCollisionPos() const override;
+
+protected:
+    // タイプに応じたモデルフォルダ名を返す
+    std::string GetModelFolder() const;
 
 private:
     /// <summary>
@@ -235,28 +250,31 @@ private:
     GameCamera* pGameCamera_;
     EnemyManager* pEnemyManager_;
 
+    // ダメージコールバック
+    std::function<void()> onDamageTaken_;
+
     // flags
-    bool isDeathPending_ = false;
-    bool isDamageColling_;
-    bool isDeath_;
-    bool isCollisionRope_;
-    bool isInAnticipation_ = false; // 現在前隙中かどうか
-    bool isAttacking_      = false; // 攻撃中かどうか
+    bool isDeathPending_   = false;
+    bool isDamageColling_  = false;
+    bool isDeath_          = false;
+    bool isCollisionRope_  = false;
+    bool isInAnticipation_ = false;
+    bool isAttacking_      = false;
 
     // damageInfo
-    float damageCollTime_;
+    float damageCollTime_ = 0.0f;
     std::string lastReceivedAttackName_;
 
 protected:
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
 
     std::unique_ptr<EnemyAttackCollisionBox> attackCollisionBox_;
-    std::unique_ptr<EnemyHPBar> hpBar_;
+    std::unique_ptr<EnemyUIs> enemyUIs_;
     std::unique_ptr<EnemyEffects> enemyEffects_;
 
     // アニメーション関連
     std::array<std::string, static_cast<size_t>(AnimationType::Count)> animationNames_;
-   
+
     std::vector<DamageReactionAnimInfo> damageReactionAnimations_;
     ChaseAnimationState chaseAnimeState_ = ChaseAnimationState::NONE;
     bool isPreDashFinished_              = false;
@@ -271,7 +289,7 @@ protected:
     // Type
     Type type_;
 
-    // HP
+    // ボディカラー更新用
     EnemyHPBarColorConfig* colorConfig_ = nullptr;
 
     float hp_;
@@ -325,11 +343,20 @@ public:
     void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
     void SetHPBarColorConfig(EnemyHPBarColorConfig* config) {
-        hpBar_->SetColorConfig(config);
         colorConfig_ = config;
+        if (enemyUIs_) { enemyUIs_->SetColorConfig(config); }
     }
+    void SetGroupIconIndex(int32_t index) {
+        if (enemyUIs_) { enemyUIs_->SetGroupIndex(index); }
+    }
+    void OnSpawnCompleted() { if (enemyUIs_) { enemyUIs_->OnSpawned(); } }
     void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }
     void SetIsAttacking(bool value) { isAttacking_ = value; }
 
     void SetAnimationName(AnimationType type, const std::string& name);
+    void SetAnimationActive(bool active) {
+        if (objAnimation_) {
+            objAnimation_->SetIsActive(active);
+        }
+    }
 };

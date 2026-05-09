@@ -207,6 +207,7 @@ private:
     //
     const bool* isDeath_;
     bool isDeathRenditionFinish_ = false;
+    bool isDeathHidePlayer_      = false;
 
     // ダメージクールダウン
     bool isDamageColling_     = false;
@@ -237,7 +238,7 @@ public:
     PlayerAnimator& GetPlayerAnimator() { return animator_; }
     KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
-    bool GetIsDeathRenditionFinish() const { return *isDeath_; }
+    bool GetIsDeathRenditionFinish() const { return isDeathRenditionFinish_; }
 
     //*-- setter --*//
     // class Set
@@ -247,9 +248,10 @@ public:
     void SetCombo(Combo* combo);
     void SetHitStop(AttackEffect* hitStop);
     void SetComboAttackController(PlayerComboAttackController* playerComboAttackController);
-    void SetDeathTimer(DeathTimer* deathTimer) { pDeathTimer_ = deathTimer; }
+    void SetDeathTimer(DeathTimer* deathTimer);
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
+    void SetDeathHidePlayer(bool hide) { isDeathHidePlayer_ = hide; }
     void SetIsIgnoreUnlockState(bool isIgnore) { isIgnoreUnlockState_ = isIgnore; }
     void SetObjectiveAngle(float angle) { objectiveAngle_ = angle; }
 

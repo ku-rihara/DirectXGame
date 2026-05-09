@@ -9,7 +9,7 @@ GameScenePose::GameScenePose(GameScene* gameScene)
 
 void GameScenePose::Init() {
     // TODO: 後程ポーズ用スプライト画像に差し替え
-    poseSprite_.reset(KetaEngine::Sprite::Create("white1x1.dds"));
+    poseSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 }
 
 void GameScenePose::Update([[maybe_unused]] float timeSpeed) {

@@ -1,10 +1,16 @@
 #include "GameScenePlaying.h"
+#include "DeathTimer/DeathTimerGauge.h"
 #include "Frame/Frame.h"
 #include "GameSceneFinish.h"
+#include "GameSceneGameOver.h"
 #include "GameScenePose.h"
+#include "PostEffect/PostEffectRenderer.h"
 #include "ResultObj/GameResultInfo.h"
 #include "Scene/GameScene.h"
+#include "Scene/Manager/SceneManager.h"
+#include "input/Input.h"
 #include "utility/DitherOcclusion/DitherOcclusion.h"
+#include <cmath>
 
 GameScenePlaying::GameScenePlaying(GameScene* gameScene)
     : BaseGameSceneState("GameScenePlaying", gameScene) {
@@ -30,7 +36,6 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     // Editor
     obj.attackEffect_->Update();
     obj.field_->Update();
-   /* obj.sideRopeController_->Update();*/
     obj.audienceController_->Update();
 
     // 各クラス更新
@@ -49,16 +54,23 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     elapsedTimeSec_ += KetaEngine::Frame::DeltaTime();
     GameResultInfo::GetInstance()->RecordCombo(obj.combo_->GetComboCount());
     GameResultInfo::GetInstance()->RecordKillCount(obj.killCounter_->GetKillCount());
-    GameResultInfo::GetInstance()->RecordLevel(obj.deathTimer_->GetCurrentLevel());
     GameResultInfo::GetInstance()->RecordSurvivalTime(static_cast<int32_t>(elapsedTimeSec_));
     obj.fireInjectors_->Update();
     obj.gameCamera_->Update();
     obj.backGroundObjectManager_->Update(timeSpeed);
     obj.deathTimer_->Update(timeSpeed);
-    obj.killBonusController_->Update(KetaEngine::Frame::DeltaTime());
-    obj.killBonusFlyController_->Update(KetaEngine::Frame::DeltaTime());
 
-    obj.enemyManager_->HpBarUpdate(pOwner_->GetViewProjection());
+    // ゲームオーバー時にコントローラ振動を一度だけ停止
+    if (obj.deathTimer_->GetIsDeath() && !gameOverHandled_) {
+        gameOverHandled_ = true;
+
+        size_t numPads = KetaEngine::Input::GetNumberOfJoysticks();
+        for (size_t i = 0; i < numPads; ++i) {
+            KetaEngine::Input::SetVibration(static_cast<int32_t>(i), 0.0f, 0.0f);
+        }
+    }
+
+    obj.enemyManager_->UIUpdate(pOwner_->GetViewProjection());
     obj.enemyManager_->SetViewProjection(&pOwner_->GetViewProjection());
     obj.lockOnController_->Update(obj.player_.get(), pOwner_->GetViewProjection());
 
@@ -69,18 +81,23 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.comboSupportSpriteUi_->Update();
     obj.nextAttackHintUI_->Update();
 
-    // ゲーム終了判定（デスタイマーが0になったら即終了）
-    if (obj.deathTimer_->GetIsDeath()) {
-        pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
+    // 危険状態の赤ビネット：エラーのため無効化中
+    // if (!obj.deathTimer_->GetIsDeath()) { ... }
+
+    // ゲーム終了判定（死亡演出が完了してからゲームオーバー演出へ遷移）
+    if (obj.deathTimer_->GetIsDeath() && obj.player_->GetIsDeathRenditionFinish()) {
+        pOwner_->ChangeState(std::make_unique<GameSceneGameOver>(pOwner_));
         return;
     }
 
-    // 全敵撃破チェック（スポーン完了済み＆生存敵ゼロ）
+    // 全敵撃破チェック
     bool allSpawned = obj.enemySpawner_->GetAllGroupsCompleted() &&
                       !obj.continuousEnemySpawner_->IsActive();
 
     if (allSpawned && obj.enemyManager_->GetIsAllCleared()) {
-        pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_));
+        pOwner_->ChangeState(std::make_unique<GameSceneFinish>(pOwner_, []() {
+            KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
+        }));
         return;
     }
 

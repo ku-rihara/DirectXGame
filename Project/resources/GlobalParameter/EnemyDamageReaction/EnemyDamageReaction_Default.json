@@ -12,14 +12,14 @@
         "Normal_Normal_DefaultDamageAnimationName": "EnemyNormalDamage",
         "Normal_Slammed_DefaultDamageAnimationName": "TakeUpMotion",
         "Normal_TakeUpper_DefaultDamageAnimationName": "TakeUpMotion",
-        "Strong_Bound_DefaultDamageAnimationName": "NormalEnemyBoundDamage",
+        "Strong_Bound_DefaultDamageAnimationName": "StrongEnemyBoundDamage",
         "Strong_DefaultDamageCoolTime": 0.0,
-        "Strong_DefaultObjEaseAnimationName": "",
+        "Strong_DefaultObjEaseAnimationName": "None",
         "Strong_DefaultObjEaseAnimationStartTiming": 0.0,
         "Strong_DefaultParticleEffectName": "NormalDamageEffect",
-        "Strong_GetUp_DefaultDamageAnimationName": "NormalEnemyKipUp",
-        "Strong_Normal_DefaultDamageAnimationName": "EnemyNormalDamage",
-        "Strong_Slammed_DefaultDamageAnimationName": "TakeUpMotion",
-        "Strong_TakeUpper_DefaultDamageAnimationName": "TakeUpMotion"
+        "Strong_GetUp_DefaultDamageAnimationName": "StrongEnemyKipUp",
+        "Strong_Normal_DefaultDamageAnimationName": "StrongEnemyDefaultDamage",
+        "Strong_Slammed_DefaultDamageAnimationName": "StrongEnemyBoundDamage",
+        "Strong_TakeUpper_DefaultDamageAnimationName": "StrongEnemyBoundDamage"
     }
 }

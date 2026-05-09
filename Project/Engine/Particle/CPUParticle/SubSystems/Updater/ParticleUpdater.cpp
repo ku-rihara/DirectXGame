@@ -28,6 +28,7 @@ void ParticleUpdater::UpdateDissolvePlayer(ParticleManager::ParticleGroup& group
     }
 }
 
+
 void ParticleUpdater::UpdateGroup(
     ParticleManager::ParticleGroup& group,
     const ParticleManager::AccelerationField& field,
@@ -69,6 +70,13 @@ void ParticleUpdater::UpdateGroup(
         ///------------------------------------------------------------------------
         if (it->isAdaptColorEasing) {
             it->colorEasing->Update(Frame::DeltaTimeRate());
+        }
+
+        ///------------------------------------------------------------------------
+        /// カラー+アルファ(RGBA)イージング更新
+        ///------------------------------------------------------------------------
+        if (it->isAdaptColorAlphaEasing) {
+            it->colorAlphaEasing->Update(Frame::DeltaTimeRate());
         }
 
         ///------------------------------------------------------------------------

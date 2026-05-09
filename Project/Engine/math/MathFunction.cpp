@@ -24,6 +24,14 @@ Vector3 Lerp(const Vector3& start, const Vector3& end, float t) {
 	return result;
 }
 
+Vector4 Lerp(const Vector4& start, const Vector4& end, float t) {
+	return Vector4{
+	    (1.0f - t) * start.x + end.x * t,
+	    (1.0f - t) * start.y + end.y * t,
+	    (1.0f - t) * start.z + end.z * t,
+	    (1.0f - t) * start.w + end.w * t};
+}
+
 
 Vector3 SLerp(const Vector3& start, const Vector3& end, float t) {
     // ベクトルの正規化

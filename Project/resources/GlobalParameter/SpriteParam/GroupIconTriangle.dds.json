@@ -1,0 +1,27 @@
+{
+    "GroupIconTriangle.dds": {
+        "layerNum": 1,
+        "startAnchorPoint": [
+            0.5,
+            0.5
+        ],
+        "startColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "startPosition": [
+            0.0,
+            0.0
+        ],
+        "startScale": [
+            0.5,
+            0.5
+        ],
+        "startUVScale": [
+            1.0,
+            1.0
+        ]
+    }
+}

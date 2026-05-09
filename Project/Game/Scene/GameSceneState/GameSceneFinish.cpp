@@ -1,10 +1,10 @@
 #include "GameSceneFinish.h"
 #include "Scene/GameScene.h"
-#include "Scene/Manager/SceneManager.h"
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 
-GameSceneFinish::GameSceneFinish(GameScene* gameScene)
-    : BaseGameSceneState("GameSceneFinish", gameScene) {
+GameSceneFinish::GameSceneFinish(GameScene* gameScene, std::function<void()> onFinished)
+    : BaseGameSceneState("GameSceneFinish", gameScene)
+    , onFinished_(std::move(onFinished)) {
     Init();
 }
 
@@ -22,16 +22,15 @@ void GameSceneFinish::Init() {
     clearSprite_->PlaySpriteEaseAnimation("finishSpritePos", "GameSceneFinish");
 
     // フェードイン用イージング
-    KetaEngine::EasingParameter<float> fadeParam;
-    fadeParam.type       = EasingType::OutCubic;
-    fadeParam.startValue = 0.7f;
-    fadeParam.endValue   = 1.0f;
-    fadeParam.maxTime    = 1.0f;
-    fadeEasing_.SettingValue(fadeParam);
+    fadeEasing_.Init("GameSceneFadeIn.json");
     fadeEasing_.SetAdaptValue(&alpha_);
 }
 
 void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
+    // HitStopタイマーをここでも更新することで、GameScenePlaying終了時に
+    // HitStop中だった場合でも正しくタイムスケールが戻る
+    pOwner_->GetGameObj().attackEffect_->Update();
+
     auto* screen = pOwner_->GetGameObj().screenSprite_.get();
 
     switch (phase_) {
@@ -53,8 +52,9 @@ void GameSceneFinish::Update([[maybe_unused]] float timeSpeed) {
         screen->SetAlpha(alpha_);
 
         if (fadeEasing_.IsFinished()) {
-            KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
-         
+            if (onFinished_) {
+                onFinished_();
+            }
             return;
         }
         break;

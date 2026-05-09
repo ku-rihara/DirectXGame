@@ -77,6 +77,12 @@ struct AlphaEaseParam {
     FMinMax endValue = {}; // 終了アルファ範囲
 };
 
+// カラー+アルファ(RGBA)イージングパラメータ
+struct ColorAlphaEaseParam {
+    EaseParam baseParam;
+    V4MinMax endValue;
+};
+
 // エミット形状
 enum class EmitShape {
     None,   ///< 通常
@@ -110,6 +116,7 @@ struct Parameters {
     EasingParamV3 translateEaseParam;
     EasingParamV3 rotateEaseParam;
     ColorEaseParam colorEaseParam;
+    ColorAlphaEaseParam colorAlphaEaseParam;
     AlphaMode alphaMode = AlphaMode::LifeTime;
     AlphaEaseParam alphaEaseParam;
     UVParam uvParam;

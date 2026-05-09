@@ -1,5 +1,4 @@
 #include "BaseEnemy.h"
-#include "Enemy/HPBar/EnemyHPBarColorConfig.h"
 
 // std
 #include <algorithm>
@@ -11,14 +10,15 @@
 #include "Enemy/EnemyManager.h"
 // behavior
 #include "../Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
+#include "../Behavior/ActionBehavior/CommonBehavior/EnemyWait.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 // Player
-#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
+#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/Player.h"
 // DeathTimer
-#include"DeathTimer/DeathTimer.h"
+#include "DeathTimer/DeathTimer.h"
 // Combo
 #include "Combo/Combo.h"
 // Field
@@ -36,17 +36,17 @@
 ///========================================================
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
-    // HP
-    HPMax_ = 115.0f;
-    hp_    = HPMax_;
-    hpBar_ = std::make_unique<EnemyHPBar>();
-    hpBar_->Init(HPMax_);
+    // HP 
+    HPMax_    = parameter_.hpMax;
+    hp_       = HPMax_;
+    enemyUIs_ = std::make_unique<EnemyUIs>();
+    enemyUIs_->Init(HPMax_);
 
     /// transform
     baseTransform_.translation_   = spawnPos;
     baseTransform_.translation_.y = parameter_.basePosY;
     baseTransform_.SetAnchorRotation(Vector3(0.0f, 1.5f, 0.0f));
-    baseTransform_.scale_         = Vector3::ZeroVector();
+    baseTransform_.scale_ = Vector3::ZeroVector();
 
     /// attack collision
     attackCollisionBox_ = std::make_unique<EnemyAttackCollisionBox>();
@@ -67,6 +67,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
 ///========================================================
 void BaseEnemy::Update() {
 
+    // ダメージリアクション外で移動Behavior更新
     if (dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
         moveBehavior_->Update();
     }
@@ -88,7 +89,7 @@ void BaseEnemy::Update() {
         enemyEffects_->Update(GetWorldPosition());
     }
 
-
+    // 移動制限
     MoveToLimit();
 
     // HP割合に応じてボディカラーを更新
@@ -127,21 +128,37 @@ void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, const bo
 ///========================================================
 /// HpBar表示
 ///========================================================
-void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
-    // ワールド座標からスクリーン座標に変換
-    Vector2 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
-    // Hpバーの座標確定
-    Vector2 hpBarPosition = positionScreen - parameter_.hpBarPosOffset;
-    // isDraw を先にセット（Update内で参照するため）
-    hpBar_->SetIsDraw(IsInView(viewProjection));
-    // HPBarスプライト位置・スケール更新
-    hpBar_->SetPosition(hpBarPosition);
-    hpBar_->Update(hp_);
-}
+void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection, float distanceToPlayer, bool isOccluded) {
+ 
+    // オクルージョン時はUI非表示
+    if (isOccluded) {
+        enemyUIs_->Hide(hp_);
+        enemyUIs_->UpdateGroupIcon({}, false);
+        return;
+    }
 
-void BaseEnemy::HideHpBar() {
-    hpBar_->SetIsDraw(false);
-    hpBar_->Update(hp_);
+    Vector3 worldPos = GetWorldPosition();
+
+    // HPバーの位置計算
+    Vector3 hpBarWorldPos  = worldPos + Vector3{0.0f, parameter_.hpBarWorldOffsetY, 0.0f};
+    Vector2 hpBarScreenPos = ScreenTransform(hpBarWorldPos, viewProjection);
+
+    // グループアイコンの位置計算
+    Vector3 iconWorldPos  = worldPos + Vector3{0.0f, parameter_.groupIconWorldOffsetY, 0.0f};
+    Vector2 iconScreenPos = ScreenTransform(iconWorldPos, viewProjection);
+
+    // UI更新
+    enemyUIs_->Update(hp_, hpBarScreenPos, IsInView(viewProjection));
+
+    // 
+    if (distanceToPlayer <= pEnemyManager_->GetHpBarDisplayDistance()) {
+        enemyUIs_->SetHPBarOffset(parameter_.hpBarPosOffset);
+        enemyUIs_->SetHPGaugeOffset(parameter_.hpGaugePosOffset);
+    } else {
+        enemyUIs_->Hide(hp_);
+    }
+
+    enemyUIs_->UpdateGroupIcon(iconScreenPos, IsInView(viewProjection));
 }
 
 Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
@@ -161,63 +178,32 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
     if (PlayerAttackCollider* attackController = dynamic_cast<PlayerAttackCollider*>(other)) {
-        // プレイヤーとの攻撃コリジョン判定
         ChangeDamageReactionByPlayerAttack(attackController);
         return;
-    }
-
-    if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
-        // 攻撃中は押し戻し無効
-        if (isAttacking_ || enemy->IsAttacking()) {
-            return;
-        }
-
-        CollisionPushUtils::ApplySpherePush(
-            baseTransform_.translation_,
-            enemy->GetCollisionPos(),
-            GetCollisionRadius(),
-            enemy->GetCollisionRadius());
     }
 }
 
 void BaseEnemy::MoveToLimit() {
 
-    // フィールドの中心とスケールを取得
-    Vector3 fieldCenter = Vector3::ZeroVector(); // フィールド中心
-    Vector3 fieldScale  = Field::baseScale_; // フィールドのスケール
+    Vector3 fieldCenter = Vector3::ZeroVector();
+    Vector3 fieldScale  = Field::baseScale_;
 
-    // プレイヤーのスケールを考慮した半径
     float radiusX = fieldScale.x - baseTransform_.scale_.x;
     float radiusZ = fieldScale.z - baseTransform_.scale_.z;
 
-    // 現在位置が範囲内かチェック
-    bool insideX = std::abs(baseTransform_.translation_.x - fieldCenter.x) <= radiusX;
-    bool insideZ = std::abs(baseTransform_.translation_.z - fieldCenter.z) <= radiusZ;
-
-    ///--------------------------------------------------------------------------------
-    /// 範囲外なら戻す
-    ///--------------------------------------------------------------------------------
-
-    if (!insideX) { /// X座標
-        baseTransform_.translation_.x = std::clamp(
-            baseTransform_.translation_.x,
-            fieldCenter.x - radiusX,
-            fieldCenter.x + radiusX);
+    if (radiusX <= 0.0f || radiusZ <= 0.0f) {
+        return;
     }
 
-    if (!insideZ) { /// Z座標
-        baseTransform_.translation_.z = std::clamp(
-            baseTransform_.translation_.z,
-            fieldCenter.z - radiusZ,
-            fieldCenter.z + radiusZ);
-    }
+    baseTransform_.translation_.x = std::clamp(
+        baseTransform_.translation_.x,
+        fieldCenter.x - radiusX,
+        fieldCenter.x + radiusX);
 
-    // 範囲外の反発処理
-    if (!insideX || !insideZ) {
-        Vector3 directionToCenter = (fieldCenter - baseTransform_.translation_).Normalize();
-        baseTransform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
-        baseTransform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
-    }
+    baseTransform_.translation_.z = std::clamp(
+        baseTransform_.translation_.z,
+        fieldCenter.z - radiusZ,
+        fieldCenter.z + radiusZ);
 }
 
 void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerAttackCollider* attackController) {
@@ -243,7 +229,7 @@ void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerAttackCollider* attackC
         return;
     }
 
-    // ダメージが確定したことをコライダーに通知（振動・音の連続発動用）
+    // ダメージが確定したことをコライダーに通知
     attackController->NotifyDamageHit();
 
     // Rootにし、受けたダメージの判定を行う
@@ -283,8 +269,10 @@ void BaseEnemy::TakeDamage(float damageValue) {
     // ダメージを受ける
     hp_ -= damageValue;
 
-    // コンボをカウント
-    pCombo_->ComboCountUP();
+    // ダメージコールバック
+    if (onDamageTaken_) {
+        onDamageTaken_();
+    }
 
     if (hp_ <= 0.0f && !isDeathPending_) {
         // 撃破カウント
@@ -296,6 +284,10 @@ void BaseEnemy::TakeDamage(float damageValue) {
     if (hp_ < 0.0f) {
         hp_ = 0.0f;
     }
+}
+
+std::unique_ptr<BaseEnemyBehavior> BaseEnemy::CreatePostSpawnBehavior() {
+    return std::make_unique<EnemyWait>(this);
 }
 
 void BaseEnemy::StartDamageColling(float collingTime, const std::string& reactiveAttackName) {
@@ -420,8 +412,12 @@ std::vector<std::string> BaseEnemy::GetAnimationNames() const {
     return {};
 }
 
+std::string BaseEnemy::GetModelFolder() const {
+    return (type_ == Type::NORMAL) ? "NormalEnemy/" : "StrongEnemy/";
+}
+
 void BaseEnemy::AddDamageReactionAnimation(const std::string& name, bool isLoop) {
-    objAnimation_->Add("Enemy/" + name + ".gltf");
+    objAnimation_->Add(GetModelFolder() + name + ".gltf");
     damageReactionAnimations_.push_back({name, isLoop});
 }
 
@@ -445,11 +441,16 @@ void BaseEnemy::SetPlayer(Player* player) {
 }
 
 void BaseEnemy::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior) {
-    // 引数で受け取った状態を次の状態としてセット
+    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+        return;
+    }
     damageBehavior_ = std::move(behavior);
 }
 
 void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
+    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+        return;
+    }
     moveBehavior_ = std::move(behavior);
 }
 
@@ -470,6 +471,7 @@ void BaseEnemy::SetKillCounter(KillCounter* killCounter) {
 }
 
 void BaseEnemy::BackToDamageRoot() {
+    isDamageColling_ = false;
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
     ResetToWaitAnimation();
 }
@@ -490,13 +492,13 @@ void BaseEnemy::SetBodyColor(const Vector4& color) {
 void BaseEnemy::SetAnimationName(AnimationType type, const std::string& name) {
 
     if (type == AnimationType::Wait) {
-        objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("Enemy/" + name + ".gltf"));
+        objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(GetModelFolder() + name + ".gltf"));
         objAnimation_->Init();
         animationNames_[static_cast<size_t>(type)] = name;
         return;
     }
 
-    objAnimation_->Add("Enemy/" + name + ".gltf");
+    objAnimation_->Add(GetModelFolder() + name + ".gltf");
     animationNames_[static_cast<size_t>(type)] = name;
 }
 
@@ -518,7 +520,6 @@ std::vector<std::string> BaseEnemy::GetDamageReactionAnimationNames() const {
     }
     return names;
 }
-
 
 bool BaseEnemy::GetDamageReactionAnimationIsLoop(const std::string& name) const {
     for (const auto& info : damageReactionAnimations_) {

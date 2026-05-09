@@ -27,6 +27,11 @@ EnemyDamageReactionTakeUpper::EnemyDamageReactionTakeUpper(
 }
 
 EnemyDamageReactionTakeUpper::~EnemyDamageReactionTakeUpper() {
+    // GetUpフェーズのアニメーション終了コールバックは[this]をキャプチャしているため、
+    // デストラクタで必ずクリアし、ダングリングポインタアクセスを防ぐ
+    if (pBaseEnemy_ && pBaseEnemy_->GetAnimationObject()) {
+        pBaseEnemy_->GetAnimationObject()->ClearAllAnimationEndCallbacks();
+    }
 }
 
 void EnemyDamageReactionTakeUpper::Update(float deltaTime) {
@@ -54,6 +59,11 @@ void EnemyDamageReactionTakeUpper::Update(float deltaTime) {
 void EnemyDamageReactionTakeUpper::UpdatePhase() {
     UpdateNormal();
     UpdateTakeUpper();
+
+    // 死亡予約済みの場合は起き上がりフェーズに移行しない（死亡パスを上書きしない）
+    if (pBaseEnemy_->GetIsDeathPending()) {
+        return;
+    }
 
     if (IsReactionFinished()) {
         OnReactionEnd();

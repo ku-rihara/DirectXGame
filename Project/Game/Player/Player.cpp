@@ -126,7 +126,8 @@ void Player::Update() {
     }
 
     // 移動制限
-    baseTransform_.SetBaseScale(parameters_->GetParameters().baseScale_);
+    baseTransform_.SetBaseScale(
+        isDeathHidePlayer_ ? Vector3::ZeroVector() : parameters_->GetParameters().baseScale_);
     MoveToLimit();
     UpdateMatrix();
 }
@@ -443,7 +444,14 @@ void Player::ResetHeadScale() {
 
 bool Player::IsAbleBehavior() {
     bool isAttackRoot = (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get()));
-    return (isAttackRoot);
+    
+    // 攻撃中かつ死んでいないなら攻撃挙動のみ可能（既存の仕様）
+    if (isAttackRoot && !(isDeath_ && *isDeath_)) {
+        return true;
+    }
+
+    // それ以外（死んでいる、または攻撃中でない）は通常挙動を許可する
+    return !isAttackRoot;
 }
 
 void Player::InitInGameScene() {
@@ -492,6 +500,13 @@ void Player::SetViewProjection(const KetaEngine::ViewProjection* viewProjection)
 
 void Player::SetComboAttackController(PlayerComboAttackController* playerComboAttackController) {
     comboAttackController_ = playerComboAttackController;
+}
+
+void Player::SetDeathTimer(DeathTimer* deathTimer) {
+    pDeathTimer_ = deathTimer;
+    pDeathTimer_->SetOnStressTickCallback([this]() {
+        effects_->Emit("StressEffect");
+    });
 }
 
 bool Player::CheckIsChargeMax() const {
