@@ -401,7 +401,7 @@
         "finishWaitTime": 0.11666666716337204,
         "gamePadBottom": 16384,
         "hasFinish": false,
-        "hasPrep": true,
+        "hasPrep": false,
         "isAbleInputMoving": true,
         "isAlwaysFollowing": true,
         "isAutoAdvance": false,
