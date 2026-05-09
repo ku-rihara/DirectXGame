@@ -77,7 +77,10 @@ void ZakoFlockBehavior::Update() {
         float currentAngle = pBaseEnemy_->GetBaseRotationY();
         pBaseEnemy_->SetRotationY(LerpShortAngle(currentAngle, targetAngle, 0.8f));
 
-        if (!isRunning_) {
+        // アニメーションがDashでなければ再生
+        auto animObj = pBaseEnemy_->GetAnimationObject();
+        std::string dashAnim = pBaseEnemy_->GetAnimationName(BaseEnemy::AnimationType::Dash);
+        if (animObj && animObj->GetCurrentAnimationName() != dashAnim) {
             pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
             isRunning_ = true;
         }

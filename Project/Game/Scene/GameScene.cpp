@@ -211,7 +211,7 @@ void GameScene::SetClassPointer() {
     gameObj_.player_->SetCombo(gameObj_.combo_.get());
     gameObj_.player_->SetHitStop(gameObj_.attackEffect_.get());
     gameObj_.player_->SetDeathTimer(gameObj_.deathTimer_.get());
-    gameObj_.player_->SetDeathFragPointer(&gameObj_.deathTimer_->GetIsDeath());
+    gameObj_.player_->SetDeathFragPointer(&gameObj_.deathTimer_->GetIsDeathRef());
 
     gameObj_.playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
     gameObj_.playerComboAttackController_->SetPlayer(gameObj_.player_.get());
