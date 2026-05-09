@@ -484,6 +484,9 @@
     <Filter Include="Game\Enemy\UIs\GroupIcon">
       <UniqueIdentifier>{d88868ea-ad93-4116-9c8d-d41c5cd99524}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\utility\Log">
+      <UniqueIdentifier>{2b632ecd-0848-4610-8231-9a53f35cbef4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -2633,6 +2636,9 @@
     <ClCompile Include="Game\Scene\GameSceneState\GameSceneGameOver.cpp">
       <Filter>Game\Scene\GameSceneState</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\Log\Log.cpp">
+      <Filter>Engine\utility\Log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Player\ComboCreator\ComboBranchParameter.h">
@@ -2823,6 +2829,9 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneGameOver.h">
       <Filter>Game\Scene\GameSceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Log\Log.h">
+      <Filter>Engine\utility\Log</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
