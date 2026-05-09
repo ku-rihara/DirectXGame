@@ -88,7 +88,9 @@ void KTFramework::Run() {
 void KTFramework::Update() {
 
     /// グローバル変数の更新
+#if defined(_DEBUG) || defined(DEVELOPMENT)
     GlobalParameter::GetInstance()->SyncAll();
+#endif
     // デバッグ処理
     Debug();
     /// ゲームシーンの毎フレーム処理

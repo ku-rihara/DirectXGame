@@ -18,7 +18,7 @@
 #include <imgui.h>
 
 StrongEnemy::~StrongEnemy() {
-    ChangeBehavior(nullptr);
+    SetOnDamageTakenCallback(nullptr);
 }
 
 void StrongEnemy::Init(const Vector3& spawnPos) {
@@ -182,7 +182,6 @@ void StrongEnemy::CreateAndSetupTauntBehavior() {
 
     // ビヘイビアのコールバックを設定
     behavior->SetOnFontMovingStart([this]() { PlayTauntFontMoving(); });
-    behavior->SetOnBehaviorEnd([this]() { PlayTauntFontClose(); });
 
     // Behavior
     ChangeBehavior(std::move(behavior));

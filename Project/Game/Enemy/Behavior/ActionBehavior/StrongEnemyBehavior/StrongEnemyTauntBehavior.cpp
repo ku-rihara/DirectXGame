@@ -9,11 +9,6 @@ StrongEnemyTauntBehavior::StrongEnemyTauntBehavior(StrongEnemy* enemy)
     pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Taunt, true);
 }
 
-StrongEnemyTauntBehavior::~StrongEnemyTauntBehavior() {
-    if (onBehaviorEnd_) {
-        onBehaviorEnd_();
-    }
-}
 
 void StrongEnemyTauntBehavior::Update() {
     pBaseEnemy_->DirectionToPlayer();
