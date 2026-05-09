@@ -354,7 +354,11 @@ void PlayerComboAttackData::DrawSaveLoadUI() {
 }
 
 void PlayerComboAttackData::RebuildBranchTracks() {
-    timeLine_.RebuildBranchTracks();
+    if (hasFinish_) {
+        finishTimeline_.RebuildBranchTracks();
+    } else {
+        timeLine_.RebuildBranchTracks();
+    }
 }
 
 ///==========================================================
@@ -521,6 +525,10 @@ void PlayerComboAttackData::SetEffectEditorSuite(KetaEngine::EffectEditorSuite* 
 
 KetaEngine::TimelineDrawer* PlayerComboAttackData::GetTimeline() {
     return timeLine_.GetTimeline();
+}
+
+KetaEngine::TimelineDrawer* PlayerComboAttackData::GetFinishTimeline() {
+    return finishTimeline_.GetTimeline();
 }
 
 ///==========================================================

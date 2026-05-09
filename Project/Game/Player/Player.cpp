@@ -445,12 +445,12 @@ void Player::ResetHeadScale() {
 bool Player::IsAbleBehavior() {
     bool isAttackRoot = (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get()));
     
-    // 攻撃中かつ死んでいないなら攻撃挙動のみ可能（既存の仕様）
+    // 攻撃中かつ死んでいないなら攻撃挙動のみ可能
     if (isAttackRoot && !(isDeath_ && *isDeath_)) {
         return true;
     }
 
-    // それ以外（死んでいる、または攻撃中でない）は通常挙動を許可する
+  //通常挙動を許可
     return !isAttackRoot;
 }
 

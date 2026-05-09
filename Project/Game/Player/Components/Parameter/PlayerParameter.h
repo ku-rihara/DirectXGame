@@ -28,6 +28,10 @@ struct SpawnParam {
     float waitTime_;
 };
 
+struct DashParam {
+    float distance = 20.0f;
+};
+
 /// Parameter構造体
 struct Parameters {
     Vector3 startPos_;
@@ -41,6 +45,7 @@ struct Parameters {
     SpawnParam spawnParam;
     float moveSpeed;
     float dashSpeedMultiplier;
+    DashParam dashParam;
     float fallSpeed;
     float attackRotate;
     float attackRotateAnit;

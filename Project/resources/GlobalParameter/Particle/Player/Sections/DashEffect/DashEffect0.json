@@ -39,6 +39,7 @@
         ],
         "ColorEaseParam.isEase": false,
         "ColorEaseParam.maxTime": 1.0,
+        "Cyl.axisInt": 0,
         "Cyl.bottomColor": [
             0.4324324131011963,
             0.4324324131011963,
@@ -79,7 +80,7 @@
         "Particle Count": 1,
         "Position Base": [
             0.0,
-            3.3299999237060547,
+            5.070000171661377,
             0.0
         ],
         "Position Max": [
@@ -160,12 +161,12 @@
         "TranslateEaseParam.endValueV3.max": [
             0.0,
             0.0,
-            -10.0
+            -2.0
         ],
         "TranslateEaseParam.endValueV3.min": [
             0.0,
             0.0,
-            -10.0
+            -2.0
         ],
         "TranslateEaseParam.isReturnToOrigin": false,
         "TranslateEaseParam.isScaleEase": true,
@@ -198,8 +199,13 @@
         "distortionStrength": 0.02800000086426735,
         "distortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
         "emissiveIntensity": 1.0,
-        "emitPositionMode": 1,
+        "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": false,
         "isFloatVelocity": true,
@@ -237,6 +243,7 @@
         "targetApplyR": true,
         "timeMode": 1,
         "useDistortion": true,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

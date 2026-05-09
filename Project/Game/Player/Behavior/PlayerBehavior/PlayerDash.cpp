@@ -5,16 +5,16 @@
 
 /// boss
 #include "Player/Player.h"
+/// engine
+#include "Frame/Frame.h"
 /// imgui
 #include <imgui.h>
 
 PlayerDash::PlayerDash(Player* player, bool forceDash)
     : BasePlayerBehavior("PlayerDash", player), forceDash_(forceDash) {
 
-    // 最初のダッシュ状態からスタート
-    currentState_ = [this]() {
-        StartDash();
-    };
+    dashEasing_.Init("PlayerDashStart.json");
+    currentState_ = [this]() { StartDash(); };
 }
 
 void PlayerDash::Update([[maybe_unused]] float timeSpeed) {
@@ -22,21 +22,31 @@ void PlayerDash::Update([[maybe_unused]] float timeSpeed) {
 }
 
 void PlayerDash::StartDash() {
-    // DashStart イージングアニメーション再生
+    const auto& dashParam = pPlayerParameter_->GetParameters().dashParam;
+
+    // ダッシュ開始アニメーションとエフェクト
     pOwner_->GetPlayerAnimator().PlayDashStartAnimation();
-    // ダッシュエフェクト開始
     pOwner_->GetEffects()->DashEffectStart();
 
-    currentState_ = [this]() {
-        UpdateNormalDash();
-    };
+    // ダッシュ開始位置と終了位置を計算
+    Vector3 start = pOwner_->GetWorldPosition();
+    Vector3 end   = start + pOwner_->GetBaseTransform().CalcForwardOffset({0.0f, 0.0f, dashParam.distance});
+
+    // ダッシュイージングのセット
+    dashCurrentPos_ = start;
+    dashEasing_.SetStartValue(start);
+    dashEasing_.SetEndValue(end);
+    dashEasing_.SetAdaptValue(&dashCurrentPos_);
+    dashEasing_.Reset();
+
+    currentState_ = [this]() { UpdateStartDash(); };
 }
 
 void PlayerDash::UpdateStartDash() {
-    if (pOwner_->GetPlayerAnimator().IsDashStartAnimationFinished()) {
-        currentState_ = [this]() {
-            UpdateNormalDash();
-        };
+    dashEasing_.Update(KetaEngine::Frame::DeltaTime());
+    pOwner_->SetWorldPosition(dashCurrentPos_);
+    if (dashEasing_.IsFinished()) {
+        currentState_ = [this]() { UpdateNormalDash(); };
     }
 }
 

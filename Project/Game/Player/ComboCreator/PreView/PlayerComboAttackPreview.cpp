@@ -51,15 +51,31 @@ void PlayerComboAttackPreview::UpdateSingleMode() {
         return;
     }
 
+    if (previewInFinishPhase_) {
+        // 終了処理タイムライン監視
+        KetaEngine::TimelineDrawer* ftl = currentAttackData_->GetFinishTimeline();
+        if (!ftl || ftl->GetCurrentFrame() >= ftl->GetEndFrame()) {
+            previewInFinishPhase_ = false;
+            ExecuteAttack(currentAttackData_);
+            attackElapsedTime_ = 0.0f;
+        }
+        return;
+    }
+
+    // メインタイムライン監視
     KetaEngine::TimelineDrawer* tl = currentAttackData_->GetTimeline();
     if (!tl) {
         return;
     }
 
-    // タイムラインが終了したらループ
     if (tl->GetCurrentFrame() >= tl->GetEndFrame()) {
-        ExecuteAttack(currentAttackData_);
-        attackElapsedTime_ = 0.0f;
+        if (currentAttackData_->HasFinishPhase()) {
+            // 終了処理フェーズへ移行（ComboAttackActionが自動で遷移する）
+            previewInFinishPhase_ = true;
+        } else {
+            ExecuteAttack(currentAttackData_);
+            attackElapsedTime_ = 0.0f;
+        }
     }
 }
 
@@ -131,8 +147,9 @@ void PlayerComboAttackPreview::StopPreview() {
 }
 
 void PlayerComboAttackPreview::ResetState() {
-    currentAttackData_ = nullptr;
-    attackElapsedTime_ = 0.0f;
+    currentAttackData_    = nullptr;
+    attackElapsedTime_    = 0.0f;
+    previewInFinishPhase_ = false;
 }
 
 void PlayerComboAttackPreview::SaveInitialState() {

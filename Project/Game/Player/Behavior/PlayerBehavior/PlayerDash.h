@@ -1,6 +1,8 @@
 #pragma once
 
 #include "BasePlayerBehavior.h"
+#include "Easing/Easing.h"
+#include "Vector3.h"
 #include <functional>
 
 /// <summary>
@@ -29,4 +31,7 @@ private:
 private:
     bool forceDash_ = false;
     std::function<void()> currentState_;
+
+    KetaEngine::Easing<Vector3> dashEasing_;
+    Vector3 dashCurrentPos_;
 };

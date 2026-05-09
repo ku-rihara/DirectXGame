@@ -21,7 +21,7 @@
             0.0,
             0.0
         ],
-        "TriggerAttackName": "JumpUpper",
+        "TriggerAttackName": "RollingDashing",
         "damageCollingTime": 0.10999999940395355,
         "isPriorityReaction": false
     }

@@ -172,12 +172,12 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
     // 移動適用
     ApplyMovement(atkSpeed);
 
-    // 予約入力
-    PreOderNextComboForButton();
-    TryAutoSelectNextFromQueue();
-
-    // キャンセル処理
-    AttackCancel();
+    // 終了処理フェーズがある場合はFINISHで受け付けるため、MAINでは行わない
+    if (!attackData_->HasFinishPhase()) {
+        PreOderNextComboForButton();
+        TryAutoSelectNextFromQueue();
+        AttackCancel();
+    }
 
     // コリジョン開始時間のチェック
     float collisionStartTime = attackData_->GetAttackParam().collisionParam.startTime;
@@ -218,7 +218,9 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
 
     // イージングが完了したら次フェーズへ
     if (moveEasing_.IsFinished() && pCollisionInfo_->GetIsFinish()) {
-        if (attackData_->HasFinishPhase()) {
+        // isSkipToFinishOnHit が true かつヒットしていない場合は終了処理をスキップ
+        bool skipFinish = attackData_->GetAttackParam().timingParam.isSkipToFinishOnHit && !hasHitEnemy_;
+        if (attackData_->HasFinishPhase() && !skipFinish) {
             currentFrame_ = 0.0f;
             SetFinishMoveEasing();
             SetOrder(Order::FINISH_ATTACK);
@@ -235,6 +237,11 @@ void ComboAttackAction::UpdateFinishAttack(float atkSpeed) {
     if (finishRendition_) {
         finishRendition_->Update(atkSpeed);
     }
+
+    // 終了処理フェーズでのキャンセル・先行入力受付
+    PreOderNextComboForButton();
+    TryAutoSelectNextFromQueue();
+    AttackCancel();
 
     const float finishWait = attackData_->GetAttackParamForPhase(AttackTimelinePhase::FINISH).timingParam.finishWaitTime;
     if (finishMoveEasing_.IsFinished() && currentFrame_ >= finishWait) {

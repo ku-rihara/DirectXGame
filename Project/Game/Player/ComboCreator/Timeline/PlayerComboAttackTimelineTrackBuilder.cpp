@@ -87,8 +87,11 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
         totalFrames = 1;
     }
 
-    // コンボ分岐トラックはMAINフェーズのみ
-    if (phase_ != AttackTimelinePhase::MAIN) {
+    // 終了処理がある場合はFINISHフェーズ、ない場合はMAINフェーズに分岐トラックを配置
+    bool shouldAddBranchTracks =
+        (phase_ == AttackTimelinePhase::MAIN   && !attackData_->HasFinishPhase()) ||
+        (phase_ == AttackTimelinePhase::FINISH);
+    if (!shouldAddBranchTracks) {
         return;
     }
 
@@ -379,7 +382,11 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
         return;
     }
 
-    if (phase_ != AttackTimelinePhase::MAIN) {
+    // 終了処理がある場合はFINISHフェーズ、ない場合はMAINフェーズに分岐トラックを配置
+    bool isTargetPhase =
+        (phase_ == AttackTimelinePhase::MAIN   && !attackData_->HasFinishPhase()) ||
+        (phase_ == AttackTimelinePhase::FINISH);
+    if (!isTargetPhase) {
         return;
     }
 
