@@ -349,6 +349,7 @@ public:
     void SetGroupIconIndex(int32_t index) {
         if (enemyUIs_) { enemyUIs_->SetGroupIndex(index); }
     }
+    void OnSpawnCompleted() { if (enemyUIs_) { enemyUIs_->OnSpawned(); } }
     void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }
     void SetIsAttacking(bool value) { isAttacking_ = value; }
 

@@ -26,6 +26,10 @@ void EnemyUIs::Hide(float hp) {
     hpBar_->Update(hp);
 }
 
+void EnemyUIs::OnSpawned() {
+    hpBar_->Show();
+}
+
 void EnemyUIs::SetGroupIndex(int32_t index) {
     groupIcon_->SetGroupIndex(index);
 }

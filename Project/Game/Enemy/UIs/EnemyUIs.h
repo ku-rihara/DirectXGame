@@ -26,6 +26,7 @@ public:
     void UpdateGroupIcon(const Vector2& screenPos, bool isDraw);
 
     void Hide(float hp);
+    void OnSpawned();
 
     void SetGroupIndex(int32_t index);
     void SetColorConfig(EnemyHPBarColorConfig* config);

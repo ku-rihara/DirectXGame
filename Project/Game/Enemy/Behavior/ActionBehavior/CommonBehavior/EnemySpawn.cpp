@@ -60,6 +60,7 @@ void EnemySpawn::Update() {
     case EnemySpawn::Step::ChangeNextBehavior:
         // Ensure scale is at baseScale_ regardless of whether the easing completed
         pBaseEnemy_->ScaleReset();
+        pBaseEnemy_->OnSpawnCompleted();
         pBaseEnemy_->ChangeBehavior(pBaseEnemy_->CreatePostSpawnBehavior());
         break;
     default:
