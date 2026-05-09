@@ -38,6 +38,8 @@ public:
 
     void PreDraw(); //< 描画前処理
 
+    void Finalize(); //< 終了処理
+
     /// <summary>
     /// 確保可能かチェック
     /// </summary>
