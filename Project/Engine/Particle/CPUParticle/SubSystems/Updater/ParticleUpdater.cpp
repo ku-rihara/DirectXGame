@@ -104,6 +104,21 @@ void ParticleUpdater::UpdateGroup(
         it->velocity_.y += it->gravity_ * Frame::DeltaTime();
 
         ///------------------------------------------------------------------------
+        /// ゴール位置への誘導
+        ///------------------------------------------------------------------------
+        if (it->useGoalPosition && !it->followPos && !it->isAdaptTranslateEasing) {
+            Vector3 toGoal = (it->goalTargetPos + it->goalOffset) - it->worldTransform_->translation_;
+            float dist     = toGoal.Length();
+            if (dist > 0.001f) {
+                it->direction_ = toGoal.Normalize();
+                if (!it->isFloatVelocity) {
+                    float spd  = it->speedV3.Length();
+                    it->speedV3 = it->direction_ * spd;
+                }
+            }
+        }
+
+        ///------------------------------------------------------------------------
         /// 変位更新
         ///------------------------------------------------------------------------
         if (it->followPos) {

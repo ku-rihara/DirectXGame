@@ -124,6 +124,10 @@ struct Parameters {
     // Shape
     EmitShape emitShape = EmitShape::None;
     FMinMax sphereRadius = {};
+    // ゴール誘導
+    bool useGoalPosition = false;
+    Vector3 goalOffset;       // エディタで設定するオフセット
+    Vector3 goalTargetPos;    // ランタイムで設定するターゲット位置（JSON非保存）
 };
 
 // グループパラメータ

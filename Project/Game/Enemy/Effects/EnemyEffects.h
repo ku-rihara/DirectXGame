@@ -31,8 +31,14 @@ public:
     /// <param name="name">エフェクト名</param>
     void Emit(const std::string& name);
 
+    /// <summary>
+    /// パーティクルのゴール位置をセット（フラグがtrueのセクションが向かう先）
+    /// </summary>
+    void SetTargetObjectPos(const Vector3& pos);
+
 private:
     std::unique_ptr<KetaEngine::ParticlePlayer> particlePlayer_;
+    Vector3 goalPos_;
 
 public:
     /// =========================================================================================

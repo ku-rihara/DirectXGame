@@ -14,7 +14,7 @@ void ParticlePlayer::Update(float speedRate) {
     UpdatePlayState();
 
     // TargetParam ポインタが設定されていれば毎フレーム自動適用
-    if (targetParam_.pos_ || targetParam_.rotate_) {
+    if (targetParam_.pos_ || targetParam_.rotate_ || targetParam_.goalPos_) {
         auto* particleData = GetParticleData();
         if (particleData) {
             if (targetParam_.pos_) {
@@ -22,6 +22,9 @@ void ParticlePlayer::Update(float speedRate) {
             }
             if (targetParam_.rotate_) {
                 particleData->SetTargetRotation(*targetParam_.rotate_);
+            }
+            if (targetParam_.goalPos_) {
+                particleData->SetGoalPosition(*targetParam_.goalPos_);
             }
         }
     }
@@ -177,6 +180,24 @@ void ParticlePlayer::SetTargetRotatePtr(const Vector3* rotate) {
         auto* particleData = GetParticleData();
         if (particleData) {
             particleData->SetTargetRotation(*rotate);
+        }
+    }
+}
+
+void ParticlePlayer::SetGoalPosition(const Vector3& pos) {
+    auto* particleData = GetParticleData();
+    if (!particleData) {
+        return;
+    }
+    particleData->SetGoalPosition(pos);
+}
+
+void ParticlePlayer::SetGoalPosPtr(const Vector3* pos) {
+    targetParam_.goalPos_ = pos;
+    if (pos) {
+        auto* particleData = GetParticleData();
+        if (particleData) {
+            particleData->SetGoalPosition(*pos);
         }
     }
 }

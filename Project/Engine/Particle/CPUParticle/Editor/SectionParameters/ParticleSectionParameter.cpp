@@ -59,6 +59,8 @@ void ParticleSectionParameter::RegisterParams(GlobalParameter* globalParam, cons
     globalParam->Regist(groupName, "Direction Max", &parameters_.directionDist.max);
     globalParam->Regist(groupName, "Direction Min", &parameters_.directionDist.min);
     globalParam->Regist(groupName, "isFloatVelocity", &parameters_.isFloatVelocity);
+    globalParam->Regist(groupName, "useGoalPosition", &parameters_.useGoalPosition);
+    globalParam->Regist(groupName, "goalPosition",    &parameters_.goalOffset);
 
     // Color
     globalParam->Regist(groupName, "BaseColor", &parameters_.baseColor);
@@ -227,6 +229,8 @@ void ParticleSectionParameter::AdaptParameters(GlobalParameter* globalParam, con
     parameters_.directionDist.max  = globalParam->GetValue<Vector3>(groupName, "Direction Max");
     parameters_.directionDist.min  = globalParam->GetValue<Vector3>(groupName, "Direction Min");
     parameters_.isFloatVelocity    = globalParam->GetValue<bool>(groupName, "isFloatVelocity");
+    parameters_.useGoalPosition    = globalParam->GetValue<bool>(groupName, "useGoalPosition");
+    parameters_.goalOffset         = globalParam->GetValue<Vector3>(groupName, "goalPosition");
 
     // Color
     parameters_.baseColor                            = globalParam->GetValue<Vector4>(groupName, "BaseColor");
@@ -396,6 +400,13 @@ void ParticleSectionParameter::AdjustParam() {
         ImGui::SameLine();
         ImGui::Checkbox("Rotation##target", &targetApplyR_);
         ImGui::Unindent();
+    }
+
+    // Goal Position
+    ImGui::SeparatorText("ゴール位置誘導");
+    ImGui::Checkbox("ゴール位置へ向かう", &parameters_.useGoalPosition);
+    if (parameters_.useGoalPosition) {
+        ImGui::DragFloat3("ゴール位置オフセット", &parameters_.goalOffset.x, 0.1f);
     }
 
     // Timing Parameters
@@ -823,6 +834,13 @@ void ParticleSectionParameter::SetTargetPosition(const Vector3& targetPos) {
     if (targetApplyPos_) {
         parameters_.targetPos = targetPos;
     }
+}
+
+void ParticleSectionParameter::SetGoalPosition(const Vector3& pos) {
+    if (!parameters_.useGoalPosition) {
+        return;
+    }
+    parameters_.goalTargetPos = pos;
 }
 
 void ParticleSectionParameter::SetTargetRotation(const Vector3& targetRotate) {

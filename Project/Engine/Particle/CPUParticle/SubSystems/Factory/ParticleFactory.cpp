@@ -362,6 +362,13 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
     particle.gravity_ = parameters.gravity;
 
     ///------------------------------------------------------------------------
+    /// ゴール誘導設定
+    ///------------------------------------------------------------------------
+    particle.useGoalPosition = parameters.useGoalPosition;
+    particle.goalOffset      = parameters.goalOffset;
+    particle.goalTargetPos   = parameters.goalTargetPos;
+
+    ///------------------------------------------------------------------------
     /// Dissolveイージング設定
     ///------------------------------------------------------------------------
     if (dissolveParams && dissolveParams->isActive) {

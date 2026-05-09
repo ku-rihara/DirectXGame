@@ -85,6 +85,7 @@ public:
     void SetFollowingPos(const Vector3* pos);
     void SetTargetPosition(const Vector3& targetPos);
     void SetTargetRotation(const Vector3& targetRotate);
+    void SetGoalPosition(const Vector3& pos);
 };
 
 }
