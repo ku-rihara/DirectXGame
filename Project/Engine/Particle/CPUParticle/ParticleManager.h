@@ -91,6 +91,10 @@ public:
         bool useGoalPosition = false;
         Vector3 goalOffset;
         Vector3 goalTargetPos;
+        bool isRotateForDirection  = false;
+        bool rotateForDirectionX   = true;
+        bool rotateForDirectionY   = true;
+        bool rotateForDirectionZ   = true;
         std::unique_ptr<WorldTransform> worldTransform_;
 
         ScaleInFo scaleInfo;

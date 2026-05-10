@@ -4,6 +4,8 @@
 
 // base
 #include "base/TextureManager.h"
+// editor
+#include "Editor/CameraEditor/CameraEditor.h"
 // math
 #include "2d/SpriteRegistry.h"
 #include "Frame/Frame.h"

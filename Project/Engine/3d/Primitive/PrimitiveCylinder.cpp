@@ -41,8 +41,8 @@ void PrimitiveCylinder::Create() {
     for (int32_t j = 0; j < params_.heightDivisions; ++j) {
         float tTop = float(j)     * hStep;
         float tBot = float(j + 1) * hStep;
-        float yTop = params_.height * (1.0f - tTop);
-        float yBot = params_.height * (1.0f - tBot);
+        float yTop = params_.height * (1.0f - tTop) - params_.height * 0.5f;
+        float yBot = params_.height * (1.0f - tBot) - params_.height * 0.5f;
 
         float rxTop = params_.topRadiusX + (params_.bottomRadiusX - params_.topRadiusX) * tTop;
         float rzTop = params_.topRadiusZ + (params_.bottomRadiusZ - params_.topRadiusZ) * tTop;

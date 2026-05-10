@@ -40,7 +40,6 @@ public:
     /// ===================================================
     /// setter
     /// ===================================================
-    void SetParent(KetaEngine::WorldTransform* parent);
     void SetWorldPosition(const Vector3& pos) { baseTransform_.translation_ = pos; }
     void UpdateWorldMatrix() { baseTransform_.UpdateMatrix(); }
     void SetWorldPositionY(float pos) { baseTransform_.translation_.y = pos; }

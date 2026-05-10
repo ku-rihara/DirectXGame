@@ -1,0 +1,12 @@
+{
+    "AfterDashRollingHitCamera": {
+        "autoReturnToInitial": true,
+        "resetFovEaseType": 22,
+        "resetPosEaseType": 22,
+        "resetRotateEaseType": 22,
+        "resetTimePoint": 0.699999988079071,
+        "returnDelayTime": 0.25999999046325684,
+        "timeMode": 1,
+        "useLookAt": false
+    }
+}

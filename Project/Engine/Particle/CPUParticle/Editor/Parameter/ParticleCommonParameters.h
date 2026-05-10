@@ -112,6 +112,9 @@ struct Parameters {
     bool isFloatVelocity        = false;
     bool isScalerScale          = false;
     bool isRotateForDirection   = false;
+    bool rotateForDirectionX    = true;
+    bool rotateForDirectionY    = true;
+    bool rotateForDirectionZ    = true;
     ScaleEaseParam scaleEaseParam;
     EasingParamV3 translateEaseParam;
     EasingParamV3 rotateEaseParam;

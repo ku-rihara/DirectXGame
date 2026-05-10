@@ -115,6 +115,14 @@ void ParticleUpdater::UpdateGroup(
                     float spd  = it->speedV3.Length();
                     it->speedV3 = it->direction_ * spd;
                 }
+                if (it->isRotateForDirection) {
+                    Vector3 up = {0.0f, 1.0f, 0.0f};
+                    Matrix4x4 rotMat  = DirectionToDirection(up, it->direction_);
+                    Vector3 dirAngles = ExtractEulerAngles(rotMat);
+                    if (it->rotateForDirectionX) it->worldTransform_->rotation_.x = dirAngles.x;
+                    if (it->rotateForDirectionY) it->worldTransform_->rotation_.y = -dirAngles.y;
+                    if (it->rotateForDirectionZ) it->worldTransform_->rotation_.z = dirAngles.z;
+                }
             }
         }
 

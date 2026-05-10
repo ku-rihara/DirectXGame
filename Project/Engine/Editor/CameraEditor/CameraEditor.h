@@ -58,7 +58,10 @@ public:
     CameraAnimationData* GetSelectedAnimation();
 
     void SetPreviewObjPos(const Vector3& pos);
+    void SetPreviewCameraParameters(const Vector3& pos, const Vector3& rot, float fov);
+
     void SetAutoApplyToViewProjection(bool enable) { autoApplyToViewProjection_ = enable; }
+
     void SetSequenceElementPreviewMode(bool enable) { keyFramePreviewMode_ = enable; }
     void SetViewProjection(ViewProjection* vp);
 };

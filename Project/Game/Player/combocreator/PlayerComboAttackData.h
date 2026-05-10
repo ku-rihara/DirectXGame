@@ -209,6 +209,7 @@ public:
     const std::string& GetFolderPath() const { return folderPath_; }
     Player* GetPlayer() const { return pPlayer_; };
     KetaEngine::TimelineDrawer* GetTimeline();
+    KetaEngine::TimelineDrawer* GetFinishTimeline();
 
     bool HasPrepPhase() const { return hasPrep_; }
     bool HasFinishPhase() const { return hasFinish_; }

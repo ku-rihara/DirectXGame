@@ -1,30 +1,30 @@
 {
-    "TauntBoss1": {
+    "TauntBoss2": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
-        "AdaptRotateIsZ": true,
+        "AdaptRotateIsZ": false,
         "AlphaEaseParam.easeTypeInt": 0,
         "AlphaEaseParam.endValue.max": 0.0,
         "AlphaEaseParam.endValue.min": 0.0,
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            1.0,
-            1.0,
-            1.0,
-            0.5921568870544434
+            0.953667938709259,
+            0.8616150617599487,
+            0.8616150617599487,
+            0.0
         ],
         "Color Max": [
-            1.0,
-            1.0,
-            1.0,
-            1.0
+            0.0,
+            0.0,
+            0.0,
+            0.0
         ],
         "Color Min": [
             0.0,
             0.0,
             0.0,
-            0.772549033164978
+            0.0
         ],
         "ColorEaseParam.easeTypeInt": 0,
         "ColorEaseParam.endValue.max": [
@@ -73,25 +73,25 @@
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 0.25999999046325684,
+        "IntervalTime": 0.38999998569488525,
         "IsScreenPos": false,
-        "LifeTime": 1.25,
+        "LifeTime": 1.2300000190734863,
         "Max Particle Num": 1000,
-        "Particle Count": 5,
+        "Particle Count": 1,
         "Position Base": [
+            -9.5600004196167,
+            0.6200000047683716,
+            -13.550000190734863
+        ],
+        "Position Max": [
             0.0,
             0.0,
             0.0
         ],
-        "Position Max": [
-            26.90999984741211,
-            9.5,
-            22.219999313354492
-        ],
         "Position Min": [
-            -27.84000015258789,
             0.0,
-            -24.979999542236328
+            0.0,
+            0.0
         ],
         "RailFileName": "",
         "Rotate Base": [
@@ -121,19 +121,19 @@
             0.0
         ],
         "RotateEaseParam.isScaleEase": false,
-        "RotateEaseParam.maxTime": 0.5099999904632568,
+        "RotateEaseParam.maxTime": 1.0,
         "RotateSpeed Max": [
             0.0,
             0.0,
-            3.0
+            0.0
         ],
         "RotateSpeed Min": [
             0.0,
             0.0,
-            1.0
+            0.0
         ],
-        "Scale Max": 0.0,
-        "Scale Min": 0.0,
+        "Scale Max": 6.0,
+        "Scale Min": 6.0,
         "ScaleV3 Max": [
             1.0,
             1.0,
@@ -144,16 +144,16 @@
             1.0,
             1.0
         ],
-        "Speed Max": 0.0,
-        "Speed Min": 0.0,
+        "Speed Max": 7.0,
+        "Speed Min": 7.0,
         "SpeedV3 Max": [
             0.0,
-            18.459999084472656,
+            0.0,
             0.0
         ],
         "SpeedV3 Min": [
             0.0,
-            8.329999923706055,
+            0.0,
             0.0
         ],
         "StartTime": 0.0,
@@ -198,7 +198,7 @@
         "dissolveName": "",
         "distortionStrength": 0.05000000074505806,
         "distortionTexturePath": "",
-        "emissiveIntensity": 1.0,
+        "emissiveIntensity": 1.399999976158142,
         "emitPositionMode": 2,
         "emitShape": 0,
         "goalPosition": [
@@ -207,23 +207,23 @@
             0.0
         ],
         "isAlphaNoMove": false,
-        "isBillboard": true,
-        "isFloatVelocity": false,
-        "isRotateForDirection": false,
+        "isBillboard": false,
+        "isFloatVelocity": true,
+        "isRotateForDirection": true,
         "isScalerScale": true,
         "isShot": false,
-        "modelFilePath": "",
+        "modelFilePath": "Font/EnemyTauntArrow.obj",
         "parentFollowR": true,
         "parentFollowS": true,
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
-        "rotateForDirectionX": true,
+        "rotateForDirectionX": false,
         "rotateForDirectionY": true,
-        "rotateForDirectionZ": true,
-        "scaleEaseParam.easeTypeInt": 16,
-        "scaleEaseParam.endValueF.max": 1.5,
-        "scaleEaseParam.endValueF.min": 1.0,
+        "rotateForDirectionZ": false,
+        "scaleEaseParam.easeTypeInt": 0,
+        "scaleEaseParam.endValueF.max": 0.0,
+        "scaleEaseParam.endValueF.min": 0.0,
         "scaleEaseParam.endValueV3.max": [
             0.0,
             0.0,
@@ -235,18 +235,18 @@
             0.0
         ],
         "scaleEaseParam.isReturnToOrigin": false,
-        "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.5400000214576721,
+        "scaleEaseParam.isScaleEase": false,
+        "scaleEaseParam.maxTime": 1.0,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
-        "selectedTexturePath": "Resources/EngineTexture/Particle/SmileEnemy.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/default.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,
-        "targetApplyR": false,
+        "targetApplyR": true,
         "timeMode": 1,
         "useDistortion": false,
-        "useGoalPosition": false,
-        "useModel": false
+        "useGoalPosition": true,
+        "useModel": true
     }
 }

@@ -22,7 +22,7 @@
             0.0
         ],
         "TriggerAttackName": "RollingDashing",
-        "damageCollingTime": 0.10999999940395355,
+        "damageCollingTime": 0.6600000262260437,
         "isPriorityReaction": false
     }
 }
