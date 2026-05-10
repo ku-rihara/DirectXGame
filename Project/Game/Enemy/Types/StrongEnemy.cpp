@@ -1,4 +1,5 @@
 #include "StrongEnemy.h"
+#include "Player/Player.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 // behavior
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyChase.h"

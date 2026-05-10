@@ -133,15 +133,19 @@ void ComboAttackAction::InitializeAttack() {
 }
 
 void ComboAttackAction::UpdatePrepAttack(float atkSpeed) {
+    const auto& prepParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION);
+
     prepMoveEasing_.Update(atkSpeed);
-    pOwner_->SetWorldPosition(prepCurrentMoveValue_);
+    if (!prepParam.isMotionOnly) {
+        pOwner_->SetWorldPosition(prepCurrentMoveValue_);
+    }
 
     if (prepRendition_) {
         prepRendition_->Update(atkSpeed);
     }
 
     // コリジョン開始時間のチェック
-    const float prepCollisionStartTime = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).collisionParam.startTime;
+    const float prepCollisionStartTime = prepParam.collisionParam.startTime;
     if (!isCollisionActive_ && currentFrame_ >= prepCollisionStartTime) {
         SetupCollision(AttackTimelinePhase::PREPARATION);
     }
@@ -153,7 +157,8 @@ void ComboAttackAction::UpdatePrepAttack(float atkSpeed) {
     }
 
     // イージングとコリジョンタイムライン両方が完了したら次フェーズへ
-    if (prepMoveEasing_.IsFinished() && pCollisionInfo_->GetIsFinish()) {
+    const float prepFinishWait = prepParam.timingParam.finishWaitTime;
+    if (prepMoveEasing_.IsFinished() && pCollisionInfo_->GetIsFinish() && currentFrame_ >= prepFinishWait) {
         currentFrame_      = 0.0f;
         isCollisionActive_ = false;
         SetMoveEasing();
