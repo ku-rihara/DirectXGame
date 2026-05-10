@@ -19,7 +19,7 @@
         "Branch_0_keyboardButton": 35,
         "Branch_0_nextAttackName": "FallAttackAfterJumping",
         "Branch_0_precedeInputTime": 0.3499999940395355,
-        "Branch_0_requireHit": false,
+        "Branch_0_requireHit": true,
         "CameraAction_FileName": "DashRollingCamera",
         "CameraAction_IsCameraReset": true,
         "CameraAction_OnHit_FileName": "",

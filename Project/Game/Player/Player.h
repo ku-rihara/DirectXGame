@@ -225,7 +225,7 @@ public:
     BaseTitleBehavior* GetTitleBehavior() const { return titleBehavior_.get(); }
     BaseComboAttackBehavior* GetComboBehavior() const { return comboBehavior_.get(); }
     PlayerEffects* GetEffects() const { return effects_.get(); }
-    LockOnController* GetLockOn() const { return pLockOn_; }
+    LockOnController* GetLockOnController() const { return pLockOn_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     AttackEffect* GetAttackEffect() const { return pAttackEffect_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }

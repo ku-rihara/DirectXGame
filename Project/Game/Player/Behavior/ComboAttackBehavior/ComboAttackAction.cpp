@@ -475,14 +475,15 @@ void ComboAttackAction::SetupCollision(AttackTimelinePhase phase) {
 
 void ComboAttackAction::SetMoveEasing() {
     // targetPosを計算
-    const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
-    startPosition_                                    = pOwner_->GetWorldPosition();
+    const auto& attackParam = attackData_->GetAttackParam();
+    const auto& moveParam   = attackParam.moveParam;
+    startPosition_          = pOwner_->GetWorldPosition();
 
     // ロックオン対象がいればそちらを向く
     LockOn* lockOn = nullptr;
 
-    if (pOwner_->GetLockOn()) {
-        lockOn = pOwner_->GetLockOn()->GetLockOn();
+    if (pOwner_->GetLockOnController()) {
+        lockOn = pOwner_->GetLockOnController()->GetLockOn();
     }
 
     if (lockOn && lockOn->ExistTarget()) {
@@ -491,11 +492,13 @@ void ComboAttackAction::SetMoveEasing() {
         pOwner_->GetBaseTransform().rotation_.y = std::atan2(toTarget.x, toTarget.z);
     }
 
-    // 攻撃条件がAIRでなく、かつジャンプ中でもないのに浮いている場合はYを地上に補正する
+    // 攻撃条件がAIRまたはBOTHなら高さを維持する。そうでなければ地上に補正する
     const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
-    bool isAirAttack    = attackData_->GetAttackParam().triggerParam.condition == PlayerComboAttackData::TriggerCondition::AIR;
-    bool isJumping      = dynamic_cast<PlayerJump*>(pOwner_->GetBehavior()) != nullptr;
-    if (!isAirAttack && !isJumping && startPosition_.y > groundY) {
+    auto condition      = attackParam.triggerParam.condition;
+    bool isAirValid     = (condition == PlayerComboAttackData::TriggerCondition::AIR || 
+                           condition == PlayerComboAttackData::TriggerCondition::BOTH);
+
+    if (!isAirValid && startPosition_.y > groundY) {
         startPosition_.y = groundY;
     }
 
@@ -505,6 +508,11 @@ void ComboAttackAction::SetMoveEasing() {
     // Yだけ指定する場合
     if (moveParam.isPositionYSelect) {
         targetPosition_.y = moveParam.value.y;
+    } else {
+        // Yを直接指定しない場合、空中攻撃なら開始時の高さを維持する
+        if (isAirValid) {
+            targetPosition_.y = startPosition_.y;
+        }
     }
 
     // 移動先に敵がいたら目の前で止まる
@@ -528,25 +536,28 @@ void ComboAttackAction::SetMoveEasing() {
 }
 
 void ComboAttackAction::SetPrepMoveEasing() {
-    const auto& moveParam  = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).moveParam;
-    const float finishWait = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).timingParam.finishWaitTime;
-    std::string attackName = attackData_ ? attackData_->GetGroupName() : "Unknown";
-    KetaEngine::Log::Info("[" + attackName + "] Prep easeTime=" + std::to_string(moveParam.easeTime)
-                          + " startTime=" + std::to_string(moveParam.startTime)
-                          + " finishTimeOffset=" + std::to_string(moveParam.finishTimeOffset)
-                          + " finishWaitTime=" + std::to_string(finishWait));
-    Vector3 start = pOwner_->GetWorldPosition();
+    const auto& prepParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION);
+    const auto& moveParam = prepParam.moveParam;
+    Vector3 start         = pOwner_->GetWorldPosition();
 
+    // 攻撃条件は全フェーズ共通でMAINのものを参照する
     const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
-    bool isAirAttack    = attackData_->GetAttackParam().triggerParam.condition == PlayerComboAttackData::TriggerCondition::AIR;
-    bool isJumping      = dynamic_cast<PlayerJump*>(pOwner_->GetBehavior()) != nullptr;
-    if (!isAirAttack && !isJumping && start.y > groundY) {
+    auto condition      = attackData_->GetAttackParam().triggerParam.condition;
+    bool isAirValid     = (condition == PlayerComboAttackData::TriggerCondition::AIR || 
+                           condition == PlayerComboAttackData::TriggerCondition::BOTH);
+
+    if (!isAirValid && start.y > groundY) {
         start.y = groundY;
     }
 
     Vector3 target = start + pOwner_->GetBaseTransform().CalcForwardOffset(moveParam.value);
     if (moveParam.isPositionYSelect) {
         target.y = moveParam.value.y;
+    } else {
+        // Yを直接指定しない場合、空中攻撃なら開始時の高さを維持する
+        if (isAirValid) {
+            target.y = start.y;
+        }
     }
 
     prepCurrentMoveValue_ = start;
@@ -561,19 +572,28 @@ void ComboAttackAction::SetPrepMoveEasing() {
 }
 
 void ComboAttackAction::SetFinishMoveEasing() {
-    const auto& moveParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::FINISH).moveParam;
-    Vector3 start         = pOwner_->GetWorldPosition();
+    const auto& finishParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::FINISH);
+    const auto& moveParam   = finishParam.moveParam;
+    Vector3 start           = pOwner_->GetWorldPosition();
 
+    // 攻撃条件は全フェーズ共通でMAINのものを参照する
     const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
-    bool isAirAttack    = attackData_->GetAttackParam().triggerParam.condition == PlayerComboAttackData::TriggerCondition::AIR;
-    bool isJumping      = dynamic_cast<PlayerJump*>(pOwner_->GetBehavior()) != nullptr;
-    if (!isAirAttack && !isJumping && start.y > groundY) {
+    auto condition      = attackData_->GetAttackParam().triggerParam.condition;
+    bool isAirValid     = (condition == PlayerComboAttackData::TriggerCondition::AIR || 
+                           condition == PlayerComboAttackData::TriggerCondition::BOTH);
+
+    if (!isAirValid && start.y > groundY) {
         start.y = groundY;
     }
 
     Vector3 target = start + pOwner_->GetBaseTransform().CalcForwardOffset(moveParam.value);
     if (moveParam.isPositionYSelect) {
         target.y = moveParam.value.y;
+    } else {
+        // Yを直接指定しない場合、空中攻撃なら開始時の高さを維持する
+        if (isAirValid) {
+            target.y = start.y;
+        }
     }
 
     finishCurrentMoveValue_ = start;
@@ -694,30 +714,20 @@ void ComboAttackAction::Debug() {
 
 void ComboAttackAction::SetOrder(Order order) {
     order_ = order;
-    std::string orderName;
     switch (order) {
     case Order::INIT:
-        orderName = "INIT";
         break;
     case Order::PREP_ATTACK:
-        orderName = "PREP_ATTACK";
         break;
     case Order::ATTACK:
-        orderName = "ATTACK";
         break;
     case Order::FINISH_ATTACK:
-        orderName = "FINISH_ATTACK";
         break;
     case Order::WAIT:
-        orderName = "WAIT";
         break;
     case Order::CHANGE:
-        orderName = "CHANGE";
         break;
     }
-
-    std::string attackName = attackData_ ? attackData_->GetGroupName() : "Unknown";
-    KetaEngine::Log::Info("ComboAttackAction [" + attackName + "] SetOrder: " + orderName);
 
     switch (order) {
     case Order::INIT:

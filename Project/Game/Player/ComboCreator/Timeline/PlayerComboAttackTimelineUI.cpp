@@ -38,19 +38,17 @@ void PlayerComboAttackTimelineUI::RegisterParamUIFunctions() {
         attackData_->DrawMoveParamUIForPhase(phase_);
     };
 
-    // 攻撃発動パラメータはMAINフェーズのみ
-    if (phase_ == AttackTimelinePhase::MAIN) {
-        paramUIDrawFunctions_[ParamEditType::TRIGGER] = [this]() {
-            bool isFirstAttack = true;
-            if (attackData_->GetPlayer()) {
-                auto* controller = attackData_->GetPlayer()->GetComboAttackController();
-                if (controller) {
-                    isFirstAttack = controller->IsFirstAttack(attackData_->GetGroupName());
-                }
+    // 攻撃発動パラメータ
+    paramUIDrawFunctions_[ParamEditType::TRIGGER] = [this]() {
+        bool isFirstAttack = true;
+        if (attackData_->GetPlayer()) {
+            auto* controller = attackData_->GetPlayer()->GetComboAttackController();
+            if (controller) {
+                isFirstAttack = controller->IsFirstAttack(attackData_->GetGroupName());
             }
-            attackData_->DrawTriggerParamUI(isFirstAttack);
-        };
-    }
+        }
+        attackData_->DrawTriggerParamUIForPhase(phase_, isFirstAttack);
+    };
 
     paramUIDrawFunctions_[ParamEditType::FLAGS] = [this]() {
         attackData_->DrawFlagsParamUIForPhase(phase_);

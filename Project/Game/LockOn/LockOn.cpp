@@ -53,12 +53,19 @@ void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* pla
 
     // 現在のターゲットの有効性チェック
     if (currentTarget_.has_value()) {
-
-        // 範囲外チェック
-        Vector3 relativePosition;
-        if (!IsTargetRange(currentTarget_.value(), player, relativePosition)) {
+        // 現在のターゲットが、渡されたターゲットリストに含まれているかチェック
+        auto it = std::find(targets.begin(), targets.end(), currentTarget_.value());
+        if (it == targets.end()) {
+            // 含まれていない場合はリセット
             currentTarget_.reset();
             currentTargetIndex_ = 0;
+        } else {
+            // 範囲外チェック
+            Vector3 relativePosition;
+            if (!IsTargetRange(currentTarget_.value(), player, relativePosition)) {
+                currentTarget_.reset();
+                currentTargetIndex_ = 0;
+            }
         }
     }
 
@@ -315,7 +322,10 @@ Vector3 LockOn::GetCurrentTargetPosition() const {
     if (currentTarget_.has_value()) {
 
         return std::visit([](auto&& obj) -> Vector3 {
-            return obj->GetWorldPosition();
+            if (obj) {
+                return obj->GetWorldPosition();
+            }
+            return Vector3{};
         },
             currentTarget_.value());
     }
@@ -326,7 +336,10 @@ Vector3 LockOn::GetCurrentTargetPosition() const {
 Vector3 LockOn::GetTargetObjectPosition(const LockOnVariant& target) const {
 
     return std::visit([](auto&& obj) -> Vector3 {
-        return obj->GetWorldPosition();
+        if (obj) {
+            return obj->GetWorldPosition();
+        }
+        return Vector3{};
     },
         target);
 }

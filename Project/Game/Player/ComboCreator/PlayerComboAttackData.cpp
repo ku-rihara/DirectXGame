@@ -24,8 +24,11 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     globalParameter_->SyncParamForGroup(groupName_);
     renditionData_.SyncSlotsToList();
 
-    // enumのタイプををIntから適応
-    attackParam_.triggerParam.condition      = static_cast<TriggerCondition>(triggerConditionInt_);
+    // enumのタイプををIntから適応 (全フェーズ共通)
+    attackParam_.triggerParam.condition       = static_cast<TriggerCondition>(triggerConditionInt_);
+    prepAttackParam_.triggerParam.condition   = attackParam_.triggerParam.condition;
+    finishAttackParam_.triggerParam.condition = attackParam_.triggerParam.condition;
+
     attackParam_.collisionParam.followTarget = static_cast<CollisionFollowTarget>(collisionFollowTargetInt_);
 
     // 解放フラグ初期化
@@ -44,8 +47,10 @@ void PlayerComboAttackData::LoadData() {
     globalParameter_->SyncParamForGroup(groupName_);
     renditionData_.SyncSlotsToList();
 
-    // conditionをIntから適応
-    attackParam_.triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
+    // conditionをIntから適応 (全フェーズ共通)
+    attackParam_.triggerParam.condition       = static_cast<TriggerCondition>(triggerConditionInt_);
+    prepAttackParam_.triggerParam.condition   = attackParam_.triggerParam.condition;
+    finishAttackParam_.triggerParam.condition = attackParam_.triggerParam.condition;
 
     // 解放フラグ初期化
     attackParam_.isUnlocked = (attackParam_.ableDefeatLevel == 0);
@@ -191,29 +196,38 @@ void PlayerComboAttackData::DrawMoveParamUI() {
 }
 
 void PlayerComboAttackData::DrawTriggerParamUI(bool isFirstAttack) {
-    auto& triggerParam = attackParam_.triggerParam;
+    DrawTriggerParamUIForPhase(TimelinePhase::MAIN, isFirstAttack);
+}
 
-    ImGui::SeparatorText("攻撃発動パラメータ");
+void PlayerComboAttackData::DrawTriggerParamUIForPhase(TimelinePhase phase, bool isFirstAttack) {
+    auto& triggerParam = attackParam_.triggerParam; // 常にMAINフェーズのパラメータを共通として扱う
 
-    // 最初の攻撃かどうかを表示
-    if (isFirstAttack) {
-        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "これは最初の攻撃です");
-    } else {
-        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "これはコンボ中の攻撃です");
+    ImGui::SeparatorText("攻撃発動パラメータ (共通)");
+
+    // MAINフェーズの場合のみ最初の攻撃かどうかを表示
+    if (phase == TimelinePhase::MAIN) {
+        if (isFirstAttack) {
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "これは最初の攻撃です");
+        } else {
+            ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "これはコンボ中の攻撃です");
+        }
+
+        // 最初の攻撃の場合のみボタンを表示
+        if (isFirstAttack) {
+            ImGuiKeyboardKeySelector("キーボード:ボタン", triggerParam.keyBordBottom);
+            ImGuiGamepadButtonSelector("パッド:ボタン", triggerParam.gamePadBottom);
+        }
     }
 
-    // 最初の攻撃の場合のみボタンと状況を表示
-    if (isFirstAttack) {
-        ImGuiKeyboardKeySelector("キーボード:ボタン", triggerParam.keyBordBottom);
-        ImGuiGamepadButtonSelector("パッド:ボタン", triggerParam.gamePadBottom);
+    // 発動条件は共通で管理
+    const char* conditionItems[] = {"地上", "空中", "両方", "ダッシュ", "ジャストアクション"};
 
-        // 発動条件
-        const char* conditionItems[] = {"地上", "空中", "両方", "ダッシュ", "ジャストアクション"};
-        triggerConditionInt_         = static_cast<int>(triggerParam.condition);
-        if (ImGui::Combo("発動できる状況", &triggerConditionInt_,
-                conditionItems, IM_ARRAYSIZE(conditionItems))) {
-            triggerParam.condition = static_cast<TriggerCondition>(triggerConditionInt_);
-        }
+    if (ImGui::Combo("発動できる状況", &triggerConditionInt_,
+            conditionItems, IM_ARRAYSIZE(conditionItems))) {
+        auto condition = static_cast<TriggerCondition>(triggerConditionInt_);
+        attackParam_.triggerParam.condition = condition;
+        prepAttackParam_.triggerParam.condition = condition;
+        finishAttackParam_.triggerParam.condition = condition;
     }
 }
 

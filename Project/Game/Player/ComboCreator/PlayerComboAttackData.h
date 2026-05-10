@@ -137,6 +137,7 @@ public:
     // フェーズ別UI
     void DrawCollisionParamUIForPhase(TimelinePhase phase);
     void DrawMoveParamUIForPhase(TimelinePhase phase);
+    void DrawTriggerParamUIForPhase(TimelinePhase phase, bool isFirstAttack);
     void DrawFlagsParamUIForPhase(TimelinePhase phase);
     void DrawPhaseControls();
 

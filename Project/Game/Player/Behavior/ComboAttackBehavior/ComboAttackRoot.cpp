@@ -156,8 +156,11 @@ bool ComboAttackRoot::CheckConditionMuch(const PlayerComboAttackData::TriggerCon
 }
 
 void ComboAttackRoot::JudgeAttackPattern() {
-    // ジャンプ中かどうかで判定
-    if (dynamic_cast<PlayerJump*>(pOwner_->GetBehavior())) {
+    // ジャンプ行動中、または一定以上浮いている場合は空中（JUMP）扱いにする
+    bool isJumping  = dynamic_cast<PlayerJump*>(pOwner_->GetBehavior()) != nullptr;
+    bool isFloating = pOwner_->GetWorldPosition().y > pOwner_->GetParameter()->GetParameters().startPos_.y + 0.1f;
+
+    if (isJumping || isFloating) {
         attackPatern_ = AttackPatern::JUMP;
     } else {
         attackPatern_ = AttackPatern::NORMAL;
