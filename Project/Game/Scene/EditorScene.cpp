@@ -43,6 +43,7 @@ void EditorScene::Update() {
     enemyManager_->Update();
     combo_->Update();
     gameCamera_->Update();
+    lockOnController_->Update(player_.get(), viewProjection_);
 
     ViewProjectionUpdate();
 
@@ -78,6 +79,7 @@ void EditorScene::Debug() {
     comboAsistController_->AdjustParam();
     unlockNotifier_->AdjustParam();
     audienceController_->AdjustParam();
+    lockOnController_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();

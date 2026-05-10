@@ -35,6 +35,7 @@ private:
         int32_t objectCount;
         int32_t spawnedCount     = 0;
         int32_t aliveCount       = 0;
+        int32_t strongEnemyCount = 0; // そのフェーズのStrongEnemyの数
         int32_t nextFazeEnemyNum = 0;
         bool isActive            = false;
         bool isCompleted         = false;
@@ -63,6 +64,7 @@ public:
     /// </summary>
     /// <param name="groupId">グループID</param>
     void OnEnemyDestroyed(int groupId);
+    void OnStrongEnemyDestroyed(int groupId); // 強敵が倒された際の通知
 
     ///=======================================================================================
     /// Editor method

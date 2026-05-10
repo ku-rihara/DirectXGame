@@ -391,6 +391,9 @@ void EnemyManager::Update() {
 
             if (enemies_[i]->GetType() == BaseEnemy::Type::STRONG) {
                 OnBossKilled(enemies_[i].get());
+                if (pEnemySpawner_) {
+                    pEnemySpawner_->OnStrongEnemyDestroyed(groupID);
+                }
             }
 
             if (pEnemySpawner_) {

@@ -70,6 +70,7 @@ void GameScene::Debug() {
     gameObj_.fireInjectors_->AdjustParam();
     gameObj_.gameIntroManager_->AdjustParam();
     gameObj_.audienceController_->AdjustParam();
+    gameObj_.lockOnController_->AdjustParam();
     gameObj_.deathTimer_->AdjustParam();
     gameObj_.killCounter_->AdjustParam();
     gameObj_.comboAsistController_->AdjustParam();

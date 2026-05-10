@@ -24,6 +24,12 @@ void LockOnController::Update(Player* pPlayer, const KetaEngine::ViewProjection&
     lockOn_->Update(targets, pPlayer, viewProjection);
 }
 
+void LockOnController::AdjustParam() {
+    if (lockOn_) {
+        lockOn_->AdjustParam();
+    }
+}
+
 void LockOnController::SetEnemyManager(EnemyManager* enemyManager) {
     pEnemyManager_ = enemyManager;
 }

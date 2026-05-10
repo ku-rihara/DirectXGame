@@ -100,6 +100,9 @@ void Player::Update() {
         behavior_->Update();
     }
 
+    // ロックオン対象がいればそちらを向く
+    FaceToTarget();
+
     if (viewProjection_) {
         jumpAttackUI_->Update(GetWorldPosition(), *viewProjection_);
     }

@@ -9,6 +9,21 @@ void EnemySpawner::Init(const std::string& jsonData) {
     ParseJsonData(jsonData);
     SettingGroupSpawnPos();
 
+    // グループごとのStrongEnemy数をカウント
+    for (auto& group : spawnGroups_) {
+        group.strongEnemyCount = 0;
+        auto it = groupSpawnPoints_.find(group.id);
+        if (it != groupSpawnPoints_.end()) {
+            for (auto* sp : it->second) {
+                if (sp->enemyType == "StrongEnemy" || sp->enemyType == "BossEnemy") {
+                    group.strongEnemyCount++;
+                }
+            }
+        }
+    }
+
+    shouldLoop_ = true; // デフォルトでループ有効
+
     // グローバルパラメータ
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
@@ -238,7 +253,8 @@ bool EnemySpawner::IsGroupFullyPreGenerated(int32_t groupId) const {
 bool EnemySpawner::IsGroupCompleted(int groupId) const {
     if (groupId >= 0 && groupId < spawnGroups_.size()) {
         const SpawnGroup& group = spawnGroups_[groupId];
-        return (group.aliveCount <= group.nextFazeEnemyNum && group.spawnedCount == group.objectCount);
+        // 全員スポーン済み かつ StrongEnemyが全滅 したら完了
+        return (group.strongEnemyCount <= 0 && group.spawnedCount == group.objectCount);
     }
     return false;
 }
@@ -257,12 +273,29 @@ void EnemySpawner::ActivateNextGroup() {
 }
 
 void EnemySpawner::RestartLoop() {
+    // 最初のグループのStrongEnemy数を再カウントするために、一度全グループのカウントを初期化
+    ParseJsonData(jsonData_.dump()); // JSONから再読み込みして構造をリセット
+    // ※ ParseJsonData内でspawnGroups_などが再構築されるため、
+    // ここでの手動ループリセットは不要になるか、あるいはParseJsonData後に必要。
+    // 安全のため、Initと同様のカウント処理を再度行う。
+
     for (auto& group : spawnGroups_) {
         group.isActive       = false;
         group.isCompleted    = false;
         group.spawnedCount   = 0;
         group.aliveCount     = 0;
         group.groupStartTime = 0.0f;
+
+        // StrongEnemy数を再カウント
+        group.strongEnemyCount = 0;
+        auto it = groupSpawnPoints_.find(group.id);
+        if (it != groupSpawnPoints_.end()) {
+            for (auto* sp : it->second) {
+                if (sp->enemyType == "StrongEnemy" || sp->enemyType == "BossEnemy") {
+                    group.strongEnemyCount++;
+                }
+            }
+        }
     }
     for (auto& spawn : spawnPoints_) {
         spawn.hasSpawned   = false;
@@ -285,6 +318,15 @@ void EnemySpawner::OnEnemyDestroyed(int groupId) {
         spawnGroups_[groupId].aliveCount--;
         if (spawnGroups_[groupId].aliveCount < 0) {
             spawnGroups_[groupId].aliveCount = 0;
+        }
+    }
+}
+
+void EnemySpawner::OnStrongEnemyDestroyed(int groupId) {
+    if (groupId >= 0 && groupId < spawnGroups_.size()) {
+        spawnGroups_[groupId].strongEnemyCount--;
+        if (spawnGroups_[groupId].strongEnemyCount < 0) {
+            spawnGroups_[groupId].strongEnemyCount = 0;
         }
     }
 }

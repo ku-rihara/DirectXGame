@@ -1,17 +1,20 @@
 #include "ComboAttackAction.h"
+#include "utility/Log/Log.h"
 #include <cmath>
-#include "utility/Log/Log.h" 
 // Behavior
 #include "ComboAttackRoot.h"
 // Frame
 #include "Frame/Frame.h"
 // Input
 #include "input/Input.h"
+// LockOn
+#include "LockOn/LockOn.h"
+#include "LockOn/LockOnController.h"
 // Player
-#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
-#include "Player/ComboCreator/PlayerComboAttackController.h"
-#include "Player/Player.h"
 #include "DeathTimer/DeathTimer.h"
+#include "Player/ComboCreator/PlayerComboAttackController.h"
+#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
+#include "Player/Player.h"
 // ActionBehavior
 #include "Player/Behavior/PlayerBehavior/PlayerJump.h"
 #include "Player/Behavior/PlayerBehavior/PlayerMove.h"
@@ -130,8 +133,8 @@ void ComboAttackAction::Update(float atkSpeed) {
 }
 
 void ComboAttackAction::InitializeAttack() {
-    currentFrame_    = 0.0f;
-    attackRawTimer_  = 0.0f;
+    currentFrame_   = 0.0f;
+    attackRawTimer_ = 0.0f;
     if (attackData_->HasPrepPhase()) {
         SetOrder(Order::PREP_ATTACK);
     } else {
@@ -475,6 +478,19 @@ void ComboAttackAction::SetMoveEasing() {
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
     startPosition_                                    = pOwner_->GetWorldPosition();
 
+    // ロックオン対象がいればそちらを向く
+    LockOn* lockOn = nullptr;
+
+    if (pOwner_->GetLockOn()) {
+        lockOn = pOwner_->GetLockOn()->GetLockOn();
+    }
+
+    if (lockOn && lockOn->ExistTarget()) {
+        Vector3 targetPos                       = lockOn->GetCurrentTargetPosition();
+        Vector3 toTarget                        = targetPos - startPosition_;
+        pOwner_->GetBaseTransform().rotation_.y = std::atan2(toTarget.x, toTarget.z);
+    }
+
     // 攻撃条件がAIRでなく、かつジャンプ中でもないのに浮いている場合はYを地上に補正する
     const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
     bool isAirAttack    = attackData_->GetAttackParam().triggerParam.condition == PlayerComboAttackData::TriggerCondition::AIR;
@@ -512,13 +528,13 @@ void ComboAttackAction::SetMoveEasing() {
 }
 
 void ComboAttackAction::SetPrepMoveEasing() {
-    const auto& moveParam    = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).moveParam;
-    const float finishWait   = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).timingParam.finishWaitTime;
-    std::string attackName   = attackData_ ? attackData_->GetGroupName() : "Unknown";
+    const auto& moveParam  = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).moveParam;
+    const float finishWait = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION).timingParam.finishWaitTime;
+    std::string attackName = attackData_ ? attackData_->GetGroupName() : "Unknown";
     KetaEngine::Log::Info("[" + attackName + "] Prep easeTime=" + std::to_string(moveParam.easeTime)
-        + " startTime=" + std::to_string(moveParam.startTime)
-        + " finishTimeOffset=" + std::to_string(moveParam.finishTimeOffset)
-        + " finishWaitTime=" + std::to_string(finishWait));
+                          + " startTime=" + std::to_string(moveParam.startTime)
+                          + " finishTimeOffset=" + std::to_string(moveParam.finishTimeOffset)
+                          + " finishWaitTime=" + std::to_string(finishWait));
     Vector3 start = pOwner_->GetWorldPosition();
 
     const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
@@ -580,7 +596,7 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
     const Vector3& start, const Vector3& defaultTarget,
     Vector3* outFoundEnemyPos) const {
 
-     // ヒットした敵の方向を向き続ける
+    // ヒットした敵の方向を向き続ける
     if (pCollisionInfo_->GetHasHitTarget()) {
         Vector3 dir = pCollisionInfo_->GetHitTargetPos() - pOwner_->GetWorldPosition();
         if (dir.x != 0.0f || dir.z != 0.0f) {
@@ -600,8 +616,8 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
     }
 
     // 移動方向ベクトル
-    Vector3 moveVec  = defaultTarget - start;
-    float   moveDist = moveVec.Length();
+    Vector3 moveVec = defaultTarget - start;
+    float moveDist  = moveVec.Length();
     if (moveDist < 0.001f) {
         return defaultTarget;
     }
@@ -612,9 +628,9 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
     // 敵コリジョン前面から何ユニット手前で止まるか
     const float kStopMargin = 1.5f;
 
-    float         closestDot      = moveDist; 
-    bool          found           = false;
-    Vector3       foundEnemyPos   = {};
+    float closestDot      = moveDist;
+    bool found            = false;
+    Vector3 foundEnemyPos = {};
 
     for (const auto& enemy : enemies) {
         if (!enemy) {
@@ -675,7 +691,6 @@ void ComboAttackAction::Debug() {
 
 #endif
 }
-
 
 void ComboAttackAction::SetOrder(Order order) {
     order_ = order;

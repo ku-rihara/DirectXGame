@@ -16,6 +16,9 @@
 
 void LockOn::Init() {
 
+    // パラメータ初期値
+    currentTargetScale_ = Vector2::OneVector();
+
     //* グローバルパラメータ
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
@@ -43,6 +46,7 @@ void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* pla
     }
 
     if (!isActive_) {
+        lockOnMark_->SetIsDraw(false);
         ableLockOnMarkers_.clear();
         return;
     }
@@ -81,6 +85,11 @@ void LockOn::UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets,
     // 必要な数のマーカーを確保
     ResizeTargetMarkers(validTargets.size());
 
+    // 全てのマーカーを一旦非表示にリセット
+    for (auto& marker : ableLockOnMarkers_) {
+        if (marker.sprite) marker.sprite->SetIsDraw(false);
+    }
+
     // 各ターゲットのマーカーを更新
     for (size_t i = 0; i < validTargets.size(); ++i) {
         if (i >= ableLockOnMarkers_.size())
@@ -99,6 +108,7 @@ void LockOn::UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets,
 
         // スプライトの位置とスケールを設定
         if (ableLockOnMarkers_[i].sprite) {
+            ableLockOnMarkers_[i].sprite->SetIsDraw(true);
             ableLockOnMarkers_[i].sprite->transform_.pos = ableLockOnMarkers_[i].screenPosition;
 
             if (isCurrentTarget) {
@@ -280,6 +290,7 @@ void LockOn::UpdateCurrentReticleUI(const KetaEngine::ViewProjection& viewProjec
     lockOnMarkPos_ = Lerp(prePos_, positionScreenV2, lerpTime_);
 
     // スプライトの座標と回転を設定
+    lockOnMark_->SetIsDraw(true);
     lockOnMark_->transform_.pos = lockOnMarkPos_;
     spriteRotation_ += KetaEngine::Frame::DeltaTime();
     /* lockOnMark_->transform_.rotate.z = spriteRotation_;*/
