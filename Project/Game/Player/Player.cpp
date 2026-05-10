@@ -135,6 +135,7 @@ void Player::Update() {
 void Player::ChangeDeathMode() {
 
     if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
+        ChangeCombBoRoot(); // 攻撃を強制終了
         ChangeBehavior(std::make_unique<PlayerDeath>(this));
     }
 }
@@ -443,15 +444,13 @@ void Player::ResetHeadScale() {
 }
 
 bool Player::IsAbleBehavior() {
-    bool isAttackRoot = (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get()));
-    
-    // 攻撃中かつ死んでいないなら攻撃挙動のみ可能
-    if (isAttackRoot && !(isDeath_ && *isDeath_)) {
+    // 死亡中はPlayerDeathの更新を許可するために必ずtrueを返す
+    if (isDeath_ && *isDeath_) {
         return true;
     }
 
-  //通常挙動を許可
-    return !isAttackRoot;
+    // 攻撃中でなければ通常の振る舞いを許可
+    return (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get()) != nullptr);
 }
 
 void Player::InitInGameScene() {

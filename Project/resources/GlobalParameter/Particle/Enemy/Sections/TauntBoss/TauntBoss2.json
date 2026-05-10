@@ -79,9 +79,9 @@
         "Max Particle Num": 1000,
         "Particle Count": 1,
         "Position Base": [
-            -9.5600004196167,
+            0.0,
             0.6200000047683716,
-            -13.550000190734863
+            0.0
         ],
         "Position Max": [
             0.0,
@@ -144,8 +144,8 @@
             1.0,
             1.0
         ],
-        "Speed Max": 7.0,
-        "Speed Min": 7.0,
+        "Speed Max": 19.959999084472656,
+        "Speed Min": 18.739999771118164,
         "SpeedV3 Max": [
             0.0,
             0.0,

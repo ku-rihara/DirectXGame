@@ -112,16 +112,22 @@ void ParticleUpdater::UpdateGroup(
             if (dist > 0.001f) {
                 it->direction_ = toGoal.Normalize();
                 if (!it->isFloatVelocity) {
-                    float spd  = it->speedV3.Length();
+                    float spd   = it->speedV3.Length();
                     it->speedV3 = it->direction_ * spd;
                 }
+
+                // 各軸の適応
                 if (it->isRotateForDirection) {
-                    Vector3 up = {0.0f, 1.0f, 0.0f};
-                    Matrix4x4 rotMat  = DirectionToDirection(up, it->direction_);
-                    Vector3 dirAngles = ExtractEulerAngles(rotMat);
-                    if (it->rotateForDirectionX) it->worldTransform_->rotation_.x = dirAngles.x;
-                    if (it->rotateForDirectionY) it->worldTransform_->rotation_.y = -dirAngles.y;
-                    if (it->rotateForDirectionZ) it->worldTransform_->rotation_.z = dirAngles.z;
+                    Vector3 d = it->direction_;
+                    if (it->rotateForDirectionX) {
+                        it->worldTransform_->rotation_.x = std::atan2(-d.y, std::sqrt(d.x * d.x + d.z * d.z));
+                    }
+                    if (it->rotateForDirectionY) {
+                        it->worldTransform_->rotation_.y = std::atan2(d.x, d.z);
+                    }
+                    if (it->rotateForDirectionZ) {
+                        it->worldTransform_->rotation_.z = 0.0f;
+                    }
                 }
             }
         }

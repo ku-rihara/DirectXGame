@@ -11,6 +11,7 @@
 #include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
+#include "DeathTimer/DeathTimer.h"
 // ActionBehavior
 #include "Player/Behavior/PlayerBehavior/PlayerJump.h"
 #include "Player/Behavior/PlayerBehavior/PlayerMove.h"
@@ -109,6 +110,12 @@ void ComboAttackAction::Init() {
 }
 
 void ComboAttackAction::Update(float atkSpeed) {
+
+    // 死亡チェック
+    if (pOwner_->GetDeathTimer() && pOwner_->GetDeathTimer()->GetIsDeath()) {
+        pOwner_->ChangeCombBoRoot();
+        return;
+    }
 
     // 通常移動
     if (attackData_->GetAttackParam().moveParam.isAbleInputMoving) {
