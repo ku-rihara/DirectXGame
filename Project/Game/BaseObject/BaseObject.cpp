@@ -17,3 +17,4 @@ Vector3 BaseObject::GetWorldPosition() const {
 
     return worldPos;
 }
+
