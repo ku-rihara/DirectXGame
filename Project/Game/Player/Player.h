@@ -197,6 +197,7 @@ private:
 
     // move
     float objectiveAngle_;
+    float objectiveAnglePitch_ = 0.0f;
     Vector3 direction_;
     Vector3 prePos_;
     float moveSpeed_;
@@ -254,6 +255,7 @@ public:
     void SetDeathHidePlayer(bool hide) { isDeathHidePlayer_ = hide; }
     void SetIsIgnoreUnlockState(bool isIgnore) { isIgnoreUnlockState_ = isIgnore; }
     void SetObjectiveAngle(float angle) { objectiveAngle_ = angle; }
+    void SetObjectiveAnglePitch(float angle) { objectiveAnglePitch_ = angle; }
 
     AutoComboQueue& GetAutoComboQueue() { return autoComboQueue_; }
 

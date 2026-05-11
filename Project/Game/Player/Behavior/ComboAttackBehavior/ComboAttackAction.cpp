@@ -147,6 +147,21 @@ void ComboAttackAction::UpdatePrepAttack(float atkSpeed) {
 
     prepMoveEasing_.Update(atkSpeed);
     if (!prepParam.isMotionOnly) {
+        // 移動方向を向く
+        if (prepParam.moveParam.isFaceMovementDirection) {
+            Vector3 moveDir = prepCurrentMoveValue_ - pOwner_->GetWorldPosition();
+            float lengthXZ = std::sqrt(moveDir.x * moveDir.x + moveDir.z * moveDir.z);
+            if (lengthXZ > 0.001f || std::abs(moveDir.y) > 0.001f) {
+                // Yaw (Y軸回転)
+                if (lengthXZ > 0.001f) {
+                    pOwner_->SetObjectiveAngle(std::atan2(moveDir.x, moveDir.z));
+                }
+                // Pitch (X軸回転) - 高低差も含めて傾く
+                pOwner_->SetObjectiveAnglePitch(std::atan2(-moveDir.y, lengthXZ));
+                pOwner_->AdaptRotate();
+            }
+        }
+
         pOwner_->SetWorldPosition(prepCurrentMoveValue_);
     }
 
@@ -246,7 +261,24 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
 }
 
 void ComboAttackAction::UpdateFinishAttack(float atkSpeed) {
+    const auto& finishParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::FINISH);
     finishMoveEasing_.Update(atkSpeed);
+
+    // 移動方向を向く
+    if (finishParam.moveParam.isFaceMovementDirection) {
+        Vector3 moveDir = finishCurrentMoveValue_ - pOwner_->GetWorldPosition();
+        float lengthXZ = std::sqrt(moveDir.x * moveDir.x + moveDir.z * moveDir.z);
+        if (lengthXZ > 0.001f || std::abs(moveDir.y) > 0.001f) {
+            // Yaw
+            if (lengthXZ > 0.001f) {
+                pOwner_->SetObjectiveAngle(std::atan2(moveDir.x, moveDir.z));
+            }
+            // Pitch
+            pOwner_->SetObjectiveAnglePitch(std::atan2(-moveDir.y, lengthXZ));
+            pOwner_->AdaptRotate();
+        }
+    }
+
     pOwner_->SetWorldPosition(finishCurrentMoveValue_);
 
     if (finishRendition_) {
@@ -443,7 +475,27 @@ void ComboAttackAction::AttackCancel() {
 
 void ComboAttackAction::ApplyMovement(float atkSpeed) {
     moveEasing_.Update(atkSpeed);
-    pOwner_->SetWorldPosition(currentMoveValue_);
+
+    // 移動方向を向く
+    if (attackData_->GetAttackParam().moveParam.isFaceMovementDirection) {
+        Vector3 moveDir = currentMoveValue_ - pOwner_->GetWorldPosition();
+        float lengthXZ = std::sqrt(moveDir.x * moveDir.x + moveDir.z * moveDir.z);
+        if (lengthXZ > 0.001f || std::abs(moveDir.y) > 0.001f) {
+            // Yaw
+            if (lengthXZ > 0.001f) {
+                pOwner_->SetObjectiveAngle(std::atan2(moveDir.x, moveDir.z));
+            }
+            // Pitch
+            pOwner_->SetObjectiveAnglePitch(std::atan2(-moveDir.y, lengthXZ));
+            pOwner_->AdaptRotate();
+        }
+    }
+
+    // 瞬間的に座標0に飛ぶバグへの対策: 移動量が極端に大きい(ワープ)場合は適用をスキップするか制限する
+    // 特にFallAntipation等で初期化が間に合っていない場合を想定
+    if (currentMoveValue_.Length() > 0.0001f || (currentMoveValue_ - pOwner_->GetWorldPosition()).Length() < 100.0f) {
+        pOwner_->SetWorldPosition(currentMoveValue_);
+    }
 }
 
 void ComboAttackAction::SetupCollision(AttackTimelinePhase phase) {

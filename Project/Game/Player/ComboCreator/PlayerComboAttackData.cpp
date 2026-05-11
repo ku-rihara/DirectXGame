@@ -190,6 +190,7 @@ void PlayerComboAttackData::DrawMoveParamUI() {
     ImGui::DragFloat3("移動量", &moveParam.value.x, 0.01f);
     ImGui::DragFloat("終了タイムオフセット", &moveParam.finishTimeOffset, 0.01f);
     ImGui::Checkbox("敵の前で止まる", &moveParam.isStopBeforeEnemy);
+    ImGui::Checkbox("移動方向を向く", &moveParam.isFaceMovementDirection);
 
     // Easing Type
     ImGuiEasingTypeSelector("イージング", moveParam.easeType);
@@ -403,6 +404,7 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
     globalParameter_->Regist(groupName_, "finishTimeOffset", &attackParam_.moveParam.finishTimeOffset);
     globalParameter_->Regist(groupName_, "isStopBeforeEnemy", &attackParam_.moveParam.isStopBeforeEnemy);
+    globalParameter_->Regist(groupName_, "isFaceMovementDirection", &attackParam_.moveParam.isFaceMovementDirection);
 
     // TriggerParam（最初の攻撃用）
     globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
@@ -606,6 +608,7 @@ void PlayerComboAttackData::RegisterPhaseParams(
     globalParameter_->Regist(groupName_, prefix + "isPositionYSelect",    &param.moveParam.isPositionYSelect);
     globalParameter_->Regist(groupName_, prefix + "finishTimeOffset",     &param.moveParam.finishTimeOffset);
     globalParameter_->Regist(groupName_, prefix + "isStopBeforeEnemy",    &param.moveParam.isStopBeforeEnemy);
+    globalParameter_->Regist(groupName_, prefix + "isFaceMovementDirection", &param.moveParam.isFaceMovementDirection);
 
     // TimingParam
     globalParameter_->Regist(groupName_, prefix + "finishWaitTime",       &param.timingParam.finishWaitTime);
@@ -657,6 +660,7 @@ void PlayerComboAttackData::DrawMoveParamUIForPhase(TimelinePhase phase) {
     ImGui::DragFloat3("移動量", &moveParam.value.x, 0.01f);
     ImGui::DragFloat("終了タイムオフセット", &moveParam.finishTimeOffset, 0.01f);
     ImGui::Checkbox("敵の前で止まる", &moveParam.isStopBeforeEnemy);
+    ImGui::Checkbox("移動方向を向く", &moveParam.isFaceMovementDirection);
 
     ImGuiEasingTypeSelector("イージング", moveParam.easeType);
 }

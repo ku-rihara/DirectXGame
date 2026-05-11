@@ -1,0 +1,28 @@
+{
+    "FallingRushDamage": {
+        "Bound_BounceDamping": 0.15000000596046448,
+        "Bound_BoundNum": 3,
+        "Bound_InitialBounceRate": 0.46000000834465027,
+        "Normal_DamageAnimationName": "",
+        "Normal_KnockBackDamping": 0.20000000298023224,
+        "Normal_KnockBackTime": 0.7699999809265137,
+        "Slammed_Gravity": 0.0,
+        "Slammed_RotateSpeed": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Strong_DamageAnimationName": "",
+        "TakeUpper_FallSpeedLimit": 149.39999389648438,
+        "TakeUpper_FloatingTime": 0.3799999952316284,
+        "TakeUpper_Gravity": 77.19999694824219,
+        "TakeUpper_RotateSpeed": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "TriggerAttackName": "FallAttackAfterJumping",
+        "damageCollingTime": 0.9399999976158142,
+        "isPriorityReaction": true
+    }
+}

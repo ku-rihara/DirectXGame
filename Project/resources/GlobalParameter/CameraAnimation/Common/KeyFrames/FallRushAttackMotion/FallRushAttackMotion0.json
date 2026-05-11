@@ -1,0 +1,20 @@
+{
+    "FallRushAttackMotion0": {
+        "fov": 45.0,
+        "fovEaseType": 0,
+        "position": [
+            0.0,
+            0.0,
+            9.399999618530273
+        ],
+        "positionEaseType": 22,
+        "rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "rotationEaseType": 0,
+        "timeMode": 1,
+        "timePoint": 0.8199999928474426
+    }
+}

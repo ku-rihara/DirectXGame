@@ -132,8 +132,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 4.0,
-        "Scale Min": 4.0,
+        "Scale Max": 2.0,
+        "Scale Min": 2.0,
         "ScaleV3 Max": [
             1.0,
             1.0,
@@ -201,6 +201,11 @@
         "emissiveIntensity": 1.7999999523162842,
         "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": false,
         "isFloatVelocity": false,
@@ -213,6 +218,9 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 3,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
         "scaleEaseParam.easeTypeInt": 0,
         "scaleEaseParam.endValueF.max": 0.0,
         "scaleEaseParam.endValueF.min": 0.0,
@@ -238,6 +246,7 @@
         "targetApplyR": true,
         "timeMode": 1,
         "useDistortion": false,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

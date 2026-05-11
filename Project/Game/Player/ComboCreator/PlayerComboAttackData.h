@@ -53,6 +53,7 @@ public:
         bool isPositionYSelect;
         float finishTimeOffset;
         bool isStopBeforeEnemy = false;
+        bool isFaceMovementDirection = false;
     };
 
     // コリジョンパラメータ
