@@ -11,10 +11,11 @@ void LockOnController::Init() {
 }
 void LockOnController::Update(Player* pPlayer, const KetaEngine::ViewProjection& viewProjection) {
 
-    
+    // ロックオン対象の収集
     std::vector<LockOn::LockOnVariant> targets;
     const auto& enemies = pEnemyManager_->GetEnemies();
 
+    // 強敵のみをロックオン対象とする
     for (const auto& enemy : enemies) {
         if (enemy && dynamic_cast<StrongEnemy*>(enemy.get())) {
             targets.emplace_back(enemy.get());

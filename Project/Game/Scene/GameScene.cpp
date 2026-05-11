@@ -209,6 +209,7 @@ void GameScene::SetClassPointer() {
     gameObj_.player_->SetViewProjection(&viewProjection_);
     gameObj_.nextAttackHintUI_->SetViewProjection(&viewProjection_);
     gameObj_.player_->SetLockOn(gameObj_.lockOnController_.get());
+    gameObj_.gameCamera_->SetLockOn(gameObj_.lockOnController_->GetLockOn());
     gameObj_.player_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.player_->SetComboAttackController(gameObj_.playerComboAttackController_.get());
     gameObj_.player_->SetCombo(gameObj_.combo_.get());

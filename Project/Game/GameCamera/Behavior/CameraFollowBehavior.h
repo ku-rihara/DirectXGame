@@ -20,4 +20,5 @@ private:
 
 private:
     bool isReset_ = false;
+    const void* prevTarget_ = nullptr;
 };

@@ -3,6 +3,7 @@
 #include "3d/ViewProjection.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
+// std
 #include <cstdint>
 #include <memory>
 #include <optional>
@@ -96,30 +97,13 @@ private:
     /// <param name="validTargets">有効なターゲットリスト</param>
     void SortTargetsByAngle(std::vector<std::pair<float, LockOnVariant>>& validTargets) const;
 
-    /// <summary>
-    /// ターゲットマーカーのリサイズ
-    /// </summary>
-    /// <param name="targetCount">ターゲット数</param>
-    void ResizeTargetMarkers(const size_t& targetCount);
+    // ターゲットマーカーのリサイズや有効マーカー関係は削除
 
     /// <summary>
     /// 現在のレティクルUI更新
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
     void UpdateCurrentReticleUI(const KetaEngine::ViewProjection& viewProjection);
-
-    /// <summary>
-    /// Lerp時間の増加
-    /// </summary>
-    /// <param name="incrementTime">増加時間</param>
-    void LerpTimeIncrement(float incrementTime);
-
-    /// <summary>
-    /// ターゲットマーカー更新
-    /// </summary>
-    /// <param name="validTargets">有効なターゲットリスト</param>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets, const KetaEngine::ViewProjection& viewProjection);
 
 private:
     // global parameter
@@ -128,10 +112,8 @@ private:
 
     // Sprite
     std::unique_ptr<KetaEngine::Sprite> lockOnMark_;
-    std::vector<TargetMarker> ableLockOnMarkers_;
     uint32_t reticleHandle_;
     Vector2 currentTargetScale_;
-    Vector2 ableTargetScale_;
 
     // ターゲット
     std::optional<LockOnVariant> currentTarget_;
@@ -143,6 +125,7 @@ private:
     Vector2 spriteScale_;
     Vector2 lockOnMarkPos_;
     float spriteRotation_;
+    Vector3 targetOffset_; // ロックオン座標のオフセット
 
     // 自動検索設定
     bool autoSearchEnabled_   = true;

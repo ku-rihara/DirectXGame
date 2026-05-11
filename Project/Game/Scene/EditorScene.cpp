@@ -183,6 +183,7 @@ void EditorScene::SetClassPointer() {
 
     player_->SetViewProjection(&viewProjection_);
     player_->SetLockOn(lockOnController_.get());
+    gameCamera_->SetLockOn(lockOnController_->GetLockOn());
     player_->SetGameCamera(gameCamera_.get());
     player_->SetComboAttackController(playerComboAttackController_.get());
     player_->SetCombo(combo_.get());

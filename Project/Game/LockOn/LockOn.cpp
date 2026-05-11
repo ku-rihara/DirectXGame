@@ -27,7 +27,6 @@ void LockOn::Init() {
 
     // メインターゲット用スプライト
     lockOnMark_.reset(KetaEngine::Sprite::Create("UI/anchorPoint.dds"));
-   
 }
 
 void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* player, const KetaEngine::ViewProjection& viewProjection) {
@@ -35,19 +34,26 @@ void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* pla
     autoSearchTimer_ += deltaTime;
 
     // BボタンまたはRキーでロックオン切り替え
-    bool toggleTriggered = KetaEngine::Input::IsTriggerPad(0, GamepadButton::B) ||
-                           KetaEngine::Input::GetInstance()->TriggerKey(KeyboardKey::R);
+    bool toggleTriggered = KetaEngine::Input::IsTriggerPad(0, GamepadButton::B) || KetaEngine::Input::GetInstance()->TriggerKey(KeyboardKey::R);
     if (toggleTriggered) {
-        isActive_ = !isActive_;
-        if (!isActive_) {
+        if (currentTarget_.has_value()) {
+            // ターゲットがいる場合はロックオンを解除
+            isActive_ = false;
             currentTarget_.reset();
             currentTargetIndex_ = 0;
+        } else {
+            // ターゲットがいない場合は検索してロックオン
+            isActive_ = true;
+            AutoSearchTarget(targets, player);
+            // 検索しても見つからなかった場合はアクティブ状態を維持しない
+            if (!currentTarget_.has_value()) {
+                isActive_ = false;
+            }
         }
     }
 
     if (!isActive_) {
         lockOnMark_->SetIsDraw(false);
-        ableLockOnMarkers_.clear();
         return;
     }
 
@@ -78,70 +84,11 @@ void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* pla
         autoSearchTimer_ = 0.0f;
     }
 
-    ableLockOnMarkers_.clear();
-
     // 有効なターゲットを取得
     validTargets_ = GetValidTargets(targets, player);
 
     // UIとマーカーの更新
     UpdateCurrentReticleUI(viewProjection);
-    UpdateTargetMarkers(validTargets_, viewProjection);
-}
-
-void LockOn::UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets, const KetaEngine::ViewProjection& viewProjection) {
-    // 必要な数のマーカーを確保
-    ResizeTargetMarkers(validTargets.size());
-
-    // 全てのマーカーを一旦非表示にリセット
-    for (auto& marker : ableLockOnMarkers_) {
-        if (marker.sprite) marker.sprite->SetIsDraw(false);
-    }
-
-    // 各ターゲットのマーカーを更新
-    for (size_t i = 0; i < validTargets.size(); ++i) {
-        if (i >= ableLockOnMarkers_.size())
-            break;
-
-        // ターゲットの3D座標を取得
-        Vector3 targetWorldPos = GetTargetObjectPosition(validTargets[i]);
-
-        // スクリーン座標に変換
-        Vector2 screenPos                    = ScreenTransform(targetWorldPos, viewProjection);
-        ableLockOnMarkers_[i].screenPosition = screenPos;
-
-        // 現在のターゲットかどうかをチェック
-        bool isCurrentTarget                  = (currentTarget_.has_value() && validTargets[i] == currentTarget_.value());
-        ableLockOnMarkers_[i].isCurrentTarget = isCurrentTarget;
-
-        // スプライトの位置とスケールを設定
-        if (ableLockOnMarkers_[i].sprite) {
-            ableLockOnMarkers_[i].sprite->SetIsDraw(true);
-            ableLockOnMarkers_[i].sprite->transform_.pos = ableLockOnMarkers_[i].screenPosition;
-
-            if (isCurrentTarget) {
-                // 現在のターゲットは大きく表示
-                ableLockOnMarkers_[i].sprite->transform_.scale = currentTargetScale_;
-                ableLockOnMarkers_[i].sprite->SetColor(Vector3(1.0f, 0.0f, 0.0f)); // 赤色
-            } else {
-                // 利用可能なターゲットは小さく表示
-                ableLockOnMarkers_[i].sprite->transform_.scale = ableTargetScale_;
-                ableLockOnMarkers_[i].sprite->SetColor(Vector3(1.0f, 1.0f, 1.0f)); // 黄色
-            }
-        }
-    }
-}
-
-void LockOn::ResizeTargetMarkers(const size_t& targetCount) {
-    if (ableLockOnMarkers_.size() < targetCount) {
-        // 足りない分のマーカーを作成
-        size_t currentSize = ableLockOnMarkers_.size();
-        ableLockOnMarkers_.resize(targetCount);
-
-        for (size_t i = currentSize; i < targetCount; ++i) {
-            ableLockOnMarkers_[i].sprite.reset(KetaEngine::Sprite::Create("UI/anchorPoint.dds"));
-            ableLockOnMarkers_[i].sprite->SetAnchorPoint(Vector2(0.5f, 0.5f));
-        }
-    }
 }
 
 void LockOn::HandleTargetSwitching(const std::vector<LockOnVariant>& targets, const Player* player) {
@@ -293,14 +240,18 @@ void LockOn::UpdateCurrentReticleUI(const KetaEngine::ViewProjection& viewProjec
     lockOnMark_->transform_.scale = spriteScale_;
 
     // 線形補間の計算
-    LerpTimeIncrement(targetChangeSpeed_);
+    lerpTime_ += targetChangeSpeed_ * KetaEngine::Frame::DeltaTimeRate();
+    if (lerpTime_ >= 1.0f) {
+        lerpTime_ = 1.0f;
+    }
+
     lockOnMarkPos_ = Lerp(prePos_, positionScreenV2, lerpTime_);
 
     // スプライトの座標と回転を設定
     lockOnMark_->SetIsDraw(true);
     lockOnMark_->transform_.pos = lockOnMarkPos_;
     spriteRotation_ += KetaEngine::Frame::DeltaTime();
-    /* lockOnMark_->transform_.rotate.z = spriteRotation_;*/
+     lockOnMark_->transform_.rotate.z = spriteRotation_;
 }
 
 void LockOn::SortTargetsByDistance(std::vector<std::pair<float, LockOnVariant>>& validTargets) const {
@@ -317,13 +268,12 @@ void LockOn::SortTargetsByAngle(std::vector<std::pair<float, LockOnVariant>>& va
         });
 }
 
-
 Vector3 LockOn::GetCurrentTargetPosition() const {
     if (currentTarget_.has_value()) {
 
-        return std::visit([](auto&& obj) -> Vector3 {
+        return std::visit([this](auto&& obj) -> Vector3 {
             if (obj) {
-                return obj->GetWorldPosition();
+                return obj->GetWorldPosition() + targetOffset_;
             }
             return Vector3{};
         },
@@ -335,9 +285,9 @@ Vector3 LockOn::GetCurrentTargetPosition() const {
 
 Vector3 LockOn::GetTargetObjectPosition(const LockOnVariant& target) const {
 
-    return std::visit([](auto&& obj) -> Vector3 {
+    return std::visit([this](auto&& obj) -> Vector3 {
         if (obj) {
-            return obj->GetWorldPosition();
+            return obj->GetWorldPosition() + targetOffset_;
         }
         return Vector3{};
     },
@@ -391,13 +341,6 @@ bool LockOn::IsTargetRange(const LockOnVariant& target, const Player* player, Ve
     return false;
 }
 
-void LockOn::LerpTimeIncrement(float incrementTime) {
-    lerpTime_ += incrementTime;
-    if (lerpTime_ >= 1.0f) {
-        lerpTime_ = 1.0f;
-    }
-}
-
 ///=========================================================
 /// バインド
 ///==========================================================
@@ -407,7 +350,7 @@ void LockOn::RegisterParams() {
     globalParameter_->Regist(groupName_, "angleRange", &angleRange_);
     globalParameter_->Regist(groupName_, "spriteScale", &spriteScale_);
     globalParameter_->Regist(groupName_, "targetChangeSpeed", &targetChangeSpeed_);
-    globalParameter_->Regist(groupName_, "availableTargetScale", &ableTargetScale_);
+    globalParameter_->Regist(groupName_, "targetOffset", &targetOffset_);
 }
 
 ///=========================================================
@@ -424,10 +367,8 @@ void LockOn::AdjustParam() {
         ImGui::DragFloat("angleRange", &angleRange_, 0.1f);
         ImGui::DragFloat("targetChangeSpeed", &targetChangeSpeed_, 0.1f);
         ImGui::DragFloat2("spriteScale", &spriteScale_.x, 0.1f);
+        ImGui::DragFloat3("targetOffset", &targetOffset_.x, 0.1f);
 
-        ImGui::Separator();
-        ImGui::Text("Target Markers");
-        ImGui::DragFloat2("Available Target Scale", &ableTargetScale_.x, 0.1f);
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
@@ -438,5 +379,8 @@ void LockOn::AdjustParam() {
 }
 
 const LockOn::LockOnVariant* LockOn::GetIsCurrentTarget() const {
-    return currentTarget_ ? &(*currentTarget_) : nullptr;
+    if (currentTarget_.has_value()) {
+        return &currentTarget_.value();
+    }
+    return nullptr;
 }
