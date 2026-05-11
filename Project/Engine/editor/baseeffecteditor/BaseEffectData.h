@@ -19,7 +19,7 @@ public:
     };
 
 public:
-    virtual ~BaseEffectData() = default;
+    virtual ~BaseEffectData();
 
     //*---------------------------- public Methods ----------------------------*//
 
