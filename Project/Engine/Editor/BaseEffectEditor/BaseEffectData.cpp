@@ -41,6 +41,12 @@ void BaseEffectData::Init(const std::string& name, const std::string& categoryNa
     globalParameter_ = GlobalParameter::GetInstance();
 }
 
+BaseEffectData::~BaseEffectData() {
+    if (globalParameter_ && !groupName_.empty()) {
+        globalParameter_->ClearRegistersForGroup(groupName_);
+    }
+}
+
 bool BaseEffectData::IsPlaying() const {
     return playState_ == PlayState::PLAYING;
 }

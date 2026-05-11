@@ -14,7 +14,7 @@ void TimeModeSelector::GetParam(const std::string& groupName, GlobalParameter* g
 
 void TimeModeSelector::SelectTimeModeImGui(const char* label) {
     int mode = static_cast<int>(timeModeInt_);
-    if (ImGui::Combo(label, &mode, TimeModeLabels.data(), static_cast<int>(TimeModeLabels.size()))) {
+    if (ImGui::Combo(label, &mode, TimeModeLabels, IM_ARRAYSIZE(TimeModeLabels))) {
         timeModeInt_ = mode;
     }
 }

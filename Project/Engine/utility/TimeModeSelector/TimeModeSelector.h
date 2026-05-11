@@ -24,7 +24,7 @@ public:
 private:
     int32_t timeModeInt_ = static_cast<int32_t>(TimeMode::DELTA_TIME_RATE);
 
-    std::vector<const char*> TimeModeLabels = {
+    static inline const char* TimeModeLabels[] = {
         "DeltaTime (No TimeScale)",
         "DeltaTimeRate (With TimeScale)"};
 
