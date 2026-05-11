@@ -5,7 +5,8 @@
 #include "GameCamera/GameCamera.h"
 /// player
 #include "Player/Player.h"
-/// frame
+/// engine
+#include "audio/Audio.h"
 #include "Frame/Frame.h"
 /// imgui
 #include <imgui.h>
@@ -51,6 +52,7 @@ void PlayerDeath::WaitPreDeath(float) {
         isDeathActionsTriggered_ = true;
         pOwner_->SetDeathHidePlayer(true);
         pOwner_->GetEffects()->Emit("PlayerDeath");
+        KetaEngine::Audio::GetInstance()->Play("PlayerDeathExplotion.mp3", 1.0f);
         pOwner_->SetIsDeathRenditionFinish(true);
     }
 }

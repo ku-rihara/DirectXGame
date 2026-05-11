@@ -128,9 +128,21 @@ void Player::Update() {
         ChangeDeathMode();
     }
 
+    // 死亡時にプレイヤーモデルを非表示にする (スケールを0にする)
+    // baseTransformのスケールを0にするとペアレントされているパーティクルも消えてしまうため、
+    // モデル側のスケールのみを操作する
+    if (isDeathHidePlayer_) {
+        obj3d_->transform_.scale_                   = Vector3::ZeroVector();
+        leftHand_->GetObject3D()->transform_.scale_  = Vector3::ZeroVector();
+        rightHand_->GetObject3D()->transform_.scale_ = Vector3::ZeroVector();
+    } else {
+        obj3d_->transform_.scale_                   = Vector3::OneVector();
+        leftHand_->GetObject3D()->transform_.scale_  = Vector3::OneVector();
+        rightHand_->GetObject3D()->transform_.scale_ = Vector3::OneVector();
+    }
+
     // 移動制限
-    baseTransform_.SetBaseScale(
-        isDeathHidePlayer_ ? Vector3::ZeroVector() : parameters_->GetParameters().baseScale_);
+    baseTransform_.SetBaseScale(parameters_->GetParameters().baseScale_);
     MoveToLimit();
     UpdateMatrix();
 }

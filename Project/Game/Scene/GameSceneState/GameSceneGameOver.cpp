@@ -28,6 +28,9 @@ void GameSceneGameOver::Update([[maybe_unused]] float timeSpeed) {
     // HitStopタイマーを更新
     pOwner_->GetGameObj().attackEffect_->Update();
 
+    // 死亡エフェクトを最後まで表示するためにプレイヤーを更新し続ける
+    pOwner_->GetGameObj().player_->Update();
+
     auto* screen = pOwner_->GetGameObj().screenSprite_.get();
 
     switch (phase_) {

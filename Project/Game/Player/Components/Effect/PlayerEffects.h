@@ -46,15 +46,15 @@ private:
     /// private variables
     /// ===================================================
 
-   
-
-    KetaEngine::ParticlePlayer particlePlayer_;
+    static constexpr size_t kMaxParticles = 8;
+    std::array<std::unique_ptr<KetaEngine::ParticlePlayer>, kMaxParticles> particlePlayers_;
+    KetaEngine::WorldTransform* pParentTransform_ = nullptr;
 
 public:
     /// =========================================================================================
     /// getter
     /// =========================================================================================
-    bool IsParticleFinished() const { return particlePlayer_.IsFinished(); }
+    bool IsAnyParticlePlaying() const;
 
     /// =========================================================================================
     /// setter

@@ -20,5 +20,5 @@ public:
 private:
     float startDelayTimer_;
     float dirLockTimer_    = 0.0f; ///< 方向転換後のロック残り時間
-    Vector3 lockedMoveDir_ = {}; ///< ロック中の移動方向
+    Vector3 lockedMoveDir_ = {};   ///< ロック中の移動方向
 };

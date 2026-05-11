@@ -1,5 +1,6 @@
 #include "TitleSceneTransition.h"
 #include "base/TextureManager.h"
+#include "audio/Audio.h"
 #include "Frame/Frame.h"
 
 void TitleSceneTransition::Init() {
@@ -28,12 +29,14 @@ void TitleSceneTransition::CheckInput() {
     // キーボード入力（Space）
     if (KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::Space)) {
         isTransitionRequested_ = true;
+        KetaEngine::Audio::GetInstance()->Play("SelectSE.mp3", 1.0f);
         return;
     }
 
     // コントローラー入力（Aボタン）
     if (KetaEngine::Input::IsTriggerPad(0, GamepadButton::A)) {
         isTransitionRequested_ = true;
+        KetaEngine::Audio::GetInstance()->Play("SelectSE.mp3", 1.0f);
     }
 }
 

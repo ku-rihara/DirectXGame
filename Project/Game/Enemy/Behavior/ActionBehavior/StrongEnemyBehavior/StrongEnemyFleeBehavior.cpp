@@ -14,7 +14,9 @@ StrongEnemyFleeBehavior::StrongEnemyFleeBehavior(StrongEnemy* enemy, float start
     if (startDelayTimer_ <= 0.0f) {
         pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
     }
-   
+
+    // 焦りエフェクトの発生
+    pBaseEnemy_->GetEnemyEffects()->Emit("EnemyImpatience");
 }
 
 void StrongEnemyFleeBehavior::Update() {

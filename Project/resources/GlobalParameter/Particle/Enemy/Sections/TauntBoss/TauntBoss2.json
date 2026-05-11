@@ -9,9 +9,9 @@
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            0.953667938709259,
-            0.8616150617599487,
-            0.8616150617599487,
+            0.9305019378662109,
+            0.08981676399707794,
+            0.08981676399707794,
             0.0
         ],
         "Color Max": [
@@ -73,9 +73,9 @@
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 0.38999998569488525,
+        "IntervalTime": 0.3199999928474426,
         "IsScreenPos": false,
-        "LifeTime": 1.2300000190734863,
+        "LifeTime": 1.5299999713897705,
         "Max Particle Num": 1000,
         "Particle Count": 1,
         "Position Base": [
@@ -132,20 +132,20 @@
             0.0,
             0.0
         ],
-        "Scale Max": 6.0,
-        "Scale Min": 6.0,
+        "Scale Max": 3.0,
+        "Scale Min": 3.0,
         "ScaleV3 Max": [
+            3.0,
             1.0,
-            1.0,
-            1.0
+            2.0
         ],
         "ScaleV3 Min": [
+            3.0,
             1.0,
-            1.0,
-            1.0
+            2.0
         ],
-        "Speed Max": 19.959999084472656,
-        "Speed Min": 18.739999771118164,
+        "Speed Max": 35.0,
+        "Speed Min": 35.0,
         "SpeedV3 Max": [
             0.0,
             0.0,
