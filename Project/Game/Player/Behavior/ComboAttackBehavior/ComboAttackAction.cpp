@@ -529,7 +529,13 @@ void ComboAttackAction::SetMoveEasing() {
     // targetPosを計算
     const auto& attackParam = attackData_->GetAttackParam();
     const auto& moveParam   = attackParam.moveParam;
-    startPosition_          = pOwner_->GetWorldPosition();
+
+    // 行列が未更新で0になるのを防ぐためのガード
+    Vector3 start = pOwner_->GetWorldPosition();
+    if (start.Length() < 0.0001f) {
+        start = pOwner_->GetBaseTransform().translation_;
+    }
+    startPosition_ = start;
 
     // ロックオン対象がいればそちらを向く
     LockOn* lockOn = nullptr;
@@ -590,7 +596,12 @@ void ComboAttackAction::SetMoveEasing() {
 void ComboAttackAction::SetPrepMoveEasing() {
     const auto& prepParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION);
     const auto& moveParam = prepParam.moveParam;
-    Vector3 start         = pOwner_->GetWorldPosition();
+
+    // 行列が未更新で0になるのを防ぐためのガード
+    Vector3 start = pOwner_->GetWorldPosition();
+    if (start.Length() < 0.0001f) {
+        start = pOwner_->GetBaseTransform().translation_;
+    }
 
     // 攻撃条件は全フェーズ共通でMAINのものを参照する
     const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
@@ -613,6 +624,8 @@ void ComboAttackAction::SetPrepMoveEasing() {
     }
 
     prepCurrentMoveValue_ = start;
+    // PrepPhase開始時にもMAINフェーズ用の現在地を初期化しておく(ApplyMovement等での座標飛び防止)
+    currentMoveValue_     = start;
 
     prepMoveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
     prepMoveEasing_.SetStartValue(start);
@@ -626,7 +639,12 @@ void ComboAttackAction::SetPrepMoveEasing() {
 void ComboAttackAction::SetFinishMoveEasing() {
     const auto& finishParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::FINISH);
     const auto& moveParam   = finishParam.moveParam;
-    Vector3 start           = pOwner_->GetWorldPosition();
+
+    // 行列が未更新で0になるのを防ぐためのガード
+    Vector3 start = pOwner_->GetWorldPosition();
+    if (start.Length() < 0.0001f) {
+        start = pOwner_->GetBaseTransform().translation_;
+    }
 
     // 攻撃条件は全フェーズ共通でMAINのものを参照する
     const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
