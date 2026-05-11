@@ -10,8 +10,7 @@ CameraFollowBehavior::CameraFollowBehavior(GameCamera* owner)
 }
 
 void CameraFollowBehavior::Update(float time) {
-    time; // 未使用
-    MoveUpdate();
+    MoveUpdate(time);
 
     if (isReset_) {
         pOwner_->Reset();
@@ -50,7 +49,7 @@ Vector2 CameraFollowBehavior::InputUpdate() {
     return inputVector;
 }
 
-void CameraFollowBehavior::MoveUpdate() {
+void CameraFollowBehavior::MoveUpdate(float time) {
     // 入力更新
     Vector2 inputVector = InputUpdate();
 
@@ -78,7 +77,7 @@ void CameraFollowBehavior::MoveUpdate() {
         // ロックオンの瞬間以外は手動操作を許可する
         if (inputVector.Length() > 0.1f) {
             inputVector = inputVector.Normalize();
-            pOwner_->AddDestinationAngleY(inputVector.x * pOwner_->GetParameter().rotateYSpeed);
+            pOwner_->AddDestinationAngleY(inputVector.x * pOwner_->GetParameter().rotateYSpeed * time);
         }
     }
 

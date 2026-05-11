@@ -116,7 +116,7 @@
         ],
         "Finish_collisionStartTime": 0.0,
         "Finish_finishTimeOffset": 0.0,
-        "Finish_finishWaitTime": 0.06666667014360428,
+        "Finish_finishWaitTime": 0.01666666753590107,
         "Finish_isAbleInputMoving": false,
         "Finish_isAlwaysFollowing": false,
         "Finish_isAutoAdvance": false,
