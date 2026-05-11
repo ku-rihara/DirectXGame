@@ -53,7 +53,7 @@ void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
     obj.skyBox_->Update();
     obj.audienceController_->Update();
     obj.comboDirector_->Update();
-    obj.backGroundObjectManager_->Update(obj.gameIntroManager_->GetCurrentPlaySpeedRate());
+    obj.backGroundObjectManager_->Update(KetaEngine::Frame::DeltaTime() * obj.gameIntroManager_->GetCurrentPlaySpeedRate());
     obj.gameCamera_->Update(obj.gameIntroManager_->GetCurrentPlaySpeedRate());
     obj.combo_->Update();
 
