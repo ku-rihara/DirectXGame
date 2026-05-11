@@ -92,6 +92,7 @@ private:
 public:
     KetaEngine::Object3DAnimation* GetObjAnimation() { return objAnimation_.get(); }
     int32_t GetSeatRowNum() const { return seatRowNum_; }
+    int32_t GetAppearComboLevel() const { return appearComboLevel_; }
     AudienceRoot* GetAudienceRoot() const;
     KetaEngine::ParticlePlayer* GetParticlePlayer() const { return particlePlayer_.get(); }
 

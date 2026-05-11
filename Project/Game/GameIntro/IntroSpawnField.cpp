@@ -46,9 +46,6 @@ void IntroSpawnField::Wait() {
 
 void IntroSpawnField::ObjSpawn() {
 
-    if (pGameBackGroundObject_) {
-        pGameBackGroundObject_->Update(playSpeed_);
-    }
     if (pFireInjectors_) {
         pFireInjectors_->Spawn();
     }

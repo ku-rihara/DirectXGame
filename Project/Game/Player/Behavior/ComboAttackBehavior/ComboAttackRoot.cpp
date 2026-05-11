@@ -46,7 +46,7 @@ void ComboAttackRoot::Update(float atkSpeed) {
                 auto& triggerParam = nextData->GetAttackParam().triggerParam;
 
                 if (CheckConditionMuch(triggerParam.condition)) {
-                    // 条件OK: 強制ダッシュを解除してから実行
+                    //  強制ダッシュを解除してから実行
                     pOwner_->ClearAutoDash();
                     queue.Dequeue();
                     pOwner_->ChangeComboBehavior(
@@ -156,11 +156,10 @@ bool ComboAttackRoot::CheckConditionMuch(const PlayerComboAttackData::TriggerCon
 }
 
 void ComboAttackRoot::JudgeAttackPattern() {
-    // ジャンプ行動中、または一定以上浮いている場合は空中（JUMP）扱いにする
+    // ジャンプ行動中であるかをチェック
     bool isJumping  = dynamic_cast<PlayerJump*>(pOwner_->GetBehavior()) != nullptr;
-    bool isFloating = pOwner_->GetWorldPosition().y > pOwner_->GetParameter()->GetParameters().startPos_.y + 0.1f;
 
-    if (isJumping || isFloating) {
+    if (isJumping) {
         attackPatern_ = AttackPatern::JUMP;
     } else {
         attackPatern_ = AttackPatern::NORMAL;

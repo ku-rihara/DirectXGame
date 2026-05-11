@@ -852,6 +852,10 @@ void ParticleSectionParameter::SetTargetPosition(const Vector3& targetPos) {
 }
 
 void ParticleSectionParameter::SetGoalPosition(const Vector3& pos) {
+    if (!this) {
+        return;
+    }
+
     if (!parameters_.useGoalPosition) {
         return;
     }

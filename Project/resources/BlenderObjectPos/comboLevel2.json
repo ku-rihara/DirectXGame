@@ -518,7 +518,7 @@
                 {
                     "group_id": 0,
                     "animation_name": "StartAudienceSeat",
-                    "start_time": 2.5,
+                    "start_time": 3.0,
                     "is_loop": false
                 }
             ]

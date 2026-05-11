@@ -32,8 +32,8 @@ private:
 
     // 背景オブジェクトの定義
     std::vector<Entry> entries_ = {
-        { "ComboLevel1.json", 0, true  },
-        { "ComboLevel2.json", 1, false },
+        { "ComboLevel1.json", 1, true  },
+        { "ComboLevel2.json", 2, false },
     };
 
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
@@ -42,6 +42,9 @@ private:
     std::unique_ptr<GameBackGroundObject>      gameBackGroundObject_;
     std::unique_ptr<ComboLevelObjHolder>       comboLevelObjHolder_;
     std::unique_ptr<KetaEngine::DitherOcclusion> ditherOcclusion_;
+
+    // debug
+    bool isDebugForceShowAll_ = false;
 
 public:
     ComboLevelObjHolder* GetComboLevelObjHolder() const { return comboLevelObjHolder_.get(); }

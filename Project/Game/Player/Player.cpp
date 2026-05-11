@@ -96,6 +96,11 @@ void Player::Update() {
     HeadLightSetting();
 
     /// 振る舞い処理
+    // コンボ更新を先に行うことで、攻撃入力による状態遷移を優先させる
+    if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
+        comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
+    }
+
     if (IsAbleBehavior()) {
         behavior_->Update();
     }
@@ -116,11 +121,6 @@ void Player::Update() {
         if (damageCollTime_ <= 0.0f) {
             isDamageColling_ = false;
         }
-    }
-
-    // コンボ更新
-    if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
-        comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
     }
 
     // 死亡モード変更

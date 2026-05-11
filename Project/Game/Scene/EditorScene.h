@@ -6,6 +6,8 @@
 #include "Audience/AudienceController.h"
 // Combo
 #include "Combo/Combo.h"
+#include "BackGroundObject/BackGroundObjectManager.h"
+#include "ComboScene/ComboDirector.h"
 // DeathTimer
 #include "DeathTimer/DeathTimer.h"
 // KillCounter
@@ -77,6 +79,8 @@ private:
     std::unique_ptr<PlayerComboAttackController> playerComboAttackController_ = nullptr;
     std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
     std::unique_ptr<AudienceController> audienceController_                   = nullptr;
+    std::unique_ptr<BackGroundObjectManager> backGroundObjectManager_         = nullptr;
+    std::unique_ptr<ComboDirector> comboDirector_                             = nullptr;
     std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
     std::unique_ptr<KillCounter> killCounter_                                 = nullptr;
     std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;

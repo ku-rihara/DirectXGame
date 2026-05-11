@@ -9,8 +9,15 @@ void AudienceController::Init() {
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
+    for (int32_t i = 0; i < audienceMaxNum_; i++) {
+        audiences_[i] = std::make_unique<Audience>();
+        audiences_[i]->Init(i);
+        audiences_[i]->SetBaseScale(baseTransformScale_);
+        AdaptPositions(i);
 
-    createdCount_ = 0;
+        audiences_[i]->ForceUpdateTransforms();
+    }
+    createdCount_ = audienceMaxNum_;
 }
 
 void AudienceController::AdaptPositions(int32_t index) {
@@ -21,53 +28,22 @@ void AudienceController::AdaptPositions(int32_t index) {
     }
 }
 
-void AudienceController::DeferredCreate() {
-    if (createdCount_ >= audienceMaxNum_) {
-        return;
-    }
-
-    int32_t i     = createdCount_;
-    audiences_[i] = std::make_unique<Audience>();
-    audiences_[i]->Init(i);
-    audiences_[i]->SetBaseScale(baseTransformScale_);
-    AdaptPositions(i);
-
-    audiences_[i]->ForceUpdateTransforms();
-    createdCount_++;
-}
-
-void AudienceController::ProcessPendingDisappear() {
-    if (pendingDisappearLevel_ < 0) {
-        return;
-    }
-
-    int32_t end = std::min(pendingDisappearIndex_ + kDisappearPerFrame_, audienceMaxNum_);
-    for (int32_t i = pendingDisappearIndex_; i < end; i++) {
+void AudienceController::Update() {
+    for (int32_t i = 0; i < audienceMaxNum_; i++) {
         if (audiences_[i]) {
-            audiences_[i]->DisAppearByComboLevel(pendingDisappearLevel_);
+            if (isDebugForceShowAll_) {
+                audiences_[i]->AppearByComboLevel(audiences_[i]->GetAppearComboLevel());
+            }
+            audiences_[i]->Update();
         }
     }
-    pendingDisappearIndex_ = end;
-
-    if (pendingDisappearIndex_ >= audienceMaxNum_) {
-        pendingDisappearLevel_ = -1;
-    }
-}
-
-void AudienceController::Update() {
-    // 段階的DisAppear処理
-    ProcessPendingDisappear();
-
-    for (int32_t i = 0; i < createdCount_; i++) {
-        audiences_[i]->Update();
-    }
-
-    // 分散生成
-    DeferredCreate();
 }
 
 void AudienceController::AppearAudienceByLevel(int32_t level) {
-    for (int32_t i = 0; i < createdCount_; i++) {
+    if (isDebugForceShowAll_) {
+        return;
+    }
+    for (int32_t i = 0; i < audienceMaxNum_; i++) {
         if (audiences_[i]) {
             audiences_[i]->AppearByComboLevel(level);
         }
@@ -75,9 +51,11 @@ void AudienceController::AppearAudienceByLevel(int32_t level) {
 }
 
 void AudienceController::DisAppearAudience(int32_t level) {
-    // 段階処理キューにセット
-    pendingDisappearLevel_ = level;
-    pendingDisappearIndex_ = 0;
+    for (int32_t i = 0; i < audienceMaxNum_; i++) {
+        if (audiences_[i]) {
+            audiences_[i]->DisAppearByComboLevel(level);
+        }
+    }
 }
 
 void AudienceController::RegisterParams() {
@@ -98,6 +76,8 @@ void AudienceController::AdjustParam() {
 
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
+
+        ImGui::Checkbox("Debug Force Show All", &isDebugForceShowAll_);
 
         // transform
         ImGui::DragFloat3("baseScale", &baseTransformScale_.x, 0.01f);

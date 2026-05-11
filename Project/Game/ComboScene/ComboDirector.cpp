@@ -26,6 +26,11 @@ void ComboDirector::CheckIsLevelUp() {
     // 現在レベルを取得
     int32_t currentLevel = pCombo_->GetCurrentLevel();
 
+    // 最大レベルならレベルアップチェックを行わない
+    if (currentLevel >= kComboLevel) {
+        return;
+    }
+
     if (pCombo_->GetComboCount() < pCombo_->GetLevelUPNum(currentLevel)) {
         return; // レベルアップ条件を満たしていない
     }
@@ -38,20 +43,22 @@ void ComboDirector::LevelUp() {
 
     pCombo_->LevelUp();
 
-    // レベル対象のオブジェクト、観客をスポーン
-    int32_t comboLevel = GetComboLevelZeroStart();
-    comboLevelObjHolder_->SetEffectMode(comboLevel, ObjEffectMode::SPAWN);
-    audienceController_->AppearAudienceByLevel(comboLevel);
+    // 累積的にすべてのレベルのオブジェクトと観客をスポーン
+    for (int32_t i = 1; i <= pCombo_->GetCurrentLevel(); ++i) {
+        comboLevelObjHolder_->SetEffectMode(i, ObjEffectMode::SPAWN);
+        audienceController_->AppearAudienceByLevel(i);
+    }
 
     // チェックに戻す
     state_ = State::CHECK;
 }
 
 void ComboDirector::LevelReset() {
-    int32_t comboLevel = GetComboLevelZeroStart();
-    // 背景オブジェクトClose
-    comboLevelObjHolder_->CloseForComboLevel(comboLevel);
-    audienceController_->DisAppearAudience(comboLevel);
+    // 現在のレベルまですべての背景オブジェクトと観客を閉じる
+    int32_t currentLevel = pCombo_->GetCurrentLevel();
+    comboLevelObjHolder_->CloseForComboLevel(currentLevel);
+    audienceController_->DisAppearAudience(currentLevel);
+
     // コンボリセット
     pCombo_->Reset();
     // チェックに戻す

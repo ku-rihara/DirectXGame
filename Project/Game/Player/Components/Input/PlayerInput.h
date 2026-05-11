@@ -18,6 +18,9 @@ public:
     /// ジャンプ入力 - キーボード (J キー押し続け)
     bool IsJumpKeyPressed() const;
 
+    /// ジャンプ入力 - キーボード (J キートリガー)
+    bool IsJumpKeyTriggered() const;
+
     /// ジャンプ入力 - パッド (A ボタントリガー)
     bool IsJumpPadTriggered() const;
 

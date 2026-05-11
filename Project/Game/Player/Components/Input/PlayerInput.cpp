@@ -29,6 +29,10 @@ bool PlayerInput::IsJumpKeyPressed() const {
     return KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::J);
 }
 
+bool PlayerInput::IsJumpKeyTriggered() const {
+    return KetaEngine::Input::GetInstance()->TriggerKey(KeyboardKey::J);
+}
+
 bool PlayerInput::IsJumpPadTriggered() const {
     return KetaEngine::Input::IsTriggerPad(0, GamepadButton::A);
 }

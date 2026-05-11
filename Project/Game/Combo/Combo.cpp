@@ -81,7 +81,7 @@ void Combo::ComboCountUP() {
 }
 
 void Combo::LevelUp() {
-    if (currentLevel_ >= kComboLevel - 1) {
+    if (currentLevel_ >= kComboLevel-1) {
         return;
     }
     currentLevel_++; // レベルアップ

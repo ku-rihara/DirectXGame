@@ -269,6 +269,11 @@ void BaseEnemy::TakeDamage(float damageValue) {
     // ダメージを受ける
     hp_ -= damageValue;
 
+    // コンボをカウント
+    if (pCombo_) {
+        pCombo_->ComboCountUP();
+    }
+
     // ダメージコールバック
     if (onDamageTaken_) {
         onDamageTaken_();

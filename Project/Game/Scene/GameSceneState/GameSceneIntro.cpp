@@ -17,7 +17,7 @@ void GameSceneIntro::Init() {
 }
 
 void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
-    if (KetaEngine::Frame::DeltaTime() >= 2.0f) {
+    if (KetaEngine::Frame::DeltaTime() >= 0.5f) {
         return;
     }
 
@@ -51,6 +51,9 @@ void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
 
     // obj
     obj.skyBox_->Update();
+    obj.audienceController_->Update();
+    obj.comboDirector_->Update();
+    obj.backGroundObjectManager_->Update(obj.gameIntroManager_->GetCurrentPlaySpeedRate());
     obj.gameCamera_->Update(obj.gameIntroManager_->GetCurrentPlaySpeedRate());
     obj.combo_->Update();
 

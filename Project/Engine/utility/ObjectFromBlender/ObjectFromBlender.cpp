@@ -324,6 +324,16 @@ void ObjectFromBlender::SetAllObjectsScaleZero() {
     }
 }
 
+void ObjectFromBlender::SetAllObjectsScaleOne() {
+    if (!levelData_) {
+        return;
+    }
+    for (auto& objectData : levelData_->objects) {
+        objectData.object3d->transform_.scale_ = Vector3::OneVector();
+        objectData.object3d->transform_.UpdateMatrix();
+    }
+}
+
 void ObjectFromBlender::SetLoopEndCallback(int32_t groupNum, const std::function<void()>& callback) {
     if (!levelData_) {
         return;

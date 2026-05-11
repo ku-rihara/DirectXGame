@@ -44,11 +44,13 @@ void ComboLevelObjHolder::SetEffectMode(int32_t comboLevel, const ObjEffectMode&
     for (auto& entry : entries_) {
         if (entry.comboLevel == comboLevel) {
             entry.obj->SetEffectMode(mode);
+            if (mode == ObjEffectMode::SPAWN) {
+                entry.obj->GetObjectFromBlender()->SetAllObjectsScaleOne();
+            }
             // マスターが再スポーン時にPULSEを再開できるようにする
             if (mode == ObjEffectMode::SPAWN && entry.obj.get() == pulseMaster_) {
                 entry.obj->SetIsPulseCycleStart(true);
             }
-            return;
         }
     }
 }

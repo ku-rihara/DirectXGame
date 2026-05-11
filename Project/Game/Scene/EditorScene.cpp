@@ -42,6 +42,8 @@ void EditorScene::Update() {
     skyBox_->Update();
     enemyManager_->Update();
     combo_->Update();
+    comboDirector_->Update();
+    backGroundObjectManager_->Update(KetaEngine::Frame::DeltaTimeRate());
     gameCamera_->Update();
     lockOnController_->Update(player_.get(), viewProjection_);
 
@@ -79,6 +81,7 @@ void EditorScene::Debug() {
     comboAsistController_->AdjustParam();
     unlockNotifier_->AdjustParam();
     audienceController_->AdjustParam();
+    backGroundObjectManager_->AdjustParam();
     lockOnController_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
@@ -130,6 +133,8 @@ void EditorScene::ObjectInit() {
     playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
     sideRopeController_          = std::make_unique<SideRopeController>();
     audienceController_          = std::make_unique<AudienceController>();
+    backGroundObjectManager_     = std::make_unique<BackGroundObjectManager>();
+    comboDirector_               = std::make_unique<ComboDirector>();
     ObjectFromBlender_           = std::make_unique<KetaEngine::ObjectFromBlender>();
     deathTimer_                  = std::make_unique<DeathTimer>();
     killCounter_                 = std::make_unique<KillCounter>();
@@ -146,6 +151,8 @@ void EditorScene::ObjectInit() {
     lockOnController_->Init();
     skyBox_->Init();
     combo_->Init();
+    comboDirector_->Init();
+    backGroundObjectManager_->Init();
     enemyManager_->Init();
     enemySpawner_->Init("enemySpawner.json");
     gameCamera_->Init();
@@ -184,6 +191,11 @@ void EditorScene::SetClassPointer() {
     player_->SetDeathFragPointer(&deathTimer_->GetIsDeath());
 
     combo_->SetDeathTimer(deathTimer_.get());
+
+    comboDirector_->SetPlayer(player_.get());
+    comboDirector_->SetComboAndDeathTimer(combo_.get(), deathTimer_.get());
+    comboDirector_->SetComboLevelObjHolder(backGroundObjectManager_->GetComboLevelObjHolder());
+    comboDirector_->SetAudienceController(audienceController_.get());
 
     playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
     playerComboAttackController_->SetPlayer(player_.get());
