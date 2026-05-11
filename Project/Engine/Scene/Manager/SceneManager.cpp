@@ -104,5 +104,8 @@ void SceneManager::ChangeScene(const std::string& sceneName) {
 
     // パーティクルリセット
     ParticleManager::GetInstance()->ResetAllParticles();
+
+    // シーン切り替え（ロード）にかかった時間を破棄するためタイマーをリセット
+    Frame::Init();
 }
 

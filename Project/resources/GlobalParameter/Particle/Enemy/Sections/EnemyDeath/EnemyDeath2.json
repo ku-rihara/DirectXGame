@@ -41,6 +41,7 @@
         ],
         "ColorEaseParam.isEase": false,
         "ColorEaseParam.maxTime": 1.0,
+        "Cyl.axisInt": 0,
         "Cyl.bottomColor": [
             1.0,
             1.0,
@@ -137,13 +138,13 @@
         "Scale Max": 1.0,
         "Scale Min": 1.0,
         "ScaleV3 Max": [
-            5.0,
-            5.0,
+            6.0,
+            6.0,
             0.0
         ],
         "ScaleV3 Min": [
-            5.0,
-            5.0,
+            6.0,
+            6.0,
             0.0
         ],
         "Speed Max": 31.700000762939453,
@@ -204,6 +205,11 @@
         "emissiveIntensity": 7.5,
         "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": true,
@@ -217,6 +223,9 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
         "scaleEaseParam.backRatio": 0.0,
         "scaleEaseParam.easeTypeInt": 0,
         "scaleEaseParam.endValueF.max": 0.0,
@@ -233,7 +242,7 @@
         ],
         "scaleEaseParam.isReturnToOrigin": false,
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.20000000298023224,
+        "scaleEaseParam.maxTime": 0.2800000011920929,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
         "scaleEaseParam.startValueF": 1.0,
@@ -249,6 +258,7 @@
         "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": false,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

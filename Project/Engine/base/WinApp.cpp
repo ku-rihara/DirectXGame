@@ -78,8 +78,7 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
     if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
         // デバッグレイヤーを有効化する
         debugController_->EnableDebugLayer();
-        // さらにGPU側でもチェックを行えるようにする
-        debugController_->SetEnableGPUBasedValidation(TRUE);
+        // debugController_->SetEnableGPUBasedValidation(TRUE);
     }
 #endif
     // ウィンドウを表示する
