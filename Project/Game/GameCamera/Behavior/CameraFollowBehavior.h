@@ -16,8 +16,9 @@ public:
 
 private:
     Vector2 InputUpdate();
-    void MoveUpdate();
+    void MoveUpdate(float time);
 
 private:
     bool isReset_ = false;
+    const void* prevTarget_ = nullptr;
 };

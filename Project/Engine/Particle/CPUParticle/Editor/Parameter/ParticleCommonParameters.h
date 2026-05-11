@@ -112,6 +112,9 @@ struct Parameters {
     bool isFloatVelocity        = false;
     bool isScalerScale          = false;
     bool isRotateForDirection   = false;
+    bool rotateForDirectionX    = true;
+    bool rotateForDirectionY    = true;
+    bool rotateForDirectionZ    = true;
     ScaleEaseParam scaleEaseParam;
     EasingParamV3 translateEaseParam;
     EasingParamV3 rotateEaseParam;
@@ -124,6 +127,10 @@ struct Parameters {
     // Shape
     EmitShape emitShape = EmitShape::None;
     FMinMax sphereRadius = {};
+    // ゴール誘導
+    bool useGoalPosition = false;
+    Vector3 goalOffset;       // エディタで設定するオフセット
+    Vector3 goalTargetPos;    // ランタイムで設定するターゲット位置（JSON非保存）
 };
 
 // グループパラメータ

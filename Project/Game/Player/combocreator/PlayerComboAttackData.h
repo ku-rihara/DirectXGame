@@ -53,6 +53,7 @@ public:
         bool isPositionYSelect;
         float finishTimeOffset;
         bool isStopBeforeEnemy = false;
+        bool isFaceMovementDirection = false;
     };
 
     // コリジョンパラメータ
@@ -71,6 +72,7 @@ public:
     struct TimingParam {
         float finishWaitTime;
         bool isAutoAdvance;
+        bool isSkipToFinishOnHit = false; // ヒット時に即終了処理へ移行
     };
 
     // 攻撃発動に関するパラメータ
@@ -136,6 +138,7 @@ public:
     // フェーズ別UI
     void DrawCollisionParamUIForPhase(TimelinePhase phase);
     void DrawMoveParamUIForPhase(TimelinePhase phase);
+    void DrawTriggerParamUIForPhase(TimelinePhase phase, bool isFirstAttack);
     void DrawFlagsParamUIForPhase(TimelinePhase phase);
     void DrawPhaseControls();
 
@@ -208,6 +211,7 @@ public:
     const std::string& GetFolderPath() const { return folderPath_; }
     Player* GetPlayer() const { return pPlayer_; };
     KetaEngine::TimelineDrawer* GetTimeline();
+    KetaEngine::TimelineDrawer* GetFinishTimeline();
 
     bool HasPrepPhase() const { return hasPrep_; }
     bool HasFinishPhase() const { return hasFinish_; }

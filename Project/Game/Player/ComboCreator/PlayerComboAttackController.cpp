@@ -427,14 +427,16 @@ PlayerComboAttackData* PlayerComboAttackController::GetAttackByName(const std::s
 
 float PlayerComboAttackController::GetRealAttackSpeed(float baseTimeSpeed) const {
 
-    float result = baseTimeSpeed * attackValueForLevel_[pCombo_->GetCurrentLevel()].speedRate;
+    int32_t level = std::clamp(pCombo_->GetCurrentLevel(), 0, kComboLevel - 1);
+    float result = baseTimeSpeed * attackValueForLevel_[level].speedRate;
 
     return result;
 }
 
 float PlayerComboAttackController::GetPowerRate() const {
 
-    float rate = attackValueForLevel_[pCombo_->GetCurrentLevel()].powerRate;
+    int32_t level = std::clamp(pCombo_->GetCurrentLevel(), 0, kComboLevel - 1);
+    float rate = attackValueForLevel_[level].powerRate;
     return rate;
 }
 

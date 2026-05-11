@@ -87,6 +87,7 @@ public:
     void AddSpotLight(); //< スポットライト追加
     void AddPointLight(); //< ポイントライト追加
     void RegisterParams(); //< パラメータバインド
+    void Finalize(); //< 終了処理
 
 private:
     DirectXCommon* dxCommon_;

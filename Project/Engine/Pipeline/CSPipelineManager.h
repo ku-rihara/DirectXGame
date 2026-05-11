@@ -54,6 +54,8 @@ public:
     /// <param name="numThreadsX">スレッド数X</param>
     void DisPatch(const CSPipelineType& type, ID3D12GraphicsCommandList* commandList, const UINT& numThreadsX);
 
+    void Finalize(); //< 終了処理
+
 private:
     CSPipelineManager()  = default;
     ~CSPipelineManager() = default;

@@ -65,3 +65,9 @@ void PipelineManager::PreBlendSet(const PipelineType& type, ID3D12GraphicsComman
     assert(pipelines_[index]);
     pipelines_[index]->PreBlendSet(commandList, blendMode);
 }
+
+void PipelineManager::Finalize() {
+    for (auto& pipeline : pipelines_) {
+        pipeline.reset();
+    }
+}

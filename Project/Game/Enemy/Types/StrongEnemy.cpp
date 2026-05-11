@@ -1,4 +1,5 @@
 #include "StrongEnemy.h"
+#include "Player/Player.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 // behavior
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyChase.h"
@@ -59,6 +60,11 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
 }
 
 void StrongEnemy::Update() {
+    if (GetPlayer()) {
+        Vector3 playerPos = GetPlayer()->GetWorldPosition();
+        GetEnemyEffects()->SetTargetObjectPos({playerPos.x, 0.0f, playerPos.z});
+    }
+
     BaseEnemy::Update();
 
     // フォント位置を毎フレームbaseTransformに追従

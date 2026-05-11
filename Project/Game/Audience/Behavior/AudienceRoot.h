@@ -18,6 +18,8 @@ public:
     void ChangeCloseMode();
     void ChangeAppearMode();
 
+    bool GetIsDraw() const { return isDraw_; }
+
 private:
     /// ===================================================
     /// private variables

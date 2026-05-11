@@ -201,6 +201,11 @@
         "emissiveIntensity": 2.700000047683716,
         "emitPositionMode": 0,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": true,
         "isBillboard": true,
         "isFloatVelocity": false,
@@ -238,6 +243,7 @@
         "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": false,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

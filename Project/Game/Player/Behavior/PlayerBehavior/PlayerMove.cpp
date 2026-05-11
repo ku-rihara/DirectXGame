@@ -22,6 +22,9 @@ PlayerMove::~PlayerMove() {
 
 void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
 
+    // 押し出し等でY座標が浮いたままになるのを防ぐため、地上状態ではYをリセットする
+    pOwner_->ResetPositionY();
+
     CheckAndSwitchAnimation();
 
     // ダッシュ入力 → PlayerDash へ
@@ -33,7 +36,7 @@ void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
     pOwner_->Move(pPlayerParameter_->GetParameters().moveSpeed);
 
     // ジャンプに切り替え
-    if (pOwner_->GetInput().IsJumpKeyPressed()) {
+    if (pOwner_->GetInput().IsJumpKeyTriggered()) {
         pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, pPlayerParameter_->GetParameters().normalJump.jumpSpeed));
     } else {
         JumpForJoyState();

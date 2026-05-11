@@ -178,3 +178,11 @@ std::string CameraEditor::GetFolderName() const {
 void CameraEditor::SetPreviewObjPos(const Vector3& pos) {
     preViewFollowObj_->transform_.translation_ = pos;
 }
+
+void CameraEditor::SetPreviewCameraParameters(const Vector3& pos, const Vector3& rot, float fov) {
+    if (viewProjection_) {
+        viewProjection_->translation_ = pos;
+        viewProjection_->rotation_    = rot;
+        viewProjection_->fovAngleY_   = fov;
+    }
+}

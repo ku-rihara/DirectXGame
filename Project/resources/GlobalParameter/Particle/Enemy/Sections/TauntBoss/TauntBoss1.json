@@ -201,6 +201,11 @@
         "emissiveIntensity": 1.0,
         "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": false,
@@ -213,6 +218,9 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
         "scaleEaseParam.easeTypeInt": 16,
         "scaleEaseParam.endValueF.max": 1.5,
         "scaleEaseParam.endValueF.min": 1.0,
@@ -238,6 +246,7 @@
         "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": false,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

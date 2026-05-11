@@ -78,6 +78,9 @@ private:
     bool startFromOrigin_ = false;
     Vector3 previewInitPos_;
 
+    // 終了処理フェーズ監視フラグ
+    bool previewInFinishPhase_ = false;
+
     // 演出再生フレーム追跡
     int32_t prevFrame_ = 0;
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> renditionPlayed_{};

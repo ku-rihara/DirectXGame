@@ -96,16 +96,21 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
     ///------------------------------------------------------------------------
     /// 回転設定
     ///------------------------------------------------------------------------
-    if (parameters.isRotateForDirection) {
-        particle.worldTransform_->rotation_ = DirectionToEulerAngles(particle.direction_, *viewProjection);
-    } else {
-        Vector3 rotate = {
+    {
+        Vector3 randomRotate = {
             Random::Range(parameters.rotateDist.min.x, parameters.rotateDist.max.x),
             Random::Range(parameters.rotateDist.min.y, parameters.rotateDist.max.y),
             Random::Range(parameters.rotateDist.min.z, parameters.rotateDist.max.z)};
-        particle.worldTransform_->rotation_ = ToRadian(parameters.baseRotate + rotate);
-        // TargetRotaeは元々Radianなので加算するだけ
-        particle.worldTransform_->rotation_ += parameters.targetRotate;
+        Vector3 baseRot = ToRadian(parameters.baseRotate + randomRotate) + parameters.targetRotate;
+
+        if (parameters.isRotateForDirection) {
+            Vector3 dirAngles = DirectionToEulerAngles(particle.direction_, *viewProjection);
+            particle.worldTransform_->rotation_.x = parameters.rotateForDirectionX ? dirAngles.x : baseRot.x;
+            particle.worldTransform_->rotation_.y = parameters.rotateForDirectionY ? dirAngles.y : baseRot.y;
+            particle.worldTransform_->rotation_.z = parameters.rotateForDirectionZ ? dirAngles.z : baseRot.z;
+        } else {
+            particle.worldTransform_->rotation_ = baseRot;
+        }
     }
 
     ///------------------------------------------------------------------------
@@ -360,6 +365,17 @@ ParticleManager::Particle ParticleFactory::MakeParticle(
     /// 重力設定
     ///------------------------------------------------------------------------
     particle.gravity_ = parameters.gravity;
+
+    ///------------------------------------------------------------------------
+    /// ゴール誘導設定
+    ///------------------------------------------------------------------------
+    particle.useGoalPosition = parameters.useGoalPosition;
+    particle.goalOffset      = parameters.goalOffset;
+    particle.goalTargetPos   = parameters.goalTargetPos;
+    particle.isRotateForDirection = parameters.isRotateForDirection;
+    particle.rotateForDirectionX  = parameters.rotateForDirectionX;
+    particle.rotateForDirectionY  = parameters.rotateForDirectionY;
+    particle.rotateForDirectionZ  = parameters.rotateForDirectionZ;
 
     ///------------------------------------------------------------------------
     /// Dissolveイージング設定

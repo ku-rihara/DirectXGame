@@ -8,10 +8,14 @@ void EnemyEffects::Init(KetaEngine::WorldTransform* transform) {
 
 void EnemyEffects::Update(const Vector3& position) {
     particlePlayer_->SetTargetPosition(position);
+    particlePlayer_->SetGoalPosition(goalPos_);
     particlePlayer_->Update();
-
 }
 
 void EnemyEffects::Emit(const std::string& name) {
     particlePlayer_->Play(name, "Enemy");
+}
+
+void EnemyEffects::SetTargetObjectPos(const Vector3& pos) {
+    goalPos_ = pos;
 }

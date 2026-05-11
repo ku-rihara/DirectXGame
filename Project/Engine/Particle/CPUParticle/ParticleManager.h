@@ -88,6 +88,13 @@ public:
         Vector3 rotateSpeed_;
         Vector4 color_;
         const Vector3* followPos = nullptr;
+        bool useGoalPosition = false;
+        Vector3 goalOffset;
+        Vector3 goalTargetPos;
+        bool isRotateForDirection  = false;
+        bool rotateForDirectionX   = true;
+        bool rotateForDirectionY   = true;
+        bool rotateForDirectionZ   = true;
         std::unique_ptr<WorldTransform> worldTransform_;
 
         ScaleInFo scaleInfo;

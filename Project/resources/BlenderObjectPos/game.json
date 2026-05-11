@@ -68,7 +68,7 @@
           {
             "group_id": 0,
             "animation_name": "StartAudienceSeat",
-            "start_time": 2.5,
+            "start_time": 3.0,
             "is_loop": false
           }
         ]
@@ -98,7 +98,7 @@
           {
             "group_id": 0,
             "animation_name": "StartAudienceSeat",
-            "start_time": 2.700000047683716,
+            "start_time": 3.200000047683716,
             "is_loop": false
           }
         ]
@@ -128,7 +128,7 @@
           {
             "group_id": 0,
             "animation_name": "StartAudienceSeat",
-            "start_time": 2.799999952316284,
+            "start_time": 3.299999952316284,
             "is_loop": false
           }
         ]
@@ -158,7 +158,7 @@
           {
             "group_id": 0,
             "animation_name": "StartAudienceSeat",
-            "start_time": 2.5999999046325684,
+            "start_time": 3.0999999046325684,
             "is_loop": false
           }
         ]
@@ -188,7 +188,7 @@
           {
             "group_id": 0,
             "animation_name": "StartSideField",
-            "start_time": 1.5,
+            "start_time": 2.0,
             "is_loop": false
           }
         ]
@@ -219,7 +219,7 @@
           {
             "group_id": 0,
             "animation_name": "StartField",
-            "start_time": 0.800000011920929,
+            "start_time": 1.300000011920929,
             "is_loop": false
           }
         ]

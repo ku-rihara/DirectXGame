@@ -16,6 +16,7 @@
 #include "Combo/Combo.h"
 // LockOn
 #include "LockOn/LockOn.h"
+#include "LockOn/LockOnController.h"
 // Spawner
 #include "Spawner/EnemySpawner.h"
 // imGui
@@ -391,6 +392,14 @@ void EnemyManager::Update() {
 
             if (enemies_[i]->GetType() == BaseEnemy::Type::STRONG) {
                 OnBossKilled(enemies_[i].get());
+                if (pEnemySpawner_) {
+                    pEnemySpawner_->OnStrongEnemyDestroyed(groupID);
+                }
+            }
+
+            // ロックオン対象からの削除
+            if (pPlayer_ && pPlayer_->GetLockOnController()) {
+                pPlayer_->GetLockOnController()->GetLockOn()->OnObjectDestroyed(enemies_[i].get());
             }
 
             if (pEnemySpawner_) {
@@ -434,9 +443,9 @@ void EnemyManager::UIUpdate(const KetaEngine::ViewProjection& viewProjection) {
         float distance   = (enemyPos - playerPos).Length();
 
         //  StrongEnemyがカメラとNormalEnemyのUIの間に重なるか
-        bool idDraw   = false;
+        bool idDraw         = false;
         bool isNormalTarget = enemies_[i]->GetType() == BaseEnemy::Type::NORMAL;
-        Vector3 targetNdc = ScreenTransformWithDepth(enemyPos, viewProjection);
+        Vector3 targetNdc   = ScreenTransformWithDepth(enemyPos, viewProjection);
         if (isNormalTarget && targetNdc.z > 0.0f && targetNdc.z <= 1.0f) {
             for (size_t j = 0; j < enemies_.size(); ++j) {
                 if (i == j || enemies_[j]->GetIsDeath()) {
@@ -561,7 +570,7 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("hpMax", &parameters_[typeIndex].hpMax, 1.0f, 1.0f, 9999.0f);
 
     ImGui::SeparatorText("スプライト関連");
-    ImGui::DragFloat2("HPBarOffsetPos",   &parameters_[typeIndex].hpBarPosOffset.x,   0.01f);
+    ImGui::DragFloat2("HPBarOffsetPos", &parameters_[typeIndex].hpBarPosOffset.x, 0.01f);
     ImGui::DragFloat2("HPGaugeOffsetPos", &parameters_[typeIndex].hpGaugePosOffset.x, 0.01f);
     ImGui::DragFloat("HPBarWorldOffsetY", &parameters_[typeIndex].hpBarWorldOffsetY, 0.01f);
     ImGui::DragFloat("GroupIconScreenOffsetY", &parameters_[typeIndex].groupIconWorldOffsetY, 1.0f);
@@ -607,7 +616,6 @@ void EnemyManager::AdjustParam() {
         if (minionsByBoss_.empty()) {
             ImGui::TextColored({1.0f, 0.4f, 0.4f, 1.0f}, "ボスが未リンク");
         }
-       
 
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);

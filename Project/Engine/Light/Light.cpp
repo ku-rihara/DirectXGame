@@ -151,3 +151,15 @@ void Light::RemovePointLight(int num) {
     pointLightManager_->Remove(num);
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }
+
+void Light::Finalize() {
+    directionalLight_.reset();
+    pointLightManager_.reset();
+    spotLightManager_.reset();
+    areaLightManager_.reset();
+    ambientLight_.reset();
+
+    cameraForGPUResource_.Reset();
+    playerOcclusionResource_.Reset();
+    lightCountResource_.Reset();
+}

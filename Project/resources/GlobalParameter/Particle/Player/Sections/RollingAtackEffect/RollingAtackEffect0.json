@@ -86,7 +86,7 @@
         "Max Particle Num": 1000,
         "Particle Count": 2,
         "Position Base": [
-            -5.610000133514404,
+            0.0,
             7.420000076293945,
             0.0
         ],
@@ -210,6 +210,11 @@
         "emissiveIntensity": 8.5,
         "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": false,
         "isFloatVelocity": false,
@@ -222,6 +227,9 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 2,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
         "scaleEaseParam.backRatio": 0.0,
         "scaleEaseParam.easeTypeInt": 19,
         "scaleEaseParam.endValueF.max": 9.0,
@@ -248,6 +256,7 @@
         "targetApplyR": true,
         "timeMode": 1,
         "useDistortion": true,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

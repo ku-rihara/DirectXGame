@@ -11,10 +11,14 @@ void PlayerAnimator::Init(
     PlayerHandRight* rightHand,
     KetaEngine::WorldTransform* baseTransform) {
 
+    // メンバ変数にポインタをセット
     obj3d_         = obj3d;
     leftHand_      = leftHand;
     rightHand_     = rightHand;
     baseTransform_ = baseTransform;
+
+    // 初期位置保存
+    initYPos_ = baseTransform_->translation_.y;
 
     // ディゾルブエッジ設定
     obj3d_->GetModelMaterial()->GetMaterialData()->dissolveEdgeColor = Vector3(0.6706f, 0.8824f, 0.9804f);
@@ -58,6 +62,8 @@ void PlayerAnimator::PlayWaitAnimation() {
 ///=============================================================
 void PlayerAnimator::StopMoveAnimation() {
     baseTransform_->StopObjEaseAnimation();
+    obj3d_->transform_.translation_.y = 0.0f;
+    baseTransform_->translation_.y    = initYPos_;
 }
 
 ///=============================================================
@@ -89,12 +95,21 @@ void PlayerAnimator::SetInitialDissolveHidden() {
 /// ダッシュアニメーション
 ///=============================================================
 void PlayerAnimator::PlayDashStartAnimation() {
-    baseTransform_->PlayObjEaseAnimation("DashStart", "Player");
+    obj3d_->transform_.translation_.y = 0.0f;
+    baseTransform_->translation_.y    = initYPos_;
+    baseTransform_->UpdateMatrix();
+    obj3d_->transform_.PlayObjEaseAnimation("DashStart", "Player");
 }
 
 bool PlayerAnimator::IsDashStartAnimationFinished() const {
     auto* player = baseTransform_->GetObjEaseAnimationPlayer();
     return player && player->IsFinished();
+}
+
+void PlayerAnimator::PlayPlayerCategoryAnimation(const std::string& name) {
+    if (!name.empty()) {
+        baseTransform_->PlayObjEaseAnimation(name, "Player");
+    }
 }
 
 ///=============================================================

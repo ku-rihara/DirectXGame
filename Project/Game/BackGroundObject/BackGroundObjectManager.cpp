@@ -26,6 +26,11 @@ void BackGroundObjectManager::Init() {
 }
 
 void BackGroundObjectManager::Update(float playSpeed) {
+    if (isDebugForceShowAll_) {
+        for (const auto& entry : entries_) {
+            comboLevelObjHolder_->SetEffectMode(entry.comboLevel, ObjEffectMode::SPAWN);
+        }
+    }
     comboLevelObjHolder_->Update(playSpeed);
     gameBackGroundObject_->Update(playSpeed);
 }
@@ -56,6 +61,8 @@ void BackGroundObjectManager::AdjustParam() {
 
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
+
+        ImGui::Checkbox("Debug Force Show All", &isDebugForceShowAll_);
 
         for (auto& entry : entries_) {
             ImGui::InputInt(entry.filename.c_str(), &entry.comboLevel);

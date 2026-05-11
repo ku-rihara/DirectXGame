@@ -180,3 +180,11 @@ void ParticlePlayer::SetTargetRotatePtr(const Vector3* rotate) {
         }
     }
 }
+
+void ParticlePlayer::SetGoalPosition(const Vector3& pos) {
+    auto* particleData = GetParticleData();
+    if (!particleData) {
+        return;
+    }
+    particleData->SetGoalPosition(pos);
+}

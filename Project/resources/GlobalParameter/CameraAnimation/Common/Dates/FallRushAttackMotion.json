@@ -1,0 +1,12 @@
+{
+    "FallRushAttackMotion": {
+        "autoReturnToInitial": true,
+        "resetFovEaseType": 0,
+        "resetPosEaseType": 22,
+        "resetRotateEaseType": 0,
+        "resetTimePoint": 0.8199999928474426,
+        "returnDelayTime": 0.33000001311302185,
+        "timeMode": 1,
+        "useLookAt": false
+    }
+}

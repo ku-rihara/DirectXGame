@@ -101,6 +101,11 @@ void Audience::AppearByComboLevel(int32_t level) {
         return;
     }
 
+    // すでに表示されているなら何もしない
+    if (audienceRoot->GetIsDraw()) {
+        return;
+    }
+
     // スポーンモードに移行
     particlePlayer_->SetTargetPosition(objAnimation_->transform_.GetWorldPos());
     particlePlayer_->Play("AppearEffect", "Audience");

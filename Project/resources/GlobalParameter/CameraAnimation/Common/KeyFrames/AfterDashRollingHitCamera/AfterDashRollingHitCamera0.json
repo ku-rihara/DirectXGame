@@ -1,0 +1,20 @@
+{
+    "AfterDashRollingHitCamera0": {
+        "fov": 57.70000076293945,
+        "fovEaseType": 22,
+        "position": [
+            0.0,
+            5.099999904632568,
+            -9.5
+        ],
+        "positionEaseType": 22,
+        "rotation": [
+            0.13962633907794952,
+            0.0,
+            0.0
+        ],
+        "rotationEaseType": 22,
+        "timeMode": 1,
+        "timePoint": 1.2000000476837158
+    }
+}

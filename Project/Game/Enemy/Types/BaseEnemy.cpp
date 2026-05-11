@@ -269,6 +269,11 @@ void BaseEnemy::TakeDamage(float damageValue) {
     // ダメージを受ける
     hp_ -= damageValue;
 
+    // コンボをカウント
+    if (pCombo_) {
+        pCombo_->ComboCountUP();
+    }
+
     // ダメージコールバック
     if (onDamageTaken_) {
         onDamageTaken_();
@@ -444,6 +449,13 @@ void BaseEnemy::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReac
     if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
         return;
     }
+
+     // スポーン中のダメージリアクション時にスケールをリセットする
+    if (dynamic_cast<EnemySpawn*>(moveBehavior_.get())) {
+        ScaleReset();
+        OnSpawnCompleted();
+    }
+
     damageBehavior_ = std::move(behavior);
 }
 

@@ -39,11 +39,11 @@ private:
     const std::string groupName_ = "Combo";
 
     // parameter
-    float comboTime_;
-    int32_t comboCount_;
-    float comboTimeMax_;
+    float comboTime_     = 0.0f;
+    int32_t comboCount_  = 0;
+    float comboTimeMax_  = 5.0f;
     int32_t LevelUpNum[kComboLevel];
-    int32_t currentLevel_;
+    int32_t currentLevel_ = 0;
 
     bool isReset_ = false;
 

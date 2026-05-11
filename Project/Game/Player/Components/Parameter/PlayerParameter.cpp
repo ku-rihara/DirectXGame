@@ -47,6 +47,9 @@ void PlayerParameter::RegisterParams() {
 
    
     globalParameter_->Regist(groupName_, "spawnParamWaitTime", &playerParams_.spawnParam.waitTime_);
+
+    // DashParam
+    globalParameter_->Regist(groupName_, "dashDistance", &playerParams_.dashParam.distance);
 }
 
 ///==========================================================
@@ -93,6 +96,9 @@ void PlayerParameter::AdjustParam() {
         ImGui::DragFloat("gravityB", &playerParams_.boundJump.gravity, 0.01f);
         ImGui::DragFloat("fallSpeedLimitB", &playerParams_.boundJump.fallSpeedLimit, 0.01f);
 
+
+        ImGui::SeparatorText("DashParam");
+        ImGui::DragFloat("dashDistance", &playerParams_.dashParam.distance, 0.1f);
 
         ImGui::SeparatorText("EasingTime");
 

@@ -206,6 +206,7 @@ void DirectXCommon::Finalize() {
 
     dxCompiler_->Finalize();
     dxRenderTarget_->Finalize();
+    depthBuffer_->Finalize();
     dxSwapChain_->Finalize();
     dxCommand_->Finalize();
     dxDevice_->Finalize();

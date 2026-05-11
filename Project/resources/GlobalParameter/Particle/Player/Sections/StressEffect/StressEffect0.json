@@ -50,7 +50,7 @@
         "Cyl.bottomRadiusZ": 2.0,
         "Cyl.divisions": 32,
         "Cyl.endAngleDeg": 360.0,
-        "Cyl.height": 2.140000104904175,
+        "Cyl.height": 4.860000133514404,
         "Cyl.heightDivisions": 1,
         "Cyl.startAngleDeg": 0.0,
         "Cyl.topColor": [
@@ -59,8 +59,8 @@
             1.0,
             1.0
         ],
-        "Cyl.topRadiusX": 3.0199999809265137,
-        "Cyl.topRadiusZ": 3.0199999809265137,
+        "Cyl.topRadiusX": 5.0,
+        "Cyl.topRadiusZ": 5.0,
         "Cyl.uvModeInt": 1,
         "Direction Max": [
             0.0,
@@ -80,7 +80,7 @@
         "Particle Count": 1,
         "Position Base": [
             0.0,
-            0.0,
+            3.940000057220459,
             0.0
         ],
         "Position Max": [
@@ -201,6 +201,11 @@
         "emissiveIntensity": 2.299999952316284,
         "emitPositionMode": 1,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": false,
         "isFloatVelocity": false,
@@ -217,14 +222,14 @@
         "scaleEaseParam.endValueF.max": 3.0,
         "scaleEaseParam.endValueF.min": 3.0,
         "scaleEaseParam.endValueV3.max": [
-            2.0,
-            2.0,
-            2.0
+            1.0,
+            1.0,
+            1.0
         ],
         "scaleEaseParam.endValueV3.min": [
-            2.0,
-            2.0,
-            2.0
+            1.0,
+            1.0,
+            1.0
         ],
         "scaleEaseParam.isReturnToOrigin": false,
         "scaleEaseParam.isScaleEase": true,
@@ -238,6 +243,7 @@
         "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": false,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

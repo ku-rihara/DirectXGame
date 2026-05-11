@@ -1,5 +1,6 @@
 {
     "ZRollingJump": {
+        "IsLoop": false,
         "Original_Rotation": [
             0.0,
             0.0,

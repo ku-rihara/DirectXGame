@@ -96,9 +96,17 @@ void Player::Update() {
     HeadLightSetting();
 
     /// 振る舞い処理
+    // コンボ更新を先に行うことで、攻撃入力による状態遷移を優先させる
+    if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
+        comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
+    }
+
     if (IsAbleBehavior()) {
         behavior_->Update();
     }
+
+    // ロックオン対象がいればそちらを向く
+    FaceToTarget();
 
     if (viewProjection_) {
         jumpAttackUI_->Update(GetWorldPosition(), *viewProjection_);
@@ -113,11 +121,6 @@ void Player::Update() {
         if (damageCollTime_ <= 0.0f) {
             isDamageColling_ = false;
         }
-    }
-
-    // コンボ更新
-    if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
-        comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
     }
 
     // 死亡モード変更
@@ -135,6 +138,7 @@ void Player::Update() {
 void Player::ChangeDeathMode() {
 
     if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
+        ChangeCombBoRoot(); // 攻撃を強制終了
         ChangeBehavior(std::make_unique<PlayerDeath>(this));
     }
 }
@@ -443,15 +447,13 @@ void Player::ResetHeadScale() {
 }
 
 bool Player::IsAbleBehavior() {
-    bool isAttackRoot = (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get()));
-    
-    // 攻撃中かつ死んでいないなら攻撃挙動のみ可能（既存の仕様）
-    if (isAttackRoot && !(isDeath_ && *isDeath_)) {
+    // 死亡中はPlayerDeathの更新を許可するために必ずtrueを返す
+    if (isDeath_ && *isDeath_) {
         return true;
     }
 
-    // それ以外（死んでいる、または攻撃中でない）は通常挙動を許可する
-    return !isAttackRoot;
+    // 攻撃中でなければ通常の振る舞いを許可
+    return (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get()) != nullptr);
 }
 
 void Player::InitInGameScene() {

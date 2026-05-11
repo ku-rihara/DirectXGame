@@ -72,11 +72,14 @@ void ParticleSection::InitGlobalParameter() {
 
 void ParticleSection::InitParticleGroup() {
     if (ParticleManager::GetInstance()->particleGroups_.find(groupName_) == ParticleManager::GetInstance()->particleGroups_.end()) {
-        auto primitiveType = static_cast<PrimitiveType>(sectionParam_->GetPrimitiveTypeInt());
-        CreatePrimitiveParticle(primitiveType, sectionParam_->GetMaxParticleNum());
-
-        if (primitiveType == PrimitiveType::Cylinder) {
-            RebuildCylinder(sectionParam_->GetCylinderParams());
+        if (sectionParam_->IsUseModel()) {
+            CreateModelParticle(sectionParam_->GetModelFilePath(), sectionParam_->GetMaxParticleNum());
+        } else {
+            auto primitiveType = static_cast<PrimitiveType>(sectionParam_->GetPrimitiveTypeInt());
+            CreatePrimitiveParticle(primitiveType, sectionParam_->GetMaxParticleNum());
+            if (primitiveType == PrimitiveType::Cylinder) {
+                RebuildCylinder(sectionParam_->GetCylinderParams());
+            }
         }
     }
 }
@@ -305,10 +308,14 @@ void ParticleSection::LoadData() {
     sectionParam_->AdaptParameters(globalParameter_, groupName_);
 
     // ロード後、保存されていた形状を再生成・再適用する
-    auto primitiveType = static_cast<PrimitiveType>(sectionParam_->GetPrimitiveTypeInt());
-    ChangePrimitive(primitiveType);
-    if (primitiveType == PrimitiveType::Cylinder) {
-        RebuildCylinder(sectionParam_->GetCylinderParams());
+    if (sectionParam_->IsUseModel()) {
+        CreateModelParticle(sectionParam_->GetModelFilePath(), sectionParam_->GetMaxParticleNum());
+    } else {
+        auto primitiveType = static_cast<PrimitiveType>(sectionParam_->GetPrimitiveTypeInt());
+        ChangePrimitive(primitiveType);
+        if (primitiveType == PrimitiveType::Cylinder) {
+            RebuildCylinder(sectionParam_->GetCylinderParams());
+        }
     }
 
     ApplyTextureToManager();

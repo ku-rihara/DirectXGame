@@ -62,10 +62,12 @@ void ZakoFlockBehavior::Update() {
         targetPos.z = std::clamp(targetPos.z, -rz, rz);
     }
 
+    // 目標位置への距離と方向を算出
     Vector3 diff = targetPos - pBaseEnemy_->GetWorldPosition();
     diff.y       = 0.0f;
     float dist   = diff.Length();
 
+    // 十分に近づいていなければ移動
     if (dist > kCloseEnough) {
         Vector3 dir = diff;
         dir.Normalize();
@@ -77,7 +79,10 @@ void ZakoFlockBehavior::Update() {
         float currentAngle = pBaseEnemy_->GetBaseRotationY();
         pBaseEnemy_->SetRotationY(LerpShortAngle(currentAngle, targetAngle, 0.8f));
 
-        if (!isRunning_) {
+        // アニメーションがDashでなければ再生
+        auto animObj         = pBaseEnemy_->GetAnimationObject();
+        std::string dashAnim = pBaseEnemy_->GetAnimationName(BaseEnemy::AnimationType::Dash);
+        if (animObj && animObj->GetCurrentAnimationName() != dashAnim) {
             pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
             isRunning_ = true;
         }

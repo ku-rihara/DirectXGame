@@ -27,8 +27,8 @@ public:
     /// pos_ / rotate_ にポインタをセットしておくと Update() で毎フレーム自動適用される
     /// </summary>
     struct TargetParam {
-        const Vector3* pos_    = nullptr;  ///< 毎フレーム参照する TargetPosition ポインタ
-        const Vector3* rotate_ = nullptr;  ///< 毎フレーム参照する TargetRotation ポインタ
+        const Vector3* pos_     = nullptr;  ///< 毎フレーム参照する TargetPosition ポインタ
+        const Vector3* rotate_  = nullptr;  ///< 毎フレーム参照する TargetRotation ポインタ
     };
 
 public:
@@ -80,6 +80,9 @@ public:
     // --- TargetPosition (ポインタ渡し：Update で毎フレーム自動適用) ---
     void SetTargetPosPtr(const Vector3* pos);
     void SetTargetRotatePtr(const Vector3* rotate);
+
+    // --- GoalPosition (ゴール誘導) ---
+    void SetGoalPosition(const Vector3& pos);
 };
 
 }

@@ -4,6 +4,8 @@
 void BaseComboLevelBackObj::Init(const std::string& filename) {
     BaseBackGroundObject::Init(filename);
     ObjectFromBlender_->EasingResetSelectGroup(static_cast<int32_t>(ObjEffectMode::SPAWN));
+    // 初期は非表示に設定
+    ObjectFromBlender_->SetAllObjectsScaleZero();
 }
 
 void BaseComboLevelBackObj::Update(float playSpeed) {
@@ -20,6 +22,8 @@ void BaseComboLevelBackObj::Update(float playSpeed) {
             return;
         }
 
+        ObjectFromBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(ObjEffectMode::SPAWN));
+
         // スポーンが終わったらPULSEへ
         if (ObjectFromBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::SPAWN))) {
             ObjectFromBlender_->EasingAllReset();
@@ -35,6 +39,7 @@ void BaseComboLevelBackObj::Update(float playSpeed) {
             // イージングリセット後にスケール0を適用して非表示状態を維持
             ObjectFromBlender_->SetAllObjectsScaleZero();
             effectMode_ = ObjEffectMode::NONE;
+            return; // NONEになったので終了
         }
     }
 

@@ -52,6 +52,7 @@ public:
     // -------------------------------------------------------
     void PlayDashStartAnimation();
     bool IsDashStartAnimationFinished() const;
+    void PlayPlayerCategoryAnimation(const std::string& name);
 
     // -------------------------------------------------------
     // ObjEase アニメーション (タイトル等)
@@ -68,12 +69,13 @@ public:
     bool IsTitleLeftHandAnimationFinished() const;
 
 private:
-    KetaEngine::DissolvePlayer   dissolvePlayer_;
+    KetaEngine::DissolvePlayer dissolvePlayer_;
     KetaEngine::RibbonTrailPlayer mainHeadTrailPlayer_;
-    Vector3                      headTrailFollowPos_{};
+    Vector3 headTrailFollowPos_{};
+    float initYPos_ = 0.0f;
 
-    KetaEngine::Object3d*       obj3d_         = nullptr;
-    PlayerHandLeft*             leftHand_       = nullptr;
-    PlayerHandRight*            rightHand_      = nullptr;
-    KetaEngine::WorldTransform* baseTransform_  = nullptr;
+    KetaEngine::Object3d* obj3d_               = nullptr;
+    PlayerHandLeft* leftHand_                  = nullptr;
+    PlayerHandRight* rightHand_                = nullptr;
+    KetaEngine::WorldTransform* baseTransform_ = nullptr;
 };

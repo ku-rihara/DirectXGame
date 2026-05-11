@@ -58,6 +58,11 @@ void SrvManager::PreDraw() {
     dxCommon_->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps->GetAddressOf());
 }
 
+void SrvManager::Finalize() {
+    descriptorHeap_.Reset();
+    instancingResources_.clear();
+}
+
 ///=========================================
 /// GPU、CPUデスクリプタハンドル取得
 ///=========================================

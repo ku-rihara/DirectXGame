@@ -209,6 +209,13 @@ void ShadowMap::PostDraw() {
     TransitionResourceState(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 }
 
+void ShadowMap::Finalize() {
+    shadowMapResource_.Reset();
+    vertexResource_.Reset();
+    pipeline_.reset();
+    lightViewProjection_.reset();
+}
+
 void ShadowMap::DebugImGui() {
     if (ImGui::TreeNode("ShadowMap Debug")) {
         ImGui::DragFloat3("targetPos", &targetPos_.x, 0.5f);

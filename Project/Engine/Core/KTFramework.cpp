@@ -3,15 +3,16 @@
 using namespace KetaEngine;
 
 // dx
+#include "3d/ModelManager.h"
 #include "Base/Dx/DxRenderTarget.h"
 #include "PostEffect/PostEffectRenderer.h"
-#include"3d/ModelManager.h"
 #include "ShadowMap/ShadowMap.h"
 
 // resource
 #include "Core/ResourceLoader.h"
 
 // utility
+#include "../utility/Log/Log.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // imGui
 #include "2D/ImGuiManager.h"
@@ -116,6 +117,7 @@ void KTFramework::Debug() {
 // 解放
 // ========================================================
 void KTFramework::Finalize() {
+    KetaEngine::Log::Finalize();
     // ライブラリの終了
     engineCore_->Finalize();
 }
@@ -153,7 +155,7 @@ void KTFramework::DisplayGameView() {
     ImVec2 windowSize = ImGui::GetContentRegionAvail();
 
     // アスペクト比を維持してテクスチャを表示
-    float aspectRatio = WinApp::aspectRatio; 
+    float aspectRatio = WinApp::aspectRatio;
     ImVec2 imageSize  = windowSize;
 
     if (windowSize.x / windowSize.y > aspectRatio) {
@@ -174,4 +176,3 @@ void KTFramework::DisplayGameView() {
     ImGui::End();
 #endif
 }
-

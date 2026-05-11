@@ -4,6 +4,8 @@
 
 // base
 #include "base/TextureManager.h"
+// editor
+#include "Editor/CameraEditor/CameraEditor.h"
 // math
 #include "2d/SpriteRegistry.h"
 #include "Frame/Frame.h"
@@ -68,6 +70,7 @@ void GameScene::Debug() {
     gameObj_.fireInjectors_->AdjustParam();
     gameObj_.gameIntroManager_->AdjustParam();
     gameObj_.audienceController_->AdjustParam();
+    gameObj_.lockOnController_->AdjustParam();
     gameObj_.deathTimer_->AdjustParam();
     gameObj_.killCounter_->AdjustParam();
     gameObj_.comboAsistController_->AdjustParam();
@@ -206,12 +209,13 @@ void GameScene::SetClassPointer() {
     gameObj_.player_->SetViewProjection(&viewProjection_);
     gameObj_.nextAttackHintUI_->SetViewProjection(&viewProjection_);
     gameObj_.player_->SetLockOn(gameObj_.lockOnController_.get());
+    gameObj_.gameCamera_->SetLockOn(gameObj_.lockOnController_->GetLockOn());
     gameObj_.player_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.player_->SetComboAttackController(gameObj_.playerComboAttackController_.get());
     gameObj_.player_->SetCombo(gameObj_.combo_.get());
     gameObj_.player_->SetHitStop(gameObj_.attackEffect_.get());
     gameObj_.player_->SetDeathTimer(gameObj_.deathTimer_.get());
-    gameObj_.player_->SetDeathFragPointer(&gameObj_.deathTimer_->GetIsDeath());
+    gameObj_.player_->SetDeathFragPointer(&gameObj_.deathTimer_->GetIsDeathRef());
 
     gameObj_.playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
     gameObj_.playerComboAttackController_->SetPlayer(gameObj_.player_.get());

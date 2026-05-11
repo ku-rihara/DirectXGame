@@ -72,6 +72,8 @@ public:
     /// <param name="blendMode">ブレンドモード</param>
     void PreBlendSet(const PipelineType& type, ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) const;
 
+    void Finalize(); //< 終了処理
+
 private:
     PipelineManager()  = default;
     ~PipelineManager() = default;

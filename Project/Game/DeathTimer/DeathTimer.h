@@ -72,6 +72,7 @@ private:
 
 public:
     const bool& GetIsDeath() const { return isDeath_; }
+    bool& GetIsDeathRef() { return isDeath_; }
     float GetCurrentStress() const { return currentStress_; }
     float GetMaxStress() const { return maxStress_; }
     DeathTimerGauge* GetDeathTimerGauge() const { return deathTimerGauge_.get(); }

@@ -1,4 +1,4 @@
-﻿{
+{
     "anchorPoint.dds": {
         "layerNum": 4,
         "startAnchorPoint": [
@@ -12,12 +12,12 @@
             1.0
         ],
         "startPosition": [
-            0.0,
+            -644.5,
             0.0
         ],
         "startScale": [
-            0.0,
-            0.0
+            1.0,
+            1.0
         ],
         "startUVScale": [
             1.0,

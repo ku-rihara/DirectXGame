@@ -10,6 +10,8 @@
 // Behavior
 #include "Behavior/CameraFollowBehavior.h"
 #include"Behavior/CameraResetBehavior.h"
+// engine
+#include "Frame/Frame.h"
 
 /// std
 #include <imgui.h>
@@ -38,7 +40,7 @@ void GameCamera::Update(float speedRate) {
 
     // Behavior更新
     if (behavior_) {
-        behavior_->Update();
+        behavior_->Update(KetaEngine::Frame::DeltaTimeRate() * speedRate);
     }
 
     // ビュー行列の更新

@@ -201,6 +201,11 @@
         "emissiveIntensity": 0.800000011920929,
         "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": false,
@@ -231,13 +236,14 @@
         "scaleEaseParam.maxTime": 0.5,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
-        "selectedTexturePath": "Resources/EngineTexture/Particle/DeathGaugeIcon_Angry.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/angry.dds",
         "sphereRadius.max": 7.320000171661377,
         "sphereRadius.min": 3.7200000286102295,
         "targetApplyPos": true,
         "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": false,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

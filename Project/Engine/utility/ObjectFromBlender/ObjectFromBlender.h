@@ -105,6 +105,11 @@ public:
     /// </summary>
     void SetAllObjectsScaleZero();
 
+    /// <summary>
+    /// 全オブジェクトのスケールを1に設定（表示化）
+    /// </summary>
+    void SetAllObjectsScaleOne();
+
     const LevelData* GetLevelData() const { return levelData_.get(); }
 };
 

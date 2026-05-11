@@ -1,0 +1,21 @@
+{
+    "LockOn": {
+        "angleRange": 180.0,
+        "availableTargetScale": [
+            0.6000000238418579,
+            0.6000000238418579
+        ],
+        "maxDistance": 100.0,
+        "minDistance": 0.0,
+        "spriteScale": [
+            0.6000000238418579,
+            0.6000000238418579
+        ],
+        "targetChangeSpeed": 4.300000190734863,
+        "targetOffset": [
+            -1.0,
+            6.900000095367432,
+            0.0
+        ]
+    }
+}

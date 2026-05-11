@@ -24,6 +24,8 @@ public:
     /// <param name="viewProjection">ビュープロジェクション</param>
     void Update(Player* pPlayer, const KetaEngine::ViewProjection& viewProjection);
 
+    void AdjustParam(); // パラメータ調整用
+
 private:
     std::unique_ptr<LockOn> lockOn_ = nullptr;
     EnemyManager* pEnemyManager_    = nullptr;
