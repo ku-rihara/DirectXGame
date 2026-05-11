@@ -6,7 +6,8 @@
 #include "GameCamera/GameCamera.h"
 #include "Player/Components/Animation/PlayerAnimator.h"
 #include "Player/Player.h"
-/// frame
+/// engine
+#include "audio/Audio.h"
 #include "Frame/Frame.h"
 #include <imgui.h>
 
@@ -24,6 +25,9 @@ PlayerJump::PlayerJump(Player* player, float initSpeed)
     } else {
         pOwner_->GetGameCamera()->PlayAnimation("PlayerJump", false);
         pOwner_->GetPlayerAnimator().PlayJumpAnimation();
+
+        // ジャンプSE再生
+        KetaEngine::Audio::GetInstance()->Play("PlayerJump.mp3", 1.0f);
 
         ChangeState([this]() { StartState(); });
     }

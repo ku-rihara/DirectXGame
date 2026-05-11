@@ -40,6 +40,7 @@ public:
 private:
     bool isTaunting_        = false;
     bool isTauntFontMoving_ = false;
+    bool isFleeing_         = false;
     StrongParameter strongParam_;
 
     // Taunt演出用フォントオブジェクト

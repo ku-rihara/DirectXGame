@@ -64,24 +64,24 @@
         "Cyl.uvModeInt": 0,
         "Direction Max": [
             0.0,
-            0.0,
+            1.0,
             0.0
         ],
         "Direction Min": [
             0.0,
-            0.0,
+            1.0,
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 0.6499999761581421,
+        "IntervalTime": 0.4000000059604645,
         "IsScreenPos": false,
-        "LifeTime": 0.6200000047683716,
+        "LifeTime": 0.3700000047683716,
         "Max Particle Num": 1000,
-        "Particle Count": 6,
+        "Particle Count": 3,
         "Position Base": [
             0.0,
             0.0,
-            0.0
+            -2.2200000286102295
         ],
         "Position Max": [
             0.0,
@@ -132,8 +132,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 1.0,
-        "Scale Min": 1.0,
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
         "ScaleV3 Max": [
             1.0,
             7.0,
@@ -144,7 +144,7 @@
             4.0,
             1.0
         ],
-        "Speed Max": 0.0,
+        "Speed Max": 6.820000171661377,
         "Speed Min": 0.0,
         "SpeedV3 Max": [
             0.0,
@@ -159,14 +159,14 @@
         "StartTime": 0.0,
         "TranslateEaseParam.easeTypeInt": 22,
         "TranslateEaseParam.endValueV3.max": [
-            6.199999809265137,
+            1.0,
             11.0,
-            8.760000228881836
+            0.0
         ],
         "TranslateEaseParam.endValueV3.min": [
-            -5.869999885559082,
-            5.0,
-            -5.940000057220459
+            1.0,
+            11.0,
+            0.0
         ],
         "TranslateEaseParam.isReturnToOrigin": false,
         "TranslateEaseParam.isScaleEase": true,
@@ -198,14 +198,19 @@
         "dissolveName": "",
         "distortionStrength": 0.05000000074505806,
         "distortionTexturePath": "",
-        "emissiveIntensity": 1.0,
+        "emissiveIntensity": 2.5,
         "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": false,
         "isRotateForDirection": true,
-        "isScalerScale": false,
+        "isScalerScale": true,
         "isShot": false,
         "modelFilePath": "",
         "parentFollowR": true,
@@ -213,9 +218,12 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
-        "scaleEaseParam.easeTypeInt": 0,
-        "scaleEaseParam.endValueF.max": 0.0,
-        "scaleEaseParam.endValueF.min": 0.0,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
+        "scaleEaseParam.easeTypeInt": 22,
+        "scaleEaseParam.endValueF.max": 4.0,
+        "scaleEaseParam.endValueF.min": 4.0,
         "scaleEaseParam.endValueV3.max": [
             0.0,
             0.0,
@@ -227,17 +235,18 @@
             0.0
         ],
         "scaleEaseParam.isReturnToOrigin": false,
-        "scaleEaseParam.isScaleEase": false,
-        "scaleEaseParam.maxTime": 1.0,
+        "scaleEaseParam.isScaleEase": true,
+        "scaleEaseParam.maxTime": 0.5799999833106995,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
-        "selectedTexturePath": "Resources/EngineTexture/Particle/fire.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/InpatienceTexture.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,
         "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": false,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

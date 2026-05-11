@@ -80,7 +80,7 @@
         "Particle Count": 2,
         "Position Base": [
             0.0,
-            0.0,
+            4.760000228881836,
             0.0
         ],
         "Position Max": [
@@ -132,8 +132,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 2.0,
-        "Scale Min": 2.0,
+        "Scale Max": 1.2200000286102295,
+        "Scale Min": 1.2200000286102295,
         "ScaleV3 Max": [
             1.0,
             1.0,
@@ -203,7 +203,7 @@
         "emitShape": 0,
         "goalPosition": [
             0.0,
-            0.0,
+            12.300000190734863,
             0.0
         ],
         "isAlphaNoMove": false,
@@ -218,6 +218,9 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
         "scaleEaseParam.easeTypeInt": 0,
         "scaleEaseParam.endValueF.max": 0.0,
         "scaleEaseParam.endValueF.min": 0.0,
@@ -236,7 +239,7 @@
         "scaleEaseParam.maxTime": 1.0,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
-        "selectedTexturePath": "Resources/EngineTexture/Particle/circle.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/Heat.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,

@@ -98,9 +98,8 @@ void DirectXCommon::PostDraw() {
     // 画面に表示
     dxSwapChain_->Present();
 
-    // コマンドの初期化
+    // コマンドの終了待ち
     dxCommand_->WaitForGPU();
-    Frame::Update();
     dxCommand_->ResetCommand();
 }
 

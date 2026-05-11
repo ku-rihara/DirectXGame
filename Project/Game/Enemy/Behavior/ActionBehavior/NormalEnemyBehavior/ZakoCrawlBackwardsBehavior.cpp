@@ -10,6 +10,9 @@
 ZakoCrawlBackwardsBehavior::ZakoCrawlBackwardsBehavior(NormalEnemy* enemy, bool skipStumble)
     : BaseEnemyBehavior("ZakoCrawlBackwardsBehavior", static_cast<BaseEnemy*>(enemy)), pNormalEnemy_(enemy) {
 
+    // 焦りエフェクト開始
+    pBaseEnemy_->GetEnemyEffects()->Emit("EnemyImpatience");
+
     if (skipStumble) {
         // ダメージリアクション後の復帰時: StumbleBackwardsを省略してCrawlへ直行
         phase_ = Phase::CRAWL;
@@ -56,6 +59,9 @@ void ZakoCrawlBackwardsBehavior::Update() {
     float targetAngle  = std::atan2(-toPlayer.x, -toPlayer.z);
     float currentAngle = pBaseEnemy_->GetBaseRotationY();
     pBaseEnemy_->SetRotationY(LerpShortAngle(currentAngle, targetAngle, 0.8f));
+
+    // 焦りエフェクトの発生
+    pBaseEnemy_->GetEnemyEffects()->Emit("EnemyImpatience");
 
     // STUMBLEフェーズは向きのみ、移動なし
     if (phase_ == Phase::STUMBLE) {

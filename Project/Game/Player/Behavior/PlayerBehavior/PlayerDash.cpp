@@ -6,6 +6,7 @@
 /// boss
 #include "Player/Player.h"
 /// engine
+#include "audio/Audio.h"
 #include "Frame/Frame.h"
 /// imgui
 #include <imgui.h>
@@ -27,6 +28,9 @@ void PlayerDash::StartDash() {
     // ダッシュ開始アニメーションとエフェクト
     pOwner_->GetPlayerAnimator().PlayDashStartAnimation();
     pOwner_->GetEffects()->DashEffectStart();
+
+    // ダッシュSE再生
+    KetaEngine::Audio::GetInstance()->Play("PlayerDashSE.mp3", 1.0f);
 
     // ダッシュ開始位置と終了位置を計算
     Vector3 start = pOwner_->GetWorldPosition();

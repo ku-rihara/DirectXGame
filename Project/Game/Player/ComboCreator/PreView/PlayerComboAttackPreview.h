@@ -78,13 +78,21 @@ private:
     bool startFromOrigin_ = false;
     Vector3 previewInitPos_;
 
-    // 終了処理フェーズ監視フラグ
+    // フェーズ監視フラグ
+    bool previewInPrepPhase_   = false;
     bool previewInFinishPhase_ = false;
 
     // 演出再生フレーム追跡
     int32_t prevFrame_ = 0;
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> renditionPlayed_{};
+    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> renditionOnHitPlayed_{};
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> objAnimPlayed_{};
+
+    // リスト形式の演出用再生フラグ
+    std::vector<bool> isPostEffectPlayed_;
+    std::vector<bool> isPostEffectOnHitPlayed_;
+    std::vector<bool> isParticleEffectPlayed_;
+    std::vector<bool> isParticleEffectOnHitPlayed_;
 
     // プレイヤーの初期状態保存
     Vector3 initialPosition_;

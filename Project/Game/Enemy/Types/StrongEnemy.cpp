@@ -84,6 +84,11 @@ void StrongEnemy::Update() {
         // 毎フレームEmit
         GetEnemyEffects()->Emit("TauntBoss");
     }
+
+    if (isFleeing_) {
+        // 焦りエフェクトの発生 (毎フレーム)
+        GetEnemyEffects()->Emit("EnemyImpatience");
+    }
 }
 
 void StrongEnemy::SpawnRenditionInit() {
@@ -199,8 +204,10 @@ std::unique_ptr<BaseEnemyBehavior> StrongEnemy::CreatePostSpawnBehavior() {
 
 void StrongEnemy::StartFlee() {
     isTaunting_ = false;
+    isFleeing_  = true;
     PlayTauntFontClose();
     SetOnDamageTakenCallback(nullptr);
+    GetEnemyEffects()->Emit("EnemyImpatience");
     ChangeBehavior(std::make_unique<StrongEnemyFleeBehavior>(this, strongParam_.fleeCooldownTime));
 }
 
@@ -213,6 +220,7 @@ void StrongEnemy::StartTaunt() {
     }
 
     isTaunting_ = true;
+    isFleeing_  = false;
     PlayTauntFontSpawn();
     GetEnemyEffects()->Emit("TauntBoss");
     CreateAndSetupTauntBehavior();
@@ -229,6 +237,7 @@ void StrongEnemy::StopTaunt() {
     }
 
     isTaunting_ = false;
+    isFleeing_  = false;
     // 追いかけBehaviorに遷移
     ChangeBehavior(std::make_unique<EnemyChase>(this));
 }
@@ -239,12 +248,14 @@ void StrongEnemy::StopTauntToWait(float waitTime) {
     }
 
     isTaunting_ = false;
+    isFleeing_  = false;
     // 待機Behaviorに遷移
     ChangeBehavior(std::make_unique<EnemyWait>(this, waitTime));
 }
 
 void StrongEnemy::BackToDamageRoot() {
 
+    isFleeing_ = false;
     // ダメージリアクションRootだけ設定して即座に逃走へ切り替える
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
     StartFlee();

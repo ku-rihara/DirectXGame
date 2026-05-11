@@ -51,6 +51,22 @@ void PlayerComboAttackPreview::UpdateSingleMode() {
         return;
     }
 
+    if (previewInPrepPhase_) {
+        // 予備動作タイムライン監視
+        KetaEngine::TimelineDrawer* ptl = currentAttackData_->GetPrepTimeline();
+        if (!ptl || ptl->GetCurrentFrame() >= ptl->GetEndFrame()) {
+            previewInPrepPhase_ = false;
+            // メインフェーズへ移行（ComboAttackAction側で同期される）
+            KetaEngine::TimelineDrawer* tl = currentAttackData_->GetTimeline();
+            if (tl) {
+                tl->SetCurrentFrame(0);
+                tl->SetPlaying(true);
+            }
+            attackElapsedTime_ = 0.0f;
+        }
+        return;
+    }
+
     if (previewInFinishPhase_) {
         // 終了処理タイムライン監視
         KetaEngine::TimelineDrawer* ftl = currentAttackData_->GetFinishTimeline();
@@ -70,8 +86,13 @@ void PlayerComboAttackPreview::UpdateSingleMode() {
 
     if (tl->GetCurrentFrame() >= tl->GetEndFrame()) {
         if (currentAttackData_->HasFinishPhase()) {
-            // 終了処理フェーズへ移行（ComboAttackActionが自動で遷移する）
+            // 終了処理フェーズへ移行
             previewInFinishPhase_ = true;
+            KetaEngine::TimelineDrawer* ftl = currentAttackData_->GetFinishTimeline();
+            if (ftl) {
+                ftl->SetCurrentFrame(0);
+                ftl->SetPlaying(true);
+            }
         } else {
             ExecuteAttack(currentAttackData_);
             attackElapsedTime_ = 0.0f;
@@ -106,7 +127,15 @@ void PlayerComboAttackPreview::ExecuteAttack(PlayerComboAttackData* attackData) 
     ResetRenditionFlags();
 
     // タイムラインをリセットして再生
-    KetaEngine::TimelineDrawer* tl = attackData->GetTimeline();
+    KetaEngine::TimelineDrawer* tl = nullptr;
+    if (attackData->HasPrepPhase()) {
+        previewInPrepPhase_ = true;
+        tl = attackData->GetPrepTimeline();
+    } else {
+        previewInPrepPhase_ = false;
+        tl = attackData->GetTimeline();
+    }
+
     if (tl) {
         tl->SetCurrentFrame(0);
         tl->SetPlaying(true);
@@ -225,7 +254,12 @@ std::string PlayerComboAttackPreview::GetCurrentAttackName() const {
 
 void PlayerComboAttackPreview::ResetRenditionFlags() {
     renditionPlayed_.fill(false);
+    renditionOnHitPlayed_.fill(false);
     objAnimPlayed_.fill(false);
+    isPostEffectPlayed_.clear();
+    isPostEffectOnHitPlayed_.clear();
+    isParticleEffectPlayed_.clear();
+    isParticleEffectOnHitPlayed_.clear();
     prevFrame_ = 0;
 }
 
@@ -234,8 +268,22 @@ void PlayerComboAttackPreview::UpdatePreviewRenditions() {
         return;
     }
 
-    KetaEngine::TimelineDrawer* timeline = currentAttackData_->GetTimeline();
-    if (!timeline) {
+    // 現在のフェーズに対応するタイムラインと演出データを取得
+    KetaEngine::TimelineDrawer* timeline = nullptr;
+    const PlayerAttackRenditionData* renditionData = nullptr;
+
+    if (previewInPrepPhase_) {
+        timeline      = currentAttackData_->GetPrepTimeline();
+        renditionData = &currentAttackData_->GetRenditionDataForPhase(AttackTimelinePhase::PREPARATION);
+    } else if (previewInFinishPhase_) {
+        timeline      = currentAttackData_->GetFinishTimeline();
+        renditionData = &currentAttackData_->GetRenditionDataForPhase(AttackTimelinePhase::FINISH);
+    } else {
+        timeline      = currentAttackData_->GetTimeline();
+        renditionData = &currentAttackData_->GetRenditionDataForPhase(AttackTimelinePhase::MAIN);
+    }
+
+    if (!timeline || !renditionData) {
         return;
     }
 
@@ -246,9 +294,7 @@ void PlayerComboAttackPreview::UpdatePreviewRenditions() {
         ResetRenditionFlags();
     }
 
-    const auto& renditionData = currentAttackData_->GetRenditionData();
-
-    // 通常演出 (RenditionType → EffectEditorType + category)
+    // 通常演出 (リスト形式以外)
     struct RendMapping {
         PlayerAttackRenditionData::Type rendType;
         KetaEngine::EffectEditorType    editorType;
@@ -258,7 +304,6 @@ void PlayerComboAttackPreview::UpdatePreviewRenditions() {
         {PlayerAttackRenditionData::Type::CameraAction,      KetaEngine::EffectEditorType::Camera,     "Common"},
         {PlayerAttackRenditionData::Type::HitStop,           KetaEngine::EffectEditorType::TimeScale,  "Common"},
         {PlayerAttackRenditionData::Type::ShakeAction,       KetaEngine::EffectEditorType::Shake,      "Common"},
-        {PlayerAttackRenditionData::Type::ParticleEffect,    KetaEngine::EffectEditorType::Particle,   "Player"},
         {PlayerAttackRenditionData::Type::RibbonTrailEffect, KetaEngine::EffectEditorType::RibbonTrail,"Player"},
     };
 
@@ -267,7 +312,7 @@ void PlayerComboAttackPreview::UpdatePreviewRenditions() {
         if (renditionPlayed_[idx]) {
             continue;
         }
-        const auto& param = renditionData.GetRenditionParamFromType(m.rendType);
+        const auto& param = renditionData->GetRenditionParamFromType(m.rendType);
         if (param.fileName.empty() || param.fileName == "None") {
             continue;
         }
@@ -275,6 +320,40 @@ void PlayerComboAttackPreview::UpdatePreviewRenditions() {
         if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
             pEditorSuite_->PlayEffect(m.editorType, param.fileName, m.category);
             renditionPlayed_[idx] = true;
+        }
+    }
+
+    // ポストエフェクトリスト
+    const auto& postEffectList = renditionData->GetPostEffectList();
+    if (isPostEffectPlayed_.size() != postEffectList.size()) {
+        isPostEffectPlayed_.assign(postEffectList.size(), false);
+    }
+    for (size_t i = 0; i < postEffectList.size(); ++i) {
+        if (isPostEffectPlayed_[i]) continue;
+        const auto& param = postEffectList[i];
+        if (param.fileName.empty() || param.fileName == "None") continue;
+
+        int32_t effectFrame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
+            pEditorSuite_->PlayEffect(KetaEngine::EffectEditorType::PostEffect, param.fileName, "Common");
+            isPostEffectPlayed_[i] = true;
+        }
+    }
+
+    // パーティクルエフェクトリスト
+    const auto& particleEffectList = renditionData->GetParticleEffectList();
+    if (isParticleEffectPlayed_.size() != particleEffectList.size()) {
+        isParticleEffectPlayed_.assign(particleEffectList.size(), false);
+    }
+    for (size_t i = 0; i < particleEffectList.size(); ++i) {
+        if (isParticleEffectPlayed_[i]) continue;
+        const auto& param = particleEffectList[i];
+        if (param.fileName.empty() || param.fileName == "None") continue;
+
+        int32_t effectFrame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+        if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
+            pEditorSuite_->PlayEffect(KetaEngine::EffectEditorType::Particle, param.fileName, "Player");
+            isParticleEffectPlayed_[i] = true;
         }
     }
 
@@ -295,7 +374,7 @@ void PlayerComboAttackPreview::UpdatePreviewRenditions() {
         if (objAnimPlayed_[idx]) {
             continue;
         }
-        const auto& param = renditionData.GetObjAnimationParamFromType(m.animType);
+        const auto& param = renditionData->GetObjAnimationParamFromType(m.animType);
         if (param.fileName.empty() || param.fileName == "None") {
             continue;
         }

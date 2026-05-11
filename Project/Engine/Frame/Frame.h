@@ -31,7 +31,7 @@ public:
 
 private:
     static std::chrono::steady_clock::time_point reference_;
-    static std::chrono::high_resolution_clock::time_point lastTime_;
+    static std::chrono::steady_clock::time_point lastTime_;
     static float deltaTime_;
     static float deltaTimeRate_;
     static float timeScale_;

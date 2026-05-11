@@ -1,6 +1,7 @@
 #include "GameResultScene.h"
 #include "2d/SpriteRegistry.h"
 #include "Base/TextureManager.h"
+#include "audio/Audio.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 #include "ResultObj/GameResultInfo.h"
@@ -56,6 +57,7 @@ void GameResultScene::Update() {
 void GameResultScene::CheckEndInput() {
     if (KetaEngine::Input::GetInstance()->TriggerKey(KeyboardKey::Space) || KetaEngine::Input::IsTriggerPad(0, GamepadButton::A)) {
         isStartFadeOut_ = true;
+        KetaEngine::Audio::GetInstance()->Play("SelectSE.mp3", 1.0f);
     }
 }
 

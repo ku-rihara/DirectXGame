@@ -341,30 +341,16 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
 
 void PlayerComboAttackData::DrawSaveLoadUI() {
 
-    // セーブボタン：エフェクトリスト→スロット同期 → 変数値→dates_反映 → ファイル保存
+    // セーブボタン
     if (ImGui::Button(("Save " + groupName_).c_str())) {
-        branchCount_ = static_cast<int32_t>(comboBranches_.size());
-        renditionData_.SyncListToSlots();
-        globalParameter_->PushParamForGroup(groupName_);
-        globalParameter_->SaveFile(groupName_, folderPath_);
+        SaveData();
         std::string message = groupName_ + ".json saved.";
         MessageBoxA(nullptr, message.c_str(), "GlobalParameter", 0);
     }
 
     // ロードボタン
     if (ImGui::Button(("Load " + groupName_).c_str())) {
-        globalParameter_->LoadFile(groupName_, folderPath_);
-        globalParameter_->SyncParamForGroup(groupName_);
-        renditionData_.SyncSlotsToList();
-        timeLine_.Init(this);
-        if (hasPrep_) {
-            prepRenditionData_.SyncSlotsToList();
-            prepTimeline_.Init(this, TimelinePhase::PREPARATION);
-        }
-        if (hasFinish_) {
-            finishRenditionData_.SyncSlotsToList();
-            finishTimeline_.Init(this, TimelinePhase::FINISH);
-        }
+        LoadData();
     }
 }
 
@@ -541,6 +527,10 @@ void PlayerComboAttackData::SetEffectEditorSuite(KetaEngine::EffectEditorSuite* 
 
 KetaEngine::TimelineDrawer* PlayerComboAttackData::GetTimeline() {
     return timeLine_.GetTimeline();
+}
+
+KetaEngine::TimelineDrawer* PlayerComboAttackData::GetPrepTimeline() {
+    return prepTimeline_.GetTimeline();
 }
 
 KetaEngine::TimelineDrawer* PlayerComboAttackData::GetFinishTimeline() {

@@ -10,6 +10,8 @@ using namespace KetaEngine;
 
 // resource
 #include "Core/ResourceLoader.h"
+// Frame
+#include "Frame/Frame.h"
 
 // utility
 #include "../utility/Log/Log.h"
@@ -56,6 +58,7 @@ void KTFramework::Run() {
     // ウィンドウのxボタンが押されるまでループ
     while (engineCore_->ProcessMessage() == 0) {
         // フレームの開始
+        Frame::Update();
         engineCore_->BeginFrame();
 
         // 更新

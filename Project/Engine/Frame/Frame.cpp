@@ -24,9 +24,17 @@ void Frame::Update() {
     // 経過時間（秒）を計算
     auto currentTime                       = std::chrono::steady_clock::now();
     std::chrono::duration<float> frameTime = currentTime - lastTime_;
-    deltaTime_                             = frameTime.count();
-    deltaTimeRate_                         = deltaTime_ * timeScale_;
-    lastTime_                              = currentTime;
+    
+    // シーン遷移やフリーズによる極端な値を制限（1/10秒以上はロード中とみなす）
+    float frameTimeCount = frameTime.count();
+    if (frameTimeCount > 0.1f) {
+        deltaTime_ = 1.0f / kFPS;
+    } else {
+        deltaTime_ = frameTimeCount;
+    }
+    
+    deltaTimeRate_ = deltaTime_ * timeScale_;
+    lastTime_      = currentTime;
 }
 
 float Frame::DeltaTime() {
@@ -38,25 +46,29 @@ float Frame::DeltaTimeRate() {
 }
 
 void Frame::FixFPS() {
-    // 1/60秒ピッタリの時間
-    const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
-    // 1/60秒にわずかに短い時間
-    const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
+    // VSync(60Hz)との競合を避けるため、CPU側は少し早めの65FPSをターゲットにする
+    // これにより、Present(1, 0)が呼ばれる前に必ずCPU処理が終わっている状態を作る
+    const std::chrono::microseconds kTargetTime(uint64_t(1000000.0f / 65.0f));
 
     // 現在時刻を取得
     std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
     // 前回基準からの経過時間を取得
     std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
 
-    // 1/60秒経っていない場合
-    if (elapsed < kMinCheckTime) {
-        // 1/60秒経過するまで微小なスリープを繰り返す
-        while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
-            std::this_thread::sleep_for(std::chrono::microseconds(1));
+    // ターゲット時間に達していない場合
+    if (elapsed < kTargetTime) {
+        // 余裕がある場合のみスリープ（OSのタイマー解像度の影響を最小限にする）
+        if (kTargetTime - elapsed > std::chrono::microseconds(1000)) {
+            std::this_thread::sleep_for(std::chrono::microseconds(500));
+        }
+        // 残りはビジーループで微調整（精度優先）
+        while (std::chrono::steady_clock::now() - reference_ < kTargetTime) {
+            std::this_thread::yield(); // 他のスレッドに実行権を譲る
         }
     }
 
-    // 現在時刻を基準時間として記録
+    // 次のフレームの基準を「今」に更新（遅れを取り戻そうとしない）
+    // これがVsync環境で最も安定する
     reference_ = std::chrono::steady_clock::now();
 }
 
