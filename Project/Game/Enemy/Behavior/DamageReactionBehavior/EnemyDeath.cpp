@@ -66,7 +66,18 @@ void EnemyDeath::Update([[maybe_unused]] float deltaTime) {
     case Step::BURST:
         pBaseEnemy_->SetScale(Vector3::ZeroVector());
         pBaseEnemy_->DeathRenditionInit();
-        step_ = Step::DEATH;
+        deathWaitTimer_ = 2.0f;
+        step_           = Step::WAITING;
+        break;
+
+    /// -------------------------------------------------------
+    /// 爆散エフェクト待機
+    ///---------------------------------------------------------
+    case Step::WAITING:
+        deathWaitTimer_ -= deltaTime;
+        if (deathWaitTimer_ <= 0.0f) {
+            step_ = Step::DEATH;
+        }
         break;
 
     /// -------------------------------------------------------

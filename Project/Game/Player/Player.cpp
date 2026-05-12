@@ -135,8 +135,8 @@ void Player::Update() {
         rightHand_->GetObject3D()->transform_.scale_ = Vector3::ZeroVector();
     } else {
         obj3d_->transform_.scale_                   = Vector3::OneVector();
-        leftHand_->GetObject3D()->transform_.scale_  = Vector3::OneVector();
-        rightHand_->GetObject3D()->transform_.scale_ = Vector3::OneVector();
+        leftHand_->GetObject3D()->transform_.scale_  = Vector3(2.0f, 2.0f, 2.0f);
+        rightHand_->GetObject3D()->transform_.scale_ = Vector3(2.0f, 2.0f, 2.0f);
     }
 
     // 移動制限
