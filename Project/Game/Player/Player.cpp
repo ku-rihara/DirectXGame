@@ -128,9 +128,7 @@ void Player::Update() {
         ChangeDeathMode();
     }
 
-    // 死亡時にプレイヤーモデルを非表示にする (スケールを0にする)
-    // baseTransformのスケールを0にするとペアレントされているパーティクルも消えてしまうため、
-    // モデル側のスケールのみを操作する
+    // 死亡時にプレイヤーモデルを非表示にする
     if (isDeathHidePlayer_) {
         obj3d_->transform_.scale_                   = Vector3::ZeroVector();
         leftHand_->GetObject3D()->transform_.scale_  = Vector3::ZeroVector();

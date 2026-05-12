@@ -82,6 +82,7 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
     assert(itGroup != dates_.end());
 
     json root;
+    // データをJSONに変換
     for (auto& [itemName, item] : itGroup->second) {
         if (std::holds_alternative<int32_t>(item)) {
             root[groupName][itemName] = std::get<int32_t>(item);
@@ -105,6 +106,7 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
         }
     }
 
+    // ディレクトリが存在しない場合は作成
     std::filesystem::path dir(kDirectoryPath);
     if (!std::filesystem::exists(dir)) {
         std::filesystem::create_directories(dir);
@@ -122,6 +124,7 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
         fullDir += "/";
     }
 
+    // ファイルに保存
     std::string filePath = fullDir + groupName + ".json";
     std::ofstream ofs(filePath);
     if (ofs.fail()) {
@@ -130,11 +133,15 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
         assert(0);
         return;
     }
+
+    // JSONを整形して保存
     ofs << std::setw(4) << root << std::endl;
     ofs.close();
 }
 
 void GlobalParameter::LoadFiles() {
+
+    // ディレクトリが存在しない場合は終了
     std::filesystem::path dir(kDirectoryPath);
     if (!std::filesystem::exists(dir))
         return;
@@ -309,11 +316,13 @@ void GlobalParameter::CopyGroup(const std::string& fromGroup, const std::string&
     if (it == dates_.end())
         return;
 
+    // コピー元とコピー先のグループを取得   
     Group& sourceGroup = it->second;
     Group& destGroup   = dates_[toGroup];
 
+    // コピー元のアイテムをコピー先に追加
     for (const auto& [key, variant] : sourceGroup) {
-        // コピー
+
         if (std::holds_alternative<int32_t>(variant)) {
             destGroup[key] = std::get<int32_t>(variant);
         } else if (std::holds_alternative<uint32_t>(variant)) {
@@ -355,6 +364,8 @@ void GlobalParameter::Regist(const std::string& group, const std::string& key, T
 }
 
 void GlobalParameter::SyncAll() {
+
+    // 全てのグループの登録アイテムを同期
     for (auto& [group, items] : registerParams_) {
         for (auto& item : items) {
             item.pushVariant();
@@ -363,11 +374,13 @@ void GlobalParameter::SyncAll() {
 }
 
 bool GlobalParameter::HasRegisters(const std::string& groupName) const {
+    // グループが存在し、かつ登録アイテムがあるか確認
     auto it = registerParams_.find(groupName);
     return it != registerParams_.end() && !it->second.empty();
 }
 
 void GlobalParameter::SyncParamForGroup(const std::string& group) {
+    // 指定されたグループの登録アイテムを同期
     auto it = registerParams_.find(group);
     if (it != registerParams_.end()) {
         for (auto& item : it->second) {
@@ -377,6 +390,7 @@ void GlobalParameter::SyncParamForGroup(const std::string& group) {
 }
 
 void GlobalParameter::ClearRegistersForGroup(const std::string& groupName) {
+    // 指定されたグループの登録アイテムをクリア
     auto it = registerParams_.find(groupName);
     if (it != registerParams_.end()) {
         it->second.clear();
@@ -384,6 +398,7 @@ void GlobalParameter::ClearRegistersForGroup(const std::string& groupName) {
 }
 
 void GlobalParameter::PushParamForGroup(const std::string& groupName) {
+    // 指定されたグループの登録アイテムをプッシュ
     auto it = registerParams_.find(groupName);
     if (it != registerParams_.end()) {
         for (auto& item : it->second) {
@@ -393,10 +408,16 @@ void GlobalParameter::PushParamForGroup(const std::string& groupName) {
 }
 
 void GlobalParameter::RemoveKeysWithPrefix(const std::string& groupName, const std::string& prefix) {
+
+    // グループが存在しない場合は終了
     auto it = dates_.find(groupName);
-    if (it == dates_.end()) return;
+    if (it == dates_.end()) {
+        return;
+    }
 
     Group& group = it->second;
+
+    // キーのプレフィックスを確認し、該当するキーを削除
     for (auto keyIt = group.begin(); keyIt != group.end();) {
         if (keyIt->first.substr(0, prefix.size()) == prefix) {
             keyIt = group.erase(keyIt);
