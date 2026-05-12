@@ -8,6 +8,7 @@ private:
         DIRECTIONSET,
         ANIMATION,
         BURST,
+        WAITING,
         DEATH,
     };
 
@@ -15,6 +16,7 @@ private:
     Step step_;
     bool deathAnimStarted_  = false;
     bool deathAnimFinished_ = false;
+    float deathWaitTimer_   = 0.0f;
 
 public:
     EnemyDeath(BaseEnemy* boss);

@@ -67,7 +67,7 @@ void Frame::FixFPS() {
         }
     }
 
-    // 次のフレームの基準を「今」に更新（遅れを取り戻そうとしない）
+    // 次のフレームの基準を「今」に更新（遅れを取り戻しようとしない）
     // これがVsync環境で最も安定する
     reference_ = std::chrono::steady_clock::now();
 }

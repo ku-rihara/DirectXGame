@@ -85,8 +85,8 @@ void StrongEnemy::Update() {
         GetEnemyEffects()->Emit("TauntBoss");
     }
 
-    if (isFleeing_) {
-        // 焦りエフェクトの発生 (毎フレーム)
+    if (isFleeing_ && dynamic_cast<EnemyDamageReactionRoot*>(GetDamageReactionBehavior())) {
+        // 焦りエフェクトの発生 (毎フレーム) - ダメージリアクション中は発生させない
         GetEnemyEffects()->Emit("EnemyImpatience");
     }
 }

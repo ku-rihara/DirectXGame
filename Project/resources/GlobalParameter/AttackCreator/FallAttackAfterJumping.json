@@ -20,7 +20,7 @@
         "CameraAction_OnHit_IsCameraReset": false,
         "CameraAction_OnHit_StartTiming": 0.0,
         "CameraAction_StartTiming": 0.0,
-        "CollisionRad": 11.470000267028809,
+        "CollisionRad": 17.860000610351563,
         "ComboBranchCount": 0,
         "Condition": 1,
         "Finish_Audio_Attack_FileName": "FallExplosion",
@@ -298,7 +298,7 @@
         "collisionOffsetPos": [
             0.0,
             5.03000020980835,
-            0.0
+            1.6699999570846558
         ],
         "collisionStartTime": 0.0,
         "finishTimeOffset": 0.01666666753590107,

@@ -24,7 +24,7 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     globalParameter_->SyncParamForGroup(groupName_);
     renditionData_.SyncSlotsToList();
 
-    // enumのタイプををIntから適応 (全フェーズ共通)
+    // enumのタイプををIntから適応
     attackParam_.triggerParam.condition       = static_cast<TriggerCondition>(triggerConditionInt_);
     prepAttackParam_.triggerParam.condition   = attackParam_.triggerParam.condition;
     finishAttackParam_.triggerParam.condition = attackParam_.triggerParam.condition;
@@ -47,7 +47,7 @@ void PlayerComboAttackData::LoadData() {
     globalParameter_->SyncParamForGroup(groupName_);
     renditionData_.SyncSlotsToList();
 
-    // conditionをIntから適応 (全フェーズ共通)
+    // conditionをIntから適応 
     attackParam_.triggerParam.condition       = static_cast<TriggerCondition>(triggerConditionInt_);
     prepAttackParam_.triggerParam.condition   = attackParam_.triggerParam.condition;
     finishAttackParam_.triggerParam.condition = attackParam_.triggerParam.condition;

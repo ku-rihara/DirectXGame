@@ -11,6 +11,7 @@ void PlayerComboAttackTimelineParameterApplier::Init(
     PlayerComboAttackTimelineData* data,
     AttackTimelinePhase phase) {
 
+    // メンバーポインタを保存
     attackData_     = attackData;
     timelineDrawer_ = timeline;
     timeLineData_   = data;
@@ -105,37 +106,35 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
     auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
 
     // コライダー適用
-    {
-        int32_t trackIdx = timeLineData_->GetDefaultTrackIndex(
-            PlayerComboAttackTimelineData::DefaultTrack::COLLISION);
+    int32_t trackIdx = timeLineData_->GetDefaultTrackIndex(
+        PlayerComboAttackTimelineData::DefaultTrack::COLLISION);
 
-        if (trackIdx >= 0 && trackIdx < static_cast<int32_t>(timelineDrawer_->GetTracks().size())) {
-            auto& keyframes = timelineDrawer_->GetTracks()[trackIdx].keyframes;
+    if (trackIdx >= 0 && trackIdx < static_cast<int32_t>(timelineDrawer_->GetTracks().size())) {
+        auto& keyframes = timelineDrawer_->GetTracks()[trackIdx].keyframes;
 
-            if (!keyframes.empty()) {
-                // 先頭キーフレームの位置 → startTime
-                int32_t startFrame = keyframes[0].frame;
-                attackParam.collisionParam.startTime = KetaEngine::Frame::FrameToTime(startFrame);
+        if (!keyframes.empty()) {
+            // 先頭キーフレームの位置 → startTime
+            int32_t startFrame                   = keyframes[0].frame;
+            attackParam.collisionParam.startTime = KetaEngine::Frame::FrameToTime(startFrame);
 
-                // いずれかのdurationが変更されていたらそれを共通durationとして採用
-                float storedDurFrames = static_cast<float>(
-                    KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.adaptTime));
-                float newDurFrames = keyframes[0].duration;
-                for (const auto& kf : keyframes) {
-                    if (std::abs(kf.duration - storedDurFrames) > 0.5f) {
-                        newDurFrames = kf.duration;
-                        break;
-                    }
+            // いずれかのdurationが変更されていたらそれを共通durationとして採用
+            float storedDurFrames = static_cast<float>(
+                KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.adaptTime));
+            float newDurFrames = keyframes[0].duration;
+            for (const auto& kf : keyframes) {
+                if (std::abs(kf.duration - storedDurFrames) > 0.5f) {
+                    newDurFrames = kf.duration;
+                    break;
                 }
-                int32_t durationFrames = static_cast<int32_t>(newDurFrames);
-                attackParam.collisionParam.adaptTime = KetaEngine::Frame::FrameToTime(durationFrames);
+            }
+            int32_t durationFrames               = static_cast<int32_t>(newDurFrames);
+            attackParam.collisionParam.adaptTime = KetaEngine::Frame::FrameToTime(durationFrames);
 
-                // 全キーフレームを再配置（先頭位置 + i * (duration + wait)）
-                int32_t waitFrames = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.loopWaitTime);
-                for (int32_t i = 0; i < static_cast<int32_t>(keyframes.size()); ++i) {
-                    keyframes[i].frame    = startFrame + i * (durationFrames + waitFrames);
-                    keyframes[i].duration = static_cast<float>(durationFrames);
-                }
+            // 全キーフレームを再配置（先頭位置 + i * (duration + wait)）
+            int32_t waitFrames = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.loopWaitTime);
+            for (int32_t i = 0; i < static_cast<int32_t>(keyframes.size()); ++i) {
+                keyframes[i].frame    = startFrame + i * (durationFrames + waitFrames);
+                keyframes[i].duration = static_cast<float>(durationFrames);
             }
         }
     }
@@ -200,6 +199,7 @@ void PlayerComboAttackTimelineParameterApplier::UpdateFinishWaitKeyFramePosition
         return;
     }
 
+    // デフォルトトラックのインデックスを取得
     int32_t finishWaitTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT);
     int32_t moveTrackIdx = timeLineData_->GetDefaultTrackIndex(
@@ -207,81 +207,110 @@ void PlayerComboAttackTimelineParameterApplier::UpdateFinishWaitKeyFramePosition
     int32_t collisionTrackIdx = timeLineData_->GetDefaultTrackIndex(
         PlayerComboAttackTimelineData::DefaultTrack::COLLISION);
 
-    if (finishWaitTrackIdx < 0 || moveTrackIdx < 0 || collisionTrackIdx < 0)
+    // トラックが存在しない場合は処理しない
+    if (finishWaitTrackIdx < 0 || moveTrackIdx < 0 || collisionTrackIdx < 0) {
         return;
+    }
 
     auto& tracks = timelineDrawer_->GetTracks();
-    if (finishWaitTrackIdx >= static_cast<int32_t>(tracks.size()) ||
-        moveTrackIdx >= static_cast<int32_t>(tracks.size()) ||
-        collisionTrackIdx >= static_cast<int32_t>(tracks.size()))
+    // トラックインデックスが範囲外の場合も処理しない
+    if (finishWaitTrackIdx >= static_cast<int32_t>(tracks.size()) || moveTrackIdx >= static_cast<int32_t>(tracks.size()) || collisionTrackIdx >= static_cast<int32_t>(tracks.size())) {
         return;
+    }
 
+    // キーフレームデータを取得
     const auto& moveKeyframes      = tracks[moveTrackIdx].keyframes;
     const auto& collisionKeyframes = tracks[collisionTrackIdx].keyframes;
     auto& finishWaitKeyframes      = tracks[finishWaitTrackIdx].keyframes;
 
-    if (moveKeyframes.empty() || finishWaitKeyframes.empty())
+    // 移動とコリジョンのキーフレームが存在しない場合は終了待機の位置を更新できないため処理しない
+    if (moveKeyframes.empty() || finishWaitKeyframes.empty()) {
         return;
+    }
 
+    // 移動の終了フレームを計算（開始フレーム + duration）
     int32_t moveEndFrame = moveKeyframes[0].frame + static_cast<int32_t>(moveKeyframes[0].duration);
 
     // ループがある場合は最後のキーフレームの終端を使用
     int32_t collisionEndFrame = !collisionKeyframes.empty()
-        ? collisionKeyframes.back().frame + static_cast<int32_t>(collisionKeyframes.back().duration)
-        : 0;
+                                    ? collisionKeyframes.back().frame + static_cast<int32_t>(collisionKeyframes.back().duration)
+                                    : 0;
 
+    // 終了待機の開始フレームを移動終了とコリジョン終了の遅い方に設定
     finishWaitKeyframes[0].frame = std::max(moveEndFrame, collisionEndFrame);
 }
 
 void PlayerComboAttackTimelineParameterApplier::UpdateTimelineEndFrame() {
-    if (!attackData_ || !timelineDrawer_)
+    if (!attackData_ || !timelineDrawer_) {
         return;
+    }
 
+    // タイムラインの終了フレームの計算
     int32_t totalFrames = CalculateTotalFrames();
     timelineDrawer_->SetEndFrame(totalFrames);
 }
 
 int32_t PlayerComboAttackTimelineParameterApplier::GetFinishWaitStartFrame() const {
-    if (!attackData_)
+    if (!attackData_) {
         return 0;
+    }
 
+    // コリジョン終了時間と移動終了時間の遅い方を終了待機開始フレームとする
     auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
 
+    // コリジョン終了フレーム = コリジョン開始時間 + 適応時間
     int32_t collisionEndFrame = KetaEngine::Frame::TimeToFrame(
         attackParam.collisionParam.startTime + attackParam.collisionParam.adaptTime);
 
+    // 移動終了フレーム = 移動開始時間 + イージング時間 + 終了待機開始からのオフセット時間
     int32_t moveEndFrame = KetaEngine::Frame::TimeToFrame(
         attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset);
 
+    // 長い方を終了待機の開始フレームとする
     return std::max(collisionEndFrame, moveEndFrame);
 }
-
 
 static int32_t GetRenditionIndexFromTrackType(PlayerComboAttackTimelineData::TrackType type) {
     using TT = PlayerComboAttackTimelineData::TrackType;
     using RT = PlayerAttackRenditionData::Type;
+    // 通常演出のトラックタイプをPlayerAttackRenditionDataのTypeにマッピング
     switch (type) {
-    case TT::CAMERA_ACTION:   return static_cast<int32_t>(RT::CameraAction);
-    case TT::HIT_STOP:        return static_cast<int32_t>(RT::HitStop);
-    case TT::SHAKE_ACTION:    return static_cast<int32_t>(RT::ShakeAction);
-    case TT::POST_EFFECT:     return static_cast<int32_t>(RT::PostEffect);
-    case TT::PARTICLE_EFFECT: return static_cast<int32_t>(RT::ParticleEffect);
-    case TT::AUDIO_ATTACK:    return static_cast<int32_t>(RT::AudioAttack);
-    default:                  return -1;
+    case TT::CAMERA_ACTION:
+        return static_cast<int32_t>(RT::CameraAction);
+    case TT::HIT_STOP:
+        return static_cast<int32_t>(RT::HitStop);
+    case TT::SHAKE_ACTION:
+        return static_cast<int32_t>(RT::ShakeAction);
+    case TT::POST_EFFECT:
+        return static_cast<int32_t>(RT::PostEffect);
+    case TT::PARTICLE_EFFECT:
+        return static_cast<int32_t>(RT::ParticleEffect);
+    case TT::AUDIO_ATTACK:
+        return static_cast<int32_t>(RT::AudioAttack);
+    default:
+        return -1;
     }
 }
 
 static int32_t GetRenditionOnHitIndexFromTrackType(PlayerComboAttackTimelineData::TrackType type) {
     using TT = PlayerComboAttackTimelineData::TrackType;
     using RT = PlayerAttackRenditionData::Type;
+    // ヒット時演出のトラックタイプをPlayerAttackRenditionDataのTypeにマッピング
     switch (type) {
-    case TT::CAMERA_ACTION_ON_HIT:   return static_cast<int32_t>(RT::CameraAction);
-    case TT::HIT_STOP_ON_HIT:        return static_cast<int32_t>(RT::HitStop);
-    case TT::SHAKE_ACTION_ON_HIT:    return static_cast<int32_t>(RT::ShakeAction);
-    case TT::POST_EFFECT_ON_HIT:     return static_cast<int32_t>(RT::PostEffect);
-    case TT::PARTICLE_EFFECT_ON_HIT: return static_cast<int32_t>(RT::ParticleEffect);
-    case TT::AUDIO_ATTACK_ON_HIT:    return static_cast<int32_t>(RT::AudioAttack);
-    default:                         return -1;
+    case TT::CAMERA_ACTION_ON_HIT:
+        return static_cast<int32_t>(RT::CameraAction);
+    case TT::HIT_STOP_ON_HIT:
+        return static_cast<int32_t>(RT::HitStop);
+    case TT::SHAKE_ACTION_ON_HIT:
+        return static_cast<int32_t>(RT::ShakeAction);
+    case TT::POST_EFFECT_ON_HIT:
+        return static_cast<int32_t>(RT::PostEffect);
+    case TT::PARTICLE_EFFECT_ON_HIT:
+        return static_cast<int32_t>(RT::ParticleEffect);
+    case TT::AUDIO_ATTACK_ON_HIT:
+        return static_cast<int32_t>(RT::AudioAttack);
+    default:
+        return -1;
     }
 }
 
@@ -292,7 +321,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
         return;
     }
 
-    using TT = PlayerComboAttackTimelineData::TrackType;
+    using TT            = PlayerComboAttackTimelineData::TrackType;
     auto& renditionData = attackData_->GetRenditionDataForPhase(phase_);
     int typeInt         = static_cast<int>(trackInfo.type);
 
@@ -315,9 +344,13 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
             return;
         }
 
+        // その他の通常演出は単一
         int32_t rendIdx = GetRenditionIndexFromTrackType(trackInfo.type);
-        if (rendIdx < 0) return;
+        if (rendIdx < 0) {
+            return;
+        }
 
+        // RenditionParamを更新
         auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
             renditionData.GetRenditionParamFromIndex(rendIdx));
         param.fileName      = trackInfo.fileName;
@@ -325,6 +358,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
         param.isCameraReset = trackInfo.isCameraReset;
         param.volume        = trackInfo.volume;
     }
+
     // ヒット時演出
     else if (typeInt >= static_cast<int>(TT::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(TT::AUDIO_ATTACK_ON_HIT)) {
         // ヒット時ポストエフェクトは複数対応
@@ -344,9 +378,13 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
             return;
         }
 
+        // その他のヒット時演出は単一
         int32_t rendIdx = GetRenditionOnHitIndexFromTrackType(trackInfo.type);
-        if (rendIdx < 0) return;
+        if (rendIdx < 0) {
+            return;
+        }
 
+        // RenditionParamを更新
         auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
             renditionData.GetRenditionParamOnHitFromIndex(rendIdx));
         param.fileName       = trackInfo.fileName;
@@ -355,6 +393,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
         param.volume         = trackInfo.volume;
         param.repeatOnDamage = trackInfo.repeatOnDamage;
     }
+
     // オブジェクトアニメーション
     else if (typeInt >= static_cast<int>(TT::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TT::OBJ_ANIM_MAIN_HEAD)) {
         int baseIndex = typeInt - static_cast<int>(TT::OBJ_ANIM_HEAD);
@@ -376,8 +415,8 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
         if (trackInfo.trackIndex < static_cast<int32_t>(tracks.size())) {
             const auto& keyframes = tracks[trackInfo.trackIndex].keyframes;
             if (!keyframes.empty()) {
-                float duration = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(keyframes[0].duration));
-                auto& vibParam = renditionData.GetVibrationParam();
+                float duration          = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(keyframes[0].duration));
+                auto& vibParam          = renditionData.GetVibrationParam();
                 vibParam.startTiming    = timing;
                 vibParam.duration       = duration;
                 vibParam.intensity      = trackInfo.vibrationIntensity;
@@ -393,9 +432,10 @@ int32_t PlayerComboAttackTimelineParameterApplier::CalculateTotalFrames() const 
         return 0;
     }
 
+    // 合計フレームの計算
     auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
+    float totalTime   = attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset + attackParam.timingParam.finishWaitTime;
 
-    float totalTime = attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset + attackParam.timingParam.finishWaitTime;
-
+    // Frame変換して返す
     return KetaEngine::Frame::TimeToFrame(totalTime);
 }

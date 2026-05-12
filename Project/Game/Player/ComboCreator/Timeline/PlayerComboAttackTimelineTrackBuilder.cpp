@@ -21,8 +21,9 @@ void PlayerComboAttackTimelineTrackBuilder::Init(
 }
 
 void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
-    if (!attackData_ || !timelineDrawer_ || !data_)
+    if (!attackData_ || !timelineDrawer_ || !data_) {
         return;
+    }
 
     auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
 
@@ -30,7 +31,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
     int32_t totalFrames = CalculateTotalFrames();
     timelineDrawer_->SetEndFrame(totalFrames);
 
-    // コライダートラック（ループ数分のキーフレームを追加）
+    // コライダートラック
     {
         int32_t trackIdx = timelineDrawer_->AddTrack("コライダー");
         data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::COLLISION, trackIdx);
@@ -45,7 +46,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
             timelineDrawer_->AddKeyFrame(trackIdx, kfFrame, 1.0f,
                 static_cast<float>(durationFrames), "コライダー適応時間");
 
-            // 先頭以外のキーフレームは位置をロック（先頭に連動して動く）
+            // 先頭以外のキーフレームは位置をロック
             if (i > 0) {
                 auto& kf            = timelineDrawer_->GetTracks()[trackIdx].keyframes.back();
                 kf.isPositionLocked = true;
@@ -146,7 +147,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
     using RendType  = PlayerAttackRenditionData::Type;
     using TrackType = PlayerComboAttackTimelineData::TrackType;
 
-    // RenditionData::Type → TrackType の正引きマッピング（PostEffect/ParticleEffectはリストから個別処理）
+    // RenditionData::Type → TrackType の正引きマッピング
     struct RendToTrack { RendType rendType; TrackType trackType; };
     static constexpr RendToTrack kNormalMapping[] = {
         {RendType::CameraAction,   TrackType::CAMERA_ACTION},
@@ -185,7 +186,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
         timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
     }
 
-    // ポストエフェクト（複数対応）— リストから直接再構築
+    // ポストエフェクト — リストから直接再構築
     {
         const auto& postEffectList = renditionData.GetPostEffectList();
         for (const auto& param : postEffectList) {
@@ -224,7 +225,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
         }
     }
 
-    // パーティクルエフェクト（複数対応）— リストから直接再構築
+    // パーティクルエフェクト — リストから直接再構築
     {
         const auto& particleEffectList = renditionData.GetParticleEffectList();
         for (const auto& param : particleEffectList) {
@@ -276,6 +277,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
         int32_t trackIdx      = timelineDrawer_->AddTrack(trackName);
 
         PlayerComboAttackTimelineData::TrackInfo info;
+        // パラメータセットしてトラックに追加
         info.type            = m.trackType;
         info.trackIndex      = trackIdx;
         info.fileName        = param.fileName;
@@ -290,8 +292,9 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
 }
 
 void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
-    if (!attackData_ || !timelineDrawer_ || !data_)
+    if (!attackData_ || !timelineDrawer_ || !data_){
         return;
+    }
 
     auto& renditionData = attackData_->GetRenditionDataForPhase(phase_);
 
@@ -320,6 +323,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
         int32_t trackIdx      = timelineDrawer_->AddTrack(trackName);
 
         PlayerComboAttackTimelineData::TrackInfo info;
+        // パラメータセットしてトラックに追加
         info.type = static_cast<PlayerComboAttackTimelineData::TrackType>(
             static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD) + i);
         info.trackIndex    = trackIdx;

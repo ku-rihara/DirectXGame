@@ -8,6 +8,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 class PlayerAttackCollider;
@@ -59,6 +60,10 @@ private:
     void SetMoveEasing();
     void SetPrepMoveEasing();
     void SetFinishMoveEasing();
+
+    // 共通イージングセットアップ: フェーズのパラメータから start/target を計算し easing と currentValue を設定する
+    std::pair<Vector3, Vector3> SetPhaseEasing(AttackTimelinePhase phase, KetaEngine::Easing<Vector3>& easing, Vector3& currentValue);
+    void FaceTowardTarget(const Vector3& targetPos);
 
     void PreOderNextComboForButton();
     void TryAutoSelectNextFromQueue(); // キューから次の攻撃を自動選択
