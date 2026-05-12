@@ -255,6 +255,7 @@ void StrongEnemy::StopTauntToWait(float waitTime) {
 
 void StrongEnemy::BackToDamageRoot() {
 
+    isDamageColling_ = false;
     isFleeing_ = false;
     // ダメージリアクションRootだけ設定して即座に逃走へ切り替える
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));

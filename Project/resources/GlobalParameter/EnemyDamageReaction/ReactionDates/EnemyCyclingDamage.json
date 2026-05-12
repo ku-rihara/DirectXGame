@@ -25,7 +25,7 @@
             0.0
         ],
         "TakeUpper_ThrustRotateSpeed": 0.0,
-        "TriggerAttackName": "ConsecutivePunch",
+        "TriggerAttackName": "FieldCycleAttack",
         "damageCollingTime": 0.07000000029802322,
         "isPriorityReaction": false
     }

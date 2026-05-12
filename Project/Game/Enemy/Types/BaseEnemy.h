@@ -253,10 +253,11 @@ private:
     // ダメージコールバック
     std::function<void()> onDamageTaken_;
 
+protected:
     // flags
-    bool isDeathPending_   = false;
     bool isDamageColling_  = false;
     bool isDeath_          = false;
+    bool isDeathPending_   = false;
     bool isCollisionRope_  = false;
     bool isInAnticipation_ = false;
     bool isAttacking_      = false;
