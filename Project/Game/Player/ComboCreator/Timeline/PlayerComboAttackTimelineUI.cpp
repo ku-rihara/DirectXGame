@@ -243,6 +243,7 @@ std::optional<KetaEngine::EffectEditorType> PlayerComboAttackTimelineUI::GetEffe
     using TrackType      = PlayerComboAttackTimelineData::TrackType;
     using EffectEditorType = KetaEngine::EffectEditorType;
 
+    // TrackTypeに対応するEffectEditorTypeを返す
     switch (type) {
     case TrackType::CAMERA_ACTION:
     case TrackType::CAMERA_ACTION_ON_HIT:

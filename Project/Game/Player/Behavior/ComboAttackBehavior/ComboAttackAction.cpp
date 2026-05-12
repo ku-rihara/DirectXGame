@@ -61,6 +61,7 @@ void ComboAttackAction::Init() {
     auto& branches                          = attackData_->GetComboBranches();
     PlayerComboAttackController* controller = pOwner_->GetComboAttackController();
 
+    // 分岐候補を走査してリストに追加
     for (auto& branch : branches) {
         if (!branch->GetNextAttackName().empty() && branch->GetNextAttackName() != "None") {
             PlayerComboAttackData* nextAttack = controller->GetAttackByName(branch->GetNextAttackName());
@@ -82,16 +83,21 @@ void ComboAttackAction::Init() {
         }
     }
 
+    // 演出の初期化
     attackRendition_ = std::make_unique<PlayerAttackRendition>();
     attackRendition_->Init(pOwner_, attackData_, AttackTimelinePhase::MAIN);
 
+    /// フェーズ別演出の初期化
     prepRendition_.reset();
     finishRendition_.reset();
 
+    /// フェーズ別演出の初期化
     if (attackData_->HasPrepPhase()) {
         prepRendition_ = std::make_unique<PlayerAttackRendition>();
         prepRendition_->Init(pOwner_, attackData_, AttackTimelinePhase::PREPARATION);
     }
+
+    // 終了処理フェーズがある場合はそちらで演出を受け付けるため、MAINフェーズでは初期化しない
     if (attackData_->HasFinishPhase()) {
         finishRendition_ = std::make_unique<PlayerAttackRendition>();
         finishRendition_->Init(pOwner_, attackData_, AttackTimelinePhase::FINISH);
@@ -149,17 +155,7 @@ void ComboAttackAction::UpdatePrepAttack(float atkSpeed) {
     if (!prepParam.isMotionOnly) {
         // 移動方向を向く
         if (prepParam.moveParam.isFaceMovementDirection) {
-            Vector3 moveDir = prepCurrentMoveValue_ - pOwner_->GetWorldPosition();
-            float lengthXZ = std::sqrt(moveDir.x * moveDir.x + moveDir.z * moveDir.z);
-            if (lengthXZ > 0.001f || std::abs(moveDir.y) > 0.001f) {
-                // Yaw (Y軸回転)
-                if (lengthXZ > 0.001f) {
-                    pOwner_->SetObjectiveAngle(std::atan2(moveDir.x, moveDir.z));
-                }
-                // Pitch (X軸回転) - 高低差も含めて傾く
-                pOwner_->SetObjectiveAnglePitch(std::atan2(-moveDir.y, lengthXZ));
-                pOwner_->AdaptRotate();
-            }
+            FaceTowardTarget(prepCurrentMoveValue_);
         }
 
         pOwner_->SetWorldPosition(prepCurrentMoveValue_);
@@ -192,7 +188,7 @@ void ComboAttackAction::UpdatePrepAttack(float atkSpeed) {
 }
 
 void ComboAttackAction::UpdateAttack(float atkSpeed) {
-    // （HitStop等で長時間スタックした場合の脱出）
+    // HitStop等で長時間スタックした場合の脱出
     attackRawTimer_ += KetaEngine::Frame::DeltaTime();
     if (attackRawTimer_ >= kAttackTimeout) {
         SetOrder(Order::WAIT);
@@ -266,17 +262,7 @@ void ComboAttackAction::UpdateFinishAttack(float atkSpeed) {
 
     // 移動方向を向く
     if (finishParam.moveParam.isFaceMovementDirection) {
-        Vector3 moveDir = finishCurrentMoveValue_ - pOwner_->GetWorldPosition();
-        float lengthXZ = std::sqrt(moveDir.x * moveDir.x + moveDir.z * moveDir.z);
-        if (lengthXZ > 0.001f || std::abs(moveDir.y) > 0.001f) {
-            // Yaw
-            if (lengthXZ > 0.001f) {
-                pOwner_->SetObjectiveAngle(std::atan2(moveDir.x, moveDir.z));
-            }
-            // Pitch
-            pOwner_->SetObjectiveAnglePitch(std::atan2(-moveDir.y, lengthXZ));
-            pOwner_->AdaptRotate();
-        }
+        FaceTowardTarget(finishCurrentMoveValue_);
     }
 
     pOwner_->SetWorldPosition(finishCurrentMoveValue_);
@@ -478,21 +464,10 @@ void ComboAttackAction::ApplyMovement(float atkSpeed) {
 
     // 移動方向を向く
     if (attackData_->GetAttackParam().moveParam.isFaceMovementDirection) {
-        Vector3 moveDir = currentMoveValue_ - pOwner_->GetWorldPosition();
-        float lengthXZ = std::sqrt(moveDir.x * moveDir.x + moveDir.z * moveDir.z);
-        if (lengthXZ > 0.001f || std::abs(moveDir.y) > 0.001f) {
-            // Yaw
-            if (lengthXZ > 0.001f) {
-                pOwner_->SetObjectiveAngle(std::atan2(moveDir.x, moveDir.z));
-            }
-            // Pitch
-            pOwner_->SetObjectiveAnglePitch(std::atan2(-moveDir.y, lengthXZ));
-            pOwner_->AdaptRotate();
-        }
+        FaceTowardTarget(currentMoveValue_);
     }
 
-    // 瞬間的に座標0に飛ぶバグへの対策: 移動量が極端に大きい(ワープ)場合は適用をスキップするか制限する
-    // 特にFallAntipation等で初期化が間に合っていない場合を想定
+
     if (currentMoveValue_.Length() > 0.0001f || (currentMoveValue_ - pOwner_->GetWorldPosition()).Length() < 100.0f) {
         pOwner_->SetWorldPosition(currentMoveValue_);
     }
@@ -526,131 +501,56 @@ void ComboAttackAction::SetupCollision(AttackTimelinePhase phase) {
 }
 
 void ComboAttackAction::SetMoveEasing() {
-    // targetPosを計算
-    const auto& attackParam = attackData_->GetAttackParam();
-    const auto& moveParam   = attackParam.moveParam;
 
-    // 行列が未更新で0になるのを防ぐためのガード
-    Vector3 start = pOwner_->GetWorldPosition();
-    if (start.Length() < 0.0001f) {
-        start = pOwner_->GetBaseTransform().translation_;
+    // 現在座標が極端に大きい場合、現在位置を基準にする
+    Vector3 pos = pOwner_->GetWorldPosition();
+    if (pos.Length() < 0.0001f) {
+        pos = pOwner_->GetBaseTransform().translation_;
     }
-    startPosition_ = start;
-
     // ロックオン対象がいればそちらを向く
-    LockOn* lockOn = nullptr;
-
-    if (pOwner_->GetLockOnController()) {
-        lockOn = pOwner_->GetLockOnController()->GetLockOn();
-    }
-
+    LockOn* lockOn = pOwner_->GetLockOnController() ? pOwner_->GetLockOnController()->GetLockOn() : nullptr;
     if (lockOn && lockOn->ExistTarget()) {
-        Vector3 targetPos                       = lockOn->GetCurrentTargetPosition();
-        Vector3 toTarget                        = targetPos - startPosition_;
+        Vector3 toTarget                        = lockOn->GetCurrentTargetPosition() - pos;
         pOwner_->GetBaseTransform().rotation_.y = std::atan2(toTarget.x, toTarget.z);
     }
 
-    // 攻撃条件がAIRまたはBOTHなら高さを維持する。そうでなければ地上に補正する
-    const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
-    auto condition      = attackParam.triggerParam.condition;
-    bool isAirValid     = (condition == PlayerComboAttackData::TriggerCondition::AIR || 
-                           condition == PlayerComboAttackData::TriggerCondition::BOTH);
+    // フェーズに応じたイージングセットアップ
+    auto [start, target] = SetPhaseEasing(AttackTimelinePhase::MAIN, moveEasing_, currentMoveValue_);
+    startPosition_       = start;
+    targetPosition_      = target;
 
-    if (!isAirValid && startPosition_.y > groundY) {
-        startPosition_.y = groundY;
-    }
-
-    // オフセット計算
-    targetPosition_ = startPosition_ + pOwner_->GetBaseTransform().CalcForwardOffset(moveParam.value);
-
-    // Yだけ指定する場合
-    if (moveParam.isPositionYSelect) {
-        targetPosition_.y = moveParam.value.y;
-    } else {
-        // Yを直接指定しない場合、空中攻撃なら開始時の高さを維持する
-        if (isAirValid) {
-            targetPosition_.y = startPosition_.y;
-        }
-    }
-
-    // 移動先に敵がいたら目の前で止まる
-    if (moveParam.isStopBeforeEnemy) {
+    // 敵の手前で止まるフラグがある場合は目標位置を再計算してイージングの終了値を更新
+    if (attackData_->GetAttackParam().moveParam.isStopBeforeEnemy) {
         targetPosition_ = CalcStopBeforeEnemyTarget(startPosition_, targetPosition_);
+        moveEasing_.SetEndValue(targetPosition_);
     }
-
-    // 待機中のために現在の位置で初期化
-    currentMoveValue_ = startPosition_;
-
-    // イージングのセットアップ
-    moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
-    moveEasing_.SetStartValue(startPosition_);
-    moveEasing_.SetEndValue(targetPosition_);
-    moveEasing_.SetMaxTime(moveParam.easeTime);
-    moveEasing_.SetAdaptValue(&currentMoveValue_);
-    moveEasing_.SetFinishTimeOffset(moveParam.finishTimeOffset);
-
-    // 開始時間を設定
-    moveEasing_.SetStartTimeOffset(moveParam.startTime);
 }
 
 void ComboAttackAction::SetPrepMoveEasing() {
-    const auto& prepParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::PREPARATION);
-    const auto& moveParam = prepParam.moveParam;
-
-    // 行列が未更新で0になるのを防ぐためのガード
-    Vector3 start = pOwner_->GetWorldPosition();
-    if (start.Length() < 0.0001f) {
-        start = pOwner_->GetBaseTransform().translation_;
-    }
-
-    // 攻撃条件は全フェーズ共通でMAINのものを参照する
-    const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
-    auto condition      = attackData_->GetAttackParam().triggerParam.condition;
-    bool isAirValid     = (condition == PlayerComboAttackData::TriggerCondition::AIR || 
-                           condition == PlayerComboAttackData::TriggerCondition::BOTH);
-
-    if (!isAirValid && start.y > groundY) {
-        start.y = groundY;
-    }
-
-    Vector3 target = start + pOwner_->GetBaseTransform().CalcForwardOffset(moveParam.value);
-    if (moveParam.isPositionYSelect) {
-        target.y = moveParam.value.y;
-    } else {
-        // Yを直接指定しない場合、空中攻撃なら開始時の高さを維持する
-        if (isAirValid) {
-            target.y = start.y;
-        }
-    }
-
-    prepCurrentMoveValue_ = start;
-    // PrepPhase開始時にもMAINフェーズ用の現在地を初期化しておく(ApplyMovement等での座標飛び防止)
-    currentMoveValue_     = start;
-
-    prepMoveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
-    prepMoveEasing_.SetStartValue(start);
-    prepMoveEasing_.SetEndValue(target);
-    prepMoveEasing_.SetMaxTime(moveParam.easeTime);
-    prepMoveEasing_.SetAdaptValue(&prepCurrentMoveValue_);
-    prepMoveEasing_.SetFinishTimeOffset(moveParam.finishTimeOffset);
-    prepMoveEasing_.SetStartTimeOffset(moveParam.startTime);
+    auto [start, _] = SetPhaseEasing(AttackTimelinePhase::PREPARATION, prepMoveEasing_, prepCurrentMoveValue_);
+    // PrepPhase開始時にMAINフェーズ用の現在地も初期化しておく
+    currentMoveValue_ = start;
 }
 
 void ComboAttackAction::SetFinishMoveEasing() {
-    const auto& finishParam = attackData_->GetAttackParamForPhase(AttackTimelinePhase::FINISH);
-    const auto& moveParam   = finishParam.moveParam;
+    SetPhaseEasing(AttackTimelinePhase::FINISH, finishMoveEasing_, finishCurrentMoveValue_);
+}
 
-    // 行列が未更新で0になるのを防ぐためのガード
+std::pair<Vector3, Vector3> ComboAttackAction::SetPhaseEasing(
+    AttackTimelinePhase phase,
+    KetaEngine::Easing<Vector3>& easing,
+    Vector3& currentValue) {
+
+    const auto& moveParam = attackData_->GetAttackParamForPhase(phase).moveParam;
+
     Vector3 start = pOwner_->GetWorldPosition();
     if (start.Length() < 0.0001f) {
         start = pOwner_->GetBaseTransform().translation_;
     }
 
-    // 攻撃条件は全フェーズ共通でMAINのものを参照する
     const float groundY = pPlayerParameter_->GetParameters().startPos_.y;
     auto condition      = attackData_->GetAttackParam().triggerParam.condition;
-    bool isAirValid     = (condition == PlayerComboAttackData::TriggerCondition::AIR || 
-                           condition == PlayerComboAttackData::TriggerCondition::BOTH);
+    bool isAirValid     = (condition == PlayerComboAttackData::TriggerCondition::AIR || condition == PlayerComboAttackData::TriggerCondition::BOTH);
 
     if (!isAirValid && start.y > groundY) {
         start.y = groundY;
@@ -659,22 +559,33 @@ void ComboAttackAction::SetFinishMoveEasing() {
     Vector3 target = start + pOwner_->GetBaseTransform().CalcForwardOffset(moveParam.value);
     if (moveParam.isPositionYSelect) {
         target.y = moveParam.value.y;
-    } else {
-        // Yを直接指定しない場合、空中攻撃なら開始時の高さを維持する
-        if (isAirValid) {
-            target.y = start.y;
-        }
+    } else if (isAirValid) {
+        target.y = start.y;
     }
 
-    finishCurrentMoveValue_ = start;
+    // イージングのセット
+    currentValue = start;
+    easing.SetType(static_cast<EasingType>(moveParam.easeType));
+    easing.SetStartValue(start);
+    easing.SetEndValue(target);
+    easing.SetMaxTime(moveParam.easeTime);
+    easing.SetAdaptValue(&currentValue);
+    easing.SetFinishTimeOffset(moveParam.finishTimeOffset);
+    easing.SetStartTimeOffset(moveParam.startTime);
 
-    finishMoveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
-    finishMoveEasing_.SetStartValue(start);
-    finishMoveEasing_.SetEndValue(target);
-    finishMoveEasing_.SetMaxTime(moveParam.easeTime);
-    finishMoveEasing_.SetAdaptValue(&finishCurrentMoveValue_);
-    finishMoveEasing_.SetFinishTimeOffset(moveParam.finishTimeOffset);
-    finishMoveEasing_.SetStartTimeOffset(moveParam.startTime);
+    return {start, target};
+}
+
+void ComboAttackAction::FaceTowardTarget(const Vector3& targetPos) {
+    Vector3 moveDir = targetPos - pOwner_->GetWorldPosition();
+    float lengthXZ  = std::sqrt(moveDir.x * moveDir.x + moveDir.z * moveDir.z);
+    if (lengthXZ > 0.001f || std::abs(moveDir.y) > 0.001f) {
+        if (lengthXZ > 0.001f) {
+            pOwner_->SetObjectiveAngle(std::atan2(moveDir.x, moveDir.z));
+        }
+        pOwner_->SetObjectiveAnglePitch(std::atan2(-moveDir.y, lengthXZ));
+        pOwner_->AdaptRotate();
+    }
 }
 
 bool ComboAttackAction::IsAttackUnlock(const PlayerComboAttackData& data) const {
@@ -784,21 +695,6 @@ void ComboAttackAction::Debug() {
 
 void ComboAttackAction::SetOrder(Order order) {
     order_ = order;
-    switch (order) {
-    case Order::INIT:
-        break;
-    case Order::PREP_ATTACK:
-        break;
-    case Order::ATTACK:
-        break;
-    case Order::FINISH_ATTACK:
-        break;
-    case Order::WAIT:
-        break;
-    case Order::CHANGE:
-        break;
-    }
-
     switch (order) {
     case Order::INIT:
         orderFunc_ = [this](float) {
