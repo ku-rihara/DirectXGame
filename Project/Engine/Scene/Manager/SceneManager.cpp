@@ -31,6 +31,8 @@ SceneManager::~SceneManager() {
 /// 更新
 ///==============================================
 void SceneManager::Update() {
+    // シーン切り替えがあれば実行
+    ApplyPendingSceneChange();
 
     // 次のシーンが設定されている場合
     if (Input::GetInstance()->PushKey(KeyboardKey::E) && Input::GetInstance()->PushKey(KeyboardKey::Escape)) {
@@ -58,8 +60,12 @@ void SceneManager::Update() {
 }
 
 void SceneManager::Debug() {
-    scene_->Debug();
-    collisionManager_->AdjustParam();
+    if (scene_) {
+        scene_->Debug();
+    }
+    if (collisionManager_) {
+        collisionManager_->AdjustParam();
+    }
 }
 
 void SceneManager::SkyBoxDraw() {
@@ -74,8 +80,21 @@ void SceneManager::SkyBoxDraw() {
 /// シーン切り替え
 ///==============================================
 void SceneManager::ChangeScene(const std::string& sceneName) {
+    pendingSceneName_ = sceneName;
+    if (!scene_) {
+        ApplyPendingSceneChange();
+    }
+}
+
+///==============================================
+/// シーン切り替え実行
+///==============================================
+void SceneManager::ApplyPendingSceneChange() {
+    if (pendingSceneName_.empty()) {
+        return;
+    }
+
     assert(sceneFactory_);
-    assert(!nextScene_);
 
     if (scene_) {
         // 現在のシーンを終了
@@ -98,14 +117,15 @@ void SceneManager::ChangeScene(const std::string& sceneName) {
     collisionManager_->Init();
 
     // 次のシーンを生成
-    nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(sceneName));
-    scene_     = std::move(nextScene_);
+    scene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(pendingSceneName_));
     scene_->Init();
 
     // パーティクルリセット
     ParticleManager::GetInstance()->ResetAllParticles();
 
+    // シーン名をクリア
+    pendingSceneName_.clear();
+
     // シーン切り替え（ロード）にかかった時間を破棄するためタイマーをリセット
     Frame::Init();
 }
-

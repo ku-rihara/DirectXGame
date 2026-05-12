@@ -26,7 +26,6 @@ public:
     /// <param name="sceneName"></param>
     void ChangeScene(const std::string& scenemane);
 
-private:
     void ApplyPendingSceneChange();
 
 private:
