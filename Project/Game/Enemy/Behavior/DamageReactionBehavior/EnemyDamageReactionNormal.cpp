@@ -15,6 +15,7 @@ EnemyDamageReactionNormal::EnemyDamageReactionNormal(
     const PlayerAttackCollider* playerCollisionInfo)
     : BaseEnemyDamageReaction("EnemyDamageReactionNormal", boss) {
 
+    // リアクションデータとプレイヤーのコリジョン情報をセット
     pReactionData_        = reactionData;
     pPlayerCollisionInfo_ = playerCollisionInfo;
 
@@ -47,11 +48,13 @@ void EnemyDamageReactionNormal::Debug() {
 }
 
 void EnemyDamageReactionNormal::InitReaction() {
+
     // プレイヤーのコリジョン情報と敵ポインタが有効であることを確認
     if (!pPlayerCollisionInfo_ || !pBaseEnemy_) {
         return;
     }
 
+    // 敵のタイプを取得
     int enemyType = static_cast<int>(pBaseEnemy_->GetType());
 
     // StumbleBackwards再生中のNormalリアクションはアニメーションをスキップ

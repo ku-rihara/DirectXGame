@@ -294,6 +294,7 @@ void ComboAttackAction::UpdateWait(float atkSpeed) {
         }
     }
 
+    // 攻撃後の硬直中も移動方向を向く
     pOwner_->AdaptRotate();
     waitTime_ += atkSpeed;
 
@@ -301,6 +302,7 @@ void ComboAttackAction::UpdateWait(float atkSpeed) {
         return;
     }
 
+    // 次のオーダーをセットする
     SetOrder(Order::CHANGE);
 }
 
@@ -577,18 +579,22 @@ std::pair<Vector3, Vector3> ComboAttackAction::SetPhaseEasing(
 }
 
 void ComboAttackAction::FaceTowardTarget(const Vector3& targetPos) {
+    // プレイヤーの位置から目標位置へのベクトル
     Vector3 moveDir = targetPos - pOwner_->GetWorldPosition();
     float lengthXZ  = std::sqrt(moveDir.x * moveDir.x + moveDir.z * moveDir.z);
     if (lengthXZ > 0.001f || std::abs(moveDir.y) > 0.001f) {
         if (lengthXZ > 0.001f) {
             pOwner_->SetObjectiveAngle(std::atan2(moveDir.x, moveDir.z));
         }
+
+        // 縦方向の角度も設定
         pOwner_->SetObjectiveAnglePitch(std::atan2(-moveDir.y, lengthXZ));
         pOwner_->AdaptRotate();
     }
 }
 
 bool ComboAttackAction::IsAttackUnlock(const PlayerComboAttackData& data) const {
+    // ロック解除状態か、ロック解除状態を無視するフラグが立っている場合は有効
     bool result = data.GetAttackParam().isUnlocked || pOwner_->GetIsIgnoreUnlockState();
     return result;
 }
@@ -605,12 +611,14 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
         }
         pOwner_->AdaptRotate();
     }
-
+    
+    // 敵マネージャーから敵の位置を取得
     EnemyManager* enemyManager = attackData_->GetEnemyManager();
     if (!enemyManager) {
         return defaultTarget;
     }
 
+    // 移動経路上の最も手前にいる敵を探す
     const auto& enemies = enemyManager->GetEnemies();
     if (enemies.empty()) {
         return defaultTarget;

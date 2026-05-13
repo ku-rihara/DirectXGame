@@ -101,7 +101,7 @@ private:
     KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_          = "EnemyDamageReaction/ReactionDates";
-    const std::string renditionFolderPath_ = "Resources/GlobalParameter/EnemyDamageReaction/RenditionDates/";
+    const std::string renditionFolderPath_ = "resources/GlobalParameter/EnemyDamageReaction/RenditionDates/";
 
     // 演出データ
     std::unique_ptr<EnemyDamageRenditionData> rendition_;

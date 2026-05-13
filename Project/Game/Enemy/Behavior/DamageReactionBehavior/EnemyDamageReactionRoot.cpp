@@ -97,6 +97,9 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
     // ダメージを受ける
     pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
 
+    // ダメージパーティクルエフェクトを再生
+    PlayDamageParticleEffect(reactionData);
+
     if (pBaseEnemy_->GetHP() <= 0.0f) {
         // 死亡リアクションに変更
         ChangeDeathReaction(reactionData);

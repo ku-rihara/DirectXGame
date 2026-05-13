@@ -52,7 +52,7 @@ private:
     //*-------------------------------- Private variants--------------------------------*//
     
     // 共通パラメータ
-    const std::string AttackDataFolderPath_ = "Resources/GlobalParameter/EnemyDamageReaction/ReactionDates/";
+    const std::string AttackDataFolderPath_ = "resources/GlobalParameter/EnemyDamageReaction/ReactionDates";
 
     std::vector<std::unique_ptr<EnemyDamageReactionData>> reactions_;
     int selectedIndex_    = -1;

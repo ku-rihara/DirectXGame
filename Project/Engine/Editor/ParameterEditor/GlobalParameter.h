@@ -150,7 +150,7 @@ public:
 private:
     std::unordered_map<std::string, Group> dates_;
     std::unordered_map<std::string, std::vector<BoundItem>> registerParams_;
-    const std::string kDirectoryPath = "Resources/GlobalParameter/";
+    const std::string kDirectoryPath = "resources/GlobalParameter/";
 
 public:
     const std::string& GetDirectoryPath() const { return kDirectoryPath; }

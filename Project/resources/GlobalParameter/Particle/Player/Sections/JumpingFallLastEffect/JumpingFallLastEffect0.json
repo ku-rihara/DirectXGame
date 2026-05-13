@@ -222,8 +222,8 @@
         "rotateForDirectionY": true,
         "rotateForDirectionZ": true,
         "scaleEaseParam.easeTypeInt": 22,
-        "scaleEaseParam.endValueF.max": 22.0,
-        "scaleEaseParam.endValueF.min": 22.0,
+        "scaleEaseParam.endValueF.max": 19.0,
+        "scaleEaseParam.endValueF.min": 19.0,
         "scaleEaseParam.endValueV3.max": [
             0.0,
             0.0,
