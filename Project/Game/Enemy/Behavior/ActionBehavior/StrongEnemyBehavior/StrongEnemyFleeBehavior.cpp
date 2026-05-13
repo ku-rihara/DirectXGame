@@ -129,8 +129,10 @@ void StrongEnemyFleeBehavior::Update() {
     }
 
     // ── 進行方向を向いて移動 ─────────────────────────────────
-    const float targetAngle = std::atan2(-moveDir.x, -moveDir.z);
-    pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetBaseRotationY(), targetAngle, 0.8f));
+    pBaseEnemy_->SetRotationY(LerpShortAngle(
+        pBaseEnemy_->GetBaseRotationY(),
+        CalcFaceAngleY(pos, pos + moveDir, true),
+        0.8f));
     pBaseEnemy_->AddPosition(moveDir * (param.fleeSpeed * dt));
 }
 

@@ -213,10 +213,9 @@ void Player::Move(float speed) {
 
 void Player::FaceToTarget() {
     if (pLockOn_ && pLockOn_->GetLockOn()->GetIsCurrentTarget()) {
-        Vector3 differentialVector = pLockOn_->GetLockOn()->GetCurrentTargetPosition() - GetWorldPosition();
-
-        // Y軸周り角度(θy)
-        baseTransform_.rotation_.y = std::atan2(differentialVector.x, differentialVector.z);
+        baseTransform_.rotation_.y = CalcFaceAngleY(
+            GetWorldPosition(),
+            pLockOn_->GetLockOn()->GetCurrentTargetPosition());
     }
 }
 

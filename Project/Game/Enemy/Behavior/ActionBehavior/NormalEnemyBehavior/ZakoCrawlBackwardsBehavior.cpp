@@ -56,9 +56,10 @@ void ZakoCrawlBackwardsBehavior::Update() {
     toPlayer.Normalize();
 
     // プレイヤーを向いたまま後退するため、正面はプレイヤー方向
-    float targetAngle  = std::atan2(-toPlayer.x, -toPlayer.z);
-    float currentAngle = pBaseEnemy_->GetBaseRotationY();
-    pBaseEnemy_->SetRotationY(LerpShortAngle(currentAngle, targetAngle, 0.8f));
+    pBaseEnemy_->SetRotationY(LerpShortAngle(
+        pBaseEnemy_->GetBaseRotationY(),
+        CalcFaceAngleY(pBaseEnemy_->GetWorldPosition(), pBaseEnemy_->GetPlayer()->GetWorldPosition(), true),
+        0.8f));
 
     // 焦りエフェクトの発生
     pBaseEnemy_->GetEnemyEffects()->Emit("EnemyImpatience");

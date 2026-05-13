@@ -16,12 +16,10 @@ EnemyDeath::EnemyDeath(BaseEnemy* boss)
 
 void EnemyDeath::AngleCaluclation() {
     Vector3 playerPos = pBaseEnemy_->GetPlayer()->GetWorldPosition();
-
-    direction_   = pBaseEnemy_->GetDirectionToTarget(playerPos);
-    direction_.y = 0.0f;
-    direction_   = direction_.Normalize();
-
-    objectiveAngle_ = std::atan2(direction_.x, direction_.z);
+    direction_        = pBaseEnemy_->GetDirectionToTarget(playerPos);
+    direction_.y      = 0.0f;
+    direction_        = direction_.Normalize();
+    objectiveAngle_   = CalcFaceAngleY(pBaseEnemy_->GetWorldPosition(), playerPos);
 }
 
 EnemyDeath::~EnemyDeath() {

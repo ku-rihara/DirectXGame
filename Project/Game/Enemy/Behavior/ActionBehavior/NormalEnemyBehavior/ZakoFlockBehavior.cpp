@@ -75,9 +75,10 @@ void ZakoFlockBehavior::Update() {
         pBaseEnemy_->AddPosition(dir * (speed * dt));
 
         // 移動中は進行方向を向く
-        float targetAngle  = std::atan2(-dir.x, -dir.z);
-        float currentAngle = pBaseEnemy_->GetBaseRotationY();
-        pBaseEnemy_->SetRotationY(LerpShortAngle(currentAngle, targetAngle, 0.8f));
+        pBaseEnemy_->SetRotationY(LerpShortAngle(
+            pBaseEnemy_->GetBaseRotationY(),
+            CalcFaceAngleY(pBaseEnemy_->GetWorldPosition(), targetPos, true),
+            0.8f));
 
         // アニメーションがDashでなければ再生
         auto animObj         = pBaseEnemy_->GetAnimationObject();

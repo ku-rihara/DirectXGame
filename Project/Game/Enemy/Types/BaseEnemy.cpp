@@ -323,21 +323,7 @@ void BaseEnemy::DeathRenditionInit() {
 }
 
 void BaseEnemy::DirectionToPlayer(bool isOpposite) {
-
-    // プレイヤーへの方向
-    Vector3 directionToPlayer = GetDirectionToTarget(pPlayer_->GetWorldPosition());
-
-    if (isOpposite) {
-        directionToPlayer *= -1.0f;
-    }
-    // 正規化
-    directionToPlayer.y = 0.0f;
-    directionToPlayer.Normalize();
-
-    // 目標角度を計算
-    float objectiveAngle = std::atan2(-directionToPlayer.x, -directionToPlayer.z);
-
-    // 最短角度補間で回転を更新
+    float objectiveAngle       = CalcFaceAngleY(GetWorldPosition(), pPlayer_->GetWorldPosition(), !isOpposite);
     baseTransform_.rotation_.y = LerpShortAngle(baseTransform_.rotation_.y, objectiveAngle, 0.8f);
 }
 

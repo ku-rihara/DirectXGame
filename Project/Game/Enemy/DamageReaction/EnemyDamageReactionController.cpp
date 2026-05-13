@@ -11,22 +11,25 @@ void EnemyDamageReactionController::Init() {
     RegisterParams();
     globalParameter_->SyncParamForGroup(defaultParamGroupName_);
 
+    // ダメージリアクションデータのロード
     AllLoadFile();
 }
 
 void EnemyDamageReactionController::RegisterParams() {
     // 敵タイプの名前
-    const char* typeNames[]     = {"Normal", "Strong"};
+    const char* typeNames[] = {"Normal", "Strong"};
     // アニメーション種類の名前
     const char* animeTypeNames[] = {"Normal", "TakeUpper", "Slammed", "Bound", "GetUp"};
+
     for (int i = 0; i < kEnemyTypeCount; ++i) {
         std::string typePrefix = std::string(typeNames[i]) + "_";
-        // アニメーション種類別に登録
+        // デフォルトアニメーションを種類別に登録
         for (int a = 0; a < static_cast<int>(DefaultAnimType::Count); ++a) {
             globalParameter_->Regist(defaultParamGroupName_,
                 typePrefix + animeTypeNames[a] + "_DefaultDamageAnimationName",
                 &defaultDamageAnimationNames_[i][a]);
         }
+
         // デフォルトダメージクールタイム
         globalParameter_->Regist(defaultParamGroupName_, typePrefix + "DefaultDamageCoolTime", &defaultDamageCoolTime_[i]);
         // イージング系は敵タイプ別のみ
@@ -39,47 +42,45 @@ void EnemyDamageReactionController::RegisterParams() {
 
 void EnemyDamageReactionController::AllLoadFile() {
 
-    // AttackCreatorのPlayerComboAttackDataフォルダ内のすべてのファイルを検索
+    // EnemyDamageReactionDataフォルダ内のすべてのJSONファイルを検索
     if (std::filesystem::exists(AttackDataFolderPath_) && std::filesystem::is_directory(AttackDataFolderPath_)) {
-        // 既存の攻撃データをクリア
+        // 既存のリアクションデータをクリア
         reactions_.clear();
         selectedIndex_ = -1;
 
+        // フォルダ内のすべての.jsonファイルを処理
         for (const auto& entry : std::filesystem::directory_iterator(AttackDataFolderPath_)) {
             if (entry.is_regular_file() && entry.path().extension() == ".json") {
+                // 拡張子を除く
                 std::string fileName = entry.path().stem().string();
 
                 // 新規作成してロード
-                auto attack = std::make_unique<EnemyDamageReactionData>();
-                attack->Init(fileName);
-                attack->LoadData(); // Load
-                reactions_.push_back(std::move(attack));
+                auto reaction = std::make_unique<EnemyDamageReactionData>();
+                reaction->Init(fileName);
+                reaction->LoadData();
+                reactions_.push_back(std::move(reaction));
             }
         }
     }
 }
 
-void EnemyDamageReactionController::Update(float deltaTime) {
-    // すべての攻撃データを更新
-    for (auto& attack : reactions_) {
-        // 必要に応じて更新処理
-        attack;
-        deltaTime;
-    }
-}
-
 void EnemyDamageReactionController::EditorUpdate() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
-    if (ImGui::CollapsingHeader("Damage Reaction Manager")) {
+
+    ///*-------------------------------- 敵のダメージリアクションUI --------------------------------*//
+    if (ImGui::CollapsingHeader("敵のダメージリアクション")) {
         ImGui::PushID("Damage Reaction Manager");
 
         // デフォルトパラメータUI（敵タイプ別）
         if (ImGui::TreeNode("Default Parameters")) {
-            const char* typeNames[] = {"Normal", "Strong"};
+            // 敵タイプの名前
+            const char* typeNames[]     = {"Normal", "Strong"};
+            // 利用可能なアニメーション種類の名前
             const auto& availableAnimes = availableAnimations_;
-
+            // アニメーション種類
             const char* animeTypeLabels[] = {"Normal Damage", "TakeUpper", "Slammed", "Bound", "GetUp"};
 
+            // 敵タイプ別のツリー
             for (int t = 0; t < kEnemyTypeCount; ++t) {
                 ImGui::PushID(t);
                 if (ImGui::TreeNode(typeNames[t])) {
@@ -214,10 +215,7 @@ void EnemyDamageReactionController::EditorUpdate() {
         }
         ImGui::SeparatorText("All File Save/Load");
 
-       
         ImGui::PopID();
-
-      
     }
 #endif
 }
@@ -270,4 +268,3 @@ EnemyDamageReactionData* EnemyDamageReactionController::GetAttackByTriggerName(c
     }
     return nullptr;
 }
-

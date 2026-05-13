@@ -1,6 +1,7 @@
 #include "ComboAttackAction.h"
 #include "utility/Log/Log.h"
 #include <cmath>
+#include "MathFunction.h"
 // Behavior
 #include "ComboAttackRoot.h"
 // Frame
@@ -288,10 +289,9 @@ void ComboAttackAction::UpdateWait(float atkSpeed) {
 
     // ヒットした敵の方向を向き続ける
     if (pCollisionInfo_->GetHasHitTarget()) {
-        Vector3 dir = pCollisionInfo_->GetHitTargetPos() - pOwner_->GetWorldPosition();
-        if (dir.x != 0.0f || dir.z != 0.0f) {
-            pOwner_->SetObjectiveAngle(std::atan2(dir.x, dir.z));
-        }
+        pOwner_->SetObjectiveAngle(CalcFaceAngleY(
+            pOwner_->GetWorldPosition(),
+            pCollisionInfo_->GetHitTargetPos()));
     }
 
     // 攻撃後の硬直中も移動方向を向く
@@ -512,8 +512,7 @@ void ComboAttackAction::SetMoveEasing() {
     // ロックオン対象がいればそちらを向く
     LockOn* lockOn = pOwner_->GetLockOnController() ? pOwner_->GetLockOnController()->GetLockOn() : nullptr;
     if (lockOn && lockOn->ExistTarget()) {
-        Vector3 toTarget                        = lockOn->GetCurrentTargetPosition() - pos;
-        pOwner_->GetBaseTransform().rotation_.y = std::atan2(toTarget.x, toTarget.z);
+        pOwner_->GetBaseTransform().rotation_.y = CalcFaceAngleY(pos, lockOn->GetCurrentTargetPosition());
     }
 
     // フェーズに応じたイージングセットアップ
@@ -584,7 +583,7 @@ void ComboAttackAction::FaceTowardTarget(const Vector3& targetPos) {
     float lengthXZ  = std::sqrt(moveDir.x * moveDir.x + moveDir.z * moveDir.z);
     if (lengthXZ > 0.001f || std::abs(moveDir.y) > 0.001f) {
         if (lengthXZ > 0.001f) {
-            pOwner_->SetObjectiveAngle(std::atan2(moveDir.x, moveDir.z));
+            pOwner_->SetObjectiveAngle(CalcFaceAngleY(pOwner_->GetWorldPosition(), targetPos));
         }
 
         // 縦方向の角度も設定
@@ -605,10 +604,9 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
 
     // ヒットした敵の方向を向き続ける
     if (pCollisionInfo_->GetHasHitTarget()) {
-        Vector3 dir = pCollisionInfo_->GetHitTargetPos() - pOwner_->GetWorldPosition();
-        if (dir.x != 0.0f || dir.z != 0.0f) {
-            pOwner_->SetObjectiveAngle(std::atan2(dir.x, dir.z));
-        }
+        pOwner_->SetObjectiveAngle(CalcFaceAngleY(
+            pOwner_->GetWorldPosition(),
+            pCollisionInfo_->GetHitTargetPos()));
         pOwner_->AdaptRotate();
     }
     

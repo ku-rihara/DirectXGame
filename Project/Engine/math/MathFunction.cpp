@@ -220,6 +220,19 @@ Vector3 DirectionToEulerAngles(const Vector3& direction, const KetaEngine::ViewP
 }
 
 
+float CalcFaceAngleY(const Vector3& from, const Vector3& to, bool isOpposite) {
+    Vector3 dir = to - from;
+    dir.y       = 0.0f;
+    if (dir.x == 0.0f && dir.z == 0.0f) {
+        return 0.0f;
+    }
+    if (isOpposite) {
+        return std::atan2(-dir.x, -dir.z);
+    }
+    return std::atan2(dir.x, dir.z);
+}
+
+
 constexpr float Deg2Rad = std::numbers::pi_v<float> / 180.0f;
 constexpr float Rad2Deg = 180.0f / std::numbers::pi_v<float>;
 

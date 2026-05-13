@@ -43,3 +43,5 @@ Vector3 ToDegree(const Vector3& radians);
 
 
  Vector3 DirectionToEulerAngles(const Vector3& direction, const KetaEngine::ViewProjection& view);
+
+float CalcFaceAngleY(const Vector3& from, const Vector3& to, bool isOpposite = false);
