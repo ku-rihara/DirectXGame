@@ -1,3 +1,4 @@
+#include <format>
 #include "EnemySpawner.h"
 #include "Enemy/EnemyManager.h"
 #include "MathFunction.h"
@@ -214,7 +215,7 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
 ///==========================================================
 void EnemySpawner::RegisterParams() {
     for (int32_t i = 0; i < spawnGroups_.size() - 1; ++i) {
-        globalParameter_->Regist(groupName_, "nextFazeEnemyNum" + std::to_string(i), &spawnGroups_[i].nextFazeEnemyNum);
+        globalParameter_->Regist(groupName_, std::format("nextFazeEnemyNum{}", i), &spawnGroups_[i].nextFazeEnemyNum);
     }
 }
 
@@ -228,7 +229,7 @@ void EnemySpawner::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         for (int32_t i = 0; i < spawnGroups_.size() - 1; ++i) {
-            ImGui::InputInt(("nextFazeEnemyNum" + std::to_string(i)).c_str(), &spawnGroups_[i].nextFazeEnemyNum);
+            ImGui::InputInt(std::format("nextFazeEnemyNum{}", i).c_str(), &spawnGroups_[i].nextFazeEnemyNum);
         }
 
         // セーブ・ロード

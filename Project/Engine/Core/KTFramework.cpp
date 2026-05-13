@@ -121,6 +121,9 @@ void KTFramework::Debug() {
 // ========================================================
 void KTFramework::Finalize() {
     KetaEngine::Log::Finalize();
+    if (pSceneManager_) {
+        pSceneManager_->Finalize();
+    }
     // ライブラリの終了
     engineCore_->Finalize();
 }

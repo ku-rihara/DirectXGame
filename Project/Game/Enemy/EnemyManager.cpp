@@ -484,7 +484,7 @@ void EnemyManager::RegisterParams() {
     globalParameter_->Regist(groupName_, "uiOcclusionRadius", &uiOcclusionRadius_);
 
     for (uint32_t i = 0; i < parameters_.size(); ++i) {
-        const std::string& indexString = std::to_string(static_cast<int>(i + 1));
+        const std::string& indexString = std::format("{}", static_cast<int>(i + 1));
 
         globalParameter_->Regist(groupName_, "basePosY_" + indexString, &parameters_[i].basePosY);
         globalParameter_->Regist(groupName_, "burstTime" + indexString, &parameters_[i].burstTime);

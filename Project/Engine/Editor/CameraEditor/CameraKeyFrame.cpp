@@ -1,3 +1,4 @@
+#include <format>
 #include "CameraKeyFrame.h"
 
 using namespace KetaEngine;
@@ -11,7 +12,7 @@ void CameraKeyFrame::Init(const std::string& groupName, const std::string& categ
     globalParameter_            = GlobalParameter::GetInstance();
     currentSequenceElementIndex_ = keyNumber;
     categoryName_               = categoryName;
-    std::string newGroupName    = groupName + std::to_string(currentSequenceElementIndex_);
+    std::string newGroupName    = std::format("{}{}", groupName, currentSequenceElementIndex_);
     groupName_                  = newGroupName;
 
     // フォルダパス設定

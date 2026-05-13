@@ -1,3 +1,4 @@
+#include <format>
 #include "CameraAnimationData.h"
 
 using namespace KetaEngine;
@@ -355,7 +356,7 @@ void CameraAnimationData::AdjustParam() {
 
             bool isSelected       = (selectedKeyFrameIndex_ == i);
             bool isActive         = (activeKeyFrameIndex_ == i);
-            std::string labelText = "KeyFrame " + std::to_string(i) + " (t:" + std::to_string(sectionElements_[i]->GetTimePoint()) + ")";
+            std::string labelText = std::format("KeyFrame {} (t:{})", i, sectionElements_[i]->GetTimePoint());
 
             if (isActive) {
                 labelText += " [ACTIVE]";

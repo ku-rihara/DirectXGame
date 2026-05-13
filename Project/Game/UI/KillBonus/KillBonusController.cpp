@@ -1,3 +1,4 @@
+#include <format>
 #include "KillBonusController.h"
 #include "Audio/Audio.h"
 #include <imgui.h>
@@ -139,14 +140,14 @@ void KillBonusController::RegisterParams() {
 
     // 段階カラー
     for (int i = 0; i < 3; ++i) {
-        const std::string prefix = "simKill_tier" + std::to_string(i);
+        const std::string prefix = std::format("simKill_tier{}", i);
         globalParameter_->Regist(groupName_, prefix + "_threshold", &simKillLayout_.colorTiers[i].threshold);
         globalParameter_->Regist(groupName_, prefix + "_color", &simKillLayout_.colorTiers[i].color);
     }
 
     // 段階カラー
     for (int i = 0; i < 3; ++i) {
-        const std::string prefix = "combo_tier" + std::to_string(i);
+        const std::string prefix = std::format("combo_tier{}", i);
         globalParameter_->Regist(groupName_, prefix + "_threshold", &comboLayout_.colorTiers[i].threshold);
     }
 }

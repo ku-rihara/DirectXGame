@@ -1,3 +1,4 @@
+#include <format>
 #include "GPUParticleSection.h"
 
 using namespace KetaEngine;
@@ -14,7 +15,7 @@ void GPUParticleSection::Init(const std::string& particleName, const std::string
     particleName_ = particleName;
     categoryName_ = categoryName;
     sectionIndex_ = sectionIndex;
-    sectionName_  = particleName + std::to_string(sectionIndex);
+    sectionName_  = std::format("{}{}", particleName, sectionIndex);
     groupName_    = categoryName + "_" + sectionName_;
     folderPath_   = baseFolderPath_ + categoryName_ + "/" + "Sections/" + particleName_ + "/";
 

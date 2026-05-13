@@ -1,3 +1,4 @@
+#include <format>
 #include "ParticleSection.h"
 // Manager
 #include "../ParticleManager.h"
@@ -13,7 +14,7 @@ using namespace KetaEngine;
 void ParticleSection::Init(const std::string& particleName, const std::string& categoryName, int32_t sectionIndex) {
     particleName_ = particleName;
     sectionIndex_ = sectionIndex;
-    groupName_    = particleName + std::to_string(sectionIndex);
+    groupName_    = std::format("{}{}", particleName, sectionIndex);
     folderPath_   = baseFolderPath_ + categoryName + "/" + "Sections/" + particleName_ + "/";
 
     InitSectionParam();

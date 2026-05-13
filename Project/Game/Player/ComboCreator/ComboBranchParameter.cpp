@@ -1,3 +1,4 @@
+#include <format>
 #include "ComboBranchParameter.h"
 #include "input/InputData.h"
 #include <imgui.h>
@@ -14,7 +15,7 @@ void ComboBranchParameter::Init(const std::string& groupName, int32_t branchInde
 }
 
 void ComboBranchParameter::RegisterParams() {
-    std::string prefix = "Branch_" + std::to_string(branchIndex_) + "_";
+    std::string prefix = std::format("Branch_{}_", branchIndex_);
 
     globalParameter_->Regist(groupName_, prefix + "nextAttackName", &nextAttackName_);
     globalParameter_->Regist(groupName_, prefix + "keyboardButton", &keyboardButton_);
@@ -31,7 +32,7 @@ bool ComboBranchParameter::DrawParameterUI(const std::string& attackFolderPath, 
     bool requestDelete = false;
 
     // 分岐ヘッダー
-    std::string header = "分岐 " + std::to_string(branchIndex_ + 1);
+    std::string header = std::format("分岐 {}", branchIndex_ + 1);
     if (!nextAttackName_.empty()) {
         header += " -> " + nextAttackName_;
     }
@@ -44,7 +45,7 @@ bool ComboBranchParameter::DrawParameterUI(const std::string& attackFolderPath, 
             "次の攻撃名",
             attackFolderPath,
             nextAttackName_,
-            parentGroupName + "_branch_" + std::to_string(branchIndex_),
+            std::format("{}_branch_{}", parentGroupName, branchIndex_),
             true);
 
         // ボタン設定

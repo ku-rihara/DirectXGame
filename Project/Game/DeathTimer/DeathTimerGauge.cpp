@@ -1,3 +1,4 @@
+#include <format>
 #include "DeathTimerGauge.h"
 #include "Frame/Frame.h"
 #include <algorithm>
@@ -53,7 +54,7 @@ void DeathTimerGauge::SpriteInit() {
     displayRatio_ = 0.0f;
     gaugeSprite_->SetGaugeRate(0.0f);
     for (int32_t i = 0; i < kPercentDigitCount; ++i) {
-        percentDigits_[i].Init("StressPercent" + std::to_string(i));
+        percentDigits_[i].Init(std::format("StressPercent{}", i));
     }
 }
 
@@ -166,7 +167,7 @@ void DeathTimerGauge::AdjustParam() {
         ImGui::ColorEdit4("Danger Color", &dangerColor_.x);
 
         for (int32_t i = 0; i < heatBeat_.heatBeatSpeedRate.size(); ++i) {
-            ImGui::DragFloat(("heatBeatSpeedRate" + std::to_string(i)).c_str(), &heatBeat_.heatBeatSpeedRate[i], 0.01f);
+            ImGui::DragFloat(std::format("heatBeatSpeedRate{}", i).c_str(), &heatBeat_.heatBeatSpeedRate[i], 0.01f);
         }
 
         // 現在の状態表示
@@ -190,7 +191,7 @@ void DeathTimerGauge::RegisterParams() {
     globalParameter_->Regist(groupName_, "normalColor", &normalColor_);
     globalParameter_->Regist(groupName_, "dangerColor", &dangerColor_);
     for (int32_t i = 0; i < static_cast<int32_t>(heatBeat_.heatBeatSpeedRate.size()); ++i) {
-        globalParameter_->Regist(groupName_, "heatBeatSpeedRate" + std::to_string(i), &heatBeat_.heatBeatSpeedRate[i]);
+        globalParameter_->Regist(groupName_, std::format("heatBeatSpeedRate{}", i), &heatBeat_.heatBeatSpeedRate[i]);
     }
     globalParameter_->Regist(groupName_, "gaugeEaseSpeed", &gaugeEaseSpeed_);
     globalParameter_->Regist(groupName_, "percentBasePos", &percentBasePos_);

@@ -1,3 +1,4 @@
+#include <format>
 #include "Audience.h"
 // Behavior
 #include "Behavior/AudienceRoot.h"
@@ -13,7 +14,7 @@ void Audience::Init(int32_t index) {
 
     // グループ名を設定
     audienceIndex_ = index;
-    groupName_ += std::to_string(audienceIndex_);
+    groupName_ += std::format("{}", audienceIndex_);
 
     // グローバルパラメータ
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();

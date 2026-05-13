@@ -1,3 +1,4 @@
+#include <format>
 #include "KillCounter.h"
 // Player
 #include "Player/ComboCreator/PlayerComboAttackController.h"
@@ -73,7 +74,7 @@ void KillCounter::UnlockAttacksForLevel(int32_t level) {
 
 void KillCounter::RegisterParams() {
     for (int32_t i = 0; i < kMaxKillLevel; ++i) {
-        globalParameter_->Regist(groupName_, "LevelUpThreshold" + std::to_string(i + 1), &levelUpThresholds_[i]);
+        globalParameter_->Regist(groupName_, std::format("LevelUpThreshold{}", i + 1), &levelUpThresholds_[i]);
     }
 }
 
@@ -87,7 +88,7 @@ void KillCounter::AdjustParam() {
         ImGui::Separator();
 
         for (int32_t i = 0; i < kMaxKillLevel; ++i) {
-            std::string label = "Level " + std::to_string(i + 1) + " Threshold";
+            std::string label = std::format("Level {} Threshold", i + 1);
             ImGui::InputInt(label.c_str(), &levelUpThresholds_[i]);
         }
 

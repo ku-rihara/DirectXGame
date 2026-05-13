@@ -31,7 +31,7 @@ public:
 
 public:
     BaseScene()          = default;
-    virtual ~BaseScene() = default;
+    virtual ~BaseScene();
 
     // 初期化、更新、描画
     virtual void Init();

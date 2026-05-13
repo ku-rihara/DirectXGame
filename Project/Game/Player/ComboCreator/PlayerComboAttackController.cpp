@@ -1,3 +1,4 @@
+#include <format>
 #include "PlayerComboAttackController.h"
 #include "Enemy/EnemyManager.h"
 #include "Frame/Frame.h"
@@ -219,7 +220,7 @@ void PlayerComboAttackController::VisualizeComboFlow() {
         }
 
         ImGui::PushID(chainIdx);
-        std::string label = "コンボチェイン" + std::to_string(chainIdx + 1);
+        std::string label = std::format("コンボチェイン{}", chainIdx + 1);
         if (ImGui::TreeNode(label.c_str())) {
             std::unordered_set<std::string> visited;
             DrawComboFlowTree(name, "", {}, visited);
@@ -244,7 +245,7 @@ void PlayerComboAttackController::VisualizeComboFlow() {
         }
 
         ImGui::PushID(chainIdx);
-        std::string label = "コンボチェイン" + std::to_string(chainIdx + 1);
+        std::string label = std::format("コンボチェイン{}", chainIdx + 1);
         if (ImGui::TreeNode(label.c_str())) {
             std::unordered_set<std::string> visited;
             DrawComboFlowTree(name, "", {}, visited);
@@ -373,8 +374,8 @@ void PlayerComboAttackController::SelectAttackByName(const std::string& name) {
 ///==========================================================
 void PlayerComboAttackController::BindCommonParams() {
     for (int32_t i = 0; i < kComboLevel; ++i) {
-        globalParameter_->Regist(commonGroupName_, "AttackSpeedRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speedRate);
-        globalParameter_->Regist(commonGroupName_, "AttackPowerRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].powerRate);
+        globalParameter_->Regist(commonGroupName_, std::format("AttackSpeedRate{}", int(i + 1)), &attackValueForLevel_[i].speedRate);
+        globalParameter_->Regist(commonGroupName_, std::format("AttackPowerRate{}", int(i + 1)), &attackValueForLevel_[i].powerRate);
     }
 }
 
@@ -388,9 +389,9 @@ void PlayerComboAttackController::AdjustCommonParam() {
 
         // attackLevel Values
         for (int32_t i = 0; i < kComboLevel; ++i) {
-            ImGui::SeparatorText(("AttackValue Level " + std::to_string(int(i + 1))).c_str());
-            ImGui::DragFloat(("AttackSpeedRate" + std::to_string(int(i + 1))).c_str(), &attackValueForLevel_[i].speedRate, 0.01f);
-            ImGui::DragFloat(("AttackPowerRate" + std::to_string(int(i + 1))).c_str(), &attackValueForLevel_[i].powerRate, 0.01f);
+            ImGui::SeparatorText(std::format("AttackValue Level {}", int(i + 1)).c_str());
+            ImGui::DragFloat(std::format("AttackSpeedRate{}", int(i + 1)).c_str(), &attackValueForLevel_[i].speedRate, 0.01f);
+            ImGui::DragFloat(std::format("AttackPowerRate{}", int(i + 1)).c_str(), &attackValueForLevel_[i].powerRate, 0.01f);
         }
 
         // セーブ・ロード

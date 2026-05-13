@@ -1,3 +1,4 @@
+#include <format>
 #include "AnimationRegistry.h"
 
 using namespace KetaEngine;
@@ -122,7 +123,7 @@ void AnimationRegistry::DebugImGui() {
             if (animation != nullptr) {
                 ImGui::PushID(index);
 
-                if (ImGui::CollapsingHeader(("Animation " + std::to_string(index)).c_str())) {
+                if (ImGui::CollapsingHeader(std::format("Animation {}", index).c_str())) {
                     ImGui::Text("Animation Address: %p", static_cast<void*>(animation));
                 }
 

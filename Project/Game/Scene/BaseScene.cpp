@@ -13,6 +13,18 @@
 
 #include <imgui.h>
 
+BaseScene::~BaseScene() {
+    if (KetaEngine::PostEffectRenderer::GetInstance()) {
+        KetaEngine::PostEffectRenderer::GetInstance()->SetViewProjection(nullptr);
+    }
+    if (KetaEngine::ParticleManager::GetInstance()) {
+        KetaEngine::ParticleManager::GetInstance()->SetViewProjection(nullptr);
+    }
+    if (KetaEngine::GPUParticleManager::GetInstance()) {
+        KetaEngine::GPUParticleManager::GetInstance()->SetViewProjection(nullptr);
+    }
+}
+
 void BaseScene::Init() {
 
     // メンバ変数の初期化

@@ -1,3 +1,4 @@
+#include <format>
 #include "ParticleData.h"
 
 using namespace KetaEngine;
@@ -228,7 +229,7 @@ void ParticleData::AdjustParam() {
         ImGui::PushID(i);
         bool isSelected = (selectedKeyFrameIndex_ == i);
 
-        std::string labelText = "Section " + std::to_string(i);
+        std::string labelText = std::format("Section {}", i);
         bool isPlaying        = false;
 
         if (i < static_cast<int>(sectionElements_.size()) && sectionElements_[i]) {

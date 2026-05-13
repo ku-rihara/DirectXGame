@@ -38,7 +38,7 @@ void Combo::DebugMode() {
 void Combo::RegisterParams() {
     globalParameter_->Regist(groupName_, "comboTimeMax_", &comboTimeMax_);
     for (int32_t i = 0; i < kComboLevel; ++i) {
-        globalParameter_->Regist(groupName_, "LevelUpComboNum" + std::to_string(int(i + 1)), &LevelUpNum[i]);
+        globalParameter_->Regist(groupName_, std::format("LevelUpComboNum{}", int(i + 1)), &LevelUpNum[i]);
     }
 }
 
@@ -55,7 +55,7 @@ void Combo::AdjustParam() {
         ImGui::SeparatorText("Combo Parameter");
         ImGui::DragFloat("Combo Time Max", &comboTimeMax_, 0.01f);
         for (int32_t i = 0; i < kComboLevel; ++i) {
-            ImGui::InputInt(("LevelUpComboNum" + std::to_string(int(i + 1))).c_str(), &LevelUpNum[i]);
+            ImGui::InputInt(std::format("LevelUpComboNum{}", int(i + 1)).c_str(), &LevelUpNum[i]);
         }
 
         // セーブ・ロード

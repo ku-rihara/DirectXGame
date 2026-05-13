@@ -1,3 +1,4 @@
+#include <format>
 #include "PlayerComboAttackTimelineUI.h"
 #include "../PlayerComboAttackData.h"
 #include "../PlayerComboAttackController.h"
@@ -181,9 +182,9 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
 }
 
 void PlayerComboAttackTimelineUI::DrawTrackContextMenu(int32_t trackIndex) {
-    ImGui::PushID(("TrackContext_" + std::to_string(trackIndex)).c_str());
+    ImGui::PushID(std::format("TrackContext_{}", trackIndex).c_str());
 
-    std::string popupId = "TrackContextMenu_" + std::to_string(trackIndex);
+    std::string popupId = std::format("TrackContextMenu_{}", trackIndex);
 
     if (ImGui::BeginPopup(popupId.c_str())) {
         auto trackType = data_->GetTrackTypeFromIndex(trackIndex);
@@ -284,7 +285,7 @@ void PlayerComboAttackTimelineUI::DrawRenditionKeyFrameEditor(int32_t trackIndex
     std::string directory = data_->GetDirectoryForTrackType(trackInfo->type);
 
     // FileSelectorのキー
-    std::string fileSelectorKey = std::to_string(trackIndex) + "_" + std::to_string(keyIndex);
+    std::string fileSelectorKey = std::format("{}_{}", trackIndex, keyIndex);
 
     // FileSelectorが存在しない場合は作成
     if (fileSelectorMap_.find(fileSelectorKey) == fileSelectorMap_.end()) {
@@ -380,7 +381,7 @@ void PlayerComboAttackTimelineUI::DrawVibrationKeyFrameEditor(int32_t trackIndex
     float prevIntensity = trackInfo->vibrationIntensity;
     if (ImGui::SliderFloat("振動強度", &trackInfo->vibrationIntensity, 0.0f, 1.0f)) {
         if (prevIntensity != trackInfo->vibrationIntensity) {
-            std::string newLabel = "振動強度:" + std::to_string(trackInfo->vibrationIntensity);
+            std::string newLabel = std::format("振動強度:{}", trackInfo->vibrationIntensity);
             timeline_->SetKeyFrameLabel(trackIndex, keyIndex, newLabel);
         }
     }

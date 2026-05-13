@@ -1,3 +1,4 @@
+#include <format>
 #include "RailControlPoint.h"
 
 using namespace KetaEngine;
@@ -8,7 +9,7 @@ void RailControlPoint::Init(const std::string& railName, const std::string& cate
     globalParameter_            = GlobalParameter::GetInstance();
     currentSequenceElementIndex_ = keyNumber;
     categoryName_               = categoryName;
-    std::string newGroupName    = railName + std::to_string(currentSequenceElementIndex_);
+    std::string newGroupName    = std::format("{}{}", railName, currentSequenceElementIndex_);
     groupName_                  = newGroupName;
 
     folderPath_ = "RailEditor/" + categoryName_ + "/ControlPoints/" + railName;

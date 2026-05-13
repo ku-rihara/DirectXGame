@@ -1,3 +1,4 @@
+#include <format>
 #include "SpriteEaseAnimationData.h"
 
 using namespace KetaEngine;
@@ -353,7 +354,7 @@ void SpriteEaseAnimationData::AdjustParam() {
     for (int i = 0; i < GetTotalKeyFrameCount(); ++i) {
         ImGui::PushID(i);
         bool isSelected = (selectedKeyFrameIndex_ == i);
-        if (ImGui::Selectable(("Section " + std::to_string(i)).c_str(), isSelected)) {
+        if (ImGui::Selectable(std::format("Section {}", i).c_str(), isSelected)) {
             SetSelectedKeyFrameIndex(i);
         }
         ImGui::PopID();

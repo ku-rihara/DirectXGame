@@ -28,6 +28,8 @@ public:
 
     void ApplyPendingSceneChange();
 
+    void Finalize();
+
 private:
     std::unique_ptr<BaseScene> scene_                   = nullptr;
     std::unique_ptr<BaseScene> nextScene_               = nullptr;

@@ -1,3 +1,4 @@
+#include <format>
 #include "NextAttackUI.h"
 #include <XInput.h>
 #include <imgui.h>
@@ -105,7 +106,7 @@ void NextAttackUI::RegisterParams() {
     globalParameter_->Regist(groupName_, "closeAnimDuration", &closeAnimDuration_);
 
     for (int32_t i = 0; i < kMaxCandidates; ++i) {
-        globalParameter_->Regist(groupName_, "slotOffset" + std::to_string(i), &slotOffsets_[i]);
+        globalParameter_->Regist(groupName_, std::format("slotOffset{}", i), &slotOffsets_[i]);
     }
 }
 
@@ -124,7 +125,7 @@ void NextAttackUI::AdjustParam() {
         ImGui::SeparatorText("スロットオフセット");
         for (int32_t i = 0; i < kMaxCandidates; ++i) {
             ImGui::PushID(i);
-            ImGui::DragFloat2(("スロット" + std::to_string(i)).c_str(), &slotOffsets_[i].x, 0.5f);
+            ImGui::DragFloat2(std::format("スロット{}", i).c_str(), &slotOffsets_[i].x, 0.5f);
             ImGui::PopID();
         }
 

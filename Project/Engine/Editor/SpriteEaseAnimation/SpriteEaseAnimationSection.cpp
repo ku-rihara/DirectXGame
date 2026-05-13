@@ -1,3 +1,4 @@
+#include <format>
 #include "SpriteEaseAnimationSection.h"
 
 using namespace KetaEngine;
@@ -8,7 +9,7 @@ using namespace KetaEngine;
 void SpriteEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, int32_t keyNumber) {
     globalParameter_             = GlobalParameter::GetInstance();
     currentSequenceElementIndex__ = keyNumber;
-    groupName_                   = animationName + std::to_string(currentSequenceElementIndex__);
+    groupName_                   = std::format("{}{}", animationName, currentSequenceElementIndex__);
     folderPath_                  = "SpriteEaseAnimation/" + categoryName + "/" + "Sections/" + animationName + "/";
 
     // Scaleの初期値を(1,1)に設定

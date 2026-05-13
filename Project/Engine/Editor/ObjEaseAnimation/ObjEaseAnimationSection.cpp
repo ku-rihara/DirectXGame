@@ -1,3 +1,4 @@
+#include <format>
 #include "ObjEaseAnimationSection.h"
 
 using namespace KetaEngine;
@@ -9,7 +10,7 @@ using namespace KetaEngine;
 void ObjEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, int32_t keyNumber) {
     globalParameter_             = GlobalParameter::GetInstance();
     currentSequenceElementIndex__ = keyNumber;
-    groupName_                   = animationName + std::to_string(currentSequenceElementIndex__);
+    groupName_                   = std::format("{}{}", animationName, currentSequenceElementIndex__);
     folderPath_                  = "ObjEaseAnimation/" + categoryName + "/" + "Sections/" + animationName + "/";
 
 

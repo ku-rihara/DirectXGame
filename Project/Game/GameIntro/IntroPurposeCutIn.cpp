@@ -1,3 +1,4 @@
+#include <format>
 #include "IntroPurposeCutIn.h"
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 #include "Frame/Frame.h"
@@ -9,7 +10,7 @@ void IntroPurposeCutIn::Init(const std::string& name) {
 
     // スプライト初期化
     for (size_t i = 0; i < sprites_.size(); ++i) {
-        sprites_[i].reset(KetaEngine::Sprite::Create("PurposeUI/gamePurposeNo" + std::to_string(i + 1) + ".dds"));
+        sprites_[i].reset(KetaEngine::Sprite::Create(std::format("PurposeUI/gamePurposeNo{}.dds", i + 1)));
         sprites_[i]->transform_.scale = Vector2::ZeroVector();
     }
     sprites_[CENTER]->transform_.pos = centerPos_;

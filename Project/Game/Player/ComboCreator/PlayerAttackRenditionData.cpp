@@ -1,3 +1,4 @@
+#include <format>
 #include "PlayerAttackRenditionData.h"
 #include <algorithm>
 #include <cassert>
@@ -67,7 +68,7 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
     globalParam->Regist(groupName, prefix + "PostEffect_Count", &postEffectCount_);
     globalParam->Regist(groupName, prefix + "PostEffect_OnHit_Count", &postEffectOnHitCount_);
     for (int32_t i = 0; i < kMaxEffectSlots; ++i) {
-        std::string suffix = "_" + std::to_string(i);
+        std::string suffix = std::format("_{}", i);
         globalParam->Regist(groupName, prefix + "PostEffect_Slot" + suffix + "_FileName",          &postEffectSlots_[i].fileName);
         globalParam->Regist(groupName, prefix + "PostEffect_Slot" + suffix + "_StartTiming",       &postEffectSlots_[i].startTiming);
         globalParam->Regist(groupName, prefix + "PostEffect_OnHit_Slot" + suffix + "_FileName",    &postEffectOnHitSlots_[i].fileName);
@@ -78,7 +79,7 @@ void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* glob
     globalParam->Regist(groupName, prefix + "ParticleEffect_Count", &particleEffectCount_);
     globalParam->Regist(groupName, prefix + "ParticleEffect_OnHit_Count", &particleEffectOnHitCount_);
     for (int32_t i = 0; i < kMaxEffectSlots; ++i) {
-        std::string suffix = "_" + std::to_string(i);
+        std::string suffix = std::format("_{}", i);
         globalParam->Regist(groupName, prefix + "ParticleEffect_Slot" + suffix + "_FileName",          &particleEffectSlots_[i].fileName);
         globalParam->Regist(groupName, prefix + "ParticleEffect_Slot" + suffix + "_StartTiming",       &particleEffectSlots_[i].startTiming);
         globalParam->Regist(groupName, prefix + "ParticleEffect_OnHit_Slot" + suffix + "_FileName",    &particleEffectOnHitSlots_[i].fileName);

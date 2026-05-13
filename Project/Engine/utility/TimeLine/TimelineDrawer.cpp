@@ -1,3 +1,4 @@
+#include <format>
 #include "TimelineDrawer.h"
 #include "../../math/MathFunction.h"
 
@@ -316,7 +317,7 @@ void TimelineDrawer::DrawToolbar() {
 }
 
 void TimelineDrawer::DrawKeyFrameContextMenu(uint32_t trackIndex, uint32_t keyIndex, float kfX, float kfY) {
-    std::string popupId = "KeyFrameContextMenu_" + std::to_string(trackIndex) + "_" + std::to_string(keyIndex);
+    std::string popupId = std::format("KeyFrameContextMenu_{}_{}", trackIndex, keyIndex);
 
     // キーフレーム右クリック
     if (ImGui::IsMouseClicked(1) && ImGui::IsMouseHoveringRect(ImVec2(kfX - 8, kfY - 8), ImVec2(kfX + 8, kfY + 8))) {

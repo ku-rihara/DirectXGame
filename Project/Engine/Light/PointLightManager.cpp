@@ -1,3 +1,4 @@
+#include <format>
 #include "PointLightManager.h"
 
 using namespace KetaEngine;
@@ -73,7 +74,7 @@ void PointLightManager::DebugImGui() {
     if (ImGui::CollapsingHeader("PointLights")) {
         const auto& pointLights = GetLights();
         for (size_t i = 0; i < pointLights.size(); ++i) {
-            if (ImGui::TreeNode(("PointLight" + std::to_string(i)).c_str())) {
+            if (ImGui::TreeNode(std::format("PointLight{}", i).c_str())) {
                 pointLights[i]->DebugImGui();
                 ImGui::TreePop();
             }

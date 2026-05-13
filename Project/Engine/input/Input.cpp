@@ -1,4 +1,5 @@
 // Input.cpp
+#include <format>
 #include "Input.h"
 
 using namespace KetaEngine;
@@ -45,13 +46,13 @@ void Input::Init(HINSTANCE hInstance, HWND hWnd) {
         auto gamepad = std::make_unique<Gamepad>();
         if (gamepad->Init(directInput_, i)) {
             gamepads_.push_back(std::move(gamepad));
-            OutputDebugStringA(("Gamepad " + std::to_string(i) + " initialized successfully\n").c_str()); // デバッグ出力
+            OutputDebugStringA(std::format("Gamepad {} initialized successfully\n", i).c_str()); // デバッグ出力
         } else {
-            OutputDebugStringA(("Gamepad " + std::to_string(i) + " initialization failed\n").c_str()); // デバッグ出力
+            OutputDebugStringA(std::format("Gamepad {} initialization failed\n", i).c_str()); // デバッグ出力
         }
     }
 
-    OutputDebugStringA(("Number of gamepads initialized: " + std::to_string(gamepads_.size()) + "\n").c_str()); // デバッグ出力
+    OutputDebugStringA((std::format("Number of gamepads initialized: {}\n", gamepads_.size())).c_str()); // デバッグ出力
 }
 
 void Input::Update() {

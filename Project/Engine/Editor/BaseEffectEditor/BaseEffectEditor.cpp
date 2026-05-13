@@ -1,3 +1,4 @@
+#include <format>
 #include "BaseEffectEditor.h"
 
 using namespace KetaEngine;
@@ -93,7 +94,7 @@ void BaseEffectEditor<TEffectData>::RenderCategoryUI() {
         ImGui::PushID(i);
 
         bool isSelected       = (selectedCategoryIndex_ == i);
-        std::string labelText = categories_[i].name + " (" + std::to_string(categories_[i].effects.size()) + " effects)";
+        std::string labelText = std::format("{} ({} effects)", categories_[i].name, categories_[i].effects.size());
 
         // セレクトインデックを更新
         if (ImGui::Selectable(labelText.c_str(), isSelected)) {

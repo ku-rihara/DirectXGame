@@ -1,3 +1,4 @@
+#include <format>
 #include "AreaLightManager.h"
 
 using namespace KetaEngine;
@@ -41,7 +42,7 @@ void AreaLightManager::DebugImGui() {
         
         const auto& areaLights = GetLights();
         for (size_t i = 0; i < areaLights.size(); ++i) {
-            if (ImGui::TreeNode(("AreaLight" + std::to_string(i)).c_str())) {
+            if (ImGui::TreeNode(std::format("AreaLight{}", i).c_str())) {
             
                 areaLights[i]->DebugImGui();
                 ImGui::TreePop();

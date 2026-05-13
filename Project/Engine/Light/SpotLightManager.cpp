@@ -1,3 +1,4 @@
+#include <format>
 #include "SpotLightManager.h"
 
 using namespace KetaEngine;
@@ -39,7 +40,7 @@ void SpotLightManager::Update() {
 void SpotLightManager::Add(ID3D12Device* device, const int32_t number) {
     auto newLight = std::make_unique<SpotLight>();
 
-    newLight->Init(device, groupName_ +std::to_string(number).c_str());
+    newLight->Init(device, std::format("{}{}", groupName_, number));
     spotLights_.push_back(std::move(newLight));
    
     UpdateStructuredBuffer();
@@ -80,7 +81,7 @@ void SpotLightManager::AdjustParams() {
     if (ImGui::CollapsingHeader("SpotLights")) {
         const auto& spotLights = GetLights();
         for (size_t i = 0; i < spotLights.size(); ++i) {
-            if (ImGui::TreeNode(("SpotLight" + std::to_string(i)).c_str())) {
+            if (ImGui::TreeNode(std::format("SpotLight{}", i).c_str())) {
                 spotLights[i]->AdjustParam();
                 ImGui::TreePop();
             }

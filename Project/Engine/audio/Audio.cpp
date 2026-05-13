@@ -325,6 +325,12 @@ void Audio::Unload(int soundId) {
 }
 
 void Audio::Finalize() {
+    if (masterVoice_) {
+        masterVoice_->DestroyVoice();
+        masterVoice_ = nullptr;
+    }
+    xAudio2_.Reset();
+
     for (auto& soundData : soundDatas_) {
         delete[] soundData.pBuffer;
         soundData.pBuffer = nullptr;
@@ -335,6 +341,4 @@ void Audio::Finalize() {
         MFShutdown();
         isMediaFoundationInitialized_ = false;
     }
-
-    xAudio2_.Reset();
 }

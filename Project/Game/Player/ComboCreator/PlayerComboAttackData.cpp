@@ -1,3 +1,4 @@
+#include <format>
 #include "PlayerComboAttackData.h"
 #include "PlayerComboAttackController.h"
 #include <Windows.h>
@@ -302,7 +303,7 @@ void PlayerComboAttackData::DrawComboBranchesUI() {
         globalParameter_->PushParamForGroup(groupName_);
 
         // 削除によって不要になった末尾Branch番号のキーをdates_から削除
-        std::string removedPrefix = "Branch_" + std::to_string(oldBranchCount - 1) + "_";
+        std::string removedPrefix = std::format("Branch_{}_", oldBranchCount - 1);
         globalParameter_->RemoveKeysWithPrefix(groupName_, removedPrefix);
 
         // タイムラインの分岐トラックを再構築

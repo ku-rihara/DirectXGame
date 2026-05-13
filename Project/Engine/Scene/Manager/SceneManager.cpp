@@ -27,6 +27,17 @@ SceneManager* SceneManager::GetInstance() {
 SceneManager::~SceneManager() {
 }
 
+void SceneManager::Finalize() {
+    if (scene_) {
+        scene_.reset();
+    }
+    if (collisionManager_) {
+        collisionManager_.reset();
+    }
+    Object3DRegistry::GetInstance()->Clear();
+    AnimationRegistry::GetInstance()->Clear();
+}
+
 ///==============================================
 /// 更新
 ///==============================================
@@ -117,7 +128,7 @@ void SceneManager::ApplyPendingSceneChange() {
     collisionManager_->Init();
 
     // 次のシーンを生成
-    scene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(pendingSceneName_));
+    scene_ = sceneFactory_->CreateScene(pendingSceneName_);
     scene_->Init();
 
     // パーティクルリセット

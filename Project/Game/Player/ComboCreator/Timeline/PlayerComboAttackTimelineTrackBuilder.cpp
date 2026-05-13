@@ -1,3 +1,4 @@
+#include <format>
 #include "PlayerComboAttackTimelineTrackBuilder.h"
 #include "../ComboBranchParameter.h"
 #include "../PlayerAttackRenditionData.h"
@@ -378,7 +379,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupVibrationTrack() {
     if (durationFrames < 1.0f) durationFrames = 1.0f;
 
     timelineDrawer_->AddKeyFrame(trackIdx, startFrame, vibParam.intensity, durationFrames,
-        "振動強度:" + std::to_string(vibParam.intensity));
+        std::format("振動強度:{}", vibParam.intensity));
 }
 
 void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
