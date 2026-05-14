@@ -29,6 +29,7 @@ void EnemyDamageReactionData::LoadData() {
 }
 
 void EnemyDamageReactionData::SaveData() {
+    globalParameter_->PushParamForGroup(groupName_);
     globalParameter_->SaveFile(groupName_, folderPath_);
 
     // 演出データを保存

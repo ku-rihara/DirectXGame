@@ -9,6 +9,7 @@ void EnemyDamageReactionController::Init() {
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(defaultParamGroupName_);
     RegisterParams();
+    globalParameter_->LoadFile(defaultParamGroupName_, defaultParamFolderPath_);
     globalParameter_->SyncParamForGroup(defaultParamGroupName_);
 
     // ダメージリアクションデータのロード
@@ -142,6 +143,7 @@ void EnemyDamageReactionController::EditorUpdate() {
 
             // デフォルトパラメータ保存
             if (ImGui::Button("Save Default Parameters")) {
+                globalParameter_->PushParamForGroup(defaultParamGroupName_);
                 globalParameter_->SaveFile(defaultParamGroupName_, defaultParamFolderPath_);
             }
             ImGui::TreePop();

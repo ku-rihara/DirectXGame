@@ -79,7 +79,6 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
         int enemyType = static_cast<int>(pBaseEnemy_->GetType());
         pBaseEnemy_->StartDamageColling(pReactionController_->GetDefaultDamageCoolTime(enemyType), attackName);
         pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
-        PlayDamageParticleEffect(nullptr);
         if (pBaseEnemy_->GetHP() <= 0.0f) {
             pBaseEnemy_->SetIsDeathPending(true);
             pBaseEnemy_->SetIsAdaptCollision(false);
@@ -96,9 +95,6 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
 
     // ダメージを受ける
     pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
-
-    // ダメージパーティクルエフェクトを再生
-    PlayDamageParticleEffect(reactionData);
 
     if (pBaseEnemy_->GetHP() <= 0.0f) {
         // 死亡リアクションに変更
@@ -128,9 +124,6 @@ void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* react
     // コリジョンを無効化
     pBaseEnemy_->SetIsAdaptCollision(false);
 
-    // ダメージパーティクルエフェクトを再生
-    PlayDamageParticleEffect(reactionData);
-
     // blowYPowerでリアクション種別を自動判定
     float blowYPower = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
 
@@ -143,33 +136,5 @@ void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* react
     } else {
         pBaseEnemy_->ChangeDamageReactionBehavior(
             std::make_unique<EnemyDeath>(pBaseEnemy_));
-    }
-}
-
-void EnemyDamageReactionRoot::PlayDamageParticleEffect(EnemyDamageReactionData* reactionData) {
-    if (!reactionData) {
-        // デフォルトパーティクルエフェクトを再生
-        int enemyType = static_cast<int>(pBaseEnemy_->GetType());
-        const auto& defaultParticle = pReactionController_->GetDefaultParticleEffectName(enemyType);
-        if (!defaultParticle.empty() && defaultParticle != "None") {
-            if (pBaseEnemy_->GetEnemyEffects()) {
-                pBaseEnemy_->GetEnemyEffects()->Emit(defaultParticle);
-            }
-        }
-        return;
-    }
-
-    // 演出データの取得
-    const EnemyDamageRenditionData* rendition = reactionData->GetRendition();
-    if (!rendition) {
-        return;
-    }
-
-    // パーティクルエフェクトの再生
-    const auto& particleParam = rendition->GetParticleEffectParam();
-    if (!particleParam.fileName.empty() && particleParam.fileName != "None") {
-        if (pBaseEnemy_->GetEnemyEffects()) {
-            pBaseEnemy_->GetEnemyEffects()->Emit(particleParam.fileName);
-        }
     }
 }

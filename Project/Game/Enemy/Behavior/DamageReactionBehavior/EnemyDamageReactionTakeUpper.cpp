@@ -35,10 +35,6 @@ EnemyDamageReactionTakeUpper::~EnemyDamageReactionTakeUpper() {
 }
 
 void EnemyDamageReactionTakeUpper::Update(float deltaTime) {
-    if (!pReactionData_) {
-        return;
-    }
-
     // バウンド死亡のバーストタイマー待ち
     if (isDeathBurstPhase_) {
         deathBurstTimer_ -= deltaTime;

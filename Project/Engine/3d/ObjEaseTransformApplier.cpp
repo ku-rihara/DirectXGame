@@ -92,20 +92,22 @@ bool ObjEaseTransformApplier::Apply(
     }
 
     // Translation
+    Vector3 trans = Vector3::ZeroVector();
     if (!animeData->GetIsUseRailActiveKeyFrame()) {
-        Vector3 trans = player_->GetCurrentTranslation();
-        // 対象の向いてる方向を進行方向として動く場合はローカル→ワールド変換
-        if (animeData->IsTranslationAlongForward()) {
-            Matrix4x4 rotMat = MakeRotateMatrix(worldRotation);
-            trans            = TransformNormal(trans, rotMat);
-        }
-        result.translation = trans;
+        trans = player_->GetCurrentTranslation();
     } else {
         auto* railPlayer = animeData->GetCurrentRailPlayer();
         if (railPlayer) {
-            result.translation = railPlayer->GetCurrentPosition();
+            trans = railPlayer->GetCurrentPosition();
         }
     }
+
+    // 対象の向いてる方向を進行方向として動く場合はローカル→ワールド変換
+    if (animeData->IsTranslationAlongForward()) {
+        Matrix4x4 rotMat = MakeRotateMatrix(worldRotation);
+        trans            = TransformNormal(trans, rotMat);
+    }
+    result.translation = trans;
 
     // 進行方向を向く設定が有効な場合は方向から回転を決定する
     if (lookAtDirectionEnabled_ && player_->IsLookingAtDirection()) {

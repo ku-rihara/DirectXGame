@@ -3,8 +3,7 @@
         "Bound_BounceDamping": 0.0,
         "Bound_BoundNum": 0,
         "Bound_InitialBounceRate": 0.0,
-        "Normal_DamageAnimationName": "EnemyNormalDamage",
-        "Strong_DamageAnimationName": "StrongEnemyDefaultDamage",
+        "Normal_DamageAnimationName": "",
         "Normal_KnockBackDamping": 0.0,
         "Normal_KnockBackTime": 0.0,
         "ReactionState": 0,
@@ -25,8 +24,8 @@
             0.0
         ],
         "TakeUpper_ThrustRotateSpeed": 0.0,
-        "TriggerAttackName": "FieldCycleAttack",
-        "damageCollingTime": 0.07000000029802322,
+        "TriggerAttackName": "ConsecutivePunch",
+        "damageCollingTime": 0.1899999976158142,
         "isPriorityReaction": false
     }
 }

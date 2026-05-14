@@ -13,7 +13,7 @@
         "Normal_Slammed_DefaultDamageAnimationName": "TakeUpMotion",
         "Normal_TakeUpper_DefaultDamageAnimationName": "TakeUpMotion",
         "Strong_Bound_DefaultDamageAnimationName": "StrongEnemyBoundDamage",
-        "Strong_DefaultDamageCoolTime": 0.0,
+        "Strong_DefaultDamageCoolTime": 0.11,
         "Strong_DefaultObjEaseAnimationName": "None",
         "Strong_DefaultObjEaseAnimationStartTiming": 0.0,
         "Strong_DefaultParticleEffectName": "NormalDamageEffect",

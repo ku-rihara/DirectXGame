@@ -32,10 +32,6 @@ EnemyDamageReactionSlammed::~EnemyDamageReactionSlammed() {
 }
 
 void EnemyDamageReactionSlammed::Update(float deltaTime) {
-    if (!pReactionData_) {
-        return;
-    }
-
     damageRendition_.Update(deltaTime, reactionTimer_, hasPlayedRendition_);
     reactionTimer_ += deltaTime;
 

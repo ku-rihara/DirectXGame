@@ -35,12 +35,6 @@ private:
     /// <param name="reactionData">リアクションデータ</param>
     void ChangeDeathReaction(EnemyDamageReactionData* reactionData);
 
-    /// <summary>
-    /// ダメージパーティクルエフェクトを再生
-    /// </summary>
-    /// <param name="reactionData">リアクションデータ</param>
-    void PlayDamageParticleEffect(EnemyDamageReactionData* reactionData);
-
 private:
     const PlayerAttackCollider* pPlayerCollisionInfo_    = nullptr;
     EnemyDamageReactionController* pReactionController_ = nullptr;

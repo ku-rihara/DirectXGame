@@ -20,18 +20,14 @@ EnemyDamageReactionNormal::EnemyDamageReactionNormal(
     pPlayerCollisionInfo_ = playerCollisionInfo;
 
     InitReaction();
-    if (pReactionData_) {
-        damageRendition_.Init(pBaseEnemy_, pReactionData_);
-    }
+    damageRendition_.Init(pBaseEnemy_, pReactionData_);
 }
 
 EnemyDamageReactionNormal::~EnemyDamageReactionNormal() {
 }
 
 void EnemyDamageReactionNormal::Update(float deltaTime) {
-    if (pReactionData_) {
-        damageRendition_.Update(deltaTime, reactionTimer_, hasPlayedRendition_);
-    }
+    damageRendition_.Update(deltaTime, reactionTimer_, hasPlayedRendition_);
     UpdateNormal();
 
     reactionTimer_ += deltaTime;

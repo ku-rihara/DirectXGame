@@ -4,7 +4,7 @@ using namespace KetaEngine;
 #include <cassert>
 
 // 最大SRV数の定義
-const uint32_t SrvManager::kMaxCount = 1024*6;
+const uint32_t SrvManager::kMaxCount = 1024*7;
 
 // シングルトンインスタンスの取得
 SrvManager* SrvManager::GetInstance() {
