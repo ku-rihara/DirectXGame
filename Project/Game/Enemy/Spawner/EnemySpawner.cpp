@@ -25,7 +25,7 @@ void EnemySpawner::Init(const std::string& jsonData) {
 
     shouldLoop_ = true; // デフォルトでループ有効
 
-    // グローバルパラメータ
+    // グローバルパラメータへパラメータ登録
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();

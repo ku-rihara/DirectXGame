@@ -4,7 +4,7 @@
 
 void KillCountUIController::Init() {
 
-    // グローバルパラメータ
+    // グローバルパラメータへパラメータ登録
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();

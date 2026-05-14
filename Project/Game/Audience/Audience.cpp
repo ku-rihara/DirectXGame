@@ -16,7 +16,7 @@ void Audience::Init(int32_t index) {
     audienceIndex_ = index;
     groupName_ += std::format("{}", audienceIndex_);
 
-    // グローバルパラメータ
+    // グローバルパラメータへパラメータ登録
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();

@@ -16,7 +16,7 @@ void KillCountUI::Init(const KillCountDigit& digit) {
 
     CreateGroupName(digit);
 
-    // グローバルパラメータ
+    // グローバルパラメータへパラメータ登録
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();

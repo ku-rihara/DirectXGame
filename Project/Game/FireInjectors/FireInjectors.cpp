@@ -9,7 +9,7 @@ void FireInjectors::Init() {
     ObjectFromBlender_->LoadJsonFile("FireInjectors.json");
     ObjectFromBlender_->EasingAllReset();*/
 
-    // グローバルパラメータ
+    // グローバルパラメータへパラメータ登録
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();

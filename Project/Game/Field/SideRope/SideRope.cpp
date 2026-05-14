@@ -9,7 +9,7 @@ void SideRope::Init(int32_t type) {
     type_      = static_cast<SideRopeType>(type);
     groupName_ = SetGroupNameByType();
 
-    // グローバルパラメータ
+    // グローバルパラメータへパラメータ登録
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
