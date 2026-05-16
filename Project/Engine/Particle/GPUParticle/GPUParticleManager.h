@@ -110,6 +110,8 @@ public:
     void SetModel(const std::string& name, const std::string& modelName);
     void SetEmitterSphere(const std::string& name, const ParticleEmit& emitter);
     void SetViewProjection(const ViewProjection* view);
+
+    void ResetAllParticles() { particleGroups_.clear(); }
 };
 
 }; // KetaEngine

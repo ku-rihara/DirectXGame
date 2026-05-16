@@ -147,6 +147,7 @@ void GameScene::ObjectInit() {
     gameObj_.screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
 
     // 初期化
+    gameObj_.field_->Init();
     gameObj_.player_->InitInGameScene();
     gameObj_.unlockNotifier_->Init();
     gameObj_.lockOnController_->Init();

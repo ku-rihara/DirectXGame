@@ -2,13 +2,16 @@
 using namespace KetaEngine;
 
 // 3d
-#include "3d/Object3D/Object3DRegistry.h"
 #include "3D/AnimationObject3D/AnimationRegistry.h"
+#include "3d/Object3D/Object3DRegistry.h"
 // base
 #include "Base/Dx/DirectXCommon.h"
+#include "Base/Dx/DxCommand.h"
 #include "Frame/Frame.h"
 #include "Pipeline/PipelineManager.h"
 // particle
+#include "2D/SpriteRegistry.h"
+#include "3D/RibbonTrail/RibbonTrailManager.h"
 #include "Particle/CPUParticle/ParticleManager.h"
 #include "Particle/GPUParticle/GPUParticleManager.h"
 // input
@@ -28,14 +31,19 @@ SceneManager::~SceneManager() {
 }
 
 void SceneManager::Finalize() {
+
+    // シーンの破棄
     if (scene_) {
         scene_.reset();
     }
+
+    // コリジョンマネージャの破棄
     if (collisionManager_) {
         collisionManager_.reset();
     }
-    Object3DRegistry::GetInstance()->Clear();
-    AnimationRegistry::GetInstance()->Clear();
+
+    // 登録されているオブジェクトの破棄
+    ClearAllRegistries();
 }
 
 ///==============================================
@@ -55,6 +63,7 @@ void SceneManager::Update() {
         ChangeScene("RESULT");
     }
 
+    // シーンの更新
     if (scene_) {
         scene_->Update();
     }
@@ -67,19 +76,26 @@ void SceneManager::Update() {
     ParticleManager::GetInstance()->Update();
     GPUParticleManager::GetInstance()->Update();
 
+    // コリジョン更新
     collisionManager_->Update();
 }
 
 void SceneManager::Debug() {
+
+    // シーンごとのデバッグ表示
     if (scene_) {
         scene_->Debug();
     }
+
+    // 登録されているオブジェクトのデバッグ表示
     if (collisionManager_) {
         collisionManager_->AdjustParam();
     }
 }
 
 void SceneManager::SkyBoxDraw() {
+
+    // シーンのスカイボックス描画
     if (scene_) {
         PipelineManager::GetInstance()->PreDraw(PipelineType::SkyBox, DirectXCommon::GetInstance()->GetCommandList());
         scene_->SkyBoxDraw();
@@ -91,39 +107,48 @@ void SceneManager::SkyBoxDraw() {
 /// シーン切り替え
 ///==============================================
 void SceneManager::ChangeScene(const std::string& sceneName) {
+    // シーン切り替えを予約
     pendingSceneName_ = sceneName;
-    if (!scene_) {
-        ApplyPendingSceneChange();
-    }
 }
 
 ///==============================================
 /// シーン切り替え実行
 ///==============================================
 void SceneManager::ApplyPendingSceneChange() {
+
+    // シーン切り替えが予約されていない場合は何もしない
     if (pendingSceneName_.empty()) {
         return;
     }
 
+    // シーン工場が設定されていない場合はエラー
     assert(sceneFactory_);
 
+    // 現在のシーンを終了
     if (scene_) {
-        // 現在のシーンを終了
         scene_.reset();
     }
 
+    // コリジョンマネージャのリセット
     if (collisionManager_) {
         collisionManager_.reset();
     }
 
-    Object3DRegistry::GetInstance()->Clear();
-    AnimationRegistry::GetInstance()->Clear();
+    // GPUが現在実行中のコマンドを完了するのを待つ
+    DirectXCommon::GetInstance()->GetDxCommand()->WaitForGPU();
 
-    //// グローバル変数の読み込み
+    // 登録されているオブジェクトの破棄
+    ClearAllRegistries();
+
+    // グローバル変数の登録全解除
     GlobalParameter::GetInstance()->ResetAllRegister();
     GlobalParameter::GetInstance()->LoadFiles();
 
-    // コリジョン
+    // パーティクルリセット
+    ParticleManager::GetInstance()->ResetAllParticles();
+    GPUParticleManager::GetInstance()->ResetAllParticles();
+
+    // コリジョン生成
     collisionManager_ = std::make_unique<CollisionManager>();
     collisionManager_->Init();
 
@@ -131,12 +156,13 @@ void SceneManager::ApplyPendingSceneChange() {
     scene_ = sceneFactory_->CreateScene(pendingSceneName_);
     scene_->Init();
 
-    // パーティクルリセット
-    ParticleManager::GetInstance()->ResetAllParticles();
-
     // シーン名をクリア
     pendingSceneName_.clear();
+}
 
-    // シーン切り替え（ロード）にかかった時間を破棄するためタイマーをリセット
-    Frame::Init();
+void SceneManager::ClearAllRegistries() {
+    Object3DRegistry::GetInstance()->Clear();
+    AnimationRegistry::GetInstance()->Clear();
+    RibbonTrailManager::GetInstance()->Clear();
+    SpriteRegistry::GetInstance()->Clear();
 }

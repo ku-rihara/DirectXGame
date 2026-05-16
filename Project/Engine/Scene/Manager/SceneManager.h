@@ -31,6 +31,7 @@ public:
     void Finalize();
 
 private:
+    void ClearAllRegistries();
     std::unique_ptr<BaseScene> scene_                   = nullptr;
     std::unique_ptr<BaseScene> nextScene_               = nullptr;
     AbstractSceneFactory* sceneFactory_                 = nullptr;
