@@ -53,13 +53,16 @@ private:
     void ApplyParentParametersToData(ParticleData* particleData);
 
 private:
-    
+
     std::string currentParticleName_;
     bool isInitialized_          = false;
     bool wasPlayCalledThisFrame_ = false;
 
     ParentParam parentParam_;
     TargetParam targetParam_;
+
+    // 名前変更時に古いエフェクトを即破棄せず、afterDurationまで継続させるリスト
+    std::vector<std::unique_ptr<BaseEffectData>> finishingEffects_;
 
 public:
     ParticleData* GetParticleData();

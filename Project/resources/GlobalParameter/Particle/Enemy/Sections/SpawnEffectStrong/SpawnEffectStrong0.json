@@ -10,9 +10,9 @@
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            0.07349169999361038,
-            0.7799227833747864,
             0.03312414139509201,
+            0.7799227833747864,
+            0.5463680028915405,
             0.0
         ],
         "Color Max": [
@@ -41,14 +41,15 @@
         ],
         "ColorEaseParam.isEase": false,
         "ColorEaseParam.maxTime": 1.0,
+        "Cyl.axisInt": 0,
         "Cyl.bottomColor": [
             1.0,
             1.0,
             1.0,
             1.0
         ],
-        "Cyl.bottomRadiusX": 1.0,
-        "Cyl.bottomRadiusZ": 1.0,
+        "Cyl.bottomRadiusX": 1.5,
+        "Cyl.bottomRadiusZ": 1.5,
         "Cyl.divisions": 32,
         "Cyl.endAngleDeg": 360.0,
         "Cyl.height": 3.0,
@@ -60,8 +61,8 @@
             1.0,
             1.0
         ],
-        "Cyl.topRadiusX": 1.0,
-        "Cyl.topRadiusZ": 1.0,
+        "Cyl.topRadiusX": 1.5,
+        "Cyl.topRadiusZ": 1.5,
         "Cyl.uvModeInt": 0,
         "Direction Max": [
             0.0,
@@ -76,12 +77,12 @@
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "IsScreenPos": false,
-        "LifeTime": 0.8399999737739563,
+        "LifeTime": 0.6800000071525574,
         "Max Particle Num": 1000,
         "Particle Count": 1,
         "Position Base": [
             0.0,
-            -0.5,
+            8.680000305175781,
             0.0
         ],
         "Position Max": [
@@ -202,6 +203,11 @@
         "emissiveIntensity": 1.0,
         "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": false,
         "isFloatVelocity": false,
@@ -214,19 +220,22 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 2,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
         "scaleEaseParam.backRatio": 0.0,
         "scaleEaseParam.easeTypeInt": 22,
         "scaleEaseParam.endValueF.max": 1.0,
         "scaleEaseParam.endValueF.min": 1.0,
         "scaleEaseParam.endValueV3.max": [
-            4.5,
-            4.5,
-            4.5
+            6.0,
+            6.0,
+            6.0
         ],
         "scaleEaseParam.endValueV3.min": [
-            4.5,
-            4.5,
-            4.5
+            6.0,
+            6.0,
+            6.0
         ],
         "scaleEaseParam.isReturnToOrigin": false,
         "scaleEaseParam.isScaleEase": true,
@@ -246,6 +255,7 @@
         "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": false,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

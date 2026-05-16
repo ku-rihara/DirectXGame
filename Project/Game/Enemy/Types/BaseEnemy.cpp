@@ -500,6 +500,10 @@ void BaseEnemy::SetAnimationName(AnimationType type, const std::string& name) {
     animationNames_[static_cast<size_t>(type)] = name;
 }
 
+bool BaseEnemy::IsInDeathBehavior() const {
+    return dynamic_cast<EnemyDeath*>(damageBehavior_.get()) != nullptr;
+}
+
 void BaseEnemy::RotateInit() {
     if (objAnimation_) {
         objAnimation_->transform_.rotation_ = Vector3::ZeroVector();

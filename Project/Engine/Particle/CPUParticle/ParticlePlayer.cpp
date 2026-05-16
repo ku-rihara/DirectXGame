@@ -7,6 +7,7 @@ void ParticlePlayer::Init() {
     BaseEffectPlayer::Init();
     isInitialized_          = false;
     wasPlayCalledThisFrame_ = false;
+    finishingEffects_.clear();
 }
 
 void ParticlePlayer::Update(float speedRate) {
@@ -28,6 +29,20 @@ void ParticlePlayer::Update(float speedRate) {
 
     if (effectData_) {
         effectData_->Update(speedRate);
+    }
+
+    // 古いエフェクトを継続更新し、afterDurationで停止したら削除
+    for (auto it = finishingEffects_.begin(); it != finishingEffects_.end();) {
+        auto* pd = dynamic_cast<ParticleData*>(it->get());
+        if (pd) {
+            pd->CheckAndPauseSectionsAfterDuration(Frame::DeltaTimeRate());
+            pd->Update(speedRate);
+            if (!pd->IsPlaying()) {
+                it = finishingEffects_.erase(it);
+                continue;
+            }
+        }
+        ++it;
     }
 
     // フラグをリセット
@@ -52,13 +67,10 @@ void ParticlePlayer::Play(const std::string& particleName, const std::string& ca
     // 初回呼び出し、またはパーティクル名が変わった場合のみ初期化
     if (!isInitialized_ || currentCategoryName_ != categoryName || currentParticleName_ != particleName) {
 
-        // 既存のエフェクトを停止
+        // 既存のエフェクトは即破棄せず、afterDurationまで継続させる
         if (effectData_) {
-            effectData_->Pause();
+            finishingEffects_.push_back(std::move(effectData_));
         }
-
-        // 新しいエフェクトデータを作成
-        effectData_.reset();
         effectData_ = CreateEffectData();
 
         auto* particleData = dynamic_cast<ParticleData*>(effectData_.get());

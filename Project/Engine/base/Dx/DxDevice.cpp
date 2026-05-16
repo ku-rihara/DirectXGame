@@ -3,6 +3,7 @@
 using namespace KetaEngine;
 #include "function/Convert.h"
 #include "function/Log.h"
+#include "utility/Log/Log.h"
 #include <cassert>
 #include <format>
 
@@ -10,7 +11,7 @@ void DxDevice::Init() {
     CreateFactory();
     CreateDevice();
     SetupDebugLayer();
-    Log("Complete create D3D12Device!!!\n");
+    ::Log("Complete create D3D12Device!!!\n");
 }
 
 void DxDevice::CreateFactory() {
@@ -32,7 +33,9 @@ void DxDevice::CreateDevice() {
 
         // ソフトウェアアダプタでなければ採用
         if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
-            Log(ConvertString(std::format(L"Use Adapter:{}\n", adapterDesc.Description)));
+            std::string adapterName = ConvertString(adapterDesc.Description);
+            ::Log(std::format("Use Adapter:{}\n", adapterName));
+            KetaEngine::Log::Info(std::format("Use Adapter: {}", adapterName));
             break;
         }
         useAdapter_ = nullptr;
@@ -48,7 +51,7 @@ void DxDevice::CreateDevice() {
     for (size_t i = 0; i < _countof(featureLevels); ++i) {
         hr_ = D3D12CreateDevice(useAdapter_.Get(), featureLevels[i], IID_PPV_ARGS(&device_));
         if (SUCCEEDED(hr_)) {
-            Log(std::format("FeatureLevel : {}\n", featureLevelStrings[i]));
+            ::Log(std::format("FeatureLevel : {}\n", featureLevelStrings[i]));
             break;
         }
     }

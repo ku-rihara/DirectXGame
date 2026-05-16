@@ -75,7 +75,7 @@
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "IsScreenPos": false,
-        "LifeTime": 1.0,
+        "LifeTime": 0.7400000095367432,
         "Max Particle Num": 1000,
         "Particle Count": 8,
         "Position Base": [
@@ -201,6 +201,11 @@
         "emissiveIntensity": 2.299999952316284,
         "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": false,
@@ -213,6 +218,9 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
         "scaleEaseParam.easeTypeInt": 22,
         "scaleEaseParam.endValueF.max": 0.0,
         "scaleEaseParam.endValueF.min": 0.0,
@@ -228,7 +236,7 @@
         ],
         "scaleEaseParam.isReturnToOrigin": false,
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.4300000071525574,
+        "scaleEaseParam.maxTime": 0.3499999940395355,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
         "selectedTexturePath": "Resources/EngineTexture/Particle/circle.dds",
@@ -238,6 +246,7 @@
         "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": false,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

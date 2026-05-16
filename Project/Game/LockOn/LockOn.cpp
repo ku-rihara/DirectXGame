@@ -62,15 +62,26 @@ void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* pla
         // 現在のターゲットが、渡されたターゲットリストに含まれているかチェック
         auto it = std::find(targets.begin(), targets.end(), currentTarget_.value());
         if (it == targets.end()) {
-            // 含まれていない場合はリセット
+            // ターゲットが消滅した場合はロックオン自体も解除
+            isActive_ = false;
             currentTarget_.reset();
             currentTargetIndex_ = 0;
         } else {
-            // 範囲外チェック
-            Vector3 relativePosition;
-            if (!IsTargetRange(currentTarget_.value(), player, relativePosition)) {
+            // DeathBehaviorに入った瞬間にロックオン解除
+            bool isDying = std::visit([](auto&& enemy) -> bool {
+                return enemy && enemy->IsInDeathBehavior();
+            }, currentTarget_.value());
+            if (isDying) {
+                isActive_ = false;
                 currentTarget_.reset();
                 currentTargetIndex_ = 0;
+            } else {
+                // 範囲外チェック
+                Vector3 relativePosition;
+                if (!IsTargetRange(currentTarget_.value(), player, relativePosition)) {
+                    currentTarget_.reset();
+                    currentTargetIndex_ = 0;
+                }
             }
         }
     }
@@ -296,6 +307,7 @@ Vector3 LockOn::GetTargetObjectPosition(const LockOnVariant& target) const {
 
 void LockOn::OnObjectDestroyed(const LockOnVariant& obj) {
     if (currentTarget_.has_value() && currentTarget_.value() == obj) {
+        isActive_ = false;
         currentTarget_.reset();
         currentTargetIndex_ = 0;
 

@@ -41,6 +41,17 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
     CoInitializeEx(0, COINIT_MULTITHREADED);
     // システムタイマーの分解能をあげる
     timeBeginPeriod(1);
+
+    // Windows11の効率モード（E-coreへの移動）を無効化し、メインスレッドをP-coreで実行させる
+    // yield()スピン待機がE-core移動の口実になりFPSが不安定になる問題への対処
+    PROCESS_POWER_THROTTLING_STATE throttling = {};
+    throttling.Version                        = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
+    throttling.ControlMask                    = PROCESS_POWER_THROTTLING_EXECUTION_SPEED;
+    throttling.StateMask                      = 0; // 0 = スロットリング無効
+    SetProcessInformation(GetCurrentProcess(), ProcessPowerThrottling, &throttling, sizeof(throttling));
+
+    SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+    SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
     // ウィンドウプロシージャ
     wc_.lpfnWndProc = WindowProc;
     // ウィンドウクラス名

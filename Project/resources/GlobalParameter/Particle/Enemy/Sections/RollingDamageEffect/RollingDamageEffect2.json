@@ -73,9 +73,9 @@
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 1.0,
+        "IntervalTime": 0.8399999737739563,
         "IsScreenPos": false,
-        "LifeTime": 0.7900000214576721,
+        "LifeTime": 0.4000000059604645,
         "Max Particle Num": 1000,
         "Particle Count": 7,
         "Position Base": [
@@ -198,9 +198,14 @@
         "dissolveName": "",
         "distortionStrength": 0.0020000000949949026,
         "distortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
-        "emissiveIntensity": 3.4000000953674316,
+        "emissiveIntensity": 1.0,
         "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": false,
@@ -213,6 +218,9 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
         "scaleEaseParam.easeTypeInt": 22,
         "scaleEaseParam.endValueF.max": 5.0,
         "scaleEaseParam.endValueF.min": 5.0,
@@ -229,8 +237,8 @@
         "scaleEaseParam.isReturnToOrigin": false,
         "scaleEaseParam.isScaleEase": true,
         "scaleEaseParam.maxTime": 0.49000000953674316,
-        "scaleEaseParam.returnEaseTypeInt": 0,
-        "scaleEaseParam.returnMaxTime": 0.0,
+        "scaleEaseParam.returnEaseTypeInt": 21,
+        "scaleEaseParam.returnMaxTime": 0.23000000417232513,
         "selectedTexturePath": "Resources/EngineTexture/Particle/circle.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
@@ -238,6 +246,7 @@
         "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": true,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

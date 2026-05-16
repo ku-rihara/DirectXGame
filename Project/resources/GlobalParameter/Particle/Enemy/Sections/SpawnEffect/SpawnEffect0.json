@@ -41,6 +41,7 @@
         ],
         "ColorEaseParam.isEase": false,
         "ColorEaseParam.maxTime": 1.0,
+        "Cyl.axisInt": 0,
         "Cyl.bottomColor": [
             1.0,
             1.0,
@@ -81,7 +82,7 @@
         "Particle Count": 1,
         "Position Base": [
             0.0,
-            -0.5,
+            7.099999904632568,
             0.0
         ],
         "Position Max": [
@@ -202,6 +203,11 @@
         "emissiveIntensity": 1.0,
         "emitPositionMode": 2,
         "emitShape": 0,
+        "goalPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "isAlphaNoMove": false,
         "isBillboard": false,
         "isFloatVelocity": false,
@@ -214,6 +220,9 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 2,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
         "scaleEaseParam.backRatio": 0.0,
         "scaleEaseParam.easeTypeInt": 22,
         "scaleEaseParam.endValueF.max": 1.0,
@@ -230,7 +239,7 @@
         ],
         "scaleEaseParam.isReturnToOrigin": false,
         "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.27000001072883606,
+        "scaleEaseParam.maxTime": 0.41999998688697815,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
         "scaleEaseParam.startValueF": 1.0,
@@ -246,6 +255,7 @@
         "targetApplyR": false,
         "timeMode": 1,
         "useDistortion": false,
+        "useGoalPosition": false,
         "useModel": false
     }
 }

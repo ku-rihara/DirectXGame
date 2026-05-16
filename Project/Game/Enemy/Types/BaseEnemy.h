@@ -302,6 +302,7 @@ public:
     /// ========================================================================================
     const bool& GetIsDeath() const { return isDeath_; }
     const bool& GetIsDeathPending() const { return isDeathPending_; }
+    bool IsInDeathBehavior() const;
     const Type& GetType() const { return type_; }
     const Parameter& GetParameter() const { return parameter_; }
     int32_t GetGroupId() const { return groupId_; }

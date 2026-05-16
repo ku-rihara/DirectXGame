@@ -3,6 +3,7 @@
 
 using namespace KetaEngine;
 #include <thread>
+#include <immintrin.h>
 
 std::chrono::steady_clock::time_point Frame::reference_ = std::chrono::steady_clock::now();
 std::chrono::steady_clock::time_point Frame::lastTime_  = std::chrono::steady_clock::now();
@@ -62,8 +63,9 @@ void Frame::FixFPS() {
             std::this_thread::sleep_for(std::chrono::microseconds(500));
         }
         // 残りはビジーループで微調整（精度優先）
+        // yield()はスケジューラにスレッド移動の口実を与えるため_mm_pause()を使用
         while (std::chrono::steady_clock::now() - reference_ < kTargetTime) {
-            std::this_thread::yield(); // 他のスレッドに実行権を譲る
+            _mm_pause();
         }
     }
 
