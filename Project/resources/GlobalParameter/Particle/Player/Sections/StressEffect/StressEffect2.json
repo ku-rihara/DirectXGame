@@ -207,7 +207,7 @@
             0.0
         ],
         "isAlphaNoMove": true,
-        "isBillboard": true,
+        "isBillboard": false,
         "isFloatVelocity": false,
         "isRotateForDirection": false,
         "isScalerScale": false,
@@ -218,6 +218,9 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
+        "rotateForDirectionX": true,
+        "rotateForDirectionY": true,
+        "rotateForDirectionZ": true,
         "scaleEaseParam.easeTypeInt": 22,
         "scaleEaseParam.endValueF.max": 5.0,
         "scaleEaseParam.endValueF.min": 2.0,
