@@ -308,12 +308,19 @@ void ParticleSection::LoadData() {
     globalParameter_->SyncParamForGroup(groupName_);
     sectionParam_->AdaptParameters(globalParameter_, groupName_);
 
-    // ロード後、保存されていた形状を再生成・再適用する
-    if (sectionParam_->IsUseModel()) {
-        CreateModelParticle(sectionParam_->GetModelFilePath(), sectionParam_->GetMaxParticleNum());
-    } else {
+    // グループが存在しない場合のみ形状を再生成する
+    bool groupExists = (ParticleManager::GetInstance()->particleGroups_.find(groupName_) != ParticleManager::GetInstance()->particleGroups_.end());
+    if (!groupExists) {
+        if (sectionParam_->IsUseModel()) {
+            CreateModelParticle(sectionParam_->GetModelFilePath(), sectionParam_->GetMaxParticleNum());
+        } else {
+            auto primitiveType = static_cast<PrimitiveType>(sectionParam_->GetPrimitiveTypeInt());
+            ChangePrimitive(primitiveType);
+        }
+    }
+    // シリンダーパラメータはグループの有無に関わらず常に適用する
+    if (!sectionParam_->IsUseModel()) {
         auto primitiveType = static_cast<PrimitiveType>(sectionParam_->GetPrimitiveTypeInt());
-        ChangePrimitive(primitiveType);
         if (primitiveType == PrimitiveType::Cylinder) {
             RebuildCylinder(sectionParam_->GetCylinderParams());
         }
