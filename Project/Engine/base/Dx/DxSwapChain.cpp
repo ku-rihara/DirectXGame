@@ -5,12 +5,24 @@ using namespace KetaEngine;
 #include "Base/WinApp.h"
 #include <cassert>
 
+// Tearingサポートフラグ
+static bool g_TearingSupported = false;
+
 void DxSwapChain::Init(
     Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory,
     Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue,
     WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight) {
 
     commandQueue_ = commandQueue;
+
+    // Tearingサポートの確認
+    Microsoft::WRL::ComPtr<IDXGIFactory5> factory5;
+    if (SUCCEEDED(dxgiFactory.As(&factory5))) {
+        BOOL allowTearing = FALSE;
+        if (SUCCEEDED(factory5->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(allowTearing))) && allowTearing) {
+            g_TearingSupported = true;
+        }
+    }
 
     // スワップチェーン設定
     desc_.Width            = backBufferWidth;
@@ -20,6 +32,8 @@ void DxSwapChain::Init(
     desc_.BufferUsage      = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     desc_.BufferCount      = 2;
     desc_.SwapEffect       = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+    // Tearing許可と同時にFRAME_LATENCY_WAITABLE_OBJECTフラグをセットして遅延を制御できるようにする
+    desc_.Flags            = DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT | (g_TearingSupported ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0);
 
     // スワップチェーン作成
     hr_ = dxgiFactory->CreateSwapChainForHwnd(
@@ -30,6 +44,13 @@ void DxSwapChain::Init(
         nullptr,
         reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
     assert(SUCCEEDED(hr_));
+
+    // 最大フレーム遅延を1に設定
+    swapChain_->SetMaximumFrameLatency(1);
+    waitableObject_ = swapChain_->GetFrameLatencyWaitableObject();
+
+    // Alt+Enterの無効化
+    dxgiFactory->MakeWindowAssociation(winApp->GetHwnd(), DXGI_MWA_NO_ALT_ENTER);
 
     resourceStates_[0] = D3D12_RESOURCE_STATE_PRESENT;
     resourceStates_[1] = D3D12_RESOURCE_STATE_PRESENT;
@@ -54,7 +75,15 @@ void DxSwapChain::CreateRenderTargetViews(RtvManager* rtvManager) {
 }
 
 void DxSwapChain::Present() {
-    swapChain_->Present(1, 0);
+    if (waitableObject_) {
+        // 次のフレームを描画して良いタイミングまで待機
+        WaitForSingleObject(waitableObject_, INFINITE);
+    }
+
+    UINT presentFlags = g_TearingSupported ? DXGI_PRESENT_ALLOW_TEARING : 0;
+    // VSyncをオフ (0) にして Tearing を許可
+    swapChain_->Present(0, presentFlags);
+
     // Present後、現在のバックバッファはPRESENT状態になる
     UpdateResourceState(GetCurrentBackBufferIndex(), D3D12_RESOURCE_STATE_PRESENT);
 }
@@ -124,6 +153,11 @@ void DxSwapChain::Finalize() {
     }
     if (swapChain_) {
         swapChain_.Reset();
+    }
+    
+    if (waitableObject_) {
+        CloseHandle(waitableObject_);
+        waitableObject_ = nullptr;
     }
 
     commandQueue_.Reset();

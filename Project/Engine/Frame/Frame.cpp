@@ -48,7 +48,6 @@ float Frame::DeltaTimeRate() {
 
 void Frame::FixFPS() {
     // VSync(60Hz)との競合を避けるため、CPU側は少し早めの65FPSをターゲットにする
-    // これにより、Present(1, 0)が呼ばれる前に必ずCPU処理が終わっている状態を作る
     const std::chrono::microseconds kTargetTime(uint64_t(1000000.0f / 65.0f));
 
     // 現在時刻を取得
@@ -58,19 +57,17 @@ void Frame::FixFPS() {
 
     // ターゲット時間に達していない場合
     if (elapsed < kTargetTime) {
-        // 余裕がある場合のみスリープ（OSのタイマー解像度の影響を最小限にする）
+        // 余裕がある場合のみスリープ
         if (kTargetTime - elapsed > std::chrono::microseconds(1000)) {
             std::this_thread::sleep_for(std::chrono::microseconds(500));
         }
-        // 残りはビジーループで微調整（精度優先）
-        // yield()はスケジューラにスレッド移動の口実を与えるため_mm_pause()を使用
+        // 残りはビジーループで微調整
         while (std::chrono::steady_clock::now() - reference_ < kTargetTime) {
             _mm_pause();
         }
     }
 
-    // 次のフレームの基準を「今」に更新（遅れを取り戻しようとしない）
-    // これがVsync環境で最も安定する
+    // 次のフレームの基準を今に更新
     reference_ = std::chrono::steady_clock::now();
 }
 

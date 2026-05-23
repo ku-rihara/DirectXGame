@@ -332,17 +332,8 @@ void Object3DAnimation::Draw(const ViewProjection& viewProjection) {
     // WVPデータ更新
     UpdateWVPData(viewProjection);
 
-    // スキニング
-    CSPipelineManager::GetInstance()->PreDraw(CSPipelineType::Skinning, DirectXCommon::GetInstance()->GetCommandList());
-    CSSkinning();
-
-    // アニメーション描画
-    PipelineManager::GetInstance()->PreDraw(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList());
-    PipelineManager::GetInstance()->PreBlendSet(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList(), blendMode);
+    // アニメーション描画 (パイプライン設定は外部で行う)
     model_->DrawAnimation(wvpResource_, *shadowMap_, material_.get(), skinCluster_);
-
-    // 通常パイプラインに戻す
-    PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, DirectXCommon::GetInstance()->GetCommandList());
 }
 
 ///=====================================================================

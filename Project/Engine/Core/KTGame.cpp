@@ -94,6 +94,10 @@ void KTGame::Draw() {
 void KTGame::DrawShadow() {
     const ViewProjection& viewProjection = pSceneManager_->GetScene()->GetViewProjection();
 
+    // スキニング
+    // 影描画の前に頂点データを最新にする必要があるためここで実行する
+    AnimationRegistry::GetInstance()->SkinningAll();
+
     // 影描画前処理
     ShadowMap::GetInstance()->PreDraw();
     // 影描画

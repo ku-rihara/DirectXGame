@@ -50,6 +50,11 @@ public:
     void DrawAll(const ViewProjection& viewProjection);
 
     /// <summary>
+    /// 全アニメーションのスキニング（Compute Shader）のみをまとめて実行する
+    /// </summary>
+    void SkinningAll();
+
+    /// <summary>
     /// 全アニメーションのシャドウを描画
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>

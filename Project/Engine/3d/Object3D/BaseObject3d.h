@@ -72,6 +72,8 @@ public:
     int32_t GetTextureIndex() const { return textureIndex_; }
     bool GetIsAutoUpdate() const { return isAutoUpdate_; }
     ModelMaterial* GetModelMaterial() const { return material_.get(); }
+    bool GetIsDraw() const { return isDraw_; }
+    BlendMode GetBlendMode() const { return blendMode; }
     //*----------------------  Setter Methods ----------------------*//
     void SetIsDraw(bool is) { isDraw_ = is; }
     void SetIsAutoUpdate(bool is) { isAutoUpdate_ = is; }

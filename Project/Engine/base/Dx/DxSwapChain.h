@@ -66,6 +66,7 @@ private:
     HRESULT hr_;
 
     std::array<D3D12_RESOURCE_STATES, 2> resourceStates_;
+    HANDLE waitableObject_ = nullptr;
 
 public:
     Microsoft::WRL::ComPtr<IDXGISwapChain4> GetSwapChain() const { return swapChain_; }

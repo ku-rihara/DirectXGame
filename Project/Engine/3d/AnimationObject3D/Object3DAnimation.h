@@ -106,6 +106,7 @@ private:
     /// <returns>補間された値</returns>
     Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
 
+public:
     void CSSkinning(); //< コンピュートシェーダーによるスキニング
 
 private:

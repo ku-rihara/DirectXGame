@@ -3,6 +3,9 @@
 
 using namespace KetaEngine;
 #include "Object3DAnimation.h"
+#include "Base/Dx/DirectXCommon.h"
+#include "Pipeline/PipelineManager.h"
+#include "Pipeline/CSPipelineManager.h"
 #include <algorithm>
 #include <imgui.h>
 
@@ -69,11 +72,36 @@ void AnimationRegistry::UpdateAll(float deltaTime) {
 }
 
 ///============================================================
+/// スキニング
+///============================================================
+void AnimationRegistry::SkinningAll() {
+    auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+    if (!commandList) return;
+
+    // まとめてComputeShaderのパイプラインを設定
+    CSPipelineManager::GetInstance()->PreDraw(CSPipelineType::Skinning, commandList);
+
+    for (Object3DAnimation* animation : animations_) {
+        // アクティブで描画対象のものだけスキニングを実行
+        if (animation != nullptr && animation->IsActive() && animation->GetIsDraw()) {
+            animation->CSSkinning();
+        }
+    }
+}
+
+///============================================================
 /// 描画
 ///============================================================
 void AnimationRegistry::DrawAll(const ViewProjection& viewProjection) {
+    auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+    if (!commandList) return;
+
+    PipelineManager::GetInstance()->PreDraw(PipelineType::SkinningObject3D, commandList);
+
     for (Object3DAnimation* animation : animations_) {
-        if (animation != nullptr && animation->IsActive()) {
+        if (animation != nullptr && animation->IsActive() && animation->GetIsDraw()) {
+            // 個別のブレンドモードを設定
+            PipelineManager::GetInstance()->PreBlendSet(PipelineType::SkinningObject3D, commandList, animation->GetBlendMode());
             animation->Draw(viewProjection);
         }
     }
