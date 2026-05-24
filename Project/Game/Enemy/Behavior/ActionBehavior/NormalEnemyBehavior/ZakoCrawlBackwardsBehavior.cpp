@@ -42,9 +42,11 @@ ZakoCrawlBackwardsBehavior::~ZakoCrawlBackwardsBehavior() {
 
 void ZakoCrawlBackwardsBehavior::Update() {
     if (pBaseEnemy_->GetHP() <= 0.0f) {
-        pBaseEnemy_->SetIsDeathPending(true);
-        pBaseEnemy_->SetIsAdaptCollision(false);
-        pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
+        if (!pBaseEnemy_->GetIsDeathPending()) {
+            pBaseEnemy_->SetIsDeathPending(true);
+            pBaseEnemy_->SetIsAdaptCollision(false);
+            pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
+        }
         return;
     }
 

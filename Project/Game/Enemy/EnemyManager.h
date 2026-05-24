@@ -19,6 +19,8 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+// Pool
+#include "utility/ObjectPool/ObjectPool.h"
 
 enum class Type;
 struct BaseEnemy::Parameter;
@@ -107,6 +109,13 @@ private:
     std::unique_ptr<EnemyDamageReactionController> damageReactionController_;
 
 private:
+    // 同時に存在しうる最大数
+    static constexpr int32_t kNormalEnemyPoolSize = 48;
+    static constexpr int32_t kStrongEnemyPoolSize = 8;
+
+    ObjectPool<NormalEnemy> normalPool_;
+    ObjectPool<StrongEnemy> strongPool_;
+
     std::vector<std::unique_ptr<BaseEnemy>> enemies_;
     std::vector<std::string> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
 

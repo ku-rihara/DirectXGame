@@ -9,6 +9,8 @@
 // Behavior
 #include "../Behavior/ActionBehavior/BaseEnemyBehavior.h"
 #include "../Behavior/DamageReactionBehavior/BaseEnemyDamageReaction.h"
+// BehaviorController
+#include "../BehaviorController/EnemyBehaviorController.h"
 // Collision
 #include "../CollisionBox/EnemyAttackCollisionBox.h"
 #include "Collider/SphereCollider.h"
@@ -119,6 +121,11 @@ public:
     void RotateInit(); //< 回転初期化
 
     /// <summary>
+    /// プールへ返却する前に呼ぶクリーンアップ
+    /// </summary>
+    void PrepareForPool();
+
+    /// <summary>
     /// スプライトUIの表示
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
@@ -227,12 +234,6 @@ private:
     /// <param name="viewProjection">ビュープロジェクション</param>
     bool IsInView(const KetaEngine::ViewProjection& viewProjection) const;
 
-    // ダメージクールタイムの更新
-    void DamageCollingUpdate(float deltaTime);
-
-    // ダメージリアクション変更処理
-    void ChangeDamageReactionByPlayerAttack(PlayerAttackCollider* attackController);
-
 private:
     void MoveToLimit();
 
@@ -255,16 +256,13 @@ private:
 
 protected:
     // flags
-    bool isDamageColling_  = false;
     bool isDeath_          = false;
     bool isDeathPending_   = false;
     bool isCollisionRope_  = false;
     bool isInAnticipation_ = false;
     bool isAttacking_      = false;
 
-    // damageInfo
-    float damageCollTime_ = 0.0f;
-    std::string lastReceivedAttackName_;
+    void ResetDamageCooling() { behaviorCtrl_.ResetDamageCooling(); }
 
 protected:
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
@@ -280,9 +278,8 @@ protected:
     ChaseAnimationState chaseAnimeState_ = ChaseAnimationState::NONE;
     bool isPreDashFinished_              = false;
 
-    /// behavior
-    std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_ = nullptr;
-    std::unique_ptr<BaseEnemyBehavior> moveBehavior_         = nullptr;
+    /// ビヘイビア管理
+    EnemyBehaviorController behaviorCtrl_;
 
     // パラメータ
     Parameter parameter_;
@@ -311,7 +308,7 @@ public:
     float GetBaseRotationY() const { return baseTransform_.rotation_.y; }
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
-    BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return damageBehavior_.get(); }
+    BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return behaviorCtrl_.GetDamageBehavior(); }
     EnemyManager* GetManager() const { return pEnemyManager_; }
     EnemyEffects* GetEnemyEffects() const { return enemyEffects_.get(); }
     EnemyAttackCollisionBox* GetAttackCollisionBox() const { return attackCollisionBox_.get(); }
@@ -340,7 +337,7 @@ public:
     void SetParameter(const Type& type, const Parameter& paramater);
     void SetBodyRotate(Vector3 rotate) { objAnimation_->transform_.rotation_ = rotate; }
     void SetBodyColor(const Vector4& color);
-    void SetIsDeath(const bool& is) { isDeath_ = is; }
+    void SetIsDeath(bool is);
     void SetGroupId(int groupId) { groupId_ = groupId; }
     void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }

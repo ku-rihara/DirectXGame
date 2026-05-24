@@ -21,6 +21,7 @@
 #include "Spawner/EnemySpawner.h"
 // imGui
 #include <imgui.h>
+#include <cassert>
 #include <cstring>
 
 ///========================================================================================
@@ -39,6 +40,18 @@ void EnemyManager::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     hpBarColorConfig_.Init();
+
+    // オブジェクトプール事前確保
+    for (int32_t i = 0; i < kNormalEnemyPoolSize; ++i) {
+        auto ne = std::make_unique<NormalEnemy>();
+        ne->SetIsAdaptCollision(false);
+        normalPool_.Release(std::move(ne));
+    }
+    for (int32_t i = 0; i < kStrongEnemyPoolSize; ++i) {
+        auto se = std::make_unique<StrongEnemy>();
+        se->SetIsAdaptCollision(false);
+        strongPool_.Release(std::move(se));
+    }
 }
 
 ///========================================================================================
@@ -50,13 +63,18 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     std::unique_ptr<BaseEnemy> enemy;
 
     if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) {
-        enemy = std::make_unique<NormalEnemy>();
-        enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+        auto ne = normalPool_.Acquire();
+        assert(ne && "NormalEnemy pool exhausted");
+        if (!ne) ne = std::make_unique<NormalEnemy>();
+        ne->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+        enemy = std::move(ne);
     } else if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)] || enemyType == "BossEnemy") {
-        auto strong = std::make_unique<StrongEnemy>();
-        strong->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
-        strong->SetStrongParameter(strongEnemyParam_);
-        enemy = std::move(strong);
+        auto se = strongPool_.Acquire();
+        assert(se && "StrongEnemy pool exhausted");
+        if (!se) se = std::make_unique<StrongEnemy>();
+        se->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        se->SetStrongParameter(strongEnemyParam_);
+        enemy = std::move(se);
     }
 
     if (!enemy) {
@@ -240,13 +258,18 @@ void EnemyManager::PreGenerateEnemy(const std::string& enemyType, const Vector3&
     std::unique_ptr<BaseEnemy> enemy;
 
     if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) {
-        enemy = std::make_unique<NormalEnemy>();
-        enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+        auto ne = normalPool_.Acquire();
+        assert(ne && "NormalEnemy pool exhausted (PreGenerate)");
+        if (!ne) ne = std::make_unique<NormalEnemy>();
+        ne->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+        enemy = std::move(ne);
     } else if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)] || enemyType == "BossEnemy") {
-        auto strong = std::make_unique<StrongEnemy>();
-        strong->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
-        strong->SetStrongParameter(strongEnemyParam_);
-        enemy = std::move(strong);
+        auto se = strongPool_.Acquire();
+        assert(se && "StrongEnemy pool exhausted (PreGenerate)");
+        if (!se) se = std::make_unique<StrongEnemy>();
+        se->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        se->SetStrongParameter(strongEnemyParam_);
+        enemy = std::move(se);
     }
 
     if (!enemy) {
@@ -317,7 +340,6 @@ bool EnemyManager::ActivateSingleWaitingEnemy(int32_t groupID) {
     }
 
     enemy->SetAnimationActive(true);
-    enemy->SetIsAdaptCollision(true);
     enemy->ChangeBehavior(std::make_unique<EnemySpawn>(enemy.get()));
 
     NormalEnemy* newMinion = nullptr;
@@ -363,6 +385,13 @@ void EnemyManager::ClearAllWaitingEnemies() {
                         ++bit;
                     }
                 }
+            }
+            // プールへ返却
+            e->PrepareForPool();
+            if (e->GetType() == BaseEnemy::Type::NORMAL) {
+                normalPool_.Release(std::unique_ptr<NormalEnemy>(static_cast<NormalEnemy*>(e.release())));
+            } else {
+                strongPool_.Release(std::unique_ptr<StrongEnemy>(static_cast<StrongEnemy*>(e.release())));
             }
         }
     }
@@ -434,6 +463,15 @@ void EnemyManager::Update() {
                             minions.end());
                     }
                 }
+            }
+
+            // プールへ返却
+            auto dying = std::move(enemies_[i]);
+            dying->PrepareForPool();
+            if (dying->GetType() == BaseEnemy::Type::NORMAL) {
+                normalPool_.Release(std::unique_ptr<NormalEnemy>(static_cast<NormalEnemy*>(dying.release())));
+            } else {
+                strongPool_.Release(std::unique_ptr<StrongEnemy>(static_cast<StrongEnemy*>(dying.release())));
             }
 
             enemies_[i] = std::move(enemies_.back());

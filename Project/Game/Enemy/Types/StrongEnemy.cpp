@@ -23,6 +23,11 @@ StrongEnemy::~StrongEnemy() {
 }
 
 void StrongEnemy::Init(const Vector3& spawnPos) {
+    // プール再利用時のために StrongEnemy 固有状態をリセット
+    isTaunting_        = false;
+    isTauntFontMoving_ = false;
+    isFleeing_         = false;
+
     BaseEnemy::Init(spawnPos);
 
     // アニメーション名の設定
@@ -46,8 +51,10 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
  
 
-    // Tauntフォントオブジェクト初期化
-    tauntFont_.reset(KetaEngine::Object3d::CreateModel("Font/IrairaDance.obj"));
+    // Tauntフォントオブジェクト
+    if (!tauntFont_) {
+        tauntFont_.reset(KetaEngine::Object3d::CreateModel("Font/IrairaDance.obj"));
+    }
     tauntFont_->transform_.Init();
     tauntFont_->transform_.translation_ = strongParam_.tauntFontOffset;
     tauntFont_->transform_.scale_       = Vector3::ZeroVector();
@@ -215,7 +222,7 @@ void StrongEnemy::StartTaunt() {
     if (isTaunting_) {
         return;
     }
-    if (dynamic_cast<EnemySpawn*>(moveBehavior_.get())) {
+    if (dynamic_cast<EnemySpawn*>(behaviorCtrl_.GetMoveBehavior())) {
         return;
     }
 
@@ -254,9 +261,8 @@ void StrongEnemy::StopTauntToWait(float waitTime) {
 }
 
 void StrongEnemy::BackToDamageRoot() {
-
-    isDamageColling_ = false;
     isFleeing_ = false;
+    ResetDamageCooling();
     // ダメージリアクションRootだけ設定して即座に逃走へ切り替える
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
     StartFlee();

@@ -12,6 +12,15 @@
 ///  初期化
 ///========================================================
 void NormalEnemy::Init(const Vector3& spawnPos) {
+    // プール再利用時のために NormalEnemy 固有状態をリセット
+    pBoss_            = nullptr;
+    spawnOffset_      = {};
+    zakoState_        = ZakoState::Spawning;
+    slotIndex_        = 0;
+    slotCount_        = 1;
+    parentBossName_.clear();
+    isInStumblePhase_ = false;
+
     BaseEnemy::Init(spawnPos);
 
     // アニメーション名を設定

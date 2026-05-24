@@ -14,7 +14,6 @@
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 // Player
-#include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/Player.h"
 // DeathTimer
@@ -36,10 +35,26 @@
 ///========================================================
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
-    // HP 
-    HPMax_    = parameter_.hpMax;
-    hp_       = HPMax_;
-    enemyUIs_ = std::make_unique<EnemyUIs>();
+    // プール再利用時のためフラグをリセット
+    isDeath_           = false;
+    isDeathPending_    = false;
+    isCollisionRope_   = false;
+    isInAnticipation_  = false;
+    isAttacking_       = false;
+    chaseAnimeState_   = ChaseAnimationState::NONE;
+    isPreDashFinished_ = false;
+    damageReactionAnimations_.clear();
+
+    behaviorCtrl_.Init(this);
+
+    // HP
+    HPMax_ = parameter_.hpMax;
+    hp_    = HPMax_;
+
+    // プール再利用時は既存オブジェクトを使い回す
+    if (!enemyUIs_) {
+        enemyUIs_ = std::make_unique<EnemyUIs>();
+    }
     enemyUIs_->Init(HPMax_);
 
     /// transform
@@ -49,13 +64,17 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     baseTransform_.scale_ = Vector3::ZeroVector();
 
     /// attack collision
-    attackCollisionBox_ = std::make_unique<EnemyAttackCollisionBox>();
+    if (!attackCollisionBox_) {
+        attackCollisionBox_ = std::make_unique<EnemyAttackCollisionBox>();
+    }
     attackCollisionBox_->Init();
     attackCollisionBox_->SetEnemy(this);
     attackCollisionBox_->SetParentTransform(&baseTransform_);
 
     // エフェクト初期化
-    enemyEffects_ = std::make_unique<EnemyEffects>();
+    if (!enemyEffects_) {
+        enemyEffects_ = std::make_unique<EnemyEffects>();
+    }
     enemyEffects_->Init(&baseTransform_);
 
     // 振る舞い初期化
@@ -63,20 +82,31 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
 }
 
 ///========================================================
+/// プール返却前クリーンアップ
+///========================================================
+void BaseEnemy::PrepareForPool() {
+    // ビヘイビアを先に破棄
+    behaviorCtrl_.Reset();
+    // 残存コールバックを念のためクリア
+    if (objAnimation_) {
+        objAnimation_->ClearAllAnimationEndCallbacks();
+    }
+    // UI を非表示にする
+    if (enemyUIs_) {
+        enemyUIs_->Hide(hp_);
+        enemyUIs_->UpdateGroupIcon({}, false);
+    }
+    // コリジョン無効化
+    SetIsAdaptCollision(false);
+}
+
+///========================================================
 /// 更新
 ///========================================================
 void BaseEnemy::Update() {
 
-    // ダメージリアクション外で移動Behavior更新
-    if (dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
-        moveBehavior_->Update();
-    }
-
-    // ダメージクールタイム更新
-    DamageCollingUpdate(KetaEngine::Frame::DeltaTimeRate());
-
-    // ダメージBehavior更新
-    damageBehavior_->Update(KetaEngine::Frame::DeltaTimeRate());
+    // ビヘイビア更新
+    behaviorCtrl_.Update(KetaEngine::Frame::DeltaTimeRate());
 
     // 攻撃コリジョン更新
     if (attackCollisionBox_) {
@@ -178,7 +208,7 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
     if (PlayerAttackCollider* attackController = dynamic_cast<PlayerAttackCollider*>(other)) {
-        ChangeDamageReactionByPlayerAttack(attackController);
+        behaviorCtrl_.OnPlayerAttackCollision(attackController);
         return;
     }
 }
@@ -204,40 +234,6 @@ void BaseEnemy::MoveToLimit() {
         baseTransform_.translation_.z,
         fieldCenter.z - radiusZ,
         fieldCenter.z + radiusZ);
-}
-
-void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerAttackCollider* attackController) {
-
-    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
-        return;
-    }
-
-    if (!attackController->GetComboAttackData()) {
-        return;
-    }
-
-    // プレイヤーの攻撃名を取得
-    std::string attackName = attackController->GetComboAttackData()->GetGroupName();
-
-    // 攻撃名が空かチェック
-    if (attackName.empty()) {
-        return;
-    }
-
-    // ダメージクーリング中
-    if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
-        return;
-    }
-
-    // ダメージが確定したことをコライダーに通知
-    attackController->NotifyDamageHit();
-
-    // Rootにし、受けたダメージの判定を行う
-    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
-
-    if (EnemyDamageReactionRoot* damageReaction = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
-        damageReaction->SelectDamageActionBehaviorByAttack(attackController);
-    }
 }
 
 bool BaseEnemy::IsInView(const KetaEngine::ViewProjection& viewProjection) const {
@@ -291,27 +287,20 @@ void BaseEnemy::TakeDamage(float damageValue) {
     }
 }
 
+void BaseEnemy::SetIsDeath(bool is) {
+    isDeath_ = is;
+    if (is) {
+        SetIsAdaptCollision(false);
+        SetAnimationActive(false);
+    }
+}
+
 std::unique_ptr<BaseEnemyBehavior> BaseEnemy::CreatePostSpawnBehavior() {
     return std::make_unique<EnemyWait>(this);
 }
 
 void BaseEnemy::StartDamageColling(float collingTime, const std::string& reactiveAttackName) {
-    isDamageColling_        = true;
-    lastReceivedAttackName_ = reactiveAttackName;
-    damageCollTime_         = collingTime;
-}
-
-void BaseEnemy::DamageCollingUpdate(float deltaTime) {
-    if (!isDamageColling_) {
-        return;
-    }
-
-    // クールタイム減算
-    damageCollTime_ -= deltaTime;
-
-    if (damageCollTime_ <= 0.0f) {
-        isDamageColling_ = false;
-    }
+    behaviorCtrl_.StartDamageColling(collingTime, reactiveAttackName);
 }
 
 void BaseEnemy::ThrustRenditionInit() {
@@ -432,24 +421,11 @@ void BaseEnemy::SetPlayer(Player* player) {
 }
 
 void BaseEnemy::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior) {
-    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
-        return;
-    }
-
-     // スポーン中のダメージリアクション時にスケールをリセットする
-    if (dynamic_cast<EnemySpawn*>(moveBehavior_.get())) {
-        ScaleReset();
-        OnSpawnCompleted();
-    }
-
-    damageBehavior_ = std::move(behavior);
+    behaviorCtrl_.ChangeDamageReactionBehavior(std::move(behavior));
 }
 
 void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
-    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
-        return;
-    }
-    moveBehavior_ = std::move(behavior);
+    behaviorCtrl_.ChangeBehavior(std::move(behavior));
 }
 
 void BaseEnemy::SetGameCamera(GameCamera* gameCamera) {
@@ -469,7 +445,7 @@ void BaseEnemy::SetKillCounter(KillCounter* killCounter) {
 }
 
 void BaseEnemy::BackToDamageRoot() {
-    isDamageColling_ = false;
+    ResetDamageCooling();
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
     ResetToWaitAnimation();
 }
@@ -490,18 +466,24 @@ void BaseEnemy::SetBodyColor(const Vector4& color) {
 void BaseEnemy::SetAnimationName(AnimationType type, const std::string& name) {
 
     if (type == AnimationType::Wait) {
-        objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(GetModelFolder() + name + ".gltf"));
-        objAnimation_->Init();
+        // プール再利用時はモデルを再生成しない
+        if (!objAnimation_) {
+            objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(GetModelFolder() + name + ".gltf"));
+            objAnimation_->Init();
+        }
         animationNames_[static_cast<size_t>(type)] = name;
         return;
     }
 
-    objAnimation_->Add(GetModelFolder() + name + ".gltf");
+    // 同スロットに既にアニメーションが登録済みなら追加ロードしない
+    if (animationNames_[static_cast<size_t>(type)].empty()) {
+        objAnimation_->Add(GetModelFolder() + name + ".gltf");
+    }
     animationNames_[static_cast<size_t>(type)] = name;
 }
 
 bool BaseEnemy::IsInDeathBehavior() const {
-    return dynamic_cast<EnemyDeath*>(damageBehavior_.get()) != nullptr;
+    return dynamic_cast<EnemyDeath*>(behaviorCtrl_.GetDamageBehavior()) != nullptr;
 }
 
 void BaseEnemy::RotateInit() {

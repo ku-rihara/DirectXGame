@@ -1,10 +1,19 @@
 #pragma once
+#include <cassert>
 #include <memory>
 #include <vector>
 
 template <typename T>
 class ObjectPool {
 public:
+    /// ゲーム開始時に capacity 個のオブジェクトを事前確保する
+    void PreAllocate(int capacity) {
+        pool_.reserve(pool_.size() + capacity);
+        for (int i = 0; i < capacity; ++i) {
+            pool_.push_back(std::make_unique<T>());
+        }
+    }
+
     // プールから取得
     std::unique_ptr<T> Acquire() {
         if (pool_.empty()) {
