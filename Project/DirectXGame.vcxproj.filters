@@ -97,6 +97,9 @@
     <Filter Include="Game\Enemy">
       <UniqueIdentifier>{8681CCDB-3370-4458-A13E-43B0996405CF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\BehaviorController">
+      <UniqueIdentifier>{B1C2D3E4-F5A6-7890-BCDE-F12345678901}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\Field">
       <UniqueIdentifier>{F2353E46-B03C-4CA5-9A5D-73125E132BE4}</UniqueIdentifier>
     </Filter>
@@ -1069,6 +1072,9 @@
     <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp">
       <Filter>Game\DeathTimer</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\BehaviorController\EnemyBehaviorController.cpp">
+      <Filter>Game\Enemy\BehaviorController</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
     </ClCompile>
@@ -1995,6 +2001,9 @@
     </ClInclude>
     <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h">
       <Filter>Game\DeathTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\BehaviorController\EnemyBehaviorController.h">
+      <Filter>Game\Enemy\BehaviorController</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>

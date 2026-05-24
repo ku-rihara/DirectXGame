@@ -133,12 +133,12 @@ public:
     void ClearRegistersForGroup(const std::string& groupName);
 
     void ResetAllRegister(); //< 全登録リセット
-    void SyncAll();          //< 全同期
-    void LoadFiles();        //< 全ファイル読み込み
+
+    void LoadFiles(); //< 全ファイル読み込み
     bool HasRegisters(const std::string& groupName) const;
 
     /// <summary>
-    /// グループの登録変数値をdates_に書き込む（push方向）
+    /// グループの登録変数値をdates_に書き込む
     /// </summary>
     void PushParamForGroup(const std::string& groupName);
 

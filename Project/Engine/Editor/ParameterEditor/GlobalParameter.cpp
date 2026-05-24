@@ -78,6 +78,7 @@ T GlobalParameter::GetValue(const std::string& groupName, const std::string& key
 //==============================================================================
 
 void GlobalParameter::SaveFile(const std::string& groupName, const std::string& folderName) {
+    PushParamForGroup(groupName); 
     auto itGroup = dates_.find(groupName);
     assert(itGroup != dates_.end());
 
@@ -361,16 +362,6 @@ void GlobalParameter::Regist(const std::string& group, const std::string& key, T
     };
 
     registerParams_[group].emplace_back(std::move(item));
-}
-
-void GlobalParameter::SyncAll() {
-
-    // 全てのグループの登録アイテムを同期
-    for (auto& [group, items] : registerParams_) {
-        for (auto& item : items) {
-            item.pushVariant();
-        }
-    }
 }
 
 bool GlobalParameter::HasRegisters(const std::string& groupName) const {

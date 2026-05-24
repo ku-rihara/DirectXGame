@@ -63,7 +63,7 @@ void KTFramework::Run() {
 
     // 低FPS検出用
     static constexpr float kSlowFrameThresholdMs = 30.0f;
-    static constexpr int   kSlowFrameLogInterval = 60; // 60フレームに1回まとめてログ
+    static constexpr int   kSlowFrameLogInterval = 60; 
     int slowFrameCount = 0;
     float slowFrameWorstMs = 0.0f;
 
@@ -111,9 +111,7 @@ void KTFramework::Run() {
 
         /// フレームの終了
         engineCore_->EndFrame();
-
-        // シーン遷移直後：GPUクロックを安定させるためウォームアップフレームを実行
-     
+   
         if (pSceneManager_->IsJustTransitioned()) {
             pSceneManager_->ClearTransitionFlag();
 
@@ -201,10 +199,7 @@ void KTFramework::Run() {
 // ========================================================
 void KTFramework::Update() {
 
-    /// グローバル変数の更新
-#if defined(_DEBUG) || defined(DEVELOPMENT)
-    GlobalParameter::GetInstance()->SyncAll();
-#endif
+
     // デバッグ処理
     Debug();
     /// ゲームシーンの毎フレーム処理
