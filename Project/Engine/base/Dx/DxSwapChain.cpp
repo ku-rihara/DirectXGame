@@ -3,7 +3,9 @@
 using namespace KetaEngine;
 #include "Base/Descriptors/RtvManager.h"
 #include "Base/WinApp.h"
+#include "Frame/Frame.h"
 #include <cassert>
+#include <chrono>
 
 // Tearingサポートフラグ
 static bool g_TearingSupported = false;
@@ -74,14 +76,21 @@ void DxSwapChain::CreateRenderTargetViews(RtvManager* rtvManager) {
     rtvManager->Create(rtvManager->Allocate(), resources_[1].Get(), &rtvDesc_);
 }
 
-void DxSwapChain::Present() {
-    if (waitableObject_) {
-        // 次のフレームを描画して良いタイミングまで待機
-        WaitForSingleObject(waitableObject_, INFINITE);
+void DxSwapChain::WaitForNextFrame() {
+    if (!waitableObject_) {
+        return;
     }
+    // フレーム開始時にFLWOを待機する。
 
+    auto t0 = std::chrono::steady_clock::now();
+    WaitForSingleObjectEx(waitableObject_, INFINITE, FALSE);
+    float waitMs = std::chrono::duration<float, std::milli>(std::chrono::steady_clock::now() - t0).count();
+    Frame::SetLastFlwoWaitMs(waitMs);
+}
+
+void DxSwapChain::Present() {
+    // Present
     UINT presentFlags = g_TearingSupported ? DXGI_PRESENT_ALLOW_TEARING : 0;
-    // VSyncをオフ (0) にして Tearing を許可
     swapChain_->Present(0, presentFlags);
 
     // Present後、現在のバックバッファはPRESENT状態になる

@@ -18,8 +18,12 @@ using namespace KetaEngine;
 #include "input/Input.h"
 // global parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
+// log
+#include "utility/Log/Log.h"
 
 #include <cassert>
+#include <chrono>
+#include <format>
 
 // シングルトンインスタンスの取得
 SceneManager* SceneManager::GetInstance() {
@@ -63,21 +67,26 @@ void SceneManager::Update() {
         ChangeScene("RESULT");
     }
 
-    // シーンの更新
-    if (scene_) {
-        scene_->Update();
-    }
+    using clock = std::chrono::steady_clock;
+    using ms = std::chrono::duration<float, std::milli>;
 
-    // 登録されているオブジェクトを更新
+    auto t0 = clock::now();
+    if (scene_) { scene_->Update(); }
+    lastSceneUpdateMs_ = ms(clock::now() - t0).count();
+
+    t0 = clock::now();
     Object3DRegistry::GetInstance()->UpdateAll();
     AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
+    lastRegistryMs_ = ms(clock::now() - t0).count();
 
-    // パーティクル更新
+    t0 = clock::now();
     ParticleManager::GetInstance()->Update();
     GPUParticleManager::GetInstance()->Update();
+    lastParticleMs_ = ms(clock::now() - t0).count();
 
-    // コリジョン更新
+    t0 = clock::now();
     collisionManager_->Update();
+    lastCollisionMs_ = ms(clock::now() - t0).count();
 }
 
 void SceneManager::Debug() {
@@ -124,6 +133,10 @@ void SceneManager::ApplyPendingSceneChange() {
     // シーン工場が設定されていない場合はエラー
     assert(sceneFactory_);
 
+    auto transitionStart = std::chrono::steady_clock::now();
+    KetaEngine::Log::Info(std::format("[SceneTransition] START: {} -> {}",
+        scene_ ? "prev" : "none", pendingSceneName_));
+
     // 現在のシーンを終了
     if (scene_) {
         scene_.reset();
@@ -135,14 +148,18 @@ void SceneManager::ApplyPendingSceneChange() {
     }
 
     // GPUが現在実行中のコマンドを完了するのを待つ
+    auto t0 = std::chrono::steady_clock::now();
     DirectXCommon::GetInstance()->GetDxCommand()->WaitForGPU();
+    float waitGPUMs = std::chrono::duration<float, std::milli>(std::chrono::steady_clock::now() - t0).count();
 
     // 登録されているオブジェクトの破棄
     ClearAllRegistries();
 
     // グローバル変数の登録全解除
     GlobalParameter::GetInstance()->ResetAllRegister();
+    t0 = std::chrono::steady_clock::now();
     GlobalParameter::GetInstance()->LoadFiles();
+    float loadFilesMs = std::chrono::duration<float, std::milli>(std::chrono::steady_clock::now() - t0).count();
 
     // パーティクルリセット
     ParticleManager::GetInstance()->ResetAllParticles();
@@ -153,11 +170,26 @@ void SceneManager::ApplyPendingSceneChange() {
     collisionManager_->Init();
 
     // 次のシーンを生成
+    auto sceneInitStart = std::chrono::steady_clock::now();
     scene_ = sceneFactory_->CreateScene(pendingSceneName_);
     scene_->Init();
+    float sceneInitMs = std::chrono::duration<float, std::milli>(
+        std::chrono::steady_clock::now() - sceneInitStart).count();
+
+    int32_t particleGroups = GPUParticleManager::GetInstance()->GetTotalGroupCount();
+
+    // シーン遷移後にタイマーをリセット。遷移中の長時間ブロックにより
+    Frame::Init();
+
+    float totalMs = std::chrono::duration<float, std::milli>(
+        std::chrono::steady_clock::now() - transitionStart).count();
+    KetaEngine::Log::Info(std::format(
+        "[SceneTransition] END: {} | waitGPU={:.1f}ms loadFiles={:.1f}ms sceneInit={:.1f}ms total={:.1f}ms particles={}groups",
+        pendingSceneName_, waitGPUMs, loadFilesMs, sceneInitMs, totalMs, particleGroups));
 
     // シーン名をクリア
     pendingSceneName_.clear();
+    justTransitioned_ = true;
 }
 
 void SceneManager::ClearAllRegistries() {

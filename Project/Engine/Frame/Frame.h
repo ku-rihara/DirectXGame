@@ -19,6 +19,13 @@ public:
     static void FixFPS(); //< FPSを60に固定
     static void ResetDeltaTime(); //< デルタタイムをリセット
 
+    // フレーム計測値 (毎フレーム更新)
+    static float GetLastFixFPSWaitMs() { return lastFixFPSWaitMs_; }
+    static float GetLastFlwoWaitMs() { return lastFlwoWaitMs_; }
+    static float GetLastGpuWaitMs() { return lastGpuWaitMs_; }
+    static void SetLastFlwoWaitMs(float ms) { lastFlwoWaitMs_ = ms; }
+    static void SetLastGpuWaitMs(float ms) { lastGpuWaitMs_ = ms; }
+
     /// <summary>
     /// 秒からフレームに変換
     /// </summary>
@@ -35,6 +42,10 @@ private:
     static float deltaTime_;
     static float deltaTimeRate_;
     static float timeScale_;
+
+    static float lastFixFPSWaitMs_;
+    static float lastFlwoWaitMs_;
+    static float lastGpuWaitMs_;
 
     static const float kFPS; //< フレームレート固定値
 

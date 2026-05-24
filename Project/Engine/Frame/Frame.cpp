@@ -10,6 +10,9 @@ std::chrono::steady_clock::time_point Frame::lastTime_  = std::chrono::steady_cl
 float Frame::deltaTime_                                 = 0.0f;
 float Frame::deltaTimeRate_                             = 0.0f;
 float Frame::timeScale_                                 = 1.0f;
+float Frame::lastFixFPSWaitMs_                          = 0.0f;
+float Frame::lastFlwoWaitMs_                            = 0.0f;
+float Frame::lastGpuWaitMs_                             = 0.0f;
 const float Frame::kFPS                                 = 60.0f;
 
 void Frame::Init() {
@@ -26,7 +29,7 @@ void Frame::Update() {
     auto currentTime                       = std::chrono::steady_clock::now();
     std::chrono::duration<float> frameTime = currentTime - lastTime_;
     
-    // シーン遷移やフリーズによる極端な値を制限（1/10秒以上はロード中とみなす）
+    // シーン遷移やフリーズによる極端な値を制限
     float frameTimeCount = frameTime.count();
     if (frameTimeCount > 0.1f) {
         deltaTime_ = 1.0f / kFPS;
@@ -51,9 +54,9 @@ void Frame::FixFPS() {
     const std::chrono::microseconds kTargetTime(uint64_t(1000000.0f / 65.0f));
 
     // 現在時刻を取得
-    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point waitStart = std::chrono::steady_clock::now();
     // 前回基準からの経過時間を取得
-    std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
+    std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(waitStart - reference_);
 
     // ターゲット時間に達していない場合
     if (elapsed < kTargetTime) {
@@ -69,6 +72,9 @@ void Frame::FixFPS() {
 
     // 次のフレームの基準を今に更新
     reference_ = std::chrono::steady_clock::now();
+
+    // FixFPS待機時間を記録
+    lastFixFPSWaitMs_ = std::chrono::duration<float, std::milli>(reference_ - waitStart).count();
 }
 
 /// <summary>

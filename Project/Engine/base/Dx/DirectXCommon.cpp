@@ -5,6 +5,7 @@ using namespace KetaEngine;
 #include "Base/Descriptors/SrvManager.h"
 #include "Base/WinApp.h"
 #include "Frame/Frame.h"
+#include "utility/Log/Log.h"
 // dx
 #include "DxCommand.h"
 #include "DxCompiler.h"
@@ -12,8 +13,10 @@ using namespace KetaEngine;
 #include "DxDevice.h"
 #include "DxRenderTarget.h"
 #include "DxSwapChain.h"
-#include"DxResourceBarrier.h"
+#include "DxResourceBarrier.h"
 #include <cassert>
+#include <chrono>
+#include <format>
 
 #pragma comment(lib, "dxguid.lib")
 
@@ -68,7 +71,7 @@ void DirectXCommon::InitRenderingResources() {
     dxSwapChain_->CreateRenderTargetViews(rtvManager_);
 
     // SwapChainのバックバッファを登録
-     for (UINT i = 0; i < 2; ++i) { 
+     for (UINT i = 0; i < 2; ++i) {
         resourceBarrier_->RegisterResource(
             dxSwapChain_->GetSwapChainResource(i).Get(),
             D3D12_RESOURCE_STATE_PRESENT);
@@ -78,6 +81,66 @@ void DirectXCommon::InitRenderingResources() {
     dxRenderTarget_->SetUseClasses(
         depthBuffer_.get(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(),resourceBarrier_.get());
     dxRenderTarget_->Init(dxDevice_->GetDevice(),backBufferWidth_, backBufferHeight_);
+
+    // GPUタイムスタンプクエリ初期化
+    {
+        D3D12_QUERY_HEAP_DESC heapDesc{};
+        heapDesc.Type     = D3D12_QUERY_HEAP_TYPE_TIMESTAMP;
+        heapDesc.Count    = kTimestampPassCount * 2; // begin+end per pass
+        heapDesc.NodeMask = 0;
+        dxDevice_->GetDevice()->CreateQueryHeap(&heapDesc, IID_PPV_ARGS(&timestampHeap_));
+
+        dxCommand_->GetCommandQueue()->GetTimestampFrequency(&gpuTickFrequency_);
+
+        D3D12_HEAP_PROPERTIES readbackProps{};
+        readbackProps.Type = D3D12_HEAP_TYPE_READBACK;
+        D3D12_RESOURCE_DESC resDesc{};
+        resDesc.Dimension          = D3D12_RESOURCE_DIMENSION_BUFFER;
+        resDesc.Width              = sizeof(UINT64) * kTimestampPassCount * 2;
+        resDesc.Height             = 1;
+        resDesc.DepthOrArraySize   = 1;
+        resDesc.MipLevels          = 1;
+        resDesc.SampleDesc.Count   = 1;
+        resDesc.Layout             = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+        resDesc.Flags              = D3D12_RESOURCE_FLAG_NONE;
+        dxDevice_->GetDevice()->CreateCommittedResource(
+            &readbackProps, D3D12_HEAP_FLAG_NONE, &resDesc,
+            D3D12_RESOURCE_STATE_COPY_DEST, nullptr,
+            IID_PPV_ARGS(&timestampReadback_));
+        timestampReadback_->Map(0, nullptr, reinterpret_cast<void**>(&timestampMappedData_));
+    }
+}
+
+void DirectXCommon::BeginTimestamp(int passIndex) {
+    if (!timestampHeap_) return;
+    GetCommandList()->EndQuery(timestampHeap_.Get(),
+        D3D12_QUERY_TYPE_TIMESTAMP, passIndex * 2);
+}
+
+void DirectXCommon::EndTimestamp(int passIndex) {
+    if (!timestampHeap_) return;
+    GetCommandList()->EndQuery(timestampHeap_.Get(),
+        D3D12_QUERY_TYPE_TIMESTAMP, passIndex * 2 + 1);
+}
+
+void DirectXCommon::ResolveTimestamps() {
+    if (!timestampHeap_ || !timestampReadback_) return;
+    GetCommandList()->ResolveQueryData(
+        timestampHeap_.Get(), D3D12_QUERY_TYPE_TIMESTAMP,
+        0, kTimestampPassCount * 2,
+        timestampReadback_.Get(), 0);
+}
+
+float DirectXCommon::GetTimestampMs(int passIndex) const {
+    if (!timestampMappedData_ || gpuTickFrequency_ == 0) return 0.0f;
+    UINT64 begin = timestampMappedData_[passIndex * 2];
+    UINT64 end   = timestampMappedData_[passIndex * 2 + 1];
+    if (end <= begin) return 0.0f;
+    return static_cast<float>(end - begin) * 1000.0f / static_cast<float>(gpuTickFrequency_);
+}
+
+void DirectXCommon::WaitForNextFrame() {
+    dxSwapChain_->WaitForNextFrame();
 }
 
 void DirectXCommon::PreDraw() {
@@ -99,7 +162,12 @@ void DirectXCommon::PostDraw() {
     dxSwapChain_->Present();
 
     // コマンドの終了待ち
+    auto gpuWaitStart = std::chrono::steady_clock::now();
     dxCommand_->WaitForGPU();
+    float gpuWaitMs = std::chrono::duration<float, std::milli>(
+        std::chrono::steady_clock::now() - gpuWaitStart).count();
+    Frame::SetLastGpuWaitMs(gpuWaitMs);
+
     dxCommand_->ResetCommand();
 }
 

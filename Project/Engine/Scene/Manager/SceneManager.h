@@ -39,12 +39,24 @@ private:
 
     /// ChangeScene() で予約されたシーン名（次フレーム冒頭で適用）
     std::string pendingSceneName_;
+    bool  justTransitioned_    = false;
+    float lastSceneUpdateMs_   = 0.0f;
+    float lastRegistryMs_      = 0.0f;
+    float lastParticleMs_      = 0.0f;
+    float lastCollisionMs_     = 0.0f;
 
 public:
     ///===========================================================
     /// getter method
     ///===========================================================
     BaseScene* GetScene() const { return scene_.get(); }
+    bool IsJustTransitioned() const { return justTransitioned_; }
+    void ClearTransitionFlag() { justTransitioned_ = false; }
+
+    float GetLastSceneUpdateMs()  const { return lastSceneUpdateMs_; }
+    float GetLastRegistryMs()     const { return lastRegistryMs_; }
+    float GetLastParticleMs()     const { return lastParticleMs_; }
+    float GetLastCollisionMs()    const { return lastCollisionMs_; }
 
     ///===========================================================
     /// setter method

@@ -37,6 +37,10 @@ public:
 
         ParticleEmit* emitSphereData = nullptr;
         PerView* perViewData          = nullptr;
+
+        // emit=0 が続いたフレーム数。一定以上でDispatch/Drawをスキップする。
+        // パーティクルのライフタイムが最大でも数秒なので2秒(120f)で安全にスキップ可能。
+        int32_t noEmitFrames = 0;
     };
 
 public:
@@ -111,7 +115,12 @@ public:
     void SetEmitterSphere(const std::string& name, const ParticleEmit& emitter);
     void SetViewProjection(const ViewProjection* view);
 
-    void ResetAllParticles() { particleGroups_.clear(); }
+    void ResetAllParticles() { particleGroups_.clear(); frameCounter_ = 0; }
+    int32_t GetTotalGroupCount() const { return static_cast<int32_t>(particleGroups_.size()); }
+    int32_t GetActiveGroupCount() const;
+
+private:
+    int32_t frameCounter_ = 0;
 };
 
 }; // KetaEngine

@@ -59,7 +59,7 @@ void GPUParticlePlayer::Play(const std::string& particleName, const std::string&
             effectData_.reset();
         }
 
-        InitEffect(categoryName, particleName);
+        InitEffect(particleName, categoryName);
     }
 
     // エフェクトを再生

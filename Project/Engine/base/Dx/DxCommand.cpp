@@ -13,6 +13,7 @@ void DxCommand::Init(Microsoft::WRL::ComPtr<ID3D12Device> device) {
 void DxCommand::CreateCommandQueue(Microsoft::WRL::ComPtr<ID3D12Device> device) {
     commandQueue_ = nullptr;
     D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
+    commandQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_HIGH;
     hr_ = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
     assert(SUCCEEDED(hr_));
 }

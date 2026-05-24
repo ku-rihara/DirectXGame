@@ -12,7 +12,10 @@ using namespace KetaEngine;
 #include "3D/Primitive/PrimitiveCylinder.h"
 #include "3D/Primitive/PrimitivePlane.h"
 #include "3D/Primitive/PrimitiveRing.h"
+// log
+#include "utility/Log/Log.h"
 #include <cassert>
+#include <format>
 
 GPUParticleManager* GPUParticleManager::GetInstance() {
     static GPUParticleManager instance;
@@ -46,6 +49,8 @@ void GPUParticleManager::CreateParticleGroup(
 
     // マテリアル作成
     CreateMaterialResource(name);
+
+    Log::Info(std::format("[GPUParticle] CreateGroup '{}' (total={})", name, particleGroups_.size()));
 }
 
 void GPUParticleManager::CreatePrimitiveParticle(
@@ -86,6 +91,9 @@ void GPUParticleManager::CreatePrimitiveParticle(
 
     // マテリアル作成
     CreateMaterialResource(name);
+
+    Log::Info(std::format("[GPUParticle] CreatePrimGroup '{}' type={} max={} (total={})",
+        name, static_cast<int>(type), maxCount, particleGroups_.size()));
 }
 
 void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
@@ -127,7 +135,25 @@ void GPUParticleManager::Emit(const std::string& name) {
 }
 
 void GPUParticleManager::Update() {
+    static constexpr int32_t kNoEmitSkipFrames = 120;
+
+    frameCounter_++;
+    int32_t activeGroups  = 0;
+    int32_t skippedGroups = 0;
+
     for (auto& [groupName, group] : particleGroups_) {
+        bool isEmitting = group.emitSphereData && group.emitSphereData->emit != 0;
+        if (isEmitting) {
+            group.noEmitFrames = 0;
+        } else {
+            group.noEmitFrames++;
+        }
+
+        if (group.noEmitFrames > kNoEmitSkipFrames) {
+            skippedGroups++;
+            continue;
+        }
+        activeGroups++;
 
         // ViewProjectionデータ更新
         if (viewProjection_ && group.perViewData) {
@@ -139,10 +165,26 @@ void GPUParticleManager::Update() {
 
         // Particle更新
         group.resourceData->UpdatePerFrameData(Frame::DeltaTime());
-        group.material.UpdateUVAnimation(Frame::DeltaTime());   
+        group.material.UpdateUVAnimation(Frame::DeltaTime());
         DispatchEmit(group);
         DispatchUpdate(group);
     }
+
+    // 最初の10フレームと60フレームごとにパーティクル統計をログ出力
+    int32_t total = activeGroups + skippedGroups;
+    if (total > 0 && (frameCounter_ <= 10 || frameCounter_ % 60 == 0)) {
+        Log::Info(std::format("[GPUParticle] frame={} dispatch={}/{} skipped={}",
+            frameCounter_, activeGroups, total, skippedGroups));
+    }
+}
+
+int32_t GPUParticleManager::GetActiveGroupCount() const {
+    static constexpr int32_t kNoEmitSkipFrames = 120;
+    int32_t count = 0;
+    for (const auto& [name, group] : particleGroups_) {
+        if (group.noEmitFrames <= kNoEmitSkipFrames) count++;
+    }
+    return count;
 }
 
 void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
@@ -176,8 +218,14 @@ void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
     PipelineManager* pipe                  = PipelineManager::GetInstance();
     viewProjection;
 
+    static constexpr int32_t kNoEmitSkipFrames = 120;
+
     for (auto& [groupName, group] : particleGroups_) {
         if (!group.resourceData) {
+            continue;
+        }
+
+        if (group.noEmitFrames > kNoEmitSkipFrames) {
             continue;
         }
 

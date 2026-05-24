@@ -238,6 +238,7 @@ void ModelAnimation::CreateInfluenceResource(SkinCluster& skinCluster, ModelData
     uint32_t srvIndex                     = srvManager->Allocate();
     skinCluster.influenceSrvHandle.first  = srvManager->GetCPUDescriptorHandle(srvIndex);
     skinCluster.influenceSrvHandle.second = srvManager->GetGPUDescriptorHandle(srvIndex);
+
     srvManager->CreateForStructuredBuffer(
         srvIndex,
         skinCluster.influenceResource.Get(),

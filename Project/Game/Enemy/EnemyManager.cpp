@@ -377,13 +377,15 @@ void EnemyManager::Update() {
 
     for (size_t i = 0; i < enemies_.size();) {
 
+#if defined(_DEBUG) || defined(DEVELOPMENT)
+
         if (enemies_[i]->GetType() == BaseEnemy::Type::NORMAL) {
             enemies_[i]->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
         } else if (enemies_[i]->GetType() == BaseEnemy::Type::STRONG) {
             enemies_[i]->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
-            // StrongParameterも毎フレーム同期
             static_cast<StrongEnemy*>(enemies_[i].get())->SetStrongParameter(strongEnemyParam_);
         }
+#endif
 
         enemies_[i]->Update();
 
