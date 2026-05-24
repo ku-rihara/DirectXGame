@@ -65,6 +65,15 @@ public:
         ID3D12Resource* resource);
 
     /// <summary>
+    /// 複数リソースのUAVバリアを一括設定
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
+    /// <param name="resources">リソースのリスト</param>
+    void UAVBarrierBatch(
+        ID3D12GraphicsCommandList* commandList,
+        const std::vector<ID3D12Resource*>& resources);
+
+    /// <summary>
     /// エイリアシングバリアを設定
     /// </summary>
     /// <param name="commandList">コマンドリスト</param>

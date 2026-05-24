@@ -86,7 +86,15 @@ private:
 
     std::array<BaseEnemy::Parameter, 2> parameters_;
     NormalEnemy::NormalParameter normalEnemyParam_;
-    StrongEnemy::StrongParameter strongEnemyParam_; 
+    StrongEnemy::StrongParameter strongEnemyParam_;
+
+#if defined(_DEBUG) || defined(DEVELOPMENT)
+    // パラメータ変更検知用キャッシュ（変化した時だけ全敵にSetParameterを適用）
+    std::array<BaseEnemy::Parameter, 2> cachedParameters_;
+    NormalEnemy::NormalParameter cachedNormalEnemyParam_;
+    StrongEnemy::StrongParameter cachedStrongEnemyParam_;
+    bool parametersDirty_ = true;
+#endif
 
     Player* pPlayer_;
     GameCamera* pGameCamera_;

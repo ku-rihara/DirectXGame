@@ -303,8 +303,7 @@ void Object3DAnimation::TransitionFinish() {
 }
 
 void Object3DAnimation::CSSkinning() {
-    auto commandList           = DirectXCommon::GetInstance()->GetCommandList();
-    DxResourceBarrier* barrier = DirectXCommon::GetInstance()->GetResourceBarrier();
+    auto commandList = DirectXCommon::GetInstance()->GetCommandList();
 
     // Compute Shader用リソース設定
     commandList->SetComputeRootDescriptorTable(0, skinCluster_.paletteSrvHandle.second);
@@ -316,9 +315,6 @@ void Object3DAnimation::CSSkinning() {
     // スキニング実行
     int numVertices = static_cast<int>(model_->GetModelData().vertices.size());
     CSPipelineManager::GetInstance()->DisPatch(CSPipelineType::Skinning, commandList, numVertices);
-
-    // UAV barrier
-    barrier->UAVBarrier(commandList, skinCluster_.outputVertexResource.Get());
 }
 
 ///============================================================
@@ -332,7 +328,7 @@ void Object3DAnimation::Draw(const ViewProjection& viewProjection) {
     // WVPデータ更新
     UpdateWVPData(viewProjection);
 
-    // アニメーション描画 (パイプライン設定は外部で行う)
+    // アニメーション描画
     model_->DrawAnimation(wvpResource_, *shadowMap_, material_.get(), skinCluster_);
 }
 
@@ -347,7 +343,7 @@ void Object3DAnimation::DrawShadow(const ViewProjection& viewProjection) {
     // WVPデータ更新
     UpdateWVPData(viewProjection);
 
-    // スキン済み頂点バッファでシャドウマップ描画（アニメーションに追従した影）
+    // スキン済み頂点バッファでシャドウマップ描画
     model_->DrawForShadowMapSkinned(wvpResource_, *shadowMap_, skinCluster_.outputVertexBufferView);
 }
 

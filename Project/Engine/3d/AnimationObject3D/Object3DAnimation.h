@@ -201,6 +201,8 @@ public:
     void SetLoop(bool loop) { isLoop_ = loop; }
     void SetIsActive(bool active) { isActive_ = active; isDraw_ = active; }
     bool IsActive() const { return isActive_; }
+
+    ID3D12Resource* GetOutputVertexResource() const { return skinCluster_.outputVertexResource.Get(); }
     
     /// <summary>
     /// 特定のアニメーション終了時のコールバックを設定

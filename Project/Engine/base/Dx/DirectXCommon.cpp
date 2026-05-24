@@ -162,11 +162,7 @@ void DirectXCommon::PostDraw() {
     dxSwapChain_->Present();
 
     // コマンドの終了待ち
-    auto gpuWaitStart = std::chrono::steady_clock::now();
     dxCommand_->WaitForGPU();
-    float gpuWaitMs = std::chrono::duration<float, std::milli>(
-        std::chrono::steady_clock::now() - gpuWaitStart).count();
-    Frame::SetLastGpuWaitMs(gpuWaitMs);
 
     dxCommand_->ResetCommand();
 }

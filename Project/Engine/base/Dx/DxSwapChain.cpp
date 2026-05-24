@@ -3,9 +3,7 @@
 using namespace KetaEngine;
 #include "Base/Descriptors/RtvManager.h"
 #include "Base/WinApp.h"
-#include "Frame/Frame.h"
 #include <cassert>
-#include <chrono>
 
 // Tearingサポートフラグ
 static bool g_TearingSupported = false;
@@ -82,10 +80,7 @@ void DxSwapChain::WaitForNextFrame() {
     }
     // フレーム開始時にFLWOを待機する。
 
-    auto t0 = std::chrono::steady_clock::now();
     WaitForSingleObjectEx(waitableObject_, INFINITE, FALSE);
-    float waitMs = std::chrono::duration<float, std::milli>(std::chrono::steady_clock::now() - t0).count();
-    Frame::SetLastFlwoWaitMs(waitMs);
 }
 
 void DxSwapChain::Present() {

@@ -94,6 +94,26 @@ void DxResourceBarrier::UAVBarrier(
 }
 
 ///==========================================================
+/// UAVバリア（一括）
+///==========================================================
+void DxResourceBarrier::UAVBarrierBatch(
+    ID3D12GraphicsCommandList* commandList,
+    const std::vector<ID3D12Resource*>& resources) {
+
+    assert(commandList != nullptr);
+    if (resources.empty()) return;
+
+    std::vector<D3D12_RESOURCE_BARRIER> barriers;
+    barriers.reserve(resources.size());
+    for (ID3D12Resource* resource : resources) {
+        assert(resource != nullptr);
+        barriers.push_back(CreateUAVBarrier(resource));
+    }
+
+    commandList->ResourceBarrier(static_cast<UINT>(barriers.size()), barriers.data());
+}
+
+///==========================================================
 /// エイリアシングバリア
 ///==========================================================
 void DxResourceBarrier::AliasingBarrier(

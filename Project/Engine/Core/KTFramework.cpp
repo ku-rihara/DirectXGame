@@ -161,12 +161,9 @@ void KTFramework::Run() {
                 auto* dxLog = DirectXCommon::GetInstance();
                 auto* sm = pSceneManager_;
                 Log::Warn(std::format(
-                    "[SLOW FRAME] total={:.1f}ms | fixfps={:.1f}ms flwo={:.1f}ms work={:.1f}ms gpu={:.1f}ms | fps~={:.0f} | particles={}/{} | shadow={:.1f}ms main={:.1f}ms postfx={:.1f}ms | cpu: scene={:.1f}ms reg={:.1f}ms ptcl={:.1f}ms col={:.1f}ms",
+                    "[SLOW FRAME] total={:.1f}ms | work={:.1f}ms | fps~={:.0f} | particles={}/{} | shadow={:.1f}ms main={:.1f}ms postfx={:.1f}ms | cpu: scene={:.1f}ms reg={:.1f}ms ptcl={:.1f}ms col={:.1f}ms",
                     totalMs,
-                    Frame::GetLastFixFPSWaitMs(),
-                    Frame::GetLastFlwoWaitMs(),
                     workMs,
-                    Frame::GetLastGpuWaitMs(),
                     totalMs > 0.0f ? 1000.0f / totalMs : 0.0f,
                     pm->GetActiveGroupCount(),
                     pm->GetTotalGroupCount(),
@@ -254,20 +251,6 @@ void KTFramework::DisplayFPS() {
     ImGui::Text("FPS: %.1f", io.Framerate);
     ImGui::PopStyleColor();
     ImGui::Separator();
-    // フレーム内訳
-    float flwo = Frame::GetLastFlwoWaitMs();
-    float gpu  = Frame::GetLastGpuWaitMs();
-    float fix  = Frame::GetLastFixFPSWaitMs();
-
-    if (flwo > 20.0f) {
-        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 80, 80, 255));
-        ImGui::Text("FLWO: %.1fms !", flwo);
-        ImGui::PopStyleColor();
-    } else {
-        ImGui::Text("FLWO: %.1fms", flwo);
-    }
-    ImGui::Text("GPU wait: %.1fms", gpu);
-    ImGui::Text("FixFPS: %.1fms", fix);
     ImGui::Separator();
     auto* pm = GPUParticleManager::GetInstance();
     ImGui::Text("Particles: %d/%d groups", pm->GetActiveGroupCount(), pm->GetTotalGroupCount());

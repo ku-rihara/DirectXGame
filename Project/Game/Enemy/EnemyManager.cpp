@@ -21,6 +21,7 @@
 #include "Spawner/EnemySpawner.h"
 // imGui
 #include <imgui.h>
+#include <cstring>
 
 ///========================================================================================
 ///  初期化
@@ -375,17 +376,30 @@ void EnemyManager::Update() {
 
     UpdateTauntState();
 
-    for (size_t i = 0; i < enemies_.size();) {
-
 #if defined(_DEBUG) || defined(DEVELOPMENT)
+    // パラメータが変わった時だけ全敵に一括適用（毎フレーム全敵にコピーするのを防ぐ）
+    bool paramsChanged = parametersDirty_ ||
+        memcmp(parameters_.data(), cachedParameters_.data(), sizeof(parameters_)) != 0 ||
+        memcmp(&normalEnemyParam_, &cachedNormalEnemyParam_, sizeof(normalEnemyParam_)) != 0 ||
+        memcmp(&strongEnemyParam_, &cachedStrongEnemyParam_, sizeof(strongEnemyParam_)) != 0;
 
-        if (enemies_[i]->GetType() == BaseEnemy::Type::NORMAL) {
-            enemies_[i]->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
-        } else if (enemies_[i]->GetType() == BaseEnemy::Type::STRONG) {
-            enemies_[i]->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
-            static_cast<StrongEnemy*>(enemies_[i].get())->SetStrongParameter(strongEnemyParam_);
+    if (paramsChanged) {
+        cachedParameters_       = parameters_;
+        cachedNormalEnemyParam_ = normalEnemyParam_;
+        cachedStrongEnemyParam_ = strongEnemyParam_;
+        parametersDirty_        = false;
+
+        for (auto& enemy : enemies_) {
+            BaseEnemy::Type t = enemy->GetType();
+            enemy->SetParameter(t, parameters_[static_cast<size_t>(t)]);
+            if (t == BaseEnemy::Type::STRONG) {
+                static_cast<StrongEnemy*>(enemy.get())->SetStrongParameter(strongEnemyParam_);
+            }
         }
+    }
 #endif
+
+    for (size_t i = 0; i < enemies_.size();) {
 
         enemies_[i]->Update();
 
