@@ -16,6 +16,7 @@ public:
     static void Update(); //< フレーム更新
     static float DeltaTime(); //< デルタタイムを取得
     static float DeltaTimeRate(); //< タイムスケール適用後のデルタタイムを取得
+    static void FixFPS();         //< FPSを60に固定
     static void ResetDeltaTime(); //< デルタタイムをリセット
 
     /// <summary>
@@ -29,17 +30,19 @@ public:
     static float FrameToTime(int32_t frame);
 
 private:
-    static std::chrono::steady_clock::time_point lastTime_;
+    static std::chrono::steady_clock::time_point reference_;
+    static std::chrono::high_resolution_clock::time_point lastTime_;
     static float deltaTime_;
     static float deltaTimeRate_;
     static float timeScale_;
 
-    static const float kFPS; //< フレームレート固定値
+    // フレームレート固定値
+    static const float kFPS; 
 
 public:
     static float GetFPS() { return kFPS; }
     static float GetTimeScale();
-    float GetTimeScaleInstance() const {return timeScale_;}
+    float GetTimeScaleInstance() const { return timeScale_; }
 
     static void SetTimeScale(float scale);
 };

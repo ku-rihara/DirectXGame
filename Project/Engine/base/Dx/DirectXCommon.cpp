@@ -32,6 +32,7 @@ void DirectXCommon::Init(WinApp* win, int32_t backBufferWidth, int32_t backBuffe
 
 void DirectXCommon::Init(WinApp* win, int32_t windowWidth, int32_t windowHeight, int32_t renderWidth, int32_t renderHeight) {
 
+    // 引数の保存
     winApp_           = win;
     windowWidth_      = windowWidth;
     windowHeight_     = windowHeight;
@@ -49,6 +50,7 @@ void DirectXCommon::Init(WinApp* win, int32_t windowWidth, int32_t windowHeight,
 
 void DirectXCommon::InitDxClasses() {
 
+    // DirectXクラス群のインスタンス生成
     dxDevice_       = std::make_unique<DxDevice>();
     dxCommand_      = std::make_unique<DxCommand>();
     dxSwapChain_    = std::make_unique<DxSwapChain>();
@@ -112,13 +114,17 @@ void DirectXCommon::InitRenderingResources() {
 }
 
 void DirectXCommon::BeginTimestamp(int passIndex) {
-    if (!timestampHeap_) return;
+    if (!timestampHeap_) {
+        return;
+    }
     GetCommandList()->EndQuery(timestampHeap_.Get(),
         D3D12_QUERY_TYPE_TIMESTAMP, passIndex * 2);
 }
 
 void DirectXCommon::EndTimestamp(int passIndex) {
-    if (!timestampHeap_) return;
+    if (!timestampHeap_) {
+        return;
+    }
     GetCommandList()->EndQuery(timestampHeap_.Get(),
         D3D12_QUERY_TYPE_TIMESTAMP, passIndex * 2 + 1);
 }
