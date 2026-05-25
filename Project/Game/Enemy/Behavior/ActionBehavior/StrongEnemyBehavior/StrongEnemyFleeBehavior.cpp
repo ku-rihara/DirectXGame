@@ -1,4 +1,4 @@
-#include "StrongEnemyFleeBehavior.h"
+﻿#include "StrongEnemyFleeBehavior.h"
 
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/Types/StrongEnemy.h"
@@ -12,7 +12,7 @@ StrongEnemyFleeBehavior::StrongEnemyFleeBehavior(StrongEnemy* enemy, float start
     : StrongEnemyBehaviorBase("StrongEnemyFleeBehavior", enemy), startDelayTimer_(startDelay) {
 
     if (startDelayTimer_ <= 0.0f) {
-        pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
+        pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
     }
 
     // 焦りエフェクトの発生
@@ -28,7 +28,7 @@ void StrongEnemyFleeBehavior::Update() {
         startDelayTimer_ -= dt;
         pBaseEnemy_->DirectionToPlayer();
         if (startDelayTimer_ <= 0.0f) {
-            pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
+            pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
         }
         return;
     }
@@ -40,7 +40,7 @@ void StrongEnemyFleeBehavior::Update() {
     }
 
     // ── プレイヤーから遠ざかる方向を計算 ─────────────────────
-    Vector3 toPlayer        = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
+    Vector3 toPlayer        = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetBaseInfo()->GetPlayer()->GetWorldPosition());
     toPlayer.y              = 0.0f;
     const float toPlayerLen = toPlayer.Length();
     if (toPlayerLen < 0.001f) {
@@ -53,8 +53,8 @@ void StrongEnemyFleeBehavior::Update() {
     Vector3 pos = pBaseEnemy_->GetWorldPosition();
     pos.y       = 0.0f;
 
-    const float rx = Field::baseScale_.x - pBaseEnemy_->GetParameter().baseScale_.x;
-    const float rz = Field::baseScale_.z - pBaseEnemy_->GetParameter().baseScale_.z;
+    const float rx = Field::baseScale_.x - pBaseEnemy_->GetBaseInfo()->GetParameter().baseScale_.x;
+    const float rz = Field::baseScale_.z - pBaseEnemy_->GetBaseInfo()->GetParameter().baseScale_.z;
 
     // 壁との余裕距離（この距離以下になったら壁に近いと判定）
     const float wallMargin = param.fleeDistance * 0.5f;

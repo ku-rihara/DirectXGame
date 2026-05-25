@@ -1,4 +1,4 @@
-#include "EnemyManager.h"
+﻿#include "EnemyManager.h"
 // UIs
 #include "UIs/GroupIcon/GroupIcon.h"
 // Math
@@ -66,13 +66,13 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
         auto ne = normalPool_.Acquire();
         assert(ne && "NormalEnemy pool exhausted");
         if (!ne) ne = std::make_unique<NormalEnemy>();
-        ne->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+        ne->GetBaseInfo()->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
         enemy = std::move(ne);
     } else if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)] || enemyType == "BossEnemy") {
         auto se = strongPool_.Acquire();
         assert(se && "StrongEnemy pool exhausted");
         if (!se) se = std::make_unique<StrongEnemy>();
-        se->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        se->GetBaseInfo()->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
         se->SetStrongParameter(strongEnemyParam_);
         enemy = std::move(se);
     }
@@ -81,23 +81,24 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
         return;
     }
 
-    enemy->SetPlayer(pPlayer_);
-    enemy->SetGameCamera(pGameCamera_);
-    enemy->SetManager(this);
-    enemy->SetCombo(pCombo_);
-    enemy->SetKillCounter(pKillCounter_);
+    enemy->RefreshCollision();
+    enemy->GetBaseInfo()->SetPlayer(pPlayer_);
+    enemy->GetBaseInfo()->SetGameCamera(pGameCamera_);
+    enemy->GetBaseInfo()->SetManager(this);
+    enemy->GetBaseInfo()->SetCombo(pCombo_);
+    enemy->GetBaseInfo()->SetKillCounter(pKillCounter_);
     enemy->SetGroupId(groupID);
     enemy->Init(position);
     enemy->SetHPBarColorConfig(&hpBarColorConfig_);
     UpdateAvailableAnimationsForEditor(enemy.get());
 
-    if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
+    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
         NormalEnemy* ne = static_cast<NormalEnemy*>(enemy.get());
         ne->SetSpawnOffset(localOffset);
         ne->SetNormalParameter(normalEnemyParam_);
     }
 
-    if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
+    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
         NormalEnemy* ne = static_cast<NormalEnemy*>(enemy.get());
         ne->SetOnDamageTakenCallback([this, ne]() {
             if (pDeathTimer_ && ne->GetZakoState() == NormalEnemy::ZakoState::CrawlBackwards) {
@@ -106,12 +107,12 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
         });
     }
 
-    if (enemy->GetType() == BaseEnemy::Type::STRONG && !parentBossName.empty()) {
+    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG && !parentBossName.empty()) {
         bossByName_[parentBossName] = enemy.get();
     }
 
     NormalEnemy* newMinion = nullptr;
-    if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
+    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
         newMinion = static_cast<NormalEnemy*>(enemy.get());
     }
 
@@ -126,7 +127,7 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, const std::string& parentBossName) {
 
     for (auto& e : enemies_) {
-        if (e->GetGroupId() == groupID && e->GetType() == BaseEnemy::Type::STRONG) {
+        if (e->GetGroupId() == groupID && e->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG) {
             if (minionsByBoss_.find(e.get()) == minionsByBoss_.end()) {
                 minionsByBoss_[e.get()]  = {};
                 bossGroupIndex_[e.get()] = nextBossGroupIndex_++;
@@ -152,7 +153,7 @@ void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, c
 
     if (!targetBoss) {
         for (auto& enemy : enemies_) {
-            if (enemy->GetGroupId() == groupID && enemy->GetType() == BaseEnemy::Type::STRONG) {
+            if (enemy->GetGroupId() == groupID && enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG) {
                 targetBoss = enemy.get();
                 break;
             }
@@ -261,13 +262,13 @@ void EnemyManager::PreGenerateEnemy(const std::string& enemyType, const Vector3&
         auto ne = normalPool_.Acquire();
         assert(ne && "NormalEnemy pool exhausted (PreGenerate)");
         if (!ne) ne = std::make_unique<NormalEnemy>();
-        ne->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+        ne->GetBaseInfo()->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
         enemy = std::move(ne);
     } else if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)] || enemyType == "BossEnemy") {
         auto se = strongPool_.Acquire();
         assert(se && "StrongEnemy pool exhausted (PreGenerate)");
         if (!se) se = std::make_unique<StrongEnemy>();
-        se->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        se->GetBaseInfo()->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
         se->SetStrongParameter(strongEnemyParam_);
         enemy = std::move(se);
     }
@@ -276,23 +277,24 @@ void EnemyManager::PreGenerateEnemy(const std::string& enemyType, const Vector3&
         return;
     }
 
-    enemy->SetPlayer(pPlayer_);
-    enemy->SetGameCamera(pGameCamera_);
-    enemy->SetManager(this);
-    enemy->SetCombo(pCombo_);
-    enemy->SetKillCounter(pKillCounter_);
+    enemy->RefreshCollision();
+    enemy->GetBaseInfo()->SetPlayer(pPlayer_);
+    enemy->GetBaseInfo()->SetGameCamera(pGameCamera_);
+    enemy->GetBaseInfo()->SetManager(this);
+    enemy->GetBaseInfo()->SetCombo(pCombo_);
+    enemy->GetBaseInfo()->SetKillCounter(pKillCounter_);
     enemy->SetGroupId(groupID);
     enemy->Init(position);
     enemy->SetHPBarColorConfig(&hpBarColorConfig_);
     UpdateAvailableAnimationsForEditor(enemy.get());
 
-    if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
+    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
         NormalEnemy* ne = static_cast<NormalEnemy*>(enemy.get());
         ne->SetSpawnOffset(localOffset);
         ne->SetNormalParameter(normalEnemyParam_);
     }
 
-    if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
+    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
         NormalEnemy* ne2 = static_cast<NormalEnemy*>(enemy.get());
         ne2->SetOnDamageTakenCallback([this, ne2]() {
             if (pDeathTimer_ && ne2->GetZakoState() == NormalEnemy::ZakoState::CrawlBackwards) {
@@ -301,16 +303,16 @@ void EnemyManager::PreGenerateEnemy(const std::string& enemyType, const Vector3&
         });
     }
 
-    if (enemy->GetType() == BaseEnemy::Type::STRONG && !parentBossName.empty()) {
+    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG && !parentBossName.empty()) {
         bossByName_[parentBossName] = enemy.get();
     }
 
-    if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
+    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
         static_cast<NormalEnemy*>(enemy.get())->SetParentBossName(parentBossName);
     }
 
     enemy->SetScale(Vector3::ZeroVector());
-    enemy->SetAnimationActive(false);
+    enemy->GetAnimator()->SetAnimationActive(false);
     enemy->SetIsAdaptCollision(false);
 
     waitingEnemies_[groupID].push_back(std::move(enemy));
@@ -327,25 +329,26 @@ bool EnemyManager::ActivateSingleWaitingEnemy(int32_t groupID) {
 
     auto& enemy = it->second.front();
 
-    if (auto* anim = enemy->GetAnimationObject()) {
+    if (auto* anim = enemy->GetAnimator()->GetAnimationObject()) {
         anim->ClearAllAnimationEndCallbacks();
     }
 
     // Refresh parameters so EnemySpawn reads the correct baseScale_
-    if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
-        enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
-    } else if (enemy->GetType() == BaseEnemy::Type::STRONG) {
-        enemy->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
+        enemy->GetBaseInfo()->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+    } else if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG) {
+        enemy->GetBaseInfo()->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
         static_cast<StrongEnemy*>(enemy.get())->SetStrongParameter(strongEnemyParam_);
     }
+    enemy->RefreshCollision();
 
-    enemy->SetAnimationActive(true);
+    enemy->GetAnimator()->SetAnimationActive(true);
     enemy->ChangeBehavior(std::make_unique<EnemySpawn>(enemy.get()));
 
     NormalEnemy* newMinion = nullptr;
     std::string bossName   = "";
 
-    if (enemy->GetType() == BaseEnemy::Type::NORMAL) {
+    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
         newMinion = static_cast<NormalEnemy*>(enemy.get());
         bossName  = newMinion->GetParentBossName();
     }
@@ -353,7 +356,7 @@ bool EnemyManager::ActivateSingleWaitingEnemy(int32_t groupID) {
     enemies_.push_back(std::move(enemy));
 
     BaseEnemy* activated = enemies_.back().get();
-    if (activated->GetType() == BaseEnemy::Type::STRONG) {
+    if (activated->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG) {
         for (auto& [name, ptr] : bossByName_) {
             if (ptr == activated) {
                 bossByName_[name] = activated;
@@ -377,7 +380,7 @@ bool EnemyManager::ActivateSingleWaitingEnemy(int32_t groupID) {
 void EnemyManager::ClearAllWaitingEnemies() {
     for (auto& [groupID, waitingList] : waitingEnemies_) {
         for (auto& e : waitingList) {
-            if (e->GetType() == BaseEnemy::Type::STRONG) {
+            if (e->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG) {
                 for (auto bit = bossByName_.begin(); bit != bossByName_.end();) {
                     if (bit->second == e.get()) {
                         bit = bossByName_.erase(bit);
@@ -388,7 +391,7 @@ void EnemyManager::ClearAllWaitingEnemies() {
             }
             // プールへ返却
             e->PrepareForPool();
-            if (e->GetType() == BaseEnemy::Type::NORMAL) {
+            if (e->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
                 normalPool_.Release(std::unique_ptr<NormalEnemy>(static_cast<NormalEnemy*>(e.release())));
             } else {
                 strongPool_.Release(std::unique_ptr<StrongEnemy>(static_cast<StrongEnemy*>(e.release())));
@@ -419,8 +422,9 @@ void EnemyManager::Update() {
         parametersDirty_        = false;
 
         for (auto& enemy : enemies_) {
-            BaseEnemy::Type t = enemy->GetType();
-            enemy->SetParameter(t, parameters_[static_cast<size_t>(t)]);
+            BaseEnemy::Type t = enemy->GetBaseInfo()->GetType();
+            enemy->GetBaseInfo()->SetParameter(t, parameters_[static_cast<size_t>(t)]);
+            enemy->RefreshCollision();
             if (t == BaseEnemy::Type::STRONG) {
                 static_cast<StrongEnemy*>(enemy.get())->SetStrongParameter(strongEnemyParam_);
             }
@@ -435,7 +439,7 @@ void EnemyManager::Update() {
         if (enemies_[i]->GetIsDeath()) {
             int32_t groupID = enemies_[i]->GetGroupId();
 
-            if (enemies_[i]->GetType() == BaseEnemy::Type::STRONG) {
+            if (enemies_[i]->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG) {
                 OnBossKilled(enemies_[i].get());
                 if (pEnemySpawner_) {
                     pEnemySpawner_->OnStrongEnemyDestroyed(groupID);
@@ -451,7 +455,7 @@ void EnemyManager::Update() {
                 pEnemySpawner_->OnEnemyDestroyed(groupID);
             }
 
-            if (enemies_[i]->GetType() == BaseEnemy::Type::NORMAL) {
+            if (enemies_[i]->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
                 NormalEnemy* dying = static_cast<NormalEnemy*>(enemies_[i].get());
                 BaseEnemy* boss    = dying->GetBoss();
                 if (boss) {
@@ -468,7 +472,7 @@ void EnemyManager::Update() {
             // プールへ返却
             auto dying = std::move(enemies_[i]);
             dying->PrepareForPool();
-            if (dying->GetType() == BaseEnemy::Type::NORMAL) {
+            if (dying->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
                 normalPool_.Release(std::unique_ptr<NormalEnemy>(static_cast<NormalEnemy*>(dying.release())));
             } else {
                 strongPool_.Release(std::unique_ptr<StrongEnemy>(static_cast<StrongEnemy*>(dying.release())));
@@ -498,14 +502,14 @@ void EnemyManager::UIUpdate(const KetaEngine::ViewProjection& viewProjection) {
 
         //  StrongEnemyがカメラとNormalEnemyのUIの間に重なるか
         bool idDraw         = false;
-        bool isNormalTarget = enemies_[i]->GetType() == BaseEnemy::Type::NORMAL;
+        bool isNormalTarget = enemies_[i]->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL;
         Vector3 targetNdc   = ScreenTransformWithDepth(enemyPos, viewProjection);
         if (isNormalTarget && targetNdc.z > 0.0f && targetNdc.z <= 1.0f) {
             for (size_t j = 0; j < enemies_.size(); ++j) {
                 if (i == j || enemies_[j]->GetIsDeath()) {
                     continue;
                 }
-                if (enemies_[j]->GetType() != BaseEnemy::Type::STRONG) {
+                if (enemies_[j]->GetBaseInfo()->GetType() != BaseEnemy::Type::STRONG) {
                     continue;
                 }
                 Vector3 occNdc = ScreenTransformWithDepth(enemies_[j]->GetWorldPosition(), viewProjection);
@@ -713,7 +717,7 @@ void EnemyManager::UpdateAvailableAnimationsForEditor(BaseEnemy* enemy) {
         return;
     }
 
-    const auto& animeNames = enemy->GetDamageReactionAnimationNames();
+    const auto& animeNames = enemy->GetAnimator()->GetDamageReactionAnimationNames();
     if (!animeNames.empty()) {
         damageReactionController_->SetAvailableAnimations(animeNames);
     }

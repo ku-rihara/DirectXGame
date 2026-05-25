@@ -1,4 +1,4 @@
-/// behavior
+﻿/// behavior
 #include "EnemyDamageReactionRoot.h"
 #include "EnemyDamageReactionNormal.h"
 #include "EnemyDamageReactionSlammed.h"
@@ -24,7 +24,7 @@
 EnemyDamageReactionRoot::EnemyDamageReactionRoot(BaseEnemy* boss)
     : BaseEnemyDamageReaction("EnemyDamageReactionRoot", boss) {
 
-    pReactionController_ = pBaseEnemy_->GetManager()->GetDamageReactionController();
+    pReactionController_ = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
 }
 
 EnemyDamageReactionRoot::~EnemyDamageReactionRoot() {
@@ -76,7 +76,7 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
 
     if (!reactionData) {
         // 設定されていない攻撃: デフォルトアニメーション + ノックバックのみ
-        int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+        int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
         pBaseEnemy_->StartDamageColling(pReactionController_->GetDefaultDamageCoolTime(enemyType), attackName);
         pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
         if (pBaseEnemy_->GetHP() <= 0.0f) {

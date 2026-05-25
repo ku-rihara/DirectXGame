@@ -6,7 +6,7 @@
 StrongEnemyTauntBehavior::StrongEnemyTauntBehavior(StrongEnemy* enemy)
     : StrongEnemyBehaviorBase("StrongEnemyTauntBehavior", enemy) {
 
-    pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Taunt, true);
+    pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Taunt, true);
 }
 
 

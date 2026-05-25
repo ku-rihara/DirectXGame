@@ -9,7 +9,7 @@ ZakoTauntBehavior::ZakoTauntBehavior(NormalEnemy* enemy)
     , pNormalEnemy_(enemy) {
 
     // 煽りアニメーション再生
-    pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Taunt, true);
+    pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Taunt, true);
     // 煽りエフェクト開始
     pBaseEnemy_->GetEnemyEffects()->Emit("TauntZako");
 }

@@ -1,4 +1,4 @@
-#include "ZakoCrawlBackwardsBehavior.h"
+﻿#include "ZakoCrawlBackwardsBehavior.h"
 
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 #include "Enemy/Types/BaseEnemy.h"
@@ -23,7 +23,7 @@ ZakoCrawlBackwardsBehavior::ZakoCrawlBackwardsBehavior(NormalEnemy* enemy, bool 
         pNormalEnemy_->SetIsInStumblePhase(true);
 
         const std::string stumbleName = "StumbleBackwards";
-        pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(stumbleName, [this]() {
+        pBaseEnemy_->GetAnimator()->GetAnimationObject()->SetAnimationEndCallback(stumbleName, [this]() {
             phase_ = Phase::CRAWL;
             pNormalEnemy_->SetIsInStumblePhase(false);
             pNormalEnemy_->PlayNormalAnimation(NormalEnemy::NormalAnimationType::CrawlBackwards, true);
@@ -33,7 +33,7 @@ ZakoCrawlBackwardsBehavior::ZakoCrawlBackwardsBehavior(NormalEnemy* enemy, bool 
 
 ZakoCrawlBackwardsBehavior::~ZakoCrawlBackwardsBehavior() {
     // Behavior破棄時にコールバックが残っていれば削除
-    if (auto* anim = pBaseEnemy_->GetAnimationObject()) {
+    if (auto* anim = pBaseEnemy_->GetAnimator()->GetAnimationObject()) {
         anim->RemoveAnimationEndCallback("StumbleBackwards");
     }
     // Stumbleフェーズフラグを必ずクリア
@@ -53,14 +53,14 @@ void ZakoCrawlBackwardsBehavior::Update() {
     float deltaTime = KetaEngine::Frame::DeltaTimeRate();
 
     // プレイヤー方向を計算
-    Vector3 toPlayer = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
+    Vector3 toPlayer = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetBaseInfo()->GetPlayer()->GetWorldPosition());
     toPlayer.y       = 0.0f;
     toPlayer.Normalize();
 
     // プレイヤーを向いたまま後退するため、正面はプレイヤー方向
     pBaseEnemy_->SetRotationY(LerpShortAngle(
         pBaseEnemy_->GetBaseRotationY(),
-        CalcFaceAngleY(pBaseEnemy_->GetWorldPosition(), pBaseEnemy_->GetPlayer()->GetWorldPosition(), true),
+        CalcFaceAngleY(pBaseEnemy_->GetWorldPosition(), pBaseEnemy_->GetBaseInfo()->GetPlayer()->GetWorldPosition(), true),
         0.8f));
 
     // 焦りエフェクトの発生
@@ -74,7 +74,7 @@ void ZakoCrawlBackwardsBehavior::Update() {
 
     // CRAWLフェーズ：アニメーションが途切れていたら再生し直す
     const std::string crawlName = "CrawlBackwards";
-    if (pBaseEnemy_->GetAnimationObject()->GetCurrentAnimationName() != crawlName) {
+    if (pBaseEnemy_->GetAnimator()->GetAnimationObject()->GetCurrentAnimationName() != crawlName) {
         pNormalEnemy_->PlayNormalAnimation(NormalEnemy::NormalAnimationType::CrawlBackwards, true);
     }
 

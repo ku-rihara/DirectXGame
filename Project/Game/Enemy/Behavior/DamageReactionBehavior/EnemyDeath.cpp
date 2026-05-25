@@ -1,4 +1,4 @@
-/// behavior
+﻿/// behavior
 #include "EnemyDeath.h"
 /// obj
 #include "Enemy/Types/BaseEnemy.h"
@@ -15,7 +15,7 @@ EnemyDeath::EnemyDeath(BaseEnemy* boss)
 }
 
 void EnemyDeath::AngleCaluclation() {
-    Vector3 playerPos = pBaseEnemy_->GetPlayer()->GetWorldPosition();
+    Vector3 playerPos = pBaseEnemy_->GetBaseInfo()->GetPlayer()->GetWorldPosition();
     direction_        = pBaseEnemy_->GetDirectionToTarget(playerPos);
     direction_.y      = 0.0f;
     direction_        = direction_.Normalize();
@@ -42,10 +42,10 @@ void EnemyDeath::Update([[maybe_unused]] float deltaTime) {
     case Step::ANIMATION:
         if (!deathAnimStarted_) {
             deathAnimStarted_ = true;
-            const std::string& deathAnim = pBaseEnemy_->GetAnimationName(BaseEnemy::AnimationType::Death);
+            const std::string& deathAnim = pBaseEnemy_->GetAnimator()->GetAnimationName(BaseEnemy::AnimationType::Death);
             if (!deathAnim.empty()) {
-                pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Death, false);
-                pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(deathAnim, [this]() {
+                pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Death, false);
+                pBaseEnemy_->GetAnimator()->GetAnimationObject()->SetAnimationEndCallback(deathAnim, [this]() {
                     deathAnimFinished_ = true;
                 });
             } else {

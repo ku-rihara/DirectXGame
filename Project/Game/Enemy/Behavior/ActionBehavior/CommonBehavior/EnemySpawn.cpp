@@ -1,4 +1,4 @@
-
+﻿
 /// behavior
 #include "EnemySpawn.h"
 #include "EnemyWait.h"
@@ -18,11 +18,11 @@ EnemySpawn::EnemySpawn(BaseEnemy* boss)
     /// spawn
     spawnEasing_.Init("SpawnScaling.json");
     spawnEasing_.SetAdaptValue(&tempEnemyScale_);
-    spawnEasing_.SetEndValue(pBaseEnemy_->GetParameter().baseScale_);
+    spawnEasing_.SetEndValue(pBaseEnemy_->GetBaseInfo()->GetParameter().baseScale_);
     spawnEasing_.Reset();
 
  
-    pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(pBaseEnemy_->GetAnimationName(BaseEnemy::AnimationType::Spawn), [this]() {
+    pBaseEnemy_->GetAnimator()->GetAnimationObject()->SetAnimationEndCallback(pBaseEnemy_->GetAnimator()->GetAnimationName(BaseEnemy::AnimationType::Spawn), [this]() {
         step_ = Step::ChangeNextBehavior; // 次のステップ
     });
 }
@@ -42,7 +42,7 @@ void EnemySpawn::Update() {
         ///------------------------------------------------------------------
     case EnemySpawn::Step::EFFECTEMIT:
         pBaseEnemy_->SpawnRenditionInit();
-        pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Spawn,false); // スポーンアニメーション再生
+        pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Spawn,false); // スポーンアニメーション再生
 
         step_ = Step::SPAWN; // 次のステップ
         break;

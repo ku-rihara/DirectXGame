@@ -289,6 +289,9 @@
     <Filter Include="Game\Enemy\Spawner">
       <UniqueIdentifier>{A2905447-6A3D-4B59-B4D2-A0C5BE95768A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\Component">
+      <UniqueIdentifier>{F1A2B3C4-D5E6-7890-ABCD-EF1234567890}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\Enemy\Types">
       <UniqueIdentifier>{DA84E922-8FA9-4760-9A36-7CA92DDD24B5}</UniqueIdentifier>
     </Filter>
@@ -1119,6 +1122,12 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp">
       <Filter>Game\Enemy\Spawner</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Component\EnemyAnimator.cpp">
+      <Filter>Game\Enemy\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Component\EnemyInitializer.cpp">
+      <Filter>Game\Enemy\Component</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Types\BaseEnemy.cpp">
       <Filter>Game\Enemy\Types</Filter>
@@ -2049,6 +2058,15 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Types\BaseEnemy.h">
       <Filter>Game\Enemy\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Component\EnemyAnimator.h">
+      <Filter>Game\Enemy\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Component\EnemyBaseInfo.h">
+      <Filter>Game\Enemy\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Component\EnemyInitializer.h">
+      <Filter>Game\Enemy\Component</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Types\NormalEnemy.h">
       <Filter>Game\Enemy\Types</Filter>

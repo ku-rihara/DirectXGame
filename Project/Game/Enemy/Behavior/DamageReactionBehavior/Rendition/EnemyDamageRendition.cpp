@@ -1,4 +1,4 @@
-#include "EnemyDamageRendition.h"
+﻿#include "EnemyDamageRendition.h"
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/EnemyManager.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionController.h"
@@ -51,15 +51,15 @@ void EnemyDamageRendition::Update(
     // オブジェクトアニメーションの再生
     if (easeFileName != "None") {
         if (easeFileName.empty()) {
-            const auto* controller = pBaseEnemy_->GetManager()->GetDamageReactionController();
-            int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+            const auto* controller = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+            int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
             easeFileName = controller->GetDefaultObjEaseAnimationName(enemyType);
             easeTiming = controller->GetDefaultObjEaseAnimationStartTiming(enemyType);
         }
 
         if (reactionTimer >= easeTiming && !easeFileName.empty() && easeFileName != "None") {
-            if (pBaseEnemy_->GetAnimationObject()) {
-                pBaseEnemy_->GetAnimationObject()->transform_.PlayObjEaseAnimation(easeFileName, "Enemy");
+            if (pBaseEnemy_->GetAnimator()->GetAnimationObject()) {
+                pBaseEnemy_->GetAnimator()->GetAnimationObject()->transform_.PlayObjEaseAnimation(easeFileName, "Enemy");
             }
         }
     }
@@ -67,8 +67,8 @@ void EnemyDamageRendition::Update(
     // パーティクルエフェクトの再生
     if (particleFileName != "None") {
         if (particleFileName.empty()) {
-            const auto* controller = pBaseEnemy_->GetManager()->GetDamageReactionController();
-            int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+            const auto* controller = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+            int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
             particleFileName = controller->GetDefaultParticleEffectName(enemyType);
             particleTiming = 0.0f;
         }

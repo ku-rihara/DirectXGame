@@ -1,4 +1,4 @@
-#include "EnemyDamageReactionTakeUpper.h"
+﻿#include "EnemyDamageReactionTakeUpper.h"
 #include "EnemyDamageReactionRoot.h"
 #include "EnemyDeath.h"
 #include "Player/Components/CollisionBox/PlayerAttackCollider.h"
@@ -29,8 +29,8 @@ EnemyDamageReactionTakeUpper::EnemyDamageReactionTakeUpper(
 EnemyDamageReactionTakeUpper::~EnemyDamageReactionTakeUpper() {
     // GetUpフェーズのアニメーション終了コールバックは[this]をキャプチャしているため、
     // デストラクタで必ずクリアし、ダングリングポインタアクセスを防ぐ
-    if (pBaseEnemy_ && pBaseEnemy_->GetAnimationObject()) {
-        pBaseEnemy_->GetAnimationObject()->ClearAllAnimationEndCallbacks();
+    if (pBaseEnemy_ && pBaseEnemy_->GetAnimator()->GetAnimationObject()) {
+        pBaseEnemy_->GetAnimator()->GetAnimationObject()->ClearAllAnimationEndCallbacks();
     }
 }
 
@@ -87,19 +87,19 @@ void EnemyDamageReactionTakeUpper::InitReaction() {
     const auto& reactionParam = pReactionData_->GetReactionParam();
 
     // ダメージアニメーションを再生（敵タイプ別）
-    int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+    int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
     const auto& animName = reactionParam.damageAnimationNames[enemyType];
     if (animName == "None") {
         // "None"が設定されている場合は何もしない
     } else if (animName.empty()) {
         // 空の場合はデフォルトアニメーションを再生
-        const auto* controller = pBaseEnemy_->GetManager()->GetDamageReactionController();
+        const auto* controller = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
         const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::TakeUpper);
         if (!defaultAnim.empty()) {
-            pBaseEnemy_->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetDamageReactionAnimationIsLoop(defaultAnim));
+            pBaseEnemy_->GetAnimator()->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(defaultAnim));
         }
     } else {
-        pBaseEnemy_->PlayAnimationByName(animName, pBaseEnemy_->GetDamageReactionAnimationIsLoop(animName));
+        pBaseEnemy_->GetAnimator()->PlayAnimationByName(animName, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(animName));
     }
 
     blowYPower_ = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
@@ -165,7 +165,7 @@ void EnemyDamageReactionTakeUpper::UpdateTakeUpper() {
         return;
     }
 
-    const auto& enemyParam = pBaseEnemy_->GetParameter();
+    const auto& enemyParam = pBaseEnemy_->GetBaseInfo()->GetParameter();
 
     // 頂点に到達していない場合は上昇
     if (!hasReachedPeak_) {
@@ -203,11 +203,11 @@ void EnemyDamageReactionTakeUpper::UpdateTakeUpper() {
 
             // バウンドアニメーション再生
             {
-                const auto* ctrl = pBaseEnemy_->GetManager()->GetDamageReactionController();
-                int eType = static_cast<int>(pBaseEnemy_->GetType());
+                const auto* ctrl = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+                int eType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
                 const auto& boundAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::Bound);
                 if (!boundAnim.empty()) {
-                    pBaseEnemy_->PlayAnimationByName(boundAnim, false);
+                    pBaseEnemy_->GetAnimator()->PlayAnimationByName(boundAnim, false);
                 }
             }
 
@@ -259,7 +259,7 @@ void EnemyDamageReactionTakeUpper::UpdateBounce(float basePosY, float gravity) {
             if (isDeathBounce_) {
                 pBaseEnemy_->ThrustRenditionInit();
                 pBaseEnemy_->DeathRenditionInit();
-                deathBurstTimer_   = pBaseEnemy_->GetParameter().deathBurstTime;
+                deathBurstTimer_   = pBaseEnemy_->GetBaseInfo()->GetParameter().deathBurstTime;
                 isDeathBurstPhase_ = true;
                 return;
             }
@@ -271,7 +271,7 @@ void EnemyDamageReactionTakeUpper::UpdateBounce(float basePosY, float gravity) {
 }
 
 bool EnemyDamageReactionTakeUpper::IsReactionFinished() const {
-    const auto& enemyParam = pBaseEnemy_->GetParameter();
+    const auto& enemyParam = pBaseEnemy_->GetBaseInfo()->GetParameter();
 
     if (hasReachedPeak_ && floatingTimer_ >= floatingTime_ && hasReachedGround_ &&
         currentBoundCount_ >= maxBoundCount_ &&
@@ -289,13 +289,13 @@ void EnemyDamageReactionTakeUpper::GetUpPhase() {
 }
 
 void EnemyDamageReactionTakeUpper::OnReactionEnd() {
-    pBaseEnemy_->RotateInit();
-    const auto& enemyParam = pBaseEnemy_->GetParameter();
+    pBaseEnemy_->GetAnimator()->RotateInit();
+    const auto& enemyParam = pBaseEnemy_->GetBaseInfo()->GetParameter();
     pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
 
     // 起き上がりアニメーション再生
-    const auto* ctrl = pBaseEnemy_->GetManager()->GetDamageReactionController();
-    int eType = static_cast<int>(pBaseEnemy_->GetType());
+    const auto* ctrl = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+    int eType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
     const auto& getUpAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::GetUp);
 
     if (getUpAnim.empty()) {
@@ -304,16 +304,16 @@ void EnemyDamageReactionTakeUpper::OnReactionEnd() {
         return;
     }
 
-    pBaseEnemy_->PlayAnimationByName(getUpAnim, false);
+    pBaseEnemy_->GetAnimator()->PlayAnimationByName(getUpAnim, false);
 
     // アニメーション終了コールバックで完了フラグを立てる
-    pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(getUpAnim, [this]() {
+    pBaseEnemy_->GetAnimator()->GetAnimationObject()->SetAnimationEndCallback(getUpAnim, [this]() {
         getUpFinished_ = true;
     });
 }
 
 void EnemyDamageReactionTakeUpper::RotationUpdate() {
     // 回転演出
-    Vector3 currentRotation = pBaseEnemy_->GetBodyRotation();
-    pBaseEnemy_->SetBodyRotate(currentRotation + takeUpperRotateSpeed_ * KetaEngine::Frame::DeltaTimeRate());
+    Vector3 currentRotation = pBaseEnemy_->GetAnimator()->GetBodyRotation();
+    pBaseEnemy_->GetAnimator()->SetBodyRotate(currentRotation + takeUpperRotateSpeed_ * KetaEngine::Frame::DeltaTimeRate());
 }

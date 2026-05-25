@@ -1,4 +1,4 @@
-#include "ComboAttackAction.h"
+﻿#include "ComboAttackAction.h"
 #include "utility/Log/Log.h"
 #include <cmath>
 #include "MathFunction.h"
@@ -662,7 +662,7 @@ Vector3 ComboAttackAction::CalcStopBeforeEnemyTarget(
         float perpDist = (toEnemy - moveDirNorm * dot).Length();
 
         // 敵のコリジョン幅の半分 + 経路幅を合わせた判定
-        float enemyHalfWidth = enemy->GetParameter().collisionRad * 0.5f;
+        float enemyHalfWidth = enemy->GetBaseInfo()->GetParameter().collisionRad * 0.5f;
         if (perpDist > kPathHalfWidth + enemyHalfWidth) {
             continue;
         }

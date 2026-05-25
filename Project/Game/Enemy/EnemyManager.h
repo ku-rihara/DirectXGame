@@ -22,8 +22,6 @@
 // Pool
 #include "utility/ObjectPool/ObjectPool.h"
 
-enum class Type;
-struct BaseEnemy::Parameter;
 class Player;
 class Combo;
 class GameCamera;

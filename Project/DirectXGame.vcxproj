@@ -257,6 +257,8 @@
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Enemy\Spawner\ContinuousEnemySpawner.cpp" />
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp" />
+    <ClCompile Include="Game\Enemy\Component\EnemyAnimator.cpp" />
+    <ClCompile Include="Game\Enemy\Component\EnemyInitializer.cpp" />
     <ClCompile Include="Game\Enemy\Types\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\Types\NormalEnemy.cpp" />
     <ClCompile Include="Game\Enemy\Types\StrongEnemy.cpp" />
@@ -634,6 +636,9 @@
     <ClInclude Include="Game\Enemy\Spawner\ContinuousEnemySpawner.h" />
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h" />
     <ClInclude Include="Game\Enemy\Types\BaseEnemy.h" />
+    <ClInclude Include="Game\Enemy\Component\EnemyAnimator.h" />
+    <ClInclude Include="Game\Enemy\Component\EnemyBaseInfo.h" />
+    <ClInclude Include="Game\Enemy\Component\EnemyInitializer.h" />
     <ClInclude Include="Game\Enemy\Types\NormalEnemy.h" />
     <ClInclude Include="Game\Enemy\Types\StrongEnemy.h" />
     <ClInclude Include="Game\Field\Field.h" />

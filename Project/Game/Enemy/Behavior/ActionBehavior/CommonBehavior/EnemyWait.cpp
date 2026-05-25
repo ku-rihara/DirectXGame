@@ -1,4 +1,4 @@
-/// behavior
+﻿/// behavior
 #include "EnemyWait.h"
 #include "EnemyChase.h"
 /// obj
@@ -15,10 +15,10 @@
 EnemyWait::EnemyWait(BaseEnemy* boss)
     : BaseEnemyBehavior("EnemyWait", boss) {
 
-    cooldownTimer_ = pBaseEnemy_->GetParameter().waitCooldownTime;
+    cooldownTimer_ = pBaseEnemy_->GetBaseInfo()->GetParameter().waitCooldownTime;
 
     // 待機アニメーションにリセット
-    pBaseEnemy_->ResetToWaitAnimation();
+    pBaseEnemy_->GetAnimator()->ResetToWaitAnimation();
 
     // 初期フェーズを待機に設定
     currentPhase_ = [this]() {
@@ -26,8 +26,8 @@ EnemyWait::EnemyWait(BaseEnemy* boss)
     };
 
     // アニメーション終了時のコールバックを設定
-    const std::string& animeName = pBaseEnemy_->GetAnimationName(BaseEnemy::AnimationType::Discovery);
-    pBaseEnemy_->GetAnimationObject()->SetAnimationEndCallback(animeName, [this]() {
+    const std::string& animeName = pBaseEnemy_->GetAnimator()->GetAnimationName(BaseEnemy::AnimationType::Discovery);
+    pBaseEnemy_->GetAnimator()->GetAnimationObject()->SetAnimationEndCallback(animeName, [this]() {
         currentPhase_ = [this]() {
             UpdateEnd();
         };
@@ -42,7 +42,7 @@ EnemyWait::EnemyWait(BaseEnemy* boss, float waitTime)
 
 EnemyWait::~EnemyWait() {
     // コールバックをクリア
-    pBaseEnemy_->GetAnimationObject()->ClearAllAnimationEndCallbacks();
+    pBaseEnemy_->GetAnimator()->GetAnimationObject()->ClearAllAnimationEndCallbacks();
 }
 
 void EnemyWait::Update() {
@@ -70,7 +70,7 @@ void EnemyWait::UpdateWaiting() {
     // プレイヤーが追跡範囲内にいるか
     if (IsDiscovery()) {
         // 発見モーションを再生
-        pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Discovery, false);
+        pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Discovery, false);
 
         currentPhase_ = [this]() {
             UpdateDiscovery();
@@ -79,7 +79,7 @@ void EnemyWait::UpdateWaiting() {
 }
 
 bool EnemyWait::IsDiscovery() {
-    const auto& param = pBaseEnemy_->GetParameter();
+    const auto& param = pBaseEnemy_->GetBaseInfo()->GetParameter();
     bool result       = false;
 
     // 追跡開始距離以内＆追跡限界距離以上

@@ -132,9 +132,11 @@ public:
     /// <param name="groupName"></param>
     void ClearRegistersForGroup(const std::string& groupName);
 
-    void ResetAllRegister(); //< 全登録リセット
+    // 全登録リセット
+    void ResetAllRegister(); 
 
-    void LoadFiles(); //< 全ファイル読み込み
+    // 全ファイル読み込み
+    void LoadFiles(); 
     bool HasRegisters(const std::string& groupName) const;
 
     /// <summary>

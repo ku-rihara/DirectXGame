@@ -1,7 +1,6 @@
 #include "BaseEnemy.h"
+#include "Enemy/Component/EnemyInitializer.h"
 
-// std
-#include <algorithm>
 // CollisionUtils
 #include "utility/CollisionPush/CollisionPushUtils.h"
 // KillCounter
@@ -34,51 +33,7 @@
 ///  初期化
 ///========================================================
 void BaseEnemy::Init(const Vector3& spawnPos) {
-
-    // プール再利用時のためフラグをリセット
-    isDeath_           = false;
-    isDeathPending_    = false;
-    isCollisionRope_   = false;
-    isInAnticipation_  = false;
-    isAttacking_       = false;
-    chaseAnimeState_   = ChaseAnimationState::NONE;
-    isPreDashFinished_ = false;
-    damageReactionAnimations_.clear();
-
-    behaviorCtrl_.Init(this);
-
-    // HP
-    HPMax_ = parameter_.hpMax;
-    hp_    = HPMax_;
-
-    // プール再利用時は既存オブジェクトを使い回す
-    if (!enemyUIs_) {
-        enemyUIs_ = std::make_unique<EnemyUIs>();
-    }
-    enemyUIs_->Init(HPMax_);
-
-    /// transform
-    baseTransform_.translation_   = spawnPos;
-    baseTransform_.translation_.y = parameter_.basePosY;
-    baseTransform_.SetAnchorRotation(Vector3(0.0f, 1.5f, 0.0f));
-    baseTransform_.scale_ = Vector3::ZeroVector();
-
-    /// attack collision
-    if (!attackCollisionBox_) {
-        attackCollisionBox_ = std::make_unique<EnemyAttackCollisionBox>();
-    }
-    attackCollisionBox_->Init();
-    attackCollisionBox_->SetEnemy(this);
-    attackCollisionBox_->SetParentTransform(&baseTransform_);
-
-    // エフェクト初期化
-    if (!enemyEffects_) {
-        enemyEffects_ = std::make_unique<EnemyEffects>();
-    }
-    enemyEffects_->Init(&baseTransform_);
-
-    // 振る舞い初期化
-    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+    EnemyInitializer(this, spawnPos).Run();
 }
 
 ///========================================================
@@ -88,9 +43,7 @@ void BaseEnemy::PrepareForPool() {
     // ビヘイビアを先に破棄
     behaviorCtrl_.Reset();
     // 残存コールバックを念のためクリア
-    if (objAnimation_) {
-        objAnimation_->ClearAllAnimationEndCallbacks();
-    }
+    animator_.ClearAllCallbacks();
     // UI を非表示にする
     if (enemyUIs_) {
         enemyUIs_->Hide(hp_);
@@ -126,7 +79,7 @@ void BaseEnemy::Update() {
     if (colorConfig_ && HPMax_ > 0.0f) {
         float ratio = hp_ / HPMax_;
         Vector3 c   = colorConfig_->GetColor(ratio);
-        SetBodyColor({c.x, c.y, c.z, 1.0f});
+        animator_.SetBodyColor({c.x, c.y, c.z, 1.0f});
     }
 
     BaseObject::Update();
@@ -169,21 +122,23 @@ void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection, 
 
     Vector3 worldPos = GetWorldPosition();
 
+    const auto& param = baseInfo_.GetParameter();
+
     // HPバーの位置計算
-    Vector3 hpBarWorldPos  = worldPos + Vector3{0.0f, parameter_.hpBarWorldOffsetY, 0.0f};
+    Vector3 hpBarWorldPos  = worldPos + Vector3{0.0f, param.hpBarWorldOffsetY, 0.0f};
     Vector2 hpBarScreenPos = ScreenTransform(hpBarWorldPos, viewProjection);
 
     // グループアイコンの位置計算
-    Vector3 iconWorldPos  = worldPos + Vector3{0.0f, parameter_.groupIconWorldOffsetY, 0.0f};
+    Vector3 iconWorldPos  = worldPos + Vector3{0.0f, param.groupIconWorldOffsetY, 0.0f};
     Vector2 iconScreenPos = ScreenTransform(iconWorldPos, viewProjection);
 
     // UI更新
     enemyUIs_->Update(hp_, hpBarScreenPos, IsInView(viewProjection));
 
-    // 
-    if (distanceToPlayer <= pEnemyManager_->GetHpBarDisplayDistance()) {
-        enemyUIs_->SetHPBarOffset(parameter_.hpBarPosOffset);
-        enemyUIs_->SetHPGaugeOffset(parameter_.hpGaugePosOffset);
+    //
+    if (distanceToPlayer <= baseInfo_.GetManager()->GetHpBarDisplayDistance()) {
+        enemyUIs_->SetHPBarOffset(param.hpBarPosOffset);
+        enemyUIs_->SetHPGaugeOffset(param.hpGaugePosOffset);
     } else {
         enemyUIs_->Hide(hp_);
     }
@@ -266,8 +221,8 @@ void BaseEnemy::TakeDamage(float damageValue) {
     hp_ -= damageValue;
 
     // コンボをカウント
-    if (pCombo_) {
-        pCombo_->ComboCountUP();
+    if (baseInfo_.GetCombo()) {
+        baseInfo_.GetCombo()->ComboCountUP();
     }
 
     // ダメージコールバック
@@ -277,8 +232,8 @@ void BaseEnemy::TakeDamage(float damageValue) {
 
     if (hp_ <= 0.0f && !isDeathPending_) {
         // 撃破カウント
-        if (pKillCounter_) {
-            pKillCounter_->AddKillCount();
+        if (baseInfo_.GetKillCounter()) {
+            baseInfo_.GetKillCounter()->AddKillCount();
         }
     }
 
@@ -291,7 +246,7 @@ void BaseEnemy::SetIsDeath(bool is) {
     isDeath_ = is;
     if (is) {
         SetIsAdaptCollision(false);
-        SetAnimationActive(false);
+        animator_.SetAnimationActive(false);
     }
 }
 
@@ -312,112 +267,24 @@ void BaseEnemy::DeathRenditionInit() {
 }
 
 void BaseEnemy::DirectionToPlayer(bool isOpposite) {
-    float objectiveAngle       = CalcFaceAngleY(GetWorldPosition(), pPlayer_->GetWorldPosition(), !isOpposite);
+    float objectiveAngle       = CalcFaceAngleY(GetWorldPosition(), baseInfo_.GetPlayer()->GetWorldPosition(), !isOpposite);
     baseTransform_.rotation_.y = LerpShortAngle(baseTransform_.rotation_.y, objectiveAngle, 0.8f);
 }
 
-///========================================================
-/// 指定したアニメーションを再生
-///========================================================
-void BaseEnemy::PlayAnimation(AnimationType type, bool isLoop) {
-    if (!objAnimation_) {
-        return;
-    }
-
-    const std::string& animeName = GetAnimationName(type);
-    if (animeName.empty()) {
-        return;
-    }
-
-    objAnimation_->ChangeAnimation(animeName);
-    objAnimation_->SetLoop(isLoop);
-}
-
-///========================================================
-/// アニメーション名で直接再生
-///========================================================
-bool BaseEnemy::PlayAnimationByName(const std::string& animationName, bool isLoop) {
-    if (!objAnimation_ || animationName.empty()) {
-        return false;
-    }
-
-    // 利用可能なアニメーションリストを取得して確認
-    auto animeNames = objAnimation_->GetAnimationNames();
-    auto it         = std::find(animeNames.begin(), animeNames.end(), animationName);
-
-    if (it != animeNames.end()) {
-        objAnimation_->ChangeAnimation(animationName);
-        objAnimation_->SetLoop(isLoop);
-        return true;
-    }
-
-    return false; // アニメーションが見つからない
-}
-
-///========================================================
-/// 追跡中のアニメーション更新
-///========================================================
-void BaseEnemy::UpdateChaseAnimation([[maybe_unused]] float deltaTime) {
-    if (!objAnimation_) {
-        return;
-    }
-
-    // 予備動作が終了したらダッシュアニメーションに切り替え
-    if (chaseAnimeState_ == ChaseAnimationState::PRE_DASH && isPreDashFinished_) {
-        chaseAnimeState_ = ChaseAnimationState::DASHING;
-        objAnimation_->ChangeAnimation(GetAnimationName(AnimationType::Dash));
-        objAnimation_->SetLoop(true); // ダッシュはループ
-    }
-}
-
-///========================================================
-/// 待機アニメーションにリセット
-///========================================================
-void BaseEnemy::ResetToWaitAnimation() {
-    if (!objAnimation_) {
-        return;
-    }
-
-    // 待機アニメーションに戻す
-    chaseAnimeState_   = ChaseAnimationState::NONE;
-    isPreDashFinished_ = false;
-    objAnimation_->ChangeAnimation(GetAnimationName(AnimationType::Wait));
-    objAnimation_->SetLoop(true); // 待機アニメーションはループ
-}
-
-std::vector<std::string> BaseEnemy::GetAnimationNames() const {
-    if (objAnimation_) {
-        return objAnimation_->GetAnimationNames();
-    }
-    return {};
-}
-
-std::string BaseEnemy::GetModelFolder() const {
-    return (type_ == Type::NORMAL) ? "NormalEnemy/" : "StrongEnemy/";
-}
-
-void BaseEnemy::AddDamageReactionAnimation(const std::string& name, bool isLoop) {
-    objAnimation_->Add(GetModelFolder() + name + ".gltf");
-    damageReactionAnimations_.push_back({name, isLoop});
-}
 
 float BaseEnemy::CalcDistanceToPlayer() {
     // プレイヤーへの方向
-    Vector3 directionToPlayer = GetDirectionToTarget(pPlayer_->GetWorldPosition());
+    Vector3 directionToPlayer = GetDirectionToTarget(baseInfo_.GetPlayer()->GetWorldPosition());
     float distance            = std::sqrt(directionToPlayer.x * directionToPlayer.x + directionToPlayer.z * directionToPlayer.z);
     return distance;
 }
 
 Vector3 BaseEnemy::GetCollisionPos() const {
     // パラメータからオフセットを取得
-    const Vector3& offset = parameter_.collisionOffset;
+    const Vector3& offset = baseInfo_.GetParameter().collisionOffset;
     // ワールド座標に変換
     Vector3 worldPos = TransformMatrix(offset, baseTransform_.matWorld_);
     return worldPos;
-}
-
-void BaseEnemy::SetPlayer(Player* player) {
-    pPlayer_ = player;
 }
 
 void BaseEnemy::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior) {
@@ -428,88 +295,23 @@ void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
     behaviorCtrl_.ChangeBehavior(std::move(behavior));
 }
 
-void BaseEnemy::SetGameCamera(GameCamera* gameCamera) {
-    pGameCamera_ = gameCamera;
-}
-
-void BaseEnemy::SetManager(EnemyManager* manager) {
-    pEnemyManager_ = manager;
-}
-
-void BaseEnemy::SetCombo(Combo* manager) {
-    pCombo_ = manager;
-}
-
-void BaseEnemy::SetKillCounter(KillCounter* killCounter) {
-    pKillCounter_ = killCounter;
-}
-
 void BaseEnemy::BackToDamageRoot() {
     ResetDamageCooling();
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
-    ResetToWaitAnimation();
+    animator_.ResetToWaitAnimation();
 }
 
-void BaseEnemy::SetParameter(const Type& type, const Parameter& parameter) {
-    type_      = type;
-    parameter_ = parameter;
-    // コリジョンサイズを適用
-    SetCollisionRadius(parameter_.collisionRad);
+void BaseEnemy::RefreshCollision() {
+    SetCollisionRadius(baseInfo_.GetParameter().collisionRad);
 }
 
-void BaseEnemy::SetBodyColor(const Vector4& color) {
-    if (objAnimation_) {
-        objAnimation_->GetModelMaterial()->GetMaterialData()->color = color;
-    }
-}
-
-void BaseEnemy::SetAnimationName(AnimationType type, const std::string& name) {
-
-    if (type == AnimationType::Wait) {
-        // プール再利用時はモデルを再生成しない
-        if (!objAnimation_) {
-            objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(GetModelFolder() + name + ".gltf"));
-            objAnimation_->Init();
-        }
-        animationNames_[static_cast<size_t>(type)] = name;
-        return;
-    }
-
-    // 同スロットに既にアニメーションが登録済みなら追加ロードしない
-    if (animationNames_[static_cast<size_t>(type)].empty()) {
-        objAnimation_->Add(GetModelFolder() + name + ".gltf");
-    }
-    animationNames_[static_cast<size_t>(type)] = name;
-}
 
 bool BaseEnemy::IsInDeathBehavior() const {
     return dynamic_cast<EnemyDeath*>(behaviorCtrl_.GetDamageBehavior()) != nullptr;
 }
 
-void BaseEnemy::RotateInit() {
-    if (objAnimation_) {
-        objAnimation_->transform_.rotation_ = Vector3::ZeroVector();
-    }
-}
 
 void BaseEnemy::ScaleReset() {
-    baseTransform_.scale_ = parameter_.baseScale_;
+    baseTransform_.scale_ = baseInfo_.GetParameter().baseScale_;
 }
 
-std::vector<std::string> BaseEnemy::GetDamageReactionAnimationNames() const {
-    std::vector<std::string> names;
-    names.reserve(damageReactionAnimations_.size());
-    for (const auto& info : damageReactionAnimations_) {
-        names.push_back(info.name);
-    }
-    return names;
-}
-
-bool BaseEnemy::GetDamageReactionAnimationIsLoop(const std::string& name) const {
-    for (const auto& info : damageReactionAnimations_) {
-        if (info.name == name) {
-            return info.isLoop;
-        }
-    }
-    return false;
-}

@@ -1,4 +1,4 @@
-#include "EnemyDamageReactionNormal.h"
+﻿#include "EnemyDamageReactionNormal.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionController.h"
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Types/BaseEnemy.h"
@@ -51,7 +51,7 @@ void EnemyDamageReactionNormal::InitReaction() {
     }
 
     // 敵のタイプを取得
-    int enemyType = static_cast<int>(pBaseEnemy_->GetType());
+    int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
 
     // StumbleBackwards再生中のNormalリアクションはアニメーションをスキップ
     bool skipAnimation = false;
@@ -69,13 +69,13 @@ void EnemyDamageReactionNormal::InitReaction() {
                 // "None"が設定されている場合は何もしない
             } else if (animName.empty()) {
                 // 空の場合はデフォルトアニメーションを再生
-                const auto* controller  = pBaseEnemy_->GetManager()->GetDamageReactionController();
+                const auto* controller  = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
                 const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::Normal);
                 if (!defaultAnim.empty()) {
-                    pBaseEnemy_->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetDamageReactionAnimationIsLoop(defaultAnim));
+                    pBaseEnemy_->GetAnimator()->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(defaultAnim));
                 }
             } else {
-                pBaseEnemy_->PlayAnimationByName(animName, pBaseEnemy_->GetDamageReactionAnimationIsLoop(animName));
+                pBaseEnemy_->GetAnimator()->PlayAnimationByName(animName, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(animName));
             }
         }
 
@@ -83,10 +83,10 @@ void EnemyDamageReactionNormal::InitReaction() {
     } else {
         if (!skipAnimation) {
             // リアクションデータが未設定: デフォルトアニメーションを再生
-            const auto* controller  = pBaseEnemy_->GetManager()->GetDamageReactionController();
+            const auto* controller  = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
             const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::Normal);
             if (!defaultAnim.empty()) {
-                pBaseEnemy_->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetDamageReactionAnimationIsLoop(defaultAnim));
+                pBaseEnemy_->GetAnimator()->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(defaultAnim));
             }
         }
         totalReactionTime_ = kDefaultKnockBackTime;
@@ -136,7 +136,7 @@ void EnemyDamageReactionNormal::UpdateNormal() {
         pBaseEnemy_->SetWorldPositionZ(newPos.z);
 
         // 滞空中の場合、重力を適用して落下させる
-        const auto& enemyParam = pBaseEnemy_->GetParameter();
+        const auto& enemyParam = pBaseEnemy_->GetBaseInfo()->GetParameter();
         float currentY         = pBaseEnemy_->GetWorldPosition().y;
         if (currentY > enemyParam.basePosY) {
             float newY = currentY - enemyParam.deathGravity * KetaEngine::Frame::DeltaTimeRate();
@@ -151,8 +151,8 @@ bool EnemyDamageReactionNormal::IsReactionFinished() const {
 
 void EnemyDamageReactionNormal::OnReactionEnd() {
     if (pBaseEnemy_) {
-        pBaseEnemy_->RotateInit();
-        const auto& enemyParam = pBaseEnemy_->GetParameter();
+        pBaseEnemy_->GetAnimator()->RotateInit();
+        const auto& enemyParam = pBaseEnemy_->GetBaseInfo()->GetParameter();
         pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
     }
 }

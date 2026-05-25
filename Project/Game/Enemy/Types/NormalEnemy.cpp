@@ -24,28 +24,29 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     BaseEnemy::Init(spawnPos);
 
     // アニメーション名を設定
-    SetAnimationName(AnimationType::Wait, "NormalEnemyWaiting");
-    SetAnimationName(AnimationType::Spawn, "NormalEnemySpawn");
-    SetAnimationName(AnimationType::Discovery, "NormalEnemyDiscovery");
-    SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
-    SetAnimationName(AnimationType::Death, "EnemyDeathAnimation");
-    SetAnimationName(AnimationType::Taunt, "NormalEnemyTaunt");
+    GetAnimator()->SetAnimationName(AnimationType::Wait, "NormalEnemyWaiting");
+    GetAnimator()->SetAnimationName(AnimationType::Spawn, "NormalEnemySpawn");
+    GetAnimator()->SetAnimationName(AnimationType::Discovery, "NormalEnemyDiscovery");
+    GetAnimator()->SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
+    GetAnimator()->SetAnimationName(AnimationType::Death, "EnemyDeathAnimation");
+    GetAnimator()->SetAnimationName(AnimationType::Taunt, "NormalEnemyTaunt");
 
     // NormalEnemy固有アニメーション
     AddNormalAnimation(NormalAnimationType::StumbleBackwards, "StumbleBackwards");
     AddNormalAnimation(NormalAnimationType::CrawlBackwards, "CrawlBackwards");
 
     // ダメージリアクション用アニメーションを追加
-    AddDamageReactionAnimation("EnemyNormalDamage");
-    AddDamageReactionAnimation("TakeUpMotion", true);
-    AddDamageReactionAnimation("NormalEnemyBoundDamage");
-    AddDamageReactionAnimation("NormalEnemyKipUp");
+    GetAnimator()->AddDamageReactionAnimation("EnemyNormalDamage");
+    GetAnimator()->AddDamageReactionAnimation("TakeUpMotion", true);
+    GetAnimator()->AddDamageReactionAnimation("NormalEnemyBoundDamage");
+    GetAnimator()->AddDamageReactionAnimation("NormalEnemyKipUp");
 
     // アニメーションの初期化
-    objAnimation_->transform_.Init();
-    objAnimation_->transform_.SetParent(&baseTransform_);
-    objAnimation_->transform_.scale_                                     = Vector3::OneVector();
-    objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
+    auto* animObj = GetAnimator()->GetAnimationObject();
+    animObj->transform_.Init();
+    animObj->transform_.SetParent(&baseTransform_);
+    animObj->transform_.scale_                                     = Vector3::OneVector();
+    animObj->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
     
     // スポーン後の行動を生成
     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
@@ -116,7 +117,7 @@ void NormalEnemy::StartFlee() {
 /// NormalEnemy固有アニメーション追加
 ///========================================================
 void NormalEnemy::AddNormalAnimation(NormalAnimationType type, const std::string& name) {
-    objAnimation_->Add(GetModelFolder() + name + ".gltf");
+    GetAnimator()->AddAnimationFile(name);
     normalAnimationNames_[static_cast<size_t>(type)] = name;
 }
 
@@ -125,7 +126,7 @@ void NormalEnemy::AddNormalAnimation(NormalAnimationType type, const std::string
 ///========================================================
 bool NormalEnemy::PlayNormalAnimation(NormalAnimationType type, bool isLoop) {
     const std::string& name = normalAnimationNames_[static_cast<size_t>(type)];
-    return PlayAnimationByName(name, isLoop);
+    return GetAnimator()->PlayAnimationByName(name, isLoop);
 }
 
 ///========================================================
@@ -139,7 +140,7 @@ void NormalEnemy::BackToDamageRoot() {
     // ダメージリアクションによってStumbleが中断された場合はフラグをリセット
     if (isInStumblePhase_) {
         isInStumblePhase_ = false;
-        if (auto* anim = GetAnimationObject()) {
+        if (auto* anim = GetAnimator()->GetAnimationObject()) {
             anim->RemoveAnimationEndCallback("StumbleBackwards");
         }
     }
@@ -154,7 +155,7 @@ void NormalEnemy::BackToDamageRoot() {
     }
 
     // 通常のBehaviorに戻る
-    BaseEnemy::ResetToWaitAnimation();
+    GetAnimator()->ResetToWaitAnimation();
 }
 
 void NormalEnemy::SetSlot(int32_t index, int32_t count) {

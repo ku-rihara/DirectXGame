@@ -1,4 +1,4 @@
-/// behavior
+﻿/// behavior
 #include "EnemyChase.h"
 #include "EnemyWait.h"
 /// obj
@@ -15,7 +15,7 @@ EnemyChase::EnemyChase(BaseEnemy* enemy)
     : BaseEnemyBehavior("EnemyChase", enemy) {
 
     // 追跡アニメーションを再生
-    pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
+    pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
 
 }
 
@@ -25,10 +25,10 @@ EnemyChase::~EnemyChase() {
 void EnemyChase::Update() {
     
     // 毎フレームプレイヤー方向を再計算して移動
-    Vector3 direction = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
+    Vector3 direction = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetBaseInfo()->GetPlayer()->GetWorldPosition());
     direction.y = 0.0f;
     direction.Normalize();
-    pBaseEnemy_->AddPosition(direction * (pBaseEnemy_->GetParameter().chaseSpeed * KetaEngine::Frame::DeltaTime()));
+    pBaseEnemy_->AddPosition(direction * (pBaseEnemy_->GetBaseInfo()->GetParameter().chaseSpeed * KetaEngine::Frame::DeltaTime()));
 
     // 毎フレームプレイヤーを向く
     pBaseEnemy_->DirectionToPlayer();

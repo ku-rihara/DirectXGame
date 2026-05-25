@@ -1,4 +1,4 @@
-#include "StrongEnemy.h"
+﻿#include "StrongEnemy.h"
 #include "Player/Player.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 // behavior
@@ -31,24 +31,25 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     BaseEnemy::Init(spawnPos);
 
     // アニメーション名の設定
-    SetAnimationName(AnimationType::Wait, "StrongEnemyWaiting");
-    SetAnimationName(AnimationType::Spawn, "StrongEnemySpawn");
-    SetAnimationName(AnimationType::Discovery, "StrongEnemyDiscovery");
-    SetAnimationName(AnimationType::Dash, "StrongEnemyRun");
-    SetAnimationName(AnimationType::Death, "StrongEnemyDeath");
-    SetAnimationName(AnimationType::Taunt, "StrongEnemyTaunt");
+    GetAnimator()->SetAnimationName(AnimationType::Wait, "StrongEnemyWaiting");
+    GetAnimator()->SetAnimationName(AnimationType::Spawn, "StrongEnemySpawn");
+    GetAnimator()->SetAnimationName(AnimationType::Discovery, "StrongEnemyDiscovery");
+    GetAnimator()->SetAnimationName(AnimationType::Dash, "StrongEnemyRun");
+    GetAnimator()->SetAnimationName(AnimationType::Death, "StrongEnemyDeath");
+    GetAnimator()->SetAnimationName(AnimationType::Taunt, "StrongEnemyTaunt");
 
     // ダメージリアクションのアニメーションを追加
-    AddDamageReactionAnimation("StrongEnemyDefaultDamage");
-    AddDamageReactionAnimation("StrongEnemyTakeUp", true);
-    AddDamageReactionAnimation("StrongEnemyBoundDamage");
-    AddDamageReactionAnimation("StrongEnemyKipUp");
+    GetAnimator()->AddDamageReactionAnimation("StrongEnemyDefaultDamage");
+    GetAnimator()->AddDamageReactionAnimation("StrongEnemyTakeUp", true);
+    GetAnimator()->AddDamageReactionAnimation("StrongEnemyBoundDamage");
+    GetAnimator()->AddDamageReactionAnimation("StrongEnemyKipUp");
 
     // アニメーションの初期化
-    objAnimation_->transform_.Init();
-    objAnimation_->transform_.SetParent(&baseTransform_);
-    objAnimation_->transform_.scale_                                     = Vector3::OneVector();
-    objAnimation_->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
+    auto* animObj = GetAnimator()->GetAnimationObject();
+    animObj->transform_.Init();
+    animObj->transform_.SetParent(&baseTransform_);
+    animObj->transform_.scale_                                     = Vector3::OneVector();
+    animObj->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
  
 
     // Tauntフォントオブジェクト
@@ -67,8 +68,8 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
 }
 
 void StrongEnemy::Update() {
-    if (GetPlayer()) {
-        Vector3 playerPos = GetPlayer()->GetWorldPosition();
+    if (GetBaseInfo()->GetPlayer()) {
+        Vector3 playerPos = GetBaseInfo()->GetPlayer()->GetWorldPosition();
         GetEnemyEffects()->SetTargetObjectPos({playerPos.x, 0.0f, playerPos.z});
     }
 

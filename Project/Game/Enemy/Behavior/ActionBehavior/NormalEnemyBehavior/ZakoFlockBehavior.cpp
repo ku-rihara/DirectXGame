@@ -1,4 +1,4 @@
-#include "ZakoFlockBehavior.h"
+﻿#include "ZakoFlockBehavior.h"
 
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/Types/NormalEnemy.h"
@@ -18,13 +18,13 @@ ZakoFlockBehavior::ZakoFlockBehavior(NormalEnemy* enemy)
         Vector3 diff = boss->GetWorldPosition() - pBaseEnemy_->GetWorldPosition();
         diff.y       = 0.0f;
         if (diff.Length() > kCloseEnough) {
-            pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
+            pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
             isRunning_ = true;
         } else {
-            pBaseEnemy_->ResetToWaitAnimation();
+            pBaseEnemy_->GetAnimator()->ResetToWaitAnimation();
         }
     } else {
-        pBaseEnemy_->ResetToWaitAnimation();
+        pBaseEnemy_->GetAnimator()->ResetToWaitAnimation();
     }
 }
 
@@ -53,8 +53,8 @@ void ZakoFlockBehavior::Update() {
 
     // 目標位置をフィールド境界内に制限
 
-    const float rx = Field::baseScale_.x - pBaseEnemy_->GetParameter().baseScale_.x;
-    const float rz = Field::baseScale_.z - pBaseEnemy_->GetParameter().baseScale_.z;
+    const float rx = Field::baseScale_.x - pBaseEnemy_->GetBaseInfo()->GetParameter().baseScale_.x;
+    const float rz = Field::baseScale_.z - pBaseEnemy_->GetBaseInfo()->GetParameter().baseScale_.z;
     if (rx > 0.0f) {
         targetPos.x = std::clamp(targetPos.x, -rx, rx);
     }
@@ -71,7 +71,7 @@ void ZakoFlockBehavior::Update() {
     if (dist > kCloseEnough) {
         Vector3 dir = diff;
         dir.Normalize();
-        float speed = pBaseEnemy_->GetParameter().chaseSpeed;
+        float speed = pBaseEnemy_->GetBaseInfo()->GetParameter().chaseSpeed;
         pBaseEnemy_->AddPosition(dir * (speed * dt));
 
         // 移動中は進行方向を向く
@@ -81,15 +81,15 @@ void ZakoFlockBehavior::Update() {
             0.8f));
 
         // アニメーションがDashでなければ再生
-        auto animObj         = pBaseEnemy_->GetAnimationObject();
-        std::string dashAnim = pBaseEnemy_->GetAnimationName(BaseEnemy::AnimationType::Dash);
+        auto animObj         = pBaseEnemy_->GetAnimator()->GetAnimationObject();
+        std::string dashAnim = pBaseEnemy_->GetAnimator()->GetAnimationName(BaseEnemy::AnimationType::Dash);
         if (animObj && animObj->GetCurrentAnimationName() != dashAnim) {
-            pBaseEnemy_->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
+            pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
             isRunning_ = true;
         }
     } else {
         if (isRunning_) {
-            pBaseEnemy_->ResetToWaitAnimation();
+            pBaseEnemy_->GetAnimator()->ResetToWaitAnimation();
             isRunning_ = false;
         }
         // 停止中はプレイヤーを向く
