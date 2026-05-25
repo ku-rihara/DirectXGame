@@ -89,7 +89,7 @@ private:
     StrongEnemy::StrongParameter strongEnemyParam_;
 
 #if defined(_DEBUG) || defined(DEVELOPMENT)
-    // パラメータ変更検知用キャッシュ（変化した時だけ全敵にSetParameterを適用）
+    // パラメータ変更検知用キャッシュ
     std::array<BaseEnemy::Parameter, 2> cachedParameters_;
     NormalEnemy::NormalParameter cachedNormalEnemyParam_;
     StrongEnemy::StrongParameter cachedStrongEnemyParam_;

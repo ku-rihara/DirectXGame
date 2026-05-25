@@ -4,6 +4,8 @@ using namespace KetaEngine;
 
 // dx
 #include "3d/ModelManager.h"
+// particle
+#include "Particle/GPUParticle/GPUParticleManager.h"
 #include "Base/Dx/DxRenderTarget.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include "ShadowMap/ShadowMap.h"
@@ -12,8 +14,6 @@ using namespace KetaEngine;
 #include "Core/ResourceLoader.h"
 // Frame
 #include "Frame/Frame.h"
-// particle
-#include "Particle/GPUParticle/GPUParticleManager.h"
 // dx
 #include "Base/Dx/DirectXCommon.h"
 
@@ -61,21 +61,11 @@ void KTFramework::Init() {
 void KTFramework::Run() {
     Init(); /// 初期化
 
-    // 低FPS検出用
-    static constexpr float kSlowFrameThresholdMs = 30.0f;
-    static constexpr int   kSlowFrameLogInterval = 60; 
-    int slowFrameCount = 0;
-    float slowFrameWorstMs = 0.0f;
-
     // ウィンドウのxボタンが押されるまでループ
     while (engineCore_->ProcessMessage() == 0) {
-        auto frameStart = std::chrono::steady_clock::now();
-
         // フレームの開始
         Frame::Update();
         engineCore_->BeginFrame();
-
-        auto workStart = std::chrono::steady_clock::now();
 
         // 更新
         Update();
@@ -105,9 +95,6 @@ void KTFramework::Run() {
         dx->EndTimestamp(2);
 
         dx->ResolveTimestamps();
-
-        float workMs = std::chrono::duration<float, std::milli>(
-            std::chrono::steady_clock::now() - workStart).count();
 
         /// フレームの終了
         engineCore_->EndFrame();
@@ -144,51 +131,6 @@ void KTFramework::Run() {
                 dxWarm->GetTimestampMs(1),
                 std::chrono::duration<float, std::milli>(
                     std::chrono::steady_clock::now() - warmupStart).count()));
-        }
-
-        float totalMs = std::chrono::duration<float, std::milli>(
-            std::chrono::steady_clock::now() - frameStart).count();
-
-        // 低FPS検出ログ
-        if (totalMs > kSlowFrameThresholdMs) {
-            slowFrameCount++;
-            if (totalMs > slowFrameWorstMs) slowFrameWorstMs = totalMs;
-
-            if (slowFrameCount % kSlowFrameLogInterval == 1) {
-                auto* pm = GPUParticleManager::GetInstance();
-                auto* dxLog = DirectXCommon::GetInstance();
-                auto* sm = pSceneManager_;
-                Log::Warn(std::format(
-                    "[SLOW FRAME] total={:.1f}ms | work={:.1f}ms | fps~={:.0f} | particles={}/{} | shadow={:.1f}ms main={:.1f}ms postfx={:.1f}ms | cpu: scene={:.1f}ms reg={:.1f}ms ptcl={:.1f}ms col={:.1f}ms",
-                    totalMs,
-                    workMs,
-                    totalMs > 0.0f ? 1000.0f / totalMs : 0.0f,
-                    pm->GetActiveGroupCount(),
-                    pm->GetTotalGroupCount(),
-                    dxLog->GetTimestampMs(0),
-                    dxLog->GetTimestampMs(1),
-                    dxLog->GetTimestampMs(2),
-                    sm->GetLastSceneUpdateMs(),
-                    sm->GetLastRegistryMs(),
-                    sm->GetLastParticleMs(),
-                    sm->GetLastCollisionMs()));
-            }
-        } else {
-            // 正常に回復したらカウントリセット
-            if (slowFrameCount > 0) {
-                auto* pm = GPUParticleManager::GetInstance();
-                auto* dxLog = DirectXCommon::GetInstance();
-                Log::Info(std::format(
-                    "[FRAME RECOVERY] {} slow frames (worst={:.1f}ms), now normal ({:.1f}ms) | particles={}/{} | shadow={:.1f}ms main={:.1f}ms postfx={:.1f}ms",
-                    slowFrameCount, slowFrameWorstMs, totalMs,
-                    pm->GetActiveGroupCount(),
-                    pm->GetTotalGroupCount(),
-                    dxLog->GetTimestampMs(0),
-                    dxLog->GetTimestampMs(1),
-                    dxLog->GetTimestampMs(2)));
-                slowFrameCount = 0;
-                slowFrameWorstMs = 0.0f;
-            }
         }
     }
     Finalize();
@@ -240,12 +182,10 @@ void KTFramework::DisplayFPS() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGuiIO& io = ImGui::GetIO();
 
-    // FPSウィンドウ
     ImGui::Begin("FPS");
     ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 100, 255));
     ImGui::Text("FPS: %.1f", io.Framerate);
     ImGui::PopStyleColor();
-    ImGui::Separator();
     ImGui::Separator();
     auto* pm = GPUParticleManager::GetInstance();
     ImGui::Text("Particles: %d/%d groups", pm->GetActiveGroupCount(), pm->GetTotalGroupCount());

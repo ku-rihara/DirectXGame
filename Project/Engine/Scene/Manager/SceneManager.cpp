@@ -67,26 +67,15 @@ void SceneManager::Update() {
         ChangeScene("RESULT");
     }
 
-    using clock = std::chrono::steady_clock;
-    using ms = std::chrono::duration<float, std::milli>;
-
-    auto t0 = clock::now();
     if (scene_) { scene_->Update(); }
-    lastSceneUpdateMs_ = ms(clock::now() - t0).count();
 
-    t0 = clock::now();
     Object3DRegistry::GetInstance()->UpdateAll();
     AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
-    lastRegistryMs_ = ms(clock::now() - t0).count();
 
-    t0 = clock::now();
     ParticleManager::GetInstance()->Update();
     GPUParticleManager::GetInstance()->Update();
-    lastParticleMs_ = ms(clock::now() - t0).count();
 
-    t0 = clock::now();
     collisionManager_->Update();
-    lastCollisionMs_ = ms(clock::now() - t0).count();
 }
 
 void SceneManager::Debug() {
