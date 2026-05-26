@@ -57,5 +57,5 @@ public:
     /// <param name="mode">エフェクトモード</param>
     int32_t ConvertEffectModeToInt(const ObjEffectMode& mode);
 
-    void SetIsPulseCycleStart(const bool& isStart) { isPulseCycleStart_ = isStart; }
+    void SetIsPulseCycleStart(bool isStart) { isPulseCycleStart_ = isStart; }
 };

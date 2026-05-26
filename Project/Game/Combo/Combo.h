@@ -55,7 +55,7 @@ public:
     int32_t GetComboCount() const { return comboCount_; }
     int32_t GetCurrentLevel() const { return currentLevel_; }
     int32_t GetLevelUPNum(int32_t level) const { return LevelUpNum[level]; }
-    const bool& GetIsReset() const { return isReset_; }
+    bool GetIsReset() const { return isReset_; }
 
     void SetDeathTimer(DeathTimer* deathTimer);
 };

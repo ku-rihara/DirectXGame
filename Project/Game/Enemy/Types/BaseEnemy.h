@@ -97,7 +97,7 @@ public:
     /// <param name="fallSpeedLimit">落下速度制限</param>
     /// <param name="gravity">重力</param>
     /// <param name="isJump">ジャンプフラグ</param>
-    void Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump);
+    void Fall(float& speed, float fallSpeedLimit, float gravity, bool isJump);
 
     /// <summary>
     /// ターゲットへの方向取得
@@ -193,8 +193,8 @@ public:
     /// ========================================================================================
     ///  getter method
     /// ========================================================================================
-    const bool& GetIsDeath() const { return isDeath_; }
-    const bool& GetIsDeathPending() const { return isDeathPending_; }
+    bool GetIsDeath() const { return isDeath_; }
+    bool GetIsDeathPending() const { return isDeathPending_; }
     bool IsInDeathBehavior() const;
     int32_t GetGroupId() const { return groupId_; }
     float GetHP() const { return hp_; }
@@ -215,7 +215,7 @@ public:
     void RefreshCollision();
     void SetIsDeath(bool is);
     void SetGroupId(int groupId) { groupId_ = groupId; }
-    void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
+    void SetIsDeathPending(bool is) { isDeathPending_ = is; }
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
     void SetHPBarColorConfig(EnemyHPBarColorConfig* config) {
         colorConfig_ = config;

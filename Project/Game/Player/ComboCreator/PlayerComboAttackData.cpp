@@ -5,7 +5,7 @@
 // Easing
 #include "Easing/EasingCreator/EasingParameterData.h"
 // Enemy
-#include "Enemy/EnemyManager.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
 // Player
 #include "Player/Player.h"
 // input

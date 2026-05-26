@@ -152,7 +152,7 @@ void GameIntroManager::AdjustParam() {
 #endif // _DEBUG
 }
 
-const bool& GameIntroManager::GetIsFinishStep(const IntroStep& step) {
+bool GameIntroManager::GetIsFinishStep(const IntroStep& step) {
 
     return introSequences_[step]->GetIsFinish();
 }

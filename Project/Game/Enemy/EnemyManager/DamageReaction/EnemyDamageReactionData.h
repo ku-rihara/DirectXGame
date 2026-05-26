@@ -98,7 +98,7 @@ private:
     //*-------------------------------- Private variants--------------------------------*//
 
     // グローバルパラメータ
-    KetaEngine::GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_;
     const std::string folderPath_          = "EnemyDamageReaction/ReactionDates";
     const std::string renditionFolderPath_ = "resources/GlobalParameter/EnemyDamageReaction/RenditionDates/";

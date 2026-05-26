@@ -6,7 +6,7 @@
 // KillCounter
 #include "KillCounter/KillCounter.h"
 // Manager
-#include "Enemy/EnemyManager.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
 // behavior
 #include "../Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 #include "../Behavior/ActionBehavior/CommonBehavior/EnemyWait.h"
@@ -97,7 +97,7 @@ void BaseEnemy::Jump(float& speed, float fallSpeedLimit, float gravity) {
 ///=========================================================
 /// 　落ちる
 ///==========================================================
-void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump) {
+void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, bool isJump) {
 
     if (!isJump) {
         // 移動

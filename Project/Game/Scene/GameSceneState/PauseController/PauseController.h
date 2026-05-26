@@ -9,7 +9,7 @@ public:
     ~PauseController() = default;
 
     /// <summary>
-    /// ポーズボタンがトリガーされたか（押した瞬間のみ true）
+    /// ポーズボタンがトリガーされたか
     /// キーボード: P キー / ゲームパッド: Start ボタン
     /// </summary>
     bool IsPauseTriggered() const;

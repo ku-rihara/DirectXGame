@@ -10,7 +10,6 @@ GameSceneGameOver::GameSceneGameOver(GameScene* gameScene)
 }
 
 void GameSceneGameOver::Init() {
-    phase_ = Phase::kSpriteAnim;
     alpha_ = 0.7f;
 
     // TimeUpスプライト生成・アニメーション再生
@@ -21,50 +20,55 @@ void GameSceneGameOver::Init() {
     // フェードイン用イージング
     fadeEasing_.Init("GameSceneFadeIn.json");
     fadeEasing_.SetAdaptValue(&alpha_);
+
+    // 最初の状態をスプライトアニメーション待ちに設定
+    currentState_ = [this](float t) { StateSpriteAnim(t); };
 }
 
 void GameSceneGameOver::Update([[maybe_unused]] float timeSpeed) {
-
     // HitStopタイマーを更新
     pOwner_->GetGameObj().attackEffect_->Update();
 
     // 死亡エフェクトを最後まで表示するためにプレイヤーを更新し続ける
     pOwner_->GetGameObj().player_->Update();
 
-    auto* screen = pOwner_->GetGameObj().screenSprite_.get();
-
-    switch (phase_) {
-    case Phase::kSpriteAnim:
-        // TimeUpスプライトのイージングアニメーション更新
-        if (gameOverSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) {
-            Vector2 finalPos = gameOverSprite_->GetSpriteEaseAnimationPlayer()->GetCurrentPosition();
-            gameOverSprite_->transform_.pos = finalPos;
-            gameOverSprite_->StopSpriteEaseAnimation();
-
-            // 画面フェードイン開始
-            screen->SetIsDraw(true);
-            screen->SetAlpha(alpha_);
-            phase_ = Phase::kFadeIn;
-        }
-        break;
-
-    case Phase::kFadeIn:
-        // 画面フェードイン更新
-        fadeEasing_.Update(timeSpeed);
-        screen->SetAlpha(alpha_);
-
-        // フェードインが完了したらシーン遷移
-        if (fadeEasing_.IsFinished()) {
-            KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
-            return;
-        }
-        break;
-
-    case Phase::kDone:
-        break;
-    }
+    currentState_(timeSpeed);
 
     ViewUpDate();
+}
+
+void GameSceneGameOver::StateSpriteAnim([[maybe_unused]] float timeSpeed) {
+    if (!gameOverSprite_->GetSpriteEaseAnimationPlayer()->IsFinished()) { 
+        return; 
+    }
+
+    // スプライトの最終位置を取得してからアニメーションを停止
+    Vector2 finalPos = gameOverSprite_->GetSpriteEaseAnimationPlayer()->GetCurrentPosition();
+    gameOverSprite_->transform_.pos = finalPos;
+    gameOverSprite_->StopSpriteEaseAnimation();
+
+    // 画面フェードイン開始
+    auto* screen = pOwner_->GetGameObj().screenSprite_.get();
+    screen->SetIsDraw(true);
+    screen->SetAlpha(alpha_);
+
+    // フェードイン状態に遷移
+    currentState_ = [this](float t) { StateFadeIn(t); };
+}
+
+void GameSceneGameOver::StateFadeIn(float timeSpeed) {
+    // 画面フェードイン更新
+    fadeEasing_.Update(timeSpeed);
+    pOwner_->GetGameObj().screenSprite_->SetAlpha(alpha_);
+
+    // フェードインが完了したらシーン遷移
+    if (!fadeEasing_.IsFinished()) {
+        return; 
+    }
+
+    // シーン遷移
+    currentState_ = [](float) {};
+    KetaEngine::SceneManager::GetInstance()->ChangeScene("RESULT");
 }
 
 void GameSceneGameOver::Debug() {

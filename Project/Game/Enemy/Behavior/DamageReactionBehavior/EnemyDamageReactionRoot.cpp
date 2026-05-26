@@ -1,11 +1,11 @@
-﻿/// behavior
+/// behavior
 #include "EnemyDamageReactionRoot.h"
 #include "EnemyDamageReactionNormal.h"
 #include "EnemyDamageReactionSlammed.h"
 #include "EnemyDamageReactionTakeUpper.h"
 #include "EnemyDeath.h"
 /// Enemy
-#include "Enemy/EnemyManager.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
 #include "Enemy/Types/BaseEnemy.h"
 // Field
 #include "Field/SideRope/SideRope.h"
@@ -14,8 +14,8 @@
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
 /// data
-#include "Enemy/DamageReaction/EnemyDamageReactionController.h"
-#include "Enemy/DamageReaction/EnemyDamageReactionData.h"
+#include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionController.h"
+#include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionData.h"
 /// math
 #include "Frame/Frame.h"
 #include "MathFunction.h"

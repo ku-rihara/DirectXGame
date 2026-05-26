@@ -1,7 +1,7 @@
-﻿#include "EnemyDamageRendition.h"
+#include "EnemyDamageRendition.h"
 #include "Enemy/Types/BaseEnemy.h"
-#include "Enemy/EnemyManager.h"
-#include "Enemy/DamageReaction/EnemyDamageReactionController.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
+#include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionController.h"
 #include "Frame/Frame.h"
 
 void EnemyDamageRendition::Init(BaseEnemy* enemy, EnemyDamageReactionData* reactionData) {

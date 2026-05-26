@@ -75,7 +75,6 @@ void EditorScene::Debug() {
     player_->AdjustParam();
     sideRopeController_->AdjustParam();
     enemyManager_->AdjustParam();
-    enemySpawner_->AdjustParam();
     combo_->AdjustParam();
     killCounter_->AdjustParam();
     comboAsistController_->AdjustParam();
@@ -126,7 +125,6 @@ void EditorScene::ObjectInit() {
     player_                      = std::make_unique<Player>();
     gameCamera_                  = std::make_unique<GameCamera>();
     enemyManager_                = std::make_unique<EnemyManager>();
-    enemySpawner_                = std::make_unique<EnemySpawner>();
     skyBox_                      = std::make_unique<SkyBox>();
     combo_                       = std::make_unique<Combo>();
     attackEffect_                = std::make_unique<AttackEffect>();
@@ -154,7 +152,7 @@ void EditorScene::ObjectInit() {
     comboDirector_->Init();
     backGroundObjectManager_->Init();
     enemyManager_->Init();
-    enemySpawner_->Init("enemySpawner.json");
+    enemyManager_->InitSpawner("enemySpawner.json");
     gameCamera_->Init();
     playerComboAttackController_->Init();
     killCounter_->SetAttackController(playerComboAttackController_.get());
@@ -175,10 +173,6 @@ void EditorScene::SetClassPointer() {
     enemyManager_->SetCombo(combo_.get());
     enemyManager_->SetKillCounter(killCounter_.get());
     enemyManager_->SetGameCamera(gameCamera_.get());
-    enemyManager_->SetEnemySpawner(enemySpawner_.get());
-
-    enemySpawner_->SetEnemyManager(enemyManager_.get());
-
     lockOnController_->SetEnemyManager(enemyManager_.get());
 
     player_->SetViewProjection(&viewProjection_);

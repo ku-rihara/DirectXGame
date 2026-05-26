@@ -75,7 +75,7 @@ void EnemyDamageReactionController::EditorUpdate() {
         // デフォルトパラメータUI（敵タイプ別）
         if (ImGui::TreeNode("Default Parameters")) {
             // 敵タイプの名前
-            const char* typeNames[]     = {"Normal", "Strong"};
+            const char* typeNames[] = {"Normal", "Strong"};
             // 利用可能なアニメーション種類の名前
             const auto& availableAnimes = availableAnimations_;
             // アニメーション種類

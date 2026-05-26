@@ -53,7 +53,7 @@ public:
     const std::string& GetTag() const { return tag_; }
 
     /// setter
-    void SetIsAbleCollision(const bool& is) { isAbleCollision_ = is; }
+    void SetIsAbleCollision(bool is) { isAbleCollision_ = is; }
     void SetSize(const Vector3& size) { size_ = size; }
     void SetPosition(const Vector3& position) { transform_.translation_ = position; }
     void SetOffset(const Vector3& offset) { offset_ = offset; }

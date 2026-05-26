@@ -64,7 +64,6 @@ void GameScene::Debug() {
     gameObj_.player_->AdjustParam();
     gameObj_.sideRopeController_->AdjustParam();
     gameObj_.enemyManager_->AdjustParam();
-    gameObj_.enemySpawner_->AdjustParam();
     gameObj_.continuousEnemySpawner_->AdjustParam();
     gameObj_.combo_->AdjustParam();
     gameObj_.fireInjectors_->AdjustParam();
@@ -124,7 +123,6 @@ void GameScene::ObjectInit() {
     gameObj_.player_                      = std::make_unique<Player>();
     gameObj_.gameCamera_                  = std::make_unique<GameCamera>();
     gameObj_.enemyManager_                = std::make_unique<EnemyManager>();
-    gameObj_.enemySpawner_                = std::make_unique<EnemySpawner>();
     gameObj_.operateUI_                   = std::make_unique<OperateUI>();
     gameObj_.skyBox_                      = std::make_unique<SkyBox>();
     gameObj_.combo_                       = std::make_unique<Combo>();
@@ -155,7 +153,7 @@ void GameScene::ObjectInit() {
     gameObj_.combo_->Init();
     gameObj_.gameIntroManager_->Init();
     gameObj_.enemyManager_->Init();
-    gameObj_.enemySpawner_->Init("enemySpawner.json");
+    gameObj_.enemyManager_->InitSpawner("enemySpawner.json");
     gameObj_.continuousEnemySpawner_->Init();
     gameObj_.fireInjectors_->Init();
     gameObj_.gameCamera_->Init();
@@ -181,10 +179,8 @@ void GameScene::SetClassPointer() {
     gameObj_.enemyManager_->SetCombo(gameObj_.combo_.get());
     gameObj_.enemyManager_->SetKillCounter(gameObj_.killCounter_.get());
     gameObj_.enemyManager_->SetGameCamera(gameObj_.gameCamera_.get());
-    gameObj_.enemyManager_->SetEnemySpawner(gameObj_.enemySpawner_.get());
     gameObj_.enemyManager_->SetDeathTimer(gameObj_.deathTimer_.get());
 
-    gameObj_.enemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
     gameObj_.continuousEnemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
     gameObj_.continuousEnemySpawner_->SetPlayer(gameObj_.player_.get());
 

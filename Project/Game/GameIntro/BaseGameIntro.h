@@ -57,8 +57,8 @@ protected:
 
 public:
     // getter
-    const bool& GetIsFinish() const { return isFinish_; }
-    const bool& GetIsAbleEnemySpawn() const { return isAbleEnemySpawn_; }
+    bool GetIsFinish() const { return isFinish_; }
+    bool GetIsAbleEnemySpawn() const { return isAbleEnemySpawn_; }
 
     // setter
     void SetHowToOperate(OperateUI* howToOperate) { pHowToOperate_ = howToOperate; }

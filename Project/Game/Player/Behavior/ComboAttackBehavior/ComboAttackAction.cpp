@@ -1,4 +1,4 @@
-﻿#include "ComboAttackAction.h"
+#include "ComboAttackAction.h"
 #include "utility/Log/Log.h"
 #include <cmath>
 #include "MathFunction.h"
@@ -22,7 +22,7 @@
 // PostEffect
 #include "PostEffect/PostEffectRenderer.h"
 // Enemy
-#include "Enemy/EnemyManager.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
 #include "Enemy/Types/BaseEnemy.h"
 
 ComboAttackAction::ComboAttackAction(Player* player, PlayerComboAttackData* attackData)

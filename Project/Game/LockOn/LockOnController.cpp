@@ -3,7 +3,7 @@
 // target
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/Types/StrongEnemy.h"
-#include "Enemy/EnemyManager.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
 
 void LockOnController::Init() {
     lockOn_ = std::make_unique<LockOn>();

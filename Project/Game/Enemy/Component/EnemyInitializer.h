@@ -13,6 +13,8 @@ public:
     void Run();
 
 private:
+
+    // 各初期化処理
     void ResetFlags();
     void InitAnimator();
     void InitBehaviorController();
@@ -24,6 +26,7 @@ private:
     void InitDamageReaction();
     void ApplyCollision();
 
+private:
     BaseEnemy* enemy_;
     Vector3    spawnPos_;
 };

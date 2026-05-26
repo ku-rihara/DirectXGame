@@ -80,21 +80,21 @@ public:
     const PlayerComboAttackData* GetComboAttackData() const { return comboAttackData_; }
     float GetAttackPower() const { return attackPower_; };
     int32_t GetCurrentLoopCount() const { return currentLoopCount_; }
-    const bool& GetIsInLoopWait() const { return isInLoopWait_; }
-    const bool& GetIsHit() const { return isHit_; }
+    bool GetIsInLoopWait() const { return isInLoopWait_; }
+    bool GetIsHit() const { return isHit_; }
 
     // ダメージが確定した際に敵側から呼ぶ
     void NotifyDamageHit() { ++damageHitCount_; }
     int32_t GetDamageHitCount() const { return damageHitCount_; }
-    const bool& GetIsFinish() const { return isFinish_; }
+    bool GetIsFinish() const { return isFinish_; }
     const KetaEngine::WorldTransform* GetPlayerTransform() const { return baseTransform_; }
-    const bool& GetHasHitEnemy() const { return hasHitEnemy_; }
+    bool GetHasHitEnemy() const { return hasHitEnemy_; }
     bool            GetHasHitTarget() const  { return hasHitTarget_; }
     const Vector3&  GetHitTargetPos() const  { return hitTargetPos_; }
 
-    void SetIsAbleCollision(const bool& is) { isAbleCollision_ = is; }
+    void SetIsAbleCollision(bool is) { isAbleCollision_ = is; }
     void SetAttackPower(float atkPower) { attackPower_ = atkPower; }
-    void SetIsHit(const bool& is) { isHit_ = is; }
+    void SetIsHit(bool is) { isHit_ = is; }
     void SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform);
     void SetSphereRad(float radius) { sphereRad_ = radius; }
     void SetPosition(const Vector3& position) { transform_.translation_ = position; }

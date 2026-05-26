@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseEnemyDamageReaction.h"
-#include "Enemy/DamageReaction/EnemyDamageReactionData.h"
+#include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionData.h"
 #include "Rendition/EnemyDamageRendition.h"
 #include "Vector3.h"
 

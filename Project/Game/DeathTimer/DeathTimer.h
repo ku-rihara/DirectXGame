@@ -59,7 +59,7 @@ private:
     float stressReductionPerHit_ = 5.0f; // ザコ攻撃1回あたりの減少量
 
     // コールバック
-    std::function<void()> onDecayTick_;  // ストレス減少時に呼ばれる
+    std::function<void()> onDecayTick_; // ストレス減少時に呼ばれる
     std::function<void()> onStressTick_; // ストレス増加時に呼ばれる
 
     // 煽り状態
@@ -67,7 +67,6 @@ private:
     int32_t tauntingEnemyCount_ = 0;
 
     bool isDeath_ = false;
-
     bool isGodMode_ = false; // デバッグ用: ストレス増加を止める
 
 public:

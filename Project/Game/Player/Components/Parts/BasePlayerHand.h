@@ -71,8 +71,8 @@ public:
     ///========================================================
     virtual void SetParent(KetaEngine::WorldTransform* parent);
     void SetObjTranslate(const Vector3& pos) { obj3d_->transform_.translation_ = pos; }
-    void SetIsEmit(const bool& isEmit) { isEmit_ = isEmit; }
-    void SetIsShadow(const bool& isShadow) { isShadow_ = isShadow; }
+    void SetIsEmit(bool isEmit) { isEmit_ = isEmit; }
+    void SetIsShadow(bool isShadow) { isShadow_ = isShadow; }
 
     /// トレイルを即座にクリア（攻撃リセット時などに呼ぶ）
     void ClearTrail() { trailPlayer_.StopAndClear(); }

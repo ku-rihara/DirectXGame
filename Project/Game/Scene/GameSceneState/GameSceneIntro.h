@@ -2,6 +2,7 @@
 
 #include "2d/Sprite.h"
 #include "BaseGameSceneState.h"
+#include <functional>
 #include <memory>
 
 /// <summary>
@@ -17,8 +18,18 @@ public:
     void Debug() override;
 
 private:
-    // イントロステート固有の変数
-    float alpha_        = 1.0f;
-    bool isFirstChange_ = false;
+    /// <summary>
+    /// 暗転スプライトをフェードアウトさせるフェーズ
+    /// </summary>
+    /// <param name="timeSpeed">タイムスピード</param>
+    void PhaseFadeIn(float timeSpeed);
+    /// <summary>
+    /// イントロ演出を進行するフェーズ
+    /// </summary>
+    /// <param name="timeSpeed">タイムスピード</param>
+    void PhaseIntro(float timeSpeed);
 
+    float alpha_            = 1.0f;    //< 暗転スプライトのアルファ値
+    bool shouldTransition_  = false;   //< Playingステートへの遷移フラグ
+    std::function<void(float)> phase_; //< 現在のフェーズ関数
 };

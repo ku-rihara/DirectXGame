@@ -1,4 +1,4 @@
-﻿#include "StrongEnemy.h"
+#include "StrongEnemy.h"
 #include "Player/Player.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 // behavior
@@ -9,7 +9,7 @@
 #include "Enemy/Behavior/ActionBehavior/StrongEnemyBehavior/StrongEnemyTauntBehavior.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 // manager
-#include "Enemy/EnemyManager.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
 
 #include "Frame/Frame.h"
 #include "Light/LightingType.h"

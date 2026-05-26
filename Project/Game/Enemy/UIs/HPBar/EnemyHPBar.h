@@ -40,14 +40,14 @@ private:
 
 public:
     // getter
-    const bool& GetIsSpawned() const { return isSpawned_; }
+    bool GetIsSpawned() const { return isSpawned_; }
 
     // setter
     void SetPosition(const Vector2& pos) { position_ = pos; }
     void SetGaugeOffset(const Vector2& offset) { gaugeOffset_ = offset; }
-    void SetIsSpawned(const bool& is) { isSpawned_ = is; }
+    void SetIsSpawned(bool is) { isSpawned_ = is; }
     void Show();
     void SetAlpha(float a) { alpha_ = a; }
-    void SetIsDraw(const bool& is) { isDraw_ = is; }
+    void SetIsDraw(bool is) { isDraw_ = is; }
     void SetColorConfig(EnemyHPBarColorConfig* config) { colorConfig_ = config; }
 };

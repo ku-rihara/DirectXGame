@@ -101,7 +101,7 @@ void IntroSpawnField::Finish() {
     isFinish_ = true;
 }
 
-bool IntroSpawnField::ProcessStep(float limitTime, const Step& nextStep, const bool& enableEnemySpawn) {
+bool IntroSpawnField::ProcessStep(float limitTime, const Step& nextStep, bool enableEnemySpawn) {
     currentTime_ += playSpeed_;
 
     if (currentTime_ >= limitTime) {

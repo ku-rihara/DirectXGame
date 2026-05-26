@@ -55,7 +55,7 @@ private:
     /// <param name="nextStep">次のステップ</param>
     /// <param name="enableEnemySpawn">敵生成有効化</param>
     /// <returns>ステップ完了でtrue</returns>
-    bool ProcessStep(float limitTime, const Step& nextStep, const bool& enableEnemySpawn = false);
+    bool ProcessStep(float limitTime, const Step& nextStep, bool enableEnemySpawn = false);
 
 private:
     static void (IntroSpawnField::* spFuncTable_[])();

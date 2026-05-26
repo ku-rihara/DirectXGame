@@ -60,7 +60,7 @@ public:
     void GameIntroUpdate(float playSpeed = 1.0f); //< イントロシーン更新
 
     // 影適応するかのフラグセット
-    void SetShadowFrag(const bool& isShadow);
+    void SetShadowFrag(bool isShadow);
 
     /// <summary>
     /// 移動
@@ -105,7 +105,7 @@ public:
     /// <param name="fallSpeedLimit">落下速度上限</param>
     /// <param name="gravity">重力</param>
     /// <param name="isJump">ジャンプによる落下か</param>
-    void Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump = false);
+    void Fall(float& speed, float fallSpeedLimit, float gravity, bool isJump = false);
 
     // Behavior
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);

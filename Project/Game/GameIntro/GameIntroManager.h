@@ -47,7 +47,7 @@ public:
     /// </summary>
     /// <param name="step">イントロステップ</param>
     /// <returns>終了していればtrue</returns>
-    const bool& GetIsFinishStep(const IntroStep& step);
+    bool GetIsFinishStep(const IntroStep& step);
 
 private:
     

@@ -16,9 +16,8 @@
 // DeathTimer
 #include "DeathTimer/DeathTimer.h"
 // Enemy
-#include "Enemy/EnemyManager.h"
-#include "Enemy/Spawner/ContinuousEnemySpawner.h"
-#include "Enemy/Spawner/EnemySpawner.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
+#include "Enemy/EnemyManager/Spawner/ContinuousEnemySpawner.h"
 // Field
 #include "Field/Field.h"
 #include "Field/SideRope/SideRopeController.h"
@@ -88,7 +87,6 @@ private:
         std::unique_ptr<SkyBox> skyBox_                                           = nullptr;
         std::unique_ptr<Combo> combo_                                             = nullptr;
         std::unique_ptr<EnemyManager> enemyManager_                               = nullptr;
-        std::unique_ptr<EnemySpawner> enemySpawner_                               = nullptr;
         std::unique_ptr<OperateUI> operateUI_                                     = nullptr;
         std::unique_ptr<FireInjectors> fireInjectors_                             = nullptr;
         std::unique_ptr<BackGroundObjectManager> backGroundObjectManager_         = nullptr;

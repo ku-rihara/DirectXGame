@@ -285,7 +285,7 @@ void Player::Jump(float& speed, float fallSpeedLimit, float gravity) {
 ///=========================================================
 /// 　落ちる
 ///==========================================================
-void Player::Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump) {
+void Player::Fall(float& speed, float fallSpeedLimit, float gravity, bool isJump) {
 
     if (!isJump) {
         // 移動
@@ -478,7 +478,7 @@ void Player::InitInGameScene() {
     SetShadowFrag(false);
 }
 
-void Player::SetShadowFrag(const bool& isShadow) {
+void Player::SetShadowFrag(bool isShadow) {
     obj3d_->SetIsShadow(isShadow);
     leftHand_->SetIsShadow(isShadow);
     rightHand_->SetIsShadow(isShadow);

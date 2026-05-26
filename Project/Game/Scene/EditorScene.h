@@ -13,8 +13,7 @@
 // KillCounter
 #include "KillCounter/KillCounter.h"
 // Enemy
-#include "Enemy/EnemyManager.h"
-#include "Enemy/Spawner/EnemySpawner.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
 // Field
 #include "Field/Field.h"
 #include "Field/SideRope/SideRopeController.h"
@@ -74,7 +73,6 @@ private:
     std::unique_ptr<SkyBox> skyBox_                                           = nullptr;
     std::unique_ptr<Combo> combo_                                             = nullptr;
     std::unique_ptr<EnemyManager> enemyManager_                               = nullptr;
-    std::unique_ptr<EnemySpawner> enemySpawner_                               = nullptr;
     std::unique_ptr<AttackEffect> attackEffect_                               = nullptr;
     std::unique_ptr<PlayerComboAttackController> playerComboAttackController_ = nullptr;
     std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;

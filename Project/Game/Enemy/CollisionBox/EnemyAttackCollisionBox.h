@@ -65,12 +65,12 @@ public:
     ///------------------------------------------------------------------------------
     Vector3 GetCollisionPos() const override;
     float GetAttackValue() const { return attackValue_; }
-    const bool& GetIsHit() const { return isHit_; }
-    const bool& GetIsFinish() const { return isFinish_; }
+    bool GetIsHit() const { return isHit_; }
+    bool GetIsFinish() const { return isFinish_; }
 
     ///------------------------------------------------------------------------------
     /// setter method
     ///------------------------------------------------------------------------------
     void SetEnemy(BaseEnemy* enemy) { pEnemy_ = enemy; }
-    void SetIsHit(const bool& is) { isHit_ = is; }
+    void SetIsHit(bool is) { isHit_ = is; }
 };

@@ -3,6 +3,7 @@
 #include "2d/Sprite.h"
 #include "BaseGameSceneState.h"
 #include "Easing/Easing.h"
+#include <functional>
 #include <memory>
 
 /// <summary>
@@ -18,13 +19,16 @@ public:
     void Debug() override;
 
 private:
-    enum class Phase {
-        kSpriteAnim, // TimeUpスプライトアニメーション待ち
-        kFadeIn,     // 画面フェードイン（暗転）
-        kDone,
-    };
+    /// <summary>
+    /// TimeUpスプライトアニメーション待ちの状態
+    /// </summary>
+    void StateSpriteAnim(float timeSpeed);
+    /// <summary>
+    /// 画面フェードインの状態
+    /// </summary>
+    void StateFadeIn(float timeSpeed);
 
-    Phase phase_ = Phase::kSpriteAnim;
+    std::function<void(float)> currentState_;
     float alpha_ = 0.7f;
 
     std::unique_ptr<KetaEngine::Sprite> gameOverSprite_;

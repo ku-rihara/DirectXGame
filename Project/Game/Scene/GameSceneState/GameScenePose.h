@@ -18,6 +18,6 @@ public:
     void Debug() override;
 
 private:
-    std::unique_ptr<KetaEngine::Sprite> poseSprite_;
-    PauseController pauseController_;
+    std::unique_ptr<KetaEngine::Sprite> poseSprite_; ///< ポーズ中に表示するスプライト
+    PauseController pauseController_;                 ///< ポーズボタン入力の管理
 };

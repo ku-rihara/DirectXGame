@@ -10,10 +10,9 @@ GameSceneIntro::GameSceneIntro(GameScene* gameScene)
 }
 
 void GameSceneIntro::Init() {
-    alpha_         = 1.0f;
-    isFirstChange_ = false;
-
-  
+    alpha_           = 1.0f;
+    shouldTransition_ = false;
+    phase_           = [this](float t) { PhaseFadeIn(t); };
 }
 
 void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
@@ -23,33 +22,14 @@ void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
 
     auto& obj = pOwner_->GetGameObj();
 
-    // フェードイン処理
     obj.screenSprite_->SetAlpha(alpha_);
 
-    if (!isFirstChange_) {
-        alpha_ -= KetaEngine::Frame::DeltaTime();
-
-        if (alpha_ <= 0.0f) {
-            alpha_         = 0.0f;
-            isFirstChange_ = true;
-        }
-    }
-
-
-    // gameIntro
     obj.gameIntroManager_->Update();
     obj.operateUI_->Update();
 
-    if (obj.gameIntroManager_->GetIsFinishStep(GameIntroManager::SpawnField)) {
-        obj.enemySpawner_->Update(KetaEngine::Frame::DeltaTimeRate());
-        obj.enemyManager_->Update();
-        obj.enemyManager_->UIUpdate(pOwner_->GetViewProjection());
-    }
+    phase_(timeSpeed);
 
-    // Editor
     obj.attackEffect_->Update();
-
-    // obj
     obj.skyBox_->Update();
     obj.audienceController_->Update();
     obj.comboDirector_->Update();
@@ -57,14 +37,33 @@ void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
     obj.gameCamera_->Update(obj.gameIntroManager_->GetCurrentPlaySpeedRate());
     obj.combo_->Update();
 
-    // イントロ完了でプレイ状態へ遷移
-    if (obj.gameIntroManager_->GetIsFinishStep(GameIntroManager::AppearPurpose)) {
-        ViewUpDate();
+    ViewUpDate();
+
+    if (shouldTransition_) {
         pOwner_->ChangeState(std::make_unique<GameScenePlaying>(pOwner_));
-        return;
+    }
+}
+
+void GameSceneIntro::PhaseFadeIn([[maybe_unused]] float timeSpeed) {
+    alpha_ -= KetaEngine::Frame::DeltaTime();
+    if (alpha_ <= 0.0f) {
+        alpha_ = 0.0f;
+        phase_ = [this](float t) { PhaseIntro(t); };
+    }
+}
+
+void GameSceneIntro::PhaseIntro([[maybe_unused]] float timeSpeed) {
+    auto& obj = pOwner_->GetGameObj();
+
+    if (obj.gameIntroManager_->GetIsFinishStep(GameIntroManager::SpawnField)) {
+        obj.enemyManager_->GetSpawner()->Update(KetaEngine::Frame::DeltaTimeRate());
+        obj.enemyManager_->Update();
+        obj.enemyManager_->UIUpdate(pOwner_->GetViewProjection());
     }
 
-    ViewUpDate();
+    if (obj.gameIntroManager_->GetIsFinishStep(GameIntroManager::AppearPurpose)) {
+        shouldTransition_ = true;
+    }
 }
 
 void GameSceneIntro::Debug() {
