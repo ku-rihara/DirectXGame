@@ -12,15 +12,21 @@
 EnemyDamageReactionNormal::EnemyDamageReactionNormal(
     BaseEnemy* boss,
     EnemyDamageReactionData* reactionData,
-    const PlayerAttackCollider* playerCollisionInfo)
+    const PlayerAttackCollider* playerCollisionInfo,
+    bool skipAnimation)
     : BaseEnemyDamageReaction("EnemyDamageReactionNormal", boss) {
 
-    // リアクションデータとプレイヤーのコリジョン情報をセット
     pReactionData_        = reactionData;
     pPlayerCollisionInfo_ = playerCollisionInfo;
+    skipAnimation_        = skipAnimation;
 
     InitReaction();
     damageRendition_.Init(pBaseEnemy_, pReactionData_);
+
+    // knockBackTime=0 の即時完了リアクションはUpdateが呼ばれる前に
+    if (totalReactionTime_ <= 0.0f) {
+        damageRendition_.Update(0.0f, 0.0f, hasPlayedRendition_);
+    }
 }
 
 EnemyDamageReactionNormal::~EnemyDamageReactionNormal() {
@@ -53,10 +59,12 @@ void EnemyDamageReactionNormal::InitReaction() {
     // 敵のタイプを取得
     int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
 
-    // StumbleBackwards再生中のNormalリアクションはアニメーションをスキップ
-    bool skipAnimation = false;
-    if (NormalEnemy* normalEnemy = dynamic_cast<NormalEnemy*>(pBaseEnemy_)) {
-        skipAnimation = normalEnemy->IsInStumblePhase();
+    // StumbleBackwards再生中 or 再再生間隔未満の場合はアニメーションをスキップ
+    bool skipAnimation = skipAnimation_;
+    if (!skipAnimation) {
+        if (NormalEnemy* normalEnemy = dynamic_cast<NormalEnemy*>(pBaseEnemy_)) {
+            skipAnimation = normalEnemy->IsInStumblePhase();
+        }
     }
 
     if (pReactionData_) {

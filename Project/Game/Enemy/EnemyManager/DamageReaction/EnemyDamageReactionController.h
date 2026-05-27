@@ -82,7 +82,7 @@ private:
     std::array<KetaEngine::FileSelector, kEnemyTypeCount> defaultParticleFileSelectors_;
 
     // エディター用 利用可能なアニメーション名リスト
-    std::vector<std::string> availableAnimations_;
+    std::array<std::vector<std::string>, kEnemyTypeCount> availableAnimations_;
 
 public:
     EnemyDamageReactionData* GetSelectedAttack();
@@ -91,8 +91,8 @@ public:
     int GetAttackCount() const { return static_cast<int>(reactions_.size()); }
 
     // エディター用 利用可能なアニメーション名リストの設定・取得
-    void SetAvailableAnimations(const std::vector<std::string>& animations) { availableAnimations_ = animations; }
-    const std::vector<std::string>& GetAvailableAnimations() const { return availableAnimations_; }
+    void SetAvailableAnimations(int enemyType, const std::vector<std::string>& animations) { availableAnimations_[enemyType] = animations; }
+    const std::vector<std::string>& GetAvailableAnimations(int enemyType) const { return availableAnimations_[enemyType]; }
 
     // デフォルトパラメータのGetter
     const std::string& GetDefaultDamageAnimationName(int enemyType, DefaultAnimType animType) const {

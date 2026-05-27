@@ -1,6 +1,9 @@
 #include "EnemyBehaviorController.h"
 // Enemy
 #include "Enemy/Types/BaseEnemy.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
+#include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionController.h"
+#include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionData.h"
 // Behaviors
 #include "Enemy/Behavior/ActionBehavior/BaseEnemyBehavior.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
@@ -21,6 +24,8 @@ void EnemyBehaviorController::Init(BaseEnemy* owner) {
     isDamageColling_         = false;
     damageCollTime_          = 0.0f;
     lastReceivedAttackName_.clear();
+    animReplayTimer_         = 0.0f;
+    animReplayAttackName_.clear();
     moveBehavior_   = nullptr;
     damageBehavior_ = nullptr;
 }
@@ -38,6 +43,7 @@ void EnemyBehaviorController::Update(float deltaTime) {
     }
 
     DamageCollingUpdate(deltaTime);
+    animReplayTimer_ += deltaTime;
 
     if (damageBehavior_) {
         damageBehavior_->Update(deltaTime);
@@ -62,11 +68,13 @@ void EnemyBehaviorController::ChangeDamageReactionBehavior(std::unique_ptr<BaseE
         return;
     }
 
-    // スポーン中にダメージを受けた場合はスケール・コリジョンをリセット
+    // スポーンビヘイビアをスキップして次のビヘイビアへ移行する
     if (dynamic_cast<EnemySpawn*>(moveBehavior_.get())) {
         pOwner_->ScaleReset();
         pOwner_->OnSpawnCompleted();
         pOwner_->SetIsAdaptCollision(true);
+        // EnemySpawn を post-spawn ビヘイビアに差し替え
+        moveBehavior_ = pOwner_->CreatePostSpawnBehavior();
     }
 
     damageBehavior_ = std::move(behavior);
@@ -95,15 +103,52 @@ void EnemyBehaviorController::OnPlayerAttackCollision(PlayerAttackCollider* atta
 
     // 同一攻撃のクーリング中
     if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
+      
+        auto* controller = pOwner_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+        if (controller) {
+            const auto* reactionData = controller->GetAttackByTriggerName(attackName);
+            if (reactionData && reactionData->GetReactionParam().normalParam.knockBackTime <= 0.0f) {
+                const EnemyDamageRenditionData* rendition = reactionData->GetRendition();
+                if (rendition) {
+                    const auto& particle = rendition->GetParticleEffectParam();
+                    if (!particle.fileName.empty() && particle.fileName != "None" && particle.startTiming <= 0.0f) {
+                        if (auto* effects = pOwner_->GetEnemyEffects()) {
+                            effects->Emit(particle.fileName);
+                        }
+                    }
+                }
+            }
+        }
         return;
     }
 
     attackController->NotifyDamageHit();
 
+    // 同一攻撃が animReplayMinTime 未満で再ヒットした場合はアニメーション再再生をスキップ
+    bool skipAnimation = false;
+    if (animReplayAttackName_ == attackName) {
+        auto* controller = pOwner_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+        if (controller) {
+            const auto* reactionData = controller->GetAttackByTriggerName(attackName);
+            if (reactionData) {
+                float minTime = reactionData->GetReactionParam().animReplayMinTime;
+                if (minTime > 0.0f && animReplayTimer_ < minTime) {
+                    skipAnimation = true;
+                }
+            }
+        }
+    }
+
+    // アニメーションを再生する場合はタイマーをリセット
+    if (!skipAnimation) {
+        animReplayTimer_ = 0.0f;
+    }
+    animReplayAttackName_ = attackName;
+
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(pOwner_));
 
     if (EnemyDamageReactionRoot* root = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
-        root->SelectDamageActionBehaviorByAttack(attackController);
+        root->SelectDamageActionBehaviorByAttack(attackController, skipAnimation);
     }
 }
 
@@ -132,6 +177,8 @@ void EnemyBehaviorController::Reset() {
     damageBehavior_ = nullptr;
     ResetDamageCooling();
     lastReceivedAttackName_.clear();
+    animReplayTimer_ = 0.0f;
+    animReplayAttackName_.clear();
 }
 
 ///========================================================

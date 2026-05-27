@@ -20,7 +20,8 @@ public:
     /// ダメージリアクションを再生
     /// </summary>
     /// <param name="playerCollisionInfo">プレイヤーの攻撃情報</param>
-    void SelectDamageActionBehaviorByAttack(const PlayerAttackCollider* playerCollisionInfo);
+    /// <param name="skipAnimation">同一攻撃の再再生間隔未満の場合はアニメーションをスキップ</param>
+    void SelectDamageActionBehaviorByAttack(const PlayerAttackCollider* playerCollisionInfo, bool skipAnimation = false);
 
 private:
     /// <summary>
@@ -38,4 +39,5 @@ private:
 private:
     const PlayerAttackCollider* pPlayerCollisionInfo_    = nullptr;
     EnemyDamageReactionController* pReactionController_ = nullptr;
+    bool skipAnimation_                                  = false;
 };

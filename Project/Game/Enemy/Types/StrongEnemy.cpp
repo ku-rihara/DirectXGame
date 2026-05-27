@@ -94,7 +94,7 @@ void StrongEnemy::Update() {
     }
 
     if (isFleeing_ && dynamic_cast<EnemyDamageReactionRoot*>(GetDamageReactionBehavior())) {
-        // 焦りエフェクトの発生 (毎フレーム) - ダメージリアクション中は発生させない
+        // 焦りエフェクトの発生
         GetEnemyEffects()->Emit("EnemyImpatience");
     }
 }
@@ -263,7 +263,6 @@ void StrongEnemy::StopTauntToWait(float waitTime) {
 
 void StrongEnemy::BackToDamageRoot() {
     isFleeing_ = false;
-    ResetDamageCooling();
     // ダメージリアクションRootだけ設定して即座に逃走へ切り替える
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
     StartFlee();

@@ -73,6 +73,7 @@ void EnemyDamageReactionData::RegisterParams() {
     globalParameter_->Regist(groupName_, "Normal_DamageAnimationName", &reactionParam_.damageAnimationNames[0]);
     globalParameter_->Regist(groupName_, "Strong_DamageAnimationName", &reactionParam_.damageAnimationNames[1]);
     globalParameter_->Regist(groupName_, "damageCollingTime", &reactionParam_.damageCollingTime);
+    globalParameter_->Regist(groupName_, "animReplayMinTime", &reactionParam_.animReplayMinTime);
     globalParameter_->Regist(groupName_, "isPriorityReaction", &reactionParam_.isPriorityReaction);
 
     // NormalParam
@@ -98,8 +99,7 @@ void EnemyDamageReactionData::RegisterParams() {
 ///==========================================================
 /// パラメータ調整
 ///==========================================================
-void EnemyDamageReactionData::AdjustParam(const std::vector<std::string>& availableAnimations) {
-    availableAnimations;
+void EnemyDamageReactionData::AdjustParam([[maybe_unused]] const std::array<std::vector<std::string>, kEnemyTypeCount>& availableAnimations) {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
 
     ImGui::PushID(groupName_.c_str());
@@ -115,15 +115,16 @@ void EnemyDamageReactionData::AdjustParam(const std::vector<std::string>& availa
         for (int t = 0; t < kEnemyTypeCount; ++t) {
             ImGui::PushID(t);
 
-            if (!availableAnimations.empty()) {
+            const auto& anims = availableAnimations[t];
+            if (!anims.empty()) {
                 // 現在選択されているインデックスを検索
                 // 0=Default(空文字), 1=None, 2+=アニメーション名
                 int currentIndex = 0; // Default
                 if (reactionParam_.damageAnimationNames[t] == "None") {
                     currentIndex = 1;
                 } else if (!reactionParam_.damageAnimationNames[t].empty()) {
-                    for (size_t i = 0; i < availableAnimations.size(); ++i) {
-                        if (availableAnimations[i] == reactionParam_.damageAnimationNames[t]) {
+                    for (size_t i = 0; i < anims.size(); ++i) {
+                        if (anims[i] == reactionParam_.damageAnimationNames[t]) {
                             currentIndex = static_cast<int>(i + 2);
                             break;
                         }
@@ -134,7 +135,7 @@ void EnemyDamageReactionData::AdjustParam(const std::vector<std::string>& availa
                 std::vector<const char*> items;
                 items.push_back("Default");
                 items.push_back("None");
-                for (const auto& anim : availableAnimations) {
+                for (const auto& anim : anims) {
                     items.push_back(anim.c_str());
                 }
 
@@ -144,7 +145,7 @@ void EnemyDamageReactionData::AdjustParam(const std::vector<std::string>& availa
                     } else if (currentIndex == 1) {
                         reactionParam_.damageAnimationNames[t] = "None";
                     } else {
-                        reactionParam_.damageAnimationNames[t] = availableAnimations[currentIndex - 2];
+                        reactionParam_.damageAnimationNames[t] = anims[currentIndex - 2];
                     }
                 }
             } else {
@@ -166,10 +167,11 @@ void EnemyDamageReactionData::AdjustParam(const std::vector<std::string>& availa
     ImGui::SeparatorText("通常パラメータ");
     ImGui::Checkbox("死亡せずリアクション優先", &reactionParam_.isPriorityReaction);
     ImGui::DragFloat("ダメージクールタイム", &reactionParam_.damageCollingTime, 0.01f);
+    ImGui::DragFloat("アニメーション再再生間隔(同一攻撃)", &reactionParam_.animReplayMinTime, 0.01f, 0.0f, 5.0f);
     ImGui::DragFloat("ノックバック適応時間", &reactionParam_.normalParam.knockBackTime, 0.01f, 0.0f, 10.0f);
     ImGui::DragFloat("ノックバック減衰", &reactionParam_.normalParam.knockBackDamping, 0.1f);
 
-    if(ImGui::CollapsingHeader("突き落とされる用のパラメータ")) {
+    if (ImGui::CollapsingHeader("突き落とされる用のパラメータ")) {
         ImGui::DragFloat("突き落とされる場合の重力", &reactionParam_.slammedParam.gravity, 0.1f, 0.0f);
         ImGui::DragFloat3("突き落とされる場合の回転スピード", &reactionParam_.slammedParam.rotateSpeed.x, 0.01f);
     }

@@ -77,7 +77,6 @@ void EnemyDamageReactionController::EditorUpdate() {
             // 敵タイプの名前
             const char* typeNames[] = {"Normal", "Strong"};
             // 利用可能なアニメーション種類の名前
-            const auto& availableAnimes = availableAnimations_;
             // アニメーション種類
             const char* animeTypeLabels[] = {"Normal Damage", "TakeUpper", "Slammed", "Bound", "GetUp"};
 
@@ -85,6 +84,7 @@ void EnemyDamageReactionController::EditorUpdate() {
             for (int t = 0; t < kEnemyTypeCount; ++t) {
                 ImGui::PushID(t);
                 if (ImGui::TreeNode(typeNames[t])) {
+                    const auto& availableAnimes = availableAnimations_[t];
                     // アニメーション種類別のドロップダウン
                     for (int a = 0; a < static_cast<int>(DefaultAnimType::Count); ++a) {
                         ImGui::PushID(a);

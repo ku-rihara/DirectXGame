@@ -16,7 +16,8 @@ public:
     EnemyDamageReactionNormal(
         BaseEnemy* boss,
         EnemyDamageReactionData* reactionData,
-        const PlayerAttackCollider* playerCollisionInfo);
+        const PlayerAttackCollider* playerCollisionInfo,
+        bool skipAnimation = false);
     ~EnemyDamageReactionNormal() override;
 
     void Update(float deltaTime) override;
@@ -44,6 +45,8 @@ private:
     // 演出管理
     EnemyDamageRendition damageRendition_;
     bool hasPlayedRendition_ = false;
+
+    bool skipAnimation_ = false; ///< 同一攻撃の再再生間隔未満でのヒット時はアニメーションをスキップ
 
 public:
     Vector3 GetKnockBackVelocity() const { return knockBackVelocity_; }

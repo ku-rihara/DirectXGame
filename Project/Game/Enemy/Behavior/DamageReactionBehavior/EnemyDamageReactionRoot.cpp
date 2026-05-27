@@ -43,7 +43,7 @@ void EnemyDamageReactionRoot::Update(float deltaTime) {
 void EnemyDamageReactionRoot::Debug() {
 }
 
-void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerAttackCollider* playerCollisionInfo) {
+void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerAttackCollider* playerCollisionInfo, bool skipAnimation) {
     if (!playerCollisionInfo) {
         return;
     }
@@ -53,10 +53,10 @@ void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerAtt
     }
 
     pPlayerCollisionInfo_ = playerCollisionInfo;
-    // プレイヤーの攻撃名を取得
+    skipAnimation_        = skipAnimation;
+
     std::string attackName = playerCollisionInfo->GetComboAttackData()->GetGroupName();
 
-    // 攻撃名が空でない場合、リアクションを適用
     if (!attackName.empty()) {
         ApplyReactionByAttackName(attackName);
     }
@@ -85,7 +85,7 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
             pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
         } else {
             pBaseEnemy_->ChangeDamageReactionBehavior(
-                std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, nullptr, pPlayerCollisionInfo_));
+                std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, nullptr, pPlayerCollisionInfo_, skipAnimation_));
         }
         return;
     }
@@ -112,7 +112,7 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
                 std::make_unique<EnemyDamageReactionSlammed>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
         } else {
             pBaseEnemy_->ChangeDamageReactionBehavior(
-                std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+                std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_, skipAnimation_));
         }
     }
 }

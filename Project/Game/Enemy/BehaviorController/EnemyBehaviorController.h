@@ -66,4 +66,8 @@ private:
     bool        isDamageColling_        = false;
     float       damageCollTime_         = 0.0f;
     std::string lastReceivedAttackName_;
+
+    // アニメーション再再生クールタイム管理
+    float       animReplayTimer_        = 0.0f;
+    std::string animReplayAttackName_;
 };

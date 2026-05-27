@@ -540,7 +540,8 @@ void EnemyManager::UpdateAvailableAnimationsForEditor(BaseEnemy* enemy) {
 
     const auto& animeNames = enemy->GetAnimator()->GetDamageReactionAnimationNames();
     if (!animeNames.empty()) {
-        damageReactionController_->SetAvailableAnimations(animeNames);
+        int typeIndex = static_cast<int>(enemy->GetBaseInfo()->GetType());
+        damageReactionController_->SetAvailableAnimations(typeIndex, animeNames);
     }
 }
 

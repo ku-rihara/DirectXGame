@@ -47,12 +47,13 @@ public:
     // リアクションパラメータ
     struct ReactionParameter {
         std::string triggerAttackName;
-        std::array<std::string, kEnemyTypeCount> damageAnimationNames; 
+        std::array<std::string, kEnemyTypeCount> damageAnimationNames;
         NormalParam normalParam;
         BoundParam boundParam;
         SlammedParam slammedParam;
         TakeUpperParam takeUpperParam;
         float damageCollingTime;
+        float animReplayMinTime; ///< 同一攻撃でアニメーションを再再生するまでの最低経過時間
         bool isPriorityReaction;
     };
 
@@ -74,7 +75,7 @@ private:
 public:
 
     // パラメータバインド、調節
-    void AdjustParam(const std::vector<std::string>& availableAnimations);
+    void AdjustParam([[maybe_unused]] const std::array<std::vector<std::string>, kEnemyTypeCount>& availableAnimations);
     void RegisterParams();
 
     // データロード、セーブ
