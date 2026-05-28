@@ -115,26 +115,12 @@ public:
     void PreRenderTexture();       //< レンダーテクスチャ描画前処理
     void DepthBarrierTransition(); //< デプスバリア遷移
 
-    // GPUタイムスタンプクエリ（パス別GPU時間計測）
-    // passIndex: 0=Shadow, 1=MainDraw, 2=PostFx
-    static constexpr int kTimestampPassCount = 3;
-    void BeginTimestamp(int passIndex);  // パス開始時に呼ぶ
-    void EndTimestamp(int passIndex);    // パス終了時に呼ぶ
-    void ResolveTimestamps();            // EndFrame直前(DrawPostEffect後)に呼ぶ
-    float GetTimestampMs(int passIndex) const; // PostDraw後に取得可能
-
 private:
     ImGuiManager* imguiManager_     = nullptr;
     TextureManager* textureManager_ = nullptr;
     SrvManager* srvManager_         = nullptr;
     RtvManager* rtvManager_         = nullptr;
     WinApp* winApp_                 = nullptr;
-
-    // タイムスタンプクエリリソース
-    Microsoft::WRL::ComPtr<ID3D12QueryHeap> timestampHeap_;
-    Microsoft::WRL::ComPtr<ID3D12Resource>  timestampReadback_;
-    UINT64* timestampMappedData_ = nullptr;
-    UINT64  gpuTickFrequency_    = 1;
 
     // DirectXクラス群
     std::unique_ptr<DxDevice> dxDevice_;
