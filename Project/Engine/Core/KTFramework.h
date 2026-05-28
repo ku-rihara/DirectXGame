@@ -25,7 +25,6 @@ public:
     virtual void Finalize(); //< 終了処理
 
     void Debug(); //< デバッグ
-    void DisplayFPS(); //< FPS表示
     void DisplayGameView(); //< ゲームビュー表示
     void Run(); //< 実行
 

@@ -169,13 +169,6 @@ void GPUParticleManager::Update() {
         DispatchEmit(group);
         DispatchUpdate(group);
     }
-
-    // 最初の10フレームと60フレームごとにパーティクル統計をログ出力
-    int32_t total = activeGroups + skippedGroups;
-    if (total > 0 && (frameCounter_ <= 10 || frameCounter_ % 60 == 0)) {
-        Log::Info(std::format("[GPUParticle] frame={} dispatch={}/{} skipped={}",
-            frameCounter_, activeGroups, total, skippedGroups));
-    }
 }
 
 int32_t GPUParticleManager::GetActiveGroupCount() const {

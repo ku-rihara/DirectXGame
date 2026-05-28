@@ -29,6 +29,44 @@ void Frame::Update() {
     lastTime_                              = currentTime;
 }
 
+void Frame::FixFPS() {
+    // 1/60秒ピッタリの時間
+    const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
+
+    // 現在時刻を取得
+    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
+
+    // 1/60秒経っていない場合
+    if (elapsed < kMinTime) {
+        // 残り時間を計算
+        auto sleepTime = kMinTime - elapsed;
+
+        // 残り時間が1ミリ秒以上ある場合は、1ミリ秒引いた時間だけスリープする
+        if (sleepTime > std::chrono::microseconds(1000)) {
+            std::this_thread::sleep_for(sleepTime - std::chrono::microseconds(1000));
+        }
+
+        // 微小な待機を繰り返す
+        while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
+            std::this_thread::yield();
+        }
+    }
+
+    // 現在時刻を基準時間として記録
+    reference_ = std::chrono::steady_clock::now();
+}
+
+int32_t Frame::TimeToFrame(float seconds) {
+    // 秒からフレームに変換
+    return static_cast<int32_t>(seconds * kFPS);
+}
+
+float Frame::FrameToTime(int32_t frame) {
+    // フレームから秒に変換
+    return static_cast<float>(frame) / kFPS;
+}
+
 float Frame::DeltaTime() {
     return deltaTime_;
 }
@@ -37,42 +75,6 @@ float Frame::DeltaTimeRate() {
     return deltaTimeRate_;
 }
 
-void Frame::FixFPS() {
-    // 1/60秒ピッタリの時間
-    const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
-    // 1/60秒にわずかに短い時間
-    const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
-
-    // 現在時刻を取得
-    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-    // 前回基準からの経過時間を取得
-    std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
-
-    // 1/60秒経っていない場合
-    if (elapsed < kMinCheckTime) {
-        // 1/60秒経過するまで微小なスリープを繰り返す
-        while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
-            std::this_thread::sleep_for(std::chrono::microseconds(1));
-        }
-    }
-
-    // 現在時刻を基準時間として記録
-    reference_ = std::chrono::steady_clock::now();
-}
-
-/// <summary>
-/// 秒からフレームに変換
-/// </summary>
-int32_t Frame::TimeToFrame(float seconds) {
-    return static_cast<int32_t>(seconds * kFPS);
-}
-
-/// <summary>
-/// フレームから秒に変換
-/// </summary>
-float Frame::FrameToTime(int32_t frame) {
-    return static_cast<float>(frame) / kFPS;
-}
 
 void Frame::SetTimeScale(float scale) {
 

@@ -228,6 +228,8 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
     // ヒット時に終了処理へ即移行
     if (hasHitEnemy_ && attackData_->GetAttackParam().timingParam.isSkipToFinishOnHit) {
         isCollisionActive_ = false;
+        pCollisionInfo_->SetIsAbleCollision(false);
+        pCollisionInfo_->Update();
         if (attackData_->HasFinishPhase()) {
             currentFrame_ = 0.0f;
             SetFinishMoveEasing();

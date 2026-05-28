@@ -37,7 +37,7 @@ private:
     AbstractSceneFactory* sceneFactory_                 = nullptr;
     std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 
-    /// ChangeScene() で予約されたシーン名（次フレーム冒頭で適用）
+    /// ChangeScene() で予約されたシーン名
     std::string pendingSceneName_;
     bool justTransitioned_ = false;
 

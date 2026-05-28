@@ -46,7 +46,7 @@ public:
         CANCEL_TIME,
         PRECEDE_INPUT,
         FINISH_WAIT_TIME,
-        // MainHead追従トレイル（単独トラック）
+        // MainHead追従トレイル
         RIBBON_TRAIL_MAIN_HEAD,
         // コントローラ振動
         VIBRATION,
@@ -56,9 +56,9 @@ public:
     struct TrackInfo {
         TrackType type;
         int32_t trackIndex;
-        int32_t branchIndex = -1;  // どの分岐のトラックか（-1は分岐と関係ない）
+        int32_t branchIndex = -1;  // どの分岐のトラックか
         std::string fileName;
-        std::string trailFileName; // トレイルプリセット名（右手・左手アニメーションのみ使用）
+        std::string trailFileName; // トレイルプリセット名
         bool isCameraReset = false;
         float volume       = 1.0f;
         // 振動トラック用
