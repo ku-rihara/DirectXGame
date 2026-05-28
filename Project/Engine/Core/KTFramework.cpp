@@ -5,8 +5,8 @@ using namespace KetaEngine;
 // dx
 #include "3d/ModelManager.h"
 // particle
-#include "Particle/GPUParticle/GPUParticleManager.h"
 #include "Base/Dx/DxRenderTarget.h"
+#include "Particle/GPUParticle/GPUParticleManager.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include "ShadowMap/ShadowMap.h"
 
@@ -22,9 +22,9 @@ using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // imGui
 #include "2D/ImGuiManager.h"
-#include <imgui.h>
 #include <chrono>
 #include <format>
+#include <imgui.h>
 
 const char kWindowTitle[] = "LE4A_13_クリハラ_ケイタ";
 
@@ -63,6 +63,7 @@ void KTFramework::Run() {
 
     // ウィンドウのxボタンが押されるまでループ
     while (engineCore_->ProcessMessage() == 0) {
+
         // フレームの開始
         Frame::Update();
         engineCore_->BeginFrame();
@@ -97,7 +98,6 @@ void KTFramework::Run() {
 // ========================================================
 void KTFramework::Update() {
 
-
     // デバッグ処理
     Debug();
     /// ゲームシーンの毎フレーム処理
@@ -112,6 +112,8 @@ void KTFramework::Debug() {
         return;
     }
 
+    /// FPS表示
+    DisplayFPS();
     /// ゲームビューウィンドウを表示
     DisplayGameView();
     pSceneManager_->Debug();
@@ -127,6 +129,22 @@ void KTFramework::Finalize() {
     }
     // ライブラリの終了
     engineCore_->Finalize();
+}
+
+// ========================================================
+// FPS表示
+// ========================================================
+void KTFramework::DisplayFPS() {
+#if defined(_DEBUG) || defined(DEVELOPMENT)
+    ImGuiIO& io = ImGui::GetIO();
+
+    // FPSウィンドウ
+    ImGui::Begin("FPS");
+    ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 100, 255));
+    ImGui::Text("FPS: %.1f", io.Framerate);
+    ImGui::PopStyleColor();
+    ImGui::End();
+#endif
 }
 
 // ========================================================
