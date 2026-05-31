@@ -122,9 +122,6 @@ int EngineCore::ProcessMessage() {
 /// フレーム開始処理
 ///========================================================================
 void EngineCore::BeginFrame() {
-    // FLWOをフレーム先頭で待機する
-    directXCommon_->WaitForNextFrame();
-
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     imGuiManager_->Begin();
 #endif

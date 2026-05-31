@@ -5,6 +5,7 @@
 #include "Collider/CollisionManager.h"
 #include "EngineCore.h"
 /// std
+#include <chrono>
 #include <memory>
 
 // ゲーム全体
@@ -38,6 +39,21 @@ protected:
     ///=======================================================
     std::unique_ptr<AbstractSceneFactory> sceneFactory_;
     std::unique_ptr<EngineCore> engineCore_;
+
+    // フレーム各フェーズの計測結果（ms）
+    struct FrameTimings {
+        float frameMs    = 0.0f; // フレーム全体
+        float fixFpsMs   = 0.0f; // FixFPS (60fps캡)
+        float beginMs    = 0.0f; // BeginFrame (WaitForNextFrame + ImGui + Input)
+        float updateMs   = 0.0f; // Update (ゲームロジック + アニメーション)
+        float drawMs     = 0.0f; // Draw (GPU コマンド積み)
+        float endFrameMs = 0.0f; // EndFrame (ExecuteCommand + Present(1) + WaitForGPU)
+        float workMs     = 0.0f; // FixFPS除いた実作業時間
+    };
+    FrameTimings frameTimings_;
+
+private:
+    void RunGpuWarmup(int numFrames); //< シーン遷移後 GPU P-state をP0に引き上げる
 };
 
 }; // KetaEngine

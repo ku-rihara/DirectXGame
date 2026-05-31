@@ -69,6 +69,10 @@ private:
     std::array<D3D12_RESOURCE_STATES, 2> resourceStates_;
     HANDLE waitableObject_ = nullptr;
 
+    Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
+    HANDLE fenceEvent_   = nullptr;
+    UINT64 fenceValue_   = 0;
+
 public:
     Microsoft::WRL::ComPtr<IDXGISwapChain4> GetSwapChain() const { return swapChain_; }
     Microsoft::WRL::ComPtr<ID3D12Resource> GetSwapChainResource(int index) const {

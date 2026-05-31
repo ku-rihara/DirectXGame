@@ -84,12 +84,11 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
         wc_.hInstance, // インスタンスハンドル
         nullptr); // オプション
 
-#if defined(_DEBUG) || defined(DEVELOPMENT)
+#if defined(_DEBUG)
+    // デバッグレイヤー
     debugController_ = nullptr;
     if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
-        // デバッグレイヤーを有効化する
         debugController_->EnableDebugLayer();
-        // debugController_->SetEnableGPUBasedValidation(TRUE);
     }
 #endif
     // ウィンドウを表示する

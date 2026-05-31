@@ -5,6 +5,7 @@ using namespace KetaEngine;
 // dx
 #include "3d/ModelManager.h"
 // particle
+#include "Base/Descriptors/SrvManager.h"
 #include "Base/Dx/DxRenderTarget.h"
 #include "Particle/GPUParticle/GPUParticleManager.h"
 #include "PostEffect/PostEffectRenderer.h"
@@ -61,16 +62,33 @@ void KTFramework::Init() {
 void KTFramework::Run() {
     Init(); /// 初期化
 
+    // ロード完了後にタイマーをリセット
+    Frame::Init();
+
+    using Clock = std::chrono::steady_clock;
+    auto ms = [](Clock::time_point a, Clock::time_point b) {
+        return std::chrono::duration<float, std::milli>(b - a).count();
+    };
+
+    static int slowFrameCount = 0;
+
     // ウィンドウのxボタンが押されるまでループ
     while (engineCore_->ProcessMessage() == 0) {
 
-        // フレームの開始
+        auto t0 = Clock::now();
+
+        /// フレーム開始前処理: FixFPS + ResetDeltaTime
         Frame::Update();
+        auto t1 = Clock::now();
+
+        // BeginFrame: WaitForNextFrame(FLWO) + ImGui + Input
         engineCore_->BeginFrame();
+        auto t2 = Clock::now();
 
         // 更新
         Update();
         ShadowMap::GetInstance()->UpdateLightMatrix();
+        auto t3 = Clock::now();
 
         // 影描画
         DrawShadow();
@@ -86,9 +104,46 @@ void KTFramework::Run() {
 
         // ポストエフェクト描画
         DrawPostEffect();
+        auto t4 = Clock::now();
 
-        /// フレームの終了
+        /// フレームの終了: ExecuteCommand → Present(1,VSync) → WaitForGPU
         engineCore_->EndFrame();
+        auto t5 = Clock::now();
+
+        // シーン遷移直後: GPUがアイドル後のP-state低下をP0に戻してから本番ループへ
+        if (pSceneManager_->IsJustTransitioned()) {
+            pSceneManager_->ClearTransitionFlag();
+            RunGpuWarmup(8);
+            Frame::Init(); // ウォームアップ分の経過時間を除外
+        }
+
+        // 各フェーズのタイミングを記録
+        frameTimings_.frameMs    = ms(t0, t5);
+        frameTimings_.fixFpsMs   = ms(t0, t1);
+        frameTimings_.beginMs    = ms(t1, t2);
+        frameTimings_.updateMs   = ms(t2, t3);
+        frameTimings_.drawMs     = ms(t3, t4);
+        frameTimings_.endFrameMs = ms(t4, t5);
+        // FixFPS除いた実作業時間
+        frameTimings_.workMs     = ms(t1, t5);
+
+        // 低速フレームをログに記録（診断用）
+        if (frameTimings_.workMs > 16.0f) {
+            ++slowFrameCount;
+            if (slowFrameCount <= 120) {
+                KetaEngine::Log::Warn(std::format(
+                    "[SlowFrame #{}] work={:.2f}ms (fixFps={:.2f} begin={:.2f} update={:.2f} draw={:.2f} end={:.2f})",
+                    slowFrameCount,
+                    frameTimings_.workMs,
+                    frameTimings_.fixFpsMs,
+                    frameTimings_.beginMs,
+                    frameTimings_.updateMs,
+                    frameTimings_.drawMs,
+                    frameTimings_.endFrameMs));
+            }
+        } else {
+            slowFrameCount = 0;
+        }
     }
     Finalize();
 }
@@ -138,13 +193,63 @@ void KTFramework::DisplayFPS() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGuiIO& io = ImGui::GetIO();
 
-    // FPSウィンドウ
-    ImGui::Begin("FPS");
+    ImGui::Begin("FPS / Frame Timing");
+
+    // FPS
     ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 100, 255));
     ImGui::Text("FPS: %.1f", io.Framerate);
     ImGui::PopStyleColor();
+
+    ImGui::Separator();
+
+    // 各フェーズ (ms)
+    ImGui::Text("Frame total : %5.2f ms", frameTimings_.frameMs);
+    ImGui::Text("  FixFPS    : %5.2f ms", frameTimings_.fixFpsMs);
+    ImGui::Text("  BeginFrame: %5.2f ms  (WaitNextFrame+ImGui+Input)", frameTimings_.beginMs);
+    ImGui::Text("  Update    : %5.2f ms", frameTimings_.updateMs);
+    ImGui::Text("  Draw      : %5.2f ms", frameTimings_.drawMs);
+    // EndFrame = ExecuteCommand + Present(1,VSync≈16ms) + WaitForGPU
+    // 正常: endFrame ≈ 16.666ms (Present(1)がVSync分ブロック)
+    // 異常: endFrame >> 16.666ms (GPUがVSync後も終わらない → 30fps)
+    ImGui::Text("  EndFrame  : %5.2f ms  (Present(VSync)+GPU)", frameTimings_.endFrameMs);
+
+    ImGui::Separator();
+
+    // 実作業時間 (>16.666ms で 30fps)
+    constexpr float kBudget = 16.666f;
+    bool over = frameTimings_.workMs > kBudget;
+    ImGui::PushStyleColor(ImGuiCol_Text, over ? IM_COL32(255, 60, 60, 255) : IM_COL32(60, 255, 60, 255));
+    ImGui::Text("Work (excl.FixFPS): %5.2f ms  %s",
+        frameTimings_.workMs,
+        over ? "<<< OVER BUDGET (30fps)" : "OK (60fps)");
+    ImGui::PopStyleColor();
+
+    ImGui::Separator();
+    ImGui::TextDisabled("EndFrame = ExecuteCommand + Present + WaitForGPU");
+    ImGui::TextDisabled("WaitForGPU: Debug layer ON -> ~30ms, OFF -> ~3ms");
+
     ImGui::End();
 #endif
+}
+
+// ========================================================
+// GPUウォームアップ
+// ========================================================
+void KTFramework::RunGpuWarmup(int numFrames) {
+    auto* dxCommon = DirectXCommon::GetInstance();
+    auto* srvMgr   = SrvManager::GetInstance();
+
+    auto t0 = std::chrono::steady_clock::now();
+    for (int i = 0; i < numFrames; ++i) {
+        srvMgr->PreDraw();            // デスクリプタヒープをコマンドリストに設定
+        dxCommon->PreRenderTexture(); // オフスクリーンRT: RENDER_TARGET + クリア
+        dxCommon->PreDraw();          // RT→SRV、バックバッファ→RENDER_TARGET
+        dxCommon->PostDraw();         // RENDER_TARGET→PRESENT + Execute + Present + Wait + Reset
+    }
+
+    float elapsed = std::chrono::duration<float, std::milli>(
+        std::chrono::steady_clock::now() - t0).count();
+    KetaEngine::Log::Info(std::format("[GpuWarmup] {} frames in {:.1f}ms", numFrames, elapsed));
 }
 
 // ========================================================

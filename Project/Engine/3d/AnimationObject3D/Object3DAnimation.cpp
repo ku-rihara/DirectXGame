@@ -229,10 +229,13 @@ void Object3DAnimation::UpdateSkinCluster() {
     for (size_t jointIndex = 0; jointIndex < skeleton_.joints.size(); ++jointIndex) {
         assert(jointIndex < skinCluster_.inverseBindPoseMatrices.size());
 
-        skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix =
+        /// スキニング行列の計算
+        Matrix4x4 skinMatrix =
             skinCluster_.inverseBindPoseMatrices[jointIndex] * skeleton_.joints[jointIndex].skeletonSpaceMatrix;
-        skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
-            Inverse(Transpose(skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix));
+
+        // GPUメモリに書き込む
+        skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix              = skinMatrix;
+        skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix = Inverse(Transpose(skinMatrix));
     }
 }
 

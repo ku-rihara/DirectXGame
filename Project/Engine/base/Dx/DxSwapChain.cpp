@@ -5,24 +5,12 @@ using namespace KetaEngine;
 #include "Base/WinApp.h"
 #include <cassert>
 
-// Tearingサポートフラグ
-static bool g_TearingSupported = false;
-
 void DxSwapChain::Init(
     Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory,
     Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue,
     WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight) {
 
     commandQueue_ = commandQueue;
-
-    // Tearingサポートの確認
-    Microsoft::WRL::ComPtr<IDXGIFactory5> factory5;
-    if (SUCCEEDED(dxgiFactory.As(&factory5))) {
-        BOOL allowTearing = FALSE;
-        if (SUCCEEDED(factory5->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(allowTearing))) && allowTearing) {
-            g_TearingSupported = true;
-        }
-    }
 
     // スワップチェーン設定
     desc_.Width            = backBufferWidth;
@@ -32,8 +20,7 @@ void DxSwapChain::Init(
     desc_.BufferUsage      = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     desc_.BufferCount      = 2;
     desc_.SwapEffect       = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-    // Tearing許可と同時にFRAME_LATENCY_WAITABLE_OBJECTフラグをセットして遅延を制御できるようにする
-    desc_.Flags            = DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT | (g_TearingSupported ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0);
+    desc_.Flags            = DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT;
 
     // スワップチェーン作成
     hr_ = dxgiFactory->CreateSwapChainForHwnd(
@@ -48,6 +35,14 @@ void DxSwapChain::Init(
     // 最大フレーム遅延を1に設定
     swapChain_->SetMaximumFrameLatency(1);
     waitableObject_ = swapChain_->GetFrameLatencyWaitableObject();
+
+    // フェンスとイベントを一度だけ生成
+    Microsoft::WRL::ComPtr<ID3D12Device> device;
+    commandQueue_->GetDevice(IID_PPV_ARGS(&device));
+    hr_ = device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
+    assert(SUCCEEDED(hr_));
+    fenceEvent_ = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+    assert(fenceEvent_ != nullptr);
 
     // Alt+Enterの無効化
     dxgiFactory->MakeWindowAssociation(winApp->GetHwnd(), DXGI_MWA_NO_ALT_ENTER);
@@ -84,9 +79,8 @@ void DxSwapChain::WaitForNextFrame() {
 }
 
 void DxSwapChain::Present() {
-    // Present
-    UINT presentFlags = g_TearingSupported ? DXGI_PRESENT_ALLOW_TEARING : 0;
-    swapChain_->Present(0, presentFlags);
+    /// PRESENT状態に遷移
+    swapChain_->Present(1, 0);
 
     // Present後、現在のバックバッファはPRESENT状態になる
     UpdateResourceState(GetCurrentBackBufferIndex(), D3D12_RESOURCE_STATE_PRESENT);
@@ -108,41 +102,16 @@ D3D12_RESOURCE_STATES DxSwapChain::GetResourceState(const UINT& index) const {
 }
 
 void DxSwapChain::WaitForGPU() {
-    if (!commandQueue_) {
+    if (!commandQueue_ || !fence_ || !fenceEvent_) {
         return;
     }
 
- 
-    Microsoft::WRL::ComPtr<ID3D12Fence> fence;
-    UINT64 fenceValue = 1;
+    ++fenceValue_;
+    commandQueue_->Signal(fence_.Get(), fenceValue_);
 
-   
-    Microsoft::WRL::ComPtr<ID3D12Device> device;
-    hr_ = commandQueue_->GetDevice(IID_PPV_ARGS(&device));
-    if (FAILED(hr_)) {
-        return;
-    }
-
-    hr_ = device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-    if (FAILED(hr_)) {
-        return;
-    }
-
-   
-    hr_ = commandQueue_->Signal(fence.Get(), fenceValue);
-    if (FAILED(hr_)) {
-        return;
-    }
-
-    if (fence->GetCompletedValue() < fenceValue) {
-        HANDLE fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-        if (fenceEvent != nullptr) {
-            hr_ = fence->SetEventOnCompletion(fenceValue, fenceEvent);
-            if (SUCCEEDED(hr_)) {
-                WaitForSingleObject(fenceEvent, INFINITE);
-            }
-            CloseHandle(fenceEvent);
-        }
+    if (fence_->GetCompletedValue() < fenceValue_) {
+        fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
+        WaitForSingleObject(fenceEvent_, INFINITE);
     }
 }
 
@@ -163,6 +132,12 @@ void DxSwapChain::Finalize() {
         CloseHandle(waitableObject_);
         waitableObject_ = nullptr;
     }
+
+    if (fenceEvent_) {
+        CloseHandle(fenceEvent_);
+        fenceEvent_ = nullptr;
+    }
+    fence_.Reset();
 
     commandQueue_.Reset();
 }
