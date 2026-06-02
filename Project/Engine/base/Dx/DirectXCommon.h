@@ -114,6 +114,7 @@ public:
     void Finalize();               //< 終了処理
     void PreRenderTexture();       //< レンダーテクスチャ描画前処理
     void DepthBarrierTransition(); //< デプスバリア遷移
+    void KeepAlive();              //< ローディング中にGPU
 
 private:
     ImGuiManager* imguiManager_     = nullptr;

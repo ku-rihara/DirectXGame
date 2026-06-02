@@ -185,6 +185,26 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptor
 
 void DirectXCommon::DepthBarrierTransition() {}
 
+void DirectXCommon::KeepAlive() {
+    using Clock = std::chrono::steady_clock;
+    static Clock::time_point lastSubmit{};
+
+    auto now = Clock::now();
+
+    // 100ms 未経過なら何もしない
+    if (std::chrono::duration<float, std::milli>(now - lastSubmit).count() < 100.0f) {
+        return; 
+    }
+
+    lastSubmit = now;
+
+    // 最小限のGPUフレームを送ってP-stateの低下を防ぐ
+    srvManager_->PreDraw();
+    PreRenderTexture();
+    PreDraw();
+    PostDraw();
+}
+
 D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::GetCPUDescriptorHandle(
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap,
    uint32_t descriptorSize,

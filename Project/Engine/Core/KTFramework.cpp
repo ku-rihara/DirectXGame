@@ -26,6 +26,8 @@ using namespace KetaEngine;
 #include <chrono>
 #include <format>
 #include <imgui.h>
+#include <dwmapi.h>
+#pragma comment(lib, "dwmapi.lib")
 
 const char kWindowTitle[] = "LE4A_13_クリハラ_ケイタ";
 
@@ -114,6 +116,7 @@ void KTFramework::Run() {
         if (pSceneManager_->IsJustTransitioned()) {
             pSceneManager_->ClearTransitionFlag();
             RunGpuWarmup(8);
+            DwmFlush(); // DWMのVSync境界に同期してPresent位相を正規化
             Frame::Init(); // ウォームアップ分の経過時間を除外
         }
 
@@ -208,14 +211,12 @@ void KTFramework::DisplayFPS() {
     ImGui::Text("  BeginFrame: %5.2f ms  (WaitNextFrame+ImGui+Input)", frameTimings_.beginMs);
     ImGui::Text("  Update    : %5.2f ms", frameTimings_.updateMs);
     ImGui::Text("  Draw      : %5.2f ms", frameTimings_.drawMs);
-    // EndFrame = ExecuteCommand + Present(1,VSync≈16ms) + WaitForGPU
-    // 正常: endFrame ≈ 16.666ms (Present(1)がVSync分ブロック)
-    // 異常: endFrame >> 16.666ms (GPUがVSync後も終わらない → 30fps)
+
     ImGui::Text("  EndFrame  : %5.2f ms  (Present(VSync)+GPU)", frameTimings_.endFrameMs);
 
     ImGui::Separator();
 
-    // 実作業時間 (>16.666ms で 30fps)
+    // 実作業時間 
     constexpr float kBudget = 16.666f;
     bool over = frameTimings_.workMs > kBudget;
     ImGui::PushStyleColor(ImGuiCol_Text, over ? IM_COL32(255, 60, 60, 255) : IM_COL32(60, 255, 60, 255));

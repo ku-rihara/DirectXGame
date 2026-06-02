@@ -19,6 +19,7 @@ private:
     void CheckInput();
     void UpdateFadeOut();
 
+private:
     std::unique_ptr<KetaEngine::Sprite> screenSprite_;
     bool isTransitionRequested_ = false;
     float transitionAlpha_      = 0.0f;

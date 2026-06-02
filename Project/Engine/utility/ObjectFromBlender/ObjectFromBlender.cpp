@@ -2,6 +2,7 @@
 
 using namespace KetaEngine;
 #include "3d/Model.h"
+#include "Base/Dx/DirectXCommon.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 #include "Frame/Frame.h"
 #include "mathFunction.h"
@@ -45,6 +46,8 @@ void ObjectFromBlender::LoadJsonFile(const std::string& _fileName) {
     // 全オブジェクトを走査
     for (const auto& object : jsonData_["objects"]) {
         ConvertJSONToObjects(object);
+        // ローディング中GPU P-stateを維持
+        DirectXCommon::GetInstance()->KeepAlive();
     }
 }
 
