@@ -26,32 +26,15 @@
             537.0,
             0.0
         ],
-        "Level_basePos": [
-            560.0,
+        "Rank_basePos": [
+            640.0,
             614.0
         ],
-        "Level_baseScale": [
-            0.8999999761581421,
-            0.8999999761581421
+        "Rank_baseScale": [
+            1.0,
+            1.0
         ],
-        "Level_digitScaleOffset": [
-            -0.6899999976158142,
-            0.6800000071525574
-        ],
-        "Level_digitSpacing": 83.0,
-        "Level_labelOffset": [
-            0.0,
-            0.0
-        ],
-        "Level_numberOffset": [
-            328.0,
-            10.0
-        ],
-        "Level_startDelay": 0.0,
-        "Level_unitOffset": [
-            1100.0,
-            0.0
-        ],
+        "Rank_startDelay": 0.0,
         "Survival_basePos": [
             560.0,
             434.0
