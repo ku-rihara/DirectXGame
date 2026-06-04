@@ -3,31 +3,42 @@
 #include "ResultObj/GameResultInfo.h"
 #include <imgui.h>
 
+GameResultUI::~GameResultUI() {
+    if (globalParameter_) {
+        globalParameter_->ClearRegistersForGroup(groupName_);
+    }
+}
+
 void GameResultUI::Init() {
+
+    // グローバルパラメータの登録
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
-
-    // ResultUI グループ（位置・スケール）
     globalParameter_->CreateGroup(groupName_);
-    // RankThreshold グループ（ランク判定スコア）
-    globalParameter_->CreateGroup(rankGroupName_);
-
+    globalParameter_->ClearRegistersForGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
-    globalParameter_->SyncParamForGroup(rankGroupName_);
 
-    auto* info   = GameResultInfo::GetInstance();
+    auto* resultInfo   = GameResultInfo::GetInstance();
     currentItem_ = 0;
 
+    // テキストと単位のスプライトの初期化
     items_[0].Init("ResultUI/EnemyKillCountText.dds", "ResultUI/ResultKillUnit.dds",
-        info->GetTotalKillCount(), survivalCfg_);
+        resultInfo->GetTotalKillCount(), survivalCfg_);
     items_[1].Init("ResultUI/SurvivalTimeCount.dds", "ResultUI/SurvivalTimeCountUnit.dds",
-        info->GetSurvivalTimeSec(), killCfg_);
+        resultInfo->GetSurvivalTimeSec(), killCfg_);
 
-    int32_t rank = info->GetRank(rankScoreForA_, rankScoreForS_);
+    //  ランクラベルの初期化
+    rankLabelCfg_.digitCount = 0;
+    items_[2].Init("ResultUI/RankText.dds", "", 0, rankLabelCfg_);
+
+    // ランクの初期化
+    int32_t rank = resultInfo->GetRank(rankScoreForA_, rankScoreForS_);
     rankSprite_.Init(rank, rankCfg_);
 
+    // キルカウントからアニメーション開始
     items_[0].Start();
 
+    // 結果発表スプライトの初期化
     sprite_.reset(KetaEngine::Sprite::Create("ResultUI/ResultPresent.dds"));
     sprite_->SetIsDraw(true);
 }
@@ -35,22 +46,32 @@ void GameResultUI::Init() {
 void GameResultUI::Update() {
     float dt = KetaEngine::Frame::DeltaTime();
 
+    // 各項目の設定を更新
     items_[0].SetConfig(survivalCfg_);
     items_[1].SetConfig(killCfg_);
+    items_[2].SetConfig(rankLabelCfg_);
 
+    // アニメーションの更新
     for (auto& item : items_) {
         item.Update(dt);
     }
+
+    // ランクスプライトの更新
+    rankSprite_.SetConfig(rankCfg_);
     rankSprite_.Update(dt);
 
-    // 現在アイテムが完了したら次へ進める
+    // 現在の項目が終了しているか確認
     if (currentItem_ < static_cast<int32_t>(items_.size())) {
+
         if (items_[currentItem_].IsFinished()) {
+            // 次の項目へ加算
             ++currentItem_;
+
+            // 次の項目を開始のアニメーション開始
             if (currentItem_ < static_cast<int32_t>(items_.size())) {
                 items_[currentItem_].Start();
             } else {
-                // 全item完了 → ランクスプライトを開始
+                // 全項目表示後にランクスプライトのアニメーション開始
                 rankSprite_.Start();
             }
         }
@@ -58,34 +79,37 @@ void GameResultUI::Update() {
 }
 
 void GameResultUI::RegisterParams() {
-    // ① 生き残った時間
-    globalParameter_->Regist(groupName_, "Survival_basePos",        &survivalCfg_.basePos);
-    globalParameter_->Regist(groupName_, "Survival_labelOffset",    &survivalCfg_.labelOffset);
-    globalParameter_->Regist(groupName_, "Survival_numberOffset",   &survivalCfg_.numberBaseOffset);
-    globalParameter_->Regist(groupName_, "Survival_digitSpacing",   &survivalCfg_.digitSpacing);
-    globalParameter_->Regist(groupName_, "Survival_unitOffset",     &survivalCfg_.unitOffset);
-    globalParameter_->Regist(groupName_, "Survival_baseScale",      &survivalCfg_.baseScale);
-    globalParameter_->Regist(groupName_, "Survival_digitScaleOffset", &survivalCfg_.digitScaleOffset);
-    globalParameter_->Regist(groupName_, "Survival_startDelay",     &survivalCfg_.startDelay);
+    struct Entry { 
+        const char* prefix; 
+    ResultUIItem::Config* cfg; 
+    };
 
-    // ② 敵を倒した数
-    globalParameter_->Regist(groupName_, "Kill_basePos",            &killCfg_.basePos);
-    globalParameter_->Regist(groupName_, "Kill_labelOffset",        &killCfg_.labelOffset);
-    globalParameter_->Regist(groupName_, "Kill_numberOffset",       &killCfg_.numberBaseOffset);
-    globalParameter_->Regist(groupName_, "Kill_digitSpacing",       &killCfg_.digitSpacing);
-    globalParameter_->Regist(groupName_, "Kill_unitOffset",         &killCfg_.unitOffset);
-    globalParameter_->Regist(groupName_, "Kill_baseScale",          &killCfg_.baseScale);
-    globalParameter_->Regist(groupName_, "Kill_digitScaleOffset",   &killCfg_.digitScaleOffset);
-    globalParameter_->Regist(groupName_, "Kill_startDelay",         &killCfg_.startDelay);
+    const std::array<Entry, 3> items = {{
+        { "Survival",  &survivalCfg_  },
+        { "Kill",      &killCfg_      },
+        { "RankLabel", &rankLabelCfg_ },
+    }};
 
-    // ③ ランク
-    globalParameter_->Regist(groupName_, "Rank_basePos",            &rankCfg_.basePos);
-    globalParameter_->Regist(groupName_, "Rank_baseScale",          &rankCfg_.baseScale);
-    globalParameter_->Regist(groupName_, "Rank_startDelay",         &rankCfg_.startDelay);
+    for (auto& [prefix, cfg] : items) {
+        std::string p = prefix;
+        globalParameter_->Regist(groupName_, p + "_basePos",          &cfg->basePos);
+        globalParameter_->Regist(groupName_, p + "_labelOffset",      &cfg->labelOffset);
+        globalParameter_->Regist(groupName_, p + "_numberOffset",     &cfg->numberBaseOffset);
+        globalParameter_->Regist(groupName_, p + "_digitSpacing",     &cfg->digitSpacing);
+        globalParameter_->Regist(groupName_, p + "_unitOffset",       &cfg->unitOffset);
+        globalParameter_->Regist(groupName_, p + "_baseScale",        &cfg->baseScale);
+        globalParameter_->Regist(groupName_, p + "_digitScaleOffset", &cfg->digitScaleOffset);
+        globalParameter_->Regist(groupName_, p + "_startDelay",       &cfg->startDelay);
+    }
 
-    // ランク閾値（RankThresholdグループ）
-    globalParameter_->Regist(rankGroupName_, "ScoreForA", &rankScoreForA_);
-    globalParameter_->Regist(rankGroupName_, "ScoreForS", &rankScoreForS_);
+    // ランクバッジ
+    globalParameter_->Regist(groupName_, "Rank_basePos",    &rankCfg_.basePos);
+    globalParameter_->Regist(groupName_, "Rank_baseScale",  &rankCfg_.baseScale);
+    globalParameter_->Regist(groupName_, "Rank_startDelay", &rankCfg_.startDelay);
+
+    // ランク閾値
+    globalParameter_->Regist(groupName_, "ScoreForA", &rankScoreForA_);
+    globalParameter_->Regist(groupName_, "ScoreForS", &rankScoreForS_);
 }
 
 void GameResultUI::AdjustParam() {
@@ -93,46 +117,42 @@ void GameResultUI::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        if (ImGui::TreeNode("生き残った時間")) {
-            ImGui::DragFloat2("BasePos",          &survivalCfg_.basePos.x,          1.f);
-            ImGui::DragFloat2("LabelOffset",      &survivalCfg_.labelOffset.x,      1.f);
-            ImGui::DragFloat2("NumberOffset",     &survivalCfg_.numberBaseOffset.x, 1.f);
-            ImGui::DragFloat ("DigitSpacing",     &survivalCfg_.digitSpacing,       1.f);
-            ImGui::DragFloat2("UnitOffset",       &survivalCfg_.unitOffset.x,       1.f);
-            ImGui::DragFloat2("BaseScale",        &survivalCfg_.baseScale.x,        0.01f);
-            ImGui::DragFloat2("DigitScaleOffset", &survivalCfg_.digitScaleOffset.x, 0.01f);
-            ImGui::DragFloat ("StartDelay",       &survivalCfg_.startDelay,         0.01f);
-            ImGui::TreePop();
+        struct Entry { const char* label; ResultUIItem::Config* cfg; };
+        const std::array<Entry, 3> items = {{
+            { "生き残った時間", &survivalCfg_  },
+            { "敵を倒した数",   &killCfg_      },
+            { "ランクラベル",   &rankLabelCfg_ },
+        }};
+
+        for (auto& [label, cfg] : items) {
+            if (ImGui::TreeNode(label)) {
+                ImGui::DragFloat2("BasePos",          &cfg->basePos.x,          1.f);
+                ImGui::DragFloat2("LabelOffset",      &cfg->labelOffset.x,      1.f);
+                ImGui::DragFloat2("NumberOffset",     &cfg->numberBaseOffset.x, 1.f);
+                ImGui::DragFloat ("DigitSpacing",     &cfg->digitSpacing,       1.f);
+                ImGui::DragFloat2("UnitOffset",       &cfg->unitOffset.x,       1.f);
+                ImGui::DragFloat2("BaseScale",        &cfg->baseScale.x,        0.01f);
+                ImGui::DragFloat2("DigitScaleOffset", &cfg->digitScaleOffset.x, 0.01f);
+                ImGui::DragFloat ("StartDelay",       &cfg->startDelay,         0.01f);
+                ImGui::TreePop();
+            }
         }
-        if (ImGui::TreeNode("敵を倒した数")) {
-            ImGui::DragFloat2("BasePos",          &killCfg_.basePos.x,          1.f);
-            ImGui::DragFloat2("LabelOffset",      &killCfg_.labelOffset.x,      1.f);
-            ImGui::DragFloat2("NumberOffset",     &killCfg_.numberBaseOffset.x, 1.f);
-            ImGui::DragFloat ("DigitSpacing",     &killCfg_.digitSpacing,       1.f);
-            ImGui::DragFloat2("UnitOffset",       &killCfg_.unitOffset.x,       1.f);
-            ImGui::DragFloat2("BaseScale",        &killCfg_.baseScale.x,        0.01f);
-            ImGui::DragFloat2("DigitScaleOffset", &killCfg_.digitScaleOffset.x, 0.01f);
-            ImGui::DragFloat ("StartDelay",       &killCfg_.startDelay,         0.01f);
-            ImGui::TreePop();
-        }
-        if (ImGui::TreeNode("ランク (B/A/S)")) {
+
+        if (ImGui::TreeNode("ランクバッジ (B/A/S)")) {
             ImGui::DragFloat2("BasePos",    &rankCfg_.basePos.x,   1.f);
             ImGui::DragFloat2("BaseScale",  &rankCfg_.baseScale.x, 0.01f);
             ImGui::DragFloat ("StartDelay", &rankCfg_.startDelay,  0.01f);
             ImGui::TreePop();
         }
 
+        if (ImGui::TreeNode("ランク閾値")) {
+            ImGui::DragInt("ScoreForA (BからA)", &rankScoreForA_, 1);
+            ImGui::DragInt("ScoreForS (AからS)", &rankScoreForS_, 1);
+            ImGui::TreePop();
+        }
+
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
-        ImGui::PopID();
-    }
-
-    if (ImGui::CollapsingHeader(rankGroupName_.c_str())) {
-        ImGui::PushID(rankGroupName_.c_str());
-        ImGui::DragInt("ScoreForA (BからA)", &rankScoreForA_, 1);
-        ImGui::DragInt("ScoreForS (AからS)", &rankScoreForS_, 1);
-        globalParameter_->ParamSaveForImGui(rankGroupName_);
-        globalParameter_->ParamLoadForImGui(rankGroupName_);
         ImGui::PopID();
     }
 #endif

@@ -85,6 +85,7 @@ void SpriteRegistry::DrawAll() {
 ///============================================================
 void SpriteRegistry::Clear() {
     sprites_.clear();
+    groupRepresentatives_.clear();
 }
 
 ///============================================================

@@ -18,7 +18,7 @@ void DxRenderTarget::Init(Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t 
     backBufferHeight_ = height;
     backBufferWidth_  = width;
 
-    clearColor_ = Vector4(0.2f, 0.2f, 0.2f, 1.0f);
+    clearColor_ = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 
     // レンダーテクスチャリソースの作成
     renderTextureResource_ = CreateRenderTextureResource(device, backBufferWidth_, backBufferHeight_,

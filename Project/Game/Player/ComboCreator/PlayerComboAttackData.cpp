@@ -666,6 +666,12 @@ void PlayerComboAttackData::DrawFlagsParamUIForPhase(TimelinePhase phase) {
 
     if (phase == TimelinePhase::MAIN) {
         ImGui::Checkbox("ヒット時に終了処理へスキップ", &attackParam_.timingParam.isSkipToFinishOnHit);
+
+        ImGui::SeparatorText("解放設定");
+        ImGui::InputInt("解放に必要なレベル", &attackParam_.ableDefeatLevel);
+        if (attackParam_.ableDefeatLevel < 0) {
+            attackParam_.ableDefeatLevel = 0;
+        }
     }
 }
 

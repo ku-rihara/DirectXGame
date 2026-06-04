@@ -1,5 +1,6 @@
 #include "ResultUIItem.h"
 
+
 void ResultUIItem::Init(const std::string& labelTex, const std::string& unitTex,
                         int32_t targetValue, const Config& cfg) {
     config_       = cfg;
@@ -8,22 +9,27 @@ void ResultUIItem::Init(const std::string& labelTex, const std::string& unitTex,
     phase_        = Phase::kIdle;
 
     // ラベルスプライト
-    labelSprite_.reset(KetaEngine::Sprite::Create(labelTex));
-    labelSprite_->SetIsDraw(true);
+    if (!labelTex.empty()) {
+        labelSprite_.reset(KetaEngine::Sprite::Create(labelTex));
+        if (labelSprite_) { labelSprite_->SetIsDraw(true); }
+    }
 
-    // 数字スプライト（先頭桁から右へ）
-    digitSprites_.clear();
-    digitSprites_.resize(static_cast<size_t>(cfg.digitCount));
+    // 数字スプライト
     for (int32_t i = 0; i < cfg.digitCount; ++i) {
         digitSprites_[i].reset(KetaEngine::Sprite::Create("Number/Numbers.dds"));
         digitSprites_[i]->SetUVScale({0.1f, 1.0f});
         digitSprites_[i]->SetUVPosition({0.f, 0.f});
         digitSprites_[i]->SetIsDraw(true);
     }
+    for (int32_t i = cfg.digitCount; i < kMaxDigits; ++i) {
+        digitSprites_[i].reset();
+    }
 
     // 単位スプライト
-    unitSprite_.reset(KetaEngine::Sprite::Create(unitTex));
-    unitSprite_->SetIsDraw(true);
+    if (!unitTex.empty()) {
+        unitSprite_.reset(KetaEngine::Sprite::Create(unitTex));
+        unitSprite_->SetIsDraw(true);
+    }
 
     // 初期位置・スケール適用
     ApplyPositions();
@@ -96,7 +102,7 @@ void ResultUIItem::ApplyPositions() {
     if (labelSprite_) {
         labelSprite_->transform_.pos = config_.basePos + config_.labelOffset;
     }
-    for (int32_t i = 0; i < static_cast<int32_t>(digitSprites_.size()); ++i) {
+    for (int32_t i = 0; i < config_.digitCount; ++i) {
         Vector2 pos = config_.basePos + config_.numberBaseOffset;
         pos.x += config_.digitSpacing * static_cast<float>(i);
         digitSprites_[i]->transform_.pos = pos;
@@ -111,8 +117,8 @@ void ResultUIItem::ApplyScale(const Vector2& scale) {
     if (labelSprite_) {
         labelSprite_->transform_.scale = scale;
     }
-    for (auto& d : digitSprites_) {
-        d->transform_.scale = isHidden ? Vector2::ZeroVector() : scale + config_.digitScaleOffset;
+    for (int32_t i = 0; i < config_.digitCount; ++i) {
+        digitSprites_[i]->transform_.scale = isHidden ? Vector2::ZeroVector() : scale + config_.digitScaleOffset;
     }
     if (unitSprite_) {
         unitSprite_->transform_.scale = scale;
@@ -120,7 +126,7 @@ void ResultUIItem::ApplyScale(const Vector2& scale) {
 }
 
 void ResultUIItem::UpdateDigits(int32_t value) {
-    int32_t count = static_cast<int32_t>(digitSprites_.size());
+    int32_t count = config_.digitCount;
     for (int32_t i = 0; i < count; ++i) {
         int32_t power = 1;
         for (int32_t j = 0; j < (count - 1 - i); ++j) {

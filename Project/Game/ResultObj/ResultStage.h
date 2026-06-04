@@ -11,7 +11,6 @@
 /// <summary>
 /// リザルト画面のステージ
 /// ObjectFromBlender でオブジェクトを配置する
-/// カメラ位置・回転の調整も担当
 /// </summary>
 class ResultStage {
 public:

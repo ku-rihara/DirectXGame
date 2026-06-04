@@ -15,7 +15,7 @@
 class GameResultUI {
 public:
     GameResultUI()  = default;
-    ~GameResultUI() = default;
+    ~GameResultUI();
 
     void Init();
     void Update();
@@ -24,17 +24,17 @@ public:
 
 private:
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
-    const std::string groupName_     = "ResultUI";
-    const std::string rankGroupName_ = "RankThreshold";
+    const std::string groupName_ = "ResultUI";
 
-    ResultUIItem::Config    survivalCfg_; ///<  生き残った時間
-    ResultUIItem::Config    killCfg_;     ///<  敵を倒した数
-    ResultRankSprite::Config rankCfg_;    ///<  ランク
+    ResultUIItem::Config     survivalCfg_;   ///<  生き残った時間
+    ResultUIItem::Config     killCfg_;      ///<  敵を倒した数
+    ResultUIItem::Config     rankLabelCfg_; ///<  ランクラベル
+    ResultRankSprite::Config rankCfg_;      ///<  ランクバッジ(B/A/S)
 
-    int32_t rankScoreForA_; ///< このスコア以上でAランク
-    int32_t rankScoreForS_; ///< このスコア以上でSランク
+    int32_t rankScoreForA_ = 0; ///< このスコア以上でAランク
+    int32_t rankScoreForS_ = 0; ///< このスコア以上でSランク
 
-    std::array<ResultUIItem, 2> items_;
+    std::array<ResultUIItem, 3> items_;
     ResultRankSprite            rankSprite_;
     int32_t currentItem_ = 0;
 

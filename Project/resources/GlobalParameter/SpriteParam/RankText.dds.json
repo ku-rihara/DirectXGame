@@ -1,5 +1,5 @@
 {
-    "ResultPresent.dds": {
+    "RankText.dds": {
         "layerNum": 0,
         "startAnchorPoint": [
             0.5,
@@ -12,8 +12,8 @@
             1.0
         ],
         "startPosition": [
-            674.5,
-            143.5
+            0.0,
+            0.0
         ],
         "startScale": [
             1.0,

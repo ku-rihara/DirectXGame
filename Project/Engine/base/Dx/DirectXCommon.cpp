@@ -17,6 +17,7 @@ using namespace KetaEngine;
 #include <cassert>
 #include <chrono>
 #include <format>
+#include <stdexcept>
 
 #pragma comment(lib, "dxguid.lib")
 
@@ -157,9 +158,10 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(
     HRESULT hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc,
         initialState, nullptr, IID_PPV_ARGS(&resource));
 
-    assert(SUCCEEDED(hr) && "CreateCommittedResource failed");
     if (FAILED(hr)) {
-        return nullptr;
+        KetaEngine::Log::Error(std::format("[DirectXCommon] CreateCommittedResource failed. HRESULT=0x{:08X} size={}", static_cast<uint32_t>(hr), sizeInBytes));
+        assert(false && "CreateCommittedResource failed");
+        throw std::runtime_error(std::format("CreateCommittedResource failed: HRESULT=0x{:08X}", static_cast<uint32_t>(hr)));
     }
 
     return resource;

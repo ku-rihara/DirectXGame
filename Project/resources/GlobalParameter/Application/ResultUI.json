@@ -1,8 +1,8 @@
 {
     "ResultUI": {
         "Kill_basePos": [
-            560.0,
-            526.0
+            520.0,
+            420.0
         ],
         "Kill_baseScale": [
             0.8999999761581421,
@@ -26,18 +26,46 @@
             537.0,
             0.0
         ],
+        "RankLabel_basePos": [
+            567.0,
+            596.0
+        ],
+        "RankLabel_baseScale": [
+            0.8999999761581421,
+            0.8999999761581421
+        ],
+        "RankLabel_digitScaleOffset": [
+            0.0,
+            0.0
+        ],
+        "RankLabel_digitSpacing": 0.0,
+        "RankLabel_labelOffset": [
+            0.0,
+            0.0
+        ],
+        "RankLabel_numberOffset": [
+            0.0,
+            0.0
+        ],
+        "RankLabel_startDelay": 0.0,
+        "RankLabel_unitOffset": [
+            0.0,
+            0.0
+        ],
         "Rank_basePos": [
-            640.0,
-            614.0
+            806.0,
+            597.0
         ],
         "Rank_baseScale": [
-            1.0,
-            1.0
+            0.23000000417232513,
+            0.44999998807907104
         ],
         "Rank_startDelay": 0.0,
+        "ScoreForA": 120,
+        "ScoreForS": 350,
         "Survival_basePos": [
-            560.0,
-            434.0
+            520.0,
+            290.0
         ],
         "Survival_baseScale": [
             0.8999999761581421,

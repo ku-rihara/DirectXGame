@@ -25,6 +25,9 @@ public:
         int32_t rankCount = 3;
     };
 
+    ResultRankSprite()  = default;
+    ~ResultRankSprite() = default;
+
     /// <summary>
     /// 初期化
     /// </summary>
@@ -37,15 +40,17 @@ public:
     void Update(float dt);
     bool IsFinished() const;
 
+    void SetConfig(const Config& cfg);
+
 private:
     // スプライトのスケールを適用
     void ApplyScale(const Vector2& scale);
 
     // フェーズごとの更新関数
-    void UpdateIdle   (float);
-    void UpdateWait   (float dt);
+    void UpdateIdle(float);
+    void UpdateWait(float dt);
     void UpdateScaleIn(float dt);
-    void UpdateDone   (float);
+    void UpdateDone(float);
 
     // アニメーションのフェーズ
     enum class Phase {
@@ -73,5 +78,5 @@ private:
     Phase phase_   = Phase::kIdle;
 
     // テクスチャファイル名
-    const std::string textureFileName_;
+    const std::string textureFileName_ = "ResultUI/RankSprite.dds";
 };

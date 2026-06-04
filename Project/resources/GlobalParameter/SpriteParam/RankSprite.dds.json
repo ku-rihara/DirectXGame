@@ -1,5 +1,5 @@
 {
-    "ResultPresent.dds": {
+    "RankSprite.dds": {
         "layerNum": 0,
         "startAnchorPoint": [
             0.5,
@@ -12,15 +12,15 @@
             1.0
         ],
         "startPosition": [
-            674.5,
-            143.5
+            0.0,
+            0.0
         ],
         "startScale": [
             1.0,
             1.0
         ],
         "startUVScale": [
-            1.0,
+            0.33329999446868896,
             1.0
         ]
     }

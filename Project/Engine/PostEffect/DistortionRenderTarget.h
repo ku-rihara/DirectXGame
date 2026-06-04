@@ -29,7 +29,7 @@ public:
     /// 歪みパス開始 - RTを歪みRTに切り替え・クリア
     /// </summary>
     /// <param name="commandList">コマンドリスト</param>
-    /// <param name="dsvHandle">深度バッファのDSVハンドル（深度テスト用）</param>
+    /// <param name="dsvHandle">深度バッファのDSVハンドル</param>
     void BeginDistortionPass(ID3D12GraphicsCommandList* commandList,
                              D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle);
 
@@ -61,7 +61,7 @@ private:
     uint32_t rtvIndex_ = 0;
 
     // クリア値 (0,0,0,0) = 歪みなし
-    static constexpr float kClearColor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+     const float kClearColor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 };
 
 } // namespace KetaEngine
