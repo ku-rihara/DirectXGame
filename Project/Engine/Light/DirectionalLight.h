@@ -1,25 +1,23 @@
 #pragma once
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include <d3d12.h>
+#include <string>
 #include <wrl.h>
 
 namespace KetaEngine {
 
 struct DirectionalLightData {
-    Vector4 color; // ライトの色
+    Vector4 color;     // ライトの色
     Vector3 direction; // ライトの向き
-    float intensity; // 輝度
+    float intensity;   // 輝度
 };
 
 /// <summary>
 /// ディレクショナルライトクラス
 /// </summary>
 class DirectionalLight {
-private:
-    Microsoft::WRL::ComPtr<ID3D12Resource> lightResource_;
-    DirectionalLightData* lightData_;
-
 public:
     DirectionalLight()  = default;
     ~DirectionalLight() = default;
@@ -54,7 +52,19 @@ public:
     /// <param name="commandList">コマンドリスト</param>
     void SetLightCommand(ID3D12GraphicsCommandList* commandList);
 
+    void RegisterParams(); //< パラメータバインド
     void DebugImGui(); //< ImGuiデバッグ表示
+
+private:
+
+    // ライトデータ
+    Microsoft::WRL::ComPtr<ID3D12Resource> lightResource_;
+    DirectionalLightData* lightData_;
+
+    // GlobalParameter
+    GlobalParameter* globalParameter_;
+    const std::string groupName_ = "DirectionalLight";
+
 public:
     // getter
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }
