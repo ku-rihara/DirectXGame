@@ -5,7 +5,9 @@
 #include "Easing/Easing.h"
 #include "Easing/EasingCreator/EasingCreator.h"
 #include "Easing/EasingCreator/EasingParameterData.h"
+#include "Enemy/AttackBomb/BossAttackBombManager.h"
 #include <functional>
+#include <memory>
 
 /// <summary>
 /// 強敵クラス
@@ -45,6 +47,9 @@ private:
 
     // Taunt演出用フォントオブジェクト
     std::unique_ptr<KetaEngine::Object3d> tauntFont_;
+
+    // 攻撃ボム管理
+    std::unique_ptr<BossAttackBombManager> bombManager_;
 
     KetaEngine::Easing<Vector3> colorEasing_;
     Vector3 currentFontColor_ = {1.0f, 1.0f, 1.0f};

@@ -1,4 +1,5 @@
 #include "StrongEnemy.h"
+#include "DeathTimer/DeathTimer.h"
 #include "Player/Player.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 // behavior
@@ -20,6 +21,9 @@
 
 StrongEnemy::~StrongEnemy() {
     SetOnDamageTakenCallback(nullptr);
+    if (bombManager_) {
+        bombManager_->Stop();
+    }
 }
 
 void StrongEnemy::Init(const Vector3& spawnPos) {
@@ -63,6 +67,19 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     // 色イージング初期化
     colorEasing_.Init("TauntColor");
 
+    // 攻撃ボムマネージャ初期化
+    if (!bombManager_) {
+        bombManager_ = std::make_unique<BossAttackBombManager>();
+    }
+    bombManager_->Init();
+    bombManager_->SetOnBombLandedCallback([this](float amount) {
+        if (auto* player = GetBaseInfo()->GetPlayer()) {
+            if (auto* dt = player->GetDeathTimer()) {
+                dt->TakeDamage(amount);
+            }
+        }
+    });
+
     // スポーン後の行動を生成
     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
@@ -74,6 +91,14 @@ void StrongEnemy::Update() {
     }
 
     BaseEnemy::Update();
+
+    if (bombManager_) {
+        bombManager_->SetBossPosition(baseTransform_.translation_);
+        if (auto* player = GetBaseInfo()->GetPlayer()) {
+            bombManager_->SetPlayerPosition(player->GetWorldPosition());
+        }
+        bombManager_->Update();
+    }
 
     // フォント位置を毎フレームbaseTransformに追従
     if (tauntFont_) {
@@ -213,6 +238,9 @@ std::unique_ptr<BaseEnemyBehavior> StrongEnemy::CreatePostSpawnBehavior() {
 void StrongEnemy::StartFlee() {
     isTaunting_ = false;
     isFleeing_  = true;
+    if (bombManager_) {
+        bombManager_->Stop();
+    }
     PlayTauntFontClose();
     SetOnDamageTakenCallback(nullptr);
     GetEnemyEffects()->Emit("EnemyImpatience");
@@ -232,6 +260,9 @@ void StrongEnemy::StartTaunt() {
     PlayTauntFontSpawn();
     GetEnemyEffects()->Emit("TauntBoss");
     CreateAndSetupTauntBehavior();
+    if (bombManager_) {
+        bombManager_->Start();
+    }
 
     // ダメージを受けた瞬間にTaunt演出を終了させる
     SetOnDamageTakenCallback([this]() {
@@ -246,6 +277,9 @@ void StrongEnemy::StopTaunt() {
 
     isTaunting_ = false;
     isFleeing_  = false;
+    if (bombManager_) {
+        bombManager_->Stop();
+    }
     // 追いかけBehaviorに遷移
     ChangeBehavior(std::make_unique<EnemyChase>(this));
 }

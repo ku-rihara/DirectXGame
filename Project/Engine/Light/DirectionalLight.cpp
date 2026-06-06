@@ -15,11 +15,8 @@ void DirectionalLight::Init(ID3D12Device* device) {
     lightData_ = nullptr;
     lightResource_->Map(0, nullptr, reinterpret_cast<void**>(&lightData_));
 
-   
-    lightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-    lightData_->direction = {0.489f, -0.732f, -0.474f};
-    lightData_->intensity = 0.6f;
-
+    lightData_->color = Vector4::kWHITE();
+  
     // グローバルパラメータに登録
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);

@@ -1,6 +1,5 @@
 {
     "DeathTimer": {
-        "baseStressRate": 0.10000000149011612,
         "comboMaxMultiplier": 5.0,
         "comboMultiplierPerStep": 1.090000033378601,
         "comboStepSize": 50,
@@ -26,8 +25,6 @@
         "maxStress": 100.0,
         "maxTimer": 10.0,
         "recoveryDuration": 0.47999998927116394,
-        "stressRatePerEnemy": 0.800000011920929,
-        "stressReductionPerHit": 1.600000023841858,
-        "tauntTickInterval": 2.0
+        "stressReductionPerHit": 1.600000023841858
     }
 }

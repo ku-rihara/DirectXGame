@@ -206,9 +206,6 @@ void EnemyManager::UpdateTauntState() {
         return;
     }
 
-    bool anyBossInRange = false;
-    int32_t tauntCount  = 0;
-
     for (auto& [boss, minions] : minionsByBoss_) {
         if (!boss || boss->GetIsDeath()) {
             continue;
@@ -226,17 +223,11 @@ void EnemyManager::UpdateTauntState() {
 
             if (bossIsTaunting) {
                 zako->StartTaunt();
-                if (zako->IsTaunting()) {
-                    ++tauntCount;
-                    anyBossInRange = true;
-                }
             } else {
                 zako->StopTaunt();
             }
         }
     }
-
-    pDeathTimer_->SetTauntState(anyBossInRange, tauntCount);
 }
 
 ///========================================================================================

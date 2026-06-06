@@ -496,6 +496,9 @@
         <Filter Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior">
             <UniqueIdentifier>{35E7A99A-2F2B-4E41-9AD1-F57E851E1430}</UniqueIdentifier>
         </Filter>
+        <Filter Include="Game\Enemy\AttackBomb">
+            <UniqueIdentifier>{B0831098-5ACA-497A-BCDA-F2F7DCC34863}</UniqueIdentifier>
+        </Filter>
         <Filter Include="Game\Enemy\Behavior\DamageReactionBehavior\Rendition">
             <UniqueIdentifier>{ADA3C6A4-490C-456D-AC9C-5DCA82E48F32}</UniqueIdentifier>
         </Filter>
@@ -1256,6 +1259,12 @@
         </ClCompile>
         <ClCompile Include="Game\Enemy\Types\StrongEnemy.cpp">
             <Filter>Game\Enemy\Types</Filter>
+        </ClCompile>
+        <ClCompile Include="Game\Enemy\AttackBomb\AttackBomb.cpp">
+            <Filter>Game\Enemy\AttackBomb</Filter>
+        </ClCompile>
+        <ClCompile Include="Game\Enemy\AttackBomb\BossAttackBombManager.cpp">
+            <Filter>Game\Enemy\AttackBomb</Filter>
         </ClCompile>
         <ClCompile Include="Game\Field\Field.cpp">
             <Filter>Game\Field</Filter>
@@ -2397,6 +2406,12 @@
         </ClInclude>
         <ClInclude Include="Game\Enemy\Types\StrongEnemy.h">
             <Filter>Game\Enemy\Types</Filter>
+        </ClInclude>
+        <ClInclude Include="Game\Enemy\AttackBomb\AttackBomb.h">
+            <Filter>Game\Enemy\AttackBomb</Filter>
+        </ClInclude>
+        <ClInclude Include="Game\Enemy\AttackBomb\BossAttackBombManager.h">
+            <Filter>Game\Enemy\AttackBomb</Filter>
         </ClInclude>
         <ClInclude Include="Game\Field\Field.h">
             <Filter>Game\Field</Filter>

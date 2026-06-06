@@ -16,27 +16,13 @@ void DeathTimer::Init() {
     deathTimerGauge_->Init();
     deathTimerGauge_->SetTimer(0.0f, maxStress_);
 
-    currentStress_  = 0.0f;
-    tauntTickTimer_ = 0.0f;
-    isDeath_        = false;
+    currentStress_ = 0.0f;
+    isDeath_       = false;
 }
 
 void DeathTimer::Update(float deltaTime) {
 
-    if (!isGodMode_) {
-        // 煽り中は秒間隔でストレス増加
-        if (isTaunting_) {
-            tauntTickTimer_ += deltaTime;
-            if (tauntTickTimer_ >= tauntTickInterval_) {
-                tauntTickTimer_ -= tauntTickInterval_;
-                float amount = baseStressRate_ + static_cast<float>(tauntingEnemyCount_) * stressRatePerEnemy_;
-                currentStress_ += amount;
-                if (onStressTick_) {
-                    onStressTick_();
-                }
-            }
-        }
-    }
+    (void)deltaTime;
 
     currentStress_ = std::clamp(currentStress_, 0.0f, maxStress_);
 
@@ -61,11 +47,6 @@ void DeathTimer::TakeDamage(float amount) {
     }
 }
 
-void DeathTimer::SetTauntState(bool isTaunting, int32_t tauntingCount) {
-    isTaunting_         = isTaunting;
-    tauntingEnemyCount_ = tauntingCount;
-}
-
 void DeathTimer::OnNormalEnemyHit() {
     currentStress_ = (std::max)(0.0f, currentStress_ - stressReductionPerHit_);
     if (onDecayTick_) {
@@ -74,10 +55,7 @@ void DeathTimer::OnNormalEnemyHit() {
 }
 
 void DeathTimer::RegisterParams() {
-    globalParameter_->Regist(groupName_, "maxStress", &maxStress_);
-    globalParameter_->Regist(groupName_, "tauntTickInterval", &tauntTickInterval_);
-    globalParameter_->Regist(groupName_, "baseStressRate", &baseStressRate_);
-    globalParameter_->Regist(groupName_, "stressRatePerEnemy", &stressRatePerEnemy_);
+    globalParameter_->Regist(groupName_, "maxStress",            &maxStress_);
     globalParameter_->Regist(groupName_, "stressReductionPerHit", &stressReductionPerHit_);
 }
 
@@ -87,10 +65,6 @@ void DeathTimer::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         ImGui::DragFloat("最大ストレス", &maxStress_, 0.1f, 1.0f, 10000.0f);
-        ImGui::SeparatorText("ストレス増加");
-        ImGui::DragFloat("増加間隔（秒）", &tauntTickInterval_, 0.05f, 0.1f, 30.0f);
-        ImGui::DragFloat("基準増加量（秒ごと）", &baseStressRate_, 0.1f, 0.0f, 100.0f);
-        ImGui::DragFloat("ザコ1体あたり追加増加量", &stressRatePerEnemy_, 0.1f, 0.0f, 50.0f);
         ImGui::SeparatorText("ストレス減少");
         ImGui::DragFloat("ザコ攻撃1回の減少量", &stressReductionPerHit_, 0.1f, 0.0f, 100.0f);
 
@@ -105,7 +79,6 @@ void DeathTimer::AdjustParam() {
 
         ImGui::Separator();
         ImGui::Text("現在のストレス: %.1f / %.1f", currentStress_, maxStress_);
-        ImGui::Text("煽り中: %s  煽りザコ数: %d", isTaunting_ ? "YES" : "NO", tauntingEnemyCount_);
 
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);

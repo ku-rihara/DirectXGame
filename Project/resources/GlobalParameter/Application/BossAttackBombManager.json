@@ -1,0 +1,8 @@
+{
+    "BossAttackBombManager": {
+        "arcHeight": 8.0,
+        "bombThrowInterval": 3.0,
+        "flightTime": 1.5,
+        "stressPerBomb": 10.0
+    }
+}
