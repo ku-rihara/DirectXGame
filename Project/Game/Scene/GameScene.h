@@ -101,8 +101,8 @@ private:
         std::unique_ptr<KillCounter> killCounter_                                 = nullptr;
         std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
         std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;
-        std::unique_ptr<ComboSupportSpriteUi> comboSupportSpriteUi_              = nullptr;
-        std::unique_ptr<NextAttackHintUI>       nextAttackHintUI_                 = nullptr;
+        std::unique_ptr<ComboSupportSpriteUi> comboSupportSpriteUi_               = nullptr;
+        std::unique_ptr<NextAttackHintUI> nextAttackHintUI_                       = nullptr;
 
         std::unique_ptr<KetaEngine::Sprite> screenSprite_;
     };

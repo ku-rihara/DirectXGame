@@ -1,15 +1,23 @@
 #include "BossAttackBombManager.h"
+#include"../../GameCamera/GameCamera.h"
+#include "DeathTimer/DeathTimer.h"
 #include "Frame/Frame.h"
 #include <imgui.h>
 
 void BossAttackBombManager::Init() {
+
+    // globalParameterの登録
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
+
+    // ポストエフェクトの再生クラスの初期化
+    postEffectPlayer_.Init();
 }
 
 void BossAttackBombManager::Update() {
+    postEffectPlayer_.Update();
 
     if (!isActive_) {
         return;
@@ -60,8 +68,18 @@ void BossAttackBombManager::ThrowBomb() {
     // 着地コールバックの設定
     float stressAmount = stressPerBomb_;
     bomb->SetOnLandedCallback([this, stressAmount]() {
-        if (onBombLanded_) {
-            onBombLanded_(stressAmount);
+
+        // ポストエフェクトのリアクション
+        postEffectPlayer_.Play("BombLanding", "AttackBomb");
+
+        // カメラのシェイク
+        if (pGameCamera_) {
+            pGameCamera_->PlayShake("");
+        }
+
+        // ストレスゲージを増やす
+        if (pDeathTimer_) {
+            pDeathTimer_->TakeDamage(stressAmount);
         }
     });
 

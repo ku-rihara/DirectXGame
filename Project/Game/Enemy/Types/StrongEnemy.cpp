@@ -71,14 +71,11 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     if (!bombManager_) {
         bombManager_ = std::make_unique<BossAttackBombManager>();
     }
+
     bombManager_->Init();
-    bombManager_->SetOnBombLandedCallback([this](float amount) {
-        if (auto* player = GetBaseInfo()->GetPlayer()) {
-            if (auto* dt = player->GetDeathTimer()) {
-                dt->TakeDamage(amount);
-            }
-        }
-    });
+    if (auto* player = GetBaseInfo()->GetPlayer()) {
+        bombManager_->SetDeathTimer(player->GetDeathTimer());
+    }
 
     // スポーン後の行動を生成
     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));

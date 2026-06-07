@@ -8,12 +8,12 @@
 // Math
 #include "Vector3.h"
 // std
-#include <functional>
 #include <memory>
 #include <string>
 #include <vector>
 
 class GameCamera;
+class DeathTimer;
 /// <summary>
 /// ボス専用攻撃ボム管理クラス
 /// </summary>
@@ -43,7 +43,9 @@ private:
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_                  = "BossAttackBombManager";
 
-    GameCamera* pGameCamera_ = nullptr;
+    // 他クラスのポインタ
+    GameCamera*  pGameCamera_  = nullptr;
+    DeathTimer*  pDeathTimer_  = nullptr;
     KetaEngine::PostEffectPlayer postEffectPlayer_;
 
     // 攻撃ボムのコンテナ
@@ -59,13 +61,13 @@ private:
     float throwTimer_ = 0.0f;
     bool isActive_    = false;
 
-    // 位置とコールバック
+    // 位置
     Vector3 bossPos_;
     Vector3 playerPos_;
-    std::function<void(float)> onBombLanded_;
 
 public:
     void SetBossPosition(const Vector3& pos) { bossPos_ = pos; }
     void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
-    void SetOnBombLandedCallback(std::function<void(float)> cb) { onBombLanded_ = std::move(cb); }
+    void SetGameCamera(GameCamera* camera) { pGameCamera_ = camera; }
+    void SetDeathTimer(DeathTimer* dt) { pDeathTimer_ = dt; }
 };

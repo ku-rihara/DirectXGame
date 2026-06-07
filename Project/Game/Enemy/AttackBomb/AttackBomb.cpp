@@ -22,14 +22,10 @@ void AttackBomb::Init(const Vector3& startPos, const Vector3& targetPos, float f
     // トレイルの初期化
     trailPlayer_.Init();
     trailPlayer_.SetFollowPosition(&position_);
-
-    // ポストエフェクトの初期化
-    postEffectPlayer_.Init();
 }
 
 void AttackBomb::Update() {
     trailPlayer_.Update();
-    postEffectPlayer_.Update();
 
     if (isLanded_) {
         return;
@@ -66,14 +62,6 @@ void AttackBomb::StartTrail(const std::string& presetName, const std::string& ca
 
 void AttackBomb::StopTrail() {
     trailPlayer_.StopEmit();
-}
-
-void AttackBomb::StartPostEffect(const std::string& presetName, const std::string& category) {
-    postEffectPlayer_.Play(presetName, category);
-}
-
-void AttackBomb::StopPostEffect() {
-    postEffectPlayer_.StopAndReset();
 }
 
 void AttackBomb::InitEasing(float arcHeight) {

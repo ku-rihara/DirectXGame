@@ -2,7 +2,6 @@
 #include "3d/Object3d/Object3d.h"
 #include "Easing/Easing.h"
 #include "Editor/RibbonTrailEditor/RibbonTrailPlayer.h"
-#include "Editor/PostEffectEditor/PostEffectPlayer.h"
 #include "Vector3.h"
 #include <functional>
 #include <memory>
@@ -24,11 +23,6 @@ public:
     void StartTrail(const std::string& presetName, const std::string& category = "AttackBomb");
     /// トレイルのエミット停止
     void StopTrail();
-
-    /// 着地時ポストエフェクト再生開始
-    void StartPostEffect(const std::string& presetName, const std::string& category = "AttackBomb");
-    /// ポストエフェクト即時停止・リセット
-    void StopPostEffect();
 
 private:
 
@@ -55,9 +49,6 @@ private:
 
     // リボントレイル
     KetaEngine::RibbonTrailPlayer trailPlayer_;
-
-    // ポストエフェクト
-    KetaEngine::PostEffectPlayer postEffectPlayer_;
 
     // 着地コールバック
     std::function<void()> onLanded_;
