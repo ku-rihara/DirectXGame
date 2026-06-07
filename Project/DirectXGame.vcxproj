@@ -101,6 +101,7 @@
         <ClCompile Include="Engine\Editor\ParameterEditor\GlobalParameter.cpp"/>
         <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectData.cpp"/>
         <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectEditor.cpp"/>
+        <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectPlayer.cpp"/>
         <ClCompile Include="Engine\Editor\RailEditor\Rail.cpp"/>
         <ClCompile Include="Engine\Editor\RailEditor\RailControlPoint.cpp"/>
         <ClCompile Include="Engine\Editor\RailEditor\RailData.cpp"/>
@@ -463,6 +464,7 @@
         <ClInclude Include="Engine\Editor\ParameterEditor\GlobalParameter.h"/>
         <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectData.h"/>
         <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectEditor.h"/>
+        <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectPlayer.h"/>
         <ClInclude Include="Engine\Editor\RailEditor\Rail.h"/>
         <ClInclude Include="Engine\Editor\RailEditor\RailControlPoint.h"/>
         <ClInclude Include="Engine\Editor\RailEditor\RailData.h"/>

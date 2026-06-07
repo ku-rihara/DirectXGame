@@ -1,0 +1,34 @@
+{
+    "BombTrail": {
+        "DistortionStrength": 0.02,
+        "DistortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
+        "DistortionUVScrollSpeed": [
+            0.1,
+            0.0
+        ],
+        "EmitInterval": 0.02,
+        "EndColor": [
+            1.0,
+            0.3,
+            0.0,
+            0.0
+        ],
+        "EndWidth": 0.0,
+        "FollowMode": 0,
+        "Lifetime": 0.4,
+        "MaxPoints": 64,
+        "StartColor": [
+            1.0,
+            0.7,
+            0.1,
+            1.0
+        ],
+        "StartWidth": 0.3,
+        "TexturePath": "",
+        "UVScrollSpeed": [
+            0.0,
+            0.0
+        ],
+        "UseDistortion": false
+    }
+}

@@ -2,8 +2,8 @@
 
 using namespace KetaEngine;
 #include "3D/RibbonTrail/RibbonTrail.h"
-#include "RibbonTrailData.h"
 #include "Frame/Frame.h"
+#include "RibbonTrailData.h"
 #include <cmath>
 
 ///============================================================
@@ -36,7 +36,9 @@ void RibbonTrailPlayer::Update(float speedRate) {
     SyncDataToTrail();
 
     const RibbonTrailData* data = GetData();
-    if (!data) { return; }
+    if (!data) {
+        return;
+    }
 
     switch (data->GetFollowMode()) {
 
@@ -53,16 +55,12 @@ void RibbonTrailPlayer::Update(float speedRate) {
         break;
 
     case TrailFollowMode::Arc:
-        // 弧モードは EmitArc() で一括生成済み。
-        // basePos_ がフレームごとに動く（キャラクターに追従）場合は
-        // 毎フレーム弧を再生成したいケースもあるので、
-        // 追従が必要なら Update 内で ApplyArcToTrail() を呼ぶ。
-        // デフォルトは生成後そのまま（自然消滅）。
+
         break;
 
     case TrailFollowMode::StayInPlace:
     default:
-        // 何もしない（ポイントは自然消滅）
+        // 何もしない
         break;
     }
 }
@@ -98,36 +96,39 @@ void RibbonTrailPlayer::Play(const std::string& presetName, const std::string& c
 }
 
 ///============================================================
-/// EmitArc（外部から任意タイミングで弧を生成する）
+/// EmitArc
 ///============================================================
 void RibbonTrailPlayer::EmitArc() {
-    if (!trail_) { return; }
+    if (!trail_) {
+        return;
+    }
     ApplyArcToTrail();
 }
 
 ///============================================================
-/// ApplyArcToTrail（内部処理）
+/// ApplyArcToTrail
 ///============================================================
 void RibbonTrailPlayer::ApplyArcToTrail() {
     const RibbonTrailData* data = GetData();
-    if (!data || !trail_) { return; }
+    if (!data || !trail_) {
+        return;
+    }
 
     // 基準座標：SetBasePos/SetBasePosValue で指定、未指定は原点
     static const Vector3 kOrigin = {0.0f, 0.0f, 0.0f};
-    const Vector3& center = basePos_ ? *basePos_ : kOrigin;
+    const Vector3& center        = basePos_ ? *basePos_ : kOrigin;
 
     // 度数 → ラジアン変換
     constexpr float kDegToRad = 3.14159265358979323846f / 180.0f;
-    float startRad = data->GetArcStartAngleDeg() * kDegToRad;
-    float endRad   = data->GetArcEndAngleDeg()   * kDegToRad;
+    float startRad            = data->GetArcStartAngleDeg() * kDegToRad;
+    float endRad              = data->GetArcEndAngleDeg() * kDegToRad;
 
-    ArcDirection dir   = (data->GetArcDirectionInt() == 1) ? ArcDirection::Clockwise
-                                                           : ArcDirection::CounterClockwise;
-    ArcPlane     plane = static_cast<ArcPlane>(data->GetArcPlaneInt());
+    ArcDirection dir = (data->GetArcDirectionInt() == 1) ? ArcDirection::Clockwise
+                                                         : ArcDirection::CounterClockwise;
+    ArcPlane plane   = static_cast<ArcPlane>(data->GetArcPlaneInt());
 
     trail_->Clear();
     trail_->SetArc(center, startRad, endRad, data->GetArcRadius(), dir, plane);
-
 }
 
 ///============================================================
@@ -170,7 +171,7 @@ RibbonTrailData* RibbonTrailPlayer::GetData() const {
 /// SyncDataToTrail
 ///============================================================
 void RibbonTrailPlayer::SyncDataToTrail() {
-    if (!trail_) { 
+    if (!trail_) {
         return;
     }
     trail_->SetEndColor(GetEndColor());
@@ -223,7 +224,7 @@ float RibbonTrailPlayer::GetEmitInterval() const {
 
 const std::string& RibbonTrailPlayer::GetTexturePath() const {
     static const std::string empty;
-    const RibbonTrailData*   data = GetData();
+    const RibbonTrailData* data = GetData();
     return data ? data->GetTexturePath() : empty;
 }
 
@@ -239,7 +240,7 @@ float RibbonTrailPlayer::GetDistortionStrength() const {
 
 const std::string& RibbonTrailPlayer::GetDistortionTexturePath() const {
     static const std::string empty;
-    const RibbonTrailData*   data = GetData();
+    const RibbonTrailData* data = GetData();
     return data ? data->GetDistortionTexturePath() : empty;
 }
 

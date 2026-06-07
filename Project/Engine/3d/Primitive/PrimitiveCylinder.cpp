@@ -113,28 +113,33 @@ void PrimitiveCylinder::SetEndAngleMask(float endDeg) {
     material_.GetMaterialData()->angleMaskRatio = ratio;
 }
 
-void PrimitiveCylinder::StartEndAngleEasing(float targetEndDeg, float duration) {
+void PrimitiveCylinder::StartEndAngleEasing(float targetEndDeg, const EasingParameter<float>& easingParam) {
     const float range = params_.endAngleDeg - params_.startAngleDeg;
     if (range <= 0.0f) {
         return;
     }
-    easingStartRatio_  = material_.GetMaterialData()->angleMaskRatio;
-    easingTargetRatio_ = std::clamp((targetEndDeg - params_.startAngleDeg) / range, 0.0f, 1.0f);
-    easingDuration_    = duration;
-    easingTimer_       = 0.0f;
-    isEasing_          = true;
+
+    float* ratioPtr = &material_.GetMaterialData()->angleMaskRatio;
+
+    EasingParameter<float> p = easingParam;
+    p.startValue = *ratioPtr;
+    p.endValue   = std::clamp((targetEndDeg - params_.startAngleDeg) / range, 0.0f, 1.0f);
+
+    if (!endAngleEasing_) {
+        endAngleEasing_ = std::make_unique<Easing<float>>();
+    }
+    endAngleEasing_->SettingValue(p);
+    endAngleEasing_->SetAdaptValue(ratioPtr);
 }
 
 void PrimitiveCylinder::UpdateEasing(float deltaTime) {
-    if (!isEasing_) {
-        return;
+    if (endAngleEasing_) {
+        endAngleEasing_->Update(deltaTime);
     }
-    easingTimer_ += deltaTime;
-    float t = (easingDuration_ > 0.0f) ? (std::min)(easingTimer_ / easingDuration_, 1.0f) : 1.0f;
-    material_.GetMaterialData()->angleMaskRatio = easingStartRatio_ + (easingTargetRatio_ - easingStartRatio_) * t;
-    if (t >= 1.0f) {
-        isEasing_ = false;
-    }
+}
+
+bool PrimitiveCylinder::IsEasingFinished() const {
+    return !endAngleEasing_ || endAngleEasing_->IsFinished();
 }
 
 Vector2 PrimitiveCylinder::GetUV(float u, float v) const {

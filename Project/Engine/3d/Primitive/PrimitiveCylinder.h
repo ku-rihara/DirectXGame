@@ -1,8 +1,10 @@
 #pragma once
 
 #include "3D/Primitive/IPrimitive.h"
+#include "Easing/Easing.h"
 #include "Vector4.h"
 #include <cstdint>
+#include <memory>
 
 /// <summary>
 /// シリンダープリミティブクラス
@@ -34,40 +36,38 @@ public:
     PrimitiveCylinder()  = default;
     ~PrimitiveCylinder() = default;
 
-    void Init() override; //< 初期化
-    void Create() override; //< シリンダー生成
+    // 初期化、プリミティブ作成
+    void Init() override;
+    void Create() override;
 
-    /// パラメータを設定してメッシュを再構築する
-    void SetParams(const CylinderParams& params) { params_ = params; }
-    const CylinderParams& GetParams() const { return params_; }
+    // プリミティブの再構築
     void Rebuild();
 
-    /// シェーダーマスクで終点角度を直接設定 (Rebuildなし)
-    /// endDeg: startAngleDeg〜endAngleDeg の範囲で指定
-    void SetEndAngleMask(float endDeg);
+    /// 終点角度をEasing<float>でアニメーション
+    /// param.startValue / endValue は内部でratio変換して上書きする
+    void StartEndAngleEasing(float targetEndDeg, const EasingParameter<float>& easingParam);
 
-    /// 終点角度をイージングで動かす (シンプル線形補間)
-    /// targetEndDeg: 目標終点角度 (startAngleDeg〜endAngleDeg の範囲)
-    /// duration    : 秒数
-    void StartEndAngleEasing(float targetEndDeg, float duration);
-
-    /// イージング更新 (毎フレーム呼ぶ)
+    /// イージング更新
     void UpdateEasing(float deltaTime);
+
+    bool IsEasingFinished() const;
 
 private:
     Vector2 GetUV(float u, float v) const;
     Vector4 ApplyAxis(float circX, float circY, float h) const;
 
+private:
     const int kVerticesPerFace = 6;
-
     CylinderParams params_;
+    std::unique_ptr<Easing<float>> endAngleEasing_;
 
-    // 終点角度イージング
-    float easingStartRatio_  = 1.0f;
-    float easingTargetRatio_ = 1.0f;
-    float easingDuration_    = 0.0f;
-    float easingTimer_       = 0.0f;
-    bool  isEasing_          = false;
+public:
+    // Getter
+    const CylinderParams& GetParams() const { return params_; }
+
+    // Setter
+    void SetParams(const CylinderParams& params) { params_ = params; }
+    void SetEndAngleMask(float endDeg);
 };
 
 }; // KetaEngine

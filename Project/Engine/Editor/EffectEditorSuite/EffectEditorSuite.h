@@ -54,7 +54,7 @@ public:
     void SelectFileEdit(EffectEditorType type, const std::string& fileName, const std::string& categoryName);
 
     /// <summary>
-    /// エディター経由でエフェクトを再生（プレビュー用）
+    /// エディター経由でエフェクトを再生
     /// </summary>
     void PlayEffect(EffectEditorType type, const std::string& fileName, const std::string& categoryName);
 

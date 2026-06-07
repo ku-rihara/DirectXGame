@@ -30,7 +30,7 @@ public:
     // レンダラーへパラメータを適用してエフェクトを有効化
     void ApplyToRenderer();
 
-    // モードの主要パラメータを設定（イージング用）
+    // モードの主要パラメータを設定
     void SetMainParam(float value);
 
 private:
@@ -65,7 +65,7 @@ private:
     float luminanceWeightRate_ = 0.3f;
 
     // イージングパラメータ
-    float durationTime_ = 0.0f; //< エフェクト持続時間 (0=瞬時適用)
+    float durationTime_ = 0.0f; //< エフェクト持続時間
     float paramStart_   = 0.0f; //< 主要パラメータのイージング開始値
     float paramEnd_     = 0.0f; //< 主要パラメータのイージング終了値
     int32_t easeType_   = 0;    //< EasingType にキャストして使用
@@ -74,7 +74,7 @@ private:
     Easing<float> paramEase_;
     float easedParam_ = 0.0f;
 
-    // 内部タイマー（startTime 待機用）
+    // 内部タイマー
     float currentTime_ = 0.0f;
 
 public:

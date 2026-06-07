@@ -18,9 +18,19 @@ void AttackBomb::Init(const Vector3& startPos, const Vector3& targetPos, float f
     obj3d_.reset(KetaEngine::Object3d::CreateModel("TestObj/axis.obj"));
     obj3d_->transform_.Init();
     obj3d_->transform_.translation_ = startPos;
+
+    // トレイルの初期化
+    trailPlayer_.Init();
+    trailPlayer_.SetFollowPosition(&position_);
+
+    // ポストエフェクトの初期化
+    postEffectPlayer_.Init();
 }
 
 void AttackBomb::Update() {
+    trailPlayer_.Update();
+    postEffectPlayer_.Update();
+
     if (isLanded_) {
         return;
     }
@@ -34,6 +44,7 @@ void AttackBomb::Update() {
     if (arcEasing_.IsFinished()) {
         position_ = targetPos_;
         isLanded_ = true;
+        trailPlayer_.StopEmit();
         if (onLanded_) {
             onLanded_();
         }
@@ -47,6 +58,22 @@ void AttackBomb::Update() {
 
     // 3Dモデルの位置を更新
     obj3d_->transform_.translation_ = position_;
+}
+
+void AttackBomb::StartTrail(const std::string& presetName, const std::string& category) {
+    trailPlayer_.Play(presetName, category);
+}
+
+void AttackBomb::StopTrail() {
+    trailPlayer_.StopEmit();
+}
+
+void AttackBomb::StartPostEffect(const std::string& presetName, const std::string& category) {
+    postEffectPlayer_.Play(presetName, category);
+}
+
+void AttackBomb::StopPostEffect() {
+    postEffectPlayer_.StopAndReset();
 }
 
 void AttackBomb::InitEasing(float arcHeight) {
