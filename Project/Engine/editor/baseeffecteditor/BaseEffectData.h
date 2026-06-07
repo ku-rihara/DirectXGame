@@ -35,7 +35,7 @@ public:
     void Pause();
 
     /// <summary>
-    /// 再生ボタンを描画する（派生クラスの AdjustParam 内で呼ぶ）
+    /// 再生ボタンを描画する
     /// ボタン色は基底クラスで統一管理
     /// </summary>
     void DrawPlayButton();
@@ -50,7 +50,7 @@ public:
     virtual void SaveData();
 
     /// <summary>
-    /// GlobalParameter から最新値を再取得する（エディタ編集の即時反映用）
+    /// GlobalParameter から最新値を再取得する
     /// </summary>
     void RefreshParams() { GetParams(); }
 
@@ -68,8 +68,9 @@ protected:
     std::string groupName_;
     std::string categoryName_;
     std::string folderPath_;
-    PlayState playState_ = PlayState::STOPPED;
-    bool showControls_   = true;
+    PlayState playState_      = PlayState::STOPPED;
+    bool showControls_        = true;
+    bool ownsRegistration_    = false;
 
 public:
     //*---------------------------- getter Methods ----------------------------*//

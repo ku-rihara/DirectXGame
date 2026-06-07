@@ -1576,9 +1576,6 @@
         <ClCompile Include="Engine\math\Vector2.cpp">
             <Filter>Engine\math</Filter>
         </ClCompile>
-        <ClCompile Include="Engine\math\Vector2Proxy.cpp">
-            <Filter>Engine\math</Filter>
-        </ClCompile>
         <ClCompile Include="Engine\math\Vector3.cpp">
             <Filter>Engine\math</Filter>
         </ClCompile>
@@ -2726,9 +2723,6 @@
             <Filter>Engine\math</Filter>
         </ClInclude>
         <ClInclude Include="Engine\math\Vector2.h">
-            <Filter>Engine\math</Filter>
-        </ClInclude>
-        <ClInclude Include="Engine\math\Vector2Proxy.h">
             <Filter>Engine\math</Filter>
         </ClInclude>
         <ClInclude Include="Engine\math\Vector3.h">

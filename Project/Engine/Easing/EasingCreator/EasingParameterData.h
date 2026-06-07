@@ -44,20 +44,6 @@ enum class EasingFinishValueType {
     COUNT,
 };
 
-enum class AdaptFloatAxisType {
-    X, // X軸
-    Y, // Y軸
-    Z, // Z軸
-    COUNT,
-};
-
-enum class AdaptVector2AxisType {
-    XY,
-    XZ,
-    YZ,
-    COUNT,
-};
-
 constexpr std::array<const char*, static_cast<int>(EasingType::COUNT)> EasingTypeLabels = {
     "InSine", "OutSine", "InOutSine",
     "InQuint", "OutQuint", "InOutQuint",
@@ -70,19 +56,7 @@ constexpr std::array<const char*, static_cast<int>(EasingType::COUNT)> EasingTyp
     "InBounce", "OutBounce", "InOutBounce",
     "SquishyScaling"};
 
-constexpr std::array<const char*, static_cast<int>(AdaptFloatAxisType::COUNT)> AdaptFloatAxisTypeLabels = {
-    "X",
-    "Y",
-    "Z",
-};
-
-constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)> AdaptVector2AxisTypeLabels = {
-    "XY",
-    "XZ",
-    "YZ",
-};
-
-constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)> FinishTypeLabels = {
+constexpr std::array<const char*, 2> FinishTypeLabels = {
     "Start", "End"};
 
 /// <summary>
@@ -99,9 +73,6 @@ struct EasingParameter {
 
     EasingType type                  = EasingType::InSine;
     EasingFinishValueType finishType = EasingFinishValueType::End;
-
-    AdaptFloatAxisType adaptFloatAxisType  = AdaptFloatAxisType::X;
-    AdaptVector2AxisType adaptVec2AxisType = AdaptVector2AxisType::XY;
 
     T startValue = {};
     T endValue   = {};

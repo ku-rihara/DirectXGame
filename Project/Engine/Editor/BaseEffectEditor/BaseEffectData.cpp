@@ -3,6 +3,18 @@
 using namespace KetaEngine;
 #include <imgui.h>
 
+BaseEffectData::~BaseEffectData() {
+    if (ownsRegistration_ && globalParameter_ && !groupName_.empty()) {
+        globalParameter_->ClearRegistersForGroup(groupName_);
+    }
+}
+
+void BaseEffectData::Init(const std::string& name, const std::string& categoryName) {
+    groupName_       = name;
+    categoryName_    = categoryName;
+    globalParameter_ = GlobalParameter::GetInstance();
+}
+
 void BaseEffectData::Play() {
     Reset();
     playState_ = PlayState::PLAYING;
@@ -35,17 +47,6 @@ void BaseEffectData::Pause() {
     }
 }
 
-void BaseEffectData::Init(const std::string& name, const std::string& categoryName) {
-    groupName_    = name;
-    categoryName_ = categoryName;
-    globalParameter_ = GlobalParameter::GetInstance();
-}
-
-BaseEffectData::~BaseEffectData() {
-    if (globalParameter_ && !groupName_.empty()) {
-        globalParameter_->ClearRegistersForGroup(groupName_);
-    }
-}
 
 bool BaseEffectData::IsPlaying() const {
     return playState_ == PlayState::PLAYING;

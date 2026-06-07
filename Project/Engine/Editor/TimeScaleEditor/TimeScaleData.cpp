@@ -16,9 +16,11 @@ void TimeScaleData::Init(const std::string& timeScaleName, const std::string& ca
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
+        ownsRegistration_ = true;
     } else {
         // 値取得
         GetParams();
+        ownsRegistration_ = false;
     }
 
     // 初期化

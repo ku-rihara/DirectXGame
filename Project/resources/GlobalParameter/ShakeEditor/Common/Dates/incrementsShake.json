@@ -1,0 +1,11 @@
+{
+    "incrementsShake": {
+        "axisFlag": 7,
+        "easeType": 6,
+        "maxTime": 0.8500000238418579,
+        "shakeLength": 0.23999999463558197,
+        "shakeType": 0,
+        "startTime": 1.0,
+        "timeMode": 0
+    }
+}

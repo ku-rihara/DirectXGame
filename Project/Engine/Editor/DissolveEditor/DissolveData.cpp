@@ -20,9 +20,11 @@ void DissolveData::Init(const std::string& dissolveName, const std::string& cate
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
+        ownsRegistration_ = true;
         InitParams();
     } else {
         GetParams();
+        ownsRegistration_ = false;
     }
 
     // イージング設定

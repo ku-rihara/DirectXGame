@@ -1,6 +1,7 @@
 #pragma once
 #include "Easing/EasingCreator/EasingParameterData.h"
-#include "Vector2Proxy.h"
+#include "vector2.h"
+#include "vector3.h"
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -41,31 +42,7 @@ public:
     /// <param name="value">適用先の値</param>
     void SetAdaptValue(T* value);
 
-    /// <summary>
-    /// Vector2の軸に適用(float用)
-    /// </summary>
-    /// <param name="value">適用先のVector2</param>
-    template <typename U = T>
-    typename std::enable_if_t<std::is_same_v<U, float>, void>
-    SetAdaptValue(Vector2* value);
-
-    /// <summary>
-    /// Vector3の軸に適用(float用)
-    /// </summary>
-    /// <param name="value">適用先のVector3</param>
-    template <typename U = T>
-    typename std::enable_if_t<std::is_same_v<U, float>, void>
-    SetAdaptValue(Vector3* value);
-
-    /// <summary>
-    /// Vector3の軸に適用(Vector2用)
-    /// </summary>
-    /// <param name="value">適用先のVector3</param>
-    template <typename U = T>
-    typename std::enable_if_t<std::is_same_v<U, Vector2>, void>
-    SetAdaptValue(Vector3* value);
-
-    // 　イージング終了コールバック、いーじんぐ待機終了コールバック
+    // 　イージング終了コールバック、イージング待機終了コールバック
     void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
     void SetOnWaitEndCallback(const std::function<void()>& callback) { onWaitEndCallback_ = callback; }
 
@@ -76,7 +53,6 @@ public:
 private:
     void CalculateValue(); //< イージング値計算
     void FinishBehavior(); //< 終了時の動作
-    void ChangeAdaptAxis(); //< 適用軸変更
     void FilePathChangeForType(); //< ファイルパスを型に応じて変更
     bool IsEasingStarted() const; //< イージング開始判定
 
@@ -84,30 +60,30 @@ private:
     EasingType type_                       = EasingType::InSine;
     EasingFinishValueType finishValueType_ = EasingFinishValueType::End;
 
-    AdaptFloatAxisType adaptFloatAxisType_     = AdaptFloatAxisType::X;
-    AdaptVector2AxisType adaptVector2AxisType_ = AdaptVector2AxisType::XY;
-
-private:
+    // イージングの開始値、終了値、基準の値、対象の値
     T startValue_ = {};
     T endValue_   = {};
     T baseValue_  = {};
-    T* currentOffset_ = nullptr;
+    T* adaptTarget_ = nullptr;
 
+    // タイムパラメータ
     float maxTime_     = 0.0f;
     float currentTime_ = 0.0f;
     float waitTimeMax_ = 0.0f;
     float waitTime_    = 0.0f;
 
+    // オフセット
     float startTimeOffset_        = 0.0f;
     float finishTimeOffset_       = 0.0f;
     float currentStartTimeOffset_ = 0.0f;
 
+    // 専用のイージングのパラメータ
     float amplitude_ = 0.0f;
     float period_    = 0.0f;
 
     EasingType returnType_  = EasingType::InSine; // 戻りフェーズのイージング種類
-    float returnMaxTime_    = 0.0f;               // 戻りフェーズの時間（0=戻りなし）
-    float forwardMaxTime_   = 0.0f;               // 前進フェーズの時間（returnMaxTime_>0 のとき使用）
+    float returnMaxTime_    = 0.0f;               // 戻りフェーズの時間
+    float forwardMaxTime_   = 0.0f;               // 前進フェーズの時間
 
     bool isFinished_ = false;
     bool isPlaying_  = false;
@@ -122,12 +98,6 @@ private:
     std::string currentSelectedFileName_;
     std::string easingName_;
 
-    AdaptVector2AxisType oldTypeVector2_ = AdaptVector2AxisType::XY;
-    AdaptFloatAxisType oldTypeFloat_     = AdaptFloatAxisType::X;
-    Vector2* adaptTargetVec2_ = nullptr;
-    Vector3* adaptTargetVec3_ = nullptr;
-    std::unique_ptr<IVector2Proxy> vector2Proxy_;
-
     std::function<void()> onFinishCallback_;
     std::function<void()> onWaitEndCallback_;
 
@@ -137,7 +107,7 @@ public:
     /// -------------------------------------------------------------------------
     /// Getter methods
     /// -------------------------------------------------------------------------
-    const T& GetValue() const { return *currentOffset_; }
+    const T& GetValue() const { return *adaptTarget_; }
     const T& GetEndValue() const { return endValue_; }
     const T& GetStartValue() const { return startValue_; }
     bool IsFinished() const { return isFinished_; }

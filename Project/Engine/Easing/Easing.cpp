@@ -48,10 +48,8 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
 
     // イージングのパラメータをセット
 
-    type_                 = easingParam.type;
-    adaptFloatAxisType_   = easingParam.adaptFloatAxisType;
-    adaptVector2AxisType_ = easingParam.adaptVec2AxisType;
-    finishValueType_      = easingParam.finishType;
+    type_            = easingParam.type;
+    finishValueType_ = easingParam.finishType;
 
     startValue_ = easingParam.startValue;
     endValue_   = easingParam.endValue;
@@ -104,10 +102,6 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
         return;
     }
 
-    // 以前の値を保存
-    oldTypeVector2_ = adaptVector2AxisType_;
-    oldTypeFloat_   = adaptFloatAxisType_;
-
     // JSONの内容を確認
     const auto& inner = easingJson.begin().value();
 
@@ -129,16 +123,14 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
         param.endValue   = Vector3{ev[0].get<float>(), ev[1].get<float>(), ev[2].get<float>()};
 
     } else if constexpr (std::is_same_v<T, Vector2>) {
-        const auto& sv          = inner.at("startValue");
-        const auto& ev          = inner.at("endValue");
-        param.startValue        = Vector2{sv[0].get<float>(), sv[1].get<float>()};
-        param.endValue          = Vector2{ev[0].get<float>(), ev[1].get<float>()};
-        param.adaptVec2AxisType = static_cast<AdaptVector2AxisType>(inner.at("adaptVec2AxisType").get<int>());
+        const auto& sv   = inner.at("startValue");
+        const auto& ev   = inner.at("endValue");
+        param.startValue = Vector2{sv[0].get<float>(), sv[1].get<float>()};
+        param.endValue   = Vector2{ev[0].get<float>(), ev[1].get<float>()};
 
     } else if constexpr (std::is_same_v<T, float>) {
-        param.startValue         = inner.at("startValue").get<float>();
-        param.endValue           = inner.at("endValue").get<float>();
-        param.adaptFloatAxisType = static_cast<AdaptFloatAxisType>(inner.at("adaptFloatAxisType").get<int>());
+        param.startValue = inner.at("startValue").get<float>();
+        param.endValue   = inner.at("endValue").get<float>();
     }
 
     param.maxTime       = inner.at("maxTime").get<float>();
@@ -162,34 +154,6 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     auto it                 = std::find(easingFiles_.begin(), easingFiles_.end(), fileName.substr(0, fileName.size() - 5)); //-5は".json"の長さ
     if (it != easingFiles_.end()) {
         selectedFileIndex_ = static_cast<int>(std::distance(easingFiles_.begin(), it));
-    }
-
-    // 軸が変わった場合、軸を変えた上で値を更新
-    ChangeAdaptAxis();
-}
-
-template <typename T>
-void Easing<T>::ChangeAdaptAxis() {
-
-    if constexpr (std::is_same_v<T, Vector2>) {
-
-        // 適応するVector2の軸が変わった場合、値を更新
-        if (oldTypeVector2_ != adaptVector2AxisType_ && adaptTargetVec3_) {
-            SetAdaptValue<Vector2>(adaptTargetVec3_);
-        }
-
-    } else if constexpr (std::is_same_v<T, float>) {
-
-        // 適応するfloatの軸が変わった場合、値を更新
-        if (oldTypeFloat_ != adaptFloatAxisType_) {
-
-            if (adaptTargetVec3_) {
-                SetAdaptValue<float>(adaptTargetVec3_);
-            }
-            if (adaptTargetVec2_) {
-                SetAdaptValue<float>(adaptTargetVec2_);
-            }
-        }
     }
 }
 
@@ -246,10 +210,6 @@ void Easing<T>::Update(float deltaTime) {
 
     isPlaying_ = true;
     CalculateValue();
-
-    if (vector2Proxy_) {
-        vector2Proxy_->Apply();
-    }
 
     //  終了時間を過ぎたら終了処理
     if (currentTime_ < maxTime_ - finishTimeOffset_) {
@@ -311,13 +271,13 @@ void Easing<T>::CalculateValue() {
     }
 
     // currentOffsetのイージング計算
-    if (!currentOffset_) {
+    if (!adaptTarget_) {
         return;
     }
 
     // maxTime_ が 0 の場合は終端値を即セットして終了
     if (maxTime_ <= 0.0f) {
-        *currentOffset_ = endValue;
+        *adaptTarget_ = endValue;
         return;
     }
 
@@ -342,90 +302,90 @@ void Easing<T>::CalculateValue() {
     switch (type_) {
 
     case EasingType::InSine:
-        *currentOffset_ = EaseInSine(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInSine(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutSine:
-        *currentOffset_ = EaseOutSine(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseOutSine(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutSine:
-        *currentOffset_ = EaseInOutSine(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInOutSine(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InQuint:
-        *currentOffset_ = EaseInQuint(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInQuint(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutQuint:
-        *currentOffset_ = EaseOutQuint(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseOutQuint(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutQuint:
-        *currentOffset_ = EaseInOutQuint(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInOutQuint(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InCirc:
-        *currentOffset_ = EaseInCirc(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInCirc(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutCirc:
-        *currentOffset_ = EaseOutCirc(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseOutCirc(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutCirc:
-        *currentOffset_ = EaseInOutCirc(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInOutCirc(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InExpo:
-        *currentOffset_ = EaseInExpo(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInExpo(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutExpo:
-        *currentOffset_ = EaseOutExpo(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseOutExpo(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutExpo:
-        *currentOffset_ = EaseInOutExpo(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInOutExpo(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InCubic:
-        *currentOffset_ = EaseInCubic(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInCubic(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutCubic:
-        *currentOffset_ = EaseOutCubic(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseOutCubic(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutCubic:
-        *currentOffset_ = EaseInOutCubic(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInOutCubic(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InQuad:
-        *currentOffset_ = EaseInQuad(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInQuad(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutQuad:
-        *currentOffset_ = EaseOutQuad(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseOutQuad(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutQuad:
-        *currentOffset_ = EaseInOutQuad(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInOutQuad(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InQuart:
-        *currentOffset_ = EaseInQuart(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInQuart(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutQuart:
-        *currentOffset_ = EaseOutQuart(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseOutQuart(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutQuart:
         /*    currentOffset_ = EaseInOutQuart(startValue, endValue, currentTime_, maxTime_);*/
         break;
     case EasingType::InBack:
-        *currentOffset_ = EaseInBack(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInBack(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutBack:
-        *currentOffset_ = EaseOutBack(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseOutBack(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutBack:
-        *currentOffset_ = EaseInOutBack(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInOutBack(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InBounce:
-        *currentOffset_ = EaseInBounce(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInBounce(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutBounce:
-        *currentOffset_ = EaseOutBounce(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseOutBounce(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutBounce:
-        *currentOffset_ = EaseInOutBounce(startValue, endValue, currentTime_, maxTime_);
+        *adaptTarget_ = EaseInOutBounce(startValue, endValue, currentTime_, maxTime_);
         break;
 
     //  特殊イージング
     case EasingType::SquishyScaling:
-        *currentOffset_ = EaseAmplitudeScale(startValue, currentTime_, maxTime_, amplitude_, period_);
+        *adaptTarget_ = EaseAmplitudeScale(startValue, currentTime_, maxTime_, amplitude_, period_);
         break;
 
     }
@@ -444,19 +404,23 @@ void Easing<T>::Easing::FinishBehavior() {
     isFinished_  = true;
     isPlaying_   = false;
 
+    if (!adaptTarget_) {
+        return;
+    }
+
     switch (finishValueType_) {
     case EasingFinishValueType::Start:
         if (isStartEndReverse_) {
-            *currentOffset_ = endValue_ + baseValue_;
+            *adaptTarget_ = endValue_ + baseValue_;
         } else {
-            *currentOffset_ = startValue_ + baseValue_;
+            *adaptTarget_ = startValue_ + baseValue_;
         }
         break;
     case EasingFinishValueType::End:
         if (isStartEndReverse_) {
-            *currentOffset_ = startValue_ + baseValue_;
+            *adaptTarget_ = startValue_ + baseValue_;
         } else {
-            *currentOffset_ = endValue_ + baseValue_;
+            *adaptTarget_ = endValue_ + baseValue_;
         }
         break;
     default:
@@ -465,75 +429,12 @@ void Easing<T>::Easing::FinishBehavior() {
 }
 template <typename T>
 void Easing<T>::Easing::SetAdaptValue(T* value) {
-    currentOffset_ = value;
-}
-
-template <>
-template <>
-void Easing<float>::SetAdaptValue<float>(Vector2* value) {
-    adaptTargetVec2_ = value;
-    switch (adaptFloatAxisType_) {
-    case AdaptFloatAxisType::X:
-        currentOffset_ = &value->x;
-        break;
-    case AdaptFloatAxisType::Y:
-        currentOffset_ = &value->y;
-        break;
-    default:
-        currentOffset_ = &value->x;
-        break;
-    }
-}
-
-template <>
-template <>
-void Easing<float>::SetAdaptValue<float>(Vector3* value) {
-    adaptTargetVec3_ = value;
-    switch (adaptFloatAxisType_) {
-    case AdaptFloatAxisType::X:
-        currentOffset_ = &value->x;
-        break;
-    case AdaptFloatAxisType::Y:
-        currentOffset_ = &value->y;
-        break;
-    case AdaptFloatAxisType::Z:
-        currentOffset_ = &value->z;
-        break;
-    default:
-        currentOffset_ = &value->x;
-        break;
-    }
-}
-
-template <>
-template <>
-void Easing<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
-    adaptTargetVec3_ = value;
-
-    switch (adaptVector2AxisType_) {
-    case AdaptVector2AxisType::XY:
-        vector2Proxy_ = std::make_unique<XYProxy>(value);
-
-        break;
-    case AdaptVector2AxisType::XZ:
-        vector2Proxy_ = std::make_unique<XZProxy>(value);
-
-        break;
-    case AdaptVector2AxisType::YZ:
-        vector2Proxy_ = std::make_unique<YZProxy>(value);
-
-        break;
-    default:
-        vector2Proxy_ = std::make_unique<XYProxy>(value);
-
-        break;
-    }
-    currentOffset_ = &vector2Proxy_->Get();
+    adaptTarget_ = value;
 }
 
 template <typename T>
 void Easing<T>::Easing::SetCurrentOffset(const T& value) {
-    *currentOffset_ = value;
+    *adaptTarget_ = value;
 }
 template <typename T>
 bool Easing<T>::IsEasingStarted() const {

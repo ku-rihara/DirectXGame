@@ -23,13 +23,13 @@ void MovieLine::Init() {
     appearEasing_[1].Init("DownMovieLineAppear.json");
 
     for (int32_t i = 0; i < static_cast<int32_t>(exitEasing_.size()); ++i) {
-        exitEasing_[i].SetAdaptValue(&exitAdaptPos_[i]);
+        exitEasing_[i].SetAdaptValue(&exitAdaptPosY_[i]);
         exitEasing_[i].SetStartValue(appearPosition_[i].y);
         exitEasing_[i].Reset();
     }
 
     for (int32_t i = 0; i < static_cast<int32_t>(appearEasing_.size()); ++i) {
-        appearEasing_[i].SetAdaptValue(&appearAdaptPos_[i]);
+        appearEasing_[i].SetAdaptValue(&appearAdaptPosY_[i]);
         appearEasing_[i].Reset();
     }
 }
@@ -37,14 +37,14 @@ void MovieLine::Init() {
 void MovieLine::AppearUpdate(float playSpeed) {
     for (int32_t i = 0; i < static_cast<int32_t>(appearEasing_.size()); ++i) {
         appearEasing_[i].Update(playSpeed);
-        sprite_[i]->transform_.pos = appearAdaptPos_[i];
+        sprite_[i]->transform_.pos = Vector2(appearPosition_[i].x, appearAdaptPosY_[i]);
     }
 }
 
 void MovieLine::ExitUpdate(float playSpeed) {
     for (int32_t i = 0; i < static_cast<int32_t>(exitEasing_.size()); ++i) {
         exitEasing_[i].Update(playSpeed);
-        sprite_[i]->transform_.pos = Vector2(appearPosition_[i].x, exitAdaptPos_[i].y);
+        sprite_[i]->transform_.pos = Vector2(appearPosition_[i].x, exitAdaptPosY_[i]);
     }
 }
 

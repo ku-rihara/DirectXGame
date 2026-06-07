@@ -156,14 +156,11 @@ void EasingCreator<T>::ToJson(nlohmann::json& j, const std::string& name, const 
         jsonParam["startValue"] = {param.startValue.x, param.startValue.y, param.startValue.z};
         jsonParam["endValue"]   = {param.endValue.x, param.endValue.y, param.endValue.z};
     } else if constexpr (std::is_same_v<T, Vector2>) {
-        jsonParam["startValue"]        = {param.startValue.x, param.startValue.y};
-        jsonParam["endValue"]          = {param.endValue.x, param.endValue.y};
-        jsonParam["adaptVec2AxisType"] = static_cast<int>(param.adaptVec2AxisType);
+        jsonParam["startValue"] = {param.startValue.x, param.startValue.y};
+        jsonParam["endValue"]   = {param.endValue.x, param.endValue.y};
     } else if constexpr (std::is_same_v<T, float>) {
-
-        jsonParam["startValue"]         = param.startValue;
-        jsonParam["endValue"]           = param.endValue;
-        jsonParam["adaptFloatAxisType"] = static_cast<int>(param.adaptFloatAxisType);
+        jsonParam["startValue"] = param.startValue;
+        jsonParam["endValue"]   = param.endValue;
     }
 
     jsonParam["type"]        = static_cast<int>(param.type);
@@ -209,15 +206,13 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
             param.startValue = Vector3{sv[0], sv[1], sv[2]};
             param.endValue   = Vector3{ev[0], ev[1], ev[2]};
         } else if constexpr (std::is_same_v<T, Vector2>) {
-            auto sv                 = val["startValue"];
-            auto ev                 = val["endValue"];
-            param.startValue        = Vector2{sv[0], sv[1]};
-            param.endValue          = Vector2{ev[0], ev[1]};
-            param.adaptVec2AxisType = static_cast<AdaptVector2AxisType>(val.value("adaptVec2AxisType", 0));
+            auto sv          = val["startValue"];
+            auto ev          = val["endValue"];
+            param.startValue = Vector2{sv[0], sv[1]};
+            param.endValue   = Vector2{ev[0], ev[1]};
         } else if constexpr (std::is_same_v<T, float>) {
-            param.startValue         = val["startValue"].get<T>();
-            param.endValue           = val["endValue"].get<T>();
-            param.adaptFloatAxisType = static_cast<AdaptFloatAxisType>(val.value("adaptFloatAxisType", 0));
+            param.startValue = val["startValue"].get<T>();
+            param.endValue   = val["endValue"].get<T>();
         }
 
         presets_[inner.key()] = param;
@@ -272,28 +267,14 @@ void EasingCreator<T>::Edit() {
         ImGui::DragFloat("Amplitude", &editingParam_.amplitude, 0.01f);
         ImGui::DragFloat("Period", &editingParam_.period, 0.01f);
 
-        int adaptFloatAxisType = static_cast<int>(editingParam_.adaptFloatAxisType);
-        int adaptVec2AxisType  = static_cast<int>(editingParam_.adaptVec2AxisType);
-
         // スタート、終了位置の入力
         if constexpr (std::is_same_v<T, float>) {
             ImGui::DragFloat("Start Value", &editingParam_.startValue, 0.01f);
             ImGui::DragFloat("End Value", &editingParam_.endValue, 0.01f);
-
-            if (ImGui::Combo("AdaptAxis Type", &adaptFloatAxisType, AdaptFloatAxisTypeLabels.data(), static_cast<int>(AdaptFloatAxisTypeLabels.size()))) {
-                editingParam_.adaptFloatAxisType = static_cast<AdaptFloatAxisType>(adaptFloatAxisType);
-            }
-
-        } else if constexpr (std::is_same_v<T, Vector2>) { // vec2
+        } else if constexpr (std::is_same_v<T, Vector2>) {
             ImGui::DragFloat2("Start Value", &editingParam_.startValue.x, 0.01f);
             ImGui::DragFloat2("End Value", &editingParam_.endValue.x, 0.01f);
-           
-            // 軸のタイプの選択(Vector2)
-            if (ImGui::Combo("AdaptAxis Type", &adaptVec2AxisType, AdaptVector2AxisTypeLabels.data(), static_cast<int>(AdaptVector2AxisTypeLabels.size()))) {
-                editingParam_.adaptVec2AxisType = static_cast<AdaptVector2AxisType>(adaptVec2AxisType);
-            }
-
-        } else if constexpr (std::is_same_v<T, Vector3>) { // vec3
+        } else if constexpr (std::is_same_v<T, Vector3>) {
             ImGui::DragFloat3("Start Value", &editingParam_.startValue.x, 0.01f);
             ImGui::DragFloat3("End Value", &editingParam_.endValue.x, 0.01f);
         }

@@ -575,6 +575,7 @@ std::pair<Vector3, Vector3> ComboAttackAction::SetPhaseEasing(
     easing.SetAdaptValue(&currentValue);
     easing.SetFinishTimeOffset(moveParam.finishTimeOffset);
     easing.SetStartTimeOffset(moveParam.startTime);
+    easing.Reset();
 
     return {start, target};
 }

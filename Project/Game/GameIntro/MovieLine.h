@@ -36,8 +36,8 @@ private:
     const std::string groupName_ = "MovieLine";
     std::array<std::unique_ptr<KetaEngine::Sprite>, 2> sprite_;
     std::array<Vector2, 2> appearPosition_;
-    std::array<Vector2, 2> appearAdaptPos_;
-    std::array<Vector2, 2> exitAdaptPos_;
+    std::array<float, 2> appearAdaptPosY_ = {};
+    std::array<float, 2> exitAdaptPosY_   = {};
     std::array<KetaEngine::Easing<float>, 2> exitEasing_;
     std::array<KetaEngine::Easing<float>, 2> appearEasing_;
 };

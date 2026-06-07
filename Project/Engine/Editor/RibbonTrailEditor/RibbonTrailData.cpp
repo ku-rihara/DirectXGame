@@ -17,8 +17,10 @@ void RibbonTrailData::Init(const std::string& name, const std::string& categoryN
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
+        ownsRegistration_ = true;
     } else {
         GetParams();
+        ownsRegistration_ = false;
     }
 }
 

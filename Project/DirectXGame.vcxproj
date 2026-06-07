@@ -371,8 +371,7 @@
         <ClCompile Include="Engine\math\random.cpp"/>
         <ClCompile Include="Engine\math\Shake.cpp"/>
         <ClCompile Include="Engine\math\Vector2.cpp"/>
-        <ClCompile Include="Engine\math\Vector2Proxy.cpp"/>
-        <ClCompile Include="Engine\math\Vector3.cpp"/>
+<ClCompile Include="Engine\math\Vector3.cpp"/>
         <ClCompile Include="Engine\math\Vector4.cpp"/>
     </ItemGroup>
     <ItemGroup>
@@ -757,8 +756,7 @@
         <ClInclude Include="Engine\math\random.h"/>
         <ClInclude Include="Engine\math\Shake.h"/>
         <ClInclude Include="Engine\math\Vector2.h"/>
-        <ClInclude Include="Engine\math\Vector2Proxy.h"/>
-        <ClInclude Include="Engine\math\Vector3.h"/>
+<ClInclude Include="Engine\math\Vector3.h"/>
         <ClInclude Include="Engine\math\Vector4.h"/>
     </ItemGroup>
     <ItemGroup>

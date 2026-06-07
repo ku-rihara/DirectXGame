@@ -18,9 +18,11 @@ void ShakeData::Init(const std::string& shakeName, const std::string& categoryNa
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
+        ownsRegistration_ = true;
     } else {
         // 値取得
         GetParams();
+        ownsRegistration_ = false;
     }
 
     // 初期化
