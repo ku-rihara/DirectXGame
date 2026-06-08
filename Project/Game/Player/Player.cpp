@@ -70,10 +70,6 @@ void Player::Init() {
     leftHand_->SetParent(&baseTransform_);
     rightHand_->SetParent(&baseTransform_);
 
-    // JumpAttackUI
-    jumpAttackUI_ = std::make_unique<JumpAttackUI>();
-    jumpAttackUI_->Init();
-
     // パラメータセット
     baseTransform_.SetBaseScale(Vector3::OneVector());
     baseTransform_.translation_ = parameters_->GetParameters().startPos_;
@@ -107,10 +103,6 @@ void Player::Update() {
 
     // ロックオン対象がいればそちらを向く
     FaceToTarget();
-
-    if (viewProjection_) {
-        jumpAttackUI_->Update(GetWorldPosition(), *viewProjection_);
-    }
 
     /// Particle
     effects_->Update(GetWorldPosition(), baseTransform_.rotation_);
@@ -311,7 +303,6 @@ void Player::AdjustParam() {
     // パーツのパラメータ
     leftHand_->AdjustParam();
     rightHand_->AdjustParam();
-    jumpAttackUI_->AdjustParam();
 
 #endif // _DEBUG
 }

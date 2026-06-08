@@ -439,9 +439,6 @@
     <Filter Include="Game\Player\Components\Input">
       <UniqueIdentifier>{E57A20F6-EC65-4841-AD1D-313A361884B5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\Components\JumpAttackUI">
-      <UniqueIdentifier>{55A41137-84F9-4A52-A7B9-13470E861501}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Player\Components\Parameter">
       <UniqueIdentifier>{0261DED0-BDFD-45E6-B564-687FCF3151E9}</UniqueIdentifier>
     </Filter>
@@ -1400,9 +1397,6 @@
     </ClCompile>
     <ClCompile Include="Game\Player\Components\Effect\PlayerEffects.cpp">
       <Filter>Game\Player\Components\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\Components\JumpAttackUI\JumpAttackUI.cpp">
-      <Filter>Game\Player\Components\JumpAttackUI</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\NextAttackIndicator\NextAttackHintUI.cpp">
       <Filter>Game\UI\NextAttackIndicator</Filter>
@@ -2547,9 +2541,6 @@
     </ClInclude>
     <ClInclude Include="Game\Player\Components\Effect\PlayerEffects.h">
       <Filter>Game\Player\Components\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Components\JumpAttackUI\JumpAttackUI.h">
-      <Filter>Game\Player\Components\JumpAttackUI</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\NextAttackIndicator\NextAttackHintUI.h">
       <Filter>Game\UI\NextAttackIndicator</Filter>
