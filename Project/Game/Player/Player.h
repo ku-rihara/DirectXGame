@@ -148,6 +148,14 @@ public:
     /// </summary>
     bool IsAirborne() const;
 
+    
+    /// 自動ダッシュ開始
+    void StartAutoDash();
+    /// 自動ダッシュ解除
+    void ClearAutoDash();
+    void RotateReset();
+    void HeadLightSetting();
+
 private:
     void ChangeDeathMode();
     bool IsAbleBehavior();
@@ -208,7 +216,7 @@ private:
     // 死亡フラグ
     const bool* isDeath_;
     bool isDeathRenditionFinish_ = false;
-  
+
     // ダメージクールダウン
     bool isDamageColling_     = false;
     float damageCollTime_     = 0.0f;
@@ -218,7 +226,9 @@ private:
     bool isIgnoreUnlockState_ = false;
 
 public:
-    // getter
+    /// ===================================================
+    /// Getter Method
+    /// ===================================================
     PlayerHandLeft* GetLeftHand() const { return leftHand_.get(); }
     PlayerHandRight* GetRightHand() const { return rightHand_.get(); }
     BasePlayerBehavior* GetBehavior() const { return behavior_.get(); }
@@ -239,9 +249,11 @@ public:
     KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
     bool GetIsDeathRenditionFinish() const { return isDeathRenditionFinish_; }
+    AutoComboQueue& GetAutoComboQueue() { return autoComboQueue_; }
 
-    //*-- setter --*//
-    // class Set
+    /// ===================================================
+    /// Setter Method
+    /// ===================================================
     void SetViewProjection(const KetaEngine::ViewProjection* viewProjection);
     void SetLockOn(LockOnController* lockon);
     void SetGameCamera(GameCamera* gamecamera);
@@ -254,17 +266,7 @@ public:
     void SetIsIgnoreUnlockState(bool isIgnore) { isIgnoreUnlockState_ = isIgnore; }
     void SetObjectiveAngle(float angle) { objectiveAngle_ = angle; }
     void SetObjectiveAnglePitch(float angle) { objectiveAnglePitch_ = angle; }
-
-    AutoComboQueue& GetAutoComboQueue() { return autoComboQueue_; }
-
-    /// 自動ダッシュ開始
-    void StartAutoDash();
-    /// 自動ダッシュ解除
-    void ClearAutoDash();
-
     void SetTitleBehavior();
-    void RotateReset();
-    void HeadLightSetting();
     void SetHeadScale(const Vector3& scale) { obj3d_->transform_.scale_ = scale; }
     void SetHeadPosY(float posy) { obj3d_->transform_.translation_.y = posy; }
     void SetHeadRotateX(float zRotate) { obj3d_->transform_.rotation_.x = zRotate; }

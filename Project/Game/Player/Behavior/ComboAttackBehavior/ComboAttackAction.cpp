@@ -221,7 +221,7 @@ void ComboAttackAction::UpdateAttack(float atkSpeed) {
     }
 
     // 敵にヒットしたかをチェック
-    if (pCollisionInfo_->GetHasHitEnemy()) {
+    if (pCollisionInfo_->GetHasHitTarget()) {
         hasHitEnemy_ = true;
     }
 

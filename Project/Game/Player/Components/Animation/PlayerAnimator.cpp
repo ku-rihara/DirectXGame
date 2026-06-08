@@ -31,6 +31,8 @@ void PlayerAnimator::Init(
 }
 
 void PlayerAnimator::Update() {
+
+    // Dissolve 更新
     dissolvePlayer_.Update();
     if (dissolvePlayer_.IsPlaying()) {
         dissolvePlayer_.ApplyToMaterial(*obj3d_->GetModelMaterial());
@@ -113,7 +115,7 @@ void PlayerAnimator::PlayPlayerCategoryAnimation(const std::string& name) {
 }
 
 ///=============================================================
-/// ObjEase アニメーション (タイトル等)
+/// ObjEase アニメーション
 ///=============================================================
 void PlayerAnimator::PlayMainHeadAnimation(const std::string& name) {
     baseTransform_->PlayObjEaseAnimation(name, "MainHead");

@@ -2,11 +2,7 @@
 
 // BaseCollisionBox
 #include "Collider/SphereCollider.h"
-// Combo
-#include "Combo/Combo.h"
-// Parameter
-#include "Editor/ParameterEditor/GlobalParameter.h"
-// Phase
+// Timeline
 #include "Player/ComboCreator/Timeline/PlayerComboAttackTimelinePhase.h"
 // std
 #include <array>
@@ -35,77 +31,76 @@ public:
     // コリジョンコールバック
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
+    /// <summary>
+    /// 新しい攻撃に備えて状態をリセット
+    /// </summary>
+    void PrepareForNewAttack();
+
+    // ダメージがヒットしたことを通知
+    void NotifyDamageHit() { ++damageHitCount_; }
+
 private:
     void AdaptCollision();
     void LoopWaiting(float timeSpeed);
     void LoopStart();
 
 private:
-    const KetaEngine::WorldTransform* baseTransform_ = nullptr;
-    const PlayerComboAttackData* comboAttackData_    = nullptr;
 
+    // 攻撃データ
+    const PlayerComboAttackData* comboAttackData_ = nullptr;
+
+    // WorldTransformと攻撃コリジョンのオフセット
     KetaEngine::WorldTransform transform_;
     Vector3 offset_;
-    float sphereRad_;
 
-    // ヒットした敵の座標（ポインタは持たない）
-    Vector3 hitTargetPos_  = {};
-    bool    hasHitTarget_  = false;
+    // ヒットした敵の座標
+    Vector3 hitTargetPos_ = {};
 
-    // time
+    // times
     float adaptTimer_;
     float loopWaitTimer_;
-    bool hasHitEnemy_ = false;
 
-    // count
+    // コリジョンOn/OFFのループ回数
     int32_t currentLoopCount_;
 
-    // states
+    // 攻撃力とサイズ
     float attackPower_;
+    float sphereRad_;
 
-    // frag
-    bool isInLoopWait_ = false;
-    bool isHit_        = false;
-    bool isFinish_     = false;
-
+    // 状態フラグ
+    bool isInLoopWait_    = false;
+    bool isHit_           = false;
+    bool isFinish_        = false;
     bool isAbleCollision_ = false;
+    bool hasHitTarget_    = false;
 
+    // 攻撃のフェーズ
     AttackTimelinePhase phase_ = AttackTimelinePhase::MAIN;
 
-    // 実際にダメージが入った回数（敵のダメージインターバル通過時にインクリメント）
+    // 実際にダメージが入った回数
     int32_t damageHitCount_ = 0;
 
 public:
+    /// ===================================================
+    /// Getter Method
+    /// ===================================================
     Vector3 GetCollisionPos() const override;
     const PlayerComboAttackData* GetComboAttackData() const { return comboAttackData_; }
     float GetAttackPower() const { return attackPower_; };
     int32_t GetCurrentLoopCount() const { return currentLoopCount_; }
-    bool GetIsInLoopWait() const { return isInLoopWait_; }
     bool GetIsHit() const { return isHit_; }
-
-    // ダメージが確定した際に敵側から呼ぶ
-    void NotifyDamageHit() { ++damageHitCount_; }
     int32_t GetDamageHitCount() const { return damageHitCount_; }
     bool GetIsFinish() const { return isFinish_; }
-    const KetaEngine::WorldTransform* GetPlayerTransform() const { return baseTransform_; }
-    bool GetHasHitEnemy() const { return hasHitEnemy_; }
-    bool            GetHasHitTarget() const  { return hasHitTarget_; }
-    const Vector3&  GetHitTargetPos() const  { return hitTargetPos_; }
+    const KetaEngine::WorldTransform* GetPlayerTransform() const { return transform_.parent_; }
+    bool GetHasHitTarget() const { return hasHitTarget_; }
+    const Vector3& GetHitTargetPos() const { return hitTargetPos_; }
 
+    /// ===================================================
+    /// Setter Method
+    /// ===================================================
     void SetIsAbleCollision(bool is) { isAbleCollision_ = is; }
     void SetAttackPower(float atkPower) { attackPower_ = atkPower; }
-    void SetIsHit(bool is) { isHit_ = is; }
     void SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform);
     void SetSphereRad(float radius) { sphereRad_ = radius; }
     void SetPosition(const Vector3& position) { transform_.translation_ = position; }
-
-    void PrepareForNewAttack() {
-        isFinish_      = false;
-        hasHitEnemy_   = false;
-        isHit_         = false;
-        hasHitTarget_  = false;
-        damageHitCount_ = 0;
-        SetIsAbleCollision(false);
-    }
-   
 };

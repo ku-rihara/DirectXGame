@@ -9,14 +9,22 @@
 #include <imgui.h>
 
 void PlayerAttackCollider::Init() {
+
+    // フラグの初期化
     SetIsAbleCollision(false);
+    isInLoopWait_ = false;
+
+    // カウント、タイマーの初期化
     currentLoopCount_ = 0;
-    isInLoopWait_     = false;
     loopWaitTimer_    = 0.0f;
+
+    // transformの初期化
     transform_.Init();
 }
 
 void PlayerAttackCollider::Update() {
+
+    // 攻撃データが無くてもColliderの更新は行う
     if (!comboAttackData_) {
         AdaptCollision();
         return;
@@ -27,7 +35,7 @@ void PlayerAttackCollider::Update() {
         UpdateOffset();
     }
 
-    // baseの更新
+    // Collider更新
     AdaptCollision();
 }
 
@@ -42,8 +50,10 @@ void PlayerAttackCollider::TimerUpdate(float timeSpeed) {
         return;
     }
 
+    // コリジョンパラメータ取得
     const auto& collisionParam = comboAttackData_->GetAttackParamForPhase(phase_).collisionParam;
 
+    // ループ待機処理
     LoopWaiting(timeSpeed);
 
     // 通常のコリジョンタイマー処理
@@ -51,12 +61,14 @@ void PlayerAttackCollider::TimerUpdate(float timeSpeed) {
         return;
     }
 
+    // コリジョン適応タイマー減算
     adaptTimer_ -= timeSpeed;
 
     if (adaptTimer_ > 0.0f) {
         return;
     }
 
+    // 1回の攻撃が終了
     SetIsAbleCollision(false);
 
     // ループが設定されている場合
@@ -65,7 +77,7 @@ void PlayerAttackCollider::TimerUpdate(float timeSpeed) {
         isInLoopWait_  = true;
         loopWaitTimer_ = collisionParam.loopWaitTime;
     } else {
-
+        // 攻撃の終了
         isInLoopWait_ = false;
         isFinish_     = true;
         SetIsAbleCollision(false);
@@ -99,7 +111,7 @@ void PlayerAttackCollider::LoopStart() {
 
     isInLoopWait_ = false;
     adaptTimer_   = collisionParam.adaptTime;
-    // ループ開始時にヒットフラグをリセット（マルチヒット用）
+    // ループ開始時にヒットフラグをリセット
     isHit_ = false;
     SetIsAbleCollision(true);
     UpdateOffset();
@@ -117,12 +129,11 @@ void PlayerAttackCollider::AttackStart(const PlayerComboAttackData* comboAttackD
     currentLoopCount_ = 0;
     loopWaitTimer_    = 0.0f;
     isInLoopWait_     = false;
-    isFinish_        = false;
-    isHit_           = false;
-    hasHitEnemy_     = false;
-    damageHitCount_  = 0;
-    hasHitTarget_  = false;
-    hitTargetPos_  = {};
+    isFinish_         = false;
+    isHit_            = false;
+    damageHitCount_   = 0;
+    hasHitTarget_     = false;
+    hitTargetPos_     = {};
 
     // サイズセット
     sphereRad_ = collisionParam.sphereRad;
@@ -141,8 +152,7 @@ void PlayerAttackCollider::UpdateOffset() {
 
 void PlayerAttackCollider::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
-        isHit_        = true;
-        hasHitEnemy_  = true;
+        isHit_ = true;
         // 最初にヒットした敵の座標を記録し、毎フレーム更新する
         if (!hasHitTarget_) {
             hasHitTarget_ = true;
@@ -151,8 +161,15 @@ void PlayerAttackCollider::OnCollisionStay([[maybe_unused]] BaseCollider* other)
     }
 }
 
+void PlayerAttackCollider::PrepareForNewAttack() {
+    isFinish_       = false;
+    isHit_          = false;
+    hasHitTarget_   = false;
+    damageHitCount_ = 0;
+    SetIsAbleCollision(false);
+}
+
 void PlayerAttackCollider::SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform) {
-    baseTransform_     = playerBaseTransform;
     transform_.parent_ = playerBaseTransform;
 }
 
@@ -161,4 +178,3 @@ Vector3 PlayerAttackCollider::GetCollisionPos() const {
     Vector3 worldPos = TransformMatrix(offset_, transform_.matWorld_);
     return worldPos;
 }
-

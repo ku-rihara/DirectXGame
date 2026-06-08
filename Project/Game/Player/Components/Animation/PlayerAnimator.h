@@ -14,7 +14,6 @@ class PlayerHandRight;
 
 /// <summary>
 /// プレイヤーアニメーション管理クラス
-/// ディゾルブ・ObjEaseアニメーションの再生/判定を一元管理
 /// </summary>
 class PlayerAnimator {
 public:
@@ -55,7 +54,7 @@ public:
     void PlayPlayerCategoryAnimation(const std::string& name);
 
     // -------------------------------------------------------
-    // ObjEase アニメーション (タイトル等)
+    // ObjEase アニメーション 
     // -------------------------------------------------------
     void PlayMainHeadAnimation(const std::string& name);
     void StartMainHeadTrailEmit(const std::string& presetName, const std::string& category = "Player");
@@ -69,11 +68,16 @@ public:
     bool IsTitleLeftHandAnimationFinished() const;
 
 private:
+
+    // Dissolve、Trailのプレイヤー
     KetaEngine::DissolvePlayer dissolvePlayer_;
     KetaEngine::RibbonTrailPlayer mainHeadTrailPlayer_;
+
+    // 追従座標、初期Y座標
     Vector3 headTrailFollowPos_{};
     float initYPos_ = 0.0f;
 
+    // 他クラスのポインタ
     KetaEngine::Object3d* obj3d_               = nullptr;
     PlayerHandLeft* leftHand_                  = nullptr;
     PlayerHandRight* rightHand_                = nullptr;

@@ -1,5 +1,6 @@
 #pragma once
 
+// 3d
 #include "3d/ViewProjection.h"
 
 /// utility
@@ -34,6 +35,10 @@ public:
     /// <param name="position">位置座標</param>
     void Update(const Vector3& position, const Vector3& rotation);
 
+    /// <summary>
+    /// エミット
+    /// </summary>
+    /// <param name="name">エフェクト名</param>
     void Emit(const std::string&name);
 
     // 落下エフェクト開始処理
@@ -46,8 +51,11 @@ private:
     /// private variables
     /// ===================================================
 
+    // 複数の種類のエフェクトを同時に再生できるよう配列で管理
     static constexpr size_t kMaxParticles = 8;
     std::array<std::unique_ptr<KetaEngine::ParticlePlayer>, kMaxParticles> particlePlayers_;
+
+    // PearentTransformのポインタ
     KetaEngine::WorldTransform* pParentTransform_ = nullptr;
 
 public:

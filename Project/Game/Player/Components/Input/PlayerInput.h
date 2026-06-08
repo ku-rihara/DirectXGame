@@ -2,28 +2,28 @@
 #include "math/Vector3.h"
 
 /// <summary>
-/// プレイヤー入力クラス - 入力値の取得を一元管理
+/// プレイヤーのアクションの入力を管理するクラス
 /// </summary>
 class PlayerInput {
 public:
-    /// 移動方向取得 (WASD + スティック合算)
+    /// 移動方向取得 
     Vector3 GetMoveDirection() const;
 
     /// 移動中かどうか
     bool IsMoving() const;
 
-    /// ダッシュ入力 (LB)
+    /// ダッシュ入力 - パッド
     bool IsDashInput() const;
 
-    /// ジャンプ入力 - キーボード (J キー押し続け)
+    /// ジャンプ入力 - キーボード
     bool IsJumpKeyPressed() const;
 
-    /// ジャンプ入力 - キーボード (J キートリガー)
+    /// ジャンプ入力 - キーボード
     bool IsJumpKeyTriggered() const;
 
-    /// ジャンプ入力 - パッド (A ボタントリガー)
+    /// ジャンプ入力 - パッド
     bool IsJumpPadTriggered() const;
 
 private:
-    static constexpr float kMoveThreshold = 0.3f;
+   const float kMoveThreshold = 0.3f;
 };
