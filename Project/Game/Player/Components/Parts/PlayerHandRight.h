@@ -16,7 +16,7 @@ public:
 
     // 初期化、更新
     void Init() override;
-    void Update() override;
+    void Update(bool isDeath) override;
 
 
     void AdjustParam() override; //< パラメータの調整

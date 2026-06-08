@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/DissolveEditor/DissolvePlayer.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RibbonTrailEditor/RibbonTrailPlayer.h"
 
 #include "3d/Object3D/Object3d.h"
@@ -22,19 +22,35 @@ public:
 
     // 初期化、更新
     virtual void Init();
-    virtual void Update();
+    virtual void Update(bool isDeath);
     virtual void AdjustParam() = 0;
 
+    // パラメータ登録、調節
+    void RegisterParams();
+    void AdjustParamBase();
 
-    void RegisterParams(); //< パラメータ登録
-    void AdjustParamBase(); //< 基本パラメータの調整
+    // ディゾルブ再生、初期の非表示状態をセット
+    void PlayDissolve(const std::string& name);
+    void SetInitialDissolveHidden();
 
-    void PlayDissolve(const std::string& name); //< ディゾルブ再生
-    void SetInitialDissolveHidden(); //< 初期非表示状態設定
-
+    /// トレイルクリア、放出開始、停止
+    void ClearTrail() { trailPlayer_.StopAndClear(); }
+    void StartTrailEmit(const std::string& presetName, const std::string& category = "Player");
+    void StopTrailEmit() { trailPlayer_.StopEmit(); }
+ 
 protected:
+    /// <summary>
+    /// エフェクト発射
+    /// </summary>
+    /// <param name="effectName">エフェクト名</param>
     void EffectEmit(const std::string& effectName);
 
+private:
+    /// <summary>
+    /// 死亡フラグによる更新処理
+    /// </summary>
+    /// <param name="isDeath">死亡フラグ</param>
+    void UpdateByDeathFrag(bool isDeath);
 protected:
     ///=============================================
     /// private variant
@@ -73,12 +89,4 @@ public:
     void SetObjTranslate(const Vector3& pos) { obj3d_->transform_.translation_ = pos; }
     void SetIsEmit(bool isEmit) { isEmit_ = isEmit; }
     void SetIsShadow(bool isShadow) { isShadow_ = isShadow; }
-
-    /// トレイルを即座にクリア（攻撃リセット時などに呼ぶ）
-    void ClearTrail() { trailPlayer_.StopAndClear(); }
-
-    /// トレイル放出開始（プリセット名でパラメータをロードして開始）
-    void StartTrailEmit(const std::string& presetName, const std::string& category = "Player");
-    /// トレイル放出停止（既存ポイントはLifeTimeまで残してフェードアウト）
-    void StopTrailEmit() { trailPlayer_.StopEmit(); }
 };

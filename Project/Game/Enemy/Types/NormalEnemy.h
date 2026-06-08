@@ -79,6 +79,8 @@ private:
     std::string parentBossName_;
     NormalParameter normalParam_;
 
+    void InitAnimations();
+
     // StumbleBackwards再生中フラグ
     bool isInStumblePhase_ = false;
 

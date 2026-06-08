@@ -54,6 +54,10 @@ private:
     KetaEngine::Easing<Vector3> colorEasing_;
     Vector3 currentFontColor_ = {1.0f, 1.0f, 1.0f};
 
+    void InitAnimations();
+    void InitTauntFont();
+    void InitBombManager();
+
     void PlayTauntFontSpawn();
     void PlayTauntFontMoving();
     void PlayTauntFontClose();

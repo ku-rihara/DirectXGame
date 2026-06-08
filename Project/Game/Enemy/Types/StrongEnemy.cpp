@@ -1,7 +1,7 @@
 #include "StrongEnemy.h"
 #include "DeathTimer/DeathTimer.h"
-#include "Player/Player.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
+#include "Player/Player.h"
 // behavior
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyChase.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
@@ -27,14 +27,24 @@ StrongEnemy::~StrongEnemy() {
 }
 
 void StrongEnemy::Init(const Vector3& spawnPos) {
-    // プール再利用時のために StrongEnemy 固有状態をリセット
     isTaunting_        = false;
     isTauntFontMoving_ = false;
     isFleeing_         = false;
 
+    // 基底クラスの初期化
     BaseEnemy::Init(spawnPos);
+    // アニメーション初期化
+    InitAnimations();
+    // 煽り文字の初期化
+    InitTauntFont();
+    // 攻撃ボムマネージャーの初期化
+    InitBombManager();
 
-    // アニメーション名の設定
+    // Behaviorのセットアップ
+    BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
+}
+
+void StrongEnemy::InitAnimations() {
     GetAnimator()->SetAnimationName(AnimationType::Wait, "StrongEnemyWaiting");
     GetAnimator()->SetAnimationName(AnimationType::Spawn, "StrongEnemySpawn");
     GetAnimator()->SetAnimationName(AnimationType::Discovery, "StrongEnemyDiscovery");
@@ -42,53 +52,60 @@ void StrongEnemy::Init(const Vector3& spawnPos) {
     GetAnimator()->SetAnimationName(AnimationType::Death, "StrongEnemyDeath");
     GetAnimator()->SetAnimationName(AnimationType::Taunt, "StrongEnemyTaunt");
 
-    // ダメージリアクションのアニメーションを追加
     GetAnimator()->AddDamageReactionAnimation("StrongEnemyDefaultDamage");
     GetAnimator()->AddDamageReactionAnimation("StrongEnemyTakeUp", true);
     GetAnimator()->AddDamageReactionAnimation("StrongEnemyBoundDamage");
     GetAnimator()->AddDamageReactionAnimation("StrongEnemyKipUp");
 
-    // アニメーションの初期化
     auto* animObj = GetAnimator()->GetAnimationObject();
     animObj->transform_.Init();
     animObj->transform_.SetParent(&baseTransform_);
     animObj->transform_.scale_                                     = Vector3::OneVector();
     animObj->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
- 
+}
 
-    // Tauntフォントオブジェクト
+void StrongEnemy::InitTauntFont() {
     if (!tauntFont_) {
         tauntFont_.reset(KetaEngine::Object3d::CreateModel("Font/IrairaDance.obj"));
     }
+    // Transformの初期化
     tauntFont_->transform_.Init();
     tauntFont_->transform_.translation_ = strongParam_.tauntFontOffset;
     tauntFont_->transform_.scale_       = Vector3::ZeroVector();
 
-    // 色イージング初期化
+    // マテリアルの初期化
     colorEasing_.Init("TauntColor");
+}
 
-    // 攻撃ボムマネージャ初期化
+void StrongEnemy::InitBombManager() {
+
+    // 攻撃ボムマネージャーの生成
     if (!bombManager_) {
         bombManager_ = std::make_unique<BossAttackBombManager>();
     }
 
+    // 攻撃ボムマネージャーの初期化
     bombManager_->Init();
+
+    // カメラとストレスタイマーのセット
+    bombManager_->SetGameCamera(GetBaseInfo()->GetGameCamera());
     if (auto* player = GetBaseInfo()->GetPlayer()) {
         bombManager_->SetDeathTimer(player->GetDeathTimer());
     }
-
-    // スポーン後の行動を生成
-    BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
 
 void StrongEnemy::Update() {
+
+    // エフェクトのターゲット座標をセットする
     if (GetBaseInfo()->GetPlayer()) {
         Vector3 playerPos = GetBaseInfo()->GetPlayer()->GetWorldPosition();
         GetEnemyEffects()->SetTargetObjectPos({playerPos.x, 0.0f, playerPos.z});
     }
 
+    // 基底クラスの更新
     BaseEnemy::Update();
 
+    // 煽り文字の更新
     if (bombManager_) {
         bombManager_->SetBossPosition(baseTransform_.translation_);
         if (auto* player = GetBaseInfo()->GetPlayer()) {
@@ -194,7 +211,7 @@ void StrongEnemy::PlayTauntFontSpawn() {
     }
 }
 
-// フォントをループアニメーションへ移行 
+// フォントをループアニメーションへ移行
 void StrongEnemy::PlayTauntFontMoving() {
     isTauntFontMoving_ = true;
     if (tauntFont_) {
@@ -298,5 +315,3 @@ void StrongEnemy::BackToDamageRoot() {
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
     StartFlee();
 }
-
-

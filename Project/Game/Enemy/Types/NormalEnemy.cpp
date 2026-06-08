@@ -12,7 +12,6 @@
 ///  初期化
 ///========================================================
 void NormalEnemy::Init(const Vector3& spawnPos) {
-    // プール再利用時のために NormalEnemy 固有状態をリセット
     pBoss_            = nullptr;
     spawnOffset_      = {};
     zakoState_        = ZakoState::Spawning;
@@ -22,34 +21,32 @@ void NormalEnemy::Init(const Vector3& spawnPos) {
     isInStumblePhase_ = false;
 
     BaseEnemy::Init(spawnPos);
+    InitAnimations();
 
-    // アニメーション名を設定
-    GetAnimator()->SetAnimationName(AnimationType::Wait, "NormalEnemyWaiting");
-    GetAnimator()->SetAnimationName(AnimationType::Spawn, "NormalEnemySpawn");
+    BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
+}
+
+void NormalEnemy::InitAnimations() {
+    GetAnimator()->SetAnimationName(AnimationType::Wait,      "NormalEnemyWaiting");
+    GetAnimator()->SetAnimationName(AnimationType::Spawn,     "NormalEnemySpawn");
     GetAnimator()->SetAnimationName(AnimationType::Discovery, "NormalEnemyDiscovery");
-    GetAnimator()->SetAnimationName(AnimationType::Dash, "NormalEnemyRun");
-    GetAnimator()->SetAnimationName(AnimationType::Death, "EnemyDeathAnimation");
-    GetAnimator()->SetAnimationName(AnimationType::Taunt, "NormalEnemyTaunt");
+    GetAnimator()->SetAnimationName(AnimationType::Dash,      "NormalEnemyRun");
+    GetAnimator()->SetAnimationName(AnimationType::Death,     "EnemyDeathAnimation");
+    GetAnimator()->SetAnimationName(AnimationType::Taunt,     "NormalEnemyTaunt");
 
-    // NormalEnemy固有アニメーション
     AddNormalAnimation(NormalAnimationType::StumbleBackwards, "StumbleBackwards");
-    AddNormalAnimation(NormalAnimationType::CrawlBackwards, "CrawlBackwards");
+    AddNormalAnimation(NormalAnimationType::CrawlBackwards,   "CrawlBackwards");
 
-    // ダメージリアクション用アニメーションを追加
     GetAnimator()->AddDamageReactionAnimation("EnemyNormalDamage");
     GetAnimator()->AddDamageReactionAnimation("TakeUpMotion", true);
     GetAnimator()->AddDamageReactionAnimation("NormalEnemyBoundDamage");
     GetAnimator()->AddDamageReactionAnimation("NormalEnemyKipUp");
 
-    // アニメーションの初期化
     auto* animObj = GetAnimator()->GetAnimationObject();
     animObj->transform_.Init();
     animObj->transform_.SetParent(&baseTransform_);
     animObj->transform_.scale_                                     = Vector3::OneVector();
     animObj->GetModelMaterial()->GetMaterialData()->enableLighting = static_cast<int32_t>(KetaEngine::LightingType::SpecularReflection);
-    
-    // スポーン後の行動を生成
-    BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
 
 ///========================================================

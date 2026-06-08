@@ -181,10 +181,10 @@ private:
     std::unique_ptr<BaseComboAttackBehavior> comboBehavior_ = nullptr;
     std::unique_ptr<BaseTitleBehavior> titleBehavior_       = nullptr;
 
-    // コンボ自動実行キュー（アンロック演出用）
+    // コンボ自動実行キュー
     AutoComboQueue autoComboQueue_;
 
-    // 自動実行攻撃発火時コールバック（アンロック演出UIへの通知用）
+    // 自動実行攻撃発火時コールバック
     std::function<void(const std::string&)> autoComboAttackCallback_;
 
 private:
@@ -205,11 +205,10 @@ private:
     // attackCharge
     float currentUpperChargeTime_;
 
-    //
+    // 死亡フラグ
     const bool* isDeath_;
     bool isDeathRenditionFinish_ = false;
-    bool isDeathHidePlayer_      = false;
-
+  
     // ダメージクールダウン
     bool isDamageColling_     = false;
     float damageCollTime_     = 0.0f;
@@ -252,14 +251,13 @@ public:
     void SetDeathTimer(DeathTimer* deathTimer);
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
-    void SetDeathHidePlayer(bool hide) { isDeathHidePlayer_ = hide; }
     void SetIsIgnoreUnlockState(bool isIgnore) { isIgnoreUnlockState_ = isIgnore; }
     void SetObjectiveAngle(float angle) { objectiveAngle_ = angle; }
     void SetObjectiveAnglePitch(float angle) { objectiveAnglePitch_ = angle; }
 
     AutoComboQueue& GetAutoComboQueue() { return autoComboQueue_; }
 
-    /// 自動ダッシュ開始（アンロック演出用）
+    /// 自動ダッシュ開始
     void StartAutoDash();
     /// 自動ダッシュ解除
     void ClearAutoDash();

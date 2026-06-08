@@ -9,10 +9,10 @@
 #include "DeathTimer/DeathTimer.h"
 /// Behavior
 #include "Behavior/ComboAttackBehavior/ComboAttackRoot.h"
+#include "Behavior/PlayerBehavior/PlayerDash.h"
 #include "Behavior/PlayerBehavior/PlayerDeath.h"
 #include "Behavior/PlayerBehavior/PlayerJump.h"
 #include "Behavior/PlayerBehavior/PlayerMove.h"
-#include "Behavior/PlayerBehavior/PlayerDash.h"
 #include "Behavior/PlayerBehavior/PlayerSpawn.h"
 #include "Behavior/TitleBehavior/TitlePlayerBehavior.h"
 
@@ -59,7 +59,7 @@ void Player::Init() {
     playerCollisionInfo_ = std::make_unique<PlayerAttackCollider>();
     playerCollisionInfo_->Init();
     playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
-  
+
     // トランスフォーム初期化
     obj3d_->transform_.Init();
     leftHand_->Init();
@@ -129,14 +129,10 @@ void Player::Update() {
     }
 
     // 死亡時にプレイヤーモデルを非表示にする
-    if (isDeathHidePlayer_) {
-        obj3d_->transform_.scale_                   = Vector3::ZeroVector();
-        leftHand_->GetObject3D()->transform_.scale_  = Vector3::ZeroVector();
-        rightHand_->GetObject3D()->transform_.scale_ = Vector3::ZeroVector();
+    if (isDeathRenditionFinish_) {
+        obj3d_->transform_.scale_ = Vector3::ZeroVector();
     } else {
-        obj3d_->transform_.scale_                   = Vector3::OneVector();
-        leftHand_->GetObject3D()->transform_.scale_  = Vector3(2.0f, 2.0f, 2.0f);
-        rightHand_->GetObject3D()->transform_.scale_ = Vector3(2.0f, 2.0f, 2.0f);
+        obj3d_->transform_.scale_ = Vector3::OneVector();
     }
 
     // 移動制限
@@ -349,8 +345,8 @@ void Player::SetTitleBehavior() {
 
 void Player::UpdateMatrix() {
     /// 行列更新
-    leftHand_->Update();
-    rightHand_->Update();
+    leftHand_->Update(isDeathRenditionFinish_);
+    rightHand_->Update(isDeathRenditionFinish_);
 
     animator_.Update();
 
@@ -371,7 +367,7 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             pDeathTimer_->TakeDamage(attackBox->GetAttackValue());
             // クールダウン開始
             isDamageColling_ = true;
-            damageCollTime_ = damageCollDuration_;
+            damageCollTime_  = damageCollDuration_;
         }
         return;
     }
@@ -421,7 +417,6 @@ void Player::HeadLightSetting() {
     }
 }
 
-
 bool Player::IsDashing() const {
     return dynamic_cast<PlayerDash*>(behavior_.get()) != nullptr;
 }
@@ -443,7 +438,7 @@ void Player::ClearAutoDash() {
 }
 
 void Player::RotateReset() {
-    obj3d_->transform_.rotation_      = {0, 0, 0};
+    obj3d_->transform_.rotation_      = Vector3::ZeroVector();
     obj3d_->transform_.translation_.y = 0.0f;
 }
 

@@ -50,7 +50,6 @@ void PlayerDeath::WaitCameraEnd(float) {
 void PlayerDeath::WaitPreDeath(float) {
     if (isPreDeathAnimDone_ && !isDeathActionsTriggered_) {
         isDeathActionsTriggered_ = true;
-        pOwner_->SetDeathHidePlayer(true);
         pOwner_->GetEffects()->Emit("PlayerDeath");
         KetaEngine::Audio::GetInstance()->Play("PlayerDeathExplotion.mp3", 1.0f);
         pOwner_->SetIsDeathRenditionFinish(true);

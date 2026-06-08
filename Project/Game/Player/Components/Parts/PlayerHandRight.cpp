@@ -22,9 +22,9 @@ void PlayerHandRight::Init() {
 ///=========================================================
 /// 　更新
 ///==========================================================
-void PlayerHandRight::Update() {
+void PlayerHandRight::Update(bool isDeath) {
     BasePlayerHand::EffectEmit("DefaultFireAuraBlue");
-    BasePlayerHand::Update();
+    BasePlayerHand::Update(isDeath);
 }
 
 void PlayerHandRight::AdjustParam() {

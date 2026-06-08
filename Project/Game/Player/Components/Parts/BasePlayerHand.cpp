@@ -31,19 +31,17 @@ void BasePlayerHand::Init() {
 ///=========================================================
 /// 　更新
 ///==========================================================
-void BasePlayerHand::Update() {
+void BasePlayerHand::Update(bool isDeath) {
 
     // 戻り中は進行方向の逆を向くよう WorldTransform に伝える
     auto* animPlayer = obj3d_->transform_.GetObjEaseAnimationPlayer();
     obj3d_->transform_.SetReverseDirectionOnReturn(animPlayer->IsTranslationReturning());
 
+    // 影描画のON/OFFを反映
     obj3d_->SetIsShadow(isShadow_);
 
-    // エミッター更新
-    Vector3 handPos  = obj3d_->transform_.GetWorldPos();
-    particlePlayer_->SetTargetPosition(handPos);
-    effectFollowPos_ = handPos;
-    particlePlayer_->Update();
+    // 死亡フラグよって処理が変わるオブジェクトの更新処理
+    UpdateByDeathFrag(isDeath);
 
     // ディゾルブ更新・適用
     dissolvePlayer_.Update();
@@ -54,7 +52,21 @@ void BasePlayerHand::Update() {
     // トレイル更新
     trailPlayer_.Update();
 
+    // 基底クラスの更新
     BaseObject::Update();
+}
+
+void BasePlayerHand::UpdateByDeathFrag(bool isDeath) {
+    // 死亡時にスケールをゼロにして消す
+    if (isDeath) {
+        obj3d_->transform_.scale_ = Vector3::ZeroVector();
+        return;
+    }
+    // エミッター更新
+    Vector3 handPos = obj3d_->transform_.GetWorldPos();
+    particlePlayer_->SetTargetPosition(handPos);
+    effectFollowPos_ = handPos;
+    particlePlayer_->Update();
 }
 
 ///=================================================================================
@@ -72,7 +84,6 @@ void BasePlayerHand::AdjustParamBase() {
     globalParameter_->ParamLoadForImGui(groupName_);
 #endif // _DEBUG
 }
-
 
 void BasePlayerHand::PlayDissolve(const std::string& name) {
     dissolvePlayer_.Play(name);
@@ -93,6 +104,6 @@ void BasePlayerHand::StartTrailEmit(const std::string& presetName, const std::st
 
 void BasePlayerHand::EffectEmit(const std::string& effectName) {
     if (isEmit_) {
-        particlePlayer_->Play(effectName,"Player");
+        particlePlayer_->Play(effectName, "Player");
     }
 }
