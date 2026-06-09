@@ -144,7 +144,7 @@ bool PlayerComboAttackData::CheckTriggerCondition(TriggerCondition condition) co
 
     case TriggerCondition::DASH:
         if (pPlayer_) {
-            return pPlayer_->IsDashing();
+            return pPlayer_->GetBehaviors().IsDashing();
         }
         return false;
 

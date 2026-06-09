@@ -155,3 +155,21 @@ bool PlayerAnimator::IsTitleLeftHandAnimationFinished() const {
     auto* player = leftHand_->GetObject3D()->transform_.GetObjEaseAnimationPlayer();
     return player && player->IsFinished();
 }
+
+void PlayerAnimator::ResetHeadScale() {
+    obj3d_->transform_.scale_ = Vector3::OneVector();
+}
+
+void PlayerAnimator::ResetPositionY() {
+    baseTransform_->translation_.y = initYPos_;
+}
+
+void PlayerAnimator::RotateReset() {
+    obj3d_->transform_.rotation_      = Vector3::ZeroVector();
+    obj3d_->transform_.translation_.y = 0.0f;
+}
+
+void PlayerAnimator::SetHeadScale(const Vector3& scale)  { obj3d_->transform_.scale_       = scale;  }
+void PlayerAnimator::SetHeadPosY(float posY)              { obj3d_->transform_.translation_.y = posY;  }
+void PlayerAnimator::SetHeadRotateX(float rotX)           { obj3d_->transform_.rotation_.x   = rotX;  }
+void PlayerAnimator::SetHeadRotateY(float rotY)           { obj3d_->transform_.rotation_.y   = rotY;  }

@@ -60,7 +60,7 @@ void ComboAttackAction::Init() {
     nextAttackCandidates_.clear();
     allNextAttackCandidates_.clear();
     auto& branches                          = attackData_->GetComboBranches();
-    PlayerComboAttackController* controller = pOwner_->GetComboAttackController();
+    PlayerComboAttackController* controller = pOwner_->GetContext().comboAttackController;
 
     // 分岐候補を走査してリストに追加
     for (auto& branch : branches) {
@@ -122,7 +122,7 @@ void ComboAttackAction::Init() {
 void ComboAttackAction::Update(float atkSpeed) {
 
     // 死亡チェック
-    if (pOwner_->GetDeathTimer() && pOwner_->GetDeathTimer()->GetIsDeath()) {
+    if (pOwner_->GetContext().pDeathTimer && pOwner_->GetContext().pDeathTimer->GetIsDeath()) {
         pOwner_->ChangeCombBoRoot();
         return;
     }
@@ -348,14 +348,14 @@ void ComboAttackAction::ChangeNextAttack() {
         // 落下フラグがある場合はPlayerJumpに移行
         if (pOwner_->GetWorldPosition().y > pOwner_->GetParameter()->GetParameters().startPos_.y) {
             pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_));
-            pOwner_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pOwner_));
+            pOwner_->ChangeCombo(std::make_unique<ComboAttackRoot>(pOwner_));
             return;
         }
 
         // データが見つからない場合はルートに戻る
         KetaEngine::PostEffectRenderer::GetInstance()->SetPostEffectMode(KetaEngine::PostEffectMode::NONE);
         pOwner_->ChangeBehavior(std::make_unique<PlayerMove>(pOwner_));
-        pOwner_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pOwner_));
+        pOwner_->ChangeCombo(std::make_unique<ComboAttackRoot>(pOwner_));
     }
 }
 
@@ -491,7 +491,7 @@ void ComboAttackAction::SetupCollision(AttackTimelinePhase phase) {
     pOwner_->GetPlayerCollisionInfo()->SetIsAbleCollision(true);
 
     // 攻撃スピード
-    const PlayerComboAttackController* attackController = pOwner_->GetComboAttackController();
+    const PlayerComboAttackController* attackController = pOwner_->GetContext().comboAttackController;
 
     // 攻撃力
     float power = attackParam.power * attackController->GetPowerRate();
@@ -512,7 +512,7 @@ void ComboAttackAction::SetMoveEasing() {
         pos = pOwner_->GetBaseTransform().translation_;
     }
     // ロックオン対象がいればそちらを向く
-    LockOn* lockOn = pOwner_->GetLockOnController() ? pOwner_->GetLockOnController()->GetLockOn() : nullptr;
+    LockOn* lockOn = pOwner_->GetContext().pLockOn ? pOwner_->GetContext().pLockOn->GetLockOn() : nullptr;
     if (lockOn && lockOn->ExistTarget()) {
         pOwner_->GetBaseTransform().rotation_.y = CalcFaceAngleY(pos, lockOn->GetCurrentTargetPosition());
     }

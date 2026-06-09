@@ -30,12 +30,12 @@ void PlayerDeath::Update([[maybe_unused]] float timeSpeed) {
 }
 
 void PlayerDeath::StartDeathRendition(float) {
-    pOwner_->GetGameCamera()->PlayAnimation("GameOverCamera", true);
+    pOwner_->GetContext().pGameCamera->PlayAnimation("GameOverCamera", true);
     ChangeState([this](float t) { WaitCameraEnd(t); });
 }
 
 void PlayerDeath::WaitCameraEnd(float) {
-    if (!pOwner_->GetGameCamera()->IsRenditionFinished()) {
+    if (!pOwner_->GetContext().pGameCamera->IsRenditionFinished()) {
         return;
     }
 

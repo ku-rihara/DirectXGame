@@ -117,7 +117,7 @@ void PlayerComboAttackPreview::ExecuteAttack(PlayerComboAttackData* attackData) 
 
     // プレイヤーのコンボビヘイビアを攻撃アクションに変更
     // Init()内のSetMoveEasing()がGetWorldPosition()でpreviewInitPos_を正しくキャプチャする
-    player_->ChangeComboBehavior(
+    player_->ChangeCombo(
         std::make_unique<ComboAttackAction>(player_, attackData));
 
     // タイマーリセット
@@ -167,7 +167,7 @@ void PlayerComboAttackPreview::StopPreview() {
 
     // プレイヤーをコンボルートに戻す
     if (player_) {
-        player_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(player_));
+        player_->ChangeCombo(std::make_unique<ComboAttackRoot>(player_));
     }
 
     // 状態リセット

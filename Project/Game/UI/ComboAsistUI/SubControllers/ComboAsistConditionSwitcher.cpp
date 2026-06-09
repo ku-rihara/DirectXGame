@@ -30,9 +30,9 @@ bool ComboAsistConditionSwitcher::CheckAutoConditionSwitch(
     using TC = PlayerComboAttackData::TriggerCondition;
     TC desired = TC::GROUND;
 
-    if (pPlayer->IsAirborne() && pConditionDataMap_->count(TC::AIR) > 0) {
+    if (pPlayer->GetBehaviors().IsAirborne() && pConditionDataMap_->count(TC::AIR) > 0) {
         desired = TC::AIR;
-    } else if (pPlayer->IsDashing() && pConditionDataMap_->count(TC::DASH) > 0) {
+    } else if (pPlayer->GetBehaviors().IsDashing() && pConditionDataMap_->count(TC::DASH) > 0) {
         desired = TC::DASH;
     }
 

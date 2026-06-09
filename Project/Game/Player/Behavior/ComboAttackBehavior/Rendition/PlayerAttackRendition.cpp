@@ -1,5 +1,4 @@
 #include "PlayerAttackRendition.h"
-#include "Player/Components/Effect/AttackEffect/AttackEffect.h"
 #include "Audio/Audio.h"
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
@@ -199,19 +198,19 @@ void PlayerAttackRendition::UpdateHitRenditions(const PlayerAttackRenditionData&
 void PlayerAttackRendition::PlayRenditionEffect(PlayerAttackRenditionData::Type type, const PlayerAttackRenditionData::RenditionParam& param) {
     switch (type) {
     case PlayerAttackRenditionData::Type::CameraAction:
-        pPlayer_->GetGameCamera()->PlayAnimation(param.fileName, param.isCameraReset);
+        pPlayer_->GetContext().pGameCamera->PlayAnimation(param.fileName, param.isCameraReset);
         break;
 
     case PlayerAttackRenditionData::Type::HitStop:
-        pPlayer_->GetAttackEffect()->PlayHitStop(param.fileName);
+        pPlayer_->GetEffects()->PlayHitStop(param.fileName);
         break;
 
     case PlayerAttackRenditionData::Type::ShakeAction:
-        pPlayer_->GetGameCamera()->PlayShake(param.fileName);
+        pPlayer_->GetContext().pGameCamera->PlayShake(param.fileName);
         break;
 
     case PlayerAttackRenditionData::Type::PostEffect:
-        pPlayer_->GetAttackEffect()->PlayPostEffect(param.fileName);
+        pPlayer_->GetEffects()->PlayPostEffect(param.fileName);
         break;
 
     case PlayerAttackRenditionData::Type::ParticleEffect:

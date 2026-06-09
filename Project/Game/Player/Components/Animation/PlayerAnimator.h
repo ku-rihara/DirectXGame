@@ -37,6 +37,14 @@ public:
     // 移動 / 待機アニメーション
     // 状態が切り替わった時だけ PlayerMove から呼ぶ
     // -------------------------------------------------------
+    void ResetHeadScale();
+    void ResetPositionY();
+    void RotateReset();
+    void SetHeadScale(const Vector3& scale);
+    void SetHeadPosY(float posY);
+    void SetHeadRotateX(float rotX);
+    void SetHeadRotateY(float rotY);
+
     void PlayMoveAnimation();
     void PlayWaitAnimation();
     void StopMoveAnimation();

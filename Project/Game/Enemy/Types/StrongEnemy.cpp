@@ -90,7 +90,8 @@ void StrongEnemy::InitBombManager() {
     // カメラとストレスタイマーのセット
     bombManager_->SetGameCamera(GetBaseInfo()->GetGameCamera());
     if (auto* player = GetBaseInfo()->GetPlayer()) {
-        bombManager_->SetDeathTimer(player->GetDeathTimer());
+        bombManager_->SetDeathTimer(player->GetContext().pDeathTimer);
+        bombManager_->SetPlayer(player);
     }
 }
 

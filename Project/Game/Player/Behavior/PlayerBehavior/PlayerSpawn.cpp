@@ -49,7 +49,7 @@ void PlayerSpawn::Update(float timeSpeed) {
             break;
         }
         pOwner_->SetShadowFrag(true);
-        pOwner_->PlayDissolve("SpawnDissolve");
+        pOwner_->GetPlayerAnimator().PlayDissolve("SpawnDissolve");
         step_ = Step::SPAWN;
         break;
 
@@ -57,7 +57,7 @@ void PlayerSpawn::Update(float timeSpeed) {
         ///
         ///================================================================
     case PlayerSpawn::Step::SPAWN:
-        if (pOwner_->IsDissolveFinished()) {
+        if (pOwner_->GetPlayerAnimator().IsDissolveFinished()) {
             step_ = Step::END;
         }
         break;

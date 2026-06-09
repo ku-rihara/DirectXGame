@@ -5,7 +5,7 @@
 
 // objects
 #include "Field/Field.h"
-#include "Player/Player.h"
+#include "Player/TitlePlayer/TitlePlayer.h"
 #include "SkyBox/SkyBox.h"
 #include "SkyDome/SkyDome.h"
 
@@ -21,7 +21,7 @@
 class TitleScene : public BaseScene {
 private:
   
-    std::unique_ptr<Player> player_                                   = nullptr;
+    std::unique_ptr<TitlePlayer> player_                              = nullptr;
     std::unique_ptr<Field> field_                                     = nullptr;
     std::unique_ptr<SkyBox> skyBox_                                   = nullptr;
     std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_ = nullptr;

@@ -43,7 +43,7 @@ void PlayerComboAttackTimelineUI::RegisterParamUIFunctions() {
     paramUIDrawFunctions_[ParamEditType::TRIGGER] = [this]() {
         bool isFirstAttack = true;
         if (attackData_->GetPlayer()) {
-            auto* controller = attackData_->GetPlayer()->GetComboAttackController();
+            auto* controller = attackData_->GetPlayer()->GetContext().comboAttackController;
             if (controller) {
                 isFirstAttack = controller->IsFirstAttack(attackData_->GetGroupName());
             }

@@ -29,7 +29,6 @@ void GameSceneIntro::Update([[maybe_unused]] float timeSpeed) {
 
     phase_(timeSpeed);
 
-    obj.attackEffect_->Update();
     obj.skyBox_->Update();
     obj.audienceController_->Update();
     obj.comboDirector_->Update();

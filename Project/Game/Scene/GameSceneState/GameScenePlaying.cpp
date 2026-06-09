@@ -32,7 +32,6 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     auto& obj = pOwner_->GetGameObj();
 
     // Editor更新
-    obj.attackEffect_->Update();
     obj.field_->Update();
     obj.audienceController_->Update();
 

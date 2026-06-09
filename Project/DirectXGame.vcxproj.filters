@@ -328,6 +328,9 @@
     <Filter Include="Game\Player\Behavior">
       <UniqueIdentifier>{A3A35D87-96DD-4650-BAB8-2880D8475FEB}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\TitlePlayer">
+      <UniqueIdentifier>{B2C4E5F6-1A2B-3C4D-5E6F-7A8B9C0D1E2F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\Player\ComboCreator">
       <UniqueIdentifier>{AF4845C7-E49E-4310-B3F3-F7AC95EA5042}</UniqueIdentifier>
     </Filter>
@@ -501,9 +504,6 @@
     </Filter>
     <Filter Include="Game\Player\Behavior\ComboAttackBehavior\Rendition">
       <UniqueIdentifier>{4924C90C-50E6-4413-A28B-6ED17E16B8CC}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\Components\Effect\AttackEffect">
-      <UniqueIdentifier>{F8DB3721-2AF1-4B73-9DD7-009195A84C9A}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1392,9 +1392,6 @@
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.cpp">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Components\Effect\AttackEffect\AttackEffect.cpp">
-      <Filter>Game\Player\Components\Effect\AttackEffect</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\Components\Effect\PlayerEffects.cpp">
       <Filter>Game\Player\Components\Effect</Filter>
     </ClCompile>
@@ -1415,6 +1412,9 @@
     </ClCompile>
     <ClCompile Include="Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Behavior\PlayerBehaviorManager.cpp">
+      <Filter>Game\Player\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\ResultObj\ResultRunner.cpp">
       <Filter>Game\ResultObj</Filter>
@@ -2536,9 +2536,6 @@
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.h">
       <Filter>Game\Player\ComboCreator\Timeline</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Components\Effect\AttackEffect\AttackEffect.h">
-      <Filter>Game\Player\Components\Effect\AttackEffect</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\Components\Effect\PlayerEffects.h">
       <Filter>Game\Player\Components\Effect</Filter>
     </ClInclude>
@@ -2558,6 +2555,12 @@
       <Filter>Game\Player\Components\Parts</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Behavior\PlayerBehaviorManager.h">
+      <Filter>Game\Player\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerContext.h">
       <Filter>Game\Player</Filter>
     </ClInclude>
     <ClInclude Include="Game\ResultObj\ResultRunner.h">
@@ -2891,10 +2894,16 @@
     <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectPlayer.cpp">
       <Filter>Engine\Editor\PostEffectEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\TitlePlayer\TitlePlayer.cpp">
+      <Filter>Game\Player\TitlePlayer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectPlayer.h">
       <Filter>Engine\Editor\PostEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\TitlePlayer\TitlePlayer.h">
+      <Filter>Game\Player\TitlePlayer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

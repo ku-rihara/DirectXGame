@@ -96,7 +96,7 @@ void ComboAsistController::Update() {
         columnScroller_.CheckColumnOverflow(*currentData, isVisible_);
 
         // 行シフト
-        auto* comboBehavior = pPlayer_ ? pPlayer_->GetComboBehavior() : nullptr;
+        auto* comboBehavior = pPlayer_ ? pPlayer_->GetBehaviors().GetComboBehavior() : nullptr;
         if (comboBehavior) {
             columnScroller_.CheckRowShift(*currentData, isVisible_, comboBehavior->GetName());
         }
@@ -206,7 +206,7 @@ void ComboAsistController::UpdateComboState() {
     if (!currentData) {
         return;
     }
-    auto* comboBehavior = pPlayer_->GetComboBehavior();
+    auto* comboBehavior = pPlayer_->GetBehaviors().GetComboBehavior();
     if (!comboBehavior) {
         return;
     }

@@ -23,7 +23,7 @@ PlayerJump::PlayerJump(Player* player, float initSpeed)
     if (speed_ == 0.0f) {
         ChangeState([this]() { FallOnlyState(); });
     } else {
-        pOwner_->GetGameCamera()->PlayAnimation("PlayerJump", false);
+        pOwner_->GetContext().pGameCamera->PlayAnimation("PlayerJump", false);
         pOwner_->GetPlayerAnimator().PlayJumpAnimation();
 
         // ジャンプSE再生

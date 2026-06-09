@@ -78,7 +78,7 @@ void NextAttackIndicatorUI::Update() {
     }
 
     // 現在のコンボアクションを取得
-    auto* behavior = pPlayer_->GetComboBehavior();
+    auto* behavior = pPlayer_->GetBehaviors().GetComboBehavior();
     auto* action   = dynamic_cast<ComboAttackAction*>(behavior);
     if (!action) {
         return;

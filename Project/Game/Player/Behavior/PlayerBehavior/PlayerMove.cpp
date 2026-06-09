@@ -14,7 +14,7 @@
 PlayerMove::PlayerMove(Player* player)
     : BasePlayerBehavior("PlayerMove", player) {
     // 攻撃等から復帰した時に確実にアニメーションを再開するため
-    wasMoving_ = !pOwner_->CheckIsMoving();
+    wasMoving_ = !pOwner_->GetInput().IsMoving();
 }
 
 PlayerMove::~PlayerMove() {
@@ -23,7 +23,7 @@ PlayerMove::~PlayerMove() {
 void PlayerMove::Update([[maybe_unused]] float timeSpeed) {
 
     // 押し出し等でY座標が浮いたままになるのを防ぐため、地上状態ではYをリセットする
-    pOwner_->ResetPositionY();
+    pOwner_->GetPlayerAnimator().ResetPositionY();
 
     CheckAndSwitchAnimation();
 
@@ -52,7 +52,7 @@ void PlayerMove::JumpForJoyState() {
 
 void PlayerMove::CheckAndSwitchAnimation() {
     // 移動状態を取得
-    bool isMoving = pOwner_->CheckIsMoving();
+    bool isMoving = pOwner_->GetInput().IsMoving();
 
     // 移動状態が変わってるかチェック
     if (isMoving == wasMoving_) {

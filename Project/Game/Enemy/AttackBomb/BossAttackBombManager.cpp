@@ -1,7 +1,8 @@
 #include "BossAttackBombManager.h"
-#include"../../GameCamera/GameCamera.h"
+#include "../../GameCamera/GameCamera.h"
 #include "DeathTimer/DeathTimer.h"
 #include "Frame/Frame.h"
+#include "Player/Player.h"
 #include <imgui.h>
 
 void BossAttackBombManager::Init() {
@@ -74,12 +75,17 @@ void BossAttackBombManager::ThrowBomb() {
 
         // カメラのシェイク
         if (pGameCamera_) {
-            pGameCamera_->PlayShake("");
+            pGameCamera_->PlayShake("DamageCamera");
         }
 
         // ストレスゲージを増やす
         if (pDeathTimer_) {
             pDeathTimer_->TakeDamage(stressAmount);
+        }
+
+        // ストレスエフェクト
+        if (pPlayer_) {
+            pPlayer_->GetEffects()->Emit("StressEffect");
         }
     });
 

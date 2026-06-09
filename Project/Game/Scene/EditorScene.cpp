@@ -32,7 +32,6 @@ void EditorScene::Update() {
     unlockNotifier_->Update(KetaEngine::Frame::DeltaTime());
 
     // Editor
-    attackEffect_->Update();
     field_->Update();
     /*sideRopeController_->Update();*/
     audienceController_->Update();
@@ -90,10 +89,6 @@ void EditorScene::Debug() {
     enemyManager_->DebugEnemySpawn();
     ImGui::End();
 
-    ImGui::Begin("Rendition");
-    attackEffect_->EditorUpdate();
-    ImGui::End();
-
     ImGui::Begin("PlayerAttack");
     playerComboAttackController_->EditorUpdate();
     ImGui::End();
@@ -127,7 +122,6 @@ void EditorScene::ObjectInit() {
     enemyManager_                = std::make_unique<EnemyManager>();
     skyBox_                      = std::make_unique<SkyBox>();
     combo_                       = std::make_unique<Combo>();
-    attackEffect_                = std::make_unique<AttackEffect>();
     playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
     sideRopeController_          = std::make_unique<SideRopeController>();
     audienceController_          = std::make_unique<AudienceController>();
@@ -157,7 +151,6 @@ void EditorScene::ObjectInit() {
     playerComboAttackController_->Init();
     killCounter_->SetAttackController(playerComboAttackController_.get());
     killCounter_->Init();
-    attackEffect_->Init();
     sideRopeController_->Init();
     audienceController_->Init();
     deathTimer_->Init();
@@ -181,7 +174,6 @@ void EditorScene::SetClassPointer() {
     player_->SetGameCamera(gameCamera_.get());
     player_->SetComboAttackController(playerComboAttackController_.get());
     player_->SetCombo(combo_.get());
-    player_->SetHitStop(attackEffect_.get());
     player_->SetDeathTimer(deathTimer_.get());
     player_->SetDeathFragPointer(&deathTimer_->GetIsDeath());
 

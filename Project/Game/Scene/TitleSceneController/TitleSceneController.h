@@ -2,7 +2,7 @@
 // 2D
 #include "2d/Sprite.h"
 // objects
-#include "Player/Player.h"
+#include "Player/TitlePlayer/TitlePlayer.h"
 #include "UI/TitleLogo.h"
 // TitleSceneTransition
 #include "TitleSceneTransition.h"
@@ -17,7 +17,7 @@ public:
     TitleSceneController()  = default;
     ~TitleSceneController() = default;
 
-    void Init(Player* player);
+    void Init(TitlePlayer* player);
     void Update();
 
     // 遷移関連
@@ -28,7 +28,7 @@ private:
     void UpdatePlayerPerformance();
     void UpdateLogoSequence();
 
-    Player* player_ = nullptr;
+    TitlePlayer* player_ = nullptr;
     std::unique_ptr<TitleLogo> titleLogo_;
     std::unique_ptr<TitleSceneTransition> sceneTransition_;
     bool isTitleLogoUpdate_ = false;

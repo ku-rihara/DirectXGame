@@ -311,7 +311,6 @@
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineParameterApplier.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineTrackBuilder.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.cpp" />
-    <ClCompile Include="Game\Player\Components\Effect\AttackEffect\AttackEffect.cpp" />
     <ClCompile Include="Game\Player\Components\Effect\PlayerEffects.cpp" />
     <ClCompile Include="Game\UI\NextAttackIndicator\NextAttackHintUI.cpp" />
     <ClCompile Include="Game\Player\Components\Parameter\PlayerParameter.cpp" />
@@ -319,6 +318,8 @@
     <ClCompile Include="Game\Player\Components\Parts\PlayerHandLeft.cpp" />
     <ClCompile Include="Game\Player\Components\Parts\PlayerHandRight.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
+    <ClCompile Include="Game\Player\Behavior\PlayerBehaviorManager.cpp" />
+    <ClCompile Include="Game\Player\TitlePlayer\TitlePlayer.cpp" />
     <ClCompile Include="Game\ResultObj\ResultRunner.cpp" />
     <ClCompile Include="Game\ResultObj\ResultStage.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
@@ -696,7 +697,6 @@
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineUI.h" />
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimeline.h" />
     <ClInclude Include="Game\Player\ComboCreator\Timeline\PlayerComboAttackTimelineData.h" />
-    <ClInclude Include="Game\Player\Components\Effect\AttackEffect\AttackEffect.h" />
     <ClInclude Include="Game\Player\Components\Effect\PlayerEffects.h" />
     <ClInclude Include="Game\UI\NextAttackIndicator\NextAttackHintUI.h" />
     <ClInclude Include="Game\Player\Components\Parameter\PlayerParameter.h" />
@@ -704,6 +704,9 @@
     <ClInclude Include="Game\Player\Components\Parts\PlayerHandLeft.h" />
     <ClInclude Include="Game\Player\Components\Parts\PlayerHandRight.h" />
     <ClInclude Include="Game\Player\Player.h" />
+    <ClInclude Include="Game\Player\Behavior\PlayerBehaviorManager.h" />
+    <ClInclude Include="Game\Player\TitlePlayer\TitlePlayer.h" />
+    <ClInclude Include="Game\Player\PlayerContext.h" />
     <ClInclude Include="Game\ResultObj\ResultRunner.h" />
     <ClInclude Include="Game\ResultObj\ResultStage.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />

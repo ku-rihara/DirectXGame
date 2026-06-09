@@ -17,8 +17,8 @@ ComboAttackRoot::ComboAttackRoot(Player* player)
 ComboAttackRoot::~ComboAttackRoot() {}
 
 void ComboAttackRoot::Init() {
-    pOwner_->SetHeadScale(Vector3::OneVector());
-    pOwner_->RotateReset();
+    pOwner_->GetPlayerAnimator().SetHeadScale(Vector3::OneVector());
+    pOwner_->GetPlayerAnimator().RotateReset();
     attackPatern_ = AttackPatern::NORMAL;
 }
 
@@ -29,7 +29,7 @@ void ComboAttackRoot::Update(float atkSpeed) {
     JudgeAttackPattern();
 
     // 攻撃コントローラーを取得
-    PlayerComboAttackController* controller = pOwner_->GetComboAttackController();
+    PlayerComboAttackController* controller = pOwner_->GetContext().comboAttackController;
     if (!controller) {
         return;
     }
@@ -49,7 +49,7 @@ void ComboAttackRoot::Update(float atkSpeed) {
                     //  強制ダッシュを解除してから実行
                     pOwner_->ClearAutoDash();
                     queue.Dequeue();
-                    pOwner_->ChangeComboBehavior(
+                    pOwner_->ChangeCombo(
                         std::make_unique<ComboAttackAction>(pOwner_, nextData));
                     return;
                 }
@@ -61,7 +61,7 @@ void ComboAttackRoot::Update(float atkSpeed) {
                     return;
                 }
 
-                if (triggerParam.condition == TC::DASH && !pOwner_->IsDashing()) {
+                if (triggerParam.condition == TC::DASH && !pOwner_->GetBehaviors().IsDashing()) {
                     // ダッシュ中でないので強制ダッシュを開始。次フレームでDASH条件が通る
                     pOwner_->StartAutoDash();
                     return;
@@ -125,7 +125,7 @@ void ComboAttackRoot::Update(float atkSpeed) {
 
         // トリガーされたら攻撃開始
         if (triggered) {
-            pOwner_->ChangeComboBehavior(
+            pOwner_->ChangeCombo(
                 std::make_unique<ComboAttackAction>(pOwner_, attackPtr.get()));
             return; // 最初にマッチした攻撃を実行
         }
@@ -136,7 +136,7 @@ bool ComboAttackRoot::CheckConditionMuch(const PlayerComboAttackData::TriggerCon
     switch (condition) {
     case PlayerComboAttackData::TriggerCondition::GROUND:
         // 地上のみ
-        return attackPatern_ == AttackPatern::NORMAL && !pOwner_->IsDashing();
+        return attackPatern_ == AttackPatern::NORMAL && !pOwner_->GetBehaviors().IsDashing();
 
     case PlayerComboAttackData::TriggerCondition::AIR:
         // 空中のみ
@@ -148,7 +148,7 @@ bool ComboAttackRoot::CheckConditionMuch(const PlayerComboAttackData::TriggerCon
 
     case PlayerComboAttackData::TriggerCondition::DASH:
         // ダッシュ中のみ
-        return pOwner_->IsDashing();
+        return pOwner_->GetBehaviors().IsDashing();
 
     default:
         return false;
@@ -157,7 +157,7 @@ bool ComboAttackRoot::CheckConditionMuch(const PlayerComboAttackData::TriggerCon
 
 void ComboAttackRoot::JudgeAttackPattern() {
     // ジャンプ行動中であるかをチェック
-    bool isJumping  = dynamic_cast<PlayerJump*>(pOwner_->GetBehavior()) != nullptr;
+    bool isJumping = pOwner_->GetBehaviors().IsAirborne();
 
     if (isJumping) {
         attackPatern_ = AttackPatern::JUMP;

@@ -42,9 +42,6 @@ void DeathTimer::TakeDamage(float amount) {
     }
 #endif
     currentStress_ = (std::min)(currentStress_ + amount, maxStress_);
-    if (onStressTick_) {
-        onStressTick_();
-    }
 }
 
 void DeathTimer::OnNormalEnemyHit() {

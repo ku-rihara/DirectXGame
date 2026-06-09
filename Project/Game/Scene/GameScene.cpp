@@ -85,10 +85,6 @@ void GameScene::Debug() {
     easingEditor_.Edit();
     ImGui::End();
 
-    ImGui::Begin("Rendition");
-    gameObj_.attackEffect_->EditorUpdate();
-    ImGui::End();
-
     ImGui::Begin("PlayerAttack");
     gameObj_.playerComboAttackController_->EditorUpdate();
     ImGui::End();
@@ -129,7 +125,6 @@ void GameScene::ObjectInit() {
     gameObj_.fireInjectors_               = std::make_unique<FireInjectors>();
     gameObj_.backGroundObjectManager_     = std::make_unique<BackGroundObjectManager>();
     gameObj_.comboDirector_               = std::make_unique<ComboDirector>();
-    gameObj_.attackEffect_                = std::make_unique<AttackEffect>();
     gameObj_.gameIntroManager_            = std::make_unique<GameIntroManager>();
     gameObj_.continuousEnemySpawner_      = std::make_unique<ContinuousEnemySpawner>();
     gameObj_.playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
@@ -162,7 +157,6 @@ void GameScene::ObjectInit() {
     gameObj_.playerComboAttackController_->Init();
     gameObj_.killCounter_->SetAttackController(gameObj_.playerComboAttackController_.get());
     gameObj_.killCounter_->Init();
-    gameObj_.attackEffect_->Init();
     gameObj_.sideRopeController_->Init();
     gameObj_.audienceController_->Init();
     gameObj_.deathTimer_->Init();
@@ -210,7 +204,6 @@ void GameScene::SetClassPointer() {
     gameObj_.player_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.player_->SetComboAttackController(gameObj_.playerComboAttackController_.get());
     gameObj_.player_->SetCombo(gameObj_.combo_.get());
-    gameObj_.player_->SetHitStop(gameObj_.attackEffect_.get());
     gameObj_.player_->SetDeathTimer(gameObj_.deathTimer_.get());
     gameObj_.player_->SetDeathFragPointer(&gameObj_.deathTimer_->GetIsDeathRef());
 

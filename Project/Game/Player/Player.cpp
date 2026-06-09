@@ -7,14 +7,6 @@
 #include "utility/CollisionPush/CollisionPushUtils.h"
 // DeathTimer
 #include "DeathTimer/DeathTimer.h"
-/// Behavior
-#include "Behavior/ComboAttackBehavior/ComboAttackRoot.h"
-#include "Behavior/PlayerBehavior/PlayerDash.h"
-#include "Behavior/PlayerBehavior/PlayerDeath.h"
-#include "Behavior/PlayerBehavior/PlayerJump.h"
-#include "Behavior/PlayerBehavior/PlayerMove.h"
-#include "Behavior/PlayerBehavior/PlayerSpawn.h"
-#include "Behavior/TitleBehavior/TitlePlayerBehavior.h"
 
 // light
 #include "Light/AmbientLight.h"
@@ -39,16 +31,10 @@ void Player::Init() {
     BaseObject::Init();
 
     //* particle
-    effects_ = std::make_unique<PlayerEffects>();
-    effects_->Init(&baseTransform_);
+    effects_.Init(&baseTransform_);
 
     ///* グローバルパラメータ
-    parameters_ = std::make_unique<PlayerParameter>();
-    parameters_->Init();
-
-    ///* 武器生成
-    leftHand_  = std::make_unique<PlayerHandLeft>();
-    rightHand_ = std::make_unique<PlayerHandRight>();
+    parameters_.Init();
 
     // Playerのモデル
     obj3d_.reset(KetaEngine::Object3d::CreateModel("Player/Player.obj"));
@@ -56,29 +42,26 @@ void Player::Init() {
     obj3d_->GetModelMaterial()->GetMaterialData()->environmentCoefficient = 0.05f;
 
     // Playerの攻撃クラス
-    playerCollisionInfo_ = std::make_unique<PlayerAttackCollider>();
-    playerCollisionInfo_->Init();
-    playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
+    playerCollisionInfo_.Init();
+    playerCollisionInfo_.SetPlayerBaseTransform(&baseTransform_);
 
     // トランスフォーム初期化
     obj3d_->transform_.Init();
-    leftHand_->Init();
-    rightHand_->Init();
+    leftHand_.Init();
+    rightHand_.Init();
 
     // ペアレント
     obj3d_->transform_.SetParent(&baseTransform_);
-    leftHand_->SetParent(&baseTransform_);
-    rightHand_->SetParent(&baseTransform_);
+    leftHand_.SetParent(&baseTransform_);
+    rightHand_.SetParent(&baseTransform_);
 
     // パラメータセット
     baseTransform_.SetBaseScale(Vector3::OneVector());
-    baseTransform_.translation_ = parameters_->GetParameters().startPos_;
+    baseTransform_.translation_ = parameters_.GetParameters().startPos_;
 
-    animator_.Init(obj3d_.get(), leftHand_.get(), rightHand_.get(), &baseTransform_);
+    animator_.Init(obj3d_.get(), &leftHand_, &rightHand_, &baseTransform_);
 
-    /// 通常モードから
-    ChangeBehavior(std::make_unique<PlayerSpawn>(this));
-    ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
+    behaviors_.Init(this);
     HeadLightSetting();
 }
 
@@ -93,27 +76,20 @@ void Player::Update() {
 
     /// 振る舞い処理
     // コンボ更新を先に行うことで、攻撃入力による状態遷移を優先させる
-    if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
-        comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
+    if (!behaviors_.IsDead()) {
+        behaviors_.GetComboBehavior()->Update(context_.comboAttackController->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
     }
 
     if (IsAbleBehavior()) {
-        behavior_->Update();
+        behaviors_.GetBehavior()->Update();
     }
 
     // ロックオン対象がいればそちらを向く
     FaceToTarget();
 
     /// Particle
-    effects_->Update(GetWorldPosition(), baseTransform_.rotation_);
+    effects_.Update(GetWorldPosition(), baseTransform_.rotation_);
 
-    // ダメージクールダウン更新
-    if (isDamageColling_) {
-        damageCollTime_ -= KetaEngine::Frame::DeltaTimeRate();
-        if (damageCollTime_ <= 0.0f) {
-            isDamageColling_ = false;
-        }
-    }
 
     // 死亡モード変更
     if (isDeath_ && *isDeath_) {
@@ -128,46 +104,26 @@ void Player::Update() {
     }
 
     // 移動制限
-    baseTransform_.SetBaseScale(parameters_->GetParameters().baseScale_);
+    baseTransform_.SetBaseScale(parameters_.GetParameters().baseScale_);
     MoveToLimit();
     UpdateMatrix();
 }
 
 void Player::ChangeDeathMode() {
-
-    if (!dynamic_cast<PlayerDeath*>(behavior_.get())) {
-        ChangeCombBoRoot(); // 攻撃を強制終了
-        ChangeBehavior(std::make_unique<PlayerDeath>(this));
+    if (!behaviors_.IsDead()) {
+        behaviors_.EnterDeath(this);
     }
-}
-
-// タイトル更新
-void Player::TitleUpdate() {
-
-    /// Particle
-    effects_->Update(GetWorldPosition(), baseTransform_.rotation_);
-
-    titleBehavior_->Update();
-    /// 行列更新
-    UpdateMatrix();
 }
 
 void Player::GameIntroUpdate(float playSpeed) {
 
-    effects_->Update(GetWorldPosition(), baseTransform_.rotation_);
+    effects_.Update(GetWorldPosition(), baseTransform_.rotation_);
 
-    if (dynamic_cast<PlayerSpawn*>(behavior_.get())) {
-        behavior_->Update(playSpeed);
+    if (behaviors_.IsSpawning()) {
+        behaviors_.GetBehavior()->Update(playSpeed);
     }
     /// 行列更新
     UpdateMatrix();
-}
-
-///=========================================================
-/// 移動の入力処理
-///==========================================================
-Vector3 Player::GetInputDirection() {
-    return input_.GetMoveDirection();
 }
 
 ///=========================================================
@@ -175,11 +131,10 @@ Vector3 Player::GetInputDirection() {
 ///==========================================================
 void Player::Move(float speed) {
 
-    /// Inputから速度代入
-    direction_ = GetInputDirection();
+    direction_ = input_.GetMoveDirection();
 
     /// 移動処理
-    if (CheckIsMoving()) {
+    if (input_.IsMoving()) {
         // 移動量に速さを反映
         direction_ = direction_.Normalize() * (speed)*KetaEngine::Frame::DeltaTimeRate();
         // 移動ベクトルをカメラの角度だけ回転する
@@ -190,8 +145,8 @@ void Player::Move(float speed) {
         // 目標角度
         objectiveAngle_ = std::atan2(direction_.x, direction_.z);
         // 最短角度補間
-        if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
-            AdaptRotate(); // 回転適応
+        if (behaviors_.IsComboRoot()) {
+            AdaptRotate();
         }
         FaceToTarget();
     } else {
@@ -200,10 +155,10 @@ void Player::Move(float speed) {
 }
 
 void Player::FaceToTarget() {
-    if (pLockOn_ && pLockOn_->GetLockOn()->GetIsCurrentTarget()) {
+    if (context_.pLockOn && context_.pLockOn->GetLockOn()->GetIsCurrentTarget()) {
         baseTransform_.rotation_.y = CalcFaceAngleY(
             GetWorldPosition(),
-            pLockOn_->GetLockOn()->GetCurrentTargetPosition());
+            context_.pLockOn->GetLockOn()->GetCurrentTargetPosition());
     }
 }
 
@@ -214,10 +169,6 @@ void Player::AdaptRotate() {
 ///=========================================================
 /// 動いているか
 ///==========================================================
-bool Player::CheckIsMoving() {
-    return input_.IsMoving();
-}
-
 ///=========================================================
 /// 　移動制限
 ///==========================================================
@@ -284,10 +235,10 @@ void Player::Fall(float& speed, float fallSpeedLimit, float gravity, bool isJump
     speed = max(speed - (gravity * KetaEngine::Frame::DeltaTimeRate()), -fallSpeedLimit);
 
     // 着地
-    if (baseTransform_.translation_.y <= parameters_->GetParameters().startPos_.y) {
+    if (baseTransform_.translation_.y <= parameters_.GetParameters().startPos_.y) {
 
         speed                         = 0.0f;
-        baseTransform_.translation_.y = parameters_->GetParameters().startPos_.y;
+        baseTransform_.translation_.y = parameters_.GetParameters().startPos_.y;
     }
 }
 
@@ -298,11 +249,11 @@ void Player::AdjustParam() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
 
     // プレイヤーのパラメータ
-    parameters_->AdjustParam();
+    parameters_.AdjustParam();
 
     // パーツのパラメータ
-    leftHand_->AdjustParam();
-    rightHand_->AdjustParam();
+    leftHand_.AdjustParam();
+    rightHand_.AdjustParam();
 
 #endif // _DEBUG
 }
@@ -310,34 +261,19 @@ void Player::AdjustParam() {
 ///==============================================================================
 /// 振る舞い切り替え
 ///===============================================================================
-void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior) {
-    // 引数で受け取った状態を次の状態としてセット
-    behavior_ = std::move(behavior);
-}
-void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior) {
-    // 引数で受け取った状態を次の状態としてセット
-    comboBehavior_ = std::move(behavior);
-}
-
-void Player::ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior> behavior) {
-    titleBehavior_ = std::move(behavior);
-}
 void Player::ChangeCombBoRoot() {
-    ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
+    behaviors_.ResetComboToRoot(this);
 }
 
 /// =========================================================================================
 /// setter method
 /// =========================================================================================
 
-void Player::SetTitleBehavior() {
-    ChangeTitleBehavior(std::make_unique<TitlePlayerBehavior>(this));
-}
 
 void Player::UpdateMatrix() {
     /// 行列更新
-    leftHand_->Update(isDeathRenditionFinish_);
-    rightHand_->Update(isDeathRenditionFinish_);
+    leftHand_.Update(isDeathRenditionFinish_);
+    rightHand_.Update(isDeathRenditionFinish_);
 
     animator_.Update();
 
@@ -349,19 +285,6 @@ void Player::UpdateMatrix() {
 ///===============================================================================
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-
-    // 敵の攻撃コリジョンとの衝突判定
-    if (EnemyAttackCollisionBox* attackBox = dynamic_cast<EnemyAttackCollisionBox*>(other)) {
-        // ダメージクールダウン中はスキップ
-        if (!isDamageColling_ && pDeathTimer_) {
-            // ダメージを受ける
-            pDeathTimer_->TakeDamage(attackBox->GetAttackValue());
-            // クールダウン開始
-            isDamageColling_ = true;
-            damageCollTime_  = damageCollDuration_;
-        }
-        return;
-    }
 
     if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
         // 敵が攻撃中は押し戻し無効
@@ -377,18 +300,6 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 }
 
-void Player::PlayDissolve(const std::string& name) {
-    animator_.PlayDissolve(name);
-}
-
-bool Player::IsDissolveFinished() const {
-    return animator_.IsDissolveFinished();
-}
-
-void Player::SetInitialDissolveHidden() {
-    animator_.SetInitialDissolveHidden();
-}
-
 Vector3 Player::GetCollisionPos() const {
     // ローカル座標でのオフセット
     const Vector3 offset = {0.0f, 1.5f, 0.0f};
@@ -401,73 +312,46 @@ Vector3 Player::GetCollisionPos() const {
 /// SetValue
 /// =======================================================================================
 void Player::HeadLightSetting() {
-    if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
+    if (behaviors_.IsComboRoot()) {
         KetaEngine::Light::GetInstance()->GetAmbientLight()->SetIntensity(0.0f);
     } else {
         KetaEngine::Light::GetInstance()->GetAmbientLight()->SetIntensity(0.9f);
     }
 }
 
-bool Player::IsDashing() const {
-    return dynamic_cast<PlayerDash*>(behavior_.get()) != nullptr;
-}
-
-bool Player::IsAirborne() const {
-    return dynamic_cast<PlayerJump*>(behavior_.get()) != nullptr;
-}
-
 void Player::StartAutoDash() {
-    if (dynamic_cast<PlayerMove*>(behavior_.get())) {
-        ChangeBehavior(std::make_unique<PlayerDash>(this, true));
-    }
+    behaviors_.StartAutoDash(this);
 }
 
 void Player::ClearAutoDash() {
-    if (auto* dashState = dynamic_cast<PlayerDash*>(behavior_.get())) {
-        dashState->SetForceDash(false);
-    }
+    behaviors_.ClearForceDash();
 }
 
-void Player::RotateReset() {
-    obj3d_->transform_.rotation_      = Vector3::ZeroVector();
-    obj3d_->transform_.translation_.y = 0.0f;
-}
-
-void Player::ResetPositionY() {
-    baseTransform_.translation_.y = parameters_->GetParameters().startPos_.y;
-}
-
-void Player::ResetHeadScale() {
-    obj3d_->transform_.scale_ = Vector3::OneVector();
-}
 
 bool Player::IsAbleBehavior() {
-    // 死亡中はPlayerDeathの更新を許可するために必ずtrueを返す
     if (isDeath_ && *isDeath_) {
         return true;
     }
-
-    // 攻撃中でなければ通常の振る舞いを許可
-    return (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get()) != nullptr);
+    return behaviors_.IsComboRoot();
 }
 
 void Player::InitInGameScene() {
     Init();
-    baseTransform_.SetBaseScale(parameters_->GetParameters().baseScale_);
+    baseTransform_.SetBaseScale(parameters_.GetParameters().baseScale_);
 
     // 初期状態: スポーンアニメーション開始まで非表示
-    SetInitialDissolveHidden();
-    leftHand_->SetInitialDissolveHidden();
-    rightHand_->SetInitialDissolveHidden();
-    leftHand_->SetIsEmit(false);
-    rightHand_->SetIsEmit(false);
+    animator_.SetInitialDissolveHidden();
+    leftHand_.SetInitialDissolveHidden();
+    rightHand_.SetInitialDissolveHidden();
+    leftHand_.SetIsEmit(false);
+    rightHand_.SetIsEmit(false);
     SetShadowFrag(false);
 }
 
 void Player::SetShadowFrag(bool isShadow) {
     obj3d_->SetIsShadow(isShadow);
-    leftHand_->SetIsShadow(isShadow);
-    rightHand_->SetIsShadow(isShadow);
+    leftHand_.SetIsShadow(isShadow);
+    rightHand_.SetIsShadow(isShadow);
 }
 
 ///==============================================================================
@@ -475,37 +359,32 @@ void Player::SetShadowFrag(bool isShadow) {
 ///===============================================================================
 
 void Player::SetLockOn(LockOnController* lockOn) {
-    pLockOn_ = lockOn;
+    context_.pLockOn = lockOn;
 }
 
 void Player::SetCombo(Combo* combo) {
-    pCombo_ = combo;
-    comboAttackController_->SetCombo(pCombo_);
+    context_.pCombo = combo;
+    context_.comboAttackController->SetCombo(context_.pCombo);
 }
 
 void Player::SetGameCamera(GameCamera* gameCamera) {
-    pGameCamera_ = gameCamera;
+    context_.pGameCamera = gameCamera;
 }
 
-void Player::SetHitStop(AttackEffect* hitStop) {
-    pAttackEffect_ = hitStop;
-}
 
 void Player::SetViewProjection(const KetaEngine::ViewProjection* viewProjection) {
     viewProjection_ = viewProjection;
 }
 
 void Player::SetComboAttackController(PlayerComboAttackController* playerComboAttackController) {
-    comboAttackController_ = playerComboAttackController;
+    context_.comboAttackController = playerComboAttackController;
 }
 
 void Player::SetDeathTimer(DeathTimer* deathTimer) {
-    pDeathTimer_ = deathTimer;
-    pDeathTimer_->SetOnStressTickCallback([this]() {
-        effects_->Emit("StressEffect");
-    });
+    context_.pDeathTimer = deathTimer;
+   
 }
 
 bool Player::CheckIsChargeMax() const {
-    return currentUpperChargeTime_ >= parameters_->GetParameters().upperParam.chargeTime;
+    return currentUpperChargeTime_ >= parameters_.GetParameters().upperParam.chargeTime;
 }

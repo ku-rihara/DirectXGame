@@ -4,7 +4,7 @@
 // Behavior
 #include "Player/Behavior/TitleBehavior/TitlePlayerBehavior.h"
 
-void TitleSceneController::Init(Player* player) {
+void TitleSceneController::Init(TitlePlayer* player) {
     player_ = player;
 
     titleLogo_ = std::make_unique<TitleLogo>();

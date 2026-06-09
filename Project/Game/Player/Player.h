@@ -7,17 +7,14 @@
 // Collider
 #include "Collider/AABBCollider.h"
 #include "Components/CollisionBox/PlayerAttackCollider.h"
-// Behavior
-#include "Behavior/ComboAttackBehavior/BaseComboAttackBehavior.h"
-#include "Behavior/PlayerBehavior/BasePlayerBehavior.h"
-#include "Behavior/TitleBehavior/BaseTitleBehavior.h"
+// BehaviorManager
+#include "Behavior/PlayerBehaviorManager.h"
 // Editor
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Animation
 #include "Components/Animation/PlayerAnimator.h"
-// Particle,Effect
+// Effect
 #include "Components/Effect/PlayerEffects.h"
-
 // Parameter
 #include "Components/Parameter/PlayerParameter.h"
 // Input
@@ -27,16 +24,16 @@
 #include "Components/Parts/PlayerHandRight.h"
 // ComboCreator
 #include "Player/AutoComboAttack/AutoComboQueue.h"
+// Context
+#include "PlayerContext.h"
 // std
 #include <functional>
 #include <memory>
 #include <string>
 
-class SpecialAttackGauge;
 class LockOnController;
 class GameCamera;
 class Combo;
-class AttackEffect;
 class PlayerComboAttackController;
 class DeathTimer;
 
@@ -45,51 +42,36 @@ class DeathTimer;
 /// </summary>
 class Player : public BaseObject, public KetaEngine::AABBCollider {
 private:
+    struct PlayerContext {
+        LockOnController* pLockOn                          = nullptr;
+        GameCamera* pGameCamera                            = nullptr;
+        Combo* pCombo                                      = nullptr;
+        PlayerComboAttackController* comboAttackController = nullptr;
+        DeathTimer* pDeathTimer                            = nullptr;
+    };
+
 public:
     Player()  = default;
     ~Player() = default;
 
-    // 初期化、更新
+    // 初期化処理
     void Init() override;
+    void InitInGameScene();
+
+    // 更新処理
     void Update() override;
-
-    void InitInGameScene(); //< ゲームシーンでの初期化
-    void TitleUpdate(); //< タイトル更新処理
-    void GameIntroUpdate(float playSpeed = 1.0f); //< イントロシーン更新
-
-    // 影適応するかのフラグセット
-    void SetShadowFrag(bool isShadow);
+    void GameIntroUpdate(float playSpeed = 1.0f);
 
     /// <summary>
     /// 移動
     /// </summary>
     /// <param name="speed">移動スピード</param>
     void Move(float speed);
-
-    bool CheckIsMoving(); //< 移動中かチェック
     void MoveToLimit(); //< 移動範囲制限
-    Vector3 GetInputDirection(); //< 入力による方向決定
     void UpdateMatrix(); //< 行列更新
 
-    // reset
-    void ResetPositionY(); //< Y座標リセット
-    void ResetHeadScale(); //< 頭のスケールリセット
-
     /// <summary>
-    /// ディゾルブアニメーション再生
-    /// </summary>
-    /// <param name="name">ディゾルブ名</param>
-    void PlayDissolve(const std::string& name);
-
-    /// <summary>
-    /// ディゾルブアニメーション完了判定
-    /// </summary>
-    bool IsDissolveFinished() const;
-
-    void SetInitialDissolveHidden(); //< 初期非表示状態設定
-
-    /// <summary>
-    /// ジャンプ
+    /// ジャンプの動き
     /// </summary>
     /// <param name="speed">ジャンプスピード</param>
     /// <param name="fallSpeedLimit">落下速度上限</param>
@@ -97,18 +79,13 @@ public:
     void Jump(float& speed, float fallSpeedLimit, float gravity);
 
     /// <summary>
-    /// 落ちる
+    /// ジャンプから落ちる処理
     /// </summary>
     /// <param name="speed">落下速度</param>
     /// <param name="fallSpeedLimit">落下速度上限</param>
     /// <param name="gravity">重力</param>
     /// <param name="isJump">ジャンプによる落下か</param>
     void Fall(float& speed, float fallSpeedLimit, float gravity, bool isJump = false);
-
-    // Behavior
-    void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);
-    void ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior);
-    void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior> behavior);
 
     // 衝突コールバック
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
@@ -136,59 +113,43 @@ public:
     void AdjustParam(); //< パラメータ調整
     Vector3 GetCollisionPos() const override; //< 衝突位置取得
 
-    /// <summary>
-    /// ダッシュ中かどうかを取得
-    /// </summary>
-    bool IsDashing() const;
-
-    /// <summary>
-    /// 空中かどうかを取得
-    /// </summary>
-    bool IsAirborne() const;
-
-    
-    /// 自動ダッシュ開始
+    /// 自動ダッシュ開始、解除
     void StartAutoDash();
-    /// 自動ダッシュ解除
     void ClearAutoDash();
-    void RotateReset();
+
     void HeadLightSetting();
+
+    // Behavior切り替え
+    void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior) { behaviors_.Change(std::move(behavior)); }
+    void ChangeCombo(std::unique_ptr<BaseComboAttackBehavior> combo) { behaviors_.ChangeCombo(std::move(combo)); }
 
 private:
     void ChangeDeathMode();
     bool IsAbleBehavior();
 
+protected:
+    PlayerBehaviorManager behaviors_;
+    PlayerEffects effects_;
+
 private:
+    // グローバルパラメータ
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Player";
 
-    PlayerAnimator animator_;
-
-    /// other class
-    LockOnController* pLockOn_                          = nullptr;
-    GameCamera* pGameCamera_                            = nullptr;
-    Combo* pCombo_                                      = nullptr;
-    AttackEffect* pAttackEffect_                        = nullptr;
-    PlayerComboAttackController* comboAttackController_ = nullptr;
-    DeathTimer* pDeathTimer_                            = nullptr;
-
+    // ViewProjectionの取得
     const KetaEngine::ViewProjection* viewProjection_ = nullptr;
 
-    std::unique_ptr<KetaEngine::Object3d> obj3d_;
-    std::unique_ptr<PlayerHandLeft> leftHand_;
-    std::unique_ptr<PlayerHandRight> rightHand_;
-    std::unique_ptr<PlayerEffects> effects_;
-    std::unique_ptr<PlayerParameter> parameters_;
-    std::unique_ptr<PlayerAttackCollider> playerCollisionInfo_;
-    /// behavior
-    std::unique_ptr<BasePlayerBehavior> behavior_           = nullptr;
-    std::unique_ptr<BaseComboAttackBehavior> comboBehavior_ = nullptr;
-    std::unique_ptr<BaseTitleBehavior> titleBehavior_       = nullptr;
-
-    // コンボ自動実行キュー
+    PlayerAnimator animator_;
+    PlayerContext context_;
     AutoComboQueue autoComboQueue_;
+    std::unique_ptr<KetaEngine::Object3d> obj3d_;
 
-    // 自動実行攻撃発火時コールバック
+    PlayerHandLeft leftHand_;
+    PlayerHandRight rightHand_;
+    PlayerParameter parameters_;
+    PlayerAttackCollider playerCollisionInfo_;
+
+    // 自動実行攻撃時コールバック
     std::function<void(const std::string&)> autoComboAttackCallback_;
 
 private:
@@ -213,11 +174,6 @@ private:
     const bool* isDeath_;
     bool isDeathRenditionFinish_ = false;
 
-    // ダメージクールダウン
-    bool isDamageColling_     = false;
-    float damageCollTime_     = 0.0f;
-    float damageCollDuration_ = 1.0f; // ダメージ無敵時間
-
     // コンボアンロックスキップ
     bool isIgnoreUnlockState_ = false;
 
@@ -225,19 +181,13 @@ public:
     /// ===================================================
     /// Getter Method
     /// ===================================================
-    PlayerHandLeft* GetLeftHand() const { return leftHand_.get(); }
-    PlayerHandRight* GetRightHand() const { return rightHand_.get(); }
-    BasePlayerBehavior* GetBehavior() const { return behavior_.get(); }
-    BaseTitleBehavior* GetTitleBehavior() const { return titleBehavior_.get(); }
-    BaseComboAttackBehavior* GetComboBehavior() const { return comboBehavior_.get(); }
-    PlayerEffects* GetEffects() const { return effects_.get(); }
-    LockOnController* GetLockOnController() const { return pLockOn_; }
-    GameCamera* GetGameCamera() const { return pGameCamera_; }
-    AttackEffect* GetAttackEffect() const { return pAttackEffect_; }
-    PlayerParameter* GetParameter() const { return parameters_.get(); }
-    PlayerAttackCollider* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
-    PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
-    DeathTimer* GetDeathTimer() const { return pDeathTimer_; }
+    PlayerHandLeft* GetLeftHand() { return &leftHand_; }
+    PlayerHandRight* GetRightHand() { return &rightHand_; }
+    const PlayerBehaviorManager& GetBehaviors() const { return behaviors_; }
+    PlayerEffects* GetEffects() { return &effects_; }
+    PlayerParameter* GetParameter() { return &parameters_; }
+    PlayerAttackCollider* GetPlayerCollisionInfo() { return &playerCollisionInfo_; }
+    const PlayerContext& GetContext() const { return context_; }
     bool GetIsIgnoreUnlockState() const { return isIgnoreUnlockState_; }
     const PlayerInput& GetInput() const { return input_; }
     PlayerAnimator& GetPlayerAnimator() { return animator_; }
@@ -250,20 +200,16 @@ public:
     /// Setter Method
     /// ===================================================
     void SetViewProjection(const KetaEngine::ViewProjection* viewProjection);
-    void SetLockOn(LockOnController* lockon);
-    void SetGameCamera(GameCamera* gamecamera);
-    void SetCombo(Combo* combo);
-    void SetHitStop(AttackEffect* hitStop);
-    void SetComboAttackController(PlayerComboAttackController* playerComboAttackController);
     void SetDeathTimer(DeathTimer* deathTimer);
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
     void SetIsIgnoreUnlockState(bool isIgnore) { isIgnoreUnlockState_ = isIgnore; }
     void SetObjectiveAngle(float angle) { objectiveAngle_ = angle; }
     void SetObjectiveAnglePitch(float angle) { objectiveAnglePitch_ = angle; }
-    void SetTitleBehavior();
-    void SetHeadScale(const Vector3& scale) { obj3d_->transform_.scale_ = scale; }
-    void SetHeadPosY(float posy) { obj3d_->transform_.translation_.y = posy; }
-    void SetHeadRotateX(float zRotate) { obj3d_->transform_.rotation_.x = zRotate; }
-    void SetHeadRotateY(float zRotate) { obj3d_->transform_.rotation_.y = zRotate; }
+    void SetShadowFrag(bool isShadow);
+    // Class Set
+    void SetLockOn(LockOnController* lockon);
+    void SetGameCamera(GameCamera* gamecamera);
+    void SetCombo(Combo* combo);
+    void SetComboAttackController(PlayerComboAttackController* playerComboAttackController);
 };

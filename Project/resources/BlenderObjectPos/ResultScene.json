@@ -176,6 +176,50 @@
                 ]
             },
             "file_name": "ResultObj/Stone.obj"
+        },
+        {
+            "type": "MESH",
+            "name": "SM_SlopedTunnel.001",
+            "transform": {
+                "translation": [
+                    -8.89706802368164,
+                    -96.28607177734375,
+                    62.49531936645508
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    0.6860726475715637,
+                    0.6860726475715637,
+                    0.9077875018119812
+                ]
+            },
+            "file_name": "ResultObj/Tunnel.obj"
+        },
+        {
+            "type": "MESH",
+            "name": "SM_SlopedTunnel.002",
+            "transform": {
+                "translation": [
+                    -8.89706802368164,
+                    273.8724670410156,
+                    62.49531936645508
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    0.6860726475715637,
+                    0.6860726475715637,
+                    0.9077875018119812
+                ]
+            },
+            "file_name": "ResultObj/Tunnel.obj"
         }
     ]
 }

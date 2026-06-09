@@ -23,7 +23,7 @@ void TitleScene::Init() {
     /// 生成
     ///=======================================================================================
     field_             = std::make_unique<Field>();
-    player_            = std::make_unique<Player>();
+    player_            = std::make_unique<TitlePlayer>();
     skyBox_            = std::make_unique<SkyBox>();
     ObjectFromBlender_ = std::make_unique<KetaEngine::ObjectFromBlender>();
 

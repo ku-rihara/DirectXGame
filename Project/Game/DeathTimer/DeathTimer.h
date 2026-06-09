@@ -45,9 +45,7 @@ private:
     // ストレス減少
     float stressReductionPerHit_ = 5.0f; // ザコ攻撃1回あたりの減少量
 
-    // コールバック
-    std::function<void()> onDecayTick_;  // ストレス減少時に呼ばれる
-    std::function<void()> onStressTick_; // ストレス増加時に呼ばれる
+    std::function<void()> onDecayTick_;
 
     bool isDeath_   = false;
     bool isGodMode_ = false; // デバッグ用: ストレス増加を止める
@@ -59,7 +57,5 @@ public:
     float GetMaxStress() const { return maxStress_; }
     DeathTimerGauge* GetDeathTimerGauge() const { return deathTimerGauge_.get(); }
 
-    // コールバック設定
     void SetOnDecayTickCallback(std::function<void()> cb) { onDecayTick_ = std::move(cb); }
-    void SetOnStressTickCallback(std::function<void()> cb) { onStressTick_ = std::move(cb); }
 };

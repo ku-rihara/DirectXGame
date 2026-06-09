@@ -364,8 +364,8 @@ void EnemyManager::Update() {
                 }
             }
 
-            if (pPlayer_ && pPlayer_->GetLockOnController()) {
-                pPlayer_->GetLockOnController()->GetLockOn()->OnObjectDestroyed(enemies_[i].get());
+            if (pPlayer_ && pPlayer_->GetContext().pLockOn) {
+                pPlayer_->GetContext().pLockOn->GetLockOn()->OnObjectDestroyed(enemies_[i].get());
             }
 
             if (spawner_) {

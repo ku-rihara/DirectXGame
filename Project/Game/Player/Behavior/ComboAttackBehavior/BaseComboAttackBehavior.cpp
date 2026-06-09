@@ -9,5 +9,5 @@ BaseComboAttackBehavior::BaseComboAttackBehavior(const std::string& name, Player
 }
 
 void BaseComboAttackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAttackBehavior> nextCombo) {
-    pOwner_->ChangeComboBehavior(std::move(nextCombo));
+    pOwner_->ChangeCombo(std::move(nextCombo));
 }

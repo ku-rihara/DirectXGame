@@ -26,8 +26,8 @@ void GameSceneGameOver::Init() {
 }
 
 void GameSceneGameOver::Update([[maybe_unused]] float timeSpeed) {
-    // HitStopタイマーを更新
-    pOwner_->GetGameObj().attackEffect_->Update();
+    // HitStopを解除する
+    pOwner_->GetGameObj().player_->GetEffects()->ResetHitStop();
 
     // 死亡エフェクトを最後まで表示するためにプレイヤーを更新し続ける
     pOwner_->GetGameObj().player_->Update();

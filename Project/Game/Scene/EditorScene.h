@@ -23,7 +23,6 @@
 #include "LockOn/LockOnController.h"
 // Player
 #include "Player/ComboCreator/PlayerComboAttackController.h"
-#include "Player/Components/Effect/AttackEffect/AttackEffect.h"
 #include "Player/Player.h"
 // SkyBox
 #include "SkyBox/SkyBox.h"
@@ -73,7 +72,6 @@ private:
     std::unique_ptr<SkyBox> skyBox_                                           = nullptr;
     std::unique_ptr<Combo> combo_                                             = nullptr;
     std::unique_ptr<EnemyManager> enemyManager_                               = nullptr;
-    std::unique_ptr<AttackEffect> attackEffect_                               = nullptr;
     std::unique_ptr<PlayerComboAttackController> playerComboAttackController_ = nullptr;
     std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
     std::unique_ptr<AudienceController> audienceController_                   = nullptr;

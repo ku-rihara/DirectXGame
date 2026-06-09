@@ -14,6 +14,7 @@
 
 class GameCamera;
 class DeathTimer;
+class Player;
 /// <summary>
 /// ボス専用攻撃ボム管理クラス
 /// </summary>
@@ -46,6 +47,7 @@ private:
     // 他クラスのポインタ
     GameCamera*  pGameCamera_  = nullptr;
     DeathTimer*  pDeathTimer_  = nullptr;
+    Player*      pPlayer_      = nullptr;
     KetaEngine::PostEffectPlayer postEffectPlayer_;
 
     // 攻撃ボムのコンテナ
@@ -70,4 +72,5 @@ public:
     void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
     void SetGameCamera(GameCamera* camera) { pGameCamera_ = camera; }
     void SetDeathTimer(DeathTimer* dt) { pDeathTimer_ = dt; }
+    void SetPlayer(Player* player) { pPlayer_ = player; }
 };

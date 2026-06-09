@@ -275,7 +275,7 @@ void Easing<T>::CalculateValue() {
         return;
     }
 
-    // maxTime_ が 0 の場合は終端値を即セットして終了
+    // maxTime_ が 0 の場合は終端値をセットして終了
     if (maxTime_ <= 0.0f) {
         *adaptTarget_ = endValue;
         return;
