@@ -2,30 +2,41 @@
 #include "Frame/Frame.h"
 #include "math/MathFunction.h"
 
-void AttackBomb::Init(const Vector3& startPos, const Vector3& targetPos, float flightTime, float arcHeight) {
+void AttackBomb::Init(const Vector3& startPos, const Vector3& targetPos, const Param& param) {
     startPos_    = startPos;
     targetPos_   = targetPos;
     position_    = startPos;
-    flightTime_  = flightTime;
+    param_       = param;
     elapsedTime_ = 0.0f;
     isLanded_    = false;
     arcOffset_   = 0.0f;
 
     // イージングの初期化
-    InitEasing(arcHeight);
+    InitEasing(param_.arcHeight);
 
     // 3Dモデルの生成
-    obj3d_.reset(KetaEngine::Object3d::CreateModel("TestObj/axis.obj"));
+    obj3d_.reset(KetaEngine::Object3d::CreateModel("Items/RottenBanana.obj"));
     obj3d_->transform_.Init();
     obj3d_->transform_.translation_ = startPos;
+    obj3d_->transform_.scale_       = param_.scale;
 
     // トレイルの初期化
     trailPlayer_.Init();
     trailPlayer_.SetFollowPosition(&position_);
+    trailPlayer_.Play("BombTrail", "AttackBomb");
+
+    // Particle初期化
+    particlePlayer_.Init();
+    particlePlayer_.SetParentTransform(&obj3d_->transform_);
+    particlePlayer_.Play("BomMoveEffect", "AttackBomb");
 }
 
 void AttackBomb::Update() {
+
+    // トレイル更新
     trailPlayer_.Update();
+    // パーティクル更新
+    particlePlayer_.Update();
 
     if (isLanded_) {
         return;
@@ -48,16 +59,13 @@ void AttackBomb::Update() {
     }
 
     // 放物線軌道の計算
-    float t   = elapsedTime_ / flightTime_;
+    float t   = elapsedTime_ / param_.flightTime;
     position_ = Lerp(startPos_, targetPos_, t);
     position_.y += arcOffset_;
 
-    // 3Dモデルの位置を更新
+    // 3Dモデルの位置・回転を更新
     obj3d_->transform_.translation_ = position_;
-}
-
-void AttackBomb::StartTrail(const std::string& presetName, const std::string& category) {
-    trailPlayer_.Play(presetName, category);
+    obj3d_->transform_.rotation_.z += param_.rotateZSpeed * dt;
 }
 
 void AttackBomb::StopTrail() {
@@ -70,8 +78,8 @@ void AttackBomb::InitEasing(float arcHeight) {
     param.returnType    = EasingType::InSine;
     param.startValue    = 0.0f;
     param.endValue      = arcHeight;
-    param.maxTime       = flightTime_ / 2.0f;
-    param.returnMaxTime = flightTime_ / 2.0f;
+    param.maxTime       = param_.flightTime / 2.0f;
+    param.returnMaxTime = param_.flightTime / 2.0f;
     arcEasing_.SettingValue(param);
     arcEasing_.SetAdaptValue(&arcOffset_);
 }

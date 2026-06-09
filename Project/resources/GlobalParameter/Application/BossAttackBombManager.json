@@ -1,8 +1,14 @@
 {
     "BossAttackBombManager": {
-        "arcHeight": 8.0,
+        "arcHeight": 17.100000381469727,
         "bombThrowInterval": 3.0,
         "flightTime": 1.5,
+        "rotateZSpeed": 8.8100004196167,
+        "scale": [
+            9.0,
+            9.0,
+            9.0
+        ],
         "stressPerBomb": 10.0
     }
 }

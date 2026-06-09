@@ -2897,6 +2897,9 @@
     <ClCompile Include="Game\Player\TitlePlayer\TitlePlayer.cpp">
       <Filter>Game\Player\TitlePlayer</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\AttackBomb\BossAttackBombParameter.cpp">
+      <Filter>Game\Enemy\AttackBomb</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectPlayer.h">
@@ -2904,6 +2907,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\TitlePlayer\TitlePlayer.h">
       <Filter>Game\Player\TitlePlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\AttackBomb\BossAttackBombParameter.h">
+      <Filter>Game\Enemy\AttackBomb</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

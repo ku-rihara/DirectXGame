@@ -66,6 +66,10 @@ void EnemyManager::Init() {
     param_ = std::make_unique<EnemyParameter>();
     param_->Init(globalParameter_, groupName_);
 
+    // ボムパラメータ（一度だけ初期化）
+    bombParam_ = std::make_unique<BossAttackBombParameter>();
+    bombParam_->Init();
+
     globalParameter_->SyncParamForGroup(groupName_);
 
     // HPバーの色設定
@@ -479,6 +483,10 @@ void EnemyManager::AdjustParam() {
 
     if (spawner_) {
         spawner_->AdjustParam();
+    }
+
+    if (bombParam_) {
+        bombParam_->AdjustParam();
     }
 #endif
 }

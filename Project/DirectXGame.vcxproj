@@ -268,6 +268,7 @@
     <ClCompile Include="Game\Enemy\Types\StrongEnemy.cpp" />
     <ClCompile Include="Game\Enemy\AttackBomb\AttackBomb.cpp" />
     <ClCompile Include="Game\Enemy\AttackBomb\BossAttackBombManager.cpp" />
+    <ClCompile Include="Game\Enemy\AttackBomb\BossAttackBombParameter.cpp" />
     <ClCompile Include="Game\Field\Field.cpp" />
     <ClCompile Include="Game\Field\SideRope\SideRope.cpp" />
     <ClCompile Include="Game\Field\SideRope\SideRopeController.cpp" />
@@ -653,6 +654,7 @@
     <ClInclude Include="Game\Enemy\Types\StrongEnemy.h" />
     <ClInclude Include="Game\Enemy\AttackBomb\AttackBomb.h" />
     <ClInclude Include="Game\Enemy\AttackBomb\BossAttackBombManager.h" />
+    <ClInclude Include="Game\Enemy\AttackBomb\BossAttackBombParameter.h" />
     <ClInclude Include="Game\Field\Field.h" />
     <ClInclude Include="Game\Field\SideRope\RopeBoundParam.h" />
     <ClInclude Include="Game\Field\SideRope\SideRope.h" />

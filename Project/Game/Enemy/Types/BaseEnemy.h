@@ -117,6 +117,8 @@ public:
     // ダメージを受けたときのコールバックを設定
     void SetOnDamageTakenCallback(std::function<void()> cb) { onDamageTaken_ = std::move(cb); }
 
+    virtual void AdjustParam() {}
+
     // behavior変更
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);

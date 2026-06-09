@@ -125,8 +125,11 @@ void PostEffectData::Update(float speedRate) {
     if (durationTime_ > 0.0f) {
         // Easing<float> によるパラメータ更新
         paramEase_.Update(timeSpeed);
-        SetMainParam(easedParam_);
-        ApplyToRenderer();
+        // finish callback が playState_ を STOPPED にした場合は ApplyToRenderer をスキップ
+        if (playState_ == PlayState::PLAYING) {
+            SetMainParam(easedParam_);
+            ApplyToRenderer();
+        }
     } else {
         // durationTime が 0 → 一度適用して終了
         ApplyToRenderer();

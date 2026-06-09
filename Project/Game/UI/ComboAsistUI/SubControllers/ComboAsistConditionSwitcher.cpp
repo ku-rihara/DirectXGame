@@ -16,7 +16,7 @@ void ComboAsistConditionSwitcher::Init(
 
 
 ///==========================================================
-/// 自動条件切替（プレイヤー状態に基づく）
+/// 自動条件切替
 ///==========================================================
 bool ComboAsistConditionSwitcher::CheckAutoConditionSwitch(
     bool isVisible,

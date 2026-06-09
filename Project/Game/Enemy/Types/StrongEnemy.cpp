@@ -19,6 +19,7 @@
 #include <cmath>
 #include <imgui.h>
 
+
 StrongEnemy::~StrongEnemy() {
     SetOnDamageTakenCallback(nullptr);
     if (bombManager_) {
@@ -93,6 +94,7 @@ void StrongEnemy::InitBombManager() {
         bombManager_->SetDeathTimer(player->GetContext().pDeathTimer);
         bombManager_->SetPlayer(player);
     }
+    bombManager_->SetParam(GetBaseInfo()->GetManager()->GetBombParam());
 }
 
 void StrongEnemy::Update() {

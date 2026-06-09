@@ -6,6 +6,7 @@
 #include "DamageReaction/EnemyDamageReactionController.h"
 // Parameter
 #include "Parameter/EnemyParameter.h"
+#include "Enemy/AttackBomb/BossAttackBombParameter.h"
 // Pool
 #include "Pool/EnemyPool.h"
 // Spawner
@@ -127,8 +128,9 @@ private:
     const std::string groupName_                  = "Enemies";
 
     // 敵のパラメータ、スポーン管理
-    std::unique_ptr<EnemyParameter> param_;
-    std::unique_ptr<EnemySpawner> spawner_;
+    std::unique_ptr<EnemyParameter>          param_;
+    std::unique_ptr<BossAttackBombParameter> bombParam_;
+    std::unique_ptr<EnemySpawner>            spawner_;
 
     // 他クラスのポインタ
     Player* pPlayer_                                   = nullptr;
@@ -180,7 +182,8 @@ public:
     float GetHpBarDisplayDistance() const { return param_->GetHpBarDisplayDistance(); }
     float GetUIocclusionRadius() const { return param_->GetUiOcclusionRadius(); }
     EnemySpawner* GetSpawner() const { return spawner_.get(); }
-    EnemyParameter* GetParam() const { return param_.get(); }
+    EnemyParameter*          GetParam()     const { return param_.get(); }
+    BossAttackBombParameter* GetBombParam() const { return bombParam_.get(); }
 
     bool IsAnyEnemyInAnticipation() const;
 
