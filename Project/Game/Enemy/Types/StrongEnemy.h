@@ -31,6 +31,7 @@ public:
     void Init(const Vector3& spownPos) override;
     void Update() override;
     void SpawnRenditionInit() override;
+    void PrepareForPool() override;
 
     void StartFlee();
     void StartTaunt();

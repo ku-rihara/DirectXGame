@@ -27,6 +27,13 @@ StrongEnemy::~StrongEnemy() {
     }
 }
 
+void StrongEnemy::PrepareForPool() {
+    if (bombManager_) {
+        bombManager_->Stop();
+    }
+    BaseEnemy::PrepareForPool();
+}
+
 void StrongEnemy::Init(const Vector3& spawnPos) {
     isTaunting_        = false;
     isTauntFontMoving_ = false;

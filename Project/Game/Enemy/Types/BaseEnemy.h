@@ -74,7 +74,7 @@ public:
     /// <summary>
     /// プールへ返却する前に呼ぶクリーンアップ
     /// </summary>
-    void PrepareForPool();
+    virtual void PrepareForPool();
 
     /// <summary>
     /// スプライトUIの表示

@@ -71,7 +71,7 @@ public:
     void Init();
     int Load(const std::string& filename);
     void Unload(int soundId);
-    void Play(const std::string& soundName, float volume);
+    void Play(const std::string& soundName, float volume = 1.0f);
     void Finalize();
 
     IXAudio2* GetXAudio2() const { return xAudio2_.Get(); }
