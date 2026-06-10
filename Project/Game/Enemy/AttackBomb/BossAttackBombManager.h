@@ -12,7 +12,7 @@
 #include <vector>
 
 class GameCamera;
-class DeathTimer;
+class StressGauge;
 class Player;
 
 /// <summary>
@@ -37,7 +37,7 @@ private:
 
     // 他クラスのポインタ
     GameCamera* pGameCamera_ = nullptr;
-    DeathTimer* pDeathTimer_ = nullptr;
+    StressGauge* pStressGauge_ = nullptr;
     Player*     pPlayer_     = nullptr;
     KetaEngine::PostEffectPlayer postEffectPlayer_;
 
@@ -56,7 +56,7 @@ public:
     void SetBossPosition(const Vector3& pos)          { bossPos_     = pos; }
     void SetPlayerPosition(const Vector3& pos)        { playerPos_   = pos; }
     void SetGameCamera(GameCamera* camera)            { pGameCamera_ = camera; }
-    void SetDeathTimer(DeathTimer* dt)                { pDeathTimer_ = dt; }
+    void SetStressGauge(StressGauge* dt)                { pStressGauge_ = dt; }
     void SetPlayer(Player* player)                    { pPlayer_     = player; }
     void SetParam(const BossAttackBombParameter* p)   { pParam_      = p; }
 };

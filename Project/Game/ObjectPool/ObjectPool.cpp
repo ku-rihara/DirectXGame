@@ -1,6 +1,6 @@
 #include "ObjectPool.h"
-#include "Enemy/Types/NormalEnemy.h"
-#include "Enemy/Types/StrongEnemy.h"
+#include "Enemy/Types/EntourageEnemy.h"
+#include "Enemy/Types/LeaderEnemy.h"
 
 template <typename T>
 void ObjectPool<T>::PreAllocate(int capacity) {
@@ -50,5 +50,5 @@ size_t ObjectPool<T>::Size() const {
 }
 
 // 明示的インスタンス化
-template class ObjectPool<NormalEnemy>;
-template class ObjectPool<StrongEnemy>;
+template class ObjectPool<EntourageEnemy>;
+template class ObjectPool<LeaderEnemy>;

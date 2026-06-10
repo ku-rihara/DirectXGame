@@ -213,7 +213,7 @@
       "spawn_offset": 0.0
     },
     {
-      "name": "NormalEnemySpawn",
+      "name": "EntourageEnemySpawn",
       "group_id": 0,
       "spawnTime": 0.20000000298023224,
       "position": [
@@ -248,12 +248,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.20000000298023224,
       "parent_boss_name": "BossEnemySpawn"
     },
     {
-      "name": "NormalEnemySpawn.001",
+      "name": "EntourageEnemySpawn.001",
       "group_id": 0,
       "spawnTime": 0.20000000298023224,
       "position": [
@@ -288,12 +288,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.20000000298023224,
       "parent_boss_name": "BossEnemySpawn"
     },
     {
-      "name": "NormalEnemySpawn.002",
+      "name": "EntourageEnemySpawn.002",
       "group_id": 0,
       "spawnTime": 0.5,
       "position": [
@@ -328,12 +328,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn"
     },
     {
-      "name": "NormalEnemySpawn.003",
+      "name": "EntourageEnemySpawn.003",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -368,12 +368,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "NormalEnemySpawn.004",
+      "name": "EntourageEnemySpawn.004",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -408,12 +408,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "NormalEnemySpawn.005",
+      "name": "EntourageEnemySpawn.005",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -448,12 +448,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "NormalEnemySpawn.006",
+      "name": "EntourageEnemySpawn.006",
       "group_id": 0,
       "spawnTime": 0.5,
       "position": [
@@ -488,12 +488,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn"
     },
     {
-      "name": "NormalEnemySpawn.007",
+      "name": "EntourageEnemySpawn.007",
       "group_id": 0,
       "spawnTime": 0.5,
       "position": [
@@ -528,12 +528,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn"
     },
     {
-      "name": "NormalEnemySpawn.008",
+      "name": "EntourageEnemySpawn.008",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -568,12 +568,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "NormalEnemySpawn.009",
+      "name": "EntourageEnemySpawn.009",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -608,12 +608,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "NormalEnemySpawn.010",
+      "name": "EntourageEnemySpawn.010",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -648,12 +648,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "NormalEnemySpawn.011",
+      "name": "EntourageEnemySpawn.011",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -688,12 +688,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "NormalEnemySpawn.012",
+      "name": "EntourageEnemySpawn.012",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -728,12 +728,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "NormalEnemySpawn.013",
+      "name": "EntourageEnemySpawn.013",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -768,12 +768,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.014",
+      "name": "EntourageEnemySpawn.014",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -808,12 +808,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.001"
     },
     {
-      "name": "NormalEnemySpawn.015",
+      "name": "EntourageEnemySpawn.015",
       "group_id": 2,
       "spawnTime": 3.5999999046325684,
       "position": [
@@ -848,12 +848,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 2.0,
       "parent_boss_name": "BossEnemySpawn.002"
     },
     {
-      "name": "NormalEnemySpawn.016",
+      "name": "EntourageEnemySpawn.016",
       "group_id": 2,
       "spawnTime": 3.5999999046325684,
       "position": [
@@ -888,12 +888,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 2.0,
       "parent_boss_name": "BossEnemySpawn.002"
     },
     {
-      "name": "NormalEnemySpawn.017",
+      "name": "EntourageEnemySpawn.017",
       "group_id": 2,
       "spawnTime": 3.5999999046325684,
       "position": [
@@ -928,12 +928,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 2.0,
       "parent_boss_name": "BossEnemySpawn.002"
     },
     {
-      "name": "NormalEnemySpawn.018",
+      "name": "EntourageEnemySpawn.018",
       "group_id": 2,
       "spawnTime": 3.5999999046325684,
       "position": [
@@ -968,12 +968,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 2.0,
       "parent_boss_name": "BossEnemySpawn.002"
     },
     {
-      "name": "NormalEnemySpawn.019",
+      "name": "EntourageEnemySpawn.019",
       "group_id": 2,
       "spawnTime": 3.5999999046325684,
       "position": [
@@ -1008,12 +1008,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 2.0,
       "parent_boss_name": "BossEnemySpawn.002"
     },
     {
-      "name": "NormalEnemySpawn.020",
+      "name": "EntourageEnemySpawn.020",
       "group_id": 2,
       "spawnTime": 3.5999999046325684,
       "position": [
@@ -1048,12 +1048,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 2.0,
       "parent_boss_name": "BossEnemySpawn.002"
     },
     {
-      "name": "NormalEnemySpawn.021",
+      "name": "EntourageEnemySpawn.021",
       "group_id": 2,
       "spawnTime": 3.5999999046325684,
       "position": [
@@ -1088,12 +1088,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 2.0,
       "parent_boss_name": "BossEnemySpawn.002"
     },
     {
-      "name": "NormalEnemySpawn.022",
+      "name": "EntourageEnemySpawn.022",
       "group_id": 2,
       "spawnTime": 3.5999999046325684,
       "position": [
@@ -1128,12 +1128,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 2.0,
       "parent_boss_name": "BossEnemySpawn.002"
     },
     {
-      "name": "NormalEnemySpawn.023",
+      "name": "EntourageEnemySpawn.023",
       "group_id": 2,
       "spawnTime": 3.5999999046325684,
       "position": [
@@ -1168,12 +1168,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 2.0,
       "parent_boss_name": "BossEnemySpawn.002"
     },
     {
-      "name": "NormalEnemySpawn.024",
+      "name": "EntourageEnemySpawn.024",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -1208,12 +1208,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.003"
     },
     {
-      "name": "NormalEnemySpawn.025",
+      "name": "EntourageEnemySpawn.025",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -1248,12 +1248,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.003"
     },
     {
-      "name": "NormalEnemySpawn.026",
+      "name": "EntourageEnemySpawn.026",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -1288,12 +1288,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.003"
     },
     {
-      "name": "NormalEnemySpawn.027",
+      "name": "EntourageEnemySpawn.027",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -1328,12 +1328,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.003"
     },
     {
-      "name": "NormalEnemySpawn.028",
+      "name": "EntourageEnemySpawn.028",
       "group_id": 1,
       "spawnTime": 1.7999999523162842,
       "position": [
@@ -1368,12 +1368,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.003"
     },
     {
-      "name": "NormalEnemySpawn.029",
+      "name": "EntourageEnemySpawn.029",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1408,12 +1408,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.030",
+      "name": "EntourageEnemySpawn.030",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1448,12 +1448,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.031",
+      "name": "EntourageEnemySpawn.031",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1488,12 +1488,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.032",
+      "name": "EntourageEnemySpawn.032",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1528,12 +1528,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.033",
+      "name": "EntourageEnemySpawn.033",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1568,12 +1568,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.034",
+      "name": "EntourageEnemySpawn.034",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1608,12 +1608,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.035",
+      "name": "EntourageEnemySpawn.035",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1648,12 +1648,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.036",
+      "name": "EntourageEnemySpawn.036",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1688,12 +1688,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.037",
+      "name": "EntourageEnemySpawn.037",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1728,12 +1728,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.038",
+      "name": "EntourageEnemySpawn.038",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1768,12 +1768,12 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     },
     {
-      "name": "NormalEnemySpawn.039",
+      "name": "EntourageEnemySpawn.039",
       "group_id": 2,
       "spawnTime": 2.0999999046325684,
       "position": [
@@ -1808,7 +1808,7 @@
           1.5
         ]
       },
-      "enemy_type": "NormalEnemy",
+      "enemy_type": "EntourageEnemy",
       "spawn_offset": 0.5,
       "parent_boss_name": "BossEnemySpawn.004"
     }

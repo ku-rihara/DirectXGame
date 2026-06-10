@@ -177,8 +177,8 @@ void GameIntroManager::SetGameBackGroundObject(GameBackGroundObject* gameBackGro
     pGameBackGroundObject_ = gameBackGroundObject;
 }
 
-void GameIntroManager::SetDeathTimerGauge(DeathTimerGauge* deathTimerGauge) {
-    pDeathTimerGauge_ = deathTimerGauge;
+void GameIntroManager::SetStressGaugeGauge(StressGaugeGauge* StressGaugeGauge) {
+    pStressGaugeGauge_ = StressGaugeGauge;
 }
 
 void GameIntroManager::ClassisSet() {
@@ -189,7 +189,7 @@ void GameIntroManager::ClassisSet() {
         intro->SetPlayer(pPlayer_);
         intro->SetFireInjectors(pFireInjectors_);
         intro->SetGameBackGroundObject(pGameBackGroundObject_);
-        intro->SetDeathTimerGauge(pDeathTimerGauge_);
+        intro->SetStressGaugeGauge(pStressGaugeGauge_);
         intro->SetComboAsistController(pComboAsistController_);
         intro->SetComboSupportSpriteUi(pComboSupportSpriteUi_);
     }

@@ -1,5 +1,5 @@
 #include "Combo.h"
-#include "DeathTimer/DeathTimer.h"
+#include "StressGauge/StressGauge.h"
 #include "Frame/Frame.h"
 #include <imgui.h>
 
@@ -107,6 +107,6 @@ void Combo::Reset() {
     isReset_      = false;
 }
 
-void Combo::SetDeathTimer(DeathTimer* deathTimer) {
-    deathTimer_ = deathTimer;
+void Combo::SetStressGauge(StressGauge* StressGauge) {
+    StressGauge_ = StressGauge;
 }

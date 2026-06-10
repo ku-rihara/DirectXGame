@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Enemy/Types/BaseEnemy.h"
-#include "Enemy/Types/NormalEnemy.h"
-#include "Enemy/Types/StrongEnemy.h"
+#include "Enemy/Types/EntourageEnemy.h"
+#include "Enemy/Types/LeaderEnemy.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <array>
 #include <string>
@@ -25,8 +25,8 @@ public:
     void DrawEnemyParamUI(BaseEnemy::Type type);
 
     const BaseEnemy::Parameter&          GetBaseParam(BaseEnemy::Type type) const;
-    const NormalEnemy::NormalParameter&  GetNormalParam() const { return normalEnemyParam_; }
-    const StrongEnemy::StrongParameter&  GetStrongParam() const { return strongEnemyParam_; }
+    const EntourageEnemy::NormalParameter&  GetNormalParam() const { return EntourageEnemyParam_; }
+    const LeaderEnemy::StrongParameter&  GetStrongParam() const { return LeaderEnemyParam_; }
     float GetHpBarDisplayDistance() const { return hpBarDisplayDistance_; }
     float GetUiOcclusionRadius() const { return uiOcclusionRadius_; }
 
@@ -43,14 +43,14 @@ private:
 
     // 敵の基本パラメータ、種類ごとのパラメータ
     std::array<BaseEnemy::Parameter, 2> parameters_;
-    NormalEnemy::NormalParameter normalEnemyParam_;
-    StrongEnemy::StrongParameter strongEnemyParam_;
+    EntourageEnemy::NormalParameter EntourageEnemyParam_;
+    LeaderEnemy::StrongParameter LeaderEnemyParam_;
 
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     // デバッグ用キャッシュ
     std::array<BaseEnemy::Parameter, 2> cachedParameters_;
-    NormalEnemy::NormalParameter cachedNormalEnemyParam_;
-    StrongEnemy::StrongParameter cachedStrongEnemyParam_;
+    EntourageEnemy::NormalParameter cachedEntourageEnemyParam_;
+    LeaderEnemy::StrongParameter cachedLeaderEnemyParam_;
     bool parametersDirty_ = true;
 #endif
 };

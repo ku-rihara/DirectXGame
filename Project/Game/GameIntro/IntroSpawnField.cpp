@@ -2,7 +2,7 @@
 #include "UI/ComboAsistUI/ComboAsistController.h"
 #include "UI/ComboAsistUI/SupportSprite/ComboSupportSpriteUi.h"
 #include "BackGroundObject/GameBackGroundObject.h"
-#include "DeathTimer/DeathTimerGauge.h"
+#include "StressGauge/StressGaugeGauge.h"
 #include "FireInjectors/FireInjectors.h"
 #include "GameCamera/GameCamera.h"
 #include "player/Player.h"
@@ -64,7 +64,7 @@ void IntroSpawnField::FinishWait() {
     if (pHowToOperate_) {
         scaleEasing_.Update(playSpeed_);
         pHowToOperate_->SetScale(spriteEaseScale_);
-        pDeathTimerGauge_->SetSpriteScales(spriteEaseScale_);
+        pStressGaugeGauge_->SetSpriteScales(spriteEaseScale_);
         if (pComboSupportSpriteUi_) {
             pComboSupportSpriteUi_->SetScale(spriteEaseScale_);
         }
@@ -88,7 +88,7 @@ void IntroSpawnField::FinishWait() {
 
 void IntroSpawnField::Finish() {
     pHowToOperate_->SetScale(Vector2::OneVector());
-    pDeathTimerGauge_->SetSpriteScales(Vector2::OneVector());
+    pStressGaugeGauge_->SetSpriteScales(Vector2::OneVector());
     if (pComboSupportSpriteUi_) {
         pComboSupportSpriteUi_->SetScale(Vector2::OneVector());
     }

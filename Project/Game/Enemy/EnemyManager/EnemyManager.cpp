@@ -7,8 +7,8 @@
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 // Player
 #include "Player/Player.h"
-// DeathTimer
-#include "DeathTimer/DeathTimer.h"
+// StressGauge
+#include "StressGauge/StressGauge.h"
 // Combo
 #include "Combo/Combo.h"
 // LockOn
@@ -51,7 +51,7 @@ EnemyManager::~EnemyManager() {
 void EnemyManager::Init() {
 
     // デバッグ用スポーン位置と敵タイプの初期化
-    selectedEnemyType_ = "NormalEnemy";
+    selectedEnemyType_ = "EntourageEnemy";
     spawnPosition_     = {};
 
     // 他クラスのポインタ取得
@@ -114,9 +114,9 @@ void EnemyManager::RegisterEnemy(std::unique_ptr<BaseEnemy> enemy, int32_t group
         bossByName_[bossName] = enemy.get();
     }
 
-    NormalEnemy* newMinion = nullptr;
+    EntourageEnemy* newMinion = nullptr;
     if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
-        newMinion = static_cast<NormalEnemy*>(enemy.get());
+        newMinion = static_cast<EntourageEnemy*>(enemy.get());
     }
 
     enemies_.push_back(std::move(enemy));
@@ -134,18 +134,18 @@ void EnemyManager::RegisterWaitingEnemy(std::unique_ptr<BaseEnemy> enemy, int32_
 }
 
 ///========================================================================================
-///  NormalEnemyダメージコールバック
+///  EntourageEnemyダメージコールバック
 ///========================================================================================
-void EnemyManager::OnNormalEnemyDamaged(NormalEnemy* ne) {
-    if (pDeathTimer_ && ne->GetZakoState() == NormalEnemy::ZakoState::CrawlBackwards) {
-        pDeathTimer_->OnNormalEnemyHit();
+void EnemyManager::OnEntourageEnemyDamaged(EntourageEnemy* ne) {
+    if (pStressGauge_ && ne->GetZakoState() == EntourageEnemy::ZakoState::CrawlBackwards) {
+        pStressGauge_->OnEntourageEnemyHit();
     }
 }
 
 ///========================================================================================
 ///  ボス・取り巻きリンク
 ///========================================================================================
-void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, const std::string& parentBossName) {
+void EnemyManager::LinkBossAndMinions(int32_t groupID, EntourageEnemy* newMinion, const std::string& parentBossName) {
 
     for (auto& e : enemies_) {
         if (e->GetGroupId() == groupID && e->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG) {
@@ -206,7 +206,7 @@ void EnemyManager::LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion, c
 ///  煽り状態更新
 ///========================================================================================
 void EnemyManager::UpdateTauntState() {
-    if (!pPlayer_ || !pDeathTimer_) {
+    if (!pPlayer_ || !pStressGauge_) {
         return;
     }
 
@@ -216,11 +216,11 @@ void EnemyManager::UpdateTauntState() {
         }
 
         bool bossIsTaunting = false;
-        if (StrongEnemy* strong = dynamic_cast<StrongEnemy*>(boss)) {
+        if (LeaderEnemy* strong = dynamic_cast<LeaderEnemy*>(boss)) {
             bossIsTaunting = strong->IsTaunting();
         }
 
-        for (NormalEnemy* zako : minions) {
+        for (EntourageEnemy* zako : minions) {
             if (!zako || zako->GetIsDeath()) {
                 continue;
             }
@@ -241,7 +241,7 @@ void EnemyManager::OnBossKilled(BaseEnemy* dyingBoss) {
 
     auto it = minionsByBoss_.find(dyingBoss);
     if (it != minionsByBoss_.end()) {
-        for (NormalEnemy* zako : it->second) {
+        for (EntourageEnemy* zako : it->second) {
             if (zako && !zako->GetIsDeath()) {
                 zako->StartFlee();
             }
@@ -276,18 +276,18 @@ bool EnemyManager::ActivateSingleWaitingEnemy(int32_t groupID) {
     BaseEnemy::Type t = enemy->GetBaseInfo()->GetType();
     enemy->GetBaseInfo()->SetParameter(t, param_->GetBaseParam(t));
     if (t == BaseEnemy::Type::STRONG) {
-        static_cast<StrongEnemy*>(enemy.get())->SetStrongParameter(param_->GetStrongParam());
+        static_cast<LeaderEnemy*>(enemy.get())->SetStrongParameter(param_->GetStrongParam());
     }
     enemy->RefreshCollision();
 
     enemy->GetAnimator()->SetAnimationActive(true);
     enemy->ChangeBehavior(std::make_unique<EnemySpawn>(enemy.get()));
 
-    NormalEnemy* newMinion = nullptr;
+    EntourageEnemy* newMinion = nullptr;
     std::string bossName   = "";
 
     if (t == BaseEnemy::Type::NORMAL) {
-        newMinion = static_cast<NormalEnemy*>(enemy.get());
+        newMinion = static_cast<EntourageEnemy*>(enemy.get());
         bossName  = newMinion->GetParentBossName();
     }
 
@@ -348,7 +348,7 @@ void EnemyManager::Update() {
             enemy->GetBaseInfo()->SetParameter(t, param_->GetBaseParam(t));
             enemy->RefreshCollision();
             if (t == BaseEnemy::Type::STRONG) {
-                static_cast<StrongEnemy*>(enemy.get())->SetStrongParameter(param_->GetStrongParam());
+                static_cast<LeaderEnemy*>(enemy.get())->SetStrongParameter(param_->GetStrongParam());
             }
         }
     }
@@ -364,7 +364,7 @@ void EnemyManager::Update() {
             if (enemies_[i]->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG) {
                 OnBossKilled(enemies_[i].get());
                 if (spawner_) {
-                    spawner_->OnStrongEnemyDestroyed(groupID);
+                    spawner_->OnLeaderEnemyDestroyed(groupID);
                 }
             }
 
@@ -377,7 +377,7 @@ void EnemyManager::Update() {
             }
 
             if (enemies_[i]->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
-                NormalEnemy* dying = static_cast<NormalEnemy*>(enemies_[i].get());
+                EntourageEnemy* dying = static_cast<EntourageEnemy*>(enemies_[i].get());
                 BaseEnemy* boss    = dying->GetBoss();
                 if (boss) {
                     auto mit = minionsByBoss_.find(boss);
@@ -528,8 +528,8 @@ void EnemyManager::SetGameCamera(GameCamera* gameCamera) {
     pGameCamera_ = gameCamera;
 }
 
-void EnemyManager::SetDeathTimer(DeathTimer* deathTimer) {
-    pDeathTimer_ = deathTimer;
+void EnemyManager::SetStressGauge(StressGauge* StressGauge) {
+    pStressGauge_ = StressGauge;
 }
 
 void EnemyManager::UpdateAvailableAnimationsForEditor(BaseEnemy* enemy) {

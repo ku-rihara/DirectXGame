@@ -7,7 +7,7 @@
 #include <memory>
 
 constexpr int32_t kComboLevel = 5;
-class DeathTimer;
+class StressGauge;
 /// <summary>
 /// コンボシステムの管理クラス
 /// </summary>
@@ -33,7 +33,7 @@ private:
 private:
     // UIコントローラ
     std::unique_ptr<ComboUIController> uiController_ = nullptr;
-    DeathTimer* deathTimer_                          = nullptr;
+    StressGauge* StressGauge_                          = nullptr;
 
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Combo";
@@ -57,5 +57,5 @@ public:
     int32_t GetLevelUPNum(int32_t level) const { return LevelUpNum[level]; }
     bool GetIsReset() const { return isReset_; }
 
-    void SetDeathTimer(DeathTimer* deathTimer);
+    void SetStressGauge(StressGauge* StressGauge);
 };

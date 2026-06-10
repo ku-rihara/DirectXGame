@@ -13,8 +13,8 @@
 #include "Spawner/EnemySpawner.h"
 // BaseEnemy
 #include "Enemy/Types/BaseEnemy.h"
-#include "Enemy/Types/NormalEnemy.h"
-#include "Enemy/Types/StrongEnemy.h"
+#include "Enemy/Types/EntourageEnemy.h"
+#include "Enemy/Types/LeaderEnemy.h"
 // HPBar
 #include "Enemy/UIs/HPBar/EnemyHPBarColorConfig.h"
 
@@ -30,7 +30,7 @@ class Player;
 class Combo;
 class GameCamera;
 class KillCounter;
-class DeathTimer;
+class StressGauge;
 
 /// <summary>
 /// 敵を管理するクラス
@@ -75,8 +75,8 @@ public:
     // エディター用にアニメーションリストを更新
     void UpdateAvailableAnimationsForEditor(BaseEnemy* enemy);
 
-    // NormalEnemyがダメージを受けたときのコールバック用
-    void OnNormalEnemyDamaged(NormalEnemy* ne);
+    // EntourageEnemyがダメージを受けたときのコールバック用
+    void OnEntourageEnemyDamaged(EntourageEnemy* ne);
 
     /// <summary>
     /// 敵のオブジェクトプールから1体取得
@@ -108,7 +108,7 @@ private:
     /// <param name="groupID"> グループID</param>
     /// <param name="newMinion"> 新しいザコ敵</param>
     /// <param name="parentBossName"> 親ボス名</param>
-    void LinkBossAndMinions(int32_t groupID, NormalEnemy* newMinion = nullptr, const std::string& parentBossName = "");
+    void LinkBossAndMinions(int32_t groupID, EntourageEnemy* newMinion = nullptr, const std::string& parentBossName = "");
 
     // ザコ敵の状態更新
     void UpdateTauntState();
@@ -137,7 +137,7 @@ private:
     GameCamera* pGameCamera_                           = nullptr;
     Combo* pCombo_                                     = nullptr;
     KillCounter* pKillCounter_                         = nullptr;
-    DeathTimer* pDeathTimer_                           = nullptr;
+    StressGauge* pStressGauge_                           = nullptr;
     const KetaEngine::ViewProjection* pViewProjection_ = nullptr;
 
     // ダメージリアクション管理
@@ -147,12 +147,12 @@ private:
     std::vector<std::unique_ptr<BaseEnemy>> enemies_;
     // damageReactionController_より後に宣言することで、プール内の敵を先に破棄する
     std::unique_ptr<EnemyPool> pool_;
-    std::vector<std::string> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
+    std::vector<std::string> enemyTypes_ = {"EntourageEnemy", "LeaderEnemy"};
 
     // 待機中の敵のリスト
     std::unordered_map<int32_t, std::vector<std::unique_ptr<BaseEnemy>>> waitingEnemies_;
     // ボスとザコ敵の紐付け
-    std::unordered_map<BaseEnemy*, std::vector<NormalEnemy*>> minionsByBoss_;
+    std::unordered_map<BaseEnemy*, std::vector<EntourageEnemy*>> minionsByBoss_;
     // ボスの名前とポインタの紐付け
     std::unordered_map<std::string, BaseEnemy*> bossByName_;
     // ボスとグループIDの紐付け
@@ -192,7 +192,7 @@ public:
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     Combo* GetCombo() const { return pCombo_; }
     KillCounter* GetKillCounter() const { return pKillCounter_; }
-    DeathTimer* GetDeathTimer() const { return pDeathTimer_; }
+    StressGauge* GetStressGauge() const { return pStressGauge_; }
     EnemyHPBarColorConfig* GetHPBarColorConfig() { return &hpBarColorConfig_; }
 
     ///========================================================
@@ -202,6 +202,6 @@ public:
     void SetGameCamera(GameCamera* gameCamera);
     void SetCombo(Combo* combo);
     void SetKillCounter(KillCounter* killCounter);
-    void SetDeathTimer(DeathTimer* deathTimer);
+    void SetStressGauge(StressGauge* StressGauge);
     void SetViewProjection(const KetaEngine::ViewProjection* vp) { pViewProjection_ = vp; }
 };

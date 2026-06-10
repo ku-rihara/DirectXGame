@@ -13,8 +13,8 @@
 #include "ComboScene/ComboDirector.h"
 // KillCounter
 #include "KillCounter/KillCounter.h"
-// DeathTimer
-#include "DeathTimer/DeathTimer.h"
+// StressGauge
+#include "StressGauge/StressGauge.h"
 // Enemy
 #include "Enemy/EnemyManager/EnemyManager.h"
 #include "Enemy/EnemyManager/Spawner/ContinuousEnemySpawner.h"
@@ -95,7 +95,7 @@ private:
         std::unique_ptr<PlayerComboAttackController> playerComboAttackController_ = nullptr;
         std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
         std::unique_ptr<AudienceController> audienceController_                   = nullptr;
-        std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
+        std::unique_ptr<StressGauge> StressGauge_                                   = nullptr;
         std::unique_ptr<KillCounter> killCounter_                                 = nullptr;
         std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
         std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;

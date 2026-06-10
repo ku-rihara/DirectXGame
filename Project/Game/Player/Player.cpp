@@ -5,8 +5,8 @@
 #include "Enemy/Types/BaseEnemy.h"
 // CollisionUtils
 #include "utility/CollisionPush/CollisionPushUtils.h"
-// DeathTimer
-#include "DeathTimer/DeathTimer.h"
+// StressGauge
+#include "StressGauge/StressGauge.h"
 
 // light
 #include "Light/AmbientLight.h"
@@ -380,8 +380,8 @@ void Player::SetComboAttackController(PlayerComboAttackController* playerComboAt
     context_.comboAttackController = playerComboAttackController;
 }
 
-void Player::SetDeathTimer(DeathTimer* deathTimer) {
-    context_.pDeathTimer = deathTimer;
+void Player::SetStressGauge(StressGauge* StressGauge) {
+    context_.pStressGauge = StressGauge;
    
 }
 

@@ -3,45 +3,45 @@
 
 void EnemyPool::Init() {
 
-    // プールにNormalEnemyのインスタンスを事前確保
-    for (int32_t i = 0; i < kNormalEnemyPoolSize; ++i) {
-        auto normalEnemy = std::make_unique<NormalEnemy>();
-        normalEnemy->SetIsAdaptCollision(false);
-        normalPool_.Release(std::move(normalEnemy));
+    // プールにEntourageEnemyのインスタンスを事前確保
+    for (int32_t i = 0; i < kEntourageEnemyPoolSize; ++i) {
+        auto entourageEnemy = std::make_unique<EntourageEnemy>();
+        entourageEnemy->SetIsAdaptCollision(false);
+        normalPool_.Release(std::move(entourageEnemy));
     }
 
-    // プールにStrongEnemyのインスタンスを事前確保
-    for (int32_t i = 0; i < kStrongEnemyPoolSize; ++i) {
-        auto strongEnemy = std::make_unique<StrongEnemy>();
-        strongEnemy->SetIsAdaptCollision(false);
-        strongPool_.Release(std::move(strongEnemy));
+    // プールにLeaderEnemyのインスタンスを事前確保
+    for (int32_t i = 0; i < kLeaderEnemyPoolSize; ++i) {
+        auto leaderEnemy = std::make_unique<LeaderEnemy>();
+        leaderEnemy->SetIsAdaptCollision(false);
+        strongPool_.Release(std::move(leaderEnemy));
     }
 }
 
 std::unique_ptr<BaseEnemy> EnemyPool::Acquire(BaseEnemy::Type type) {
 
-    // タイプに応じてNormalEnemyかStrongEnemyをプールから取得
+    // タイプに応じてEntourageEnemyかLeaderEnemyをプールから取得
     if (type == BaseEnemy::Type::NORMAL) {
-        auto normalEnemy = normalPool_.Acquire();
-        assert(normalEnemy && "NormalEnemy pool exhausted");
-        if (!normalEnemy) {
-            return std::make_unique<NormalEnemy>();
+        auto entourageEnemy = normalPool_.Acquire();
+        assert(entourageEnemy && "EntourageEnemy pool exhausted");
+        if (!entourageEnemy) {
+            return std::make_unique<EntourageEnemy>();
         }
-        return normalEnemy;
+        return entourageEnemy;
     } else {
-        auto strongEnemy = strongPool_.Acquire();
-        assert(strongEnemy && "StrongEnemy pool exhausted");
-        if (!strongEnemy) {
-            return std::make_unique<StrongEnemy>();
+        auto leaderEnemy = strongPool_.Acquire();
+        assert(leaderEnemy && "LeaderEnemy pool exhausted");
+        if (!leaderEnemy) {
+            return std::make_unique<LeaderEnemy>();
         }
-        return strongEnemy;
+        return leaderEnemy;
     }
 }
 
 void EnemyPool::Release(std::unique_ptr<BaseEnemy> enemy) {
     if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::NORMAL) {
-        normalPool_.Release(std::unique_ptr<NormalEnemy>(static_cast<NormalEnemy*>(enemy.release())));
+        normalPool_.Release(std::unique_ptr<EntourageEnemy>(static_cast<EntourageEnemy*>(enemy.release())));
     } else {
-        strongPool_.Release(std::unique_ptr<StrongEnemy>(static_cast<StrongEnemy*>(enemy.release())));
+        strongPool_.Release(std::unique_ptr<LeaderEnemy>(static_cast<LeaderEnemy*>(enemy.release())));
     }
 }

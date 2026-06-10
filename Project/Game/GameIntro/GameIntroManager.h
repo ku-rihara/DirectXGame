@@ -81,7 +81,7 @@ private:
     Player* pPlayer_                             = nullptr;
     FireInjectors* pFireInjectors_               = nullptr;
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
-    DeathTimerGauge* pDeathTimerGauge_           = nullptr;
+    StressGaugeGauge* pStressGaugeGauge_           = nullptr;
 
 public:
     // getter
@@ -96,7 +96,7 @@ public:
     void SetPlayer(Player* player);
     void SetFireInjectors(FireInjectors* fireInjectors);
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject);
-    void SetDeathTimerGauge(DeathTimerGauge* deathTimerGauge);
+    void SetStressGaugeGauge(StressGaugeGauge* StressGaugeGauge);
     void SetSpeedMultiplier(float multiplier) { currentPlaySpeedRate_ = multiplier; }
     void SetComboAsistController(ComboAsistController* controller) { pComboAsistController_ = controller; }
     void SetComboSupportSpriteUi(ComboSupportSpriteUi* ui) { pComboSupportSpriteUi_ = ui; }

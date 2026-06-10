@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Enemy/Types/BaseEnemy.h"
-#include "Enemy/Types/NormalEnemy.h"
-#include "Enemy/Types/StrongEnemy.h"
+#include "Enemy/Types/EntourageEnemy.h"
+#include "Enemy/Types/LeaderEnemy.h"
 #include "ObjectPool/ObjectPool.h"
 
 #include <memory>
@@ -23,10 +23,10 @@ public:
 private:
 
     // プールサイズ
-    const int32_t kNormalEnemyPoolSize = 48;
-    const int32_t kStrongEnemyPoolSize = 8;
+    const int32_t kEntourageEnemyPoolSize = 48;
+    const int32_t kLeaderEnemyPoolSize = 8;
 
-    // NormalEnemyとStrongEnemyのオブジェクトプール
-    ObjectPool<NormalEnemy> normalPool_;
-    ObjectPool<StrongEnemy> strongPool_;
+    // EntourageEnemyとLeaderEnemyのオブジェクトプール
+    ObjectPool<EntourageEnemy> normalPool_;
+    ObjectPool<LeaderEnemy> strongPool_;
 };

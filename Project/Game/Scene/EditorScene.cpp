@@ -128,7 +128,7 @@ void EditorScene::ObjectInit() {
     backGroundObjectManager_     = std::make_unique<BackGroundObjectManager>();
     comboDirector_               = std::make_unique<ComboDirector>();
     ObjectFromBlender_           = std::make_unique<KetaEngine::ObjectFromBlender>();
-    deathTimer_                  = std::make_unique<DeathTimer>();
+    StressGauge_                  = std::make_unique<StressGauge>();
     killCounter_                 = std::make_unique<KillCounter>();
     comboAsistController_        = std::make_unique<ComboAsistController>();
     unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
@@ -153,7 +153,7 @@ void EditorScene::ObjectInit() {
     killCounter_->Init();
     sideRopeController_->Init();
     audienceController_->Init();
-    deathTimer_->Init();
+    StressGauge_->Init();
     viewProjection_.Init();
 
     ObjectFromBlender_->LoadJsonFile("gameScene.json");
@@ -174,13 +174,13 @@ void EditorScene::SetClassPointer() {
     player_->SetGameCamera(gameCamera_.get());
     player_->SetComboAttackController(playerComboAttackController_.get());
     player_->SetCombo(combo_.get());
-    player_->SetDeathTimer(deathTimer_.get());
-    player_->SetDeathFragPointer(&deathTimer_->GetIsDeath());
+    player_->SetStressGauge(StressGauge_.get());
+    player_->SetDeathFragPointer(&StressGauge_->GetIsDeath());
 
-    combo_->SetDeathTimer(deathTimer_.get());
+    combo_->SetStressGauge(StressGauge_.get());
 
     comboDirector_->SetPlayer(player_.get());
-    comboDirector_->SetComboAndDeathTimer(combo_.get(), deathTimer_.get());
+    comboDirector_->SetComboAndStressGauge(combo_.get(), StressGauge_.get());
     comboDirector_->SetComboLevelObjHolder(backGroundObjectManager_->GetComboLevelObjHolder());
     comboDirector_->SetAudienceController(audienceController_.get());
 

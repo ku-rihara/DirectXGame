@@ -4,7 +4,7 @@
         "Bound_BoundNum": 1,
         "Bound_InitialBounceRate": 0.9399999976158142,
         "Normal_DamageAnimationName": "EnemyNormalDamage",
-        "Strong_DamageAnimationName": "StrongEnemyDefaultDamage",
+        "Strong_DamageAnimationName": "LeaderEnemyDefaultDamage",
         "Normal_KnockBackDamping": 0.30000001192092896,
         "Normal_KnockBackTime": 0.3100000023841858,
         "ReactionState": 2,

@@ -31,9 +31,9 @@ void EnemyInitializer::ResetFlags() {
 void EnemyInitializer::InitAnimator() {
     std::string modelFolder;
     if (enemy_->baseInfo_.GetType() == BaseEnemy::Type::NORMAL) {
-        modelFolder = "NormalEnemy/";
+        modelFolder = "EntourageEnemy/";
     } else {
-        modelFolder = "StrongEnemy/";
+        modelFolder = "LeaderEnemy/";
     }
     enemy_->animator_.Init(modelFolder);
 }

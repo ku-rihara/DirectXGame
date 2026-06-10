@@ -16,7 +16,7 @@ bl_info = {
 from .create_ico_sphere import MYADDON_OT_create_ico_sphere
 from .export_scene import MYADDON_OT_export_scene
 from .stretch_vertex import MYADDON_OT_stretch_vertex
-from .enemy_spawner import MYADDON_OT_create_spawn_normalenemy, MYADDON_OT_create_spawn_strongEnemy
+from .enemy_spawner import MYADDON_OT_create_spawn_EntourageEnemy, MYADDON_OT_create_spawn_LeaderEnemy
 
 
 class TOPBAR_MT_my_menu(bpy.types.Menu):
@@ -45,12 +45,12 @@ class TOPBAR_MT_my_menu(bpy.types.Menu):
             text=MYADDON_OT_export_scene.bl_label,)
         
          #オペレータを追加
-        self.layout.operator(MYADDON_OT_create_spawn_normalenemy.bl_idname, 
-            text=MYADDON_OT_create_spawn_normalenemy.bl_label,)
+        self.layout.operator(MYADDON_OT_create_spawn_EntourageEnemy.bl_idname, 
+            text=MYADDON_OT_create_spawn_EntourageEnemy.bl_label,)
         
          #オペレータを追加
-        self.layout.operator(MYADDON_OT_create_spawn_strongEnemy.bl_idname, 
-            text=MYADDON_OT_create_spawn_strongEnemy.bl_label,)
+        self.layout.operator(MYADDON_OT_create_spawn_LeaderEnemy.bl_idname, 
+            text=MYADDON_OT_create_spawn_LeaderEnemy.bl_label,)
 
     #既存のメニューにサブメニューを追加
     def submenu(self,context):

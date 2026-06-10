@@ -23,7 +23,7 @@ private:
         float fieldMargin;
         int32_t maxRetryCount;
         int32_t maxSpawnCount = -1;
-        std::string enemyType = "NormalEnemy";
+        std::string enemyType = "EntourageEnemy";
     };
 
 public:

@@ -12,7 +12,7 @@
 #include "LockOn/LockOn.h"
 #include "LockOn/LockOnController.h"
 // Player
-#include "DeathTimer/DeathTimer.h"
+#include "StressGauge/StressGauge.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/Player.h"
@@ -122,7 +122,7 @@ void ComboAttackAction::Init() {
 void ComboAttackAction::Update(float atkSpeed) {
 
     // 死亡チェック
-    if (pOwner_->GetContext().pDeathTimer && pOwner_->GetContext().pDeathTimer->GetIsDeath()) {
+    if (pOwner_->GetContext().pStressGauge && pOwner_->GetContext().pStressGauge->GetIsDeath()) {
         pOwner_->ChangeCombBoRoot();
         return;
     }

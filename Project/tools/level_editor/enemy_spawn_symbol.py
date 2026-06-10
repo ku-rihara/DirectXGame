@@ -11,15 +11,15 @@ class SpawnNames():
     FILENAME = 2 
  
     names = {} 
-    names["NormalEnemy"] = ("PrototypeNormalEnemySpawn", "NormalEnemySpawn", "Models/NormalEnemy/NormalEnemy.obj") 
-    names["StrongEnemy"] = ("PrototypeStrongEnemySpawn", "StrongEnemySpawn", "Models/StrongEnemy/StrongEnemy.obj") 
+    names["EntourageEnemy"] = ("PrototypeEntourageEnemySpawn", "EntourageEnemySpawn", "Models/EntourageEnemy/EntourageEnemy.obj") 
+    names["LeaderEnemy"] = ("PrototypeLeaderEnemySpawn", "LeaderEnemySpawn", "Models/LeaderEnemy/LeaderEnemy.obj") 
 
 
 class MYADDON_OT_spawn_import_symbol(bpy.types.Operator): 
     bl_idname = "myaddon.spawn_import_symbol" 
     bl_label = "出現ポイントシンボルImport" 
     bl_description = "出現ポイントのシンボルをImportします" 
-    prototype_object_name = "PrototypeNormalEnemySpawn" 
+    prototype_object_name = "PrototypeEntourageEnemySpawn" 
     object_type = "EnemySpawn" 
  
     type: bpy.props.StringProperty(name="Type", default="")
@@ -60,8 +60,8 @@ class MYADDON_OT_spawn_import_symbol(bpy.types.Operator):
             self.load_obj(self.type)
         else:
             # タイプが指定されていない場合は全てをロード
-            self.load_obj("NormalEnemy") 
-            self.load_obj("StrongEnemy") 
+            self.load_obj("EntourageEnemy") 
+            self.load_obj("LeaderEnemy") 
  
         return {'FINISHED'} 
 
@@ -71,7 +71,7 @@ class MYADDON_OT_create_spawn_symbol(bpy.types.Operator):
     bl_description = "出現ポイントのシンボルを作成します" 
     bl_options = {'REGISTER', 'UNDO'} 
  
-    type: bpy.props.StringProperty(name="Type", default="NormalEnemy") 
+    type: bpy.props.StringProperty(name="Type", default="EntourageEnemy") 
  
     def execute(self, context): 
         print("出現ポイントのシンボルを作成します") 

@@ -18,8 +18,8 @@ class MYADDON_PT_spawn_manager_panel(bpy.types.Panel):
         
         # 通常敵と強敵の作成ボタン
         row = box.row(align=True)
-        row.operator("myaddon.create_spawn_normalenemy", text="通常敵", icon='CUBE')
-        row.operator("myaddon.create_spawn_strongenemy", text="強敵", icon='META_CUBE')
+        row.operator("myaddon.create_spawn_EntourageEnemy", text="通常敵", icon='CUBE')
+        row.operator("myaddon.create_spawn_LeaderEnemy", text="強敵", icon='META_CUBE')
         
         # シンボルインポートボタン
         box.operator("myaddon.spawn_import_symbol", text="シンボルをインポート", icon='IMPORT')

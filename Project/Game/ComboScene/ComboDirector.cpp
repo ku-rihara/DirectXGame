@@ -77,9 +77,9 @@ void ComboDirector::SetPlayer(Player* player) {
     pPlayer_ = player;
 }
 
-void ComboDirector::SetComboAndDeathTimer(Combo* combo, DeathTimer* deathTimer) {
+void ComboDirector::SetComboAndStressGauge(Combo* combo, StressGauge* StressGauge) {
     pCombo_ = combo;
-    pCombo_->SetDeathTimer(deathTimer);
+    pCombo_->SetStressGauge(StressGauge);
 }
 
 void ComboDirector::SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder) {

@@ -6,7 +6,7 @@ class Player;
 class Combo;
 class ComboLevelObjHolder;
 class AudienceController;
-class DeathTimer;
+class StressGauge;
 
 /// <summary>
 /// コンボシーンの制御クラス
@@ -50,7 +50,7 @@ private:
 public:
     // setter
     void SetPlayer(Player* player);
-    void SetComboAndDeathTimer(Combo* combo, DeathTimer* deathTimer);
+    void SetComboAndStressGauge(Combo* combo, StressGauge* StressGauge);
     void SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder);
     void SetAudienceController(AudienceController* audienceController);
 

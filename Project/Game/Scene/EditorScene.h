@@ -8,8 +8,8 @@
 #include "Combo/Combo.h"
 #include "BackGroundObject/BackGroundObjectManager.h"
 #include "ComboScene/ComboDirector.h"
-// DeathTimer
-#include "DeathTimer/DeathTimer.h"
+// StressGauge
+#include "StressGauge/StressGauge.h"
 // KillCounter
 #include "KillCounter/KillCounter.h"
 // Enemy
@@ -77,7 +77,7 @@ private:
     std::unique_ptr<AudienceController> audienceController_                   = nullptr;
     std::unique_ptr<BackGroundObjectManager> backGroundObjectManager_         = nullptr;
     std::unique_ptr<ComboDirector> comboDirector_                             = nullptr;
-    std::unique_ptr<DeathTimer> deathTimer_                                   = nullptr;
+    std::unique_ptr<StressGauge> StressGauge_                                   = nullptr;
     std::unique_ptr<KillCounter> killCounter_                                 = nullptr;
     std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
     std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;

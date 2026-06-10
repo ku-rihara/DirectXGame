@@ -31,7 +31,7 @@ from .ot_emitter import OBJECT_OT_add_emitter, OBJECT_OT_remove_emitter, Emitter
 from .easing_file import OBJECT_PT_easing_filename
 from .easing_step import MYADDON_OT_add_easing_step, MYADDON_OT_remove_easing_step
 from .easing_group import MYADDON_OT_add_easing_group, MYADDON_OT_remove_easing_group
-from .enemy_spawner import MYADDON_OT_create_spawn_strongEnemy,MYADDON_OT_create_spawn_normalenemy
+from .enemy_spawner import MYADDON_OT_create_spawn_LeaderEnemy,MYADDON_OT_create_spawn_EntourageEnemy
 from .enemy_spawn_symbol import MYADDON_OT_create_spawn_symbol,MYADDON_OT_spawn_import_symbol
 from .enemy_spawn_manager import SpawnGroupManager,MYADDON_OT_set_spawn_group, MYADDON_OT_toggle_group_visibility, MYADDON_OT_show_group_info,MYADDON_OT_adjust_spawn_time
 from .pt_enemy_spawner import MYADDON_PT_spawn_manager_panel,MYADDON_OT_hide_all_groups, MYADDON_OT_show_all_groups
@@ -64,8 +64,8 @@ classes = (
     MYADDON_OT_show_group_info,
     MYADDON_OT_spawn_import_symbol,
     MYADDON_OT_create_spawn_symbol,
-    MYADDON_OT_create_spawn_normalenemy,
-    MYADDON_OT_create_spawn_strongEnemy,
+    MYADDON_OT_create_spawn_EntourageEnemy,
+    MYADDON_OT_create_spawn_LeaderEnemy,
     MYADDON_OT_adjust_spawn_time,
     MYADDON_OT_hide_all_groups,
     MYADDON_OT_show_all_groups,

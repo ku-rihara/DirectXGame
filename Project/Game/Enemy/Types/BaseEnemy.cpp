@@ -15,8 +15,8 @@
 // Player
 #include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/Player.h"
-// DeathTimer
-#include "DeathTimer/DeathTimer.h"
+// StressGauge
+#include "StressGauge/StressGauge.h"
 // Combo
 #include "Combo/Combo.h"
 // Field

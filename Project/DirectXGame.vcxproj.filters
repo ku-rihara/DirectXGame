@@ -91,7 +91,7 @@
     <Filter Include="Game\ComboScene">
       <UniqueIdentifier>{318FED24-11FC-44FA-BEDB-7DBEF70B0329}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\DeathTimer">
+    <Filter Include="Game\StressGauge">
       <UniqueIdentifier>{C42FA14F-F78E-4701-A304-0BA52204452B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy">
@@ -490,10 +490,10 @@
     <Filter Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior">
       <UniqueIdentifier>{1F337F58-3959-4CEC-88C6-2CC9E195B247}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior">
+    <Filter Include="Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior">
       <UniqueIdentifier>{68ED5E9C-AA93-4C91-A446-205EF7D3A271}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior">
+    <Filter Include="Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior">
       <UniqueIdentifier>{35E7A99A-2F2B-4E41-9AD1-F57E851E1430}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\AttackBomb">
@@ -1083,11 +1083,11 @@
     <ClCompile Include="Game\ComboScene\ComboDirector.cpp">
       <Filter>Game\ComboScene</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyFleeBehavior.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior\LeaderEnemyFleeBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior\LeaderEnemyTauntBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.cpp">
       <Filter>Game\Enemy\CollisionBox</Filter>
@@ -1158,11 +1158,11 @@
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp">
       <Filter>Engine\utility\TimeModeSelector</Filter>
     </ClCompile>
-    <ClCompile Include="Game\DeathTimer\DeathTimer.cpp">
-      <Filter>Game\DeathTimer</Filter>
+    <ClCompile Include="Game\StressGauge\StressGauge.cpp">
+      <Filter>Game\StressGauge</Filter>
     </ClCompile>
-    <ClCompile Include="Game\DeathTimer\DeathTimerGauge.cpp">
-      <Filter>Game\DeathTimer</Filter>
+    <ClCompile Include="Game\StressGauge\StressGaugeGauge.cpp">
+      <Filter>Game\StressGauge</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
@@ -1176,20 +1176,20 @@
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyWait.cpp">
       <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior\EntourageEnemyBehaviorBase.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoFlockBehavior.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior\ZakoFlockBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoTauntBehavior.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior\ZakoTauntBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoCrawlBackwardsBehavior.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior\ZakoCrawlBackwardsBehavior.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.cpp">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior\LeaderEnemyBehaviorBase.cpp">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
@@ -1251,10 +1251,10 @@
     <ClCompile Include="Game\Enemy\Types\BaseEnemy.cpp">
       <Filter>Game\Enemy\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Types\NormalEnemy.cpp">
+    <ClCompile Include="Game\Enemy\Types\EntourageEnemy.cpp">
       <Filter>Game\Enemy\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Types\StrongEnemy.cpp">
+    <ClCompile Include="Game\Enemy\Types\LeaderEnemy.cpp">
       <Filter>Game\Enemy\Types</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\AttackBomb\AttackBomb.cpp">
@@ -2209,11 +2209,11 @@
     <ClCompile Include="Game\ResultObj\ResultUIItem.cpp">
       <Filter>Game\ResultObj</Filter>
     </ClCompile>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyFleeBehavior.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior\LeaderEnemyFleeBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyTauntBehavior.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior\LeaderEnemyTauntBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\CollisionBox\EnemyAttackCollisionBox.h">
       <Filter>Game\Enemy\CollisionBox</Filter>
@@ -2296,11 +2296,11 @@
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h">
       <Filter>Engine\utility\TimeModeSelector</Filter>
     </ClInclude>
-    <ClInclude Include="Game\DeathTimer\DeathTimer.h">
-      <Filter>Game\DeathTimer</Filter>
+    <ClInclude Include="Game\StressGauge\StressGauge.h">
+      <Filter>Game\StressGauge</Filter>
     </ClInclude>
-    <ClInclude Include="Game\DeathTimer\DeathTimerGauge.h">
-      <Filter>Game\DeathTimer</Filter>
+    <ClInclude Include="Game\StressGauge\StressGaugeGauge.h">
+      <Filter>Game\StressGauge</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior</Filter>
@@ -2314,20 +2314,20 @@
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\CommonBehavior\EnemyWait.h">
       <Filter>Game\Enemy\Behavior\ActionBehavior\CommonBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\NormalEnemyBehaviorBase.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior\EntourageEnemyBehaviorBase.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoFlockBehavior.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior\ZakoFlockBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoTauntBehavior.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior\ZakoTauntBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior\ZakoCrawlBackwardsBehavior.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\NormalEnemyBehavior</Filter>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior\ZakoCrawlBackwardsBehavior.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\EntourageEnemyBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior\StrongEnemyBehaviorBase.h">
-      <Filter>Game\Enemy\Behavior\ActionBehavior\StrongEnemyBehavior</Filter>
+    <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior\LeaderEnemyBehaviorBase.h">
+      <Filter>Game\Enemy\Behavior\ActionBehavior\LeaderEnemyBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h">
       <Filter>Game\Enemy\Behavior\DamageReactionBehavior</Filter>
@@ -2392,10 +2392,10 @@
     <ClInclude Include="Game\Enemy\Component\EnemyInitializer.h">
       <Filter>Game\Enemy\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Types\NormalEnemy.h">
+    <ClInclude Include="Game\Enemy\Types\EntourageEnemy.h">
       <Filter>Game\Enemy\Types</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Types\StrongEnemy.h">
+    <ClInclude Include="Game\Enemy\Types\LeaderEnemy.h">
       <Filter>Game\Enemy\Types</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\AttackBomb\AttackBomb.h">

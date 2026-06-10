@@ -35,7 +35,7 @@ class LockOnController;
 class GameCamera;
 class Combo;
 class PlayerComboAttackController;
-class DeathTimer;
+class StressGauge;
 
 /// <summary>
 /// プレイヤークラス
@@ -47,7 +47,7 @@ private:
         GameCamera* pGameCamera                            = nullptr;
         Combo* pCombo                                      = nullptr;
         PlayerComboAttackController* comboAttackController = nullptr;
-        DeathTimer* pDeathTimer                            = nullptr;
+        StressGauge* pStressGauge                            = nullptr;
     };
 
 public:
@@ -200,7 +200,7 @@ public:
     /// Setter Method
     /// ===================================================
     void SetViewProjection(const KetaEngine::ViewProjection* viewProjection);
-    void SetDeathTimer(DeathTimer* deathTimer);
+    void SetStressGauge(StressGauge* StressGauge);
     void SetDeathFragPointer(const bool* isDeath) { isDeath_ = isDeath; }
     void SetIsDeathRenditionFinish(bool isFinish) { isDeathRenditionFinish_ = isFinish; }
     void SetIsIgnoreUnlockState(bool isIgnore) { isIgnoreUnlockState_ = isIgnore; }

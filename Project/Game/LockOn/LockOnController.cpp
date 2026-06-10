@@ -2,7 +2,7 @@
 
 // target
 #include "Enemy/Types/BaseEnemy.h"
-#include "Enemy/Types/StrongEnemy.h"
+#include "Enemy/Types/LeaderEnemy.h"
 #include "Enemy/EnemyManager/EnemyManager.h"
 
 void LockOnController::Init() {
@@ -17,7 +17,7 @@ void LockOnController::Update(Player* pPlayer, const KetaEngine::ViewProjection&
 
     // 強敵のみをロックオン対象とする
     for (const auto& enemy : enemies) {
-        if (enemy && dynamic_cast<StrongEnemy*>(enemy.get())) {
+        if (enemy && dynamic_cast<LeaderEnemy*>(enemy.get())) {
             targets.emplace_back(enemy.get());
         }
     }

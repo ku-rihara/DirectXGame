@@ -37,7 +37,7 @@ private:
         int32_t objectCount;
         int32_t spawnedCount     = 0;
         int32_t aliveCount       = 0;
-        int32_t strongEnemyCount = 0;
+        int32_t LeaderEnemyCount = 0;
         int32_t nextFazeEnemyNum = 0;
         bool isActive            = false;
         bool isCompleted         = false;
@@ -78,7 +78,7 @@ public:
     /// </summary>
     /// <param name="groupId">グループID</param>
     void OnEnemyDestroyed(int groupId);
-    void OnStrongEnemyDestroyed(int groupId);
+    void OnLeaderEnemyDestroyed(int groupId);
 
     // パラメータ編集
     void AdjustParam();
@@ -142,7 +142,7 @@ private:
     const std::string directoryPath_ = "Resources/EnemyParameter/";
 
     // 敵タイプのリスト
-    std::array<std::string, 2> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
+    std::array<std::string, 2> enemyTypes_ = {"EntourageEnemy", "LeaderEnemy"};
     // スポーンポイントとグループ情報
     std::vector<SpawnPoint> spawnPoints_;
     std::vector<SpawnGroup> spawnGroups_;

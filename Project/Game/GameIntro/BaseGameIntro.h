@@ -8,7 +8,7 @@ class FireInjectors;
 class GameBackGroundObject;
 class GameCamera;
 class OperateUI;
-class DeathTimerGauge;
+class StressGaugeGauge;
 class ComboAsistController;
 class ComboSupportSpriteUi;
 
@@ -46,7 +46,7 @@ protected:
     Player* pPlayer_                             = nullptr;
     OperateUI* pHowToOperate_                 = nullptr;
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
-    DeathTimerGauge* pDeathTimerGauge_           = nullptr;
+    StressGaugeGauge* pStressGaugeGauge_           = nullptr;
     ComboAsistController* pComboAsistController_   = nullptr;
     ComboSupportSpriteUi* pComboSupportSpriteUi_  = nullptr;
 
@@ -64,7 +64,7 @@ public:
     void SetHowToOperate(OperateUI* howToOperate) { pHowToOperate_ = howToOperate; }
     void SetGameCamera(GameCamera* gameCamera) { pGameCamera_ = gameCamera; }
     void SetPlayer(Player* player) { pPlayer_ = player; }
-    void SetDeathTimerGauge(DeathTimerGauge* deathTimerGauge) { pDeathTimerGauge_ = deathTimerGauge; }
+    void SetStressGaugeGauge(StressGaugeGauge* StressGaugeGauge) { pStressGaugeGauge_ = StressGaugeGauge; }
     void SetFireInjectors(FireInjectors* fireInjectors) { pFireInjectors_ = fireInjectors; }
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject) { pGameBackGroundObject_ = gameBackGroundObject; }
     void SetComboAsistController(ComboAsistController* controller) { pComboAsistController_ = controller; }

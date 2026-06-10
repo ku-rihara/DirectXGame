@@ -1,5 +1,5 @@
 #include "GameScenePlaying.h"
-#include "DeathTimer/DeathTimerGauge.h"
+#include "StressGauge/StressGaugeGauge.h"
 #include "Frame/Frame.h"
 #include "GameSceneGameOver.h"
 #include "GameScenePose.h"
@@ -62,10 +62,10 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     GameResultInfo::GetInstance()->RecordSurvivalTime(static_cast<int32_t>(elapsedTimeSec_));
 
     // デスタイマー更新
-    obj.deathTimer_->Update(timeSpeed);
+    obj.StressGauge_->Update(timeSpeed);
 
     // ゲームオーバー時にコントローラ振動を一度だけ停止
-    if (obj.deathTimer_->GetIsDeath() && !gameOverHandled_) {
+    if (obj.StressGauge_->GetIsDeath() && !gameOverHandled_) {
         gameOverHandled_ = true;
 
         size_t numPads = KetaEngine::Input::GetNumberOfJoysticks();
@@ -86,7 +86,7 @@ void GameScenePlaying::Update([[maybe_unused]] float timeSpeed) {
     obj.nextAttackHintUI_->Update();
 
     // ゲーム終了判定
-    if (obj.deathTimer_->GetIsDeath() && obj.player_->GetIsDeathRenditionFinish()) {
+    if (obj.StressGauge_->GetIsDeath() && obj.player_->GetIsDeathRenditionFinish()) {
         pOwner_->ChangeState(std::make_unique<GameSceneGameOver>(pOwner_));
         return;
     }

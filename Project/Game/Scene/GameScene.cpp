@@ -70,7 +70,7 @@ void GameScene::Debug() {
     gameObj_.gameIntroManager_->AdjustParam();
     gameObj_.audienceController_->AdjustParam();
     gameObj_.lockOnController_->AdjustParam();
-    gameObj_.deathTimer_->AdjustParam();
+    gameObj_.StressGauge_->AdjustParam();
     gameObj_.killCounter_->AdjustParam();
     gameObj_.comboAsistController_->AdjustParam();
     gameObj_.unlockNotifier_->AdjustParam();
@@ -130,7 +130,7 @@ void GameScene::ObjectInit() {
     gameObj_.playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
     gameObj_.sideRopeController_          = std::make_unique<SideRopeController>();
     gameObj_.audienceController_          = std::make_unique<AudienceController>();
-    gameObj_.deathTimer_                  = std::make_unique<DeathTimer>();
+    gameObj_.StressGauge_                  = std::make_unique<StressGauge>();
     gameObj_.killCounter_                 = std::make_unique<KillCounter>();
     gameObj_.comboAsistController_        = std::make_unique<ComboAsistController>();
     gameObj_.unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
@@ -159,7 +159,7 @@ void GameScene::ObjectInit() {
     gameObj_.killCounter_->Init();
     gameObj_.sideRopeController_->Init();
     gameObj_.audienceController_->Init();
-    gameObj_.deathTimer_->Init();
+    gameObj_.StressGauge_->Init();
     viewProjection_.Init();
     gameObj_.nextAttackHintUI_->Init(gameObj_.player_.get());
 
@@ -173,7 +173,7 @@ void GameScene::SetClassPointer() {
     gameObj_.enemyManager_->SetCombo(gameObj_.combo_.get());
     gameObj_.enemyManager_->SetKillCounter(gameObj_.killCounter_.get());
     gameObj_.enemyManager_->SetGameCamera(gameObj_.gameCamera_.get());
-    gameObj_.enemyManager_->SetDeathTimer(gameObj_.deathTimer_.get());
+    gameObj_.enemyManager_->SetStressGauge(gameObj_.StressGauge_.get());
 
     gameObj_.continuousEnemySpawner_->SetEnemyManager(gameObj_.enemyManager_.get());
     gameObj_.continuousEnemySpawner_->SetPlayer(gameObj_.player_.get());
@@ -187,13 +187,13 @@ void GameScene::SetClassPointer() {
     gameObj_.gameIntroManager_->SetGameBackGroundObject(gameObj_.backGroundObjectManager_->GetGameBackGroundObject());
     gameObj_.operateUI_->SetPlayer(gameObj_.player_.get());
     gameObj_.gameIntroManager_->SetHowToOperate(gameObj_.operateUI_.get());
-    gameObj_.gameIntroManager_->SetDeathTimerGauge(gameObj_.deathTimer_->GetDeathTimerGauge());
+    gameObj_.gameIntroManager_->SetStressGaugeGauge(gameObj_.StressGauge_->GetStressGaugeGauge());
     gameObj_.gameIntroManager_->SetComboAsistController(gameObj_.comboAsistController_.get());
     gameObj_.gameIntroManager_->SetComboSupportSpriteUi(gameObj_.comboSupportSpriteUi_.get());
     gameObj_.gameIntroManager_->ClassisSet();
 
     gameObj_.comboDirector_->SetPlayer(gameObj_.player_.get());
-    gameObj_.comboDirector_->SetComboAndDeathTimer(gameObj_.combo_.get(), gameObj_.deathTimer_.get());
+    gameObj_.comboDirector_->SetComboAndStressGauge(gameObj_.combo_.get(), gameObj_.StressGauge_.get());
     gameObj_.comboDirector_->SetComboLevelObjHolder(gameObj_.backGroundObjectManager_->GetComboLevelObjHolder());
     gameObj_.comboDirector_->SetAudienceController(gameObj_.audienceController_.get());
 
@@ -204,8 +204,8 @@ void GameScene::SetClassPointer() {
     gameObj_.player_->SetGameCamera(gameObj_.gameCamera_.get());
     gameObj_.player_->SetComboAttackController(gameObj_.playerComboAttackController_.get());
     gameObj_.player_->SetCombo(gameObj_.combo_.get());
-    gameObj_.player_->SetDeathTimer(gameObj_.deathTimer_.get());
-    gameObj_.player_->SetDeathFragPointer(&gameObj_.deathTimer_->GetIsDeathRef());
+    gameObj_.player_->SetStressGauge(gameObj_.StressGauge_.get());
+    gameObj_.player_->SetDeathFragPointer(&gameObj_.StressGauge_->GetIsDeathRef());
 
     gameObj_.playerComboAttackController_->SetEditorSuite(effectEditorSuite_.get());
     gameObj_.playerComboAttackController_->SetPlayer(gameObj_.player_.get());

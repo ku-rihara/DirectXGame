@@ -3,8 +3,8 @@
 #include "../../GameCamera/GameCamera.h"
 // Audio
 #include "Audio/Audio.h"
-// DeathTimer
-#include "DeathTimer/DeathTimer.h"
+// StressGauge
+#include "StressGauge/StressGauge.h"
 // Frame
 #include "Frame/Frame.h"
 // Player
@@ -72,8 +72,8 @@ void BossAttackBombManager::ThrowBomb() {
             pGameCamera_->PlayShake("DamageCamera");
         }
         // ストレスゲージを増やす
-        if (pDeathTimer_) {
-            pDeathTimer_->TakeDamage(stressAmount);
+        if (pStressGauge_) {
+            pStressGauge_->TakeDamage(stressAmount);
         }
         // エフェクトを再生
         if (pPlayer_) {

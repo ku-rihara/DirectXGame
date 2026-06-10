@@ -1,8 +1,8 @@
 #include "EnemySpawner.h"
 #include "Enemy/EnemyManager/EnemyManager.h"
 #include "Enemy/EnemyManager/Parameter/EnemyParameter.h"
-#include "Enemy/Types/NormalEnemy.h"
-#include "Enemy/Types/StrongEnemy.h"
+#include "Enemy/Types/EntourageEnemy.h"
+#include "Enemy/Types/LeaderEnemy.h"
 #include "MathFunction.h"
 #include <cassert>
 #include <format>
@@ -19,12 +19,12 @@ void EnemySpawner::Init(const std::string& jsonFile, EnemyManager* manager) {
     SettingGroupSpawnPos();
 
     for (auto& group : spawnGroups_) {
-        group.strongEnemyCount = 0;
+        group.LeaderEnemyCount = 0;
         auto it = groupSpawnPoints_.find(group.id);
         if (it != groupSpawnPoints_.end()) {
             for (auto* sp : it->second) {
-                if (sp->enemyType == "StrongEnemy" || sp->enemyType == "BossEnemy") {
-                    group.strongEnemyCount++;
+                if (sp->enemyType == "LeaderEnemy" || sp->enemyType == "BossEnemy") {
+                    group.LeaderEnemyCount++;
                 }
             }
         }
@@ -61,7 +61,7 @@ void EnemySpawner::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     auto* param = pEnemyManager_->GetParam();
     enemy->GetBaseInfo()->SetParameter(type, param->GetBaseParam(type));
     if (type == BaseEnemy::Type::STRONG) {
-        static_cast<StrongEnemy*>(enemy.get())->SetStrongParameter(param->GetStrongParam());
+        static_cast<LeaderEnemy*>(enemy.get())->SetStrongParameter(param->GetStrongParam());
     }
 
     enemy->RefreshCollision();
@@ -76,11 +76,11 @@ void EnemySpawner::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     pEnemyManager_->UpdateAvailableAnimationsForEditor(enemy.get());
 
     if (type == BaseEnemy::Type::NORMAL) {
-        NormalEnemy* ne = static_cast<NormalEnemy*>(enemy.get());
+        EntourageEnemy* ne = static_cast<EntourageEnemy*>(enemy.get());
         ne->SetSpawnOffset(localOffset);
         ne->SetNormalParameter(param->GetNormalParam());
         ne->SetOnDamageTakenCallback([mgr = pEnemyManager_, ne]() {
-            mgr->OnNormalEnemyDamaged(ne);
+            mgr->OnEntourageEnemyDamaged(ne);
         });
     }
 
@@ -110,7 +110,7 @@ void EnemySpawner::PreGenerateEnemy(const std::string& enemyType, const Vector3&
     auto* param = pEnemyManager_->GetParam();
     enemy->GetBaseInfo()->SetParameter(type, param->GetBaseParam(type));
     if (type == BaseEnemy::Type::STRONG) {
-        static_cast<StrongEnemy*>(enemy.get())->SetStrongParameter(param->GetStrongParam());
+        static_cast<LeaderEnemy*>(enemy.get())->SetStrongParameter(param->GetStrongParam());
     }
 
     enemy->RefreshCollision();
@@ -125,11 +125,11 @@ void EnemySpawner::PreGenerateEnemy(const std::string& enemyType, const Vector3&
     pEnemyManager_->UpdateAvailableAnimationsForEditor(enemy.get());
 
     if (type == BaseEnemy::Type::NORMAL) {
-        NormalEnemy* ne = static_cast<NormalEnemy*>(enemy.get());
+        EntourageEnemy* ne = static_cast<EntourageEnemy*>(enemy.get());
         ne->SetSpawnOffset(localOffset);
         ne->SetNormalParameter(param->GetNormalParam());
         ne->SetOnDamageTakenCallback([mgr = pEnemyManager_, ne]() {
-            mgr->OnNormalEnemyDamaged(ne);
+            mgr->OnEntourageEnemyDamaged(ne);
         });
         ne->SetParentBossName(parentBossName);
     }
@@ -203,7 +203,7 @@ void EnemySpawner::ParseJsonData(const std::string& filename) {
 
     bossSpawnPositions_.clear();
     for (const auto& sp : spawnPoints_) {
-        if (sp.enemyType == "BossEnemy" || sp.enemyType == "StrongEnemy") {
+        if (sp.enemyType == "BossEnemy" || sp.enemyType == "LeaderEnemy") {
             bossSpawnPositions_[sp.name] = sp.position;
         }
     }
@@ -275,7 +275,7 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
                 bool used = pEnemyManager_->ActivateSingleWaitingEnemy(spawn->groupId);
                 if (!used) {
                     std::string nameForManager = "";
-                    if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "StrongEnemy") {
+                    if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "LeaderEnemy") {
                         nameForManager = spawn->name;
                     } else {
                         nameForManager = spawn->parentBossName;
@@ -348,7 +348,7 @@ bool EnemySpawner::IsGroupFullyPreGenerated(int32_t groupId) const {
 bool EnemySpawner::IsGroupCompleted(int groupId) const {
     if (groupId >= 0 && groupId < static_cast<int>(spawnGroups_.size())) {
         const SpawnGroup& group = spawnGroups_[groupId];
-        return (group.strongEnemyCount <= 0 && group.spawnedCount == group.objectCount);
+        return (group.LeaderEnemyCount <= 0 && group.spawnedCount == group.objectCount);
     }
     return false;
 }
@@ -375,12 +375,12 @@ void EnemySpawner::RestartLoop() {
         group.aliveCount     = 0;
         group.groupStartTime = 0.0f;
 
-        group.strongEnemyCount = 0;
+        group.LeaderEnemyCount = 0;
         auto it = groupSpawnPoints_.find(group.id);
         if (it != groupSpawnPoints_.end()) {
             for (auto* sp : it->second) {
-                if (sp->enemyType == "StrongEnemy" || sp->enemyType == "BossEnemy") {
-                    group.strongEnemyCount++;
+                if (sp->enemyType == "LeaderEnemy" || sp->enemyType == "BossEnemy") {
+                    group.LeaderEnemyCount++;
                 }
             }
         }
@@ -406,9 +406,9 @@ void EnemySpawner::OnEnemyDestroyed(int groupId) {
     }
 }
 
-void EnemySpawner::OnStrongEnemyDestroyed(int groupId) {
+void EnemySpawner::OnLeaderEnemyDestroyed(int groupId) {
     if (groupId >= 0 && groupId < static_cast<int>(spawnGroups_.size())) {
-        spawnGroups_[groupId].strongEnemyCount = (std::max)(0, spawnGroups_[groupId].strongEnemyCount - 1);
+        spawnGroups_[groupId].LeaderEnemyCount = (std::max)(0, spawnGroups_[groupId].LeaderEnemyCount - 1);
     }
 }
 
@@ -429,7 +429,7 @@ void EnemySpawner::PreGenerateNextGroupEnemy() {
     for (auto* spawn : it->second) {
         if (!spawn->preGenerated) {
             std::string nameForManager = "";
-            if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "StrongEnemy") {
+            if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "LeaderEnemy") {
                 nameForManager = spawn->name;
             } else {
                 nameForManager = spawn->parentBossName;
@@ -462,7 +462,7 @@ void EnemySpawner::PreGenerateCurrentGroupEnemy() {
     for (auto* spawn : it->second) {
         if (!spawn->preGenerated && !spawn->hasSpawned) {
             std::string nameForManager = "";
-            if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "StrongEnemy") {
+            if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "LeaderEnemy") {
                 nameForManager = spawn->name;
             } else {
                 nameForManager = spawn->parentBossName;

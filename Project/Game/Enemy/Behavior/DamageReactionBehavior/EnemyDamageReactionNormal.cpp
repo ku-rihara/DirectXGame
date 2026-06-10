@@ -2,7 +2,7 @@
 #include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionController.h"
 #include "Enemy/EnemyManager/EnemyManager.h"
 #include "Enemy/Types/BaseEnemy.h"
-#include "Enemy/Types/NormalEnemy.h"
+#include "Enemy/Types/EntourageEnemy.h"
 #include "EnemyDamageReactionRoot.h"
 #include "Frame/Frame.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
@@ -62,8 +62,8 @@ void EnemyDamageReactionNormal::InitReaction() {
     // StumbleBackwards再生中 or 再再生間隔未満の場合はアニメーションをスキップ
     bool skipAnimation = skipAnimation_;
     if (!skipAnimation) {
-        if (NormalEnemy* normalEnemy = dynamic_cast<NormalEnemy*>(pBaseEnemy_)) {
-            skipAnimation = normalEnemy->IsInStumblePhase();
+        if (EntourageEnemy* pEntourageEnemy = dynamic_cast<EntourageEnemy*>(pBaseEnemy_)) {
+            skipAnimation = pEntourageEnemy->IsInStumblePhase();
         }
     }
 
