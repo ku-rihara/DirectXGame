@@ -49,9 +49,7 @@ public:
     RibbonTrail()  = default;
     ~RibbonTrail();
 
-    /// <summary>
-    /// RibbonTrailオブジェクトを作成しマネージャーに登録
-    /// </summary>
+    // 生成してマネージャーに登録
     static RibbonTrail* Create(size_t maxPoints);
 
     /// <summary>
