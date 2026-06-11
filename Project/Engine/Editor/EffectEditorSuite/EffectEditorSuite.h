@@ -75,7 +75,7 @@ private:
     std::unordered_map<EffectEditorType, EffectFileFunc> editorSaveFileMap_;
     std::unordered_map<EffectEditorType, EffectFileFunc> editorLoadFileMap_;
 
-    // マップを初期化するヘルパー関数
+    // マップ初期化
     void InitEditorSelectFileEditMap();
     void InitEditorSaveLoadMaps();
 

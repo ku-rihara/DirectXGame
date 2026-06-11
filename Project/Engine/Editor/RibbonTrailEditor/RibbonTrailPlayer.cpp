@@ -114,7 +114,7 @@ void RibbonTrailPlayer::ApplyArcToTrail() {
         return;
     }
 
-    // 基準座標：SetBasePos/SetBasePosValue で指定、未指定は原点
+    // 基準座標、未指定は原点
     static const Vector3 kOrigin = {0.0f, 0.0f, 0.0f};
     const Vector3& center        = basePos_ ? *basePos_ : kOrigin;
 

@@ -25,6 +25,7 @@ private:
 public:
     static RibbonTrailManager* GetInstance();
 
+    // 登録、解除
     void Register(RibbonTrail* trail);
     void Unregister(RibbonTrail* trail);
 
@@ -34,23 +35,22 @@ public:
     void DrawAll(const ViewProjection& viewProj);
 
     /// <summary>
-    /// 時空歪みシステムの初期化（DirectX初期化後に一度呼ぶ）
+    /// 時空歪みシステムの初期化
     /// </summary>
     void InitDistortion(DirectXCommon* dxCommon, uint32_t width, uint32_t height);
 
     /// <summary>
-    /// 時空歪みパス描画（DrawAll後・PreDraw前に呼ぶ）
-    /// hasExternalDistortion: パーティクルなど外部の歪み描画がある場合true
+    /// 時空歪みパス描画
     /// </summary>
     void DrawDistortionPass(const ViewProjection& viewProj, bool hasExternalDistortion = false);
 
     /// <summary>
-    /// 時空歪みパス終了（DrawDistortionPass後に外部描画がある場合に呼ぶ）
+    /// 時空歪みパス終了
     /// </summary>
     void CloseDistortionPass();
 
     /// <summary>
-    /// 時空歪みポストエフェクト適用（DrawPostEffect内で呼ぶ）
+    /// 時空歪みポストエフェクト適用
     /// </summary>
     void ApplyDistortionEffect(ID3D12GraphicsCommandList* commandList);
 

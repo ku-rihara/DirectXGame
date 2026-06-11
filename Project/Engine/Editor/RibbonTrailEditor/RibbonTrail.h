@@ -40,7 +40,6 @@ enum class ArcPlane {
     XY, ///< 正面（XY平面）
     YZ, ///< 側面（YZ平面）
 };
-
 /// <summary>
 /// リボントレイル描画クラス
 /// </summary>
@@ -57,16 +56,7 @@ public:
     /// </summary>
     void AddPoint(const Vector3& position, const Vector4& startColor, float startWidth, float lifetime = 0.3f);
 
-    /// <summary>
-    /// 弧状にポイントを一括生成する
-    /// basePos    : 弧の中心点（SetBasePosで渡された値 or 直接指定）
-    /// startAngle : 弧の開始角度（ラジアン、平面内）
-    /// endAngle   : 弧の終了角度（ラジアン、平面内）
-    /// radius     : 弧の半径
-    /// direction  : 回転方向（左回転 / 右回転）
-    /// plane      : 弧を描く平面
-    /// segments   : 分割数（省略時は maxPoints_ を使用）
-    /// </summary>
+    // 弧状にポイントを一括生成
     void SetArc(
         const Vector3& basePos,
         float          startAngle,
@@ -76,25 +66,15 @@ public:
         ArcPlane       plane     = ArcPlane::XZ,
         int            segments  = -1);
 
-    /// <summary>
-    /// ポイントの時間経過更新と期限切れ削除
-    /// </summary>
     void Update(float deltaTime);
 
-    /// <summary>
-    /// 描画
-    /// </summary>
     void Draw(const ViewProjection& viewProj);
 
-    /// <summary>
-    /// 全ポイントを即時クリア
-    /// </summary>
     void Clear();
 
     ///========================================================
-    /// Setter（RibbonTrailPlayerから設定）
+    /// Setter
     ///========================================================
-
     /// 末端の色（head→tail グラデーション）
     void SetEndColor(const Vector4& color) { endColor_ = color; }
     /// 末端の幅（head→tail テーパー）

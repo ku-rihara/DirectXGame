@@ -99,10 +99,10 @@ public:
     Vector3 GetMovementDirection() const;
     bool IsTranslationReturning() const;
 
-    // アニメーション開始前のオフセット値を設定
+    // アニメーション前オフセット設定
     void SetPreAnimationOffsets(const Vector3& scale, const Vector3& rotation, const Vector3& translation);
 
-    // プリアニメーションオフセットをオリジナル値にリセット
+    // オフセットをデフォルトに戻す
     void SetPreAnimationOffsetsToOriginalValues() {
         SetPreAnimationOffsets(
             originalValues_[static_cast<size_t>(TransformType::Scale)],

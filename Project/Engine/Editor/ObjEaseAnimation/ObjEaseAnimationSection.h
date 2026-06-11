@@ -189,7 +189,7 @@ public:
     bool IsReturnSection() const { return isReturnSection_; }
     Vector3 GetMovementDirection() const;
 
-    // デバッグ用：Transformの状態を取得
+    // デバッグ用
     TransformState GetTransformState(TransformType type) const {
         return transformParams_[static_cast<size_t>(type)].state;
     }

@@ -10,9 +10,9 @@ namespace KetaEngine {
 
 /// トレイルの追従モード
 enum class TrailFollowMode {
-    Follow,       ///< 対象に追従しながらポイントを追加し続ける（デフォルト）
-    StayInPlace,  ///< 自動追従しない。ポイントはその場に留まり消えていく
-    Arc,          ///< 弧モード。SetArc() で形状を一括生成する
+    Follow,       ///< 対象に追従
+    StayInPlace,  ///< 自動追従しない
+    Arc,          ///< SetArc() で形状を一括生成する
 };
 
 /// <summary>
@@ -26,11 +26,16 @@ public:
 
     void Init(const std::string& name, const std::string& categoryName) override;
     void Update(float speedRate = 1.0f) override;
+
+    // 再生管理
     void Play() override;
     void Reset() override;
+
+    // パラメータ調整
     void AdjustParam();
 
 protected:
+    // パラメータ登録、取得、初期化
     void RegisterParams() override;
     void GetParams() override;
     void InitParams() override;
@@ -71,8 +76,8 @@ private:
     FileSelector distortionTextureSelector_;
 
     // ---- 弧モードパラメータ ----
-    float   arcStartAngleDeg_ = 0.0f;    ///< 弧の開始角度（度数法）
-    float   arcEndAngleDeg_   = 180.0f;  ///< 弧の終了角度（度数法）
+    float   arcStartAngleDeg_ = 0.0f;    ///< 弧の開始角度
+    float   arcEndAngleDeg_   = 180.0f;  ///< 弧の終了角度
     float   arcRadius_        = 1.5f;    ///< 弧の半径
     int32_t arcDirectionInt_  = 0;       ///< 0=反時計回り, 1=時計回り
     int32_t arcPlaneInt_      = 0;       ///< 0=XZ, 1=XY, 2=YZ

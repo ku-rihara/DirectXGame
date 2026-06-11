@@ -104,9 +104,9 @@ private:
     bool isStartEndReverse_ = false;
 
 public:
-    /// -------------------------------------------------------------------------
-    /// Getter methods
-    /// -------------------------------------------------------------------------
+    ///========================================================
+    /// Getter
+    ///========================================================
     const T& GetValue() const { return *adaptTarget_; }
     const T& GetEndValue() const { return endValue_; }
     const T& GetStartValue() const { return startValue_; }
@@ -114,9 +114,9 @@ public:
     bool IsPlaying() const { return isPlaying_; }
     const std::string& GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
     float GetCurrentEaseTime() const { return currentTime_; }
-    /// -------------------------------------------------------------------------
-    /// Setter methods
-    /// -------------------------------------------------------------------------
+    ///========================================================
+    /// Setter
+    ///========================================================
     void SetStartValue(const T& value) { startValue_ = value; }
     void SetStartTimeOffset(float time) { startTimeOffset_ = time; }
     void SetEndValue(const T& value) { endValue_ = value; }

@@ -76,7 +76,7 @@ public:
 
     IXAudio2* GetXAudio2() const { return xAudio2_.Get(); }
 
-    // 利用可能な音声ファイル名一覧を取得
+    // 読み込み済みサウンド名一覧
     std::vector<std::string> GetAvailableSoundNames() const;
 };
 

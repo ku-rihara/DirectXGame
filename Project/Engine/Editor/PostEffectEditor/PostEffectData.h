@@ -27,10 +27,10 @@ public:
     // ImGuiパラメータ調整
     void AdjustParam();
 
-    // レンダラーへパラメータを適用してエフェクトを有効化
+    // レンダラーへ適用
     void ApplyToRenderer();
 
-    // モードの主要パラメータを設定
+    // 主パラメータ設定
     void SetMainParam(float value);
 
 private:
