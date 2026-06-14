@@ -1,10 +1,10 @@
 #pragma once
+#include "3D/Primitive/IPrimitive.h"
 #include "3d/ViewProjection.h"
 #include "Base/Descriptors/SrvManager.h"
-#include "Data/ParticleCSData.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Material/GPUParticleMaterial.h"
-#include "3D/Primitive/IPrimitive.h"
+#include "Data/ParticleCSData.h"
 #include "ResourceData/GPUParticleResourceData.h"
 
 #include <cstdint>
@@ -36,7 +36,7 @@ public:
         std::unique_ptr<GPUParticleResourceData> resourceData;
 
         ParticleEmit* emitSphereData = nullptr;
-        PerView* perViewData          = nullptr;
+        PerView* perViewData         = nullptr;
 
         // emit=0 が続いたフレーム数。一定以上でDispatch/Drawをスキップする。
         // パーティクルのライフタイムが最大でも数秒なので2秒(120f)で安全にスキップ可能。
@@ -44,8 +44,10 @@ public:
     };
 
 public:
-    GPUParticleManager()  = default;
-    ~GPUParticleManager() = default;
+    GPUParticleManager()                                     = default;
+    ~GPUParticleManager()                                    = default;
+    GPUParticleManager(const GPUParticleManager&)            = delete;
+    GPUParticleManager& operator=(const GPUParticleManager&) = delete;
 
     static GPUParticleManager* GetInstance();
 
@@ -61,7 +63,7 @@ public:
     /// <param name="name">グループ名</param>
     /// <param name="modelFilePath">モデルファイルパス</param>
     /// <param name="maxCount">最大パーティクル数</param>
-    void CreateParticleGroup(const std::string& name,const std::string& modelFilePath,int32_t maxCount = 1024);
+    void CreateParticleGroup(const std::string& name, const std::string& modelFilePath, int32_t maxCount = 1024);
 
     /// <summary>
     /// プリミティブベースのパーティクルグループを作成
@@ -69,14 +71,14 @@ public:
     /// <param name="name">グループ名</param>
     /// <param name="type">プリミティブタイプ</param>
     /// <param name="maxCount">最大パーティクル数</param>
-    void CreatePrimitiveParticle(const std::string& name,const PrimitiveType& type, int32_t maxCount);
+    void CreatePrimitiveParticle(const std::string& name, const PrimitiveType& type, int32_t maxCount);
 
     /// <summary>
     /// 指定したグループのパーティクルを放出
     /// </summary>
     /// <param name="name">グループ名</param>
     void Emit(const std::string& name);
-  
+
 private:
     /// <summary>
     /// グループリソースの初期化
@@ -96,7 +98,7 @@ private:
     /// <param name="group">パーティクルグループ</param>
     void DrawGroup(GPUParticleGroup& group);
 
-     // DisPatch処理
+    // DisPatch処理
     void DispatchEmit(GPUParticleGroup& group);
     void DispatchUpdate(GPUParticleGroup& group);
     void DispatchInitParticle(GPUParticleGroup& group);
@@ -115,7 +117,10 @@ public:
     void SetEmitterSphere(const std::string& name, const ParticleEmit& emitter);
     void SetViewProjection(const ViewProjection* view);
 
-    void ResetAllParticles() { particleGroups_.clear(); frameCounter_ = 0; }
+    void ResetAllParticles() {
+        particleGroups_.clear();
+        frameCounter_ = 0;
+    }
     int32_t GetTotalGroupCount() const { return static_cast<int32_t>(particleGroups_.size()); }
     int32_t GetActiveGroupCount() const;
 

@@ -19,11 +19,13 @@ ImGuiManager* ImGuiManager::GetInstance() {
 ///===========================================================
 /// 初期化
 ///===========================================================
-void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager) {
-    winApp;
+void ImGuiManager::Init([[maybe_unused]] WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager) {
+    // 引数をメンバ変数に保存
     dxCommon_    = dxCommon;
     pSrvManager_ = srvManager;
+
 #if defined(_DEBUG) || defined(DEVELOPMENT)
+
     // ImGuiの初期化
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -67,6 +69,7 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
 
     io.Fonts->Build();
 
+   // ImGuiのDirectX12バックエンドを初期化 
     ImGui_ImplDX12_Init(
         dxCommon_->GetDevice().Get(),
         dxCommon_->GetDxSwapChain()->GetDesc().BufferCount,
@@ -80,10 +83,11 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
 }
 
 ///===========================================================
-/// 開始
+/// フレーム開始
 ///===========================================================
 void ImGuiManager::Begin() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
+
     // ImGuiフレーム開始
     ImGui_ImplDX12_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -99,6 +103,7 @@ void ImGuiManager::Begin() {
 ///===========================================================
 void ImGuiManager::SetupDockSpace() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
+
     // フルスクリーンのドッキングスペースを作成
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(viewport->Pos);
@@ -116,6 +121,7 @@ void ImGuiManager::SetupDockSpace() {
         window_flags |= ImGuiWindowFlags_NoBackground;
     }
 
+    // ウィンドウの装飾を無効化
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -142,7 +148,7 @@ void ImGuiManager::SetupDockSpace() {
 }
 
 ///===========================================================
-/// 終わり
+/// フレーム終わり
 ///===========================================================
 void ImGuiManager::preDraw() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
@@ -161,6 +167,9 @@ void ImGuiManager::Finalizer() {
 #endif
 }
 
+///===========================================================
+/// ImGui描画
+///===========================================================
 void ImGuiManager::Draw() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();

@@ -65,8 +65,10 @@ public:
 
     static Audio* GetInstance();
 
-    Audio()  = default;
-    ~Audio() = default;
+    Audio()                        = default;
+    ~Audio()                       = default;
+    Audio(const Audio&)            = delete;
+    Audio& operator=(const Audio&) = delete;
 
     void Init();
     int Load(const std::string& filename);

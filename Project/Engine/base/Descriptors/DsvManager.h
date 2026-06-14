@@ -10,8 +10,10 @@ namespace KetaEngine {
 
 class DsvManager {
 public:
-    DsvManager()  = default;
-    ~DsvManager() = default;
+    DsvManager()                             = default;
+    ~DsvManager()                            = default;
+    DsvManager(const DsvManager&)            = delete;
+    DsvManager& operator=(const DsvManager&) = delete;
 
     /// <summary>
     /// シングルトンインスタンス取得

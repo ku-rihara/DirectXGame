@@ -108,7 +108,6 @@ public:
     float   GetArcRadius()        const { return arcRadius_; }
     int32_t GetArcDirectionInt()  const { return arcDirectionInt_; }
     int32_t GetArcPlaneInt()      const { return arcPlaneInt_; }
-    float   GetArcLifetime()      const { return arcLifetime_; }
 };
 
 } // KetaEngine

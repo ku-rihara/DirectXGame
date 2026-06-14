@@ -32,7 +32,11 @@ class DirectXCommon;
 /// </summary>
 class PostEffectRenderer {
 public:
-    ~PostEffectRenderer() = default;
+    PostEffectRenderer()                                     = default;
+    ~PostEffectRenderer()                                    = default;
+    PostEffectRenderer(const PostEffectRenderer&)            = delete;
+    PostEffectRenderer& operator=(const PostEffectRenderer&) = delete;
+
     static PostEffectRenderer* GetInstance();
 
     /// <summary>
@@ -97,7 +101,7 @@ private:
     std::vector<PostEffectMode> effectStack_;
 
 public:
-   // getter
+    // getter
 
     RadialBlur* GetRadialBlur() {
         return GetEffect<RadialBlur>(PostEffectMode::RADIALBLUR);

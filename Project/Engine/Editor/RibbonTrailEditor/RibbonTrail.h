@@ -114,7 +114,6 @@ private:
     };
 
     static Vector3 CalcPerp(const Vector3& dir, const Vector3& cameraRight);
-    static inline float Lerp(float a, float b, float t) { return a + (b - a) * t; }
 
 private:
     size_t maxPoints_ = 0;

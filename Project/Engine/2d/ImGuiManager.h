@@ -13,7 +13,11 @@ class SrvManager;
 /// </summary>
 class ImGuiManager {
 public:
-    ~ImGuiManager() = default;
+    // 外部からの生成・コピーを禁止
+    ImGuiManager()                               = default;
+    ~ImGuiManager()                              = default;
+    ImGuiManager(const ImGuiManager&)            = delete;
+    ImGuiManager& operator=(const ImGuiManager&) = delete;
 
     static ImGuiManager* GetInstance();
 
@@ -22,11 +26,11 @@ public:
     ///===========================================================
 
     // 初期化、描画
-    void Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager);
+    void Init([[maybe_unused]] WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager);
     void Draw();
 
-    void Begin();     //< 開始
-    void preDraw();   //< 終わり
+    void Begin(); //< 開始
+    void preDraw(); //< 終わり
     void Finalizer(); //< 解放
 
 private:

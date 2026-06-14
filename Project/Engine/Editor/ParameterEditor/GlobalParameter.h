@@ -28,9 +28,12 @@ private:
     using json  = nlohmann::json;
 
 public:
+    GlobalParameter()                                  = default;
+    ~GlobalParameter()                                 = default;
+    GlobalParameter(const GlobalParameter&)            = delete;
+    GlobalParameter& operator=(const GlobalParameter&) = delete;
+
     static GlobalParameter* GetInstance();
-    GlobalParameter()  = default;
-    ~GlobalParameter() = default;
 
     /// <summary>
     /// グループ作成
@@ -133,10 +136,10 @@ public:
     void ClearRegistersForGroup(const std::string& groupName);
 
     // 全登録リセット
-    void ResetAllRegister(); 
+    void ResetAllRegister();
 
     // 全ファイル読み込み
-    void LoadFiles(); 
+    void LoadFiles();
     bool HasRegisters(const std::string& groupName) const;
 
     /// <summary>

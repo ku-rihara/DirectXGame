@@ -31,9 +31,6 @@ SceneManager* SceneManager::GetInstance() {
     return &instance;
 }
 
-SceneManager::~SceneManager() {
-}
-
 void SceneManager::Finalize() {
 
     // シーンの破棄

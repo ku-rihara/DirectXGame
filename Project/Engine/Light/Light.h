@@ -16,12 +16,12 @@ struct CameraForGPU {
 };
 
 struct PlayerOcclusionData {
-    Vector2 screenPos;    // プレイヤーのスクリーン座標
-    float   depth;        // プレイヤーの深度値
-    float   screenRadius; // 判定半径
-    float   ditherAlpha;  // ディザ閾値
-    int32_t enabled;      // 有効フラグ
-    float   pad[2];
+    Vector2 screenPos; // プレイヤーのスクリーン座標
+    float depth; // プレイヤーの深度値
+    float screenRadius; // 判定半径
+    float ditherAlpha; // ディザ閾値
+    int32_t enabled; // 有効フラグ
+    float pad[2];
 };
 
 // ライトの個数データ
@@ -43,8 +43,12 @@ class DirectXCommon;
 /// </summary>
 class Light {
 public:
+    Light()                        = default;
+    ~Light()                       = default;
+    Light(const Light&)            = delete;
+    Light& operator=(const Light&) = delete;
+
     static Light* GetInstance();
-    ~Light() = default;
 
     /// <summary>
     /// 初期化

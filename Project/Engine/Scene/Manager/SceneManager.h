@@ -12,8 +12,12 @@ namespace KetaEngine {
 /// </summary>
 class SceneManager {
 public:
+    SceneManager()                               = default;
+    ~SceneManager()                              = default;
+    SceneManager(const SceneManager&)            = delete;
+    SceneManager& operator=(const SceneManager&) = delete;
+
     static SceneManager* GetInstance();
-    ~SceneManager();
 
     // 更新、描画
     void Update();

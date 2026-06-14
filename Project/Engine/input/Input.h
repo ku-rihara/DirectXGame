@@ -29,9 +29,12 @@ private:
     static std::vector<std::unique_ptr<Gamepad>> gamepads_;
 
 public:
+    Input()                        = default;
+    ~Input()                       = default;
+    Input(const Input&)            = delete;
+    Input& operator=(const Input&) = delete;
+
     static Input* GetInstance();
-    Input()  = default;
-    ~Input() = default;
 
     /// <summary>
     /// 入力システムの初期化

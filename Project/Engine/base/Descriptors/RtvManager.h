@@ -10,8 +10,10 @@ namespace KetaEngine {
 
 class RtvManager {
 public:
-    RtvManager()  = default;
-    ~RtvManager() = default;
+    RtvManager()                             = default;
+    ~RtvManager()                            = default;
+    RtvManager(const RtvManager&)            = delete;
+    RtvManager& operator=(const RtvManager&) = delete;
 
     /// <summary>
     /// シングルトンインスタンス取得

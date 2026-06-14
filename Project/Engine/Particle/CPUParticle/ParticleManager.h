@@ -7,8 +7,8 @@
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 
-#include "Editor/Parameter/ParticleCommonParameters.h"
 #include "3D/Primitive/IPrimitive.h"
+#include "Editor/Parameter/ParticleCommonParameters.h"
 #include "struct/ParticleForGPU.h"
 
 // Easing
@@ -88,13 +88,13 @@ public:
         Vector3 rotateSpeed_;
         Vector4 color_;
         const Vector3* followPos = nullptr;
-        bool useGoalPosition = false;
+        bool useGoalPosition     = false;
         Vector3 goalOffset;
         Vector3 goalTargetPos;
-        bool isRotateForDirection  = false;
-        bool rotateForDirectionX   = true;
-        bool rotateForDirectionY   = true;
-        bool rotateForDirectionZ   = true;
+        bool isRotateForDirection = false;
+        bool rotateForDirectionX  = true;
+        bool rotateForDirectionY  = true;
+        bool rotateForDirectionZ  = true;
         std::unique_ptr<WorldTransform> worldTransform_;
 
         ScaleInFo scaleInfo;
@@ -117,7 +117,7 @@ public:
         std::unique_ptr<Easing<Vector4>> colorAlphaEasing;
 
         ParticleCommon::AlphaMode alphaMode = ParticleCommon::AlphaMode::LifeTime;
-        bool isAdaptAlphaEasing = false;
+        bool isAdaptAlphaEasing             = false;
         std::unique_ptr<Easing<float>> alphaEasing;
 
         UVInfo uvInfo_;
@@ -148,25 +148,26 @@ public:
         Model* model                           = nullptr;
         std::unique_ptr<IPrimitive> primitive_ = nullptr;
         ParticleMaterial material;
-        uint32_t instanceNum                  = 0;
-        uint32_t srvIndex                     = 0;
-        uint32_t currentNum                   = 0;
-        uint32_t textureHandle                = 0;
-        uint32_t dissolveTextureHandle        = 0;
-        uint32_t distortionTextureHandle      = 0; // 歪みノイズテクスチャ
-        ParticleFprGPU* instancingData        = nullptr;
+        uint32_t instanceNum             = 0;
+        uint32_t srvIndex                = 0;
+        uint32_t currentNum              = 0;
+        uint32_t textureHandle           = 0;
+        uint32_t dissolveTextureHandle   = 0;
+        uint32_t distortionTextureHandle = 0; // 歪みノイズテクスチャ
+        ParticleFprGPU* instancingData   = nullptr;
         std::list<Particle> particles;
         GroupParameters param;
         DissolveGroupParams dissolveParams;
         std::unique_ptr<DissolvePlayer> dissolvePlayer;
         std::string lastDissolveTexturePath;
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
-
     };
 
 public:
-    ParticleManager()  = default;
-    ~ParticleManager() = default;
+    ParticleManager()                                  = default;
+    ~ParticleManager()                                 = default;
+    ParticleManager(const ParticleManager&)            = delete;
+    ParticleManager& operator=(const ParticleManager&) = delete;
 
     void Init(SrvManager* srvManager);
     void Finalize() { particleGroups_.clear(); }
@@ -200,9 +201,9 @@ private:
     std::vector<std::string> particleFiles_;
     const std::string ParticleFolderName_ = "Particle";
 
-    std::unique_ptr<ParticleFactory>       factory_;
-    std::unique_ptr<ParticleUpdater>       updater_;
-    std::unique_ptr<ParticleRenderer>      renderer_;
+    std::unique_ptr<ParticleFactory> factory_;
+    std::unique_ptr<ParticleUpdater> updater_;
+    std::unique_ptr<ParticleRenderer> renderer_;
     std::unique_ptr<ParticleGroupRegistry> registry_;
 
 public:
