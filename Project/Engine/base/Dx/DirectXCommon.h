@@ -37,7 +37,7 @@ private:
     /// Private method
     ///==========================================================
 
-    void InitDxClasses();           //< DirectXクラス群の初期化
+    void InitDxClasses(); //< DirectXクラス群の初期化
     void SetupViewportAndScissor(); //< ビューポートとシザー矩形の設定
 
 public:
@@ -48,8 +48,13 @@ public:
     /// public method
     ///==========================================================
 
-    static DirectXCommon* GetInstance(); //< シングルトンインスタンスの取得
-    ~DirectXCommon() = default;
+    DirectXCommon()                                = default;
+    ~DirectXCommon()                               = default;
+    DirectXCommon(const DirectXCommon&)            = delete;
+    DirectXCommon& operator=(const DirectXCommon&) = delete;
+
+    // シングルトンインスタンス
+    static DirectXCommon* GetInstance();
 
     /// <summary>
     /// 初期化
@@ -108,13 +113,13 @@ public:
     D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
     void InitRenderingResources(); //< レンダリングリソースの初期化
-    void WaitForNextFrame();       //< フレーム開始前FLWO待機（BeginFrameで呼ぶ）
-    void PreDraw();                //< 描画前処理
-    void PostDraw();               //< 描画後処理
-    void Finalize();               //< 終了処理
-    void PreRenderTexture();       //< レンダーテクスチャ描画前処理
+    void WaitForNextFrame(); //< フレーム開始前FLWO待機（BeginFrameで呼ぶ）
+    void PreDraw(); //< 描画前処理
+    void PostDraw(); //< 描画後処理
+    void Finalize(); //< 終了処理
+    void PreRenderTexture(); //< レンダーテクスチャ描画前処理
     void DepthBarrierTransition(); //< デプスバリア遷移
-    void KeepAlive();              //< ローディング中にGPU
+    void KeepAlive(); //< ローディング中にGPU
 
 private:
     ImGuiManager* imguiManager_     = nullptr;

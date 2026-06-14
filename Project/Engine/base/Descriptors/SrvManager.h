@@ -11,8 +11,10 @@ namespace KetaEngine {
 
 class SrvManager {
 public:
-    SrvManager()  = default;
-    ~SrvManager() = default;
+    SrvManager()                             = default;
+    ~SrvManager()                            = default;
+    SrvManager(const SrvManager&)            = delete;
+    SrvManager& operator=(const SrvManager&) = delete;
 
     /// <summary>
     /// シングルトンインスタンス取得
@@ -95,9 +97,9 @@ private:
     DirectXCommon* dxCommon_ = nullptr;
 
     uint32_t descriptorSize_; //< デスクリプタサイズ
-    uint32_t useIndex_ = 0;   //< 次に使用するインデックス
+    uint32_t useIndex_ = 0; //< 次に使用するインデックス
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
-  
+
     // リソースとデータ
     std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> instancingResources_;
 
@@ -111,7 +113,6 @@ public:
 
     uint32_t GetDescriptorSize() const { return descriptorSize_; }
     ID3D12DescriptorHeap* GetDescriptorHeap() const { return descriptorHeap_.Get(); }
-
 
     ///===================================================================
     /// setter method
