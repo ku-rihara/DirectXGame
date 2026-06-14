@@ -84,7 +84,7 @@ void TimelineInteractionHandler::HandleDragUpdates(const Vector2& canvasPos, flo
         int deltaFrame = static_cast<int>(deltaX / frameWidth);
         int newFrame   = dragStartFrame_ + deltaFrame;
 
-        // 動かしたフレームを適応
+        // 動かしたフレームを適用
         if (newFrame >= 0 && newFrame <= drawParam_->GetEndFrame()) {
             (*tracks_)[draggingKeyFrame_.trackIndex].keyframes[draggingKeyFrame_.keyIndex].frame = newFrame;
         }

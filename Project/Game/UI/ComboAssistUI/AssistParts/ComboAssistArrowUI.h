@@ -1,14 +1,14 @@
 #pragma once
-#include "BaseComboAsistUI.h"
+#include "BaseComboAssistUI.h"
 #include <cstdint>
 
 /// <summary>
 /// コンボアシストでの矢印UIクラス
 /// </summary>
-class ComboAsistArrowUI : public BaseComboAsistUI {
+class ComboAssistArrowUI : public BaseComboAssistUI {
 public:
-    ComboAsistArrowUI()           = default;
-    ~ComboAsistArrowUI() override = default;
+    ComboAssistArrowUI()           = default;
+    ~ComboAssistArrowUI() override = default;
 
 public:
     /// <summary>

@@ -27,7 +27,7 @@ void BattleTestScene::Update() {
     effectEditorSuite_->SetCameraPreViewPos(player_->GetWorldPosition());
 
     // UI更新
-    comboAsistController_->Update();
+    comboAssistController_->Update();
     unlockNotifier_->Update(KetaEngine::Frame::DeltaTime());
 
     // Editor
@@ -74,7 +74,7 @@ void BattleTestScene::Debug() {
     enemyManager_->AdjustParam();
     combo_->AdjustParam();
     killCounter_->AdjustParam();
-    comboAsistController_->AdjustParam();
+    comboAssistController_->AdjustParam();
     unlockNotifier_->AdjustParam();
     audienceController_->AdjustParam();
     backGroundObjectManager_->AdjustParam();
@@ -127,7 +127,7 @@ void BattleTestScene::ObjectInit() {
     comboDirector_               = std::make_unique<ComboDirector>();
     StressGauge_                 = std::make_unique<StressGauge>();
     killCounter_                 = std::make_unique<KillCounter>();
-    comboAsistController_        = std::make_unique<ComboAsistController>();
+    comboAssistController_        = std::make_unique<ComboAssistController>();
     unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
     operateUI_                   = std::make_unique<OperateUI>();
     unlockNotifier_->Init();
@@ -184,9 +184,9 @@ void BattleTestScene::SetClassPointer() {
 
     operateUI_->SetPlayer(player_.get());
 
-    comboAsistController_->SetAttackController(playerComboAttackController_.get());
-    comboAsistController_->SetPlayer(player_.get());
-    comboAsistController_->Init();
+    comboAssistController_->SetAttackController(playerComboAttackController_.get());
+    comboAssistController_->SetPlayer(player_.get());
+    comboAssistController_->Init();
 
     // 自動コンボ実行 → アンロック通知UIリアクション の接続
     ComboUnlockNotifier* notifier = unlockNotifier_.get();
@@ -196,11 +196,11 @@ void BattleTestScene::SetClassPointer() {
 
     // 攻撃解放 → アンロック通知UI の接続
     {
-        ComboAsistController* asist          = comboAsistController_.get();
+        ComboAssistController* assist          = comboAssistController_.get();
         PlayerComboAttackController* atkCtrl = playerComboAttackController_.get();
         Player* playerPtr                    = player_.get();
-        killCounter_->SetOnAttackUnlockedCallback([notifier, asist, atkCtrl, playerPtr](const std::string& name) {
-            notifier->OnAttackUnlocked(name, asist->GetLayoutParam(), atkCtrl, playerPtr);
+        killCounter_->SetOnAttackUnlockedCallback([notifier, assist, atkCtrl, playerPtr](const std::string& name) {
+            notifier->OnAttackUnlocked(name, assist->GetLayoutParam(), atkCtrl, playerPtr);
         });
     }
 }

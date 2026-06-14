@@ -34,9 +34,9 @@
 // SkyBox
 #include "SkyBox/SkyBox.h"
 // UI
-#include "UI/ComboAsistUI/ComboAsistController.h"
-#include "UI/ComboAsistUI/SupportSprite/ComboSupportSpriteUi.h"
-#include "UI/ComboAsistUI/UnlockNotifier/ComboUnlockNotifier.h"
+#include "UI/ComboAssistUI/ComboAssistController.h"
+#include "UI/ComboAssistUI/SupportSprite/ComboSupportSpriteUi.h"
+#include "UI/ComboAssistUI/UnlockNotifier/ComboUnlockNotifier.h"
 #include "UI/NextAttackIndicator/NextAttackHintUI.h"
 #include "UI/OperateUI.h"
 // Sprite
@@ -97,7 +97,7 @@ private:
         std::unique_ptr<AudienceController> audienceController_                   = nullptr;
         std::unique_ptr<StressGauge> StressGauge_                                   = nullptr;
         std::unique_ptr<KillCounter> killCounter_                                 = nullptr;
-        std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
+        std::unique_ptr<ComboAssistController> comboAssistController_               = nullptr;
         std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;
         std::unique_ptr<ComboSupportSpriteUi> comboSupportSpriteUi_               = nullptr;
         std::unique_ptr<NextAttackHintUI> nextAttackHintUI_                       = nullptr;

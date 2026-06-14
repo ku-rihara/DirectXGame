@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseComboAsistUI.h"
+#include "BaseComboAssistUI.h"
 #include "Editor/ShakeEditor/ShakePlayer.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
 #include <cstdint>
@@ -8,10 +8,10 @@
 /// <summary>
 /// コンボアシストのボタンUIクラス
 /// </summary>
-class ComboAsistButtonUI : public BaseComboAsistUI {
+class ComboAssistButtonUI : public BaseComboAssistUI {
 public:
-    ComboAsistButtonUI()           = default;
-    ~ComboAsistButtonUI() override = default;
+    ComboAssistButtonUI()           = default;
+    ~ComboAssistButtonUI() override = default;
 
 public:
     /// <summary>

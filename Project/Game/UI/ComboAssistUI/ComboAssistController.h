@@ -1,10 +1,10 @@
 #pragma once
 // UI生成・ヘルパー
-#include "AsistBuilder/ComboUIBuilder.h"
+#include "AssistBuilder/ComboUIBuilder.h"
 // 分割クラス
-#include "SubControllers/ComboAsistColumnScroller.h"
-#include "SubControllers/ComboAsistConditionSwitcher.h"
-#include "SubControllers/ComboAsistVisibilityController.h"
+#include "SubControllers/ComboAssistColumnScroller.h"
+#include "SubControllers/ComboAssistConditionSwitcher.h"
+#include "SubControllers/ComboAssistVisibilityController.h"
 // Parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Easing
@@ -25,14 +25,14 @@ class KillCounter;
 /// <summary>
 /// コンボアシストUI管理クラス
 /// </summary>
-class ComboAsistController {
+class ComboAssistController {
 public:
     enum class PanelMode {
         Close,
         Open };
 
-    ComboAsistController()  = default;
-    ~ComboAsistController() = default;
+    ComboAssistController()  = default;
+    ~ComboAssistController() = default;
 
     void Init();
     void Update();
@@ -73,15 +73,15 @@ private:
     PlayerComboAttackController* pAttackController_ = nullptr;
     KillCounter* pKillCounter_                      = nullptr;
     KetaEngine::GlobalParameter* globalParameter_   = nullptr;
-    std::string groupName_                          = "ComboAsistUI";
+    std::string groupName_                          = "ComboAssistUI";
 
     // UI生成担当
     ComboUIBuilder uiBuilder_;
 
     // 分割クラス
-    ComboAsistVisibilityController visibilityController_;
-    ComboAsistColumnScroller columnScroller_;
-    ComboAsistConditionSwitcher conditionSwitcher_;
+    ComboAssistVisibilityController visibilityController_;
+    ComboAssistColumnScroller columnScroller_;
+    ComboAssistConditionSwitcher conditionSwitcher_;
 
     // 条件別UIデータ（全条件を事前構築）
     std::map<PlayerComboAttackData::TriggerCondition, ConditionUIData> conditionDataMap_;

@@ -36,7 +36,7 @@ public:
     void Update(int32_t comboNum);
 
     /// <summary>
-    /// 時間に応じたアルファ値適応
+    /// 時間に応じたアルファ値適用
     /// </summary>
     /// <param name="comboTime">コンボ時間</param>
     /// <param name="comboMaxTime">コンボ最大時間</param>

@@ -1,13 +1,13 @@
-#include "BaseComboAsistUI.h"
+#include "BaseComboAssistUI.h"
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 #include <cmath>
 
-void BaseComboAsistUI::SetRowColumn(int32_t row, int32_t column) {
+void BaseComboAssistUI::SetRowColumn(int32_t row, int32_t column) {
     rowNum_    = row;
     columnNum_ = column;
 }
 
-void BaseComboAsistUI::Update() {
+void BaseComboAssistUI::Update() {
     if (needsLerpUpdate_) {
         float dt           = KetaEngine::Frame::DeltaTime();
         float t            = 1.0f - std::exp(-lerpSpeed_ * dt);
@@ -32,25 +32,25 @@ void BaseComboAsistUI::Update() {
     }
 }
 
-void BaseComboAsistUI::ApplySlideOffset(float offsetX) {
+void BaseComboAssistUI::ApplySlideOffset(float offsetX) {
     slideOffsetX_ = offsetX;
     ApplyLayout();
 }
 
-void BaseComboAsistUI::SetLockUIScale(const Vector2& scale) {
+void BaseComboAssistUI::SetLockUIScale(const Vector2& scale) {
     if (lockUI_) {
         lockUI_->transform_.scale = scale;
     }
 }
 
-void BaseComboAsistUI::SetCurrentPosition(const Vector2& pos) {
+void BaseComboAssistUI::SetCurrentPosition(const Vector2& pos) {
     currentDisplayPos_ = pos;
     targetPos_         = pos;
     needsLerpUpdate_   = false;
     SetPosition(pos);
 }
 
-void BaseComboAsistUI::SetPosition(const Vector2& pos) {
+void BaseComboAssistUI::SetPosition(const Vector2& pos) {
     if (uiSprite_) {
         uiSprite_->transform_.pos = pos;
     }
@@ -62,7 +62,7 @@ void BaseComboAsistUI::SetPosition(const Vector2& pos) {
     }
 }
 
-void BaseComboAsistUI::SetScale(const Vector2& scale) {
+void BaseComboAssistUI::SetScale(const Vector2& scale) {
     baseScale_ = scale;
     Vector2 s  = baseScale_ * extraScale_;
     if (uiSprite_) {
@@ -76,7 +76,7 @@ void BaseComboAsistUI::SetScale(const Vector2& scale) {
     }
 }
 
-void BaseComboAsistUI::SetRotation(float rotZ) {
+void BaseComboAssistUI::SetRotation(float rotZ) {
     if (uiSprite_) {
         uiSprite_->transform_.rotate.z = rotZ;
     }
@@ -88,7 +88,7 @@ void BaseComboAsistUI::SetRotation(float rotZ) {
     }
 }
 
-void BaseComboAsistUI::SetActiveOutLine(bool visible) {
+void BaseComboAssistUI::SetActiveOutLine(bool visible) {
     if (activeOutLineUI_) {
         activeOutLineUI_->SetIsDraw(visible);
         if (visible && uiSprite_) {
@@ -97,26 +97,26 @@ void BaseComboAsistUI::SetActiveOutLine(bool visible) {
     }
 }
 
-void BaseComboAsistUI::SnapToTarget() {
+void BaseComboAssistUI::SnapToTarget() {
     currentDisplayPos_ = targetPos_;
     needsLerpUpdate_   = false;
     SetPosition(currentDisplayPos_);
 }
 
-void BaseComboAsistUI::SnapRangeState(bool inRange) {
+void BaseComboAssistUI::SnapRangeState(bool inRange) {
     isInRange_         = inRange;
     isScaleOutPlaying_ = false;
     SetVisible(inRange);
 }
 
-void BaseComboAsistUI::PlayPushScaling() {
+void BaseComboAssistUI::PlayPushScaling() {
     if (uiSprite_) {
-        uiSprite_->PlaySpriteEaseAnimation("PushScalingUI", "ComboAsistUI");
-        activeOutLineUI_->PlaySpriteEaseAnimation("PushScalingUI", "ComboAsistUI");
+        uiSprite_->PlaySpriteEaseAnimation("PushScalingUI", "ComboAssistUI");
+        activeOutLineUI_->PlaySpriteEaseAnimation("PushScalingUI", "ComboAssistUI");
     }
 }
 
-void BaseComboAsistUI::SetRangeVisible(bool inRange) {
+void BaseComboAssistUI::SetRangeVisible(bool inRange) {
     if (inRange == isInRange_) {
         return;
     }
@@ -137,27 +137,27 @@ void BaseComboAsistUI::SetRangeVisible(bool inRange) {
     }
 }
 
-void BaseComboAsistUI::PlayScaleIn() {
+void BaseComboAssistUI::PlayScaleIn() {
     if (uiSprite_) {
         uiSprite_->transform_.scale = {0.0f, 0.0f};
-        uiSprite_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
+        uiSprite_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAssistUI");
     }
     if (lockUI_) {
         lockUI_->transform_.scale = {0.0f, 0.0f};
-        lockUI_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
+        lockUI_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAssistUI");
     }
 }
 
-void BaseComboAsistUI::PlayScaleOut() {
+void BaseComboAssistUI::PlayScaleOut() {
     if (uiSprite_) {
-        uiSprite_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAsistUI");
+        uiSprite_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAssistUI");
     }
     if (lockUI_) {
-        lockUI_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAsistUI");
+        lockUI_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAssistUI");
     }
 }
 
-void BaseComboAsistUI::SetVisible(bool visible) {
+void BaseComboAssistUI::SetVisible(bool visible) {
     if (!visible) {
         // 非表示にする際は範囲状態をリセットする
         // これにより再表示時に SetRangeVisible(true) が正しく機能する
@@ -177,11 +177,11 @@ void BaseComboAsistUI::SetVisible(bool visible) {
     }
 }
 
-void BaseComboAsistUI::SetTargetPosY(float y) {
+void BaseComboAssistUI::SetTargetPosY(float y) {
     targetPos_.y     = y;
     needsLerpUpdate_ = true;
 }
 
-void BaseComboAsistUI::SetExtraScale(float extraScale) {
+void BaseComboAssistUI::SetExtraScale(float extraScale) {
     extraScale_ = extraScale;
 }

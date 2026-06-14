@@ -98,7 +98,7 @@ public:
     void StopObjEaseAnimation();
 
     /// <summary>
-    /// アニメーションのオリジナル値をtransformに直接適応
+    /// アニメーションのオリジナル値をtransformに直接適用
     /// </summary>
     void ApplyOriginalAnimationValuesToTransform();
 

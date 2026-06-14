@@ -58,7 +58,7 @@ void ParticleSection::InitSectionParam() {
 void ParticleSection::InitGlobalParameter() {
     globalParameter_ = GlobalParameter::GetInstance();
 
-    // グループが存在しない場合は作成してパラメータを登録、存在する場合はパラメータを適応
+    // グループが存在しない場合は作成してパラメータを登録、存在する場合はパラメータを適用
     if (!globalParameter_->HasRegisters(groupName_)) {
         globalParameter_->CreateGroup(groupName_);
 

@@ -223,7 +223,7 @@ void ObjectFromBlender::EasingAllReset() {
             objectData.object3d->transform_.StopObjEaseAnimation();
             objectData.groupStarted[i] = false;
         }
-        // イージングのオリジナル値をtransformに直接適応
+        // イージングのオリジナル値をtransformに直接適用
         objectData.object3d->transform_.ApplyOriginalAnimationValuesToTransform();
     }
     currentTime_ = 0.0f;

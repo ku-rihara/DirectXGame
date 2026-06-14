@@ -9,7 +9,7 @@ class GameBackGroundObject;
 class GameCamera;
 class OperateUI;
 class StressGaugeGauge;
-class ComboAsistController;
+class ComboAssistController;
 class ComboSupportSpriteUi;
 
 /// <summary>
@@ -47,7 +47,7 @@ protected:
     OperateUI* pHowToOperate_                 = nullptr;
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
     StressGaugeGauge* pStressGaugeGauge_           = nullptr;
-    ComboAsistController* pComboAsistController_   = nullptr;
+    ComboAssistController* pComboAssistController_   = nullptr;
     ComboSupportSpriteUi* pComboSupportSpriteUi_  = nullptr;
 
     bool isFinish_                               = false;
@@ -67,6 +67,6 @@ public:
     void SetStressGaugeGauge(StressGaugeGauge* StressGaugeGauge) { pStressGaugeGauge_ = StressGaugeGauge; }
     void SetFireInjectors(FireInjectors* fireInjectors) { pFireInjectors_ = fireInjectors; }
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject) { pGameBackGroundObject_ = gameBackGroundObject; }
-    void SetComboAsistController(ComboAsistController* controller) { pComboAsistController_ = controller; }
+    void SetComboAssistController(ComboAssistController* controller) { pComboAssistController_ = controller; }
     void SetComboSupportSpriteUi(ComboSupportSpriteUi* ui) { pComboSupportSpriteUi_ = ui; }
 };

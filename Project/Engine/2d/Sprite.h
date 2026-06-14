@@ -132,7 +132,7 @@ private:
     const std::string folderPath_ = "SpriteParam";
     Parameter parameter_;
 
-    // レイヤー。描画フラグ、初期パラメータ適応フラグ
+    // レイヤー。描画フラグ、初期パラメータ適用フラグ
     int32_t layerNum_;
     bool isDraw_           = true;
     bool isApplyInitParam_ = false;

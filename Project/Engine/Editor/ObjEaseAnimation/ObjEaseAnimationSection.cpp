@@ -54,7 +54,7 @@ void ObjEaseAnimationSection::Reset() {
     // 経過時間リセット
     elapsedTime_ = 0.0f;
 
-    // イージング再適応
+    // イージング再適用
     AdaptValueSetting();
     AdaptEaseParam();
 }

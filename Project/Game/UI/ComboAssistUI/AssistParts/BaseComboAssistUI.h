@@ -23,12 +23,12 @@ struct LayoutParam {
 /// <summary>
 /// コンボアシストで使用するUIの基底クラス
 /// </summary>
-class BaseComboAsistUI {
+class BaseComboAssistUI {
 public:
-    BaseComboAsistUI()          = default;
-    virtual ~BaseComboAsistUI() = default;
+    BaseComboAssistUI()          = default;
+    virtual ~BaseComboAssistUI() = default;
 
-    enum class AsistState {
+    enum class AssistState {
         NONE,
         PLAYING,
         NEXTATTACK,
@@ -80,7 +80,7 @@ protected:
     std::unique_ptr<KetaEngine::Sprite> activeOutLineUI_;
 
     // アシストのステート
-    AsistState state_ = AsistState::NONE;
+    AssistState state_ = AssistState::NONE;
 
     int32_t rowNum_    = 0;
     int32_t columnNum_ = 0;
@@ -106,13 +106,13 @@ protected:
 
 public:
     // getter
-    AsistState GetState() const { return state_; }
+    AssistState GetState() const { return state_; }
     Vector2 GetBaseScale() const { return baseScale_; }
     int32_t GetRowNum() const { return rowNum_; }
     int32_t GetColumnNum() const { return columnNum_; }
 
     // setter
-    void SetState(AsistState state) { state_ = state; }
+    void SetState(AssistState state) { state_ = state; }
     void SetRowColumn(int32_t row, int32_t column);
 
     // 攻撃発動アウトラインの表示/非表示

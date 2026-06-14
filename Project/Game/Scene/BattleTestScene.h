@@ -27,8 +27,8 @@
 // SkyBox
 #include "SkyBox/SkyBox.h"
 // UI
-#include "UI/ComboAsistUI/ComboAsistController.h"
-#include "UI/ComboAsistUI/UnlockNotifier/ComboUnlockNotifier.h"
+#include "UI/ComboAssistUI/ComboAssistController.h"
+#include "UI/ComboAssistUI/UnlockNotifier/ComboUnlockNotifier.h"
 #include "UI/OperateUI.h"
 // utility
 #include "utility/ObjectFromBlender/ObjectFromBlender.h"
@@ -79,7 +79,7 @@ private:
     std::unique_ptr<ComboDirector> comboDirector_                             = nullptr;
     std::unique_ptr<StressGauge> StressGauge_                                   = nullptr;
     std::unique_ptr<KillCounter> killCounter_                                 = nullptr;
-    std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
+    std::unique_ptr<ComboAssistController> comboAssistController_               = nullptr;
     std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;
     std::unique_ptr<OperateUI> operateUI_                                     = nullptr;
 

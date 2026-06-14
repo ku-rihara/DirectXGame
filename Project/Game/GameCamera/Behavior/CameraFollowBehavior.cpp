@@ -84,9 +84,9 @@ void CameraFollowBehavior::MoveUpdate(float time) {
     // 次フレームの判定用にターゲットを保持
     prevTarget_ = currentTarget;
 
-    //--------------------------- 回転、変位の適応 ---------------------------//
-    pOwner_->TranslateAdapt(); //< 変位適応
-    pOwner_->RotateAdapt();    //< 回転適応
+    //--------------------------- 回転、変位の適用 ---------------------------//
+    pOwner_->TranslateAdapt(); //< 変位適用
+    pOwner_->RotateAdapt();    //< 回転適用
 }
 
 void CameraFollowBehavior::Debug() {

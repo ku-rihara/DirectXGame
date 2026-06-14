@@ -30,7 +30,7 @@ public:
     void Init(const std::string& groupName, const std::string& categoryName, int32_t keyNumber);
     void Update(float speedRate);
 
-    // パラメータ調整、登録、適応
+    // パラメータ調整、登録、適用
     void AdjustParam();
     void RegisterParams();
     void AdaptEaseParam();

@@ -168,7 +168,7 @@ void EnemyDamageReactionData::AdjustParam([[maybe_unused]] const std::array<std:
     ImGui::Checkbox("死亡せずリアクション優先", &reactionParam_.isPriorityReaction);
     ImGui::DragFloat("ダメージクールタイム", &reactionParam_.damageCollingTime, 0.01f);
     ImGui::DragFloat("アニメーション再再生間隔(同一攻撃)", &reactionParam_.animReplayMinTime, 0.01f, 0.0f, 5.0f);
-    ImGui::DragFloat("ノックバック適応時間", &reactionParam_.normalParam.knockBackTime, 0.01f, 0.0f, 10.0f);
+    ImGui::DragFloat("ノックバック適用時間", &reactionParam_.normalParam.knockBackTime, 0.01f, 0.0f, 10.0f);
     ImGui::DragFloat("ノックバック減衰", &reactionParam_.normalParam.knockBackDamping, 0.1f);
 
     if (ImGui::CollapsingHeader("突き落とされる用のパラメータ")) {

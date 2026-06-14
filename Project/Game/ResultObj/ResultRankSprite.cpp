@@ -12,7 +12,7 @@ void ResultRankSprite::Init(int32_t rank, const Config& cfg) {
     // ランク数に合わせてUVスケールの計算
     float uvW = 1.0f / static_cast<float>(cfg.rankCount);
 
-    // UVパラメータの適応
+    // UVパラメータの適用
     sprite_->SetUVScale(Vector2(uvW, 1.0f));
     sprite_->SetUVPosition(Vector2(rank * uvW, 0.0f));
 

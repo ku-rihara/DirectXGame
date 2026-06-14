@@ -73,7 +73,7 @@ void DxSwapChain::WaitForNextFrame() {
     if (!waitableObject_) {
         return;
     }
-    // フレーム開始時にFLWOを待機する。
+    // フレーム開始時にFLOWを待機する。
 
     WaitForSingleObjectEx(waitableObject_, INFINITE, FALSE);
 }

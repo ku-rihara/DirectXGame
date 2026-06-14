@@ -1,6 +1,6 @@
 #pragma once
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "UI/ComboAsistUI/AsistParts/ComboAsistButtonUI.h"
+#include "UI/ComboAssistUI/AssistParts/ComboAssistButtonUI.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include <memory>
@@ -14,7 +14,7 @@ class Player;
 
 /// <summary>
 /// 攻撃中に次のコンボ入力候補（X / Y ボタン）をプレイヤー近傍に表示するUIクラス。
-/// ComboAsistButtonUI を使い、開放状況の表示と ScaleIn/ScaleOut イージングに対応。
+/// ComboAssistButtonUI を使い、開放状況の表示と ScaleIn/ScaleOut イージングに対応。
 /// </summary>
 class NextAttackHintUI {
 public:
@@ -50,8 +50,8 @@ private:
     Player*                           pPlayer_         = nullptr;
     const KetaEngine::ViewProjection* pViewProjection_ = nullptr;
 
-    std::unique_ptr<ComboAsistButtonUI> xButtonUI_;
-    std::unique_ptr<ComboAsistButtonUI> yButtonUI_;
+    std::unique_ptr<ComboAssistButtonUI> xButtonUI_;
+    std::unique_ptr<ComboAssistButtonUI> yButtonUI_;
 
     // --- GlobalParameter で調整可能なパラメータ ---
 

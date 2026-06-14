@@ -53,8 +53,8 @@ public:
     /// <returns>リソース状態</returns>
     D3D12_RESOURCE_STATES GetResourceState(const UINT& index) const;
     
-    void WaitForNextFrame(); //< フレーム開始前のFLWO待機（BeginFrameで呼ぶ）
-    void Present();         //< プレゼント（FLWO待機は含まない）
+    void WaitForNextFrame(); //< フレーム開始前のFLOW待機（BeginFrameで呼ぶ）
+    void Present();         //< プレゼント（FLOW待機は含まない）
     void WaitForGPU();      //< GPU同期
     void Finalize();        //< 終了処理
 

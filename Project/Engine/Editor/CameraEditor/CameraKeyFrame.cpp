@@ -71,7 +71,7 @@ void CameraKeyFrame::Update(float speedRate) {
 }
 
 void CameraKeyFrame::AdaptEaseParam() {
-    // parameterをEasingに適応
+    // parameterをEasingに適用
     positionEase_.SetMaxTime(timePoint_);
     rotationEase_.SetMaxTime(timePoint_);
     fovEase_.SetMaxTime(timePoint_);

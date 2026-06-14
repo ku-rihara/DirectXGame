@@ -1,11 +1,11 @@
-#include "ComboAsistColumnScroller.h"
+#include "ComboAssistColumnScroller.h"
 #include "Frame/Frame.h"
 #include <algorithm>
 #include <climits>
 
-void ComboAsistColumnScroller::Init(ComboAsistVisibilityController* visibility) {
+void ComboAssistColumnScroller::Init(ComboAssistVisibilityController* visibility) {
     pVisibility_ = visibility;
-    columnOverflowEasing_.Init("ComboAsistColumnOverflow.json");
+    columnOverflowEasing_.Init("ComboAssistColumnOverflow.json");
     columnOverflowEasing_.SetAdaptValue(&overflowScale_);
     columnOverflowEasing_.Reset();
 }
@@ -13,7 +13,7 @@ void ComboAsistColumnScroller::Init(ComboAsistVisibilityController* visibility) 
 ///==========================================================
 /// 列オーバーフロー検知・イージング更新
 ///==========================================================
-void ComboAsistColumnScroller::CheckColumnOverflow(ConditionUIData& currentData, bool isVisible) {
+void ComboAssistColumnScroller::CheckColumnOverflow(ConditionUIData& currentData, bool isVisible) {
     if (!isVisible) {
         return;
     }
@@ -39,9 +39,9 @@ void ComboAsistColumnScroller::CheckColumnOverflow(ConditionUIData& currentData,
     CheckGroupColumnOverflowDetect(currentData.yUIGroup);
 }
 
-void ComboAsistColumnScroller::CheckGroupColumnOverflowDetect(ComboUIGroup& uiGroup) {
+void ComboAssistColumnScroller::CheckGroupColumnOverflowDetect(ComboUIGroup& uiGroup) {
     for (auto& btn : uiGroup.mainButtonUIs) {
-        if (btn->GetState() != BaseComboAsistUI::AsistState::NONE && btn->GetColumnNum() > maxVisibleColumn_) {
+        if (btn->GetState() != BaseComboAssistUI::AssistState::NONE && btn->GetColumnNum() > maxVisibleColumn_) {
             // 発動攻撃列より先にボタンが存在しない場合はシフト不要
             int32_t maxCol = GetGroupMaxColumn(uiGroup);
             if (maxCol <= btn->GetColumnNum()) {
@@ -61,7 +61,7 @@ void ComboAsistColumnScroller::CheckGroupColumnOverflowDetect(ComboUIGroup& uiGr
 ///==========================================================
 /// 発動攻撃が表示範囲端に達した際の列シフト
 ///==========================================================
-void ComboAsistColumnScroller::ShiftColumnsForAttack(
+void ComboAssistColumnScroller::ShiftColumnsForAttack(
     ConditionUIData& currentData,
     const std::string& attackName,
     int32_t maxVisibleColumn,
@@ -98,7 +98,7 @@ void ComboAsistColumnScroller::ShiftColumnsForAttack(
 ///==========================================================
 /// コンボリセット時のRow/Columnリセット
 ///==========================================================
-void ComboAsistColumnScroller::ResetShifts(ConditionUIData& currentData) {
+void ComboAssistColumnScroller::ResetShifts(ConditionUIData& currentData) {
     // Rowリセットを先に行う（divColはカラムシフト後の座標で記録されているため、
     // カラムを先に戻すと座標系がずれてしまう）
     if (currentData.rowShiftAmount != 0) {
@@ -132,7 +132,7 @@ void ComboAsistColumnScroller::ResetShifts(ConditionUIData& currentData) {
 ///==========================================================
 /// 分岐攻撃発動時の行シフト
 ///==========================================================
-void ComboAsistColumnScroller::CheckRowShift(
+void ComboAssistColumnScroller::CheckRowShift(
     ConditionUIData& currentData,
     bool isVisible,
     const std::string& currentBehaviorName) {
@@ -191,12 +191,12 @@ void ComboAsistColumnScroller::CheckRowShift(
 ///==========================================================
 /// グループシフト実装
 ///==========================================================
-void ComboAsistColumnScroller::ShiftGroupColumns(ComboUIGroup& uiGroup, int32_t delta) {
+void ComboAssistColumnScroller::ShiftGroupColumns(ComboUIGroup& uiGroup, int32_t delta) {
     ShiftGroup(uiGroup, delta);
     uiGroup.columnShiftAmount -= delta;
 }
 
-void ComboAsistColumnScroller::ShiftGroup(ComboUIGroup& uiGroup, int32_t delta) {
+void ComboAssistColumnScroller::ShiftGroup(ComboUIGroup& uiGroup, int32_t delta) {
     for (auto& btn : uiGroup.mainButtonUIs) {
         btn->SetRowColumn(btn->GetRowNum(), btn->GetColumnNum() + delta);
         btn->ApplyLayout();
@@ -223,7 +223,7 @@ void ComboAsistColumnScroller::ShiftGroup(ComboUIGroup& uiGroup, int32_t delta) 
     }
 }
 
-void ComboAsistColumnScroller::ShiftGroupRows(
+void ComboAssistColumnScroller::ShiftGroupRows(
     ComboUIGroup& uiGroup, int32_t fromRow, int32_t divergeCol, int32_t delta) {
 
     // ボタンUIのシフト
@@ -271,7 +271,7 @@ void ComboAsistColumnScroller::ShiftGroupRows(
 ///==========================================================
 /// 検索・判定ヘルパー
 ///==========================================================
-int32_t ComboAsistColumnScroller::FindBranchRowForAttack(
+int32_t ComboAssistColumnScroller::FindBranchRowForAttack(
     const ComboUIGroup& uiGroup, const std::string& attackName) const {
     for (auto& buttonRow : uiGroup.branchButtonUIs) {
         for (auto& btn : buttonRow) {
@@ -283,7 +283,7 @@ int32_t ComboAsistColumnScroller::FindBranchRowForAttack(
     return -1;
 }
 
-int32_t ComboAsistColumnScroller::FindDivergeColForBranchRow(
+int32_t ComboAssistColumnScroller::FindDivergeColForBranchRow(
     const ComboUIGroup& uiGroup, int32_t branchRow) const {
     int32_t minCol = INT32_MAX;
     for (auto& buttonRow : uiGroup.branchButtonUIs) {
@@ -296,7 +296,7 @@ int32_t ComboAsistColumnScroller::FindDivergeColForBranchRow(
     return (minCol == INT32_MAX) ? -1 : minCol;
 }
 
-int32_t ComboAsistColumnScroller::FindAttackColumnInGroup(
+int32_t ComboAssistColumnScroller::FindAttackColumnInGroup(
     const ComboUIGroup& uiGroup, const std::string& attackName) const {
     for (const auto& btn : uiGroup.mainButtonUIs) {
         if (btn->GetAttackName() == attackName) return btn->GetColumnNum();
@@ -309,7 +309,7 @@ int32_t ComboAsistColumnScroller::FindAttackColumnInGroup(
     return -1;
 }
 
-int32_t ComboAsistColumnScroller::GetGroupMaxColumn(const ComboUIGroup& uiGroup) const {
+int32_t ComboAssistColumnScroller::GetGroupMaxColumn(const ComboUIGroup& uiGroup) const {
     int32_t maxCol = -1;
     for (const auto& btn : uiGroup.mainButtonUIs) {
         maxCol = (std::max)(maxCol, btn->GetColumnNum());
@@ -322,7 +322,7 @@ int32_t ComboAsistColumnScroller::GetGroupMaxColumn(const ComboUIGroup& uiGroup)
     return maxCol;
 }
 
-bool ComboAsistColumnScroller::HasNextStepAfterAttack(
+bool ComboAssistColumnScroller::HasNextStepAfterAttack(
     const ComboPathBuilder::ComboPathGroup& pathGroup,
     const std::string& attackName) const {
 

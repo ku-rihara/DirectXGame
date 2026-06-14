@@ -92,7 +92,7 @@ void ComboUIBuilder::CreateGroupUI(
         }
         // ステップの情報取得と、ボタンUIの生成
         const auto& step = pathGroup.mainPath.steps[i];
-        auto btn         = std::make_unique<ComboAsistButtonUI>();
+        auto btn         = std::make_unique<ComboAssistButtonUI>();
         // ボタンUIの初期化
         btn->Init(step.gamepadButton, step.isUnlocked, layoutParam, step.attackName);
         btn->SetRowColumn(mainRow, mainColMap[i]);
@@ -109,7 +109,7 @@ void ComboUIBuilder::CreateGroupUI(
             continue;
         }
         if (prevCol >= 0) {
-            auto arrow = std::make_unique<ComboAsistArrowUI>();
+            auto arrow = std::make_unique<ComboAssistArrowUI>();
             arrow->Init(prevCol, mainRow, mainColMap[i], mainRow, layoutParam);
             uiGroup.mainArrowUIs.push_back(std::move(arrow));
         }
@@ -190,7 +190,7 @@ void ComboUIBuilder::CreateGroupUI(
         if (branchInfo.divergeIndex > 0 &&
             branchInfo.divergeIndex < static_cast<int32_t>(branchInfo.path.steps.size()) &&
             layout.lastSharedCol >= 0 && layout.colMap[branchInfo.divergeIndex] >= 0) {
-            auto arrow = std::make_unique<ComboAsistArrowUI>();
+            auto arrow = std::make_unique<ComboAssistArrowUI>();
             arrow->Init(layout.lastSharedCol, mainRow, layout.colMap[branchInfo.divergeIndex], branchRow, layoutParam);
             uiGroup.branchArrowUIs.push_back(std::move(arrow));
         }
@@ -198,7 +198,7 @@ void ComboUIBuilder::CreateGroupUI(
         // 分岐パスのボタン
         for (size_t i = branchInfo.divergeIndex; i < branchInfo.path.steps.size(); ++i) {
             if (layout.colMap[i] < 0) continue;
-            auto btn = std::make_unique<ComboAsistButtonUI>();
+            auto btn = std::make_unique<ComboAssistButtonUI>();
             btn->Init(branchInfo.path.steps[i].gamepadButton, branchInfo.path.steps[i].isUnlocked, layoutParam, branchInfo.path.steps[i].attackName);
             btn->SetRowColumn(branchRow, layout.colMap[i]);
             btn->ApplyLayout();
@@ -211,7 +211,7 @@ void ComboUIBuilder::CreateGroupUI(
         for (size_t i = branchInfo.divergeIndex; i < branchInfo.path.steps.size(); ++i) {
             if (layout.colMap[i] < 0) continue;
             if (prevBCol >= 0) {
-                auto arrow = std::make_unique<ComboAsistArrowUI>();
+                auto arrow = std::make_unique<ComboAssistArrowUI>();
                 arrow->Init(prevBCol, branchRow, layout.colMap[i], branchRow, layoutParam);
                 innerArrows.push_back(std::move(arrow));
             }
@@ -226,7 +226,7 @@ void ComboUIBuilder::CreateGroupUI(
 ///==========================================================
 /// ヘルパー：グループ全UI要素に操作を適用
 ///==========================================================
-void ComboUIBuilder::ApplyToGroup(ComboUIGroup& uiGroup, const std::function<void(BaseComboAsistUI&)>& func) {
+void ComboUIBuilder::ApplyToGroup(ComboUIGroup& uiGroup, const std::function<void(BaseComboAssistUI&)>& func) {
     for (auto& ui : uiGroup.mainButtonUIs) {
         func(*ui);
     }
@@ -251,7 +251,7 @@ void ComboUIBuilder::ApplyToGroup(ComboUIGroup& uiGroup, const std::function<voi
 ///==========================================================
 /// ヘルパー：条件データ x/y 両グループに操作を適用
 ///==========================================================
-void ComboUIBuilder::ApplyToCondition(ConditionUIData& conditionData, const std::function<void(BaseComboAsistUI&)>& func) {
+void ComboUIBuilder::ApplyToCondition(ConditionUIData& conditionData, const std::function<void(BaseComboAssistUI&)>& func) {
     ApplyToGroup(conditionData.xUIGroup, func);
     ApplyToGroup(conditionData.yUIGroup, func);
 }
@@ -262,7 +262,7 @@ void ComboUIBuilder::ApplyToCondition(ConditionUIData& conditionData, const std:
 void ComboUIBuilder::ForEachStepButton(
     const ComboPathBuilder::ComboPathGroup& pathGroup,
     ComboUIGroup& uiGroup,
-    const std::function<void(const ComboPathBuilder::ComboStep&, ComboAsistButtonUI&)>& func) {
+    const std::function<void(const ComboPathBuilder::ComboStep&, ComboAssistButtonUI&)>& func) {
 
     // メインパス
     size_t idx = 0;

@@ -190,7 +190,7 @@ void GameIntroManager::ClassisSet() {
         intro->SetFireInjectors(pFireInjectors_);
         intro->SetGameBackGroundObject(pGameBackGroundObject_);
         intro->SetStressGaugeGauge(pStressGaugeGauge_);
-        intro->SetComboAsistController(pComboAsistController_);
+        intro->SetComboAssistController(pComboAssistController_);
         intro->SetComboSupportSpriteUi(pComboSupportSpriteUi_);
     }
 }

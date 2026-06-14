@@ -1,6 +1,6 @@
 #include "IntroSpawnField.h"
-#include "UI/ComboAsistUI/ComboAsistController.h"
-#include "UI/ComboAsistUI/SupportSprite/ComboSupportSpriteUi.h"
+#include "UI/ComboAssistUI/ComboAssistController.h"
+#include "UI/ComboAssistUI/SupportSprite/ComboSupportSpriteUi.h"
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "StressGauge/StressGaugeGauge.h"
 #include "FireInjectors/FireInjectors.h"
@@ -71,13 +71,13 @@ void IntroSpawnField::FinishWait() {
     }
 
     // コンボアシストUIスライドイン
-    if (pComboAsistController_) {
+    if (pComboAssistController_) {
         if (!introSlideStarted_) {
-            pComboAsistController_->OpenPanel();
+            pComboAssistController_->OpenPanel();
             introSlideStarted_ = true;
         }
-        pComboAsistController_->UpdateSlide(playSpeed_);
-        pComboAsistController_->ApplySlideOffset();
+        pComboAssistController_->UpdateSlide(playSpeed_);
+        pComboAssistController_->ApplySlideOffset();
     }
 
     if (pPlayer_) {

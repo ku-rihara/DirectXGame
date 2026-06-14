@@ -189,7 +189,7 @@ void ComboUnlockNotifier::UpdateRBHintSprite(bool anyCardWaiting,
         rbHintVisible_ = true;
         rbHintSprite_->SetIsDraw(true);
         rbHintSprite_->transform_.scale = {0.0f, 0.0f};
-        rbHintSprite_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
+        rbHintSprite_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAssistUI");
     } else if (!anyCardWaiting && rbHintVisible_) {
         // CLOSE_WAITING から外れたら非表示
         rbHintVisible_ = false;
@@ -492,7 +492,7 @@ void ComboUnlockNotifier::PopulateCard(
         }
         ++col;
 
-        auto arrow = std::make_unique<ComboAsistArrowUI>();
+        auto arrow = std::make_unique<ComboAssistArrowUI>();
         arrow->Init(col - 1, kRow, col, kRow, notifyLayout);
         arrow->ApplySlideOffset(slideStartOffsetX_);
         arrow->SnapToTarget();
@@ -511,7 +511,7 @@ void ComboUnlockNotifier::PopulateCard(
 
         if (!isFirstButton || !iconPath) {
             if (col > 0) {
-                auto arrow = std::make_unique<ComboAsistArrowUI>();
+                auto arrow = std::make_unique<ComboAssistArrowUI>();
                 arrow->Init(col - 1, kRow, col, kRow, notifyLayout);
                 arrow->ApplySlideOffset(slideStartOffsetX_);
                 arrow->SnapToTarget();
@@ -525,7 +525,7 @@ void ComboUnlockNotifier::PopulateCard(
         // 最後のボタンはロック状態で生成し、スライドイン後に演出を再生する
         const bool initUnlocked = isLast ? false : step.isUnlocked;
 
-        auto btn = std::make_unique<ComboAsistButtonUI>();
+        auto btn = std::make_unique<ComboAssistButtonUI>();
         btn->Init(step.gamepadButton, initUnlocked, notifyLayout, step.attackName);
         btn->SetRowColumn(kRow, col);
         btn->ApplyLayout();

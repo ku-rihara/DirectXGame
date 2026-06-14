@@ -1,5 +1,5 @@
 #pragma once
-#include "../AsistBuilder/ComboUIBuilder.h"
+#include "../AssistBuilder/ComboUIBuilder.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include <map>
 #include <string>
@@ -11,10 +11,10 @@ class PlayerComboAttackController;
 /// コンボアシストの発動条件切替クラス
 /// GROUND/AIR/DASHの手動・自動切替、ロック状態の同期を担当する
 /// </summary>
-class ComboAsistConditionSwitcher {
+class ComboAssistConditionSwitcher {
 public:
-    ComboAsistConditionSwitcher()  = default;
-    ~ComboAsistConditionSwitcher() = default;
+    ComboAssistConditionSwitcher()  = default;
+    ~ComboAssistConditionSwitcher() = default;
 
     void Init(
         PlayerComboAttackController* attackController,

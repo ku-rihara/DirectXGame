@@ -1,6 +1,6 @@
-#include "ComboAsistVisibilityController.h"
+#include "ComboAssistVisibilityController.h"
 
-void ComboAsistVisibilityController::SetVisibleRange(int32_t maxCol, int32_t maxRow) {
+void ComboAssistVisibilityController::SetVisibleRange(int32_t maxCol, int32_t maxRow) {
     maxVisibleColumn_ = maxCol;
     maxVisibleRow_    = maxRow;
 }
@@ -8,12 +8,12 @@ void ComboAsistVisibilityController::SetVisibleRange(int32_t maxCol, int32_t max
 ///==========================================================
 /// 条件データのX/Y両グループをまとめて更新
 ///==========================================================
-void ComboAsistVisibilityController::UpdateConditionVisibility(ConditionUIData& conditionData) {
+void ComboAssistVisibilityController::UpdateConditionVisibility(ConditionUIData& conditionData) {
     UpdateGroupVisibility(conditionData.xUIGroup);
     UpdateGroupVisibility(conditionData.yUIGroup);
 }
 
-void ComboAsistVisibilityController::SnapConditionVisibility(ConditionUIData& conditionData) {
+void ComboAssistVisibilityController::SnapConditionVisibility(ConditionUIData& conditionData) {
     SnapGroupVisibility(conditionData.xUIGroup);
     SnapGroupVisibility(conditionData.yUIGroup);
 }
@@ -21,11 +21,11 @@ void ComboAsistVisibilityController::SnapConditionVisibility(ConditionUIData& co
 ///==========================================================
 /// グループ内の全UI要素の表示/非表示を可視範囲に基づいて更新
 ///==========================================================
-void ComboAsistVisibilityController::UpdateGroupVisibility(ComboUIGroup& uiGroup) {
+void ComboAssistVisibilityController::UpdateGroupVisibility(ComboUIGroup& uiGroup) {
     ApplyRangeVisibleToGroup(uiGroup);
 }
 
-void ComboAsistVisibilityController::SnapGroupVisibility(ComboUIGroup& uiGroup) {
+void ComboAssistVisibilityController::SnapGroupVisibility(ComboUIGroup& uiGroup) {
     for (auto& btn : uiGroup.mainButtonUIs) {
         btn->SnapRangeState(IsInVisibleRange(btn->GetColumnNum(), btn->GetRowNum()));
     }
@@ -47,7 +47,7 @@ void ComboAsistVisibilityController::SnapGroupVisibility(ComboUIGroup& uiGroup) 
     }
 }
 
-void ComboAsistVisibilityController::ApplyRangeVisibleToGroup(ComboUIGroup& uiGroup) {
+void ComboAssistVisibilityController::ApplyRangeVisibleToGroup(ComboUIGroup& uiGroup) {
     for (auto& btn : uiGroup.mainButtonUIs) {
         btn->SetRangeVisible(IsInVisibleRange(btn->GetColumnNum(), btn->GetRowNum()));
     }
@@ -72,7 +72,7 @@ void ComboAsistVisibilityController::ApplyRangeVisibleToGroup(ComboUIGroup& uiGr
 ///==========================================================
 /// 指定列のUI要素を強制的に範囲外にする
 ///==========================================================
-void ComboAsistVisibilityController::TriggerLeaveRangeForColumn(ComboUIGroup& uiGroup, int32_t col) {
+void ComboAssistVisibilityController::TriggerLeaveRangeForColumn(ComboUIGroup& uiGroup, int32_t col) {
     for (auto& btn : uiGroup.mainButtonUIs) {
         if (btn->GetColumnNum() == col) {
             btn->SetRangeVisible(false);
@@ -107,11 +107,11 @@ void ComboAsistVisibilityController::TriggerLeaveRangeForColumn(ComboUIGroup& ui
 ///==========================================================
 /// 範囲判定ヘルパー
 ///==========================================================
-bool ComboAsistVisibilityController::IsInVisibleRange(int32_t col, int32_t row) const {
+bool ComboAssistVisibilityController::IsInVisibleRange(int32_t col, int32_t row) const {
     return col >= 0 && col <= maxVisibleColumn_ && row >= 0 && row <= maxVisibleRow_;
 }
 
-bool ComboAsistVisibilityController::IsArrowVisible(const ComboAsistArrowUI& arrow) const {
+bool ComboAssistVisibilityController::IsArrowVisible(const ComboAssistArrowUI& arrow) const {
     return arrow.GetFromCol() >= 0 && arrow.GetToCol() <= maxVisibleColumn_ &&
            arrow.GetFromRow() >= 0 && arrow.GetToRow() <= maxVisibleRow_;
 }

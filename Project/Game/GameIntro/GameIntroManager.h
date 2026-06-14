@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseGameIntro.h"
 #include "MovieLine.h"
-class ComboAsistController;
+class ComboAssistController;
 class ComboSupportSpriteUi;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <array>
@@ -74,7 +74,7 @@ private:
     float currentPlaySpeedRate_                  = 1.0f;
     float fastSpeedRate_                         = 3.0f;
 
-    ComboAsistController* pComboAsistController_    = nullptr;
+    ComboAssistController* pComboAssistController_    = nullptr;
     ComboSupportSpriteUi* pComboSupportSpriteUi_  = nullptr;
     OperateUI* pHowToOperate_                      = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
@@ -98,7 +98,7 @@ public:
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject);
     void SetStressGaugeGauge(StressGaugeGauge* StressGaugeGauge);
     void SetSpeedMultiplier(float multiplier) { currentPlaySpeedRate_ = multiplier; }
-    void SetComboAsistController(ComboAsistController* controller) { pComboAsistController_ = controller; }
+    void SetComboAssistController(ComboAssistController* controller) { pComboAssistController_ = controller; }
     void SetComboSupportSpriteUi(ComboSupportSpriteUi* ui) { pComboSupportSpriteUi_ = ui; }
     void ClassisSet();
 };

@@ -178,7 +178,7 @@ float TimelineDrawer::InterpolateValue(const TimeLineKeyFrame& key1, const TimeL
 }
 
 void TimelineDrawer::ApplyCurrentFrame() {
-    // 現在のフレーム値を全Trackに適応
+    // 現在のフレーム値を全Trackに適用
     for (uint32_t i = 0; i < tracks_.size(); i++) {
         if (tracks_[i].onValueChanged) {
             // 値が変わったらアプリ側でセットしたコールバック処理を呼び出す

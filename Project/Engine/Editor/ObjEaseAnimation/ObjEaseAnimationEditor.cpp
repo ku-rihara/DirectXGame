@@ -51,7 +51,7 @@ void ObjEaseAnimationEditor::UpdatePreviewObject() {
 
             animation = category.effects[category.selectedEffectIndex].get();
 
-            // オフセットの適応
+            // オフセットの適用
             if (animation && animation->IsPlaying()) {
                 Vector3 scaleOffset = animation->GetActiveKeyFrameValue(
                     ObjEaseAnimationData::TransformType::Scale);

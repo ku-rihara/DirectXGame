@@ -25,7 +25,7 @@ void Audience::Init(int32_t index) {
     particlePlayer_ = std::make_unique<KetaEngine::ParticlePlayer>();
     particlePlayer_->Init();
 
-    // 列の適応
+    // 列の適用
     seatSide_ = static_cast<SeatSide>(seatSideIndex_);
 
     // アニメーションオブジェクト作成
@@ -133,7 +133,7 @@ void Audience::DisAppearByComboLevel(int32_t level) {
 
 
 void Audience::AdaptPosition(const Vector2& ZYBasePos) {
-    // Position適応
+    // Position適用
     objAnimation_->transform_.translation_.y = ZYBasePos.y;
     objAnimation_->transform_.translation_.z = ZYBasePos.x;
 }

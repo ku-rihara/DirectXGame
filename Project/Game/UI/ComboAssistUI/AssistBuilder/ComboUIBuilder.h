@@ -28,16 +28,16 @@ public:
     //=== ヘルパー ===
 
     /// グループ内の全UI要素に操作を適用
-    void ApplyToGroup(ComboUIGroup& uiGroup, const std::function<void(BaseComboAsistUI&)>& func);
+    void ApplyToGroup(ComboUIGroup& uiGroup, const std::function<void(BaseComboAssistUI&)>& func);
 
     /// 条件データの x/y 両グループに操作を適用
-    void ApplyToCondition(ConditionUIData& conditionData, const std::function<void(BaseComboAsistUI&)>& func);
+    void ApplyToCondition(ConditionUIData& conditionData, const std::function<void(BaseComboAssistUI&)>& func);
 
     /// パスステップとUIボタンのペアに操作を適用
     void ForEachStepButton(
         const ComboPathBuilder::ComboPathGroup& pathGroup,
         ComboUIGroup& uiGroup,
-        const std::function<void(const ComboPathBuilder::ComboStep&, ComboAsistButtonUI&)>& func);
+        const std::function<void(const ComboPathBuilder::ComboStep&, ComboAssistButtonUI&)>& func);
 
 private:
     /// 1つの発動条件のUI生成（X/Yグループ両方）

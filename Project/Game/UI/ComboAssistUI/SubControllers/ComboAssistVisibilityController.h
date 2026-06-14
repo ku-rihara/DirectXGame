@@ -1,16 +1,16 @@
 #pragma once
-#include "../AsistParts/ComboAsistArrowUI.h"
-#include "../AsistBuilder/ComboUIBuilder.h"
+#include "../AssistParts/ComboAssistArrowUI.h"
+#include "../AssistBuilder/ComboUIBuilder.h"
 #include <cstdint>
 
 /// <summary>
 /// コンボアシストの表示範囲管理クラス
 /// 各UI要素が可視範囲内かを判定し、ScaleIn/Outアニメーションをトリガーする
 /// </summary>
-class ComboAsistVisibilityController {
+class ComboAssistVisibilityController {
 public:
-    ComboAsistVisibilityController()  = default;
-    ~ComboAsistVisibilityController() = default;
+    ComboAssistVisibilityController()  = default;
+    ~ComboAssistVisibilityController() = default;
 
     /// 表示範囲の最大値を設定する
     void SetVisibleRange(int32_t maxCol, int32_t maxRow);
@@ -29,7 +29,7 @@ public:
 
 private:
     bool IsInVisibleRange(int32_t col, int32_t row) const;
-    bool IsArrowVisible(const ComboAsistArrowUI& arrow) const;
+    bool IsArrowVisible(const ComboAssistArrowUI& arrow) const;
     void ApplyRangeVisibleToGroup(ComboUIGroup& uiGroup);
     void SnapGroupVisibility(ComboUIGroup& uiGroup);
 

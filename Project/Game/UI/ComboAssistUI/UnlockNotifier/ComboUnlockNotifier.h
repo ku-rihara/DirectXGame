@@ -1,10 +1,10 @@
 #pragma once
-// AsistParts
-#include "UI/ComboAsistUI/AsistParts/ComboAsistArrowUI.h"
-#include "UI/ComboAsistUI/AsistParts/ComboAsistButtonUI.h"
+// AssistParts
+#include "UI/ComboAssistUI/AssistParts/ComboAssistArrowUI.h"
+#include "UI/ComboAssistUI/AssistParts/ComboAssistButtonUI.h"
 // Builder / Data
-#include "../AsistBuilder/ComboPathBuilder.h"
-#include "../AsistBuilder/ComboUIBuilder.h"
+#include "../AssistBuilder/ComboPathBuilder.h"
+#include "../AssistBuilder/ComboUIBuilder.h"
 // Player
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 // Easing
@@ -36,10 +36,10 @@ public:
         std::unique_ptr<KetaEngine::Sprite> conditionIconSprite;
 
         // 攻撃ステップのボタンUI群
-        std::vector<std::unique_ptr<ComboAsistButtonUI>> buttonUIs;
+        std::vector<std::unique_ptr<ComboAssistButtonUI>> buttonUIs;
 
         // ボタン間の矢印UI
-        std::vector<std::unique_ptr<ComboAsistArrowUI>> arrowUIs;
+        std::vector<std::unique_ptr<ComboAssistArrowUI>> arrowUIs;
 
         /// このカードのレイアウト基準
         float basePositionX = 0.0f;
@@ -57,7 +57,7 @@ public:
         float closeWaitTimer = 0.0f;
 
         // スライドイン完了後にアンロック演出を再生するボタン
-        ComboAsistButtonUI* unlockTargetButton = nullptr;
+        ComboAssistButtonUI* unlockTargetButton = nullptr;
 
         // 将来の自動実行再有効化のためデータを保持
         Player* player = nullptr;

@@ -48,12 +48,12 @@ uint32_t ParticleRenderer::BuildInstancingData(
             break;
         }
 
-        // WVP適応
+        // WVP適用
         instancingData[instanceIndex].World                 = it->worldTransform_->matWorld_;
         instancingData[instanceIndex].WVP                   = it->worldTransform_->matWorld_ * matView * matProj;
         instancingData[instanceIndex].WorldInverseTranspose = Inverse(Transpose(it->worldTransform_->matWorld_));
 
-        /// Alpha適応
+        /// Alpha適用
         AlphaAdapt(instancingData[instanceIndex], *it);
 
         ///==========================================================================================

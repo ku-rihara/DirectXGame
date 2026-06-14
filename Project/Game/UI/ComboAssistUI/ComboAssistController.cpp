@@ -1,4 +1,4 @@
-#include "ComboAsistController.h"
+#include "ComboAssistController.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 #include "input/InputData.h"
@@ -13,7 +13,7 @@
 ///==========================================================
 /// Init
 ///==========================================================
-void ComboAsistController::Init() {
+void ComboAssistController::Init() {
     if (!pAttackController_) {
         return;
     }
@@ -41,11 +41,11 @@ void ComboAsistController::Init() {
         &currentCondition_);
 
     // スライドイージングの初期化
-    slideInEasing_.Init("ComboAsistSlideIn.json");
+    slideInEasing_.Init("ComboAssistSlideIn.json");
     slideInEasing_.SetAdaptValue(&slideOffsetX_);
     slideInEasing_.Reset();
 
-    slideOutEasing_.Init("ComboAsistSlideOut.json");
+    slideOutEasing_.Init("ComboAssistSlideOut.json");
     slideOutEasing_.SetAdaptValue(&slideOffsetX_);
     slideOutEasing_.Reset();
 
@@ -57,7 +57,7 @@ void ComboAsistController::Init() {
 
     // 全条件を明示的に非表示化
     for (auto& [cond, data] : conditionDataMap_) {
-        uiBuilder_.ApplyToCondition(data, [](BaseComboAsistUI& ui) { ui.SetVisible(false); });
+        uiBuilder_.ApplyToCondition(data, [](BaseComboAssistUI& ui) { ui.SetVisible(false); });
     }
 
     slideOffsetX_ = slideInEasing_.GetStartValue();
@@ -67,7 +67,7 @@ void ComboAsistController::Init() {
 ///==========================================================
 /// Update
 ///==========================================================
-void ComboAsistController::Update() {
+void ComboAssistController::Update() {
     conditionSwitcher_.SyncUnlockStates();
     UpdateComboState();
     CheckToggleInput();
@@ -79,9 +79,9 @@ void ComboAsistController::Update() {
             conditionSwitcher_.SwitchCondition(autoTarget,
                 [&](ConditionUIData&, ConditionUIData& next) {
                     ApplySlideOffset();
-                    uiBuilder_.ApplyToCondition(next, [](BaseComboAsistUI& ui) { ui.SnapToTarget(); });
+                    uiBuilder_.ApplyToCondition(next, [](BaseComboAssistUI& ui) { ui.SnapToTarget(); });
                     // isInRange_をfalseにリセットしてからUpdateConditionVisibilityでScaleInを発火
-                    uiBuilder_.ApplyToCondition(next, [](BaseComboAsistUI& ui) { ui.SnapRangeState(false); });
+                    uiBuilder_.ApplyToCondition(next, [](BaseComboAssistUI& ui) { ui.SnapRangeState(false); });
                     visibilityController_.UpdateConditionVisibility(next);
                     playedAttacks_.clear();
                 });
@@ -102,7 +102,7 @@ void ComboAsistController::Update() {
         }
 
         visibilityController_.UpdateConditionVisibility(*currentData);
-        uiBuilder_.ApplyToCondition(*currentData, [](BaseComboAsistUI& ui) { ui.Update(); });
+        uiBuilder_.ApplyToCondition(*currentData, [](BaseComboAssistUI& ui) { ui.Update(); });
 
     }
 }
@@ -110,7 +110,7 @@ void ComboAsistController::Update() {
 ///==========================================================
 /// UI再構築
 ///==========================================================
-void ComboAsistController::RebuildAllConditions() {
+void ComboAssistController::RebuildAllConditions() {
     // 全攻撃発動条件のコンボアシストUIを構築
     uiBuilder_.BuildAllConditions(
         pAttackController_,
@@ -123,20 +123,20 @@ void ComboAsistController::RebuildAllConditions() {
 ///==========================================================
 /// スライドイン・アウト
 ///==========================================================
-void ComboAsistController::StartSlideIn() {
+void ComboAssistController::StartSlideIn() {
     activeSlideEasing_ = &slideInEasing_;
     activeSlideEasing_->Reset();
     isSliding_ = true;
     isVisible_ = true;
 }
 
-void ComboAsistController::StartSlideOut() {
+void ComboAssistController::StartSlideOut() {
     activeSlideEasing_ = &slideOutEasing_;
     activeSlideEasing_->Reset();
     isSliding_ = true;
 }
 
-void ComboAsistController::UpdateSlide(float deltaTime) {
+void ComboAssistController::UpdateSlide(float deltaTime) {
     if (!isSliding_ || !activeSlideEasing_) {
         return;
     }
@@ -150,15 +150,15 @@ void ComboAsistController::UpdateSlide(float deltaTime) {
     }
 }
 
-void ComboAsistController::ApplySlideOffset() {
+void ComboAssistController::ApplySlideOffset() {
     auto* currentData = GetCurrentData();
     if (currentData) {
         ApplySlideOffsetToCondition(*currentData);
     }
 }
 
-void ComboAsistController::ApplySlideOffsetToCondition(ConditionUIData& data) {
-    uiBuilder_.ApplyToCondition(data, [&](BaseComboAsistUI& ui) {
+void ComboAssistController::ApplySlideOffsetToCondition(ConditionUIData& data) {
+    uiBuilder_.ApplyToCondition(data, [&](BaseComboAssistUI& ui) {
         ui.ApplySlideOffset(slideOffsetX_);
     });
 }
@@ -166,7 +166,7 @@ void ComboAsistController::ApplySlideOffsetToCondition(ConditionUIData& data) {
 ///==========================================================
 /// パネル開閉
 ///==========================================================
-void ComboAsistController::OpenPanel() {
+void ComboAssistController::OpenPanel() {
     if (panelMode_ == PanelMode::Open) {
         return;
     }
@@ -175,7 +175,7 @@ void ComboAsistController::OpenPanel() {
     isModeTransitioning_ = true;
 }
 
-void ComboAsistController::TogglePanelMode() {
+void ComboAssistController::TogglePanelMode() {
     if (isModeTransitioning_) {
         return;
     }
@@ -189,7 +189,7 @@ void ComboAsistController::TogglePanelMode() {
     isModeTransitioning_ = true;
 }
 
-void ComboAsistController::CheckToggleInput() {
+void ComboAssistController::CheckToggleInput() {
     if (KetaEngine::Input::IsTriggerPad(0, GamepadButton::DPadUp)) {
         TogglePanelMode();
     }
@@ -198,7 +198,7 @@ void ComboAsistController::CheckToggleInput() {
 ///==========================================================
 /// 攻撃発動演出
 ///==========================================================
-void ComboAsistController::UpdateComboState() {
+void ComboAssistController::UpdateComboState() {
     if (!pPlayer_) {
         return;
     }
@@ -246,23 +246,23 @@ void ComboAsistController::UpdateComboState() {
     prevBehaviorName_ = name;
 }
 
-void ComboAsistController::SetGroupActiveOutLines(
+void ComboAssistController::SetGroupActiveOutLines(
     const ComboPathBuilder::ComboPathGroup& pathGroup,
     ComboUIGroup& uiGroup,
     const std::unordered_set<std::string>& activeAttacks) {
 
     uiBuilder_.ForEachStepButton(pathGroup, uiGroup,
-        [&](const ComboPathBuilder::ComboStep& step, ComboAsistButtonUI& btn) {
+        [&](const ComboPathBuilder::ComboStep& step, ComboAssistButtonUI& btn) {
             btn.SetActiveOutLine(activeAttacks.count(step.attackName) > 0);
         });
 }
 
-void ComboAsistController::PlayPushScalingForAttack(
+void ComboAssistController::PlayPushScalingForAttack(
     const ComboPathBuilder::ComboPathGroup& pathGroup,
     ComboUIGroup& uiGroup,
     const std::string& attackName) {
     uiBuilder_.ForEachStepButton(pathGroup, uiGroup,
-        [&](const ComboPathBuilder::ComboStep&, ComboAsistButtonUI& btn) {
+        [&](const ComboPathBuilder::ComboStep&, ComboAssistButtonUI& btn) {
             btn.TryPlayPushScaling(attackName);
         });
 }
@@ -270,19 +270,19 @@ void ComboAsistController::PlayPushScalingForAttack(
 ///==========================================================
 /// ヘルパー
 ///==========================================================
-ConditionUIData* ComboAsistController::GetCurrentData() {
+ConditionUIData* ComboAssistController::GetCurrentData() {
     auto it = conditionDataMap_.find(currentCondition_);
     return (it != conditionDataMap_.end()) ? &it->second : nullptr;
 }
 
-LayoutParam ComboAsistController::MakeLayoutParam() const {
+LayoutParam ComboAssistController::MakeLayoutParam() const {
     return {basePosition_, arrowOffset_, columnSpacing_, rowSpacing_, yGroupOffsetY_, buttonScale_, arrowScale_};
 }
 
 ///==========================================================
 /// パラメータ
 ///==========================================================
-void ComboAsistController::RegisterParams() {
+void ComboAssistController::RegisterParams() {
     globalParameter_->Regist(groupName_, "basePosition", &basePosition_);
     globalParameter_->Regist(groupName_, "arrowOffset", &arrowOffset_);
     globalParameter_->Regist(groupName_, "columnSpacing", &columnSpacing_);
@@ -297,7 +297,7 @@ void ComboAsistController::RegisterParams() {
     globalParameter_->Regist(groupName_, "remainCountScale",        &remainCountScale_);
 }
 
-void ComboAsistController::AdjustParam() {
+void ComboAssistController::AdjustParam() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
@@ -315,7 +315,7 @@ void ComboAsistController::AdjustParam() {
         if (ImGui::Button("Rebuild UI")) {
             RebuildAllConditions();
             for (auto& [cond, data] : conditionDataMap_) {
-                uiBuilder_.ApplyToCondition(data, [](BaseComboAsistUI& ui) { ui.SetVisible(false); });
+                uiBuilder_.ApplyToCondition(data, [](BaseComboAssistUI& ui) { ui.SetVisible(false); });
             }
             visibilityController_.SetVisibleRange(maxVisibleColumn_, maxVisibleRow_);
             columnScroller_.SetVisibleRange(maxVisibleColumn_, maxVisibleRow_);

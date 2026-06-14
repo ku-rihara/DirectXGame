@@ -1,5 +1,5 @@
 #include "ComboSupportSpriteUi.h"
-#include "UI/ComboAsistUI/ComboAsistController.h"
+#include "UI/ComboAssistUI/ComboAssistController.h"
 #include "base/TextureManager.h"
 #include <imgui.h>
 
@@ -26,7 +26,7 @@ void ComboSupportSpriteUi::RegisterParams() {
 }
 
 void ComboSupportSpriteUi::Update() {
-    if (!pComboAsist_) {
+    if (!pComboAssist_) {
         return;
     }
     UpdateBgPositions();
@@ -34,18 +34,18 @@ void ComboSupportSpriteUi::Update() {
 }
 
 void ComboSupportSpriteUi::UpdateBgPositions() {
-    const Vector2& basePos = pComboAsist_->GetBasePosition();
+    const Vector2& basePos = pComboAssist_->GetBasePosition();
     for (int32_t i = 0; i < static_cast<int32_t>(BgType::COUNT); ++i) {
         bgSprites_[i]->transform_.pos = basePos + bgOffsets_[i];
     }
 }
 
 void ComboSupportSpriteUi::UpdateConditionSprite() {
-   /* const Vector2& basePos           = pComboAsist_->GetBasePosition();
+   /* const Vector2& basePos           = pComboAssist_->GetBasePosition();
     conditionSprite_->transform_.pos = basePos + conditionOffset_;
 
     using TriggerCondition = PlayerComboAttackData::TriggerCondition;
-    const TriggerCondition condition = pComboAsist_->GetCurrentCondition();
+    const TriggerCondition condition = pComboAssist_->GetCurrentCondition();
 
     float uvPosX = (condition == TriggerCondition::AIR) ? 0.5f : 0.0f;
     conditionSprite_->SetUVPosition({uvPosX, 0.0f});*/

@@ -72,7 +72,7 @@ void GameScene::Debug() {
     gameObj_.lockOnController_->AdjustParam();
     gameObj_.StressGauge_->AdjustParam();
     gameObj_.killCounter_->AdjustParam();
-    gameObj_.comboAsistController_->AdjustParam();
+    gameObj_.comboAssistController_->AdjustParam();
     gameObj_.unlockNotifier_->AdjustParam();
     gameObj_.comboSupportSpriteUi_->AdjustParam();
     gameObj_.nextAttackHintUI_->AdjustParam();
@@ -132,7 +132,7 @@ void GameScene::ObjectInit() {
     gameObj_.audienceController_          = std::make_unique<AudienceController>();
     gameObj_.StressGauge_                  = std::make_unique<StressGauge>();
     gameObj_.killCounter_                 = std::make_unique<KillCounter>();
-    gameObj_.comboAsistController_        = std::make_unique<ComboAsistController>();
+    gameObj_.comboAssistController_        = std::make_unique<ComboAssistController>();
     gameObj_.unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
     gameObj_.comboSupportSpriteUi_        = std::make_unique<ComboSupportSpriteUi>();
     gameObj_.nextAttackHintUI_            = std::make_unique<NextAttackHintUI>();
@@ -188,7 +188,7 @@ void GameScene::SetClassPointer() {
     gameObj_.operateUI_->SetPlayer(gameObj_.player_.get());
     gameObj_.gameIntroManager_->SetHowToOperate(gameObj_.operateUI_.get());
     gameObj_.gameIntroManager_->SetStressGaugeGauge(gameObj_.StressGauge_->GetStressGaugeGauge());
-    gameObj_.gameIntroManager_->SetComboAsistController(gameObj_.comboAsistController_.get());
+    gameObj_.gameIntroManager_->SetComboAssistController(gameObj_.comboAssistController_.get());
     gameObj_.gameIntroManager_->SetComboSupportSpriteUi(gameObj_.comboSupportSpriteUi_.get());
     gameObj_.gameIntroManager_->ClassisSet();
 
@@ -211,12 +211,12 @@ void GameScene::SetClassPointer() {
     gameObj_.playerComboAttackController_->SetPlayer(gameObj_.player_.get());
     gameObj_.playerComboAttackController_->SetEnemyManager(gameObj_.enemyManager_.get());
 
-    gameObj_.comboAsistController_->SetAttackController(gameObj_.playerComboAttackController_.get());
-    gameObj_.comboAsistController_->SetPlayer(gameObj_.player_.get());
-    gameObj_.comboAsistController_->SetKillCounter(gameObj_.killCounter_.get());
-    gameObj_.comboAsistController_->Init();
+    gameObj_.comboAssistController_->SetAttackController(gameObj_.playerComboAttackController_.get());
+    gameObj_.comboAssistController_->SetPlayer(gameObj_.player_.get());
+    gameObj_.comboAssistController_->SetKillCounter(gameObj_.killCounter_.get());
+    gameObj_.comboAssistController_->Init();
 
-    gameObj_.comboSupportSpriteUi_->SetComboAsistController(gameObj_.comboAsistController_.get());
+    gameObj_.comboSupportSpriteUi_->SetComboAssistController(gameObj_.comboAssistController_.get());
     gameObj_.comboSupportSpriteUi_->Init();
 
     ComboUnlockNotifier* notifier = gameObj_.unlockNotifier_.get();
@@ -226,11 +226,11 @@ void GameScene::SetClassPointer() {
 
     // 攻撃解放 → アンロック通知UI の接続
     {
-        ComboAsistController* asist          = gameObj_.comboAsistController_.get();
+        ComboAssistController* assist          = gameObj_.comboAssistController_.get();
         PlayerComboAttackController* atkCtrl = gameObj_.playerComboAttackController_.get();
         Player* player                       = gameObj_.player_.get();
-        gameObj_.killCounter_->SetOnAttackUnlockedCallback([notifier, asist, atkCtrl, player](const std::string& name) {
-            notifier->OnAttackUnlocked(name, asist->GetLayoutParam(), atkCtrl, player);
+        gameObj_.killCounter_->SetOnAttackUnlockedCallback([notifier, assist, atkCtrl, player](const std::string& name) {
+            notifier->OnAttackUnlocked(name, assist->GetLayoutParam(), atkCtrl, player);
         });
     }
 }

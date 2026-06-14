@@ -56,7 +56,7 @@ private:
     void CreateObject();
     // パラメータ登録
     void RegisterParams();
-    // RotateY適応
+    // RotateY適用
     void RotateYChangeBySeatSide(SeatSide seatSide);
 
 private:

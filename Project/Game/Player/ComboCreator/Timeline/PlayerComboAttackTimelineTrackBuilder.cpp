@@ -45,7 +45,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
         for (int32_t i = 0; i < totalCount; ++i) {
             int32_t kfFrame = startFrame + i * (durationFrames + waitFrames);
             timelineDrawer_->AddKeyFrame(trackIdx, kfFrame, 1.0f,
-                static_cast<float>(durationFrames), "コライダー適応時間");
+                static_cast<float>(durationFrames), "コライダー適用時間");
 
             // 先頭以外のキーフレームは位置をロック
             if (i > 0) {

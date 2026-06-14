@@ -116,7 +116,7 @@ void ParticleUpdater::UpdateGroup(
                     it->speedV3 = it->direction_ * spd;
                 }
 
-                // 各軸の適応
+                // 各軸の適用
                 if (it->isRotateForDirection) {
                     Vector3 d = it->direction_;
                     if (it->rotateForDirectionX) {

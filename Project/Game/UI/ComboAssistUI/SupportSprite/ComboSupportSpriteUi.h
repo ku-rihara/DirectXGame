@@ -9,7 +9,7 @@
 #include <memory>
 #include <string>
 
-class ComboAsistController;
+class ComboAssistController;
 
 /// <summary>
 /// コンボアシストUIのサポートスプライトUI
@@ -39,7 +39,7 @@ public:
     /// ゲームイントロに合わせてスケールを外部から制御する
     void SetScale(const Vector2& scale);
 
-    void SetComboAsistController(ComboAsistController* controller) { pComboAsist_ = controller; }
+    void SetComboAssistController(ComboAssistController* controller) { pComboAssist_ = controller; }
 
 private:
     void RegisterParams();
@@ -47,7 +47,7 @@ private:
     void UpdateConditionSprite();
 
 private:
-    ComboAsistController*       pComboAsist_     = nullptr;
+    ComboAssistController*       pComboAssist_     = nullptr;
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_                 = "ComboSupportSpriteUi";
     

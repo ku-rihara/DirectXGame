@@ -19,13 +19,13 @@ void NextAttackHintUI::Init(Player* player) {
     // LayoutParam は位置・矢印設定不要（毎フレーム SetPosition で直接指定）
     LayoutParam layout = {};
 
-    xButtonUI_ = std::make_unique<ComboAsistButtonUI>();
+    xButtonUI_ = std::make_unique<ComboAssistButtonUI>();
     xButtonUI_->Init(XINPUT_GAMEPAD_X, false, layout, "");
     xButtonUI_->SetUnlockSoundEnabled(false);
     xButtonUI_->SetScale(spriteScale_);
     xButtonUI_->SetVisible(false);
 
-    yButtonUI_ = std::make_unique<ComboAsistButtonUI>();
+    yButtonUI_ = std::make_unique<ComboAssistButtonUI>();
     yButtonUI_->Init(XINPUT_GAMEPAD_Y, false, layout, "");
     yButtonUI_->SetUnlockSoundEnabled(false);
     yButtonUI_->SetScale(spriteScale_);

@@ -1,7 +1,7 @@
-#include "ComboAsistArrowUI.h"
+#include "ComboAssistArrowUI.h"
 #include <cmath>
 
-void ComboAsistArrowUI::Init(int32_t fromCol, int32_t fromRow, int32_t toCol, int32_t toRow, const LayoutParam& layout) {
+void ComboAssistArrowUI::Init(int32_t fromCol, int32_t fromRow, int32_t toCol, int32_t toRow, const LayoutParam& layout) {
     fromCol_ = fromCol;
     fromRow_ = fromRow;
     toCol_   = toCol;
@@ -25,11 +25,11 @@ void ComboAsistArrowUI::Init(int32_t fromCol, int32_t fromRow, int32_t toCol, in
     needsLerpUpdate_ = false;
 }
 
-void ComboAsistArrowUI::Update() {
-    BaseComboAsistUI::Update();
+void ComboAssistArrowUI::Update() {
+    BaseComboAssistUI::Update();
 }
 
-void ComboAsistArrowUI::ApplyLayout() {
+void ComboAssistArrowUI::ApplyLayout() {
     // 始点・終点のボタン位置を計算
     Vector2 fromPos(
         layout_.basePosition.x + fromCol_ * layout_.columnSpacing + slideOffsetX_,
@@ -55,25 +55,25 @@ void ComboAsistArrowUI::ApplyLayout() {
     SetScale({layout_.arrowScale, layout_.arrowScale});
 }
 
-void ComboAsistArrowUI::ShiftColumns(int32_t delta) {
+void ComboAssistArrowUI::ShiftColumns(int32_t delta) {
     fromCol_ += delta;
     toCol_ += delta;
 }
 
-void ComboAsistArrowUI::ShiftRows(int32_t delta) {
+void ComboAssistArrowUI::ShiftRows(int32_t delta) {
     fromRow_ += delta;
     toRow_ += delta;
 }
 
-void ComboAsistArrowUI::PlayScaleIn() {
+void ComboAssistArrowUI::PlayScaleIn() {
     if (uiSprite_) {
         uiSprite_->transform_.scale = {0.0f, 0.0f};
-        uiSprite_->PlaySpriteEaseAnimation("ScaleInArrowUI", "ComboAsistUI");
+        uiSprite_->PlaySpriteEaseAnimation("ScaleInArrowUI", "ComboAssistUI");
     }
 }
 
-void ComboAsistArrowUI::PlayScaleOut() {
+void ComboAssistArrowUI::PlayScaleOut() {
     if (uiSprite_) {
-        uiSprite_->PlaySpriteEaseAnimation("ScaleOutArrowUI", "ComboAsistUI");
+        uiSprite_->PlaySpriteEaseAnimation("ScaleOutArrowUI", "ComboAssistUI");
     }
 }

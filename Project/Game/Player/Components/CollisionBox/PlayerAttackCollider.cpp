@@ -61,7 +61,7 @@ void PlayerAttackCollider::TimerUpdate(float timeSpeed) {
         return;
     }
 
-    // コリジョン適応タイマー減算
+    // コリジョン適用タイマー減算
     adaptTimer_ -= timeSpeed;
 
     if (adaptTimer_ > 0.0f) {

@@ -343,7 +343,7 @@
     <Filter Include="Game\Scene\TitleSceneController">
       <UniqueIdentifier>{312D31AF-0239-4C39-958E-838B4D991C46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UI\ComboAsistUI">
+    <Filter Include="Game\UI\ComboAssistUI">
       <UniqueIdentifier>{CBA01D37-E99D-4645-9494-F981FE454494}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\UI\KillBonus">
@@ -451,19 +451,19 @@
     <Filter Include="Game\Scene\GameSceneState\PauseController">
       <UniqueIdentifier>{9A86B53D-CA35-4392-96B0-91F9FD1F0963}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UI\ComboAsistUI\AsistBuilder">
+    <Filter Include="Game\UI\ComboAssistUI\AssistBuilder">
       <UniqueIdentifier>{4DA61D14-19BD-4563-B1E8-EE3CF6313C3B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UI\ComboAsistUI\AsistParts">
+    <Filter Include="Game\UI\ComboAssistUI\AssistParts">
       <UniqueIdentifier>{5DCD321F-50AE-48C4-AFEB-D3B7AB4B8500}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UI\ComboAsistUI\SubControllers">
+    <Filter Include="Game\UI\ComboAssistUI\SubControllers">
       <UniqueIdentifier>{92E31A5A-9F7A-4087-8940-8E9B242C5720}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UI\ComboAsistUI\SupportSprite">
+    <Filter Include="Game\UI\ComboAssistUI\SupportSprite">
       <UniqueIdentifier>{8AADE4F0-5BC3-4159-A0E5-D2391C819F39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UI\ComboAsistUI\UnlockNotifier">
+    <Filter Include="Game\UI\ComboAssistUI\UnlockNotifier">
       <UniqueIdentifier>{E8349E91-7CE8-4B02-8ABE-DE2CE0C40755}</UniqueIdentifier>
     </Filter>
     <Filter Include="resources\Shader\Particle\CS">
@@ -1470,23 +1470,23 @@
     <ClCompile Include="Game\SkyDome\SkyDome.cpp">
       <Filter>Game\SkyDome</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\BaseComboAsistUI.cpp">
-      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\AssistParts\BaseComboAssistUI.cpp">
+      <Filter>Game\UI\ComboAssistUI\AssistParts</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistArrowUI.cpp">
-      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\AssistParts\ComboAssistArrowUI.cpp">
+      <Filter>Game\UI\ComboAssistUI\AssistParts</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistButtonUI.cpp">
-      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\AssistParts\ComboAssistButtonUI.cpp">
+      <Filter>Game\UI\ComboAssistUI\AssistParts</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistColumnScroller.cpp">
-      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\SubControllers\ComboAssistColumnScroller.cpp">
+      <Filter>Game\UI\ComboAssistUI\SubControllers</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistConditionSwitcher.cpp">
-      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\SubControllers\ComboAssistConditionSwitcher.cpp">
+      <Filter>Game\UI\ComboAssistUI\SubControllers</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\ComboAsistController.cpp">
-      <Filter>Game\UI\ComboAsistUI</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\ComboAssistController.cpp">
+      <Filter>Game\UI\ComboAssistUI</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\KillBonus\KillBonusEntry.cpp">
       <Filter>Game\UI\KillBonus</Filter>
@@ -1518,26 +1518,26 @@
     <ClCompile Include="Game\UI\NumberDigitUI\NumberDigitUI.cpp">
       <Filter>Game\UI\NumberDigitUI</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.cpp">
-      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\SubControllers\ComboAssistVisibilityController.cpp">
+      <Filter>Game\UI\ComboAssistUI\SubControllers</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboPathBuilder.cpp">
-      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\AssistBuilder\ComboPathBuilder.cpp">
+      <Filter>Game\UI\ComboAssistUI\AssistBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.cpp">
-      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\AssistBuilder\ComboUIBuilder.cpp">
+      <Filter>Game\UI\ComboAssistUI\AssistBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIGroup.cpp">
-      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\AssistBuilder\ComboUIGroup.cpp">
+      <Filter>Game\UI\ComboAssistUI\AssistBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\AsistBuilder\ConditionUIData.cpp">
-      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\AssistBuilder\ConditionUIData.cpp">
+      <Filter>Game\UI\ComboAssistUI\AssistBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\SupportSprite\ComboSupportSpriteUi.cpp">
-      <Filter>Game\UI\ComboAsistUI\SupportSprite</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\SupportSprite\ComboSupportSpriteUi.cpp">
+      <Filter>Game\UI\ComboAssistUI\SupportSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.cpp">
-      <Filter>Game\UI\ComboAsistUI\UnlockNotifier</Filter>
+    <ClCompile Include="Game\UI\ComboAssistUI\UnlockNotifier\ComboUnlockNotifier.cpp">
+      <Filter>Game\UI\ComboAssistUI\UnlockNotifier</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\OperateUI.cpp">
       <Filter>Game\UI</Filter>
@@ -2617,23 +2617,23 @@
     <ClInclude Include="Game\SkyDome\SkyDome.h">
       <Filter>Game\SkyDome</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\BaseComboAsistUI.h">
-      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\AssistParts\BaseComboAssistUI.h">
+      <Filter>Game\UI\ComboAssistUI\AssistParts</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistArrowUI.h">
-      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\AssistParts\ComboAssistArrowUI.h">
+      <Filter>Game\UI\ComboAssistUI\AssistParts</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\AsistParts\ComboAsistButtonUI.h">
-      <Filter>Game\UI\ComboAsistUI\AsistParts</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\AssistParts\ComboAssistButtonUI.h">
+      <Filter>Game\UI\ComboAssistUI\AssistParts</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistColumnScroller.h">
-      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\SubControllers\ComboAssistColumnScroller.h">
+      <Filter>Game\UI\ComboAssistUI\SubControllers</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistConditionSwitcher.h">
-      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\SubControllers\ComboAssistConditionSwitcher.h">
+      <Filter>Game\UI\ComboAssistUI\SubControllers</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\ComboAsistController.h">
-      <Filter>Game\UI\ComboAsistUI</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\ComboAssistController.h">
+      <Filter>Game\UI\ComboAssistUI</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\KillBonus\KillBonusEntry.h">
       <Filter>Game\UI\KillBonus</Filter>
@@ -2665,26 +2665,26 @@
     <ClInclude Include="Game\UI\NumberDigitUI\NumberDigitUI.h">
       <Filter>Game\UI\NumberDigitUI</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\SubControllers\ComboAsistVisibilityController.h">
-      <Filter>Game\UI\ComboAsistUI\SubControllers</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\SubControllers\ComboAssistVisibilityController.h">
+      <Filter>Game\UI\ComboAssistUI\SubControllers</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboPathBuilder.h">
-      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\AssistBuilder\ComboPathBuilder.h">
+      <Filter>Game\UI\ComboAssistUI\AssistBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIBuilder.h">
-      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\AssistBuilder\ComboUIBuilder.h">
+      <Filter>Game\UI\ComboAssistUI\AssistBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ComboUIGroup.h">
-      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\AssistBuilder\ComboUIGroup.h">
+      <Filter>Game\UI\ComboAssistUI\AssistBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\AsistBuilder\ConditionUIData.h">
-      <Filter>Game\UI\ComboAsistUI\AsistBuilder</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\AssistBuilder\ConditionUIData.h">
+      <Filter>Game\UI\ComboAssistUI\AssistBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\SupportSprite\ComboSupportSpriteUi.h">
-      <Filter>Game\UI\ComboAsistUI\SupportSprite</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\SupportSprite\ComboSupportSpriteUi.h">
+      <Filter>Game\UI\ComboAssistUI\SupportSprite</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\ComboAsistUI\UnlockNotifier\ComboUnlockNotifier.h">
-      <Filter>Game\UI\ComboAsistUI\UnlockNotifier</Filter>
+    <ClInclude Include="Game\UI\ComboAssistUI\UnlockNotifier\ComboUnlockNotifier.h">
+      <Filter>Game\UI\ComboAssistUI\UnlockNotifier</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\OperateUI.h">
       <Filter>Game\UI</Filter>

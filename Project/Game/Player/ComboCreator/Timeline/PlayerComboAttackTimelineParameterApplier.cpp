@@ -258,7 +258,7 @@ int32_t PlayerComboAttackTimelineParameterApplier::GetFinishWaitStartFrame() con
     // コリジョン終了時間と移動終了時間の遅い方を終了待機開始フレームとする
     auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
 
-    // コリジョン終了フレーム = コリジョン開始時間 + 適応時間
+    // コリジョン終了フレーム = コリジョン開始時間 + 適用時間
     int32_t collisionEndFrame = KetaEngine::Frame::TimeToFrame(
         attackParam.collisionParam.startTime + attackParam.collisionParam.adaptTime);
 

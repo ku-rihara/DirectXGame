@@ -1,7 +1,7 @@
 #pragma once
-#include "../AsistParts/ComboAsistArrowUI.h"
-#include "ComboAsistVisibilityController.h"
-#include "../AsistBuilder/ComboUIBuilder.h"
+#include "../AssistParts/ComboAssistArrowUI.h"
+#include "ComboAssistVisibilityController.h"
+#include "../AssistBuilder/ComboUIBuilder.h"
 #include "Easing/Easing.h"
 #include <cstdint>
 #include <string>
@@ -10,12 +10,12 @@
 /// コンボアシストの列スクロール・行シフト管理クラス
 /// 表示範囲を超えた際の列シフト、分岐発動時の行シフト、リセット処理を担当する
 /// </summary>
-class ComboAsistColumnScroller {
+class ComboAssistColumnScroller {
 public:
-    ComboAsistColumnScroller()  = default;
-    ~ComboAsistColumnScroller() = default;
+    ComboAssistColumnScroller()  = default;
+    ~ComboAssistColumnScroller() = default;
 
-    void Init(ComboAsistVisibilityController* visibility);
+    void Init(ComboAssistVisibilityController* visibility);
 
     /// 列オーバーフローの検知・イージング更新を行う
     void CheckColumnOverflow(
@@ -55,7 +55,7 @@ private:
     bool HasNextStepAfterAttack(const ComboPathBuilder::ComboPathGroup& pathGroup, const std::string& attackName) const;
 
 private:
-    ComboAsistVisibilityController* pVisibility_ = nullptr;
+    ComboAssistVisibilityController* pVisibility_ = nullptr;
 
     // 列オーバーフローイージング
     KetaEngine::Easing<float> columnOverflowEasing_;

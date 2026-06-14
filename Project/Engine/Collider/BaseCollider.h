@@ -58,7 +58,7 @@ protected:
     std::unique_ptr<Line3D> debugLine_;
     Vector4 lineColor_ = Vector4::kWHITE();
 
-    // 衝突判定フラグ、衝突適応フラグ
+    // 衝突判定フラグ、衝突適用フラグ
     bool isColliding_     = false;
     bool isAdaptCollision = true;
 

@@ -83,7 +83,7 @@ void KTFramework::Run() {
         Frame::Update();
         auto t1 = Clock::now();
 
-        // BeginFrame: WaitForNextFrame(FLWO) + ImGui + Input
+        // BeginFrame: WaitForNextFrame(FLOW) + ImGui + Input
         engineCore_->BeginFrame();
         auto t2 = Clock::now();
 

@@ -1,8 +1,8 @@
-#include "ComboAsistButtonUI.h"
+#include "ComboAssistButtonUI.h"
 #include <XInput.h>
 #include "Audio/Audio.h"
 
-void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const LayoutParam& layout, const std::string& attackName) {
+void ComboAssistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const LayoutParam& layout, const std::string& attackName) {
     gamepadButton_ = gamepadButton;
     isUnlocked_    = isUnlocked;
     layout_        = layout;
@@ -45,8 +45,8 @@ void ComboAsistButtonUI::Init(int32_t gamepadButton, bool isUnlocked, const Layo
     }
 }
 
-void ComboAsistButtonUI::Update() {
-    BaseComboAsistUI::Update();
+void ComboAssistButtonUI::Update() {
+    BaseComboAssistUI::Update();
 
     unlockParticlePlayer_.Update();
     unlockParticlePlayer_.SetTargetPosition({currentDisplayPos_.x, currentDisplayPos_.y, 0.0f});
@@ -70,7 +70,7 @@ void ComboAsistButtonUI::Update() {
     }
 }
 
-void ComboAsistButtonUI::ApplyLayout() {
+void ComboAssistButtonUI::ApplyLayout() {
     // 基準位置 + 列・行番号に応じたオフセット + スライドオフセット
     Vector2 pos(
         layout_.basePosition.x + columnNum_ * layout_.columnSpacing + slideOffsetX_,
@@ -81,7 +81,7 @@ void ComboAsistButtonUI::ApplyLayout() {
     SetScale({layout_.buttonScale, layout_.buttonScale});
 }
 
-void ComboAsistButtonUI::SetUnlocked(bool isUnlocked) {
+void ComboAssistButtonUI::SetUnlocked(bool isUnlocked) {
     const bool justUnlocked = !isUnlocked_ && isUnlocked;
     isUnlocked_ = isUnlocked;
 
@@ -91,43 +91,43 @@ void ComboAsistButtonUI::SetUnlocked(bool isUnlocked) {
         }
         lockUI_->SetUVPosition({0.5f, 0.0f});
         isUnlockShakePlaying_ = true;
-        shakePlayer_.Play("UnlockShake", "ComboAsistUI");
+        shakePlayer_.Play("UnlockShake", "ComboAssistUI");
     }
 }
 
-void ComboAsistButtonUI::SetVisible(bool visible) {
-    BaseComboAsistUI::SetVisible(visible);
+void ComboAssistButtonUI::SetVisible(bool visible) {
+    BaseComboAssistUI::SetVisible(visible);
     // 解放済みの場合、SetVisible(true) でロックUIが再表示されるのを防ぐ
     if (visible && isUnlocked_ && lockUI_) {
         lockUI_->SetIsDraw(false);
     }
 }
 
-void ComboAsistButtonUI::TryPlayPushScaling(const std::string& attackName) {
+void ComboAssistButtonUI::TryPlayPushScaling(const std::string& attackName) {
     if (attackName_ == attackName) {
         PlayPushScaling();
     }
 }
 
-void ComboAsistButtonUI::SnapUnlocked(bool isUnlocked) {
+void ComboAssistButtonUI::SnapUnlocked(bool isUnlocked) {
     isUnlocked_ = isUnlocked;
     if (lockUI_) {
         lockUI_->SetIsDraw(!isUnlocked_);
     }
 }
 
-void ComboAsistButtonUI::PlayScaleIn() {
+void ComboAssistButtonUI::PlayScaleIn() {
     // uiSpriteのみアニメ再生
     if (uiSprite_) {
         uiSprite_->transform_.scale = {0.0f, 0.0f};
-        uiSprite_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAsistUI");
+        uiSprite_->PlaySpriteEaseAnimation("ScaleInUI", "ComboAssistUI");
     }
 }
 
-void ComboAsistButtonUI::PlayScaleOut() {
+void ComboAssistButtonUI::PlayScaleOut() {
     // uiSpriteのみアニメ再生
     if (uiSprite_) {
-        uiSprite_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAsistUI");
+        uiSprite_->PlaySpriteEaseAnimation("ScaleOutUI", "ComboAssistUI");
     }
 }
 

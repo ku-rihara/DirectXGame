@@ -381,7 +381,7 @@ void WorldTransform::ApplyAnimationToTransform() {
 }
 
 ///============================================================
-/// アニメーションのオリジナル値をtransformに直接適応
+/// アニメーションのオリジナル値をtransformに直接適用
 ///============================================================
 void WorldTransform::ApplyOriginalAnimationValuesToTransform() {
     ObjEaseTransformApplier::OffsetResult result;

@@ -1,8 +1,8 @@
-#include "ComboAsistConditionSwitcher.h"
+#include "ComboAssistConditionSwitcher.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
 
-void ComboAsistConditionSwitcher::Init(
+void ComboAssistConditionSwitcher::Init(
     PlayerComboAttackController* attackController,
     ComboUIBuilder* uiBuilder,
     std::map<PlayerComboAttackData::TriggerCondition, ConditionUIData>* conditionDataMap,
@@ -18,7 +18,7 @@ void ComboAsistConditionSwitcher::Init(
 ///==========================================================
 /// 自動条件切替
 ///==========================================================
-bool ComboAsistConditionSwitcher::CheckAutoConditionSwitch(
+bool ComboAssistConditionSwitcher::CheckAutoConditionSwitch(
     bool isVisible,
     Player* pPlayer,
     PlayerComboAttackData::TriggerCondition& outTargetCondition) {
@@ -47,7 +47,7 @@ bool ComboAsistConditionSwitcher::CheckAutoConditionSwitch(
 ///==========================================================
 /// 条件切替の実行
 ///==========================================================
-void ComboAsistConditionSwitcher::SwitchCondition(
+void ComboAssistConditionSwitcher::SwitchCondition(
     PlayerComboAttackData::TriggerCondition condition,
     const std::function<void(ConditionUIData& prev, ConditionUIData& next)>& onSwitch) {
 
@@ -57,7 +57,7 @@ void ComboAsistConditionSwitcher::SwitchCondition(
 
     ConditionUIData& prevData = (*pConditionDataMap_)[*pCurrentCondition_];
     // 旧条件を非表示
-    pUiBuilder_->ApplyToCondition(prevData, [](BaseComboAsistUI& ui) { ui.SetVisible(false); });
+    pUiBuilder_->ApplyToCondition(prevData, [](BaseComboAssistUI& ui) { ui.SetVisible(false); });
 
     *pCurrentCondition_ = condition;
 
@@ -69,7 +69,7 @@ void ComboAsistConditionSwitcher::SwitchCondition(
 ///==========================================================
 /// ロック状態の同期
 ///==========================================================
-void ComboAsistConditionSwitcher::SyncUnlockStates() {
+void ComboAssistConditionSwitcher::SyncUnlockStates() {
     if (!pAttackController_) {
         return;
     }
@@ -79,11 +79,11 @@ void ComboAsistConditionSwitcher::SyncUnlockStates() {
     }
 }
 
-void ComboAsistConditionSwitcher::SyncGroupUnlockStates(
+void ComboAssistConditionSwitcher::SyncGroupUnlockStates(
     const ComboPathBuilder::ComboPathGroup& pathGroup,
     ComboUIGroup& uiGroup) {
     pUiBuilder_->ForEachStepButton(pathGroup, uiGroup,
-        [&](const ComboPathBuilder::ComboStep& step, ComboAsistButtonUI& btn) {
+        [&](const ComboPathBuilder::ComboStep& step, ComboAssistButtonUI& btn) {
             auto* attackData = pAttackController_->GetAttackByName(step.attackName);
             if (attackData) {
                 btn.SetUnlocked(attackData->GetAttackParam().isUnlocked);
