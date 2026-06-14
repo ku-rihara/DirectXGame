@@ -353,13 +353,6 @@ void Object3DAnimation::DebugLineSet() {
 }
 
 ///============================================================
-/// デバッグImGui
-///============================================================
-void Object3DAnimation::DebugImGui() {
-    BaseObject3d::DebugImGui();
-}
-
-///============================================================
 /// 計算メソッド
 ///============================================================
 Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
@@ -368,25 +361,6 @@ Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& ke
 
 Quaternion Object3DAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time) {
     return modelAnimation_->CalculateValueQuaternion(keyframe, time);
-}
-
-///============================================================
-/// BaseObject3dのオーバーライド
-///============================================================
-void Object3DAnimation::UpdateWVPData(const ViewProjection& viewProjection) {
-    BaseObject3d::UpdateWVPData(viewProjection);
-}
-
-void Object3DAnimation::CreateWVPResource() {
-    BaseObject3d::CreateWVPResource();
-}
-
-void Object3DAnimation::CreateMaterialResource() {
-    BaseObject3d::CreateMaterialResource();
-}
-
-void Object3DAnimation::CreateShadowMap() {
-    BaseObject3d::CreateShadowMap();
 }
 
 ///============================================================

@@ -31,7 +31,3 @@ void AABBCollider::UpdateWorldTransform() {
 void AABBCollider::SetDebugCube() {
     debugLine_->SetCubeWireframe(cTransform_.GetWorldPos(), cTransform_.scale_, lineColor_);
 }
-
-Vector3 AABBCollider::GetCollisionPos() const {
-   return BaseCollider::GetCollisionPos();
-}

@@ -43,10 +43,6 @@ void OBBCollider::SetDebugCube() {
     DrawOBBLine(obb_, lineColor_);
 }
 
-Vector3 OBBCollider::GetCollisionPos() const {
-    return BaseCollider::GetCollisionPos();
-}
-
 Vector3 OBBCollider::GetRotate() const {
     Vector3 rotate;
     rotate = cTransform_.rotation_;

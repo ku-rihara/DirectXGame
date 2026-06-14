@@ -14,10 +14,6 @@ void LuminanceBasedOutline::Init(DirectXCommon* dxCommon) {
     BasePostEffect::Init(dxCommon);
 }
 
-void LuminanceBasedOutline::CreateGraphicsPipeline() {
-    BasePostEffect::CreateGraphicsPipeline();
-}
-
 void LuminanceBasedOutline::CreateRootSignature() {
     HRESULT hr = 0;
     // RootSignatureを作成

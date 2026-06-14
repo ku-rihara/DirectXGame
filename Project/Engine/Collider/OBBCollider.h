@@ -29,7 +29,6 @@ public:
     void DrawOBBLine(const OBB& obb, const Vector4& color);
 
     void UpdateWorldTransform() override; //< ワールド変換の更新
-    virtual Vector3 GetCollisionPos() const override; //< 衝突座標の取得
     virtual Vector3 GetRotate() const; //< 回転の取得
 
 private:

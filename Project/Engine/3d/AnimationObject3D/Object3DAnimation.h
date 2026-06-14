@@ -82,7 +82,6 @@ public:
     /// デバッグ
     ///============================================================
 
-    void DebugImGui() override; //< ImGuiデバッグ
     void DebugLineSet(); //< デバッグ用ライン設定
 
     ///============================================================
@@ -153,21 +152,11 @@ private:
     void AnimationTransition(float deltaTime);
 
     /// <summary>
-    /// WVPデータ更新
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void UpdateWVPData(const ViewProjection& viewProjection) override;
-
-    /// <summary>
     /// ジョイント取得
     /// </summary>
     /// <param name="name">ジョイント名</param>
     /// <returns>ジョイントのポインタ</returns>
     const Joint* GetJoint(const std::string& name) const;
-
-    void CreateWVPResource() override; //< WVPリソース作成
-    void CreateMaterialResource() override; //< マテリアルリソース作成
-    void CreateShadowMap() override; //< シャドウマップ作成
 
     void TransitionFinish(); //< 遷移終了
     void UpdateSkeleton(); //< スケルトン更新

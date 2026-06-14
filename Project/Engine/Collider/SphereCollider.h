@@ -20,7 +20,6 @@ public:
     void Init() override;             //< 初期化処理
     void SetDebugCube() override;     //< デバッグ球のセット
     void UpdateWorldTransform() override; //< ワールド変換の更新
-    virtual Vector3 GetCollisionPos() const override; //< 衝突座標の取得
 
 private:
     Sphere sphere_; // 球構造体

@@ -17,7 +17,6 @@ public:
     };
 
 private:
-    void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
     void CreateRootSignature() override; //< ルートシグネチャ作成
 
 public:

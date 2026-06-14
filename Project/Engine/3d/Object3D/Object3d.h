@@ -23,15 +23,6 @@ public:
     void Update();
     void Draw(const ViewProjection& viewProjection);
     void ShadowDraw(const ViewProjection& viewProjection);
-
-    // デバッグ描画
-    void DebugImGui() override; 
-
-private:
-    void UpdateWVPData(const ViewProjection& viewProjection) override;
-    void CreateShadowMap() override;
-    void CreateWVPResource() override;
-    void CreateMaterialResource() override;
 };
 
 }; // KetaEngine

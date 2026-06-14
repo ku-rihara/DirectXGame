@@ -68,35 +68,3 @@ void Object3d::ShadowDraw(const ViewProjection& viewProjection) {
     model_->DrawForShadowMap(wvpResource_, *shadowMap_);
 }
 
-///============================================================
-/// デバッグ表示
-///============================================================
-
-void Object3d::DebugImGui() {
-    BaseObject3d::DebugImGui();
-}
-
-///============================================================
-/// WVP更新
-///============================================================
-void Object3d::UpdateWVPData(const ViewProjection& viewProjection) {
-    BaseObject3d::UpdateWVPData(viewProjection);
-}
-
-///============================================================
-/// マテリアルリソース作成
-///============================================================
-void Object3d::CreateMaterialResource() {
-    BaseObject3d::CreateMaterialResource();
-}
-
-///============================================================
-/// WVPリソース作成
-///============================================================
-void Object3d::CreateWVPResource() {
-    BaseObject3d::CreateWVPResource();
-}
-
-void Object3d::CreateShadowMap() {
-    BaseObject3d::CreateShadowMap();
-}

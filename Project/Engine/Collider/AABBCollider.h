@@ -20,7 +20,6 @@ public:
     void SetDebugCube() override; //<デバッグキューブの描画セット
     
     void UpdateWorldTransform() override;             //< ワールド変換の更新
-    virtual Vector3 GetCollisionPos() const override; //< 衝突座標の取得
 
 private:
     /// ===================================================

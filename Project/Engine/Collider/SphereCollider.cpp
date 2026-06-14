@@ -60,6 +60,3 @@ void SphereCollider::SetDebugCube() {
     }
 }
 
-Vector3 SphereCollider::GetCollisionPos() const {
-    return BaseCollider::GetCollisionPos();
-}
