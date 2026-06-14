@@ -116,7 +116,7 @@ public:
     D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
     void InitRenderingResources(); //< レンダリングリソースの初期化
-    void WaitForNextFrame(); //< フレーム開始前FLWO待機（BeginFrameで呼ぶ）
+    void WaitForNextFrame(); //< フレーム開始前FLOW待機（BeginFrameで呼ぶ）
     void PreDraw(); //< 描画前処理
     void PostDraw(); //< 描画後処理
     void Finalize(); //< 終了処理
