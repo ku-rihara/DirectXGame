@@ -48,11 +48,14 @@ public:
     /// public method
     ///==========================================================
 
+private:
     DirectXCommon()                                = default;
     ~DirectXCommon()                               = default;
+    // コピー禁止
     DirectXCommon(const DirectXCommon&)            = delete;
     DirectXCommon& operator=(const DirectXCommon&) = delete;
 
+public:
     // シングルトンインスタンス
     static DirectXCommon* GetInstance();
 
