@@ -4,6 +4,7 @@ using namespace KetaEngine;
 #include "2d/Sprite.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Pipeline/PipelineManager.h"
+// std
 #include <algorithm>
 #include <cstdlib>
 #include <imgui.h>
@@ -115,7 +116,7 @@ void SpriteRegistry::DebugImGui() {
 }
 
 ///============================================================
-/// グループ名の重複チェック（代表が登録済みか）
+/// グループ名の重複チェック
 ///============================================================
 bool SpriteRegistry::HasGroupName(const std::string& groupName) const {
     return groupRepresentatives_.count(groupName) > 0;
@@ -129,7 +130,7 @@ void SpriteRegistry::RegisterRepresentative(const std::string& groupName, Sprite
 }
 
 ///============================================================
-/// 代表スプライト解除（フォロワーの参照もクリア）
+/// 代表スプライト解除
 ///============================================================
 void SpriteRegistry::UnregisterRepresentative(Sprite* sprite) {
     for (auto it = groupRepresentatives_.begin(); it != groupRepresentatives_.end(); ++it) {

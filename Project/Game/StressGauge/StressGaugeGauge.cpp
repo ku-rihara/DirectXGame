@@ -52,7 +52,7 @@ void StressGaugeGauge::SpriteInit() {
     });
 
     displayRatio_ = 0.0f;
-    gaugeSprite_->SetGaugeRate(0.0f);
+    gaugeSprite_->SetDisplayRate(0.0f);
     for (int32_t i = 0; i < kPercentDigitCount; ++i) {
         percentDigits_[i].Init(std::format("StressPercent{}", i));
     }
@@ -68,7 +68,7 @@ void StressGaugeGauge::Update(float deltaTime) {
 
     // ゲージ表示更新
     if (gaugeSprite_) {
-        gaugeSprite_->SetGaugeRate(displayRatio_);
+        gaugeSprite_->SetDisplayRate(displayRatio_);
     }
     UpdateGaugeColor();
 

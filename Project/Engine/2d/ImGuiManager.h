@@ -12,13 +12,14 @@ class SrvManager;
 /// ImGuiの管理クラス
 /// </summary>
 class ImGuiManager {
-public:
-    // 外部からの生成・コピーを禁止
+private:
     ImGuiManager()                               = default;
     ~ImGuiManager()                              = default;
+    // コピー禁止
     ImGuiManager(const ImGuiManager&)            = delete;
     ImGuiManager& operator=(const ImGuiManager&) = delete;
 
+public:
     static ImGuiManager* GetInstance();
 
     ///===========================================================

@@ -9,6 +9,7 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "struct/ModelData.h"
 #include "struct/TransformationMatrix.h"
+// std
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -22,17 +23,21 @@ class SpriteEaseAnimationPlayer;
 
 class Sprite {
 public:
+    // UVTransformの構造体
     struct UVTransform {
         Vector2 scale;
         Vector3 rotate;
         Vector2 pos;
     };
+
+    // Transformの構造体
     struct Transform {
         Vector2 scale;
         Vector3 rotate;
         Vector2 pos;
     };
 
+    // Para
     struct Parameter {
         Vector2 position_         = Vector2::ZeroVector();
         Vector2 scale_            = Vector2::OneVector();
@@ -51,7 +56,7 @@ public:
     /// </summary>
     /// <param name="textureName">テクスチャのファイル名</param>
     /// <param name="isAbleEdit">パラメータ編集を可能にするかのフラグ</param>
-    /// <param name="index">明示的インデックス(-1=共有モード, 0以上=固有グループ)</param>
+    /// <param name="index">スプライトを識別するための名前</param>
     /// <returns>作成されたSpriteのポインタ</returns>
     static Sprite* Create(const std::string& textureName, bool isAbleEdit = true, const std::string& name = "");
     void CreateSprite(const std::string& textureName);
@@ -87,7 +92,7 @@ public:
     /// <summary>
     /// 表示割合を設定(0.0f~1.0f)
     /// <summary>
-    void SetGaugeRate(float rate);
+    void SetDisplayRate(float rate);
 
 private:
     /// <summary>
@@ -99,6 +104,12 @@ private:
     /// Transformのパラメータを適用する
     /// </summary>
     void ApplyParameterToTransform();
+
+    // パラメータ関連
+    void GetParams();
+    void ApplyAnimationToMaterial();
+    Vector2 GetAnimationPosition() const;
+    Vector3 GetAnimationRotation() const;
 
 public:
     // Transform
@@ -114,40 +125,38 @@ private:
     bool isFlipX_ = false;
     bool isFlipY_ = false;
 
-    // パラメータ編集
+    // パラメータ編集関連
     GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_;
     const std::string filePath_   = "Resources/Texture/";
     const std::string folderPath_ = "SpriteParam";
     Parameter parameter_;
 
-    // 共有パラメータ管理
-    bool isRepresentative_ = false; // 代表スプライトかどうか
-
+    // レイヤー。描画フラグ、初期パラメータ適応フラグ
     int32_t layerNum_;
-    bool isDraw_            = true;
-    bool isAdaptStartParam_ = false;
+    bool isDraw_           = true;
+    bool isApplyInitParam_ = false;
 
-    // ゲージ用の表示割合(0.0f~1.0f)
-    float gaugeRate_ = 1.0f;
+    // 共有パラメータ管理
+    bool isRepresentative_ = false;
+
+    // 表示割合(0.0f~1.0f)
+    float disPlayRate_ = 1.0f;
 
     // スプライトイージングアニメーション
     std::unique_ptr<SpriteEaseAnimationPlayer> spriteEaseAnimationPlayer_;
     float animationSpeedRate_ = 1.0f;
 
-    void GetParams();
-    void ApplyAnimationToMaterial();
-    Vector2 GetAnimationPosition() const;
-    Vector3 GetAnimationRotation() const;
+    // テクスチャ自体のサイズ
+    Vector2 textureSize_;
 
-    // テクスチャ
-    Vector2 textureSize_; //< テクスチャ自体のサイズ
-    D3D12_GPU_DESCRIPTOR_HANDLE texture_;
-    uint32_t textureIndex_;
-
-    // view
+    // バッファビュー
     D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
     D3D12_INDEX_BUFFER_VIEW indexBufferView_;
+
+    // テクスチャSRVのGPUハンドル、Index
+    D3D12_GPU_DESCRIPTOR_HANDLE texture_;
+    uint32_t textureIndex_;
 
     // Resource
     Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_; //< 頂点リソース
@@ -164,28 +173,9 @@ public:
     ///  getter
     ///=========================================================================================
     const Vector2& GetPosition() const { return transform_.pos; }
-    const std::string& GetGroupName() const { return groupName_; }
-    const Vector2& GetAnchorPoint() const { return anchorPoint_; }
-    const Vector2& GetTextureSize() const { return textureSize_; }
-    const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }
     int32_t GetLayerNum() const { return layerNum_; }
-    bool GetIsRepresentative() const { return isRepresentative_; }
-
     const Parameter& GetValue() const { return parameter_; }
-
-    const Parameter& GetStartParameter() const { return parameter_; }
-    bool GetIsFlipX() const { return isFlipX_; }
-    bool GetIsFlipY() const { return isFlipY_; }
     bool GetIsDraw() const { return isDraw_; };
-    float GetGaugeRate() const { return gaugeRate_; }
-
-    // UVTransform
-    UVTransform& GetUVTransform() { return uvTransform_; }
-    const UVTransform& GetUVTransform() const { return uvTransform_; }
-
-    /// <summary>
-    /// アニメーションプレイヤー取得
-    /// </summary>
     SpriteEaseAnimationPlayer* GetSpriteEaseAnimationPlayer() { return spriteEaseAnimationPlayer_.get(); }
 
     ///=========================================================================================

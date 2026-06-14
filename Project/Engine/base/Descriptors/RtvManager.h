@@ -9,12 +9,14 @@
 namespace KetaEngine {
 
 class RtvManager {
-public:
+private:
     RtvManager()                             = default;
     ~RtvManager()                            = default;
+    // コピー禁止
     RtvManager(const RtvManager&)            = delete;
     RtvManager& operator=(const RtvManager&) = delete;
 
+public:
     /// <summary>
     /// シングルトンインスタンス取得
     /// </summary>

@@ -163,12 +163,14 @@ public:
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
     };
 
-public:
+private:
     ParticleManager()                                  = default;
     ~ParticleManager()                                 = default;
+    // コピー禁止
     ParticleManager(const ParticleManager&)            = delete;
     ParticleManager& operator=(const ParticleManager&) = delete;
 
+public:
     void Init(SrvManager* srvManager);
     void Finalize() { particleGroups_.clear(); }
     void Update();

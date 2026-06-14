@@ -1,18 +1,22 @@
 #pragma once
 
-#include "3d/Object3D/BaseObject3d.h"
+// 3D
 #include "3D/AnimationObject3D/SkeletonData.h"
 #include "3D/AnimationObject3D/SkinCluster.h"
-#include "AnimationData.h"
 #include "3D/Line3D/Line3D.h"
+#include "3d/Object3D/BaseObject3d.h"
+// Aniamtion
+#include "AnimationData.h"
 #include "ModelAnimation.h"
+// math
+#include "Quaternion.h"
+#include "Vector3.h"
+// std
 #include <cstdint>
 #include <functional>
 #include <memory>
-#include <Quaternion.h>
 #include <string>
 #include <unordered_map>
-#include <Vector3.h>
 #include <vector>
 
 /// <summary>
@@ -22,17 +26,12 @@ namespace KetaEngine {
 
 class Object3DAnimation : public BaseObject3d {
 public:
-  
     Object3DAnimation() = default;
     ~Object3DAnimation() override;
 
-    /// ============================================================
-    /// public methods
-    /// ============================================================
-
-    void Init(); //< 初期化
-    void ResetAnimation(); //< アニメーションリセット
-    void DebugImGui() override; //< ImGuiデバッグ
+    ///============================================================
+    /// 生成・アニメーション追加
+    ///============================================================
 
     /// <summary>
     /// モデル作成
@@ -53,11 +52,11 @@ public:
     /// <param name="animationName">アニメーション名</param>
     void ChangeAnimation(const std::string& animationName);
 
-    /// <summary>
-    /// アニメーション時間設定
-    /// </summary>
-    /// <param name="time">設定する時間</param>
-    void SetAnimationTime(float time);
+    ///============================================================
+    /// 更新・描画
+    ///============================================================
+
+    void Init(); //< 初期化
 
     /// <summary>
     /// 更新
@@ -77,13 +76,48 @@ public:
     /// <param name="viewProjection">ビュープロジェクション</param>
     void DrawShadow(const ViewProjection& viewProjection);
 
+    void CSSkinning(); //< CSスキニング
+
+    ///============================================================
+    /// デバッグ
+    ///============================================================
+
+    void DebugImGui() override; //< ImGuiデバッグ
+    void DebugLineSet(); //< デバッグ用ライン設定
+
+    ///============================================================
+    /// アニメーション終了コールバック
+    ///============================================================
+
     /// <summary>
-    /// デバッグ描画
+    /// 特定のアニメーション終了時のコールバックを設定
     /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void DebugLineSet();
+    /// <param name="animationName">アニメーション名</param>
+    /// <param name="callback">コールバック関数</param>
+    void SetAnimationEndCallback(const std::string& animationName, std::function<void()> callback) {
+        animationEndCallbacks_[animationName] = callback;
+    }
+
+    /// <summary>
+    /// 特定のアニメーションのコールバックを削除
+    /// </summary>
+    /// <param name="animationName">アニメーション名</param>
+    void RemoveAnimationEndCallback(const std::string& animationName) {
+        animationEndCallbacks_.erase(animationName);
+    }
+
+    /// <summary>
+    /// 全てのアニメーション終了コールバックをクリア
+    /// </summary>
+    void ClearAllAnimationEndCallbacks() {
+        animationEndCallbacks_.clear();
+    }
 
 private:
+    ///============================================================
+    /// private methods
+    ///============================================================
+
     /// <summary>
     /// 作成
     /// </summary>
@@ -105,14 +139,6 @@ private:
     /// <param name="time">時間</param>
     /// <returns>補間された値</returns>
     Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
-
-public:
-    void CSSkinning(); //< コンピュートシェーダーによるスキニング
-
-private:
-    /// ============================================================
-    /// private methods
-    /// ============================================================
 
     /// <summary>
     /// アニメーション更新
@@ -139,23 +165,21 @@ private:
     /// <returns>ジョイントのポインタ</returns>
     const Joint* GetJoint(const std::string& name) const;
 
-    void CreateWVPResource() override;      //< WVPリソース作成
+    void CreateWVPResource() override; //< WVPリソース作成
     void CreateMaterialResource() override; //< マテリアルリソース作成
-    void CreateShadowMap() override;        //< シャドウマップ作成
+    void CreateShadowMap() override; //< シャドウマップ作成
 
-    void TransitionFinish();                //< 遷移終了
-    void UpdateSkeleton();                  //< スケルトン更新
-    void UpdateSkinCluster();               //< スキンクラスター更新
+    void TransitionFinish(); //< 遷移終了
+    void UpdateSkeleton(); //< スケルトン更新
+    void UpdateSkinCluster(); //< スキンクラスター更新
 
 private:
-    /// ============================================================
+    ///============================================================
     /// private members
-    /// ============================================================
-
-    // ModelAnimation
-    std::unique_ptr<ModelAnimation> modelAnimation_;
+    ///============================================================
 
     // アニメーションデータ
+    std::unique_ptr<ModelAnimation> modelAnimation_;
     std::vector<Animation> animations_;
     Skeleton skeleton_;
     SkinCluster skinCluster_;
@@ -163,69 +187,47 @@ private:
     // 描画・デバッグ
     std::unique_ptr<Line3D> line3dDrawer_;
 
-    // アニメーション状態
-    float animationTime_           = 0.0f;
-    int32_t preAnimationIndex_     = 0;
-    int32_t currentAnimationIndex_ = 0;
-    float currentTransitionTime_   = 0.0f;
-    float preAnimationTime_        = 0.0f;
-    bool isChange_                 = false;
-    float transitionDuration_      = 0.3f;
-    bool wasPreAnimationFinished_  = false; // 前のアニメーションが終了状態だったか
+    // 再生状態
+    int32_t currentAnimationIndex_ = 0; //< 現在のアニメーション番号
+    float animationTime_           = 0.0f; //< 現在の再生時間
 
-    // ループ関連
-    bool isLoop_             = true;
-    bool hasLoopedThisFrame_ = false;
+    // 遷移関連
+    bool isChange_                = false; //< 遷移中かどうか
+    float transitionDuration_     = 0.3f; //< 遷移にかける時間
+    float currentTransitionTime_  = 0.0f; //< 遷移の経過時間
+    int32_t preAnimationIndex_    = 0; //< 遷移元のアニメーション番号
+    float preAnimationTime_       = 0.0f; //< 遷移元の再生時間
+    bool wasPreAnimationFinished_ = false; //< 遷移元が終了済みだったか
 
-    // プール対応：非アクティブ時はUpdateAll/DrawAllでスキップ
+    // ループ
+    bool isLoop_             = true; //< ループ再生するか
+    bool hasLoopedThisFrame_ = false; //< このフレームでループしたか
+
+    // 非アクティブ時はUpdateAll/DrawAllでスキップする
     bool isActive_ = true;
 
-    // コールバック - アニメーション名をキーとしたマップ
+    // アニメーション終了コールバック
     std::unordered_map<std::string, std::function<void()>> animationEndCallbacks_;
 
 public:
-    /// ============================================================
-    /// getter/setter methods
-    /// ============================================================
+    ///============================================================
+    /// getter
+    ///============================================================
 
     const Skeleton& GetSkeleton() const { return skeleton_; }
-    float GetAnimationTime() const { return animationTime_; }
-    float GetAnimationDuration() const;
-    int32_t GetCurrentAnimationIndex() const { return currentAnimationIndex_; }
     const std::string& GetCurrentAnimationName() const;
-    bool IsAnimationTransitioning() const { return isChange_; }
-    bool IsLoop() const { return isLoop_; }
     std::vector<std::string> GetAnimationNames() const;
-
-    void SetTransitionDuration(float duration) { transitionDuration_ = duration; }
-    void SetLoop(bool loop) { isLoop_ = loop; }
-    void SetIsActive(bool active) { isActive_ = active; isDraw_ = active; }
     bool IsActive() const { return isActive_; }
-
     ID3D12Resource* GetOutputVertexResource() const { return skinCluster_.outputVertexResource.Get(); }
-    
-    /// <summary>
-    /// 特定のアニメーション終了時のコールバックを設定
-    /// </summary>
-    /// <param name="animationName">アニメーション名</param>
-    /// <param name="callback">コールバック関数</param>
-    void SetAnimationEndCallback(const std::string& animationName, std::function<void()> callback) {
-        animationEndCallbacks_[animationName] = callback;
-    }
 
-    /// <summary>
-    /// 特定のアニメーションのコールバックを削除
-    /// </summary>
-    /// <param name="animationName">アニメーション名</param>
-    void RemoveAnimationEndCallback(const std::string& animationName) {
-        animationEndCallbacks_.erase(animationName);
-    }
+    ///============================================================
+    /// setter
+    ///============================================================
 
-    /// <summary>
-    /// 全てのアニメーション終了コールバックをクリア
-    /// </summary>
-    void ClearAllAnimationEndCallbacks() {
-        animationEndCallbacks_.clear();
+    void SetLoop(bool loop) { isLoop_ = loop; }
+    void SetIsActive(bool active) {
+        isActive_ = active;
+        isDraw_   = active;
     }
 };
 

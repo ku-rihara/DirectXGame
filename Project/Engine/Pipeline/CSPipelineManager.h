@@ -28,11 +28,6 @@ class CSPipelineManager {
 public:
     static CSPipelineManager* GetInstance();
 
-    CSPipelineManager(const CSPipelineManager&)            = delete;
-    CSPipelineManager& operator=(const CSPipelineManager&) = delete;
-    CSPipelineManager(CSPipelineManager&&)                 = delete;
-    CSPipelineManager& operator=(CSPipelineManager&&)      = delete;
-
     /// <summary>
     /// 初期化
     /// </summary>
@@ -59,6 +54,11 @@ public:
 private:
     CSPipelineManager()  = default;
     ~CSPipelineManager() = default;
+    // コピー禁止
+    CSPipelineManager(const CSPipelineManager&)            = delete;
+    CSPipelineManager& operator=(const CSPipelineManager&) = delete;
+    CSPipelineManager(CSPipelineManager&&)                 = delete;
+    CSPipelineManager& operator=(CSPipelineManager&&)      = delete;
 
 private:
     std::array<std::unique_ptr<BaseCSPipeline>, static_cast<size_t>(CSPipelineType::Count)> pipelines_;

@@ -14,6 +14,7 @@ class ModelManager {
 private:
     ModelManager()                               = default;
     ~ModelManager()                              = default;
+    // コピー禁止
     ModelManager(const ModelManager&)            = delete;
     ModelManager& operator=(const ModelManager&) = delete;
 

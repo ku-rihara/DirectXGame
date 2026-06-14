@@ -11,12 +11,14 @@ namespace KetaEngine {
 /// シーン管理
 /// </summary>
 class SceneManager {
-public:
+private:
     SceneManager()                               = default;
     ~SceneManager()                              = default;
+    // コピー禁止
     SceneManager(const SceneManager&)            = delete;
     SceneManager& operator=(const SceneManager&) = delete;
 
+public:
     static SceneManager* GetInstance();
 
     // 更新、描画

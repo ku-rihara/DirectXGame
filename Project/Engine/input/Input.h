@@ -31,6 +31,7 @@ private:
 public:
     Input()                        = default;
     ~Input()                       = default;
+    // コピー禁止
     Input(const Input&)            = delete;
     Input& operator=(const Input&) = delete;
 

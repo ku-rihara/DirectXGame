@@ -14,11 +14,16 @@ class ViewProjection;
 /// Animationの登録管理クラス
 /// </summary>
 class AnimationRegistry {
+private:
+    AnimationRegistry() = default;
+    ~AnimationRegistry();
+
+    // コピー禁止
+    AnimationRegistry(const AnimationRegistry&)            = delete;
+    AnimationRegistry& operator=(const AnimationRegistry&) = delete;
+
 public:
-    /// <summary>
-    /// シングルトンインスタンス取得
-    /// </summary>
-    /// <returns>AnimationRegistryのインスタンス</returns>
+    
     static AnimationRegistry* GetInstance();
 
     /// ============================================================
@@ -50,7 +55,7 @@ public:
     void DrawAll(const ViewProjection& viewProjection);
 
     /// <summary>
-    /// 全アニメーションのスキニング（Compute Shader）のみをまとめて実行する
+    /// 全アニメーションのスキニングのみをまとめて実行する
     /// </summary>
     void SkinningAll();
 
@@ -63,14 +68,6 @@ public:
     void DebugLineAllSet();
     void Clear(); //< 登録されたアニメーションをクリア
     void DebugImGui(); //< ImGuiデバッグ表示
-
-private:
-    AnimationRegistry() = default;
-    ~AnimationRegistry();
-
-    /// コピー禁止
-    AnimationRegistry(const AnimationRegistry&)            = delete;
-    AnimationRegistry& operator=(const AnimationRegistry&) = delete;
 
 private:
     std::unordered_set<Object3DAnimation*> animations_;

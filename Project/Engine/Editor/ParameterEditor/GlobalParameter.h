@@ -27,12 +27,14 @@ private:
     using Group = std::map<std::string, Item>;
     using json  = nlohmann::json;
 
-public:
+private:
     GlobalParameter()                                  = default;
     ~GlobalParameter()                                 = default;
+    // コピー禁止
     GlobalParameter(const GlobalParameter&)            = delete;
     GlobalParameter& operator=(const GlobalParameter&) = delete;
 
+public:
     static GlobalParameter* GetInstance();
 
     /// <summary>

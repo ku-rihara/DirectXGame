@@ -15,6 +15,7 @@ private:
     Line3DManager() = default;
     ~Line3DManager();
 
+    // コピー禁止
     Line3DManager(const Line3DManager&)            = delete;
     Line3DManager& operator=(const Line3DManager&) = delete;
 

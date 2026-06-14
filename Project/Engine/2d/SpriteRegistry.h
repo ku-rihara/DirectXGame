@@ -1,10 +1,9 @@
 #pragma once
 
-#include <memory>
+// std
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <vector>
 
 // 前方宣言
 namespace KetaEngine {
@@ -18,8 +17,7 @@ class SpriteRegistry {
 private:
     SpriteRegistry() = default;
     ~SpriteRegistry();
-
-    /// コピー禁止
+    // コピー禁止
     SpriteRegistry(const SpriteRegistry&)            = delete;
     SpriteRegistry& operator=(const SpriteRegistry&) = delete;
 
@@ -34,26 +32,29 @@ public:
     void RegisterObject(Sprite* object);
     void UnregisterObject(Sprite* object);
 
-    void UpdateAll(); //<全スプライト更新
-    void DrawAll();   //<全スプライト描画
+    // 全スプライト、更新、描画
+    void UpdateAll();
+    void DrawAll();
 
     void Clear();      //<登録解除
     void DebugImGui(); //<ImGuiデバッグ
 
     /// 代表スプライト管理
-    void    RegisterRepresentative(const std::string& groupName, Sprite* sprite);
-    void    UnregisterRepresentative(Sprite* sprite);
+    void RegisterRepresentative(const std::string& groupName, Sprite* sprite);
+    void UnregisterRepresentative(Sprite* sprite);
     Sprite* GetRepresentative(const std::string& groupName) const;
 
-    /// ============================================================
-    /// private members
-    /// ============================================================
 private:
-    static bool isDestroyed_;
+    /// ============================================================
+    /// private variable
+    /// ============================================================
 
+    // スプライトの登録管理
     std::unordered_set<Sprite*> sprites_;
-    std::unordered_map<std::string, Sprite*> groupRepresentatives_; // groupName → 代表Sprite
+    std::unordered_map<std::string, Sprite*> groupRepresentatives_;
 
+    // シングルトン管理
+    static bool isDestroyed_;
     static SpriteRegistry* instance_;
 
 public:

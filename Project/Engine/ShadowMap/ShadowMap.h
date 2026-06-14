@@ -25,6 +25,7 @@ class ShadowMap {
 private:
     ShadowMap()                            = default;
     ~ShadowMap()                           = default;
+    // コピー禁止
     ShadowMap(const ShadowMap&)            = delete;
     ShadowMap& operator=(const ShadowMap&) = delete;
 

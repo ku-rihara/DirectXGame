@@ -187,7 +187,7 @@ void Sprite::Draw() {
     vertexData_[3].texcoord = {texRight, texTop};
 
     // ゲージレートをマテリアルに設定
-    material_.GetMaterialData()->gaugeRate = gaugeRate_;
+    material_.GetMaterialData()->gaugeRate = disPlayRate_;
 
     ///==========================================================================================
     //  SpriteEaseAnimation
@@ -236,8 +236,8 @@ void Sprite::Draw() {
 ///=========================================================
 /// ゲージレート設定
 ///==========================================================
-void Sprite::SetGaugeRate(float rate) {
-    gaugeRate_ = std::clamp(rate, 0.0f, 1.0f);
+void Sprite::SetDisplayRate(float rate) {
+    disPlayRate_ = std::clamp(rate, 0.0f, 1.0f);
 }
 
 ///=========================================================
@@ -293,10 +293,10 @@ void Sprite::AdjustParam() {
         ImGui::SeparatorText("UVParam");
         ImGui::DragFloat2("UVScale", &parameter_.uvScale_.x, 0.01f);
 
-        ImGui::Checkbox("isAdaptStartParam", &isAdaptStartParam_);
+        ImGui::Checkbox("isAdaptStartParam", &isApplyInitParam_);
 
         // パラメータをTransformに適用
-        if (isAdaptStartParam_) {
+        if (isApplyInitParam_) {
             ApplyParameterToTransform();
         }
 

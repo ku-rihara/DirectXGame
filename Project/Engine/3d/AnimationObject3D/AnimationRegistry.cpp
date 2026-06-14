@@ -1,12 +1,12 @@
-#include <format>
 #include "AnimationRegistry.h"
+#include <format>
 
 using namespace KetaEngine;
-#include "Object3DAnimation.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Dx/DxResourceBarrier.h"
-#include "Pipeline/PipelineManager.h"
+#include "Object3DAnimation.h"
 #include "Pipeline/CSPipelineManager.h"
+#include "Pipeline/PipelineManager.h"
 #include <algorithm>
 #include <imgui.h>
 
@@ -154,18 +154,22 @@ void AnimationRegistry::Clear() {
 ///============================================================
 void AnimationRegistry::DebugImGui() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
+
+    // 登録アニメーション一覧のヘッダ
     if (ImGui::CollapsingHeader("Animation Registry")) {
-        ImGui::Text("Registered Animations: %zu", animations_.size());
+        ImGui::Text("登録アニメーションモデルの数: %zu", animations_.size());
 
         ImGui::Separator();
 
+        // 登録中の各アニメーションを順に表示
         int index = 0;
         for (Object3DAnimation* animation : animations_) {
             if (animation != nullptr) {
                 ImGui::PushID(index);
 
+                // 折りたたみを開いたものだけ中身を描画
                 if (ImGui::CollapsingHeader(std::format("Animation {}", index).c_str())) {
-                    ImGui::Text("Animation Address: %p", static_cast<void*>(animation));
+                    animation->DebugImGui();
                 }
 
                 ImGui::PopID();

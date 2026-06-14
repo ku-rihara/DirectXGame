@@ -16,6 +16,7 @@ private:
     Object3DRegistry() = default;
     ~Object3DRegistry();
 
+    // コピー禁止
     Object3DRegistry(const Object3DRegistry&)            = delete;
     Object3DRegistry& operator=(const Object3DRegistry&) = delete;
 

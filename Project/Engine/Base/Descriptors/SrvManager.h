@@ -10,12 +10,14 @@
 namespace KetaEngine {
 
 class SrvManager {
-public:
+private:
     SrvManager()                             = default;
     ~SrvManager()                            = default;
+    // コピー禁止
     SrvManager(const SrvManager&)            = delete;
     SrvManager& operator=(const SrvManager&) = delete;
 
+public:
     /// <summary>
     /// シングルトンインスタンス取得
     /// </summary>

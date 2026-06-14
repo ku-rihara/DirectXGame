@@ -30,6 +30,7 @@ private:
     static TextureManager* instance;
     TextureManager()                                 = default;
     ~TextureManager()                                = default;
+    // コピー禁止
     TextureManager(const TextureManager&)            = delete;
     TextureManager& operator=(const TextureManager&) = delete;
 

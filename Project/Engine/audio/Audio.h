@@ -65,11 +65,14 @@ public:
 
     static Audio* GetInstance();
 
+private:
     Audio()                        = default;
     ~Audio()                       = default;
+    // コピー禁止
     Audio(const Audio&)            = delete;
     Audio& operator=(const Audio&) = delete;
 
+public:
     void Init();
     int Load(const std::string& filename);
     void Unload(int soundId);

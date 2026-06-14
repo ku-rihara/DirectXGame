@@ -42,12 +42,14 @@ class DirectXCommon;
 /// ライト統合管理クラス
 /// </summary>
 class Light {
-public:
+private:
     Light()                        = default;
     ~Light()                       = default;
+    // コピー禁止
     Light(const Light&)            = delete;
     Light& operator=(const Light&) = delete;
 
+public:
     static Light* GetInstance();
 
     /// <summary>

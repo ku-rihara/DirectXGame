@@ -31,12 +31,14 @@ class DirectXCommon;
 /// ポストエフェクト描画管理クラス
 /// </summary>
 class PostEffectRenderer {
-public:
+private:
     PostEffectRenderer()                                     = default;
     ~PostEffectRenderer()                                    = default;
+    // コピー禁止
     PostEffectRenderer(const PostEffectRenderer&)            = delete;
     PostEffectRenderer& operator=(const PostEffectRenderer&) = delete;
 
+public:
     static PostEffectRenderer* GetInstance();
 
     /// <summary>

@@ -46,11 +46,6 @@ class PipelineManager {
 public:
     static PipelineManager* GetInstance();
 
-    PipelineManager(const PipelineManager&)            = delete;
-    PipelineManager& operator=(const PipelineManager&) = delete;
-    PipelineManager(PipelineManager&&)                 = delete;
-    PipelineManager& operator=(PipelineManager&&)      = delete;
-
     /// <summary>
     /// 初期化
     /// </summary>
@@ -77,6 +72,11 @@ public:
 private:
     PipelineManager()  = default;
     ~PipelineManager() = default;
+    // コピー禁止
+    PipelineManager(const PipelineManager&)            = delete;
+    PipelineManager& operator=(const PipelineManager&) = delete;
+    PipelineManager(PipelineManager&&)                 = delete;
+    PipelineManager& operator=(PipelineManager&&)      = delete;
 
 private:
     std::array<std::unique_ptr<BasePipeline>, static_cast<size_t>(PipelineType::Count)> pipelines_;

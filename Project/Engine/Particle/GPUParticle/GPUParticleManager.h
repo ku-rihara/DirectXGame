@@ -43,12 +43,14 @@ public:
         int32_t noEmitFrames = 0;
     };
 
-public:
+private:
     GPUParticleManager()                                     = default;
     ~GPUParticleManager()                                    = default;
+    // コピー禁止
     GPUParticleManager(const GPUParticleManager&)            = delete;
     GPUParticleManager& operator=(const GPUParticleManager&) = delete;
 
+public:
     static GPUParticleManager* GetInstance();
 
     // 初期化、更新、描画

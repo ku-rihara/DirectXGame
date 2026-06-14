@@ -19,6 +19,7 @@ private:
     RibbonTrailManager()  = default;
     ~RibbonTrailManager();
 
+    // コピー禁止
     RibbonTrailManager(const RibbonTrailManager&)            = delete;
     RibbonTrailManager& operator=(const RibbonTrailManager&) = delete;
 

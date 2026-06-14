@@ -1,13 +1,17 @@
 #include "Object3DAnimation.h"
 
 using namespace KetaEngine;
+// 3D
 #include "3d/ModelManager.h"
+// Animation
 #include "AnimationRegistry.h"
+// Base
 #include "Base/Dx/DirectXCommon.h"
-#include "Base/Dx/DxResourceBarrier.h"
+// math
 #include "MathFunction.h"
+// Pipeline
 #include "Pipeline/CSPipelineManager.h"
-#include "Pipeline/PipelineManager.h"
+// std
 #include <algorithm>
 #include <cassert>
 
@@ -55,6 +59,7 @@ void Object3DAnimation::Create(const std::string& fileName) {
     CreateMaterialResource();
     CreateShadowMap();
 
+    // 初期化
     Init();
 }
 
@@ -89,7 +94,7 @@ void Object3DAnimation::ChangeAnimation(const std::string& animationName) {
             preAnimationTime_ = animationTime_;
 
             // 前のアニメーションが終了状態だったかを記録
-            float preDuration = animations_[preAnimationIndex_].duration;
+            float preDuration        = animations_[preAnimationIndex_].duration;
             wasPreAnimationFinished_ = (animationTime_ >= preDuration);
 
             // 切り替え変数リセット
@@ -101,28 +106,6 @@ void Object3DAnimation::ChangeAnimation(const std::string& animationName) {
             return;
         }
     }
-}
-
-///============================================================
-/// アニメーション時間設定
-///============================================================
-void Object3DAnimation::SetAnimationTime(float time) {
-    if (!animations_.empty()) {
-        float duration      = animations_[currentAnimationIndex_].duration;
-        animationTime_      = std::fmod(time, duration);
-        hasLoopedThisFrame_ = false;
-    }
-}
-
-///============================================================
-/// アニメーションリセット
-///============================================================
-void Object3DAnimation::ResetAnimation() {
-    animationTime_           = 0.0f;
-    currentTransitionTime_   = 0.0f;
-    isChange_                = false;
-    hasLoopedThisFrame_      = false;
-    wasPreAnimationFinished_ = false;
 }
 
 ///============================================================
@@ -160,7 +143,7 @@ void Object3DAnimation::UpdateAnimation(float deltaTime) {
 
             // 現在のアニメーションに対応するコールバック実行
             const std::string& currentAnimName = animations_[currentAnimationIndex_].name;
-            auto it = animationEndCallbacks_.find(currentAnimName);
+            auto it                            = animationEndCallbacks_.find(currentAnimName);
             if (it != animationEndCallbacks_.end() && it->second) {
                 it->second();
             }
@@ -173,7 +156,7 @@ void Object3DAnimation::UpdateAnimation(float deltaTime) {
 
                 // 現在のアニメーションに対応するコールバック実行
                 const std::string& currentAnimName = animations_[currentAnimationIndex_].name;
-                auto it = animationEndCallbacks_.find(currentAnimName);
+                auto it                            = animationEndCallbacks_.find(currentAnimName);
                 if (it != animationEndCallbacks_.end() && it->second) {
                     it->second();
                 }
@@ -213,6 +196,7 @@ void Object3DAnimation::UpdateSkeleton() {
             joint.transform.rotate,
             joint.transform.translate);
 
+        // skeletonSpaceMatrixの計算
         if (joint.parent) {
             joint.skeletonSpaceMatrix = joint.localMatrix * skeleton_.joints[*joint.parent].skeletonSpaceMatrix;
         } else {
@@ -234,7 +218,7 @@ void Object3DAnimation::UpdateSkinCluster() {
             skinCluster_.inverseBindPoseMatrices[jointIndex] * skeleton_.joints[jointIndex].skeletonSpaceMatrix;
 
         // GPUメモリに書き込む
-        skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix              = skinMatrix;
+        skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix                 = skinMatrix;
         skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix = Inverse(Transpose(skinMatrix));
     }
 }
@@ -376,30 +360,6 @@ void Object3DAnimation::DebugImGui() {
 }
 
 ///============================================================
-/// Getter methods
-///============================================================
-const Joint* Object3DAnimation::GetJoint(const std::string& name) const {
-    auto it = skeleton_.jointMap.find(name);
-    if (it != skeleton_.jointMap.end()) {
-        return &skeleton_.joints[it->second];
-    }
-    return nullptr;
-}
-
-float Object3DAnimation::GetAnimationDuration() const {
-    if (animations_.empty())
-        return 0.0f;
-    return animations_[currentAnimationIndex_].duration;
-}
-
-const std::string& Object3DAnimation::GetCurrentAnimationName() const {
-    static const std::string empty = "";
-    if (animations_.empty())
-        return empty;
-    return animations_[currentAnimationIndex_].name;
-}
-
-///============================================================
 /// 計算メソッド
 ///============================================================
 Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
@@ -411,7 +371,7 @@ Quaternion Object3DAnimation::CalculateValueQuaternion(const std::vector<Keyfram
 }
 
 ///============================================================
-/// WVP更新
+/// BaseObject3dのオーバーライド
 ///============================================================
 void Object3DAnimation::UpdateWVPData(const ViewProjection& viewProjection) {
     BaseObject3d::UpdateWVPData(viewProjection);
@@ -428,6 +388,25 @@ void Object3DAnimation::CreateMaterialResource() {
 void Object3DAnimation::CreateShadowMap() {
     BaseObject3d::CreateShadowMap();
 }
+
+///============================================================
+/// Getter methods
+///============================================================
+const Joint* Object3DAnimation::GetJoint(const std::string& name) const {
+    auto it = skeleton_.jointMap.find(name);
+    if (it != skeleton_.jointMap.end()) {
+        return &skeleton_.joints[it->second];
+    }
+    return nullptr;
+}
+
+const std::string& Object3DAnimation::GetCurrentAnimationName() const {
+    static const std::string empty = "";
+    if (animations_.empty())
+        return empty;
+    return animations_[currentAnimationIndex_].name;
+}
+
 
 std::vector<std::string> Object3DAnimation::GetAnimationNames() const {
     std::vector<std::string> names;

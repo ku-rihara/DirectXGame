@@ -33,7 +33,7 @@ void ComboChainGauge::Update(float comboTime, float comboMaxTime, float alpha) {
     const float rate = std::clamp(comboTime / comboMaxTime, 0.0f, 1.0f);
 
     gaugeSprite_->SetIsDraw(true);
-    gaugeSprite_->SetGaugeRate(rate);
+    gaugeSprite_->SetDisplayRate(rate);
     gaugeSprite_->transform_.pos   = position_;
     gaugeSprite_->transform_.scale = scale_;
     gaugeSprite_->SetColor(color_);

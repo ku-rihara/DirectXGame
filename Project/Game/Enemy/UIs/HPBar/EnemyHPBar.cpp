@@ -31,7 +31,7 @@ void EnemyHPBar::Update(float hp) {
     if (hpMax_ > 0.0f) {
         ratio = Clamp(hp / hpMax_, 0.0f, 1.0f);
     }
-    hpSprite_->SetGaugeRate(ratio);
+    hpSprite_->SetDisplayRate(ratio);
 
     // HP割合に応じた色を適用
     if (colorConfig_) {
