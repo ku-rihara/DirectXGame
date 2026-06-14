@@ -34,12 +34,12 @@
 #include "utility/ObjectFromBlender/ObjectFromBlender.h"
 
 /// <summary>
-/// ゲームシーン
+/// 戦闘テスト用シーン
 /// </summary>
-class EditorScene : public BaseScene {
+class BattleTestScene : public BaseScene {
 public:
-    EditorScene()           = default;
-    ~EditorScene() override = default;
+    BattleTestScene()           = default;
+    ~BattleTestScene() override = default;
 
     ///========================================================
     /// public method
@@ -82,8 +82,6 @@ private:
     std::unique_ptr<ComboAsistController> comboAsistController_               = nullptr;
     std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;
     std::unique_ptr<OperateUI> operateUI_                                     = nullptr;
-
-    std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_ = nullptr;
 
 public:
 };

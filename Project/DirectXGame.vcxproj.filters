@@ -1425,7 +1425,7 @@
     <ClCompile Include="Game\Scene\BaseScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scene\EditorScene.cpp">
+    <ClCompile Include="Game\Scene\BattleTestScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\GameResultScene.cpp">
@@ -2572,7 +2572,7 @@
     <ClInclude Include="Game\Scene\BaseScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Scene\EditorScene.h">
+    <ClInclude Include="Game\Scene\BattleTestScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\GameScene.h">

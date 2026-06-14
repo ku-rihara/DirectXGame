@@ -1,4 +1,4 @@
-#include "EditorScene.h"
+#include "BattleTestScene.h"
 // base
 #include "base/TextureManager.h"
 // math
@@ -8,8 +8,7 @@
 #include "Scene/Manager/SceneManager.h"
 #include <imgui.h>
 
-
-void EditorScene::Init() {
+void BattleTestScene::Init() {
     //// グローバル変数の読み込み
     KetaEngine::GlobalParameter::GetInstance()->LoadFiles();
     BaseScene::Init();
@@ -22,7 +21,7 @@ void EditorScene::Init() {
     KetaEngine::Frame::ResetDeltaTime();
 }
 
-void EditorScene::Update() {
+void BattleTestScene::Update() {
     BaseScene::Update();
 
     effectEditorSuite_->SetCameraPreViewPos(player_->GetWorldPosition());
@@ -33,7 +32,6 @@ void EditorScene::Update() {
 
     // Editor
     field_->Update();
-    /*sideRopeController_->Update();*/
     audienceController_->Update();
 
     // 各クラス更新
@@ -56,11 +54,11 @@ void EditorScene::Update() {
 /// ===================================================
 /// SkyBox描画
 /// ===================================================
-void EditorScene::SkyBoxDraw() {
+void BattleTestScene::SkyBoxDraw() {
     skyBox_->Draw(viewProjection_);
 }
 
-void EditorScene::Debug() {
+void BattleTestScene::Debug() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::Begin("Camera");
     gameCamera_->AdjustParam();
@@ -101,11 +99,11 @@ void EditorScene::Debug() {
 }
 
 // ビュープロジェクション更新
-void EditorScene::ViewProjectionUpdate() {
+void BattleTestScene::ViewProjectionUpdate() {
     BaseScene::ViewProjectionUpdate();
 }
 
-void EditorScene::ViewProcess() {
+void BattleTestScene::ViewProcess() {
     viewProjection_.matView_       = gameCamera_->GetViewProjection().matView_;
     viewProjection_.matProjection_ = gameCamera_->GetViewProjection().matProjection_;
     viewProjection_.cameraMatrix_  = gameCamera_->GetViewProjection().cameraMatrix_;
@@ -113,7 +111,7 @@ void EditorScene::ViewProcess() {
     viewProjection_.TransferMatrix();
 }
 
-void EditorScene::ObjectInit() {
+void BattleTestScene::ObjectInit() {
     // gameObj_のメンバを初期化
     field_                       = std::make_unique<Field>();
     lockOnController_            = std::make_unique<LockOnController>();
@@ -127,8 +125,7 @@ void EditorScene::ObjectInit() {
     audienceController_          = std::make_unique<AudienceController>();
     backGroundObjectManager_     = std::make_unique<BackGroundObjectManager>();
     comboDirector_               = std::make_unique<ComboDirector>();
-    ObjectFromBlender_           = std::make_unique<KetaEngine::ObjectFromBlender>();
-    StressGauge_                  = std::make_unique<StressGauge>();
+    StressGauge_                 = std::make_unique<StressGauge>();
     killCounter_                 = std::make_unique<KillCounter>();
     comboAsistController_        = std::make_unique<ComboAsistController>();
     unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
@@ -155,11 +152,9 @@ void EditorScene::ObjectInit() {
     audienceController_->Init();
     StressGauge_->Init();
     viewProjection_.Init();
-
-    ObjectFromBlender_->LoadJsonFile("gameScene.json");
 }
 
-void EditorScene::SetClassPointer() {
+void BattleTestScene::SetClassPointer() {
     gameCamera_->SetTarget(&player_->GetBaseTransform());
 
     enemyManager_->SetPlayer(player_.get());

@@ -1,23 +1,34 @@
-#include"SceneFactory.h"
-#include"Scene/TitleScene.h"
-#include"Scene/GameScene.h"
-#include"Scene/EditorScene.h"
-#include"Scene/GameResultScene.h"
+#include "SceneFactory.h"
+#include "Scene/BattleTestScene.h"
+#include "Scene/GameResultScene.h"
+#include "Scene/GameScene.h"
+#include "Scene/TitleScene.h"
+
+SceneFactory::SceneFactory() {
+    // シーン名と生成処理をテーブルに登録する
+    // タイトルシーン
+    sceneCreators_["TITLE"] = []() {
+        return std::make_unique<TitleScene>();
+    };
+    // ゲームシーン
+    sceneCreators_["GAMEPLAY"] = []() {
+        return std::make_unique<GameScene>();
+    };
+    // バトルテストシーン
+    sceneCreators_["BATTLE_TEST"] = []() {
+        return std::make_unique<BattleTestScene>();
+    };
+    // リザルトシーン
+    sceneCreators_["RESULT"] = []() {
+        return std::make_unique<GameResultScene>();
+    };
+}
 
 std::unique_ptr<BaseScene> SceneFactory::CreateScene(const std::string& sceneName) {
-	// 次のシーンを生成
-	std::unique_ptr<BaseScene> newScene = nullptr;
-
-	if (sceneName =="TITLE") {
-		newScene = std::make_unique<TitleScene>();
-	}
-	else if (sceneName == "GAMEPLAY") {
-		newScene = std::make_unique<GameScene>();
-	} else if (sceneName == "EDITOR") {
-        newScene = std::make_unique<EditorScene>();
-    } else if (sceneName == "RESULT") {
-        newScene = std::make_unique<GameResultScene>();
+    // テーブルから生成関数を引いて実行する
+    auto it = sceneCreators_.find(sceneName);
+    if (it == sceneCreators_.end()) {
+        return nullptr; // 未登録のシーン名
     }
-
-	return newScene;
+    return it->second();
 }

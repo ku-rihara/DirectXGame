@@ -41,24 +41,94 @@ void BaseScene::Init() {
     effectEditorSuite_->Init();
     viewProjection_.Init();
 
-    // ビュープロジェクション
-    viewProjection_.translation_ = {0, -6.2f, -109.0f};
+    // ビュープロジェクションのセットアップ
+    SetupViewProjection();
 
-    // viewProjectionのセット
+    // カメラモードのテーブル登録
+    RegisterCameraUpdaters();
+    RegisterCameraTransitions();
+}
+
+void BaseScene::SetupViewProjection() {
+  
+    // 各システムにviewProjectionを渡す
     KetaEngine::PostEffectRenderer::GetInstance()->SetViewProjection(&viewProjection_);
     KetaEngine::ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
     KetaEngine::GPUParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
-
     effectEditorSuite_->SetViewProjection(&viewProjection_);
+}
+
+void BaseScene::RegisterCameraUpdaters() {
+
+    // 通常カメラの更新処理の登録
+    cameraUpdaters_[CameraMode::NORMAL] = [this]() {
+        ViewProcess();
+    };
+    // Editorカメラの更新処理の登録
+    cameraUpdaters_[CameraMode::EDITOR] = [this]() {
+        viewProjection_.UpdateMatrix();
+    };
+
+    // デバッグカメラの更新処理の登録
+    cameraUpdaters_[CameraMode::DEBUG] = [this]() {
+        // デバッグカメラの更新
+        debugCamera_->Update();
+        // カメラ行列をDebugCameraのViewProjectionから取得する
+        viewProjection_.matView_       = debugCamera_->GetViewProjection().matView_;
+        viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
+        viewProjection_.cameraMatrix_  = debugCamera_->GetViewProjection().cameraMatrix_;
+    };
+}
+
+void BaseScene::RegisterCameraTransitions() {
+
+    // 通常カメラからの遷移条件の登録
+    cameraTransitions_[CameraMode::NORMAL] = [this]() {
+        CameraMode next = CameraMode::NORMAL;
+        // スペース入力でDebugカメラへの移行
+        if (input_->TriggerKey(KeyboardKey::Space)) {
+            next = CameraMode::DEBUG;
+        }
+        // カメラEditorモードへの移行
+        if (effectEditorSuite_->GetCameraEditor()->GetIsEditing()) {
+            next = CameraMode::EDITOR;
+        }
+        return next;
+    };
+
+    // Editorカメラからの遷移条件の登録
+    cameraTransitions_[CameraMode::EDITOR] = [this]() {
+        CameraMode next = CameraMode::EDITOR;
+        // 通常カメラへの移行
+        if (!effectEditorSuite_->GetCameraEditor()->GetIsEditing()) {
+            next = CameraMode::NORMAL;
+        }
+        // スペース入力でDebugカメラへ移行
+        if (input_->TriggerKey(KeyboardKey::Space)) {
+            next = CameraMode::DEBUG;
+        }
+        return next;
+    };
+
+    // デバッグカメラからの遷移条件の登録
+    cameraTransitions_[CameraMode::DEBUG] = [this]() {
+        CameraMode next = CameraMode::DEBUG;
+        // スペース入力で通常カメラへ移行
+        if (input_->TriggerKey(KeyboardKey::Space)) {
+            next = CameraMode::NORMAL;
+        }
+        return next;
+    };
 }
 
 void BaseScene::Update() {
     // エディター機能更新
-    EditorClassUpdate();
+    UpdateEditors();
 }
 
-void BaseScene::EditorClassUpdate() {
+void BaseScene::UpdateEditors() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
+    // デバッグカメラとEditor更新
     debugCamera_->Update();
     effectEditorSuite_->Update();
 #endif
@@ -66,6 +136,8 @@ void BaseScene::EditorClassUpdate() {
 
 void BaseScene::Debug() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
+
+    // ViewProjectionのTransform編集
     ImGui::Begin("Camera");
     ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
     ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
@@ -76,74 +148,25 @@ void BaseScene::Debug() {
     effectEditorSuite_->EditorUpdate();
     ImGui::End();
 
+    // ImGuiの描画
     KetaEngine::PostEffectRenderer::GetInstance()->DrawImGui();
 #endif
 }
 
-// ビュープロジェクション更新
 void BaseScene::ViewProjectionUpdate() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
-    // シーンごとの切り替え処理------------------------------
-    bool isTriggerSpace = input_->TriggerKey(KeyboardKey::Space);
-    switch (cameraMode_) {
-        ///------------------------------------------------------
-        /// Normal Mode
-        ///------------------------------------------------------
-    case BaseScene::CameraMode::NORMAL:
-        // デバッグモードへ
-        if (isTriggerSpace) {
-            cameraMode_ = CameraMode::DEBUG;
-        }
-        // エディターモードへ
-        if (effectEditorSuite_->GetCameraEditor()->GetIsEditing()) {
-            cameraMode_ = CameraMode::EDITOR;
-        }
-        break;
-        ///------------------------------------------------------
-        /// Editor Mode
-        ///------------------------------------------------------
-    case BaseScene::CameraMode::EDITOR:
-        // ノーマルモードへ
-        if (!effectEditorSuite_->GetCameraEditor()->GetIsEditing()) {
-            cameraMode_ = CameraMode::NORMAL;
-        }
-        // デバッグモードへ
-        if (isTriggerSpace) {
-            cameraMode_ = CameraMode::DEBUG;
-        }
-        break;
-        ///------------------------------------------------------
-        /// Debug Mode
-        ///------------------------------------------------------
-    case BaseScene::CameraMode::DEBUG:
-        if (isTriggerSpace) {
-            cameraMode_ = CameraMode::NORMAL;
-        }
-        break;
-    default:
-        break;
-    }
 
+    // 現在のモードに応じて次のカメラモードを決定する
+    if (auto it = cameraTransitions_.find(cameraMode_); it != cameraTransitions_.end()) {
+        cameraMode_ = it->second();
+    }
+  
 #endif
-
-    switch (cameraMode_) {
-    case BaseScene::CameraMode::NORMAL:
-        ViewProcess();
-        break;
-    case BaseScene::CameraMode::EDITOR:
-        viewProjection_.UpdateMatrix();
-        break;
-    case BaseScene::CameraMode::DEBUG:
-        // デバッグカメラの更新
-        debugCamera_->Update();
-        // カメラ行列の計算をDebugCameraのViewProjectionから行う
-        viewProjection_.matView_       = debugCamera_->GetViewProjection().matView_;
-        viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
-        viewProjection_.cameraMatrix_  = debugCamera_->GetViewProjection().cameraMatrix_;
-        break;
-    default:
-        break;
+    // 現在のカメラモードに対応する更新処理をテーブルから実行する
+    if (auto it = cameraUpdaters_.find(cameraMode_); it != cameraUpdaters_.end()) {
+        it->second();
     }
-
+   
+    // ライトにカメラ位置を渡す
     KetaEngine::Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }

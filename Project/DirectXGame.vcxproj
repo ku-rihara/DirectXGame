@@ -324,7 +324,7 @@
     <ClCompile Include="Game\ResultObj\ResultRunner.cpp" />
     <ClCompile Include="Game\ResultObj\ResultStage.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
-    <ClCompile Include="Game\Scene\EditorScene.cpp" />
+    <ClCompile Include="Game\Scene\BattleTestScene.cpp" />
     <ClCompile Include="Game\Scene\GameResultScene.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\GameSceneState\BaseGameSceneState.cpp" />
@@ -712,7 +712,7 @@
     <ClInclude Include="Game\ResultObj\ResultRunner.h" />
     <ClInclude Include="Game\ResultObj\ResultStage.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
-    <ClInclude Include="Game\Scene\EditorScene.h" />
+    <ClInclude Include="Game\Scene\BattleTestScene.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\Scene\GameSceneState\BaseGameSceneState.h" />
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneGameOver.h" />

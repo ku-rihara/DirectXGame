@@ -56,7 +56,7 @@ void SceneManager::Update() {
 
     // 次のシーンが設定されている場合
     if (Input::GetInstance()->PushKey(KeyboardKey::E) && Input::GetInstance()->PushKey(KeyboardKey::Escape)) {
-        ChangeScene("EDITOR");
+        ChangeScene("BATTLE_TEST");
     }
 
     // 次のシーンが設定されている場合
