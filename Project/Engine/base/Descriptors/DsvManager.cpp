@@ -2,7 +2,6 @@
 
 using namespace KetaEngine;
 #include <cassert>
-#include <d3d12.h>
 
 // 最大DSV数の定義
 const uint32_t DsvManager::kMaxCount = 2;

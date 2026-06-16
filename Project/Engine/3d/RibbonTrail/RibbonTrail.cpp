@@ -6,7 +6,6 @@ using namespace KetaEngine;
 #include "Base/TextureManager.h"
 #include "Pipeline/RibbonTrail/RibbonTrailPipeline.h"
 #include "Pipeline/Distortion/DistortionPipeline.h"
-#include <cassert>
 #include <cmath>
 #include <d3dx12.h>
 

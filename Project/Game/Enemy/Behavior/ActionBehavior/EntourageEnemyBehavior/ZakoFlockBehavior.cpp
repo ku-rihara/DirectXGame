@@ -7,7 +7,6 @@
 #include "MathFunction.h"
 
 #include <algorithm>
-#include <cmath>
 
 ZakoFlockBehavior::ZakoFlockBehavior(EntourageEnemy* enemy)
     : BaseEnemyBehavior("ZakoFlock", static_cast<BaseEnemy*>(enemy)), pEntourageEnemy_(enemy) {

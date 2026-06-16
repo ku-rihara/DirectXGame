@@ -3,8 +3,6 @@
 
 using namespace KetaEngine;
 #include "MathFunction.h"
-#include <algorithm>
-#include <filesystem>
 #include <imgui.h>
 
 void SpriteEaseAnimationData::Init(const std::string& animationName, const std::string& categoryName) {

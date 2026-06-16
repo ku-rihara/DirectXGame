@@ -3,7 +3,6 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include <type_traits>
 
 /// <summary>
 /// イージングステップのインターフェース

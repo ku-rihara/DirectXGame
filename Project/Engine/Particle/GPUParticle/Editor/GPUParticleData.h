@@ -3,7 +3,6 @@
 #include "GPUParticleSection.h"
 #include <memory>
 #include <string>
-#include <vector>
 
 /// <summary>
 /// GPUパーティクルデータクラス

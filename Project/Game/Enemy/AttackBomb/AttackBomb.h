@@ -7,7 +7,6 @@
 #include "Vector3.h"
 #include <functional>
 #include <memory>
-#include <string>
 
 /// <summary>
 /// ボス専用攻撃ボム1発分

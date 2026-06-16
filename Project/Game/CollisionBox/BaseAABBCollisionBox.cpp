@@ -1,5 +1,4 @@
 #include "BaseAABBCollisionBox.h"
-#include <imgui.h>
 
 void BaseAABBCollisionBox::Init() {
     transform_.Init();

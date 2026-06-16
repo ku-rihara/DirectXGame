@@ -7,7 +7,6 @@ using namespace KetaEngine;
 #include "function/Log.h"
 #include <cassert>
 #include <d3dx12.h>
-#include <wrl/client.h>
 
 void BasePostEffect::Init(DirectXCommon* dxCommon) {
     dxCommon_ = dxCommon;

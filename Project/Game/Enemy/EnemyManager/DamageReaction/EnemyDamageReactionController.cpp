@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
-#include <Windows.h>
 
 void EnemyDamageReactionController::Init() {
     // デフォルトパラメータの初期化（敵タイプ別）

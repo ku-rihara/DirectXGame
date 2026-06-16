@@ -1,9 +1,7 @@
 #pragma once
 
-#include "2d/Sprite.h"
 #include "BaseGameSceneState.h"
 #include <functional>
-#include <memory>
 
 /// <summary>
 /// ゲームシーン:イントロステート

@@ -4,7 +4,6 @@
 #include "Vector3.h"
 #include <array>
 #include <cstdint>
-#include <memory>
 #include <string>
 
 class Player;

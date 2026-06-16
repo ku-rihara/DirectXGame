@@ -1,6 +1,5 @@
 #include "Quaternion.h"
 #include "Vector3.h"
-#include <cfloat>
 #include <cmath>
 #include "Matrix4x4.h"
 

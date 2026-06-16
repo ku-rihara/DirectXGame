@@ -7,7 +7,6 @@
 /// input
 #include "input/Input.h"
 /// imgui
-#include <imgui.h>
 
 // 初期化
 AudienceRoot::AudienceRoot(Audience* audience, bool isDraw)

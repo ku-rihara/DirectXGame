@@ -4,7 +4,6 @@
 #include "Enemy/Types/BaseEnemy.h"
 #include <cstdint>
 #include <string>
-#include <vector>
 
 class EnemyManager;
 class Player;

@@ -8,7 +8,6 @@
 #include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
-#include <cmath>
 
 EnemyDamageReactionSlammed::EnemyDamageReactionSlammed(
     BaseEnemy* boss,

@@ -3,7 +3,6 @@
 #include "Base/WinApp.h"
 #include "Quaternion.h"
 #include "Vector2.h"
-#include <assert.h>
 #include <cmath>
 #include <DirectXMath.h>
 #include <numbers>

@@ -10,7 +10,6 @@
 #include "Editor/TimeScaleEditor/TimeScalePlayer.h"
 /// std
 #include <array>
-#include <cstdint>
 #include <string>
 
 /// <summary>

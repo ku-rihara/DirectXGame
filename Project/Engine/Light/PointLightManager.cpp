@@ -6,7 +6,6 @@ using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Descriptors/SrvManager.h"
 #include <imgui.h>
-#include <string>
 
 void PointLightManager::Init(ID3D12Device* device) {
 

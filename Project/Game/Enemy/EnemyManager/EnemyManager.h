@@ -19,7 +19,6 @@
 #include "Enemy/UIs/HPBar/EnemyHPBarColorConfig.h"
 
 /// std
-#include <array>
 #include <json.hpp>
 #include <memory>
 #include <string>

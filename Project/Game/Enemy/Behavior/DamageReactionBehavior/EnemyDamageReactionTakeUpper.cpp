@@ -8,7 +8,6 @@
 #include "Player/Player.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Frame/Frame.h"
-#include <cmath>
 
 EnemyDamageReactionTakeUpper::EnemyDamageReactionTakeUpper(
     BaseEnemy* boss,

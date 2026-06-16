@@ -2,7 +2,6 @@
 #include "../../ParticleManager.h"
 #include "Base/TextureManager.h"
 #include "Editor/EffectEditorSuite/EffectInlineEditRequest.h"
-#include "Function/GetFile.h"
 #include "MathFunction.h"
 #include <imgui.h>
 

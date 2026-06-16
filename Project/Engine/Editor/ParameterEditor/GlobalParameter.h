@@ -5,7 +5,6 @@
 #include <functional>
 #include <json.hpp>
 #include <map>
-#include <stack>
 #include <string>
 #include <variant>
 #include <vector>

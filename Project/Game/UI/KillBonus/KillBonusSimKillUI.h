@@ -5,7 +5,6 @@
 #include "2d/Sprite.h"
 #include "Easing/Easing.h"
 #include "Vector2.h"
-#include "Vector4.h"
 #include <array>
 #include <cstdint>
 #include <memory>

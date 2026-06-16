@@ -5,7 +5,6 @@ using namespace KetaEngine;
 #include"Base/Dx/DxRenderTarget.h"
 #include "Function/Log.h"
 #include"Frame/Frame.h"
-#include<imgui.h>
 #include<cassert>
 
 void RandomNoize::Init(DirectXCommon* dxCommon) {

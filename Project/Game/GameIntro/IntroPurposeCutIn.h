@@ -2,7 +2,6 @@
 #include "2d/Sprite.h"
 #include "BaseGameIntro.h"
 #include <array>
-#include <cstdint>
 #include <memory>
 
 /// <summary>

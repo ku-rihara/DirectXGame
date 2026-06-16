@@ -8,7 +8,6 @@ using namespace KetaEngine;
 #include "mathFunction.h"
 #include <cassert>
 #include <fstream>
-#include <unordered_set>
 
 void ObjectFromBlender::LoadJsonFile(const std::string& _fileName) {
     fileName_ = _fileName;

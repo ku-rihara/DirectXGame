@@ -5,8 +5,6 @@ using namespace KetaEngine;
 // manager
 #include "Particle/GPUParticle/GPUParticleManager.h"
 // std
-#include <algorithm>
-#include <filesystem>
 // imGui
 #include <imgui.h>
 

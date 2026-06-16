@@ -1,6 +1,5 @@
 #pragma once
 #include "EasingStep.h"
-#include <cassert>
 #include <functional>
 #include <memory>
 #include <vector>

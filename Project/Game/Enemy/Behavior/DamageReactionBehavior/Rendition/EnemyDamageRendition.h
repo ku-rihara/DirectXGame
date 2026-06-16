@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionData.h"
-#include <cstdint>
 
 class BaseEnemy;
 class EnemyDamageRenditionData;

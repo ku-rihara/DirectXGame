@@ -5,7 +5,6 @@
 /// frame
 #include "Frame/Frame.h"
 /// imgui
-#include <imgui.h>
 
 // 初期化
 AudienceAppear::AudienceAppear(Audience* audience)

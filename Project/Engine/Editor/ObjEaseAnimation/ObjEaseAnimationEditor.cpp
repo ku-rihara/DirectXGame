@@ -3,7 +3,6 @@
 using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
-#include <Windows.h>
 
 void ObjEaseAnimationEditor::Init(const std::string& typeName) {
     BaseEffectEditor::Init(typeName);

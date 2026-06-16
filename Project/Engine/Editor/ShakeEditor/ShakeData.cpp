@@ -3,9 +3,7 @@
 using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "Shake.h"
-#include <algorithm>
 #include <imgui.h>
-#include <Windows.h>
 
 void ShakeData::Init(const std::string& shakeName, const std::string& categoryName) {
     BaseEffectData::Init(shakeName, categoryName);

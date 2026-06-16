@@ -2,7 +2,6 @@
 #include "2d/Sprite.h"
 #include "BaseGameIntro.h"
 #include "MovieLine.h"
-#include <memory>
 
 /// <summary>
 /// イントロフィールド生成演出クラス

@@ -4,7 +4,6 @@
 #include "Scene/Factory/AbstractSceneFactory.h"
 #include <Collider/CollisionManager.h>
 #include <memory>
-#include <type_traits>
 
 namespace KetaEngine {
 /// <summary>

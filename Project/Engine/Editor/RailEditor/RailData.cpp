@@ -4,7 +4,6 @@ using namespace KetaEngine;
 #include "3D/Line3D/Line3D.h"
 #include "Frame/Frame.h"
 #include "MathFunction.h"
-#include <algorithm>
 #include <imgui.h>
 
 void RailData::Init(const std::string& railName, const std::string& categoryName) {

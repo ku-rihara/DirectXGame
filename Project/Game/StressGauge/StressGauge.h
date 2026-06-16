@@ -3,7 +3,6 @@
 #include "StressGauge/StressGaugeGauge.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // std
-#include <cstdint>
 #include <functional>
 #include <memory>
 

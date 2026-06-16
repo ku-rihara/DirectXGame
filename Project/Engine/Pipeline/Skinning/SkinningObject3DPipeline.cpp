@@ -5,7 +5,6 @@ using namespace KetaEngine;
 // Function
 #include "function/Log.h"
 #include <cassert>
-#include <string>
 
 void SkinningObject3DPipeline::Init(DirectXCommon* dxCommon) {
     BasePipeline::Init(dxCommon);

@@ -2,7 +2,6 @@
 #include "Easing/Easing.h"
 #include "Editor/BaseEffectEditor/BaseEffectData.h"
 #include "utility/TimeModeSelector/TimeModeSelector.h"
-#include <cstdint>
 #include <string>
 
 /// <summary>

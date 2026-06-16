@@ -5,7 +5,6 @@
 #include "Vector2.h"
 #include <cstdint>
 #include <memory>
-#include <string>
 
 /// <summary>
 /// レイアウト情報

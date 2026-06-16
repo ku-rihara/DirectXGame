@@ -2,7 +2,6 @@
 
 #include <array>
 #include <memory>
-#include <variant>
 #include <vector>
 #include <wrl.h>
 

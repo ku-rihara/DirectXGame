@@ -1,6 +1,5 @@
 #pragma once
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include <memory>
 #include <string>
 
 class Player;

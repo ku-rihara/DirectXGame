@@ -2,7 +2,6 @@
 
 using namespace KetaEngine;
 #include <assert.h>
-#include <cctype>
 #include <filesystem>
 #include <fstream>
 #define ATTENUATION_TIME_MS 50

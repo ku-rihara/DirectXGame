@@ -1,8 +1,6 @@
 #pragma once
 
-#include <memory>
 #include <unordered_set>
-#include <vector>
 
 // 前方宣言
 namespace KetaEngine {

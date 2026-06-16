@@ -9,7 +9,6 @@ using namespace KetaEngine;
 #include "function/Convert.h"
 // std
 #include <algorithm>
-#include <cstdlib>
 #include <d3dx12.h>
 #include <stdexcept>
 #include <vector>

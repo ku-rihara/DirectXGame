@@ -1,7 +1,6 @@
 #include "ComboAssistColumnScroller.h"
 #include "Frame/Frame.h"
 #include <algorithm>
-#include <climits>
 
 void ComboAssistColumnScroller::Init(ComboAssistVisibilityController* visibility) {
     pVisibility_ = visibility;

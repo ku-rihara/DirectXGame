@@ -3,9 +3,7 @@
 #include "Matrix4x4.h"
 #include "Vector3.h"
 #include "Vector4.h"
-#include <array>
 #include <d3d12.h>
-#include <vector>
 #include <wrl.h>
 
 namespace KetaEngine {

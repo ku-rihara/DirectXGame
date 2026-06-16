@@ -3,7 +3,6 @@
 #include "KillBonusComboUI.h"
 #include "KillBonusSimKillUI.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "Vector2.h"
 #include <cstdint>
 #include <functional>
 #include <string>

@@ -3,7 +3,6 @@
 #include "3d/WorldTransform.h"
 
 // std
-#include <string>
 
 /// <summary>
 /// オブジェクトの基底クラス

@@ -4,7 +4,6 @@ using namespace KetaEngine;
 #include "3d/Object3d/Object3d.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Pipeline/PipelineManager.h"
-#include <cstdlib>
 #include <imgui.h>
 
 bool Object3DRegistry::isDestroyed_ = false;

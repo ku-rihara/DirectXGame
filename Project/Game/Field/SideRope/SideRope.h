@@ -6,7 +6,6 @@
 #include "RopeBoundParam.h"
 #include <cstdint>
 #include <string>
-#include <variant>
 
 enum class SideRopeType : int32_t {
     FRONT,

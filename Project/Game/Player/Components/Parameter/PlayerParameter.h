@@ -4,8 +4,6 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 
 /// std
-#include <array>
-#include <cstdint>
 #include <string>
 
 struct UpperParam {

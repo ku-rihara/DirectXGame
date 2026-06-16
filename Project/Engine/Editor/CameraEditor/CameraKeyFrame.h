@@ -4,9 +4,7 @@
 #include "utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector3.h"
 #include <cstdint>
-#include <memory>
 #include <string>
-#include <vector>
 
 /// <summary>
 /// カメラキーフレームクラス

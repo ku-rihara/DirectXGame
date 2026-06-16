@@ -19,7 +19,6 @@ using namespace KetaEngine;
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
-#include <Windows.h>
 
 template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::Init(const std::string& typeName) {

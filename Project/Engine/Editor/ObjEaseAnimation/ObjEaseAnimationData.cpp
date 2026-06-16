@@ -6,7 +6,6 @@ using namespace KetaEngine;
 #include "Editor/RailEditor/RailPlayer.h"
 #include "MathFunction.h"
 #include <algorithm>
-#include <filesystem>
 #include <imgui.h>
 
 void ObjEaseAnimationData::Init(const std::string& animationName, const std::string& categoryName) {

@@ -3,7 +3,6 @@
 #include "3d/WorldTransform.h"
 #include "Vector3.h"
 #include <list>
-#include <memory>
 #include <vector>
 
 /// <summary>

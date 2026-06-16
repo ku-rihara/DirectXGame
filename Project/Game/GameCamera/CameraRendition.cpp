@@ -1,7 +1,6 @@
 #include "CameraRendition.h"
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
-#include "Shake.h"
 
 void CameraRendition::Init() {
 

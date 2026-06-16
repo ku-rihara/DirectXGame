@@ -18,7 +18,6 @@
 #include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionData.h"
 /// math
 #include "Frame/Frame.h"
-#include "MathFunction.h"
 
 // 初期化
 EnemyDamageReactionRoot::EnemyDamageReactionRoot(BaseEnemy* boss)

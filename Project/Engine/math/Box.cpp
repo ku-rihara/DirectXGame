@@ -1,6 +1,5 @@
 #include "Box.h"
 #include <algorithm>
-#include <cmath>
 
 // 当たり判定
 bool IsCollision(const AABB& aabb, const Vector3& point) {

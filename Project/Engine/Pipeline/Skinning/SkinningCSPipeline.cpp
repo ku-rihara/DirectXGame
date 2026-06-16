@@ -5,7 +5,6 @@ using namespace KetaEngine;
 #include "Base/Dx/DxCompiler.h"
 #include "function/Log.h"
 #include <cassert>
-#include <string>
 
 void SkinningCSPipeline::Init(DirectXCommon* dxCommon) {
     BaseCSPipeline::Init(dxCommon);

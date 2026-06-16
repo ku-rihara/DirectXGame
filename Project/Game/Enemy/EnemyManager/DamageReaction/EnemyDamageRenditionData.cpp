@@ -1,5 +1,4 @@
 #include "EnemyDamageRenditionData.h"
-#include <cassert>
 #include <imgui.h>
 
 EnemyDamageRenditionData ::EnemyDamageRenditionData() {

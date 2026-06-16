@@ -4,7 +4,6 @@ using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
 #include "Line3D.h"
 #include "Pipeline/PipelineManager.h"
-#include <cstdlib>
 
 bool Line3DManager::isDestroyed_ = false;
 

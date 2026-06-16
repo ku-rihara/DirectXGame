@@ -1,7 +1,6 @@
 #pragma once
 
 #include "3D/Primitive/IPrimitive.h"
-#include <utility>
 
 /// <summary>
 /// ボックスプリミティブクラス

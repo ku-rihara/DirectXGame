@@ -2,7 +2,6 @@
 #include "Gamepad.h"
 
 using namespace KetaEngine;
-#include <cmath>
 
 
 bool Gamepad::Init(Microsoft::WRL::ComPtr<IDirectInput8> directInput, DWORD padNo) {

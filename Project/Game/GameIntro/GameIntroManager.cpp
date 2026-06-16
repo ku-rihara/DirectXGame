@@ -5,7 +5,6 @@
 #include "IntroPurposeCutIn.h"
 #include "IntroSpawnField.h"
 
-#include <algorithm>
 #include <imgui.h>
 
 void GameIntroManager::Init() {

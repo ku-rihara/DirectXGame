@@ -4,7 +4,6 @@
 using namespace KetaEngine;
 #include"Base/Dx/DirectXCommon.h"
 #include<imgui.h>
-#include<string>
 
 void AreaLightManager::Add(ID3D12Device* device) {
     

@@ -4,7 +4,6 @@
 #include <array>
 #include <cstdint>
 #include <json.hpp>
-#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>

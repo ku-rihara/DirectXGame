@@ -4,7 +4,6 @@ using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "MathFunction.h"
 #include "Matrix4x4.h"
-#include <filesystem>
 #include <imgui.h>
 #include <numbers>
 

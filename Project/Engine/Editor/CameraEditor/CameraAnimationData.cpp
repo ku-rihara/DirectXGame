@@ -5,8 +5,6 @@ using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 #include "Matrix4x4.h"
-#include <algorithm>
-#include <filesystem>
 #include <imgui.h>
 #include <numbers>
 

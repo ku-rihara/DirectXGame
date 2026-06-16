@@ -8,7 +8,6 @@ using namespace KetaEngine;
 #include "DxDepthBuffer.h"
 #include "DxResourceBarrier.h"
 #include "DxSwapChain.h"
-#include <cassert>
 
 ///==========================================================
 /// 初期化

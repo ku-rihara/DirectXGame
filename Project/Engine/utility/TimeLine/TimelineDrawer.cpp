@@ -4,7 +4,6 @@
 
 using namespace KetaEngine;
 #include <algorithm>
-#include <cstdio>
 
 void TimelineDrawer::Init(const std::string& name) {
     drawParam_.Init(name);

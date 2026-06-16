@@ -3,7 +3,6 @@
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 #include "Particle/GPUParticle/GPUParticlePlayer.h"
-#include <array>
 
 /// <summary>
 /// ゲームフィールドクラス

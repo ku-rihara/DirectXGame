@@ -1,6 +1,4 @@
 #include "BaseComboAttackBehavior.h"
-#include "Frame/Frame.h"
-#include "input/Input.h"
 #include "Player/Player.h"
 
 BaseComboAttackBehavior::BaseComboAttackBehavior(const std::string& name, Player* player)

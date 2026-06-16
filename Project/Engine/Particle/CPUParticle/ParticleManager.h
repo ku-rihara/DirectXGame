@@ -18,7 +18,6 @@
 
 // math
 #include "Box.h"
-#include "MinMax.h"
 // std
 
 #include <list>

@@ -6,7 +6,6 @@ using namespace KetaEngine;
 #include "Easing/EasingCreator/EasingCreator.h"
 #include <fstream>
 #include <imGui.h>
-#include <Windows.h>
 #include <unordered_map>
 
 // ファイルI/Oキャッシュ

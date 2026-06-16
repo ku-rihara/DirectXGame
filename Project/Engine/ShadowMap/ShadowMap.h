@@ -4,10 +4,8 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include <d3d12.h>
-#include <functional>
 #include <Matrix4x4.h>
 #include <memory>
-#include <vector>
 #include <wrl/client.h>
 
 namespace KetaEngine {

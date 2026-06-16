@@ -5,7 +5,6 @@
 #include <cstdint>
 #include <d3d12.h>
 #include <memory>
-#include <utility>
 #include <wrl/client.h>
 
 namespace KetaEngine {

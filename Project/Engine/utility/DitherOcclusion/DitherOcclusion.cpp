@@ -4,7 +4,6 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Light/Light.h"
 #include "math/Matrix4x4.h"
-#include "math/Vector4.h"
 #include <imgui.h>
 
 using namespace KetaEngine;

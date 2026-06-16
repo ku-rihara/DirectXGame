@@ -1,5 +1,4 @@
 #include "Field.h"
-#include "Light/LightingType.h"
 
 Vector3 Field::baseScale_ = {70, 1, 70};
 

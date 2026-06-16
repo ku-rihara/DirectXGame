@@ -4,9 +4,7 @@
 #include "vector3.h"
 #include <cstdint>
 #include <functional>
-#include <memory>
 #include <string>
-#include <type_traits>
 #include <vector>
 
 /// <summary>

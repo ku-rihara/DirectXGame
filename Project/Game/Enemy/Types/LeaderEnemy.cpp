@@ -17,7 +17,6 @@
 #include "math/MathFunction.h"
 #include "math/random.h"
 #include <cmath>
-#include <imgui.h>
 
 
 LeaderEnemy::~LeaderEnemy() {

@@ -1,6 +1,5 @@
 #pragma once
 #include "3d/ViewProjection.h"
-#include <memory>
 #include <unordered_set>
 
 namespace KetaEngine {

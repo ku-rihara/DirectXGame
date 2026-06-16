@@ -9,7 +9,6 @@
 /// engine
 #include "audio/Audio.h"
 #include "Frame/Frame.h"
-#include <imgui.h>
 
 // 初期化
 PlayerJump::PlayerJump(Player* player, float initSpeed)

@@ -7,7 +7,6 @@ using namespace KetaEngine;
 #include "Object3DAnimation.h"
 #include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/PipelineManager.h"
-#include <algorithm>
 #include <imgui.h>
 
 bool AnimationRegistry::isDestroyed_ = false;

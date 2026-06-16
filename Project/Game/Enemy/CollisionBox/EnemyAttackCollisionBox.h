@@ -1,8 +1,6 @@
 #pragma once
 
 #include "CollisionBox/BaseAABBCollisionBox.h"
-#include <array>
-#include <string>
 
 class BaseEnemy;
 class Player;

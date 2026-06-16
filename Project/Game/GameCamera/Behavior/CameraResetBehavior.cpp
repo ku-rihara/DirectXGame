@@ -2,7 +2,6 @@
 #include "CameraFollowBehavior.h"
 #include "GameCamera/GameCamera.h"
 #include "MathFunction.h"
-#include <cmath>
 #include <numbers>
 
 CameraResetBehavior::CameraResetBehavior(GameCamera* owner)

@@ -9,7 +9,6 @@
 /// math
 #include "MathFunction.h"
 /// imGui
-#include <imgui.h>
 
 EnemyChase::EnemyChase(BaseEnemy* enemy)
     : BaseEnemyBehavior("EnemyChase", enemy) {

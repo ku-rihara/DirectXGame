@@ -5,7 +5,6 @@ using namespace KetaEngine;
 // Function
 #include "function/Log.h"
 #include <cassert>
-#include <string>
 
 
 void Object3DPipeline::Init(DirectXCommon* dxCommon) {

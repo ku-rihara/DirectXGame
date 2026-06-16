@@ -1,6 +1,5 @@
 #pragma once
 #include "2d/Sprite.h"
-#include "Vector2.h"
 #include <memory>
 
 /// <summary>

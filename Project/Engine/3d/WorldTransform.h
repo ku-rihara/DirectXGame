@@ -6,9 +6,6 @@
 #include "ViewProjection.h"
 #include <cstdint>
 #include <d3d12.h>
-#include <functional>
-#include <list>
-#include <memory>
 #include <string>
 #include <wrl.h>
 

@@ -3,7 +3,6 @@
 using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include <imgui.h>
-#include <Windows.h>
 
 void TimeScaleData::Init(const std::string& timeScaleName, const std::string& categoryName) {
     BaseEffectData::Init(timeScaleName, categoryName);

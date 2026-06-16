@@ -2,7 +2,6 @@
 
 #include "BaseAudienceBehavior.h"
 #include "Easing/Easing.h"
-#include "Easing/EasingFunction.h"
 
 class AudienceRoot : public BaseAudienceBehavior {
 private:

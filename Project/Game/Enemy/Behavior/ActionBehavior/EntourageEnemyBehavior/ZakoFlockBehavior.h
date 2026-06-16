@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../BaseEnemyBehavior.h"
-#include "Vector3.h"
 
 class EntourageEnemy;
 

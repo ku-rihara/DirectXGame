@@ -5,7 +5,6 @@ using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 #include <imgui.h>
-#include <iostream>
 
 void CameraKeyFrame::Init(const std::string& groupName, const std::string& categoryName, int32_t keyNumber) {
     // グローバルパラメータ

@@ -2,7 +2,6 @@
 
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 // math
-#include "Vector2.h"
 // std
 #include <cstdint>
 #include <string>

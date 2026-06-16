@@ -1,7 +1,6 @@
 #pragma once
 #include "CameraAnimationData.h"
 #include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
-#include <functional>
 #include <memory>
 #include <string>
 

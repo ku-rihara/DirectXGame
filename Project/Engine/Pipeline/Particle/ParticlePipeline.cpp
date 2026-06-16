@@ -6,7 +6,6 @@ using namespace KetaEngine;
 #include "function/Log.h"
 #include "Base/Material/ModelMaterial.h"
 #include <cassert>
-#include <string>
 
 void ParticlePipeline::Init(DirectXCommon* dxCommon) {
     BasePipeline::Init(dxCommon);

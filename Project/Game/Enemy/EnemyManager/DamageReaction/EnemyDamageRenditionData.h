@@ -2,7 +2,6 @@
 
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "utility/FileSelector/FileSelector.h"
-#include <array>
 #include <cstdint>
 #include <string>
 #include <utility>

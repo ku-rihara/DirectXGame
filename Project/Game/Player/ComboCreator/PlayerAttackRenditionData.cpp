@@ -1,7 +1,6 @@
 #include <format>
 #include "PlayerAttackRenditionData.h"
 #include <algorithm>
-#include <cassert>
 #include <imgui.h>
 
 void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName, const std::string& prefix) {

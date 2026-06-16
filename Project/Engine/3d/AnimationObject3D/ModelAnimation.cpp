@@ -6,7 +6,6 @@ using namespace KetaEngine;
 #include "MathFunction.h"
 
 #include <cassert>
-#include <cmath>
 #include <cstdint>
 #include <Vector3.h>
 
@@ -15,7 +14,6 @@ using namespace KetaEngine;
 #include <assimp/scene.h>
 #include <cstring>
 #include <filesystem>
-#include <fstream>
 #include <Matrix4x4.h>
 #include <struct/ModelData.h>
 

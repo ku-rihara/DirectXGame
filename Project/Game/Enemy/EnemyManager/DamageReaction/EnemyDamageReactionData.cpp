@@ -1,6 +1,4 @@
 #include "EnemyDamageReactionData.h"
-#include "Function/GetFile.h"
-#include <algorithm>
 #include <filesystem>
 #include <imgui.h>
 

@@ -4,7 +4,6 @@
 #include "MathFunction.h"
 #include "Player/Player.h"
 #include "Random.h"
-#include <cassert>
 #include <imgui.h>
 
 void ContinuousEnemySpawner::Init() {

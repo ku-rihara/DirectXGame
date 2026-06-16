@@ -1,14 +1,13 @@
 #pragma once
 #include "BaseGameIntro.h"
-#include "MovieLine.h"
-class ComboAssistController;
-class ComboSupportSpriteUi;
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "MovieLine.h"
 #include <array>
 #include <cstdint>
 #include <memory>
-#include <vector>
 
+class ComboAssistController;
+class ComboSupportSpriteUi;
 /// <summary>
 /// ゲームイントロ管理クラス
 /// </summary>
@@ -34,11 +33,11 @@ public:
     void Init();
     void Update();
 
-    void MovieLineUpdate();               //< ムービーライン更新
+    void MovieLineUpdate(); //< ムービーライン更新
     void CheckMovieLineStateTransition(); //< ムービーライン状態遷移チェック
 
-    void BindParam();     //< パラメータバインド
-    void AdjustParam();   //< パラメータ調整
+    void BindParam(); //< パラメータバインド
+    void AdjustParam(); //< パラメータ調整
 
     bool IsAllIntroFinished() const; //< 全イントロ終了判定
 
@@ -50,7 +49,6 @@ public:
     bool GetIsFinishStep(const IntroStep& step);
 
 private:
-    
     /// <summary>
     /// 現在のイントロを更新
     /// </summary>
@@ -62,25 +60,25 @@ private:
 
 private:
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
-    const std::string groupName_      = "GameIntroManager";
+    const std::string groupName_                  = "GameIntroManager";
 
     std::array<std::unique_ptr<BaseGameIntro>, static_cast<size_t>(IntroStep::COUNT)> introSequences_;
 
-    int32_t currentIndex_                        = 0;
-    bool isInitialized_                          = false;
-    std::unique_ptr<MovieLine> movieLine_        = nullptr;
-    MovieLineState movieLineState_               = MovieLineState::NONE;
+    int32_t currentIndex_                 = 0;
+    bool isInitialized_                   = false;
+    std::unique_ptr<MovieLine> movieLine_ = nullptr;
+    MovieLineState movieLineState_        = MovieLineState::NONE;
 
-    float currentPlaySpeedRate_                  = 1.0f;
-    float fastSpeedRate_                         = 3.0f;
+    float currentPlaySpeedRate_ = 1.0f;
+    float fastSpeedRate_        = 3.0f;
 
-    ComboAssistController* pComboAssistController_    = nullptr;
-    ComboSupportSpriteUi* pComboSupportSpriteUi_  = nullptr;
+    ComboAssistController* pComboAssistController_ = nullptr;
+    ComboSupportSpriteUi* pComboSupportSpriteUi_   = nullptr;
     OperateUI* pHowToOperate_                      = nullptr;
-    GameCamera* pGameCamera_                     = nullptr;
-    Player* pPlayer_                             = nullptr;
-    FireInjectors* pFireInjectors_               = nullptr;
-    GameBackGroundObject* pGameBackGroundObject_ = nullptr;
+    GameCamera* pGameCamera_                       = nullptr;
+    Player* pPlayer_                               = nullptr;
+    FireInjectors* pFireInjectors_                 = nullptr;
+    GameBackGroundObject* pGameBackGroundObject_   = nullptr;
     StressGaugeGauge* pStressGaugeGauge_           = nullptr;
 
 public:

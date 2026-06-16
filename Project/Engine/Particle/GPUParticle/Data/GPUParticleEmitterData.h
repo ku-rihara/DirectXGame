@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../math/MinMax.h"
 #include "Vector3.h"
 #include <cstdint>
 

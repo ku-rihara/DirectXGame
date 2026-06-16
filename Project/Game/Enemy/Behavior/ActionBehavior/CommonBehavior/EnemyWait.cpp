@@ -9,7 +9,6 @@
 /// frame
 #include "Frame/Frame.h"
 /// imGui
-#include <imgui.h>
 
 // 初期化
 EnemyWait::EnemyWait(BaseEnemy* boss)

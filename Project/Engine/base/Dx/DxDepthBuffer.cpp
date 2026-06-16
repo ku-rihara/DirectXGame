@@ -3,7 +3,6 @@
 using namespace KetaEngine;
 #include "Base/Descriptors/DsvManager.h"
 #include "Base/Descriptors/SrvManager.h"
-#include <cassert>
 
 void DxDepthBuffer::Init(Microsoft::WRL::ComPtr<ID3D12Device> device, DsvManager* dsvManager,
     SrvManager* srvManager,uint32_t width,uint32_t height) {

@@ -2,7 +2,6 @@
 #include"3d/ViewProjection.h"
 #include <cmath>
 #include<numbers>
-#include<assert.h>
 
 float Lerp(float start, float end, float t) {
 	return (1.0f - t) * start + end * t;

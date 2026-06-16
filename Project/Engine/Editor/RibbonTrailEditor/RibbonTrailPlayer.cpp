@@ -4,7 +4,6 @@ using namespace KetaEngine;
 #include "3D/RibbonTrail/RibbonTrail.h"
 #include "Frame/Frame.h"
 #include "RibbonTrailData.h"
-#include <cmath>
 
 ///============================================================
 /// 初期化

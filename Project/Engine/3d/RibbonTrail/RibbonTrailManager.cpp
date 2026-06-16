@@ -7,7 +7,6 @@ using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "Pipeline/PipelineManager.h"
 #include "RibbonTrail.h"
-#include <cstdlib>
 
 bool RibbonTrailManager::isDestroyed_ = false;
 

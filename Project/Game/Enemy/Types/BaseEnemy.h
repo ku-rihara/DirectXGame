@@ -18,11 +18,9 @@
 #include "Enemy/Component/EnemyBaseInfo.h"
 
 // std
-#include <array>
 #include <cstdint>
 #include <functional>
 #include <memory>
-#include <vector>
 
 class Player;
 class GameCamera;

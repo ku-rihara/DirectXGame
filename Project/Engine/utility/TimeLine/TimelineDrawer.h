@@ -2,10 +2,8 @@
 #include "TimelineDrawParameter.h"
 #include "TimelineInteractionHandler.h"
 #include "TimelineRenderer.h"
-#include "Vector2.h"
 #include <cstdint>
 #include <functional>
-#include <imgui.h>
 #include <string>
 #include <vector>
 
