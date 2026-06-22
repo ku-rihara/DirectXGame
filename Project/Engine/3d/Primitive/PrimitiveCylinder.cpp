@@ -1,7 +1,7 @@
 #include "PrimitiveCylinder.h"
 
 using namespace KetaEngine;
-#include "3d/Mesh.h"
+#include "3D/Mesh.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "MathFunction.h"
 #include <algorithm>

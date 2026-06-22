@@ -1,6 +1,6 @@
 #include <format>
 #include "TimelineDrawer.h"
-#include "../../math/MathFunction.h"
+#include "../../Math/MathFunction.h"
 
 using namespace KetaEngine;
 #include <algorithm>

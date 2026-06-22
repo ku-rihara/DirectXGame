@@ -12,9 +12,9 @@
 // GlobalParameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Sprite
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 // ViewProjection
-#include "3d/ViewProjection.h"
+#include "3D/ViewProjection.h"
 // std
 #include <memory>
 #include <string>

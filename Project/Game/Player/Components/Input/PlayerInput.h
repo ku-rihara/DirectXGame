@@ -1,5 +1,5 @@
 #pragma once
-#include "math/Vector3.h"
+#include "Math/Vector3.h"
 
 /// <summary>
 /// プレイヤーのアクションの入力を管理するクラス

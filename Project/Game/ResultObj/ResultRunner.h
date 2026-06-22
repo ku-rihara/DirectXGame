@@ -1,6 +1,6 @@
 #pragma once
 
-#include "3d/AnimationObject3D/Object3DAnimation.h"
+#include "3D/AnimationObject3D/Object3DAnimation.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include <array>

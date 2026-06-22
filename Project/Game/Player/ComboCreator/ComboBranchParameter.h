@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "utility/FileSelector/FileSelector.h"
+#include "Utility/FileSelector/FileSelector.h"
 
 #include <cstdint>
 #include <string>

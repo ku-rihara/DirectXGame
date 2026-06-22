@@ -1,6 +1,6 @@
 #pragma once
 //2D
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 // Easing
 #include "Easing/Easing.h"
 // Editor

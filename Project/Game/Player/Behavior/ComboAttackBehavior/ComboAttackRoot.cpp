@@ -2,7 +2,7 @@
 // behavior
 #include "ComboAttackAction.h"
 // Input
-#include "input/Input.h"
+#include "Input/Input.h"
 // Player
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"

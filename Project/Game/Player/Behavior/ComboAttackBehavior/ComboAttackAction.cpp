@@ -1,5 +1,5 @@
 #include "ComboAttackAction.h"
-#include "utility/Log/Log.h"
+#include "Utility/Log/Log.h"
 #include <cmath>
 #include "MathFunction.h"
 // Behavior
@@ -7,7 +7,7 @@
 // Frame
 #include "Frame/Frame.h"
 // Input
-#include "input/Input.h"
+#include "Input/Input.h"
 // LockOn
 #include "LockOn/LockOn.h"
 #include "LockOn/LockOnController.h"

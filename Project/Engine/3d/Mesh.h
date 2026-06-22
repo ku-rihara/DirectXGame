@@ -2,7 +2,7 @@
 #include "Base/Material/BaseMaterial.h"
 #include "Base/Material/MeshMaterial.h"
 #include "Base/Material/ParticleMaterial.h"
-#include "struct/VertexData.h"
+#include "GPUData/VertexData.h"
 #include <cstdint>
 #include <d3d12.h>
 #include <dxgi1_6.h>

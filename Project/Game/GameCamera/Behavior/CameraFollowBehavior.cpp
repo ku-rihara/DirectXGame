@@ -1,7 +1,7 @@
 #include "CameraFollowBehavior.h"
 #include "GameCamera/GameCamera.h"
 #include "LockOn/LockOn.h"
-#include "input/Input.h"
+#include "Input/Input.h"
 #include <cmath>
 
 CameraFollowBehavior::CameraFollowBehavior(GameCamera* owner)

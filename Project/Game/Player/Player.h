@@ -1,6 +1,6 @@
 #pragma once
 // 3D
-#include "3d/Object3D/Object3d.h"
+#include "3D/Object3D/Object3d.h"
 #include "3D/ViewProjection.h"
 // Base
 #include "BaseObject/BaseObject.h"

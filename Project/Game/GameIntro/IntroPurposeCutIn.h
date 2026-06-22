@@ -1,5 +1,5 @@
 #pragma once
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "BaseGameIntro.h"
 #include <array>
 #include <memory>

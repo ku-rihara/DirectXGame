@@ -1,9 +1,9 @@
 #pragma once
 #include "3D/Line3D/Line3D.h"
-#include "3d/WorldTransform.h"
+#include "3D/WorldTransform.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Particle/GPUParticle/Data/GPUParticleEmitterData.h"
-#include "utility/TimeModeSelector/TimeModeSelector.h"
+#include "Utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector3.h"
 #include <memory>
 #include <string>

@@ -1,6 +1,6 @@
 #pragma once
-#include "2d/Sprite.h"
-#include "3d/ViewProjection.h"
+#include "2D/Sprite.h"
+#include "3D/ViewProjection.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 // std

@@ -1,7 +1,7 @@
 #include "Outline.h"
 
 using namespace KetaEngine;
-#include "3d/ViewProjection.h"
+#include "3D/ViewProjection.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Dx/DxCompiler.h"
 #include "Base/Dx/DxDepthBuffer.h"

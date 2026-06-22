@@ -1,6 +1,6 @@
 #include "AttackBomb.h"
 #include "Frame/Frame.h"
-#include "math/MathFunction.h"
+#include "Math/MathFunction.h"
 
 void AttackBomb::Init(const Vector3& startPos, const Vector3& targetPos, const Param& param) {
     startPos_    = startPos;

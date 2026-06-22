@@ -2,7 +2,7 @@
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/TextureManager.h"
 #include "Pipeline/PipelineManager.h"
-#include "math/MathFunction.h"
+#include "Math/MathFunction.h"
 #include <imgui.h>
 
 using namespace KetaEngine;

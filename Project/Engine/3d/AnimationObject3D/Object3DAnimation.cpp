@@ -2,7 +2,7 @@
 
 using namespace KetaEngine;
 // 3D
-#include "3d/ModelManager.h"
+#include "3D/ModelManager.h"
 // Animation
 #include "AnimationRegistry.h"
 // Base

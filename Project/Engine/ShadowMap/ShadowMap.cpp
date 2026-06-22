@@ -1,7 +1,7 @@
 #include "ShadowMap.h"
 
 using namespace KetaEngine;
-#include "3d/ViewProjection.h"
+#include "3D/ViewProjection.h"
 #include "Base/Descriptors/DsvManager.h"
 #include "Base/Descriptors/SrvManager.h"
 #include "Base/Dx/DirectXCommon.h"

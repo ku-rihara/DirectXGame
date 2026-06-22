@@ -1,6 +1,6 @@
 #pragma once
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "utility/ObjectFromBlender/ObjectFromBlender.h"
+#include "Utility/ObjectFromBlender/ObjectFromBlender.h"
 #include <cstdint>
 #include <memory>
 #include <string>

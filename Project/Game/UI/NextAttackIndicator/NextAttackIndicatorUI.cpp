@@ -1,11 +1,11 @@
 #include "NextAttackIndicatorUI.h"
 
-#include "2d/Sprite.h"
-#include "3d/ViewProjection.h"
+#include "2D/Sprite.h"
+#include "3D/ViewProjection.h"
 #include "Matrix4x4.h"
 #include "Player/Behavior/ComboAttackBehavior/ComboAttackAction.h"
 #include "Player/Player.h"
-#include "input/InputData.h"
+#include "Input/InputData.h"
 
 #include <imgui.h>
 

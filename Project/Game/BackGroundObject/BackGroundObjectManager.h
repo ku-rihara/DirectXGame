@@ -3,7 +3,7 @@
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "ComboLevel/ComboLevelObjHolder.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "utility/DitherOcclusion/DitherOcclusion.h"
+#include "Utility/DitherOcclusion/DitherOcclusion.h"
 
 #include <memory>
 #include <string>

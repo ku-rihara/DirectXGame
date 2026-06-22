@@ -1,5 +1,5 @@
 #pragma once
-#include "3d/WorldTransform.h"
+#include "3D/WorldTransform.h"
 #include "Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailPlayer.h"
@@ -8,7 +8,7 @@
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "3D/Primitive/IPrimitive.h"
 #include "3D/Primitive/PrimitiveCylinder.h"
-#include "utility/FileSelector/FileSelector.h"
+#include "Utility/FileSelector/FileSelector.h"
 #include <memory>
 #include <string>
 

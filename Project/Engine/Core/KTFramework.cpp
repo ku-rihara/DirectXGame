@@ -3,7 +3,7 @@
 using namespace KetaEngine;
 
 // dx
-#include "3d/ModelManager.h"
+#include "3D/ModelManager.h"
 // particle
 #include "Base/Descriptors/SrvManager.h"
 #include "Base/Dx/DxRenderTarget.h"
@@ -19,7 +19,7 @@ using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
 
 // utility
-#include "../utility/Log/Log.h"
+#include "../Utility/Log/Log.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // imGui
 #include "2D/ImGuiManager.h"

@@ -3,8 +3,8 @@
 #include "3D/Primitive/IPrimitive.h"
 #include "3D/Primitive/PrimitiveCylinder.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "utility/FileSelector/FileSelector.h"
-#include "utility/TimeModeSelector/TimeModeSelector.h"
+#include "Utility/FileSelector/FileSelector.h"
+#include "Utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <functional>

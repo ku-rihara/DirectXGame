@@ -7,8 +7,8 @@
 #include "Base/Material/SpriteMaterial.h"
 // struct
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "struct/ModelData.h"
-#include "struct/TransformationMatrix.h"
+#include "GPUData/ModelData.h"
+#include "GPUData/TransformationMatrix.h"
 // std
 #include <cstdint>
 #include <memory>

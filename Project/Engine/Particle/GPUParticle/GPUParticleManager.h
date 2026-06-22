@@ -1,6 +1,6 @@
 #pragma once
 #include "3D/Primitive/IPrimitive.h"
-#include "3d/ViewProjection.h"
+#include "3D/ViewProjection.h"
 #include "Base/Descriptors/SrvManager.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Material/GPUParticleMaterial.h"

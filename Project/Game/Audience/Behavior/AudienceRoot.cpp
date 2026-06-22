@@ -5,7 +5,7 @@
 /// frame
 #include "Frame/Frame.h"
 /// input
-#include "input/Input.h"
+#include "Input/Input.h"
 /// imgui
 
 // 初期化

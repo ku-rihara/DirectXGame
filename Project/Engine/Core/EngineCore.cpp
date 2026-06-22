@@ -2,9 +2,9 @@
 
 using namespace KetaEngine;
 /// 2d
-#include "2d/ImGuiManager.h"
+#include "2D/ImGuiManager.h"
 /// 3d
-#include "3d/ModelManager.h"
+#include "3D/ModelManager.h"
 /// base
 #include "Base/Descriptors/DsvManager.h"
 #include "Base/Descriptors/RtvManager.h"
@@ -18,7 +18,7 @@ using namespace KetaEngine;
 #include "ShadowMap/ShadowMap.h"
 /// audio,input
 #include "audio/Audio.h"
-#include "input/Input.h"
+#include "Input/Input.h"
 /// particle
 #include "Particle/CPUParticle/ParticleManager.h"
 #include "Particle/GPUParticle/GPUParticleManager.h"

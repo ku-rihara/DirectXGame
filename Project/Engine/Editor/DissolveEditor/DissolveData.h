@@ -1,7 +1,7 @@
 #pragma once
 #include "Easing/Easing.h"
 #include "Editor/BaseEffectEditor/BaseEffectData.h"
-#include "utility/FileSelector/FileSelector.h"
+#include "Utility/FileSelector/FileSelector.h"
 #include <cstdint>
 #include <string>
 

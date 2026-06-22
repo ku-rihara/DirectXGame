@@ -10,7 +10,7 @@ using namespace KetaEngine;
 
 // Base
 #include "Base/TextureManager.h"
-#include "3d/ModelManager.h"
+#include "3D/ModelManager.h"
 // frame
 #include "Frame/Frame.h"
 // Function

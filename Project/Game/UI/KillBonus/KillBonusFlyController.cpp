@@ -1,7 +1,7 @@
 #include "KillBonusFlyController.h"
 
-#include "3d/ViewProjection.h"
-#include "math/Matrix4x4.h"
+#include "3D/ViewProjection.h"
+#include "Math/Matrix4x4.h"
 
 #include <algorithm>
 #include <imgui.h>

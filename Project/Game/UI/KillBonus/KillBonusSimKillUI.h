@@ -2,7 +2,7 @@
 
 #include "UI/NumberDigitUI/NumberDigitUI.h"
 #include "UI/KillBonus/KillBonusColorTier.h"
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "Easing/Easing.h"
 #include "Vector2.h"
 #include <array>

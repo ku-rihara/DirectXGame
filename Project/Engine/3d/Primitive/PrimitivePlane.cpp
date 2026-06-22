@@ -1,7 +1,7 @@
 #include "PrimitivePlane.h"
 
 using namespace KetaEngine;
-#include "3d/Mesh.h"
+#include "3D/Mesh.h"
 
 void PrimitivePlane::Init() {
     vertexNum_ = 6;

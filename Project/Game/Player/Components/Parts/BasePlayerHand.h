@@ -4,7 +4,7 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RibbonTrailEditor/RibbonTrailPlayer.h"
 
-#include "3d/Object3D/Object3d.h"
+#include "3D/Object3D/Object3d.h"
 #include "BaseObject/BaseObject.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
 #include <memory>

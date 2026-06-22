@@ -1,11 +1,11 @@
 #pragma once
-#include "3d/ViewProjection.h"
-#include "3d/WorldTransform.h"
+#include "3D/ViewProjection.h"
+#include "3D/WorldTransform.h"
 #include "Base/Material/ModelMaterial.h"
 #include "3D/Model.h"
 #include "ObjectColor.h"
 #include "ShadowMap/ShadowMap.h"
-#include "struct/TransformationMatrix.h"
+#include "GPUData/TransformationMatrix.h"
 #include <cstdint>
 #include <memory>
 #include <string>

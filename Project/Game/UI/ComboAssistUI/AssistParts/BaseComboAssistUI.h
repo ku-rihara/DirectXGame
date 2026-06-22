@@ -1,7 +1,7 @@
 #pragma once
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "Frame/Frame.h"
-#include "math/MathFunction.h"
+#include "Math/MathFunction.h"
 #include "Vector2.h"
 #include <cstdint>
 #include <memory>

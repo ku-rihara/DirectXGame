@@ -3,7 +3,7 @@
 /// frame
 #include "Frame/Frame.h"
 /// input
-#include"input/Input.h"
+#include"Input/Input.h"
 /// imGui
 #include <imgui.h>
 

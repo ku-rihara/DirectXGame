@@ -6,7 +6,7 @@ using namespace KetaEngine;
 #include "Base/TextureManager.h"
 #include "MathFunction.h"
 // Primitive
-#include "3d/ModelManager.h"
+#include "3D/ModelManager.h"
 #include "3D/Primitive/PrimitiveBox.h"
 #include "3D/Primitive/PrimitiveCylinder.h"
 #include "3D/Primitive/PrimitivePlane.h"

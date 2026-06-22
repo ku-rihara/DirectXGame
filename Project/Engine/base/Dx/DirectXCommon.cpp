@@ -5,7 +5,7 @@ using namespace KetaEngine;
 #include "Base/Descriptors/SrvManager.h"
 #include "Base/WinApp.h"
 #include "Frame/Frame.h"
-#include "utility/Log/Log.h"
+#include "Utility/Log/Log.h"
 // dx
 #include "DxCommand.h"
 #include "DxCompiler.h"

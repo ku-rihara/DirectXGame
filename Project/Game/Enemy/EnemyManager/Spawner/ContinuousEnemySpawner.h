@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../math/MinMax.h"
+#include "../Math/MinMax.h"
 #include "Enemy/Types/BaseEnemy.h"
 #include <cstdint>
 #include <string>

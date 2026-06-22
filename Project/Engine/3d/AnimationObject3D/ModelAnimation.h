@@ -1,12 +1,12 @@
 #pragma once
 
-#include "3d/WorldTransform.h"
+#include "3D/WorldTransform.h"
 
 // data
 #include "SkeletonData.h"
 #include "SkinCluster.h"
 #include "AnimationData.h"
-#include "struct/ModelData.h"
+#include "GPUData/ModelData.h"
 
 #include <cstdint>
 #include <optional>

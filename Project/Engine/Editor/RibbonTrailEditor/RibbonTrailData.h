@@ -1,6 +1,6 @@
 #pragma once
 #include "Editor/BaseEffectEditor/BaseEffectData.h"
-#include "utility/FileSelector/FileSelector.h"
+#include "Utility/FileSelector/FileSelector.h"
 #include "Vector2.h"
 #include "Vector4.h"
 #include <cstdint>

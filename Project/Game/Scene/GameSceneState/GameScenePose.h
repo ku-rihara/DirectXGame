@@ -1,6 +1,6 @@
 #pragma once
 
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "BaseGameSceneState.h"
 #include "PauseController/PauseController.h"
 #include <memory>

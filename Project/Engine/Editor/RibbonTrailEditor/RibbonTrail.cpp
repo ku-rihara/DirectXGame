@@ -1,6 +1,6 @@
 #include "RibbonTrail.h"
 #include "RibbonTrailManager.h"
-#include "math/MathFunction.h"
+#include "Math/MathFunction.h"
 
 using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"

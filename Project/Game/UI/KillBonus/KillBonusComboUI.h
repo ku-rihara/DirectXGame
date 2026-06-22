@@ -1,6 +1,6 @@
 #pragma once
 
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "Easing/Easing.h"
 #include "UI/KillBonus/KillBonusColorTier.h"
 #include "UI/NumberDigitUI/NumberDigitUI.h"

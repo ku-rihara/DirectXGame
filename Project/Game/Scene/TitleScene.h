@@ -10,7 +10,7 @@
 #include "SkyDome/SkyDome.h"
 
 // utility
-#include "utility/ObjectFromBlender/ObjectFromBlender.h"
+#include "Utility/ObjectFromBlender/ObjectFromBlender.h"
 
 // TitleSceneController
 #include "TitleSceneController/TitleSceneController.h"

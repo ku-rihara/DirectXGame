@@ -14,8 +14,8 @@
 
 #include "Frame/Frame.h"
 #include "Light/LightingType.h"
-#include "math/MathFunction.h"
-#include "math/random.h"
+#include "Math/MathFunction.h"
+#include "Math/random.h"
 #include <cmath>
 
 

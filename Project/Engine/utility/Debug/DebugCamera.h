@@ -1,6 +1,6 @@
 #pragma once
-#include "3d/ViewProjection.h"
-#include "input/Input.h"
+#include "3D/ViewProjection.h"
+#include "Input/Input.h"
 #include "Matrix4x4.h"
 
 /// <summary>

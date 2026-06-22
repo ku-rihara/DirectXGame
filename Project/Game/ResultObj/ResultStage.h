@@ -1,8 +1,8 @@
 #pragma once
 
-#include "utility/ObjectFromBlender/ObjectFromBlender.h"
+#include "Utility/ObjectFromBlender/ObjectFromBlender.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "3d/ViewProjection.h"
+#include "3D/ViewProjection.h"
 #include "Vector3.h"
 // std
 #include <memory>

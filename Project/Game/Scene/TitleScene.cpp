@@ -2,7 +2,7 @@
 #include "TitleScene.h"
 #include "Scene/Manager/SceneManager.h"
 // 2D
-#include "2d/SpriteRegistry.h"
+#include "2D/SpriteRegistry.h"
 // Light
 #include "Light/Light.h"
 

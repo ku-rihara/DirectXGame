@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseScene.h"
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "KillCounter/KillCountUIController.h"
 #include "UI/LevelUI/LevelUIController.h"
 #include "ResultObj/ResultStage.h"

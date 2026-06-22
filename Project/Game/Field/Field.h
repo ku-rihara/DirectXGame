@@ -1,7 +1,7 @@
 #pragma once
-#include "3d/Object3d/Object3d.h"
-#include "3d/ViewProjection.h"
-#include "3d/WorldTransform.h"
+#include "3D/Object3d/Object3d.h"
+#include "3D/ViewProjection.h"
+#include "3D/WorldTransform.h"
 #include "Particle/GPUParticle/GPUParticlePlayer.h"
 
 /// <summary>

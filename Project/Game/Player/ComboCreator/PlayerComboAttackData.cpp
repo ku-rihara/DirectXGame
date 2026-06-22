@@ -8,8 +8,8 @@
 // Player
 #include "Player/Player.h"
 // input
-#include "input/Input.h"
-#include "input/InputData.h"
+#include "Input/Input.h"
+#include "Input/InputData.h"
 // imGui
 #include <imgui.h>
 

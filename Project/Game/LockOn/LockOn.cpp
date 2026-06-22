@@ -2,7 +2,7 @@
 // Function
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
-#include "input/Input.h"
+#include "Input/Input.h"
 #include "MathFunction.h"
 #include "Matrix4x4.h"
 // from

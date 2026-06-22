@@ -3,7 +3,7 @@ using namespace KetaEngine;
 
 // 3d
 #include "3D/AnimationObject3D/AnimationRegistry.h"
-#include "3d/Object3D/Object3DRegistry.h"
+#include "3D/Object3D/Object3DRegistry.h"
 // base
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Dx/DxCommand.h"
@@ -15,11 +15,11 @@ using namespace KetaEngine;
 #include "Particle/CPUParticle/ParticleManager.h"
 #include "Particle/GPUParticle/GPUParticleManager.h"
 // input
-#include "input/Input.h"
+#include "Input/Input.h"
 // global parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // log
-#include "utility/Log/Log.h"
+#include "Utility/Log/Log.h"
 
 #include <cassert>
 #include <chrono>

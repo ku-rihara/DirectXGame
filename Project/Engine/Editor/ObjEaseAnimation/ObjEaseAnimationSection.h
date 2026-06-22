@@ -2,8 +2,8 @@
 #include "Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailPlayer.h"
-#include "utility/FileSelector/FileSelector.h"
-#include "utility/TimeModeSelector/TimeModeSelector.h"
+#include "Utility/FileSelector/FileSelector.h"
+#include "Utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector3.h"
 #include <array>
 #include <cstdint>

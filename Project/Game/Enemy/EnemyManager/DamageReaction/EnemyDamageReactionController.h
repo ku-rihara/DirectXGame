@@ -2,7 +2,7 @@
 #include "Combo/Combo.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "EnemyDamageReactionData.h"
-#include "utility/FileSelector/FileSelector.h"
+#include "Utility/FileSelector/FileSelector.h"
 #include <array>
 #include <memory>
 #include <string>

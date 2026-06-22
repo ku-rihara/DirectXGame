@@ -1,7 +1,7 @@
 #include "KillBonusFlyEntry.h"
 
-#include "math/MathFunction.h"
-#include "math/random.h"
+#include "Math/MathFunction.h"
+#include "Math/random.h"
 
 void KillBonusFlyEntry::Init(const Vector2& startPos, const KillBonusFlyParam& param) {
     p0_       = startPos;

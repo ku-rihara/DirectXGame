@@ -2,7 +2,7 @@
 // base
 #include "base/TextureManager.h"
 // math
-#include "2d/SpriteRegistry.h"
+#include "2D/SpriteRegistry.h"
 #include "Frame/Frame.h"
 #include "Light/Light.h"
 #include "Scene/Manager/SceneManager.h"

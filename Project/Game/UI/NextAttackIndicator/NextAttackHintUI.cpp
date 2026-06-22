@@ -1,10 +1,10 @@
 #include "NextAttackHintUI.h"
 
-#include "3d/ViewProjection.h"
+#include "3D/ViewProjection.h"
 #include "Matrix4x4.h"
 #include "Player/Behavior/ComboAttackBehavior/ComboAttackAction.h"
 #include "Player/Player.h"
-#include "input/InputData.h"
+#include "Input/InputData.h"
 
 #include <imgui.h>
 

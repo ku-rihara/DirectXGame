@@ -1,7 +1,7 @@
 #pragma once
-#include "3d/ViewProjection.h"
+#include "3D/ViewProjection.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "math/Vector3.h"
+#include "Math/Vector3.h"
 #include <string>
 
 namespace KetaEngine {

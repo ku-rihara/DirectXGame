@@ -31,7 +31,7 @@
 #include "UI/ComboAssistUI/UnlockNotifier/ComboUnlockNotifier.h"
 #include "UI/OperateUI.h"
 // utility
-#include "utility/ObjectFromBlender/ObjectFromBlender.h"
+#include "Utility/ObjectFromBlender/ObjectFromBlender.h"
 
 /// <summary>
 /// 戦闘テスト用シーン

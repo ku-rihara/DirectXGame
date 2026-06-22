@@ -1,7 +1,7 @@
 #include "PrimitiveBox.h"
 
 using namespace KetaEngine;
-#include "3d/Mesh.h"
+#include "3D/Mesh.h"
 #include <numbers>
 
 void PrimitiveBox::Init() {

@@ -1,7 +1,7 @@
 #pragma once
 #include "Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "utility/TimeModeSelector/TimeModeSelector.h"
+#include "Utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include <cstdint>

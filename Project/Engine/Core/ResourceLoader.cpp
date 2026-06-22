@@ -1,6 +1,6 @@
 #include "Core/ResourceLoader.h"
 #include "Base/TextureManager.h"
-#include "3d/ModelManager.h"
+#include "3D/ModelManager.h"
 #include "Audio/Audio.h"
 
 using namespace KetaEngine;

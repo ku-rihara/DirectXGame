@@ -2,7 +2,7 @@
 
 #include "PlayerComboAttackTimelineData.h"
 #include "PlayerComboAttackTimelinePhase.h"
-#include "utility/FileSelector/FileSelector.h"
+#include "Utility/FileSelector/FileSelector.h"
 #include "Editor/EffectEditorSuite/EffectEditorSuite.h"
 #include <cstdint>
 #include <functional>

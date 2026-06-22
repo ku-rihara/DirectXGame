@@ -2,7 +2,7 @@
 
 #include "ResultUIItem.h"
 #include "ResultRankSprite.h"
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <array>
 #include <memory>

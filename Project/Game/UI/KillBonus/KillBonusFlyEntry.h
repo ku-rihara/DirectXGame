@@ -1,5 +1,5 @@
 #pragma once
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "Easing/Easing.h"
 #include "Editor/RibbonTrailEditor/RibbonTrailPlayer.h"
 #include "Vector2.h"

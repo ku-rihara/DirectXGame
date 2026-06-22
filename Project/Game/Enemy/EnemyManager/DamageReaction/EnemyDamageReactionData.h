@@ -3,7 +3,7 @@
 #include "Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "EnemyDamageRenditionData.h"
-#include "utility/FileSelector/FileSelector.h"
+#include "Utility/FileSelector/FileSelector.h"
 #include "Vector3.h"
 #include <array>
 #include <cstdint>

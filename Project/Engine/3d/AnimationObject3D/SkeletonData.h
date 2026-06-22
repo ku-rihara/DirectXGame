@@ -1,5 +1,5 @@
 #pragma once
-#include"struct/Transform.h"
+#include"GPUData/Transform.h"
 #include"Matrix4x4.h"
 #include<string>
 #include<cstdint>

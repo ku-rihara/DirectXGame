@@ -1,6 +1,6 @@
 #pragma once
 
-#include "3d/Object3D/Object3d.h"
+#include "3D/Object3D/Object3d.h"
 #include "BaseEnemy.h"
 #include "Easing/Easing.h"
 #include "Easing/EasingCreator/EasingCreator.h"

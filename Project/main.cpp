@@ -1,6 +1,6 @@
 #include "Base/WinApp.h"
 #include "Core/KTGame.h"
-#include "Engine/utility/Log/Log.h"
+#include "Engine/Utility/Log/Log.h"
 
 // windowアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {

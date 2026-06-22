@@ -1,7 +1,7 @@
 #include "SpriteRegistry.h"
 
 using namespace KetaEngine;
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Pipeline/PipelineManager.h"
 // std

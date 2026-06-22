@@ -5,7 +5,7 @@
 /// frame
 #include "Frame/Frame.h"
 /// inupt
-#include"input/Input.h"
+#include"Input/Input.h"
 /// imgui
 #include <imgui.h>
 

@@ -1,7 +1,7 @@
 // TitleSceneTransition.h
 #pragma once
-#include "2d/Sprite.h"
-#include "input/Input.h"
+#include "2D/Sprite.h"
+#include "Input/Input.h"
 #include <memory>
 
 /// <summary>

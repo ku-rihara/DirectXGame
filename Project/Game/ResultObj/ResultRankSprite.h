@@ -1,7 +1,7 @@
 #pragma once
 
 // Sprite
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 // Easing
 #include "Easing/Easing.h"
 // Math

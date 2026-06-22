@@ -1,5 +1,5 @@
 #pragma once
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "Editor/BaseEffectEditor/BaseEffectEditor.h"
 #include "SpriteEaseAnimationData.h"
 #include <memory>

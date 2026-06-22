@@ -10,10 +10,10 @@
     <Filter Include="resources">
       <UniqueIdentifier>{751F5704-3BFE-4FB3-BE5C-C04A05A37734}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\2d">
+    <Filter Include="Engine\2D">
       <UniqueIdentifier>{7B631612-B845-45EE-A42A-5614B57B95E5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\3d">
+    <Filter Include="Engine\3D">
       <UniqueIdentifier>{6E9A74A5-0B33-4B22-9AA1-9CD2DB9A90F1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Audio">
@@ -58,16 +58,16 @@
     <Filter Include="Engine\ShadowMap">
       <UniqueIdentifier>{4F7189D2-E163-4468-9314-49EABB9EB6E9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\input">
+    <Filter Include="Engine\Input">
       <UniqueIdentifier>{CB9AC829-AD53-41F9-8167-E89E7B8B5A7F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\math">
+    <Filter Include="Engine\Math">
       <UniqueIdentifier>{569C51D4-F729-44F2-A193-9A60B11B0801}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\struct">
+    <Filter Include="Engine\GPUData">
       <UniqueIdentifier>{D48BCB51-C6B3-46F0-85E0-A243FF188438}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\utility">
+    <Filter Include="Engine\Utility">
       <UniqueIdentifier>{BC1C8D23-0DCB-4E4E-81C0-4679DBD97BFF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Audience">
@@ -136,19 +136,19 @@
     <Filter Include="resources\Shader">
       <UniqueIdentifier>{904911C9-5361-4C92-8055-458E792336C4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\3d\AnimationObject3D">
+    <Filter Include="Engine\3D\AnimationObject3D">
       <UniqueIdentifier>{F3E7150D-3A25-456A-A1FE-F87CBC567192}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\3d\Line3D">
+    <Filter Include="Engine\3D\Line3D">
       <UniqueIdentifier>{2EB3F580-6E9C-48BD-8A7F-A3CD2949E4C8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\3d\Object3D">
+    <Filter Include="Engine\3D\Object3D">
       <UniqueIdentifier>{0731EB5D-1AED-4659-89A6-0196C17DE81B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\3d\Primitive">
+    <Filter Include="Engine\3D\Primitive">
       <UniqueIdentifier>{B58BFD85-C74D-428B-B3B0-4D20DBB7E6FA}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\3d\RibbonTrail">
+    <Filter Include="Engine\3D\RibbonTrail">
       <UniqueIdentifier>{98811A2C-72A6-49FD-8873-031A58249DA1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Base\Descriptors">
@@ -244,31 +244,31 @@
     <Filter Include="Engine\Scene\Manager">
       <UniqueIdentifier>{EA94E693-B604-4512-AB94-6F643E614C20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\utility\CollisionPush">
+    <Filter Include="Engine\Utility\CollisionPush">
       <UniqueIdentifier>{B0E9F953-E3B3-490C-827F-C7EC5B9FDDC7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\utility\Debug">
+    <Filter Include="Engine\Utility\Debug">
       <UniqueIdentifier>{28D4D54B-B964-4FB1-A1EC-46765D1A50FC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\utility\DitherOcclusion">
+    <Filter Include="Engine\Utility\DitherOcclusion">
       <UniqueIdentifier>{08115285-BECB-4F2C-87DE-AB2710061265}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\utility\FileSelector">
+    <Filter Include="Engine\Utility\FileSelector">
       <UniqueIdentifier>{3DEA72FA-9153-4FDA-B8F8-AB8E857EB94F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\utility\Log">
+    <Filter Include="Engine\Utility\Log">
       <UniqueIdentifier>{052860A3-5C33-41C6-8B52-AE4CC8742DC3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\utility\ObjectFromBlender">
+    <Filter Include="Engine\Utility\ObjectFromBlender">
       <UniqueIdentifier>{A1565516-3669-46EE-9ED1-78B9911F1F00}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\ObjectPool">
       <UniqueIdentifier>{C3E7A2D4-9F5B-4E83-D11A-6B4C7E2F9038}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\utility\TimeLine">
+    <Filter Include="Engine\Utility\TimeLine">
       <UniqueIdentifier>{2649843C-62D2-49F2-BEA7-C17BECB28B89}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\utility\TimeModeSelector">
+    <Filter Include="Engine\Utility\TimeModeSelector">
       <UniqueIdentifier>{DEDAD584-DC24-41B0-BA34-C284387E4AAB}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Audience\Behavior">
@@ -507,83 +507,83 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\2d\ImGuiManager.cpp">
-      <Filter>Engine\2d</Filter>
+    <ClCompile Include="Engine\2D\ImGuiManager.cpp">
+      <Filter>Engine\2D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\2d\Sprite.cpp">
-      <Filter>Engine\2d</Filter>
+    <ClCompile Include="Engine\2D\Sprite.cpp">
+      <Filter>Engine\2D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\2d\SpriteRegistry.cpp">
-      <Filter>Engine\2d</Filter>
+    <ClCompile Include="Engine\2D\SpriteRegistry.cpp">
+      <Filter>Engine\2D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\AnimationObject3D\AnimationRegistry.cpp">
-      <Filter>Engine\3d\AnimationObject3D</Filter>
+    <ClCompile Include="Engine\3D\AnimationObject3D\AnimationRegistry.cpp">
+      <Filter>Engine\3D\AnimationObject3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\AnimationObject3D\ModelAnimation.cpp">
-      <Filter>Engine\3d\AnimationObject3D</Filter>
+    <ClCompile Include="Engine\3D\AnimationObject3D\ModelAnimation.cpp">
+      <Filter>Engine\3D\AnimationObject3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\AnimationObject3D\Object3DAnimation.cpp">
-      <Filter>Engine\3d\AnimationObject3D</Filter>
+    <ClCompile Include="Engine\3D\AnimationObject3D\Object3DAnimation.cpp">
+      <Filter>Engine\3D\AnimationObject3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Line3D\Line3d.cpp">
-      <Filter>Engine\3d\Line3D</Filter>
+    <ClCompile Include="Engine\3D\Line3D\Line3d.cpp">
+      <Filter>Engine\3D\Line3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Line3D\Line3DManager.cpp">
-      <Filter>Engine\3d\Line3D</Filter>
+    <ClCompile Include="Engine\3D\Line3D\Line3DManager.cpp">
+      <Filter>Engine\3D\Line3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Mesh.cpp">
-      <Filter>Engine\3d</Filter>
+    <ClCompile Include="Engine\3D\Mesh.cpp">
+      <Filter>Engine\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Model.cpp">
-      <Filter>Engine\3d</Filter>
+    <ClCompile Include="Engine\3D\Model.cpp">
+      <Filter>Engine\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\ModelManager.cpp">
-      <Filter>Engine\3d</Filter>
+    <ClCompile Include="Engine\3D\ModelManager.cpp">
+      <Filter>Engine\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Object3D\BaseObject3d.cpp">
-      <Filter>Engine\3d\Object3D</Filter>
+    <ClCompile Include="Engine\3D\Object3D\BaseObject3d.cpp">
+      <Filter>Engine\3D\Object3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Object3D\Object3d.cpp">
-      <Filter>Engine\3d\Object3D</Filter>
+    <ClCompile Include="Engine\3D\Object3D\Object3d.cpp">
+      <Filter>Engine\3D\Object3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Object3D\Object3DRegistry.cpp">
-      <Filter>Engine\3d\Object3D</Filter>
+    <ClCompile Include="Engine\3D\Object3D\Object3DRegistry.cpp">
+      <Filter>Engine\3D\Object3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Object3D\ObjectColor.cpp">
-      <Filter>Engine\3d\Object3D</Filter>
+    <ClCompile Include="Engine\3D\Object3D\ObjectColor.cpp">
+      <Filter>Engine\3D\Object3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Primitive\IPrimitive.cpp">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClCompile Include="Engine\3D\Primitive\IPrimitive.cpp">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Primitive\PrimitiveBox.cpp">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClCompile Include="Engine\3D\Primitive\PrimitiveBox.cpp">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Primitive\PrimitiveCylinder.cpp">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClCompile Include="Engine\3D\Primitive\PrimitiveCylinder.cpp">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Primitive\PrimitivePlane.cpp">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClCompile Include="Engine\3D\Primitive\PrimitivePlane.cpp">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Primitive\PrimitiveRing.cpp">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClCompile Include="Engine\3D\Primitive\PrimitiveRing.cpp">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Primitive\PrimitiveSphere.cpp">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClCompile Include="Engine\3D\Primitive\PrimitiveSphere.cpp">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\RibbonTrail\RibbonTrail.cpp">
-      <Filter>Engine\3d\RibbonTrail</Filter>
+    <ClCompile Include="Engine\3D\RibbonTrail\RibbonTrail.cpp">
+      <Filter>Engine\3D\RibbonTrail</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\RibbonTrail\RibbonTrailManager.cpp">
-      <Filter>Engine\3d\RibbonTrail</Filter>
+    <ClCompile Include="Engine\3D\RibbonTrail\RibbonTrailManager.cpp">
+      <Filter>Engine\3D\RibbonTrail</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\ViewProjection.cpp">
-      <Filter>Engine\3d</Filter>
+    <ClCompile Include="Engine\3D\ViewProjection.cpp">
+      <Filter>Engine\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\ObjEaseTransformApplier.cpp">
-      <Filter>Engine\3d</Filter>
+    <ClCompile Include="Engine\3D\ObjEaseTransformApplier.cpp">
+      <Filter>Engine\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\WorldTransform.cpp">
-      <Filter>Engine\3d</Filter>
+    <ClCompile Include="Engine\3D\WorldTransform.cpp">
+      <Filter>Engine\3D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Audio\Audio.cpp">
       <Filter>Engine\Audio</Filter>
@@ -828,17 +828,17 @@
     <ClCompile Include="Engine\Function\GetFile.cpp">
       <Filter>Engine\Function</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\input\GamePad.cpp">
-      <Filter>Engine\input</Filter>
+    <ClCompile Include="Engine\Input\GamePad.cpp">
+      <Filter>Engine\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\input\Input.cpp">
-      <Filter>Engine\input</Filter>
+    <ClCompile Include="Engine\Input\Input.cpp">
+      <Filter>Engine\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\input\InputData.cpp">
-      <Filter>Engine\input</Filter>
+    <ClCompile Include="Engine\Input\InputData.cpp">
+      <Filter>Engine\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\input\Mouse.cpp">
-      <Filter>Engine\input</Filter>
+    <ClCompile Include="Engine\Input\Mouse.cpp">
+      <Filter>Engine\Input</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Light\AmbientLight.cpp">
       <Filter>Engine\Light</Filter>
@@ -1029,17 +1029,17 @@
     <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp">
       <Filter>Engine\ShadowMap</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp">
-      <Filter>Engine\utility\Debug</Filter>
+    <ClCompile Include="Engine\Utility\Debug\DebugCamera.cpp">
+      <Filter>Engine\Utility\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\DitherOcclusion\DitherOcclusion.cpp">
-      <Filter>Engine\utility\DitherOcclusion</Filter>
+    <ClCompile Include="Engine\Utility\DitherOcclusion\DitherOcclusion.cpp">
+      <Filter>Engine\Utility\DitherOcclusion</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp">
-      <Filter>Engine\utility\FileSelector</Filter>
+    <ClCompile Include="Engine\Utility\FileSelector\FileSelector.cpp">
+      <Filter>Engine\Utility\FileSelector</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\TimeLine\TimelineDrawParameter.cpp">
-      <Filter>Engine\utility\TimeLine</Filter>
+    <ClCompile Include="Engine\Utility\TimeLine\TimelineDrawParameter.cpp">
+      <Filter>Engine\Utility\TimeLine</Filter>
     </ClCompile>
     <ClCompile Include="Game\Audience\Audience.cpp">
       <Filter>Game\Audience</Filter>
@@ -1134,29 +1134,29 @@
     <ClCompile Include="Game\Combo\ComboChainGauge.cpp">
       <Filter>Game\Combo</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp">
-      <Filter>Engine\utility\ObjectFromBlender</Filter>
+    <ClCompile Include="Engine\Utility\ObjectFromBlender\ObjectFromBlender.cpp">
+      <Filter>Engine\Utility\ObjectFromBlender</Filter>
     </ClCompile>
     <ClCompile Include="Game\ObjectPool\ObjectPool.cpp">
       <Filter>Game\ObjectPool</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\CollisionPush\CollisionPushUtils.cpp">
-      <Filter>Engine\utility\CollisionPush</Filter>
+    <ClCompile Include="Engine\Utility\CollisionPush\CollisionPushUtils.cpp">
+      <Filter>Engine\Utility\CollisionPush</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Log\Log.cpp">
-      <Filter>Engine\utility\Log</Filter>
+    <ClCompile Include="Engine\Utility\Log\Log.cpp">
+      <Filter>Engine\Utility\Log</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp">
-      <Filter>Engine\utility\TimeLine</Filter>
+    <ClCompile Include="Engine\Utility\TimeLine\TimelineDrawer.cpp">
+      <Filter>Engine\Utility\TimeLine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\TimeLine\TimelineRenderer.cpp">
-      <Filter>Engine\utility\TimeLine</Filter>
+    <ClCompile Include="Engine\Utility\TimeLine\TimelineRenderer.cpp">
+      <Filter>Engine\Utility\TimeLine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\TimeLine\TimelineInteractionHandler.cpp">
-      <Filter>Engine\utility\TimeLine</Filter>
+    <ClCompile Include="Engine\Utility\TimeLine\TimelineInteractionHandler.cpp">
+      <Filter>Engine\Utility\TimeLine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp">
-      <Filter>Engine\utility\TimeModeSelector</Filter>
+    <ClCompile Include="Engine\Utility\TimeModeSelector\TimeModeSelector.cpp">
+      <Filter>Engine\Utility\TimeModeSelector</Filter>
     </ClCompile>
     <ClCompile Include="Game\StressGauge\StressGauge.cpp">
       <Filter>Game\StressGauge</Filter>
@@ -1546,122 +1546,122 @@
       <Filter>Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Engine\math\Box.cpp">
-      <Filter>Engine\math</Filter>
+    <ClCompile Include="Engine\Math\Box.cpp">
+      <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\MathFunction.cpp">
-      <Filter>Engine\math</Filter>
+    <ClCompile Include="Engine\Math\MathFunction.cpp">
+      <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\Matrix3x3.cpp">
-      <Filter>Engine\math</Filter>
+    <ClCompile Include="Engine\Math\Matrix3x3.cpp">
+      <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\Matrix4x4.cpp">
-      <Filter>Engine\math</Filter>
+    <ClCompile Include="Engine\Math\Matrix4x4.cpp">
+      <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\Quaternion.cpp">
-      <Filter>Engine\math</Filter>
+    <ClCompile Include="Engine\Math\Quaternion.cpp">
+      <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\random.cpp">
-      <Filter>Engine\math</Filter>
+    <ClCompile Include="Engine\Math\random.cpp">
+      <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\Shake.cpp">
-      <Filter>Engine\math</Filter>
+    <ClCompile Include="Engine\Math\Shake.cpp">
+      <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\Vector2.cpp">
-      <Filter>Engine\math</Filter>
+    <ClCompile Include="Engine\Math\Vector2.cpp">
+      <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\Vector3.cpp">
-      <Filter>Engine\math</Filter>
+    <ClCompile Include="Engine\Math\Vector3.cpp">
+      <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\Vector4.cpp">
-      <Filter>Engine\math</Filter>
+    <ClCompile Include="Engine\Math\Vector4.cpp">
+      <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClInclude Include="Engine\2d\ImGuiManager.h">
-      <Filter>Engine\2d</Filter>
+    <ClInclude Include="Engine\2D\ImGuiManager.h">
+      <Filter>Engine\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\2d\Sprite.h">
-      <Filter>Engine\2d</Filter>
+    <ClInclude Include="Engine\2D\Sprite.h">
+      <Filter>Engine\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\2d\SpriteRegistry.h">
-      <Filter>Engine\2d</Filter>
+    <ClInclude Include="Engine\2D\SpriteRegistry.h">
+      <Filter>Engine\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\AnimationObject3D\AnimationData.h">
-      <Filter>Engine\3d\AnimationObject3D</Filter>
+    <ClInclude Include="Engine\3D\AnimationObject3D\AnimationData.h">
+      <Filter>Engine\3D\AnimationObject3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\AnimationObject3D\AnimationRegistry.h">
-      <Filter>Engine\3d\AnimationObject3D</Filter>
+    <ClInclude Include="Engine\3D\AnimationObject3D\AnimationRegistry.h">
+      <Filter>Engine\3D\AnimationObject3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\AnimationObject3D\ModelAnimation.h">
-      <Filter>Engine\3d\AnimationObject3D</Filter>
+    <ClInclude Include="Engine\3D\AnimationObject3D\ModelAnimation.h">
+      <Filter>Engine\3D\AnimationObject3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\AnimationObject3D\Object3DAnimation.h">
-      <Filter>Engine\3d\AnimationObject3D</Filter>
+    <ClInclude Include="Engine\3D\AnimationObject3D\Object3DAnimation.h">
+      <Filter>Engine\3D\AnimationObject3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\AnimationObject3D\SkeletonData.h">
-      <Filter>Engine\3d\AnimationObject3D</Filter>
+    <ClInclude Include="Engine\3D\AnimationObject3D\SkeletonData.h">
+      <Filter>Engine\3D\AnimationObject3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\AnimationObject3D\SkinCluster.h">
-      <Filter>Engine\3d\AnimationObject3D</Filter>
+    <ClInclude Include="Engine\3D\AnimationObject3D\SkinCluster.h">
+      <Filter>Engine\3D\AnimationObject3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Line3D\Line3d.h">
-      <Filter>Engine\3d\Line3D</Filter>
+    <ClInclude Include="Engine\3D\Line3D\Line3d.h">
+      <Filter>Engine\3D\Line3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Line3D\Line3DManager.h">
-      <Filter>Engine\3d\Line3D</Filter>
+    <ClInclude Include="Engine\3D\Line3D\Line3DManager.h">
+      <Filter>Engine\3D\Line3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Mesh.h">
-      <Filter>Engine\3d</Filter>
+    <ClInclude Include="Engine\3D\Mesh.h">
+      <Filter>Engine\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Model.h">
-      <Filter>Engine\3d</Filter>
+    <ClInclude Include="Engine\3D\Model.h">
+      <Filter>Engine\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\ModelManager.h">
-      <Filter>Engine\3d</Filter>
+    <ClInclude Include="Engine\3D\ModelManager.h">
+      <Filter>Engine\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Object3D\BaseObject3d.h">
-      <Filter>Engine\3d\Object3D</Filter>
+    <ClInclude Include="Engine\3D\Object3D\BaseObject3d.h">
+      <Filter>Engine\3D\Object3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Object3D\Object3d.h">
-      <Filter>Engine\3d\Object3D</Filter>
+    <ClInclude Include="Engine\3D\Object3D\Object3d.h">
+      <Filter>Engine\3D\Object3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Object3D\Object3DRegistry.h">
-      <Filter>Engine\3d\Object3D</Filter>
+    <ClInclude Include="Engine\3D\Object3D\Object3DRegistry.h">
+      <Filter>Engine\3D\Object3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Object3D\ObjectColor.h">
-      <Filter>Engine\3d\Object3D</Filter>
+    <ClInclude Include="Engine\3D\Object3D\ObjectColor.h">
+      <Filter>Engine\3D\Object3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Primitive\IPrimitive.h">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClInclude Include="Engine\3D\Primitive\IPrimitive.h">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Primitive\PrimitiveBox.h">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClInclude Include="Engine\3D\Primitive\PrimitiveBox.h">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Primitive\PrimitiveCylinder.h">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClInclude Include="Engine\3D\Primitive\PrimitiveCylinder.h">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Primitive\PrimitivePlane.h">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClInclude Include="Engine\3D\Primitive\PrimitivePlane.h">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Primitive\PrimitiveRing.h">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClInclude Include="Engine\3D\Primitive\PrimitiveRing.h">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Primitive\PrimitiveSphere.h">
-      <Filter>Engine\3d\Primitive</Filter>
+    <ClInclude Include="Engine\3D\Primitive\PrimitiveSphere.h">
+      <Filter>Engine\3D\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\RibbonTrail\RibbonTrail.h">
-      <Filter>Engine\3d\RibbonTrail</Filter>
+    <ClInclude Include="Engine\3D\RibbonTrail\RibbonTrail.h">
+      <Filter>Engine\3D\RibbonTrail</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\RibbonTrail\RibbonTrailManager.h">
-      <Filter>Engine\3d\RibbonTrail</Filter>
+    <ClInclude Include="Engine\3D\RibbonTrail\RibbonTrailManager.h">
+      <Filter>Engine\3D\RibbonTrail</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\ViewProjection.h">
-      <Filter>Engine\3d</Filter>
+    <ClInclude Include="Engine\3D\ViewProjection.h">
+      <Filter>Engine\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\ObjEaseTransformApplier.h">
-      <Filter>Engine\3d</Filter>
+    <ClInclude Include="Engine\3D\ObjEaseTransformApplier.h">
+      <Filter>Engine\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\WorldTransform.h">
-      <Filter>Engine\3d</Filter>
+    <ClInclude Include="Engine\3D\WorldTransform.h">
+      <Filter>Engine\3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Audio\Audio.h">
       <Filter>Engine\Audio</Filter>
@@ -1906,17 +1906,17 @@
     <ClInclude Include="Engine\Function\Log.h">
       <Filter>Engine\Function</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\input\GamePad.h">
-      <Filter>Engine\input</Filter>
+    <ClInclude Include="Engine\Input\GamePad.h">
+      <Filter>Engine\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\input\Input.h">
-      <Filter>Engine\input</Filter>
+    <ClInclude Include="Engine\Input\Input.h">
+      <Filter>Engine\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\input\InputData.h">
-      <Filter>Engine\input</Filter>
+    <ClInclude Include="Engine\Input\InputData.h">
+      <Filter>Engine\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\input\Mouse.h">
-      <Filter>Engine\input</Filter>
+    <ClInclude Include="Engine\Input\Mouse.h">
+      <Filter>Engine\Input</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Light\AmbientLight.h">
       <Filter>Engine\Light</Filter>
@@ -2119,38 +2119,38 @@
     <ClInclude Include="Engine\ShadowMap\ShadowMapData.h">
       <Filter>Engine\ShadowMap</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
-      <Filter>Engine\struct</Filter>
+    <ClInclude Include="Engine\GPUData\D3DResourceLeakCheck.h">
+      <Filter>Engine\GPUData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\MaterialData.h">
-      <Filter>Engine\struct</Filter>
+    <ClInclude Include="Engine\GPUData\MaterialData.h">
+      <Filter>Engine\GPUData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\ModelData.h">
-      <Filter>Engine\struct</Filter>
+    <ClInclude Include="Engine\GPUData\ModelData.h">
+      <Filter>Engine\GPUData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\ParticleForGPU.h">
-      <Filter>Engine\struct</Filter>
+    <ClInclude Include="Engine\GPUData\ParticleForGPU.h">
+      <Filter>Engine\GPUData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\Transform.h">
-      <Filter>Engine\struct</Filter>
+    <ClInclude Include="Engine\GPUData\Transform.h">
+      <Filter>Engine\GPUData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\TransformationMatrix.h">
-      <Filter>Engine\struct</Filter>
+    <ClInclude Include="Engine\GPUData\TransformationMatrix.h">
+      <Filter>Engine\GPUData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\VertexData.h">
-      <Filter>Engine\struct</Filter>
+    <ClInclude Include="Engine\GPUData\VertexData.h">
+      <Filter>Engine\GPUData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Debug\DebugCamera.h">
-      <Filter>Engine\utility\Debug</Filter>
+    <ClInclude Include="Engine\Utility\Debug\DebugCamera.h">
+      <Filter>Engine\Utility\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\DitherOcclusion\DitherOcclusion.h">
-      <Filter>Engine\utility\DitherOcclusion</Filter>
+    <ClInclude Include="Engine\Utility\DitherOcclusion\DitherOcclusion.h">
+      <Filter>Engine\Utility\DitherOcclusion</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\FileSelector\FileSelector.h">
-      <Filter>Engine\utility\FileSelector</Filter>
+    <ClInclude Include="Engine\Utility\FileSelector\FileSelector.h">
+      <Filter>Engine\Utility\FileSelector</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\TimeLine\TimelineDrawParameter.h">
-      <Filter>Engine\utility\TimeLine</Filter>
+    <ClInclude Include="Engine\Utility\TimeLine\TimelineDrawParameter.h">
+      <Filter>Engine\Utility\TimeLine</Filter>
     </ClInclude>
     <ClInclude Include="Game\Audience\Audience.h">
       <Filter>Game\Audience</Filter>
@@ -2272,29 +2272,29 @@
     <ClInclude Include="Game\Combo\ComboChainGauge.h">
       <Filter>Game\Combo</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h">
-      <Filter>Engine\utility\ObjectFromBlender</Filter>
+    <ClInclude Include="Engine\Utility\ObjectFromBlender\ObjectFromBlender.h">
+      <Filter>Engine\Utility\ObjectFromBlender</Filter>
     </ClInclude>
     <ClInclude Include="Game\ObjectPool\ObjectPool.h">
       <Filter>Game\ObjectPool</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\CollisionPush\CollisionPushUtils.h">
-      <Filter>Engine\utility\CollisionPush</Filter>
+    <ClInclude Include="Engine\Utility\CollisionPush\CollisionPushUtils.h">
+      <Filter>Engine\Utility\CollisionPush</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Log\Log.h">
-      <Filter>Engine\utility\Log</Filter>
+    <ClInclude Include="Engine\Utility\Log\Log.h">
+      <Filter>Engine\Utility\Log</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h">
-      <Filter>Engine\utility\TimeLine</Filter>
+    <ClInclude Include="Engine\Utility\TimeLine\TimelineDrawer.h">
+      <Filter>Engine\Utility\TimeLine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\TimeLine\TimelineRenderer.h">
-      <Filter>Engine\utility\TimeLine</Filter>
+    <ClInclude Include="Engine\Utility\TimeLine\TimelineRenderer.h">
+      <Filter>Engine\Utility\TimeLine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\TimeLine\TimelineInteractionHandler.h">
-      <Filter>Engine\utility\TimeLine</Filter>
+    <ClInclude Include="Engine\Utility\TimeLine\TimelineInteractionHandler.h">
+      <Filter>Engine\Utility\TimeLine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h">
-      <Filter>Engine\utility\TimeModeSelector</Filter>
+    <ClInclude Include="Engine\Utility\TimeModeSelector\TimeModeSelector.h">
+      <Filter>Engine\Utility\TimeModeSelector</Filter>
     </ClInclude>
     <ClInclude Include="Game\StressGauge\StressGauge.h">
       <Filter>Game\StressGauge</Filter>
@@ -2692,38 +2692,38 @@
     <ClInclude Include="Game\UI\TitleLogo.h">
       <Filter>Game\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Box.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\Box.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\MathFunction.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\MathFunction.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Matrix3x3.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\Matrix3x3.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Matrix4x4.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\Matrix4x4.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\MinMax.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\MinMax.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Quaternion.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\Quaternion.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\random.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\random.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Shake.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\Shake.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Vector2.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\Vector2.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Vector3.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\Vector3.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Vector4.h">
-      <Filter>Engine\math</Filter>
+    <ClInclude Include="Engine\Math\Vector4.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
     <None Include=".editorconfig" />
     <None Include="resources\Shader\Library\Matrix4x4.hlsli">

@@ -1,8 +1,8 @@
 #include "OperateUI.h"
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
-#include "input/Input.h"
-#include "input/InputData.h"
+#include "Input/Input.h"
+#include "Input/InputData.h"
 #include <imgui.h>
 
 void OperateUI::Init() {

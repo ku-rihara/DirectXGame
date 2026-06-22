@@ -3,13 +3,13 @@
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Material/ParticleMaterial.h"
 
-#include "3d/Object3d/Object3d.h"
-#include "3d/ViewProjection.h"
-#include "3d/WorldTransform.h"
+#include "3D/Object3d/Object3d.h"
+#include "3D/ViewProjection.h"
+#include "3D/WorldTransform.h"
 
 #include "3D/Primitive/IPrimitive.h"
 #include "Editor/Parameter/ParticleCommonParameters.h"
-#include "struct/ParticleForGPU.h"
+#include "GPUData/ParticleForGPU.h"
 
 // Easing
 #include "Easing/Easing.h"

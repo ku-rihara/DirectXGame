@@ -1,7 +1,7 @@
 #pragma once
 
 #include "UI/NumberDigitUI/NumberDigitUI.h"
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "Easing/Easing.h"
 #include "Vector2.h"
 #include <array>

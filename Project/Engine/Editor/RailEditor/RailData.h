@@ -3,7 +3,7 @@
 #include "Editor/BaseEffectEditor/BaseSequenceEffectData.h"
 #include "Editor/RailEditor/Rail.h"
 #include "RailControlPoint.h"
-#include "utility/TimeModeSelector/TimeModeSelector.h"
+#include "Utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <memory>

@@ -15,17 +15,18 @@ public:
 
     // 更新、デバッグ
     void Update() override;
-    void Debug() override; 
+    void Debug() override;
 
+    // フェーズごとのアニメーションのセットアップ
     void SetUpAnimations();
 
 private:
     enum class Phase {
-        FALL,        // TitlePlayer  落下
-        LAND,        // TitlePlayerLand  着地演出
-        LEFT_PUNCH,  // TitleLeftHand : 左パンチ
-        RIGHT_PUNCH, // TitleRightHand : 右パンチ
-        WAITING,     // TitleWaiting : 待機ループ
+        FALL, // 落下
+        LAND, // 着地演出
+        LEFT_PUNCH, // 左パンチ
+        RIGHT_PUNCH, // 右パンチ
+        WAITING, // 待機ループ
     };
 
 private:
@@ -39,10 +40,10 @@ private:
 private:
     // 終了フラグとフェーズ
     bool isFinish_ = false;
-    Phase phase_ = Phase::FALL;
+    Phase phase_   = Phase::FALL;
 
     // フェーズごとの更新処理
-    std::unordered_map<Phase,std::function<void()>> animationPhase_;
+    std::unordered_map<Phase, std::function<void()>> animationPhase_;
 
 public:
     // Getter

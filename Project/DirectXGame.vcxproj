@@ -15,32 +15,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\2d\ImGuiManager.cpp" />
-    <ClCompile Include="Engine\2d\Sprite.cpp" />
-    <ClCompile Include="Engine\2d\SpriteRegistry.cpp" />
-    <ClCompile Include="Engine\3d\AnimationObject3D\AnimationRegistry.cpp" />
-    <ClCompile Include="Engine\3d\AnimationObject3D\ModelAnimation.cpp" />
-    <ClCompile Include="Engine\3d\AnimationObject3D\Object3DAnimation.cpp" />
-    <ClCompile Include="Engine\3d\Line3D\Line3d.cpp" />
-    <ClCompile Include="Engine\3d\Line3D\Line3DManager.cpp" />
-    <ClCompile Include="Engine\3d\Mesh.cpp" />
-    <ClCompile Include="Engine\3d\Model.cpp" />
-    <ClCompile Include="Engine\3d\ModelManager.cpp" />
-    <ClCompile Include="Engine\3d\Object3D\BaseObject3d.cpp" />
-    <ClCompile Include="Engine\3d\Object3D\Object3d.cpp" />
-    <ClCompile Include="Engine\3d\Object3D\Object3DRegistry.cpp" />
-    <ClCompile Include="Engine\3d\Object3D\ObjectColor.cpp" />
-    <ClCompile Include="Engine\3d\Primitive\IPrimitive.cpp" />
-    <ClCompile Include="Engine\3d\Primitive\PrimitiveBox.cpp" />
-    <ClCompile Include="Engine\3d\Primitive\PrimitiveCylinder.cpp" />
-    <ClCompile Include="Engine\3d\Primitive\PrimitivePlane.cpp" />
-    <ClCompile Include="Engine\3d\Primitive\PrimitiveRing.cpp" />
-    <ClCompile Include="Engine\3d\Primitive\PrimitiveSphere.cpp" />
-    <ClCompile Include="Engine\3d\RibbonTrail\RibbonTrail.cpp" />
-    <ClCompile Include="Engine\3d\RibbonTrail\RibbonTrailManager.cpp" />
-    <ClCompile Include="Engine\3d\ViewProjection.cpp" />
-    <ClCompile Include="Engine\3d\ObjEaseTransformApplier.cpp" />
-    <ClCompile Include="Engine\3d\WorldTransform.cpp" />
+    <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
+    <ClCompile Include="Engine\2D\Sprite.cpp" />
+    <ClCompile Include="Engine\2D\SpriteRegistry.cpp" />
+    <ClCompile Include="Engine\3D\AnimationObject3D\AnimationRegistry.cpp" />
+    <ClCompile Include="Engine\3D\AnimationObject3D\ModelAnimation.cpp" />
+    <ClCompile Include="Engine\3D\AnimationObject3D\Object3DAnimation.cpp" />
+    <ClCompile Include="Engine\3D\Line3D\Line3d.cpp" />
+    <ClCompile Include="Engine\3D\Line3D\Line3DManager.cpp" />
+    <ClCompile Include="Engine\3D\Mesh.cpp" />
+    <ClCompile Include="Engine\3D\Model.cpp" />
+    <ClCompile Include="Engine\3D\ModelManager.cpp" />
+    <ClCompile Include="Engine\3D\Object3D\BaseObject3d.cpp" />
+    <ClCompile Include="Engine\3D\Object3D\Object3d.cpp" />
+    <ClCompile Include="Engine\3D\Object3D\Object3DRegistry.cpp" />
+    <ClCompile Include="Engine\3D\Object3D\ObjectColor.cpp" />
+    <ClCompile Include="Engine\3D\Primitive\IPrimitive.cpp" />
+    <ClCompile Include="Engine\3D\Primitive\PrimitiveBox.cpp" />
+    <ClCompile Include="Engine\3D\Primitive\PrimitiveCylinder.cpp" />
+    <ClCompile Include="Engine\3D\Primitive\PrimitivePlane.cpp" />
+    <ClCompile Include="Engine\3D\Primitive\PrimitiveRing.cpp" />
+    <ClCompile Include="Engine\3D\Primitive\PrimitiveSphere.cpp" />
+    <ClCompile Include="Engine\3D\RibbonTrail\RibbonTrail.cpp" />
+    <ClCompile Include="Engine\3D\RibbonTrail\RibbonTrailManager.cpp" />
+    <ClCompile Include="Engine\3D\ViewProjection.cpp" />
+    <ClCompile Include="Engine\3D\ObjEaseTransformApplier.cpp" />
+    <ClCompile Include="Engine\3D\WorldTransform.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Base\Descriptors\DsvManager.cpp" />
     <ClCompile Include="Engine\Base\Descriptors\RtvManager.cpp" />
@@ -123,10 +123,10 @@
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
-    <ClCompile Include="Engine\input\GamePad.cpp" />
-    <ClCompile Include="Engine\input\Input.cpp" />
-    <ClCompile Include="Engine\input\InputData.cpp" />
-    <ClCompile Include="Engine\input\Mouse.cpp" />
+    <ClCompile Include="Engine\Input\GamePad.cpp" />
+    <ClCompile Include="Engine\Input\Input.cpp" />
+    <ClCompile Include="Engine\Input\InputData.cpp" />
+    <ClCompile Include="Engine\Input\Mouse.cpp" />
     <ClCompile Include="Engine\Light\AmbientLight.cpp" />
     <ClCompile Include="Engine\Light\AreaLight.cpp" />
     <ClCompile Include="Engine\Light\AreaLightManager.cpp" />
@@ -190,10 +190,10 @@
     <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp" />
     <ClCompile Include="Engine\Scene\Manager\SceneManager.cpp" />
     <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp" />
-    <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
-    <ClCompile Include="Engine\utility\DitherOcclusion\DitherOcclusion.cpp" />
-    <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp" />
-    <ClCompile Include="Engine\utility\TimeLine\TimelineDrawParameter.cpp" />
+    <ClCompile Include="Engine\Utility\Debug\DebugCamera.cpp" />
+    <ClCompile Include="Engine\Utility\DitherOcclusion\DitherOcclusion.cpp" />
+    <ClCompile Include="Engine\Utility\FileSelector\FileSelector.cpp" />
+    <ClCompile Include="Engine\Utility\TimeLine\TimelineDrawParameter.cpp" />
     <ClCompile Include="Game\Audience\Audience.cpp" />
     <ClCompile Include="Game\Audience\AudienceController.cpp" />
     <ClCompile Include="Game\Audience\Behavior\AudienceAppear.cpp" />
@@ -225,14 +225,14 @@
     <ClCompile Include="Game\Combo\ComboUI.cpp" />
     <ClCompile Include="Game\Combo\ComboUIController.cpp" />
     <ClCompile Include="Game\Combo\ComboChainGauge.cpp" />
-    <ClCompile Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.cpp" />
+    <ClCompile Include="Engine\Utility\ObjectFromBlender\ObjectFromBlender.cpp" />
     <ClCompile Include="Game\ObjectPool\ObjectPool.cpp" />
-    <ClCompile Include="Engine\utility\CollisionPush\CollisionPushUtils.cpp" />
-    <ClCompile Include="Engine\utility\Log\Log.cpp" />
-    <ClCompile Include="Engine\utility\TimeLine\TimelineDrawer.cpp" />
-    <ClCompile Include="Engine\utility\TimeLine\TimelineRenderer.cpp" />
-    <ClCompile Include="Engine\utility\TimeLine\TimelineInteractionHandler.cpp" />
-    <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp" />
+    <ClCompile Include="Engine\Utility\CollisionPush\CollisionPushUtils.cpp" />
+    <ClCompile Include="Engine\Utility\Log\Log.cpp" />
+    <ClCompile Include="Engine\Utility\TimeLine\TimelineDrawer.cpp" />
+    <ClCompile Include="Engine\Utility\TimeLine\TimelineRenderer.cpp" />
+    <ClCompile Include="Engine\Utility\TimeLine\TimelineInteractionHandler.cpp" />
+    <ClCompile Include="Engine\Utility\TimeModeSelector\TimeModeSelector.cpp" />
     <ClCompile Include="Game\StressGauge\StressGauge.cpp" />
     <ClCompile Include="Game\StressGauge\StressGaugeGauge.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.cpp" />
@@ -365,47 +365,47 @@
     <ClCompile Include="Game\UI\OperateUI.cpp" />
     <ClCompile Include="Game\UI\TitleLogo.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Engine\math\Box.cpp" />
-    <ClCompile Include="Engine\math\MathFunction.cpp" />
-    <ClCompile Include="Engine\math\Matrix3x3.cpp" />
-    <ClCompile Include="Engine\math\Matrix4x4.cpp" />
-    <ClCompile Include="Engine\math\Quaternion.cpp" />
-    <ClCompile Include="Engine\math\random.cpp" />
-    <ClCompile Include="Engine\math\Shake.cpp" />
-    <ClCompile Include="Engine\math\Vector2.cpp" />
-    <ClCompile Include="Engine\math\Vector3.cpp" />
-    <ClCompile Include="Engine\math\Vector4.cpp" />
+    <ClCompile Include="Engine\Math\Box.cpp" />
+    <ClCompile Include="Engine\Math\MathFunction.cpp" />
+    <ClCompile Include="Engine\Math\Matrix3x3.cpp" />
+    <ClCompile Include="Engine\Math\Matrix4x4.cpp" />
+    <ClCompile Include="Engine\Math\Quaternion.cpp" />
+    <ClCompile Include="Engine\Math\random.cpp" />
+    <ClCompile Include="Engine\Math\Shake.cpp" />
+    <ClCompile Include="Engine\Math\Vector2.cpp" />
+    <ClCompile Include="Engine\Math\Vector3.cpp" />
+    <ClCompile Include="Engine\Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\2d\ImGuiManager.h" />
-    <ClInclude Include="Engine\2d\Sprite.h" />
-    <ClInclude Include="Engine\2d\SpriteRegistry.h" />
-    <ClInclude Include="Engine\3d\AnimationObject3D\AnimationData.h" />
-    <ClInclude Include="Engine\3d\AnimationObject3D\AnimationRegistry.h" />
-    <ClInclude Include="Engine\3d\AnimationObject3D\ModelAnimation.h" />
-    <ClInclude Include="Engine\3d\AnimationObject3D\Object3DAnimation.h" />
-    <ClInclude Include="Engine\3d\AnimationObject3D\SkeletonData.h" />
-    <ClInclude Include="Engine\3d\AnimationObject3D\SkinCluster.h" />
-    <ClInclude Include="Engine\3d\Line3D\Line3d.h" />
-    <ClInclude Include="Engine\3d\Line3D\Line3DManager.h" />
-    <ClInclude Include="Engine\3d\Mesh.h" />
-    <ClInclude Include="Engine\3d\Model.h" />
-    <ClInclude Include="Engine\3d\ModelManager.h" />
-    <ClInclude Include="Engine\3d\Object3D\BaseObject3d.h" />
-    <ClInclude Include="Engine\3d\Object3D\Object3d.h" />
-    <ClInclude Include="Engine\3d\Object3D\Object3DRegistry.h" />
-    <ClInclude Include="Engine\3d\Object3D\ObjectColor.h" />
-    <ClInclude Include="Engine\3d\Primitive\IPrimitive.h" />
-    <ClInclude Include="Engine\3d\Primitive\PrimitiveBox.h" />
-    <ClInclude Include="Engine\3d\Primitive\PrimitiveCylinder.h" />
-    <ClInclude Include="Engine\3d\Primitive\PrimitivePlane.h" />
-    <ClInclude Include="Engine\3d\Primitive\PrimitiveRing.h" />
-    <ClInclude Include="Engine\3d\Primitive\PrimitiveSphere.h" />
-    <ClInclude Include="Engine\3d\RibbonTrail\RibbonTrail.h" />
-    <ClInclude Include="Engine\3d\RibbonTrail\RibbonTrailManager.h" />
-    <ClInclude Include="Engine\3d\ViewProjection.h" />
-    <ClInclude Include="Engine\3d\ObjEaseTransformApplier.h" />
-    <ClInclude Include="Engine\3d\WorldTransform.h" />
+    <ClInclude Include="Engine\2D\ImGuiManager.h" />
+    <ClInclude Include="Engine\2D\Sprite.h" />
+    <ClInclude Include="Engine\2D\SpriteRegistry.h" />
+    <ClInclude Include="Engine\3D\AnimationObject3D\AnimationData.h" />
+    <ClInclude Include="Engine\3D\AnimationObject3D\AnimationRegistry.h" />
+    <ClInclude Include="Engine\3D\AnimationObject3D\ModelAnimation.h" />
+    <ClInclude Include="Engine\3D\AnimationObject3D\Object3DAnimation.h" />
+    <ClInclude Include="Engine\3D\AnimationObject3D\SkeletonData.h" />
+    <ClInclude Include="Engine\3D\AnimationObject3D\SkinCluster.h" />
+    <ClInclude Include="Engine\3D\Line3D\Line3d.h" />
+    <ClInclude Include="Engine\3D\Line3D\Line3DManager.h" />
+    <ClInclude Include="Engine\3D\Mesh.h" />
+    <ClInclude Include="Engine\3D\Model.h" />
+    <ClInclude Include="Engine\3D\ModelManager.h" />
+    <ClInclude Include="Engine\3D\Object3D\BaseObject3d.h" />
+    <ClInclude Include="Engine\3D\Object3D\Object3d.h" />
+    <ClInclude Include="Engine\3D\Object3D\Object3DRegistry.h" />
+    <ClInclude Include="Engine\3D\Object3D\ObjectColor.h" />
+    <ClInclude Include="Engine\3D\Primitive\IPrimitive.h" />
+    <ClInclude Include="Engine\3D\Primitive\PrimitiveBox.h" />
+    <ClInclude Include="Engine\3D\Primitive\PrimitiveCylinder.h" />
+    <ClInclude Include="Engine\3D\Primitive\PrimitivePlane.h" />
+    <ClInclude Include="Engine\3D\Primitive\PrimitiveRing.h" />
+    <ClInclude Include="Engine\3D\Primitive\PrimitiveSphere.h" />
+    <ClInclude Include="Engine\3D\RibbonTrail\RibbonTrail.h" />
+    <ClInclude Include="Engine\3D\RibbonTrail\RibbonTrailManager.h" />
+    <ClInclude Include="Engine\3D\ViewProjection.h" />
+    <ClInclude Include="Engine\3D\ObjEaseTransformApplier.h" />
+    <ClInclude Include="Engine\3D\WorldTransform.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\Base\Descriptors\DsvManager.h" />
     <ClInclude Include="Engine\Base\Descriptors\RtvManager.h" />
@@ -488,10 +488,10 @@
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\GetFile.h" />
     <ClInclude Include="Engine\Function\Log.h" />
-    <ClInclude Include="Engine\input\GamePad.h" />
-    <ClInclude Include="Engine\input\Input.h" />
-    <ClInclude Include="Engine\input\InputData.h" />
-    <ClInclude Include="Engine\input\Mouse.h" />
+    <ClInclude Include="Engine\Input\GamePad.h" />
+    <ClInclude Include="Engine\Input\Input.h" />
+    <ClInclude Include="Engine\Input\InputData.h" />
+    <ClInclude Include="Engine\Input\Mouse.h" />
     <ClInclude Include="Engine\Light\AmbientLight.h" />
     <ClInclude Include="Engine\Light\AreaLight.h" />
     <ClInclude Include="Engine\Light\AreaLightManager.h" />
@@ -559,17 +559,17 @@
     <ClInclude Include="Engine\Scene\Manager\SceneManager.h" />
     <ClInclude Include="Engine\ShadowMap\ShadowMap.h" />
     <ClInclude Include="Engine\ShadowMap\ShadowMapData.h" />
-    <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h" />
-    <ClInclude Include="Engine\struct\MaterialData.h" />
-    <ClInclude Include="Engine\struct\ModelData.h" />
-    <ClInclude Include="Engine\struct\ParticleForGPU.h" />
-    <ClInclude Include="Engine\struct\Transform.h" />
-    <ClInclude Include="Engine\struct\TransformationMatrix.h" />
-    <ClInclude Include="Engine\struct\VertexData.h" />
-    <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
-    <ClInclude Include="Engine\utility\DitherOcclusion\DitherOcclusion.h" />
-    <ClInclude Include="Engine\utility\FileSelector\FileSelector.h" />
-    <ClInclude Include="Engine\utility\TimeLine\TimelineDrawParameter.h" />
+    <ClInclude Include="Engine\GPUData\D3DResourceLeakCheck.h" />
+    <ClInclude Include="Engine\GPUData\MaterialData.h" />
+    <ClInclude Include="Engine\GPUData\ModelData.h" />
+    <ClInclude Include="Engine\GPUData\ParticleForGPU.h" />
+    <ClInclude Include="Engine\GPUData\Transform.h" />
+    <ClInclude Include="Engine\GPUData\TransformationMatrix.h" />
+    <ClInclude Include="Engine\GPUData\VertexData.h" />
+    <ClInclude Include="Engine\Utility\Debug\DebugCamera.h" />
+    <ClInclude Include="Engine\Utility\DitherOcclusion\DitherOcclusion.h" />
+    <ClInclude Include="Engine\Utility\FileSelector\FileSelector.h" />
+    <ClInclude Include="Engine\Utility\TimeLine\TimelineDrawParameter.h" />
     <ClInclude Include="Game\Audience\Audience.h" />
     <ClInclude Include="Game\Audience\AudienceController.h" />
     <ClInclude Include="Game\Audience\Behavior\AudienceAppear.h" />
@@ -610,14 +610,14 @@
     <ClInclude Include="Game\Combo\ComboUI.h" />
     <ClInclude Include="Game\Combo\ComboUIController.h" />
     <ClInclude Include="Game\Combo\ComboChainGauge.h" />
-    <ClInclude Include="Engine\utility\ObjectFromBlender\ObjectFromBlender.h" />
+    <ClInclude Include="Engine\Utility\ObjectFromBlender\ObjectFromBlender.h" />
     <ClInclude Include="Game\ObjectPool\ObjectPool.h" />
-    <ClInclude Include="Engine\utility\CollisionPush\CollisionPushUtils.h" />
-    <ClInclude Include="Engine\utility\Log\Log.h" />
-    <ClInclude Include="Engine\utility\TimeLine\TimelineDrawer.h" />
-    <ClInclude Include="Engine\utility\TimeLine\TimelineRenderer.h" />
-    <ClInclude Include="Engine\utility\TimeLine\TimelineInteractionHandler.h" />
-    <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h" />
+    <ClInclude Include="Engine\Utility\CollisionPush\CollisionPushUtils.h" />
+    <ClInclude Include="Engine\Utility\Log\Log.h" />
+    <ClInclude Include="Engine\Utility\TimeLine\TimelineDrawer.h" />
+    <ClInclude Include="Engine\Utility\TimeLine\TimelineRenderer.h" />
+    <ClInclude Include="Engine\Utility\TimeLine\TimelineInteractionHandler.h" />
+    <ClInclude Include="Engine\Utility\TimeModeSelector\TimeModeSelector.h" />
     <ClInclude Include="Game\StressGauge\StressGauge.h" />
     <ClInclude Include="Game\StressGauge\StressGaugeGauge.h" />
     <ClInclude Include="Game\Enemy\Behavior\ActionBehavior\BaseEnemyBehavior.h" />
@@ -752,17 +752,17 @@
     <ClInclude Include="Game\UI\ComboAssistUI\UnlockNotifier\ComboUnlockNotifier.h" />
     <ClInclude Include="Game\UI\OperateUI.h" />
     <ClInclude Include="Game\UI\TitleLogo.h" />
-    <ClInclude Include="Engine\math\Box.h" />
-    <ClInclude Include="Engine\math\MathFunction.h" />
-    <ClInclude Include="Engine\math\Matrix3x3.h" />
-    <ClInclude Include="Engine\math\Matrix4x4.h" />
-    <ClInclude Include="Engine\math\MinMax.h" />
-    <ClInclude Include="Engine\math\Quaternion.h" />
-    <ClInclude Include="Engine\math\random.h" />
-    <ClInclude Include="Engine\math\Shake.h" />
-    <ClInclude Include="Engine\math\Vector2.h" />
-    <ClInclude Include="Engine\math\Vector3.h" />
-    <ClInclude Include="Engine\math\Vector4.h" />
+    <ClInclude Include="Engine\Math\Box.h" />
+    <ClInclude Include="Engine\Math\MathFunction.h" />
+    <ClInclude Include="Engine\Math\Matrix3x3.h" />
+    <ClInclude Include="Engine\Math\Matrix4x4.h" />
+    <ClInclude Include="Engine\Math\MinMax.h" />
+    <ClInclude Include="Engine\Math\Quaternion.h" />
+    <ClInclude Include="Engine\Math\random.h" />
+    <ClInclude Include="Engine\Math\Shake.h" />
+    <ClInclude Include="Engine\Math\Vector2.h" />
+    <ClInclude Include="Engine\Math\Vector3.h" />
+    <ClInclude Include="Engine\Math\Vector4.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
@@ -1101,7 +1101,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals;$(ProjectDir)Game;$(ProjectDir)Engine\math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals;$(ProjectDir)Game;$(ProjectDir)Engine\Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
@@ -1129,7 +1129,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)\d
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals;$(ProjectDir)Game;$(ProjectDir)Engine\math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals;$(ProjectDir)Game;$(ProjectDir)Engine\Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
@@ -1161,7 +1161,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)\d
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals;$(ProjectDir)Game;$(ProjectDir)Engine\math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals;$(ProjectDir)Game;$(ProjectDir)Engine\Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>

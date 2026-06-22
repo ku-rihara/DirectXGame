@@ -1,21 +1,21 @@
 #include "ModelAnimation.h"
 
 using namespace KetaEngine;
-#include "3d/Model.h"
+#include "3D/Model.h"
 #include "Base/Descriptors/SrvManager.h"
 #include "MathFunction.h"
 
 #include <cassert>
 #include <cstdint>
-#include <Vector3.h>
+#include "Vector3.h"
 
 #include <algorithm>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <cstring>
 #include <filesystem>
-#include <Matrix4x4.h>
-#include <struct/ModelData.h>
+#include "Matrix4x4.h"
+#include "GPUData/ModelData.h"
 
 Skeleton ModelAnimation::CreateSkeleton(const Node& rootNode) {
     Skeleton skeleton;

@@ -1,9 +1,9 @@
 #pragma once
-#include "3d/WorldTransform.h"
-#include "3d/ViewProjection.h"
+#include "3D/WorldTransform.h"
+#include "3D/ViewProjection.h"
 #include "3D/Primitive/PrimitiveBox.h"
 #include "Base/Material/SkyBoxMaterial.h"
-#include "struct/TransformationMatrix.h"
+#include "GPUData/TransformationMatrix.h"
 #include <d3d12.h>
 #include <memory>
 #include <wrl.h>

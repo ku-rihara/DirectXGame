@@ -3,7 +3,7 @@
 #include "Base/WinApp.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Light/Light.h"
-#include "math/Matrix4x4.h"
+#include "Math/Matrix4x4.h"
 #include <imgui.h>
 
 using namespace KetaEngine;

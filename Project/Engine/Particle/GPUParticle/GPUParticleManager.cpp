@@ -1,8 +1,8 @@
 #include "GPUParticleManager.h"
 
 using namespace KetaEngine;
-#include "3d/ModelManager.h"
-#include "3d/ViewProjection.h"
+#include "3D/ModelManager.h"
+#include "3D/ViewProjection.h"
 #include "Base/TextureManager.h"
 // dx
 #include "Frame/Frame.h"
@@ -13,7 +13,7 @@ using namespace KetaEngine;
 #include "3D/Primitive/PrimitivePlane.h"
 #include "3D/Primitive/PrimitiveRing.h"
 // log
-#include "utility/Log/Log.h"
+#include "Utility/Log/Log.h"
 #include <cassert>
 #include <format>
 

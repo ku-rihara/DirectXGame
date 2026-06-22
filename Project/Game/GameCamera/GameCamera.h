@@ -1,6 +1,6 @@
 #pragma once
-#include "3d/ViewProjection.h"
-#include "3d/WorldTransform.h"
+#include "3D/ViewProjection.h"
+#include "3D/WorldTransform.h"
 #include "Behavior/BaseCameraBehavior.h"
 #include "CameraRendition.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"

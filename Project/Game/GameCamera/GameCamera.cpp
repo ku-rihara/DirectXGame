@@ -4,7 +4,7 @@
 // math
 #include "Matrix4x4.h"
 // input
-#include "input/Input.h"
+#include "Input/Input.h"
 // class
 #include "LockOn/LockOn.h"
 // Behavior

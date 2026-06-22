@@ -4,9 +4,9 @@
 #include <memory>
 #include <wrl.h>
 
-#include "3d/Mesh.h"
-#include "3d/WorldTransform.h"
-#include "struct/TransformationMatrix.h"
+#include "3D/Mesh.h"
+#include "3D/WorldTransform.h"
+#include "GPUData/TransformationMatrix.h"
 #include "Base/Material/PrimitiveMaterial.h"
 
 #include <optional>

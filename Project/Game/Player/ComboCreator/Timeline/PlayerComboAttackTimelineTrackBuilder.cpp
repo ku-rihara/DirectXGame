@@ -4,7 +4,7 @@
 #include "../PlayerAttackRenditionData.h"
 #include "../PlayerComboAttackData.h"
 #include "Frame/Frame.h"
-#include "input/InputData.h"
+#include "Input/InputData.h"
 #include <algorithm>
 #include <functional>
 

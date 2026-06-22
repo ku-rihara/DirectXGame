@@ -1,10 +1,10 @@
 #pragma once
-#include "3d/ViewProjection.h"
-#include "3d/WorldTransform.h"
+#include "3D/ViewProjection.h"
+#include "3D/WorldTransform.h"
 #include "CameraKeyFrame.h"
 #include "Easing/Easing.h"
 #include "Editor/BaseEffectEditor/BaseSequenceEffectData.h"
-#include "utility/TimeModeSelector/TimeModeSelector.h"
+#include "Utility/TimeModeSelector/TimeModeSelector.h"
 #include <cstdint>
 #include <memory>
 #include <string>

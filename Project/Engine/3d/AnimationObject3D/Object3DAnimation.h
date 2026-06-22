@@ -4,7 +4,7 @@
 #include "3D/AnimationObject3D/SkeletonData.h"
 #include "3D/AnimationObject3D/SkinCluster.h"
 #include "3D/Line3D/Line3D.h"
-#include "3d/Object3D/BaseObject3d.h"
+#include "3D/Object3D/BaseObject3d.h"
 // Aniamtion
 #include "AnimationData.h"
 #include "ModelAnimation.h"

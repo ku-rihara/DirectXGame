@@ -1,6 +1,6 @@
 #pragma once
 
-#include "2d/Sprite.h"
+#include "2D/Sprite.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Player/Behavior/ComboAttackBehavior/ComboAttackAction.h"
 #include "Vector2.h"

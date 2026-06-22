@@ -1,4 +1,4 @@
-﻿/// behavior
+/// behavior
 #include "EnemyWait.h"
 #include "EnemyChase.h"
 /// obj

@@ -4,7 +4,7 @@
 #include "Enemy/CollisionBox/EnemyAttackCollisionBox.h"
 #include "Enemy/Types/BaseEnemy.h"
 // CollisionUtils
-#include "utility/CollisionPush/CollisionPushUtils.h"
+#include "Utility/CollisionPush/CollisionPushUtils.h"
 // StressGauge
 #include "StressGauge/StressGauge.h"
 

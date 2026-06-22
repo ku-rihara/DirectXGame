@@ -3,11 +3,11 @@
 #include "Frame/Frame.h"
 #include "GameSceneGameOver.h"
 #include "GameScenePose.h"
-#include "input/Input.h"
+#include "Input/Input.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include "ResultObj/GameResultInfo.h"
 #include "Scene/GameScene.h"
-#include "utility/DitherOcclusion/DitherOcclusion.h"
+#include "Utility/DitherOcclusion/DitherOcclusion.h"
 
 GameScenePlaying::GameScenePlaying(GameScene* gameScene)
     : BaseGameSceneState("GameScenePlaying", gameScene) {
