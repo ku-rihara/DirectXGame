@@ -5,11 +5,15 @@
 #include "Player/Behavior/TitleBehavior/TitlePlayerBehavior.h"
 
 void TitleSceneController::Init(TitlePlayer* player) {
+
+    // Playerセット
     player_ = player;
 
+    // タイトルロゴ生成、初期化
     titleLogo_ = std::make_unique<TitleLogo>();
     titleLogo_->Init();
 
+    // シーン遷移クラス生成、初期化
     sceneTransition_ = std::make_unique<TitleSceneTransition>();
     sceneTransition_->Init();
 
@@ -28,14 +32,15 @@ void TitleSceneController::Update() {
 }
 
 void TitleSceneController::UpdatePlayerPerformance() {
-    if (!player_)
+    if (!player_) {
         return;
+    }
 
+    // タイトル用プレイヤー更新
     player_->TitleUpdate();
 
     // プレイヤーの特定行動をトリガーにロゴ表示開始
-    if (auto* titleBehavior = dynamic_cast<TitlePlayerBehavior*>(player_->GetTitleBehavior())) {
-        (void)titleBehavior;
+    if (dynamic_cast<TitlePlayerBehavior*>(player_->GetTitleBehavior())) {
         if (!isTitleLogoUpdate_) {
             isTitleLogoUpdate_ = true;
         }
@@ -43,6 +48,7 @@ void TitleSceneController::UpdatePlayerPerformance() {
 }
 
 void TitleSceneController::UpdateLogoSequence() {
+    // タイトルロゴ更新
     if (isTitleLogoUpdate_) {
         titleLogo_->Update();
     }
@@ -50,8 +56,4 @@ void TitleSceneController::UpdateLogoSequence() {
 
 bool TitleSceneController::IsTransitionComplete() const {
     return sceneTransition_->IsTransitionComplete();
-}
-
-const std::unique_ptr<KetaEngine::Sprite>& TitleSceneController::GetScreenSprite() const {
-    return sceneTransition_->GetScreenSprite();
 }

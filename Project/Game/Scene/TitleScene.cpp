@@ -15,7 +15,8 @@ TitleScene::TitleScene() {}
 TitleScene::~TitleScene() {}
 
 void TitleScene::Init() {
-    //// グローバル変数の読み込み
+
+    // グローバル変数の読み込み
     KetaEngine::GlobalParameter::GetInstance()->LoadFiles();
     BaseScene::Init();
 
@@ -45,10 +46,11 @@ void TitleScene::Init() {
     // 演出・遷移クラス初期化
     sceneController_->Init(player_.get());
 
-    // カメラ設定
-    viewProjection_.translation_ = {7.8f, 3.6f, 8.3f};
-    viewProjection_.rotation_.y  = 3.8f;
-
+    // GlobalParameter登録
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_);
+    RegisterParams();
+    globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void TitleScene::Update() {
@@ -57,7 +59,7 @@ void TitleScene::Update() {
     // 演出・遷移の統括更新
     sceneController_->Update();
 
-    // 基本オブジェクト更新
+    // オブジェクト更新
     field_->Update();
     skyBox_->Update();
 
@@ -70,9 +72,6 @@ void TitleScene::Update() {
     }
 }
 
-/// ===================================================
-/// SkyBox描画
-/// ===================================================
 void TitleScene::SkyBoxDraw() {
     skyBox_->Draw(viewProjection_);
 }
@@ -80,11 +79,30 @@ void TitleScene::SkyBoxDraw() {
 void TitleScene::Debug() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::Begin("Param");
+    // 演出Editor更新
     effectEditorSuite_->EditorUpdate();
+
+    // ライトとスプライトのデバッグ
     KetaEngine::Light::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
+
+    // タイトルシーンのカメラ設定
+    if (ImGui::CollapsingHeader(groupName_.c_str())) {
+        ImGui::DragFloat3("cameraTranslation", &viewProjection_.translation_.x, 0.01f);
+        ImGui::DragFloat3("cameraRotation", &viewProjection_.rotation_.x, 0.01f);
+       
+        // セーブ、ロード
+        globalParameter_->ParamSaveForImGui(groupName_);
+        globalParameter_->ParamLoadForImGui(groupName_);
+    }
+
     ImGui::End();
 #endif
+}
+
+void TitleScene::RegisterParams() {
+    globalParameter_->Regist(groupName_, "cameraTranslation", &viewProjection_.translation_);
+    globalParameter_->Regist(groupName_, "cameraRotation", &viewProjection_.rotation_);
 }
 
 // ビュープロジェクション更新

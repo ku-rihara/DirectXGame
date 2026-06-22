@@ -45,11 +45,6 @@ public:
     /// </summary>
     void Reset();
 
-    BaseEnemyBehavior*          GetMoveBehavior()    const { return moveBehavior_.get(); }
-    BaseEnemyDamageReaction*    GetDamageBehavior()  const { return damageBehavior_.get(); }
-    bool                        IsDamageColling()    const { return isDamageColling_; }
-    const std::string&          GetLastAttackName()  const { return lastReceivedAttackName_; }
-
 private:
     void DamageCollingUpdate(float deltaTime);
 
@@ -60,14 +55,20 @@ private:
 
     BaseEnemy* pOwner_ = nullptr;
 
-    std::unique_ptr<BaseEnemyBehavior>       moveBehavior_;
+    std::unique_ptr<BaseEnemyBehavior> moveBehavior_;
     std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_;
 
-    bool        isDamageColling_        = false;
-    float       damageCollTime_         = 0.0f;
+    bool isDamageColling_ = false;
+    float damageCollTime_ = 0.0f;
     std::string lastReceivedAttackName_;
 
     // アニメーション再再生クールタイム管理
-    float       animReplayTimer_        = 0.0f;
+    float animReplayTimer_ = 0.0f;
     std::string animReplayAttackName_;
+
+public:
+    BaseEnemyBehavior* GetMoveBehavior() const { return moveBehavior_.get(); }
+    BaseEnemyDamageReaction* GetDamageBehavior() const { return damageBehavior_.get(); }
+    bool IsDamageColling() const { return isDamageColling_; }
+    const std::string& GetLastAttackName() const { return lastReceivedAttackName_; }
 };

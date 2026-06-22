@@ -18,7 +18,7 @@ public:
 private:
     EntourageEnemy* pEntourageEnemy_;
 
-    static constexpr float kCloseEnough = 0.5f; // 目標到達判定距離
+   const float kCloseEnough = 0.5f; // 目標到達判定距離
 
     bool isRunning_ = false;
 };

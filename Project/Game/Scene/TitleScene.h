@@ -15,20 +15,13 @@
 // TitleSceneController
 #include "TitleSceneController/TitleSceneController.h"
 
+// editor
+#include "Editor/ParameterEditor/GlobalParameter.h"
+
 /// <summary>
 /// タイトルシーン
 /// </summary>
 class TitleScene : public BaseScene {
-private:
-  
-    std::unique_ptr<TitlePlayer> player_                              = nullptr;
-    std::unique_ptr<Field> field_                                     = nullptr;
-    std::unique_ptr<SkyBox> skyBox_                                   = nullptr;
-    std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_ = nullptr;
-
-    // 演出・遷移の統括管理
-    std::unique_ptr<TitleSceneController> sceneController_ = nullptr;
-
 public:
     TitleScene();
     ~TitleScene() override;
@@ -42,7 +35,26 @@ public:
     void Update() override;
     void SkyBoxDraw() override;
 
-    void Debug() override; /// debug
     void ViewProjectionUpdate() override;
     void ViewProcess() override;
+
+    // デバッグ
+    void Debug() override;
+
+private:
+    // 編集するパラメータ登録
+    void RegisterParams();
+
+private:
+    std::unique_ptr<TitlePlayer> player_                              = nullptr;
+    std::unique_ptr<Field> field_                                     = nullptr;
+    std::unique_ptr<SkyBox> skyBox_                                   = nullptr;
+    std::unique_ptr<KetaEngine::ObjectFromBlender> ObjectFromBlender_ = nullptr;
+
+    // 演出・遷移の統括管理
+    std::unique_ptr<TitleSceneController> sceneController_ = nullptr;
+
+    // GlobalParameter
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
+    const std::string groupName_                  = "TitleScene";
 };
