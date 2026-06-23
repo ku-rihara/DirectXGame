@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Scene/GameObj.h"
 
 /// Enemy
 #include "Enemy/CollisionBox/EnemyAttackCollisionBox.h"
@@ -387,4 +388,14 @@ void Player::SetStressGauge(StressGauge* StressGauge) {
 
 bool Player::CheckIsChargeMax() const {
     return currentUpperChargeTime_ >= parameters_.GetParameters().upperParam.chargeTime;
+}
+
+void Player::Connect(GameObj* go, const KetaEngine::ViewProjection& vp) {
+    SetViewProjection(&vp);
+    SetLockOn(go->lockOnController_.get());
+    SetGameCamera(go->gameCamera_.get());
+    SetComboAttackController(go->playerComboAttackController_.get());
+    SetCombo(go->combo_.get());
+    SetStressGauge(go->StressGauge_.get());
+    SetDeathFragPointer(&go->StressGauge_->GetIsDeathRef());
 }

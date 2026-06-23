@@ -1,7 +1,7 @@
 #include "ComboUIController.h"
 #include "Frame/Frame.h"
 #include "base/TextureManager.h"
-#include "Easing/EasingFunction.h"
+#include "Editor/Easing/EasingFunction.h"
 // behavior
 #include "Behavior/ComboCountUp.h"
 #include "Behavior/ComboWait.h"

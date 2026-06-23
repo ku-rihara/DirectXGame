@@ -25,6 +25,7 @@
 #include <unordered_map>
 #include <vector>
 
+struct GameObj;
 class Player;
 class Combo;
 class GameCamera;
@@ -197,6 +198,7 @@ public:
     ///========================================================
     /// Setter
     ///========================================================
+    void Connect(GameObj* go);
     void SetPlayer(Player* player);
     void SetGameCamera(GameCamera* gameCamera);
     void SetCombo(Combo* combo);

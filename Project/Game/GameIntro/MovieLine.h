@@ -1,6 +1,6 @@
 #pragma once
 #include "2D/Sprite.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector2.h"
 #include <array>

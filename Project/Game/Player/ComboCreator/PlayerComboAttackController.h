@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <vector>
 
+struct GameObj;
 class Combo;
 class EnemyManager;
 class Player;
@@ -102,6 +103,7 @@ public:
     const std::vector<std::unique_ptr<PlayerComboAttackData>>& GetAllAttacks() const { return attacks_; }
     int GetAttackCount() const { return static_cast<int>(attacks_.size()); }
 
+    void Connect(GameObj* go, KetaEngine::EffectEditorSuite* suite);
     void SetEditorSuite(KetaEngine::EffectEditorSuite* editorSuite);
     void SetCombo(Combo* combo);
     void SetPlayer(Player* player);

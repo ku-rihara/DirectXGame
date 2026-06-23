@@ -2,6 +2,7 @@
 #include "LockOn/LockOn.h"
 #include <memory>
 
+struct GameObj;
 class ViewProjection;
 class Player;
 class EnemyManager;
@@ -35,5 +36,6 @@ public:
     LockOn* GetLockOn();
 
     // setter
+    void Connect(GameObj* go);
     void SetEnemyManager(EnemyManager* enemyManager);
 };

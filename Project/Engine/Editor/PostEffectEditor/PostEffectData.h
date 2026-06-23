@@ -1,6 +1,6 @@
 #pragma once
 #include "Editor/BaseEffectEditor/BaseEffectData.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include "Vector2.h"
 #include "Vector3.h"

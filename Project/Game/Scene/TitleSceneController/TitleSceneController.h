@@ -36,8 +36,14 @@ private:
     void UpdateLogoSequence();
 
 private:
+
+    // タイトルプレイヤーのポインタ
     TitlePlayer* player_ = nullptr;
+
+    // タイトルロゴとシーン遷移
     std::unique_ptr<TitleLogo> titleLogo_;
     std::unique_ptr<TitleSceneTransition> sceneTransition_;
+
+    // タイトルロゴ
     bool isTitleLogoUpdate_ = false;
 };

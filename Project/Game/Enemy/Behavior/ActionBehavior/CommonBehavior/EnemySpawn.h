@@ -2,7 +2,7 @@
 
 #include"../BaseEnemyBehavior.h"
 
-#include"Easing/Easing.h"
+#include"Editor/Easing/Easing.h"
 
 class EnemySpawn : public BaseEnemyBehavior {
 public:

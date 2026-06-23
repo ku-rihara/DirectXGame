@@ -1,5 +1,5 @@
 #pragma once
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector3.h"

@@ -1,4 +1,5 @@
 #include "LockOnController.h"
+#include "Scene/GameObj.h"
 
 // target
 #include "Enemy/Types/BaseEnemy.h"
@@ -40,4 +41,7 @@ LockOn* LockOnController::GetLockOn() {
         return nullptr;
     }
     return lockOn_.get();
+}
+void LockOnController::Connect(GameObj* go) {
+    SetEnemyManager(go->enemyManager_.get());
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "Editor/BaseEffectEditor/BaseEffectData.h"
 #include "Utility/TimeModeSelector/TimeModeSelector.h"
 #include <string>

@@ -1,5 +1,5 @@
 #pragma once
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "Editor/BaseEffectEditor/BaseSequenceEffectData.h"
 #include "Editor/RailEditor/Rail.h"
 #include "RailControlPoint.h"

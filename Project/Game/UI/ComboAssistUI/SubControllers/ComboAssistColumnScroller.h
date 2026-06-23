@@ -2,7 +2,7 @@
 #include "../AssistParts/ComboAssistArrowUI.h"
 #include "ComboAssistVisibilityController.h"
 #include "../AssistBuilder/ComboUIBuilder.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include <cstdint>
 #include <string>
 

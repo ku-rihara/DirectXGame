@@ -1,4 +1,5 @@
 #include "GameCamera.h"
+#include "Scene/GameObj.h"
 // Function
 #include "MathFunction.h"
 // math
@@ -154,4 +155,8 @@ void GameCamera::PlayAnimation(const std::string& filename,bool isReset) {
 
 void GameCamera::PlayShake(const std::string& filename) {
     rendition_->ShakePlay(filename);
+}
+void GameCamera::Connect(GameObj* go) {
+    SetTarget(&go->player_->GetBaseTransform());
+    SetLockOn(go->lockOnController_->GetLockOn());
 }

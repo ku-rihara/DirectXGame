@@ -8,7 +8,7 @@
 // Player
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 // Easing
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 // GlobalParameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Sprite
@@ -20,7 +20,10 @@
 #include <string>
 #include <vector>
 
+struct GameObj;
 class PlayerComboAttackController;
+class ComboAssistController;
+class KillCounter;
 class Player;
 
 /// <summary>
@@ -72,6 +75,9 @@ public:
 
     /// 初期化
     void Init();
+
+    /// コールバック接続
+    void Connect(GameObj* go);
 
     /// 更新
     void Update(float deltaTime,

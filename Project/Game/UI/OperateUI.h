@@ -2,7 +2,7 @@
 //2D
 #include "2D/Sprite.h"
 // Easing
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 // Editor
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // math
@@ -14,6 +14,7 @@
 #include <memory>
 #include <string>
 
+struct GameObj;
 class Player;
 
 /// <summary>
@@ -75,5 +76,6 @@ private:
 
 public:
     void SetScale(const Vector2& scale);
+    void Connect(GameObj* go);
     void SetPlayer(Player* player) { player_ = player; }
 };

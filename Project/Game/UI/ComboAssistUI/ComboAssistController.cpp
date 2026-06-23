@@ -1,4 +1,5 @@
 #include "ComboAssistController.h"
+#include "Scene/GameObj.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 #include "Input/InputData.h"
@@ -335,4 +336,11 @@ void ComboAssistController::AdjustParam() {
         ImGui::PopID();
     }
 #endif
+}
+
+void ComboAssistController::Connect(GameObj* go) {
+    SetAttackController(go->playerComboAttackController_.get());
+    SetPlayer(go->player_.get());
+    SetKillCounter(go->killCounter_.get());
+    Init();
 }

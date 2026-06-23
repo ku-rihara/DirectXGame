@@ -2,7 +2,7 @@
 #include "3D/ViewProjection.h"
 #include "3D/WorldTransform.h"
 #include "CameraKeyFrame.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "Editor/BaseEffectEditor/BaseSequenceEffectData.h"
 #include "Utility/TimeModeSelector/TimeModeSelector.h"
 #include <cstdint>

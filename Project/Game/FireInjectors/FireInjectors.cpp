@@ -1,4 +1,5 @@
 #include "FireInjectors.h"
+#include "Scene/GameObj.h"
 #include "Combo/Combo.h"
 #include"Frame/Frame.h"
 #include <imgui.h>
@@ -59,4 +60,7 @@ void FireInjectors::AdjustParam() {
 
 void FireInjectors::SetCombo(Combo* combo) {
     pCombo_ = combo;
+}
+void FireInjectors::Connect(GameObj* go) {
+    SetCombo(go->combo_.get());
 }

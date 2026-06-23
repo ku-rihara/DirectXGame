@@ -2,7 +2,7 @@
 
 #include "2D/Sprite.h"
 #include "BaseGameSceneState.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include <functional>
 #include <memory>
 

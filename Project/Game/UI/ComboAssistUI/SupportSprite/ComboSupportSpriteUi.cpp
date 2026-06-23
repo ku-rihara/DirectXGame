@@ -1,4 +1,5 @@
 #include "ComboSupportSpriteUi.h"
+#include "Scene/GameObj.h"
 #include "UI/ComboAssistUI/ComboAssistController.h"
 #include "base/TextureManager.h"
 #include <imgui.h>
@@ -75,4 +76,9 @@ void ComboSupportSpriteUi::AdjustParam() {
         ImGui::PopID();
     }
 #endif
+}
+
+void ComboSupportSpriteUi::Connect(GameObj* go) {
+    SetComboAssistController(go->comboAssistController_.get());
+    Init();
 }

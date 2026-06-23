@@ -8,7 +8,7 @@
 // Parameter
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Easing
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 // math
 #include "Vector2.h"
 // std
@@ -18,6 +18,7 @@
 #include <unordered_set>
 #include <vector>
 
+struct GameObj;
 class Player;
 class PlayerComboAttackController;
 class KillCounter;
@@ -131,6 +132,7 @@ public:
     const Vector2& GetBasePosition() const { return basePosition_; }
     PlayerComboAttackData::TriggerCondition GetCurrentCondition() const { return currentCondition_; }
 
+    void Connect(GameObj* go);
     void SetAttackController(PlayerComboAttackController* controller) { pAttackController_ = controller; }
     void SetPlayer(Player* player) { pPlayer_ = player; }
     void SetKillCounter(KillCounter* killCounter) { pKillCounter_ = killCounter; }

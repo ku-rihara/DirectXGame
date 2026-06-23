@@ -1,6 +1,6 @@
 #pragma once
 #include "3D/Object3d/Object3d.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 // Effect
 #include "Editor/RibbonTrailEditor/RibbonTrailPlayer.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"

@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 
+struct GameObj;
 class Combo;
 
 /// <summary>
@@ -34,5 +35,6 @@ private:
 
 public:
     // setter
+    void Connect(GameObj* go);
     void SetCombo(Combo* combo);
 };

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BasePlayerBehavior.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 
 /// <summary>
 /// プレイヤー出現振る舞いクラス

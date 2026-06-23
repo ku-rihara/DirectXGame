@@ -1,4 +1,5 @@
 #include "ComboDirector.h"
+#include "Scene/GameObj.h"
 
 #include "Audience/AudienceController.h"
 #include "BackGroundObject/ComboLevel/ComboLevelObjHolder.h"
@@ -98,3 +99,10 @@ void (ComboDirector::* ComboDirector::spFuncTable_[])(){
     &ComboDirector::LevelUp,
     &ComboDirector::LevelReset,
 };
+
+void ComboDirector::Connect(GameObj* go) {
+    SetPlayer(go->player_.get());
+    SetComboAndStressGauge(go->combo_.get(), go->StressGauge_.get());
+    SetComboLevelObjHolder(go->backGroundObjectManager_->GetComboLevelObjHolder());
+    SetAudienceController(go->audienceController_.get());
+}

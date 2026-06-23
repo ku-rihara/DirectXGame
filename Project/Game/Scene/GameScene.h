@@ -3,46 +3,8 @@
 /// base
 #include "BaseScene.h"
 #include "GameSceneState/BaseGameSceneState.h"
-
-// Audience
-#include "Audience/AudienceController.h"
-// BackGroundObj
-#include "BackGroundObject/BackGroundObjectManager.h"
-// Combo
-#include "Combo/Combo.h"
-#include "ComboScene/ComboDirector.h"
-// KillCounter
-#include "KillCounter/KillCounter.h"
-// StressGauge
-#include "StressGauge/StressGauge.h"
-// Enemy
-#include "Enemy/EnemyManager/EnemyManager.h"
-#include "Enemy/EnemyManager/Spawner/ContinuousEnemySpawner.h"
-// Field
-#include "Field/Field.h"
-#include "Field/SideRope/SideRopeController.h"
-#include "FireInjectors/FireInjectors.h"
-// Camera
-#include "GameCamera/GameCamera.h"
-// Intro
-#include "GameIntro/GameIntroManager.h"
-// LockOn
-#include "LockOn/LockOnController.h"
-// Player
-#include "Player/ComboCreator/PlayerComboAttackController.h"
-#include "Player/Player.h"
-// SkyBox
-#include "SkyBox/SkyBox.h"
-// UI
-#include "UI/ComboAssistUI/ComboAssistController.h"
-#include "UI/ComboAssistUI/SupportSprite/ComboSupportSpriteUi.h"
-#include "UI/ComboAssistUI/UnlockNotifier/ComboUnlockNotifier.h"
-#include "UI/NextAttackIndicator/NextAttackHintUI.h"
-#include "UI/OperateUI.h"
-// Sprite
-#include "2D/Sprite.h"
-// EasingEditor
-#include "Easing/EasingCreator/EasingEditor.h"
+#include "GameObj.h"
+#include "Editor/EasingEditor/EasingEditor.h"
 
 /// <summary>
 /// ゲームシーン
@@ -78,37 +40,12 @@ private:
 private:
     //*-------------------------------- Private variants--------------------------------*//
 
-    struct GameObj {
-        std::unique_ptr<GameCamera> gameCamera_                                   = nullptr;
-        std::unique_ptr<Field> field_                                             = nullptr;
-        std::unique_ptr<LockOnController> lockOnController_                       = nullptr;
-        std::unique_ptr<Player> player_                                           = nullptr;
-        std::unique_ptr<SkyBox> skyBox_                                           = nullptr;
-        std::unique_ptr<Combo> combo_                                             = nullptr;
-        std::unique_ptr<EnemyManager> enemyManager_                               = nullptr;
-        std::unique_ptr<OperateUI> operateUI_                                     = nullptr;
-        std::unique_ptr<FireInjectors> fireInjectors_                             = nullptr;
-        std::unique_ptr<BackGroundObjectManager> backGroundObjectManager_         = nullptr;
-        std::unique_ptr<ComboDirector> comboDirector_                             = nullptr;
-        std::unique_ptr<GameIntroManager> gameIntroManager_                       = nullptr;
-        std::unique_ptr<ContinuousEnemySpawner> continuousEnemySpawner_           = nullptr;
-        std::unique_ptr<PlayerComboAttackController> playerComboAttackController_ = nullptr;
-        std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
-        std::unique_ptr<AudienceController> audienceController_                   = nullptr;
-        std::unique_ptr<StressGauge> StressGauge_                                   = nullptr;
-        std::unique_ptr<KillCounter> killCounter_                                 = nullptr;
-        std::unique_ptr<ComboAssistController> comboAssistController_               = nullptr;
-        std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;
-        std::unique_ptr<ComboSupportSpriteUi> comboSupportSpriteUi_               = nullptr;
-        std::unique_ptr<NextAttackHintUI> nextAttackHintUI_                       = nullptr;
-
-        std::unique_ptr<KetaEngine::Sprite> screenSprite_;
-    };
-
     std::unique_ptr<BaseGameSceneState> state_ = nullptr;
     GameObj gameObj_;
 
-    KetaEngine::EasingEditor easingEditor_;
+    KetaEngine::EasingEditor<float>   easingEditorFloat_;
+    KetaEngine::EasingEditor<Vector2> easingEditorVec2_;
+    KetaEngine::EasingEditor<Vector3> easingEditorVec3_;
 
 public:
     GameObj& GetGameObj() { return gameObj_; }

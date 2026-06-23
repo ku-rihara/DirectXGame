@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <memory>
 
+struct GameObj;
 class ComboAssistController;
 class ComboSupportSpriteUi;
 /// <summary>
@@ -89,6 +90,7 @@ public:
     MovieLine* GetMovieLine() const { return movieLine_.get(); }
 
     // setter
+    void Connect(GameObj* go);
     void SetHowToOperate(OperateUI* howToOperate);
     void SetGameCamera(GameCamera* gameCamera);
     void SetPlayer(Player* player);

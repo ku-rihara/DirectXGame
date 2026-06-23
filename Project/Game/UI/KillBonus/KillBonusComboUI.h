@@ -1,7 +1,7 @@
 #pragma once
 
 #include "2D/Sprite.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "UI/KillBonus/KillBonusColorTier.h"
 #include "UI/NumberDigitUI/NumberDigitUI.h"
 #include "Vector2.h"

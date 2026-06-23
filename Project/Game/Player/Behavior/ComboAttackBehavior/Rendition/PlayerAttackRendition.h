@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "Particle/CPUParticle/ParticlePlayer.h"
 #include "Player/ComboCreator/PlayerAttackRenditionData.h"
 #include "Player/ComboCreator/Timeline/PlayerComboAttackTimelinePhase.h"

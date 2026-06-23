@@ -2,7 +2,7 @@
 #include "PlayerComboAttackData.h"
 #include "PlayerComboAttackController.h"
 // Easing
-#include "Easing/EasingCreator/EasingParameterData.h"
+#include "Editor/Easing/EasingCreator/EasingParameterData.h"
 // Enemy
 #include "Enemy/EnemyManager/EnemyManager.h"
 // Player

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseBehavior/BaseBehavior.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 
 class GameScene;
 

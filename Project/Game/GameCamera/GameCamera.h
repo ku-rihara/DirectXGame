@@ -6,6 +6,7 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <memory>
 
+struct GameObj;
 class LockOn;
 
 /// <summary>
@@ -93,6 +94,7 @@ public:
     float GetDestinationAngleY() const { return destinationAngleY_; }
 
     // setter
+    void Connect(GameObj* go);
     void SetTarget(const KetaEngine::WorldTransform* target);
     void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
     void SetShakePos(const Vector3& shake) { shakeOffsetPos_ = shake; }

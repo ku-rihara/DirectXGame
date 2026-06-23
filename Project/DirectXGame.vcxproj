@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -74,13 +74,9 @@
     <ClCompile Include="Engine\Core\KTFramework.cpp" />
     <ClCompile Include="Engine\Core\KTGame.cpp" />
     <ClCompile Include="Engine\Core\ResourceLoader.cpp" />
-    <ClCompile Include="Engine\Easing\Easing.cpp" />
-    <ClCompile Include="Engine\Easing\EasingCreator\EasingCreator.cpp" />
-    <ClCompile Include="Engine\Easing\EasingCreator\EasingEditor.cpp" />
-    <ClCompile Include="Engine\Easing\EasingCreator\EasingParameterData.cpp" />
-    <ClCompile Include="Engine\Easing\EasingFunction.cpp" />
-    <ClCompile Include="Engine\Easing\EasingSequence.cpp" />
-    <ClCompile Include="Engine\Easing\EasingStep.cpp" />
+    <ClCompile Include="Engine\Editor\Easing\Easing.cpp" />
+    <ClCompile Include="Engine\Editor\Easing\EasingCreator\EasingParameterData.cpp" />
+    <ClCompile Include="Engine\Editor\Easing\EasingFunction.cpp" />
     <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectData.cpp" />
     <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectEditor.cpp" />
     <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectPlayer.cpp" />
@@ -89,6 +85,8 @@
     <ClCompile Include="Engine\Editor\CameraEditor\CameraAnimationData.cpp" />
     <ClCompile Include="Engine\Editor\CameraEditor\CameraEditor.cpp" />
     <ClCompile Include="Engine\Editor\CameraEditor\CameraKeyFrame.cpp" />
+    <ClCompile Include="Engine\Editor\EasingEditor\EasingData.cpp" />
+    <ClCompile Include="Engine\Editor\EasingEditor\EasingEditor.cpp" />
     <ClCompile Include="Engine\Editor\DissolveEditor\DissolveData.cpp" />
     <ClCompile Include="Engine\Editor\DissolveEditor\DissolveEditor.cpp" />
     <ClCompile Include="Engine\Editor\DissolveEditor\DissolvePlayer.cpp" />
@@ -439,13 +437,9 @@
     <ClInclude Include="Engine\Core\KTFramework.h" />
     <ClInclude Include="Engine\Core\KTGame.h" />
     <ClInclude Include="Engine\Core\ResourceLoader.h" />
-    <ClInclude Include="Engine\Easing\Easing.h" />
-    <ClInclude Include="Engine\Easing\EasingCreator\EasingCreator.h" />
-    <ClInclude Include="Engine\Easing\EasingCreator\EasingEditor.h" />
-    <ClInclude Include="Engine\Easing\EasingCreator\EasingParameterData.h" />
-    <ClInclude Include="Engine\Easing\EasingFunction.h" />
-    <ClInclude Include="Engine\Easing\EasingSequence.h" />
-    <ClInclude Include="Engine\Easing\EasingStep.h" />
+    <ClInclude Include="Engine\Editor\Easing\Easing.h" />
+    <ClInclude Include="Engine\Editor\Easing\EasingCreator\EasingParameterData.h" />
+    <ClInclude Include="Engine\Editor\Easing\EasingFunction.h" />
     <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectData.h" />
     <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectEditor.h" />
     <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectPlayer.h" />
@@ -454,6 +448,8 @@
     <ClInclude Include="Engine\Editor\CameraEditor\CameraAnimationData.h" />
     <ClInclude Include="Engine\Editor\CameraEditor\CameraEditor.h" />
     <ClInclude Include="Engine\Editor\CameraEditor\CameraKeyFrame.h" />
+    <ClInclude Include="Engine\Editor\EasingEditor\EasingData.h" />
+    <ClInclude Include="Engine\Editor\EasingEditor\EasingEditor.h" />
     <ClInclude Include="Engine\Editor\DissolveEditor\DissolveData.h" />
     <ClInclude Include="Engine\Editor\DissolveEditor\DissolveEditor.h" />
     <ClInclude Include="Engine\Editor\DissolveEditor\DissolvePlayer.h" />
@@ -713,6 +709,7 @@
     <ClInclude Include="Game\ResultObj\ResultStage.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\BattleTestScene.h" />
+    <ClInclude Include="Game\Scene\GameObj.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\Scene\GameSceneState\BaseGameSceneState.h" />
     <ClInclude Include="Game\Scene\GameSceneState\GameSceneGameOver.h" />

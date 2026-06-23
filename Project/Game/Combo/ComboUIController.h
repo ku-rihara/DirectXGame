@@ -5,7 +5,7 @@
 
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // Easing
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 // behavior
 #include "Behavior/BaseComboUIBehavior.h"
 // std

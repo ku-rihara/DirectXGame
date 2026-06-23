@@ -1,0 +1,22 @@
+{
+    "HitSpriteScale": {
+        "StartTimeOffset": 0.0,
+        "adaptVec2AxisType": 0,
+        "amplitude": 0.5,
+        "backRatio": 0.0,
+        "endValue": [
+            1.0,
+            1.0
+        ],
+        "finishOffsetTime": 0.0,
+        "finishType": 1,
+        "maxTime": 0.4,
+        "period": 0.15,
+        "startValue": [
+            1.5,
+            1.5
+        ],
+        "type": 27,
+        "waitTime": 0.0
+    }
+}

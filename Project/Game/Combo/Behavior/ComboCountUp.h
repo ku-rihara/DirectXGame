@@ -1,8 +1,8 @@
 #pragma once
 
 #include "BaseComboUIBehavior.h"
-#include"Easing/EasingFunction.h"
-#include"Easing/Easing.h"
+#include"Editor/Easing/EasingFunction.h"
+#include"Editor/Easing/Easing.h"
 
 class ComboCountUP : public BaseComboUIBehavior {
 private:

@@ -3,7 +3,7 @@
 // Sprite
 #include "2D/Sprite.h"
 // Easing
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 // Math
 #include "Vector2.h"
 // std

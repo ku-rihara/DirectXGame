@@ -9,6 +9,7 @@
 #include <memory>
 #include <string>
 
+struct GameObj;
 class ComboAssistController;
 
 /// <summary>
@@ -39,6 +40,7 @@ public:
     /// ゲームイントロに合わせてスケールを外部から制御する
     void SetScale(const Vector2& scale);
 
+    void Connect(GameObj* go);
     void SetComboAssistController(ComboAssistController* controller) { pComboAssist_ = controller; }
 
 private:

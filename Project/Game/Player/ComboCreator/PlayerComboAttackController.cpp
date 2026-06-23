@@ -1,5 +1,6 @@
 #include <format>
 #include "PlayerComboAttackController.h"
+#include "Scene/GameObj.h"
 #include "Enemy/EnemyManager/EnemyManager.h"
 #include "Frame/Frame.h"
 // std
@@ -471,4 +472,9 @@ void PlayerComboAttackController::SetPlayer(Player* player) {
         attack->SetPlayer(player);
         attack->SetController(this);
     }
+}
+void PlayerComboAttackController::Connect(GameObj* go, KetaEngine::EffectEditorSuite* suite) {
+    SetEditorSuite(suite);
+    SetPlayer(go->player_.get());
+    SetEnemyManager(go->enemyManager_.get());
 }

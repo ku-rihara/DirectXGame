@@ -1,7 +1,7 @@
 #pragma once
 
 #include "3D/Primitive/IPrimitive.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "Vector4.h"
 #include <cstdint>
 #include <memory>

@@ -1,6 +1,6 @@
 #pragma once
 #include "3D/WorldTransform.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailPlayer.h"
 #include "3D/Line3D/Line3D.h"

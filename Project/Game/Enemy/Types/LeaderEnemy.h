@@ -2,9 +2,7 @@
 
 #include "3D/Object3D/Object3d.h"
 #include "BaseEnemy.h"
-#include "Easing/Easing.h"
-#include "Easing/EasingCreator/EasingCreator.h"
-#include "Easing/EasingCreator/EasingParameterData.h"
+#include "Editor/Easing/Easing.h"
 #include "Enemy/AttackBomb/BossAttackBombManager.h"
 #include <memory>
 

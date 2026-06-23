@@ -1,5 +1,5 @@
 #pragma once
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailPlayer.h"
 #include "Utility/FileSelector/FileSelector.h"

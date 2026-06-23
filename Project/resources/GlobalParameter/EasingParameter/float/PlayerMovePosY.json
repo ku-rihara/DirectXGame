@@ -1,0 +1,17 @@
+{
+    "PlayerMovePosY": {
+        "StartTimeOffset": 0.0,
+        "adaptFloatAxisType": 1,
+        "amplitude": 0.0,
+        "endValue": 1.2000000476837158,
+        "finishOffsetTime": 0.0,
+        "finishType": 1,
+        "maxTime": 0.1,
+        "period": 0.0,
+        "returnMaxTime": 0.1,
+        "returnType": 19,
+        "startValue": 0.0,
+        "type": 18,
+        "waitTime": 0.0
+    }
+}

@@ -1,4 +1,5 @@
 #include "ContinuousEnemySpawner.h"
+#include "Scene/GameObj.h"
 #include "Enemy/EnemyManager/EnemyManager.h"
 #include "Field/Field.h"
 #include "MathFunction.h"
@@ -218,4 +219,8 @@ void ContinuousEnemySpawner::RegisterParams() {
     globalParameter_->Regist(groupName_, "maxRetryCount", &config_.maxRetryCount);
     globalParameter_->Regist(groupName_, "maxSpawnCount", &config_.maxSpawnCount);
     globalParameter_->Regist(groupName_, "fieldMargin", &config_.fieldMargin);
+}
+void ContinuousEnemySpawner::Connect(GameObj* go) {
+    SetEnemyManager(go->enemyManager_.get());
+    SetPlayer(go->player_.get());
 }

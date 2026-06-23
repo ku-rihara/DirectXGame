@@ -1,11 +1,22 @@
 #include "ComboUnlockNotifier.h"
+// Scene
+#include "Scene/GameObj.h"
+// Base
 #include "Base/WinApp.h"
+// Input
 #include "Input/Input.h"
 #include "Input/InputData.h"
+// Math
 #include "Math/Matrix4x4.h"
+// Player
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
+// UI
+#include "UI/ComboAssistUI/ComboAssistController.h"
+// KillCounter
+#include "KillCounter/KillCounter.h"
+// std,ImGui
 #include <algorithm>
 #include <imgui.h>
 
@@ -24,6 +35,21 @@ void ComboUnlockNotifier::Init() {
     slideNorm_    = 1.0f;
     slideOffsetX_ = slideStartOffsetX_;
     ApplySlideToShared();
+}
+
+///==========================================================
+/// コールバック接続
+///==========================================================
+void ComboUnlockNotifier::Connect(GameObj* go) {
+    go->player_->SetAutoComboAttackCallback([this](const std::string& name) {
+        NotifyAttackExecuted(name);
+    });
+    ComboAssistController*       assist   = go->comboAssistController_.get();
+    PlayerComboAttackController* atkCtrl  = go->playerComboAttackController_.get();
+    Player*                      player   = go->player_.get();
+    go->killCounter_->SetOnAttackUnlockedCallback([this, assist, atkCtrl, player](const std::string& name) {
+        OnAttackUnlocked(name, assist->GetLayoutParam(), atkCtrl, player);
+    });
 }
 
 ///==========================================================

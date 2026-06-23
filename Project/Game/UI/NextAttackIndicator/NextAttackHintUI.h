@@ -29,6 +29,7 @@ public:
     /// <summary>
     /// ViewProjection ポインタを設定する
     /// </summary>
+    void Connect(const KetaEngine::ViewProjection& vp);
     void SetViewProjection(const KetaEngine::ViewProjection* viewProjection) {
         pViewProjection_ = viewProjection;
     }

@@ -1,4 +1,5 @@
 #include "GameIntroManager.h"
+#include "Scene/GameObj.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 // step
@@ -192,4 +193,15 @@ void GameIntroManager::ClassisSet() {
         intro->SetComboAssistController(pComboAssistController_);
         intro->SetComboSupportSpriteUi(pComboSupportSpriteUi_);
     }
+}
+void GameIntroManager::Connect(GameObj* go) {
+    SetFireInjectors(go->fireInjectors_.get());
+    SetGameCamera(go->gameCamera_.get());
+    SetPlayer(go->player_.get());
+    SetGameBackGroundObject(go->backGroundObjectManager_->GetGameBackGroundObject());
+    SetHowToOperate(go->operateUI_.get());
+    SetStressGaugeGauge(go->StressGauge_->GetStressGaugeGauge());
+    SetComboAssistController(go->comboAssistController_.get());
+    SetComboSupportSpriteUi(go->comboSupportSpriteUi_.get());
+    ClassisSet();
 }

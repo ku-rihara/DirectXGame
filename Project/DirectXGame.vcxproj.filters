@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Engine">
@@ -28,7 +28,7 @@
     <Filter Include="Engine\Core">
       <UniqueIdentifier>{E5F42D62-A27D-41F0-BA85-25FA51B7D175}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Easing">
+    <Filter Include="Engine\Editor\Easing">
       <UniqueIdentifier>{E1769C5F-A904-4AF4-97D9-D4B299D95B7F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor">
@@ -163,7 +163,7 @@
     <Filter Include="Engine\Collider\SpatialGrid">
       <UniqueIdentifier>{82151164-B5EB-4B95-8FA3-AB4A1ECD51BD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Easing\EasingCreator">
+    <Filter Include="Engine\Editor\Easing\EasingCreator">
       <UniqueIdentifier>{BAC0D2EA-C812-4AFB-A013-E4F69E4D26F3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\BaseEffectEditor">
@@ -195,6 +195,9 @@
     </Filter>
     <Filter Include="Engine\Editor\ShakeEditor">
       <UniqueIdentifier>{3764D52E-A476-477C-ACD7-75E7D2E9439D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editor\EasingEditor">
+      <UniqueIdentifier>{D4A2F3B1-9C8E-4D67-A3F2-1B5E7C9D0F42}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Editor\SpriteEaseAnimation">
       <UniqueIdentifier>{0C951CAA-67A4-4455-96BB-9B7B9B21D327}</UniqueIdentifier>
@@ -684,26 +687,14 @@
     <ClCompile Include="Engine\Core\ResourceLoader.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Easing\Easing.cpp">
-      <Filter>Engine\Easing</Filter>
+    <ClCompile Include="Engine\Editor\Easing\Easing.cpp">
+      <Filter>Engine\Editor\Easing</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Easing\EasingCreator\EasingCreator.cpp">
-      <Filter>Engine\Easing\EasingCreator</Filter>
+    <ClCompile Include="Engine\Editor\Easing\EasingCreator\EasingParameterData.cpp">
+      <Filter>Engine\Editor\Easing\EasingCreator</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Easing\EasingCreator\EasingEditor.cpp">
-      <Filter>Engine\Easing\EasingCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Easing\EasingCreator\EasingParameterData.cpp">
-      <Filter>Engine\Easing\EasingCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Easing\EasingFunction.cpp">
-      <Filter>Engine\Easing</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Easing\EasingSequence.cpp">
-      <Filter>Engine\Easing</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Easing\EasingStep.cpp">
-      <Filter>Engine\Easing</Filter>
+    <ClCompile Include="Engine\Editor\Easing\EasingFunction.cpp">
+      <Filter>Engine\Editor\Easing</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectData.cpp">
       <Filter>Engine\Editor\BaseEffectEditor</Filter>
@@ -788,6 +779,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.cpp">
       <Filter>Engine\Editor\RibbonTrailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\EasingEditor\EasingData.cpp">
+      <Filter>Engine\Editor\EasingEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\EasingEditor\EasingEditor.cpp">
+      <Filter>Engine\Editor\EasingEditor</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakeData.cpp">
       <Filter>Engine\Editor\ShakeEditor</Filter>
@@ -1762,26 +1759,14 @@
     <ClInclude Include="Engine\Core\ResourceLoader.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Easing\Easing.h">
-      <Filter>Engine\Easing</Filter>
+    <ClInclude Include="Engine\Editor\Easing\Easing.h">
+      <Filter>Engine\Editor\Easing</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Easing\EasingCreator\EasingCreator.h">
-      <Filter>Engine\Easing\EasingCreator</Filter>
+    <ClInclude Include="Engine\Editor\Easing\EasingCreator\EasingParameterData.h">
+      <Filter>Engine\Editor\Easing\EasingCreator</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Easing\EasingCreator\EasingEditor.h">
-      <Filter>Engine\Easing\EasingCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Easing\EasingCreator\EasingParameterData.h">
-      <Filter>Engine\Easing\EasingCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Easing\EasingFunction.h">
-      <Filter>Engine\Easing</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Easing\EasingSequence.h">
-      <Filter>Engine\Easing</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Easing\EasingStep.h">
-      <Filter>Engine\Easing</Filter>
+    <ClInclude Include="Engine\Editor\Easing\EasingFunction.h">
+      <Filter>Engine\Editor\Easing</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectData.h">
       <Filter>Engine\Editor\BaseEffectEditor</Filter>
@@ -1863,6 +1848,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\RibbonTrailEditor\RibbonTrailPlayer.h">
       <Filter>Engine\Editor\RibbonTrailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\EasingEditor\EasingData.h">
+      <Filter>Engine\Editor\EasingEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\EasingEditor\EasingEditor.h">
+      <Filter>Engine\Editor\EasingEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakeData.h">
       <Filter>Engine\Editor\ShakeEditor</Filter>
@@ -2573,6 +2564,9 @@
       <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\BattleTestScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameObj.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\GameScene.h">

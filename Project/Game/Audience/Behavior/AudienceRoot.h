@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseAudienceBehavior.h"
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 
 class AudienceRoot : public BaseAudienceBehavior {
 private:

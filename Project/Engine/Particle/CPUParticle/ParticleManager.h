@@ -12,7 +12,7 @@
 #include "GPUData/ParticleForGPU.h"
 
 // Easing
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 // Dissolve
 #include "Editor/DissolveEditor/DissolvePlayer.h"
 

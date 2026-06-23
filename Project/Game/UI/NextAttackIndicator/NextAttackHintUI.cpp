@@ -1,4 +1,5 @@
 #include "NextAttackHintUI.h"
+#include "Scene/GameObj.h"
 
 #include "3D/ViewProjection.h"
 #include "Matrix4x4.h"
@@ -112,4 +113,8 @@ void NextAttackHintUI::AdjustParam() {
         ImGui::PopID();
     }
 #endif
+}
+
+void NextAttackHintUI::Connect(const KetaEngine::ViewProjection& vp) {
+    SetViewProjection(&vp);
 }

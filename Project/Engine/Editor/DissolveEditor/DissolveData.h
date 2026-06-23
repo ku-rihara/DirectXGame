@@ -1,5 +1,5 @@
 #pragma once
-#include "Easing/Easing.h"
+#include "Editor/Easing/Easing.h"
 #include "Editor/BaseEffectEditor/BaseEffectData.h"
 #include "Utility/FileSelector/FileSelector.h"
 #include <cstdint>

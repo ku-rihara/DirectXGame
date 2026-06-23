@@ -1,4 +1,5 @@
 #include "OperateUI.h"
+#include "Scene/GameObj.h"
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
@@ -101,4 +102,8 @@ void OperateUI::Debug() {
         ImGui::PopID();
     }
 #endif
+}
+
+void OperateUI::Connect(GameObj* go) {
+    SetPlayer(go->player_.get());
 }

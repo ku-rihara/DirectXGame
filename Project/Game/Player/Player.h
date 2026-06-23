@@ -30,6 +30,7 @@
 #include <memory>
 #include <string>
 
+struct GameObj;
 class LockOnController;
 class GameCamera;
 class Combo;
@@ -207,6 +208,7 @@ public:
     void SetObjectiveAnglePitch(float angle) { objectiveAnglePitch_ = angle; }
     void SetShadowFrag(bool isShadow);
     // Class Set
+    void Connect(GameObj* go, const KetaEngine::ViewProjection& vp);
     void SetLockOn(LockOnController* lockon);
     void SetGameCamera(GameCamera* gamecamera);
     void SetCombo(Combo* combo);

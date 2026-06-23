@@ -1,4 +1,5 @@
 #include "EnemyManager.h"
+#include "Scene/GameObj.h"
 // UIs
 #include "Enemy/UIs/GroupIcon/GroupIcon.h"
 // Math
@@ -554,4 +555,12 @@ bool EnemyManager::IsAnyEnemyInAnticipation() const {
         }
     }
     return false;
+}
+
+void EnemyManager::Connect(GameObj* go) {
+    SetPlayer(go->player_.get());
+    SetCombo(go->combo_.get());
+    SetKillCounter(go->killCounter_.get());
+    SetGameCamera(go->gameCamera_.get());
+    SetStressGauge(go->StressGauge_.get());
 }

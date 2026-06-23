@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <string>
 
+struct GameObj;
 class EnemyManager;
 class Player;
 class ViewProjection;
@@ -91,6 +92,7 @@ public:
     ///=======================================================================================
     /// setter
     ///=======================================================================================
+    void Connect(GameObj* go);
     void SetEnemyManager(EnemyManager* enemyManager) { pEnemyManager_ = enemyManager; }
     void SetPlayer(Player* player) { pPlayer_ = player; }
     void SetPlayerPosition(const Vector3* playerPos) { pPlayerPosition_ = playerPos; }

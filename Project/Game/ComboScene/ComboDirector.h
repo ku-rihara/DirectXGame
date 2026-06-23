@@ -2,6 +2,7 @@
 #include <cstdint>
 
 // 前方宣言
+struct GameObj;
 class Player;
 class Combo;
 class ComboLevelObjHolder;
@@ -49,6 +50,7 @@ private:
 
 public:
     // setter
+    void Connect(GameObj* go);
     void SetPlayer(Player* player);
     void SetComboAndStressGauge(Combo* combo, StressGauge* StressGauge);
     void SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder);
