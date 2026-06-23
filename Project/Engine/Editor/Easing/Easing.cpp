@@ -1,38 +1,72 @@
 #include "Easing.h"
 
 using namespace KetaEngine;
+// Editor
 #include "Editor/Easing/EasingFunction.h"
-#include "Function/GetFile.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include <imGui.h>
-#include <unordered_map>
-
-// ディレクトリキャッシュ
-static std::unordered_map<std::string, std::vector<std::string>> s_easingDirCache;
+// std
+#include <string>
+#include <type_traits>
 
 template <typename T>
-void Easing<T>::Init(const std::string& adaptFile) {
-
-    // 初期化、ファイル読み込み
-    FilePathChangeForType();
-    const std::string dirKey = FilePath_ + filePathForType_;
-    auto dirIt = s_easingDirCache.find(dirKey);
-    if (dirIt != s_easingDirCache.end()) {
-        easingFiles_ = dirIt->second;
-    } else {
-        easingFiles_ = GetFileNamesForDirectory(dirKey);
-        s_easingDirCache[dirKey] = easingFiles_;
-    }
-  
-    if (!adaptFile.empty()) {
-        ApplyFromJson(adaptFile);
+void Easing<T>::FilePathChangeForType() {
+    if constexpr (std::is_same_v<T, float>) {
+        filePathForType_ = "float";
+    } else if constexpr (std::is_same_v<T, Vector2>) {
+        filePathForType_ = "Vector2";
+    } else if constexpr (std::is_same_v<T, Vector3>) {
+        filePathForType_ = "Vector3";
+    } else if constexpr (std::is_same_v<T, Vector4>) {
+        filePathForType_ = "Vector4";
     }
 }
 
 template <typename T>
-void Easing<T>::Reset() {
+void Easing<T>::Init(const std::string& adaptFile) {
+    if (adaptFile.empty())
+        return;
 
-    // 　パラメータリセット
+    FilePathChangeForType();
+
+    const auto dotPos        = adaptFile.rfind('.');
+    const std::string stem   = (dotPos != std::string::npos) ? adaptFile.substr(0, dotPos) : adaptFile;
+    const std::string folder = "EasingParameter/" + filePathForType_;
+
+    // ローカル変数でエントリーを作成
+    int32_t typeInt = 0, finishTypeInt = 0, returnTypeInt = 0;
+    EasingParameter<T> param;
+
+    auto* globalParameter = GlobalParameter::GetInstance();
+    if (!globalParameter->HasGroup(stem)) {
+        globalParameter->CreateGroup(stem);
+    }
+
+    globalParameter->Regist(stem, "type", &typeInt);
+    globalParameter->Regist(stem, "finishType", &finishTypeInt);
+    globalParameter->Regist(stem, "returnType", &returnTypeInt);
+    globalParameter->Regist(stem, "maxTime", &param.maxTime);
+    globalParameter->Regist(stem, "returnMaxTime", &param.returnMaxTime);
+    globalParameter->Regist(stem, "amplitude", &param.amplitude);
+    globalParameter->Regist(stem, "period", &param.period);
+    globalParameter->Regist(stem, "finishOffsetTime", &param.finishOffsetTime);
+    globalParameter->Regist(stem, "waitTime", &param.waitTimeMax);
+    globalParameter->Regist(stem, "StartTimeOffset", &param.startTimeOffset);
+    globalParameter->Regist(stem, "startValue", &param.startValue);
+    globalParameter->Regist(stem, "endValue", &param.endValue);
+
+    globalParameter->LoadFile(stem, folder);
+    globalParameter->SyncParamForGroup(stem);
+    globalParameter->ClearRegistersForGroup(stem); 
+
+    param.type       = static_cast<EasingType>(typeInt);
+    param.finishType = static_cast<EasingFinishValueType>(finishTypeInt);
+    param.returnType = static_cast<EasingType>(returnTypeInt);
+
+    SettingValue(param);
+}
+
+template <typename T>
+void Easing<T>::Reset() {
     isFinished_             = false;
     currentTime_            = 0.0f;
     waitTime_               = 0.0f;
@@ -42,9 +76,6 @@ void Easing<T>::Reset() {
 
 template <typename T>
 void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
-
-    // イージングのパラメータをセット
-
     type_            = easingParam.type;
     finishValueType_ = easingParam.finishType;
 
@@ -57,10 +88,9 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     returnMaxTime_ = easingParam.returnMaxTime;
 
     if (easingParam.returnMaxTime > 0.0f) {
-        // 前進＋後退の2フェーズ: maxTime_ は合計時間
-        forwardMaxTime_ = easingParam.maxTime;
-        maxTime_        = easingParam.maxTime + easingParam.returnMaxTime;
-        finishValueType_ = EasingFinishValueType::Start; // 終了時は起点に戻る
+        forwardMaxTime_  = easingParam.maxTime;
+        maxTime_         = easingParam.maxTime + easingParam.returnMaxTime;
+        finishValueType_ = EasingFinishValueType::Start;
     } else {
         forwardMaxTime_  = easingParam.maxTime;
         maxTime_         = easingParam.maxTime;
@@ -72,125 +102,9 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     startTimeOffset_  = easingParam.startTimeOffset;
 }
 
-
-template <typename T>
-void Easing<T>::ApplyFromJson(const std::string& fileName) {
-    FilePathChangeForType();
-
-    const std::string stem       = fileName.substr(0, fileName.size() - 5);
-    const std::string folderName = "EasingParameter/" + filePathForType_;
-    const std::string groupName  = stem;
-
-    auto* gp = GlobalParameter::GetInstance();
-
-    if (!gp->HasGroup(groupName)) {
-        gp->CreateGroup(groupName);
-
-        // デフォルト値を登録（ファイルに値があれば LoadFile で上書きされる）
-        gp->AddItem(groupName, "type",            static_cast<int32_t>(0));
-        gp->AddItem(groupName, "finishType",       static_cast<int32_t>(0));
-        gp->AddItem(groupName, "maxTime",          0.0f);
-        gp->AddItem(groupName, "returnMaxTime",    0.0f);
-        gp->AddItem(groupName, "returnType",       static_cast<int32_t>(0));
-        gp->AddItem(groupName, "amplitude",        0.0f);
-        gp->AddItem(groupName, "period",           0.0f);
-        gp->AddItem(groupName, "finishOffsetTime", 0.0f);
-        gp->AddItem(groupName, "waitTime",         0.0f);
-        gp->AddItem(groupName, "StartTimeOffset",  0.0f);
-
-        if constexpr (std::is_same_v<T, float>) {
-            gp->AddItem(groupName, "startValue", 0.0f);
-            gp->AddItem(groupName, "endValue",   1.0f);
-        } else if constexpr (std::is_same_v<T, Vector2>) {
-            gp->AddItem(groupName, "startValue", Vector2{});
-            gp->AddItem(groupName, "endValue",   Vector2{1.0f, 1.0f});
-        } else if constexpr (std::is_same_v<T, Vector3>) {
-            gp->AddItem(groupName, "startValue", Vector3{});
-            gp->AddItem(groupName, "endValue",   Vector3{1.0f, 1.0f, 1.0f});
-        } else if constexpr (std::is_same_v<T, Vector4>) {
-            gp->AddItem(groupName, "startValue", Vector4{});
-            gp->AddItem(groupName, "endValue",   Vector4{1.0f, 1.0f, 1.0f, 1.0f});
-        }
-
-        gp->LoadFile(groupName, folderName);
-    }
-
-    EasingParameter<T> param;
-    param.type            = static_cast<EasingType>(gp->GetValue<int32_t>(groupName, "type"));
-    param.finishType      = static_cast<EasingFinishValueType>(gp->GetValue<int32_t>(groupName, "finishType"));
-    param.maxTime         = gp->GetValue<float>(groupName, "maxTime");
-    param.returnMaxTime   = gp->GetValue<float>(groupName, "returnMaxTime");
-    param.returnType      = static_cast<EasingType>(gp->GetValue<int32_t>(groupName, "returnType"));
-    param.amplitude       = gp->GetValue<float>(groupName, "amplitude");
-    param.period          = gp->GetValue<float>(groupName, "period");
-    param.finishOffsetTime = gp->GetValue<float>(groupName, "finishOffsetTime");
-    param.waitTimeMax     = gp->GetValue<float>(groupName, "waitTime");
-    param.startTimeOffset = gp->GetValue<float>(groupName, "StartTimeOffset");
-
-    if constexpr (std::is_same_v<T, float>) {
-        param.startValue = gp->GetValue<float>(groupName, "startValue");
-        param.endValue   = gp->GetValue<float>(groupName, "endValue");
-    } else if constexpr (std::is_same_v<T, Vector2>) {
-        param.startValue = gp->GetValue<Vector2>(groupName, "startValue");
-        param.endValue   = gp->GetValue<Vector2>(groupName, "endValue");
-    } else if constexpr (std::is_same_v<T, Vector3>) {
-        param.startValue = gp->GetValue<Vector3>(groupName, "startValue");
-        param.endValue   = gp->GetValue<Vector3>(groupName, "endValue");
-    } else if constexpr (std::is_same_v<T, Vector4>) {
-        param.startValue = gp->GetValue<Vector4>(groupName, "startValue");
-        param.endValue   = gp->GetValue<Vector4>(groupName, "endValue");
-    }
-
-    SettingValue(param);
-
-    currentAppliedFileName_ = fileName;
-    auto it = std::find(easingFiles_.begin(), easingFiles_.end(), stem);
-    if (it != easingFiles_.end()) {
-        selectedFileIndex_ = static_cast<int>(std::distance(easingFiles_.begin(), it));
-    }
-}
-
-template <typename T>
-void Easing<T>::ApplyForImGui() {
-    FilePathChangeForType();
-
-    easingFiles_ = GetFileNamesForDirectory(FilePath_ + filePathForType_);
-
-    if (easingFiles_.empty()) {
-        return;
-    }
-
-    std::vector<const char*> fileNamesCStr;
-    for (const auto& name : easingFiles_) {
-        fileNamesCStr.push_back(name.c_str());
-    }
-#if defined(_DEBUG) || defined(DEVELOPMENT)
-
-    // 現在適用されているファイル名を表示
-    if (!currentAppliedFileName_.empty()) {
-        ImGui::Text("Currently Applied: %s", currentAppliedFileName_.c_str());
-    }
-
-    // Combo UI表示
-    if (ImGui::Combo("Easing Preset", &selectedFileIndex_, fileNamesCStr.data(), static_cast<int>(fileNamesCStr.size()))) {
-        // Comboで選択が変更された時
-        const std::string selectedFile = easingFiles_[selectedFileIndex_] + ".json";
-
-        // 同じファイルが既に適用されている場合はスキップ
-        if (currentAppliedFileName_ == selectedFile) {
-            return;
-        }
-        // 選択されたファイルを適用
-        ApplyFromJson(selectedFile);
-    }
-
-#endif // _DEBUG
-}
-
 // 時間を進めて値を更新
 template <typename T>
 void Easing<T>::Update(float deltaTime) {
-
     currentStartTimeOffset_ += deltaTime;
 
     if (!IsEasingStarted()) {
@@ -204,26 +118,24 @@ void Easing<T>::Update(float deltaTime) {
     isPlaying_ = true;
     CalculateValue();
 
-    //  終了時間を過ぎたら終了処理
     if (currentTime_ < maxTime_ - finishTimeOffset_) {
-        return; // まだ再生中
+        return;
     }
 
     isPlaying_ = false;
     FinishBehavior();
 
-    if (onFinishCallback_) { // Easing終了時のコールバック
+    if (onFinishCallback_) {
         onFinishCallback_();
     }
 
-    // 待機時間の加算
     waitTime_ += deltaTime;
 
     if (waitTime_ < waitTimeMax_) {
         return;
     }
 
-    if (onWaitEndCallback_) { // 待機終了時のコールバック
+    if (onWaitEndCallback_) {
         onWaitEndCallback_();
     }
 }
@@ -235,22 +147,6 @@ void Easing<T>::ResetStartValue() {
 }
 
 template <typename T>
-void Easing<T>::FilePathChangeForType() {
-    if constexpr (std::is_same_v<T, float>) {
-        filePathForType_ = "float";
-
-    } else if constexpr (std::is_same_v<T, Vector2>) {
-        filePathForType_ = "Vector2";
-
-    } else if constexpr (std::is_same_v<T, Vector3>) {
-        filePathForType_ = "Vector3";
-
-    } else if constexpr (std::is_same_v<T, Vector4>) {
-        filePathForType_ = "Vector4";
-    }
-}
-
-template <typename T>
 void Easing<T>::CalculateValue() {
     T startValue = {};
     T endValue   = {};
@@ -258,33 +154,28 @@ void Easing<T>::CalculateValue() {
         startValue = endValue_ + baseValue_;
         endValue   = startValue_ + baseValue_;
     } else {
-
         startValue = startValue_ + baseValue_;
         endValue   = endValue_ + baseValue_;
     }
 
-    // currentOffsetのイージング計算
     if (!adaptTarget_) {
         return;
     }
 
-    // maxTime_ が 0 の場合は終端値をセットして終了
     if (maxTime_ <= 0.0f) {
         *adaptTarget_ = endValue;
         return;
     }
 
-    float savedTime = currentTime_;
-    float savedMax  = maxTime_;
+    float savedTime      = currentTime_;
+    float savedMax       = maxTime_;
     EasingType savedType = type_;
 
     if (returnMaxTime_ > 0.0f) {
         if (savedTime <= forwardMaxTime_) {
-            // 前進フェーズ
             currentTime_ = savedTime;
             maxTime_     = forwardMaxTime_;
         } else {
-            // 後退フェーズ
             std::swap(startValue, endValue);
             currentTime_ = savedTime - forwardMaxTime_;
             maxTime_     = returnMaxTime_;
@@ -293,7 +184,6 @@ void Easing<T>::CalculateValue() {
     }
 
     switch (type_) {
-
     case EasingType::InSine:
         *adaptTarget_ = EaseInSine(startValue, endValue, currentTime_, maxTime_);
         break;
@@ -355,7 +245,6 @@ void Easing<T>::CalculateValue() {
         *adaptTarget_ = EaseOutQuart(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutQuart:
-        /*    currentOffset_ = EaseInOutQuart(startValue, endValue, currentTime_, maxTime_);*/
         break;
     case EasingType::InBack:
         *adaptTarget_ = EaseInBack(startValue, endValue, currentTime_, maxTime_);
@@ -375,15 +264,11 @@ void Easing<T>::CalculateValue() {
     case EasingType::InOutBounce:
         *adaptTarget_ = EaseInOutBounce(startValue, endValue, currentTime_, maxTime_);
         break;
-
-    //  特殊イージング
     case EasingType::SquishyScaling:
         *adaptTarget_ = EaseAmplitudeScale(startValue, currentTime_, maxTime_, amplitude_, period_);
         break;
-
     }
 
-    // 2フェーズ計算のために一時変更した値を復元
     if (returnMaxTime_ > 0.0f) {
         currentTime_ = savedTime;
         maxTime_     = savedMax;
@@ -403,23 +288,16 @@ void Easing<T>::Easing::FinishBehavior() {
 
     switch (finishValueType_) {
     case EasingFinishValueType::Start:
-        if (isStartEndReverse_) {
-            *adaptTarget_ = endValue_ + baseValue_;
-        } else {
-            *adaptTarget_ = startValue_ + baseValue_;
-        }
+        *adaptTarget_ = isStartEndReverse_ ? endValue_ + baseValue_ : startValue_ + baseValue_;
         break;
     case EasingFinishValueType::End:
-        if (isStartEndReverse_) {
-            *adaptTarget_ = startValue_ + baseValue_;
-        } else {
-            *adaptTarget_ = endValue_ + baseValue_;
-        }
+        *adaptTarget_ = isStartEndReverse_ ? startValue_ + baseValue_ : endValue_ + baseValue_;
         break;
     default:
         break;
     }
 }
+
 template <typename T>
 void Easing<T>::Easing::SetAdaptValue(T* value) {
     adaptTarget_ = value;
@@ -429,6 +307,7 @@ template <typename T>
 void Easing<T>::Easing::SetCurrentOffset(const T& value) {
     *adaptTarget_ = value;
 }
+
 template <typename T>
 bool Easing<T>::IsEasingStarted() const {
     return currentStartTimeOffset_ >= startTimeOffset_;

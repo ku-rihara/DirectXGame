@@ -4,6 +4,7 @@
 using namespace KetaEngine;
 // editor
 #include "Editor/CameraEditor/CameraEditor.h"
+#include "Editor/EasingEditor/EasingEditor.h"
 #include "Editor/DissolveEditor/DissolveEditor.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationEditor.h"
 #include "Editor/PostEffectEditor/PostEffectEditor.h"
@@ -36,6 +37,9 @@ void EffectEditorSuite::Init() {
     timeScaleEditor_           = std::make_unique<TimeScaleEditor>();
     ribbonTrailEditor_         = std::make_unique<RibbonTrailEditor>();
     postEffectEditor_          = std::make_unique<PostEffectEditor>();
+    easingEditorFloat_         = std::make_unique<EasingEditor<float>>();
+    easingEditorVec2_          = std::make_unique<EasingEditor<Vector2>>();
+    easingEditorVec3_          = std::make_unique<EasingEditor<Vector3>>();
 
     // 初期化
     objEaseAnimationEditor_->Init("ObjEaseAnimation");
@@ -49,6 +53,9 @@ void EffectEditorSuite::Init() {
     timeScaleEditor_->Init("TimeScale");
     ribbonTrailEditor_->Init("RibbonTrail");
     postEffectEditor_->Init("PostEffect");
+    easingEditorFloat_->Init("EasingFloat");
+    easingEditorVec2_->Init("EasingVec2");
+    easingEditorVec3_->Init("EasingVec3");
 
     // SelectFileEditマップを初期化
     InitEditorSelectFileEditMap();
@@ -67,6 +74,9 @@ void EffectEditorSuite::Init() {
         {"TimeScale", EffectEditorType::TimeScale},
         {"RibbonTrail", EffectEditorType::RibbonTrail},
         {"PostEffect", EffectEditorType::PostEffect},
+        {"EasingFloat", EffectEditorType::EasingFloat},
+        {"EasingVec2",  EffectEditorType::EasingVec2},
+        {"EasingVec3",  EffectEditorType::EasingVec3},
     };
     EffectInlineEditRequest::SetCallback([this](const std::string& editorType, const std::string& name, const std::string& category) {
         auto it = kTypeNameMap.find(editorType);
@@ -88,6 +98,9 @@ void EffectEditorSuite::Update() {
     timeScaleEditor_->Update(Frame::DeltaTime());
     ribbonTrailEditor_->Update();
     postEffectEditor_->Update();
+    easingEditorFloat_->Update();
+    easingEditorVec2_->Update();
+    easingEditorVec3_->Update();
 }
 
 void EffectEditorSuite::EditorUpdate() {
@@ -102,6 +115,9 @@ void EffectEditorSuite::EditorUpdate() {
     timeScaleEditor_->EditorUpdate();
     ribbonTrailEditor_->EditorUpdate();
     postEffectEditor_->EditorUpdate();
+    easingEditorFloat_->EditorUpdate();
+    easingEditorVec2_->EditorUpdate();
+    easingEditorVec3_->EditorUpdate();
 
     // コンボエディターからのインライン編集ウィンドウ
     DrawInlineEditorWindow();
@@ -141,6 +157,15 @@ void EffectEditorSuite::InitEditorSelectFileEditMap() {
          }},
         {EffectEditorType::PostEffect, [this](const std::string& name, const std::string& category) {
              postEffectEditor_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::EasingFloat, [this](const std::string& name, const std::string& category) {
+             easingEditorFloat_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::EasingVec2, [this](const std::string& name, const std::string& category) {
+             easingEditorVec2_->SelectFileEdit(name, category);
+         }},
+        {EffectEditorType::EasingVec3, [this](const std::string& name, const std::string& category) {
+             easingEditorVec3_->SelectFileEdit(name, category);
          }}};
 }
 
@@ -326,9 +351,19 @@ void EffectEditorSuite::InitEditorSaveLoadMaps() {
          }},
         {EffectEditorType::PostEffect, [this](const std::string& name, const std::string& category) {
              auto* effect = postEffectEditor_->GetEffectByName(category, name);
-             if (effect) {
-                 effect->SaveData();
-             }
+             if (effect) { effect->SaveData(); }
+         }},
+        {EffectEditorType::EasingFloat, [this](const std::string& name, const std::string& category) {
+             auto* effect = easingEditorFloat_->GetEffectByName(category, name);
+             if (effect) { effect->SaveData(); }
+         }},
+        {EffectEditorType::EasingVec2, [this](const std::string& name, const std::string& category) {
+             auto* effect = easingEditorVec2_->GetEffectByName(category, name);
+             if (effect) { effect->SaveData(); }
+         }},
+        {EffectEditorType::EasingVec3, [this](const std::string& name, const std::string& category) {
+             auto* effect = easingEditorVec3_->GetEffectByName(category, name);
+             if (effect) { effect->SaveData(); }
          }},
     };
 
@@ -378,9 +413,19 @@ void EffectEditorSuite::InitEditorSaveLoadMaps() {
          }},
         {EffectEditorType::PostEffect, [this](const std::string& name, const std::string& category) {
              auto* effect = postEffectEditor_->GetEffectByName(category, name);
-             if (effect) {
-                 effect->LoadData();
-             }
+             if (effect) { effect->LoadData(); }
+         }},
+        {EffectEditorType::EasingFloat, [this](const std::string& name, const std::string& category) {
+             auto* effect = easingEditorFloat_->GetEffectByName(category, name);
+             if (effect) { effect->LoadData(); }
+         }},
+        {EffectEditorType::EasingVec2, [this](const std::string& name, const std::string& category) {
+             auto* effect = easingEditorVec2_->GetEffectByName(category, name);
+             if (effect) { effect->LoadData(); }
+         }},
+        {EffectEditorType::EasingVec3, [this](const std::string& name, const std::string& category) {
+             auto* effect = easingEditorVec3_->GetEffectByName(category, name);
+             if (effect) { effect->LoadData(); }
          }},
     };
 }

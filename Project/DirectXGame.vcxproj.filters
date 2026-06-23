@@ -163,9 +163,6 @@
     <Filter Include="Engine\Collider\SpatialGrid">
       <UniqueIdentifier>{82151164-B5EB-4B95-8FA3-AB4A1ECD51BD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Editor\Easing\EasingCreator">
-      <UniqueIdentifier>{BAC0D2EA-C812-4AFB-A013-E4F69E4D26F3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Editor\BaseEffectEditor">
       <UniqueIdentifier>{A1CBDAD8-5B0E-4F08-B7E1-6B114C95B7E8}</UniqueIdentifier>
     </Filter>
@@ -690,8 +687,8 @@
     <ClCompile Include="Engine\Editor\Easing\Easing.cpp">
       <Filter>Engine\Editor\Easing</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Editor\Easing\EasingCreator\EasingParameterData.cpp">
-      <Filter>Engine\Editor\Easing\EasingCreator</Filter>
+    <ClCompile Include="Engine\Editor\Easing\EasingParameterData.cpp">
+      <Filter>Engine\Editor\Easing</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\Easing\EasingFunction.cpp">
       <Filter>Engine\Editor\Easing</Filter>
@@ -784,6 +781,9 @@
       <Filter>Engine\Editor\EasingEditor</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\EasingEditor\EasingEditor.cpp">
+      <Filter>Engine\Editor\EasingEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\EasingEditor\EasingPlayer.cpp">
       <Filter>Engine\Editor\EasingEditor</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\ShakeEditor\ShakeData.cpp">
@@ -1762,8 +1762,8 @@
     <ClInclude Include="Engine\Editor\Easing\Easing.h">
       <Filter>Engine\Editor\Easing</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Editor\Easing\EasingCreator\EasingParameterData.h">
-      <Filter>Engine\Editor\Easing\EasingCreator</Filter>
+    <ClInclude Include="Engine\Editor\Easing\EasingParameterData.h">
+      <Filter>Engine\Editor\Easing</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\Easing\EasingFunction.h">
       <Filter>Engine\Editor\Easing</Filter>
@@ -1853,6 +1853,9 @@
       <Filter>Engine\Editor\EasingEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\EasingEditor\EasingEditor.h">
+      <Filter>Engine\Editor\EasingEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\EasingEditor\EasingPlayer.h">
       <Filter>Engine\Editor\EasingEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Editor\ShakeEditor\ShakeData.h">

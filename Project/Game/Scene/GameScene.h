@@ -4,7 +4,6 @@
 #include "BaseScene.h"
 #include "GameSceneState/BaseGameSceneState.h"
 #include "GameObj.h"
-#include "Editor/EasingEditor/EasingEditor.h"
 
 /// <summary>
 /// ゲームシーン
@@ -43,9 +42,6 @@ private:
     std::unique_ptr<BaseGameSceneState> state_ = nullptr;
     GameObj gameObj_;
 
-    KetaEngine::EasingEditor<float>   easingEditorFloat_;
-    KetaEngine::EasingEditor<Vector2> easingEditorVec2_;
-    KetaEngine::EasingEditor<Vector3> easingEditorVec3_;
 
 public:
     GameObj& GetGameObj() { return gameObj_; }

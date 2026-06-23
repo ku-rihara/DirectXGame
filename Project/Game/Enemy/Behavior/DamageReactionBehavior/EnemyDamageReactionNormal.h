@@ -9,7 +9,6 @@ class PlayerAttackCollider;
 
 /// <summary>
 /// Normal ダメージリアクション
-/// ノックバックのみ
 /// </summary>
 class EnemyDamageReactionNormal : public BaseEnemyDamageReaction {
 public:
@@ -18,23 +17,32 @@ public:
         EnemyDamageReactionData* reactionData,
         const PlayerAttackCollider* playerCollisionInfo,
         bool skipAnimation = false);
-    ~EnemyDamageReactionNormal() override;
 
+    ~EnemyDamageReactionNormal() override;
+    
+    // 更新、デバッグ
     void Update(float deltaTime) override;
     void Debug() override;
 
 private:
+    // リアクション演出初期化、更新
     void InitReaction();
-    void UpdateNormal();
+    void UpdateReaction();
+
+    // アニメーション再生ヘルパー
+    void PlayDamageAnim(const std::string& animName, int enemyType);
+    void PlayDefaultDamageAnim(int enemyType);
+
+    // リアクション終了判定・処理
     bool IsReactionFinished() const;
     void OnReactionEnd();
 
 private:
-    EnemyDamageReactionData* pReactionData_ = nullptr;
+    EnemyDamageReactionData* pReactionData_           = nullptr;
     const PlayerAttackCollider* pPlayerCollisionInfo_ = nullptr;
 
     // タイマー
-    float reactionTimer_ = 0.0f;
+    float reactionTimer_     = 0.0f;
     float totalReactionTime_ = 1.0f;
 
     // Normal用パラメータ
@@ -46,12 +54,11 @@ private:
     EnemyDamageRendition damageRendition_;
     bool hasPlayedRendition_ = false;
 
-    bool skipAnimation_ = false; ///< 同一攻撃の再再生間隔未満でのヒット時はアニメーションをスキップ
+    bool skipAnimation_ = false;
+
+    const float kDefaultKnockBackTime    = 0.5f;
+    const float kDefaultKnockBackDamping = 5.0f;
 
 public:
     Vector3 GetKnockBackVelocity() const { return knockBackVelocity_; }
-
-private:
-    static constexpr float kDefaultKnockBackTime    = 0.5f;
-    static constexpr float kDefaultKnockBackDamping = 5.0f;
 };

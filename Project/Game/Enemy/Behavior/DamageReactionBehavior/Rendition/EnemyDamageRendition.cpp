@@ -25,26 +25,27 @@ void EnemyDamageRendition::Update(
 
     currentTime_ += deltaTime;
 
-    // すでに再生済みの場合は何もしない
+    // 再生済みの場合はスキップ
     if (hasPlayedRendition) {
         return;
     }
 
+    // 演出パラメータ取得（未設定ならデフォルトを引かせる）
     const EnemyDamageRenditionData* rendition = pReactionData_ ? pReactionData_->GetRendition() : nullptr;
 
-    std::string easeFileName = "None";
-    float easeTiming = 0.0f;
+    std::string easeFileName     = "None";
+    float easeTiming             = 0.0f;
     std::string particleFileName = "None";
-    float particleTiming = 0.0f;
+    float particleTiming         = 0.0f;
 
     if (rendition) {
-        easeFileName = rendition->GetObjAnimationParam().fileName;
-        easeTiming = rendition->GetObjAnimationParam().startTiming;
+        easeFileName     = rendition->GetObjAnimationParam().fileName;
+        easeTiming       = rendition->GetObjAnimationParam().startTiming;
         particleFileName = rendition->GetParticleEffectParam().fileName;
-        particleTiming = rendition->GetParticleEffectParam().startTiming;
+        particleTiming   = rendition->GetParticleEffectParam().startTiming;
     } else {
-        // デフォルトとして空文字を指定し、下のロジックでデフォルト名を引かせる
-        easeFileName = "";
+        // データ未設定: 空文字にしてデフォルト名を引かせる
+        easeFileName     = "";
         particleFileName = "";
     }
 
@@ -52,9 +53,9 @@ void EnemyDamageRendition::Update(
     if (easeFileName != "None") {
         if (easeFileName.empty()) {
             const auto* controller = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
-            int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
-            easeFileName = controller->GetDefaultObjEaseAnimationName(enemyType);
-            easeTiming = controller->GetDefaultObjEaseAnimationStartTiming(enemyType);
+            int enemyType          = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
+            easeFileName           = controller->GetDefaultObjEaseAnimationName(enemyType);
+            easeTiming             = controller->GetDefaultObjEaseAnimationStartTiming(enemyType);
         }
 
         if (reactionTimer >= easeTiming && !easeFileName.empty() && easeFileName != "None") {
@@ -68,9 +69,9 @@ void EnemyDamageRendition::Update(
     if (particleFileName != "None") {
         if (particleFileName.empty()) {
             const auto* controller = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
-            int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
-            particleFileName = controller->GetDefaultParticleEffectName(enemyType);
-            particleTiming = 0.0f;
+            int enemyType          = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
+            particleFileName       = controller->GetDefaultParticleEffectName(enemyType);
+            particleTiming         = 0.0f;
         }
 
         if (reactionTimer >= particleTiming && !particleFileName.empty() && particleFileName != "None") {
@@ -80,7 +81,7 @@ void EnemyDamageRendition::Update(
         }
     }
 
-    // 両方の演出のタイミングをチェックして、いずれかが再生されたら完了
+    // 両演出のタイミングを確認し、両方準備完了で再生済みフラグを立てる
     bool animReady = false;
     if (easeFileName.empty() || easeFileName == "None") {
         animReady = true;

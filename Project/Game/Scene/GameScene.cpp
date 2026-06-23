@@ -19,10 +19,6 @@ void GameScene::Init() {
     // クラスポインタセット
     SetClassPointer();
 
-    easingEditorFloat_.Init("EasingFloat");
-    easingEditorVec2_.Init("EasingVec2");
-    easingEditorVec3_.Init("EasingVec3");
-
     // 初期ステートを設定
     state_ = std::make_unique<GameSceneIntro>(this);
     state_->Init();
@@ -32,10 +28,6 @@ void GameScene::Init() {
 
 void GameScene::Update() {
     BaseScene::Update();
-
-    easingEditorFloat_.Update();
-    easingEditorVec2_.Update();
-    easingEditorVec3_.Update();
 
     // 現在のステートを更新
     if (state_) {
@@ -83,11 +75,6 @@ void GameScene::Debug() {
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 
-    ImGui::Begin("EasingEditor");
-    easingEditorFloat_.EditorUpdate();
-    easingEditorVec2_.EditorUpdate();
-    easingEditorVec3_.EditorUpdate();
-    ImGui::End();
 
     ImGui::Begin("PlayerAttack");
     gameObj_.playerComboAttackController_->EditorUpdate();

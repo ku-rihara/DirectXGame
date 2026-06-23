@@ -19,7 +19,6 @@
 /// math
 #include "Frame/Frame.h"
 
-// 初期化
 EnemyDamageReactionRoot::EnemyDamageReactionRoot(BaseEnemy* boss)
     : BaseEnemyDamageReaction("EnemyDamageReactionRoot", boss) {
 
@@ -32,7 +31,7 @@ EnemyDamageReactionRoot::~EnemyDamageReactionRoot() {
 void EnemyDamageReactionRoot::Update(float deltaTime) {
     deltaTime;
 
-    // 死亡予約済みのままRootに戻った場合のフォールバック（HP > 0 の健全な敵には適用しない）
+    // 死亡予約済みでRootに戻った場合のフォールバック
     if (pBaseEnemy_->GetIsDeathPending() && !pBaseEnemy_->GetIsDeath() && pBaseEnemy_->GetHP() <= 0.0f) {
         pBaseEnemy_->SetIsAdaptCollision(false);
         pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
@@ -43,6 +42,7 @@ void EnemyDamageReactionRoot::Debug() {
 }
 
 void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerAttackCollider* playerCollisionInfo, bool skipAnimation) {
+    // null チェック
     if (!playerCollisionInfo) {
         return;
     }
@@ -51,9 +51,11 @@ void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerAtt
         return;
     }
 
+    // ポインタ保存
     pPlayerCollisionInfo_ = playerCollisionInfo;
     skipAnimation_        = skipAnimation;
 
+    // 攻撃名でリアクションを選択
     std::string attackName = playerCollisionInfo->GetComboAttackData()->GetGroupName();
 
     if (!attackName.empty()) {
@@ -78,6 +80,8 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
         int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
         pBaseEnemy_->StartDamageColling(pReactionController_->GetDefaultDamageCoolTime(enemyType), attackName);
         pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
+
+        // HP に応じて死亡 or ノックバックへ遷移
         if (pBaseEnemy_->GetHP() <= 0.0f) {
             pBaseEnemy_->SetIsDeathPending(true);
             pBaseEnemy_->SetIsAdaptCollision(false);
@@ -100,7 +104,6 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
         ChangeDeathReaction(reactionData);
     } else {
         // blowYPowerでリアクション種別を自動判定
-    
         float blowYPower = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
 
         if (blowYPower > 0.0f) {

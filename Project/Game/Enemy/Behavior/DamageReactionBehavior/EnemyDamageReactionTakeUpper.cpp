@@ -1,12 +1,15 @@
 #include "EnemyDamageReactionTakeUpper.h"
-#include "EnemyDamageReactionRoot.h"
+// Behavior
 #include "EnemyDeath.h"
-#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
+// Types
 #include "Enemy/Types/BaseEnemy.h"
+// Manager
 #include "Enemy/EnemyManager/EnemyManager.h"
 #include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionController.h"
-#include "Player/Player.h"
+// Player
 #include "Player/ComboCreator/PlayerComboAttackData.h"
+#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
+// Frame
 #include "Frame/Frame.h"
 
 EnemyDamageReactionTakeUpper::EnemyDamageReactionTakeUpper(
@@ -15,14 +18,18 @@ EnemyDamageReactionTakeUpper::EnemyDamageReactionTakeUpper(
     const PlayerAttackCollider* playerCollisionInfo)
     : BaseEnemyDamageReaction("EnemyDamageReactionTakeUpper", boss) {
 
-    pReactionData_ = reactionData;
+    // ポインタ保存
+    pReactionData_        = reactionData;
     pPlayerCollisionInfo_ = playerCollisionInfo;
 
+    // 初期化
     InitReaction();
     damageRendition_.Init(pBaseEnemy_, pReactionData_);
 
     // 初期フェーズを設定
-    currentPhase_ = [this]() { UpdatePhase(); };
+    currentPhase_ = [this]() {
+        UpdatePhase();
+    };
 }
 
 EnemyDamageReactionTakeUpper::~EnemyDamageReactionTakeUpper() {
@@ -43,15 +50,20 @@ void EnemyDamageReactionTakeUpper::Update(float deltaTime) {
         return;
     }
 
+    // 演出・リアクション更新
     damageRendition_.Update(deltaTime, reactionTimer_, hasPlayedRendition_);
+
+    // 経過時間加算
     reactionTimer_ += deltaTime;
 
+    // フェーズ更新
     if (currentPhase_) {
         currentPhase_();
     }
 }
 
 void EnemyDamageReactionTakeUpper::UpdatePhase() {
+    // 水平ノックバック・打ち上げ処理
     UpdateNormal();
     UpdateTakeUpper();
 
@@ -60,10 +72,13 @@ void EnemyDamageReactionTakeUpper::UpdatePhase() {
         return;
     }
 
+    // 終了判定
     if (IsReactionFinished()) {
         OnReactionEnd();
-        endType_ = EndType::BackToRoot;
-        currentPhase_ = [this]() { GetUpPhase(); };
+        endType_      = EndType::BackToRoot;
+        currentPhase_ = [this]() {
+            GetUpPhase();
+        };
     }
 }
 
@@ -79,64 +94,54 @@ void EnemyDamageReactionTakeUpper::Debug() {
 }
 
 void EnemyDamageReactionTakeUpper::InitReaction() {
+    // null チェック
     if (!pReactionData_ || !pPlayerCollisionInfo_) {
         return;
     }
 
     const auto& reactionParam = pReactionData_->GetReactionParam();
 
-    // ダメージアニメーションを再生（敵タイプ別）
+    // ダメージアニメーション再生
     int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
-    const auto& animName = reactionParam.damageAnimationNames[enemyType];
-    if (animName == "None") {
-        // "None"が設定されている場合は何もしない
-    } else if (animName.empty()) {
-        // 空の場合はデフォルトアニメーションを再生
-        const auto* controller = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
-        const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::TakeUpper);
-        if (!defaultAnim.empty()) {
-            pBaseEnemy_->GetAnimator()->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(defaultAnim));
-        }
-    } else {
-        pBaseEnemy_->GetAnimator()->PlayAnimationByName(animName, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(animName));
-    }
+    PlayDamageAnim(reactionParam.damageAnimationNames[enemyType], enemyType);
 
-    blowYPower_ = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
+    // 物理パラメータ取得
+    blowYPower_     = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
     knockBackPower_ = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().knockBackPower;
 
-    // プレイヤーから敵への方向ベクトルを計算
-    Vector3 playerPos = pPlayerCollisionInfo_->GetPlayerTransform()->GetWorldPos();
-    Vector3 enemyPos = pBaseEnemy_->GetWorldPosition();
-    Vector3 direction = enemyPos - playerPos;
-    direction.y = 0.0f;
-    direction = direction.Normalize();
+    // 方向ベクトルを計算
+    Vector3 playerPos  = pPlayerCollisionInfo_->GetPlayerTransform()->GetWorldPos();
+    Vector3 enemyPos   = pBaseEnemy_->GetWorldPosition();
+    Vector3 direction  = enemyPos - playerPos;
+    direction.y        = 0.0f;
+    direction          = direction.Normalize();
 
     knockBackVelocity_ = direction * knockBackPower_;
-    knockBackTimer_ = 0.0f;
+    knockBackTimer_    = 0.0f;
 
     // バウンドパラメータの設定
     const auto& boundParam = reactionParam.boundParam;
-    maxBoundCount_ = boundParam.boundNum;
-    bounceDamping_ = boundParam.bounceDamping;
-    initialBounceRate_ = boundParam.initialBounceRate;
-    currentBoundCount_ = 0;
+    maxBoundCount_         = boundParam.boundNum;
+    bounceDamping_         = boundParam.bounceDamping;
+    initialBounceRate_     = boundParam.initialBounceRate;
+    currentBoundCount_     = 0;
 
-    // TakeUpper固有のパラメータ
+    // TakeUpper固有パラメータ
     const auto& takeUpperParam = reactionParam.takeUpperParam;
-    floatingTime_ = takeUpperParam.floatingTime;
-    hasReachedPeak_ = false;
-    floatingTimer_ = 0.0f;
-    hasReachedGround_ = false;
+    floatingTime_              = takeUpperParam.floatingTime;
+    hasReachedPeak_            = false;
+    floatingTimer_             = 0.0f;
+    hasReachedGround_          = false;
 
-    // 吹っ飛び速度
-    jumpSpeed_ = std::abs(blowYPower_);
-    initialPosition_ = pBaseEnemy_->GetWorldPosition();
+    // 吹っ飛び初速
+    jumpSpeed_        = std::abs(blowYPower_);
+    initialPosition_  = pBaseEnemy_->GetWorldPosition();
 
-    takeUpperGravity_ = takeUpperParam.gravity;
-    takeUpperRotateSpeed_ = takeUpperParam.rotateSpeed;
-    takeUpperFallLimit_ = takeUpperParam.fallSpeedLimit;
+    takeUpperGravity_      = takeUpperParam.gravity;
+    takeUpperRotateSpeed_  = takeUpperParam.rotateSpeed;
+    takeUpperFallLimit_    = takeUpperParam.fallSpeedLimit;
 
-    reactionTimer_ = 0.0f;
+    reactionTimer_      = 0.0f;
     hasPlayedRendition_ = false;
 }
 
@@ -147,8 +152,10 @@ void EnemyDamageReactionTakeUpper::UpdateNormal() {
 
     const auto& param = pReactionData_->GetReactionParam().normalParam;
 
+    // タイマー更新
     knockBackTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
+    // ノックバック中のみ水平移動を適用
     if (knockBackTimer_ < param.knockBackTime) {
         float dampingFactor = 1.0f - (param.knockBackDamping * KetaEngine::Frame::DeltaTimeRate());
         knockBackVelocity_ *= dampingFactor;
@@ -166,7 +173,7 @@ void EnemyDamageReactionTakeUpper::UpdateTakeUpper() {
 
     const auto& enemyParam = pBaseEnemy_->GetBaseInfo()->GetParameter();
 
-    // 頂点に到達していない場合は上昇
+    // 頂点到達前: 上昇フェーズ
     if (!hasReachedPeak_) {
         // 重力を適用しながらジャンプ
         pBaseEnemy_->Jump(jumpSpeed_, takeUpperFallLimit_, takeUpperGravity_);
@@ -177,33 +184,32 @@ void EnemyDamageReactionTakeUpper::UpdateTakeUpper() {
         // 速度が0以下になったら頂点到達
         if (jumpSpeed_ <= 0.0f) {
             hasReachedPeak_ = true;
-            floatingTimer_ = 0.0f;
+            floatingTimer_  = 0.0f;
         }
     }
-    // 頂点到達後、浮遊時間中
+    // 頂点到達後: 浮遊フェーズ
     else if (floatingTimer_ < floatingTime_) {
         floatingTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
         // 回転演出
         RotationUpdate();
     }
-    // 浮遊時間終了後、落下
+    // 浮遊終了後: 落下フェーズ
     else {
-        // 落下中
         pBaseEnemy_->Fall(jumpSpeed_, takeUpperFallLimit_, takeUpperGravity_, false);
 
         // 回転継続
         RotationUpdate();
 
-        // 地面に着地したらバウンド処理へ
+        // 地面着地でバウンド処理へ
         if (pBaseEnemy_->GetWorldPosition().y < enemyParam.basePosY) {
             pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
             hasReachedGround_ = true;
 
             // バウンドアニメーション再生
             {
-                const auto* ctrl = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
-                int eType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
+                const auto* ctrl      = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+                int eType             = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
                 const auto& boundAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::Bound);
                 if (!boundAnim.empty()) {
                     pBaseEnemy_->GetAnimator()->PlayAnimationByName(boundAnim, false);
@@ -213,7 +219,7 @@ void EnemyDamageReactionTakeUpper::UpdateTakeUpper() {
             // バウンドエフェクト
             pBaseEnemy_->ThrustRenditionInit();
 
-            // HPが0以下の場合、1バウンドしてアニメなしで死亡
+            // 死亡予約済みの場合は1バウンドしてアニメなしで死亡
             if (pBaseEnemy_->GetIsDeathPending()) {
                 isDeathBounce_ = true;
                 maxBoundCount_ = 1;
@@ -246,7 +252,7 @@ void EnemyDamageReactionTakeUpper::UpdateBounce(float basePosY, float gravity) {
     // 回転処理
     RotationUpdate();
 
-    // 地面に着地したら次のバウンド
+    // 着地したら次のバウンド
     if (currentPos.y <= basePosY) {
         pBaseEnemy_->SetWorldPositionY(basePosY);
         currentBoundCount_++;
@@ -293,8 +299,8 @@ void EnemyDamageReactionTakeUpper::OnReactionEnd() {
     pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
 
     // 起き上がりアニメーション再生
-    const auto* ctrl = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
-    int eType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
+    const auto* ctrl      = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+    int eType             = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
     const auto& getUpAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::GetUp);
 
     if (getUpAnim.empty()) {
@@ -315,4 +321,23 @@ void EnemyDamageReactionTakeUpper::RotationUpdate() {
     // 回転演出
     Vector3 currentRotation = pBaseEnemy_->GetAnimator()->GetBodyRotation();
     pBaseEnemy_->GetAnimator()->SetBodyRotate(currentRotation + takeUpperRotateSpeed_ * KetaEngine::Frame::DeltaTimeRate());
+}
+
+void EnemyDamageReactionTakeUpper::PlayDefaultDamageAnim(int enemyType) {
+    const auto* ctrl = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+    const auto& anim = ctrl->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::TakeUpper);
+    if (!anim.empty()) {
+        pBaseEnemy_->GetAnimator()->PlayAnimationByName(anim, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(anim));
+    }
+}
+
+void EnemyDamageReactionTakeUpper::PlayDamageAnim(const std::string& animName, int enemyType) {
+    if (animName == "None") {
+        return;
+    }
+    if (animName.empty()) {
+        PlayDefaultDamageAnim(enemyType);
+        return;
+    }
+    pBaseEnemy_->GetAnimator()->PlayAnimationByName(animName, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(animName));
 }

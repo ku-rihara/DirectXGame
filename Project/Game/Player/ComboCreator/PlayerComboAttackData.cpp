@@ -1,8 +1,8 @@
-#include <format>
+﻿#include <format>
 #include "PlayerComboAttackData.h"
 #include "PlayerComboAttackController.h"
 // Easing
-#include "Editor/Easing/EasingCreator/EasingParameterData.h"
+#include "Editor/Easing/EasingParameterData.h"
 // Enemy
 #include "Enemy/EnemyManager/EnemyManager.h"
 // Player

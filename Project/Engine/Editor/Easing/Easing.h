@@ -1,70 +1,62 @@
 #pragma once
-#include "Editor/Easing/EasingCreator/EasingParameterData.h"
+#include "Editor/Easing/EasingParameterData.h"
 #include "vector2.h"
 #include "vector3.h"
 #include <cstdint>
 #include <functional>
 #include <string>
-#include <vector>
 
 /// <summary>
-/// イージングを扱うのテンプレートクラス
+/// イージングを扱うテンプレートクラス（純粋計算エンジン）
 /// </summary>
-/// <typeParam name="T">イージング対象の型(float, Vector2, Vector3)</typeParam>
 namespace KetaEngine {
+
 template <typename T>
 class Easing {
 public:
     Easing()  = default;
     ~Easing() = default;
 
-    // 初期化(ファイルロード)、更新
+    //*----------------------------- public Methods -----------------------------*//
+
+    // 初期化、更新
     void Init(const std::string& adaptFile);
     void Update(float deltaTime);
 
-    /// <summary>
-    /// イージングパラメータ設定
-    /// </summary>
-    /// <param name="easingParam">イージングパラメータ</param>
+    // イージングパラメータ、適用先変数を設定
     void SettingValue(const EasingParameter<T>& easingParam);
-
-    /// <summary>
-    /// JSONファイルから適用
-    /// </summary>
-    /// <param name="fileName">ファイル名</param>
-    void ApplyFromJson(const std::string& fileName);
-
-    /// <summary>
-    /// 変数に適用
-    /// </summary>
-    /// <param name="value">適用先の値</param>
     void SetAdaptValue(T* value);
 
-    // 　イージング終了コールバック、イージング待機終了コールバック
+    // コールバック関数
     void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
     void SetOnWaitEndCallback(const std::function<void()>& callback) { onWaitEndCallback_ = callback; }
 
-    void Reset();           //< リセット
-    void ResetStartValue(); //< 開始値にリセット
-    void ApplyForImGui();   //< ImGuiで適用
+    // リセット
+    void Reset();
+    void ResetStartValue();
 
 private:
-    void CalculateValue(); //< イージング値計算
-    void FinishBehavior(); //< 終了時の動作
-    void FilePathChangeForType(); //< ファイルパスを型に応じて変更
-    bool IsEasingStarted() const; //< イージング開始判定
+    //*---------------------------- private Methods ----------------------------*//
+
+    void CalculateValue();
+    void FinishBehavior();
+    void FilePathChangeForType();
+    bool IsEasingStarted() const;
 
 private:
+    //*---------------------------- private Variant ----------------------------*//
+
+    // イージング種別
     EasingType type_                       = EasingType::InSine;
     EasingFinishValueType finishValueType_ = EasingFinishValueType::End;
 
-    // イージングの開始値、終了値、基準の値、対象の値
-    T startValue_ = {};
-    T endValue_   = {};
-    T baseValue_  = {};
+    // 値
+    T startValue_   = {};
+    T endValue_     = {};
+    T baseValue_    = {};
     T* adaptTarget_ = nullptr;
 
-    // タイムパラメータ
+    // 時間
     float maxTime_     = 0.0f;
     float currentTime_ = 0.0f;
     float waitTimeMax_ = 0.0f;
@@ -75,31 +67,26 @@ private:
     float finishTimeOffset_       = 0.0f;
     float currentStartTimeOffset_ = 0.0f;
 
-    // 専用のイージングのパラメータ
+    // 弾性パラメータ
     float amplitude_ = 0.0f;
     float period_    = 0.0f;
 
-    EasingType returnType_  = EasingType::InSine; // 戻りフェーズのイージング種類
-    float returnMaxTime_    = 0.0f;               // 戻りフェーズの時間
-    float forwardMaxTime_   = 0.0f;               // 前進フェーズの時間
+    // 戻りフェーズ
+    EasingType returnType_ = EasingType::InSine;
+    float returnMaxTime_   = 0.0f;
+    float forwardMaxTime_  = 0.0f;
 
+    // 状態フラグ
     bool isFinished_ = false;
     bool isPlaying_  = false;
 
-private:
-    const std::string FilePath_ = "resources/GlobalParameter/EasingParameter/";
-
-    int32_t selectedFileIndex_ = 0;
-    std::vector<std::string> easingFiles_;
-    std::string currentAppliedFileName_;
-    std::string filePathForType_;
-    std::string currentSelectedFileName_;
-    std::string easingName_;
-
+    // コールバック
     std::function<void()> onFinishCallback_;
     std::function<void()> onWaitEndCallback_;
 
     bool isStartEndReverse_ = false;
+
+    std::string filePathForType_;
 
 public:
     ///========================================================
@@ -110,8 +97,8 @@ public:
     const T& GetStartValue() const { return startValue_; }
     bool IsFinished() const { return isFinished_; }
     bool IsPlaying() const { return isPlaying_; }
-    const std::string& GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
     float GetCurrentEaseTime() const { return currentTime_; }
+
     ///========================================================
     /// Setter
     ///========================================================

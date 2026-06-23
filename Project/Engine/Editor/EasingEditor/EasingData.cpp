@@ -1,7 +1,7 @@
 #include "EasingData.h"
 
 using namespace KetaEngine;
-#include "Editor/Easing/EasingCreator/EasingParameterData.h"
+#include "Editor/Easing/EasingParameterData.h"
 #include "Frame/Frame.h"
 #include "Vector2.h"
 #include "Vector3.h"

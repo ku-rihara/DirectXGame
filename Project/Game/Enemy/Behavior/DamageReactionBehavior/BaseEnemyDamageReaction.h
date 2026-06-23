@@ -4,6 +4,7 @@
 #include <string>
 
 class BaseEnemy;
+
 class BaseEnemyDamageReaction {
 public:
     BaseEnemyDamageReaction(const std::string& name, BaseEnemy* boss);
@@ -15,9 +16,10 @@ public:
 protected:
     // 振る舞い名
     std::string name_;
-    // ボス
+    // 敵ポインタ
     BaseEnemy* pBaseEnemy_ = nullptr;
 
+    // プレイヤーへの方向・目標角度
     Vector3 direction_;
     float objectiveAngle_;
 };

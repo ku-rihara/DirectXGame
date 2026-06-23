@@ -1,7 +1,7 @@
 #pragma once
 #include "Editor/BaseEffectEditor/BaseEffectData.h"
 #include "Editor/Easing/Easing.h"
-#include "Editor/Easing/EasingCreator/EasingParameterData.h"
+#include "Editor/Easing/EasingParameterData.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include <string>
@@ -22,6 +22,7 @@ public:
     void Reset() override;
     void Play() override;
 
+    // パラメータ調整
     void AdjustParam();
 
     static std::string GetStaticFolderName();

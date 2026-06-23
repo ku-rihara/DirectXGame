@@ -10,7 +10,6 @@ class PlayerAttackCollider;
 
 /// <summary>
 /// Slammed ダメージリアクション
-/// 叩きつけ → バウンド
 /// </summary>
 class EnemyDamageReactionSlammed : public BaseEnemyDamageReaction {
 public:
@@ -27,10 +26,12 @@ public:
         const PlayerAttackCollider* playerCollisionInfo);
     ~EnemyDamageReactionSlammed() override;
 
+    // 更新、デバッグ
     void Update(float deltaTime) override;
     void Debug() override;
 
 private:
+    // リアクション演出初期化
     void InitReaction();
 
     // フェーズ関数
@@ -42,13 +43,19 @@ private:
     void UpdateNormal();
     void UpdateSlammed();
     void UpdateBounce(float basePosY, float gravity);
-    bool IsReactionFinished() const;
-    void OnReactionEnd();
     void RotationUpdate();
 
+    // リアクション終了判定・処理
+    bool IsReactionFinished() const;
+    void OnReactionEnd();
+
+    // アニメーション再生ヘルパー
+    void PlayDamageAnim(const std::string& animName, int enemyType);
+    void PlayDefaultDamageAnim(int enemyType);
+
 private:
-    EnemyDamageReactionData* pReactionData_ = nullptr;
-    const PlayerAttackCollider* pPlayerCollisionInfo_ = nullptr;
+    EnemyDamageReactionData* pReactionData_            = nullptr;
+    const PlayerAttackCollider* pPlayerCollisionInfo_  = nullptr;
 
     // フェーズ管理
     std::function<void()> currentPhase_;
@@ -61,13 +68,13 @@ private:
     float blowYPower_;
     float knockBackPower_;
 
-    // Normal用パラメータ
+    // 水平ノックバック
     Vector3 knockBackVelocity_;
     float knockBackTimer_ = 0.0f;
 
     // バウンドパラメータ
     int32_t currentBoundCount_ = 0;
-    int32_t maxBoundCount_ = 0;
+    int32_t maxBoundCount_     = 0;
     float bounceSpeed_;
     float bounceDamping_;
     float initialBounceRate_;

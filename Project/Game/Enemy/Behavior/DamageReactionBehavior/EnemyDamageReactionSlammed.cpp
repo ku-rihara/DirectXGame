@@ -1,12 +1,16 @@
 #include "EnemyDamageReactionSlammed.h"
-#include "Enemy/Types/BaseEnemy.h"
-#include "Enemy/EnemyManager/EnemyManager.h"
+// Manager
 #include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionController.h"
-#include "EnemyDamageReactionRoot.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
+// Type
+#include "Enemy/Types/BaseEnemy.h"
+// Behavior
 #include "EnemyDeath.h"
+// Frame
 #include "Frame/Frame.h"
-#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
+// Player
 #include "Player/ComboCreator/PlayerComboAttackData.h"
+#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/Player.h"
 
 EnemyDamageReactionSlammed::EnemyDamageReactionSlammed(
@@ -15,9 +19,11 @@ EnemyDamageReactionSlammed::EnemyDamageReactionSlammed(
     const PlayerAttackCollider* playerCollisionInfo)
     : BaseEnemyDamageReaction("EnemyDamageReactionSlammed", boss) {
 
+    // ポインタ保存
     pReactionData_        = reactionData;
     pPlayerCollisionInfo_ = playerCollisionInfo;
 
+    // 初期化
     InitReaction();
     damageRendition_.Init(pBaseEnemy_, pReactionData_);
 
@@ -31,15 +37,20 @@ EnemyDamageReactionSlammed::~EnemyDamageReactionSlammed() {
 }
 
 void EnemyDamageReactionSlammed::Update(float deltaTime) {
+    // 演出・リアクション更新
     damageRendition_.Update(deltaTime, reactionTimer_, hasPlayedRendition_);
+
+    // 経過時間加算
     reactionTimer_ += deltaTime;
 
+    // フェーズ更新
     if (currentPhase_) {
         currentPhase_();
     }
 }
 
 void EnemyDamageReactionSlammed::UpdatePhase() {
+    // 水平ノックバック・叩きつけ処理
     UpdateNormal();
     UpdateSlammed();
 
@@ -48,6 +59,7 @@ void EnemyDamageReactionSlammed::UpdatePhase() {
         return;
     }
 
+    // 終了判定
     if (IsReactionFinished()) {
         OnReactionEnd();
         endType_      = EndType::BackToRoot;
@@ -69,32 +81,22 @@ void EnemyDamageReactionSlammed::Debug() {
 }
 
 void EnemyDamageReactionSlammed::InitReaction() {
+    // null チェック
     if (!pReactionData_ || !pPlayerCollisionInfo_) {
         return;
     }
 
     const auto& reactionParam = pReactionData_->GetReactionParam();
 
-    // ダメージアニメーションを再生
+    // ダメージアニメーション再生
     int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
-    const auto& animName = reactionParam.damageAnimationNames[enemyType];
-    if (animName == "None") {
-        // "None"が設定されている場合は何もしない
-    } else if (animName.empty()) {
-        // 空の場合はデフォルトアニメーションを再生
-        const auto* controller = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
-        const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::Slammed);
-        if (!defaultAnim.empty()) {
-            pBaseEnemy_->GetAnimator()->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(defaultAnim));
-        }
-    } else {
-        pBaseEnemy_->GetAnimator()->PlayAnimationByName(animName, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(animName));
-    }
+    PlayDamageAnim(reactionParam.damageAnimationNames[enemyType], enemyType);
 
+    // 物理パラメータ取得
     blowYPower_     = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
     knockBackPower_ = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().knockBackPower;
 
-    // プレイヤーから敵への方向ベクトルを計算
+    // 方向ベクトルを計算
     pBaseEnemy_->DirectionToPlayer();
     Vector3 direction  = -pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetBaseInfo()->GetPlayer()->GetWorldPosition());
     knockBackVelocity_ = direction * knockBackPower_;
@@ -108,10 +110,10 @@ void EnemyDamageReactionSlammed::InitReaction() {
     currentBoundCount_     = 0;
     hasReachedGround_      = false;
 
-    // 下向きの速度を設定
+    // 下向きの初速を設定
     bounceSpeed_ = -std::abs(blowYPower_);
 
-    // Slammedのパラメータ
+    // Slammed固有パラメータ
     const auto& slammedParam = reactionParam.slammedParam;
     slammedGravity_          = slammedParam.gravity;
     slammedRotateSpeed_      = slammedParam.rotateSpeed;
@@ -127,8 +129,10 @@ void EnemyDamageReactionSlammed::UpdateNormal() {
 
     const auto& param = pReactionData_->GetReactionParam().normalParam;
 
+    // タイマー更新
     knockBackTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
+    // ノックバック中のみ水平移動を適用
     if (knockBackTimer_ < param.knockBackTime) {
         float dampingFactor = 1.0f - (param.knockBackDamping * KetaEngine::Frame::DeltaTimeRate());
         knockBackVelocity_ *= dampingFactor;
@@ -146,7 +150,7 @@ void EnemyDamageReactionSlammed::UpdateSlammed() {
 
     const auto& enemyParam = pBaseEnemy_->GetBaseInfo()->GetParameter();
 
-    // まず地面に叩きつける
+    // 地面到達前は重力で落下させる
     if (!hasReachedGround_) {
         // 重力を適用して加速
         bounceSpeed_ -= slammedGravity_ * KetaEngine::Frame::DeltaTimeRate();
@@ -155,25 +159,23 @@ void EnemyDamageReactionSlammed::UpdateSlammed() {
         pBaseEnemy_->SetWorldPositionY(
             pBaseEnemy_->GetWorldPosition().y + bounceSpeed_ * KetaEngine::Frame::DeltaTimeRate());
 
-        // 地面に到達したか確認
+        // 地面到達チェック
         if (pBaseEnemy_->GetWorldPosition().y < enemyParam.basePosY) {
             pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
             hasReachedGround_ = true;
 
             // バウンドアニメーション再生
-            {
-                const auto* ctrl = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
-                int eType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
-                const auto& boundAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::Bound);
-                if (!boundAnim.empty()) {
-                    pBaseEnemy_->GetAnimator()->PlayAnimationByName(boundAnim, false);
-                }
+            const auto* ctrl      = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+            int eType             = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
+            const auto& boundAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::Bound);
+            if (!boundAnim.empty()) {
+                pBaseEnemy_->GetAnimator()->PlayAnimationByName(boundAnim, false);
             }
 
             // 地面衝突エフェクト
             pBaseEnemy_->ThrustRenditionInit();
 
-            // HPが0以下の場合、1バウンド目で死亡処理
+            // 死亡予約済みの場合は1バウンド後に死亡処理
             if (pBaseEnemy_->GetIsDeathPending()) {
                 endType_      = EndType::Death;
                 currentPhase_ = [this]() {
@@ -182,12 +184,13 @@ void EnemyDamageReactionSlammed::UpdateSlammed() {
                 return;
             }
 
-            // 叩きつけられたスピードをベースに最初のバウンド速度を設定
+            // 叩きつけ速度をベースに最初のバウンド速度を設定
             bounceSpeed_ = std::abs(bounceSpeed_) * initialBounceRate_;
         }
         return;
     }
 
+    // 地面到達後のバウンド処理
     if (hasReachedGround_) {
         UpdateBounce(enemyParam.basePosY, slammedGravity_);
     }
@@ -209,7 +212,7 @@ void EnemyDamageReactionSlammed::UpdateBounce(float basePosY, float gravity) {
     // 回転
     RotationUpdate();
 
-    // 地面に着地したら次のバウンド
+    // 着地したら次のバウンド
     if (currentPos.y <= basePosY) {
         pBaseEnemy_->SetWorldPositionY(basePosY);
         currentBoundCount_++;
@@ -246,8 +249,8 @@ void EnemyDamageReactionSlammed::OnReactionEnd() {
     pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
 
     // 起き上がりアニメーション再生
-    const auto* ctrl = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
-    int eType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
+    const auto* ctrl      = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+    int eType             = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
     const auto& getUpAnim = ctrl->GetDefaultDamageAnimationName(eType, DefaultAnimType::GetUp);
 
     if (getUpAnim.empty()) {
@@ -268,4 +271,23 @@ void EnemyDamageReactionSlammed::RotationUpdate() {
     // 回転演出
     Vector3 currentRotation = pBaseEnemy_->GetAnimator()->GetBodyRotation();
     pBaseEnemy_->GetAnimator()->SetBodyRotate(currentRotation + slammedRotateSpeed_ * KetaEngine::Frame::DeltaTime());
+}
+
+void EnemyDamageReactionSlammed::PlayDefaultDamageAnim(int enemyType) {
+    const auto* ctrl = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+    const auto& anim = ctrl->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::Slammed);
+    if (!anim.empty()) {
+        pBaseEnemy_->GetAnimator()->PlayAnimationByName(anim, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(anim));
+    }
+}
+
+void EnemyDamageReactionSlammed::PlayDamageAnim(const std::string& animName, int enemyType) {
+    if (animName == "None") {
+        return;
+    }
+    if (animName.empty()) {
+        PlayDefaultDamageAnim(enemyType);
+        return;
+    }
+    pBaseEnemy_->GetAnimator()->PlayAnimationByName(animName, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(animName));
 }

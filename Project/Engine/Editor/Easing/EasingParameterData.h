@@ -62,8 +62,6 @@ constexpr std::array<const char*, 2> FinishTypeLabels = {
 /// <summary>
 /// イージングタイプをImGuiでセレクトする
 /// </summary>
-/// <param name="label"></param>
-/// <param name="target"></param>
 void ImGuiEasingTypeSelector(const char* label, int32_t& target);
 
 namespace KetaEngine {
@@ -78,8 +76,8 @@ struct EasingParameter {
     T endValue   = {};
 
     float maxTime        = 0.0f;
-    float returnMaxTime  = 0.0f;                // 戻りフェーズの時間（0=戻りなし）
-    EasingType returnType = EasingType::InSine; // 戻りフェーズのイージング種類
+    float returnMaxTime  = 0.0f;
+    EasingType returnType = EasingType::InSine;
     float amplitude = 0.0f;
     float period    = 0.0f;
 

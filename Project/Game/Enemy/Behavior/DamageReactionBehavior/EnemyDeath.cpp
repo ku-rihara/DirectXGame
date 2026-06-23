@@ -1,4 +1,4 @@
-﻿/// behavior
+/// behavior
 #include "EnemyDeath.h"
 /// obj
 #include "Enemy/Types/BaseEnemy.h"
@@ -7,11 +7,17 @@
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 
-// 初期化
+///=========================================================
+/// 初期化
+///=========================================================
 EnemyDeath::EnemyDeath(BaseEnemy* boss)
     : BaseEnemyDamageReaction("EnemyDeath", boss) {
 
     step_ = Step::DIRECTIONSET;
+    SetUpSteps();
+}
+
+EnemyDeath::~EnemyDeath() {
 }
 
 void EnemyDeath::AngleCaluclation() {
@@ -22,73 +28,79 @@ void EnemyDeath::AngleCaluclation() {
     objectiveAngle_   = CalcFaceAngleY(pBaseEnemy_->GetWorldPosition(), playerPos);
 }
 
-EnemyDeath::~EnemyDeath() {
-}
-
+///=========================================================
+/// 更新
+///=========================================================
 void EnemyDeath::Update([[maybe_unused]] float deltaTime) {
-    switch (step_) {
-    /// ------------------------------------------------------
-    /// 方向計算 → アニメーションへ
-    ///---------------------------------------------------------
-    case Step::DIRECTIONSET:
-        AngleCaluclation();
-        pBaseEnemy_->SetRotationY(objectiveAngle_);
-        step_ = Step::ANIMATION;
-        break;
-
-    /// -------------------------------------------------------
-    /// 死亡アニメーション再生・終了待ち
-    ///---------------------------------------------------------
-    case Step::ANIMATION:
-        if (!deathAnimStarted_) {
-            deathAnimStarted_ = true;
-            const std::string& deathAnim = pBaseEnemy_->GetAnimator()->GetAnimationName(BaseEnemy::AnimationType::Death);
-            if (!deathAnim.empty()) {
-                pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Death, false);
-                pBaseEnemy_->GetAnimator()->GetAnimationObject()->SetAnimationEndCallback(deathAnim, [this]() {
-                    deathAnimFinished_ = true;
-                });
-            } else {
-                // アニメーション未設定の場合はすぐに次へ
-                deathAnimFinished_ = true;
-            }
-        }
-        if (deathAnimFinished_) {
-            step_ = Step::BURST;
-        }
-        break;
-
-    /// -------------------------------------------------------
-    /// 爆散
-    ///---------------------------------------------------------
-    case Step::BURST:
-        pBaseEnemy_->SetScale(Vector3::ZeroVector());
-        pBaseEnemy_->DeathRenditionInit();
-        deathWaitTimer_ = 2.0f;
-        step_           = Step::WAITING;
-        break;
-
-    /// -------------------------------------------------------
-    /// 爆散エフェクト待機
-    ///---------------------------------------------------------
-    case Step::WAITING:
-        deathWaitTimer_ -= deltaTime;
-        if (deathWaitTimer_ <= 0.0f) {
-            step_ = Step::DEATH;
-        }
-        break;
-
-    /// -------------------------------------------------------
-    /// 死
-    ///---------------------------------------------------------
-    case Step::DEATH:
-        pBaseEnemy_->SetIsDeath(true);
-        break;
-
-    default:
-        break;
+    auto it = stepPhase_.find(step_);
+    if (it != stepPhase_.end()) {
+        it->second();
     }
 }
 
+///=========================================================
+/// ステップごとの処理
+///=========================================================
+void EnemyDeath::StepDirectionSet() {
+    // 方向計算 → アニメーションへ
+    AngleCaluclation();
+    pBaseEnemy_->SetRotationY(objectiveAngle_);
+    step_ = Step::ANIMATION;
+}
+
+void EnemyDeath::StepAnimation() {
+    // 死亡アニメーション再生・終了待ち
+    if (!deathAnimStarted_) {
+        deathAnimStarted_            = true;
+        const std::string& deathAnim = pBaseEnemy_->GetAnimator()->GetAnimationName(BaseEnemy::AnimationType::Death);
+        if (!deathAnim.empty()) {
+            pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Death, false);
+            pBaseEnemy_->GetAnimator()->GetAnimationObject()->SetAnimationEndCallback(deathAnim, [this]() {
+                deathAnimFinished_ = true;
+            });
+        } else {
+            // アニメーション未設定の場合はすぐに次へ
+            deathAnimFinished_ = true;
+        }
+    }
+    if (deathAnimFinished_) {
+        step_ = Step::BURST;
+    }
+}
+
+void EnemyDeath::StepBurst() {
+    // スケールを0にして爆散エフェクト開始
+    pBaseEnemy_->SetScale(Vector3::ZeroVector());
+    pBaseEnemy_->DeathRenditionInit();
+    deathWaitTimer_ = 2.0f;
+    step_           = Step::WAITING;
+}
+
+void EnemyDeath::StepWaiting() {
+    // エフェクト終了を待つ
+    deathWaitTimer_ -= KetaEngine::Frame::DeltaTime();
+    if (deathWaitTimer_ <= 0.0f) {
+        step_ = Step::DEATH;
+    }
+}
+
+void EnemyDeath::StepDeath() {
+    pBaseEnemy_->SetIsDeath(true);
+}
+
+///=========================================================
+/// セットアップ
+///=========================================================
+void EnemyDeath::SetUpSteps() {
+    stepPhase_[Step::DIRECTIONSET] = [this] { StepDirectionSet(); };
+    stepPhase_[Step::ANIMATION]    = [this] { StepAnimation(); };
+    stepPhase_[Step::BURST]        = [this] { StepBurst(); };
+    stepPhase_[Step::WAITING]      = [this] { StepWaiting(); };
+    stepPhase_[Step::DEATH]        = [this] { StepDeath(); };
+}
+
+///=========================================================
+/// デバッグ
+///=========================================================
 void EnemyDeath::Debug() {
 }

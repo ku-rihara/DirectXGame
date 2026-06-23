@@ -1,13 +1,15 @@
 #include "EnemyDamageReactionNormal.h"
+// Manager
 #include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionController.h"
 #include "Enemy/EnemyManager/EnemyManager.h"
+// Types
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/Types/EntourageEnemy.h"
-#include "EnemyDamageReactionRoot.h"
+// Frame
 #include "Frame/Frame.h"
+// Player
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Components/CollisionBox/PlayerAttackCollider.h"
-#include "Player/Player.h"
 
 EnemyDamageReactionNormal::EnemyDamageReactionNormal(
     BaseEnemy* boss,
@@ -16,14 +18,16 @@ EnemyDamageReactionNormal::EnemyDamageReactionNormal(
     bool skipAnimation)
     : BaseEnemyDamageReaction("EnemyDamageReactionNormal", boss) {
 
+    // ポインタ保存 
     pReactionData_        = reactionData;
     pPlayerCollisionInfo_ = playerCollisionInfo;
     skipAnimation_        = skipAnimation;
 
+    // 初期化
     InitReaction();
     damageRendition_.Init(pBaseEnemy_, pReactionData_);
 
-    // knockBackTime=0 の即時完了リアクションはUpdateが呼ばれる前に
+    // reactionTime=0 は即時演出
     if (totalReactionTime_ <= 0.0f) {
         damageRendition_.Update(0.0f, 0.0f, hasPlayedRendition_);
     }
@@ -33,11 +37,15 @@ EnemyDamageReactionNormal::~EnemyDamageReactionNormal() {
 }
 
 void EnemyDamageReactionNormal::Update(float deltaTime) {
-    damageRendition_.Update(deltaTime, reactionTimer_, hasPlayedRendition_);
-    UpdateNormal();
 
+    // 演出・リアクション更新
+    damageRendition_.Update(deltaTime, reactionTimer_, hasPlayedRendition_);
+    UpdateReaction();
+
+    // 経過時間加算
     reactionTimer_ += deltaTime;
 
+    // 終了時処理
     if (IsReactionFinished()) {
         OnReactionEnd();
         if (pBaseEnemy_) {
@@ -51,7 +59,7 @@ void EnemyDamageReactionNormal::Debug() {
 
 void EnemyDamageReactionNormal::InitReaction() {
 
-    // プレイヤーのコリジョン情報と敵ポインタが有効であることを確認
+    // ポインタ null チェック
     if (!pPlayerCollisionInfo_ || !pBaseEnemy_) {
         return;
     }
@@ -59,7 +67,7 @@ void EnemyDamageReactionNormal::InitReaction() {
     // 敵のタイプを取得
     int enemyType = static_cast<int>(pBaseEnemy_->GetBaseInfo()->GetType());
 
-    // StumbleBackwards再生中 or 再再生間隔未満の場合はアニメーションをスキップ
+    // StumbleBackwards スキップ判定
     bool skipAnimation = skipAnimation_;
     if (!skipAnimation) {
         if (EntourageEnemy* pEntourageEnemy = dynamic_cast<EntourageEnemy*>(pBaseEnemy_)) {
@@ -67,40 +75,17 @@ void EnemyDamageReactionNormal::InitReaction() {
         }
     }
 
-    if (pReactionData_) {
-        const auto& reactionParam = pReactionData_->GetReactionParam();
-
-        if (!skipAnimation) {
-            // ダメージアニメーションを再生
-            const auto& animName = reactionParam.damageAnimationNames[enemyType];
-            if (animName == "None") {
-                // "None"が設定されている場合は何もしない
-            } else if (animName.empty()) {
-                // 空の場合はデフォルトアニメーションを再生
-                const auto* controller  = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
-                const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::Normal);
-                if (!defaultAnim.empty()) {
-                    pBaseEnemy_->GetAnimator()->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(defaultAnim));
-                }
-            } else {
-                pBaseEnemy_->GetAnimator()->PlayAnimationByName(animName, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(animName));
-            }
-        }
-
-        totalReactionTime_ = reactionParam.normalParam.knockBackTime;
-    } else {
-        if (!skipAnimation) {
-            // リアクションデータが未設定: デフォルトアニメーションを再生
-            const auto* controller  = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
-            const auto& defaultAnim = controller->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::Normal);
-            if (!defaultAnim.empty()) {
-                pBaseEnemy_->GetAnimator()->PlayAnimationByName(defaultAnim, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(defaultAnim));
-            }
-        }
+    if (!pReactionData_) {
+        if (!skipAnimation) { PlayDefaultDamageAnim(enemyType); }
         totalReactionTime_ = kDefaultKnockBackTime;
+    } else {
+        const auto& reactionParam = pReactionData_->GetReactionParam();
+        if (!skipAnimation) {
+            PlayDamageAnim(reactionParam.damageAnimationNames[enemyType], enemyType);
+        }
+        totalReactionTime_ = reactionParam.normalParam.knockBackTime;
     }
-
-    // コンボデータが存在するか確認してノックバック強度を取得
+    // ノックバック強度を取得
     const auto* comboData = pPlayerCollisionInfo_->GetComboAttackData();
     if (comboData) {
         knockBackPower_ = comboData->GetAttackParam().knockBackPower;
@@ -108,7 +93,7 @@ void EnemyDamageReactionNormal::InitReaction() {
         knockBackPower_ = 0.0f;
     }
 
-    // プレイヤーから敵への方向ベクトルを計算
+    // 方向ベクトルを計算
     const auto* playerTransform = pPlayerCollisionInfo_->GetPlayerTransform();
     if (playerTransform) {
         Vector3 playerPos = playerTransform->GetWorldPos();
@@ -118,7 +103,7 @@ void EnemyDamageReactionNormal::InitReaction() {
         direction         = direction.Normalize();
 
         // ノックバック速度ベクトルを設定
-        knockBackVelocity_  = direction * knockBackPower_;
+        knockBackVelocity_ = direction * knockBackPower_;
     } else {
         // プレイヤートランスフォームが無ければノックバックなし
         knockBackVelocity_ = Vector3::ZeroVector();
@@ -129,12 +114,19 @@ void EnemyDamageReactionNormal::InitReaction() {
     hasPlayedRendition_ = false;
 }
 
-void EnemyDamageReactionNormal::UpdateNormal() {
-    float knockBackTime    = pReactionData_ ? pReactionData_->GetReactionParam().normalParam.knockBackTime : kDefaultKnockBackTime;
-    float knockBackDamping = pReactionData_ ? pReactionData_->GetReactionParam().normalParam.knockBackDamping : kDefaultKnockBackDamping;
+void EnemyDamageReactionNormal::UpdateReaction() {
+    // パラメータ取得
+    float knockBackTime    = kDefaultKnockBackTime;
+    float knockBackDamping = kDefaultKnockBackDamping;
+    if (pReactionData_) {
+        knockBackTime    = pReactionData_->GetReactionParam().normalParam.knockBackTime;
+        knockBackDamping = pReactionData_->GetReactionParam().normalParam.knockBackDamping;
+    }
 
+    // タイマー更新
     knockBackTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
+    // ノックバック中のみ移動・重力を適用
     if (knockBackTimer_ < knockBackTime) {
         float dampingFactor = 1.0f - (knockBackDamping * KetaEngine::Frame::DeltaTimeRate());
         knockBackVelocity_ *= dampingFactor;
@@ -163,4 +155,23 @@ void EnemyDamageReactionNormal::OnReactionEnd() {
         const auto& enemyParam = pBaseEnemy_->GetBaseInfo()->GetParameter();
         pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
     }
+}
+
+void EnemyDamageReactionNormal::PlayDefaultDamageAnim(int enemyType) {
+    const auto* ctrl = pBaseEnemy_->GetBaseInfo()->GetManager()->GetDamageReactionController();
+    const auto& anim = ctrl->GetDefaultDamageAnimationName(enemyType, DefaultAnimType::Normal);
+    if (!anim.empty()) {
+        pBaseEnemy_->GetAnimator()->PlayAnimationByName(anim, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(anim));
+    }
+}
+
+void EnemyDamageReactionNormal::PlayDamageAnim(const std::string& animName, int enemyType) {
+    if (animName == "None") {
+        return;
+    }
+    if (animName.empty()) {
+        PlayDefaultDamageAnim(enemyType);
+        return;
+    }
+    pBaseEnemy_->GetAnimator()->PlayAnimationByName(animName, pBaseEnemy_->GetAnimator()->GetDamageReactionAnimationIsLoop(animName));
 }

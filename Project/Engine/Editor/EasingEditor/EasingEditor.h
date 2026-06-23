@@ -7,7 +7,7 @@
 #include <string>
 
 /// <summary>
-/// イージングエディター（テンプレート版）
+/// イージングエディター
 /// float / Vector2 / Vector3 を型引数で切り替える
 /// </summary>
 namespace KetaEngine {

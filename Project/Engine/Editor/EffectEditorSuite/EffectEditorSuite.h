@@ -23,6 +23,7 @@ class DissolveEditor;
 class TimeScaleEditor;
 class RibbonTrailEditor;
 class PostEffectEditor;
+template <typename T> class EasingEditor;
 
 // エフェクトタイプ列挙型
 enum class EffectEditorType {
@@ -36,7 +37,10 @@ enum class EffectEditorType {
     Dissolve,
     TimeScale,
     RibbonTrail,
-    PostEffect
+    PostEffect,
+    EasingFloat,
+    EasingVec2,
+    EasingVec3
 };
 
 class EffectEditorSuite {
@@ -97,6 +101,9 @@ private:
     std::unique_ptr<TimeScaleEditor> timeScaleEditor_;
     std::unique_ptr<RibbonTrailEditor> ribbonTrailEditor_;
     std::unique_ptr<PostEffectEditor> postEffectEditor_;
+    std::unique_ptr<EasingEditor<float>>   easingEditorFloat_;
+    std::unique_ptr<EasingEditor<Vector2>> easingEditorVec2_;
+    std::unique_ptr<EasingEditor<Vector3>> easingEditorVec3_;
 
 public:
     CameraEditor* GetCameraEditor() const { return cameraEditor_.get(); }
