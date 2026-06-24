@@ -7,6 +7,7 @@
 
 /// <summary>
 /// ゲームシーン
+/// ステートパターンで Intro / Playing / Pause / GameOver を切り替える
 /// </summary>
 class GameScene : public BaseScene {
 public:
@@ -17,15 +18,14 @@ public:
     /// public method
     ///========================================================
 
-    /// 初期化、更新、描画
     void Init() override;
     void Update() override;
     void SkyBoxDraw() override;
-
     void Debug() override;
     void ViewProjectionUpdate() override;
     void ViewProcess() override;
 
+    /// 現在のステートを切り替える
     void ChangeState(std::unique_ptr<BaseGameSceneState> state);
 
 private:
@@ -33,15 +33,12 @@ private:
     /// private method
     ///========================================================
 
-    void ObjectInit();
-    void SetClassPointer();
+    void ObjectInit();    ///< 各オブジェクトの生成・初期化
+    void SetClassPointer(); ///< オブジェクト間のポインタ接続
 
 private:
-    //*-------------------------------- Private variants--------------------------------*//
-
-    std::unique_ptr<BaseGameSceneState> state_ = nullptr;
-    GameObj gameObj_;
-
+    std::unique_ptr<BaseGameSceneState> state_ = nullptr; ///< 現在のシーンステート
+    GameObj gameObj_;                                      ///< ゲーム内全オブジェクト
 
 public:
     GameObj& GetGameObj() { return gameObj_; }

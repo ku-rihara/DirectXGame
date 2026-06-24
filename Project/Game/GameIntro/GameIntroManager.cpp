@@ -77,7 +77,11 @@ void GameIntroManager::CheckMovieLineStateTransition() {
 
         // movieLine状態遷移
         if (currentIndex_ == SpawnField) {
-            auto* spawnField = dynamic_cast<IntroSpawnField*>(introSequences_[SpawnField].get());
+            auto* rawField = introSequences_[SpawnField].get();
+            IntroSpawnField* spawnField = nullptr;
+            if (rawField && rawField->IsSpawnField()) {
+                spawnField = static_cast<IntroSpawnField*>(rawField);
+            }
             if (spawnField) {
                 // ObjSpawn段階でMovieLineを表示開始
                 if (spawnField->GetCurrentStep() == IntroSpawnField::Step::OBJSPAWN && movieLineState_ == MovieLineState::NONE) {

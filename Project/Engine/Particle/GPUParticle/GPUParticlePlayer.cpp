@@ -12,7 +12,7 @@ void GPUParticlePlayer::InitEffect(const std::string& particleName, const std::s
     // エフェクトデータを作成してロード
     effectData_ = CreateEffectData();
 
-    auto* particleData = dynamic_cast<GPUParticleData*>(effectData_.get());
+    auto* particleData = static_cast<GPUParticleData*>(effectData_.get());
     if (particleData) {
         particleData->Init(particleName, categoryName);
         particleData->LoadData();
@@ -127,5 +127,5 @@ std::unique_ptr<BaseEffectData> GPUParticlePlayer::CreateEffectData() {
 }
 
 GPUParticleData* GPUParticlePlayer::GetParticleData() {
-    return dynamic_cast<GPUParticleData*>(effectData_.get());
+    return static_cast<GPUParticleData*>(effectData_.get());
 }

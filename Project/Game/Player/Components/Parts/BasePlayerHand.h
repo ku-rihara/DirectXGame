@@ -53,25 +53,24 @@ private:
     void UpdateByDeathFrag(bool isDeath);
 protected:
     ///=============================================
-    /// private variant
+    /// protected variables
     ///=============================================
 
     std::unique_ptr<KetaEngine::Object3d> obj3d_;
 
-    /// グローバルパラメータ
     KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
 
-    // emitter
+    // エフェクト放出
     std::unique_ptr<KetaEngine::ParticlePlayer> particlePlayer_;
-    Vector3 direction_;
-    Vector3 effectFollowPos_;
+    Vector3 direction_;          ///< エフェクト放出方向
+    Vector3 effectFollowPos_;    ///< エフェクトの追従座標
 
     // リボントレイル
     KetaEngine::RibbonTrailPlayer trailPlayer_;
 
-    bool isEmit_   = true;
-    bool isShadow_ = true;
+    bool isEmit_   = true;  ///< エフェクト放出フラグ
+    bool isShadow_ = true;  ///< 影描画フラグ
 
     KetaEngine::DissolvePlayer dissolvePlayer_;
 

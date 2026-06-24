@@ -70,8 +70,8 @@ void EnemyDamageReactionNormal::InitReaction() {
     // StumbleBackwards スキップ判定
     bool skipAnimation = skipAnimation_;
     if (!skipAnimation) {
-        if (EntourageEnemy* pEntourageEnemy = dynamic_cast<EntourageEnemy*>(pBaseEnemy_)) {
-            skipAnimation = pEntourageEnemy->IsInStumblePhase();
+        if (pBaseEnemy_->IsEntourageEnemy()) {
+            skipAnimation = static_cast<EntourageEnemy*>(pBaseEnemy_)->IsInStumblePhase();
         }
     }
 

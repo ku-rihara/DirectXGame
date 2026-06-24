@@ -13,6 +13,7 @@ public:
     // 更新、デバッグ
     void Update([[maybe_unused]] float timeSpeed = 0.0f) override;
     void Debug() override;
+    Type GetBehaviorType() const override { return Type::Move; }
 
 private:
     void CheckAndSwitchAnimation();

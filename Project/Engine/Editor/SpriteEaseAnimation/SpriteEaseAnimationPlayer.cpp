@@ -20,7 +20,7 @@ void SpriteEaseAnimationPlayer::Play(const std::string& animationName, const std
     effectData_.reset();
     effectData_ = CreateEffectData();
 
-    auto* animeData = dynamic_cast<SpriteEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<SpriteEaseAnimationData*>(effectData_.get());
     if (animeData) {
         animeData->Init(animationName, categoryName);
         animeData->LoadData();
@@ -36,7 +36,7 @@ std::unique_ptr<BaseEffectData> SpriteEaseAnimationPlayer::CreateEffectData() {
 }
 
 Vector2 SpriteEaseAnimationPlayer::GetCurrentScale() const {
-    auto* animeData = dynamic_cast<SpriteEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<SpriteEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActiveScale();
     }
@@ -44,7 +44,7 @@ Vector2 SpriteEaseAnimationPlayer::GetCurrentScale() const {
 }
 
 Vector2 SpriteEaseAnimationPlayer::GetCurrentPosition() const {
-    auto* animeData = dynamic_cast<SpriteEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<SpriteEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActivePosition();
     }
@@ -52,7 +52,7 @@ Vector2 SpriteEaseAnimationPlayer::GetCurrentPosition() const {
 }
 
 Vector3 SpriteEaseAnimationPlayer::GetCurrentRotation() const {
-    auto* animeData = dynamic_cast<SpriteEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<SpriteEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActiveRotation();
     }
@@ -60,7 +60,7 @@ Vector3 SpriteEaseAnimationPlayer::GetCurrentRotation() const {
 }
 
 Vector3 SpriteEaseAnimationPlayer::GetCurrentColor() const {
-    auto* animeData = dynamic_cast<SpriteEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<SpriteEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActiveColor();
     }
@@ -68,7 +68,7 @@ Vector3 SpriteEaseAnimationPlayer::GetCurrentColor() const {
 }
 
 float SpriteEaseAnimationPlayer::GetCurrentAlpha() const {
-    auto* animeData = dynamic_cast<SpriteEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<SpriteEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActiveAlpha();
     }
@@ -76,7 +76,7 @@ float SpriteEaseAnimationPlayer::GetCurrentAlpha() const {
 }
 
 bool SpriteEaseAnimationPlayer::IsPropertyActive(SpriteEaseAnimationData::PropertyType type) const {
-    auto* animeData = dynamic_cast<SpriteEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<SpriteEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->IsPropertyActive(type);
     }
@@ -84,5 +84,5 @@ bool SpriteEaseAnimationPlayer::IsPropertyActive(SpriteEaseAnimationData::Proper
 }
 
 SpriteEaseAnimationData* SpriteEaseAnimationPlayer::GetAnimationData() {
-    return dynamic_cast<SpriteEaseAnimationData*>(effectData_.get());
+    return static_cast<SpriteEaseAnimationData*>(effectData_.get());
 }

@@ -12,6 +12,7 @@ public:
 
     void Update() override;
     void Debug() override;
+    bool IsSpawn() const override { return true; }
 
 private:
 	enum class Step {

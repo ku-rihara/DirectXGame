@@ -55,13 +55,13 @@ void EnemyAttackCollisionBox::UpdateOffset() {
 }
 
 void EnemyAttackCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
-    if (dynamic_cast<Player*>(other)) {
+    if (other->IsPlayer()) {
         isHit_ = true;
     }
 }
 
 void EnemyAttackCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-    if (dynamic_cast<Player*>(other)) {
+    if (other->IsPlayer()) {
         isHit_ = true;
     }
 }

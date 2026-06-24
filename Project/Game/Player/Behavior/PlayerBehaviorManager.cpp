@@ -7,6 +7,34 @@
 #include "Player/Behavior/PlayerBehavior/PlayerMove.h"
 #include "Player/Behavior/PlayerBehavior/PlayerSpawn.h"
 
+using BT = BasePlayerBehavior::Type;
+using CT = BaseComboAttackBehavior::Type;
+
+template<> PlayerMove* PlayerBehaviorManager::GetAs<PlayerMove>() const {
+    if (behavior_ && behavior_->GetBehaviorType() == BT::Move) { return static_cast<PlayerMove*>(behavior_.get()); }
+    return nullptr;
+}
+template<> PlayerDash* PlayerBehaviorManager::GetAs<PlayerDash>() const {
+    if (behavior_ && behavior_->GetBehaviorType() == BT::Dash) { return static_cast<PlayerDash*>(behavior_.get()); }
+    return nullptr;
+}
+template<> PlayerJump* PlayerBehaviorManager::GetAs<PlayerJump>() const {
+    if (behavior_ && behavior_->GetBehaviorType() == BT::Jump) { return static_cast<PlayerJump*>(behavior_.get()); }
+    return nullptr;
+}
+template<> PlayerDeath* PlayerBehaviorManager::GetAs<PlayerDeath>() const {
+    if (behavior_ && behavior_->GetBehaviorType() == BT::Death) { return static_cast<PlayerDeath*>(behavior_.get()); }
+    return nullptr;
+}
+template<> PlayerSpawn* PlayerBehaviorManager::GetAs<PlayerSpawn>() const {
+    if (behavior_ && behavior_->GetBehaviorType() == BT::Spawn) { return static_cast<PlayerSpawn*>(behavior_.get()); }
+    return nullptr;
+}
+template<> ComboAttackRoot* PlayerBehaviorManager::GetComboAs<ComboAttackRoot>() const {
+    if (comboBehavior_ && comboBehavior_->GetComboType() == CT::Root) { return static_cast<ComboAttackRoot*>(comboBehavior_.get()); }
+    return nullptr;
+}
+
 void PlayerBehaviorManager::Init(Player* player) {
     // 初期Behavior状態
     Change(std::make_unique<PlayerSpawn>(player));

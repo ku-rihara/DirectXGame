@@ -38,7 +38,7 @@ void TitleSceneController::UpdatePlayerPerformance() {
     player_->TitleUpdate();
 
     // プレイヤーの特定行動をトリガーにロゴ表示開始
-    if (dynamic_cast<TitlePlayerBehavior*>(player_->GetTitleBehavior())) {
+    if (player_->GetTitleBehavior() && player_->GetTitleBehavior()->IsTitlePlayerBehavior()) {
         if (!isTitleLogoUpdate_) {
             isTitleLogoUpdate_ = true;
         }

@@ -12,6 +12,7 @@ public:
 
     void Update(float deltaTime) override;
     void Debug() override;
+    bool IsDeath() const override { return true; }
 
 private:
     // 死亡処理のステップ

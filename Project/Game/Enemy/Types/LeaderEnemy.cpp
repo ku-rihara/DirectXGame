@@ -141,7 +141,7 @@ void LeaderEnemy::Update() {
         GetEnemyEffects()->Emit("TauntBoss");
     }
 
-    if (isFleeing_ && dynamic_cast<EnemyDamageReactionRoot*>(GetDamageReactionBehavior())) {
+    if (isFleeing_ && GetDamageReactionBehavior() && GetDamageReactionBehavior()->IsReactionRoot()) {
         // 焦りエフェクトの発生
         GetEnemyEffects()->Emit("EnemyImpatience");
     }
@@ -274,7 +274,7 @@ void LeaderEnemy::StartTaunt() {
     if (isTaunting_) {
         return;
     }
-    if (dynamic_cast<EnemySpawn*>(behaviorCtrl_.GetMoveBehavior())) {
+    if (behaviorCtrl_.GetMoveBehavior() && behaviorCtrl_.GetMoveBehavior()->IsSpawn()) {
         return;
     }
 

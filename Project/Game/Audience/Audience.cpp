@@ -151,8 +151,8 @@ void Audience::ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior) {
 }
 
 AudienceRoot* Audience::GetAudienceRoot() const {
-    if (AudienceRoot* audienceRoot = dynamic_cast<AudienceRoot*>(behavior_.get())) {
-        return audienceRoot;
+    if (behavior_ && behavior_->IsAudienceRoot()) {
+        return static_cast<AudienceRoot*>(behavior_.get());
     }
     return nullptr;
 }

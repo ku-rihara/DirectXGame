@@ -17,4 +17,5 @@ public:
 
     virtual void Update() = 0;
     virtual void Debug()  = 0;
+    virtual bool IsSpawn() const { return false; }
 };

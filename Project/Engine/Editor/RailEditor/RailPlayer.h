@@ -31,7 +31,7 @@ private:
 
 public:
     const Vector3& GetCurrentPosition() const { return currentPosition_; }
-    RailData* GetRailData() { return dynamic_cast<RailData*>(effectData_.get()); }
+    RailData* GetRailData() { return static_cast<RailData*>(effectData_.get()); }
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
 
     void SetParent(WorldTransform* parent);

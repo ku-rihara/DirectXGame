@@ -15,6 +15,7 @@ public:
 
     void Update(float deltaTime) override;
     void Debug() override;
+    bool IsReactionRoot() const override { return true; }
 
     /// <summary>
     /// ダメージリアクションを再生

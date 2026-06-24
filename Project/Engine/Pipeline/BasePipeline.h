@@ -24,6 +24,7 @@ public:
     /// </summary>
     /// <param name="dxCommon">DirectXCommon</param>
     virtual void Init(DirectXCommon* dxCommon);
+    virtual bool IsSkyBoxPipeline() const { return false; }
 
     /// <summary>
     /// 描画前処理

@@ -236,7 +236,11 @@ void ParticleSection::RebuildCylinder(const PrimitiveCylinder::CylinderParams& p
     if (it == groups.end())
         return;
 
-    auto* cyl = dynamic_cast<PrimitiveCylinder*>(it->second.primitive_.get());
+    auto* prim = it->second.primitive_.get();
+    PrimitiveCylinder* cyl = nullptr;
+    if (prim && prim->GetPrimitiveType() == PrimitiveType::Cylinder) {
+        cyl = static_cast<PrimitiveCylinder*>(prim);
+    }
     if (cyl) {
         cyl->SetParams(params);
         cyl->Rebuild();

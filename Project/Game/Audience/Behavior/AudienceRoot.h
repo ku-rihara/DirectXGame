@@ -13,6 +13,7 @@ public:
 
     void Update([[maybe_unused]] float timeSpeed = 0.0f) override;
     void Debug() override;
+    bool IsAudienceRoot() const override { return true; }
 
     void ChangeCloseMode();
     void ChangeAppearMode();

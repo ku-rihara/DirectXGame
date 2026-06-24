@@ -12,8 +12,9 @@ public:
     PrimitiveSphere()  = default;
     ~PrimitiveSphere() = default;
 
-    void Init() override; //< 初期化
-    void Create() override; //< 球体生成
+    void Init() override;
+    void Create() override;
+    PrimitiveType GetPrimitiveType() const override { return PrimitiveType::Sphere; }
 
 private:
 };

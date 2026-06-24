@@ -7,7 +7,7 @@
 #include <string>
 
 /// <summary>
-/// イージングを扱うテンプレートクラス（純粋計算エンジン）
+/// イージングを扱うテンプレートクラス
 /// </summary>
 namespace KetaEngine {
 

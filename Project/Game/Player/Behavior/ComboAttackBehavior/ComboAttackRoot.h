@@ -27,6 +27,7 @@ public:
 	void Init() override;
     void Update(float atkSpeed) override;
 	void Debug()override;
+    Type GetComboType() const override { return Type::Root; }
 
 	void JudgeAttackPattern(); //攻撃パターンの判断　
     bool CheckConditionMuch(const PlayerComboAttackData::TriggerCondition& condition);

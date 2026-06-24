@@ -19,19 +19,15 @@ public:
     void Debug() override;
 
 private:
-    /// <summary>
     /// TimeUpスプライトアニメーション待ちの状態
-    /// </summary>
     void StateSpriteAnim(float timeSpeed);
-    /// <summary>
     /// 画面フェードインの状態
-    /// </summary>
     void StateFadeIn(float timeSpeed);
 
-    std::function<void(float)> currentState_;
-    float alpha_ = 0.7f;
+    std::function<void(float)> currentState_;         ///< 現在の状態関数
+    float alpha_ = 0.7f;                              ///< 暗転オーバーレイのアルファ値
 
-    std::unique_ptr<KetaEngine::Sprite> gameOverSprite_;
+    std::unique_ptr<KetaEngine::Sprite> gameOverSprite_; ///< ゲームオーバー表示スプライト
 
-    KetaEngine::Easing<float> fadeEasing_;
+    KetaEngine::Easing<float> fadeEasing_;            ///< フェードイン用イージング
 };

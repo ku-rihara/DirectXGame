@@ -164,7 +164,8 @@ void EntourageEnemy::OnCollisionStay(BaseCollider* other) {
     // PlayerAttackCollider 処理
     BaseEnemy::OnCollisionStay(other); 
 
-    if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+    if (other->IsEnemy()) {
+        auto* enemy = static_cast<BaseEnemy*>(other);
         if (IsAttacking() || enemy->IsAttacking()) {
             return;
         }

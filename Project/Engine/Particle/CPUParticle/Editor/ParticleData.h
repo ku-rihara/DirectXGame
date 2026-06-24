@@ -25,6 +25,8 @@ public:
     ParticleData()           = default;
     ~ParticleData() override = default;
 
+    bool IsParticleData() const override { return true; }
+
     // BaseEffectDataからのオーバーライド
     void Update(float speedRate = 1.0f) override;
     void Reset() override;

@@ -17,9 +17,10 @@ public:
     /// public method
     /// ===================================================
 
-    void Init() override;             //< 初期化処理
-    void SetDebugCube() override;     //< デバッグ球のセット
-    void UpdateWorldTransform() override; //< ワールド変換の更新
+    void Init() override;
+    void SetDebugCube() override;
+    void UpdateWorldTransform() override;
+    ColliderShape GetShape() const override { return ColliderShape::Sphere; }
 
 private:
     Sphere sphere_; // 球構造体

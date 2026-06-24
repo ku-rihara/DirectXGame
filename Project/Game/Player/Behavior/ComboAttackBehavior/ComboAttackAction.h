@@ -22,6 +22,7 @@ public:
     void Init() override;
     void Update(float atkSpeed) override;
     void Debug() override;
+    Type GetComboType() const override { return Type::Action; }
 
     // 次の攻撃候補
     struct NextAttackCandidate {

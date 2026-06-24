@@ -34,7 +34,8 @@ public:
     // Param Edit
     virtual void RegisterParams();            //< パラメータバインド
     virtual void AdjustParam();           //< パラメータ調整
-    virtual void AdjustUniqueParam() = 0; //< 固有パラメータ調整
+    virtual void AdjustUniqueParam() = 0;
+    virtual bool IsSpawnField() const { return false; }
 
 protected:
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;

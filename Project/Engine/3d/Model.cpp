@@ -226,7 +226,8 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
 
     // 環境マップ
     BasePipeline* skyBoxPipeline = PipelineManager::GetInstance()->GetPipeline(PipelineType::SkyBox);
-    if (SkyBoxPipeline* skyBoxPipe = dynamic_cast<SkyBoxPipeline*>(skyBoxPipeline)) {
+    if (skyBoxPipeline && skyBoxPipeline->IsSkyBoxPipeline()) {
+        auto* skyBoxPipe = static_cast<SkyBoxPipeline*>(skyBoxPipeline);
         uint32_t environmentalMapTexture = skyBoxPipe->GetEnvironmentalMapTextureHandle();
         commandList->SetGraphicsRootDescriptorTable(static_cast<UINT>(Object3DRootParameter::TextureCube), TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
     }
@@ -265,7 +266,8 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
 
     // 環境マップ
     BasePipeline* skyBoxPipeline = PipelineManager::GetInstance()->GetPipeline(PipelineType::SkyBox);
-    if (SkyBoxPipeline* skyBoxPipe = dynamic_cast<SkyBoxPipeline*>(skyBoxPipeline)) {
+    if (skyBoxPipeline && skyBoxPipeline->IsSkyBoxPipeline()) {
+        auto* skyBoxPipe = static_cast<SkyBoxPipeline*>(skyBoxPipeline);
         uint32_t environmentalMapTexture = skyBoxPipe->GetEnvironmentalMapTextureHandle();
         commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
     }

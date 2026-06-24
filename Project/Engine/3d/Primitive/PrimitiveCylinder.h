@@ -39,6 +39,7 @@ public:
     // 初期化、プリミティブ作成
     void Init() override;
     void Create() override;
+    PrimitiveType GetPrimitiveType() const override { return PrimitiveType::Cylinder; }
 
     // プリミティブの再構築
     void Rebuild();

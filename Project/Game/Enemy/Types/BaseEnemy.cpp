@@ -161,7 +161,8 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    if (PlayerAttackCollider* attackController = dynamic_cast<PlayerAttackCollider*>(other)) {
+    if (other->IsPlayerAttack()) {
+        auto* attackController = static_cast<PlayerAttackCollider*>(other);
         behaviorCtrl_.OnPlayerAttackCollision(attackController);
         return;
     }
@@ -306,7 +307,8 @@ void BaseEnemy::RefreshCollision() {
 
 
 bool BaseEnemy::IsInDeathBehavior() const {
-    return dynamic_cast<EnemyDeath*>(behaviorCtrl_.GetDamageBehavior()) != nullptr;
+    auto* dmg = behaviorCtrl_.GetDamageBehavior();
+    return dmg && dmg->IsDeath();
 }
 
 

@@ -18,7 +18,7 @@ void LockOnController::Update(Player* pPlayer, const KetaEngine::ViewProjection&
 
     // 強敵のみをロックオン対象とする
     for (const auto& enemy : enemies) {
-        if (enemy && dynamic_cast<LeaderEnemy*>(enemy.get())) {
+        if (enemy && enemy->IsLeaderEnemy()) {
             targets.emplace_back(enemy.get());
         }
     }

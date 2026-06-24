@@ -15,7 +15,7 @@ void ShakePlayer::Update(float speedRate) {
 }
 
 void ShakePlayer::UpdateTotalShakeOffset() {
-    if (ShakeData* shakeData = dynamic_cast<ShakeData*>(effectData_.get())) {
+    if (ShakeData* shakeData = static_cast<ShakeData*>(effectData_.get())) {
         totalShakeOffset_ = shakeData->GetShakeOffset();
     }
 }

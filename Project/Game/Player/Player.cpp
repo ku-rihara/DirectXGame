@@ -2,7 +2,6 @@
 #include "Scene/GameObj.h"
 
 /// Enemy
-#include "Enemy/CollisionBox/EnemyAttackCollisionBox.h"
 #include "Enemy/Types/BaseEnemy.h"
 // CollisionUtils
 #include "Utility/CollisionPush/CollisionPushUtils.h"
@@ -31,10 +30,10 @@ void Player::Init() {
 
     BaseObject::Init();
 
-    //* particle
+    // エフェクト初期化
     effects_.Init(&baseTransform_);
 
-    ///* グローバルパラメータ
+    // グローバルパラメータ初期化
     parameters_.Init();
 
     // Playerのモデル
@@ -76,7 +75,6 @@ void Player::Update() {
     HeadLightSetting();
 
     /// 振る舞い処理
-    // コンボ更新を先に行うことで、攻撃入力による状態遷移を優先させる
     if (!behaviors_.IsDead()) {
         behaviors_.GetComboBehavior()->Update(context_.comboAttackController->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
     }
@@ -167,9 +165,6 @@ void Player::AdaptRotate() {
     baseTransform_.rotation_.y = LerpShortAngle(baseTransform_.rotation_.y, objectiveAngle_, 0.3f);
 }
 
-///=========================================================
-/// 動いているか
-///==========================================================
 ///=========================================================
 /// 　移動制限
 ///==========================================================
@@ -287,7 +282,8 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+    if (other->IsEnemy()) {
+        auto* enemy = static_cast<BaseEnemy*>(other);
         // 敵が攻撃中は押し戻し無効
         if (enemy->IsAttacking()) {
             return;

@@ -20,6 +20,7 @@ public:
     /// </summary>
     /// <param name="dxCommon">DirectXCommon</param>
     void Init(DirectXCommon* dxCommon) override;
+    bool IsSkyBoxPipeline() const override { return true; }
 
     /// <summary>
     /// 描画前処理

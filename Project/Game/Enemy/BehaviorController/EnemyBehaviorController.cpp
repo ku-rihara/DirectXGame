@@ -36,7 +36,7 @@ void EnemyBehaviorController::Init(BaseEnemy* owner) {
 void EnemyBehaviorController::Update(float deltaTime) {
     // ダメージリアクション中でなければ移動ビヘイビアを更新
     if (moveBehavior_) {
-        bool damageActive = damageBehavior_ && !dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get());
+        bool damageActive = damageBehavior_ && !damageBehavior_->IsReactionRoot();
         if (!damageActive) {
             moveBehavior_->Update();
         }
@@ -69,7 +69,7 @@ void EnemyBehaviorController::ChangeDamageReactionBehavior(std::unique_ptr<BaseE
     }
 
     // スポーンビヘイビアをスキップして次のビヘイビアへ移行する
-    if (dynamic_cast<EnemySpawn*>(moveBehavior_.get())) {
+    if (moveBehavior_ && moveBehavior_->IsSpawn()) {
         pOwner_->ScaleReset();
         pOwner_->OnSpawnCompleted();
         pOwner_->SetIsAdaptCollision(true);
@@ -88,7 +88,7 @@ void EnemyBehaviorController::OnPlayerAttackCollision(PlayerAttackCollider* atta
     if (pOwner_->GetIsDeath() || pOwner_->GetIsDeathPending()) {
         return;
     }
-    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+    if (damageBehavior_ && damageBehavior_->IsDeath()) {
         return;
     }
 
@@ -147,8 +147,8 @@ void EnemyBehaviorController::OnPlayerAttackCollision(PlayerAttackCollider* atta
 
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(pOwner_));
 
-    if (EnemyDamageReactionRoot* root = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
-        root->SelectDamageActionBehaviorByAttack(attackController, skipAnimation);
+    if (damageBehavior_ && damageBehavior_->IsReactionRoot()) {
+        static_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())->SelectDamageActionBehaviorByAttack(attackController, skipAnimation);
     }
 }
 
@@ -196,5 +196,5 @@ void EnemyBehaviorController::DamageCollingUpdate(float deltaTime) {
 
 bool EnemyBehaviorController::IsChangeLocked() const {
     return pOwner_->GetIsDeath() ||
-           dynamic_cast<EnemyDeath*>(damageBehavior_.get()) != nullptr;
+           (damageBehavior_ && damageBehavior_->IsDeath());
 }

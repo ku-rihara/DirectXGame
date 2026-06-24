@@ -26,14 +26,11 @@ void SpatialGrid::Insert(BaseCollider* collider) {
     Vector3 pos  = collider->GetCollisionPos();
     Vector3 size = {1.0f, 1.0f, 1.0f};
 
-    // AABBまたはOBBまたはSphereの場合、実際のサイズを取得
-    if (auto* aabb = dynamic_cast<AABBCollider*>(collider)) {
-        size = aabb->GetCollisonScale();
-    } else if (auto* obb = dynamic_cast<OBBCollider*>(collider)) {
-        size = obb->GetOBB().size;
-    } else if (auto* sphere = dynamic_cast<SphereCollider*>(collider)) {
-        float r = sphere->GetSphere().radius;
-        size = { r, r, r };
+    using S = BaseCollider::ColliderShape;
+    switch (collider->GetShape()) {
+    case S::AABB:   size = static_cast<AABBCollider*>(collider)->GetCollisonScale(); break;
+    case S::OBB:    size = static_cast<OBBCollider*>(collider)->GetOBB().size; break;
+    case S::Sphere: { float r = static_cast<SphereCollider*>(collider)->GetSphere().radius; size = { r, r, r }; } break;
     }
 
     // コライダーが占有する範囲を計算

@@ -36,7 +36,7 @@ std::unique_ptr<BaseEffectData> EasingPlayer<T>::CreateEffectData() {
 
 template <typename T>
 const T& EasingPlayer<T>::GetValue() const {
-    if (auto* data = dynamic_cast<EasingData<T>*>(effectData_.get())) {
+    if (auto* data = static_cast<EasingData<T>*>(effectData_.get())) {
         return data->GetPreviewValue();
     }
     static T dummy = {};

@@ -24,6 +24,10 @@
 #include "2D/Sprite.h"
 #include <memory>
 
+/// <summary>
+/// ゲームシーン内の全オブジェクトを一括保持する構造体
+/// GameScene から各オブジェクトへのアクセス窓口として使う
+/// </summary>
 struct GameObj {
     std::unique_ptr<GameCamera>                   gameCamera_                   = nullptr;
     std::unique_ptr<Field>                        field_                        = nullptr;

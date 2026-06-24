@@ -18,8 +18,9 @@ public:
     /// public method
     /// ===================================================
 
-    void Init() override; //< 初期化処理
-    void SetDebugCube() override; //< デバッグキューブのセット
+    void Init() override;
+    void SetDebugCube() override;
+    ColliderShape GetShape() const override { return ColliderShape::OBB; }
 
     /// <summary>
     /// OBBのラインを描画

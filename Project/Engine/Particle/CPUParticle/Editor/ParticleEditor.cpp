@@ -23,9 +23,9 @@ void ParticleEditor::InitializeAllParticleGroups() {
     // カテゴリーモードの場合
     for (auto& category : categories_) {
         for (auto& effect : category.effects) {
-            auto* particleData = dynamic_cast<ParticleData*>(effect.get());
-            if (particleData) {
-                InitializeParticleDataGroups(particleData);
+            auto* ed = effect.get();
+            if (ed && ed->IsParticleData()) {
+                InitializeParticleDataGroups(static_cast<ParticleData*>(ed));
             }
         }
     }
@@ -71,7 +71,10 @@ void ParticleEditor::RenderSpecificUI() {
 
     auto* selectedEffectData = GetSelectedEffect();
     if (selectedEffectData) {
-        auto* particleData = dynamic_cast<ParticleData*>(selectedEffectData);
+        ParticleData* particleData = nullptr;
+        if (selectedEffectData->IsParticleData()) {
+            particleData = static_cast<ParticleData*>(selectedEffectData);
+        }
         if (particleData && particleData->GetTotalKeyFrameCount() > 0) {
             int selectedSectionIndex = particleData->GetSelectedKeyFrameIndex();
 
@@ -170,8 +173,8 @@ std::string ParticleEditor::GetFolderName() const {
 void ParticleEditor::PlaySelectedAnimation() {
     BaseEffectEditor::PlaySelectedAnimation();
 
-    auto* particleData = dynamic_cast<ParticleData*>(GetSelectedEffect());
-    if (particleData) {
-        particleData->SetIsPlayByEditor(true);
+    auto* sel = GetSelectedEffect();
+    if (sel && sel->IsParticleData()) {
+        static_cast<ParticleData*>(sel)->SetIsPlayByEditor(true);
     }
 }

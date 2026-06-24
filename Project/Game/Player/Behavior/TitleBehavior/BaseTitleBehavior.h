@@ -21,6 +21,7 @@ public:
 
     virtual ~BaseTitleBehavior() {}
 
-    virtual void Update() = 0; /// 更新
-    virtual void Debug()  = 0; /// デバッグ
+    virtual void Update() = 0;
+    virtual void Debug()  = 0;
+    virtual bool IsTitlePlayerBehavior() const { return false; }
 };

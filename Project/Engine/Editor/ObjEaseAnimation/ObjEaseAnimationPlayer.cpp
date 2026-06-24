@@ -22,7 +22,7 @@ void ObjEaseAnimationPlayer::Play(const std::string& animationName, const std::s
     effectData_ = CreateEffectData();
 
     // キャスト
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<ObjEaseAnimationData*>(effectData_.get());
     if (animeData) {
         animeData->Init(animationName, categoryName);
         animeData->LoadData();
@@ -44,7 +44,7 @@ std::unique_ptr<BaseEffectData> ObjEaseAnimationPlayer::CreateEffectData() {
 }
 
 Vector3 ObjEaseAnimationPlayer::GetCurrentScale() const {
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<ObjEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Scale);
     }
@@ -52,7 +52,7 @@ Vector3 ObjEaseAnimationPlayer::GetCurrentScale() const {
 }
 
 Vector3 ObjEaseAnimationPlayer::GetCurrentRotation() const {
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<ObjEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Rotation);
     }
@@ -60,7 +60,7 @@ Vector3 ObjEaseAnimationPlayer::GetCurrentRotation() const {
 }
 
 Vector3 ObjEaseAnimationPlayer::GetCurrentTranslation() const {
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<ObjEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Translation);
     }
@@ -68,7 +68,7 @@ Vector3 ObjEaseAnimationPlayer::GetCurrentTranslation() const {
 }
 
 Vector3 ObjEaseAnimationPlayer::GetCurrentScaleAnchor() const {
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<ObjEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActiveAnchorValue(ObjEaseAnimationData::TransformType::Scale);
     }
@@ -76,7 +76,7 @@ Vector3 ObjEaseAnimationPlayer::GetCurrentScaleAnchor() const {
 }
 
 Vector3 ObjEaseAnimationPlayer::GetCurrentRotationAnchor() const {
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<ObjEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActiveAnchorValue(ObjEaseAnimationData::TransformType::Rotation);
     }
@@ -84,7 +84,7 @@ Vector3 ObjEaseAnimationPlayer::GetCurrentRotationAnchor() const {
 }
 
 Vector3 ObjEaseAnimationPlayer::GetCurrentTranslationAnchor() const {
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<ObjEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetActiveAnchorValue(ObjEaseAnimationData::TransformType::Translation);
     }
@@ -92,11 +92,11 @@ Vector3 ObjEaseAnimationPlayer::GetCurrentTranslationAnchor() const {
 }
 
 ObjEaseAnimationData* ObjEaseAnimationPlayer::GetAnimationData() {
-    return dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    return static_cast<ObjEaseAnimationData*>(effectData_.get());
 }
 
 bool ObjEaseAnimationPlayer::IsLookingAtDirection() const {
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<ObjEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->IsLookingAtDirection();
     }
@@ -104,7 +104,7 @@ bool ObjEaseAnimationPlayer::IsLookingAtDirection() const {
 }
 
 Vector3 ObjEaseAnimationPlayer::GetMovementDirection() const {
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<ObjEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->GetMovementDirection();
     }
@@ -112,7 +112,7 @@ Vector3 ObjEaseAnimationPlayer::GetMovementDirection() const {
 }
 
 bool ObjEaseAnimationPlayer::IsTranslationReturning() const {
-    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    auto* animeData = static_cast<ObjEaseAnimationData*>(effectData_.get());
     if (animeData) {
         return animeData->IsTranslationReturning();
     }

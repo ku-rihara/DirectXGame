@@ -12,8 +12,9 @@ public:
     PrimitivePlane()  = default;
     ~PrimitivePlane() = default;
 
-    void Init() override;   //< 初期化
-    void Create() override; //< 平面生成
+    void Init() override;
+    void Create() override;
+    PrimitiveType GetPrimitiveType() const override { return PrimitiveType::Plane; }
   
 private:
 };

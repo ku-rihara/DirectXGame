@@ -34,14 +34,14 @@ float TimeScalePlayer::GetCurrentTimeScale() const {
 }
 
 float TimeScalePlayer::GetElapsedTime() const {
-    if (TimeScaleData* timeScaleData = dynamic_cast<TimeScaleData*>(effectData_.get())) {
+    if (TimeScaleData* timeScaleData = static_cast<TimeScaleData*>(effectData_.get())) {
         return timeScaleData->GetElapsedTime();
     }
     return 0.0f;
 }
 
 float TimeScalePlayer::GetRemainingTime() const {
-    if (TimeScaleData* timeScaleData = dynamic_cast<TimeScaleData*>(effectData_.get())) {
+    if (TimeScaleData* timeScaleData = static_cast<TimeScaleData*>(effectData_.get())) {
         return timeScaleData->GetRemainingTime();
     }
     return 0.0f;

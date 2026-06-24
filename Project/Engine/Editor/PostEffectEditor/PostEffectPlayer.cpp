@@ -57,5 +57,5 @@ std::unique_ptr<BaseEffectData> PostEffectPlayer::CreateEffectData() {
 /// GetData
 ///============================================================
 PostEffectData* PostEffectPlayer::GetData() const {
-    return dynamic_cast<PostEffectData*>(effectData_.get());
+    return static_cast<PostEffectData*>(effectData_.get());
 }

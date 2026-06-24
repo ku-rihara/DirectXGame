@@ -33,7 +33,7 @@ void ParticlePlayer::Update(float speedRate) {
 
     // 古いエフェクトを継続更新し、afterDurationで停止したら削除
     for (auto it = finishingEffects_.begin(); it != finishingEffects_.end();) {
-        auto* pd = dynamic_cast<ParticleData*>(it->get());
+        auto* pd = static_cast<ParticleData*>(it->get());
         if (pd) {
             pd->CheckAndPauseSectionsAfterDuration(Frame::DeltaTimeRate());
             pd->Update(speedRate);
@@ -73,7 +73,7 @@ void ParticlePlayer::Play(const std::string& particleName, const std::string& ca
         }
         effectData_ = CreateEffectData();
 
-        auto* particleData = dynamic_cast<ParticleData*>(effectData_.get());
+        auto* particleData = static_cast<ParticleData*>(effectData_.get());
         if (particleData) {
             particleData->Init(particleName, categoryName);
 
@@ -101,7 +101,7 @@ std::unique_ptr<BaseEffectData> ParticlePlayer::CreateEffectData() {
 }
 
 ParticleData* ParticlePlayer::GetParticleData() {
-    return dynamic_cast<ParticleData*>(effectData_.get());
+    return static_cast<ParticleData*>(effectData_.get());
 }
 
 void ParticlePlayer::ApplyParentParametersToData(ParticleData* particleData) {

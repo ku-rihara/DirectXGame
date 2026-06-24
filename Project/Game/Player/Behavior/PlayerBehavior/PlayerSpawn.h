@@ -12,8 +12,9 @@ public:
     PlayerSpawn(Player* player);
     ~PlayerSpawn();
 
-    void Update([[maybe_unused]] float timeSpeed = 0.0f) override; //< 更新
-    void Debug() override;                                         //< デバッグ
+    void Update([[maybe_unused]] float timeSpeed = 0.0f) override;
+    void Debug() override;
+    Type GetBehaviorType() const override { return Type::Spawn; }
 
 private:
     enum class Step {

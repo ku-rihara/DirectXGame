@@ -26,6 +26,7 @@ public:
     /// </summary>
     /// <param name="name">イントロ名</param>
     void Init(const std::string& name) override;
+    bool IsSpawnField() const override { return true; }
 
     /// <summary>
     /// 更新

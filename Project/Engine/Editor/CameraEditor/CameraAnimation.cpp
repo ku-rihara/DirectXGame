@@ -28,7 +28,7 @@ void CameraAnimation::Play(const std::string& animationName, const std::string& 
     currentEffectName_   = animationName;
 
     // アニメーションデータの初期化とロード
-    if (CameraAnimationData* cameraData = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
+    if (CameraAnimationData* cameraData = static_cast<CameraAnimationData*>(effectData_.get())) {
         cameraData->Init(animationName, categoryName);
         cameraData->LoadData();
 
@@ -48,7 +48,7 @@ void CameraAnimation::SaveInitialValues() {
     startParam_.rotation = pViewProjection_->rotationOffset_;
     startParam_.fov      = pViewProjection_->fovAngleY_;
 
-    if (CameraAnimationData* date = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
+    if (CameraAnimationData* date = static_cast<CameraAnimationData*>(effectData_.get())) {
         date->SetInitialValues(startParam_.position, startParam_.rotation, startParam_.fov);
     }
 }
@@ -63,7 +63,7 @@ void CameraAnimation::ApplyOffsetToViewProjection() {
     }
 
     // アニメーションデータをViewProjectionに適用
-    if (CameraAnimationData* cameraData = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
+    if (CameraAnimationData* cameraData = static_cast<CameraAnimationData*>(effectData_.get())) {
         cameraData->ApplyToViewProjection(*pViewProjection_);
     }
 }
@@ -78,7 +78,7 @@ void CameraAnimation::SetViewProjection(ViewProjection* viewProjection) {
 
 void CameraAnimation::SetLookAtTarget(const WorldTransform* target) {
     if (effectData_) {
-        if (CameraAnimationData* cameraData = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
+        if (CameraAnimationData* cameraData = static_cast<CameraAnimationData*>(effectData_.get())) {
             cameraData->SetLookAtTarget(target);
         }
     }

@@ -13,6 +13,8 @@ namespace KetaEngine {
 
 class BaseCollider {
 public:
+    enum class ColliderShape : uint8_t { AABB, OBB, Sphere };
+
     BaseCollider()          = default;
     virtual ~BaseCollider() = default;
     /// ===================================================
@@ -20,9 +22,16 @@ public:
     /// ===================================================
 
     // 初期化、行列更新
-    virtual void Init() = 0; 
-    virtual void UpdateWorldTransform() = 0; 
+    virtual void Init() = 0;
+    virtual void UpdateWorldTransform() = 0;
     virtual void SetDebugCube() = 0;
+    virtual ColliderShape GetShape() const = 0;
+
+    virtual bool IsPlayer()         const { return false; }
+    virtual bool IsEnemy()          const { return false; }
+    virtual bool IsLeaderEnemy()    const { return false; }
+    virtual bool IsEntourageEnemy() const { return false; }
+    virtual bool IsPlayerAttack()   const { return false; }
     
     /// <summary>
     /// 衝突開始時の処理

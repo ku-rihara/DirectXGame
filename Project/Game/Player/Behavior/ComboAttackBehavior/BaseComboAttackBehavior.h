@@ -12,6 +12,8 @@ class PlayerParameter;
 /// </summary>
 class BaseComboAttackBehavior : public BaseBehavior<Player> {
 public:
+    enum class Type { Base, Root, Action };
+
     BaseComboAttackBehavior(const std::string& name, Player* player);
     virtual ~BaseComboAttackBehavior() = default;
 
@@ -19,6 +21,7 @@ public:
     virtual void Update(float atkSpeed) = 0;
     virtual void Debug() override       = 0;
     virtual void ChangeNextCombo(std::unique_ptr<BaseComboAttackBehavior> nextCombo);
+    virtual Type GetComboType() const { return Type::Base; }
 
 protected:
     // プレイヤーパラメータへのポインタ

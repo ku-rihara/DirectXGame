@@ -5,10 +5,14 @@
 
 class Player;
 
+/// <summary>
+/// プレイヤーの行動 (移動・攻撃) を管理するクラス
+/// </summary>
 class PlayerBehaviorManager {
 public:
     void Init(Player* player);
 
+    // 行動切り替え
     void Change(std::unique_ptr<BasePlayerBehavior> behavior);
     void ChangeCombo(std::unique_ptr<BaseComboAttackBehavior> behavior);
     void ResetComboToRoot(Player* player);
@@ -16,15 +20,15 @@ public:
     void StartAutoDash(Player* player);
     void ClearForceDash();
 
+    // 現在の行動取得
     BasePlayerBehavior*      GetBehavior()      const { return behavior_.get(); }
     BaseComboAttackBehavior* GetComboBehavior() const { return comboBehavior_.get(); }
 
-    template<typename T>
-    T* GetAs() const { return dynamic_cast<T*>(behavior_.get()); }
+    /// 指定型にキャストして取得
+    template<typename T> T* GetAs() const;
+    template<typename T> T* GetComboAs() const;
 
-    template<typename T>
-    T* GetComboAs() const { return dynamic_cast<T*>(comboBehavior_.get()); }
-
+    // 状態クエリ
     bool IsDashing()   const;
     bool IsAirborne()  const;
     bool IsComboRoot() const;
@@ -32,6 +36,6 @@ public:
     bool IsSpawning()  const;
 
 private:
-    std::unique_ptr<BasePlayerBehavior>      behavior_;
-    std::unique_ptr<BaseComboAttackBehavior> comboBehavior_;
+    std::unique_ptr<BasePlayerBehavior>      behavior_;      ///< 通常行動
+    std::unique_ptr<BaseComboAttackBehavior> comboBehavior_; ///< コンボ攻撃行動
 };

@@ -12,6 +12,8 @@ public:
 
     virtual void Update(float deltaTime) = 0;
     virtual void Debug()                 = 0;
+    virtual bool IsReactionRoot() const { return false; }
+    virtual bool IsDeath()        const { return false; }
 
 protected:
     // 振る舞い名

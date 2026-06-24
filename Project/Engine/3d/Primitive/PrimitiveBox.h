@@ -12,8 +12,9 @@ public:
     PrimitiveBox()  = default;
     ~PrimitiveBox() = default;
 
-    void Init() override;   //< 初期化
-    void Create() override; //< ボックス生成
+    void Init() override;
+    void Create() override;
+    PrimitiveType GetPrimitiveType() const override { return PrimitiveType::Box; }
 
 private:
 };

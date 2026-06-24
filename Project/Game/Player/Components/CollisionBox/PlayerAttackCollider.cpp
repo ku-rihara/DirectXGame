@@ -150,9 +150,9 @@ void PlayerAttackCollider::UpdateOffset() {
 }
 
 void PlayerAttackCollider::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-    if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+    if (other->IsEnemy()) {
+        auto* enemy = static_cast<BaseEnemy*>(other);
         isHit_ = true;
-        // 最初にヒットした敵の座標を記録し、毎フレーム更新する
         if (!hasHitTarget_) {
             hasHitTarget_ = true;
         }

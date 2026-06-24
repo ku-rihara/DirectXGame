@@ -34,6 +34,8 @@ public:
     EntourageEnemy()           = default;
     ~EntourageEnemy() override = default;
 
+    bool IsEntourageEnemy() const override { return true; }
+
     ///========================================================================================
     ///  public method
     ///========================================================================================

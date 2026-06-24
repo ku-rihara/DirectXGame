@@ -68,8 +68,7 @@ public:
     /// <returns>指定した型のエフェクト</returns>
     template <typename T>
     T* GetEffect(PostEffectMode mode) {
-        BasePostEffect* effect = GetEffect(mode);
-        return dynamic_cast<T*>(effect);
+        return static_cast<T*>(GetEffect(mode));
     }
 
     /// <summary>

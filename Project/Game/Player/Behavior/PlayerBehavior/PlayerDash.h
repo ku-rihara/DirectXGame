@@ -15,6 +15,7 @@ public:
 
     void Update([[maybe_unused]] float timeSpeed = 0.0f) override;
     void Debug() override;
+    Type GetBehaviorType() const override { return Type::Dash; }
 
     void JumpForJoyState();
 

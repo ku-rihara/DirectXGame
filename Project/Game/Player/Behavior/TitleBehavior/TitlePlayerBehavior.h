@@ -13,9 +13,9 @@ public:
     TitlePlayerBehavior(Player* player);
     ~TitlePlayerBehavior() = default;
 
-    // 更新、デバッグ
     void Update() override;
     void Debug() override;
+    bool IsTitlePlayerBehavior() const override { return true; }
 
     // フェーズごとのアニメーションのセットアップ
     void SetUpAnimations();

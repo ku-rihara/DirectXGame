@@ -216,8 +216,8 @@ void EnemyManager::UpdateTauntState() {
         }
 
         bool bossIsTaunting = false;
-        if (LeaderEnemy* strong = dynamic_cast<LeaderEnemy*>(boss)) {
-            bossIsTaunting = strong->IsTaunting();
+        if (boss->IsLeaderEnemy()) {
+            bossIsTaunting = static_cast<LeaderEnemy*>(boss)->IsTaunting();
         }
 
         for (EntourageEnemy* zako : minions) {

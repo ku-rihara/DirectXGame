@@ -30,8 +30,9 @@ public:
     IPrimitive()          = default;
     virtual ~IPrimitive() = default;
 
-    virtual void Init();       //< 初期化
-    virtual void Create() = 0; //< プリミティブ生成
+    virtual void Init();
+    virtual void Create() = 0;
+    virtual PrimitiveType GetPrimitiveType() const = 0;
 
     /// <summary>
     /// 描画

@@ -16,10 +16,10 @@ public:
     /// public  method
     /// ===================================================
 
-    void Init() override; //< 初期化
-    void SetDebugCube() override; //<デバッグキューブの描画セット
-    
-    void UpdateWorldTransform() override;             //< ワールド変換の更新
+    void Init() override;
+    void SetDebugCube() override;
+    void UpdateWorldTransform() override;
+    ColliderShape GetShape() const override { return ColliderShape::AABB; }             //< ワールド変換の更新
 
 private:
     /// ===================================================

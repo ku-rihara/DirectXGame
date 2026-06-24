@@ -38,7 +38,11 @@ void NextAttackHintUI::Update() {
     const ComboAttackAction::NextAttackCandidate* yCand = nullptr;
 
     if (pPlayer_ && pViewProjection_) {
-        auto* action = dynamic_cast<ComboAttackAction*>(pPlayer_->GetBehaviors().GetComboBehavior());
+        auto* combo  = pPlayer_->GetBehaviors().GetComboBehavior();
+        ComboAttackAction* action = nullptr;
+        if (combo && combo->GetComboType() == BaseComboAttackBehavior::Type::Action) {
+            action = static_cast<ComboAttackAction*>(combo);
+        }
         if (action) {
             for (const auto& cand : action->GetAllNextAttackCandidates()) {
                 if (!cand.branch) {

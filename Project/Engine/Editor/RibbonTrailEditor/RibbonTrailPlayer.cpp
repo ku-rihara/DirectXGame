@@ -163,7 +163,7 @@ std::unique_ptr<BaseEffectData> RibbonTrailPlayer::CreateEffectData() {
 /// GetData
 ///============================================================
 RibbonTrailData* RibbonTrailPlayer::GetData() const {
-    return dynamic_cast<RibbonTrailData*>(effectData_.get());
+    return static_cast<RibbonTrailData*>(effectData_.get());
 }
 
 ///============================================================

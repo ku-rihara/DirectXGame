@@ -24,7 +24,6 @@
 #include "Components/Parts/PlayerHandRight.h"
 // ComboCreator
 #include "Player/AutoComboAttack/AutoComboQueue.h"
-// Context
 // std
 #include <functional>
 #include <memory>
@@ -39,20 +38,24 @@ class StressGauge;
 
 /// <summary>
 /// プレイヤークラス
+/// 移動・ジャンプ・攻撃・アニメーションを統括する
 /// </summary>
 class Player : public BaseObject, public KetaEngine::AABBCollider {
 private:
+    /// ゲームシーン内の関連オブジェクトをまとめた構造体
     struct PlayerContext {
-        LockOnController* pLockOn                          = nullptr;
-        GameCamera* pGameCamera                            = nullptr;
-        Combo* pCombo                                      = nullptr;
-        PlayerComboAttackController* comboAttackController = nullptr;
-        StressGauge* pStressGauge                            = nullptr;
+        LockOnController* pLockOn                          = nullptr; ///< ロックオン管理
+        GameCamera* pGameCamera                            = nullptr; ///< ゲームカメラ
+        Combo* pCombo                                      = nullptr; ///< コンボシステム
+        PlayerComboAttackController* comboAttackController = nullptr; ///< コンボ攻撃コントローラー
+        StressGauge* pStressGauge                          = nullptr; ///< ストレスゲージ
     };
 
 public:
     Player()  = default;
     ~Player() = default;
+
+    bool IsPlayer() const override { return true; }
 
     // 初期化処理
     void Init() override;
@@ -67,8 +70,8 @@ public:
     /// </summary>
     /// <param name="speed">移動スピード</param>
     void Move(float speed);
-    void MoveToLimit(); //< 移動範囲制限
-    void UpdateMatrix(); //< 行列更新
+    void MoveToLimit(); ///< 移動範囲制限
+    void UpdateMatrix(); ///< 行列更新
 
     /// <summary>
     /// ジャンプの動き
@@ -106,26 +109,27 @@ public:
         }
     }
 
-    void ChangeCombBoRoot(); //< コンボルート変更
-    void FaceToTarget(); //< ターゲット方向を向く
-    void AdaptRotate(); //< 回転適用
-    bool CheckIsChargeMax() const; //< チャージ最大判定
-    void AdjustParam(); //< パラメータ調整
-    Vector3 GetCollisionPos() const override; //< 衝突位置取得
+    void ChangeCombBoRoot(); ///< コンボルートへ遷移
+    void FaceToTarget(); ///< ターゲット方向を向く
+    void AdaptRotate(); ///< 目標角度を適用
+    bool CheckIsChargeMax() const; ///< チャージが最大値に達しているか
+    void AdjustParam(); ///< パラメータ編集
+    Vector3 GetCollisionPos() const override; ///< 衝突判定位置取得
 
     /// 自動ダッシュ開始、解除
     void StartAutoDash();
     void ClearAutoDash();
 
-    void HeadLightSetting();
+    // ヘッドライトのアタッチ設定
+    void HeadLightSetting(); 
 
     // Behavior切り替え
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior) { behaviors_.Change(std::move(behavior)); }
     void ChangeCombo(std::unique_ptr<BaseComboAttackBehavior> combo) { behaviors_.ChangeCombo(std::move(combo)); }
 
 private:
-    void ChangeDeathMode();
-    bool IsAbleBehavior();
+    void ChangeDeathMode(); ///< 死亡モードへ移行
+    bool IsAbleBehavior(); ///< 通常行動可能か
 
 protected:
     PlayerBehaviorManager behaviors_;
@@ -136,7 +140,7 @@ private:
     KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Player";
 
-    // ViewProjectionの取得
+    // ViewProjection
     const KetaEngine::ViewProjection* viewProjection_ = nullptr;
 
     PlayerAnimator animator_;
@@ -157,22 +161,26 @@ private:
     /// private variables
     /// ===================================================
 
-    // input
+    // 入力
     PlayerInput input_;
 
-    // move
+    // 目標角度
     float objectiveAngle_;
-    float objectiveAnglePitch_ = 0.0f;
+    float objectiveAnglePitch_ = 0.0f; 
+
+    // 移動方向ベクトル、スピード
     Vector3 direction_;
+    float moveSpeed_; 
+
+    // 移動前座標
     Vector3 prePos_;
-    float moveSpeed_;
+ 
+    // 攻撃チャージ
+    float currentUpperChargeTime_; 
 
-    // attackCharge
-    float currentUpperChargeTime_;
-
-    // 死亡フラグ
-    const bool* isDeath_;
-    bool isDeathRenditionFinish_ = false;
+    // 死亡
+    const bool* isDeath_;                 //< 死亡フラグへの参照ポインタ
+    bool isDeathRenditionFinish_ = false; //< 死亡演出完了フラグ
 
     // コンボアンロックスキップ
     bool isIgnoreUnlockState_ = false;
@@ -207,7 +215,7 @@ public:
     void SetObjectiveAngle(float angle) { objectiveAngle_ = angle; }
     void SetObjectiveAnglePitch(float angle) { objectiveAnglePitch_ = angle; }
     void SetShadowFrag(bool isShadow);
-    // Class Set
+    // 外部クラスとの接続
     void Connect(GameObj* go, const KetaEngine::ViewProjection& vp);
     void SetLockOn(LockOnController* lockon);
     void SetGameCamera(GameCamera* gamecamera);
