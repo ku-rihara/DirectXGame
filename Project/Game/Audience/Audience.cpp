@@ -99,6 +99,10 @@ void Audience::AppearByComboLevel(int32_t level) {
     // Rootを取得
     AudienceRoot* audienceRoot = GetAudienceRoot();
     if (!audienceRoot) {
+        // AudienceDisappear 中なら次回出現できるようにフラグをセット
+        if (behavior_ && behavior_->IsAudienceDisappear()) {
+            pendingAppear_ = true;
+        }
         return;
     }
 
@@ -108,6 +112,22 @@ void Audience::AppearByComboLevel(int32_t level) {
     }
 
     // スポーンモードに移行
+    particlePlayer_->SetTargetPosition(objAnimation_->transform_.GetWorldPos());
+    particlePlayer_->Play("AppearEffect", "Audience");
+    audienceRoot->ChangeAppearMode();
+}
+
+void Audience::CheckPendingAppear() {
+    if (!pendingAppear_) {
+        return;
+    }
+    pendingAppear_ = false;
+
+    AudienceRoot* audienceRoot = GetAudienceRoot();
+    if (!audienceRoot || audienceRoot->GetIsDraw()) {
+        return;
+    }
+
     particlePlayer_->SetTargetPosition(objAnimation_->transform_.GetWorldPos());
     particlePlayer_->Play("AppearEffect", "Audience");
     audienceRoot->ChangeAppearMode();

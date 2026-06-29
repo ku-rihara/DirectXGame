@@ -33,6 +33,7 @@ public:
             std::vector<bool> easingLoopFlags;
             std::vector<bool> groupStarted;
             std::vector<std::function<void()>> loopEndCallbacks;
+            std::vector<std::function<void()>> endCallbacks;
             std::unique_ptr<ParticlePlayer> particlePlayer;
             std::string particleName;
             size_t groupCount = 0;
@@ -99,11 +100,17 @@ public:
     bool GetIsEasingPlaying(int32_t groupNum) const;
 
     void SetLoopEndCallback(int32_t groupNum, const std::function<void()>& callback);
+    void SetGroupEndCallback(int32_t groupNum, const std::function<void()>& callback);
 
     /// <summary>
     /// 全オブジェクトのスケールを0に設定（非表示化）
     /// </summary>
     void SetAllObjectsScaleZero();
+
+    /// <summary>
+    /// UpdateMatrix を呼ばずにスケールのみ0に設定（UpdateAll内のコールバックから安全に呼べる）
+    /// </summary>
+    void SetAllObjectsScaleZeroNoUpdate();
 
     /// <summary>
     /// 全オブジェクトのスケールを1に設定（表示化）

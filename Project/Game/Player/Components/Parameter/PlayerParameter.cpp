@@ -50,6 +50,11 @@ void PlayerParameter::RegisterParams() {
 
     // DashParam
     globalParameter_->Regist(groupName_, "dashDistance", &playerParams_.dashParam.distance);
+
+    // MovementParam
+    globalParameter_->Regist(groupName_, "moveAcceleration", &playerParams_.movement.acceleration);
+    globalParameter_->Regist(groupName_, "moveDeceleration", &playerParams_.movement.deceleration);
+    globalParameter_->Regist(groupName_, "moveTurnBrake",    &playerParams_.movement.turnBrake);
 }
 
 ///==========================================================
@@ -99,6 +104,11 @@ void PlayerParameter::AdjustParam() {
 
         ImGui::SeparatorText("DashParam");
         ImGui::DragFloat("dashDistance", &playerParams_.dashParam.distance, 0.1f);
+
+        ImGui::SeparatorText("Movement (Inertia)");
+        ImGui::DragFloat("Acceleration", &playerParams_.movement.acceleration, 0.1f, 0.0f, 100.0f);
+        ImGui::DragFloat("Deceleration", &playerParams_.movement.deceleration, 0.1f, 0.0f, 100.0f);
+        ImGui::DragFloat("TurnBrake",    &playerParams_.movement.turnBrake,    0.1f, 0.0f, 100.0f);
 
         ImGui::SeparatorText("EasingTime");
 

@@ -89,7 +89,6 @@ void Player::Update() {
     /// Particle
     effects_.Update(GetWorldPosition(), baseTransform_.rotation_);
 
-
     // 死亡モード変更
     if (isDeath_ && *isDeath_) {
         ChangeDeathMode();
@@ -125,32 +124,28 @@ void Player::GameIntroUpdate(float playSpeed) {
     UpdateMatrix();
 }
 
-///=========================================================
-/// 移動
-///==========================================================
 void Player::Move(float speed) {
 
-    direction_ = input_.GetMoveDirection();
-
-    /// 移動処理
-    if (input_.IsMoving()) {
-        // 移動量に速さを反映
-        direction_ = direction_.Normalize() * (speed)*KetaEngine::Frame::DeltaTimeRate();
-        // 移動ベクトルをカメラの角度だけ回転する
-        Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
-        direction_             = TransformNormal(direction_, rotateMatrix);
-        // 移動
-        baseTransform_.translation_ += direction_;
-        // 目標角度
-        objectiveAngle_ = std::atan2(direction_.x, direction_.z);
-        // 最短角度補間
-        if (behaviors_.IsComboRoot()) {
-            AdaptRotate();
-        }
-        FaceToTarget();
-    } else {
-        FaceToTarget();
+    if (behaviors_.IsStartDashing()) {
+        return;
     }
+
+    // 移動パラメータを取得
+    const auto& moveParameter = parameters_.GetParameters().movement;
+    movement_.SetAcceleration(moveParameter.acceleration);
+    movement_.SetDeceleration(moveParameter.deceleration);
+    movement_.SetTurnBrake(moveParameter.turnBrake);
+
+    // 移動更新
+    movement_.Update(input_.GetMoveDirection(), baseTransform_, speed, objectiveAngle_);
+
+    // 回転適用
+    if (behaviors_.IsComboRoot()) {
+        AdaptRotate();
+    }
+    FaceToTarget();
+
+    moveSpeed_ = movement_.GetSpeed();
 }
 
 void Player::FaceToTarget() {
@@ -165,77 +160,18 @@ void Player::AdaptRotate() {
     baseTransform_.rotation_.y = LerpShortAngle(baseTransform_.rotation_.y, objectiveAngle_, 0.3f);
 }
 
-///=========================================================
-/// 　移動制限
-///==========================================================
 void Player::MoveToLimit() {
-
-    // フィールドの中心とスケールを取得
-    Vector3 fieldCenter = {0.0f, 0.0f, 0.0f}; // フィールド中心
-    Vector3 fieldScale  = Field::baseScale_; // フィールドのスケール
-
-    // プレイヤーのスケールを考慮した半径
-    float radiusX = fieldScale.x - baseTransform_.scale_.x;
-    float radiusZ = fieldScale.z - baseTransform_.scale_.z;
-
-    // 現在位置が範囲内かチェック
-    bool insideX = std::abs(baseTransform_.translation_.x - fieldCenter.x) <= radiusX;
-    bool insideZ = std::abs(baseTransform_.translation_.z - fieldCenter.z) <= radiusZ;
-
-    ///--------------------------------------------------------------------------------
-    /// 範囲外なら戻す
-    ///--------------------------------------------------------------------------------
-
-    if (!insideX) { /// X座標
-        baseTransform_.translation_.x = std::clamp(
-            baseTransform_.translation_.x,
-            fieldCenter.x - radiusX,
-            fieldCenter.x + radiusX);
-    }
-
-    if (!insideZ) { /// Z座標
-        baseTransform_.translation_.z = std::clamp(
-            baseTransform_.translation_.z,
-            fieldCenter.z - radiusZ,
-            fieldCenter.z + radiusZ);
-    }
-
-    // 範囲外の反発処理
-    if (!insideX || !insideZ) {
-        Vector3 directionToCenter = (fieldCenter - baseTransform_.translation_).Normalize();
-        baseTransform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
-        baseTransform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
-    }
+    movement_.MoveToLimit(baseTransform_, Field::baseScale_);
 }
 
-/// ===================================================
-///   Jump
-/// ===================================================
 void Player::Jump(float& speed, float fallSpeedLimit, float gravity) {
-    // 移動
-    baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
-    Fall(speed, fallSpeedLimit, gravity, true);
+    movement_.Jump(speed, fallSpeedLimit, gravity, baseTransform_,
+        parameters_.GetParameters().startPos_.y);
 }
 
-///=========================================================
-/// 　落ちる
-///==========================================================
 void Player::Fall(float& speed, float fallSpeedLimit, float gravity, bool isJump) {
-
-    if (!isJump) {
-        // 移動
-        baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
-    }
-
-    // 加速する
-    speed = max(speed - (gravity * KetaEngine::Frame::DeltaTimeRate()), -fallSpeedLimit);
-
-    // 着地
-    if (baseTransform_.translation_.y <= parameters_.GetParameters().startPos_.y) {
-
-        speed                         = 0.0f;
-        baseTransform_.translation_.y = parameters_.GetParameters().startPos_.y;
-    }
+    movement_.Fall(speed, fallSpeedLimit, gravity, baseTransform_,
+        parameters_.GetParameters().startPos_.y, isJump);
 }
 
 ///=========================================================
@@ -264,7 +200,6 @@ void Player::ChangeCombBoRoot() {
 /// =========================================================================================
 /// setter method
 /// =========================================================================================
-
 
 void Player::UpdateMatrix() {
     /// 行列更新
@@ -324,7 +259,6 @@ void Player::ClearAutoDash() {
     behaviors_.ClearForceDash();
 }
 
-
 bool Player::IsAbleBehavior() {
     if (isDeath_ && *isDeath_) {
         return true;
@@ -368,9 +302,9 @@ void Player::SetGameCamera(GameCamera* gameCamera) {
     context_.pGameCamera = gameCamera;
 }
 
-
 void Player::SetViewProjection(const KetaEngine::ViewProjection* viewProjection) {
     viewProjection_ = viewProjection;
+    movement_.Init(viewProjection_);
 }
 
 void Player::SetComboAttackController(PlayerComboAttackController* playerComboAttackController) {
@@ -379,7 +313,6 @@ void Player::SetComboAttackController(PlayerComboAttackController* playerComboAt
 
 void Player::SetStressGauge(StressGauge* StressGauge) {
     context_.pStressGauge = StressGauge;
-   
 }
 
 bool Player::CheckIsChargeMax() const {

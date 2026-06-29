@@ -35,6 +35,13 @@ struct DashParam {
     float distance = 20.0f; ///< ダッシュ移動距離
 };
 
+/// 慣性移動パラメータ
+struct MovementParam {
+    float acceleration = 15.0f; ///< 加速係数 (1/s)
+    float deceleration = 10.0f; ///< 摩擦係数 (1/s)
+    float turnBrake    = 25.0f; ///< 方向転換ブレーキ係数 (1/s)
+};
+
 /// プレイヤー全パラメータ
 struct Parameters {
     Vector3 startPos_;          ///< 初期配置座標
@@ -53,6 +60,7 @@ struct Parameters {
     float attackRotate;         ///< 攻撃時の回転量
     float attackRotateAnit;     ///< 攻撃回転の逆方向量
     float attackFloatValue;     ///< 攻撃中の浮遊量
+    MovementParam movement;     ///< 慣性移動
 };
 
 

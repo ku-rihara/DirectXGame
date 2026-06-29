@@ -13,7 +13,8 @@
 
 PlayerDash::PlayerDash(Player* player, bool forceDash)
     : BasePlayerBehavior("PlayerDash", player), forceDash_(forceDash) {
-
+    
+    isStartDash_ = true;
     dashEasing_.Init("PlayerDashStart.json");
     currentState_ = [this]() { StartDash(); };
 }
@@ -49,7 +50,8 @@ void PlayerDash::StartDash() {
 void PlayerDash::UpdateStartDash() {
     dashEasing_.Update(KetaEngine::Frame::DeltaTime());
     pOwner_->SetWorldPosition(dashCurrentPos_);
-    if (dashEasing_.IsFinished()) {
+    if (dashEasing_.IsFinished() && pOwner_->GetPlayerAnimator().IsObj3DAnimationFinished()) {
+        isStartDash_  = false;
         currentState_ = [this]() { UpdateNormalDash(); };
     }
 }
@@ -78,6 +80,7 @@ void PlayerDash::JumpForJoyState() {
     }
     pOwner_->ChangeBehavior(std::make_unique<PlayerJump>(pOwner_, pPlayerParameter_->GetParameters().normalJump.jumpSpeed));
 }
+
 
 void PlayerDash::Debug() {
     ImGui::Text("Dash");

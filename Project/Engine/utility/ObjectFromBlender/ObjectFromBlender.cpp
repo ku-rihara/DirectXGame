@@ -159,6 +159,7 @@ void ObjectFromBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Lev
     objectData.easingLoopFlags.resize(requiredSize, false);
     objectData.groupStarted.resize(requiredSize, false);
     objectData.loopEndCallbacks.resize(requiredSize);
+    objectData.endCallbacks.resize(requiredSize);
 
     // 各グループの設定を読み込み
     for (const auto& group : easingGroups) {
@@ -252,6 +253,9 @@ void ObjectFromBlender::EasingUpdateSelectGroup(float deltaTime, int32_t groupNu
             if (objectData.loopEndCallbacks[groupNum]) {
                 player->SetLoopEndCallback(objectData.loopEndCallbacks[groupNum]);
             }
+            if (objectData.endCallbacks[groupNum]) {
+                player->SetEndCallback(objectData.endCallbacks[groupNum]);
+            }
 
             objectData.groupStarted[groupNum] = true;
         }
@@ -316,6 +320,25 @@ bool ObjectFromBlender::GetIsEasingFinish(int32_t groupNum) const {
     return true;
 }
 
+void ObjectFromBlender::SetGroupEndCallback(int32_t groupNum, const std::function<void()>& callback) {
+    if (!levelData_) {
+        return;
+    }
+
+    for (auto& objectData : levelData_->objects) {
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
+            continue;
+        }
+        objectData.endCallbacks[groupNum] = callback;
+        if (objectData.groupStarted[groupNum]) {
+            auto* player = objectData.object3d->transform_.GetObjEaseAnimationPlayer();
+            if (player) {
+                player->SetEndCallback(callback);
+            }
+        }
+    }
+}
+
 void ObjectFromBlender::SetAllObjectsScaleZero() {
     if (!levelData_) {
         return;
@@ -323,6 +346,15 @@ void ObjectFromBlender::SetAllObjectsScaleZero() {
     for (auto& objectData : levelData_->objects) {
         objectData.object3d->transform_.scale_ = Vector3::ZeroVector();
         objectData.object3d->transform_.UpdateMatrix();
+    }
+}
+
+void ObjectFromBlender::SetAllObjectsScaleZeroNoUpdate() {
+    if (!levelData_) {
+        return;
+    }
+    for (auto& objectData : levelData_->objects) {
+        objectData.object3d->transform_.scale_ = Vector3::ZeroVector();
     }
 }
 

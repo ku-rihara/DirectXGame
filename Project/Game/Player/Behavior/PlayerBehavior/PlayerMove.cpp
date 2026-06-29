@@ -13,7 +13,7 @@
 
 PlayerMove::PlayerMove(Player* player)
     : BasePlayerBehavior("PlayerMove", player) {
-    // 攻撃等から復帰した時に確実にアニメーションを再開するため
+
     wasMoving_ = !pOwner_->GetInput().IsMoving();
 }
 

@@ -141,6 +141,9 @@ void PlayerAnimator::PlayTitleLeftHandAnimation(const std::string& name) {
     leftHand_->GetObject3D()->transform_.PlayObjEaseAnimation(name, "TitlePlayer");
 }
 
+///=============================================================
+/// アニメーション終了フラグ
+///=============================================================
 bool PlayerAnimator::IsTitleBodyAnimationFinished() const {
     auto* player = baseTransform_->GetObjEaseAnimationPlayer();
     return player && player->IsFinished();
@@ -156,6 +159,14 @@ bool PlayerAnimator::IsTitleLeftHandAnimationFinished() const {
     return player && player->IsFinished();
 }
 
+bool PlayerAnimator::IsObj3DAnimationFinished() const {
+    auto* player = obj3d_->transform_.GetObjEaseAnimationPlayer();
+    return player && player->IsFinished();
+}
+
+///=============================================================
+/// Reset/Setter 
+///=============================================================
 void PlayerAnimator::ResetHeadScale() {
     obj3d_->transform_.scale_ = Vector3::OneVector();
 }
@@ -169,7 +180,7 @@ void PlayerAnimator::RotateReset() {
     obj3d_->transform_.translation_.y = 0.0f;
 }
 
-void PlayerAnimator::SetHeadScale(const Vector3& scale)  { obj3d_->transform_.scale_       = scale;  }
-void PlayerAnimator::SetHeadPosY(float posY)              { obj3d_->transform_.translation_.y = posY;  }
-void PlayerAnimator::SetHeadRotateX(float rotX)           { obj3d_->transform_.rotation_.x   = rotX;  }
-void PlayerAnimator::SetHeadRotateY(float rotY)           { obj3d_->transform_.rotation_.y   = rotY;  }
+void PlayerAnimator::SetHeadScale(const Vector3& scale) { obj3d_->transform_.scale_ = scale; }
+void PlayerAnimator::SetHeadPosY(float posY) { obj3d_->transform_.translation_.y = posY; }
+void PlayerAnimator::SetHeadRotateX(float rotX) { obj3d_->transform_.rotation_.x = rotX; }
+void PlayerAnimator::SetHeadRotateY(float rotY) { obj3d_->transform_.rotation_.y = rotY; }

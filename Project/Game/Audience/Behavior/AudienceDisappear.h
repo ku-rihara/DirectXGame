@@ -12,6 +12,7 @@ public:
 
     void Update([[maybe_unused]] float timeSpeed = 0.0f) override;
     void Debug() override;
+    bool IsAudienceDisappear() const override { return true; }
 
 private:
     /// ===================================================

@@ -35,7 +35,6 @@ public:
 
     // -------------------------------------------------------
     // 移動 / 待機アニメーション
-    // 状態が切り替わった時だけ PlayerMove から呼ぶ
     // -------------------------------------------------------
     void ResetHeadScale();
     void ResetPositionY();
@@ -71,9 +70,13 @@ public:
     void PlayTitleRightHandAnimation(const std::string& name);
     void PlayTitleLeftHandAnimation(const std::string& name);
 
+    // -------------------------------------------------------
+    // アニメーション終了フラグ
+    // -------------------------------------------------------
     bool IsTitleBodyAnimationFinished() const;
     bool IsTitleRightHandAnimationFinished() const;
     bool IsTitleLeftHandAnimationFinished() const;
+    bool IsObj3DAnimationFinished() const;
 
 private:
 

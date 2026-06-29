@@ -6,7 +6,7 @@
 class Player;
 
 /// <summary>
-/// プレイヤーの行動 (移動・攻撃) を管理するクラス
+/// プレイヤーの行動を管理するクラス
 /// </summary>
 class PlayerBehaviorManager {
 public:
@@ -29,8 +29,9 @@ public:
     template<typename T> T* GetComboAs() const;
 
     // 状態クエリ
-    bool IsDashing()   const;
-    bool IsAirborne()  const;
+    bool IsDashing()      const;
+    bool IsStartDashing() const; 
+    bool IsAirborne()     const;
     bool IsComboRoot() const;
     bool IsDead()      const;
     bool IsSpawning()  const;

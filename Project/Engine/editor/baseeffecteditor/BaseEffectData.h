@@ -19,6 +19,7 @@ public:
 
 public:
     virtual ~BaseEffectData();
+    virtual bool IsParticleData() const { return false; }
 
     //*---------------------------- public Methods ----------------------------*//
 

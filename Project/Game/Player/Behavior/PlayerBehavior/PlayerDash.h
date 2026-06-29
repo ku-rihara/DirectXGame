@@ -15,11 +15,8 @@ public:
 
     void Update([[maybe_unused]] float timeSpeed = 0.0f) override;
     void Debug() override;
-    Type GetBehaviorType() const override { return Type::Dash; }
 
     void JumpForJoyState();
-
-    void SetForceDash(bool force) { forceDash_ = force; }
 
 private:
     // ダッシュ開始
@@ -30,9 +27,15 @@ private:
     void UpdateNormalDash();
 
 private:
-    bool forceDash_ = false;
+    bool forceDash_   = false;
+    bool isStartDash_ = false;
     std::function<void()> currentState_;
 
     KetaEngine::Easing<Vector3> dashEasing_;
     Vector3 dashCurrentPos_;
+
+public:
+    Type GetBehaviorType() const override { return Type::Dash; }
+    void SetForceDash(bool force) { forceDash_ = force; }
+    bool IsStartDash() const { return isStartDash_; }
 };

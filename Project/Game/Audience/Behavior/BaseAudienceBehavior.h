@@ -15,4 +15,5 @@ public:
     virtual void Update(float timeSpeed = 0.0f) override = 0;
     virtual void Debug() override                        = 0;
     virtual bool IsAudienceRoot() const { return false; }
+    virtual bool IsAudienceDisappear() const { return false; }
 };

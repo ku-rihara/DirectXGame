@@ -22,6 +22,8 @@
 // Parts
 #include "Components/Parts/PlayerHandLeft.h"
 #include "Components/Parts/PlayerHandRight.h"
+// Movement
+#include "Components/Movement/PlayerMovement.h"
 // ComboCreator
 #include "Player/AutoComboAttack/AutoComboQueue.h"
 // std
@@ -163,6 +165,9 @@ private:
 
     // 入力
     PlayerInput input_;
+
+    // 慣性移動
+    PlayerMovement movement_;
 
     // 目標角度
     float objectiveAngle_;

@@ -6,6 +6,10 @@ void BaseComboLevelBackObj::Init(const std::string& filename) {
     ObjectFromBlender_->EasingResetSelectGroup(static_cast<int32_t>(ObjEffectMode::SPAWN));
     // 初期は非表示に設定
     ObjectFromBlender_->SetAllObjectsScaleZero();
+    // CLOSEアニメーション終了の瞬間にscale_を0にする
+    ObjectFromBlender_->SetGroupEndCallback(
+        static_cast<int32_t>(ObjEffectMode::CLOSE),
+        [this]() { ObjectFromBlender_->SetAllObjectsScaleZeroNoUpdate(); });
 }
 
 void BaseComboLevelBackObj::Update(float playSpeed) {

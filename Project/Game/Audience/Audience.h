@@ -50,6 +50,7 @@ public:
     void ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior);
     void AppearByComboLevel(int32_t level);
     void DisAppearByComboLevel(int32_t level);
+    void CheckPendingAppear();
 
 private:
     // オブジェクト生成
@@ -85,6 +86,9 @@ private:
     std::unique_ptr<KetaEngine::ParticlePlayer> particlePlayer_;
 
     float cheerAnimationTimer_ = 0.0f;
+
+    // AudienceDisappear 中に AppearByComboLevel が呼ばれた場合のフラグ
+    bool pendingAppear_ = false;
 
     // behavior
     std::unique_ptr<BaseAudienceBehavior> behavior_;

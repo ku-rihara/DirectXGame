@@ -45,7 +45,7 @@ void ComboDirector::LevelUp() {
     pCombo_->LevelUp();
 
     // 累積的にすべてのレベルのオブジェクトと観客をスポーン
-    for (int32_t i = 1; i <= pCombo_->GetCurrentLevel(); ++i) {
+    for (int32_t i = 0; i <= pCombo_->GetCurrentLevel(); ++i) {
         comboLevelObjHolder_->SetEffectMode(i, ObjEffectMode::SPAWN);
         audienceController_->AppearAudienceByLevel(i);
     }

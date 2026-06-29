@@ -81,6 +81,8 @@ void AudienceDisappear::End() {
     // 終了処理
     pOwner_->GetObjAnimation()->transform_.scale_ = Vector3::ZeroVector();
     pOwner_->ChangeBehavior(std::make_unique<AudienceRoot>(pOwner_, false));
+    // 消えるアニメーション中に出現リクエストがあれば出現
+    pOwner_->CheckPendingAppear();
 }
 
 void AudienceDisappear::Debug() {
