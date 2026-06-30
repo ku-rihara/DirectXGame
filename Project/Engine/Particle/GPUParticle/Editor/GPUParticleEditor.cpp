@@ -1,7 +1,6 @@
 #include "GPUParticleEditor.h"
 
 using namespace KetaEngine;
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 
 void GPUParticleEditor::Init(const std::string& typeName) {

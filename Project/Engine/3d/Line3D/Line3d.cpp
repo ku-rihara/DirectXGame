@@ -8,8 +8,8 @@ using namespace KetaEngine;
 #include <cassert>
 #include <cmath>
 #include <cstdint>
-#include <d3dx12.h>
 #include <numbers>
+#include <d3dx12.h>
 
 ///============================================================
 /// デストラクタ

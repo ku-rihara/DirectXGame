@@ -2,7 +2,6 @@
 
 using namespace KetaEngine;
 #include "3D/Mesh.h"
-#include <numbers>
 
 void PrimitiveBox::Init() {
     vertexNum_ = 24;

@@ -126,8 +126,8 @@ void ObjEaseAnimationPlayer::SetLoop(bool isLoop) {
     }
 }
 
-void ObjEaseAnimationPlayer::SetLoopEndCallback(const std::string& animationName, std::function<void()> callback) {
-    namedLoopEndCallbacks_[animationName] = std::move(callback);
+void ObjEaseAnimationPlayer::SetLoopEndCallback(const std::string& animationName, const std::function<void()>& callback) {
+    namedLoopEndCallbacks_[animationName] = callback;
 
     // 現在そのアニメーションが再生中なら即座に適用
     if (currentEffectName_ == animationName) {

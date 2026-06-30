@@ -98,8 +98,8 @@ public:
     /// <summary>
     /// 自動実行コールバックを登録
     /// </summary>
-    void SetAutoComboAttackCallback(std::function<void(const std::string&)> callback) {
-        autoComboAttackCallback_ = std::move(callback);
+    void SetAutoComboAttackCallback(const std::function<void(const std::string&)>& callback) {
+        autoComboAttackCallback_ = callback;
     }
 
     /// <summary>

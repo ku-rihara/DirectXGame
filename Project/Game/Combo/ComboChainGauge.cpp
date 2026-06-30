@@ -1,5 +1,4 @@
 #include "ComboChainGauge.h"
-#include <algorithm>
 #include <imgui.h>
 
 void ComboChainGauge::Init() {

@@ -41,10 +41,10 @@ public:
     virtual void DebugParamImGui()                                             = 0; //< ImGuiデバッグパラメータ
 
     /// <summary>
-    /// 入力テクスチャを上書き設定（マルチパス用）
+    /// 入力テクスチャを上書き設定
     /// 未設定の場合はシーンRTのSRVを使用する
     /// </summary>
-    void SetInputSRV(D3D12_GPU_DESCRIPTOR_HANDLE handle) {
+    void SetInputSRV(const D3D12_GPU_DESCRIPTOR_HANDLE& handle) {
         inputSrvHandle_    = handle;
         hasCustomInputSRV_ = true;
     }

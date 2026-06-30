@@ -1,7 +1,6 @@
 #include "ObjEaseAnimationEditor.h"
 
 using namespace KetaEngine;
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 
 void ObjEaseAnimationEditor::Init(const std::string& typeName) {

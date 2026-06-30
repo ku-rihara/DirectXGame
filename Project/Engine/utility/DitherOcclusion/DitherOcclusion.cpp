@@ -1,6 +1,5 @@
 #include "DitherOcclusion.h"
 #include "Base/Material/ModelMaterial.h"
-#include "Base/WinApp.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Light/Light.h"
 #include "Math/Matrix4x4.h"

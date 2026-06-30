@@ -56,5 +56,5 @@ public:
     float GetMaxStress() const { return maxStress_; }
     StressGaugeGauge* GetStressGaugeGauge() const { return StressGaugeGauge_.get(); }
 
-    void SetOnDecayTickCallback(std::function<void()> cb) { onDecayTick_ = std::move(cb); }
+    void SetOnDecayTickCallback(const std::function<void()>& cb) { onDecayTick_ = cb; }
 };

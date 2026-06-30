@@ -3,10 +3,7 @@
 
 using namespace KetaEngine;
 #include "Frame/Frame.h"
-#include "MathFunction.h"
-#include "Matrix4x4.h"
 #include <imgui.h>
-#include <numbers>
 
 void CameraAnimationData::Init(const std::string& animationName, const std::string& categoryName) {
     BaseSequenceEffectData::Init(animationName, categoryName);

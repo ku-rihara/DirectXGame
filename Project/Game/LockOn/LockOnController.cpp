@@ -3,7 +3,6 @@
 
 // target
 #include "Enemy/Types/BaseEnemy.h"
-#include "Enemy/Types/LeaderEnemy.h"
 #include "Enemy/EnemyManager/EnemyManager.h"
 
 void LockOnController::Init() {

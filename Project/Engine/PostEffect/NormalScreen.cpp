@@ -1,7 +1,6 @@
 #include "NormalScreen.h"
 
 using namespace KetaEngine;
-#include"Base/Dx/DxRenderTarget.h"
 #include"Base/Dx/DirectXCommon.h"
 
 

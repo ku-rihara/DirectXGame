@@ -42,7 +42,7 @@ public:
     /// <param name="directInput">DirectInputインスタンス</param>
     /// <param name="padNo">パッド番号</param>
     /// <returns>初期化成功フラグ</returns>
-    bool Init(Microsoft::WRL::ComPtr<IDirectInput8> directInput, DWORD padNo);
+    bool Init(const Microsoft::WRL::ComPtr<IDirectInput8>& directInput, DWORD padNo);
 
     void Update(); //< ゲームパッド状態を更新
 

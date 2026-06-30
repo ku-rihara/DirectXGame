@@ -3,6 +3,7 @@
 using namespace KetaEngine;
 
 // サブクラス
+#include "Function/GetFile.h"
 #include "SubSystems/Factory/ParticleFactory.h"
 #include "SubSystems/Updater/ParticleUpdater.h"
 #include "SubSystems/Renderer/ParticleRenderer.h"
@@ -14,7 +15,6 @@ using namespace KetaEngine;
 // frame
 #include "Frame/Frame.h"
 // Function
-#include "Function/GetFile.h"
 // editor
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // std
@@ -77,7 +77,7 @@ void ParticleManager::UpdateUV(UVInfo& uvInfo, float deltaTime) {
 ///============================================================
 /// グループ作成
 ///============================================================
-void ParticleManager::CreateParticleGroup(const std::string name, const std::string modelFilePath, uint32_t maxnum) {
+void ParticleManager::CreateParticleGroup(const std::string& name, const std::string& modelFilePath, uint32_t maxnum) {
     registry_->CreateParticleGroup(name, modelFilePath, maxnum, particleGroups_, pSrvManager_);
 }
 
@@ -132,7 +132,7 @@ void ParticleManager::ReplaceModelParticle(const std::string& name, const std::s
 ///============================================================
 /// テクスチャセット
 ///============================================================
-void ParticleManager::SetTextureHandle(const std::string name, uint32_t handle) {
+void ParticleManager::SetTextureHandle(const std::string& name, uint32_t handle) {
     particleGroups_[name].textureHandle = handle;
 }
 
@@ -239,7 +239,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const Parameters& parame
 /// エミット
 ///======================================================================
 void ParticleManager::Emit(
-    std::string name, const Parameters& parameters, const GroupParameters& groupParameters, int32_t count) {
+    const std::string& name, const Parameters& parameters, const GroupParameters& groupParameters, int32_t count) {
 
     // パーティクルグループが存在するか確認
     assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");

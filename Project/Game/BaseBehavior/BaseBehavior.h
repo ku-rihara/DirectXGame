@@ -5,7 +5,7 @@
 template <typename OwnerType>
 class BaseBehavior {
 public:
-    BaseBehavior(const std::string name, OwnerType* owner)
+    BaseBehavior(const std::string& name, OwnerType* owner)
         : name_(name), pOwner_(owner) {}
 
     virtual ~BaseBehavior() = default;

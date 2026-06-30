@@ -1,7 +1,6 @@
 #include "SpriteEaseAnimationEditor.h"
 
 using namespace KetaEngine;
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 
 void SpriteEaseAnimationEditor::Init(const std::string& typeName) {

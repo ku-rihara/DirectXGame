@@ -19,7 +19,7 @@ void GlobalParameter::CreateGroup(const std::string& groupName) {
 /// 値セット
 ///=============================================================================
 template <typename T>
-void GlobalParameter::SetValue(const std::string& groupName, const std::string& key, T value) {
+void GlobalParameter::SetValue(const std::string& groupName, const std::string& key, const T& value) {
     Group& group = dates_[groupName]; // グループ取得または作成
 
     // 既存のキーが存在するか確認
@@ -42,7 +42,7 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
 /// アイテム追加
 ///=============================================================================
 template <typename T>
-void GlobalParameter::AddItem(const std::string& groupName, const std::string& key, T defaultValue) {
+void GlobalParameter::AddItem(const std::string& groupName, const std::string& key, const T& defaultValue) {
     Group& group = dates_[groupName];
 
     // 既存データの確認
@@ -50,7 +50,6 @@ void GlobalParameter::AddItem(const std::string& groupName, const std::string& k
     if (it != group.end()) {
         if (std::holds_alternative<T>(it->second)) {
             // 型が一致する場合、値を保持
-            defaultValue = std::get<T>(it->second);
         }
     } else {
         // 新規アイテムの追加
@@ -441,23 +440,23 @@ bool GlobalParameter::HasGroup(const std::string& groupName) const {
 }
 
 // テンプレートの明示的インスタンス化
-template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value);
-template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value);
-template void GlobalParameter::SetValue<float>(const std::string& groupName, const std::string& key, float value);
-template void GlobalParameter::SetValue<Vector2>(const std::string& groupName, const std::string& key, Vector2 value);
-template void GlobalParameter::SetValue<Vector3>(const std::string& groupName, const std::string& key, Vector3 value);
-template void GlobalParameter::SetValue<Vector4>(const std::string& groupName, const std::string& key, Vector4 value);
-template void GlobalParameter::SetValue<bool>(const std::string& groupName, const std::string& key, bool value);
-template void GlobalParameter::SetValue<std::string>(const std::string& groupName, const std::string& key, std::string value);
+template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, const int& value);
+template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, const uint32_t& value);
+template void GlobalParameter::SetValue<float>(const std::string& groupName, const std::string& key, const float& value);
+template void GlobalParameter::SetValue<Vector2>(const std::string& groupName, const std::string& key, const Vector2& value);
+template void GlobalParameter::SetValue<Vector3>(const std::string& groupName, const std::string& key, const Vector3& value);
+template void GlobalParameter::SetValue<Vector4>(const std::string& groupName, const std::string& key, const Vector4& value);
+template void GlobalParameter::SetValue<bool>(const std::string& groupName, const std::string& key, const bool& value);
+template void GlobalParameter::SetValue<std::string>(const std::string& groupName, const std::string& key, const std::string& value);
 
-template void GlobalParameter::AddItem<int>(const std::string& groupName, const std::string& key, int value);
-template void GlobalParameter::AddItem<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value);
-template void GlobalParameter::AddItem<float>(const std::string& groupName, const std::string& key, float value);
-template void GlobalParameter::AddItem<Vector2>(const std::string& groupName, const std::string& key, Vector2 value);
-template void GlobalParameter::AddItem<Vector3>(const std::string& groupName, const std::string& key, Vector3 value);
-template void GlobalParameter::AddItem<Vector4>(const std::string& groupName, const std::string& key, Vector4 value);
-template void GlobalParameter::AddItem<bool>(const std::string& groupName, const std::string& key, bool value);
-template void GlobalParameter::AddItem<std::string>(const std::string& groupName, const std::string& key, std::string value);
+template void GlobalParameter::AddItem<int>(const std::string& groupName, const std::string& key, const int& value);
+template void GlobalParameter::AddItem<uint32_t>(const std::string& groupName, const std::string& key, const uint32_t& value);
+template void GlobalParameter::AddItem<float>(const std::string& groupName, const std::string& key, const float& value);
+template void GlobalParameter::AddItem<Vector2>(const std::string& groupName, const std::string& key, const Vector2& value);
+template void GlobalParameter::AddItem<Vector3>(const std::string& groupName, const std::string& key, const Vector3& value);
+template void GlobalParameter::AddItem<Vector4>(const std::string& groupName, const std::string& key, const Vector4& value);
+template void GlobalParameter::AddItem<bool>(const std::string& groupName, const std::string& key, const bool& value);
+template void GlobalParameter::AddItem<std::string>(const std::string& groupName, const std::string& key, const std::string& value);
 
 template int32_t GlobalParameter::GetValue<int32_t>(const std::string& groupName, const std::string& key) const;
 template uint32_t GlobalParameter::GetValue<uint32_t>(const std::string& groupName, const std::string& key) const;

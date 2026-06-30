@@ -93,7 +93,7 @@ public:
     const std::string& GetModelFolder() const { return modelFolder_; }
 
     // setter
-    void SetBodyRotate(Vector3 rotate);
+    void SetBodyRotate(const Vector3& rotate);
     void SetBodyColor(const Vector4& color);
     void SetAnimationName(AnimationType type, const std::string& name);
 };

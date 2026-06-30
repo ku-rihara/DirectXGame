@@ -17,7 +17,6 @@
 #include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionController.h"
 #include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionData.h"
 /// math
-#include "Frame/Frame.h"
 
 EnemyDamageReactionRoot::EnemyDamageReactionRoot(BaseEnemy* boss)
     : BaseEnemyDamageReaction("EnemyDamageReactionRoot", boss) {

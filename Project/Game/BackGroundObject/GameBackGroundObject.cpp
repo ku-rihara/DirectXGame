@@ -1,5 +1,4 @@
 #include"GameBackGroundObject.h"
-#include "Frame/Frame.h"
 
 void GameBackGroundObject::Init(const std::string& filename) {
     BaseBackGroundObject::Init(filename);

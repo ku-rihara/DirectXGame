@@ -115,7 +115,7 @@ public:
     uint32_t GetShadowMapWidth() const { return shadowMapWidth_; }
     uint32_t GetShadowMapHeight() const { return shadowMapHeight_; }
     D3D12_RESOURCE_STATES GetCurrentState() const { return currentShadowMapState_; }
-    void SetLightCameraMatrix(Matrix4x4 m) { transformData_->lightCamera = m; }
+    void SetLightCameraMatrix(const Matrix4x4& m) { transformData_->lightCamera = m; }
 };
 
 }; // KetaEngine

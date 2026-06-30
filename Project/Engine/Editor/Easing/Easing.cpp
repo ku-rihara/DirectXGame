@@ -6,7 +6,6 @@ using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // std
 #include <string>
-#include <type_traits>
 
 ///=========================================================
 /// T の型に応じてフォルダパスを設定

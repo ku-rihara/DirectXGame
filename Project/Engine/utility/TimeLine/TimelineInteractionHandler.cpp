@@ -1,8 +1,7 @@
 #include "TimelineInteractionHandler.h"
-#include "TimelineDrawer.h" 
+#include "TimelineDrawer.h"
 
 using namespace KetaEngine;
-#include <algorithm>
 
 void TimelineInteractionHandler::Init(
     TimelineDrawParameter* drawParam,

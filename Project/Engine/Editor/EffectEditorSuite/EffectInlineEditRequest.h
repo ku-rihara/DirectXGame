@@ -11,7 +11,7 @@ class EffectInlineEditRequest {
 public:
     using CallbackFunc = std::function<void(const std::string& editorType, const std::string& name, const std::string& category)>;
 
-    static void SetCallback(CallbackFunc cb);
+    static void SetCallback(const CallbackFunc& cb);
     static void Request(const std::string& editorType, const std::string& name, const std::string& category);
 
 private:

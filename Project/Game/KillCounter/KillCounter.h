@@ -57,6 +57,6 @@ public:
     }
     // Setter
     void SetAttackController(PlayerComboAttackController* controller) { pAttackController_ = controller; }
-    void SetOnAttackUnlockedCallback(std::function<void(const std::string&)> callback) { onAttackUnlockedCallback_ = std::move(callback); }
+    void SetOnAttackUnlockedCallback(const std::function<void(const std::string&)>& callback) { onAttackUnlockedCallback_ = callback; }
 
 };

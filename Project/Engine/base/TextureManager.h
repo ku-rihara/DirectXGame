@@ -69,7 +69,7 @@ public:
     /// <param name="device">デバイス</param>
     /// <param name="metadata">メタデータ</param>
     /// <returns>リソース</returns>
-    Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const DirectX::TexMetadata& metadata);
+    Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, const DirectX::TexMetadata& metadata);
 
     /// <summary>
     /// テクスチャデータのアップロード
@@ -79,7 +79,7 @@ public:
     /// <param name="device">デバイス</param>
     /// <param name="commandList">コマンドリスト</param>
     /// <returns>中間リソース</returns>
-    Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureDate(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages, Microsoft::WRL::ComPtr<ID3D12Device> device, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
+    Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureDate(const Microsoft::WRL::ComPtr<ID3D12Resource>& texture, const DirectX::ScratchImage& mipImages, const Microsoft::WRL::ComPtr<ID3D12Device>& device, const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& commandList);
 
     void Finalize(); //< 終了処理
 

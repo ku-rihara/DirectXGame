@@ -4,12 +4,11 @@
 using namespace KetaEngine;
 #include "3D/Primitive/IPrimitive.h"
 #include "Base/TextureManager.h"
-#include "Frame/Frame.h"
 #include "Function/GetFile.h"
+#include "Frame/Frame.h"
 #include "Particle/GPUParticle/GPUParticleManager.h"
 #include "MathFunction.h"
 #include <imgui.h>
-#include <numbers>
 
 void GPUParticleSection::Init(const std::string& particleName, const std::string& categoryName, int32_t sectionIndex) {
     particleName_ = particleName;

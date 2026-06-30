@@ -3,7 +3,6 @@
 #include "../../Math/MathFunction.h"
 
 using namespace KetaEngine;
-#include <algorithm>
 
 void TimelineDrawer::Init(const std::string& name) {
     drawParam_.Init(name);
@@ -26,7 +25,7 @@ void TimelineDrawer::DrawParamEditor() {
     /*  drawParam_.DrawImGui();*/
 }
 
-uint32_t TimelineDrawer::AddTrack(const std::string& trackName, std::function<void(float)> callback) {
+uint32_t TimelineDrawer::AddTrack(const std::string& trackName, const std::function<void(float)>& callback) {
     TimeLineTrack newTrack;
     // トラック名とコールバックを設定
     newTrack.name           = trackName;
@@ -39,7 +38,7 @@ uint32_t TimelineDrawer::AddTrack(const std::string& trackName, std::function<vo
     return static_cast<uint32_t>(tracks_.size() - 1);
 }
 
-uint32_t TimelineDrawer::InsertTrack(uint32_t position, const std::string& trackName, std::function<void(float)> callback) {
+uint32_t TimelineDrawer::InsertTrack(uint32_t position, const std::string& trackName, const std::function<void(float)>& callback) {
     TimeLineTrack newTrack;
     // トラック名とコールバックを設定
     newTrack.name           = trackName;
@@ -187,7 +186,7 @@ void TimelineDrawer::ApplyCurrentFrame() {
     }
 }
 
-void TimelineDrawer::SetKeyFrameRightClickCallback(uint32_t trackIndex, std::function<void(int32_t, int32_t)> callback) {
+void TimelineDrawer::SetKeyFrameRightClickCallback(uint32_t trackIndex, const std::function<void(int32_t, int32_t)>& callback) {
     if (trackIndex >= tracks_.size()) {
         return;
     }

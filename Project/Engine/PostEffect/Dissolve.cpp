@@ -3,7 +3,6 @@
 using namespace KetaEngine;
 #include "Base/TextureManager.h"
 #include "Base/Dx/DirectXCommon.h"
-#include "Base/Dx/DxRenderTarget.h"
 #include "Function/Log.h"
 #include <cassert>
 #include <imgui.h>

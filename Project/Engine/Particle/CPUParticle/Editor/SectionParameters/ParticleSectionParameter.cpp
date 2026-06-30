@@ -871,7 +871,7 @@ void ParticleSectionParameter::SetTargetRotation(const Vector3& targetRotate) {
     }
 }
 
-void ParticleSectionParameter::SetTextureChangedCallback(std::function<void()> callback) {
+void ParticleSectionParameter::SetTextureChangedCallback(const std::function<void()>& callback) {
     onTextureChanged_ = callback;
 }
 

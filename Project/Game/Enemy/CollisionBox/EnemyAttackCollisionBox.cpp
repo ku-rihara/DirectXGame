@@ -1,7 +1,4 @@
 #include "EnemyAttackCollisionBox.h"
-#include "Enemy/Types/BaseEnemy.h"
-#include "Player/Player.h"
-#include "Frame/Frame.h"
 
 void EnemyAttackCollisionBox::Init() {
     SetIsAbleCollision(false);

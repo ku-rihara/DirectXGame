@@ -1,10 +1,8 @@
 #include "ObjectFromBlender.h"
 
 using namespace KetaEngine;
-#include "3D/Model.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
-#include "Frame/Frame.h"
 #include "mathFunction.h"
 #include <cassert>
 #include <fstream>

@@ -1,3 +1,4 @@
+#include <format>
 #include "SceneManager.h"
 using namespace KetaEngine;
 
@@ -23,7 +24,6 @@ using namespace KetaEngine;
 
 #include <cassert>
 #include <chrono>
-#include <format>
 
 // シングルトンインスタンスの取得
 SceneManager* SceneManager::GetInstance() {

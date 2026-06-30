@@ -1,5 +1,4 @@
 #include "GameSceneIntro.h"
-#include "base/TextureManager.h"
 #include "Frame/Frame.h"
 #include "GameScenePlaying.h"
 #include "Scene/GameScene.h"

@@ -4,7 +4,7 @@ using namespace KetaEngine;
 #include "Base/Descriptors/DsvManager.h"
 #include "Base/Descriptors/SrvManager.h"
 
-void DxDepthBuffer::Init(Microsoft::WRL::ComPtr<ID3D12Device> device, DsvManager* dsvManager,
+void DxDepthBuffer::Init(const Microsoft::WRL::ComPtr<ID3D12Device>& device, DsvManager* dsvManager,
     SrvManager* srvManager,uint32_t width,uint32_t height) {
     dsvManager_ = dsvManager;
     srvManager_ = srvManager;
@@ -25,7 +25,7 @@ void DxDepthBuffer::Init(Microsoft::WRL::ComPtr<ID3D12Device> device, DsvManager
 }
 
 Microsoft::WRL::ComPtr<ID3D12Resource> DxDepthBuffer::CreateDepthStencilResource(
-    Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height) {
+    const Microsoft::WRL::ComPtr<ID3D12Device>& device, uint32_t width, uint32_t height) {
 
     // リソース設定
     D3D12_RESOURCE_DESC resourceDesc{};

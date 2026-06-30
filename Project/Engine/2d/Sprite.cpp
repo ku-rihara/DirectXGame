@@ -6,7 +6,6 @@ using namespace KetaEngine;
 #include "Base/WinApp.h"
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 #include "SpriteRegistry.h"
-#include <algorithm>
 #include <imgui.h>
 
 Sprite::~Sprite() {

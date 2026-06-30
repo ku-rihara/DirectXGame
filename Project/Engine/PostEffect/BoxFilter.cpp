@@ -1,5 +1,4 @@
 #include "Base/Dx/DirectXCommon.h"
-#include"Base/Dx/DxRenderTarget.h"
 #include "BoxFilter.h"
 
 using namespace KetaEngine;

@@ -1,11 +1,9 @@
 #include "Base/Dx/DirectXCommon.h"
-#include"Base/Dx/DxRenderTarget.h"
 #include "GaussianFilter.h"
 
 using namespace KetaEngine;
 #include "function/Log.h"
 #include <cassert>
-#include <d3dx12.h>
 #include <imgui.h>
 
 void GaussianFilter::Init(DirectXCommon* dxCommon) {

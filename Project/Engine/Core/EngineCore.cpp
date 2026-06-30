@@ -24,7 +24,6 @@ using namespace KetaEngine;
 #include "Particle/GPUParticle/GPUParticleManager.h"
 /// imGui,function
 #include "function/Convert.h"
-#include "Base/Dx/DxReleaseChecker.h"
 #include <imgui_impl_dx12.h>
 /// std
 #include <string>

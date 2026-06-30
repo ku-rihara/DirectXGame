@@ -4,7 +4,7 @@
 using namespace KetaEngine;
 
 
-bool Gamepad::Init(Microsoft::WRL::ComPtr<IDirectInput8> directInput, DWORD padNo) {
+bool Gamepad::Init(const Microsoft::WRL::ComPtr<IDirectInput8>& directInput, DWORD padNo) {
     directInput;
 	padNo_ = padNo;
 	// XInput デバイスとして初期化を試みる

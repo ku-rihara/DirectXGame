@@ -6,8 +6,8 @@ using namespace KetaEngine;
 #include <cassert>
 
 void DxSwapChain::Init(
-    Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory,
-    Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue,
+    const Microsoft::WRL::ComPtr<IDXGIFactory7>& dxgiFactory,
+    const Microsoft::WRL::ComPtr<ID3D12CommandQueue>& commandQueue,
     WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight) {
 
     commandQueue_ = commandQueue;

@@ -166,12 +166,12 @@ public:
     void SetTargetPosition(const Vector3& targetPos);
     void SetTargetRotation(const Vector3& targetRotate);
     void SetGoalPosition(const Vector3& pos);
-    void SetTextureChangedCallback(std::function<void()> callback);
-    void SetPrimitiveChangedCallback(std::function<void(PrimitiveType)> callback) {
+    void SetTextureChangedCallback(const std::function<void()>& callback);
+    void SetPrimitiveChangedCallback(const std::function<void(PrimitiveType)>& callback) {
         onPrimitiveChanged_ = callback;
     }
-    void SetCylinderParamsChangedCallback(std::function<void(const KetaEngine::PrimitiveCylinder::CylinderParams&)> callback) {
-        onCylinderParamsChanged_ = std::move(callback);
+    void SetCylinderParamsChangedCallback(const std::function<void(const KetaEngine::PrimitiveCylinder::CylinderParams&)>& callback) {
+        onCylinderParamsChanged_ = callback;
     }
     const KetaEngine::PrimitiveCylinder::CylinderParams& GetCylinderParams() const { return cylinderParams_; }
 };

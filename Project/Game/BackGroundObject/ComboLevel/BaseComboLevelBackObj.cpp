@@ -1,5 +1,4 @@
 #include "BaseComboLevelBackObj.h"
-#include "Frame/Frame.h"
 
 void BaseComboLevelBackObj::Init(const std::string& filename) {
     BaseBackGroundObject::Init(filename);

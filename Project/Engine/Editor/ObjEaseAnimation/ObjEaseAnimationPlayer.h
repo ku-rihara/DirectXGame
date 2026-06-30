@@ -53,7 +53,7 @@ public:
     void SetLoop(bool isLoop);
 
     /// アニメーション名単位でループ終了コールバックを登録
-    void SetLoopEndCallback(const std::string& animationName, std::function<void()> callback);
+    void SetLoopEndCallback(const std::string& animationName, const std::function<void()>& callback);
 
     /// 現在再生中のアニメーションにコールバックを直接セット
     void SetLoopEndCallback(const std::function<void()>& callback);

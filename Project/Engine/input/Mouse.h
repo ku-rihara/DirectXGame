@@ -32,7 +32,7 @@ public:
     ~Mouse() = default;
 
     // 初期化、更新
-    void Init(Microsoft::WRL::ComPtr<IDirectInput8> directInput, HWND hWnd);
+    void Init(const Microsoft::WRL::ComPtr<IDirectInput8>& directInput, HWND hWnd);
     void Update();
 
     /// <summary>

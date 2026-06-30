@@ -3,7 +3,6 @@
 using namespace KetaEngine;
 #include "Base/Dx/DxCompiler.h"
 // Function
-#include "function/Log.h"
 #include "Base/Material/ModelMaterial.h"
 #include <cassert>
 

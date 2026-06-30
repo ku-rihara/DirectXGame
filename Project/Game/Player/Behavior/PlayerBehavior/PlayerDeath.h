@@ -20,7 +20,7 @@ private:
     void WaitCameraEnd(float timeSpeed);
     void WaitPreDeath(float timeSpeed);
 
-    void ChangeState(std::function<void(float)> newState);
+    void ChangeState(const std::function<void(float)>& newState);
 
 private:
     std::function<void(float)> currentState_;

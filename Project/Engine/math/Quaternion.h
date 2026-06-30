@@ -24,7 +24,7 @@ public:
     static Quaternion MakeRotateAxisAngle(const Vector3& axis, float angle);
     static float Dot(const Quaternion& q1, const Quaternion& q2);
     static Quaternion Lerp(const Quaternion& start, const Quaternion& end, float t);
-    static Quaternion Slerp(const Quaternion& start, Quaternion end, float t);
+    static Quaternion Slerp(const Quaternion& start, const Quaternion& end, float t);
     static Quaternion EulerToQuaternion(const Vector3& Euler);
 
     Quaternion Conjugate() const;                //< 共役Quaternion

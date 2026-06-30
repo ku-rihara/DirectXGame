@@ -1,7 +1,6 @@
 #include "GrayScale.h"
 
 using namespace KetaEngine;
-#include"Base/Dx/DxRenderTarget.h"
 #include "Base/Dx/DirectXCommon.h"
 
 void GrayScale::Init(DirectXCommon* dxCommon) {

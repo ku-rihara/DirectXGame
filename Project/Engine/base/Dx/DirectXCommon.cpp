@@ -115,7 +115,7 @@ void DirectXCommon::PostDraw() {
 }
 
 Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(
-    Microsoft::WRL::ComPtr<ID3D12Device> device,
+    const Microsoft::WRL::ComPtr<ID3D12Device>& device,
     const std::size_t& sizeInBytes,
     const ViewType& viewType) {
     // リソース記述
@@ -167,7 +167,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(
     return resource;
 }
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptorHeap(
-    Microsoft::WRL::ComPtr<ID3D12Device> device, const D3D12_DESCRIPTOR_HEAP_TYPE& heapType,
+    const Microsoft::WRL::ComPtr<ID3D12Device>& device, const D3D12_DESCRIPTOR_HEAP_TYPE& heapType,
     const UINT& numDescriptors, bool shaderVisible) {
 
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap = nullptr;
@@ -208,7 +208,7 @@ void DirectXCommon::KeepAlive() {
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::GetCPUDescriptorHandle(
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap,
+    const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap,
    uint32_t descriptorSize,
    uint32_t index) {
     D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
@@ -217,7 +217,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::GetCPUDescriptorHandle(
 }
 
 D3D12_GPU_DESCRIPTOR_HANDLE DirectXCommon::GetGPUDescriptorHandle(
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap,
+    const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap,
     uint32_t descriptorSize,
     uint32_t index) {
     D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();

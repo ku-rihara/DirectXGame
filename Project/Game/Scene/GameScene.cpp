@@ -2,7 +2,6 @@
 // State
 #include "GameSceneState/GameSceneIntro.h"
 // Base
-#include "Base/TextureManager.h"
 // 2D
 #include "2D/SpriteRegistry.h"
 // Frame,Light

@@ -3,14 +3,14 @@
 using namespace KetaEngine;
 #include <cassert>
 
-void DxCommand::Init(Microsoft::WRL::ComPtr<ID3D12Device> device) {
+void DxCommand::Init(const Microsoft::WRL::ComPtr<ID3D12Device>& device) {
     CreateCommandQueue(device);
     CreateCommandAllocator(device);
     CreateCommandList(device);
     CreateFence(device);
 }
 
-void DxCommand::CreateCommandQueue(Microsoft::WRL::ComPtr<ID3D12Device> device) {
+void DxCommand::CreateCommandQueue(const Microsoft::WRL::ComPtr<ID3D12Device>& device) {
     commandQueue_ = nullptr;
     D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
     commandQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_HIGH;
@@ -18,20 +18,20 @@ void DxCommand::CreateCommandQueue(Microsoft::WRL::ComPtr<ID3D12Device> device) 
     assert(SUCCEEDED(hr_));
 }
 
-void DxCommand::CreateCommandAllocator(Microsoft::WRL::ComPtr<ID3D12Device> device) {
+void DxCommand::CreateCommandAllocator(const Microsoft::WRL::ComPtr<ID3D12Device>& device) {
     commandAllocator_ = nullptr;
     hr_               = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator_));
     assert(SUCCEEDED(hr_));
 }
 
-void DxCommand::CreateCommandList(Microsoft::WRL::ComPtr<ID3D12Device> device) {
+void DxCommand::CreateCommandList(const Microsoft::WRL::ComPtr<ID3D12Device>& device) {
     commandList_ = nullptr;
     hr_          = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT,
                  commandAllocator_.Get(), nullptr, IID_PPV_ARGS(&commandList_));
     assert(SUCCEEDED(hr_));
 }
 
-void DxCommand::CreateFence(Microsoft::WRL::ComPtr<ID3D12Device> device) {
+void DxCommand::CreateFence(const Microsoft::WRL::ComPtr<ID3D12Device>& device) {
     fence_      = nullptr;
     fenceValue_ = 0;
     hr_         = device->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));

@@ -49,7 +49,7 @@ public:
     /// <param name="key">キー</param>
     /// <param name="value">値</param>
     template <typename T>
-    void SetValue(const std::string& groupName, const std::string& key, T value);
+    void SetValue(const std::string& groupName, const std::string& key, const T& value);
 
     /// <summary>
     /// アイテム追加
@@ -58,7 +58,7 @@ public:
     /// <param name="key">キー</param>
     /// <param name="value">値</param>
     template <typename T>
-    void AddItem(const std::string& groupName, const std::string& key, T value);
+    void AddItem(const std::string& groupName, const std::string& key, const T& value);
 
     /// <summary>
     /// 値取得

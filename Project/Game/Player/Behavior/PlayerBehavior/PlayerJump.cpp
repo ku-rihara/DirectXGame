@@ -45,7 +45,7 @@ void PlayerJump::Update([[maybe_unused]] float timeSpeed) {
 void PlayerJump::Debug() {
 }
 
-void PlayerJump::ChangeState(std::function<void()> newState) {
+void PlayerJump::ChangeState(const std::function<void()>& newState) {
     currentState_ = newState;
 }
 

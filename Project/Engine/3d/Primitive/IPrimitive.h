@@ -71,8 +71,8 @@ protected:
 public:
     Mesh* GetMesh() const { return mesh_.get(); }
 
-    void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
-    void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
+    void SetwvpDate(const Matrix4x4& date) { this->wvpDate_->WVP = date; }
+    void SetWorldMatrixDate(const Matrix4x4& date) { wvpDate_->World = date; }
 
     void SetColor(const Vector4& color);
     PrimitiveMaterial& GetMaterial() { return material_; }

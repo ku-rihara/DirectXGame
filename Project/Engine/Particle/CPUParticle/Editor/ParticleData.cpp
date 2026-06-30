@@ -2,7 +2,6 @@
 #include "ParticleData.h"
 
 using namespace KetaEngine;
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 
 void ParticleData::Init(const std::string& name, const std::string& categoryName) {

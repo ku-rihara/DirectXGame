@@ -1,7 +1,7 @@
 #include "ComboAttackAction.h"
-#include "Utility/Log/Log.h"
 #include <cmath>
 #include "MathFunction.h"
+#include "StressGauge/StressGauge.h"
 // Behavior
 #include "ComboAttackRoot.h"
 // Frame
@@ -12,7 +12,6 @@
 #include "LockOn/LockOn.h"
 #include "LockOn/LockOnController.h"
 // Player
-#include "StressGauge/StressGauge.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/Player.h"

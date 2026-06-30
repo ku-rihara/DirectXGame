@@ -1,6 +1,5 @@
 #include <format>
 #include "StressGaugeGauge.h"
-#include "Frame/Frame.h"
 #include <algorithm>
 #include <imgui.h>
 

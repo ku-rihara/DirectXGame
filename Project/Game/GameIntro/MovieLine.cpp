@@ -1,6 +1,4 @@
 #include "MovieLine.h"
-#include "base/TextureManager.h"
-#include "Frame/Frame.h"
 #include <cstdint>
 #include <imgui.h>
 

@@ -1,5 +1,4 @@
 #include "LeaderEnemy.h"
-#include "StressGauge/StressGauge.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 #include "Player/Player.h"
 // behavior
@@ -14,7 +13,6 @@
 
 #include "Frame/Frame.h"
 #include "Light/LightingType.h"
-#include "Math/MathFunction.h"
 #include "Math/random.h"
 #include <cmath>
 

@@ -1,11 +1,9 @@
 #include "BaseScene.h"
-#include "Base/WinApp.h"
-#include "Frame/Frame.h"
 #include "Light/Light.h"
+#include "Editor/CameraEditor/CameraEditor.h"
 #include "PostEffect/PostEffectRenderer.h"
 
 // editor
-#include "Editor/CameraEditor/CameraEditor.h"
 
 // Particle
 #include "Particle/CPUParticle/ParticleManager.h"

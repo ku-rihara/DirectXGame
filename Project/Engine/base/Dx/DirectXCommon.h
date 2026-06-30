@@ -84,7 +84,7 @@ public:
     /// <param name="sizeInBytes">サイズ</param>
     /// <param name="viewType">ビュータイプ</param>
     /// <returns>リソース</returns>
-    Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const size_t& sizeInBytes, const ViewType& viewType = ViewType::ShaderResource);
+    Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, const size_t& sizeInBytes, const ViewType& viewType = ViewType::ShaderResource);
 
     /// <summary>
     /// DescriptorHeapの作成
@@ -94,7 +94,7 @@ public:
     /// <param name="numDescriptors">ディスクリプタ数</param>
     /// <param name="shaderVisible">シェーダー可視性</param>
     /// <returns>ディスクリプタヒープ</returns>
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> InitializeDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device,
+    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> InitializeDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12Device>& device,
         const D3D12_DESCRIPTOR_HEAP_TYPE& heapType, const UINT& numDescriptors, bool shaderVisible);
 
     /// <summary>
@@ -104,7 +104,7 @@ public:
     /// <param name="descriptorSize">ディスクリプタサイズ</param>
     /// <param name="index">インデックス</param>
     /// <returns>CPUディスクリプタハンドル</returns>
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
+    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
     /// <summary>
     /// GPUディスクリプタハンドル取得
@@ -113,7 +113,7 @@ public:
     /// <param name="descriptorSize">ディスクリプタサイズ</param>
     /// <param name="index">インデックス</param>
     /// <returns>GPUディスクリプタハンドル</returns>
-    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
+    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
     void InitRenderingResources(); //< レンダリングリソースの初期化
     void WaitForNextFrame(); //< フレーム開始前FLOW待機（BeginFrameで呼ぶ）

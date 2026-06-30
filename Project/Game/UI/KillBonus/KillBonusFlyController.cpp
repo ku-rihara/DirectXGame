@@ -3,7 +3,6 @@
 #include "3D/ViewProjection.h"
 #include "Math/Matrix4x4.h"
 
-#include <algorithm>
 #include <imgui.h>
 
 void KillBonusFlyController::Init() {

@@ -17,8 +17,6 @@ using namespace KetaEngine;
 #include "Editor/PostEffectEditor/PostEffectData.h"
 #include "Editor/EasingEditor/EasingData.h"
 // std
-#include <algorithm>
-#include <filesystem>
 #include <imgui.h>
 
 template <typename TEffectData>

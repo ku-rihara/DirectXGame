@@ -1,5 +1,4 @@
 #include "SideRopeReboundSystem.h"
-#include "Frame/Frame.h"
 
 void SideRopeReboundSystem::Init(
     const Vector3& initialVelocity,

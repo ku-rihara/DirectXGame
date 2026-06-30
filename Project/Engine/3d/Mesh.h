@@ -50,8 +50,8 @@ public:
     /// <param name="wvpResource">WVPリソース</param>
     /// <param name="material">マテリアル</param>
     /// <param name="textureHandle">テクスチャハンドル(オプション)</param>
-    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, BaseMaterial& material, const std::optional<uint32_t>& textureHandle = std::nullopt);
-    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, BaseMaterial& material, D3D12_GPU_DESCRIPTOR_HANDLE texGpuHandle);
+    void Draw(const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, BaseMaterial& material, const std::optional<uint32_t>& textureHandle = std::nullopt);
+    void Draw(const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, BaseMaterial& material, const D3D12_GPU_DESCRIPTOR_HANDLE& texGpuHandle);
 
     /// <summary>
     /// テクスチャを設定

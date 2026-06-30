@@ -1,6 +1,5 @@
 #include "GameResultScene.h"
 #include "2D/SpriteRegistry.h"
-#include "Base/TextureManager.h"
 #include "audio/Audio.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"

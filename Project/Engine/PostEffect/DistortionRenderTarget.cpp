@@ -95,7 +95,7 @@ void DistortionRenderTarget::CreateSRV() {
 /// 歪みパス開始（RTをセット＆クリア）
 ///============================================================
 void DistortionRenderTarget::BeginDistortionPass(ID3D12GraphicsCommandList* commandList,
-                                                  D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle) {
+                                                  const D3D12_CPU_DESCRIPTOR_HANDLE& dsvHandle) {
     // RENDER_TARGET状態へ遷移
     dxCommon_->GetResourceBarrier()->Transition(
         commandList, resource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET);

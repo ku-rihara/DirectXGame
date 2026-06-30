@@ -29,8 +29,8 @@ public:
     /// <param name="backBufferWidth">バックバッファ幅</param>
     /// <param name="backBufferHeight">バックバッファ高さ</param>
     void Init(
-        Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory,
-        Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue,
+        const Microsoft::WRL::ComPtr<IDXGIFactory7>& dxgiFactory,
+        const Microsoft::WRL::ComPtr<ID3D12CommandQueue>& commandQueue,
         WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight);
 
     /// <summary>

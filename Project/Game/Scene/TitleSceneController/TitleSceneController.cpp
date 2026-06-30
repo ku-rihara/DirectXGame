@@ -1,6 +1,5 @@
 #include "TitleSceneController.h"
 // Behavior
-#include "Player/Behavior/TitleBehavior/TitlePlayerBehavior.h"
 
 void TitleSceneController::Init(TitlePlayer* player) {
 

@@ -3,7 +3,6 @@
 #include "EnemyChase.h"
 /// obj
 #include "Enemy/Types/BaseEnemy.h"
-#include "Player/Player.h"
 /// animation
 #include "3D/AnimationObject3D/Object3DAnimation.h"
 /// frame

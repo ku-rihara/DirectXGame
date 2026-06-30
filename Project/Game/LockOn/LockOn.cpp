@@ -1,6 +1,5 @@
 #include "LockOn.h"
 // Function
-#include "base/TextureManager.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 #include "MathFunction.h"
@@ -10,7 +9,6 @@
 // target
 #include "Enemy/Types/BaseEnemy.h"
 
-#include <algorithm>
 #include <cmath>
 #include <imgui.h>
 

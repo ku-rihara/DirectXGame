@@ -1,11 +1,7 @@
 #include "CameraEditor.h"
 
 using namespace KetaEngine;
-#include "Editor/ParameterEditor/GlobalParameter.h"
-#include "MathFunction.h"
-#include "Matrix4x4.h"
 #include <imgui.h>
-#include <numbers>
 
 void CameraEditor::Init(const std::string& animationName) {
     BaseEffectEditor::Init(animationName);

@@ -14,7 +14,7 @@ private:
     void FallOnlyState();
 
     // 状態遷移
-    void ChangeState(std::function<void()> newState);
+    void ChangeState(const std::function<void()>& newState);
 
 private:
     float speed_;

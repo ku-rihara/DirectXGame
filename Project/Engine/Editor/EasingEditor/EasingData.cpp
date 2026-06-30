@@ -1,12 +1,10 @@
 #include "EasingData.h"
 
 using namespace KetaEngine;
-#include "Editor/Easing/EasingParameterData.h"
 #include "Frame/Frame.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include <imgui.h>
-#include <type_traits>
 
 template <typename T>
 std::string EasingData<T>::GetStaticFolderName() {

@@ -52,13 +52,13 @@ public:
     /// トラック追加
     /// </summary>
     uint32_t AddTrack(const std::string& trackName,
-        std::function<void(float)> callback = nullptr);
+        const std::function<void(float)>& callback = {});
 
     /// <summary>
     /// トラック挿入
     /// </summary>
     uint32_t InsertTrack(uint32_t position, const std::string& trackName,
-        std::function<void(float)> callback = nullptr);
+        const std::function<void(float)>& callback = {});
 
     /// <summary>
     /// トラック削除
@@ -100,7 +100,7 @@ public:
     /// キーフレームの右クリックコールバックを設定
     /// </summary>
     void SetKeyFrameRightClickCallback(uint32_t trackIndex,
-        std::function<void(int32_t, int32_t)> callback);
+        const std::function<void(int32_t, int32_t)>& callback);
 
     /// <summary>
     /// トラック数を取得
@@ -166,7 +166,7 @@ public:
     void SetEndFrame(int frame) { drawParam_.SetEndFrame(frame); }
     void SetPlaying(bool playing) { isPlaying_ = playing; }
     void SetZoom(float zoom) { zoom_ = zoom; }
-    void SetOriginalItemDrawCallBack(std::function<void()> callback) { originalItemDrawCallBack_ = callback; }
+    void SetOriginalItemDrawCallBack(const std::function<void()>& callback) { originalItemDrawCallBack_ = callback; }
 };
 
 }; // KetaEngine

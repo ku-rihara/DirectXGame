@@ -1,7 +1,6 @@
 #include "Vignette.h"
 
 using namespace KetaEngine;
-#include "Base/Dx/DxRenderTarget.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Function/Log.h"
 #include <cassert>

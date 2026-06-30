@@ -24,7 +24,7 @@ public:
     /// <param name="srvManager">SRVマネージャー</param>
     /// <param name="width">バッファ幅</param>
     /// <param name="height">バッファ高さ</param>
-    void Init(Microsoft::WRL::ComPtr<ID3D12Device> device, DsvManager* dsvManager,
+    void Init(const Microsoft::WRL::ComPtr<ID3D12Device>& device, DsvManager* dsvManager,
         SrvManager* srvManager, uint32_t width, uint32_t height);
 
     /// <summary>
@@ -52,7 +52,7 @@ private:
     /// <param name="height">バッファ高さ</param>
     /// <returns>深度ステンシルリソース</returns>
     Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilResource(
-        Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height);
+        const Microsoft::WRL::ComPtr<ID3D12Device>& device, uint32_t width, uint32_t height);
   
     void CreateDSV();//< DSV作成
     void CreateDepthSRV(); //< 深度テクスチャ用SRV作成

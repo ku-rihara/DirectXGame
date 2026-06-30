@@ -10,8 +10,6 @@ using namespace KetaEngine;
 #include "Particle/CPUParticle/Editor/ParticleSection.h"
 #include "Particle/GPUParticle/Editor/GPUParticleSection.h"
 // std
-#include <algorithm>
-#include <filesystem>
 
 template <typename TSequenceElement>
 void BaseSequenceEffectData<TSequenceElement>::Init(const std::string& name, const std::string& categoryName) {

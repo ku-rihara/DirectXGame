@@ -100,6 +100,6 @@ public:
     AudienceRoot* GetAudienceRoot() const;
     KetaEngine::ParticlePlayer* GetParticlePlayer() const { return particlePlayer_.get(); }
 
-    void SetBaseScale(Vector3 scale);
+    void SetBaseScale(const Vector3& scale);
     void SetCheerAnimationTimer(float timer) { cheerAnimationTimer_ = timer; }
 };

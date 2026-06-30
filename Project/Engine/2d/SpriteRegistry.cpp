@@ -5,9 +5,7 @@ using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
 #include "Pipeline/PipelineManager.h"
 // std
-#include <algorithm>
 #include <imgui.h>
-#include <vector>
 
 bool SpriteRegistry::isDestroyed_ = false;
 

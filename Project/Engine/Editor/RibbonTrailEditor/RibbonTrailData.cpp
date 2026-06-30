@@ -2,7 +2,6 @@
 
 using namespace KetaEngine;
 
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 
 void RibbonTrailData::Init(const std::string& name, const std::string& categoryName) {

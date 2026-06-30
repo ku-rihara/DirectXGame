@@ -179,7 +179,7 @@ public:
 
     void ResetInstancingData(const std::string& name);
     void UpdateUV(UVInfo& uvInfo, float deltaTime);
-    void CreateParticleGroup(const std::string name, const std::string modelFilePath, uint32_t maxnum);
+    void CreateParticleGroup(const std::string& name, const std::string& modelFilePath, uint32_t maxnum);
     void CreatePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum);
     void ReplacePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum);
     void ReplaceModelParticle(const std::string& name, const std::string& modelFilePath, uint32_t maxnum);
@@ -189,7 +189,7 @@ public:
     void ResetAllParticles();
 
     Particle MakeParticle(const Parameters& parameters, const DissolveGroupParams* dissolveParams = nullptr);
-    void Emit(std::string name, const Parameters& parameters,
+    void Emit(const std::string& name, const Parameters& parameters,
         const GroupParameters& groupParameters, int32_t count);
 
     void AlphaAdapt(ParticleFprGPU& data, const Particle& parm);
@@ -218,7 +218,7 @@ public:
     bool HasDistortionParticles() const; // 歪みパーティクルが存在するか確認
 
     void SetViewProjection(const ViewProjection* view);
-    void SetTextureHandle(const std::string name, uint32_t handle);
+    void SetTextureHandle(const std::string& name, uint32_t handle);
     void SetDissolveTextureHandle(const std::string& name, uint32_t handle);
     void SetDistortionTextureHandle(const std::string& name, uint32_t handle); // 歪みテクスチャ設定
     void PlayDissolve(const std::string& name, const std::string& dissolveName);

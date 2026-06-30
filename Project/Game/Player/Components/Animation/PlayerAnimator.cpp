@@ -1,7 +1,6 @@
 #include "PlayerAnimator.h"
 #include "3D/Object3D/Object3d.h"
 #include "3D/WorldTransform.h"
-#include "Frame/Frame.h"
 #include "Player/Components/Parts/PlayerHandLeft.h"
 #include "Player/Components/Parts/PlayerHandRight.h"
 

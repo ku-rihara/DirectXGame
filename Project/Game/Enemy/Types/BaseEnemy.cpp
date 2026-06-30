@@ -7,7 +7,6 @@
 // Manager
 #include "Enemy/EnemyManager/EnemyManager.h"
 // behavior
-#include "../Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 #include "../Behavior/ActionBehavior/CommonBehavior/EnemyWait.h"
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
@@ -21,7 +20,6 @@
 // Field
 #include "Field/Field.h"
 // Camera
-#include "GameCamera/GameCamera.h"
 // Frame
 #include "Frame/Frame.h"
 // Math

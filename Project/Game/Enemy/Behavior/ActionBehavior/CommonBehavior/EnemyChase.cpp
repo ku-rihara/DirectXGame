@@ -1,13 +1,11 @@
 ﻿/// behavior
 #include "EnemyChase.h"
-#include "EnemyWait.h"
 /// obj
 #include "Enemy/Types/BaseEnemy.h"
 #include "Player/Player.h"
 /// frame
 #include "Frame/Frame.h"
 /// math
-#include "MathFunction.h"
 /// imGui
 
 EnemyChase::EnemyChase(BaseEnemy* enemy)

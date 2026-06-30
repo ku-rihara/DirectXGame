@@ -177,7 +177,7 @@ AudienceRoot* Audience::GetAudienceRoot() const {
     return nullptr;
 }
 
-void Audience::SetBaseScale(Vector3 scale) {
+void Audience::SetBaseScale(const Vector3& scale) {
     baseTransform_.scale_ = scale;
 }
 

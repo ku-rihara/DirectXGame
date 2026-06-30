@@ -6,7 +6,6 @@ using namespace KetaEngine;
 // Frame
 #include "Frame/Frame.h"
 // std
-#include <algorithm>
 #include <imgui.h>
 
 void DissolveData::Init(const std::string& dissolveName, const std::string& categoryName) {

@@ -4,8 +4,8 @@
 #include "Quaternion.h"
 #include "Vector2.h"
 #include <cmath>
-#include <DirectXMath.h>
 #include <numbers>
+#include <DirectXMath.h>
 
 Matrix4x4 MakeIdentity4x4() {
     DirectX::XMMATRIX identity = DirectX::XMMatrixIdentity();
@@ -171,7 +171,7 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
     return result;
 }
 
-Matrix4x4 MakeRotateMatrix(Vector3 rotate) {
+Matrix4x4 MakeRotateMatrix(const Vector3& rotate) {
     return (MakeRotateXMatrix(rotate.x) * MakeRotateYMatrix(rotate.y) * MakeRotateZMatrix(rotate.z));
 }
 
@@ -215,7 +215,7 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
     return result;
 }
 
-Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3 translate) {
+Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
     Matrix4x4 scaleMatrix;
     Matrix4x4 rotateMatrix;
     Matrix4x4 translateMatrix;
@@ -230,7 +230,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
     return result;
 }
 
-Matrix4x4 MakeAffineMatrixQuaternion(const Vector3& scale, const Quaternion& rotate, const Vector3 translate) {
+Matrix4x4 MakeAffineMatrixQuaternion(const Vector3& scale, const Quaternion& rotate, const Vector3& translate) {
     // Quaternion nRotate = rotate.Normalize(); // Quaternionを正規化
     return MakeScaleMatrix(scale) * MakeRotateMatrixFromQuaternion(rotate) * MakeTranslateMatrix(translate);
 }

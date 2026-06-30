@@ -1,5 +1,4 @@
 #include "EnemyHPBar.h"
-#include "base/TextureManager.h"
 #include "EnemyHPBarColorConfig.h"
 #include "MathFunction.h"
 

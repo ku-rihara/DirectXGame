@@ -101,19 +101,19 @@ Quaternion Quaternion::Lerp(const Quaternion& start, const Quaternion& end, floa
     return (result).Normalize();
 }
 
-Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, float t) {
-
-    float dot = Quaternion::Dot(start, end);
+Quaternion Quaternion::Slerp(const Quaternion& start, const Quaternion& end, float t) {
+    Quaternion localEnd = end;
+    float dot = Quaternion::Dot(start, localEnd);
 
     // 内積が負の場合、最短経路を取るためにEndを反転
     if (dot < 0.0f) {
-        end = end * -1.0f;
+        localEnd = localEnd * -1.0f;
         dot = -dot;
     }
 
     const float DOT_THRESHOLD = 0.9995f;
     if (dot > DOT_THRESHOLD) {
-        return Lerp(start, end, t);
+        return Lerp(start, localEnd, t);
     }
 
     float theta_0 = std::acos(dot);
@@ -125,7 +125,7 @@ Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, float t) {
     float s0 = std::cos(theta) - dot * sin_theta / sin_theta_0;
     float s1 = sin_theta / sin_theta_0;
 
-    return (start * s0) + (end * s1);
+    return (start * s0) + (localEnd * s1);
 }
 
 Quaternion Quaternion::EulerToQuaternion(const Vector3& Euler) {

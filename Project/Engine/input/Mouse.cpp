@@ -5,7 +5,7 @@ using namespace KetaEngine;
 #include"Base/WinApp.h"
 
 
-void Mouse::Init(Microsoft::WRL::ComPtr<IDirectInput8>directInput,HWND hWnd) {
+void Mouse::Init(const Microsoft::WRL::ComPtr<IDirectInput8>& directInput, HWND hWnd) {
     hWnd_ = hWnd;
     //マウスデバイスの生成
   HRESULT  result = directInput->CreateDevice(GUID_SysMouse, &devMouse_, NULL);

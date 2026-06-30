@@ -93,7 +93,7 @@ public:
     /// </summary>
     /// <param name="animationName">アニメーション名</param>
     /// <param name="callback">コールバック関数</param>
-    void SetAnimationEndCallback(const std::string& animationName, std::function<void()> callback) {
+    void SetAnimationEndCallback(const std::string& animationName, const std::function<void()>& callback) {
         animationEndCallbacks_[animationName] = callback;
     }
 

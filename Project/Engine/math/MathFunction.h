@@ -23,7 +23,7 @@ size_t Clamp(size_t n, size_t min, size_t max);
 
 
 
-Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vector3 p2, const Vector3& p3, float t);
+Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, float t);
 Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t);
 
 float LerpShortAngle(float a, float b, float t);

@@ -1,7 +1,6 @@
 #include "IntroSpawnField.h"
 #include "UI/ComboAssistUI/ComboAssistController.h"
 #include "UI/ComboAssistUI/SupportSprite/ComboSupportSpriteUi.h"
-#include "BackGroundObject/GameBackGroundObject.h"
 #include "StressGauge/StressGaugeGauge.h"
 #include "FireInjectors/FireInjectors.h"
 #include "GameCamera/GameCamera.h"

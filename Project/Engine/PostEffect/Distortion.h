@@ -23,7 +23,7 @@ public:
     void CreateConstantBuffer() override;
     void DebugParamImGui() override;
 
-    void SetDistortionSRV(D3D12_GPU_DESCRIPTOR_HANDLE handle) { distortionSrvHandle_ = handle; }
+    void SetDistortionSRV(const D3D12_GPU_DESCRIPTOR_HANDLE& handle) { distortionSrvHandle_ = handle; }
 
 private:
     D3D12_GPU_DESCRIPTOR_HANDLE distortionSrvHandle_{};

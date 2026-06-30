@@ -24,7 +24,7 @@ public:
     /// BonusFly到着イベント（コンボUIスポーン、flyコールバックから呼ぶ）
     void OnBonusFlyArrived(float comboBonusValue, int32_t comboCount);
 
-    void SetOnSimKillBonusCallback(std::function<void(float)> cb) { onSimKillBonusCallback_ = std::move(cb); }
+    void SetOnSimKillBonusCallback(const std::function<void(float)>& cb) { onSimKillBonusCallback_ = cb; }
 
 private:
     void FlushSimKillWindow();

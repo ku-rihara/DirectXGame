@@ -201,7 +201,7 @@ void Model::DebugImGui() {
 #endif
 }
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial* material,
+void Model::Draw(const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, const ShadowMap& shadowMap, ModelMaterial* material,
     const std::optional<uint32_t>& textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
@@ -242,7 +242,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
-void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial* material, const SkinCluster& skinCluster,
+void Model::DrawAnimation(const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, const ShadowMap& shadowMap, ModelMaterial* material, const SkinCluster& skinCluster,
     const std::optional<uint32_t>& textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
@@ -294,7 +294,7 @@ void Model::DrawInstancing(uint32_t instanceNum) {
     commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum, 0, 0);
 }
 
-void Model::DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap) {
+void Model::DrawForShadowMap(const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, const ShadowMap& shadowMap) {
     auto commandList = DirectXCommon::GetInstance()->GetCommandList();
 
     // 頂点バッファとインデックスバッファの設定
@@ -311,7 +311,7 @@ void Model::DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
-void Model::DrawForShadowMapSkinned(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, const D3D12_VERTEX_BUFFER_VIEW& skinnedVBV) {
+void Model::DrawForShadowMapSkinned(const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, const ShadowMap& shadowMap, const D3D12_VERTEX_BUFFER_VIEW& skinnedVBV) {
     auto commandList = DirectXCommon::GetInstance()->GetCommandList();
 
     // スキン済み頂点バッファとインデックスバッファの設定

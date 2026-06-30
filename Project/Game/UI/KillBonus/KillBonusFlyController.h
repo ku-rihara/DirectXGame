@@ -56,6 +56,6 @@ public:
     ///Setter
     void SetPendingComboBonusValue(float value)   { pendingComboBonusValue_ = value; }
     void SetPendingComboCount(int32_t count)      { pendingComboCount_ = count; }
-    void SetOnReachCallback(std::function<void(float, int32_t)> cb) { onReachCallback_ = std::move(cb); }
-    void SetOnGaugeAnimCallback(std::function<void()> cb)  { onGaugeAnimCallback_ = std::move(cb); }
+    void SetOnReachCallback(const std::function<void(float, int32_t)>& cb) { onReachCallback_ = cb; }
+    void SetOnGaugeAnimCallback(const std::function<void()>& cb) { onGaugeAnimCallback_ = cb; }
 };

@@ -116,7 +116,7 @@ public:
     void StartDamageColling(float collingTime, const std::string& reactiveAttackName);
 
     // ダメージを受けたときのコールバックを設定
-    void SetOnDamageTakenCallback(std::function<void()> cb) { onDamageTaken_ = std::move(cb); }
+    void SetOnDamageTakenCallback(const std::function<void()>& cb) { onDamageTaken_ = cb; }
 
     virtual void AdjustParam() {}
 

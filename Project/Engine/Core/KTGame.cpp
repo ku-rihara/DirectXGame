@@ -15,7 +15,6 @@ using namespace KetaEngine;
 #include "Base/WinApp.h"
 
 // utility
-#include "Collider/CollisionManager.h"
 
 // =============================================================
 // 初期化処理

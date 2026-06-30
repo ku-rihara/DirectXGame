@@ -1,7 +1,5 @@
 #include "TitleLogo.h"
-#include "base/TextureManager.h"
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
-#include "Frame/Frame.h"
 
 void TitleLogo::Init() {
 

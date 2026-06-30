@@ -156,7 +156,7 @@ void EnemyAnimator::SetAnimationActive(bool active) {
     }
 }
 
-void EnemyAnimator::SetBodyRotate(Vector3 rotate) {
+void EnemyAnimator::SetBodyRotate(const Vector3& rotate) {
     objAnimation_->transform_.rotation_ = rotate;
 }
 

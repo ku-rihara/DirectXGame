@@ -82,7 +82,7 @@ public:
     /// <param name="material">マテリアル</param>
     /// <param name="textureHandle">テクスチャハンドル(オプション)</param>
     void Draw(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial* material,
+        const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, const ShadowMap& shadowMap, ModelMaterial* material,
         const std::optional<uint32_t>& textureHandle = std::nullopt);
 
     /// <summary>
@@ -94,7 +94,7 @@ public:
     /// <param name="skinCluster">スキンクラスター</param>
     /// <param name="textureHandle">テクスチャハンドル(オプション)</param>
     void DrawAnimation(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial* material, const SkinCluster& skinCluster,
+        const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, const ShadowMap& shadowMap, ModelMaterial* material, const SkinCluster& skinCluster,
         const std::optional<uint32_t>& textureHandle = std::nullopt);
 
     /// <summary>
@@ -108,8 +108,8 @@ public:
     /// </summary>
     /// <param name="wvpResource">WVPリソース</param>
     /// <param name="shadowMap">シャドウマップ</param>
-    void DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap);
-    void DrawForShadowMapSkinned(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, const D3D12_VERTEX_BUFFER_VIEW& skinnedVBV);
+    void DrawForShadowMap(const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, const ShadowMap& shadowMap);
+    void DrawForShadowMapSkinned(const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, const ShadowMap& shadowMap, const D3D12_VERTEX_BUFFER_VIEW& skinnedVBV);
 
 private:
     TextureManager* textureManager_ = nullptr;

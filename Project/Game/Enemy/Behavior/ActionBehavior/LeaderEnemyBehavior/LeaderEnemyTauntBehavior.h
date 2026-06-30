@@ -14,7 +14,7 @@ public:
     void Update() override;
     void Debug() override;
 
-    void SetOnFontMovingStart(std::function<void()> cb) { onFontMovingStart_ = std::move(cb); }
+    void SetOnFontMovingStart(const std::function<void()>& cb) { onFontMovingStart_ = cb; }
 
 private:
     bool fontMovingPlayed_ = false;

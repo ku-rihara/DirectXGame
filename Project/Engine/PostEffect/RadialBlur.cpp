@@ -1,5 +1,4 @@
 #include "Base/Dx/DirectXCommon.h"
-#include"Base/Dx/DxRenderTarget.h"
 #include "RadialBlur.h"
 
 using namespace KetaEngine;

@@ -1,6 +1,5 @@
 #include "BattleTestScene.h"
 // base
-#include "base/TextureManager.h"
 // math
 #include "2D/SpriteRegistry.h"
 #include "Frame/Frame.h"

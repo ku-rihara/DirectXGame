@@ -55,5 +55,5 @@ private:
 
 public:
     bool IsFinished() const { return isFinished_; }
-    void SetOnReachCallback(std::function<void()> cb) { onReachCallback_ = std::move(cb); }
+    void SetOnReachCallback(const std::function<void()>& cb) { onReachCallback_ = cb; }
 };

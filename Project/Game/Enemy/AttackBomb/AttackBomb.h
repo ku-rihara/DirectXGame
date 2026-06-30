@@ -65,6 +65,6 @@ public:
     const Vector3& GetPosition() const { return position_; }
 
     // Setter
-    void SetOnLandedCallback(std::function<void()> cb) { onLanded_ = std::move(cb); }
+    void SetOnLandedCallback(const std::function<void()>& cb) { onLanded_ = cb; }
     void SetTargetPosition(const Vector3& pos) { targetPos_ = pos; }
 };

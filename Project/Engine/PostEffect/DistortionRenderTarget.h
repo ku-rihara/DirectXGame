@@ -31,7 +31,7 @@ public:
     /// <param name="commandList">コマンドリスト</param>
     /// <param name="dsvHandle">深度バッファのDSVハンドル</param>
     void BeginDistortionPass(ID3D12GraphicsCommandList* commandList,
-                             D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle);
+                             const D3D12_CPU_DESCRIPTOR_HANDLE& dsvHandle);
 
     /// <summary>
     /// 歪みパス終了 - SRVとして読めるようにバリア遷移

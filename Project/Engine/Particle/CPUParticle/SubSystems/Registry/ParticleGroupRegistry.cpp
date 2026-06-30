@@ -4,7 +4,6 @@ using namespace KetaEngine;
 
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/TextureManager.h"
-#include "MathFunction.h"
 // Primitive
 #include "3D/ModelManager.h"
 #include "3D/Primitive/PrimitiveBox.h"

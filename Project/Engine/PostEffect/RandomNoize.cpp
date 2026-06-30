@@ -2,7 +2,6 @@
 
 using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
-#include"Base/Dx/DxRenderTarget.h"
 #include "Function/Log.h"
 #include"Frame/Frame.h"
 #include<cassert>

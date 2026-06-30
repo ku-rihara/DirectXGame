@@ -2,10 +2,7 @@
 #include "ObjEaseAnimationData.h"
 
 using namespace KetaEngine;
-#include "3D/WorldTransform.h"
 #include "Editor/RailEditor/RailPlayer.h"
-#include "MathFunction.h"
-#include <algorithm>
 #include <imgui.h>
 
 void ObjEaseAnimationData::Init(const std::string& animationName, const std::string& categoryName) {

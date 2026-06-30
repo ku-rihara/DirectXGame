@@ -3,15 +3,13 @@
 using namespace KetaEngine;
 #include "2D/ImGuiManager.h"
 #include "Dx/DxCommand.h"
+#include "function/Convert.h"
 /// srv
 #include "Base/Descriptors/SrvManager.h"
 // function
-#include "function/Convert.h"
 // std
-#include <algorithm>
 #include <d3dx12.h>
 #include <stdexcept>
-#include <vector>
 
 TextureManager* TextureManager::instance = nullptr;
 
@@ -55,7 +53,7 @@ DirectX::ScratchImage TextureManager::LoadTextureFile(const std::string& filePat
     return image;
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const DirectX::TexMetadata& metadata) {
+Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::CreateTextureResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, const DirectX::TexMetadata& metadata) {
     // 1. metadataを基にResourceの設定
     D3D12_RESOURCE_DESC resourceDesc{};
     resourceDesc.Width            = UINT(metadata.width);
@@ -88,7 +86,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::CreateTextureResource(Mic
 }
 
 [[nodiscard]]
-Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureDate(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages, Microsoft::WRL::ComPtr<ID3D12Device> device, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
+Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureDate(const Microsoft::WRL::ComPtr<ID3D12Resource>& texture, const DirectX::ScratchImage& mipImages, const Microsoft::WRL::ComPtr<ID3D12Device>& device, const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& commandList) {
     std::vector<D3D12_SUBRESOURCE_DATA> subresources;
     DirectX::PrepareUpload(device.Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
     uint64_t intermediateSize                                   = GetRequiredIntermediateSize(texture.Get(), 0, UINT(subresources.size()));

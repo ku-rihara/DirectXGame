@@ -55,7 +55,7 @@ void PlayerDeath::WaitPreDeath(float) {
     }
 }
 
-void PlayerDeath::ChangeState(std::function<void(float)> newState) {
+void PlayerDeath::ChangeState(const std::function<void(float)>& newState) {
     currentState_ = newState;
 }
 

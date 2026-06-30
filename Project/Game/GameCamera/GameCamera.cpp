@@ -5,9 +5,7 @@
 // math
 #include "Matrix4x4.h"
 // input
-#include "Input/Input.h"
 // class
-#include "LockOn/LockOn.h"
 // Behavior
 #include "Behavior/CameraFollowBehavior.h"
 #include"Behavior/CameraResetBehavior.h"

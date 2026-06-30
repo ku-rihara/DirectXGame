@@ -12,7 +12,7 @@ using namespace KetaEngine;
 ///==========================================================
 /// 初期化
 ///==========================================================
-void DxRenderTarget::Init(Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height) {
+void DxRenderTarget::Init(const Microsoft::WRL::ComPtr<ID3D12Device>& device, uint32_t width, uint32_t height) {
 
     backBufferHeight_ = height;
     backBufferWidth_  = width;
@@ -161,7 +161,7 @@ void DxRenderTarget::CreateRenderTextureSRV() {
 /// レンダーテクスチャリソース作成
 ///==========================================================
 Microsoft::WRL::ComPtr<ID3D12Resource> DxRenderTarget::CreateRenderTextureResource(
-    Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height,
+    const Microsoft::WRL::ComPtr<ID3D12Device>& device, uint32_t width, uint32_t height,
     DXGI_FORMAT format, const Vector4& clearColor) {
 
     // リソース設定
