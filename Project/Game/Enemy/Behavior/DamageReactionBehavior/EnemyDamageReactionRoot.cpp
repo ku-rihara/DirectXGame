@@ -119,9 +119,6 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
 }
 
 void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* reactionData) {
-    // 死亡予約フラグを立てる
-    pBaseEnemy_->SetIsDeathPending(true);
-
     // コリジョンを無効化
     pBaseEnemy_->SetIsAdaptCollision(false);
 
@@ -138,4 +135,7 @@ void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* react
         pBaseEnemy_->ChangeDamageReactionBehavior(
             std::make_unique<EnemyDeath>(pBaseEnemy_));
     }
+
+    // 死亡Behavior設定後にフラグをセット
+    pBaseEnemy_->SetIsDeathPending(true);
 }

@@ -34,6 +34,9 @@ EnemyDamageReactionSlammed::EnemyDamageReactionSlammed(
 }
 
 EnemyDamageReactionSlammed::~EnemyDamageReactionSlammed() {
+    if (pBaseEnemy_ && pBaseEnemy_->GetAnimator()->GetAnimationObject()) {
+        pBaseEnemy_->GetAnimator()->GetAnimationObject()->ClearAllAnimationEndCallbacks();
+    }
 }
 
 void EnemyDamageReactionSlammed::Update(float deltaTime) {

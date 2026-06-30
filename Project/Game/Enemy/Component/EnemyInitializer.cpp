@@ -36,6 +36,7 @@ void EnemyInitializer::InitAnimator() {
         modelFolder = "LeaderEnemy/";
     }
     enemy_->animator_.Init(modelFolder);
+    enemy_->animator_.SetAnimationActive(true);
 }
 
 void EnemyInitializer::InitBehaviorController() {

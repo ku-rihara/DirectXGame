@@ -63,7 +63,13 @@ void EnemyBehaviorController::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> 
 /// ダメージリアクションビヘイビア変更
 ///========================================================
 void EnemyBehaviorController::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior) {
-    if (IsChangeLocked()) {
+    // 完全死亡中は一切変更不可
+    if (pOwner_->GetIsDeath() || (damageBehavior_ && damageBehavior_->IsDeath())) {
+        return;
+    }
+
+    // 死亡シーケンス進行中は EnemyDeath への遷移のみ許可
+    if (pOwner_->GetIsDeathPending() && (!behavior || !behavior->IsDeath())) {
         return;
     }
 
@@ -195,5 +201,6 @@ void EnemyBehaviorController::DamageCollingUpdate(float deltaTime) {
 
 bool EnemyBehaviorController::IsChangeLocked() const {
     return pOwner_->GetIsDeath() ||
+           pOwner_->GetIsDeathPending() ||
            (damageBehavior_ && damageBehavior_->IsDeath());
 }
