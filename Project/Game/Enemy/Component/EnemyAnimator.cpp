@@ -14,7 +14,6 @@ void EnemyAnimator::SetAnimationName(AnimationType type, const std::string& name
     if (type == AnimationType::Wait) {
         if (!objAnimation_) {
             objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel(modelFolder_ + name + ".gltf"));
-            objAnimation_->Init();
         }
         // Waitアニメーション名のセット
         animationNames_[static_cast<size_t>(type)] = name;
