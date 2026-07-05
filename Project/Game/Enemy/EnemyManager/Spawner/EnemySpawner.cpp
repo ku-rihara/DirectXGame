@@ -88,64 +88,6 @@ void EnemySpawner::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 }
 
 ///========================================================================================
-///  事前生成
-///========================================================================================
-void EnemySpawner::PreGenerateEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID,
-    const Vector3& localOffset, const std::string& parentBossName) {
-
-    BaseEnemy::Type type;
-    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) {
-        type = BaseEnemy::Type::NORMAL;
-    } else if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)] || enemyType == "BossEnemy") {
-        type = BaseEnemy::Type::STRONG;
-    } else {
-        return;
-    }
-
-    auto enemy = pEnemyManager_->AcquireFromPool(type);
-    if (!enemy) {
-        return;
-    }
-
-    auto* param = pEnemyManager_->GetParam();
-    enemy->GetBaseInfo()->SetParameter(type, param->GetBaseParam(type));
-    if (type == BaseEnemy::Type::STRONG) {
-        static_cast<LeaderEnemy*>(enemy.get())->SetStrongParameter(param->GetStrongParam());
-    }
-
-    enemy->RefreshCollision();
-    enemy->GetBaseInfo()->SetPlayer(pEnemyManager_->GetPlayer());
-    enemy->GetBaseInfo()->SetGameCamera(pEnemyManager_->GetGameCamera());
-    enemy->GetBaseInfo()->SetManager(pEnemyManager_);
-    enemy->GetBaseInfo()->SetCombo(pEnemyManager_->GetCombo());
-    enemy->GetBaseInfo()->SetKillCounter(pEnemyManager_->GetKillCounter());
-    enemy->SetGroupId(groupID);
-    enemy->Init(position);
-    enemy->SetHPBarColorConfig(pEnemyManager_->GetHPBarColorConfig());
-    pEnemyManager_->UpdateAvailableAnimationsForEditor(enemy.get());
-
-    if (type == BaseEnemy::Type::NORMAL) {
-        EntourageEnemy* ne = static_cast<EntourageEnemy*>(enemy.get());
-        ne->SetSpawnOffset(localOffset);
-        ne->SetNormalParameter(param->GetNormalParam());
-        ne->SetOnDamageTakenCallback([mgr = pEnemyManager_, ne]() {
-            mgr->OnEntourageEnemyDamaged(ne);
-        });
-        ne->SetParentBossName(parentBossName);
-    }
-
-    enemy->SetScale(Vector3::ZeroVector());
-    enemy->GetAnimator()->SetAnimationActive(false);
-    enemy->SetIsAdaptCollision(false);
-
-    std::string bossRegName = "";
-    if (type == BaseEnemy::Type::STRONG) {
-        bossRegName = parentBossName;
-    }
-    pEnemyManager_->RegisterWaitingEnemy(std::move(enemy), groupID, bossRegName);
-}
-
-///========================================================================================
 ///  JSONデータ解析
 ///========================================================================================
 void EnemySpawner::ParseJsonData(const std::string& filename) {
@@ -221,7 +163,6 @@ void EnemySpawner::SettingGroupSpawnPos() {
 ///========================================================================================
 void EnemySpawner::Update(float deltaTime) {
     currentTime_ += deltaTime;
-    ++preGenFrameCount_;
 
     if (currentGroupIndex_ < static_cast<int>(spawnGroups_.size())) {
         UpdateCurrentGroup();
@@ -233,13 +174,8 @@ void EnemySpawner::UpdateCurrentGroup() {
 
     if (!currentGroup.isActive) {
         if (currentGroupIndex_ == 0) {
-            if (preGenFrameCount_ % kPreGenFrameInterval == 0) {
-                PreGenerateCurrentGroupEnemy();
-            }
-            if (IsGroupFullyPreGenerated(0)) {
-                currentGroup.isActive       = true;
-                currentGroup.groupStartTime = currentTime_;
-            }
+            currentGroup.isActive       = true;
+            currentGroup.groupStartTime = currentTime_;
         } else {
             if (spawnGroups_[currentGroupIndex_ - 1].isCompleted) {
                 currentGroup.isActive       = true;
@@ -250,11 +186,6 @@ void EnemySpawner::UpdateCurrentGroup() {
 
     if (currentGroup.isActive && !currentGroup.isCompleted) {
         SpawnEnemiesInGroup(currentGroup);
-
-        if (preGenFrameCount_ % kPreGenFrameInterval == 0) {
-            PreGenerateCurrentGroupEnemy();
-            PreGenerateNextGroupEnemy();
-        }
 
         if (IsGroupCompleted(currentGroup.id)) {
             currentGroup.isCompleted = true;
@@ -272,26 +203,23 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
             float adjustedSpawnTime = spawn->spawnTime + spawn->spawnOffset;
 
             if (groupElapsedTime >= adjustedSpawnTime) {
-                bool used = pEnemyManager_->ActivateSingleWaitingEnemy(spawn->groupId);
-                if (!used) {
-                    std::string nameForManager = "";
-                    if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "LeaderEnemy") {
-                        nameForManager = spawn->name;
-                    } else {
-                        nameForManager = spawn->parentBossName;
-                    }
-
-                    Vector3 localOffset = {};
-                    if (!spawn->parentBossName.empty()) {
-                        auto it = bossSpawnPositions_.find(spawn->parentBossName);
-                        if (it != bossSpawnPositions_.end()) {
-                            localOffset   = spawn->position - it->second;
-                            localOffset.y = 0.0f;
-                        }
-                    }
-
-                    SpawnEnemy(spawn->enemyType, spawn->position, spawn->groupId, localOffset, nameForManager);
+                std::string nameForManager = "";
+                if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "LeaderEnemy") {
+                    nameForManager = spawn->name;
+                } else {
+                    nameForManager = spawn->parentBossName;
                 }
+
+                Vector3 localOffset = {};
+                if (!spawn->parentBossName.empty()) {
+                    auto it = bossSpawnPositions_.find(spawn->parentBossName);
+                    if (it != bossSpawnPositions_.end()) {
+                        localOffset   = spawn->position - it->second;
+                        localOffset.y = 0.0f;
+                    }
+                }
+
+                SpawnEnemy(spawn->enemyType, spawn->position, spawn->groupId, localOffset, nameForManager);
 
                 spawn->hasSpawned = true;
                 group.spawnedCount++;
@@ -332,19 +260,6 @@ void EnemySpawner::AdjustParam() {
 ///========================================================================================
 ///  グループ完了チェック / 次グループ起動
 ///========================================================================================
-bool EnemySpawner::IsGroupFullyPreGenerated(int32_t groupId) const {
-    auto it = groupSpawnPoints_.find(groupId);
-    if (it == groupSpawnPoints_.end()) {
-        return true;
-    }
-    for (const auto* spawn : it->second) {
-        if (!spawn->preGenerated) {
-            return false;
-        }
-    }
-    return true;
-}
-
 bool EnemySpawner::IsGroupCompleted(int groupId) const {
     if (groupId >= 0 && groupId < static_cast<int>(spawnGroups_.size())) {
         const SpawnGroup& group = spawnGroups_[groupId];
@@ -386,18 +301,12 @@ void EnemySpawner::RestartLoop() {
         }
     }
     for (auto& spawn : spawnPoints_) {
-        spawn.hasSpawned   = false;
-        spawn.preGenerated = false;
+        spawn.hasSpawned = false;
     }
     currentGroupIndex_  = 0;
     currentTime_        = 0.0f;
-    preGenFrameCount_   = 0;
     isSystemActive_     = true;
     allGroupsCompleted_ = false;
-
-    if (pEnemyManager_) {
-        pEnemyManager_->ClearAllWaitingEnemies();
-    }
 }
 
 void EnemySpawner::OnEnemyDestroyed(int groupId) {
@@ -409,77 +318,5 @@ void EnemySpawner::OnEnemyDestroyed(int groupId) {
 void EnemySpawner::OnLeaderEnemyDestroyed(int groupId) {
     if (groupId >= 0 && groupId < static_cast<int>(spawnGroups_.size())) {
         spawnGroups_[groupId].LeaderEnemyCount = (std::max)(0, spawnGroups_[groupId].LeaderEnemyCount - 1);
-    }
-}
-
-///========================================================================================
-///  事前生成ヘルパー
-///========================================================================================
-void EnemySpawner::PreGenerateNextGroupEnemy() {
-    int32_t nextGroupId = currentGroupIndex_ + 1;
-    if (nextGroupId >= static_cast<int32_t>(spawnGroups_.size())) {
-        return;
-    }
-
-    auto it = groupSpawnPoints_.find(nextGroupId);
-    if (it == groupSpawnPoints_.end()) {
-        return;
-    }
-
-    for (auto* spawn : it->second) {
-        if (!spawn->preGenerated) {
-            std::string nameForManager = "";
-            if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "LeaderEnemy") {
-                nameForManager = spawn->name;
-            } else {
-                nameForManager = spawn->parentBossName;
-            }
-
-            Vector3 localOffset = {};
-            if (!spawn->parentBossName.empty()) {
-                auto bit = bossSpawnPositions_.find(spawn->parentBossName);
-                if (bit != bossSpawnPositions_.end()) {
-                    localOffset   = spawn->position - bit->second;
-                    localOffset.y = 0.0f;
-                }
-            }
-
-            PreGenerateEnemy(spawn->enemyType, spawn->position, nextGroupId, localOffset, nameForManager);
-            spawn->preGenerated = true;
-            return;
-        }
-    }
-}
-
-void EnemySpawner::PreGenerateCurrentGroupEnemy() {
-    int32_t groupId = currentGroupIndex_;
-
-    auto it = groupSpawnPoints_.find(groupId);
-    if (it == groupSpawnPoints_.end()) {
-        return;
-    }
-
-    for (auto* spawn : it->second) {
-        if (!spawn->preGenerated && !spawn->hasSpawned) {
-            std::string nameForManager = "";
-            if (spawn->enemyType == "BossEnemy" || spawn->enemyType == "LeaderEnemy") {
-                nameForManager = spawn->name;
-            } else {
-                nameForManager = spawn->parentBossName;
-            }
-
-            Vector3 localOffset = {};
-            if (!spawn->parentBossName.empty()) {
-                auto bit = bossSpawnPositions_.find(spawn->parentBossName);
-                if (bit != bossSpawnPositions_.end()) {
-                    localOffset   = spawn->position - bit->second;
-                    localOffset.y = 0.0f;
-                }
-            }
-
-            PreGenerateEnemy(spawn->enemyType, spawn->position, groupId, localOffset, nameForManager);
-            spawn->preGenerated = true;
-            return;
-        }
     }
 }

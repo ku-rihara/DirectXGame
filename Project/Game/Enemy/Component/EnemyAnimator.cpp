@@ -33,6 +33,14 @@ void EnemyAnimator::SetAnimationName(AnimationType type, const std::string& name
 void EnemyAnimator::AddDamageReactionAnimation(const std::string& name, bool isLoop) {
     // ダメージリアクションのアニメーション追加
     objAnimation_->Add(modelFolder_ + name + ".gltf");
+
+    // 再スポーン時の重複登録を防ぐ
+    for (auto& info : damageReactionAnimations_) {
+        if (info.name == name) {
+            info.isLoop = isLoop;
+            return;
+        }
+    }
     damageReactionAnimations_.push_back({name, isLoop});
 }
 

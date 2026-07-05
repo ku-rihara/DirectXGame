@@ -13,6 +13,8 @@ void IntroPurposeCutIn::Init(const std::string& name) {
         sprites_[i].reset(KetaEngine::Sprite::Create(std::format("PurposeUI/gamePurposeNo{}.dds", i + 1)));
         sprites_[i]->transform_.scale = Vector2::ZeroVector();
     }
+    sprites_[LEFT]->transform_.pos   = leftPos_;
+    sprites_[RIGHT]->transform_.pos  = rightPos_;
     sprites_[CENTER]->transform_.pos = centerPos_;
 
     backLineSprite_.reset(KetaEngine::Sprite::Create("PurposeUI/gamePurposeLine.dds"));
@@ -116,6 +118,8 @@ void IntroPurposeCutIn::ResetAllSpritesScale() {
 
 void IntroPurposeCutIn::RegisterParams() {
     BaseGameIntro::RegisterParams();
+    globalParameter_->Regist(groupName_, "leftPos", &leftPos_);
+    globalParameter_->Regist(groupName_, "rightPos", &rightPos_);
     globalParameter_->Regist(groupName_, "centerPos", &centerPos_);
 }
 
@@ -125,6 +129,12 @@ void IntroPurposeCutIn::AdjustParam() {
 
 void IntroPurposeCutIn::AdjustUniqueParam() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
+    if (ImGui::DragFloat2("Left Pos", &leftPos_.x, 1.0f)) {
+        sprites_[LEFT]->transform_.pos = leftPos_;
+    }
+    if (ImGui::DragFloat2("Right Pos", &rightPos_.x, 1.0f)) {
+        sprites_[RIGHT]->transform_.pos = rightPos_;
+    }
     if (ImGui::DragFloat2("Center Pos", &centerPos_.x, 1.0f)) {
         sprites_[CENTER]->transform_.pos = centerPos_;
     }
@@ -135,6 +145,8 @@ void IntroPurposeCutIn::AdjustUniqueParam() {
             sprite->transform_.scale = {1.0f, 1.0f};
         }
         backLineSprite_->transform_.scale = {1.0f, 1.0f};
+        sprites_[LEFT]->transform_.pos    = leftPos_;
+        sprites_[RIGHT]->transform_.pos   = rightPos_;
         sprites_[CENTER]->transform_.pos  = centerPos_;
     }
 #endif

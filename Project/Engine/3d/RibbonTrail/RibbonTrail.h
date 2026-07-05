@@ -1,10 +1,13 @@
 #pragma once
 
 #include "3D/ViewProjection.h"
+// matrix
 #include "Matrix4x4.h"
+// Vector
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
+// std
 #include <cstdint>
 #include <d3d12.h>
 #include <deque>
@@ -21,21 +24,24 @@ enum class ArcDirection {
 
 /// 弧を描く平面の基準軸
 enum class ArcPlane {
-    XZ, 
-    XY, 
-    YZ, 
+    XZ,
+    XY,
+    YZ,
 };
 
+// リボントレイルの頂点構造体
 struct RibbonVertex {
     Vector3 pos;
     Vector4 color;
     Vector2 uv;
 };
 
+// リボントレイルの定数バッファ構造体
 struct RibbonCBuffer {
     Matrix4x4 viewProjection;
 };
 
+// リボントレイルのUVスクロール用定数バッファ構造体
 struct RibbonUVScrollCBuffer {
     Vector2 offset;
     float pad[2];
@@ -103,8 +109,13 @@ private:
         float age = 0.0f;
     };
 
-    static Vector3 CalcPerp(const Vector3& dir, const Vector3& cameraRight);
-    static inline float Lerp(float a, float b, float t) { return a + (b - a) * t; }
+    /// <summary>
+    /// 幅方向ベクトル計算
+    /// </summary>
+    /// <param name="dir">方向ベクトル</param>
+    /// <param name="cameraRight">カメラの右方向ベクトル</param>
+    /// <returns></returns>
+    Vector3 CalcPerp(const Vector3& dir, const Vector3& cameraRight);
 
 private:
     size_t maxPoints_ = 0;
@@ -114,8 +125,8 @@ private:
     float endWidth_   = 0.0f;
 
     // テクスチャ
-    uint32_t textureHandle_                          = UINT32_MAX;
-    static constexpr const char* kDefaultTexturePath = "Resources/Texture/default.dds";
+    uint32_t textureHandle_               = UINT32_MAX;
+    const std::string kDefaultTexturePath = "Resources/Texture/default.dds";
 
     Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer_;
     D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
@@ -148,7 +159,6 @@ private:
     std::deque<TrailPoint> points_;
 
 public:
-
     ///========================================================
     /// Getter
     ///========================================================

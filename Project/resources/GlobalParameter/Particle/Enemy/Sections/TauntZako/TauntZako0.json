@@ -9,9 +9,9 @@
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            0.08819189667701721,
-            0.4478764533996582,
-            0.2853933870792389,
+            0.10423218458890915,
+            0.5868725776672363,
+            0.5253778100013733,
             0.0
         ],
         "Color Max": [
@@ -73,7 +73,7 @@
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 0.07000000029802322,
+        "IntervalTime": 0.15000000596046448,
         "IsScreenPos": false,
         "LifeTime": 2.190000057220459,
         "Max Particle Num": 1000,
@@ -198,7 +198,7 @@
         "dissolveName": "",
         "distortionStrength": 0.05000000074505806,
         "distortionTexturePath": "",
-        "emissiveIntensity": 2.0999999046325684,
+        "emissiveIntensity": 0.5,
         "emitPositionMode": 2,
         "emitShape": 0,
         "goalPosition": [
@@ -239,7 +239,7 @@
         "scaleEaseParam.maxTime": 1.0,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
-        "selectedTexturePath": "Resources/EngineTexture/Particle/Heat.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/SmileEnemy.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,

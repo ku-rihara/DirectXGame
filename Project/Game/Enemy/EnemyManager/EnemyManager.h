@@ -59,12 +59,6 @@ public:
     // 敵全滅チェック
     void CheckIsEnemiesCleared();
 
-    // 待機中の敵を1体アクティブ化
-    bool ActivateSingleWaitingEnemy(int32_t groupID);
-
-    // 全待機敵を破棄
-    void ClearAllWaitingEnemies();
-
     // Param Edit
     void AdjustParam();
     void DamageReactionCreate();
@@ -92,14 +86,6 @@ public:
     /// <param name="groupID"> グループID</param>
     /// <param name="bossName"> ボス名</param>
     void RegisterEnemy(std::unique_ptr<BaseEnemy> enemy, int32_t groupID, const std::string& bossName);
-
-    /// <summary>
-    /// 敵を待機リストに登録
-    /// </summary>
-    /// <param name="enemy"> 登録する敵</param>
-    /// <param name="groupID"> グループID</param>
-    /// <param name="bossName"> ボス名</param>
-    void RegisterWaitingEnemy(std::unique_ptr<BaseEnemy> enemy, int32_t groupID, const std::string& bossName = "");
 
 private:
     /// <summary>
@@ -149,8 +135,6 @@ private:
     std::unique_ptr<EnemyPool> pool_;
     std::vector<std::string> enemyTypes_ = {"EntourageEnemy", "LeaderEnemy"};
 
-    // 待機中の敵のリスト
-    std::unordered_map<int32_t, std::vector<std::unique_ptr<BaseEnemy>>> waitingEnemies_;
     // ボスとザコ敵の紐付け
     std::unordered_map<BaseEnemy*, std::vector<EntourageEnemy*>> minionsByBoss_;
     // ボスの名前とポインタの紐付け

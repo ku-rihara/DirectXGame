@@ -2,12 +2,17 @@
 #include "RibbonTrailManager.h"
 
 using namespace KetaEngine;
+// Base
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/TextureManager.h"
-#include "Pipeline/RibbonTrail/RibbonTrailPipeline.h"
+// Pipeline
 #include "Pipeline/Distortion/DistortionPipeline.h"
+#include "Pipeline/RibbonTrail/RibbonTrailPipeline.h"
+// Math
+#include"Mathfunction.h"
 #include <cmath>
 #include <d3dx12.h>
+#include <numbers>
 
 ///============================================================
 /// デストラクタ
@@ -22,9 +27,12 @@ RibbonTrail::~RibbonTrail() {
 /// RibbonTrailオブジェクト作成
 ///============================================================
 RibbonTrail* RibbonTrail::Create(size_t maxPoints) {
+    // インスタンスを生成して初期化
     std::unique_ptr<RibbonTrail> trail = std::make_unique<RibbonTrail>();
     trail->Init(maxPoints);
+    // マネージャーに登録
     RibbonTrailManager::GetInstance()->Register(trail.get());
+    // インスタンスを返す
     return trail.release();
 }
 
@@ -32,16 +40,16 @@ RibbonTrail* RibbonTrail::Create(size_t maxPoints) {
 /// 初期化
 ///============================================================
 void RibbonTrail::Init(size_t maxPoints) {
-    maxPoints_ = maxPoints;
+    maxPoints_                          = maxPoints;
+    KetaEngine::DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
     // 頂点バッファは maxPoints * 2
-    UINT bufferSize = static_cast<UINT>(sizeof(RibbonVertex) * maxPoints * 2);
-    auto dxCommon   = DirectXCommon::GetInstance();
-
+    UINT bufferSize                 = static_cast<UINT>(sizeof(RibbonVertex) * maxPoints * 2);
     D3D12_HEAP_PROPERTIES heapProps = {D3D12_HEAP_TYPE_UPLOAD};
-    D3D12_RESOURCE_DESC   vbDesc    = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
+    D3D12_RESOURCE_DESC vbDesc      = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
 
-   HRESULT hr = dxCommon->GetDevice()->CreateCommittedResource(
+    // 頂点バッファの作成
+    HRESULT hr = dxCommon->GetDevice()->CreateCommittedResource(
         &heapProps,
         D3D12_HEAP_FLAG_NONE,
         &vbDesc,
@@ -50,10 +58,11 @@ void RibbonTrail::Init(size_t maxPoints) {
         IID_PPV_ARGS(&vertexBuffer_));
 
     if (FAILED(hr)) {
-       
+
         throw std::runtime_error("CreateCommittedResource failed");
     }
 
+    // 頂点バッファビューの作成
     vertexBufferView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
     vertexBufferView_.SizeInBytes    = bufferSize;
     vertexBufferView_.StrideInBytes  = sizeof(RibbonVertex);
@@ -83,7 +92,7 @@ void RibbonTrail::Init(size_t maxPoints) {
 ///============================================================
 void RibbonTrail::SetTexture(const std::string& texturePath) {
     const std::string& path = texturePath.empty() ? kDefaultTexturePath : texturePath;
-    textureHandle_ = TextureManager::GetInstance()->LoadTexture(path);
+    textureHandle_          = TextureManager::GetInstance()->LoadTexture(path);
 }
 
 ///============================================================
@@ -112,32 +121,41 @@ void RibbonTrail::AddPoint(const Vector3& position, const Vector4& startColor, f
 ///============================================================
 void RibbonTrail::SetArc(
     const Vector3& basePos,
-    float          startAngle,
-    float          endAngle,
-    float          radius,
-    ArcDirection   direction,
-    ArcPlane       plane,
-    int            segments)
-{
+    float startAngle,
+    float endAngle,
+    float radius,
+    ArcDirection direction,
+    ArcPlane plane,
+    int segments) {
     points_.clear();
 
-    int seg = (segments > 1) ? segments : static_cast<int>(maxPoints_);
-    if (seg < 2) { seg = 2; }
+    // segmentの代入
+    int segment = segments;
+    if (segment <= 1) {
+        segment = static_cast<int>(maxPoints_);
+    }
 
-    constexpr float kPi    = 3.14159265358979323846f;
-    constexpr float kTwoPi = kPi * 2.0f;
+    if (segment < 2) {
+        segment = 2;
+    }
+
+    const float kTwoPi = std::numbers::pi_v<float> * 2.0f;
 
     float from = startAngle;
     float to   = endAngle;
 
     if (direction == ArcDirection::CounterClockwise) {
-        while (to < from) { to += kTwoPi; }
+        while (to < from) {
+            to += kTwoPi;
+        }
     } else {
-        while (to > from) { to -= kTwoPi; }
+        while (to > from) {
+            to -= kTwoPi;
+        }
     }
 
-    for (int i = 0; i < seg; ++i) {
-        float t     = static_cast<float>(i) / static_cast<float>(seg - 1);
+    for (int i = 0; i < segment; ++i) {
+        float t     = static_cast<float>(i) / static_cast<float>(segment - 1);
         float angle = from + (to - from) * t;
 
         float cosA = std::cos(angle);
@@ -207,7 +225,7 @@ Vector3 RibbonTrail::CalcPerp(const Vector3& dir, const Vector3& cameraRight) {
 void RibbonTrail::Draw(const ViewProjection& viewProj) {
     size_t count = points_.size();
     if (count < 2) {
-        lastVertexCount_ = 0; 
+        lastVertexCount_ = 0;
         return;
     }
 
@@ -217,18 +235,16 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
         viewProj.matView_.m[1][0],
         viewProj.matView_.m[2][0]};
     float crLen = std::sqrt(
-        cameraRight.x * cameraRight.x +
-        cameraRight.y * cameraRight.y +
-        cameraRight.z * cameraRight.z);
+        cameraRight.x * cameraRight.x + cameraRight.y * cameraRight.y + cameraRight.z * cameraRight.z);
     if (crLen > 0.001f) {
         cameraRight = {cameraRight.x / crLen, cameraRight.y / crLen, cameraRight.z / crLen};
     }
 
     size_t vertexCount = 0;
-    float  countF      = static_cast<float>(count > 1 ? count - 1 : 1);
+    float countF       = static_cast<float>(count > 1 ? count - 1 : 1);
 
     // ねじれ防止用：前セグメントのperp
-    Vector3 prevPerp = {0.0f, 0.0f, 0.0f}; 
+    Vector3 prevPerp = {0.0f, 0.0f, 0.0f};
 
     for (size_t i = 0; i < count; ++i) {
         const auto& p = points_[i];
@@ -237,16 +253,16 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
         Vector3 dir;
         if (i == 0) {
             dir = {p.position.x - points_[1].position.x,
-                   p.position.y - points_[1].position.y,
-                   p.position.z - points_[1].position.z};
+                p.position.y - points_[1].position.y,
+                p.position.z - points_[1].position.z};
         } else if (i == count - 1) {
             dir = {points_[i - 1].position.x - p.position.x,
-                   points_[i - 1].position.y - p.position.y,
-                   points_[i - 1].position.z - p.position.z};
+                points_[i - 1].position.y - p.position.y,
+                points_[i - 1].position.z - p.position.z};
         } else {
             dir = {points_[i - 1].position.x - points_[i + 1].position.x,
-                   points_[i - 1].position.y - points_[i + 1].position.y,
-                   points_[i - 1].position.z - points_[i + 1].position.z};
+                points_[i - 1].position.y - points_[i + 1].position.y,
+                points_[i - 1].position.z - points_[i + 1].position.z};
         }
 
         float dirLen = std::sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
@@ -267,7 +283,7 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
 
         float t = static_cast<float>(i) / countF;
 
-        float   aliveRate = 1.0f - (p.age / p.lifetime);
+        float aliveRate   = 1.0f - (p.age / p.lifetime);
         Vector4 lerpColor = {
             Lerp(p.startColor.x, endColor_.x, t),
             Lerp(p.startColor.y, endColor_.y, t),
@@ -293,8 +309,8 @@ void RibbonTrail::Draw(const ViewProjection& viewProj) {
         return;
     }
 
-    cBufferData_->viewProjection    = viewProj.matView_ * viewProj.matProjection_;
-    uvScrollCBufferData_->offset    = uvScrollOffset_;
+    cBufferData_->viewProjection = viewProj.matView_ * viewProj.matProjection_;
+    uvScrollCBufferData_->offset = uvScrollOffset_;
 
     auto commandList = DirectXCommon::GetInstance()->GetCommandList();
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);

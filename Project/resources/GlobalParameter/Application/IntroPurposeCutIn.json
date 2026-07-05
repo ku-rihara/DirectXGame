@@ -3,11 +3,19 @@
         "AppearWaitTime": 0.5,
         "centerAppearWaitTime": 0.23999999463558197,
         "centerPos": [
-            528.0,
-            326.0
+            495.0,
+            319.0
         ],
         "closeWaitTime": 0.5199999809265137,
         "disAppearWaitTime": 0.0,
-        "finishWaitTime": 0.0
+        "finishWaitTime": 0.0,
+        "leftPos": [
+            141.0,
+            316.0
+        ],
+        "rightPos": [
+            964.0,
+            320.0
+        ]
     }
 }

@@ -12,9 +12,9 @@
 class LeaderEnemy : public BaseEnemy {
 public:
     struct StrongParameter {
-        float fleeSpeed         = 5.0f;
-        float fleeDistance      = 20.0f;
-        float fleeCooldownTime  = 0.5f;
+        float fleeSpeed;
+        float fleeDistance;
+        float fleeCooldownTime;
         float separationDistance;
         float separationStrength;
         Vector3 tauntFontOffset;
@@ -27,17 +27,39 @@ public:
 
     bool IsLeaderEnemy() const override { return true; }
 
+    // 初期化、更新
     void Init(const Vector3& spownPos) override;
-    void Update() override;
     void SpawnRenditionInit() override;
+    void Update() override;
+
+    // プール返却前クリーンアップ
     void PrepareForPool() override;
 
+    // 逃走・煽りの状態遷移
     void StartFlee();
     void StartTaunt();
     void StopTaunt();
     void StopTauntToWait(float waitTime);
+
+    // ダメージ復帰
     void BackToDamageRoot() override;
     std::unique_ptr<BaseEnemyBehavior> CreatePostSpawnBehavior() override;
+
+private:
+    // 初期化
+    void InitAnimations();
+    void InitTauntFont();
+    void InitBombManager();
+
+    // 煽り演出再生
+    void PlayTauntFontSpawn();
+    void PlayTauntFontMoving();
+    void PlayTauntFontClose();
+    void CreateAndSetupTauntBehavior();
+
+    // 煽り文字の色演出
+    static Vector3 RandomBrightColor();
+    void StartNextColorTransition();
 
 private:
     bool isTaunting_        = false;
@@ -54,25 +76,10 @@ private:
     KetaEngine::Easing<Vector3> colorEasing_;
     Vector3 currentFontColor_ = {1.0f, 1.0f, 1.0f};
 
-private:
-    // 初期化
-    void InitAnimations();
-    void InitTauntFont();
-    void InitBombManager();
-
-    // 煽り演出再生
-    void PlayTauntFontSpawn();
-    void PlayTauntFontMoving();
-    void PlayTauntFontClose();
-    void CreateAndSetupTauntBehavior();
-
-    static Vector3 RandomBrightColor();
-    void StartNextColorTransition();
-
 public:
+    // Getter
     const StrongParameter& GetStrongParameter() const { return strongParam_; }
     void SetStrongParameter(const StrongParameter& param) { strongParam_ = param; }
     bool IsTaunting() const { return isTaunting_; }
-
     KetaEngine::Object3d* GetTauntFont() const { return tauntFont_.get(); }
 };

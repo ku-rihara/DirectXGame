@@ -8,9 +8,11 @@
 #include "AnimationData.h"
 #include "GPUData/ModelData.h"
 
+// std
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace KetaEngine {
@@ -116,6 +118,9 @@ private:
     /// ============================================================
 
     const std::string directoryPath_ = "Resources/Model/";
+
+    // 読み込み済みアニメーションのキャッシュ
+    static std::unordered_map<std::string, Animation> animationCache_;
 };
 
 }; // KetaEngine

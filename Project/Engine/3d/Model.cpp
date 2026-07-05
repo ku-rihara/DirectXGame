@@ -16,6 +16,7 @@ using namespace KetaEngine;
 #include "Pipeline/SkyBox/SkyBoxPipeline.h"
 
 #include "ShadowMap/ShadowMap.h"
+#include "Utility/Log/Log.h"
 #include <filesystem>
 
 void ModelCommon::Init(DirectXCommon* dxCommon) {
@@ -37,6 +38,10 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
     Assimp::Importer importer;
     std::string filePath(directoryPath + "/" + filename); // ファイルを開く
     const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+    if (!scene) {
+        Log::Error("Model::LoadModelFile failed: " + filePath + " (" + importer.GetErrorString() + ")");
+        assert(false && "モデルファイルの読み込みに失敗しました");
+    }
     assert(scene->HasMeshes()); // メッシュがないのは対応しない
 
     for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
@@ -117,8 +122,12 @@ ModelData Model::LoadModelGltf(const std::string& directoryPath, const std::stri
     Assimp::Importer importer;
     std::string filePath(directoryPath + "/" + filename); // ファイルを開く
     const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
-    modelData            = LoadModelFile(directoryPath, filename);
-    modelData.rootNode   = ReadNode(scene->mRootNode);
+    if (!scene) {
+        Log::Error("Model::LoadModelGltf failed: " + filePath + " (" + importer.GetErrorString() + ")");
+        assert(false && "gltfモデルファイルの読み込みに失敗しました");
+    }
+    modelData          = LoadModelFile(directoryPath, filename);
+    modelData.rootNode = ReadNode(scene->mRootNode);
     return modelData;
 }
 

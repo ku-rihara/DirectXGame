@@ -28,6 +28,10 @@ void LeaderEnemy::PrepareForPool() {
     if (bombManager_) {
         bombManager_->Stop();
     }
+    // 煽り文字も非表示化
+    if (tauntFont_) {
+        tauntFont_->SetIsDraw(false);
+    }
     BaseEnemy::PrepareForPool();
 }
 
@@ -77,6 +81,8 @@ void LeaderEnemy::InitTauntFont() {
     tauntFont_->transform_.Init();
     tauntFont_->transform_.translation_ = strongParam_.tauntFontOffset;
     tauntFont_->transform_.scale_       = Vector3::ZeroVector();
+    // 煽り開始まで非表示
+    tauntFont_->SetIsDraw(false);
 
     // マテリアルの初期化
     colorEasing_.Init("TauntColor");
@@ -213,6 +219,7 @@ void LeaderEnemy::StartNextColorTransition() {
 void LeaderEnemy::PlayTauntFontSpawn() {
     isTauntFontMoving_ = false;
     if (tauntFont_) {
+        tauntFont_->SetIsDraw(true);
         tauntFont_->transform_.scale_ = Vector3::OneVector();
         tauntFont_->transform_.PlayObjEaseAnimation("SpawnTauntFont", "LeaderEnemyTauntFont");
     }
@@ -236,6 +243,7 @@ void LeaderEnemy::PlayTauntFontClose() {
         if (player) {
             player->SetEndCallback([this]() {
                 tauntFont_->transform_.scale_ = Vector3::ZeroVector();
+                tauntFont_->SetIsDraw(false);
             });
         }
     }

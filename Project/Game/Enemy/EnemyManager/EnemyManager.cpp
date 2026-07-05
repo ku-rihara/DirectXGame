@@ -4,8 +4,6 @@
 #include "Enemy/UIs/GroupIcon/GroupIcon.h"
 // Math
 #include "Matrix4x4.h"
-// Behavior
-#include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 // Player
 #include "Player/Player.h"
 // StressGauge
@@ -27,14 +25,6 @@ EnemyManager::~EnemyManager() {
         if (e) { e->PrepareForPool(); }
     }
     enemies_.clear();
-
-    // 待機敵のビヘイビアを先にリセットしてから破棄
-    for (auto& [id, list] : waitingEnemies_) {
-        for (auto& e : list) {
-            if (e) { e->PrepareForPool(); }
-        }
-    }
-    waitingEnemies_.clear();
 
     minionsByBoss_.clear();
     bossByName_.clear();
@@ -77,7 +67,7 @@ void EnemyManager::Init() {
 
     // オブジェクトプール事前確保
     pool_ = std::make_unique<EnemyPool>();
-    pool_->Init();
+    pool_->Init(this);
 }
 
 ///========================================================================================
@@ -121,16 +111,6 @@ void EnemyManager::RegisterEnemy(std::unique_ptr<BaseEnemy> enemy, int32_t group
 
     enemies_.push_back(std::move(enemy));
     LinkBossAndMinions(groupID, newMinion, bossName);
-}
-
-///========================================================================================
-///  waitingリストへ登録
-///========================================================================================
-void EnemyManager::RegisterWaitingEnemy(std::unique_ptr<BaseEnemy> enemy, int32_t groupID, const std::string& bossName) {
-    if (enemy->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG && !bossName.empty()) {
-        bossByName_[bossName] = enemy.get();
-    }
-    waitingEnemies_[groupID].push_back(std::move(enemy));
 }
 
 ///========================================================================================
@@ -256,82 +236,6 @@ void EnemyManager::OnBossKilled(BaseEnemy* dyingBoss) {
             break;
         }
     }
-}
-
-///========================================================================================
-///  待機中の敵を1体アクティブ化
-///========================================================================================
-bool EnemyManager::ActivateSingleWaitingEnemy(int32_t groupID) {
-    auto it = waitingEnemies_.find(groupID);
-    if (it == waitingEnemies_.end() || it->second.empty()) {
-        return false;
-    }
-
-    auto& enemy = it->second.front();
-
-    if (auto* anim = enemy->GetAnimator()->GetAnimationObject()) {
-        anim->ClearAllAnimationEndCallbacks();
-    }
-
-    BaseEnemy::Type t = enemy->GetBaseInfo()->GetType();
-    enemy->GetBaseInfo()->SetParameter(t, param_->GetBaseParam(t));
-    if (t == BaseEnemy::Type::STRONG) {
-        static_cast<LeaderEnemy*>(enemy.get())->SetStrongParameter(param_->GetStrongParam());
-    }
-    enemy->RefreshCollision();
-
-    enemy->GetAnimator()->SetAnimationActive(true);
-    enemy->ChangeBehavior(std::make_unique<EnemySpawn>(enemy.get()));
-
-    EntourageEnemy* newMinion = nullptr;
-    std::string bossName   = "";
-
-    if (t == BaseEnemy::Type::NORMAL) {
-        newMinion = static_cast<EntourageEnemy*>(enemy.get());
-        bossName  = newMinion->GetParentBossName();
-    }
-
-    enemies_.push_back(std::move(enemy));
-
-    BaseEnemy* activated = enemies_.back().get();
-    if (activated->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG) {
-        for (auto& [name, ptr] : bossByName_) {
-            if (ptr == activated) {
-                bossByName_[name] = activated;
-                break;
-            }
-        }
-    }
-
-    it->second.erase(it->second.begin());
-    if (it->second.empty()) {
-        waitingEnemies_.erase(it);
-    }
-
-    LinkBossAndMinions(groupID, newMinion, bossName);
-    return true;
-}
-
-///========================================================================================
-///  全待機敵を破棄
-///========================================================================================
-void EnemyManager::ClearAllWaitingEnemies() {
-    for (auto& [groupID, waitingList] : waitingEnemies_) {
-        for (auto& e : waitingList) {
-            if (e->GetBaseInfo()->GetType() == BaseEnemy::Type::STRONG) {
-                for (auto bit = bossByName_.begin(); bit != bossByName_.end();) {
-                    if (bit->second == e.get()) {
-                        bit = bossByName_.erase(bit);
-                    } else {
-                        ++bit;
-                    }
-                }
-            }
-            e->PrepareForPool();
-            pool_->Release(std::move(e));
-        }
-    }
-    waitingEnemies_.clear();
 }
 
 ///========================================================================================

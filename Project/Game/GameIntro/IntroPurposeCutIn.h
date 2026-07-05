@@ -67,6 +67,8 @@ private:
     Phase phase_            = Phase::Appear;
     bool appearAnimStarted_ = false;
 
+    Vector2 leftPos_    = {};
+    Vector2 rightPos_   = {};
     Vector2 centerPos_  = {};
     bool isPreview_     = false;
 };

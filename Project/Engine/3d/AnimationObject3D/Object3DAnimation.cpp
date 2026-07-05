@@ -14,6 +14,7 @@ using namespace KetaEngine;
 // std
 #include <algorithm>
 #include <cassert>
+#include <filesystem>
 
 Object3DAnimation::~Object3DAnimation() {
     if (AnimationRegistry::GetInstance()) {
@@ -75,9 +76,19 @@ void Object3DAnimation::Init() {
 /// アニメーション追加
 ///============================================================
 void Object3DAnimation::Add(const std::string& fileName) {
-    if (modelAnimation_) {
-        animations_.push_back(modelAnimation_->LoadAnimationFile(fileName));
+    if (!modelAnimation_) {
+        return;
     }
+
+    // 同名のアニメーションが既に追加済みなら何もしない
+    std::string stemName = std::filesystem::path(fileName).stem().string();
+    for (const auto& anime : animations_) {
+        if (anime.name == stemName) {
+            return;
+        }
+    }
+
+    animations_.push_back(modelAnimation_->LoadAnimationFile(fileName));
 }
 
 ///============================================================

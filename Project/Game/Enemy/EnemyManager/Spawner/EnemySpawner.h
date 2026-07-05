@@ -26,8 +26,7 @@ private:
         std::string enemyType;
         float spawnOffset;
         std::string parentBossName;
-        bool hasSpawned   = false;
-        bool preGenerated = false;
+        bool hasSpawned = false;
     };
 
     // スポーンする敵のグループ情報
@@ -102,30 +101,16 @@ private:
     /// <returns></returns>
     bool IsGroupCompleted(int groupId) const;
 
-    /// <summary>
-    /// 指定されたグループの全ての敵が事前生成されているかをチェックする
-    /// </summary>
-    /// <param name="groupId">グループID</param>
-    /// <returns></returns>
-    bool IsGroupFullyPreGenerated(int32_t groupId) const;
-
     // 次のグループをアクティブ化
     void ActivateNextGroup();
     // グループのスポーン位置を設定
     void SettingGroupSpawnPos();
     // 現在のグループのスポーン位置を設定
     void UpdateCurrentGroup();
-    // 次のグループの敵を事前生成
-    void PreGenerateNextGroupEnemy();
-    // 現在のグループの敵を事前生成
-    void PreGenerateCurrentGroupEnemy();
 
     // パラメータ登録とループ再開
     void RegisterParams();
     void RestartLoop();
-
-    void PreGenerateEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID,
-        const Vector3& localOffset = {}, const std::string& parentBossName = "");
 
 private:
     // JSONデータ
@@ -153,16 +138,12 @@ private:
     // 最大フェーズ数
     int32_t maxFazeNum_;
 
-    // 敵の事前生成に使用するフレーム間隔
-    const int32_t kPreGenFrameInterval = 5;
-
     // 現在のスポーン状況
-    float currentTime_        = 0.0f;
-    int currentGroupIndex_    = 0;
-    int32_t preGenFrameCount_ = 0;
-    bool isSystemActive_      = false;
-    bool allGroupsCompleted_  = false;
-    bool shouldLoop_          = false;
+    float currentTime_       = 0.0f;
+    int currentGroupIndex_   = 0;
+    bool isSystemActive_     = false;
+    bool allGroupsCompleted_ = false;
+    bool shouldLoop_         = false;
 
 public:
     bool IsActive() const { return isSystemActive_; }

@@ -17,6 +17,8 @@ using namespace KetaEngine;
 #include "Matrix4x4.h"
 #include "GPUData/ModelData.h"
 
+std::unordered_map<std::string, Animation> ModelAnimation::animationCache_;
+
 Skeleton ModelAnimation::CreateSkeleton(const Node& rootNode) {
     Skeleton skeleton;
     skeleton.root = CreateJoint(rootNode, {}, skeleton.joints);
@@ -29,28 +31,30 @@ Skeleton ModelAnimation::CreateSkeleton(const Node& rootNode) {
     return skeleton;
 }
 
+
 SkinCluster ModelAnimation::CreateSkinCluster(ModelData& modelData, const Skeleton& skeleton, Model* model) {
 
     SkinCluster skinCluster = {};
 
+    // スキニングCSが使うGPUバッファ・SRV/UAVを一式作成
     CreatePaletteResource(skinCluster, skeleton);
     CreateInputVertexSRV(skinCluster, modelData, model);
     CreateInfluenceResource(skinCluster, modelData);
     CreateOutputVertexResourceAndUAV(skinCluster, modelData);
     CreateSkinningInfoResource(skinCluster, modelData);
-   
 
-     // influence用のVBVを作成
+    // バインドポーズ行列を単位行列で初期化
     skinCluster.inverseBindPoseMatrices.resize(skeleton.joints.size());
     std::generate(skinCluster.inverseBindPoseMatrices.begin(), skinCluster.inverseBindPoseMatrices.end(), MakeIdentity4x4);
 
-
+    // ジョイント毎のバインドポーズ行列と、頂点毎のウェイト、ジョイント番号を設定
     for (const auto& jointWeight : modelData.skinClusterData) {
         auto it = skeleton.jointMap.find(jointWeight.first);
         if (it == skeleton.jointMap.end()) {
             continue;
         }
 
+        // このジョイントのバインドポーズ行列を設定
         skinCluster.inverseBindPoseMatrices[(*it).second] = jointWeight.second.inverseBindPoseMatrix;
         for (const auto& vertexWeight : jointWeight.second.vertexWeights) {
             auto& currentInfluence = skinCluster.mappedInfluence[vertexWeight.vertexIndex];
@@ -87,9 +91,6 @@ int32_t ModelAnimation::CreateJoint(const Node& node, const std::optional<int32_
 }
 
 Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
-    Animation animation;
-    Assimp::Importer importer;
-
     std::filesystem::path path(fileName);
     std::string stemName  = path.stem().string();
     std::string fileBase  = path.filename().string();
@@ -103,11 +104,22 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
         filePath = directoryPath_ + parentDir + "/" + stemName + "/" + fileBase;
     }
 
+    // キャッシュにあれば返す
+    if (auto it = animationCache_.find(filePath); it != animationCache_.end()) {
+        return it->second;
+    }
+
+    Animation animation;
+    Assimp::Importer importer;
+
     animation.name = stemName;
 
     const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
-    assert(scene->mNumAnimations != 0); // アニメーションがない
-    aiAnimation* animationAssimp = scene->mAnimations[0]; // 最初のアニメションをだけ採用
+    // アニメーションがない
+    assert(scene->mNumAnimations != 0); 
+
+    // 最初のアニメションをだけ採用
+    aiAnimation* animationAssimp = scene->mAnimations[0]; 
     animation.duration           = float(animationAssimp->mDuration / animationAssimp->mTicksPerSecond); // 時間の単位を秒に変換
 
     // channelを回してNodeAnimationの情報をとってくる
@@ -143,15 +155,18 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
         }
     }
 
+    animationCache_[filePath] = animation;
     return animation;
 }
 
 Vector3 ModelAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
     assert(!keyframe.empty());
+    // キーフレームが1つ、または最初のキーフレームより前なら先頭の値
     if (keyframe.size() == 1 || time <= keyframe[0].time) {
         return keyframe[0].value;
     }
 
+    // 前後のキーフレームを探して補間
     for (size_t i = 0; i < keyframe.size() - 1; ++i) {
         size_t nextIndex = i + 1;
         if (keyframe[i].time <= time && time <= keyframe[nextIndex].time) {
@@ -159,15 +174,18 @@ Vector3 ModelAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyfr
             return Lerp(keyframe[i].value, keyframe[nextIndex].value, t);
         }
     }
+    // 最後のキーフレームより後なら末尾の値
     return (*keyframe.rbegin()).value;
 }
 
 Quaternion ModelAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time) {
     assert(!keyframe.empty());
+    // キーフレームが1つ、または最初のキーフレームより前なら先頭の値
     if (keyframe.size() == 1 || time <= keyframe[0].time) {
         return keyframe[0].value;
     }
 
+    // 前後のキーフレームを探して球面補間
     for (size_t i = 0; i < keyframe.size() - 1; ++i) {
         size_t nextIndex = i + 1;
         if (keyframe[i].time <= time && time <= keyframe[nextIndex].time) {
@@ -175,6 +193,7 @@ Quaternion ModelAnimation::CalculateValueQuaternion(const std::vector<KeyframeQu
             return Quaternion::Slerp(keyframe[i].value, keyframe[nextIndex].value, t);
         }
     }
+    // 最後のキーフレームより後なら末尾の値
     return (*keyframe.rbegin()).value;
 }
 
@@ -186,12 +205,15 @@ void ModelAnimation::CreatePaletteResource(SkinCluster& skinCluster, const Skele
     DirectXCommon* dxCommon = DirectXCommon::GetInstance();
     SrvManager* srvManager  = SrvManager::GetInstance();
 
+    // パレットリソース作成
     skinCluster.paletteResource = dxCommon->CreateBufferResource(
         dxCommon->GetDevice(), sizeof(WellForGPU) * skeleton.joints.size());
+    // CPU側で初期化
     WellForGPU* mappedPalette = nullptr;
     skinCluster.paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
     skinCluster.mappedPalette = {mappedPalette, skeleton.joints.size()};
 
+    // SRVを作成
     uint32_t srvIndex                   = srvManager->Allocate();
     skinCluster.paletteSrvHandle.first  = srvManager->GetCPUDescriptorHandle(srvIndex);
     skinCluster.paletteSrvHandle.second = srvManager->GetGPUDescriptorHandle(srvIndex);
@@ -206,6 +228,7 @@ void ModelAnimation::CreatePaletteResource(SkinCluster& skinCluster, const Skele
 void ModelAnimation::CreateInputVertexSRV(SkinCluster& skinCluster, ModelData& modelData, Model* model) {
     SrvManager* srvManager = SrvManager::GetInstance();
 
+    // SRVを作成
     uint32_t inputVertexSrvIndex            = srvManager->Allocate();
     skinCluster.inputVertexSrvHandle.first  = srvManager->GetCPUDescriptorHandle(inputVertexSrvIndex);
     skinCluster.inputVertexSrvHandle.second = srvManager->GetGPUDescriptorHandle(inputVertexSrvIndex);
@@ -254,6 +277,7 @@ void ModelAnimation::CreateOutputVertexResourceAndUAV(SkinCluster& skinCluster, 
     DirectXCommon* dxCommon = DirectXCommon::GetInstance();
     SrvManager* srvManager  = SrvManager::GetInstance();
 
+    // 出力頂点リソース作成
     skinCluster.outputVertexResource = dxCommon->CreateBufferResource(
         dxCommon->GetDevice(),
         static_cast<UINT>(sizeof(VertexData) * modelData.vertices.size()),
@@ -263,12 +287,12 @@ void ModelAnimation::CreateOutputVertexResourceAndUAV(SkinCluster& skinCluster, 
     skinCluster.outputVertexUavHandle.first  = srvManager->GetCPUDescriptorHandle(outputVertexUavIndex);
     skinCluster.outputVertexUavHandle.second = srvManager->GetGPUDescriptorHandle(outputVertexUavIndex);
 
-
     // UAV作成
     srvManager->CreateStructuredUAV(
         outputVertexUavIndex, skinCluster.outputVertexResource.Get(),
         UINT(modelData.vertices.size()), sizeof(VertexData));
 
+    // Vertex Buffer Viewを作成
     skinCluster.outputVertexBufferView.BufferLocation = skinCluster.outputVertexResource->GetGPUVirtualAddress();
     skinCluster.outputVertexBufferView.SizeInBytes    = static_cast<UINT>(sizeof(VertexData) * modelData.vertices.size());
     skinCluster.outputVertexBufferView.StrideInBytes  = sizeof(VertexData);
@@ -280,9 +304,11 @@ void ModelAnimation::CreateSkinningInfoResource(SkinCluster& skinCluster, ModelD
         int numVertices;
     };
 
+    // 頂点数を渡すためのリソース作成
     skinCluster.skinningInfoResource = dxCommon->CreateBufferResource(
         dxCommon->GetDevice(), sizeof(SkinningInformation));
 
+    // CPU側で書き込み
     SkinningInformation* mappedSkinningInfo = nullptr;
     skinCluster.skinningInfoResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedSkinningInfo));
     mappedSkinningInfo->numVertices = static_cast<int>(modelData.vertices.size());

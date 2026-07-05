@@ -48,6 +48,8 @@ void BaseEnemy::PrepareForPool() {
     }
     // コリジョン無効化
     SetIsAdaptCollision(false);
+    // AnimationRegistryのSkinning/Drawの対象から外す
+    animator_.SetAnimationActive(false);
 }
 
 ///========================================================
