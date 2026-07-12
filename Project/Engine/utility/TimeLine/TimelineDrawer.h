@@ -29,6 +29,9 @@ struct TimeLineTrack {
     // キーフレーム右クリックコールバック
     std::function<void(int32_t trackIndex, int32_t keyIndex)> onKeyFrameRightClick;
 
+    // トラック名エリア右クリックコールバック
+    std::function<void(int32_t trackIndex)> onTrackRightClick;
+
     // トラック固有ID
     uint32_t id;
 };
@@ -103,6 +106,12 @@ public:
         const std::function<void(int32_t, int32_t)>& callback);
 
     /// <summary>
+    /// トラック名エリアの右クリックコールバックを設定
+    /// </summary>
+    void SetTrackRightClickCallback(uint32_t trackIndex,
+        const std::function<void(int32_t)>& callback);
+
+    /// <summary>
     /// トラック数を取得
     /// </summary>
     size_t GetTrackCount() const { return tracks_.size(); }
@@ -120,6 +129,9 @@ private:
     // キーフレームのコンテキストメニュー処理（右クリックメニュー開閉）
     void DrawKeyFrameContextMenu(uint32_t trackIndex, uint32_t keyIndex,
         float kfX, float kfY);
+
+    // トラック名エリアのコンテキストメニュー処理
+    void DrawTrackRowContextMenu(uint32_t trackIndex, const Vector2& canvasPos, float trackY);
 
 private:
     //*---------------------------- private Variant ----------------------------*//

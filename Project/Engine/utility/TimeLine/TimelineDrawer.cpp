@@ -194,6 +194,13 @@ void TimelineDrawer::SetKeyFrameRightClickCallback(uint32_t trackIndex, const st
     tracks_[trackIndex].onKeyFrameRightClick = callback;
 }
 
+void TimelineDrawer::SetTrackRightClickCallback(uint32_t trackIndex, const std::function<void(int32_t)>& callback) {
+    if (trackIndex >= tracks_.size()) {
+        return;
+    }
+    tracks_[trackIndex].onTrackRightClick = callback;
+}
+
 void TimelineDrawer::Draw(const std::string& name) {
     ImGui::Begin(name.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar);
 
@@ -260,6 +267,10 @@ void TimelineDrawer::Draw(const std::string& name) {
             // キーフレームコンテキストメニュー
             DrawKeyFrameContextMenu(i, j, kfX, kfY);
         }
+
+        // トラック名エリアのコンテキストメニュー
+        DrawTrackRowContextMenu(i, canvasPos, trackY);
+
         trackY += drawParam_.GetTrackHeight();
     }
 
@@ -336,6 +347,26 @@ void TimelineDrawer::DrawKeyFrameContextMenu(uint32_t trackIndex, uint32_t keyIn
 
         if (ImGui::MenuItem("Delete KeyFrame")) {
             RemoveKeyFrame(trackIndex, keyIndex);
+        }
+        ImGui::EndPopup();
+    }
+}
+
+void TimelineDrawer::DrawTrackRowContextMenu(uint32_t trackIndex, const Vector2& canvasPos, float trackY) {
+    ImVec2 labelMin(canvasPos.x, trackY);
+    ImVec2 labelMax(canvasPos.x + drawParam_.GetHeaderWidth(), trackY + drawParam_.GetTrackHeight());
+    std::string popupId = std::format("TrackContextMenu_{}", trackIndex);
+
+    // トラック名エリア右クリック
+    if (ImGui::IsMouseClicked(1) && ImGui::IsMouseHoveringRect(labelMin, labelMax)) {
+        ImGui::OpenPopup(popupId.c_str());
+    }
+
+    // OpenPopup/BeginPopupを同一スコープ内で完結させる(ID不一致で開かなくなるのを防ぐため、
+    // 呼び出し元は必ずコールバック経由でメニュー内容を描画すること)
+    if (ImGui::BeginPopup(popupId.c_str())) {
+        if (tracks_[trackIndex].onTrackRightClick) {
+            tracks_[trackIndex].onTrackRightClick(static_cast<int32_t>(trackIndex));
         }
         ImGui::EndPopup();
     }

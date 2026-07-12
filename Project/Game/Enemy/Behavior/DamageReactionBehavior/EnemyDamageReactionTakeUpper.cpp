@@ -41,15 +41,6 @@ EnemyDamageReactionTakeUpper::~EnemyDamageReactionTakeUpper() {
 }
 
 void EnemyDamageReactionTakeUpper::Update(float deltaTime) {
-    // バウンド死亡のバーストタイマー待ち
-    if (isDeathBurstPhase_) {
-        deathBurstTimer_ -= deltaTime;
-        if (deathBurstTimer_ <= 0.0f) {
-            pBaseEnemy_->SetIsDeath(true);
-        }
-        return;
-    }
-
     // 演出・リアクション更新
     damageRendition_.Update(deltaTime, reactionTimer_, hasPlayedRendition_);
 
@@ -67,15 +58,9 @@ void EnemyDamageReactionTakeUpper::UpdatePhase() {
     UpdateNormal();
     UpdateTakeUpper();
 
-    // 死亡予約済みの場合は起き上がりフェーズに移行しない（死亡パスを上書きしない）
-    if (pBaseEnemy_->GetIsDeathPending()) {
-        return;
-    }
-
     // 終了判定
     if (IsReactionFinished()) {
         OnReactionEnd();
-        endType_      = EndType::BackToRoot;
         currentPhase_ = [this]() {
             GetUpPhase();
         };
@@ -83,11 +68,7 @@ void EnemyDamageReactionTakeUpper::UpdatePhase() {
 }
 
 void EnemyDamageReactionTakeUpper::EndPhase() {
-    if (endType_ == EndType::Death) {
-        pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
-    } else {
-        pBaseEnemy_->BackToDamageRoot();
-    }
+    pBaseEnemy_->BackToDamageRoot();
 }
 
 void EnemyDamageReactionTakeUpper::Debug() {
@@ -219,12 +200,6 @@ void EnemyDamageReactionTakeUpper::UpdateTakeUpper() {
             // バウンドエフェクト
             pBaseEnemy_->ThrustRenditionInit();
 
-            // 死亡予約済みの場合は1バウンドしてアニメなしで死亡
-            if (pBaseEnemy_->GetIsDeathPending()) {
-                isDeathBounce_ = true;
-                maxBoundCount_ = 1;
-            }
-
             // 最初の着地時のバウンド速度を設定
             bounceSpeed_ = std::abs(blowYPower_) * initialBounceRate_;
         }
@@ -261,13 +236,6 @@ void EnemyDamageReactionTakeUpper::UpdateBounce(float basePosY, float gravity) {
 
         if (currentBoundCount_ >= maxBoundCount_) {
             bounceSpeed_ = 0.0f;
-            if (isDeathBounce_) {
-                pBaseEnemy_->ThrustRenditionInit();
-                pBaseEnemy_->DeathRenditionInit();
-                deathBurstTimer_   = pBaseEnemy_->GetBaseInfo()->GetParameter().deathBurstTime;
-                isDeathBurstPhase_ = true;
-                return;
-            }
         } else {
             bounceSpeed_ = nextBounceSpeed;
             pBaseEnemy_->ThrustRenditionInit();

@@ -214,7 +214,6 @@ void Model::Draw(const Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, cons
     const std::optional<uint32_t>& textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
-    /*materialDate_->color = color.;*/
 
     // 頂点バッファとインデックスバッファの設定
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);

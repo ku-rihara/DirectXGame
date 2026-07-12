@@ -60,6 +60,7 @@ void EnemyParameter::RegisterParams() {
         globalParameter_->Regist(groupName_, "deathGravity" + idx,           &parameters_[i].deathGravity);
         globalParameter_->Regist(groupName_, "deathRotateSpeed" + idx,       &parameters_[i].deathRotateSpeed);
         globalParameter_->Regist(groupName_, "deathBurstTime" + idx,         &parameters_[i].deathBurstTime);
+        globalParameter_->Regist(groupName_, "deathAnimTimeout" + idx,       &parameters_[i].deathAnimTimeout);
         globalParameter_->Regist(groupName_, "gaugeIncreaseValue" + idx,     &parameters_[i].gaugeIncreaseValue);
     }
 
@@ -125,6 +126,7 @@ void EnemyParameter::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("DeathGravity",     &parameters_[i].deathGravity,     0.1f);
     ImGui::DragFloat("DeathRotateSpeed", &parameters_[i].deathRotateSpeed, 0.01f);
     ImGui::DragFloat("DeathBurstTime",   &parameters_[i].deathBurstTime,   0.01f);
+    ImGui::DragFloat("DeathAnimTimeout", &parameters_[i].deathAnimTimeout, 0.05f, 0.0f, 30.0f);
 
     ImGui::SeparatorText("HPパラメータ");
     ImGui::DragFloat("hpMax", &parameters_[i].hpMax, 1.0f, 1.0f, 9999.0f);

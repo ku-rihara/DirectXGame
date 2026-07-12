@@ -13,13 +13,6 @@ class PlayerAttackCollider;
 /// </summary>
 class EnemyDamageReactionSlammed : public BaseEnemyDamageReaction {
 public:
-    // 終了時の遷移先
-    enum class EndType {
-        BackToRoot,
-        Death,
-    };
-
-public:
     EnemyDamageReactionSlammed(
         BaseEnemy* boss,
         EnemyDamageReactionData* reactionData,
@@ -29,6 +22,9 @@ public:
     // 更新、デバッグ
     void Update(float deltaTime) override;
     void Debug() override;
+
+    // 叩きつけ〜起き上がりが完了するまでは新しい攻撃で割り込まれない
+    bool CanBeInterruptedByNewHit() const override { return false; }
 
 private:
     // リアクション演出初期化
@@ -59,7 +55,6 @@ private:
 
     // フェーズ管理
     std::function<void()> currentPhase_;
-    EndType endType_ = EndType::BackToRoot;
 
     // タイマー
     float reactionTimer_ = 0.0f;

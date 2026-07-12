@@ -38,6 +38,7 @@ public:
         float deathGravity;
         float deathRotateSpeed;
         float deathBurstTime;
+        float deathAnimTimeout; 
         float gaugeIncreaseValue;
         float waitCooldownTime;
     };

@@ -291,6 +291,10 @@ void BaseEnemy::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReac
     behaviorCtrl_.ChangeDamageReactionBehavior(std::move(behavior));
 }
 
+void BaseEnemy::ChangeDamageReactionBehavior(std::unique_ptr<EnemyDeath> behavior) {
+    behaviorCtrl_.ChangeDamageReactionBehavior(std::move(behavior));
+}
+
 void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
     behaviorCtrl_.ChangeBehavior(std::move(behavior));
 }
@@ -307,8 +311,7 @@ void BaseEnemy::RefreshCollision() {
 
 
 bool BaseEnemy::IsInDeathBehavior() const {
-    auto* dmg = behaviorCtrl_.GetDamageBehavior();
-    return dmg && dmg->IsDeath();
+    return behaviorCtrl_.IsDeathLocked();
 }
 
 

@@ -57,15 +57,9 @@ void EnemyDamageReactionSlammed::UpdatePhase() {
     UpdateNormal();
     UpdateSlammed();
 
-    // 死亡予約済みの場合は起き上がりフェーズに移行しない
-    if (pBaseEnemy_->GetIsDeathPending()) {
-        return;
-    }
-
     // 終了判定
     if (IsReactionFinished()) {
         OnReactionEnd();
-        endType_      = EndType::BackToRoot;
         currentPhase_ = [this]() {
             GetUpPhase();
         };
@@ -73,11 +67,7 @@ void EnemyDamageReactionSlammed::UpdatePhase() {
 }
 
 void EnemyDamageReactionSlammed::EndPhase() {
-    if (endType_ == EndType::Death) {
-        pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
-    } else {
-        pBaseEnemy_->BackToDamageRoot();
-    }
+    pBaseEnemy_->BackToDamageRoot();
 }
 
 void EnemyDamageReactionSlammed::Debug() {
@@ -177,15 +167,6 @@ void EnemyDamageReactionSlammed::UpdateSlammed() {
 
             // 地面衝突エフェクト
             pBaseEnemy_->ThrustRenditionInit();
-
-            // 死亡予約済みの場合は1バウンド後に死亡処理
-            if (pBaseEnemy_->GetIsDeathPending()) {
-                endType_      = EndType::Death;
-                currentPhase_ = [this]() {
-                    EndPhase();
-                };
-                return;
-            }
 
             // 叩きつけ速度をベースに最初のバウンド速度を設定
             bounceSpeed_ = std::abs(bounceSpeed_) * initialBounceRate_;

@@ -52,6 +52,7 @@ void EnemyDeath::StepAnimation() {
     // 死亡アニメーション再生・終了待ち
     if (!deathAnimStarted_) {
         deathAnimStarted_            = true;
+        deathAnimTimer_              = 0.0f;
         const std::string& deathAnim = pBaseEnemy_->GetAnimator()->GetAnimationName(BaseEnemy::AnimationType::Death);
         if (!deathAnim.empty()) {
             pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Death, false);
@@ -63,6 +64,15 @@ void EnemyDeath::StepAnimation() {
             deathAnimFinished_ = true;
         }
     }
+
+    // 終了コールバックが来なくても、タイムアウトしたら強制的に次へ進める
+    if (!deathAnimFinished_) {
+        deathAnimTimer_ += KetaEngine::Frame::DeltaTime();
+        if (deathAnimTimer_ >= pBaseEnemy_->GetBaseInfo()->GetParameter().deathAnimTimeout) {
+            deathAnimFinished_ = true;
+        }
+    }
+
     if (deathAnimFinished_) {
         step_ = Step::BURST;
     }

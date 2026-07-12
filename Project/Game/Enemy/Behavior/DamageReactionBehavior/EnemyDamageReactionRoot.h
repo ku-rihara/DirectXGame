@@ -34,8 +34,7 @@ private:
     /// <summary>
     /// 死亡リアクション変更
     /// </summary>
-    /// <param name="reactionData">リアクションデータ</param>
-    void ChangeDeathReaction(EnemyDamageReactionData* reactionData);
+    void ChangeDeathReaction();
 
 private:
     const PlayerAttackCollider* pPlayerCollisionInfo_    = nullptr;

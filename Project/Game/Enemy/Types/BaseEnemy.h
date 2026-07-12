@@ -31,6 +31,7 @@ class PlayerAttackCollider;
 class EnemyHPBarColorConfig;
 class BaseEnemyBehavior;
 class EnemyInitializer;
+class EnemyDeath;
 
 /// <summary>
 /// 敵の基底クラス
@@ -122,6 +123,8 @@ public:
 
     // behavior変更
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
+    // 死亡Behaviorへの移行専用
+    void ChangeDamageReactionBehavior(std::unique_ptr<EnemyDeath> behavior);
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
     virtual void BackToDamageRoot();
 

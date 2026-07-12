@@ -5,6 +5,7 @@
 class BaseEnemy;
 class BaseEnemyBehavior;
 class BaseEnemyDamageReaction;
+class EnemyDeath;
 class PlayerAttackCollider;
 
 /// <summary>
@@ -33,6 +34,11 @@ public:
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
 
     /// <summary>
+    /// 死亡ビヘイビアへの変更
+    /// </summary>
+    void ChangeDamageReactionBehavior(std::unique_ptr<EnemyDeath> behavior);
+
+    /// <summary>
     /// プレイヤー攻撃コライダーとの衝突処理
     /// </summary>
     void OnPlayerAttackCollision(PlayerAttackCollider* attackController);
@@ -53,6 +59,11 @@ private:
     /// </summary>
     bool IsChangeLocked() const;
 
+    /// <summary>
+    /// スポーン中の被弾ならスポーンを打ち切る
+    /// </summary>
+    void InterruptSpawnIfActive();
+
     BaseEnemy* pOwner_ = nullptr;
 
     std::unique_ptr<BaseEnemyBehavior> moveBehavior_;
@@ -61,6 +72,9 @@ private:
     bool isDamageColling_ = false;
     float damageCollTime_ = 0.0f;
     std::string lastReceivedAttackName_;
+
+    // 死亡Behaviorに移行した時点のロックフラグ
+    bool isDeathLocked_ = false;
 
     // アニメーション再再生クールタイム管理
     float animReplayTimer_ = 0.0f;
@@ -71,4 +85,5 @@ public:
     BaseEnemyDamageReaction* GetDamageBehavior() const { return damageBehavior_.get(); }
     bool IsDamageColling() const { return isDamageColling_; }
     const std::string& GetLastAttackName() const { return lastReceivedAttackName_; }
+    bool IsDeathLocked() const { return isDeathLocked_; }
 };

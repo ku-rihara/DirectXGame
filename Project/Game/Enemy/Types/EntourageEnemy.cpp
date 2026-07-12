@@ -142,7 +142,13 @@ void EntourageEnemy::BackToDamageRoot() {
         }
     }
 
-    // CrawlBackwards状態だった場合: Stumble省略でCrawlから再開
+    // スポーン中の被弾で移動Behaviorが保留状態であれば、スポーン後のBehaviorを生成して移行
+    if (!behaviorCtrl_.GetMoveBehavior()) {
+        ChangeBehavior(CreatePostSpawnBehavior());
+        return;
+    }
+
+    // CrawlBackwards状態だった場合、Stumble省略でCrawlから再開
     if (zakoState_ == ZakoState::CrawlBackwards) {
         ChangeBehavior(std::make_unique<ZakoCrawlBackwardsBehavior>(this, true));
         return;

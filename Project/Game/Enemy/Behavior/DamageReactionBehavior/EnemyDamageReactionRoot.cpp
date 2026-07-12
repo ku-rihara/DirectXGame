@@ -82,9 +82,7 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
 
         // HP に応じて死亡 or ノックバックへ遷移
         if (pBaseEnemy_->GetHP() <= 0.0f) {
-            pBaseEnemy_->SetIsDeathPending(true);
-            pBaseEnemy_->SetIsAdaptCollision(false);
-            pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
+            ChangeDeathReaction();
         } else {
             pBaseEnemy_->ChangeDamageReactionBehavior(
                 std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, nullptr, pPlayerCollisionInfo_, skipAnimation_));
@@ -100,7 +98,7 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
 
     if (pBaseEnemy_->GetHP() <= 0.0f) {
         // 死亡リアクションに変更
-        ChangeDeathReaction(reactionData);
+        ChangeDeathReaction();
     } else {
         // blowYPowerでリアクション種別を自動判定
         float blowYPower = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
@@ -118,24 +116,9 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
     }
 }
 
-void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* reactionData) {
+void EnemyDamageReactionRoot::ChangeDeathReaction() {
     // コリジョンを無効化
     pBaseEnemy_->SetIsAdaptCollision(false);
-
-    // blowYPowerでリアクション種別を自動判定
-    float blowYPower = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
-
-    if (blowYPower > 0.0f) {
-        pBaseEnemy_->ChangeDamageReactionBehavior(
-            std::make_unique<EnemyDamageReactionTakeUpper>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
-    } else if (blowYPower < 0.0f) {
-        pBaseEnemy_->ChangeDamageReactionBehavior(
-            std::make_unique<EnemyDamageReactionSlammed>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
-    } else {
-        pBaseEnemy_->ChangeDamageReactionBehavior(
-            std::make_unique<EnemyDeath>(pBaseEnemy_));
-    }
-
-    // 死亡Behavior設定後にフラグをセット
     pBaseEnemy_->SetIsDeathPending(true);
+    pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
 }

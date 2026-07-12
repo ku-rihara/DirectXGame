@@ -2,6 +2,7 @@
 
 using namespace KetaEngine;
 #include "Base/WinApp.h"
+#include "Player/ComboCreator/PlayerAttackRenditionData.h"
 #include <fstream>
 #include <imgui.h>
 #include <iostream>
@@ -12,7 +13,8 @@ GlobalParameter* GlobalParameter::GetInstance() {
 }
 
 void GlobalParameter::CreateGroup(const std::string& groupName) {
-    dates_[groupName]; // グループを作成
+    // グループの作成
+    dates_[groupName]; 
 }
 
 ///============================================================================
@@ -62,13 +64,17 @@ void GlobalParameter::AddItem(const std::string& groupName, const std::string& k
 ///=============================================================================
 template <typename T>
 T GlobalParameter::GetValue(const std::string& groupName, const std::string& key) const {
+
+    // グループがあるか確認
     auto itGroup = dates_.find(groupName);
     assert(itGroup != dates_.end());
 
+    // グループ内から指定キーの項目を検索
     const Group& group = dates_.at(groupName);
     auto itItem        = group.find(key);
     assert(itItem != group.end());
 
+    //　値を返す
     return std::get<T>(itItem->second);
 }
 
@@ -103,6 +109,14 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
             root[groupName][itemName] = std::get<bool>(item);
         } else if (std::holds_alternative<std::string>(item)) {
             root[groupName][itemName] = std::get<std::string>(item);
+        }
+    }
+
+    // 配列データをJSONに書き込み
+    auto itArrayGroup = arrayDates_.find(groupName);
+    if (itArrayGroup != arrayDates_.end()) {
+        for (auto& [itemName, arr] : itArrayGroup->second) {
+            root[groupName][itemName] = arr;
         }
     }
 
@@ -263,17 +277,21 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
             double value = itItem->get<double>();
             SetValue(groupName, itemName, static_cast<float>(value));
         }
-        // Vector2 (Array of 2 elements)
+        //要素がオブジェクト、または空配列
+        else if (itItem->is_array() && (itItem->empty() || !itItem->at(0).is_number())) {
+            arrayDates_[groupName][itemName] = *itItem;
+        }
+        // Vector2 
         else if (itItem->is_array() && itItem->size() == 2) {
             Vector2 value = {itItem->at(0), itItem->at(1)};
             SetValue(groupName, itemName, value);
         }
-        // Vector3 (Array of 3 elements)
+        // Vector3 
         else if (itItem->is_array() && itItem->size() == 3) {
             Vector3 value = {itItem->at(0), itItem->at(1), itItem->at(2)};
             SetValue(groupName, itemName, value);
         }
-        // Vector4 (Array of 4 elements)
+        // Vector4 
         else if (itItem->is_array() && itItem->size() == 4) {
             Vector4 value = {itItem->at(0), itItem->at(1), itItem->at(2), itItem->at(3)};
             SetValue(groupName, itemName, value);
@@ -439,6 +457,33 @@ bool GlobalParameter::HasGroup(const std::string& groupName) const {
     return dates_.find(groupName) != dates_.end();
 }
 
+template <typename T>
+void GlobalParameter::SetArrayValue(const std::string& groupName, const std::string& key, const std::vector<T>& value) {
+    json arr = json::array();
+    for (const auto& item : value) {
+        arr.push_back(item);
+    }
+    arrayDates_[groupName][key] = std::move(arr);
+}
+
+
+template <typename T>
+std::vector<T> GlobalParameter::GetArrayValue(const std::string& groupName, const std::string& key) const {
+    std::vector<T> result;
+    auto itGroup = arrayDates_.find(groupName);
+    if (itGroup == arrayDates_.end()) {
+        return result;
+    }
+    auto itKey = itGroup->second.find(key);
+    if (itKey == itGroup->second.end()) {
+        return result;
+    }
+    result.reserve(itKey->second.size());
+    for (const auto& elem : itKey->second) {
+        result.push_back(elem.get<T>());
+    }
+    return result;
+}
 // テンプレートの明示的インスタンス化
 template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, const int& value);
 template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, const uint32_t& value);
@@ -475,3 +520,11 @@ template void GlobalParameter::Regist<Vector3>(const std::string& group, const s
 template void GlobalParameter::Regist<Vector4>(const std::string& group, const std::string& key, Vector4* variable);
 template void GlobalParameter::Regist<bool>(const std::string& group, const std::string& key, bool* variable);
 template void GlobalParameter::Regist<std::string>(const std::string& group, const std::string& key, std::string* variable);
+
+template void GlobalParameter::SetArrayValue<PlayerAttackRenditionData::RenditionParam>(const std::string& groupName, const std::string& key, const std::vector<PlayerAttackRenditionData::RenditionParam>& value);
+template void GlobalParameter::SetArrayValue<PlayerAttackRenditionData::ObjAnimationParam>(const std::string& groupName, const std::string& key, const std::vector<PlayerAttackRenditionData::ObjAnimationParam>& value);
+template void GlobalParameter::SetArrayValue<PlayerAttackRenditionData::VibrationParam>(const std::string& groupName, const std::string& key, const std::vector<PlayerAttackRenditionData::VibrationParam>& value);
+
+template std::vector<PlayerAttackRenditionData::RenditionParam> GlobalParameter::GetArrayValue<PlayerAttackRenditionData::RenditionParam>(const std::string& groupName, const std::string& key) const;
+template std::vector<PlayerAttackRenditionData::ObjAnimationParam> GlobalParameter::GetArrayValue<PlayerAttackRenditionData::ObjAnimationParam>(const std::string& groupName, const std::string& key) const;
+template std::vector<PlayerAttackRenditionData::VibrationParam> GlobalParameter::GetArrayValue<PlayerAttackRenditionData::VibrationParam>(const std::string& groupName, const std::string& key) const;

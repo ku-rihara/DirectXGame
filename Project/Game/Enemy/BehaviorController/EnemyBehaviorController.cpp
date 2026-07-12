@@ -1,17 +1,18 @@
 #include "EnemyBehaviorController.h"
 // Enemy
-#include "Enemy/Types/BaseEnemy.h"
-#include "Enemy/EnemyManager/EnemyManager.h"
 #include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionController.h"
 #include "Enemy/EnemyManager/DamageReaction/EnemyDamageReactionData.h"
+#include "Enemy/EnemyManager/EnemyManager.h"
+#include "Enemy/Types/BaseEnemy.h"
 // Behaviors
 #include "Enemy/Behavior/ActionBehavior/BaseEnemyBehavior.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 #include "Enemy/Behavior/DamageReactionBehavior/BaseEnemyDamageReaction.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
+#include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 // Player
-#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
+#include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 
 EnemyBehaviorController::~EnemyBehaviorController() = default;
 
@@ -19,14 +20,15 @@ EnemyBehaviorController::~EnemyBehaviorController() = default;
 /// 初期化
 ///========================================================
 void EnemyBehaviorController::Init(BaseEnemy* owner) {
-    pOwner_                  = owner;
-    isDamageColling_         = false;
-    damageCollTime_          = 0.0f;
+    pOwner_          = owner;
+    isDamageColling_ = false;
+    damageCollTime_  = 0.0f;
     lastReceivedAttackName_.clear();
-    animReplayTimer_         = 0.0f;
+    animReplayTimer_ = 0.0f;
     animReplayAttackName_.clear();
     moveBehavior_   = nullptr;
     damageBehavior_ = nullptr;
+    isDeathLocked_  = false;
 }
 
 ///========================================================
@@ -63,26 +65,30 @@ void EnemyBehaviorController::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> 
 /// ダメージリアクションビヘイビア変更
 ///========================================================
 void EnemyBehaviorController::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior) {
-    // 完全死亡中は一切変更不可
-    if (pOwner_->GetIsDeath() || (damageBehavior_ && damageBehavior_->IsDeath())) {
+    // 死亡Behaviorに移行済み、または死亡ならBehaviorの変更を不可にする
+    if (isDeathLocked_ || pOwner_->GetIsDeath() || pOwner_->GetIsDeathPending()) {
         return;
     }
 
-    // 死亡シーケンス進行中は EnemyDeath への遷移のみ許可
-    if (pOwner_->GetIsDeathPending() && (!behavior || !behavior->IsDeath())) {
-        return;
-    }
-
-    // スポーンビヘイビアをスキップして次のビヘイビアへ移行する
-    if (moveBehavior_ && moveBehavior_->IsSpawn()) {
-        pOwner_->ScaleReset();
-        pOwner_->OnSpawnCompleted();
-        pOwner_->SetIsAdaptCollision(true);
-        // EnemySpawn を post-spawn ビヘイビアに差し替え
-        moveBehavior_ = pOwner_->CreatePostSpawnBehavior();
-    }
+    InterruptSpawnIfActive();
 
     damageBehavior_ = std::move(behavior);
+}
+
+///========================================================
+/// 死亡ビヘイビア変更
+///========================================================
+void EnemyBehaviorController::ChangeDamageReactionBehavior(std::unique_ptr<EnemyDeath> behavior) {
+    // 完全死亡後は再度の死亡遷移も不要
+    if (isDeathLocked_ || pOwner_->GetIsDeath()) {
+        return;
+    }
+
+    InterruptSpawnIfActive();
+
+    damageBehavior_ = std::move(behavior);
+    // 死亡Behaviorに移行した時点で以後の変更を全てロックする
+    isDeathLocked_ = true;
 }
 
 ///========================================================
@@ -90,10 +96,12 @@ void EnemyBehaviorController::ChangeDamageReactionBehavior(std::unique_ptr<BaseE
 ///========================================================
 void EnemyBehaviorController::OnPlayerAttackCollision(PlayerAttackCollider* attackController) {
     // 死亡中は受け付けない
-    if (pOwner_->GetIsDeath() || pOwner_->GetIsDeathPending()) {
+    if (isDeathLocked_ || pOwner_->GetIsDeath() || pOwner_->GetIsDeathPending()) {
         return;
     }
-    if (damageBehavior_ && damageBehavior_->IsDeath()) {
+
+    //割り込みを禁止しているリアクションは、スキップする
+    if (damageBehavior_ && !damageBehavior_->IsReactionRoot() && !damageBehavior_->CanBeInterruptedByNewHit()) {
         return;
     }
 
@@ -108,7 +116,7 @@ void EnemyBehaviorController::OnPlayerAttackCollision(PlayerAttackCollider* atta
 
     // 同一攻撃のクーリング中
     if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
-      
+
         auto* controller = pOwner_->GetBaseInfo()->GetManager()->GetDamageReactionController();
         if (controller) {
             const auto* reactionData = controller->GetAttackByTriggerName(attackName);
@@ -180,6 +188,7 @@ void EnemyBehaviorController::ResetDamageCooling() {
 void EnemyBehaviorController::Reset() {
     moveBehavior_   = nullptr;
     damageBehavior_ = nullptr;
+    isDeathLocked_  = false;
     ResetDamageCooling();
     lastReceivedAttackName_.clear();
     animReplayTimer_ = 0.0f;
@@ -200,7 +209,17 @@ void EnemyBehaviorController::DamageCollingUpdate(float deltaTime) {
 }
 
 bool EnemyBehaviorController::IsChangeLocked() const {
-    return pOwner_->GetIsDeath() ||
-           pOwner_->GetIsDeathPending() ||
-           (damageBehavior_ && damageBehavior_->IsDeath());
+    // Behaviorを切り替えない条件
+    return damageBehavior_ && !damageBehavior_->IsReactionRoot();
+}
+
+void EnemyBehaviorController::InterruptSpawnIfActive() {
+    // スポーン中の被弾ならスポーンを打ち切る
+    if (!moveBehavior_ || !moveBehavior_->IsSpawn()) {
+        return;
+    }
+    pOwner_->ScaleReset();
+    pOwner_->OnSpawnCompleted();
+    pOwner_->SetIsAdaptCollision(true);
+    moveBehavior_ = nullptr;
 }

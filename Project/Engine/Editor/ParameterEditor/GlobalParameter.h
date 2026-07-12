@@ -78,6 +78,39 @@ public:
     void Regist(const std::string& group, const std::string& key, T* variable);
 
     /// <summary>
+    /// 配列値設定
+    /// </summary>
+    template <typename T>
+    void SetArrayValue(const std::string& groupName, const std::string& key, const std::vector<T>& value);
+
+    /// <summary>
+    /// 配列値取得
+    /// </summary>
+    template <typename T>
+    std::vector<T> GetArrayValue(const std::string& groupName, const std::string& key) const;
+
+    /// <summary>
+    /// 可変長リスト変数登録
+    /// </summary>
+    template <typename T>
+    void RegistArray(const std::string& group, const std::string& key, std::vector<T>* variable) {
+        auto& groupArrays = arrayDates_[group];
+        if (groupArrays.find(key) == groupArrays.end()) {
+            SetArrayValue(group, key, *variable);
+        }
+
+        BoundItem item;
+        item.pullVariant = [this, group, key, variable]() {
+            *variable = GetArrayValue<T>(group, key);
+        };
+        item.pushVariant = [this, group, key, variable]() {
+            SetArrayValue(group, key, *variable);
+        };
+
+        registerParams_[group].emplace_back(std::move(item));
+    }
+
+    /// <summary>
     /// グループコピー
     /// </summary>
     /// <param name="fromGroup">コピー元</param>
@@ -155,6 +188,8 @@ public:
 
 private:
     std::unordered_map<std::string, Group> dates_;
+    // 配列用のJSON配列
+    std::unordered_map<std::string, std::unordered_map<std::string, json>> arrayDates_;
     std::unordered_map<std::string, std::vector<BoundItem>> registerParams_;
     const std::string kDirectoryPath = "resources/GlobalParameter/";
 

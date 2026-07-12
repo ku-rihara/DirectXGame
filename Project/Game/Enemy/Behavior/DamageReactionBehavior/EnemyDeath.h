@@ -12,7 +12,6 @@ public:
 
     void Update(float deltaTime) override;
     void Debug() override;
-    bool IsDeath() const override { return true; }
 
 private:
     // 死亡処理のステップ
@@ -39,6 +38,7 @@ private:
     Step step_              = Step::DIRECTIONSET;
     bool deathAnimStarted_  = false;
     bool deathAnimFinished_ = false;
+    float deathAnimTimer_   = 0.0f;
     float deathWaitTimer_   = 0.0f;
 
     std::map<Step, std::function<void()>> stepPhase_;
