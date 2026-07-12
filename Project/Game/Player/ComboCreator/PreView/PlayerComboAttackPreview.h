@@ -81,17 +81,11 @@ private:
     bool previewInPrepPhase_   = false;
     bool previewInFinishPhase_ = false;
 
-    // 演出再生フレーム追跡
+    // 演出再生フレーム追跡（Type/ObjAnimationTypeごとに可変長の再生フラグ）
     int32_t prevFrame_ = 0;
-    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> renditionPlayed_{};
-    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> renditionOnHitPlayed_{};
-    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> objAnimPlayed_{};
-
-    // リスト形式の演出用再生フラグ
-    std::vector<bool> isPostEffectPlayed_;
-    std::vector<bool> isPostEffectOnHitPlayed_;
-    std::vector<bool> isParticleEffectPlayed_;
-    std::vector<bool> isParticleEffectOnHitPlayed_;
+    std::array<std::vector<bool>, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> renditionPlayed_{};
+    std::array<std::vector<bool>, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> renditionOnHitPlayed_{};
+    std::array<std::vector<bool>, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> objAnimPlayed_{};
 
     // プレイヤーの初期状態保存
     Vector3 initialPosition_;

@@ -4,6 +4,8 @@
 // target
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/EnemyManager/EnemyManager.h"
+// Collider
+#include "CollisionBox/GameColliderType.h"
 
 void LockOnController::Init() {
     lockOn_ = std::make_unique<LockOn>();
@@ -17,7 +19,7 @@ void LockOnController::Update(Player* pPlayer, const KetaEngine::ViewProjection&
 
     // 強敵のみをロックオン対象とする
     for (const auto& enemy : enemies) {
-        if (enemy && enemy->IsLeaderEnemy()) {
+        if (enemy && HasColliderType(enemy.get(), GameColliderType::LeaderEnemy)) {
             targets.emplace_back(enemy.get());
         }
     }

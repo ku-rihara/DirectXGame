@@ -2206,6 +2206,9 @@
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
+    <ClInclude Include="Game\CollisionBox\GameColliderType.h">
+      <Filter>Game\CollisionBox</Filter>
+    </ClInclude>
     <ClInclude Include="Game\ComboScene\ComboDirector.h">
       <Filter>Game\ComboScene</Filter>
     </ClInclude>

@@ -253,13 +253,15 @@ std::string PlayerComboAttackPreview::GetCurrentAttackName() const {
 }
 
 void PlayerComboAttackPreview::ResetRenditionFlags() {
-    renditionPlayed_.fill(false);
-    renditionOnHitPlayed_.fill(false);
-    objAnimPlayed_.fill(false);
-    isPostEffectPlayed_.clear();
-    isPostEffectOnHitPlayed_.clear();
-    isParticleEffectPlayed_.clear();
-    isParticleEffectOnHitPlayed_.clear();
+    for (auto& played : renditionPlayed_) {
+        played.clear();
+    }
+    for (auto& played : renditionOnHitPlayed_) {
+        played.clear();
+    }
+    for (auto& played : objAnimPlayed_) {
+        played.clear();
+    }
     prevFrame_ = 0;
 }
 
@@ -304,56 +306,30 @@ void PlayerComboAttackPreview::UpdatePreviewRenditions() {
         {PlayerAttackRenditionData::Type::CameraAction,      KetaEngine::EffectEditorType::Camera,     "Common"},
         {PlayerAttackRenditionData::Type::HitStop,           KetaEngine::EffectEditorType::TimeScale,  "Common"},
         {PlayerAttackRenditionData::Type::ShakeAction,       KetaEngine::EffectEditorType::Shake,      "Common"},
+        {PlayerAttackRenditionData::Type::PostEffect,        KetaEngine::EffectEditorType::PostEffect, "Common"},
+        {PlayerAttackRenditionData::Type::ParticleEffect,    KetaEngine::EffectEditorType::Particle,   "Player"},
         {PlayerAttackRenditionData::Type::RibbonTrailEffect, KetaEngine::EffectEditorType::RibbonTrail,"Player"},
     };
 
     for (const auto& m : kMapping) {
         size_t idx = static_cast<size_t>(m.rendType);
-        if (renditionPlayed_[idx]) {
-            continue;
-        }
-        const auto& param = renditionData->GetRenditionParamFromType(m.rendType);
-        if (param.fileName.empty() || param.fileName == "None") {
-            continue;
-        }
-        int32_t effectFrame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
-            pEditorSuite_->PlayEffect(m.editorType, param.fileName, m.category);
-            renditionPlayed_[idx] = true;
-        }
-    }
+        const auto& list = renditionData->GetRenditionListFromType(m.rendType);
 
-    // ポストエフェクトリスト
-    const auto& postEffectList = renditionData->GetPostEffectList();
-    if (isPostEffectPlayed_.size() != postEffectList.size()) {
-        isPostEffectPlayed_.assign(postEffectList.size(), false);
-    }
-    for (size_t i = 0; i < postEffectList.size(); ++i) {
-        if (isPostEffectPlayed_[i]) continue;
-        const auto& param = postEffectList[i];
-        if (param.fileName.empty() || param.fileName == "None") continue;
-
-        int32_t effectFrame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
-            pEditorSuite_->PlayEffect(KetaEngine::EffectEditorType::PostEffect, param.fileName, "Common");
-            isPostEffectPlayed_[i] = true;
+        auto& played = renditionPlayed_[idx];
+        if (played.size() != list.size()) {
+            played.assign(list.size(), false);
         }
-    }
 
-    // パーティクルエフェクトリスト
-    const auto& particleEffectList = renditionData->GetParticleEffectList();
-    if (isParticleEffectPlayed_.size() != particleEffectList.size()) {
-        isParticleEffectPlayed_.assign(particleEffectList.size(), false);
-    }
-    for (size_t i = 0; i < particleEffectList.size(); ++i) {
-        if (isParticleEffectPlayed_[i]) continue;
-        const auto& param = particleEffectList[i];
-        if (param.fileName.empty() || param.fileName == "None") continue;
+        for (size_t i = 0; i < list.size(); ++i) {
+            if (played[i]) continue;
+            const auto& param = list[i];
+            if (param.fileName.empty() || param.fileName == "None") continue;
 
-        int32_t effectFrame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
-            pEditorSuite_->PlayEffect(KetaEngine::EffectEditorType::Particle, param.fileName, "Player");
-            isParticleEffectPlayed_[i] = true;
+            int32_t effectFrame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+            if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
+                pEditorSuite_->PlayEffect(m.editorType, param.fileName, m.category);
+                played[i] = true;
+            }
         }
     }
 
@@ -371,17 +347,23 @@ void PlayerComboAttackPreview::UpdatePreviewRenditions() {
 
     for (const auto& m : kObjMapping) {
         size_t idx = static_cast<size_t>(m.animType);
-        if (objAnimPlayed_[idx]) {
-            continue;
+        const auto& list = renditionData->GetObjAnimationListFromType(m.animType);
+
+        auto& played = objAnimPlayed_[idx];
+        if (played.size() != list.size()) {
+            played.assign(list.size(), false);
         }
-        const auto& param = renditionData->GetObjAnimationParamFromType(m.animType);
-        if (param.fileName.empty() || param.fileName == "None") {
-            continue;
-        }
-        int32_t effectFrame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
-            pEditorSuite_->PlayEffect(KetaEngine::EffectEditorType::ObjEaseAnimation, param.fileName, m.category);
-            objAnimPlayed_[idx] = true;
+
+        for (size_t i = 0; i < list.size(); ++i) {
+            if (played[i]) continue;
+            const auto& param = list[i];
+            if (param.fileName.empty() || param.fileName == "None") continue;
+
+            int32_t effectFrame = KetaEngine::Frame::TimeToFrame(param.startTiming);
+            if (prevFrame_ < effectFrame && currentFrame >= effectFrame) {
+                pEditorSuite_->PlayEffect(KetaEngine::EffectEditorType::ObjEaseAnimation, param.fileName, m.category);
+                played[i] = true;
+            }
         }
     }
 

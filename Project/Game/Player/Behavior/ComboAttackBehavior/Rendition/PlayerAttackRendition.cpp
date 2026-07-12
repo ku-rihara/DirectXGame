@@ -1,4 +1,5 @@
 #include "PlayerAttackRendition.h"
+#include <algorithm>
 #include "Audio/Audio.h"
 #include "GameCamera/GameCamera.h"
 #include "Input/Input.h"
@@ -14,18 +15,18 @@ void PlayerAttackRendition::Init(Player* player, PlayerComboAttackData* playerCo
 }
 
 void PlayerAttackRendition::Reset() {
-    currentTime_  = 0.0f;
-    isPlayed_.fill(false);
-    isPlayedOnHit_.fill(false);
-    isObjAnimePlayed_.fill(false);
+    currentTime_ = 0.0f;
+    for (auto& played : isPlayed_) {
+        played.clear();
+    }
+    for (auto& played : isPlayedOnHit_) {
+        played.clear();
+    }
+    for (auto& played : isObjAnimePlayed_) {
+        played.clear();
+    }
     hasTriggeredHitEffects_ = false;
     previousHasHit_         = false;
-
-    // ポストエフェクト・パーティクルエフェクトリスト再生フラグをリセット
-    isPostEffectPlayed_.clear();
-    isPostEffectOnHitPlayed_.clear();
-    isParticleEffectPlayed_.clear();
-    isParticleEffectOnHitPlayed_.clear();
 
     // トレイル停止
     if (pPlayer_) {
@@ -35,9 +36,9 @@ void PlayerAttackRendition::Reset() {
     }
 
     // 振動の状態をリセット
-    isVibrationPlayed_      = false;
-    vibrationTimer_         = 0.0f;
-    isVibrating_            = false;
+    isVibrationPlayed_.clear();
+    vibrationTimer_.clear();
+    isVibrating_.clear();
     previousLoopCount_      = 0;
     previousDamageHitCount_ = 0;
 
@@ -68,7 +69,9 @@ void PlayerAttackRendition::Update(float deltaTime) {
     bool isNewHit = hasHit && !previousHasHit_;
     if (isNewHit) {
         // ヒット時演出のフラグをリセットして再度発動可能にする
-        isPlayedOnHit_.fill(false);
+        for (auto& played : isPlayedOnHit_) {
+            played.clear();
+        }
         UpdateHitRenditions(renditionData);
         hasTriggeredHitEffects_ = true;
     }
@@ -90,106 +93,47 @@ void PlayerAttackRendition::Update(float deltaTime) {
 
 void PlayerAttackRendition::UpdateNormalRenditions(const PlayerAttackRenditionData& renditionData) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
+        auto type = static_cast<PlayerAttackRenditionData::Type>(i);
+
         // ヒット音はヒット時のみ再生するためスキップ
-        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::AudioHit) {
-            continue;
-        }
-        // ポストエフェクト・パーティクルエフェクトはリストで管理するためスキップ
-        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::PostEffect ||
-            static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::ParticleEffect) {
+        if (type == PlayerAttackRenditionData::Type::AudioHit) {
             continue;
         }
 
-        const auto& param = renditionData.GetRenditionParamFromIndex(i);
-
-        // すでに再生済みならスキップ
-        if (isPlayed_[i]) {
-            continue;
+        const auto& list = renditionData.GetRenditionListFromType(type);
+        auto& played      = isPlayed_[i];
+        if (played.size() != list.size()) {
+            played.assign(list.size(), false);
         }
 
-        // startTiming に達したら発動
-        if (currentTime_ >= param.startTiming && param.fileName != "" && param.fileName != "None") {
-            PlayRenditionEffect(static_cast<PlayerAttackRenditionData::Type>(i), param);
-            isPlayed_[i] = true;
-        }
-    }
-
-    // ポストエフェクトリストの更新
-    const auto& postEffectList = renditionData.GetPostEffectList();
-    if (isPostEffectPlayed_.size() != postEffectList.size()) {
-        isPostEffectPlayed_.assign(postEffectList.size(), false);
-    }
-    for (size_t i = 0; i < postEffectList.size(); ++i) {
-        if (isPostEffectPlayed_[i]) continue;
-        const auto& param = postEffectList[i];
-        if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
-            PlayRenditionEffect(PlayerAttackRenditionData::Type::PostEffect, param);
-            isPostEffectPlayed_[i] = true;
-        }
-    }
-
-    // パーティクルエフェクトリストの更新
-    const auto& particleEffectList = renditionData.GetParticleEffectList();
-    if (isParticleEffectPlayed_.size() != particleEffectList.size()) {
-        isParticleEffectPlayed_.assign(particleEffectList.size(), false);
-    }
-    for (size_t i = 0; i < particleEffectList.size(); ++i) {
-        if (isParticleEffectPlayed_[i]) continue;
-        const auto& param = particleEffectList[i];
-        if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
-            PlayRenditionEffect(PlayerAttackRenditionData::Type::ParticleEffect, param);
-            isParticleEffectPlayed_[i] = true;
+        for (size_t j = 0; j < list.size(); ++j) {
+            if (played[j]) continue;
+            const auto& param = list[j];
+            if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
+                PlayRenditionEffect(type, param);
+                played[j] = true;
+            }
         }
     }
 }
 
 void PlayerAttackRendition::UpdateHitRenditions(const PlayerAttackRenditionData& renditionData) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
-        // ポストエフェクト・パーティクルエフェクトはリストで管理するためスキップ
-        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::PostEffect ||
-            static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::ParticleEffect) {
-            continue;
+        auto type = static_cast<PlayerAttackRenditionData::Type>(i);
+
+        const auto& list = renditionData.GetRenditionOnHitListFromType(type);
+        auto& played      = isPlayedOnHit_[i];
+        if (played.size() != list.size()) {
+            played.assign(list.size(), false);
         }
 
-        const auto& param = renditionData.GetRenditionParamOnHitFromIndex(i);
-
-        // すでに再生済みならスキップ
-        if (isPlayedOnHit_[i]) {
-            continue;
-        }
-
-        // startTiming に達したら発動
-        if (currentTime_ >= param.startTiming && param.fileName != "" && param.fileName != "None") {
-            PlayRenditionEffect(static_cast<PlayerAttackRenditionData::Type>(i), param);
-            isPlayedOnHit_[i] = true;
-        }
-    }
-
-    // ヒット時ポストエフェクトリストの更新
-    const auto& postEffectOnHitList = renditionData.GetPostEffectOnHitList();
-    if (isPostEffectOnHitPlayed_.size() != postEffectOnHitList.size()) {
-        isPostEffectOnHitPlayed_.assign(postEffectOnHitList.size(), false);
-    }
-    for (size_t i = 0; i < postEffectOnHitList.size(); ++i) {
-        if (isPostEffectOnHitPlayed_[i]) continue;
-        const auto& param = postEffectOnHitList[i];
-        if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
-            PlayRenditionEffect(PlayerAttackRenditionData::Type::PostEffect, param);
-            isPostEffectOnHitPlayed_[i] = true;
-        }
-    }
-
-    // ヒット時パーティクルエフェクトリストの更新
-    const auto& particleEffectOnHitList = renditionData.GetParticleEffectOnHitList();
-    if (isParticleEffectOnHitPlayed_.size() != particleEffectOnHitList.size()) {
-        isParticleEffectOnHitPlayed_.assign(particleEffectOnHitList.size(), false);
-    }
-    for (size_t i = 0; i < particleEffectOnHitList.size(); ++i) {
-        if (isParticleEffectOnHitPlayed_[i]) continue;
-        const auto& param = particleEffectOnHitList[i];
-        if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
-            PlayRenditionEffect(PlayerAttackRenditionData::Type::ParticleEffect, param);
-            isParticleEffectOnHitPlayed_[i] = true;
+        for (size_t j = 0; j < list.size(); ++j) {
+            if (played[j]) continue;
+            const auto& param = list[j];
+            if (currentTime_ >= param.startTiming && !param.fileName.empty() && param.fileName != "None") {
+                PlayRenditionEffect(type, param);
+                played[j] = true;
+            }
         }
     }
 }
@@ -233,53 +177,58 @@ void PlayerAttackRendition::PlayRenditionEffect(PlayerAttackRenditionData::Type 
 
 void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionData& renditionData) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::Count); ++i) {
-        const auto& param = renditionData.GetObjAnimationParamFromIndex(i);
+        auto animType = static_cast<PlayerAttackRenditionData::ObjAnimationType>(i);
 
-        // すでに再生済みならスキップ
-        if (isObjAnimePlayed_[i]) {
-            continue;
+        const auto& list = renditionData.GetObjAnimationListFromType(animType);
+        auto& played      = isObjAnimePlayed_[i];
+        if (played.size() != list.size()) {
+            played.assign(list.size(), false);
         }
 
-        // ファイル名が空ならスキップ
-        if (param.fileName.empty() || param.fileName == "None") {
-            isObjAnimePlayed_[i] = true;
-            continue;
-        }
+        for (size_t j = 0; j < list.size(); ++j) {
+            if (played[j]) continue;
+            const auto& param = list[j];
 
-        // startTiming に達したら発動
-        if (currentTime_ >= param.startTiming) {
-            switch (static_cast<PlayerAttackRenditionData::ObjAnimationType>(i)) {
-            case PlayerAttackRenditionData::ObjAnimationType::Head:
-                pPlayer_->GetObject3D()->transform_.PlayObjEaseAnimation(param.fileName, "Player");
-                break;
-
-            case PlayerAttackRenditionData::ObjAnimationType::RightHand:
-                pPlayer_->GetRightHand()->GetObject3D()->transform_.PlayObjEaseAnimation(param.fileName, "RightHand");
-                if (!param.trailFileName.empty() && param.trailFileName != "None") {
-                    pPlayer_->GetRightHand()->StartTrailEmit(param.trailFileName, "Player");
-                }
-                break;
-
-            case PlayerAttackRenditionData::ObjAnimationType::LeftHand:
-                pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation(param.fileName, "LeftHand");
-                if (!param.trailFileName.empty() && param.trailFileName != "None") {
-                    pPlayer_->GetLeftHand()->StartTrailEmit(param.trailFileName, "Player");
-                }
-                break;
-
-            case PlayerAttackRenditionData::ObjAnimationType::MainHead:
-                pPlayer_->GetPlayerAnimator().PlayMainHeadAnimation(param.fileName);
-                if (!param.trailFileName.empty() && param.trailFileName != "None") {
-                    pPlayer_->GetPlayerAnimator().StartMainHeadTrailEmit(param.trailFileName, "Player");
-                }
-                break;
-
-            default:
-                break;
+            // ファイル名が空ならスキップ（再生済み扱いにはしない）
+            if (param.fileName.empty() || param.fileName == "None") {
+                played[j] = true;
+                continue;
             }
 
-            // 再生済みに設定
-            isObjAnimePlayed_[i] = true;
+            // startTiming に達したら発動
+            if (currentTime_ >= param.startTiming) {
+                switch (animType) {
+                case PlayerAttackRenditionData::ObjAnimationType::Head:
+                    pPlayer_->GetObject3D()->transform_.PlayObjEaseAnimation(param.fileName, "Player");
+                    break;
+
+                case PlayerAttackRenditionData::ObjAnimationType::RightHand:
+                    pPlayer_->GetRightHand()->GetObject3D()->transform_.PlayObjEaseAnimation(param.fileName, "RightHand");
+                    if (!param.trailFileName.empty() && param.trailFileName != "None") {
+                        pPlayer_->GetRightHand()->StartTrailEmit(param.trailFileName, "Player");
+                    }
+                    break;
+
+                case PlayerAttackRenditionData::ObjAnimationType::LeftHand:
+                    pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation(param.fileName, "LeftHand");
+                    if (!param.trailFileName.empty() && param.trailFileName != "None") {
+                        pPlayer_->GetLeftHand()->StartTrailEmit(param.trailFileName, "Player");
+                    }
+                    break;
+
+                case PlayerAttackRenditionData::ObjAnimationType::MainHead:
+                    pPlayer_->GetPlayerAnimator().PlayMainHeadAnimation(param.fileName);
+                    if (!param.trailFileName.empty() && param.trailFileName != "None") {
+                        pPlayer_->GetPlayerAnimator().StartMainHeadTrailEmit(param.trailFileName, "Player");
+                    }
+                    break;
+
+                default:
+                    break;
+                }
+
+                played[j] = true;
+            }
         }
     }
 }
@@ -287,62 +236,72 @@ void PlayerAttackRendition::UpdateObjectAnimations(const PlayerAttackRenditionDa
 void PlayerAttackRendition::UpdateDamageHitRenditions(const PlayerAttackRenditionData& renditionData) {
     // OnHit演出の中でrepeatOnDamage=trueのものをダメージごとに再生
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
-        if (static_cast<PlayerAttackRenditionData::Type>(i) == PlayerAttackRenditionData::Type::PostEffect) {
-            continue;
-        }
-        const auto& param = renditionData.GetRenditionParamOnHitFromIndex(i);
-        if (param.repeatOnDamage && param.fileName != "" && param.fileName != "None") {
-            PlayRenditionEffect(static_cast<PlayerAttackRenditionData::Type>(i), param);
+        auto type = static_cast<PlayerAttackRenditionData::Type>(i);
+        for (const auto& param : renditionData.GetRenditionOnHitListFromType(type)) {
+            if (param.repeatOnDamage && !param.fileName.empty() && param.fileName != "None") {
+                PlayRenditionEffect(type, param);
+            }
         }
     }
 }
 
 void PlayerAttackRendition::UpdateVibration(const PlayerAttackRenditionData& renditionData, bool hasHit, bool isNewDamageHit, float deltaTime) {
-    const auto& vibParam = renditionData.GetVibrationParam();
+    const auto& list = renditionData.GetVibrationList();
 
-    // クールタイム終了した場合、振動フラグをリセット
+    if (isVibrationPlayed_.size() != list.size()) {
+        isVibrationPlayed_.assign(list.size(), false);
+        vibrationTimer_.assign(list.size(), 0.0f);
+        isVibrating_.assign(list.size(), false);
+    }
+
+    // クールタイム終了した場合、振動再生フラグを全てリセット
     int32_t currentLoopCount = pPlayer_->GetPlayerCollisionInfo()->GetCurrentLoopCount();
     if (currentLoopCount > previousLoopCount_) {
-        isVibrationPlayed_ = false;
+        std::fill(isVibrationPlayed_.begin(), isVibrationPlayed_.end(), false);
         previousLoopCount_ = currentLoopCount;
     }
 
-    if (vibParam.repeatOnDamage) {
-        // ダメージヒットごとに振動する
-        if (isNewDamageHit && vibParam.intensity > 0.0f) {
-            size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
-            for (size_t padNo = 0; padNo < numGamepads; ++padNo) {
-                KetaEngine::Input::SetVibration(static_cast<int32_t>(padNo), vibParam.intensity, vibParam.intensity);
+    for (size_t i = 0; i < list.size(); ++i) {
+        const auto& vibParam = list[i];
+
+        if (vibParam.repeatOnDamage) {
+            // ダメージヒットごとに振動する
+            if (isNewDamageHit && vibParam.intensity > 0.0f) {
+                isVibrating_[i]    = true;
+                vibrationTimer_[i] = 0.0f;
             }
-            isVibrating_    = true;
-            vibrationTimer_ = 0.0f;
-        }
-    } else {
-        // 通常：トリガー条件チェックのうえ1回だけ振動
-        bool shouldTrigger = !vibParam.triggerByHit || (vibParam.triggerByHit && hasHit);
-        if (shouldTrigger && !isVibrationPlayed_) {
-            if (currentTime_ >= vibParam.startTiming && vibParam.intensity > 0.0f) {
-                size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
-                for (size_t padNo = 0; padNo < numGamepads; ++padNo) {
-                    KetaEngine::Input::SetVibration(static_cast<int32_t>(padNo), vibParam.intensity, vibParam.intensity);
+        } else {
+            // 通常：トリガー条件チェックのうえ1回だけ振動
+            bool shouldTrigger = !vibParam.triggerByHit || (vibParam.triggerByHit && hasHit);
+            if (shouldTrigger && !isVibrationPlayed_[i]) {
+                if (currentTime_ >= vibParam.startTiming && vibParam.intensity > 0.0f) {
+                    isVibrationPlayed_[i] = true;
+                    isVibrating_[i]       = true;
+                    vibrationTimer_[i]    = 0.0f;
                 }
-                isVibrationPlayed_ = true;
-                isVibrating_       = true;
-                vibrationTimer_    = 0.0f;
+            }
+        }
+
+        // 振動中のタイマー管理
+        if (isVibrating_[i]) {
+            vibrationTimer_[i] += deltaTime;
+            float effectiveDuration = (vibParam.duration > 0.0f) ? vibParam.duration : 0.1f;
+            if (vibrationTimer_[i] >= effectiveDuration) {
+                isVibrating_[i] = false;
             }
         }
     }
 
-    // 振動中のタイマー管理（共通）
-    if (isVibrating_) {
-        vibrationTimer_ += deltaTime;
-        float effectiveDuration = (vibParam.duration > 0.0f) ? vibParam.duration : 0.1f;
-        if (vibrationTimer_ >= effectiveDuration) {
-            size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
-            for (size_t padNo = 0; padNo < numGamepads; ++padNo) {
-                KetaEngine::Input::SetVibration(static_cast<int32_t>(padNo), 0.0f, 0.0f);
-            }
-            isVibrating_ = false;
+    // 実際のゲームパッド振動は、同時に振動中のエントリの中で最大強度のものを採用する
+    float maxIntensity = 0.0f;
+    for (size_t i = 0; i < list.size(); ++i) {
+        if (isVibrating_[i]) {
+            maxIntensity = (std::max)(maxIntensity, list[i].intensity);
         }
+    }
+
+    size_t numGamepads = KetaEngine::Input::GetNumberOfJoysticks();
+    for (size_t padNo = 0; padNo < numGamepads; ++padNo) {
+        KetaEngine::Input::SetVibration(static_cast<int32_t>(padNo), maxIntensity, maxIntensity);
     }
 }

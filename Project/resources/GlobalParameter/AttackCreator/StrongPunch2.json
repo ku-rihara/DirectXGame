@@ -1,108 +1,406 @@
 {
     "StrongPunch2": {
-        "Audio_Attack_FileName": "punchAir",
-        "Audio_Attack_OnHit_FileName": "JumpingPunchSE",
-        "Audio_Attack_OnHit_RepeatOnDamage": false,
-        "Audio_Attack_OnHit_StartTiming": 0.5333333611488342,
-        "Audio_Attack_OnHit_Volume": 1.0,
-        "Audio_Attack_StartTiming": 0.5333333611488342,
-        "Audio_Attack_TriggerByHit": false,
-        "Audio_Attack_Volume": 0.4180000126361847,
-        "Audio_Hit_FileName": "",
-        "Audio_Hit_OnHit_FileName": "",
-        "Audio_Hit_OnHit_RepeatOnDamage": false,
-        "Audio_Hit_OnHit_StartTiming": 0.0,
-        "Audio_Hit_OnHit_Volume": 1.0,
-        "Audio_Hit_StartTiming": 0.0,
-        "Audio_Hit_TriggerByHit": true,
-        "Audio_Hit_Volume": 0.3190000057220459,
+        "Audio_Attack_List": [
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.0,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.06666667014360428,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.15000000596046448,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.23333333432674408,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.3166666626930237,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.4000000059604645,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.46666666865348816,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.550000011920929,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.6333333253860474,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.7166666388511658,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.800000011920929,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.8666666746139526,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 0.949999988079071,
+                "volume": 0.4180000126361847
+            },
+            {
+                "fileName": "punchAir",
+                "isCameraReset": false,
+                "repeatOnDamage": false,
+                "startTiming": 1.0333333015441895,
+                "volume": 0.4180000126361847
+            }
+        ],
+        "Audio_Attack_OnHit_List": [
+            {
+                "fileName": "JumpingPunchSE",
+                "isCameraReset": false,
+                "repeatOnDamage": true,
+                "startTiming": 0.0,
+                "volume": 1.0
+            }
+        ],
+        "Audio_Hit_List": [],
+        "Audio_Hit_OnHit_List": [],
         "Branch_0_cancelTime": 0.8500000238418579,
         "Branch_0_gamepadButton": 32768,
         "Branch_0_keyboardButton": 37,
         "Branch_0_nextAttackName": "StrongAttack3",
         "Branch_0_precedeInputTime": 0.8500000238418579,
         "Branch_0_requireHit": false,
-        "CameraAction_FileName": "",
-        "CameraAction_IsCameraReset": false,
-        "CameraAction_OnHit_FileName": "None",
-        "CameraAction_OnHit_IsCameraReset": false,
-        "CameraAction_OnHit_StartTiming": 0.0,
-        "CameraAction_StartTiming": 0.0,
-        "CameraAction_TriggerByHit": false,
+        "CameraAction_List": [],
+        "CameraAction_OnHit_List": [],
         "CollisionRad": 7.0,
         "ComboBranchCount": 1,
         "Condition": 0,
-        "HitStop_FileName": "",
-        "HitStop_OnHit_FileName": "",
-        "HitStop_OnHit_StartTiming": 0.0,
-        "HitStop_StartTiming": 0.0,
-        "HitStop_TriggerByHit": false,
-        "KnockBackPower": 5.53000020980835,
-        "Main_Head_FileName": "WarpAttackFirst",
-        "Main_Head_StartTiming": 0.23333333432674408,
-        "Main_Head_TrailFileName": "",
-        "ObjAnim_Head_FileName": "JumpingPunchMotion",
-        "ObjAnim_Head_StartTiming": 0.5333333611488342,
-        "ObjAnim_LeftHand_FileName": "None",
-        "ObjAnim_LeftHand_StartTiming": 0.0,
-        "ObjAnim_LeftHand_TrailFileName": "",
-        "ObjAnim_RightHand_FileName": "JumpingRightPunch",
-        "ObjAnim_RightHand_StartTiming": 0.5333333611488342,
-        "ObjAnim_RightHand_TrailFileName": "",
-        "ParticleEffectParam_FileName": "",
-        "ParticleEffectParam_OnHit_FileName": "",
-        "ParticleEffectParam_OnHit_StartTiming": 0.0,
-        "ParticleEffectParam_StartTiming": 0.0,
-        "ParticleEffectParam_TriggerByHit": false,
-        "ParticleEffect_Count": 2,
-        "ParticleEffect_OnHit_Count": 0,
-        "ParticleEffect_OnHit_Slot_0_FileName": "",
-        "ParticleEffect_OnHit_Slot_0_StartTiming": 0.0,
-        "ParticleEffect_OnHit_Slot_1_FileName": "",
-        "ParticleEffect_OnHit_Slot_1_StartTiming": 0.0,
-        "ParticleEffect_Slot_0_FileName": "WarpEffect",
-        "ParticleEffect_Slot_0_StartTiming": 0.0,
-        "ParticleEffect_Slot_1_FileName": "WarpSmoke",
-        "ParticleEffect_Slot_1_StartTiming": 0.5333333611488342,
-        "PostEffectParam_FileName": "",
-        "PostEffectParam_OnHit_FileName": "",
-        "PostEffectParam_OnHit_StartTiming": 0.0,
-        "PostEffectParam_StartTiming": 0.0,
-        "PostEffectParam_TriggerByHit": false,
-        "PostEffect_Count": 0,
-        "PostEffect_OnHit_Count": 0,
-        "PostEffect_OnHit_Slot_0_FileName": "",
-        "PostEffect_OnHit_Slot_0_StartTiming": 0.0,
-        "PostEffect_OnHit_Slot_1_FileName": "",
-        "PostEffect_OnHit_Slot_1_StartTiming": 0.0,
-        "PostEffect_OnHit_Slot_2_FileName": "",
-        "PostEffect_OnHit_Slot_2_StartTiming": 0.0,
-        "PostEffect_OnHit_Slot_3_FileName": "",
-        "PostEffect_OnHit_Slot_3_StartTiming": 0.0,
-        "PostEffect_Slot_0_FileName": "",
-        "PostEffect_Slot_0_StartTiming": 0.0,
-        "PostEffect_Slot_1_FileName": "",
-        "PostEffect_Slot_1_StartTiming": 0.0,
-        "PostEffect_Slot_2_FileName": "",
-        "PostEffect_Slot_2_StartTiming": 0.0,
-        "PostEffect_Slot_3_FileName": "",
-        "PostEffect_Slot_3_StartTiming": 0.0,
-        "RibbonTrailEffect_FileName": "",
-        "RibbonTrailEffect_OnHit_FileName": "",
-        "RibbonTrailEffect_OnHit_StartTiming": 0.0,
-        "RibbonTrailEffect_StartTiming": 0.0,
-        "ShakeAction_FileName": "None",
-        "ShakeAction_OnHit_FileName": "PunchAttackCamera",
-        "ShakeAction_OnHit_StartTiming": 0.5333333611488342,
-        "ShakeAction_StartTiming": 0.0,
-        "ShakeAction_TriggerByHit": true,
-        "Vibration_Duration": 0.5166666507720947,
-        "Vibration_Intensity": 0.23899999260902405,
-        "Vibration_RepeatOnDamage": false,
-        "Vibration_StartTiming": 0.5333333611488342,
-        "Vibration_TriggerByHit": true,
+        "Finish_Audio_Attack_List": [],
+        "Finish_Audio_Attack_OnHit_List": [],
+        "Finish_Audio_Hit_List": [],
+        "Finish_Audio_Hit_OnHit_List": [],
+        "Finish_CameraAction_List": [],
+        "Finish_CameraAction_OnHit_List": [],
+        "Finish_CollisionRad": 0.0,
+        "Finish_HitStop_List": [],
+        "Finish_HitStop_OnHit_List": [],
+        "Finish_KnockBackPower": 0.0,
+        "Finish_Main_Head_List": [],
+        "Finish_ObjAnim_Head_List": [],
+        "Finish_ObjAnim_LeftHand_List": [],
+        "Finish_ObjAnim_RightHand_List": [],
+        "Finish_ParticleEffectParam_List": [],
+        "Finish_ParticleEffectParam_OnHit_List": [],
+        "Finish_PostEffectParam_List": [],
+        "Finish_PostEffectParam_OnHit_List": [],
+        "Finish_RibbonTrailEffect_List": [],
+        "Finish_RibbonTrailEffect_OnHit_List": [],
+        "Finish_ShakeAction_List": [],
+        "Finish_ShakeAction_OnHit_List": [],
+        "Finish_Vibration_List": [],
+        "Finish_adaptTime": 0.0,
+        "Finish_blowYPower": 0.0,
+        "Finish_collisionOffsetPos": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Finish_collisionStartTime": 0.0,
+        "Finish_finishTimeOffset": 0.0,
+        "Finish_finishWaitTime": 0.0,
+        "Finish_isAbleInputMoving": false,
+        "Finish_isAlwaysFollowing": false,
+        "Finish_isAutoAdvance": false,
+        "Finish_isFaceMovementDirection": false,
+        "Finish_isMotionOnly": false,
+        "Finish_isPositionYSelect": false,
+        "Finish_isStopBeforeEnemy": false,
+        "Finish_loopNum": 0,
+        "Finish_loopWaitTime": 0.0,
+        "Finish_moveEaseTime": 0.0,
+        "Finish_moveEaseType": 0,
+        "Finish_moveStartTime": 0.0,
+        "Finish_moveValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Finish_power": 0.0,
+        "HitStop_List": [],
+        "HitStop_OnHit_List": [],
+        "KnockBackPower": 0.5,
+        "Main_Head_List": [],
+        "ObjAnim_Head_List": [
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.0,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.06666667014360428,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.15000000596046448,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.23333333432674408,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.3166666626930237,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.4000000059604645,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.46666666865348816,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.550000011920929,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.6333333253860474,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.7166666388511658,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.800000011920929,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.8666666746139526,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 0.949999988079071,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraOraScaling",
+                "startTiming": 1.0333333015441895,
+                "trailFileName": ""
+            }
+        ],
+        "ObjAnim_LeftHand_List": [
+            {
+                "fileName": "OraoraPunchLeft",
+                "startTiming": 0.0,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchLeft",
+                "startTiming": 0.15000000596046448,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchLeft",
+                "startTiming": 0.3166666626930237,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchLeft",
+                "startTiming": 0.46666666865348816,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchLeft",
+                "startTiming": 0.6333333253860474,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchLeft",
+                "startTiming": 0.800000011920929,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchLeft",
+                "startTiming": 0.949999988079071,
+                "trailFileName": ""
+            }
+        ],
+        "ObjAnim_RightHand_List": [
+            {
+                "fileName": "OraoraPunchRight",
+                "startTiming": 0.06666667014360428,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchRight",
+                "startTiming": 0.23333333432674408,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchRight",
+                "startTiming": 0.4000000059604645,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchRight",
+                "startTiming": 0.550000011920929,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchRight",
+                "startTiming": 0.7166666388511658,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchRight",
+                "startTiming": 0.8666666746139526,
+                "trailFileName": ""
+            },
+            {
+                "fileName": "OraoraPunchRight",
+                "startTiming": 1.0333333015441895,
+                "trailFileName": ""
+            }
+        ],
+        "ParticleEffectParam_List": [],
+        "ParticleEffectParam_OnHit_List": [],
+        "PostEffectParam_List": [],
+        "PostEffectParam_OnHit_List": [],
+        "Prep_Audio_Attack_List": [],
+        "Prep_Audio_Attack_OnHit_List": [],
+        "Prep_Audio_Hit_List": [],
+        "Prep_Audio_Hit_OnHit_List": [],
+        "Prep_CameraAction_List": [],
+        "Prep_CameraAction_OnHit_List": [],
+        "Prep_CollisionRad": 0.0,
+        "Prep_HitStop_List": [],
+        "Prep_HitStop_OnHit_List": [],
+        "Prep_KnockBackPower": 0.0,
+        "Prep_Main_Head_List": [],
+        "Prep_ObjAnim_Head_List": [],
+        "Prep_ObjAnim_LeftHand_List": [],
+        "Prep_ObjAnim_RightHand_List": [],
+        "Prep_ParticleEffectParam_List": [],
+        "Prep_ParticleEffectParam_OnHit_List": [],
+        "Prep_PostEffectParam_List": [],
+        "Prep_PostEffectParam_OnHit_List": [],
+        "Prep_RibbonTrailEffect_List": [],
+        "Prep_RibbonTrailEffect_OnHit_List": [],
+        "Prep_ShakeAction_List": [],
+        "Prep_ShakeAction_OnHit_List": [],
+        "Prep_Vibration_List": [],
+        "Prep_adaptTime": 0.0,
+        "Prep_blowYPower": 0.0,
+        "Prep_collisionOffsetPos": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Prep_collisionStartTime": 0.0,
+        "Prep_finishTimeOffset": 0.0,
+        "Prep_finishWaitTime": 0.0,
+        "Prep_isAbleInputMoving": false,
+        "Prep_isAlwaysFollowing": false,
+        "Prep_isAutoAdvance": false,
+        "Prep_isFaceMovementDirection": false,
+        "Prep_isMotionOnly": false,
+        "Prep_isPositionYSelect": false,
+        "Prep_isStopBeforeEnemy": false,
+        "Prep_loopNum": 0,
+        "Prep_loopWaitTime": 0.0,
+        "Prep_moveEaseTime": 0.0,
+        "Prep_moveEaseType": 0,
+        "Prep_moveStartTime": 0.0,
+        "Prep_moveValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Prep_power": 0.0,
+        "RibbonTrailEffect_List": [],
+        "RibbonTrailEffect_OnHit_List": [],
+        "ShakeAction_List": [],
+        "ShakeAction_OnHit_List": [
+            {
+                "fileName": "PunchAttackCamera",
+                "isCameraReset": false,
+                "repeatOnDamage": true,
+                "startTiming": 0.0,
+                "volume": 1.0
+            }
+        ],
+        "Vibration_List": [
+            {
+                "duration": 0.05000000074505806,
+                "intensity": 0.23899999260902405,
+                "repeatOnDamage": true,
+                "startTiming": 0.0,
+                "triggerByHit": true
+            }
+        ],
         "ableDefeatLevel": 0,
-        "adaptTime": 0.25,
+        "adaptTime": 0.03333333507180214,
         "blowYPower": 0.0,
         "collisionOffsetPos": [
             0.0,
@@ -114,28 +412,32 @@
             6.0,
             6.0
         ],
-        "collisionStartTime": 0.5166666507720947,
+        "collisionStartTime": 0.0,
         "enableFall": false,
-        "finishTimeOffset": 0.0,
+        "finishTimeOffset": 0.6333333253860474,
         "finishWaitTime": 0.30000001192092896,
         "gamePadBottom": 32768,
+        "hasFinish": false,
+        "hasPrep": false,
         "isAbleInputMoving": false,
         "isAlwaysFollowing": false,
         "isAutoAdvance": false,
+        "isFaceMovementDirection": false,
         "isMotionOnly": false,
         "isPositionYSelect": false,
+        "isSkipToFinishOnHit": false,
         "isStopBeforeEnemy": true,
         "keyBordBottom": 37,
-        "loopNum": 0,
-        "loopWaitTime": 0.0,
+        "loopNum": 13,
+        "loopWaitTime": 0.03999999910593033,
         "moveEaseTime": 0.2666666805744171,
         "moveEaseType": 6,
-        "moveStartTime": 0.5166666507720947,
+        "moveStartTime": 0.0,
         "moveValue": [
             0.0,
             0.0,
             0.0
         ],
-        "power": 29.6200008392334
+        "power": 3.0
     }
 }

@@ -2,6 +2,7 @@
 #include "Enemy/Component/EnemyInitializer.h"
 
 // CollisionUtils
+#include "CollisionBox/GameColliderType.h"
 // KillCounter
 #include "KillCounter/KillCounter.h"
 // Manager
@@ -30,6 +31,7 @@
 ///  初期化
 ///========================================================
 void BaseEnemy::Init(const Vector3& spawnPos) {
+    SetTypeID(static_cast<uint32_t>(GameColliderType::Enemy));
     EnemyInitializer(this, spawnPos).Run();
 }
 
@@ -161,7 +163,7 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    if (other->IsPlayerAttack()) {
+    if (HasColliderType(other, GameColliderType::PlayerAttack)) {
         auto* attackController = static_cast<PlayerAttackCollider*>(other);
         behaviorCtrl_.OnPlayerAttackCollision(attackController);
         return;

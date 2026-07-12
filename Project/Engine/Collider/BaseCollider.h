@@ -27,12 +27,7 @@ public:
     virtual void SetDebugCube() = 0;
     virtual ColliderShape GetShape() const = 0;
 
-    virtual bool IsPlayer()         const { return false; }
-    virtual bool IsEnemy()          const { return false; }
-    virtual bool IsLeaderEnemy()    const { return false; }
-    virtual bool IsEntourageEnemy() const { return false; }
-    virtual bool IsPlayerAttack()   const { return false; }
-    
+
     /// <summary>
     /// 衝突開始時の処理
     /// </summary>

@@ -79,6 +79,8 @@
             6.800000190734863,
             3.700000047683716
         ],
+        "deathAnimTimeout1": 3.0,
+        "deathAnimTimeout2": 3.0,
         "deathBlowValue1": 2.2699999809265137,
         "deathBlowValue2": 2.2699999809265137,
         "deathBlowValueY1": 50.0,

@@ -31,6 +31,9 @@ public:
     void AddTrack(PlayerComboAttackTimelineData::TrackType type);
     void RemoveTrack(int32_t trackIndex);
 
+    // 既存トラックへのキーフレーム追加
+    void AddKeyFrameToTrack(int32_t trackIndex);
+
     // コンボ分岐トラックの再構築
     void RebuildBranchTracks();
 

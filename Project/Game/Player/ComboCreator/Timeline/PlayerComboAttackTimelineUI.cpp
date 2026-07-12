@@ -133,6 +133,10 @@ void PlayerComboAttackTimelineUI::DrawTrackMenuItem(
             [this](int32_t trackIdx, int32_t keyIdx) {
                 DrawKeyFrameMenuItems(trackIdx, keyIdx);
             });
+        timeline_->SetTrackRightClickCallback(newTrackIndex,
+            [this](int32_t trackIdx) {
+                DrawTrackContextMenu(trackIdx);
+            });
     }
 
     if (exists) {
@@ -182,31 +186,42 @@ void PlayerComboAttackTimelineUI::DrawAddTrackPopup() {
 }
 
 void PlayerComboAttackTimelineUI::DrawTrackContextMenu(int32_t trackIndex) {
+    // メニュー内容の描画する
     ImGui::PushID(std::format("TrackContext_{}", trackIndex).c_str());
 
-    std::string popupId = std::format("TrackContextMenu_{}", trackIndex);
+    auto trackType = data_->GetTrackTypeFromIndex(trackIndex);
 
-    if (ImGui::BeginPopup(popupId.c_str())) {
-        auto trackType = data_->GetTrackTypeFromIndex(trackIndex);
+    ImGui::Text("トラック: %s", data_->GetTrackTypeName(trackType));
+    ImGui::Separator();
 
-        ImGui::Text("トラック: %s", data_->GetTrackTypeName(trackType));
-        ImGui::Separator();
-
-        // デフォルトトラック以外は削除可能
-        bool isDefaultTrack        = false;
-        const auto& defaultIndices = data_->GetDefaultTrackIndices();
-        for (size_t i = 0; i < defaultIndices.size(); ++i) {
-            if (trackIndex == defaultIndices[i]) {
-                isDefaultTrack = true;
-                break;
-            }
+    // デフォルトトラック以外は削除可能
+    bool isDefaultTrack        = false;
+    const auto& defaultIndices = data_->GetDefaultTrackIndices();
+    for (size_t i = 0; i < defaultIndices.size(); ++i) {
+        if (trackIndex == defaultIndices[i]) {
+            isDefaultTrack = true;
+            break;
         }
+    }
 
-        if (!isDefaultTrack && ImGui::MenuItem("トラックを削除")) {
-            trackBuilder_->RemoveTrack(trackIndex);
-        }
+    // 複数キーフレームに対応しているトラックかどうかを判定する。
+    bool supportsMultipleKeyFrames = true;
+    int32_t moveTrackIdx = data_->GetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING);
+    int32_t finishWaitTrackIdx = data_->GetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT);
+    if (trackIndex == moveTrackIdx || trackIndex == finishWaitTrackIdx) {
+        supportsMultipleKeyFrames = false;
+    }
+    auto* trackInfo = data_->FindTrackInfo(trackIndex);
+    if (trackInfo && trackInfo->branchIndex >= 0) {
+        supportsMultipleKeyFrames = false;
+    }
 
-        ImGui::EndPopup();
+    if (supportsMultipleKeyFrames && ImGui::MenuItem("キーフレーム追加")) {
+        trackBuilder_->AddKeyFrameToTrack(trackIndex);
+    }
+
+    if (!isDefaultTrack && ImGui::MenuItem("トラックを削除")) {
+        trackBuilder_->RemoveTrack(trackIndex);
     }
 
     ImGui::PopID();

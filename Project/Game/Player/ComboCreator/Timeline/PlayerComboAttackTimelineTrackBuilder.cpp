@@ -148,146 +148,54 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
     using TrackType = PlayerComboAttackTimelineData::TrackType;
 
     // RenditionData::Type → TrackType の正引きマッピング
-    struct RendToTrack { RendType rendType; TrackType trackType; };
-    static constexpr RendToTrack kNormalMapping[] = {
-        {RendType::CameraAction,   TrackType::CAMERA_ACTION},
-        {RendType::HitStop,        TrackType::HIT_STOP},
-        {RendType::ShakeAction,    TrackType::SHAKE_ACTION},
-        {RendType::AudioAttack,    TrackType::AUDIO_ATTACK},
-    };
-    static constexpr RendToTrack kOnHitMapping[] = {
-        {RendType::CameraAction,   TrackType::CAMERA_ACTION_ON_HIT},
-        {RendType::HitStop,        TrackType::HIT_STOP_ON_HIT},
-        {RendType::ShakeAction,    TrackType::SHAKE_ACTION_ON_HIT},
-        {RendType::AudioAttack,    TrackType::AUDIO_ATTACK_ON_HIT},
+    struct RendToTrack { RendType rendType; TrackType trackType; TrackType trackTypeOnHit; };
+    static constexpr RendToTrack kMapping[] = {
+        {RendType::CameraAction,   TrackType::CAMERA_ACTION,   TrackType::CAMERA_ACTION_ON_HIT},
+        {RendType::HitStop,        TrackType::HIT_STOP,        TrackType::HIT_STOP_ON_HIT},
+        {RendType::ShakeAction,    TrackType::SHAKE_ACTION,    TrackType::SHAKE_ACTION_ON_HIT},
+        {RendType::PostEffect,     TrackType::POST_EFFECT,     TrackType::POST_EFFECT_ON_HIT},
+        {RendType::ParticleEffect, TrackType::PARTICLE_EFFECT, TrackType::PARTICLE_EFFECT_ON_HIT},
+        {RendType::AudioAttack,    TrackType::AUDIO_ATTACK,    TrackType::AUDIO_ATTACK_ON_HIT},
     };
 
-    // 通常演出
-    for (const auto& m : kNormalMapping) {
-        int32_t rendIdx       = static_cast<int32_t>(m.rendType);
-        const auto& param     = renditionData.GetRenditionParamFromIndex(rendIdx);
-
-        if (param.fileName.empty() || param.fileName == "None") {
-            continue;
-        }
-
-        std::string trackName = PlayerAttackRenditionData::kRenditionTypeInfos[rendIdx].label;
-        int32_t trackIdx      = timelineDrawer_->AddTrack(trackName);
-
-        PlayerComboAttackTimelineData::TrackInfo info;
-        info.type          = m.trackType;
-        info.trackIndex    = trackIdx;
-        info.fileName      = param.fileName;
-        info.isCameraReset = param.isCameraReset;
-        info.volume        = param.volume;
-        data_->AddTrackInfo(info);
-
-        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
-    }
-
-    // ポストエフェクト — リストから直接再構築
-    {
-        const auto& postEffectList = renditionData.GetPostEffectList();
-        for (const auto& param : postEffectList) {
-            if (param.fileName.empty() || param.fileName == "None") {
+   // 同一fileName区間を1トラックにまとめる
+    auto buildTracks = [this](const std::vector<PlayerAttackRenditionData::RenditionParam>& list,
+                               TrackType trackType, const std::string& trackName, bool isOnHit) {
+        size_t i = 0;
+        while (i < list.size()) {
+            const auto& first = list[i];
+            if (first.fileName.empty() || first.fileName == "None") {
+                ++i;
                 continue;
             }
 
-            int32_t trackIdx = timelineDrawer_->AddTrack("ポストエフェクト");
+            int32_t trackIdx = timelineDrawer_->AddTrack(trackName);
 
             PlayerComboAttackTimelineData::TrackInfo info;
-            info.type       = TrackType::POST_EFFECT;
-            info.trackIndex = trackIdx;
-            info.fileName   = param.fileName;
+            info.type           = trackType;
+            info.trackIndex     = trackIdx;
+            info.fileName       = first.fileName;
+            info.isCameraReset  = first.isCameraReset;
+            info.volume         = first.volume;
+            info.repeatOnDamage = isOnHit ? first.repeatOnDamage : false;
             data_->AddTrackInfo(info);
 
-            int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-            timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
-        }
-
-        const auto& postEffectOnHitList = renditionData.GetPostEffectOnHitList();
-        for (const auto& param : postEffectOnHitList) {
-            if (param.fileName.empty() || param.fileName == "None") {
-                continue;
+            size_t j = i;
+            while (j < list.size() && list[j].fileName == first.fileName) {
+                int32_t frame = KetaEngine::Frame::TimeToFrame(list[j].startTiming);
+                timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + first.fileName);
+                ++j;
             }
-
-            int32_t trackIdx = timelineDrawer_->AddTrack("ポストエフェクト (ヒット時)");
-
-            PlayerComboAttackTimelineData::TrackInfo info;
-            info.type       = TrackType::POST_EFFECT_ON_HIT;
-            info.trackIndex = trackIdx;
-            info.fileName   = param.fileName;
-            data_->AddTrackInfo(info);
-
-            int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-            timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
+            i = j;
         }
-    }
+    };
 
-    // パーティクルエフェクト — リストから直接再構築
-    {
-        const auto& particleEffectList = renditionData.GetParticleEffectList();
-        for (const auto& param : particleEffectList) {
-            if (param.fileName.empty() || param.fileName == "None") {
-                continue;
-            }
+    for (const auto& m : kMapping) {
+        int32_t rendIdx    = static_cast<int32_t>(m.rendType);
+        std::string label  = PlayerAttackRenditionData::kRenditionTypeInfos[rendIdx].label;
 
-            int32_t trackIdx = timelineDrawer_->AddTrack("パーティクルエフェクト");
-
-            PlayerComboAttackTimelineData::TrackInfo info;
-            info.type       = TrackType::PARTICLE_EFFECT;
-            info.trackIndex = trackIdx;
-            info.fileName   = param.fileName;
-            data_->AddTrackInfo(info);
-
-            int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-            timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
-        }
-
-        const auto& particleEffectOnHitList = renditionData.GetParticleEffectOnHitList();
-        for (const auto& param : particleEffectOnHitList) {
-            if (param.fileName.empty() || param.fileName == "None") {
-                continue;
-            }
-
-            int32_t trackIdx = timelineDrawer_->AddTrack("パーティクルエフェクト (ヒット時)");
-
-            PlayerComboAttackTimelineData::TrackInfo info;
-            info.type       = TrackType::PARTICLE_EFFECT_ON_HIT;
-            info.trackIndex = trackIdx;
-            info.fileName   = param.fileName;
-            data_->AddTrackInfo(info);
-
-            int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-            timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
-        }
-    }
-
-    // ヒット時演出
-    for (const auto& m : kOnHitMapping) {
-        int32_t rendIdx       = static_cast<int32_t>(m.rendType);
-        const auto& param     = renditionData.GetRenditionParamOnHitFromIndex(rendIdx);
-
-        if (param.fileName.empty() || param.fileName == "None") {
-            continue;
-        }
-
-        std::string trackName = std::string(PlayerAttackRenditionData::kRenditionTypeInfos[rendIdx].label) + " (ヒット時)";
-        int32_t trackIdx      = timelineDrawer_->AddTrack(trackName);
-
-        PlayerComboAttackTimelineData::TrackInfo info;
-        // パラメータセットしてトラックに追加
-        info.type            = m.trackType;
-        info.trackIndex      = trackIdx;
-        info.fileName        = param.fileName;
-        info.isCameraReset   = param.isCameraReset;
-        info.volume          = param.volume;
-        info.repeatOnDamage  = param.repeatOnDamage;
-        data_->AddTrackInfo(info);
-
-        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + param.fileName);
+        buildTracks(renditionData.GetRenditionListFromType(m.rendType), m.trackType, label, false);
+        buildTracks(renditionData.GetRenditionOnHitListFromType(m.rendType), m.trackTypeOnHit, label + " (ヒット時)", true);
     }
 }
 
@@ -299,53 +207,56 @@ void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
     auto& renditionData = attackData_->GetRenditionDataForPhase(phase_);
 
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::Count); ++i) {
-        const auto& param = renditionData.GetObjAnimationParamFromIndex(i);
-
-        bool isMainHead = (i == static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::MainHead));
-
-        if (param.fileName.empty() || param.fileName == "None") {
-            // MainHeadの場合、アニメファイルなしでもトレイルだけ設定されていればトレイルトラックを作成
-            if (isMainHead && !param.trailFileName.empty() && param.trailFileName != "None") {
-                int32_t trailTrackIdx = timelineDrawer_->AddTrack("MainHead追従トレイル");
-
-                PlayerComboAttackTimelineData::TrackInfo trailInfo;
-                trailInfo.type       = PlayerComboAttackTimelineData::TrackType::RIBBON_TRAIL_MAIN_HEAD;
-                trailInfo.trackIndex = trailTrackIdx;
-                trailInfo.fileName   = param.trailFileName;
-                data_->AddTrackInfo(trailInfo);
-
-                timelineDrawer_->AddKeyFrame(trailTrackIdx, 0, 1.0f, 1.0f, "トレイル:" + param.trailFileName);
-            }
-            continue;
-        }
+        const auto& list = renditionData.GetObjAnimationListFromIndex(i);
+        bool isMainHead  = (i == static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::MainHead));
 
         std::string trackName = PlayerAttackRenditionData::kObjAnimationTypeInfos[i].label;
-        int32_t trackIdx      = timelineDrawer_->AddTrack(trackName);
-
-        PlayerComboAttackTimelineData::TrackInfo info;
-        // パラメータセットしてトラックに追加
-        info.type = static_cast<PlayerComboAttackTimelineData::TrackType>(
+        auto trackType = static_cast<PlayerComboAttackTimelineData::TrackType>(
             static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD) + i);
-        info.trackIndex    = trackIdx;
-        info.fileName      = param.fileName;
-        info.trailFileName = param.trailFileName;
-        data_->AddTrackInfo(info);
 
-        int32_t frame = KetaEngine::Frame::TimeToFrame(param.startTiming);
-        timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f,
-            "使用ファイル:" + param.fileName);
+        // 同一fileNameが連続するエントリを1トラックの複数キーフレームとしてグルーピングして復元する
+        size_t idx = 0;
+        while (idx < list.size()) {
+            const auto& first = list[idx];
+            if (first.fileName.empty() || first.fileName == "None") {
+                ++idx;
+                continue;
+            }
 
-        // MainHeadかつトレイルも設定済みなら独立したトレイルトラックを追加
-        if (isMainHead && !param.trailFileName.empty() && param.trailFileName != "None") {
-            int32_t trailTrackIdx = timelineDrawer_->AddTrack("MainHead追従トレイル");
+            int32_t trackIdx = timelineDrawer_->AddTrack(trackName);
 
-            PlayerComboAttackTimelineData::TrackInfo trailInfo;
-            trailInfo.type       = PlayerComboAttackTimelineData::TrackType::RIBBON_TRAIL_MAIN_HEAD;
-            trailInfo.trackIndex = trailTrackIdx;
-            trailInfo.fileName   = param.trailFileName;
-            data_->AddTrackInfo(trailInfo);
+            PlayerComboAttackTimelineData::TrackInfo info;
+            info.type          = trackType;
+            info.trackIndex    = trackIdx;
+            info.fileName      = first.fileName;
+            info.trailFileName = first.trailFileName;
+            data_->AddTrackInfo(info);
 
-            timelineDrawer_->AddKeyFrame(trailTrackIdx, 0, 1.0f, 1.0f, "トレイル:" + param.trailFileName);
+            size_t j = idx;
+            while (j < list.size() && list[j].fileName == first.fileName) {
+                int32_t frame = KetaEngine::Frame::TimeToFrame(list[j].startTiming);
+                timelineDrawer_->AddKeyFrame(trackIdx, frame, 1.0f, 1.0f, "使用ファイル:" + first.fileName);
+                ++j;
+            }
+            idx = j;
+        }
+
+        // MainHead追従トレイル: トレイルファイルが設定されている最初のエントリから1トラックだけ復元
+        if (isMainHead) {
+            for (const auto& param : list) {
+                if (!param.trailFileName.empty() && param.trailFileName != "None") {
+                    int32_t trailTrackIdx = timelineDrawer_->AddTrack("MainHead追従トレイル");
+
+                    PlayerComboAttackTimelineData::TrackInfo trailInfo;
+                    trailInfo.type       = PlayerComboAttackTimelineData::TrackType::RIBBON_TRAIL_MAIN_HEAD;
+                    trailInfo.trackIndex = trailTrackIdx;
+                    trailInfo.fileName   = param.trailFileName;
+                    data_->AddTrackInfo(trailInfo);
+
+                    timelineDrawer_->AddKeyFrame(trailTrackIdx, 0, 1.0f, 1.0f, "トレイル:" + param.trailFileName);
+                    break;
+                }
+            }
         }
     }
 }
@@ -358,27 +269,42 @@ void PlayerComboAttackTimelineTrackBuilder::SetupVibrationTrack() {
     if (!attackData_ || !timelineDrawer_ || !data_)
         return;
 
-    const auto& vibParam = attackData_->GetRenditionDataForPhase(phase_).GetVibrationParam();
+    const auto& list = attackData_->GetRenditionDataForPhase(phase_).GetVibrationList();
 
-    if (vibParam.intensity <= 0.0f)
-        return;
+    // 強度/トリガー条件が同じ連続エントリを1トラックの複数キーフレームとしてグルーピングして復元する
+    size_t idx = 0;
+    while (idx < list.size()) {
+        const auto& first = list[idx];
+        if (first.intensity <= 0.0f) {
+            ++idx;
+            continue;
+        }
 
-    int32_t trackIdx = timelineDrawer_->AddTrack("コントローラ振動");
+        int32_t trackIdx = timelineDrawer_->AddTrack("コントローラ振動");
 
-    PlayerComboAttackTimelineData::TrackInfo info;
-    info.type                = PlayerComboAttackTimelineData::TrackType::VIBRATION;
-    info.trackIndex          = trackIdx;
-    info.vibrationIntensity = vibParam.intensity;
-    info.triggerByHit       = vibParam.triggerByHit;
-    info.repeatOnDamage     = vibParam.repeatOnDamage;
-    data_->AddTrackInfo(info);
+        PlayerComboAttackTimelineData::TrackInfo info;
+        info.type               = PlayerComboAttackTimelineData::TrackType::VIBRATION;
+        info.trackIndex         = trackIdx;
+        info.vibrationIntensity = first.intensity;
+        info.triggerByHit       = first.triggerByHit;
+        info.repeatOnDamage     = first.repeatOnDamage;
+        data_->AddTrackInfo(info);
 
-    int32_t startFrame    = KetaEngine::Frame::TimeToFrame(vibParam.startTiming);
-    float durationFrames  = static_cast<float>(KetaEngine::Frame::TimeToFrame(vibParam.duration));
-    if (durationFrames < 1.0f) durationFrames = 1.0f;
+        size_t j = idx;
+        while (j < list.size() &&
+               list[j].intensity == first.intensity &&
+               list[j].triggerByHit == first.triggerByHit &&
+               list[j].repeatOnDamage == first.repeatOnDamage) {
+            int32_t startFrame   = KetaEngine::Frame::TimeToFrame(list[j].startTiming);
+            float durationFrames = static_cast<float>(KetaEngine::Frame::TimeToFrame(list[j].duration));
+            if (durationFrames < 1.0f) durationFrames = 1.0f;
 
-    timelineDrawer_->AddKeyFrame(trackIdx, startFrame, vibParam.intensity, durationFrames,
-        std::format("振動強度:{}", vibParam.intensity));
+            timelineDrawer_->AddKeyFrame(trackIdx, startFrame, list[j].intensity, durationFrames,
+                std::format("振動強度:{}", list[j].intensity));
+            ++j;
+        }
+        idx = j;
+    }
 }
 
 void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
@@ -530,6 +456,39 @@ void PlayerComboAttackTimelineTrackBuilder::AddTrack(PlayerComboAttackTimelineDa
 
     // 初期キーフレームを追加
     timelineDrawer_->AddKeyFrame(trackIdx, 0, 0.0f, 1.0f, "ファイル未選択");
+}
+
+void PlayerComboAttackTimelineTrackBuilder::AddKeyFrameToTrack(int32_t trackIndex) {
+    if (!timelineDrawer_ || !data_) {
+        return;
+    }
+
+    if (trackIndex < 0 || trackIndex >= static_cast<int32_t>(timelineDrawer_->GetTrackCount())) {
+        return;
+    }
+
+    auto* trackInfo = data_->FindTrackInfo(trackIndex);
+
+    // 直前のキーフレームの終端の後ろに新しいキーフレームを追加
+    const auto& keyframes = timelineDrawer_->GetTracks()[trackIndex].keyframes;
+    int32_t newFrame = 0;
+    for (const auto& kf : keyframes) {
+        int32_t endFrame = kf.frame + static_cast<int32_t>(kf.duration);
+        if (endFrame > newFrame) {
+            newFrame = endFrame;
+        }
+    }
+
+    if (trackInfo && trackInfo->type == PlayerComboAttackTimelineData::TrackType::VIBRATION) {
+        timelineDrawer_->AddKeyFrame(trackIndex, newFrame, trackInfo->vibrationIntensity, 6.0f,
+            std::format("振動強度:{}", trackInfo->vibrationIntensity));
+        return;
+    }
+
+    std::string label = (trackInfo && !trackInfo->fileName.empty())
+        ? "使用ファイル:" + trackInfo->fileName
+        : "ファイル未選択";
+    timelineDrawer_->AddKeyFrame(trackIndex, newFrame, 1.0f, 1.0f, label);
 }
 
 void PlayerComboAttackTimelineTrackBuilder::RemoveTrack(int32_t trackIndex) {

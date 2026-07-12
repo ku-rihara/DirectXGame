@@ -5,6 +5,8 @@
 // Types
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/Types/EntourageEnemy.h"
+// Collider
+#include "CollisionBox/GameColliderType.h"
 // Frame
 #include "Frame/Frame.h"
 // Player
@@ -70,7 +72,7 @@ void EnemyDamageReactionNormal::InitReaction() {
     // StumbleBackwards スキップ判定
     bool skipAnimation = skipAnimation_;
     if (!skipAnimation) {
-        if (pBaseEnemy_->IsEntourageEnemy()) {
+        if (HasColliderType(pBaseEnemy_, GameColliderType::EntourageEnemy)) {
             skipAnimation = static_cast<EntourageEnemy*>(pBaseEnemy_)->IsInStumblePhase();
         }
     }

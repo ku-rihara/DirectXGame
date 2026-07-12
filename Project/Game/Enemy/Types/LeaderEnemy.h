@@ -25,8 +25,6 @@ public:
     LeaderEnemy() = default;
     ~LeaderEnemy() override;
 
-    bool IsLeaderEnemy() const override { return true; }
-
     // 初期化、更新
     void Init(const Vector3& spownPos) override;
     void SpawnRenditionInit() override;

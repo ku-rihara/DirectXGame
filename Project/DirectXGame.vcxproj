@@ -583,6 +583,7 @@
         <ClInclude Include="Game\BaseBehavior\BaseBehavior.h"/>
         <ClInclude Include="Game\BaseObject\BaseObject.h"/>
         <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h"/>
+        <ClInclude Include="Game\CollisionBox\GameColliderType.h"/>
         <ClInclude Include="Game\ComboScene\ComboDirector.h"/>
         <ClCompile Include="Game\ResultObj\GameResultInfo.cpp"/>
         <ClCompile Include="Game\ResultObj\GameResultUI.cpp"/>

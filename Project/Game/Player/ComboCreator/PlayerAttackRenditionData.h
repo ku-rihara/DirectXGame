@@ -7,8 +7,10 @@
 // std
 #include <array>
 #include <cstdint>
+#include <json.hpp>
 #include <string>
-#include <utility>
+#include <unordered_map>
+#include <vector>
 
 /// <summary>
 /// プレイヤー攻撃演出データクラス
@@ -18,10 +20,11 @@ public:
     struct RenditionParam {
         std::string fileName;
         float startTiming    = 0.0f;
-        float currentTime_;
         bool isCameraReset   = false;
         float volume         = 1.0f;
-        bool repeatOnDamage  = false;  
+        bool repeatOnDamage  = false;
+
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(RenditionParam, fileName, startTiming, isCameraReset, volume, repeatOnDamage)
     };
 
     // オブジェクトアニメーションパラメータ
@@ -29,6 +32,8 @@ public:
         std::string fileName;
         float       startTiming   = 0.0f;
         std::string trailFileName;
+
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(ObjAnimationParam, fileName, startTiming, trailFileName)
     };
 
     // 振動パラメータ
@@ -37,7 +42,9 @@ public:
         float duration      = 0.3f;
         float intensity     = 0.0f;
         bool triggerByHit   = false;
-        bool repeatOnDamage = false; 
+        bool repeatOnDamage = false;
+
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(VibrationParam, startTiming, duration, intensity, triggerByHit, repeatOnDamage)
     };
 
     enum class Type {
@@ -104,17 +111,8 @@ public:
     void AdjustParam();
     void RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName, const std::string& prefix = "");
 
-    // ポストエフェクトリスト ↔ スロット同期
-    void SyncListToSlots();
-    void SyncSlotsToList();
-    // パーティクルエフェクトリスト ↔ スロット同期
-    void SyncParticleListToSlots();
-    void SyncParticleSlotsToList();
-
 private:
     //*-------------------------------- private Method --------------------------------*//
-    void SelectRenditionFile(const char* label, const std::string& directory, std::pair<RenditionParam, KetaEngine::FileSelector>& param);
-    void SelectObjAnimationFile(const char* label, const std::string& directory, std::pair<ObjAnimationParam, KetaEngine::FileSelector>& param);
 
     // オブジェクトアニメーションタイプに応じたフォルダパスを取得
     std::string GetObjAnimationFolderPath(ObjAnimationType type) const;
@@ -132,84 +130,60 @@ private:
         "Resources/GlobalParameter/ObjEaseAnimation/LeftHand/Dates/",
         "Resources/GlobalParameter/ObjEaseAnimation/MainHead/Dates/"};
 
-    // 演出パラメータ配列(通常とヒット時)
-    std::array<std::pair<RenditionParam, KetaEngine::FileSelector>, static_cast<size_t>(Type::Count)> renditionParams_;
-    std::array<std::pair<RenditionParam, KetaEngine::FileSelector>, static_cast<size_t>(Type::Count)> renditionParamsOnHit_;
+    // 演出パラメータリスト
+    std::array<std::vector<RenditionParam>, static_cast<size_t>(Type::Count)> renditionLists_;
+    std::array<std::vector<RenditionParam>, static_cast<size_t>(Type::Count)> renditionOnHitLists_;
 
-    // オブジェクトアニメーションパラメータ配列
-    std::array<std::pair<ObjAnimationParam, KetaEngine::FileSelector>, static_cast<size_t>(ObjAnimationType::Count)> objAnimationParams_;
+    // オブジェクトアニメーションパラメータリスト
+    std::array<std::vector<ObjAnimationParam>, static_cast<size_t>(ObjAnimationType::Count)> objAnimationLists_;
 
-    // 振動パラメータ
-    VibrationParam vibrationParam_;
+    // 振動パラメータリスト
+    std::vector<VibrationParam> vibrationList_;
 
-    // ポストエフェクト
-    std::vector<RenditionParam> postEffectList_;
-    std::vector<RenditionParam> postEffectOnHitList_;
-
-    // スロット数
-    static constexpr int32_t kMaxEffectSlots = 2; 
-
-    // ポストエフェクト保存用スロット
-    std::array<RenditionParam, kMaxEffectSlots> postEffectSlots_{};
-    std::array<RenditionParam, kMaxEffectSlots> postEffectOnHitSlots_{};
-    int32_t postEffectCount_      = 0;
-    int32_t postEffectOnHitCount_ = 0;
-
-    // パーティクルエフェクト
-    std::vector<RenditionParam> particleEffectList_;
-    std::vector<RenditionParam> particleEffectOnHitList_;
-
-    // パーティクルエフェクト保存用スロット
-    std::array<RenditionParam, kMaxEffectSlots> particleEffectSlots_{};
-    std::array<RenditionParam, kMaxEffectSlots> particleEffectOnHitSlots_{};
-    int32_t particleEffectCount_      = 0;
-    int32_t particleEffectOnHitCount_ = 0;
+    // AdjustParam用のFileSelectorキャッシュ
+    std::unordered_map<std::string, KetaEngine::FileSelector> fileSelectorMap_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
-    const RenditionParam& GetRenditionParamFromIndex(int32_t index) const {
-        return GetRenditionParamFromType(static_cast<Type>(index));
+
+    // 通常演出
+    const std::vector<RenditionParam>& GetRenditionListFromIndex(int32_t index) const {
+        return renditionLists_[index];
+    }
+    const std::vector<RenditionParam>& GetRenditionListFromType(const Type& type) const {
+        return renditionLists_[static_cast<size_t>(type)];
+    }
+    void ClearRenditionList(const Type& type) { renditionLists_[static_cast<size_t>(type)].clear(); }
+    void AddRenditionEntry(const Type& type, const RenditionParam& param) {
+        renditionLists_[static_cast<size_t>(type)].push_back(param);
     }
 
-    const RenditionParam& GetRenditionParamFromType(const Type& type) const {
-        return renditionParams_[static_cast<size_t>(type)].first;
+    // ヒット時演出
+    const std::vector<RenditionParam>& GetRenditionOnHitListFromIndex(int32_t index) const {
+        return renditionOnHitLists_[index];
+    }
+    const std::vector<RenditionParam>& GetRenditionOnHitListFromType(const Type& type) const {
+        return renditionOnHitLists_[static_cast<size_t>(type)];
+    }
+    void ClearRenditionOnHitList(const Type& type) { renditionOnHitLists_[static_cast<size_t>(type)].clear(); }
+    void AddRenditionOnHitEntry(const Type& type, const RenditionParam& param) {
+        renditionOnHitLists_[static_cast<size_t>(type)].push_back(param);
     }
 
-    // ヒット時用のゲッター
-    const RenditionParam& GetRenditionParamOnHitFromIndex(int32_t index) const {
-        return GetRenditionParamOnHitFromType(static_cast<Type>(index));
+    // オブジェクトアニメーション
+    const std::vector<ObjAnimationParam>& GetObjAnimationListFromIndex(int32_t index) const {
+        return objAnimationLists_[index];
+    }
+    const std::vector<ObjAnimationParam>& GetObjAnimationListFromType(const ObjAnimationType& type) const {
+        return objAnimationLists_[static_cast<size_t>(type)];
+    }
+    void ClearObjAnimationList(const ObjAnimationType& type) { objAnimationLists_[static_cast<size_t>(type)].clear(); }
+    void AddObjAnimationEntry(const ObjAnimationType& type, const ObjAnimationParam& param) {
+        objAnimationLists_[static_cast<size_t>(type)].push_back(param);
     }
 
-    const RenditionParam& GetRenditionParamOnHitFromType(const Type& type) const {
-        return renditionParamsOnHit_[static_cast<size_t>(type)].first;
-    }
-
-    const ObjAnimationParam& GetObjAnimationParamFromIndex(int32_t index) const {
-        return objAnimationParams_[index].first;
-    }
-    const ObjAnimationParam& GetObjAnimationParamFromType(const ObjAnimationType& type) const {
-        return objAnimationParams_[static_cast<size_t>(type)].first;
-    }
-
-    // 振動パラメータの取得
-    const VibrationParam& GetVibrationParam() const { return vibrationParam_; }
-    VibrationParam& GetVibrationParam() { return vibrationParam_; }
-
-    // ポストエフェクトリスト操作
-    void ClearPostEffectList() { postEffectList_.clear(); }
-    void AddPostEffect(const RenditionParam& param) { postEffectList_.push_back(param); }
-    const std::vector<RenditionParam>& GetPostEffectList() const { return postEffectList_; }
-
-    void ClearPostEffectOnHitList() { postEffectOnHitList_.clear(); }
-    void AddPostEffectOnHit(const RenditionParam& param) { postEffectOnHitList_.push_back(param); }
-    const std::vector<RenditionParam>& GetPostEffectOnHitList() const { return postEffectOnHitList_; }
-
-    // パーティクルエフェクトリスト操作
-    void ClearParticleEffectList() { particleEffectList_.clear(); }
-    void AddParticleEffect(const RenditionParam& param) { particleEffectList_.push_back(param); }
-    const std::vector<RenditionParam>& GetParticleEffectList() const { return particleEffectList_; }
-
-    void ClearParticleEffectOnHitList() { particleEffectOnHitList_.clear(); }
-    void AddParticleEffectOnHit(const RenditionParam& param) { particleEffectOnHitList_.push_back(param); }
-    const std::vector<RenditionParam>& GetParticleEffectOnHitList() const { return particleEffectOnHitList_; }
+    // 振動
+    const std::vector<VibrationParam>& GetVibrationList() const { return vibrationList_; }
+    void ClearVibrationList() { vibrationList_.clear(); }
+    void AddVibrationEntry(const VibrationParam& param) { vibrationList_.push_back(param); }
 };

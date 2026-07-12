@@ -1,4 +1,5 @@
 #include "EntourageEnemy.h"
+#include "CollisionBox/GameColliderType.h"
 #include "Utility/CollisionPush/CollisionPushUtils.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyWait.h"
@@ -21,6 +22,7 @@ void EntourageEnemy::Init(const Vector3& spawnPos) {
     isInStumblePhase_ = false;
 
     BaseEnemy::Init(spawnPos);
+    SetTypeID(GetTypeID() | GameColliderType::EntourageEnemy);
     InitAnimations();
 
     BaseEnemy::ChangeBehavior(std::make_unique<EnemySpawn>(this));
@@ -170,7 +172,7 @@ void EntourageEnemy::OnCollisionStay(BaseCollider* other) {
     // PlayerAttackCollider 処理
     BaseEnemy::OnCollisionStay(other); 
 
-    if (other->IsEnemy()) {
+    if (HasColliderType(other, GameColliderType::Enemy)) {
         auto* enemy = static_cast<BaseEnemy*>(other);
         if (IsAttacking() || enemy->IsAttacking()) {
             return;

@@ -21,33 +21,25 @@ private:
     float currentTime_ = 0.0f;
 
     // 通常演出の再生フラグ
-    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayed_{};
+    std::array<std::vector<bool>, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayed_{};
 
     // ヒット時演出の再生フラグ
-    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayedOnHit_{};
+    std::array<std::vector<bool>, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayedOnHit_{};
 
-    // ポストエフェクトリスト用再生フラグ
-    std::vector<bool> isPostEffectPlayed_;
-    std::vector<bool> isPostEffectOnHitPlayed_;
-
-    // パーティクルエフェクトリスト用再生フラグ
-    std::vector<bool> isParticleEffectPlayed_;
-    std::vector<bool> isParticleEffectOnHitPlayed_;
-
-    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimePlayed_{};
+    std::array<std::vector<bool>, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimePlayed_{};
 
     // ヒットエフェクトがトリガーされたかどうか
     bool hasTriggeredHitEffects_ = false;
-    // 前フレームのヒット状態（マルチヒット検出用）
+    // 前フレームのヒット状態
     bool previousHasHit_ = false;
 
     // 振動関連
-    bool isVibrationPlayed_ = false;
-    float vibrationTimer_   = 0.0f;
-    bool isVibrating_       = false;
+    std::vector<bool> isVibrationPlayed_;
+    std::vector<float> vibrationTimer_;
+    std::vector<bool> isVibrating_;
     int32_t previousLoopCount_ = 0;
 
-    // ダメージヒット検出（連続演出用）
+    // ダメージヒット検出
     int32_t previousDamageHitCount_ = 0;
 
 public:

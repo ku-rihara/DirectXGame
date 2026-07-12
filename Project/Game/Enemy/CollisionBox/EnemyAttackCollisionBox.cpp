@@ -1,4 +1,5 @@
 #include "EnemyAttackCollisionBox.h"
+#include "CollisionBox/GameColliderType.h"
 
 void EnemyAttackCollisionBox::Init() {
     SetIsAbleCollision(false);
@@ -52,13 +53,13 @@ void EnemyAttackCollisionBox::UpdateOffset() {
 }
 
 void EnemyAttackCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
-    if (other->IsPlayer()) {
+    if (HasColliderType(other, GameColliderType::Player)) {
         isHit_ = true;
     }
 }
 
 void EnemyAttackCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-    if (other->IsPlayer()) {
+    if (HasColliderType(other, GameColliderType::Player)) {
         isHit_ = true;
     }
 }

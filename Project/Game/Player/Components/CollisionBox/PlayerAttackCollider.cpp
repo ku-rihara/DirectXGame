@@ -3,11 +3,15 @@
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 // enemy
 #include "Enemy/Types/BaseEnemy.h"
+// Collider
+#include "CollisionBox/GameColliderType.h"
 // Frame
 #include "Frame/Frame.h"
 // imGui
 
 void PlayerAttackCollider::Init() {
+
+    SetTypeID(static_cast<uint32_t>(GameColliderType::PlayerAttack));
 
     // フラグの初期化
     SetIsAbleCollision(false);
@@ -150,7 +154,7 @@ void PlayerAttackCollider::UpdateOffset() {
 }
 
 void PlayerAttackCollider::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-    if (other->IsEnemy()) {
+    if (HasColliderType(other, GameColliderType::Enemy)) {
         auto* enemy = static_cast<BaseEnemy*>(other);
         isHit_ = true;
         if (!hasHitTarget_) {

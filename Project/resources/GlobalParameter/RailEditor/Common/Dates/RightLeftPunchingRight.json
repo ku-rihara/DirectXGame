@@ -1,0 +1,13 @@
+{
+    "RightLeftPunchingRight": {
+        "easeType": 7,
+        "isLookAtDirection": false,
+        "isLoop": false,
+        "maxTime": 0.07000000029802322,
+        "returnEaseType": 21,
+        "returnMode": 1,
+        "returnTime": 0.05000000074505806,
+        "startTime": 0.0,
+        "timeMode": 1
+    }
+}

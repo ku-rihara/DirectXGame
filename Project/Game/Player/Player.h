@@ -57,8 +57,6 @@ public:
     Player()  = default;
     ~Player() = default;
 
-    bool IsPlayer() const override { return true; }
-
     // 初期化処理
     void Init() override;
     void InitInGameScene();

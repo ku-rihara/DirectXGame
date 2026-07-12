@@ -29,6 +29,7 @@ public:
 
 private:
     void SetupKeyFrameCallbacks();
+    void SetupTrackCallbacks();
 
 private:
     PlayerComboAttackData* attackData_ = nullptr;

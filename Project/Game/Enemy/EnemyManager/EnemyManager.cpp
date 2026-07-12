@@ -1,5 +1,7 @@
 #include "EnemyManager.h"
 #include "Scene/GameObj.h"
+// Collider
+#include "CollisionBox/GameColliderType.h"
 // UIs
 #include "Enemy/UIs/GroupIcon/GroupIcon.h"
 // Math
@@ -196,7 +198,7 @@ void EnemyManager::UpdateTauntState() {
         }
 
         bool bossIsTaunting = false;
-        if (boss->IsLeaderEnemy()) {
+        if (HasColliderType(boss, GameColliderType::LeaderEnemy)) {
             bossIsTaunting = static_cast<LeaderEnemy*>(boss)->IsTaunting();
         }
 

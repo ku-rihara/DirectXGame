@@ -159,22 +159,26 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
             });
     });
 
-    // ポストエフェクト・パーティクルエフェクトリストをクリアして再構築
+    // 演出系リストを全種別クリアしてから再構築
     auto& renditionDataForClear = attackData_->GetRenditionDataForPhase(phase_);
-    renditionDataForClear.ClearPostEffectList();
-    renditionDataForClear.ClearPostEffectOnHitList();
-    renditionDataForClear.ClearParticleEffectList();
-    renditionDataForClear.ClearParticleEffectOnHitList();
+    for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
+        auto type = static_cast<PlayerAttackRenditionData::Type>(i);
+        renditionDataForClear.ClearRenditionList(type);
+        renditionDataForClear.ClearRenditionOnHitList(type);
+    }
+    for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::Count); ++i) {
+        renditionDataForClear.ClearObjAnimationList(static_cast<PlayerAttackRenditionData::ObjAnimationType>(i));
+    }
+    renditionDataForClear.ClearVibrationList();
 
     // 演出系とコンボ分岐タイミングの適用
     auto& branches = attackData_->GetComboBranches();
     for (const auto& trackInfo : timeLineData_->GetAddedTracks()) {
-        int32_t frame = timelineDrawer_->GetFirstKeyFrameFrame(trackInfo.trackIndex);
-        float timing  = KetaEngine::Frame::FrameToTime(frame);
-
         // コンボ分岐のタイミング
         if (trackInfo.branchIndex >= 0 && trackInfo.branchIndex < static_cast<int32_t>(branches.size())) {
-            auto& branch = branches[trackInfo.branchIndex];
+            int32_t frame = timelineDrawer_->GetFirstKeyFrameFrame(trackInfo.trackIndex);
+            float timing  = KetaEngine::Frame::FrameToTime(frame);
+            auto& branch  = branches[trackInfo.branchIndex];
 
             if (trackInfo.type == PlayerComboAttackTimelineData::TrackType::CANCEL_TIME) {
                 branch->SetCancelTime(timing);
@@ -183,7 +187,7 @@ void PlayerComboAttackTimelineParameterApplier::ApplyToParameters() {
             }
         } else {
             // 演出系の適用
-            ApplyTrackToRendition(trackInfo, timing);
+            ApplyTrackToRendition(trackInfo);
         }
     }
 
@@ -315,9 +319,9 @@ static int32_t GetRenditionOnHitIndexFromTrackType(PlayerComboAttackTimelineData
 }
 
 void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
-    const PlayerComboAttackTimelineData::TrackInfo& trackInfo, float timing) {
+    const PlayerComboAttackTimelineData::TrackInfo& trackInfo) {
 
-    if (!attackData_) {
+    if (!attackData_ || !timelineDrawer_) {
         return;
     }
 
@@ -325,105 +329,97 @@ void PlayerComboAttackTimelineParameterApplier::ApplyTrackToRendition(
     auto& renditionData = attackData_->GetRenditionDataForPhase(phase_);
     int typeInt         = static_cast<int>(trackInfo.type);
 
+    const auto& tracks = timelineDrawer_->GetTracks();
+    if (trackInfo.trackIndex < 0 || trackInfo.trackIndex >= static_cast<int32_t>(tracks.size())) {
+        return;
+    }
+    const auto& keyframes = tracks[trackInfo.trackIndex].keyframes;
+
     // 通常演出
     if (typeInt >= static_cast<int>(TT::CAMERA_ACTION) && typeInt <= static_cast<int>(TT::AUDIO_ATTACK)) {
-        // ポストエフェクトは複数対応：リストに追加
-        if (trackInfo.type == TT::POST_EFFECT) {
-            PlayerAttackRenditionData::RenditionParam param;
-            param.fileName    = trackInfo.fileName;
-            param.startTiming = timing;
-            renditionData.AddPostEffect(param);
-            return;
-        }
-        // パーティクルエフェクトは複数対応：リストに追加
-        if (trackInfo.type == TT::PARTICLE_EFFECT) {
-            PlayerAttackRenditionData::RenditionParam param;
-            param.fileName    = trackInfo.fileName;
-            param.startTiming = timing;
-            renditionData.AddParticleEffect(param);
-            return;
-        }
-
-        // その他の通常演出は単一
         int32_t rendIdx = GetRenditionIndexFromTrackType(trackInfo.type);
         if (rendIdx < 0) {
             return;
         }
+        auto type = static_cast<PlayerAttackRenditionData::Type>(rendIdx);
 
-        // RenditionParamを更新
-        auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
-            renditionData.GetRenditionParamFromIndex(rendIdx));
-        param.fileName      = trackInfo.fileName;
-        param.startTiming   = timing;
-        param.isCameraReset = trackInfo.isCameraReset;
-        param.volume        = trackInfo.volume;
+        for (const auto& kf : keyframes) {
+            PlayerAttackRenditionData::RenditionParam param;
+            param.fileName      = trackInfo.fileName;
+            param.startTiming   = KetaEngine::Frame::FrameToTime(kf.frame);
+            param.isCameraReset = trackInfo.isCameraReset;
+            param.volume        = trackInfo.volume;
+            renditionData.AddRenditionEntry(type, param);
+        }
+        return;
     }
 
     // ヒット時演出
-    else if (typeInt >= static_cast<int>(TT::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(TT::AUDIO_ATTACK_ON_HIT)) {
-        // ヒット時ポストエフェクトは複数対応
-        if (trackInfo.type == TT::POST_EFFECT_ON_HIT) {
-            PlayerAttackRenditionData::RenditionParam p;
-            p.fileName    = trackInfo.fileName;
-            p.startTiming = timing;
-            renditionData.AddPostEffectOnHit(p);
-            return;
-        }
-        // ヒット時パーティクルエフェクトは複数対応
-        if (trackInfo.type == TT::PARTICLE_EFFECT_ON_HIT) {
-            PlayerAttackRenditionData::RenditionParam p;
-            p.fileName    = trackInfo.fileName;
-            p.startTiming = timing;
-            renditionData.AddParticleEffectOnHit(p);
-            return;
-        }
-
-        // その他のヒット時演出は単一
+    if (typeInt >= static_cast<int>(TT::CAMERA_ACTION_ON_HIT) && typeInt <= static_cast<int>(TT::AUDIO_ATTACK_ON_HIT)) {
         int32_t rendIdx = GetRenditionOnHitIndexFromTrackType(trackInfo.type);
         if (rendIdx < 0) {
             return;
         }
+        auto type = static_cast<PlayerAttackRenditionData::Type>(rendIdx);
 
-        // RenditionParamを更新
-        auto& param = const_cast<PlayerAttackRenditionData::RenditionParam&>(
-            renditionData.GetRenditionParamOnHitFromIndex(rendIdx));
-        param.fileName       = trackInfo.fileName;
-        param.startTiming    = timing;
-        param.isCameraReset  = trackInfo.isCameraReset;
-        param.volume         = trackInfo.volume;
-        param.repeatOnDamage = trackInfo.repeatOnDamage;
+        for (const auto& kf : keyframes) {
+            PlayerAttackRenditionData::RenditionParam param;
+            param.fileName       = trackInfo.fileName;
+            param.startTiming    = KetaEngine::Frame::FrameToTime(kf.frame);
+            param.isCameraReset  = trackInfo.isCameraReset;
+            param.volume         = trackInfo.volume;
+            param.repeatOnDamage = trackInfo.repeatOnDamage;
+            renditionData.AddRenditionOnHitEntry(type, param);
+        }
+        return;
     }
 
     // オブジェクトアニメーション
-    else if (typeInt >= static_cast<int>(TT::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TT::OBJ_ANIM_MAIN_HEAD)) {
-        int baseIndex = typeInt - static_cast<int>(TT::OBJ_ANIM_HEAD);
-        auto& param   = const_cast<PlayerAttackRenditionData::ObjAnimationParam&>(
-            renditionData.GetObjAnimationParamFromIndex(baseIndex));
-        param.fileName      = trackInfo.fileName;
-        param.startTiming   = timing;
-        param.trailFileName = trackInfo.trailFileName;
+    if (typeInt >= static_cast<int>(TT::OBJ_ANIM_HEAD) && typeInt <= static_cast<int>(TT::OBJ_ANIM_MAIN_HEAD)) {
+        int baseIndex  = typeInt - static_cast<int>(TT::OBJ_ANIM_HEAD);
+        auto animType  = static_cast<PlayerAttackRenditionData::ObjAnimationType>(baseIndex);
+
+        for (const auto& kf : keyframes) {
+            PlayerAttackRenditionData::ObjAnimationParam param;
+            param.fileName      = trackInfo.fileName;
+            param.startTiming   = KetaEngine::Frame::FrameToTime(kf.frame);
+            param.trailFileName = trackInfo.trailFileName;
+            renditionData.AddObjAnimationEntry(animType, param);
+        }
+        return;
     }
+
     // MainHead追従トレイル
-    else if (trackInfo.type == TT::RIBBON_TRAIL_MAIN_HEAD) {
-        auto& param = const_cast<PlayerAttackRenditionData::ObjAnimationParam&>(
-            renditionData.GetObjAnimationParamFromType(PlayerAttackRenditionData::ObjAnimationType::MainHead));
-        param.trailFileName = trackInfo.fileName;
-    }
-    // コントローラ振動
-    else if (trackInfo.type == TT::VIBRATION) {
-        const auto& tracks = timelineDrawer_->GetTracks();
-        if (trackInfo.trackIndex < static_cast<int32_t>(tracks.size())) {
-            const auto& keyframes = tracks[trackInfo.trackIndex].keyframes;
-            if (!keyframes.empty()) {
-                float duration          = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(keyframes[0].duration));
-                auto& vibParam          = renditionData.GetVibrationParam();
-                vibParam.startTiming    = timing;
-                vibParam.duration       = duration;
-                vibParam.intensity      = trackInfo.vibrationIntensity;
-                vibParam.triggerByHit   = trackInfo.triggerByHit;
-                vibParam.repeatOnDamage = trackInfo.repeatOnDamage;
+    if (trackInfo.type == TT::RIBBON_TRAIL_MAIN_HEAD) {
+        auto mainHeadType    = PlayerAttackRenditionData::ObjAnimationType::MainHead;
+        auto existingEntries = renditionData.GetObjAnimationListFromType(mainHeadType);
+
+        if (existingEntries.empty()) {
+            PlayerAttackRenditionData::ObjAnimationParam param;
+            param.trailFileName = trackInfo.fileName;
+            renditionData.AddObjAnimationEntry(mainHeadType, param);
+        } else {
+            renditionData.ClearObjAnimationList(mainHeadType);
+            for (auto& param : existingEntries) {
+                param.trailFileName = trackInfo.fileName;
+                renditionData.AddObjAnimationEntry(mainHeadType, param);
             }
         }
+        return;
+    }
+
+    // コントローラ振動
+    if (trackInfo.type == TT::VIBRATION) {
+        for (const auto& kf : keyframes) {
+            PlayerAttackRenditionData::VibrationParam param;
+            param.startTiming    = KetaEngine::Frame::FrameToTime(kf.frame);
+            param.duration       = KetaEngine::Frame::FrameToTime(static_cast<int32_t>(kf.duration));
+            param.intensity      = trackInfo.vibrationIntensity;
+            param.triggerByHit   = trackInfo.triggerByHit;
+            param.repeatOnDamage = trackInfo.repeatOnDamage;
+            renditionData.AddVibrationEntry(param);
+        }
+        return;
     }
 }
 

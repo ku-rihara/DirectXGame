@@ -26,8 +26,9 @@ void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData, AttackTi
     trackBuilder_.SetupAudioTracks();
     trackBuilder_.SetupVibrationTrack();
 
-    // すべてのトラックにキーフレームコールバックを設定
+    // すべてのトラックにキーフレーム・トラックのコールバックを設定
     SetupKeyFrameCallbacks();
+    SetupTrackCallbacks();
 
     isInitialized_ = true;
 }
@@ -37,6 +38,15 @@ void PlayerComboAttackTimeline::SetupKeyFrameCallbacks() {
     for (uint32_t i = 0; i < timeline_.GetTrackCount(); ++i) {
         timeline_.SetKeyFrameRightClickCallback(i, [this](int32_t trackIdx, int32_t keyIdx) {
             ui_.DrawKeyFrameMenuItems(trackIdx, keyIdx);
+        });
+    }
+}
+
+void PlayerComboAttackTimeline::SetupTrackCallbacks() {
+    // トラック名エリアの右クリックのコールバックを設定
+    for (uint32_t i = 0; i < timeline_.GetTrackCount(); ++i) {
+        timeline_.SetTrackRightClickCallback(i, [this](int32_t trackIdx) {
+            ui_.DrawTrackContextMenu(trackIdx);
         });
     }
 }
@@ -76,11 +86,6 @@ void PlayerComboAttackTimeline::Draw() {
     // 描画パラメータエディタ
     timeline_.DrawParamEditor();
 
-    // 各トラックのコンテキストメニュー処理
-    for (size_t i = 0; i < timeline_.GetTrackCount(); ++i) {
-        ui_.DrawTrackContextMenu(static_cast<int32_t>(i));
-    }
-
     // タイムライン変更を毎フレームパラメータに自動適用
     ApplyToParameters();
 
@@ -100,6 +105,7 @@ void PlayerComboAttackTimeline::RebuildBranchTracks() {
 
     // 新しいトラックにコールバックを再設定
     SetupKeyFrameCallbacks();
+    SetupTrackCallbacks();
 }
 
 void PlayerComboAttackTimeline::SetEffectEditorSuite(KetaEngine::EffectEditorSuite* suite) {

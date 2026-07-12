@@ -40,9 +40,6 @@ class BaseEnemy : public BaseObject, public KetaEngine::SphereCollider {
     friend class EnemyInitializer;
 
 public:
-    bool IsEnemy() const override { return true; }
-    virtual bool IsLeaderEnemy()    const override { return false; }
-    virtual bool IsEntourageEnemy() const override { return false; }
     using Type                   = EnemyBaseInfo::Type;
     using Parameter              = EnemyBaseInfo::Parameter;
     using AnimationType          = EnemyAnimator::AnimationType;

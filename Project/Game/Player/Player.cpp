@@ -4,6 +4,7 @@
 /// Enemy
 #include "Enemy/Types/BaseEnemy.h"
 // CollisionUtils
+#include "CollisionBox/GameColliderType.h"
 #include "Utility/CollisionPush/CollisionPushUtils.h"
 // StressGauge
 #include "StressGauge/StressGauge.h"
@@ -27,6 +28,8 @@
 /// 　初期化
 ///==========================================================
 void Player::Init() {
+
+    SetTypeID(static_cast<uint32_t>(GameColliderType::Player));
 
     BaseObject::Init();
 
@@ -217,7 +220,7 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    if (other->IsEnemy()) {
+    if (HasColliderType(other, GameColliderType::Enemy)) {
         auto* enemy = static_cast<BaseEnemy*>(other);
         // 敵が攻撃中は押し戻し無効
         if (enemy->IsAttacking()) {

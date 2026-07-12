@@ -1,4 +1,5 @@
 #include "LeaderEnemy.h"
+#include "CollisionBox/GameColliderType.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 #include "Player/Player.h"
 // behavior
@@ -42,6 +43,7 @@ void LeaderEnemy::Init(const Vector3& spawnPos) {
 
     // 基底クラスの初期化
     BaseEnemy::Init(spawnPos);
+    SetTypeID(GetTypeID() | GameColliderType::LeaderEnemy);
     // アニメーション初期化
     InitAnimations();
     // 煽り文字の初期化

@@ -22,7 +22,6 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
-    renditionData_.SyncSlotsToList();
 
     // enumのタイプををIntから適用
     attackParam_.triggerParam.condition       = static_cast<TriggerCondition>(triggerConditionInt_);
@@ -45,7 +44,6 @@ void PlayerComboAttackData::LoadData() {
     // JSONファイルからロードして同期
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
-    renditionData_.SyncSlotsToList();
 
     // conditionをIntから適用 
     attackParam_.triggerParam.condition       = static_cast<TriggerCondition>(triggerConditionInt_);
@@ -63,13 +61,11 @@ void PlayerComboAttackData::LoadData() {
 
     // 予備動作フェーズ
     if (hasPrep_) {
-        prepRenditionData_.SyncSlotsToList();
         prepTimeline_.Init(this, TimelinePhase::PREPARATION);
     }
 
     // 終了処理フェーズ
     if (hasFinish_) {
-        finishRenditionData_.SyncSlotsToList();
         finishTimeline_.Init(this, TimelinePhase::FINISH);
     }
 }
@@ -77,15 +73,6 @@ void PlayerComboAttackData::LoadData() {
 void PlayerComboAttackData::SaveData() {
     // branchCount_を更新
     branchCount_ = static_cast<int32_t>(comboBranches_.size());
-
-    // エフェクトリストをスロットに同期してから保存
-    renditionData_.SyncListToSlots();
-    if (hasPrep_) {
-        prepRenditionData_.SyncListToSlots();
-    }
-    if (hasFinish_) {
-        finishRenditionData_.SyncListToSlots();
-    }
 
     // 登録変数の現在値をdates_に書き込んでから保存
     globalParameter_->PushParamForGroup(groupName_);

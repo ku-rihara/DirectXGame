@@ -16,8 +16,6 @@ public:
     PlayerAttackCollider()           = default;
     ~PlayerAttackCollider() override = default;
 
-    bool IsPlayerAttack() const override { return true; }
-
     // 初期化、更新、描画
     void Init() override;
     void Update();

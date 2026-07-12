@@ -59,20 +59,12 @@ PlayerComboAttackTimelineData::FindTrackInfo(int32_t trackIndex) {
 }
 
 bool PlayerComboAttackTimelineData::IsTrackTypeAlreadyAdded(TrackType type) const {
-    // 複数追加可能なトラックタイプ
-    if (type == TrackType::CANCEL_TIME || type == TrackType::PRECEDE_INPUT ||
-        type == TrackType::POST_EFFECT || type == TrackType::POST_EFFECT_ON_HIT ||
-        type == TrackType::PARTICLE_EFFECT || type == TrackType::PARTICLE_EFFECT_ON_HIT) {
-        return false;
-    }
-
-    // 追加されたトラックのチェック
+    // 同じ種類のトラックの重複追加は禁止する
     for (const auto& track : addedTracks_) {
         if (track.type == type) {
             return true;
         }
     }
-
     return false;
 }
 

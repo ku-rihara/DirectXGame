@@ -2,17 +2,17 @@
     "RollingDamageEffect2": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
-        "AdaptRotateIsZ": false,
+        "AdaptRotateIsZ": true,
         "AlphaEaseParam.easeTypeInt": 0,
         "AlphaEaseParam.endValue.max": 0.0,
         "AlphaEaseParam.endValue.min": 0.0,
         "AlphaEaseParam.isEase": false,
         "AlphaEaseParam.maxTime": 1.0,
         "BaseColor": [
-            0.8313725590705872,
-            0.7803921699523926,
-            0.7803921699523926,
-            0.6470588445663452
+            0.9189189076423645,
+            0.25545233488082886,
+            0.0,
+            1.0
         ],
         "Color Max": [
             0.0,
@@ -26,19 +26,19 @@
             0.0,
             0.0
         ],
-        "ColorEaseParam.easeTypeInt": 0,
+        "ColorEaseParam.easeTypeInt": 5,
         "ColorEaseParam.endValue.max": [
-            0.0,
-            0.0,
-            0.0
+            1.0,
+            1.0,
+            1.0
         ],
         "ColorEaseParam.endValue.min": [
-            0.0,
-            0.0,
-            0.0
+            1.0,
+            1.0,
+            1.0
         ],
-        "ColorEaseParam.isEase": false,
-        "ColorEaseParam.maxTime": 1.0,
+        "ColorEaseParam.isEase": true,
+        "ColorEaseParam.maxTime": 0.1899999976158142,
         "Cyl.axisInt": 0,
         "Cyl.bottomColor": [
             1.0,
@@ -63,24 +63,24 @@
         "Cyl.topRadiusZ": 1.0,
         "Cyl.uvModeInt": 0,
         "Direction Max": [
-            0.0,
-            0.0,
+            1.0,
+            1.0,
             0.0
         ],
         "Direction Min": [
-            0.0,
-            0.0,
+            -1.0,
+            -1.0,
             0.0
         ],
-        "Gravity": 0.0,
-        "IntervalTime": 0.8399999737739563,
+        "Gravity": -9.199999809265137,
+        "IntervalTime": 0.8799999952316284,
         "IsScreenPos": false,
-        "LifeTime": 0.4000000059604645,
+        "LifeTime": 0.3499999940395355,
         "Max Particle Num": 1000,
-        "Particle Count": 7,
+        "Particle Count": 28,
         "Position Base": [
             0.0,
-            1.590000033378601,
+            3.5199999809265137,
             0.0
         ],
         "Position Max": [
@@ -132,45 +132,45 @@
             0.0,
             0.0
         ],
-        "Scale Max": 0.0,
-        "Scale Min": 0.0,
+        "Scale Max": 1.0,
+        "Scale Min": 1.0,
         "ScaleV3 Max": [
-            1.0,
-            1.0,
+            0.20000000298023224,
+            4.309999942779541,
             1.0
         ],
         "ScaleV3 Min": [
-            1.0,
-            1.0,
+            0.20000000298023224,
+            3.9100000858306885,
             1.0
         ],
-        "Speed Max": 0.0,
+        "Speed Max": 26.0,
         "Speed Min": 0.0,
         "SpeedV3 Max": [
-            0.0,
-            0.0,
+            38.81999969482422,
+            42.7400016784668,
             0.0
         ],
         "SpeedV3 Min": [
             0.0,
-            0.0,
+            -38.790000915527344,
             0.0
         ],
         "StartTime": 0.0,
-        "TranslateEaseParam.easeTypeInt": 0,
+        "TranslateEaseParam.easeTypeInt": 6,
         "TranslateEaseParam.endValueV3.max": [
             0.0,
-            0.0,
-            0.0
+            33.0,
+            25.0
         ],
         "TranslateEaseParam.endValueV3.min": [
             0.0,
-            0.0,
-            0.0
+            -35.0,
+            35.0
         ],
         "TranslateEaseParam.isReturnToOrigin": false,
         "TranslateEaseParam.isScaleEase": false,
-        "TranslateEaseParam.maxTime": 1.0,
+        "TranslateEaseParam.maxTime": 0.3400000035762787,
         "TranslateEaseParam.returnEaseTypeInt": 0,
         "TranslateEaseParam.returnMaxTime": 0.0,
         "UV IsLoop": false,
@@ -196,21 +196,16 @@
         "alphaMode": 1,
         "blendMode": 1,
         "dissolveName": "",
-        "distortionStrength": 0.0020000000949949026,
-        "distortionTexturePath": "Resources/EngineTexture/Noise/PerlinNoise.dds",
-        "emissiveIntensity": 1.0,
+        "distortionStrength": 0.05000000074505806,
+        "distortionTexturePath": "",
+        "emissiveIntensity": 2.299999952316284,
         "emitPositionMode": 2,
         "emitShape": 0,
-        "goalPosition": [
-            0.0,
-            0.0,
-            0.0
-        ],
         "isAlphaNoMove": false,
         "isBillboard": true,
         "isFloatVelocity": false,
-        "isRotateForDirection": false,
-        "isScalerScale": true,
+        "isRotateForDirection": true,
+        "isScalerScale": false,
         "isShot": true,
         "modelFilePath": "",
         "parentFollowR": true,
@@ -218,12 +213,9 @@
         "parentFollowT": true,
         "preBillboardType": 0,
         "primitiveTypeInt": 0,
-        "rotateForDirectionX": true,
-        "rotateForDirectionY": true,
-        "rotateForDirectionZ": true,
-        "scaleEaseParam.easeTypeInt": 22,
-        "scaleEaseParam.endValueF.max": 5.0,
-        "scaleEaseParam.endValueF.min": 5.0,
+        "scaleEaseParam.easeTypeInt": 0,
+        "scaleEaseParam.endValueF.max": 0.0,
+        "scaleEaseParam.endValueF.min": 0.0,
         "scaleEaseParam.endValueV3.max": [
             0.0,
             0.0,
@@ -235,18 +227,17 @@
             0.0
         ],
         "scaleEaseParam.isReturnToOrigin": false,
-        "scaleEaseParam.isScaleEase": true,
-        "scaleEaseParam.maxTime": 0.49000000953674316,
-        "scaleEaseParam.returnEaseTypeInt": 21,
-        "scaleEaseParam.returnMaxTime": 0.23000000417232513,
-        "selectedTexturePath": "Resources/EngineTexture/Particle/circle.dds",
+        "scaleEaseParam.isScaleEase": false,
+        "scaleEaseParam.maxTime": 1.0,
+        "scaleEaseParam.returnEaseTypeInt": 0,
+        "scaleEaseParam.returnMaxTime": 0.0,
+        "selectedTexturePath": "Resources/EngineTexture/Particle/SlashNoise.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,
         "targetApplyR": false,
         "timeMode": 1,
-        "useDistortion": true,
-        "useGoalPosition": false,
+        "useDistortion": false,
         "useModel": false
     }
 }

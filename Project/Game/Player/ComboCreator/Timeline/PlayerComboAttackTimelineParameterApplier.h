@@ -72,10 +72,8 @@ private:
     /// 演出系トラックの情報をRenditionパラメータに適用
     /// </summary>
     /// <param name="trackInfo">トラック情報</param>
-    /// <param name="timing">開始タイミング（秒）</param>
     void ApplyTrackToRendition(
-        const PlayerComboAttackTimelineData::TrackInfo& trackInfo,
-        float timing);
+        const PlayerComboAttackTimelineData::TrackInfo& trackInfo);
 
     /// <summary>
     /// 終了待機時間の開始フレームを取得
