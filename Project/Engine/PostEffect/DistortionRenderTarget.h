@@ -9,8 +9,8 @@ namespace KetaEngine {
 class DirectXCommon;
 
 /// <summary>
-/// 歪みパス専用 R16G16F レンダーターゲット
-/// トレイルが書き込んだ UVオフセット(XY) を保持する
+/// 歪みパス専用レンダーターゲット
+/// トレイルが書き込んだUVオフセットを保持する
 /// </summary>
 class DistortionRenderTarget {
 public:
@@ -21,12 +21,12 @@ public:
     /// 初期化
     /// </summary>
     /// <param name="dxCommon">DirectXCommon</param>
-    /// <param name="width">幅（通常はレンダー解像度と同じ）</param>
+    /// <param name="width">幅</param>
     /// <param name="height">高さ</param>
     void Init(DirectXCommon* dxCommon, uint32_t width, uint32_t height);
 
     /// <summary>
-    /// 歪みパス開始 - RTを歪みRTに切り替え・クリア
+    /// 歪みパス開始
     /// </summary>
     /// <param name="commandList">コマンドリスト</param>
     /// <param name="dsvHandle">深度バッファのDSVハンドル</param>
@@ -34,7 +34,7 @@ public:
                              const D3D12_CPU_DESCRIPTOR_HANDLE& dsvHandle);
 
     /// <summary>
-    /// 歪みパス終了 - SRVとして読めるようにバリア遷移
+    /// 歪みパス終了
     /// </summary>
     /// <param name="commandList">コマンドリスト</param>
     void EndDistortionPass(ID3D12GraphicsCommandList* commandList);

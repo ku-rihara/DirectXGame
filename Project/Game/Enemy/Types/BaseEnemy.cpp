@@ -41,7 +41,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
 void BaseEnemy::PrepareForPool() {
     // ビヘイビアを先に破棄
     behaviorCtrl_.Reset();
-    // 残存コールバックを念のためクリア
+    // 残存コールバックをクリア
     animator_.ClearAllCallbacks();
     // UI を非表示にする
     if (enemyUIs_) {
@@ -50,7 +50,7 @@ void BaseEnemy::PrepareForPool() {
     }
     // コリジョン無効化
     SetIsAdaptCollision(false);
-    // AnimationRegistryのSkinning/Drawの対象から外す
+    //アニメーションの対象から外す
     animator_.SetAnimationActive(false);
 }
 
@@ -113,7 +113,7 @@ void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, bool isJ
 /// HpBar表示
 ///========================================================
 void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection, float distanceToPlayer, bool isOccluded) {
- 
+
     // オクルージョン時はUI非表示
     if (isOccluded) {
         enemyUIs_->Hide(hp_);
@@ -273,7 +273,6 @@ void BaseEnemy::DirectionToPlayer(bool isOpposite) {
     baseTransform_.rotation_.y = LerpShortAngle(baseTransform_.rotation_.y, objectiveAngle, 0.8f);
 }
 
-
 float BaseEnemy::CalcDistanceToPlayer() {
     // プレイヤーへの方向
     Vector3 directionToPlayer = GetDirectionToTarget(baseInfo_.GetPlayer()->GetWorldPosition());
@@ -311,13 +310,22 @@ void BaseEnemy::RefreshCollision() {
     SetCollisionRadius(baseInfo_.GetParameter().collisionRad);
 }
 
-
 bool BaseEnemy::IsInDeathBehavior() const {
     return behaviorCtrl_.IsDeathLocked();
 }
-
 
 void BaseEnemy::ScaleReset() {
     baseTransform_.scale_ = baseInfo_.GetParameter().baseScale_;
 }
 
+void BaseEnemy::SetHPBarColorConfig(EnemyHPBarColorConfig* config) {
+    colorConfig_ = config;
+    if (enemyUIs_) {
+        enemyUIs_->SetColorConfig(config);
+    }
+}
+void BaseEnemy::SetGroupIconIndex(int32_t index) {
+    if (enemyUIs_) {
+        enemyUIs_->SetGroupIndex(index);
+    }
+}

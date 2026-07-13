@@ -4,7 +4,7 @@
 class BaseEnemy;
 
 /// <summary>
-/// BaseEnemy::Init の処理を担うクラス。
+/// BaseEnemyの初期化処理を担うクラス
 /// </summary>
 class EnemyInitializer {
 public:

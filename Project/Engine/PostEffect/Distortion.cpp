@@ -2,8 +2,8 @@
 
 using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
-#include "Base/Dx/DxRenderTarget.h"
 #include "function/Log.h"
+
 #include <cassert>
 #include <d3dx12.h>
 
@@ -12,7 +12,7 @@ using namespace KetaEngine;
 ///============================================================
 void Distortion::Init(DirectXCommon* dxCommon) {
     vsName_ = L"resources/Shader/PostEffect/Fullscreen.VS.hlsl";
-    psName_ = L"resources/Shader/PostEffect/Distortion.PS.hlsl";
+    psName_ = L"resources/Shader/PostEffect/DistortionComposite.PS.hlsl";
     BasePostEffect::Init(dxCommon);
 }
 
@@ -85,13 +85,6 @@ void Distortion::SetDrawState(ID3D12GraphicsCommandList* commandList) {
 }
 
 ///============================================================
-/// 定数バッファ作成
-///============================================================
-void Distortion::CreateConstantBuffer() {
-  
-}
-
-///============================================================
 /// 描画
 ///============================================================
 void Distortion::Draw(ID3D12GraphicsCommandList* commandList) {
@@ -104,6 +97,13 @@ void Distortion::Draw(ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootDescriptorTable(1, distortionSrvHandle_);
 
     commandList->DrawInstanced(3, 1, 0, 0);
+}
+
+///============================================================
+/// 定数バッファ作成
+///============================================================
+void Distortion::CreateConstantBuffer() {
+    // Distortionでは定数バッファは使用しないため、ここでは何もしない
 }
 
 ///============================================================

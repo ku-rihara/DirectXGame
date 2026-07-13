@@ -16,12 +16,12 @@ void DistortionRenderTarget::Init(DirectXCommon* dxCommon, uint32_t width, uint3
     CreateRTV();
     CreateSRV();
 
-    // バリア管理に登録（初期状態: RENDER_TARGET）
+    // バリア管理に登録
     dxCommon_->GetResourceBarrier()->RegisterResource(resource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
 }
 
 ///============================================================
-/// リソース作成（R16G16_FLOAT）
+/// リソース作成
 ///============================================================
 void DistortionRenderTarget::CreateResource(uint32_t width, uint32_t height) {
     D3D12_RESOURCE_DESC desc{};
@@ -92,7 +92,7 @@ void DistortionRenderTarget::CreateSRV() {
 }
 
 ///============================================================
-/// 歪みパス開始（RTをセット＆クリア）
+/// 歪みパス開始
 ///============================================================
 void DistortionRenderTarget::BeginDistortionPass(ID3D12GraphicsCommandList* commandList,
                                                   const D3D12_CPU_DESCRIPTOR_HANDLE& dsvHandle) {
@@ -100,15 +100,15 @@ void DistortionRenderTarget::BeginDistortionPass(ID3D12GraphicsCommandList* comm
     dxCommon_->GetResourceBarrier()->Transition(
         commandList, resource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
 
-    // 歪みRTをセット（シーンRTの代わりにこちらへ書き込む）
+    // 歪みRTをセット
     commandList->OMSetRenderTargets(1, &rtvHandle_, FALSE, &dsvHandle);
 
-    // UVオフセット(0,0)でクリア = 歪みなしの初期状態
+    // UVオフセット(0,0)でクリア
     commandList->ClearRenderTargetView(rtvHandle_, kClearColor, 0, nullptr);
 }
 
 ///============================================================
-/// 歪みパス終了（SRVとして読めるよう遷移）
+/// 歪みパス終了
 ///============================================================
 void DistortionRenderTarget::EndDistortionPass(ID3D12GraphicsCommandList* commandList) {
     dxCommon_->GetResourceBarrier()->Transition(

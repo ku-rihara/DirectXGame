@@ -1,8 +1,7 @@
 #include "Fullscreen.hlsli"
 
-// t0: 通常シーンのレンダーターゲット
+
 Texture2D<float4> gSceneTexture      : register(t0);
-// t1: 歪みパスで書き込まれたUVオフセットテクスチャ（R16G16F）
 Texture2D<float2> gDistortionTexture : register(t1);
 
 SamplerState gSampler : register(s0);

@@ -55,11 +55,6 @@ void DistortionPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     }
 }
 
-void DistortionPipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) {
-    commandList;
-    blendMode;
-}
-
 ///============================================================
 /// RibbonTrail 用ルートシグネチャ
 ///============================================================
@@ -322,4 +317,9 @@ void DistortionPipeline::CreateParticlePipeline() {
     if (FAILED(hr)) {
         throw std::runtime_error("DistortionPipeline(Particle): CreateGraphicsPipelineState failed");
     }
+}
+
+void DistortionPipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) {
+    commandList;
+    blendMode;
 }

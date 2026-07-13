@@ -57,13 +57,15 @@ protected:
     /// <returns>コンパイル済みシェーダー</returns>
     Microsoft::WRL::ComPtr<IDxcBlob> CompileShader(const wchar_t* shaderPath, const wchar_t* target);
 
+    // dxCommon
     DirectXCommon* dxCommon_ = nullptr;
 
+    // ルートシグネチャ
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
 
+    // シェーダーコンパイル用のバッファ
     Microsoft::WRL::ComPtr<ID3DBlob> signatureBlob_ = nullptr;
     Microsoft::WRL::ComPtr<ID3DBlob> errorBlob_     = nullptr;
-
     Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob_ = nullptr;
     Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob_  = nullptr;
 

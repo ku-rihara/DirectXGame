@@ -12,10 +12,10 @@
 // Collision
 #include "../CollisionBox/EnemyAttackCollisionBox.h"
 #include "Collider/SphereCollider.h"
-#include "Enemy/Effects/EnemyEffects.h"
-#include "Enemy/UIs/EnemyUIs.h"
 #include "Enemy/Component/EnemyAnimator.h"
 #include "Enemy/Component/EnemyBaseInfo.h"
+#include "Enemy/Effects/EnemyEffects.h"
+#include "Enemy/UIs/EnemyUIs.h"
 
 // std
 #include <cstdint>
@@ -144,7 +144,6 @@ public:
 
     Vector3 GetCollisionPos() const override;
 
-
 private:
     /// <summary>
     /// 視野内判定
@@ -202,6 +201,8 @@ public:
     int32_t GetGroupId() const { return groupId_; }
     float GetHP() const { return hp_; }
     float GetBaseRotationY() const { return baseTransform_.rotation_.y; }
+    bool IsInAnticipation() const { return isInAnticipation_; }
+    bool IsAttacking() const { return isAttacking_; }
     BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return behaviorCtrl_.GetDamageBehavior(); }
     EnemyBaseInfo* GetBaseInfo() { return &baseInfo_; }
     const EnemyBaseInfo* GetBaseInfo() const { return &baseInfo_; }
@@ -209,8 +210,6 @@ public:
     const EnemyAnimator* GetAnimator() const { return &animator_; }
     EnemyEffects* GetEnemyEffects() const { return enemyEffects_.get(); }
     EnemyAttackCollisionBox* GetAttackCollisionBox() const { return attackCollisionBox_.get(); }
-    bool IsInAnticipation() const { return isInAnticipation_; }
-    bool IsAttacking() const { return isAttacking_; }
 
     /// ========================================================================================
     ///  setter method
@@ -220,15 +219,13 @@ public:
     void SetGroupId(int groupId) { groupId_ = groupId; }
     void SetIsDeathPending(bool is) { isDeathPending_ = is; }
     void SetWorldPositionY(float PosY) { baseTransform_.translation_.y = PosY; }
-    void SetHPBarColorConfig(EnemyHPBarColorConfig* config) {
-        colorConfig_ = config;
-        if (enemyUIs_) { enemyUIs_->SetColorConfig(config); }
+    void SetHPBarColorConfig(EnemyHPBarColorConfig* config);
+    void SetGroupIconIndex(int32_t index);
+    void OnSpawnCompleted() {
+        if (enemyUIs_) {
+            enemyUIs_->OnSpawned();
+        }
     }
-    void SetGroupIconIndex(int32_t index) {
-        if (enemyUIs_) { enemyUIs_->SetGroupIndex(index); }
-    }
-    void OnSpawnCompleted() { if (enemyUIs_) { enemyUIs_->OnSpawned(); } }
     void SetIsInAnticipation(bool value) { isInAnticipation_ = value; }
     void SetIsAttacking(bool value) { isAttacking_ = value; }
-
 };

@@ -383,7 +383,7 @@
         "ShakeAction_List": [],
         "ShakeAction_OnHit_List": [
             {
-                "fileName": "PunchAttackCamera",
+                "fileName": "OraOraCameraShake",
                 "isCameraReset": false,
                 "repeatOnDamage": true,
                 "startTiming": 0.0,

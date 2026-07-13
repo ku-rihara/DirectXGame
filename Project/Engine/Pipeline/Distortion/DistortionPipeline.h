@@ -30,12 +30,12 @@ enum class DistortionParticleRootParam : UINT {
 /// </summary>
 class DistortionPipeline : public BasePipeline {
 public:
-    explicit DistortionPipeline(DistortionMode mode);
+    DistortionPipeline(DistortionMode mode);
     ~DistortionPipeline() = default;
 
     void Init(DirectXCommon* dxCommon) override;
     void PreDraw(ID3D12GraphicsCommandList* commandList) override;
-    void PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) override;
+    void PreBlendSet(ID3D12GraphicsCommandList*, const BlendMode&) override;
 
 protected:
     void CreateRootSignature() override;

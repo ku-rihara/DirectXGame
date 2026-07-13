@@ -2873,7 +2873,7 @@
     <FxCompile Include="resources\Shader\PostEffect\Vignette.PS.hlsl">
       <Filter>resources\Shader\PostEffect</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\PostEffect\Distortion.PS.hlsl">
+    <FxCompile Include="resources\Shader\PostEffect\DistortionComposite.PS.hlsl">
       <Filter>resources\Shader\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\Distortion\Distortion.PS.hlsl">

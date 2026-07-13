@@ -65,7 +65,7 @@ void ObjEaseAnimationData::UpdateIndependentSRTProgression() {
         return;
     }
 
-    // セクションが存在しないアニメーション（ファイル未存在など）は即座に完了させる
+    // セクションが存在しないアニメーションは即座に完了させる
     if (sectionElements_.empty()) {
         isAllKeyFramesFinished_ = true;
         playState_              = PlayState::STOPPED;
@@ -123,7 +123,7 @@ void ObjEaseAnimationData::UpdateSyncSRTProgression() {
         return;
     }
 
-    // セクションが存在しないアニメーション（ファイル未存在など）は即座に完了させる
+    // セクションが存在しないアニメーションは即座に完了させる
     if (sectionElements_.empty()) {
         isAllKeyFramesFinished_ = true;
         playState_              = PlayState::STOPPED;

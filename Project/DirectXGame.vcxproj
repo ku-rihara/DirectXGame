@@ -963,7 +963,7 @@
             <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</ExcludedFromBuild>
             <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Development|x64&apos;">true</ExcludedFromBuild>
         </FxCompile>
-        <FxCompile Include="resources\Shader\PostEffect\Distortion.PS.hlsl">
+        <FxCompile Include="resources\Shader\PostEffect\DistortionComposite.PS.hlsl">
             <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">true</ExcludedFromBuild>
             <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|x64&apos;">true</ExcludedFromBuild>
             <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Development|x64&apos;">true</ExcludedFromBuild>
