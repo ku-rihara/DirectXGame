@@ -23,9 +23,6 @@ public:
     void Update(float deltaTime) override;
     void Debug() override;
 
-    // 打ち上げから起き上がりが完了するまでは新しい攻撃で割り込まれない
-    bool CanBeInterruptedByNewHit() const override { return false; }
-
 private:
     // リアクション演出初期化
     void InitReaction();

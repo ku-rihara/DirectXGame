@@ -14,6 +14,14 @@ void ParticlePlayer::Update(float speedRate) {
     // Play関数が呼ばれていたか確認
     UpdatePlayState();
 
+    // 優先エフェクトのガード時間を減算
+    if (priorityGuardTimer_ > 0.0f) {
+        priorityGuardTimer_ -= Frame::DeltaTimeRate();
+        if (priorityGuardTimer_ < 0.0f) {
+            priorityGuardTimer_ = 0.0f;
+        }
+    }
+
     // TargetParam ポインタが設定されていれば毎フレーム自動適用
     if (targetParam_.pos_ || targetParam_.rotate_) {
         auto* particleData = GetParticleData();
@@ -61,11 +69,26 @@ void ParticlePlayer::UpdatePlayState() {
 }
 
 void ParticlePlayer::Play(const std::string& particleName, const std::string& categoryName) {
+    PlayInternal(particleName, categoryName, false);
+}
+
+void ParticlePlayer::PlayPriority(const std::string& particleName, const std::string& categoryName) {
+    PlayInternal(particleName, categoryName, true);
+}
+
+void ParticlePlayer::PlayInternal(const std::string& particleName, const std::string& categoryName, bool isPriority) {
+    bool isSwitchingEffect = !isInitialized_ || currentCategoryName_ != categoryName || currentParticleName_ != particleName;
+
+    // 優先エフェクト再生中は、ガード時間が残っている間、通常Emitによる差し替えを無視する
+    if (isSwitchingEffect && !isPriority && currentIsPriority_ && priorityGuardTimer_ > 0.0f) {
+        return;
+    }
+
     // このフレームでPlayが呼ばれたことを記録
     wasPlayCalledThisFrame_ = true;
 
     // 初回呼び出し、またはパーティクル名が変わった場合のみ初期化
-    if (!isInitialized_ || currentCategoryName_ != categoryName || currentParticleName_ != particleName) {
+    if (isSwitchingEffect) {
 
         // 既存のエフェクトは即破棄せず、afterDurationまで継続させる
         if (effectData_) {
@@ -87,6 +110,8 @@ void ParticlePlayer::Play(const std::string& particleName, const std::string& ca
         currentParticleName_ = particleName;
         currentEffectName_   = particleName;
         isInitialized_       = true;
+        currentIsPriority_   = isPriority;
+        priorityGuardTimer_  = isPriority ? kPriorityGuardDuration : 0.0f;
     } else {
         // 同じパーティクルで、Pause状態だった場合は再開
         auto* particleData = GetParticleData();

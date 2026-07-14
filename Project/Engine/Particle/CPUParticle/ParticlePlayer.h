@@ -44,6 +44,11 @@ public:
     void Play(const std::string& particleName, const std::string& categoryName = "Common") override;
 
     /// <summary>
+    /// 優先パーティクルをEmitする
+    /// </summary>
+    void PlayPriority(const std::string& particleName, const std::string& categoryName = "Common");
+
+    /// <summary>
     /// 再生状況
     /// </summary>
     void UpdatePlayState();
@@ -51,12 +56,18 @@ public:
 private:
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
     void ApplyParentParametersToData(ParticleData* particleData);
+    void PlayInternal(const std::string& particleName, const std::string& categoryName, bool isPriority);
 
 private:
 
     std::string currentParticleName_;
     bool isInitialized_          = false;
     bool wasPlayCalledThisFrame_ = false;
+
+    // 優先エフェクトが通常Emitに即座に上書きされないためのガード
+    bool currentIsPriority_       = false;
+    float priorityGuardTimer_     = 0.0f;
+    static constexpr float kPriorityGuardDuration = 0.3f;
 
     ParentParam parentParam_;
     TargetParam targetParam_;

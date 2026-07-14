@@ -75,7 +75,7 @@ void EnemyDamageRendition::Update(
 
         if (reactionTimer >= particleTiming && !particleFileName.empty() && particleFileName != "None") {
             if (pBaseEnemy_->GetEnemyEffects()) {
-                pBaseEnemy_->GetEnemyEffects()->Emit(particleFileName);
+                pBaseEnemy_->GetEnemyEffects()->EmitPriority(particleFileName);
             }
         }
     }

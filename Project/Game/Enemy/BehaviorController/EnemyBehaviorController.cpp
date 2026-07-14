@@ -100,11 +100,6 @@ void EnemyBehaviorController::OnPlayerAttackCollision(PlayerAttackCollider* atta
         return;
     }
 
-    //割り込みを禁止しているリアクションは、スキップする
-    if (damageBehavior_ && !damageBehavior_->IsReactionRoot() && !damageBehavior_->CanBeInterruptedByNewHit()) {
-        return;
-    }
-
     if (!attackController->GetComboAttackData()) {
         return;
     }
@@ -126,7 +121,7 @@ void EnemyBehaviorController::OnPlayerAttackCollision(PlayerAttackCollider* atta
                     const auto& particle = rendition->GetParticleEffectParam();
                     if (!particle.fileName.empty() && particle.fileName != "None" && particle.startTiming <= 0.0f) {
                         if (auto* effects = pOwner_->GetEnemyEffects()) {
-                            effects->Emit(particle.fileName);
+                            effects->EmitPriority(particle.fileName);
                         }
                     }
                 }

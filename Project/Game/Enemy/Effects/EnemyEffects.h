@@ -32,7 +32,13 @@ public:
     void Emit(const std::string& name);
 
     /// <summary>
-    /// パーティクルのゴール位置をセット（フラグがtrueのセクションが向かう先）
+    /// 優先パーティクルエフェクトの放出
+    /// </summary>
+    /// <param name="name">エフェクト名</param>
+    void EmitPriority(const std::string& name);
+
+    /// <summary>
+    /// パーティクルのゴール位置をセット
     /// </summary>
     void SetTargetObjectPos(const Vector3& pos);
 

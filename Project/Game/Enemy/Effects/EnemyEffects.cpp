@@ -16,6 +16,10 @@ void EnemyEffects::Emit(const std::string& name) {
     particlePlayer_->Play(name, "Enemy");
 }
 
+void EnemyEffects::EmitPriority(const std::string& name) {
+    particlePlayer_->PlayPriority(name, "Enemy");
+}
+
 void EnemyEffects::SetTargetObjectPos(const Vector3& pos) {
     goalPos_ = pos;
 }

@@ -257,7 +257,7 @@
             },
             {
                 "fileName": "OraoraPunchLeft",
-                "startTiming": 0.15000000596046448,
+                "startTiming": 0.20000000298023224,
                 "trailFileName": ""
             },
             {
@@ -392,8 +392,8 @@
         ],
         "Vibration_List": [
             {
-                "duration": 0.05000000074505806,
-                "intensity": 0.23899999260902405,
+                "duration": 1.0333333015441895,
+                "intensity": 0.3930000066757202,
                 "repeatOnDamage": true,
                 "startTiming": 0.0,
                 "triggerByHit": true
