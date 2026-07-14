@@ -2,15 +2,12 @@
 
 using namespace KetaEngine;
 
-ModelManager* ModelManager::instance_ = nullptr;
 std::map<std::string, std::unique_ptr<Model>> ModelManager::models_;
 
 // シングルトンインスタンス取得
 ModelManager* ModelManager::GetInstance() {
-    if (!instance_) {
-        instance_ = new ModelManager();
-    }
-    return instance_;
+    static ModelManager instance;
+    return &instance;
 }
 
 void ModelManager::Initialize(DirectXCommon* dxCommon) {
@@ -24,12 +21,13 @@ Model* ModelManager::LoadModel(const std::string& modelName) {
         // 読み込み済みなら早期リターン
         return nullptr;
     }
-    Model* model = new Model();
+    std::unique_ptr<Model> model = std::make_unique<Model>();
     model->CreateModel(modelName);
+    Model* modelPtr = model.get();
     // モデルをmapコンテナに格納する
     models_.insert(std::make_pair(modelName, std::move(model)));
 
-    return model;
+    return modelPtr;
 }
 
 
@@ -77,6 +75,4 @@ Model* ModelManager::FindModel(const std::string& modelName) {
 void ModelManager::Finalize() {
     models_.clear(); // モデルデータを解放
     modelCommon.reset(); // ModelCommonを解放
-    delete instance_;
-    instance_ = nullptr; // インスタンスをnullptrにする
 }

@@ -27,7 +27,6 @@ private:
     };
 
 private:
-    static TextureManager* instance;
     TextureManager()                                 = default;
     ~TextureManager()                                = default;
     // コピー禁止

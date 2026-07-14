@@ -102,32 +102,30 @@ int Audio::LoadWaveFile(const std::string& fullPath) {
 
     // Dataチャンクの読み込み
     ChunkHeader chunk;
-    char* pBuffer   = nullptr;
-    size_t dataSize = 0;
+    std::vector<BYTE> buffer;
 
     while (file.read((char*)&chunk, sizeof(chunk))) {
         if (strncmp(chunk.id, "data", 4) == 0) {
             // 波形データの読み込み
-            pBuffer = new char[chunk.size];
-            file.read(pBuffer, chunk.size);
-            dataSize = chunk.size;
+            buffer.resize(chunk.size);
+            file.read(reinterpret_cast<char*>(buffer.data()), chunk.size);
             break;
         } else {
             // その他チャンクをスキップ
             file.seekg(chunk.size, std::ios_base::cur);
         }
     }
-    assert(pBuffer != nullptr && dataSize > 0);
+    assert(!buffer.empty());
     file.close();
 
     // 読み込んだ音声データを保存
     SoundData soundData  = {};
     soundData.wfex       = format.fmt;
-    soundData.pBuffer    = reinterpret_cast<BYTE*>(pBuffer);
-    soundData.bufferSize = int(dataSize);
+    soundData.bufferSize = int(buffer.size());
+    soundData.buffer     = std::move(buffer);
 
     // soundDatas_に追加
-    soundDatas_.push_back(soundData);
+    soundDatas_.push_back(std::move(soundData));
     int index = int(soundDatas_.size()) - 1;
 
     // ファイル名とインデックスをマップに保存
@@ -143,13 +141,12 @@ int Audio::LoadMP3File(const std::string& fullPath) {
 
     // ファイルパスをワイド文字列に変換
     int wchars_num = MultiByteToWideChar(CP_UTF8, 0, fullPath.c_str(), -1, NULL, 0);
-    wchar_t* wstr  = new wchar_t[wchars_num];
-    MultiByteToWideChar(CP_UTF8, 0, fullPath.c_str(), -1, wstr, wchars_num);
+    std::vector<wchar_t> wstr(wchars_num);
+    MultiByteToWideChar(CP_UTF8, 0, fullPath.c_str(), -1, wstr.data(), wchars_num);
 
     // SourceReaderの作成
     Microsoft::WRL::ComPtr<IMFSourceReader> pReader;
-    hr = MFCreateSourceReaderFromURL(wstr, NULL, &pReader);
-    delete[] wstr;
+    hr = MFCreateSourceReaderFromURL(wstr.data(), NULL, &pReader);
     assert(SUCCEEDED(hr));
 
     // PCMフォーマットを設定
@@ -216,18 +213,14 @@ int Audio::LoadMP3File(const std::string& fullPath) {
         hr = pBuffer->Unlock();
     }
 
-    // バッファにコピー
-    BYTE* pBuffer = new BYTE[audioData.size()];
-    memcpy(pBuffer, audioData.data(), audioData.size());
-
     // 読み込んだ音声データを保存
     SoundData soundData  = {};
     soundData.wfex       = wfex;
-    soundData.pBuffer    = pBuffer;
     soundData.bufferSize = int(audioData.size());
+    soundData.buffer     = std::move(audioData);
 
     // soundDatas_に追加
-    soundDatas_.push_back(soundData);
+    soundDatas_.push_back(std::move(soundData));
     int index = int(soundDatas_.size()) - 1;
 
     // ファイル名とインデックスをマップに保存
@@ -292,7 +285,7 @@ void Audio::PlayForID(int soundId, float volume) {
     assert(SUCCEEDED(result));
 
     XAUDIO2_BUFFER buf{};
-    buf.pAudioData = soundData.pBuffer;
+    buf.pAudioData = soundData.buffer.data();
     buf.AudioBytes = soundData.bufferSize;
     buf.Flags      = XAUDIO2_END_OF_STREAM;
 
@@ -316,8 +309,8 @@ std::vector<std::string> Audio::GetAvailableSoundNames() const {
 void Audio::Unload(int soundId) {
     if (soundId >= 0 && soundId < soundDatas_.size()) {
         SoundData& soundData = soundDatas_[soundId];
-        delete[] soundData.pBuffer;
-        soundData.pBuffer    = nullptr;
+        soundData.buffer.clear();
+        soundData.buffer.shrink_to_fit();
         soundData.bufferSize = 0;
         soundData.wfex       = {};
     }
@@ -330,10 +323,6 @@ void Audio::Finalize() {
     }
     xAudio2_.Reset();
 
-    for (auto& soundData : soundDatas_) {
-        delete[] soundData.pBuffer;
-        soundData.pBuffer = nullptr;
-    }
     soundDatas_.clear();
 
     if (isMediaFoundationInitialized_) {

@@ -35,8 +35,8 @@ public:
     struct SoundData {
         // 波形フォーマット
         WAVEFORMATEX wfex;
-        // バッファの先頭アドレス
-        BYTE* pBuffer;
+        // 波形データ
+        std::vector<BYTE> buffer;
         // バッファのサイズ
         unsigned int bufferSize;
     };

@@ -48,7 +48,6 @@ public:
     void Finalize(); //< 終了処理
 
 private:
-    static ModelManager* instance_;
     static std::map<std::string, std::unique_ptr<Model>> models_;
     std::unique_ptr<ModelCommon> modelCommon = nullptr;
 };

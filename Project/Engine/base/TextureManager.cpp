@@ -11,14 +11,10 @@ using namespace KetaEngine;
 #include <d3dx12.h>
 #include <stdexcept>
 
-TextureManager* TextureManager::instance = nullptr;
-
 // インスタンス取得
 TextureManager* TextureManager::GetInstance() {
-    if (instance == nullptr) {
-        instance = new TextureManager;
-    }
-    return instance;
+    static TextureManager instance;
+    return &instance;
 }
 
 void TextureManager::Init(DirectXCommon* dxCommon, SrvManager* srvManager) {
@@ -257,8 +253,6 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(const std::string& f
 }
 
 void TextureManager::Finalize() {
-    delete instance;
-    instance       = nullptr;
     directXCommon_ = nullptr;
     pSrvManager_   = nullptr;
 }
