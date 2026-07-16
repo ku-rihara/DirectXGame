@@ -15,9 +15,9 @@ struct CameraForGPU {
     Vector3 worldPosition_;
 };
 
-struct PlayerOcclusionData {
-    Vector2 screenPos; // プレイヤーのスクリーン座標
-    float depth; // プレイヤーの深度値
+struct DitherOcclusionData {
+    Vector2 screenPos; // 対象のスクリーン座標
+    float depth; // 対象の深度値
     float screenRadius; // 判定半径
     float ditherAlpha; // ディザ閾値
     int32_t enabled; // 有効フラグ
@@ -71,9 +71,9 @@ public:
     void SetWorldCameraPos(const Vector3& pos);
 
     /// <summary>
-    /// プレイヤーオクルージョンデータを設定
+    /// ディザオクルージョンデータを設定
     /// </summary>
-    void SetPlayerOcclusion(const PlayerOcclusionData& data);
+    void SetDitherOcclusion(const DitherOcclusionData& data);
 
     /// <summary>
     /// スポットライトを削除
@@ -114,9 +114,9 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
     CameraForGPU* cameraForGPUData_;
 
-    // プレイヤーオクルージョン
-    Microsoft::WRL::ComPtr<ID3D12Resource> playerOcclusionResource_;
-    PlayerOcclusionData* playerOcclusionData_;
+    // ディザオクルージョン
+    Microsoft::WRL::ComPtr<ID3D12Resource> ditherOcclusionResource_;
+    DitherOcclusionData* ditherOcclusionData_;
 
     // LightsData
     Microsoft::WRL::ComPtr<ID3D12Resource> lightCountResource_;

@@ -59,6 +59,11 @@ void EnemyDamageReactionSlammed::UpdatePhase() {
 
     // 終了判定
     if (IsReactionFinished()) {
+        // HPが0の場合は起き上がらず爆散して死亡へ
+        if (TryTransitionToExplosiveDeath()) {
+            return;
+        }
+
         OnReactionEnd();
         currentPhase_ = [this]() {
             GetUpPhase();

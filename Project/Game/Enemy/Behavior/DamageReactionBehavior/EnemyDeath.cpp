@@ -10,10 +10,14 @@
 ///=========================================================
 /// 初期化
 ///=========================================================
-EnemyDeath::EnemyDeath(BaseEnemy* boss)
+EnemyDeath::EnemyDeath(BaseEnemy* boss, bool startFromBurst)
     : BaseEnemyDamageReaction("EnemyDeath", boss) {
 
-    step_ = Step::DIRECTIONSET;
+    if (startFromBurst) {
+        step_ = Step::BURST;
+    } else {
+        step_ = Step::DIRECTIONSET;
+    }
     SetUpSteps();
 }
 

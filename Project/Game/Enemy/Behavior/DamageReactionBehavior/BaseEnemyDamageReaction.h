@@ -20,6 +20,13 @@ public:
     virtual bool CanBeInterruptedByNewHit() const { return true; }
 
 protected:
+    /// <summary>
+    /// HPが0の場合、死亡Behaviorへ移行する
+    /// </summary>
+    /// <returns>移行した場合はtrue</returns>
+    bool TryTransitionToExplosiveDeath();
+
+protected:
     // 振る舞い名
     std::string name_;
     // 敵ポインタ

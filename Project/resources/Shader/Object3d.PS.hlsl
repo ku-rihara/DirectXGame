@@ -45,7 +45,7 @@ struct LightCountData
     int spotLightCount;
 };
 
-struct PlayerOcclusion
+struct DitherOcclusion
 {
     float2 screenPos;    
     float  depth;        
@@ -62,7 +62,7 @@ ConstantBuffer<Camera> gCamera : register(b2);
 ConstantBuffer<AreaLight> gAreaLight : register(b3);
 ConstantBuffer<AmbientLight> gAmbientLight : register(b4);
 ConstantBuffer<LightCountData> gLightCountData : register(b5);
-ConstantBuffer<PlayerOcclusion> gPlayerOcclusion : register(b6);
+ConstantBuffer<DitherOcclusion> gDitherOcclusion : register(b6);
 
 
 PixelShaderOutput main(VertexShaderOutput input)
@@ -74,16 +74,16 @@ PixelShaderOutput main(VertexShaderOutput input)
 
     // スクリーンスペース ディザ抜き処理
     //対象オブジェクトより手前にある場合のみ適用
-    if (gMaterial.enableDither != 0 && gPlayerOcclusion.enabled != 0)
+    if (gMaterial.enableDither != 0 && gDitherOcclusion.enabled != 0)
     {
-        if (input.position.z < gPlayerOcclusion.depth)
+        if (input.position.z < gDitherOcclusion.depth)
         {
-            float2 diff = input.position.xy - gPlayerOcclusion.screenPos;
+            float2 diff = input.position.xy - gDitherOcclusion.screenPos;
             float  dist = length(diff);
 
             // 距離に応じて ditherAlpha を中心→外周でグラデーション
-            float t = saturate(dist / gPlayerOcclusion.screenRadius);
-            float effectiveAlpha = lerp(gPlayerOcclusion.ditherAlpha, 1.0f, t);
+            float t = saturate(dist / gDitherOcclusion.screenRadius);
+            float effectiveAlpha = lerp(gDitherOcclusion.ditherAlpha, 1.0f, t);
 
             // Bayer 4x4 オーダードディザリング行列
             static const float bayerMatrix[16] = {

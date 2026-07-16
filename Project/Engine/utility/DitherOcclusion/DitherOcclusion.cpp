@@ -25,11 +25,11 @@ void DitherOcclusion::Add(ModelMaterial* material) {
 
 void DitherOcclusion::Update(
     const ViewProjection& vp,
-    const Vector3& playerWorldPos) {
-    PlayerOcclusionData data{};
+    const Vector3& targetWorldPos) {
+    DitherOcclusionData data{};
 
     // ワールド座標をスクリーン座標に変換
-    const Vector3 screen = ScreenTransformWithDepth(playerWorldPos, vp);
+    const Vector3 screen = ScreenTransformWithDepth(targetWorldPos, vp);
 
     if (screen.z >= 0.0f && screen.z <= 1.0f) {
         data.screenPos.x  = screen.x;
@@ -42,7 +42,7 @@ void DitherOcclusion::Update(
         data.enabled = 0;
     }
 
-    Light::GetInstance()->SetPlayerOcclusion(data);
+    Light::GetInstance()->SetDitherOcclusion(data);
 }
 
 void DitherOcclusion::RegisterParams() {

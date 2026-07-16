@@ -61,8 +61,7 @@ private:
     /// <summary>
     /// ライトの向き設定
     /// </summary>
-    /// <param name="lightDirection">ライト方向</param>
-    void SetLightOrientation(const Vector3& lightDirection);
+    void SetLightOrientation();
 
     /// <summary>
     /// リソース状態遷移

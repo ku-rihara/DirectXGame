@@ -94,23 +94,23 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
     // ダメージを受ける
     pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
 
-    if (pBaseEnemy_->GetHP() <= 0.0f) {
-        // 死亡リアクションに変更
+    // blowYPowerでリアクション種別を自動判定
+    float blowYPower = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
+
+    if (blowYPower > 0.0f) {
+        // 致死打でもTakeUpperは最後まで再生し、リアクション終了時に爆散する
+        pBaseEnemy_->ChangeDamageReactionBehavior(
+            std::make_unique<EnemyDamageReactionTakeUpper>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+    } else if (blowYPower < 0.0f) {
+        // 致死打でもSlammedは最後まで再生し、リアクション終了時に爆散する
+        pBaseEnemy_->ChangeDamageReactionBehavior(
+            std::make_unique<EnemyDamageReactionSlammed>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+    } else if (pBaseEnemy_->GetHP() <= 0.0f) {
+        // Normalの致死打は従来通り即座に死亡リアクションへ
         ChangeDeathReaction();
     } else {
-        // blowYPowerでリアクション種別を自動判定
-        float blowYPower = pPlayerCollisionInfo_->GetComboAttackData()->GetAttackParam().blowYPower;
-
-        if (blowYPower > 0.0f) {
-            pBaseEnemy_->ChangeDamageReactionBehavior(
-                std::make_unique<EnemyDamageReactionTakeUpper>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
-        } else if (blowYPower < 0.0f) {
-            pBaseEnemy_->ChangeDamageReactionBehavior(
-                std::make_unique<EnemyDamageReactionSlammed>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
-        } else {
-            pBaseEnemy_->ChangeDamageReactionBehavior(
-                std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_, skipAnimation_));
-        }
+        pBaseEnemy_->ChangeDamageReactionBehavior(
+            std::make_unique<EnemyDamageReactionNormal>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_, skipAnimation_));
     }
 }
 

@@ -6,7 +6,8 @@
 
 class EnemyDeath : public BaseEnemyDamageReaction {
 public:
-    EnemyDeath(BaseEnemy* boss);
+   
+    EnemyDeath(BaseEnemy* boss, bool startFromBurst = false);
     ~EnemyDeath();
     void AngleCaluclation();
 

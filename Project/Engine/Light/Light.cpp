@@ -31,11 +31,11 @@ void Light::Init(DirectXCommon* dxCommon) {
     cameraForGPUData_ = nullptr;
     cameraForGPUResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPUData_));
 
-    // プレイヤーオクルージョン
-    playerOcclusionResource_ = DirectXCommon::GetInstance()->CreateBufferResource(dxCommon_->GetDevice(), sizeof(PlayerOcclusionData));
-    playerOcclusionData_ = nullptr;
-    playerOcclusionResource_->Map(0, nullptr, reinterpret_cast<void**>(&playerOcclusionData_));
-    playerOcclusionData_->enabled = 0;
+    // ディザオクルージョン
+    ditherOcclusionResource_ = DirectXCommon::GetInstance()->CreateBufferResource(dxCommon_->GetDevice(), sizeof(DitherOcclusionData));
+    ditherOcclusionData_ = nullptr;
+    ditherOcclusionResource_->Map(0, nullptr, reinterpret_cast<void**>(&ditherOcclusionData_));
+    ditherOcclusionData_->enabled = 0;
 
     // ライトカウント
     lightCountResource_ = DirectXCommon::GetInstance()->CreateBufferResource(dxCommon_->GetDevice(), sizeof(LightCountData));
@@ -48,29 +48,36 @@ void Light::Init(DirectXCommon* dxCommon) {
 }
 
 void Light::Update() {
+    // ライトの更新処理
     spotLightManager_->Update();
     spotLightCountMax_ = int32_t(spotLightManager_->GetLightCount());
 }
 
 void Light::InitAllLights() {
 
+    // ディレクショナルライト初期化
     directionalLight_ = std::make_unique<DirectionalLight>();
     directionalLight_->Init(dxCommon_->GetDevice().Get());
 
+    // ポイントライト初期化
     pointLightManager_ = std::make_unique<PointLightManager>();
     pointLightManager_->Init(dxCommon_->GetDevice().Get());
 
+    // スポットライト初期化
     spotLightManager_ = std::make_unique<SpotLightManager>();
     spotLightManager_->Init(dxCommon_->GetDevice().Get());
 
+    // エリアライト初期化
     areaLightManager_ = std::make_unique<AreaLightManager>();
     ambientLight_     = std::make_unique<AmbientLight>();
     ambientLight_->Init(dxCommon_->GetDevice().Get());
 
+    // ライトカウント初期化
     for (int32_t i = 0; i < 5; ++i) {
         AddSpotLight();
     }
 
+    // ライトカウント初期化
     AddPointLight();
     areaLightManager_->Add(dxCommon_->GetDevice().Get());
 }
@@ -121,15 +128,15 @@ void Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {
     spotLightManager_->SetLightCommand(commandList);
     areaLightManager_->SetLightCommand(commandList);
     ambientLight_->SetLightCommand(commandList);
-    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Object3DRootParameter::PlayerOcclusion), playerOcclusionResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(static_cast<UINT>(Object3DRootParameter::DitherOcclusion), ditherOcclusionResource_->GetGPUVirtualAddress());
 }
 
 void Light::SetWorldCameraPos(const Vector3& pos) {
     cameraForGPUData_->worldPosition_ = pos;
 }
 
-void Light::SetPlayerOcclusion(const PlayerOcclusionData& data) {
-    *playerOcclusionData_ = data;
+void Light::SetDitherOcclusion(const DitherOcclusionData& data) {
+    *ditherOcclusionData_ = data;
 }
 
 void Light::AddSpotLight() {
@@ -144,8 +151,8 @@ void Light::AddPointLight() {
 }
 
 void Light::RemoveSpotLight(int num) {
-    pointLightManager_->Remove(num);
-    lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
+    spotLightManager_->Remove(num);
+    lightCountData_->spotLightCount = int(spotLightManager_->GetLightCount());
 }
 void Light::RemovePointLight(int num) {
     pointLightManager_->Remove(num);
@@ -160,6 +167,6 @@ void Light::Finalize() {
     ambientLight_.reset();
 
     cameraForGPUResource_.Reset();
-    playerOcclusionResource_.Reset();
+    ditherOcclusionResource_.Reset();
     lightCountResource_.Reset();
 }

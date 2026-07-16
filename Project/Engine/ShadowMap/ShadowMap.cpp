@@ -139,7 +139,7 @@ void ShadowMap::UpdateLightMatrix() {
     Vector3 lightDirection = GetLightDirectionAndPosition();
 
     // ライトの向きを設定
-    SetLightOrientation(lightDirection);
+    SetLightOrientation();
 
     // ViewProjectionの行列を更新
     lightViewProjection_->UpdateMatrix();
@@ -172,11 +172,10 @@ void ShadowMap::TransitionResourceState(ID3D12GraphicsCommandList* commandList, 
     }
 }
 
-void ShadowMap::SetLightOrientation(const Vector3& lightDirection) {
+void ShadowMap::SetLightOrientation() {
     // ライトがターゲットを向くための回転を計算
     Vector3 forward = (targetPos_ - lightViewProjection_->translation_).Normalize();
 
-    lightDirection;
     lightViewProjection_->rotation_.y = atan2f(forward.x, forward.z);
     lightViewProjection_->rotation_.x = -asinf(forward.y);
     lightViewProjection_->rotation_.z = 0.0f;

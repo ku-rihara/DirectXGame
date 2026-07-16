@@ -158,10 +158,10 @@ void Object3DPipeline::CreateRootSignature() {
     rootParameters[static_cast<UINT>(Object3DRootParameter::Dissolve)].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
     rootParameters[static_cast<UINT>(Object3DRootParameter::Dissolve)].DescriptorTable.NumDescriptorRanges = 1;
 
-    // PlayerOcclusion (b6, Pixel)
-    rootParameters[static_cast<UINT>(Object3DRootParameter::PlayerOcclusion)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[static_cast<UINT>(Object3DRootParameter::PlayerOcclusion)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[static_cast<UINT>(Object3DRootParameter::PlayerOcclusion)].Descriptor.ShaderRegister = 6;
+    // DitherOcclusion (b6, Pixel)
+    rootParameters[static_cast<UINT>(Object3DRootParameter::DitherOcclusion)].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::DitherOcclusion)].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[static_cast<UINT>(Object3DRootParameter::DitherOcclusion)].Descriptor.ShaderRegister = 6;
 
     descriptionRootSignature.pParameters   = rootParameters;
     descriptionRootSignature.NumParameters = static_cast<UINT>(Object3DRootParameter::Count);

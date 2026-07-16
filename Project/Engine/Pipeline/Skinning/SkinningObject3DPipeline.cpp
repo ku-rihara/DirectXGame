@@ -158,7 +158,7 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[13].DescriptorTable.pDescriptorRanges   = &descriptorRange[6];
     rootParameters[13].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 14: PlayerOcclusion (b6, Pixel)
+    // 14: DitherOcclusion (b6, Pixel)
     rootParameters[14].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[14].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[14].Descriptor.ShaderRegister = 6;

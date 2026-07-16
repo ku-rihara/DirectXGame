@@ -26,7 +26,7 @@ enum class Object3DRootParameter : UINT{
     ShadowMap,
     LightTransform,
     Dissolve,
-    PlayerOcclusion,
+    DitherOcclusion,
     Count
 };
 
