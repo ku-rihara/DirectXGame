@@ -47,7 +47,7 @@ void Mesh::CreateVertexResource() {
     vertexBufferView_ = {};
     // リソースの先頭アドレスから使う
     vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-    // 使用するリソースのサイズは頂点3つ分のサイズ
+    // 使用するリソースのサイズは頂点分のサイズ
     vertexBufferView_.SizeInBytes = sizeof(VertexData) * vertexNum_;
     // 頂点当たりのサイズ
     vertexBufferView_.StrideInBytes = sizeof(VertexData);

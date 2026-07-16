@@ -20,14 +20,17 @@ public:
     PlayerComboAttackTimeline()  = default;
     ~PlayerComboAttackTimeline() = default;
 
+    // 初期化、更新、UI描画
     void Init(PlayerComboAttackData* attackData, AttackTimelinePhase phase = AttackTimelinePhase::MAIN);
     void Update(float deltaTime);
     void Draw();
+
+    // パラメータ適用、分岐トラック再構築
     void ApplyToParameters();
     void RebuildBranchTracks();
-    void SetEffectEditorSuite(KetaEngine::EffectEditorSuite* suite);
 
 private:
+    // キーフレーム・トラックのコールバック設定
     void SetupKeyFrameCallbacks();
     void SetupTrackCallbacks();
 
@@ -47,4 +50,7 @@ private:
 public:
     // Getter
     KetaEngine::TimelineDrawer* GetTimeline();
+
+    // Setter
+    void SetEffectEditorSuite(KetaEngine::EffectEditorSuite* suite);
 };

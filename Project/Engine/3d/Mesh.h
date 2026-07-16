@@ -1,11 +1,8 @@
 #pragma once
 #include "Base/Material/BaseMaterial.h"
-#include "Base/Material/MeshMaterial.h"
-#include "Base/Material/ParticleMaterial.h"
 #include "GPUData/VertexData.h"
 #include <cstdint>
 #include <d3d12.h>
-#include <dxgi1_6.h>
 #include <optional>
 #include <wrl.h>
 

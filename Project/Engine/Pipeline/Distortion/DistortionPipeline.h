@@ -10,18 +10,18 @@ enum class DistortionMode { Ribbon, Particle };
 
 /// RibbonTrail 歪みパス用ルートパラメータ
 enum class DistortionRibbonRootParam : UINT {
-    TransformationMatrix, // b0 (VS) - ビュープロジェクション行列
-    DistortionUVScroll,   // b1 (VS) - 歪みテクスチャUVスクロール
-    DistortionParam,      // b0 (PS) - 歪み強度
-    DistortionMap,        // t0 (PS) - ノイズ/法線テクスチャ
+    TransformationMatrix, //  ビュープロジェクション行列
+    DistortionUVScroll,   //  歪みテクスチャUVスクロール
+    DistortionParam,      //  歪み強度
+    DistortionMap,        //  ノイズ/法線テクスチャ
     Count
 };
 
 /// CPUParticle 歪みパス用ルートパラメータ
 enum class DistortionParticleRootParam : UINT {
-    ParticleData,    // t0 (VS) - インスタンシングデータ
-    DistortionParam, // b0 (PS) - 歪み強度
-    DistortionMap,   // t0 (PS) - ノイズテクスチャ
+    ParticleData,    //  インスタンシングデータ
+    DistortionParam, //  歪み強度
+    DistortionMap,   //  ノイズテクスチャ
     Count
 };
 
@@ -34,14 +34,20 @@ public:
     ~DistortionPipeline() = default;
 
     void Init(DirectXCommon* dxCommon) override;
+
+    // 描画前処理、ブレンド設定処理
     void PreDraw(ID3D12GraphicsCommandList* commandList) override;
     void PreBlendSet(ID3D12GraphicsCommandList*, const BlendMode&) override;
 
 protected:
+
+    // ルートシグネチャ作成、グラフィックスパイプライン作成
     void CreateRootSignature() override;
     void CreateGraphicsPipeline() override;
 
 private:
+
+    // ルートシグネチャ作成、グラフィックスパイプライン作成
     void CreateRibbonRootSignature();
     void CreateParticleRootSignature();
     void CreateRibbonPipeline();

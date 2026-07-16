@@ -7,8 +7,6 @@
 /// Enemy
 #include "Enemy/EnemyManager/EnemyManager.h"
 #include "Enemy/Types/BaseEnemy.h"
-// Field
-#include "Field/SideRope/SideRope.h"
 // Player
 #include "Player/Components/CollisionBox/PlayerAttackCollider.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"

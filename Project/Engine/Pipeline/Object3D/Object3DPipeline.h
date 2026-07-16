@@ -3,8 +3,6 @@
 #include "../BasePipeline.h"
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Material/ModelMaterial.h"
-#include <d3dcommon.h>
-#include <dxcapi.h>
 #include <wrl/client.h>
 #include <Windows.h>
 
@@ -57,7 +55,7 @@ public:
     void PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) override;
 
 protected:
-    void CreateRootSignature() override; //< ルートシグネチャ作成
+    void CreateRootSignature() override;    //< ルートシグネチャ作成
     void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
 
 private:

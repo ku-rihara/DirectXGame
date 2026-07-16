@@ -239,7 +239,7 @@
         "scaleEaseParam.maxTime": 1.0,
         "scaleEaseParam.returnEaseTypeInt": 0,
         "scaleEaseParam.returnMaxTime": 0.0,
-        "selectedTexturePath": "Resources/EngineTexture/Particle/SmileEnemy.dds",
+        "selectedTexturePath": "Resources/EngineTexture/Particle/HeatBreak.dds",
         "sphereRadius.max": 0.0,
         "sphereRadius.min": 0.0,
         "targetApplyPos": true,
