@@ -10,6 +10,7 @@ void PlayerComboAttackTimeline::Init(PlayerComboAttackData* attackData, AttackTi
         return;
     }
 
+    // タイムラインを初期化
     timeline_.Init("AttackTimeline");
 
     // 各クラスの初期化

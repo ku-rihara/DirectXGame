@@ -41,7 +41,12 @@ public:
     int32_t CalculateTotalFrames() const;
 
 private:
-
+    // SetupDefaultTracksのサブ処理
+    void BuildCollisionTrack();
+    void BuildMoveEasingTrack();
+    void BuildFinishWaitTrack();
+    bool ShouldAddBranchTracks() const;
+    void BuildCancelAndPrecedeInputTracks(int32_t totalFrames);
 
     std::string GetButtonDisplayName(int32_t keyboardButton, int32_t gamepadButton);
 

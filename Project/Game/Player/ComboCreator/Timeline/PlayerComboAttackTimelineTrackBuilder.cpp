@@ -1,4 +1,3 @@
-#include <format>
 #include "PlayerComboAttackTimelineTrackBuilder.h"
 #include "../ComboBranchParameter.h"
 #include "../PlayerAttackRenditionData.h"
@@ -6,7 +5,7 @@
 #include "Frame/Frame.h"
 #include "Input/InputData.h"
 #include <algorithm>
-
+#include <format>
 
 void PlayerComboAttackTimelineTrackBuilder::Init(
     PlayerComboAttackData* attackData,
@@ -14,6 +13,7 @@ void PlayerComboAttackTimelineTrackBuilder::Init(
     PlayerComboAttackTimelineData* data,
     AttackTimelinePhase phase) {
 
+    // データの初期化
     attackData_     = attackData;
     timelineDrawer_ = timeline;
     data_           = data;
@@ -25,115 +25,138 @@ void PlayerComboAttackTimelineTrackBuilder::SetupDefaultTracks() {
         return;
     }
 
-    auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
-
     // 総フレーム数を計算して設定
     int32_t totalFrames = CalculateTotalFrames();
     timelineDrawer_->SetEndFrame(totalFrames);
 
-    // コライダートラック
-    {
-        int32_t trackIdx = timelineDrawer_->AddTrack("コライダー");
-        data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::COLLISION, trackIdx);
-
-        int32_t startFrame     = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.startTime);
-        int32_t durationFrames = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.adaptTime);
-        int32_t waitFrames     = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.loopWaitTime);
-        int32_t totalCount     = attackParam.collisionParam.loopNum + 1; // 初回 + ループ回数
-
-        for (int32_t i = 0; i < totalCount; ++i) {
-            int32_t kfFrame = startFrame + i * (durationFrames + waitFrames);
-            timelineDrawer_->AddKeyFrame(trackIdx, kfFrame, 1.0f,
-                static_cast<float>(durationFrames), "コライダー適用時間");
-
-            // 先頭以外のキーフレームは位置をロック
-            if (i > 0) {
-                auto& kf            = timelineDrawer_->GetTracks()[trackIdx].keyframes.back();
-                kf.isPositionLocked = true;
-            }
-        }
-    }
-
-    // 移動イージングトラック
-    {
-        int32_t trackIdx = timelineDrawer_->AddTrack("移動イージング");
-        data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING, trackIdx);
-
-        int32_t moveStartFrame = KetaEngine::Frame::TimeToFrame(attackParam.moveParam.startTime);
-        int32_t moveDuration   = KetaEngine::Frame::TimeToFrame(attackParam.moveParam.easeTime);
-
-        timelineDrawer_->AddKeyFrame(trackIdx, moveStartFrame, 1.0f,
-            static_cast<float>(moveDuration), "移動イージング時間");
-    }
-
-    // 終了待機時間トラック
-    {
-        int32_t trackIdx = timelineDrawer_->AddTrack("終了待機時間");
-        data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT, trackIdx);
-
-        int32_t collisionEndFrame = KetaEngine::Frame::TimeToFrame(
-            attackParam.collisionParam.startTime + attackParam.collisionParam.adaptTime);
-        int32_t moveEndFrame = KetaEngine::Frame::TimeToFrame(
-            attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset);
-        int32_t waitStartFrame = (std::max)(collisionEndFrame, moveEndFrame);
-
-        int32_t waitDuration = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.finishWaitTime);
-
-        timelineDrawer_->AddKeyFrame(trackIdx, waitStartFrame, 1.0f,
-            static_cast<float>(waitDuration), "終了待機時間");
-    }
+    // コリジョン、イージング、終了待機時間のトラック追加
+    BuildCollisionTrack();
+    BuildMoveEasingTrack();
+    BuildFinishWaitTrack();
 
     // totalFramesが0以下の場合は最小値を設定
     if (totalFrames <= 0) {
         totalFrames = 1;
     }
 
-    // 終了処理がある場合はFINISHフェーズ、ない場合はMAINフェーズに分岐トラックを配置
-    bool shouldAddBranchTracks =
-        (phase_ == AttackTimelinePhase::MAIN   && !attackData_->HasFinishPhase()) ||
-        (phase_ == AttackTimelinePhase::FINISH);
-    if (!shouldAddBranchTracks) {
+    if (!ShouldAddBranchTracks()) {
         return;
     }
 
+    // 先行入力とキャンセルフレームのトラックを追加
+    BuildCancelAndPrecedeInputTracks(totalFrames);
+}
+
+///  -------------------------------------------------------------------------
+///   トラック項目
+///  -------------------------------------------------------------------------
+void PlayerComboAttackTimelineTrackBuilder::BuildCollisionTrack() {
+    auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
+
+    int32_t trackIdx = timelineDrawer_->AddTrack("コライダー");
+    data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::COLLISION, trackIdx);
+
+    int32_t startFrame     = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.startTime);
+    int32_t durationFrames = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.adaptTime);
+    int32_t waitFrames     = KetaEngine::Frame::TimeToFrame(attackParam.collisionParam.loopWaitTime);
+    int32_t totalCount     = attackParam.collisionParam.loopNum + 1; // 初回 + ループ回数
+
+    for (int32_t i = 0; i < totalCount; ++i) {
+        int32_t kfFrame = startFrame + i * (durationFrames + waitFrames);
+        timelineDrawer_->AddKeyFrame(trackIdx, kfFrame, 1.0f,
+            static_cast<float>(durationFrames), "コライダー適用時間");
+
+        // 先頭以外のキーフレームは位置をロック
+        if (i > 0) {
+            auto& kf            = timelineDrawer_->GetTracks()[trackIdx].keyframes.back();
+            kf.isPositionLocked = true;
+        }
+    }
+}
+
+void PlayerComboAttackTimelineTrackBuilder::BuildMoveEasingTrack() {
+    auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
+
+    int32_t trackIdx = timelineDrawer_->AddTrack("移動イージング");
+    data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::MOVE_EASING, trackIdx);
+
+    int32_t moveStartFrame = KetaEngine::Frame::TimeToFrame(attackParam.moveParam.startTime);
+    int32_t moveDuration   = KetaEngine::Frame::TimeToFrame(attackParam.moveParam.easeTime);
+
+    timelineDrawer_->AddKeyFrame(trackIdx, moveStartFrame, 1.0f,
+        static_cast<float>(moveDuration), "移動イージング時間");
+}
+
+void PlayerComboAttackTimelineTrackBuilder::BuildFinishWaitTrack() {
+    auto& attackParam = attackData_->GetAttackParamForPhase(phase_);
+
+    // 終了待機時間のトラックを追加
+    int32_t trackIdx = timelineDrawer_->AddTrack("終了待機時間");
+    data_->SetDefaultTrackIndex(PlayerComboAttackTimelineData::DefaultTrack::FINISH_WAIT, trackIdx);
+
+    // 移動イージング、コリジョンの終了フレームを計算
+    int32_t collisionEndFrame = KetaEngine::Frame::TimeToFrame(
+        attackParam.collisionParam.startTime + attackParam.collisionParam.adaptTime);
+    int32_t moveEndFrame = KetaEngine::Frame::TimeToFrame(
+        attackParam.moveParam.startTime + attackParam.moveParam.easeTime + attackParam.moveParam.finishTimeOffset);
+
+    // 終了開始時間のフレームを計算
+    int32_t waitStartFrame = (std::max)(collisionEndFrame, moveEndFrame);
+
+    // 終了待機時間のフレーム数を計算
+    int32_t waitDuration = KetaEngine::Frame::TimeToFrame(attackParam.timingParam.finishWaitTime);
+
+    // 終了待機時間のキーフレームを追加
+    timelineDrawer_->AddKeyFrame(trackIdx, waitStartFrame, 1.0f,
+        static_cast<float>(waitDuration), "終了待機時間");
+}
+
+bool PlayerComboAttackTimelineTrackBuilder::ShouldAddBranchTracks() const {
+    // 終了処理がある場合はFINISHフェーズ、ない場合はMAINフェーズに分岐トラックを配置
+    return (phase_ == AttackTimelinePhase::MAIN && !attackData_->HasFinishPhase()) || (phase_ == AttackTimelinePhase::FINISH);
+}
+
+void PlayerComboAttackTimelineTrackBuilder::BuildCancelAndPrecedeInputTracks(int32_t totalFrames) {
     const auto& branches = attackData_->GetComboBranches();
+
+    // 分岐の数だけトラックを追加
     for (size_t i = 0; i < branches.size(); ++i) {
-        const auto& branch = branches[i];
+        // 分岐のトラック名を作成
+        const auto& branch     = branches[i];
         std::string buttonName = GetButtonDisplayName(branch->GetKeyboardButton(), branch->GetGamepadButton());
 
         // キャンセル開始トラック
-        {
-            std::string trackName = "キャンセル開始（" + buttonName + "）";
-            int32_t trackIdx = timelineDrawer_->AddTrack(trackName);
+        std::string cancelTrackName = "キャンセル開始（" + buttonName + "）";
+        int32_t cancelTrackIdx      = timelineDrawer_->AddTrack(cancelTrackName);
 
-            PlayerComboAttackTimelineData::TrackInfo info;
-            info.type = PlayerComboAttackTimelineData::TrackType::CANCEL_TIME;
-            info.trackIndex = trackIdx;
-            info.branchIndex = static_cast<int32_t>(i);
-            data_->AddTrackInfo(info);
+        // キャンセルトラックを追加
+        PlayerComboAttackTimelineData::TrackInfo cancelInfo;
+        cancelInfo.type        = PlayerComboAttackTimelineData::TrackType::CANCEL_TIME;
+        cancelInfo.trackIndex  = cancelTrackIdx;
+        cancelInfo.branchIndex = static_cast<int32_t>(i);
+        data_->AddTrackInfo(cancelInfo);
 
-            int32_t cancelFrame = KetaEngine::Frame::TimeToFrame(branch->GetCancelTime());
-            // durationが負にならないように
-            float duration = static_cast<float>((std::max)(0, totalFrames - cancelFrame));
-            timelineDrawer_->AddKeyFrame(trackIdx, cancelFrame, 1.0f, duration, "キャンセル可能範囲");
-        }
+        // キャンセルフレームの計算と、durationが負にならないようにmaxで調整
+        int32_t cancelFrame  = KetaEngine::Frame::TimeToFrame(branch->GetCancelTime());
+        float cancelDuration = static_cast<float>((std::max)(0, totalFrames - cancelFrame));
+        // キャンセル開始のキーフレームを追加
+        timelineDrawer_->AddKeyFrame(cancelTrackIdx, cancelFrame, 1.0f, cancelDuration, "キャンセル可能範囲");
 
         // 先行入力開始トラック
-        {
-            std::string trackName = "先行入力開始（" + buttonName + "）";
-            int32_t trackIdx = timelineDrawer_->AddTrack(trackName);
+        std::string precedeTrackName = "先行入力開始（" + buttonName + "）";
+        int32_t precedeTrackIdx      = timelineDrawer_->AddTrack(precedeTrackName);
 
-            PlayerComboAttackTimelineData::TrackInfo info;
-            info.type = PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT;
-            info.trackIndex = trackIdx;
-            info.branchIndex = static_cast<int32_t>(i);
-            data_->AddTrackInfo(info);
+        // 先行入力トラックを追加
+        PlayerComboAttackTimelineData::TrackInfo precedeInfo;
+        precedeInfo.type        = PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT;
+        precedeInfo.trackIndex  = precedeTrackIdx;
+        precedeInfo.branchIndex = static_cast<int32_t>(i);
+        data_->AddTrackInfo(precedeInfo);
 
-            int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(branch->GetPrecedeInputTime());
-            // durationが負にならないように
-            float duration = static_cast<float>((std::max)(0, totalFrames - precedeFrame));
-            timelineDrawer_->AddKeyFrame(trackIdx, precedeFrame, 1.0f, duration, "先行入力可能範囲");
-        }
+        int32_t precedeFrame = KetaEngine::Frame::TimeToFrame(branch->GetPrecedeInputTime());
+        // durationが負にならないように
+        float precedeDuration = static_cast<float>((std::max)(0, totalFrames - precedeFrame));
+        timelineDrawer_->AddKeyFrame(precedeTrackIdx, precedeFrame, 1.0f, precedeDuration, "先行入力可能範囲");
     }
 }
 
@@ -148,29 +171,40 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
     using TrackType = PlayerComboAttackTimelineData::TrackType;
 
     // RenditionData::Type → TrackType の正引きマッピング
-    struct RendToTrack { RendType rendType; TrackType trackType; TrackType trackTypeOnHit; };
+    struct RendToTrack {
+        RendType rendType;
+        TrackType trackType;
+        TrackType trackTypeOnHit;
+    };
     static constexpr RendToTrack kMapping[] = {
-        {RendType::CameraAction,   TrackType::CAMERA_ACTION,   TrackType::CAMERA_ACTION_ON_HIT},
-        {RendType::HitStop,        TrackType::HIT_STOP,        TrackType::HIT_STOP_ON_HIT},
-        {RendType::ShakeAction,    TrackType::SHAKE_ACTION,    TrackType::SHAKE_ACTION_ON_HIT},
-        {RendType::PostEffect,     TrackType::POST_EFFECT,     TrackType::POST_EFFECT_ON_HIT},
+        {RendType::CameraAction, TrackType::CAMERA_ACTION, TrackType::CAMERA_ACTION_ON_HIT},
+        {RendType::HitStop, TrackType::HIT_STOP, TrackType::HIT_STOP_ON_HIT},
+        {RendType::ShakeAction, TrackType::SHAKE_ACTION, TrackType::SHAKE_ACTION_ON_HIT},
+        {RendType::PostEffect, TrackType::POST_EFFECT, TrackType::POST_EFFECT_ON_HIT},
         {RendType::ParticleEffect, TrackType::PARTICLE_EFFECT, TrackType::PARTICLE_EFFECT_ON_HIT},
-        {RendType::AudioAttack,    TrackType::AUDIO_ATTACK,    TrackType::AUDIO_ATTACK_ON_HIT},
+        {RendType::AudioAttack, TrackType::AUDIO_ATTACK, TrackType::AUDIO_ATTACK_ON_HIT},
     };
 
-   // 同一fileName区間を1トラックにまとめる
+    // 同一fileName区間を1トラックにまとめる
     auto buildTracks = [this](const std::vector<PlayerAttackRenditionData::RenditionParam>& list,
-                               TrackType trackType, const std::string& trackName, bool isOnHit) {
+                           TrackType trackType, const std::string& trackName, bool isOnHit) {
+        // トラックを追加
         size_t i = 0;
+
+        // 追加するトラックのインデックスを保持
         while (i < list.size()) {
             const auto& first = list[i];
+
+            // ファイル名が空または"None"の場合はスキップ
             if (first.fileName.empty() || first.fileName == "None") {
                 ++i;
                 continue;
             }
 
+            // トラックを追加
             int32_t trackIdx = timelineDrawer_->AddTrack(trackName);
 
+            // トラック情報を作成
             PlayerComboAttackTimelineData::TrackInfo info;
             info.type           = trackType;
             info.trackIndex     = trackIdx;
@@ -180,6 +214,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
             info.repeatOnDamage = isOnHit ? first.repeatOnDamage : false;
             data_->AddTrackInfo(info);
 
+            // キーフレームを追加する
             size_t j = i;
             while (j < list.size() && list[j].fileName == first.fileName) {
                 int32_t frame = KetaEngine::Frame::TimeToFrame(list[j].startTiming);
@@ -190,41 +225,51 @@ void PlayerComboAttackTimelineTrackBuilder::SetupRenditionTracks() {
         }
     };
 
+    // RenditionDataのリストをトラックに変換
     for (const auto& m : kMapping) {
-        int32_t rendIdx    = static_cast<int32_t>(m.rendType);
-        std::string label  = PlayerAttackRenditionData::kRenditionTypeInfos[rendIdx].label;
 
+        // 通常時のトラックを作成
+        int32_t rendIdx   = static_cast<int32_t>(m.rendType);
+        std::string label = PlayerAttackRenditionData::kRenditionTypeInfos[rendIdx].label;
+
+        // 通常時とヒット時のそれぞれのトラックを作成
         buildTracks(renditionData.GetRenditionListFromType(m.rendType), m.trackType, label, false);
         buildTracks(renditionData.GetRenditionOnHitListFromType(m.rendType), m.trackTypeOnHit, label + " (ヒット時)", true);
     }
 }
 
 void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
-    if (!attackData_ || !timelineDrawer_ || !data_){
+    if (!attackData_ || !timelineDrawer_ || !data_) {
         return;
     }
 
+    // オブジェクトアニメーションのトラックを作成
     auto& renditionData = attackData_->GetRenditionDataForPhase(phase_);
 
+    // オブジェクトアニメーション種別ごとにトラックへ変換
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::Count); ++i) {
         const auto& list = renditionData.GetObjAnimationListFromIndex(i);
         bool isMainHead  = (i == static_cast<int32_t>(PlayerAttackRenditionData::ObjAnimationType::MainHead));
 
         std::string trackName = PlayerAttackRenditionData::kObjAnimationTypeInfos[i].label;
-        auto trackType = static_cast<PlayerComboAttackTimelineData::TrackType>(
+        auto trackType        = static_cast<PlayerComboAttackTimelineData::TrackType>(
             static_cast<int>(PlayerComboAttackTimelineData::TrackType::OBJ_ANIM_HEAD) + i);
 
-        // 同一fileNameが連続するエントリを1トラックの複数キーフレームとしてグルーピングして復元する
+        // 同一fileName区間を1トラックにまとめる
         size_t idx = 0;
         while (idx < list.size()) {
             const auto& first = list[idx];
+
+            // ファイル名が空または"None"の場合はスキップ
             if (first.fileName.empty() || first.fileName == "None") {
                 ++idx;
                 continue;
             }
 
+            // トラックを追加
             int32_t trackIdx = timelineDrawer_->AddTrack(trackName);
 
+            // トラック情報を作成
             PlayerComboAttackTimelineData::TrackInfo info;
             info.type          = trackType;
             info.trackIndex    = trackIdx;
@@ -232,6 +277,7 @@ void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
             info.trailFileName = first.trailFileName;
             data_->AddTrackInfo(info);
 
+            // キーフレームを追加する
             size_t j = idx;
             while (j < list.size() && list[j].fileName == first.fileName) {
                 int32_t frame = KetaEngine::Frame::TimeToFrame(list[j].startTiming);
@@ -241,18 +287,20 @@ void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
             idx = j;
         }
 
-        // MainHead追従トレイル: トレイルファイルが設定されている最初のエントリから1トラックだけ復元
+        // MainHead追従トレイル
         if (isMainHead) {
             for (const auto& param : list) {
                 if (!param.trailFileName.empty() && param.trailFileName != "None") {
                     int32_t trailTrackIdx = timelineDrawer_->AddTrack("MainHead追従トレイル");
 
+                    // トラック情報を作成
                     PlayerComboAttackTimelineData::TrackInfo trailInfo;
                     trailInfo.type       = PlayerComboAttackTimelineData::TrackType::RIBBON_TRAIL_MAIN_HEAD;
                     trailInfo.trackIndex = trailTrackIdx;
                     trailInfo.fileName   = param.trailFileName;
                     data_->AddTrackInfo(trailInfo);
 
+                    // キーフレームを追加する
                     timelineDrawer_->AddKeyFrame(trailTrackIdx, 0, 1.0f, 1.0f, "トレイル:" + param.trailFileName);
                     break;
                 }
@@ -262,7 +310,6 @@ void PlayerComboAttackTimelineTrackBuilder::SetupObjectAnimationTracks() {
 }
 
 void PlayerComboAttackTimelineTrackBuilder::SetupAudioTracks() {
-
 }
 
 void PlayerComboAttackTimelineTrackBuilder::SetupVibrationTrack() {
@@ -271,7 +318,6 @@ void PlayerComboAttackTimelineTrackBuilder::SetupVibrationTrack() {
 
     const auto& list = attackData_->GetRenditionDataForPhase(phase_).GetVibrationList();
 
-    // 強度/トリガー条件が同じ連続エントリを1トラックの複数キーフレームとしてグルーピングして復元する
     size_t idx = 0;
     while (idx < list.size()) {
         const auto& first = list[idx];
@@ -291,13 +337,11 @@ void PlayerComboAttackTimelineTrackBuilder::SetupVibrationTrack() {
         data_->AddTrackInfo(info);
 
         size_t j = idx;
-        while (j < list.size() &&
-               list[j].intensity == first.intensity &&
-               list[j].triggerByHit == first.triggerByHit &&
-               list[j].repeatOnDamage == first.repeatOnDamage) {
+        while (j < list.size() && list[j].intensity == first.intensity && list[j].triggerByHit == first.triggerByHit && list[j].repeatOnDamage == first.repeatOnDamage) {
             int32_t startFrame   = KetaEngine::Frame::TimeToFrame(list[j].startTiming);
             float durationFrames = static_cast<float>(KetaEngine::Frame::TimeToFrame(list[j].duration));
-            if (durationFrames < 1.0f) durationFrames = 1.0f;
+            if (durationFrames < 1.0f)
+                durationFrames = 1.0f;
 
             timelineDrawer_->AddKeyFrame(trackIdx, startFrame, list[j].intensity, durationFrames,
                 std::format("振動強度:{}", list[j].intensity));
@@ -314,8 +358,7 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
 
     // 終了処理がある場合はFINISHフェーズ、ない場合はMAINフェーズに分岐トラックを配置
     bool isTargetPhase =
-        (phase_ == AttackTimelinePhase::MAIN   && !attackData_->HasFinishPhase()) ||
-        (phase_ == AttackTimelinePhase::FINISH);
+        (phase_ == AttackTimelinePhase::MAIN && !attackData_->HasFinishPhase()) || (phase_ == AttackTimelinePhase::FINISH);
     if (!isTargetPhase) {
         return;
     }
@@ -324,8 +367,7 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
     std::vector<int32_t> trackIndicesToRemove;
     const auto& addedTracks = data_->GetAddedTracks();
     for (const auto& trackInfo : addedTracks) {
-        if (trackInfo.type == PlayerComboAttackTimelineData::TrackType::CANCEL_TIME ||
-            trackInfo.type == PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT) {
+        if (trackInfo.type == PlayerComboAttackTimelineData::TrackType::CANCEL_TIME || trackInfo.type == PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT) {
             trackIndicesToRemove.push_back(trackInfo.trackIndex);
         }
     }
@@ -383,11 +425,11 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
         // キャンセル開始トラック
         {
             std::string trackName = "キャンセル開始（" + buttonName + "）";
-            int32_t trackIdx = timelineDrawer_->InsertTrack(insertPosition, trackName);
+            int32_t trackIdx      = timelineDrawer_->InsertTrack(insertPosition, trackName);
 
             PlayerComboAttackTimelineData::TrackInfo info;
-            info.type = PlayerComboAttackTimelineData::TrackType::CANCEL_TIME;
-            info.trackIndex = trackIdx;
+            info.type        = PlayerComboAttackTimelineData::TrackType::CANCEL_TIME;
+            info.trackIndex  = trackIdx;
             info.branchIndex = static_cast<int32_t>(i);
             data_->AddTrackInfo(info);
 
@@ -403,11 +445,11 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
         // 先行入力開始トラック
         {
             std::string trackName = "先行入力開始（" + buttonName + "）";
-            int32_t trackIdx = timelineDrawer_->InsertTrack(insertPosition, trackName);
+            int32_t trackIdx      = timelineDrawer_->InsertTrack(insertPosition, trackName);
 
             PlayerComboAttackTimelineData::TrackInfo info;
-            info.type = PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT;
-            info.trackIndex = trackIdx;
+            info.type        = PlayerComboAttackTimelineData::TrackType::PRECEDE_INPUT;
+            info.trackIndex  = trackIdx;
             info.branchIndex = static_cast<int32_t>(i);
             data_->AddTrackInfo(info);
 
@@ -421,7 +463,7 @@ void PlayerComboAttackTimelineTrackBuilder::RebuildBranchTracks() {
         }
     }
 
-    // トラックインデックスの更新（挿入によりずれた分を調整）
+    // トラックインデックスの更新
     if (insertedCount > 0) {
         data_->UpdateTrackIndicesAfterInsert(finishWaitTrackIdx + 1, insertedCount);
     }
@@ -471,7 +513,7 @@ void PlayerComboAttackTimelineTrackBuilder::AddKeyFrameToTrack(int32_t trackInde
 
     // 直前のキーフレームの終端の後ろに新しいキーフレームを追加
     const auto& keyframes = timelineDrawer_->GetTracks()[trackIndex].keyframes;
-    int32_t newFrame = 0;
+    int32_t newFrame      = 0;
     for (const auto& kf : keyframes) {
         int32_t endFrame = kf.frame + static_cast<int32_t>(kf.duration);
         if (endFrame > newFrame) {
@@ -486,8 +528,8 @@ void PlayerComboAttackTimelineTrackBuilder::AddKeyFrameToTrack(int32_t trackInde
     }
 
     std::string label = (trackInfo && !trackInfo->fileName.empty())
-        ? "使用ファイル:" + trackInfo->fileName
-        : "ファイル未選択";
+                            ? "使用ファイル:" + trackInfo->fileName
+                            : "ファイル未選択";
     timelineDrawer_->AddKeyFrame(trackIndex, newFrame, 1.0f, 1.0f, label);
 }
 
@@ -511,8 +553,6 @@ int32_t PlayerComboAttackTimelineTrackBuilder::CalculateTotalFrames() const {
 
     return KetaEngine::Frame::TimeToFrame(totalTime);
 }
-
-
 
 // ボタン名取得用ヘルパー
 std::string PlayerComboAttackTimelineTrackBuilder::GetButtonDisplayName(int32_t keyboardButton, int32_t gamepadButton) {

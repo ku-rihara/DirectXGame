@@ -33,8 +33,7 @@ EnemyDamageReactionTakeUpper::EnemyDamageReactionTakeUpper(
 }
 
 EnemyDamageReactionTakeUpper::~EnemyDamageReactionTakeUpper() {
-    // GetUpフェーズのアニメーション終了コールバックは[this]をキャプチャしているため、
-    // デストラクタで必ずクリアし、ダングリングポインタアクセスを防ぐ
+  
     if (pBaseEnemy_ && pBaseEnemy_->GetAnimator()->GetAnimationObject()) {
         pBaseEnemy_->GetAnimator()->GetAnimationObject()->ClearAllAnimationEndCallbacks();
     }

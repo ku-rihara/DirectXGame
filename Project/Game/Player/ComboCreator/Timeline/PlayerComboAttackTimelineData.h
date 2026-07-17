@@ -56,15 +56,15 @@ public:
     struct TrackInfo {
         TrackType type;
         int32_t trackIndex;
-        int32_t branchIndex = -1;  // どの分岐のトラックか
+        int32_t branchIndex = -1;  
         std::string fileName;
-        std::string trailFileName; // トレイルプリセット名
+        std::string trailFileName; 
         bool isCameraReset = false;
         float volume       = 1.0f;
         // 振動トラック用
         float vibrationIntensity = 0.5f;
         bool triggerByHit        = false;
-        bool repeatOnDamage      = false;  // ダメージヒットごとに発動
+        bool repeatOnDamage      = false;  
     };
 
 public:
