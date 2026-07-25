@@ -72,7 +72,7 @@ public:
     struct TimingParam {
         float finishWaitTime;
         bool isAutoAdvance;
-        bool isSkipToFinishOnHit = false; // ヒット時に即終了処理へ移行
+        bool isSkipToFinishOnHit = false;
     };
 
     // 攻撃発動に関するパラメータ
@@ -92,8 +92,9 @@ public:
         float power;
         float blowYPower;
         bool isMotionOnly = false;
-        int32_t ableDefeatLevel = 0; 
-        bool isUnlocked = true;      
+        int32_t ableDefeatLevel = 0;
+        bool isUnlocked = true;
+        bool disableLockOnCameraFollow = false;
     };
 
 public:
