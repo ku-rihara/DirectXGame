@@ -1,4 +1,4 @@
-﻿#include <format>
+#include <format>
 #include "PlayerComboAttackData.h"
 #include "PlayerComboAttackController.h"
 // Easing
@@ -358,6 +358,7 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
     globalParameter_->Regist(groupName_, "blowYPower", &attackParam_.blowYPower);
     globalParameter_->Regist(groupName_, "isMotionOnly", &attackParam_.isMotionOnly);
+    globalParameter_->Regist(groupName_, "disableLockOnCameraFollow", &attackParam_.disableLockOnCameraFollow);
 
     // CollisionParam
     globalParameter_->Regist(groupName_, "CollisionRad", &attackParam_.collisionParam.sphereRad);
@@ -652,6 +653,7 @@ void PlayerComboAttackData::DrawFlagsParamUIForPhase(TimelinePhase phase) {
 
     if (phase == TimelinePhase::MAIN) {
         ImGui::Checkbox("ヒット時に終了処理へスキップ", &attackParam_.timingParam.isSkipToFinishOnHit);
+        ImGui::Checkbox("ロックオン中もカメラ追従しない", &attackParam_.disableLockOnCameraFollow);
 
         ImGui::SeparatorText("解放設定");
         ImGui::InputInt("解放に必要なレベル", &attackParam_.ableDefeatLevel);
@@ -665,7 +667,7 @@ void PlayerComboAttackData::DrawFlagsParamUIForPhase(TimelinePhase phase) {
 /// フェーズコントロールUI
 ///==========================================================
 void PlayerComboAttackData::DrawPhaseControls() {
-    // フェーズタブ（存在するフェーズのみ表示）
+    // フェーズタブ
     if (hasPrep_) {
         bool isPrep = (currentDisplayPhase_ == TimelinePhase::PREPARATION);
         if (ImGui::RadioButton("予備動作", isPrep)) {

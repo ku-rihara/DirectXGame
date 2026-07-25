@@ -58,6 +58,7 @@ void EngineCore::Initialize(const char* title, int windowWidth, int windowHeight
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);
 
+    // dsvManager
     dsvManager_ = DsvManager::GetInstance();
     dsvManager_->Init(directXCommon_);
 
@@ -75,6 +76,7 @@ void EngineCore::Initialize(const char* title, int windowWidth, int windowHeight
     csPipelineManager_ = CSPipelineManager::GetInstance();
     csPipelineManager_->Init(directXCommon_);
 
+    // ShadowMap
     shadowMap_ = ShadowMap::GetInstance();
     shadowMap_->Init(directXCommon_);
 
@@ -94,6 +96,7 @@ void EngineCore::Initialize(const char* title, int windowWidth, int windowHeight
     modelManager_ = ModelManager::GetInstance();
     modelManager_->Initialize(directXCommon_);
 
+    //  Light
     light_ = Light::GetInstance();
     light_->Init(directXCommon_);
 

@@ -98,20 +98,19 @@ void ComboAssistColumnScroller::ShiftColumnsForAttack(
 /// コンボリセット時のRow/Columnリセット
 ///==========================================================
 void ComboAssistColumnScroller::ResetShifts(ConditionUIData& currentData) {
-    // Rowリセットを先に行う（divColはカラムシフト後の座標で記録されているため、
-    // カラムを先に戻すと座標系がずれてしまう）
+    // Rowリセットを先に行う
     if (currentData.rowShiftAmount != 0) {
         int32_t branchRow = currentData.rowShiftAmount;
         int32_t divCol    = currentData.rowShiftDivergeCol;
         int32_t mainRow   = currentData.rowShiftMainRow;
-        int32_t delta     = branchRow - mainRow; // 正方向（復元用）
+        int32_t delta     = branchRow - mainRow; // 正方向
 
         ComboUIGroup& shiftedGroup = currentData.rowShiftIsXGroup
                                          ? currentData.xUIGroup
                                          : currentData.yUIGroup;
-        // Step1: 現在mainRowにいるbranch itemsをbranchRowへ戻す
+        //  現在mainRowにいるbranch itemsをbranchRowへ戻す
         ShiftGroupRows(shiftedGroup, mainRow, divCol, delta);
-        // Step2: 範囲外にいるmain items（row = mainRow-delta）をmainRowへ戻す
+        // 範囲外にいるmain itemsをmainRowへ戻す
         ShiftGroupRows(shiftedGroup, mainRow - delta, divCol, delta);
 
         currentData.rowShiftAmount     = 0;
@@ -119,7 +118,7 @@ void ComboAssistColumnScroller::ResetShifts(ConditionUIData& currentData) {
         currentData.rowShiftMainRow    = 0;
     }
 
-    // Columnリセット（rowリセット後に行うことで座標系が一致する）
+    // Columnリセット
     if (currentData.xUIGroup.columnShiftAmount != 0) {
         ShiftGroupColumns(currentData.xUIGroup, currentData.xUIGroup.columnShiftAmount);
     }
@@ -166,7 +165,7 @@ void ComboAssistColumnScroller::CheckRowShift(
         return;
     }
 
-    // このグループのmainRowを取得（col < divCol にいるmainButtonの行）
+    // このグループのmainRowを取得
     int32_t mainRow = 0;
     for (auto& btn : affectedGroup->mainButtonUIs) {
         if (btn->GetColumnNum() < divCol) {
@@ -177,9 +176,9 @@ void ComboAssistColumnScroller::CheckRowShift(
 
     const int32_t delta = mainRow - branchRow; // 負の値
 
-    // Step1: 競合するmain items（mainRow, col>=divCol）を範囲外へ
+    // 競合するmain itemsを範囲外へ
     ShiftGroupRows(*affectedGroup, mainRow, divCol, delta);
-    // Step2: branch items（branchRow, col>=divCol）をmainRowへ
+    // branch itemsをmainRowへ
     ShiftGroupRows(*affectedGroup, branchRow, divCol, delta);
 
     currentData.rowShiftAmount     = branchRow;

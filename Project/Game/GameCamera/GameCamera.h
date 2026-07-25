@@ -22,8 +22,9 @@ public:
     struct Parameter {
         InterpolationTime interpolationTime;
         Vector3 offsetPos;
-        float rotate;       // 見下ろし角度
-        float rotateYSpeed; // カメラY軸回転速度
+        float rotate;               // 見下ろし角度
+        float rotateYSpeed;         // カメラY軸回転速度
+        float lockOnFaceMinDistance; //カメラ追従可能な最低距離
     };
 
 public:
@@ -75,7 +76,8 @@ private:
     std::unique_ptr<BaseCameraBehavior> behavior_;
     const KetaEngine::WorldTransform* target_ = nullptr;
 
-    bool isInputEnabled_ = true; // 入力受付フラグ（イントロ中はfalse）
+    bool isInputEnabled_ = true; // 入力受付フラグ
+    bool isLockOnFollowEnabled_ = true; 
     Vector3 stickInput_;
     Vector3 interTarget_;     // 補間された注視点位置
     float destinationAngleY_; // 目標Y軸回転角
@@ -106,5 +108,8 @@ public:
 
     void SetInputEnabled(bool enabled) { isInputEnabled_ = enabled; }
     bool GetIsInputEnabled() const { return isInputEnabled_; }
+
+    void SetLockOnFollowEnabled(bool enabled) { isLockOnFollowEnabled_ = enabled; }
+    bool GetIsLockOnFollowEnabled() const { return isLockOnFollowEnabled_; }
     bool IsRenditionFinished() const { return rendition_ && rendition_->IsAnimationFinished(); }
 };

@@ -22,7 +22,7 @@ void SpriteMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     // 初期値をセット
     materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
     materialData_->uvTransform = MakeIdentity4x4();
-    materialData_->gaugeRate = 1.0f;
+    materialData_->disPlayRate = 1.0f;
 
 }
 

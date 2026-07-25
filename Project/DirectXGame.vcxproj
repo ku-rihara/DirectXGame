@@ -182,6 +182,7 @@
         <ClCompile Include="Engine\PostEffect\Outline.cpp"/>
         <ClCompile Include="Engine\PostEffect\PostEffectRenderer.cpp"/>
         <ClCompile Include="Engine\PostEffect\Distortion.cpp"/>
+        <ClCompile Include="Engine\PostEffect\DistortionManager.cpp"/>
         <ClCompile Include="Engine\PostEffect\DistortionRenderTarget.cpp"/>
         <ClCompile Include="Engine\PostEffect\RadialBlur.cpp"/>
         <ClCompile Include="Engine\PostEffect\RandomNoize.cpp"/>
@@ -549,6 +550,7 @@
         <ClInclude Include="Engine\PostEffect\Outline.h"/>
         <ClInclude Include="Engine\PostEffect\PostEffectRenderer.h"/>
         <ClInclude Include="Engine\PostEffect\Distortion.h"/>
+        <ClInclude Include="Engine\PostEffect\DistortionManager.h"/>
         <ClInclude Include="Engine\PostEffect\DistortionRenderTarget.h"/>
         <ClInclude Include="Engine\PostEffect\RadialBlur.h"/>
         <ClInclude Include="Engine\PostEffect\RandomNoize.h"/>

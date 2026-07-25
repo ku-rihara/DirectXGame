@@ -1,20 +1,24 @@
 #include "KTGame.h"
 
 using namespace KetaEngine;
-/// Scene
+// 2D
 #include "2D/SpriteRegistry.h"
-#include "3D/Object3D/Object3DRegistry.h"
+// 3D
 #include "3D/AnimationObject3D/AnimationRegistry.h"
-#include "PostEffect/PostEffectRenderer.h"
-#include "Scene/Factory/SceneFactory.h"
-#include "Particle/CPUParticle/ParticleManager.h"
 #include "3D/Line3D/Line3DManager.h"
+#include "3D/Object3D/Object3DRegistry.h"
 #include "3D/RibbonTrail/RibbonTrailManager.h"
-#include "Particle/GPUParticle/GPUParticleManager.h"
+// Base
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/WinApp.h"
-
-// utility
+// Particle
+#include "Particle/CPUParticle/ParticleManager.h"
+#include "Particle/GPUParticle/GPUParticleManager.h"
+// PostEffect
+#include "PostEffect/DistortionManager.h"
+#include "PostEffect/PostEffectRenderer.h"
+// Scene
+#include "Scene/Factory/SceneFactory.h"
 
 // =============================================================
 // 初期化処理
@@ -22,7 +26,8 @@ using namespace KetaEngine;
 void KTGame::Init() {
     KTFramework::Init();
 
-    RibbonTrailManager::GetInstance()->InitDistortion(
+    // 時空歪みの初期化
+    DistortionManager::GetInstance()->Init(
         DirectXCommon::GetInstance(),
         static_cast<uint32_t>(WinApp::kWindowWidth),
         static_cast<uint32_t>(WinApp::kWindowHeight));
@@ -33,7 +38,7 @@ void KTGame::Init() {
     // タイトルから始める
     pSceneManager_ = SceneManager::GetInstance();
     pSceneManager_->SetSceneFactory(sceneFactory_.get());
-  
+
     pSceneManager_->ChangeScene("TITLE");
 }
 
@@ -49,8 +54,7 @@ void KTGame::Update() {
 // =============================================================
 void KTGame::Draw() {
 
- 
-    const ViewProjection& viewProjection   = pSceneManager_->GetScene()->GetViewProjection();
+    const ViewProjection& viewProjection = pSceneManager_->GetScene()->GetViewProjection();
     // --------------------------------------------------------------------------
     /// SkyBox描画
     // --------------------------------------------------------------------------
@@ -60,7 +64,7 @@ void KTGame::Draw() {
     // --------------------------------------------------------------------------
     // モデル描画
     // --------------------------------------------------------------------------
-   
+
     // オブジェクト描画
     Object3DRegistry::GetInstance()->DrawAll(viewProjection);
     // アニメーション描画
@@ -74,10 +78,10 @@ void KTGame::Draw() {
     // リボントレイル描画
     RibbonTrailManager::GetInstance()->DrawAll(viewProjection);
     // 時空歪みパス
-    bool hasParticleDistortion = ParticleManager::GetInstance()->HasDistortionParticles();
-    RibbonTrailManager::GetInstance()->DrawDistortionPass(viewProjection, hasParticleDistortion);
+    DistortionManager::GetInstance()->BeginPass();
+    RibbonTrailManager::GetInstance()->DrawDistortionTrails(viewProjection);
     ParticleManager::GetInstance()->DrawDistortion(viewProjection);
-    RibbonTrailManager::GetInstance()->CloseDistortionPass();
+    DistortionManager::GetInstance()->EndPass();
 
     // --------------------------------------------------------------------------
     /// スプライト描画
@@ -111,7 +115,7 @@ void KTGame::DrawPostEffect() {
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
     PostEffectRenderer::GetInstance()->Draw(commandList);
-    RibbonTrailManager::GetInstance()->ApplyDistortionEffect(commandList);
+    DistortionManager::GetInstance()->ApplyEffect(commandList);
 }
 
 // =============================================================

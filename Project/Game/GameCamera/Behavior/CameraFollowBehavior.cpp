@@ -41,7 +41,7 @@ Vector2 CameraFollowBehavior::InputUpdate() {
         inputVector = KetaEngine::Input::GetPadStick(0, 1);
     }
 
-    // RSボタンでカメラリセット（Rキーはロックオントグルに変更）
+    // RSボタンでカメラリセット
     if (KetaEngine::Input::IsPressPad(0, GamepadButton::RS)) {
         isReset_ = true;
     }
@@ -60,33 +60,31 @@ void CameraFollowBehavior::MoveUpdate(float time) {
         currentTarget = lockOn->GetIsCurrentTarget();
     }
 
-    if (currentTarget && currentTarget != prevTarget_) {
-        // 新しいターゲットにロックオンした瞬間のみ、カメラをターゲットの方向へ向ける
+    if (currentTarget && pOwner_->GetIsLockOnFollowEnabled()) {
+        // ロックオン中は毎フレームターゲットの方向へ向け続ける
         const KetaEngine::WorldTransform* camTarget = pOwner_->GetTarget();
         if (camTarget) {
             Vector3 playerPos  = camTarget->GetWorldPos();
             Vector3 targetPos  = lockOn->GetCurrentTargetPosition();
             Vector3 toTarget   = targetPos - playerPos;
             toTarget.y         = 0.0f;
-            if (toTarget.Length() > 0.001f) {
+            // 一定距離未満では向きの更新を止める
+            if (toTarget.Length() > pOwner_->GetParameter().lockOnFaceMinDistance) {
                 float angle = std::atan2(toTarget.x, toTarget.z);
                 pOwner_->SetDestinationAngleY(angle);
             }
         }
-    } else {
-        // ロックオンの瞬間以外は手動操作を許可する
+    } else if (!currentTarget) {
+        // ロックオンしていない間は手動操作を許可する
         if (inputVector.Length() > 0.1f) {
             inputVector = inputVector.Normalize();
             pOwner_->AddDestinationAngleY(inputVector.x * pOwner_->GetParameter().rotateYSpeed * time);
         }
     }
-
-    // 次フレームの判定用にターゲットを保持
-    prevTarget_ = currentTarget;
-
-    //--------------------------- 回転、変位の適用 ---------------------------//
-    pOwner_->TranslateAdapt(); //< 変位適用
-    pOwner_->RotateAdapt();    //< 回転適用
+  
+    // 位置、回転適用
+    pOwner_->TranslateAdapt(); 
+    pOwner_->RotateAdapt();    
 }
 
 void CameraFollowBehavior::Debug() {

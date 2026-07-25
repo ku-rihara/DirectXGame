@@ -46,8 +46,7 @@ public:
 private:
     void RegisterParams();
     void UpdateBgPositions();
-    void UpdateConditionSprite();
-
+  
 private:
     ComboAssistController*       pComboAssist_     = nullptr;
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
@@ -56,10 +55,10 @@ private:
     // 背景スプライト×2
     std::array<std::unique_ptr<KetaEngine::Sprite>, static_cast<int32_t>(BgType::COUNT)> bgSprites_;
 
-    // 発動条件切替スプライト（UV横並び: GROUND左 | AIR右）
+    // 発動条件切替スプライト
     std::unique_ptr<KetaEngine::Sprite> conditionSprite_;
 
-    // 各スプライトのオフセット（basePositionからの相対位置）
+    // 各スプライトのオフセット
     std::array<Vector2, static_cast<int32_t>(BgType::COUNT)> bgOffsets_;
     Vector2 conditionOffset_;
 
@@ -68,5 +67,5 @@ private:
         "ComboSupportUI/ComboSupportBg.dds",
         "ComboSupportUI/ComboSupportBg.dds",
     };
-    static constexpr const char* kConditionTexture = "ComboSupportUI/ComboCondition.dds";
+   const std::string kConditionTexture = "ComboSupportUI/ComboCondition.dds";
 };

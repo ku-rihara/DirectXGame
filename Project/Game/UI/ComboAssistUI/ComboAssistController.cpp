@@ -1,11 +1,10 @@
 #include "ComboAssistController.h"
-#include "Scene/GameObj.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 #include "Input/InputData.h"
-#include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
+#include "Scene/GameObj.h"
 #include <imgui.h>
 
 ///==========================================================
@@ -70,20 +69,19 @@ void ComboAssistController::Update() {
     UpdateComboState();
     CheckToggleInput();
 
-    // 自動条件切替（プレイヤー状態：空中/ダッシュ/地上）
-    {
-        PlayerComboAttackData::TriggerCondition autoTarget;
-        if (conditionSwitcher_.CheckAutoConditionSwitch(isVisible_, pPlayer_, autoTarget)) {
-            conditionSwitcher_.SwitchCondition(autoTarget,
-                [&](ConditionUIData&, ConditionUIData& next) {
-                    ApplySlideOffset();
-                    uiBuilder_.ApplyToCondition(next, [](BaseComboAssistUI& ui) { ui.SnapToTarget(); });
-                    // isInRange_をfalseにリセットしてからUpdateConditionVisibilityでScaleInを発火
-                    uiBuilder_.ApplyToCondition(next, [](BaseComboAssistUI& ui) { ui.SnapRangeState(false); });
-                    visibilityController_.UpdateConditionVisibility(next);
-                    playedAttacks_.clear();
-                });
-        }
+    // 自動条件切替
+
+    PlayerComboAttackData::TriggerCondition autoTarget;
+    if (conditionSwitcher_.CheckAutoConditionSwitch(isVisible_, pPlayer_, autoTarget)) {
+        conditionSwitcher_.SwitchCondition(autoTarget,
+            [&](ConditionUIData&, ConditionUIData& next) {
+                ApplySlideOffset();
+                uiBuilder_.ApplyToCondition(next, [](BaseComboAssistUI& ui) { ui.SnapToTarget(); });
+                // isInRange_をfalseにリセットしてからUpdateConditionVisibilityでScaleInを発火
+                uiBuilder_.ApplyToCondition(next, [](BaseComboAssistUI& ui) { ui.SnapRangeState(false); });
+                visibilityController_.UpdateConditionVisibility(next);
+                playedAttacks_.clear();
+            });
     }
 
     UpdateSlide(KetaEngine::Frame::DeltaTime());
@@ -101,7 +99,6 @@ void ComboAssistController::Update() {
 
         visibilityController_.UpdateConditionVisibility(*currentData);
         uiBuilder_.ApplyToCondition(*currentData, [](BaseComboAssistUI& ui) { ui.Update(); });
-
     }
 }
 
@@ -290,9 +287,9 @@ void ComboAssistController::RegisterParams() {
     globalParameter_->Regist(groupName_, "arrowScale", &arrowScale_);
     globalParameter_->Regist(groupName_, "maxVisibleColumn", &maxVisibleColumn_);
     globalParameter_->Regist(groupName_, "maxVisibleRow", &maxVisibleRow_);
-    globalParameter_->Regist(groupName_, "remainCountOffset",       &remainCountOffset_);
+    globalParameter_->Regist(groupName_, "remainCountOffset", &remainCountOffset_);
     globalParameter_->Regist(groupName_, "remainCountDigitSpacing", &remainCountDigitSpacing_);
-    globalParameter_->Regist(groupName_, "remainCountScale",        &remainCountScale_);
+    globalParameter_->Regist(groupName_, "remainCountScale", &remainCountScale_);
 }
 
 void ComboAssistController::AdjustParam() {
@@ -325,9 +322,9 @@ void ComboAssistController::AdjustParam() {
         }
 
         ImGui::SeparatorText("残りキル数表示");
-        ImGui::DragFloat2("Remain Count Offset",        &remainCountOffset_.x,       0.1f);
+        ImGui::DragFloat2("Remain Count Offset", &remainCountOffset_.x, 0.1f);
         ImGui::DragFloat2("Remain Count Digit Spacing", &remainCountDigitSpacing_.x, 0.1f);
-        ImGui::DragFloat2("Remain Count Scale",         &remainCountScale_.x,        0.01f);
+        ImGui::DragFloat2("Remain Count Scale", &remainCountScale_.x, 0.01f);
 
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);

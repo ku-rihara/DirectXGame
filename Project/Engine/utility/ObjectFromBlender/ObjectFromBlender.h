@@ -70,10 +70,12 @@ public:
     /// <param name="object">JSONオブジェクト</param>
     void ConvertJSONToObjects(const nlohmann::json& object);
 
-    void EmitterAllUpdate(); //< 全エミッター更新
-    void EmitAll(const std::string& particleName = ""); //< 全エミッター放出
+    // 全パーティクルの更新とEmit
+    void EmitterAllUpdate();
+    void EmitAll(const std::string& particleName = "");
 
-    void EasingAllReset(); //< 全イージングリセット
+    // 全イージングのリセット
+    void EasingAllReset();
 
     /// <summary>
     /// 全オブジェクトのトランスフォームを更新
@@ -103,17 +105,17 @@ public:
     void SetGroupEndCallback(int32_t groupNum, const std::function<void()>& callback);
 
     /// <summary>
-    /// 全オブジェクトのスケールを0に設定（非表示化）
+    /// 全オブジェクトのスケールを0に設定
     /// </summary>
     void SetAllObjectsScaleZero();
 
     /// <summary>
-    /// UpdateMatrix を呼ばずにスケールのみ0に設定（UpdateAll内のコールバックから安全に呼べる）
+    /// UpdateMatrix を呼ばずにスケールのみ0に設定
     /// </summary>
     void SetAllObjectsScaleZeroNoUpdate();
 
     /// <summary>
-    /// 全オブジェクトのスケールを1に設定（表示化）
+    /// 全オブジェクトのスケールを1に設定
     /// </summary>
     void SetAllObjectsScaleOne();
 

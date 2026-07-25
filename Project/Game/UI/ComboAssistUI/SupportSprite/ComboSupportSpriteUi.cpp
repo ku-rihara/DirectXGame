@@ -4,22 +4,22 @@
 #include <imgui.h>
 
 void ComboSupportSpriteUi::Init() {
+
+    // globalParameter登録
     globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
+    // スプライト作成
     for (int32_t i = 0; i < static_cast<int32_t>(BgType::COUNT); ++i) {
         bgSprites_[i].reset(KetaEngine::Sprite::Create(kBgTextures[i], true));
         bgSprites_[i]->transform_.scale = Vector2::ZeroVector();
     }
-
-  /*  conditionSprite_.reset(KetaEngine::Sprite::Create(kConditionTexture, true));
-    conditionSprite_->SetUVScale({0.5f, 1.0f});
-    conditionSprite_->transform_.scale = Vector2::ZeroVector();*/
 }
 
 void ComboSupportSpriteUi::RegisterParams() {
+    // パラメータ登録
     globalParameter_->Regist(groupName_, "bg0Offset", &bgOffsets_[0]);
     globalParameter_->Regist(groupName_, "bg1Offset", &bgOffsets_[1]);
     globalParameter_->Regist(groupName_, "conditionOffset", &conditionOffset_);
@@ -29,26 +29,16 @@ void ComboSupportSpriteUi::Update() {
     if (!pComboAssist_) {
         return;
     }
+    // 背景位置更新
     UpdateBgPositions();
-    UpdateConditionSprite();
 }
 
 void ComboSupportSpriteUi::UpdateBgPositions() {
+    
     const Vector2& basePos = pComboAssist_->GetBasePosition();
     for (int32_t i = 0; i < static_cast<int32_t>(BgType::COUNT); ++i) {
         bgSprites_[i]->transform_.pos = basePos + bgOffsets_[i];
     }
-}
-
-void ComboSupportSpriteUi::UpdateConditionSprite() {
-   /* const Vector2& basePos           = pComboAssist_->GetBasePosition();
-    conditionSprite_->transform_.pos = basePos + conditionOffset_;
-
-    using TriggerCondition = PlayerComboAttackData::TriggerCondition;
-    const TriggerCondition condition = pComboAssist_->GetCurrentCondition();
-
-    float uvPosX = (condition == TriggerCondition::AIR) ? 0.5f : 0.0f;
-    conditionSprite_->SetUVPosition({uvPosX, 0.0f});*/
 }
 
 void ComboSupportSpriteUi::SetScale(const Vector2& scale) {

@@ -4,10 +4,10 @@
         "Audio_Attack_OnHit_List": [
             {
                 "fileName": "FieldCycleAttack",
-                "startTiming": 0.0,
                 "isCameraReset": false,
-                "volume": 1.0,
-                "repeatOnDamage": true
+                "repeatOnDamage": true,
+                "startTiming": 0.0,
+                "volume": 1.0
             }
         ],
         "Audio_Hit_List": [],
@@ -72,10 +72,10 @@
         "HitStop_OnHit_List": [
             {
                 "fileName": "DefaultHitStop",
-                "startTiming": 0.0,
                 "isCameraReset": false,
-                "volume": 1.0,
-                "repeatOnDamage": false
+                "repeatOnDamage": false,
+                "startTiming": 0.0,
+                "volume": 1.0
             }
         ],
         "KnockBackPower": 17.8700008392334,
@@ -150,11 +150,11 @@
         "ShakeAction_OnHit_List": [],
         "Vibration_List": [
             {
-                "startTiming": 0.0,
                 "duration": 0.699999988079071,
                 "intensity": 0.3930000066757202,
-                "triggerByHit": true,
-                "repeatOnDamage": false
+                "repeatOnDamage": false,
+                "startTiming": 0.0,
+                "triggerByHit": true
             }
         ],
         "ableDefeatLevel": 1,
@@ -171,6 +171,7 @@
             7.0
         ],
         "collisionStartTime": 0.0,
+        "disableLockOnCameraFollow": true,
         "finishTimeOffset": 0.0,
         "finishWaitTime": 0.0,
         "gamePadBottom": 0,

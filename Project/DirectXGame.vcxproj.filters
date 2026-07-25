@@ -1011,6 +1011,9 @@
     <ClCompile Include="Engine\PostEffect\Distortion.cpp">
       <Filter>Engine\PostEffect</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\PostEffect\DistortionManager.cpp">
+      <Filter>Engine\PostEffect</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\PostEffect\DistortionRenderTarget.cpp">
       <Filter>Engine\PostEffect</Filter>
     </ClCompile>
@@ -2102,6 +2105,9 @@
       <Filter>Engine\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\Distortion.h">
+      <Filter>Engine\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\DistortionManager.h">
       <Filter>Engine\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\DistortionRenderTarget.h">

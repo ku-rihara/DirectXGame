@@ -1,9 +1,11 @@
 #include "Sprite.h"
 
 using namespace KetaEngine;
+// Base
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/TextureManager.h"
 #include "Base/WinApp.h"
+// Editor
 #include "Editor/SpriteEaseAnimation/SpriteEaseAnimationPlayer.h"
 #include "SpriteRegistry.h"
 #include <imgui.h>
@@ -79,15 +81,6 @@ void Sprite::CreateSprite(const std::string& textureName) {
 
     vertexData_ = nullptr;
     vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-    // 頂点データ
-    vertexData_[0].position = {0.0f, 360.0f, 0.0f, 1.0f}; // 左下
-    vertexData_[0].texcoord = {0.0f, 1.0f};
-    vertexData_[1].position = {0.0f, 0.0f, 0.0f, 1.0f}; // 左上
-    vertexData_[1].texcoord = {0.0f, 0.0f};
-    vertexData_[2].position = {640.0f, 360.0f, 0.0f, 1.0f}; // 右下
-    vertexData_[2].texcoord = {1.0f, 1.0f};
-    vertexData_[3].position = {640.0f, 0.0f, 0.0f, 1.0f}; // 右上
-    vertexData_[3].texcoord = {1.0f, 0.0f};
 
     // 頂点インデックス
     indexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(uint32_t) * 6);
@@ -114,7 +107,7 @@ void Sprite::CreateSprite(const std::string& textureName) {
 
     // UVTransformは単位行列を書き込んでおく
     material_.GetMaterialData()->uvTransform = MakeIdentity4x4();
-    uvTransform_.scale                       = {1.0f, 1.0f};
+    uvTransform_.scale                       = Vector2::OneVector();
 
     ///==========================================================================================
     //  WVP
@@ -185,17 +178,15 @@ void Sprite::Draw() {
     vertexData_[2].texcoord = {texRight, texBottom};
     vertexData_[3].texcoord = {texRight, texTop};
 
-    // ゲージレートをマテリアルに設定
-    material_.GetMaterialData()->gaugeRate = disPlayRate_;
-
-    ///==========================================================================================
-    //  SpriteEaseAnimation
-    ///==========================================================================================
-    UpdateSpriteEaseAnimation();
+    // 表示レートをマテリアルに設定
+    material_.GetMaterialData()->disPlayRate = disPlayRate_;
 
     ///==========================================================================================
     //  Transform
     ///==========================================================================================
+
+    //  SpriteEaseAnimation
+    UpdateSpriteEaseAnimation();
 
     Vector2 animPos = GetAnimationPosition();
     Vector3 animRot = GetAnimationRotation();
@@ -359,7 +350,7 @@ void Sprite::ApplyAnimationToMaterial() {
 
     using PropType = SpriteEaseAnimationData::PropertyType;
 
-    // Scale 
+    // Scale
     if (spriteEaseAnimationPlayer_->IsPropertyActive(PropType::Scale)) {
         const Parameter& sp = GetValue();
         Vector2 scaleOffset = spriteEaseAnimationPlayer_->GetCurrentScale();

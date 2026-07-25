@@ -97,6 +97,7 @@ void GameCamera::RegisterParams() {
     globalParameter_->Regist(groupName_, "firstRotate_", &parameter_.rotate);
     globalParameter_->Regist(groupName_, "firstOffset_", &parameter_.offsetPos);
     globalParameter_->Regist(groupName_, "rotateYSpeed", &parameter_.rotateYSpeed);
+    globalParameter_->Regist(groupName_, "lockOnFaceMinDistance", &parameter_.lockOnFaceMinDistance);
     globalParameter_->Regist(groupName_, "interpolationRotateYTime", &parameter_.interpolationTime.rotateY);
     globalParameter_->Regist(groupName_, "interpolationTargetTime", &parameter_.interpolationTime.target);
 }
@@ -111,6 +112,7 @@ void GameCamera::AdjustParam() {
         ImGui::DragFloat3("オフセット位置", &parameter_.offsetPos.x, 0.01f);
         ImGui::SeparatorText("回転スピード");
         ImGui::DragFloat("Y回転スピード", &parameter_.rotateYSpeed, 0.01f);
+        ImGui::DragFloat("ロックオン最小追従距離", &parameter_.lockOnFaceMinDistance, 0.1f);
         ImGui::SeparatorText("補間タイム");
         ImGui::DragFloat("Y回転", &parameter_.interpolationTime.rotateY, 0.01f);
         ImGui::DragFloat("ターゲット補間", &parameter_.interpolationTime.target, 0.01f);

@@ -7,6 +7,8 @@
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
 #include "Player/Behavior/PlayerBehavior/PlayerJump.h"
+// GameCamera
+#include "GameCamera/GameCamera.h"
 
 // 初期化
 ComboAttackRoot::ComboAttackRoot(Player* player)
@@ -20,6 +22,11 @@ void ComboAttackRoot::Init() {
     pOwner_->GetPlayerAnimator().SetHeadScale(Vector3::OneVector());
     pOwner_->GetPlayerAnimator().RotateReset();
     attackPatern_ = AttackPatern::NORMAL;
+
+    // 攻撃演出でカメラ追従を無効化していた場合に備え、通常状態に戻ったら必ず有効化する
+    if (GameCamera* gameCamera = pOwner_->GetContext().pGameCamera) {
+        gameCamera->SetLockOnFollowEnabled(true);
+    }
 }
 
 void ComboAttackRoot::Update(float atkSpeed) {

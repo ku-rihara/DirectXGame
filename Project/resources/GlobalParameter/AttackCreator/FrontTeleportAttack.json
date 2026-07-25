@@ -3,10 +3,10 @@
         "Audio_Attack_List": [
             {
                 "fileName": "FlyJump",
-                "startTiming": 0.0,
                 "isCameraReset": false,
-                "volume": 1.0,
-                "repeatOnDamage": false
+                "repeatOnDamage": false,
+                "startTiming": 0.0,
+                "volume": 1.0
             }
         ],
         "Audio_Attack_OnHit_List": [],
@@ -29,8 +29,10 @@
         "Finish_Audio_Hit_OnHit_List": [],
         "Finish_CameraAction_List": [],
         "Finish_CameraAction_OnHit_List": [],
+        "Finish_CollisionRad": 0.0,
         "Finish_HitStop_List": [],
         "Finish_HitStop_OnHit_List": [],
+        "Finish_KnockBackPower": 0.0,
         "Finish_Main_Head_List": [],
         "Finish_ObjAnim_Head_List": [],
         "Finish_ObjAnim_LeftHand_List": [],
@@ -44,13 +46,41 @@
         "Finish_ShakeAction_List": [],
         "Finish_ShakeAction_OnHit_List": [],
         "Finish_Vibration_List": [],
+        "Finish_adaptTime": 0.0,
+        "Finish_blowYPower": 0.0,
+        "Finish_collisionOffsetPos": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Finish_collisionStartTime": 0.0,
+        "Finish_finishTimeOffset": 0.0,
+        "Finish_finishWaitTime": 0.0,
+        "Finish_isAbleInputMoving": false,
+        "Finish_isAlwaysFollowing": false,
+        "Finish_isAutoAdvance": false,
+        "Finish_isFaceMovementDirection": false,
+        "Finish_isMotionOnly": false,
+        "Finish_isPositionYSelect": false,
+        "Finish_isStopBeforeEnemy": false,
+        "Finish_loopNum": 0,
+        "Finish_loopWaitTime": 0.0,
+        "Finish_moveEaseTime": 0.0,
+        "Finish_moveEaseType": 0,
+        "Finish_moveStartTime": 0.0,
+        "Finish_moveValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Finish_power": 0.0,
         "HitStop_List": [
             {
                 "fileName": "FallAttackTimeScale",
-                "startTiming": 0.44999998807907104,
                 "isCameraReset": false,
-                "volume": 1.0,
-                "repeatOnDamage": false
+                "repeatOnDamage": false,
+                "startTiming": 0.44999998807907104,
+                "volume": 1.0
             }
         ],
         "HitStop_OnHit_List": [],
@@ -68,17 +98,17 @@
         "ParticleEffectParam_List": [
             {
                 "fileName": "PlayerFlyDash",
-                "startTiming": 0.11666666716337204,
                 "isCameraReset": false,
-                "volume": 1.0,
-                "repeatOnDamage": false
+                "repeatOnDamage": false,
+                "startTiming": 0.11666666716337204,
+                "volume": 1.0
             },
             {
                 "fileName": "SpecialFlyEffect",
-                "startTiming": 0.0,
                 "isCameraReset": false,
-                "volume": 1.0,
-                "repeatOnDamage": false
+                "repeatOnDamage": false,
+                "startTiming": 0.0,
+                "volume": 1.0
             }
         ],
         "ParticleEffectParam_OnHit_List": [],
@@ -90,8 +120,10 @@
         "Prep_Audio_Hit_OnHit_List": [],
         "Prep_CameraAction_List": [],
         "Prep_CameraAction_OnHit_List": [],
+        "Prep_CollisionRad": 0.0,
         "Prep_HitStop_List": [],
         "Prep_HitStop_OnHit_List": [],
+        "Prep_KnockBackPower": 0.0,
         "Prep_Main_Head_List": [],
         "Prep_ObjAnim_Head_List": [],
         "Prep_ObjAnim_LeftHand_List": [],
@@ -105,6 +137,34 @@
         "Prep_ShakeAction_List": [],
         "Prep_ShakeAction_OnHit_List": [],
         "Prep_Vibration_List": [],
+        "Prep_adaptTime": 0.0,
+        "Prep_blowYPower": 0.0,
+        "Prep_collisionOffsetPos": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Prep_collisionStartTime": 0.0,
+        "Prep_finishTimeOffset": 0.0,
+        "Prep_finishWaitTime": 0.0,
+        "Prep_isAbleInputMoving": false,
+        "Prep_isAlwaysFollowing": false,
+        "Prep_isAutoAdvance": false,
+        "Prep_isFaceMovementDirection": false,
+        "Prep_isMotionOnly": false,
+        "Prep_isPositionYSelect": false,
+        "Prep_isStopBeforeEnemy": false,
+        "Prep_loopNum": 0,
+        "Prep_loopWaitTime": 0.0,
+        "Prep_moveEaseTime": 0.0,
+        "Prep_moveEaseType": 0,
+        "Prep_moveStartTime": 0.0,
+        "Prep_moveValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Prep_power": 0.0,
         "RibbonTrailEffect_List": [],
         "RibbonTrailEffect_OnHit_List": [],
         "ShakeAction_List": [],
@@ -124,14 +184,19 @@
             8.0
         ],
         "collisionStartTime": 0.0,
+        "disableLockOnCameraFollow": true,
         "finishTimeOffset": 0.0,
         "finishWaitTime": 0.30000001192092896,
         "gamePadBottom": 0,
+        "hasFinish": false,
+        "hasPrep": false,
         "isAbleInputMoving": false,
         "isAlwaysFollowing": true,
         "isAutoAdvance": true,
+        "isFaceMovementDirection": false,
         "isMotionOnly": true,
         "isPositionYSelect": false,
+        "isSkipToFinishOnHit": false,
         "isStopBeforeEnemy": false,
         "keyBordBottom": 0,
         "loopNum": 0,

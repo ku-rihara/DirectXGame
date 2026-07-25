@@ -11,6 +11,8 @@
 // LockOn
 #include "LockOn/LockOn.h"
 #include "LockOn/LockOnController.h"
+// GameCamera
+#include "GameCamera/GameCamera.h"
 // Player
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Components/CollisionBox/PlayerAttackCollider.h"
@@ -81,6 +83,12 @@ void ComboAttackAction::Init() {
                 nextAttackCandidates_.push_back(candidate);
             }
         }
+    }
+
+    // この攻撃の設定に応じてロックオン中のカメラ追従を切り替える
+    GameCamera* gameCamera = pOwner_->GetContext().pGameCamera;
+    if (gameCamera) {
+        gameCamera->SetLockOnFollowEnabled(!attackData_->GetAttackParam().disableLockOnCameraFollow);
     }
 
     // 演出の初期化

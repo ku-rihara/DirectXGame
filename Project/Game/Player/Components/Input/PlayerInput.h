@@ -12,7 +12,7 @@ public:
     /// 移動中かどうか
     bool IsMoving() const;
 
-    /// ダッシュ入力 - パッド
+    /// ダッシュ入力 - パッド/キーボード
     bool IsDashInput() const;
 
     /// ジャンプ入力 - キーボード

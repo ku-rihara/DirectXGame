@@ -117,9 +117,11 @@ public:
 
 private:
     // UVTransform
-    UVTransform uvTransform_; //< UVトランスフォーム
-    Vector2 textureLeftTop_; //< テクスチャ左上
-    Vector2 anchorPoint_; //< アンカーポイント
+    UVTransform uvTransform_;
+
+    // テクスチャ左上位置、アンカーポイント
+    Vector2 textureLeftTop_; 
+    Vector2 anchorPoint_; 
 
     // flip
     bool isFlipX_ = false;
@@ -132,7 +134,7 @@ private:
     const std::string folderPath_ = "SpriteParam";
     Parameter parameter_;
 
-    // レイヤー。描画フラグ、初期パラメータ適用フラグ
+    // レイヤー、描画フラグ、初期パラメータ適用フラグ
     int32_t layerNum_;
     bool isDraw_           = true;
     bool isApplyInitParam_ = false;

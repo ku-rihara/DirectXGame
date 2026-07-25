@@ -103,7 +103,7 @@ bool GameIntroManager::IsAllIntroFinished() const {
 void GameIntroManager::ProcessInput() {
     KetaEngine::Input* input = KetaEngine::Input::GetInstance();
 
-    if (input->TriggerKey(KeyboardKey::F) || input->IsPressPad(0, GamepadButton::A)) {
+    if (input->PushKey(KeyboardKey::F) || input->IsPressPad(0, GamepadButton::A)) {
         currentPlaySpeedRate_ = fastSpeedRate_;
     } else {
         currentPlaySpeedRate_ = 1.0f;

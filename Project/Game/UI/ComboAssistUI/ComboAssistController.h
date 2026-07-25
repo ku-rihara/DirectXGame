@@ -84,7 +84,7 @@ private:
     ComboAssistColumnScroller columnScroller_;
     ComboAssistConditionSwitcher conditionSwitcher_;
 
-    // 条件別UIデータ（全条件を事前構築）
+    // 条件別UIデータ
     std::map<PlayerComboAttackData::TriggerCondition, ConditionUIData> conditionDataMap_;
     std::vector<PlayerComboAttackData::TriggerCondition> availableConditions_;
 

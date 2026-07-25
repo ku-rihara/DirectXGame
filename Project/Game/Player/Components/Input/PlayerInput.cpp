@@ -35,7 +35,8 @@ bool PlayerInput::IsMoving() const {
 ///  ダッシュ入力
 /// ===========================================================
 bool PlayerInput::IsDashInput() const {
-    return KetaEngine::Input::IsPressPad(0, GamepadButton::LB);
+    return KetaEngine::Input::IsPressPad(0, GamepadButton::LB) ||
+           KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::Space);
 }
 
 /// ===========================================================

@@ -52,16 +52,16 @@ public:
     /// <param name="renderHeight">描画高さ</param>
     void Initialize(const char* title, int windowWidth, int windowHeight, int renderWidth, int renderHeight);
 
-    int ProcessMessage();     //< Windowsのメッセージを処理
-    void BeginFrame();        //< フレーム開始処理
-    void PreRenderTexture();  //< レンダーテクスチャ描画前処理
-    void PreDraw();           //< 描画前処理
-    void EndFrame();          //< フレーム終了処理
-    void Finalize();          //< システム全体の終了
+    int ProcessMessage(); //< Windowsのメッセージを処理
+    void BeginFrame(); //< フレーム開始処理
+    void PreRenderTexture(); //< レンダーテクスチャ描画前処理
+    void PreDraw(); //< 描画前処理
+    void EndFrame(); //< フレーム終了処理
+    void Finalize(); //< システム全体の終了
 
 private:
     ///=======================================================================
-    /// static private variant
+    ///  private variant
     ///=======================================================================
     std::unique_ptr<WinApp> winApp_;
     DirectXCommon* directXCommon_;

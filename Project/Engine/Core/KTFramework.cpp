@@ -2,22 +2,16 @@
 
 using namespace KetaEngine;
 
-// dx
-#include "3D/ModelManager.h"
 // particle
 #include "Base/Descriptors/SrvManager.h"
-#include "Base/Dx/DxRenderTarget.h"
-#include "Particle/GPUParticle/GPUParticleManager.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include "ShadowMap/ShadowMap.h"
-
 // resource
 #include "Core/ResourceLoader.h"
 // Frame
 #include "Frame/Frame.h"
 // dx
 #include "Base/Dx/DirectXCommon.h"
-
 // utility
 #include "../Utility/Log/Log.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
@@ -62,11 +56,13 @@ void KTFramework::Init() {
 // 実行
 // ========================================================
 void KTFramework::Run() {
-    Init(); /// 初期化
+    // 初期化
+    Init(); 
 
     // ロード完了後にタイマーをリセット
     Frame::Init();
 
+    // 
     using Clock = std::chrono::steady_clock;
     auto ms = [](Clock::time_point a, Clock::time_point b) {
         return std::chrono::duration<float, std::milli>(b - a).count();
@@ -83,7 +79,7 @@ void KTFramework::Run() {
         Frame::Update();
         auto t1 = Clock::now();
 
-        // BeginFrame: WaitForNextFrame(FLOW) + ImGui + Input
+        // BeginFrame:
         engineCore_->BeginFrame();
         auto t2 = Clock::now();
 
@@ -108,11 +104,11 @@ void KTFramework::Run() {
         DrawPostEffect();
         auto t4 = Clock::now();
 
-        /// フレームの終了: ExecuteCommand → Present(1,VSync) → WaitForGPU
+        /// フレームの終了
         engineCore_->EndFrame();
         auto t5 = Clock::now();
 
-        // シーン遷移直後: GPUがアイドル後のP-state低下をP0に戻してから本番ループへ
+        // シーン遷移直後
         if (pSceneManager_->IsJustTransitioned()) {
             pSceneManager_->ClearTransitionFlag();
             RunGpuWarmup(8);

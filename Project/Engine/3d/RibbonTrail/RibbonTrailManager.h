@@ -1,9 +1,6 @@
 #pragma once
 
 #include "3D/ViewProjection.h"
-#include "PostEffect/DistortionRenderTarget.h"
-#include "PostEffect/Distortion.h"
-#include <d3d12.h>
 #include <unordered_set>
 
 namespace KetaEngine {
@@ -36,37 +33,21 @@ public:
     void DrawAll(const ViewProjection& viewProj);
 
     /// <summary>
-    /// 時空歪みシステムの初期化
+    /// 歪みが有効なトレイルが1つでもあるか
     /// </summary>
-    void InitDistortion(DirectXCommon* dxCommon, uint32_t width, uint32_t height);
+    bool HasDistortionTrails() const;
 
     /// <summary>
-    /// 時空歪みパス描画
+    /// 歪みが有効なトレイルを、現在開かれている歪みRTに描画する。
+    /// 歪みRTの開閉・所有はDistortionManagerが担当する。
     /// </summary>
-    void DrawDistortionPass(const ViewProjection& viewProj, bool hasExternalDistortion = false);
-
-    /// <summary>
-    /// 時空歪みパス終了
-    /// </summary>
-    void CloseDistortionPass();
-
-    /// <summary>
-    /// 時空歪みポストエフェクト適用
-    /// </summary>
-    void ApplyDistortionEffect(ID3D12GraphicsCommandList* commandList);
+    void DrawDistortionTrails(const ViewProjection& viewProj);
 
     void Clear();
 
 private:
     static bool isDestroyed_;
     std::unordered_set<RibbonTrail*> trails_;
-
-    // 時空歪み
-    DistortionRenderTarget distortionRT_;
-    Distortion             distortionEffect_;
-    bool distortionInitialized_ = false;
-    bool hasAnyDistortion_      = false;
-    bool distortionPassOpen_    = false;
 };
 
 } // namespace KetaEngine
