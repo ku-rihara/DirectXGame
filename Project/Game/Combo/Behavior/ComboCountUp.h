@@ -4,6 +4,9 @@
 #include"Editor/Easing/EasingFunction.h"
 #include"Editor/Easing/Easing.h"
 
+/// <summary>
+/// コンボカウントアップ時の振る舞い
+/// </summary>
 class ComboCountUP : public BaseComboUIBehavior {
 private:
     enum class AnimationStep {

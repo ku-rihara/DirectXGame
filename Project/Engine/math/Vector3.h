@@ -2,6 +2,9 @@
 #include "Matrix4x4.h"
 #include <cmath>
 
+/// <summary>
+/// 3次元ベクトルクラス
+/// </summary>
 class Vector3 {
 public:
     float x;

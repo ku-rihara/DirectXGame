@@ -141,7 +141,7 @@ void Sprite::Draw() {
     ///==========================================================================================
     //  anchorPoint
     ///==========================================================================================
-
+    // anchorPointを基準に、スプライトの原点からの相対座標として四隅の位置を算出する
     float left   = 0.0f - anchorPoint_.x;
     float right  = 1.0f - anchorPoint_.x;
     float top    = 0.0f - anchorPoint_.y;
@@ -166,7 +166,7 @@ void Sprite::Draw() {
     ///==========================================================================================
     //  TextureClip
     ///==========================================================================================
-
+    // Textureの四隅の位置を計算
     float texLeft   = textureLeftTop_.x / textureSize_.x;
     float texRight  = (textureLeftTop_.x + textureSize_.x) / textureSize_.x;
     float texTop    = textureLeftTop_.y / textureSize_.y;
@@ -196,7 +196,7 @@ void Sprite::Draw() {
     Vector3 translate        = Vector3(transform_.pos.x + animPos.x, transform_.pos.y + animPos.y, 0.0f);
     Vector3 rotate           = Vector3(transform_.rotate.x + animRot.x, transform_.rotate.y + animRot.y, transform_.rotate.z + animRot.z);
 
-    // 行列変換
+    // スプライトはZ奥行きを持たないため、ワールド行列と正射影行列のみでWVPを構成する
     Matrix4x4 worldMatrixSprite               = MakeAffineMatrix(size, rotate, translate);
     Matrix4x4 projectionMatrixSprite          = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
     Matrix4x4 worldViewProjectionMatrixSprite = worldMatrixSprite * projectionMatrixSprite;
@@ -205,15 +205,17 @@ void Sprite::Draw() {
     //  UVTransform
     ///==========================================================================================
 
+    // UV変換行列を更新
     material_.GetMaterialData()->uvTransform = MakeAffineMatrix(
-        Vector3{uvTransform_.scale.x, uvTransform_.scale.y, 1.0f}, /// scale
-        uvTransform_.rotate, /// rotate
-        Vector3{uvTransform_.pos.x, uvTransform_.pos.y, 1.0f}); /// translate
+        Vector3{uvTransform_.scale.x, uvTransform_.scale.y, 1.0f},
+        uvTransform_.rotate,
+        Vector3{uvTransform_.pos.x, uvTransform_.pos.y, 1.0f});
 
     wvpData_->WVP = worldViewProjectionMatrixSprite;
 
+    // 描画に使う頂点・インデックスバッファをコマンドリストにバインドする
     directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-    directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_); // IBVを設定
+    directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 
     // TransFormationMatrixCBufferの場所を設定
     material_.SetCommandList(directXCommon->GetCommandList());

@@ -21,7 +21,11 @@ private:
     AnimationRegistry& operator=(const AnimationRegistry&) = delete;
 
 public:
-    
+
+    /// <summary>
+    /// シングルトンインスタンスを取得する
+    /// </summary>
+    /// <returns>AnimationRegistryのインスタンス</returns>
     static AnimationRegistry* GetInstance();
 
     /// ============================================================
@@ -63,9 +67,20 @@ public:
     /// <param name="viewProjection">ビュープロジェクション</param>
     void DrawAllShadow(const ViewProjection& viewProjection);
 
+    /// <summary>
+    /// 全アニメーションのデバッグライン表示を設定する
+    /// </summary>
     void DebugLineAllSet();
-    void Clear(); //< 登録されたアニメーションをクリア
-    void DebugImGui(); //< ImGuiデバッグ表示
+
+    /// <summary>
+    /// 登録されたアニメーションをクリアする
+    /// </summary>
+    void Clear();
+
+    /// <summary>
+    /// ImGuiデバッグ表示
+    /// </summary>
+    void DebugImGui();
 
 private:
     std::unordered_set<Object3DAnimation*> animations_;
@@ -73,6 +88,10 @@ private:
     static bool isDestroyed_;
 
 public:
+    /// <summary>
+    /// 登録されているアニメーションの数を取得する
+    /// </summary>
+    /// <returns>登録数</returns>
     const size_t& GetRegisteredCount() const { return animations_.size(); }
 };
 

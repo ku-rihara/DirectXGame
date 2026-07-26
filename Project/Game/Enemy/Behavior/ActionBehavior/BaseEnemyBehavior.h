@@ -3,6 +3,10 @@
 #include <string>
 
 class BaseEnemy;
+
+/// <summary>
+/// 敵の振る舞いの基底クラス
+/// </summary>
 class BaseEnemyBehavior {
 protected:
     // 振る舞い名

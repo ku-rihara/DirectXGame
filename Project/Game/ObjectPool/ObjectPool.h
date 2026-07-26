@@ -2,6 +2,9 @@
 #include <memory>
 #include <vector>
 
+/// <summary>
+/// オブジェクトプールを管理するテンプレートクラス
+/// </summary>
 template <typename T>
 class ObjectPool {
 public:

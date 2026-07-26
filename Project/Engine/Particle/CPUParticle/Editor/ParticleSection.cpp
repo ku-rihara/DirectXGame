@@ -198,15 +198,18 @@ void ParticleSection::SetEmitLine() {
 
 void ParticleSection::EmitInternal() {
     auto& groups = ParticleManager::GetInstance()->particleGroups_;
+    // まだグループが登録されていない場合は生成対象が存在しないため、この時点での発生処理を行わない
     if (groups.find(groupName_) == groups.end()) {
         return;
     }
 
     currentTime_ += Frame::DeltaTime();
 
+    // インターバル経過、または単発発生の指示があったタイミングでのみ生成を行う
     if (currentTime_ >= sectionParam_->GetIntervalTime() || IsShotJudge()) {
         auto& group = groups[groupName_];
 
+        // 生成後に上限数を超えてしまう場合は生成を見送り、次のインターバルまで待つ
         if (static_cast<int32_t>(group.particles.size()) + sectionParam_->GetParticleCount() > sectionParam_->GetMaxParticleNum()) {
             currentTime_ = 0.0f;
             return;
