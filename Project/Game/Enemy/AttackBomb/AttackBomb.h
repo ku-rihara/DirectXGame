@@ -16,6 +16,9 @@ public:
     AttackBomb()  = default;
     ~AttackBomb() = default;
 
+    /// <summary>
+    /// 攻撃ボム1発分の放物線軌道・回転パラメータ
+    /// </summary>
     struct Param {
         float flightTime   = 1.5f;
         float arcHeight    = 8.0f;

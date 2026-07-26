@@ -5,11 +5,11 @@
 #include <list>
 #include <vector>
 
-/// <summary>
-/// レール
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// 制御点列からオブジェクト移動経路を構築・描画するクラス
+/// </summary>
 class Rail {
 private:
     const size_t IndexCount_ = 20;

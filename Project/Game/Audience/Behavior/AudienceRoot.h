@@ -3,6 +3,9 @@
 #include "BaseAudienceBehavior.h"
 #include "Editor/Easing/Easing.h"
 
+/// <summary>
+/// 観客の待機・出現/退場切り替えを制御するルート振る舞い
+/// </summary>
 class AudienceRoot : public BaseAudienceBehavior {
 private:
  

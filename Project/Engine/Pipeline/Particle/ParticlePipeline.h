@@ -6,9 +6,6 @@
 #include <d3dcommon.h>
 #include <dxcapi.h>
 
-/// <summary>
-/// パーティクル描画パイプラインクラス
-/// </summary>
 namespace KetaEngine {
 
 enum class ParticleRootParameter {
@@ -19,6 +16,9 @@ enum class ParticleRootParameter {
     Count
 };
 
+/// <summary>
+/// パーティクル描画パイプラインクラス
+/// </summary>
 class ParticlePipeline : public BasePipeline {
 public:
     ParticlePipeline()  = default;

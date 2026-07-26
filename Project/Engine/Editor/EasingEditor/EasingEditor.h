@@ -6,12 +6,11 @@
 #include <memory>
 #include <string>
 
-/// <summary>
-/// イージングエディター
-/// float / Vector2 / Vector3 を型引数で切り替える
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// イージングエディター
+/// </summary>
 template <typename T>
 class EasingEditor : public BaseEffectEditor<EasingData<T>> {
 public:

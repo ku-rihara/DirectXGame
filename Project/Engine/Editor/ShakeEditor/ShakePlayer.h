@@ -5,11 +5,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// シェイクプレイヤー
 /// </summary>
-namespace KetaEngine {
-
 class ShakePlayer : public BaseEffectPlayer {
 public:
     ShakePlayer()           = default;

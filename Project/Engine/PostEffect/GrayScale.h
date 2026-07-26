@@ -3,11 +3,11 @@
 #include "BasePostEffect.h"
 #include <d3d12.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// グレースケールポストエフェクトクラス
 /// </summary>
-namespace KetaEngine {
-
 class GrayScale : public BasePostEffect {
 private:
     void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成

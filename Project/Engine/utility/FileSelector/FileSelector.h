@@ -4,6 +4,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// ImGui上でディレクトリ内のファイルを一覧・選択するためのクラス
+/// </summary>
 class FileSelector {
 public:
     FileSelector()  = default;

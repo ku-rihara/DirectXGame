@@ -3,11 +3,11 @@
 #include "BasePostEffect.h"
 #include <d3d12.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ボックスフィルタークラス
 /// </summary>
-namespace KetaEngine {
-
 class BoxFilter : public BasePostEffect {
 private:
     void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成

@@ -5,6 +5,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// オブジェクトカラーの定数バッファ用データ
+/// </summary>
 struct ConstBufferDataObjectColor {
     Vector4 color_;
 };

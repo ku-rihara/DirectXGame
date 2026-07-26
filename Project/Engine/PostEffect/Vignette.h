@@ -4,13 +4,16 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ビネットポストエフェクトクラス
 /// </summary>
-namespace KetaEngine {
-
 class Vignette : public BasePostEffect {
 public:
+    /// <summary>
+    /// ビネット効果の赤み強度パラメータ
+    /// </summary>
     struct ParamData {
         float redIntensity = 0.0f;
     };

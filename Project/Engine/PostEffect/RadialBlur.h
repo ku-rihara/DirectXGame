@@ -5,13 +5,16 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ラジアルブラーポストエフェクトクラス
 /// </summary>
-namespace KetaEngine {
-
 class RadialBlur : public BasePostEffect {
 public:
+    /// <summary>
+    /// ラジアルブラーの中心座標とぼかし幅のパラメータ
+    /// </summary>
     struct ParamData {
         Vector2 center;
         float blurWidth;

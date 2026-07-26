@@ -43,6 +43,9 @@ enum class EffectEditorType {
     EasingVec3
 };
 
+/// <summary>
+/// 各種エフェクトエディタを統一インターフェースでまとめて管理するクラス
+/// </summary>
 class EffectEditorSuite {
 public:
     EffectEditorSuite();

@@ -5,6 +5,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// 環境光の色と強度を保持する定数バッファ用データ
+/// </summary>
 struct AmbientLightData {
     Vector4 color;
     float intensity;

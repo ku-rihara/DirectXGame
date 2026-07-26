@@ -40,6 +40,9 @@ public:
     void DebugImGui() override; //< ImGuiデバッグ
 
 private:
+    /// <summary>
+    /// パーティクル用マテリアル定数バッファのデータ
+    /// </summary>
     struct MaterialData {
         Vector4 color;
         int32_t enableLighting;

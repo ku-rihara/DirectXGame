@@ -3,6 +3,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// パラメータからパーティクル1個分のインスタンスを生成するファクトリクラス
+/// </summary>
 class ParticleFactory {
 public:
     ParticleFactory()  = default;

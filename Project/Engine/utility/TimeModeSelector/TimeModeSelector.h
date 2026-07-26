@@ -11,6 +11,9 @@ namespace KetaEngine {
 
 class GlobalParameter;
 
+/// <summary>
+/// タイムスケール適用の有無(DeltaTime/DeltaTimeRate)をImGuiで切り替えるクラス
+/// </summary>
 class TimeModeSelector {
 public:
     TimeModeSelector()  = default;

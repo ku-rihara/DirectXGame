@@ -2,11 +2,11 @@
 #include <chrono>
 #include <cstdint>
 
+namespace KetaEngine {
+
 /// <summary>
 /// フレームレート管理クラス
 /// </summary>
-namespace KetaEngine {
-
 class Frame {
 public:
     Frame()  = default;

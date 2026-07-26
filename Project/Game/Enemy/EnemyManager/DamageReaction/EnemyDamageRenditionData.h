@@ -11,13 +11,17 @@
 /// </summary>
 class EnemyDamageRenditionData {
 public:
-    // オブジェクトアニメーションパラメータ
+    /// <summary>
+    /// オブジェクトアニメーションパラメータ
+    /// </summary>
     struct ObjAnimationParam {
         std::string fileName;
         float startTiming = 0.0f;
     };
 
-    // パーティクルエフェクトパラメータ
+    /// <summary>
+    /// パーティクルエフェクトパラメータ
+    /// </summary>
     struct ParticleEffectParam {
         std::string fileName;
         float startTiming = 0.0f;

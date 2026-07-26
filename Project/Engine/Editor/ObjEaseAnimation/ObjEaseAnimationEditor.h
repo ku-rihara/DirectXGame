@@ -5,13 +5,16 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// オブジェクトイージングアニメーションエディター
 /// </summary>
-namespace KetaEngine {
-
 class ObjEaseAnimationEditor : public BaseEffectEditor<ObjEaseAnimationData> {
 public:
+    /// <summary>
+    /// プレビュー用オブジェクトの基準トランスフォーム
+    /// </summary>
     struct PreViewTransform {
         Vector3 scale       = Vector3::OneVector();
         Vector3 rotation    = Vector3::ZeroVector();

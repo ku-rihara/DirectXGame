@@ -12,16 +12,25 @@ const uint32_t kNumMaxInfluence = 4;
 
 namespace KetaEngine {
 
+/// <summary>
+/// 1頂点が影響を受けるジョイントのウェイトとインデックス
+/// </summary>
 struct VertexInfluence {
     std::array<float, kNumMaxInfluence> weights;
     std::array<int32_t, kNumMaxInfluence> jointIndices;
 };
 
+/// <summary>
+/// GPUに転送するスケルトン空間行列
+/// </summary>
 struct WellForGPU {
     Matrix4x4 skeletonSpaceMatrix;
     Matrix4x4 skeletonSpaceInverseTransposeMatrix;
 };
 
+/// <summary>
+/// スキニング計算に必要なリソース・バッファビュー・SRV/UAVハンドル一式
+/// </summary>
 struct SkinCluster {
 
     std::vector<Matrix4x4> inverseBindPoseMatrices;

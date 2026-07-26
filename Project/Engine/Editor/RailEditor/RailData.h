@@ -29,6 +29,9 @@ public:
         DIRECT_RETURN
     };
 
+    /// <summary>
+    /// 終点到達後に直接開始点へ戻る場合のイージング設定・状態
+    /// </summary>
     struct RailDirectReturnParam {
         float maxTime       = 1.0f;
         int32_t easeTypeInt = 0;
@@ -36,6 +39,9 @@ public:
         Vector3 easeAdaptPos;
     };
 
+    /// <summary>
+    /// レール移動全体の進行状態
+    /// </summary>
     struct RailMoveParam {
         ReturnMode returnMode = ReturnMode::NONE;
         float maxTime         = 1.0f;

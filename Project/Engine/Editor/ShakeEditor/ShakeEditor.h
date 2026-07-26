@@ -5,12 +5,11 @@
 #include <memory>
 #include <string>
 
-/// <summary>
-/// シェイクエディター
-/// カテゴリーシステムを使用
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// シェイクエディター(カテゴリーシステムを使用)
+/// </summary>
 class ShakeEditor : public BaseEffectEditor<ShakeData> {
 public:
     ShakeEditor()  = default;

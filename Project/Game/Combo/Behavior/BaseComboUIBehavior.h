@@ -3,6 +3,10 @@
 #include <string>
 
 class ComboUIController;
+
+/// <summary>
+/// コンボUIの振る舞いの基底クラス
+/// </summary>
 class BaseComboUIBehavior {
 protected:
     // 振る舞い名

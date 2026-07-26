@@ -4,11 +4,11 @@
 #include "Box.h"
 #include "Vector3.h"
 
+namespace KetaEngine {
+
 /// <summary>
 /// OBBコライダークラス
 /// </summary>
-namespace KetaEngine {
-
 class OBBCollider : public BaseCollider {
 public:
     OBBCollider();

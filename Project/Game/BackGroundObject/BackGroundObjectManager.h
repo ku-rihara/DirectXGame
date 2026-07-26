@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 
+/// <summary>
+/// ステージ背景オブジェクト群(コンボレベル演出・ディザオクルージョン含む)を管理するクラス
+/// </summary>
 class BackGroundObjectManager {
 public:
     BackGroundObjectManager()  = default;
@@ -24,6 +27,9 @@ private:
     void InitDitherOcclusion();
 
 private:
+    /// <summary>
+    /// 背景オブジェクト定義1件分(ファイル名・対応コンボレベル・パルス主導フラグ)
+    /// </summary>
     struct Entry {
         std::string filename;
         int32_t     comboLevel    = 0;

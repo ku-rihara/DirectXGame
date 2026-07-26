@@ -29,19 +29,25 @@ enum class ArcPlane {
     YZ,
 };
 
-// リボントレイルの頂点構造体
+/// <summary>
+/// リボントレイルの頂点構造体
+/// </summary>
 struct RibbonVertex {
     Vector3 pos;
     Vector4 color;
     Vector2 uv;
 };
 
-// リボントレイルの定数バッファ構造体
+/// <summary>
+/// リボントレイルの定数バッファ構造体
+/// </summary>
 struct RibbonCBuffer {
     Matrix4x4 viewProjection;
 };
 
-// リボントレイルのUVスクロール用定数バッファ構造体
+/// <summary>
+/// リボントレイルのUVスクロール用定数バッファ構造体
+/// </summary>
 struct RibbonUVScrollCBuffer {
     Vector2 offset;
     float pad[2];

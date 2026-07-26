@@ -6,12 +6,12 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// カメラアニメーションエディタクラス
 /// カテゴリーシステム対応
 /// </summary>
-namespace KetaEngine {
-
 class CameraEditor : public BaseEffectEditor<CameraAnimationData> {
 public:
     CameraEditor()  = default;

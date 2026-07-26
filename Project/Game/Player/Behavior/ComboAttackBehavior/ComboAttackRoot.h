@@ -4,6 +4,9 @@
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 
 
+/// <summary>
+/// コンボ攻撃の起点となる振る舞い(攻撃パターン判定と派生条件の判定を行う)
+/// </summary>
 class ComboAttackRoot : public BaseComboAttackBehavior {
 
 private:

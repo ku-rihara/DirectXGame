@@ -6,14 +6,16 @@
 #include <cstdint>
 #include <string>
 
-/// <summary>
-/// カメラキーフレームクラス
-/// カテゴリーシステム対応
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// カメラキーフレームクラス
+/// </summary>
 class CameraKeyFrame {
 public:
+    /// <summary>
+    /// 1キーフレーム分のカメラパラメータ
+    /// </summary>
     struct KeyFrameParam {
         Vector3 position = {0.0f, 0.0f, 0.0f};
         Vector3 rotation = {0.0f, 0.0f, 0.0f};

@@ -10,6 +10,9 @@
 /// </summary>
 class EnemyAnimator {
 public:
+    /// <summary>
+    /// 被ダメージリアクション用アニメーション1件分の情報(名前・ループ有無)
+    /// </summary>
     struct DamageReactionAnimInfo {
         std::string name;
         bool isLoop = false;

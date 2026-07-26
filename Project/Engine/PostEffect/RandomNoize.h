@@ -3,13 +3,16 @@
 #include "BasePostEffect.h"
 #include <d3d12.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ランダムノイズポストエフェクトクラス
 /// </summary>
-namespace KetaEngine {
-
 class RandomNoize : public BasePostEffect {
 public:
+    /// <summary>
+    /// ランダムノイズ用定数バッファのデータ(経過時間)
+    /// </summary>
     struct RandomParamData {
         float time;
     };

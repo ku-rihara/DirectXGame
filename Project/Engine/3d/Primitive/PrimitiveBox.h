@@ -2,11 +2,11 @@
 
 #include "3D/Primitive/IPrimitive.h"
 
+namespace KetaEngine {
+
 /// <summary>
 /// ボックスプリミティブクラス
 /// </summary>
-namespace KetaEngine {
-
 class PrimitiveBox : public IPrimitive {
 public:
     PrimitiveBox()  = default;

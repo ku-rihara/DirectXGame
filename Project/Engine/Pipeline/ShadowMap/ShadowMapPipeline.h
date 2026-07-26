@@ -6,11 +6,11 @@
 #include <dxcapi.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// シャドウマップ描画パイプラインクラス
 /// </summary>
-namespace KetaEngine {
-
 class ShadowMapPipeline : public BasePipeline {
 public:
     ShadowMapPipeline()  = default;

@@ -8,6 +8,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// 平行光源の色・向き・輝度を保持する定数バッファ用構造体
+/// </summary>
 struct DirectionalLightData {
     Vector4 color;     // ライトの色
     Vector3 direction; // ライトの向き

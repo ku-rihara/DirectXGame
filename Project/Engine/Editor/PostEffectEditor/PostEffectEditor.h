@@ -4,11 +4,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ポストエフェクトエディター
 /// </summary>
-namespace KetaEngine {
-
 class PostEffectEditor : public BaseEffectEditor<PostEffectData> {
 public:
     PostEffectEditor()  = default;

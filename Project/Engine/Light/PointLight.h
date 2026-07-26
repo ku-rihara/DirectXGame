@@ -6,6 +6,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// ポイントライト1つ分のGPU送信用データ(色・位置・輝度・半径・減衰率)
+/// </summary>
 struct PointLightData {
     Vector4 color; // ライトの色
     Vector3 position; // ライトの位置

@@ -2,11 +2,11 @@
 #include "../Engine/Pipeline/BaseCSPipeline.h"
 #include <Windows.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// パーティクル更新用コンピュートシェーダパイプラインクラス
 /// </summary>
-namespace KetaEngine {
-
 class UpdateParticlePipeline : public BaseCSPipeline {
 public:
     UpdateParticlePipeline()          = default;

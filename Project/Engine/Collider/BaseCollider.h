@@ -6,11 +6,11 @@
 #include <memory>
 #include "Vector4.h"
 
+namespace KetaEngine {
+
 /// <summary>
 ///  Collider基底クラス
 /// </summary>
-namespace KetaEngine {
-
 class BaseCollider {
 public:
     enum class ColliderShape : uint8_t { AABB, OBB, Sphere };

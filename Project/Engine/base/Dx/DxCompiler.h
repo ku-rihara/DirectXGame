@@ -7,11 +7,11 @@
 
 #pragma comment(lib, "dxcompiler.lib")
 
+namespace KetaEngine {
+
 /// <summary>
 /// シェーダーコンパイルを行うクラス
 /// </summary>
-namespace KetaEngine {
-
 class DxCompiler {
 public:
     DxCompiler()  = default;

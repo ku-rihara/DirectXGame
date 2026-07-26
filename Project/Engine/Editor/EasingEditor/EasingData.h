@@ -8,6 +8,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// float/Vector2/Vector3等の値を型パラメータ化してイージング再生するデータクラス
+/// </summary>
 template <typename T>
 class EasingData : public BaseEffectData {
 public:

@@ -14,7 +14,9 @@ class BaseEffectEditor;
 template <typename TEffectData>
 class BaseEffectEditor {
 public:
-    // カテゴリー構造体
+    /// <summary>
+    /// カテゴリー構造体
+    /// </summary>
     struct Category {
         std::string name;
         std::vector<std::unique_ptr<TEffectData>> effects;

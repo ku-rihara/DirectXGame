@@ -66,6 +66,9 @@ void ImGuiEasingTypeSelector(const char* label, int32_t& target);
 
 namespace KetaEngine {
 
+/// <summary>
+/// 任意の型Tの値を対象としたイージングの設定・状態
+/// </summary>
 template <typename T>
 struct EasingParameter {
 

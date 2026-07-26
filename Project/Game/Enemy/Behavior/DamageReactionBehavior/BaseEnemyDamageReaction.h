@@ -5,6 +5,9 @@
 
 class BaseEnemy;
 
+/// <summary>
+/// 敵の被ダメージリアクションの基底クラス
+/// </summary>
 class BaseEnemyDamageReaction {
 public:
     BaseEnemyDamageReaction(const std::string& name, BaseEnemy* boss);

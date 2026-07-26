@@ -32,6 +32,9 @@ class ParticleUpdater;
 class ParticleRenderer;
 class ParticleGroupRegistry;
 
+/// <summary>
+/// CPUパーティクル(グループ・個々のParticle・寿命更新・描画)を統括管理するクラス
+/// </summary>
 class ParticleManager {
 public:
     using GroupParameters = ParticleCommon::GroupParameters;
@@ -39,27 +42,42 @@ public:
     using EaseParm        = ParticleCommon::ScaleEaseParam;
 
 public:
+    /// <summary>
+    /// パーティクル1個のスケールイージング用の作業値とパラメータ
+    /// </summary>
     struct ScaleInFo {
         Vector3 tempScaleV3;
         Vector3 easeEndScale;
         EaseParm easeParam;
     };
 
+    /// <summary>
+    /// パーティクル1個の移動イージング用の開始・終了座標
+    /// </summary>
     struct TranslateInfo {
         Vector3 startPosition;
         Vector3 endPosition;
     };
 
+    /// <summary>
+    /// パーティクル1個の回転イージング用の開始・終了角度
+    /// </summary>
     struct RotateInfo {
         Vector3 startRotation;
         Vector3 endRotation;
     };
 
+    /// <summary>
+    /// パーティクル1個の色イージング用の開始・終了色
+    /// </summary>
     struct ColorInfo {
         Vector3 startColor;
         Vector3 endColor;
     };
 
+    /// <summary>
+    /// パーティクル1個のUVスクロール(テクスチャアニメーション)用パラメータと状態
+    /// </summary>
     struct UVInfo {
         Vector3 pos             = {};
         Vector3 scale           = {1.0f, 1.0f, 1.0f};
@@ -74,6 +92,9 @@ public:
         int32_t numOfFrame      = 0; ///< UV スクロール有効判定用
     };
 
+    /// <summary>
+    /// CPUパーティクル1個分の全ランタイムデータ(寿命・速度・各種イージング状態など)
+    /// </summary>
     struct Particle {
         float lifeTime_;
         float currentTime_;
@@ -128,12 +149,18 @@ public:
         std::unique_ptr<Easing<float>> dissolveEasing;
     };
 
+    /// <summary>
+    /// AABB範囲内のパーティクルに加速度を与える加速フィールド
+    /// </summary>
     struct AccelerationField {
         Vector3 acceleration;
         AABB area;
         bool isAdaption;
     };
 
+    /// <summary>
+    /// パーティクルグループ全体に対するディゾルブ演出のイージングパラメータ
+    /// </summary>
     struct DissolveGroupParams {
         float startThreshold = 1.0f;
         float endThreshold   = 0.0f;
@@ -143,6 +170,9 @@ public:
         bool isActive        = false;
     };
 
+    /// <summary>
+    /// 同一テクスチャ/モデルで描画される一連のパーティクルをまとめるグループ
+    /// </summary>
     struct ParticleGroup {
         Model* model                           = nullptr;
         std::unique_ptr<IPrimitive> primitive_ = nullptr;

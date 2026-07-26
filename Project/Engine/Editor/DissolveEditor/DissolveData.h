@@ -5,11 +5,11 @@
 #include <cstdint>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ディゾルブデータクラス
 /// </summary>
-namespace KetaEngine {
-
 class DissolveData : public BaseEffectData {
 public:
     DissolveData()  = default;

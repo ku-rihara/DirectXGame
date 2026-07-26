@@ -3,11 +3,11 @@
 /// base
 #include "Base/Dx/DirectXCommon.h"
 
-/// <summary>
-/// RTV管理クラス
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// RTV用デスクリプタの割り当てを管理するシングルトンクラス
+/// </summary>
 class RtvManager {
 private:
     RtvManager()                             = default;

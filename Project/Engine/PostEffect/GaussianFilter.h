@@ -3,13 +3,16 @@
 #include "BasePostEffect.h"
 #include <d3d12.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ガウシアンフィルターポストエフェクトクラス
 /// </summary>
-namespace KetaEngine {
-
 class GaussianFilter : public BasePostEffect {
 public:
+    /// <summary>
+    /// ガウシアンフィルターの強度(標準偏差)パラメータ
+    /// </summary>
     struct ParamData {
         float sigma;
     };

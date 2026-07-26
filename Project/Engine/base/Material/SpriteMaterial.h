@@ -13,6 +13,9 @@ class DirectXCommon;
 /// </summary>
 class SpriteMaterial {
 private:
+    /// <summary>
+    /// スプライト用マテリアル定数バッファのデータ
+    /// </summary>
     struct MaterialSprite {
         Vector4 color;
         Matrix4x4 uvTransform;

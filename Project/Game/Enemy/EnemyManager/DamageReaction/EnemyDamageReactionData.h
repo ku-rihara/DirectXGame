@@ -16,24 +16,34 @@
 /// </summary>
 class EnemyDamageReactionData {
 public:
-    // Normal状態のパラメータ
+    /// <summary>
+    /// Normal状態のパラメータ
+    /// </summary>
     struct NormalParam {
         float knockBackTime;
         float knockBackDamping;
     };
 
-    // バウンド共通パラメータ
+    /// <summary>
+    /// バウンド共通パラメータ
+    /// </summary>
     struct BoundParam {
         int32_t boundNum;
         float bounceDamping;
         float initialBounceRate;
     };
 
+    /// <summary>
+    /// 地面に叩きつけられるリアクション用パラメータ
+    /// </summary>
     struct SlammedParam {
         float gravity;
         Vector3 rotateSpeed;
     };
 
+    /// <summary>
+    /// 打ち上げ(テイクアッパー)リアクション用パラメータ
+    /// </summary>
     struct TakeUpperParam {
         float floatingTime;
         float fallSpeedLimit;
@@ -44,7 +54,9 @@ public:
     // 敵タイプ数
     static constexpr int kEnemyTypeCount = 2;
 
-    // リアクションパラメータ
+    /// <summary>
+    /// リアクションパラメータ
+    /// </summary>
     struct ReactionParameter {
         std::string triggerAttackName;
         std::array<std::string, kEnemyTypeCount> damageAnimationNames;

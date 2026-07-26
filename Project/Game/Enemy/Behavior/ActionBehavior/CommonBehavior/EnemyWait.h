@@ -3,6 +3,9 @@
 #include "../BaseEnemyBehavior.h"
 #include <functional>
 
+/// <summary>
+/// 待機・発見・終了フェーズを制御する敵の待機時の振る舞い
+/// </summary>
 class EnemyWait : public BaseEnemyBehavior {
 public:
     EnemyWait(BaseEnemy* boss);

@@ -31,6 +31,9 @@ public:
         COUNT,
     };
 
+    /// <summary>
+    /// 1つの操作ボタン表示に使うスプライトのラッパー
+    /// </summary>
     struct UIParam {
         std::unique_ptr<KetaEngine::Sprite> sprite_;
     };

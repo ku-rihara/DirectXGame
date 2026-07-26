@@ -4,6 +4,9 @@
 
 #include"Editor/Easing/Easing.h"
 
+/// <summary>
+/// 敵のスポーン演出(エフェクト再生からスケール復帰まで)を行う振る舞い
+/// </summary>
 class EnemySpawn : public BaseEnemyBehavior {
 public:
     // コンストラクタ

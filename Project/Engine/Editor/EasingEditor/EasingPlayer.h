@@ -4,11 +4,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// イージングプレイヤー
 /// </summary>
-namespace KetaEngine {
-
 template <typename T>
 class EasingPlayer : public BaseEffectPlayer {
 public:

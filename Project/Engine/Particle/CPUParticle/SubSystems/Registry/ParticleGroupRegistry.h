@@ -6,6 +6,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// パーティクルグループの作成・リソースリセットを担うクラス
+/// </summary>
 class ParticleGroupRegistry {
 public:
     ParticleGroupRegistry()  = default;

@@ -45,6 +45,9 @@ public:
     bool GetIsEasingFinish(int32_t comboLevel, int32_t groupNum) const; //< イージング完了フラグ取得
 
 private:
+    /// <summary>
+    /// 背景オブジェクトとそれが有効になるコンボレベルの組
+    /// </summary>
     struct Entry {
         std::unique_ptr<BaseComboLevelBackObj> obj;
         int32_t comboLevel = 0;

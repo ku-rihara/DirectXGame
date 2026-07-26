@@ -11,10 +11,16 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// 鏡面反射計算用にGPUへ渡すカメラワールド座標
+/// </summary>
 struct CameraForGPU {
     Vector3 worldPosition_;
 };
 
+/// <summary>
+/// 遮蔽物によるディザ抜き表示(オブジェクトがカメラに隠れた際のフェード)用のパラメータ
+/// </summary>
 struct DitherOcclusionData {
     Vector2 screenPos; // 対象のスクリーン座標
     float depth; // 対象の深度値
@@ -24,7 +30,9 @@ struct DitherOcclusionData {
     float pad[2];
 };
 
-// ライトの個数データ
+/// <summary>
+/// ライトの個数データ
+/// </summary>
 struct LightCountData {
     int pointLightCount;
     int spotLightCount;

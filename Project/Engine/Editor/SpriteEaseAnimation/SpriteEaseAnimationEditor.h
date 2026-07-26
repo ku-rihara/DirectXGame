@@ -5,13 +5,16 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// スプライトイージングアニメーションエディター
 /// </summary>
-namespace KetaEngine {
-
 class SpriteEaseAnimationEditor : public BaseEffectEditor<SpriteEaseAnimationData> {
 public:
+    /// <summary>
+    /// エディタのプレビュー表示に使うスプライトの一時的な変換・色状態
+    /// </summary>
     struct PreViewTransform {
         Vector2 scale       = Vector2::OneVector();
         Vector2 position    = Vector2::ZeroVector();

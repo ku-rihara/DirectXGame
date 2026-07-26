@@ -6,6 +6,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// GPUコンピュートシェーダーで扱う1パーティクル分のデータ
+/// </summary>
 struct ParticleCS {
     Vector3 translate; 
     float lifeTime; 
@@ -18,6 +21,9 @@ struct ParticleCS {
 
 };
 
+/// <summary>
+/// GPUパーティクル描画に必要な視点依存データ
+/// </summary>
 struct PerView {
     Matrix4x4 viewProjection;
     Matrix4x4 billboardMatrix;

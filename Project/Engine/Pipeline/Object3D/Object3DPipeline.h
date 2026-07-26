@@ -6,9 +6,6 @@
 #include <wrl/client.h>
 #include <Windows.h>
 
-/// <summary>
-/// 3Dオブジェクト描画パイプラインクラス
-/// </summary>
 namespace KetaEngine {
 
 enum class Object3DRootParameter : UINT{
@@ -30,6 +27,9 @@ enum class Object3DRootParameter : UINT{
     Count
 };
 
+/// <summary>
+/// 3Dオブジェクト描画パイプラインクラス
+/// </summary>
 class Object3DPipeline : public BasePipeline {
 public:
     Object3DPipeline()  = default;

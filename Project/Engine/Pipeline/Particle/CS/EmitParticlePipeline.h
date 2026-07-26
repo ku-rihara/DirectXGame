@@ -2,11 +2,11 @@
 #include "../Engine/Pipeline/BaseCSPipeline.h"
 #include <Windows.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// パーティクル生成用コンピュートシェーダパイプラインクラス
 /// </summary>
-namespace KetaEngine {
-
 class EmitParticlePipeline : public BaseCSPipeline {
 public:
     EmitParticlePipeline()          = default;

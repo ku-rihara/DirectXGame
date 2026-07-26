@@ -10,28 +10,38 @@
 #include <wrl.h>
 #include <xaudio2.h>
 
+namespace KetaEngine {
+
 /// <summary>
 ///  オーディオクラス
 /// </summary>
-namespace KetaEngine {
-
 class Audio {
 public:
+    /// <summary>
+    /// WAVEファイルのチャンク共通ヘッダ
+    /// </summary>
     struct ChunkHeader {
         char id[4]; // チャンク毎のID
         int32_t size; // チャンクサイズ
     };
-    // RIFFヘッダチャンク
+    /// <summary>
+    /// RIFFヘッダチャンク
+    /// </summary>
     struct RiffHeader {
         ChunkHeader chunk; // RIFF
         char type[4];
     };
-    // FNTチャンク
+    /// <summary>
+    /// FNTチャンク
+    /// </summary>
     struct FormatChunk {
         ChunkHeader chunk; //"fmt"
         WAVEFORMATEX fmt; // 波形フォーマット
     };
 
+    /// <summary>
+    /// 読み込み済み音声1件分のフォーマットとPCMバッファ
+    /// </summary>
     struct SoundData {
         // 波形フォーマット
         WAVEFORMATEX wfex;

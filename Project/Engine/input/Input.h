@@ -13,11 +13,11 @@
 #include "Mouse.h"
 #include <dinput.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// 入力管理統合クラス
 /// </summary>
-namespace KetaEngine {
-
 class Input {
 private:
     Microsoft::WRL::ComPtr<IDirectInput8> directInput_    = nullptr;

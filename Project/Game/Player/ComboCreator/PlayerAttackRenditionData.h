@@ -17,6 +17,9 @@
 /// </summary>
 class PlayerAttackRenditionData {
 public:
+    /// <summary>
+    /// 攻撃演出(音声/エフェクト)1件分の設定(ファイル名・開始タイミング・カメラリセット有無・音量等)
+    /// </summary>
     struct RenditionParam {
         std::string fileName;
         float startTiming    = 0.0f;
@@ -27,7 +30,9 @@ public:
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(RenditionParam, fileName, startTiming, isCameraReset, volume, repeatOnDamage)
     };
 
-    // オブジェクトアニメーションパラメータ
+    /// <summary>
+    /// オブジェクトアニメーションパラメータ
+    /// </summary>
     struct ObjAnimationParam {
         std::string fileName;
         float       startTiming   = 0.0f;
@@ -36,7 +41,9 @@ public:
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(ObjAnimationParam, fileName, startTiming, trailFileName)
     };
 
-    // 振動パラメータ
+    /// <summary>
+    /// 振動パラメータ
+    /// </summary>
     struct VibrationParam {
         float startTiming   = 0.0f;
         float duration      = 0.3f;
@@ -67,7 +74,9 @@ public:
         Count
     };
 
-    // 演出タイプ
+    /// <summary>
+    /// 演出タイプ
+    /// </summary>
     struct RenditionTypeInfo {
         Type type;
         const char* name;
@@ -75,7 +84,9 @@ public:
         const char* dir;
     };
 
-    // オブジェクトアニメーションタイプ
+    /// <summary>
+    /// オブジェクトアニメーションタイプ
+    /// </summary>
     struct ObjAnimationTypeInfo {
         ObjAnimationType type;
         const char* name;

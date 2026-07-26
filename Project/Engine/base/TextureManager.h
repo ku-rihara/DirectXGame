@@ -16,7 +16,9 @@ class SrvManager;
 /// </summary>
 class TextureManager {
 private:
-    // テクスチャ1枚分のデータ
+    /// <summary>
+    /// テクスチャ1枚分のデータ
+    /// </summary>
     struct TextureData {
         DirectX::TexMetadata metadata;
         uint32_t index;

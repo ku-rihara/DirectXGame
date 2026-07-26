@@ -6,6 +6,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// パーティクルグループの描画(通常・スクリーン座標・歪みパス)を担当するクラス
+/// </summary>
 class ParticleRenderer {
 public:
     ParticleRenderer()  = default;

@@ -9,19 +9,25 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// カメラアニメーションデータクラス
 /// </summary>
-namespace KetaEngine {
-
 class CameraAnimationData : public BaseSequenceEffectData<CameraKeyFrame> {
 public:
+    /// <summary>
+    /// カメラの位置・回転・画角を表すトランスフォーム
+    /// </summary>
     struct CameraTransform {
         Vector3 position = {0.0f, 0.0f, 0.0f};
         Vector3 rotation = {0.0f, 0.0f, 0.0f};
         float fov        = 45.0f;
     };
 
+    /// <summary>
+    /// 初期状態へ戻る際のディレイ・イージング種別を保持するパラメータ
+    /// </summary>
     struct ResetParam {
         float timePoint         = 1.0f;
         float delayTime         = 0.0f;
@@ -31,6 +37,9 @@ public:
         int32_t fovEaseType     = 0;
     };
 
+    /// <summary>
+    /// 初期状態への復帰(リターン)処理に使うイージングと状態フラグ
+    /// </summary>
     struct ReturnParam {
         Easing<Vector3> positionEase;
         Easing<Vector3> rotationEase;
@@ -40,6 +49,9 @@ public:
         bool autoReturnToInitial  = true;
     };
 
+    /// <summary>
+    /// 注視点(ルックアット)を使用するかどうかとその対象座標
+    /// </summary>
     struct LookAtParam {
         bool useLookAt       = false;
         Vector3 lookAtTarget = {0, 0, 0};

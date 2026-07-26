@@ -43,7 +43,9 @@ public:
     };
 
 public:
-    // 移動パラメータ
+    /// <summary>
+    /// 移動パラメータ
+    /// </summary>
     struct MoveParam {
         Vector3 value;
         int32_t easeType = 0;
@@ -56,7 +58,9 @@ public:
         bool isFaceMovementDirection = false;
     };
 
-    // コリジョンパラメータ
+    /// <summary>
+    /// コリジョンパラメータ
+    /// </summary>
     struct CollisionParam {
         CollisionFollowTarget followTarget = CollisionFollowTarget::PLAYER;
         float sphereRad;
@@ -68,21 +72,27 @@ public:
         bool isAlwaysFollowing;
     };
 
-    // タイミングパラメータ
+    /// <summary>
+    /// タイミングパラメータ
+    /// </summary>
     struct TimingParam {
         float finishWaitTime;
         bool isAutoAdvance;
         bool isSkipToFinishOnHit = false;
     };
 
-    // 攻撃発動に関するパラメータ
+    /// <summary>
+    /// 攻撃発動に関するパラメータ
+    /// </summary>
     struct TriggerParam {
         TriggerCondition condition;
         int32_t keyBordBottom;
         int32_t gamePadBottom;
     };
 
-    // アタックパラメータ
+    /// <summary>
+    /// アタックパラメータ
+    /// </summary>
     struct AttackParameter {
         CollisionParam collisionParam;
         MoveParam moveParam;

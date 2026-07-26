@@ -39,6 +39,9 @@ public:
     void DebugImGui() override; //< ImGuiデバッグ
 
 private:
+    /// <summary>
+    /// スカイボックス用マテリアルの定数バッファデータ
+    /// </summary>
     struct MaterialData {
         Vector4 color;
         int32_t enableLighting;

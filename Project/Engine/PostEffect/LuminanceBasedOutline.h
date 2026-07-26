@@ -5,13 +5,16 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// 輝度ベースアウトラインポストエフェクトクラス
 /// </summary>
-namespace KetaEngine {
-
 class LuminanceBasedOutline : public BasePostEffect {
 public:
+    /// <summary>
+    /// アウトライン強調に使う輝度の重み付け係数
+    /// </summary>
     struct ParamData {
         float wightRate;
     };

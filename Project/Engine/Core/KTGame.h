@@ -4,6 +4,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// KTFrameworkを継承したゲーム本体クラス
+/// </summary>
 class KTGame : public KTFramework {
 public:
     KTGame()  = default;

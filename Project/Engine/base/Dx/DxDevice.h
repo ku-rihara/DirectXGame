@@ -7,11 +7,11 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "dxguid.lib")
 
+namespace KetaEngine {
+
 /// <summary>
 /// デバイスを管理するクラス
 /// </summary>
-namespace KetaEngine {
-
 class DxDevice {
 public:
     DxDevice()  = default;

@@ -9,6 +9,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// スケルトンを構成する1関節分のデータ
+/// </summary>
 struct Joint {
     QuaternionTransform transform;
     Matrix4x4 localMatrix;
@@ -19,6 +22,9 @@ struct Joint {
     std::optional<int32_t> parent;
 };
 
+/// <summary>
+/// モデル1体分のスケルトン
+/// </summary>
 struct Skeleton {
     int32_t root;
     std::map<std::string, int32_t> jointMap;

@@ -6,11 +6,11 @@
 #include "Vector3.h"
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ポストエフェクトデータ
 /// </summary>
-namespace KetaEngine {
-
 class PostEffectData : public BaseEffectData {
 public:
     PostEffectData()  = default;

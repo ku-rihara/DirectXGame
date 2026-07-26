@@ -3,6 +3,9 @@
 #include "BaseAudienceBehavior.h"
 #include <functional>
 
+/// <summary>
+/// 観客が退場していく際の振る舞い
+/// </summary>
 class AudienceDisappear : public BaseAudienceBehavior {
 
 public:

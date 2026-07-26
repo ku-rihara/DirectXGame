@@ -25,6 +25,9 @@ public:
         Count
     };
 
+    /// <summary>
+    /// 通常個体の逃走行動パラメータ(速度・距離)
+    /// </summary>
     struct NormalParameter {
         float fleeSpeed    = 5.0f;
         float fleeDistance = 15.0f;

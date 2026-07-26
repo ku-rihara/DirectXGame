@@ -7,6 +7,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// CPUパーティクルのエディタクラス
+/// </summary>
 class ParticleEditor : public BaseEffectEditor<ParticleData> {
 public:
     ParticleEditor()  = default;

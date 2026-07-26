@@ -3,11 +3,11 @@
 #include <memory>
 #include <vector>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ポイントライト管理クラス
 /// </summary>
-namespace KetaEngine {
-
 class PointLightManager {
 private:
     std::vector<std::unique_ptr<PointLight>> pointLights_;

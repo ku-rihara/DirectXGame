@@ -4,11 +4,11 @@
 #include <cstdint>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// レール制御点クラス
 /// </summary>
-namespace KetaEngine {
-
 class RailControlPoint {
 public:
     RailControlPoint()  = default;

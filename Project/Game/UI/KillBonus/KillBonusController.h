@@ -7,6 +7,9 @@
 #include <functional>
 #include <string>
 
+/// <summary>
+/// キルボーナスUI(コンボ演出・同時キル判定)の統括コントローラ
+/// </summary>
 class KillBonusController {
 public:
     KillBonusController()  = default;
@@ -43,7 +46,9 @@ private:
     float displayDuration_ = 2.0f;
     bool  displayActive_   = false;
 
-    // 同時キル判定
+    /// <summary>
+    /// 同時キル判定
+    /// </summary>
     struct SimKillTracker {
         float   toleranceTime = 0.0f;
         int32_t killCount     = 0;

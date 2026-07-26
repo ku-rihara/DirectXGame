@@ -13,6 +13,9 @@
 /// </summary>
 class ResultUIItem {
 public:
+    /// <summary>
+    /// リザルトUI項目のレイアウト設定(座標・オフセット・桁間隔等)
+    /// </summary>
     struct Config {
         Vector2 basePos;
         Vector2 labelOffset;

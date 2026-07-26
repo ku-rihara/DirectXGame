@@ -18,6 +18,9 @@
 /// </summary>
 class ComboUIController {
 private:
+    /// <summary>
+    /// コンボUIの拡縮アニメーション振幅パラメータ
+    /// </summary>
     struct ScalingParameter {
         Vector2 amplitudeScale;
     };

@@ -4,11 +4,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// タイムスケールエディター
 /// </summary>
-namespace KetaEngine {
-
 class TimeScaleEditor : public BaseEffectEditor<TimeScaleData> {
 public:
     TimeScaleEditor()  = default;

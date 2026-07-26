@@ -26,7 +26,9 @@ public:
     using UVParm          = ParticleCommon::UVParam;
     using JointParent     = ParticleCommon::JointParent;
 
-    // タイミングパラメータ
+    /// <summary>
+    /// タイミングパラメータ
+    /// </summary>
     struct TimingParam {
         float startTime     = 0.0f;
         float afterDuration = 0.0f;

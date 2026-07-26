@@ -11,6 +11,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// GPUに転送するワールド行列の定数バッファデータ
+/// </summary>
 struct ConstBufferDataWorldTransform {
     Matrix4x4 matWorld;
 };
@@ -20,6 +23,9 @@ enum class BillboardType {
     Y, //< Y軸ビルボード
 };
 
+/// <summary>
+/// 回転をどの軸に適用するかを示すフラグ
+/// </summary>
 struct AdaptRotate {
     bool isX;
     bool isY;
@@ -38,6 +44,9 @@ class Object3DAnimation;
 /// </summary>
 class WorldTransform {
 private:
+    /// <summary>
+    /// スケール・回転・平行移動を保持するTransform構造体
+    /// </summary>
     struct Transform {
         Vector3 scale = Vector3::OneVector();
         Vector3 rotation;
@@ -45,6 +54,9 @@ private:
         Quaternion quaternion;
     };
 
+    /// <summary>
+    /// 進行方向を向く(look-at)処理に使う設定・状態
+    /// </summary>
     struct DirectionSettings {
         bool isLookAtDirection   = false;
         Vector3 upVector         = Vector3::ToUp();

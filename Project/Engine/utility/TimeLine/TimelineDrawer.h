@@ -9,7 +9,9 @@
 
 namespace KetaEngine {
 
-// キーフレーム構造体
+/// <summary>
+/// キーフレーム構造体
+/// </summary>
 struct TimeLineKeyFrame {
     int32_t frame;
     float value;
@@ -19,7 +21,9 @@ struct TimeLineKeyFrame {
     std::string label;
 };
 
-// タイムライントラック
+/// <summary>
+/// タイムライントラック
+/// </summary>
 struct TimeLineTrack {
     std::string name;
     std::vector<TimeLineKeyFrame> keyframes;
@@ -36,6 +40,9 @@ struct TimeLineTrack {
     uint32_t id;
 };
 
+/// <summary>
+/// ImGuiベースのタイムラインUI(トラック・キーフレーム)を描画・操作するクラス
+/// </summary>
 class TimelineDrawer {
 public:
     TimelineDrawer()  = default;

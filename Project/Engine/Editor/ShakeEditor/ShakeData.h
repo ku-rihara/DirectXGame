@@ -7,11 +7,11 @@
 #include <cstdint>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// シェイクデータ
 /// </summary>
-namespace KetaEngine {
-
 class ShakeData : public BaseEffectData {
 public:
     enum class ShakeType {

@@ -9,7 +9,9 @@ namespace KetaEngine {
 
 class RibbonTrail;
 
-
+/// <summary>
+/// リボントレイルエディター
+/// </summary>
 class RibbonTrailEditor : public BaseEffectEditor<RibbonTrailData> {
 public:
     RibbonTrailEditor()  = default;

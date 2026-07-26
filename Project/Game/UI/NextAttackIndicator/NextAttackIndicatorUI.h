@@ -63,6 +63,9 @@ private:
     Player*                          pPlayer_         = nullptr;
     const KetaEngine::ViewProjection* pViewProjection_ = nullptr;
 
+    /// <summary>
+    /// 次の攻撃入力を示すボタンごとの表示情報(設定値とスプライト)
+    /// </summary>
     struct IndicatorEntry {
         ButtonConfig                      config;
         std::unique_ptr<KetaEngine::Sprite> sprite;

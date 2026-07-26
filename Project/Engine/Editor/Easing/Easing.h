@@ -6,11 +6,11 @@
 #include <functional>
 #include <string>
 
-/// <summary>
-/// イージングを扱うテンプレートクラス
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// 値の型Tを問わずイージング補間を行うテンプレートクラス
+/// </summary>
 template <typename T>
 class Easing {
 public:

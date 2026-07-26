@@ -2,6 +2,9 @@
 #include "3D/Object3d/Object3d.h"
 #include "3D/WorldTransform.h"
 
+/// <summary>
+/// 空を覆うスカイドームの描画・更新を行うクラス
+/// </summary>
 class SkyDome {
 public:
     SkyDome();

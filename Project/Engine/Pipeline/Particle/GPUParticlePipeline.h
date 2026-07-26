@@ -6,11 +6,11 @@
 #include <d3dcommon.h>
 #include <dxcapi.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// GPUパーティクル描画パイプラインクラス
 /// </summary>
-namespace KetaEngine {
-
 class GPUParticlePipeline : public BasePipeline {
 public:
     GPUParticlePipeline()  = default;

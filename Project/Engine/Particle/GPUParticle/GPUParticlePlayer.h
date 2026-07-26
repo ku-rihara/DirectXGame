@@ -5,11 +5,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// GPUパーティクルプレイヤー
 /// </summary>
-namespace KetaEngine {
-
 class GPUParticlePlayer : public BaseEffectPlayer {
 public:
     GPUParticlePlayer()           = default;

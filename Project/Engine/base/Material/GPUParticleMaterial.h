@@ -9,8 +9,14 @@ namespace KetaEngine {
 
 class DirectXCommon;
 
+/// <summary>
+/// GPUパーティクル用マテリアルを管理するクラス
+/// </summary>
 class GPUParticleMaterial {
 private:
+    /// <summary>
+    /// GPUパーティクルの定数バッファ用マテリアルデータ
+    /// </summary>
     struct MaterialData {
         Vector4 color;
 
@@ -24,6 +30,9 @@ private:
         float padding1[2];
     };
 
+    /// <summary>
+    /// UVスクロール・フリップなどUVアニメーション用の定数バッファデータ
+    /// </summary>
     struct UVAnimationData {
         Vector2 uvPosition;
         float uvRotate;

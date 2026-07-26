@@ -22,6 +22,9 @@ public:
     void DebugImGui() override;
 
 private:
+    /// <summary>
+    /// プリミティブ用マテリアルの定数バッファデータ
+    /// </summary>
     struct MaterialData {
         Vector4  color          = {1.0f, 1.0f, 1.0f, 1.0f};
         int32_t  useTexture     = 0;       ///< 1=テクスチャサンプリング有効

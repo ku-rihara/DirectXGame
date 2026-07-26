@@ -7,11 +7,11 @@
 #include <cstdint>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// スプライトイージングアニメーションセクション
 /// </summary>
-namespace KetaEngine {
-
 class SpriteEaseAnimationSection {
 public:
     enum class PropertyType {
@@ -40,6 +40,9 @@ public:
         FINISHED
     };
 
+    /// <summary>
+    /// Vector2型プロパティのイージング設定・状態
+    /// </summary>
     struct Vec2Param {
         bool isActive         = false;
         bool isReturnToOrigin = false;
@@ -67,6 +70,9 @@ public:
         float returnElapsedTime = 0.0f;
     };
 
+    /// <summary>
+    /// Vector3型プロパティのイージング設定・状態
+    /// </summary>
     struct Vec3Param {
         bool isActive         = false;
         bool isReturnToOrigin = false;
@@ -94,6 +100,9 @@ public:
         float returnElapsedTime = 0.0f;
     };
 
+    /// <summary>
+    /// float型プロパティのイージング設定・状態
+    /// </summary>
     struct FloatParam {
         bool isActive         = false;
         bool isReturnToOrigin = false;

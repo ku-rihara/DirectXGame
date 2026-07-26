@@ -5,6 +5,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// GPUパーティクルの発生位置・発生数・発生頻度を制御するデータ
+/// </summary>
 struct ParticleEmit {
     Vector3 translate;
     uint32_t count;
@@ -14,7 +17,9 @@ struct ParticleEmit {
     float _padding0;
 };
 
-
+/// <summary>
+/// 発生時のスケール・回転・座標のランダム範囲(最小/最大)を保持するデータ
+/// </summary>
 struct EmitTransformParams {
     Vector3 scaleMin;
     float _padding0;
@@ -32,7 +37,9 @@ struct EmitTransformParams {
     float _padding5;
 };
 
-// Physics系パラメータ
+/// <summary>
+/// Physics系パラメータ
+/// </summary>
 struct EmitPhysicsParams {
     Vector3 velocityMin;
     float _padding0;
@@ -45,7 +52,9 @@ struct EmitPhysicsParams {
     float _padding3;
 };
 
-// Appearance系パラメータ
+/// <summary>
+/// Appearance系パラメータ
+/// </summary>
 struct EmitAppearanceParams {
     Vector4 colorMin;
     Vector4 colorMax;
@@ -58,6 +67,9 @@ struct EmitAppearanceParams {
     float _padding2;
 };
 
+/// <summary>
+/// フレームごとにGPUへ送る時間情報(経過時間・デルタタイム)
+/// </summary>
 struct PerFrame {
     float time;
     float deltaTime;

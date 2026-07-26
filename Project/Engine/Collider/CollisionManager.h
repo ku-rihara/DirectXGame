@@ -62,6 +62,9 @@ public:
     void AdjustParam();
 
 public:
+    /// <summary>
+    /// コライダーポインタのペアをunordered_mapのキーとして使うためのハッシュ関数
+    /// </summary>
     struct PairHash {
         template <typename T1, typename T2>
         std::size_t operator()(const std::pair<T1, T2>& p) const {

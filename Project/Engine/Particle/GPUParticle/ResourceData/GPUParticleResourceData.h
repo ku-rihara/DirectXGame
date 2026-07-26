@@ -17,6 +17,9 @@ class SrvManager;
 /// </summary>
 class GPUParticleResourceData {
 public:
+    /// <summary>
+    /// GPUリソースとそのCPU/GPUデスクリプタハンドルの組
+    /// </summary>
     struct GPUResourceHandle {
         Microsoft::WRL::ComPtr<ID3D12Resource> resource;
         D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
@@ -24,6 +27,9 @@ public:
         bool IsValid() const { return resource != nullptr; }
     };
 
+    /// <summary>
+    /// CPUからマッピングされた型Tのバッファへのポインタを保持するリソースハンドル
+    /// </summary>
     template <typename T>
     struct MappedResourceHandle {
         Microsoft::WRL::ComPtr<ID3D12Resource> resource;
@@ -34,7 +40,9 @@ public:
         bool IsValid() const { return resource != nullptr && mappedData != nullptr; }
     };
 
-    // Emit関連のバッファをまとめた構造体
+    /// <summary>
+    /// Emit関連のバッファをまとめた構造体
+    /// </summary>
     struct EmitParamBuffers {
         MappedResourceHandle<EmitTransformParams> transformBuffer;
         MappedResourceHandle<EmitPhysicsParams> physicsBuffer;

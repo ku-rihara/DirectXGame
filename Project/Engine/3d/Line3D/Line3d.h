@@ -8,11 +8,17 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// ライン描画1頂点分のデータ
+/// </summary>
 struct Vertex {
     Vector3 pos;
     Vector4 color;
 };
 
+/// <summary>
+/// ライン描画用の定数バッファ
+/// </summary>
 struct CBuffer {
     Matrix4x4 viewProjection;
 };

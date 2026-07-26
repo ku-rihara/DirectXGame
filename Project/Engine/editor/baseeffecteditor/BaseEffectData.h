@@ -3,11 +3,11 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <string>
 
-/// <summary>
-/// エフェクトデータクラス
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// エフェクトデータの基底クラス
+/// </summary>
 class BaseEffectData {
 public:
     enum class PlayState {

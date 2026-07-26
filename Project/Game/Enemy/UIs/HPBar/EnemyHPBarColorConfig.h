@@ -12,6 +12,9 @@ class GlobalParameter;
 /// </summary>
 class EnemyHPBarColorConfig {
 public:
+    /// <summary>
+    /// HP割合に応じたHPバー色の1段階分の設定
+    /// </summary>
     struct Stage {
         float threshold = 0.0f; ///< この割合以上なら本ステージの色を使用
         Vector3 color   = {1.0f, 1.0f, 1.0f};

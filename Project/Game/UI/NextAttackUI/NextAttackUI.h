@@ -47,6 +47,9 @@ private:
 private:
     enum class State { Hidden, Showing, Closing };
 
+    /// <summary>
+    /// 次攻撃候補ボタン1枠分のスプライトと表示状態
+    /// </summary>
     struct ButtonSlot {
         std::unique_ptr<KetaEngine::Sprite> sprite;
         bool isActive = false;

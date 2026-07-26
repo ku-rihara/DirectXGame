@@ -7,6 +7,9 @@ class EnemyDamageReactionController;
 class EnemyDamageReactionData;
 class SideRope;
 
+/// <summary>
+/// 攻撃情報から適切なダメージリアクションを選択・再生するルートクラス
+/// </summary>
 class EnemyDamageReactionRoot : public BaseEnemyDamageReaction {
 public:
     // コンストラクタ

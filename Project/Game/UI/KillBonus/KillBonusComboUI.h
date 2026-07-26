@@ -10,6 +10,9 @@
 #include <cstdint>
 #include <memory>
 
+/// <summary>
+/// キルボーナスコンボUIの各パーツの表示位置・スケール・色レイアウト設定
+/// </summary>
 struct KillBonusComboUILayout {
     Vector2 basePos;
 
@@ -47,6 +50,9 @@ struct KillBonusComboUILayout {
     std::array<KillBonusColorTier, 3> colorTiers;
 };
 
+/// <summary>
+/// キル時のコンボ倍率ボーナスをスプライトで表示・演出するUIクラス
+/// </summary>
 class KillBonusComboUI {
 public:
     enum class State { 

@@ -7,11 +7,11 @@
 #include <dxcapi.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// アニメーション描画パイプラインクラス
 /// </summary>
-namespace KetaEngine {
-
 class SkinningObject3DPipeline : public BasePipeline {
 public:
     SkinningObject3DPipeline()  = default;

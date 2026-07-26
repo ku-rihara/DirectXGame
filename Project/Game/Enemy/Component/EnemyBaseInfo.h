@@ -20,6 +20,9 @@ public:
         COUNT,
     };
 
+    /// <summary>
+    /// 敵の各種数値パラメータ(当たり判定・HP・移動・死亡演出等)
+    /// </summary>
     struct Parameter {
         Vector3 baseScale_;
         float collisionRad;

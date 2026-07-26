@@ -13,6 +13,9 @@ enum class BlendMode;
 
 namespace KetaEngine {
 
+/// <summary>
+/// GPUパーティクルの1セクション分の発生・再生を管理するクラス
+/// </summary>
 class GPUParticleSection {
 public:
     enum class PlayState {
@@ -29,6 +32,9 @@ public:
     };
 
 public:
+    /// <summary>
+    /// UVスクロール・フリップなどUV表示に関するパラメータ
+    /// </summary>
     struct UVParameters {
         Vector2 uvPosition;
         float uvRotate;
@@ -40,6 +46,9 @@ public:
         bool isUVLoop = true;
     };
 
+    /// <summary>
+    /// 発生時の拡縮・回転・平行移動のランダム範囲
+    /// </summary>
     struct TransformParameters {
         Vector3 scaleMin = {0.5f, 0.5f, 0.5f};
         Vector3 scaleMax = {1.5f, 1.5f, 1.5f};
@@ -49,6 +58,9 @@ public:
         Vector3 translateMax;
     };
 
+    /// <summary>
+    /// 発生時の速度・回転速度のランダム範囲
+    /// </summary>
     struct PhysicsParameters {
         Vector3 velocityMin;
         Vector3 velocityMax;
@@ -56,6 +68,9 @@ public:
         Vector3 rotationSpeedMax;
     };
 
+    /// <summary>
+    /// 発生時の色・寿命のランダム範囲
+    /// </summary>
     struct AppearanceParameters {
         Vector4 colorMin;
         Vector4 colorMax;
@@ -63,12 +78,18 @@ public:
         float lifeTimeMax;
     };
 
+    /// <summary>
+    /// 発生位置・発生数・発生頻度の設定
+    /// </summary>
     struct EmitterSettings {
         Vector3 position;
         uint32_t count  = 10;
         float frequency = 1.0f;
     };
 
+    /// <summary>
+    /// ブレンドモードや有効状態などグループ全体の設定
+    /// </summary>
     struct GroupSettings {
         BlendMode blendMode  = BlendMode::Add;
         bool isActive        = true;

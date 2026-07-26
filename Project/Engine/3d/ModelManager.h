@@ -4,11 +4,11 @@
 #include <memory>
 #include <string>
 
-/// <summary>
-/// モデル管理クラス
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// モデルのロード・キャッシュ・検索を一元管理するシングルトンクラス
+/// </summary>
 class ModelManager {
 private:
     ModelManager()                               = default;

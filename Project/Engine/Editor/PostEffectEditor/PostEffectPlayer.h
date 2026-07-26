@@ -3,13 +3,13 @@
 #include <memory>
 #include <string>
 
-/// <summary>
-/// ポストエフェクト再生クラス
-/// </summary>
 namespace KetaEngine {
 
 class PostEffectData;
 
+/// <summary>
+/// ポストエフェクト再生クラス
+/// </summary>
 class PostEffectPlayer : public BaseEffectPlayer {
 public:
     PostEffectPlayer()           = default;

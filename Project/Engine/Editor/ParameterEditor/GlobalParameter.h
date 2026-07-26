@@ -9,14 +9,17 @@
 #include <variant>
 #include <vector>
 
+namespace KetaEngine {
+
 /// <summary>
 /// グローバルパラメータ管理クラス
 /// </summary>
-namespace KetaEngine {
-
 class GlobalParameter {
 public:
 private:
+    /// <summary>
+    /// 変数ポインタとGlobalParameter間で値をやり取りするための読み書き関数ペア
+    /// </summary>
     struct BoundItem {
         std::function<void()> pullVariant;
         std::function<void()> pushVariant;

@@ -23,6 +23,9 @@ public:
         Count,
     };
 
+    /// <summary>
+    /// ゲージ状態ごとの鼓動(拍動)イージングと速度倍率
+    /// </summary>
     struct HeatBeat {
         KetaEngine::Easing<Vector2> heatBeatEase;
         std::array<float, static_cast<int32_t>(GaugeState::Count)> heatBeatSpeedRate;

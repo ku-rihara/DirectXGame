@@ -24,6 +24,9 @@ public:
 private:
     void RegisterParams();
 
+    /// <summary>
+    /// ランナー全体のループ移動・配置設定
+    /// </summary>
     struct Config {
         Vector3 basePos; ///< 全体の基準位置
         float zSpacing; ///< ランナー間のZ間隔

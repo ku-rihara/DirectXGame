@@ -5,12 +5,12 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ディゾルブエディタクラス
 /// カテゴリーシステムを使用
 /// </summary>
-namespace KetaEngine {
-
 class DissolveEditor : public BaseEffectEditor<DissolveData> {
 public:
     DissolveEditor()  = default;

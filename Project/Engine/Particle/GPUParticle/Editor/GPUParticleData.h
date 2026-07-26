@@ -4,11 +4,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// GPUパーティクルデータクラス
 /// </summary>
-namespace KetaEngine {
-
 class GPUParticleData : public BaseSequenceEffectData<GPUParticleSection> {
 public:
     GPUParticleData()           = default;

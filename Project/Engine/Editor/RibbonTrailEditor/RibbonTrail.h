@@ -13,16 +13,25 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// リボントレイル描画1頂点分のデータ
+/// </summary>
 struct RibbonVertex {
     Vector3 pos;
     Vector4 color;
     Vector2 uv;
 };
 
+/// <summary>
+/// リボントレイル描画用の定数バッファ
+/// </summary>
 struct RibbonCBuffer {
     Matrix4x4 viewProjection;
 };
 
+/// <summary>
+/// UVスクロールオフセットを渡す定数バッファ
+/// </summary>
 struct RibbonUVScrollCBuffer {
     Vector2 offset;
     float   pad[2]; // 16byte アライン
@@ -105,6 +114,9 @@ public:
 private:
     void Init(size_t maxPoints);
 
+    /// <summary>
+    /// トレイルを構成する1ポイント分の座標・色・幅・経過時間
+    /// </summary>
     struct TrailPoint {
         Vector3 position;
         Vector4 startColor; // AddPoint 時のヘッド色

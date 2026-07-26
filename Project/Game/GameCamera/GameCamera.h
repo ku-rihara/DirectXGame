@@ -14,11 +14,17 @@ class LockOn;
 /// </summary>
 class GameCamera {
 public:
+    /// <summary>
+    /// カメラ追従・Y軸回転の補間にかける時間
+    /// </summary>
     struct InterpolationTime {
         float target;
         float rotateY;
     };
 
+    /// <summary>
+    /// ゲームカメラの全体パラメータ(補間時間・オフセット・追従条件)
+    /// </summary>
     struct Parameter {
         InterpolationTime interpolationTime;
         Vector3 offsetPos;

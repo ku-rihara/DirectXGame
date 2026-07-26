@@ -10,10 +10,15 @@ namespace KetaEngine {
 class Object3DAnimation;
 class WorldTransform;
 
+/// <summary>
+/// CPUパーティクルのシーケンスデータ
+/// </summary>
 class ParticleData : public BaseSequenceEffectData<ParticleSection> {
 
 public:
-    // Parent parameter 
+    /// <summary>
+    /// 追従対象を指定するための親パラメータ
+    /// </summary>
     struct ParentParam {
         const Vector3* followPos_               = nullptr;
         const WorldTransform* transform_        = nullptr;

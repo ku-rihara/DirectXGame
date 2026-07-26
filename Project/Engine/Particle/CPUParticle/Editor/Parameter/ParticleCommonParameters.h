@@ -18,7 +18,9 @@ class WorldTransform;
 /// </summary>
 namespace ParticleCommon {
 
-// UVパラメータ
+/// <summary>
+/// UVパラメータ
+/// </summary>
 struct UVParam {
     float frameScrollSpeed  = 0.0f;
     bool isLoop             = false;
@@ -30,12 +32,17 @@ struct UVParam {
     int32_t numOfFrame      = 0;
 };
 
-// ジョイント親
+/// <summary>
+/// ジョイント親
+/// </summary>
 struct JointParent {
     std::string name;
     const Object3DAnimation* animation = nullptr;
 };
 
+/// <summary>
+/// 前進・戻りフェーズを持つ汎用イージングパラメータ
+/// </summary>
 struct EaseParam {
     float maxTime              = 1.0f;
     bool isEase                = false;
@@ -45,20 +52,26 @@ struct EaseParam {
     bool isReturnToOrigin      = false; // true のとき前進後に起点へ戻るイージングを行う
 };
 
-// スケールイージングパラメータ
+/// <summary>
+/// スケールイージングパラメータ
+/// </summary>
 struct ScaleEaseParam {
     EaseParam baseParam;
     FMinMax endValueF = {};
     V3MinMax endValueV3;
 };
 
-// トランスレートイージングパラメータ
+/// <summary>
+/// トランスレートイージングパラメータ
+/// </summary>
 struct EasingParamV3 {
     EaseParam baseParam;
     V3MinMax endValue;
 };
 
-// カラーイージングパラメータ
+/// <summary>
+/// カラーイージングパラメータ
+/// </summary>
 struct ColorEaseParam {
     EaseParam baseParam;
     V3MinMax endValue;
@@ -71,13 +84,17 @@ enum class AlphaMode {
     Easing,   // イージングで消える
 };
 
-// アルファイージングパラメータ
+/// <summary>
+/// アルファイージングパラメータ
+/// </summary>
 struct AlphaEaseParam {
     EaseParam baseParam;
     FMinMax endValue = {}; // 終了アルファ範囲
 };
 
-// カラー+アルファ(RGBA)イージングパラメータ
+/// <summary>
+/// カラー+アルファ(RGBA)イージングパラメータ
+/// </summary>
 struct ColorAlphaEaseParam {
     EaseParam baseParam;
     V4MinMax endValue;
@@ -89,7 +106,9 @@ enum class EmitShape {
     Sphere, ///< 球面から全方向に放射
 };
 
-// パーティクルパラメータ
+/// <summary>
+/// パーティクルパラメータ
+/// </summary>
 struct Parameters {
     const WorldTransform* parentTransform = nullptr;
     const Vector3* followingPos_          = nullptr;
@@ -133,7 +152,9 @@ struct Parameters {
     Vector3 goalTargetPos;    // ランタイムで設定するターゲット位置（JSON非保存）
 };
 
-// グループパラメータ
+/// <summary>
+/// グループパラメータ
+/// </summary>
 struct GroupParameters {
     BlendMode blendMode         = BlendMode::None;
     bool isBillboard            = false;

@@ -11,6 +11,9 @@
 /// </summary>
 class LeaderEnemy : public BaseEnemy {
 public:
+    /// <summary>
+    /// 強敵固有の逃走・離反・挑発表示に関するパラメータ
+    /// </summary>
     struct StrongParameter {
         float fleeSpeed;
         float fleeDistance;

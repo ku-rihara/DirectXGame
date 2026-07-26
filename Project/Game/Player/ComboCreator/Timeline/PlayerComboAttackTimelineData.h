@@ -53,6 +53,9 @@ public:
         COUNT
     };
 
+    /// <summary>
+    /// タイムライン上の1トラック分の設定(種別・参照ファイル・振動やヒット時挙動など)
+    /// </summary>
     struct TrackInfo {
         TrackType type;
         int32_t trackIndex;

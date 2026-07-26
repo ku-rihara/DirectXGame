@@ -6,9 +6,6 @@
 #include <wrl/client.h>
 #include <Windows.h>
 
-/// <summary>
-/// 3Dライン描画パイプラインクラス
-/// </summary>
 namespace KetaEngine {
 
 enum class Line3DRootParameter : UINT {
@@ -16,6 +13,9 @@ enum class Line3DRootParameter : UINT {
     Count
 };
 
+/// <summary>
+/// 3Dライン描画パイプラインクラス
+/// </summary>
 class Line3DPipeline : public BasePipeline {
 public:
     Line3DPipeline()  = default;

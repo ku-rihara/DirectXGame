@@ -9,6 +9,9 @@
 // ゲーム全体
 namespace KetaEngine {
 
+/// <summary>
+/// アプリケーション全体のInit/Update/Drawライフサイクルを定義する基底フレームワーククラス
+/// </summary>
 class KTFramework {
 public:
     virtual ~KTFramework() = default;
@@ -47,7 +50,9 @@ protected:
     std::unique_ptr<AbstractSceneFactory> sceneFactory_;
     std::unique_ptr<EngineCore> engineCore_;
 
-    // フレーム各フェーズの計測結果
+    /// <summary>
+    /// フレーム各フェーズの計測結果
+    /// </summary>
     struct FrameTimings {
         float frameMs    = 0.0f; // フレーム全体
         float fixFpsMs   = 0.0f; // FixFPS

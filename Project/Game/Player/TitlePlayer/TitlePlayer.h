@@ -6,6 +6,9 @@
 // std
 #include <memory>
 
+/// <summary>
+/// タイトル画面専用のプレイヤークラス
+/// </summary>
 class TitlePlayer : public Player {
 public:
     TitlePlayer()  = default;

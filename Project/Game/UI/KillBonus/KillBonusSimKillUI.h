@@ -9,6 +9,9 @@
 #include <cstdint>
 #include <memory>
 
+/// <summary>
+/// 同時キルボーナスUIのレイアウト設定(各スプライトのオフセット・段階カラー)
+/// </summary>
 struct KillBonusSimKillUILayout {
     Vector2 basePos;
 
@@ -45,6 +48,9 @@ struct KillBonusSimKillUILayout {
     }};
 };
 
+/// <summary>
+/// 同時キルボーナス表示UIの出現・表示・終了アニメーションを制御するクラス
+/// </summary>
 class KillBonusSimKillUI {
 public:
     enum class State { Hidden, Spawning, Displaying, Closing };

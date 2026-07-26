@@ -6,43 +6,57 @@
 /// std
 #include <string>
 
+/// <summary>
 /// アッパー攻撃パラメータ
+/// </summary>
 struct UpperParam {
     float BackLashValue; ///< 反動量
     float chargeTime;    ///< チャージ最大時間
 };
 
+/// <summary>
 /// ジャンプ・落下パラメータ
+/// </summary>
 struct JumpParam {
     float jumpSpeed;      ///< 初速
     float gravity;        ///< 重力加速度
     float fallSpeedLimit; ///< 落下速度上限
 };
 
+/// <summary>
 /// コンボ継続パラメータ
+/// </summary>
 struct ComboParam {
     float waitTime;    ///< 次入力受付時間
     float attackReach; ///< 攻撃リーチ
 };
 
+/// <summary>
 /// スポーンパラメータ
+/// </summary>
 struct SpawnParam {
     float waitTime_; ///< スポーン演出待機時間
 };
 
+/// <summary>
 /// ダッシュパラメータ
+/// </summary>
 struct DashParam {
     float distance = 20.0f; ///< ダッシュ移動距離
 };
 
+/// <summary>
 /// 慣性移動パラメータ
+/// </summary>
 struct MovementParam {
     float acceleration = 15.0f; ///< 加速係数 (1/s)
     float deceleration = 10.0f; ///< 摩擦係数 (1/s)
     float turnBrake    = 25.0f; ///< 方向転換ブレーキ係数 (1/s)
 };
 
+/// <summary>
 /// プレイヤー全パラメータ
+/// </summary>
 struct Parameters {
     Vector3 startPos_;          ///< 初期配置座標
     Vector3 baseScale_;         ///< 基準スケール

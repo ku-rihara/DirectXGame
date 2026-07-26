@@ -3,11 +3,11 @@
 #include "BaseCollider.h"
 #include "Box.h"
 
+namespace KetaEngine {
+
 /// <summary>
 /// 球コライダークラス
 /// </summary>
-namespace KetaEngine {
-
 class SphereCollider : public BaseCollider {
 public:
     SphereCollider();

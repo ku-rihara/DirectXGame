@@ -3,6 +3,9 @@
 #include "BaseAudienceBehavior.h"
 #include <functional>
 
+/// <summary>
+/// 観客の出現(スポーン)時の振る舞い
+/// </summary>
 class AudienceAppear : public BaseAudienceBehavior {
 
 public:

@@ -6,11 +6,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// スプライトイージングアニメーションプレイヤー
 /// </summary>
-namespace KetaEngine {
-
 class SpriteEaseAnimationPlayer : public BaseEffectPlayer {
 public:
     SpriteEaseAnimationPlayer()           = default;

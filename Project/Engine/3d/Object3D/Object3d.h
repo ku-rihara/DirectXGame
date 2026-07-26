@@ -1,11 +1,11 @@
 #pragma once
 #include "BaseObject3d.h"
 
+namespace KetaEngine {
+
 /// <summary>
 /// 3Dオブジェクトクラス
 /// </summary>
-namespace KetaEngine {
-
 class Object3d : public BaseObject3d {
 public:
     Object3d() = default;

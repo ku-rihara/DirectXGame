@@ -13,7 +13,9 @@ class PlayerComboAttackData;
 /// </summary>
 class PlayerComboAttackTimelineParameterApplier {
 public:
-    // キーフレーム構造体
+    /// <summary>
+    /// キーフレーム構造体
+    /// </summary>
     struct KeyFrameInfo {
         int32_t startFrame; // 開始フレーム位置
         float duration; // キーフレームの持続時間（フレーム数）

@@ -15,6 +15,9 @@ class Object3DAnimation;
 /// </summary>
 class ParticlePlayer : public BaseEffectPlayer {
 public:
+    /// <summary>
+    /// 親オブジェクトへの追従設定(座標・Transform・ジョイント名等へのポインタ)
+    /// </summary>
     struct ParentParam {
         const Vector3* followPos_               = nullptr;
         const WorldTransform* transform_        = nullptr;

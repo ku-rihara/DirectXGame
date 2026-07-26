@@ -5,11 +5,11 @@
 #include <string>
 #include <vector>
 
+namespace KetaEngine {
+
 /// <summary>
 /// スポットライト管理クラス
 /// </summary>
-namespace KetaEngine {
-
 class SpotLightManager {
 public:
     SpotLightManager()  = default;

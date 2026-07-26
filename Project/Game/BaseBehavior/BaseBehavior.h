@@ -2,6 +2,9 @@
 
 #include <string>
 
+/// <summary>
+/// 所有者(OwnerType)を持つ振る舞いの基底テンプレートクラス
+/// </summary>
 template <typename OwnerType>
 class BaseBehavior {
 public:

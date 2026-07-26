@@ -2,13 +2,16 @@
 
 #include "3D/Primitive/IPrimitive.h"
 
+namespace KetaEngine {
+
 /// <summary>
 /// リングプリミティブクラス
 /// </summary>
-namespace KetaEngine {
-
 class PrimitiveRing : public IPrimitive {
 public:
+    /// <summary>
+    /// リング形状の生成パラメータ(外径・内径・分割数)
+    /// </summary>
     struct RingParams {
         float   outerRadius = 1.0f;  ///< 外径
         float   innerRadius = 0.2f;  ///< 内径

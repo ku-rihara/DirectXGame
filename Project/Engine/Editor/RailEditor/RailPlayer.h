@@ -5,11 +5,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// レールプレイヤー
 /// </summary>
-namespace KetaEngine {
-
 class RailPlayer : public BaseEffectPlayer {
 public:
     RailPlayer()           = default;

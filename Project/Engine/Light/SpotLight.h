@@ -8,6 +8,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// スポットライトの色・位置・向き・減衰・照射角度を保持する定数バッファ用構造体
+/// </summary>
 struct SpotLightData {
     Vector4 color;
     Vector3 position;

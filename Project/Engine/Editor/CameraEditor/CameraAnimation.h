@@ -4,14 +4,17 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// カメラアニメーション制御クラス
 /// カテゴリーシステム対応
 /// </summary>
-namespace KetaEngine {
-
 class CameraAnimation : public BaseEffectPlayer {
 public:
+    /// <summary>
+    /// カメラの位置・回転・画角(FOV)を表すパラメータ
+    /// </summary>
     struct CameraParam {
         Vector3 position;
         Vector3 rotation;

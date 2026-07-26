@@ -2,11 +2,11 @@
 
 #include "3D/Primitive/IPrimitive.h"
 
+namespace KetaEngine {
+
 /// <summary>
 /// 平面プリミティブクラス
 /// </summary>
-namespace KetaEngine {
-
 class PrimitivePlane : public IPrimitive {
 public:
     PrimitivePlane()  = default;

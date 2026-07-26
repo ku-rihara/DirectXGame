@@ -19,11 +19,11 @@
 #include <unordered_map>
 #include <vector>
 
+namespace KetaEngine {
+
 /// <summary>
 /// 3Dアニメーションオブジェクトクラス
 /// </summary>
-namespace KetaEngine {
-
 class Object3DAnimation : public BaseObject3d {
 public:
     Object3DAnimation() = default;

@@ -20,6 +20,9 @@ public:
         COUNT,
     };
 
+    /// <summary>
+    /// 敵種ごとの調整可能な数値パラメータ一式
+    /// </summary>
     struct Parameter {
         Vector3 baseScale_;
         float collisionRad;

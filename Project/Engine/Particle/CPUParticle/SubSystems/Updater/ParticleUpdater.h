@@ -3,6 +3,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// パーティクルグループの物理・UV更新を行うクラス
+/// </summary>
 class ParticleUpdater {
 public:
     ParticleUpdater()  = default;

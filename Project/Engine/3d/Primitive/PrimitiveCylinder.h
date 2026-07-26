@@ -6,11 +6,11 @@
 #include <cstdint>
 #include <memory>
 
+namespace KetaEngine {
+
 /// <summary>
 /// シリンダープリミティブクラス
 /// </summary>
-namespace KetaEngine {
-
 class PrimitiveCylinder : public IPrimitive {
 public:
     /// <summary>

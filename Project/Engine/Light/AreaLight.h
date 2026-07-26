@@ -6,6 +6,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// エリアライト1つ分のGPU送信用データ(色・位置・法線・サイズ・減衰等)
+/// </summary>
 struct AreaLightData {
     Vector4 color;
     Vector3 position;

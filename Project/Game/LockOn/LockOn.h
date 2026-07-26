@@ -22,6 +22,9 @@ public:
     using LockOnVariant = std::variant<BaseEnemy*>;
 
 public:
+    /// <summary>
+    /// ロックオン対象を示すマーカースプライトと画面座標
+    /// </summary>
     struct TargetMarker {
         std::unique_ptr<KetaEngine::Sprite> sprite;
         Vector2 screenPosition;

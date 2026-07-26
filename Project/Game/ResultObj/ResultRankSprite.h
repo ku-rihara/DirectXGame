@@ -17,7 +17,9 @@
 /// </summary>
 class ResultRankSprite {
 public:
-    // スプライトのパラメータ
+    /// <summary>
+    /// スプライトのパラメータ
+    /// </summary>
     struct Config {
         Vector2 basePos;
         Vector2 baseScale;

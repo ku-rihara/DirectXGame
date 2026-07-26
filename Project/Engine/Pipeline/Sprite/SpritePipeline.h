@@ -3,11 +3,11 @@
 #include "Base/Dx/DirectXCommon.h"
 #include <dxcapi.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// スプライト描画パイプラインクラス
 /// </summary>
-namespace KetaEngine {
-
 class SpritePipeline : public BasePipeline {
 public:
     SpritePipeline()  = default;

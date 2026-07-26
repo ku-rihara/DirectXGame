@@ -15,7 +15,9 @@ class EnemyManager;
 /// </summary>
 class EnemySpawner {
 private:
-    // スポーンポイントの情報
+    /// <summary>
+    /// スポーンポイントの情報
+    /// </summary>
     struct SpawnPoint {
         std::string name;
         int32_t groupId;
@@ -29,7 +31,9 @@ private:
         bool hasSpawned = false;
     };
 
-    // スポーンする敵のグループ情報
+    /// <summary>
+    /// スポーンする敵のグループ情報
+    /// </summary>
     struct SpawnGroup {
         int32_t id;
         int32_t objectCount;

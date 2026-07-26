@@ -5,11 +5,11 @@
 #include <wrl.h>
 #include <XInput.h>
 
-/// <summary>
-/// ゲームパッド入力管理クラス(XInput)
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// ゲームパッド入力管理クラス
+/// </summary>
 class Gamepad {
 private:
     enum class PadType {

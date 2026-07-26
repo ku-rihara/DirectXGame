@@ -4,11 +4,11 @@
 #include "Utility/TimeModeSelector/TimeModeSelector.h"
 #include <string>
 
-/// <summary>
-/// タイムスケールデータ
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// タイムスケールを制御するエフェクトデータ
+/// </summary>
 class TimeScaleData : public BaseEffectData {
 public:
     TimeScaleData()           = default;

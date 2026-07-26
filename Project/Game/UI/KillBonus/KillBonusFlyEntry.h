@@ -8,6 +8,9 @@
 #include <memory>
 #include <string>
 
+/// <summary>
+/// キルボーナス演出のベジエ曲線移動に使う始点・制御点・終点パラメータ
+/// </summary>
 struct KillBonusFlyParam {
     Vector2     endPos;              // 終点スクリーン座標
     Vector2     controlOffset;       // 第1制御点：始点からのオフセット

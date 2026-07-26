@@ -10,11 +10,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// 3Dオブジェクトの基底クラス
 /// </summary>
-namespace KetaEngine {
-
 class BaseObject3d {
 public:
     ///========================================================================================

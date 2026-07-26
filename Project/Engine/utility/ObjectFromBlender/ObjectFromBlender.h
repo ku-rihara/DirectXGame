@@ -27,6 +27,9 @@ public:
     /// Blenderシーン1つ分のオブジェクト配置データ
     /// </summary>
     struct LevelData {
+        /// <summary>
+        /// Blenderで配置された1オブジェクト分のデータ(モデル・アニメーション・パーティクル・子オブジェクト)
+        /// </summary>
         struct ObjectData {
             std::string fileName;
             std::unique_ptr<Object3d> object3d;

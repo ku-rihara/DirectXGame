@@ -5,17 +5,23 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// アウトラインポストエフェクトクラス
 /// </summary>
-namespace KetaEngine {
-
 class Outline : public BasePostEffect {
 public:
+    /// <summary>
+    /// アウトラインの太さ比率を保持する定数バッファ用データ
+    /// </summary>
     struct ParamData {
         float wightRate;
     };
 
+    /// <summary>
+    /// アウトライン検出に使う逆プロジェクション行列を保持する定数バッファ用データ
+    /// </summary>
     struct OutLineMaterial {
         Matrix4x4 projectionInverse;
     };

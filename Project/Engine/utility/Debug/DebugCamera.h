@@ -3,11 +3,11 @@
 #include "Input/Input.h"
 #include "Matrix4x4.h"
 
+namespace KetaEngine {
+
 /// <summary>
 /// デバッグカメラクラス
 /// </summary>
-namespace KetaEngine {
-
 class DebugCamera {
 public:
     DebugCamera()  = default;

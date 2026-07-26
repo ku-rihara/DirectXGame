@@ -4,6 +4,9 @@
 #include <functional>
 #include <map>
 
+/// <summary>
+/// 敵の死亡演出(方向設定→アニメーション→爆散→待機→死亡確定)を制御するリアクション
+/// </summary>
 class EnemyDeath : public BaseEnemyDamageReaction {
 public:
    

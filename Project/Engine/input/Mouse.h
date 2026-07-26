@@ -8,6 +8,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// マウスの相対移動量
+/// </summary>
 struct MouseMove {
     LONG lX;
     LONG lY;

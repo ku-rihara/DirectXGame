@@ -20,11 +20,11 @@ enum class PrimitiveType {
     Box
 };
 
+namespace KetaEngine {
+
 /// <summary>
 /// プリミティブの基底クラス
 /// </summary>
-namespace KetaEngine {
-
 class IPrimitive {
 public:
     IPrimitive()          = default;

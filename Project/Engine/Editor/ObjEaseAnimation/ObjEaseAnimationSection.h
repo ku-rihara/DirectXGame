@@ -10,11 +10,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// オブジェクトイージングアニメーションセクション
 /// </summary>
-namespace KetaEngine {
-
 class ObjEaseAnimationSection {
 public:
     enum class TransformType {
@@ -41,6 +41,9 @@ public:
         FINISHED
     };
 
+    /// <summary>
+    /// Scale/Rotation/Translationいずれか1種別分のイージング再生パラメータと現在の状態
+    /// </summary>
     struct TransformParam {
         bool isActive            = false;
         bool isReturnToOrigin    = false;
@@ -82,6 +85,9 @@ public:
         float returnElapsedTime = 0.0f;
     };
 
+    /// <summary>
+    /// レール移動で使用するレールファイル選択用のUIラッパー
+    /// </summary>
     struct RailFileSelector {
         FileSelector selector;
     };

@@ -4,6 +4,9 @@
 #include <array>
 #include <cstdint>
 
+/// <summary>
+/// キル数/コンボ数のしきい値と、それに対応する表示色
+/// </summary>
 struct KillBonusColorTier {
     int32_t threshold = 2;
     Vector4 color     = {1.0f, 1.0f, 1.0f, 1.0f};

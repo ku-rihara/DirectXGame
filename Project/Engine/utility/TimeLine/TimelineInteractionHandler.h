@@ -59,7 +59,9 @@ public:
 private:
     //*---------------------------- private Variant ----------------------------*//
 
-    // ドラッグ対象（トラックとキーフレームのインデックスペア）
+    /// <summary>
+    /// ドラッグ対象（トラックとキーフレームのインデックスペア）
+    /// </summary>
     struct DragTarget {
         int32_t trackIndex = -1; // 無効値
         int32_t keyIndex   = -1; // 無効値

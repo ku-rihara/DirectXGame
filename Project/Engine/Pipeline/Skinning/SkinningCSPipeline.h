@@ -2,11 +2,11 @@
 #include "../BaseCSPipeline.h"
 #include <Windows.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// スキニング計算用コンピュートシェーダパイプラインクラス
 /// </summary>
-namespace KetaEngine {
-
 class SkinningCSPipeline : public BaseCSPipeline {
 public:
     SkinningCSPipeline()          = default;

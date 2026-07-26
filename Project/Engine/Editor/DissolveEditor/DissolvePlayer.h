@@ -4,11 +4,12 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+class ModelMaterial;
+
 /// <summary>
 /// ディゾルブ再生クラス
 /// </summary>
-namespace KetaEngine {
-class ModelMaterial;
 class DissolvePlayer : public BaseEffectPlayer {
 public:
     DissolvePlayer()           = default;

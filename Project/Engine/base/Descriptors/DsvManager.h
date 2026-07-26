@@ -3,11 +3,11 @@
 /// base
 #include "Base/Dx/DirectXCommon.h"
 
+namespace KetaEngine {
+
 /// <summary>
 /// DSV管理クラス
 /// </summary>
-namespace KetaEngine {
-
 class DsvManager {
 private:
     DsvManager()                             = default;

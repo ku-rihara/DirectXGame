@@ -4,11 +4,11 @@
 #include <vector>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// リソースバリアを管理するクラス
 /// </summary>
-namespace KetaEngine {
-
 class DxResourceBarrier {
 public:
     DxResourceBarrier()  = default;

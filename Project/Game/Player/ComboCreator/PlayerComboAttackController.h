@@ -23,6 +23,9 @@ class EffectEditorSuite;
 /// </summary>
 class PlayerComboAttackController {
 public:
+    /// <summary>
+    /// レベルに応じた攻撃速度・威力の倍率
+    /// </summary>
     struct AttackValueForLevel {
         float speedRate;
         float powerRate;

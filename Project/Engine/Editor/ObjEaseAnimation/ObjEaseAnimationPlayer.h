@@ -7,11 +7,11 @@
 #include <string>
 #include <unordered_map>
 
+namespace KetaEngine {
+
 /// <summary>
 /// オブジェクトイージングアニメーションプレイヤー
 /// </summary>
-namespace KetaEngine {
-
 class ObjEaseAnimationPlayer : public BaseEffectPlayer {
 public:
     ObjEaseAnimationPlayer()           = default;

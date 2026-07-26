@@ -6,11 +6,11 @@
 #include <wrl.h>
 #include <wrl/client.h>
 
-/// <summary>
-/// WinAPIアプリケーションクラス
-/// </summary>
 namespace KetaEngine {
 
+/// <summary>
+/// WinAPIによるウィンドウ生成・メッセージ処理を担うクラス
+/// </summary>
 class WinApp {
 
 public:

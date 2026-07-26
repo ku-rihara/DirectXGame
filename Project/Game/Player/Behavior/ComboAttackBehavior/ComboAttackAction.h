@@ -24,7 +24,9 @@ public:
     void Debug() override;
     Type GetComboType() const override { return Type::Action; }
 
-    // 次の攻撃候補
+    /// <summary>
+    /// 次の攻撃候補
+    /// </summary>
     struct NextAttackCandidate {
         ComboBranchParameter* branch;
         PlayerComboAttackData* attackData;

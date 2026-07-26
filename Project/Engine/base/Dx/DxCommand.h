@@ -2,11 +2,11 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// コマンドリストを管理するクラス
 /// </summary>
-namespace KetaEngine {
-
 class DxCommand {
 public:
     DxCommand()  = default;

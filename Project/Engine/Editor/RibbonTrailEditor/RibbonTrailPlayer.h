@@ -12,7 +12,9 @@ namespace KetaEngine {
 
 class RibbonTrail;
 
-// リボントレイル再生クラス
+/// <summary>
+/// リボントレイル再生クラス
+/// </summary>
 class RibbonTrailPlayer : public BaseEffectPlayer {
 public:
     RibbonTrailPlayer()           = default;

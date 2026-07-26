@@ -4,11 +4,11 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 /// <summary>
 /// タイムスケールプレイヤー
 /// </summary>
-namespace KetaEngine {
-
 class TimeScalePlayer : public BaseEffectPlayer {
 public:
     TimeScalePlayer()           = default;

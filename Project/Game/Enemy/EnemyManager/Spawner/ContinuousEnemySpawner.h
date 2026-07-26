@@ -15,6 +15,9 @@ class ViewProjection;
 /// </summary>
 class ContinuousEnemySpawner {
 private:
+    /// <summary>
+    /// 継続スポーンの間隔・出現範囲・最大数などの設定
+    /// </summary>
     struct SpawnConfig {
         bool isEnabled = true;
         float spawnInterval;

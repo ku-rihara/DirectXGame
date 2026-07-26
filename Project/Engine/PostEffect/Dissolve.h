@@ -6,13 +6,16 @@
 #include <string>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 /// <summary>
 /// ディゾルブエフェクトクラス
 /// </summary>
-namespace KetaEngine {
-
 class Dissolve : public BasePostEffect {
 public:
+    /// <summary>
+    /// ディゾルブの閾値と発光色を保持する定数バッファ用データ
+    /// </summary>
     struct ParamData {
         float thresholdValue;
         Vector3 color;

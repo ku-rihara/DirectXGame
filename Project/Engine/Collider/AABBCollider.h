@@ -3,11 +3,11 @@
 #include "BaseCollider.h"
 #include "Box.h"
 
+namespace KetaEngine {
+
 /// <summary>
 ///  AABBコライダー
 /// </summary>
-namespace KetaEngine {
-
 class AABBCollider : public BaseCollider {
 public:
     AABBCollider();

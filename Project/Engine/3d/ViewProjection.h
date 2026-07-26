@@ -7,6 +7,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// ビュー行列・プロジェクション行列・カメラ座標を保持する定数バッファ用構造体
+/// </summary>
 struct ConstBufferDataViewProjection {
     Matrix4x4 view;
     Matrix4x4 projection;
