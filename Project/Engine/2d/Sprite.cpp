@@ -196,7 +196,7 @@ void Sprite::Draw() {
     Vector3 translate        = Vector3(transform_.pos.x + animPos.x, transform_.pos.y + animPos.y, 0.0f);
     Vector3 rotate           = Vector3(transform_.rotate.x + animRot.x, transform_.rotate.y + animRot.y, transform_.rotate.z + animRot.z);
 
-    // スプライトはZ奥行きを持たないため、ワールド行列と正射影行列のみでWVPを構成する
+    // ワールド行列と正射影行列のみでWVPを構成する
     Matrix4x4 worldMatrixSprite               = MakeAffineMatrix(size, rotate, translate);
     Matrix4x4 projectionMatrixSprite          = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
     Matrix4x4 worldViewProjectionMatrixSprite = worldMatrixSprite * projectionMatrixSprite;
@@ -233,7 +233,7 @@ void Sprite::SetDisplayRate(float rate) {
 }
 
 ///=========================================================
-/// バインド
+/// パラメータ登録
 ///==========================================================
 void Sprite::RegisterParams() {
     globalParameter_->Regist(groupName_, "layerNum", &parameter_.startLayerNum_);
