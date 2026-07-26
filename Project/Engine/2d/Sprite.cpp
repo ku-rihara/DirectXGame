@@ -254,13 +254,13 @@ void Sprite::GetParams() {
 }
 
 void Sprite::ApplyParameterToTransform() {
-    const Parameter& p                 = GetValue();
-    transform_.pos                     = p.position_;
-    transform_.scale                   = p.scale_;
-    uvTransform_.scale                 = p.uvScale_;
-    material_.GetMaterialData()->color = p.color_;
-    anchorPoint_                       = p.startAnchorPoint_;
-    layerNum_                          = p.startLayerNum_;
+    const Parameter& parameter         = GetValue();
+    transform_.pos                     = parameter.position_;
+    transform_.scale                   = parameter.scale_;
+    uvTransform_.scale                 = parameter.uvScale_;
+    material_.GetMaterialData()->color = parameter.color_;
+    anchorPoint_                       = parameter.startAnchorPoint_;
+    layerNum_                          = parameter.startLayerNum_;
 }
 
 ///=========================================================
