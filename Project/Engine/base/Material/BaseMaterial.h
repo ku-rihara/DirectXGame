@@ -36,7 +36,10 @@ public:
     /// <param name="commandList">コマンドリスト</param>
     virtual void SetCommandList(ID3D12GraphicsCommandList* commandList) = 0;
 
-    virtual void DebugImGui() = 0; //< ImGuiデバッグ
+    /// <summary>
+    /// ImGuiデバッグ表示
+    /// </summary>
+    virtual void DebugImGui() = 0;
 
 protected:
     // 共通リソース

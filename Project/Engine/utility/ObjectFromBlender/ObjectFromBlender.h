@@ -16,13 +16,16 @@ enum class EasingAdaptTransform {
     Translate,
 };
 
+namespace KetaEngine {
+
 /// <summary>
 /// Blenderからエクスポートしたオブジェクト配置クラス
 /// </summary>
-namespace KetaEngine {
-
 class ObjectFromBlender {
 public:
+    /// <summary>
+    /// Blenderシーン1つ分のオブジェクト配置データ
+    /// </summary>
     struct LevelData {
         struct ObjectData {
             std::string fileName;

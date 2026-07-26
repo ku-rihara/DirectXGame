@@ -23,21 +23,27 @@ class SpriteEaseAnimationPlayer;
 /// </summary>
 class Sprite {
 public:
-    // UVTransformの構造体
+    /// <summary>
+    /// UV座標に対する拡縮・回転・平行移動を表す構造体
+    /// </summary>
     struct UVTransform {
         Vector2 scale;
         Vector3 rotate;
         Vector2 pos;
     };
 
-    // Transformの構造体
+    /// <summary>
+    /// スプライトの拡縮・回転・座標を表す構造体
+    /// </summary>
     struct Transform {
         Vector2 scale;
         Vector3 rotate;
         Vector2 pos;
     };
 
-    // Para
+    /// <summary>
+    /// GlobalParameterで編集されるパラメータ構造体
+    /// </summary>
     struct Parameter {
         Vector2 position_         = Vector2::ZeroVector();
         Vector2 scale_            = Vector2::OneVector();
@@ -104,7 +110,8 @@ public:
 
     /// <summary>
     /// 表示割合を設定(0.0f~1.0f)
-    /// <summary>
+    /// </summary>
+    /// <param name="rate">表示割合(0.0f~1.0f)</param>
     void SetDisplayRate(float rate);
 
 private:

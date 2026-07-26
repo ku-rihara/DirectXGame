@@ -2,6 +2,9 @@
 #pragma once
 #include <cmath>
 
+/// <summary>
+/// 2次元ベクトルクラス
+/// </summary>
 class Vector2 {
 public:
 	float x;

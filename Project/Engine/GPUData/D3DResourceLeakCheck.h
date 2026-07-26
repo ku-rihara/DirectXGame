@@ -7,6 +7,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// スコープを抜ける際にD3D12/DXGIリソースのリークをチェックする構造体
+/// </summary>
 struct  D3DResourceLeakChecker {
 	
 	~D3DResourceLeakChecker() {

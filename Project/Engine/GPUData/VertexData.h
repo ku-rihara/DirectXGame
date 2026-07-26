@@ -6,6 +6,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// 頂点1つ分のデータ
+/// </summary>
 struct VertexData {
 	Vector4 position;
 	Vector2 texcoord;

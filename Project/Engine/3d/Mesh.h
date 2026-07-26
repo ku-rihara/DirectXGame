@@ -38,8 +38,15 @@ public:
     /// <param name="instanceNum">インスタンス数</param>
     void DrawInstancing(uint32_t instanceNum);
 
-    void CreateVertexResource(); //< 頂点リソース作成
-    void DebugImGui();           //< ImGuiデバッグ表示
+    /// <summary>
+    /// 頂点リソース作成
+    /// </summary>
+    void CreateVertexResource();
+
+    /// <summary>
+    /// ImGuiデバッグ表示
+    /// </summary>
+    void DebugImGui();
 
     /// <summary>
     /// 描画

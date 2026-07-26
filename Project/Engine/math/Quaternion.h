@@ -2,6 +2,9 @@
 class Vector3;
 struct Matrix4x4;
 
+/// <summary>
+/// 回転を表すクォータニオンクラス
+/// </summary>
 class Quaternion {
 public:
     float x;

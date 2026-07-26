@@ -6,6 +6,9 @@
 
 namespace KetaEngine {
 
+/// <summary>
+/// GPUパーティクル1個分の描画用データ
+/// </summary>
 struct ParticleFprGPU {
     Matrix4x4 WVP;
     Matrix4x4 World;
