@@ -4,11 +4,11 @@
 #include "Base/Dx/DirectXCommon.h"
 #include <vector>
 
+namespace KetaEngine {
+
 /// <summary>
 /// SRV管理クラス
 /// </summary>
-namespace KetaEngine {
-
 class SrvManager {
 private:
     SrvManager()                             = default;
