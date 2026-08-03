@@ -112,8 +112,8 @@ void KTFramework::Run() {
         if (pSceneManager_->IsJustTransitioned()) {
             pSceneManager_->ClearTransitionFlag();
             RunGpuWarmup(8);
-            DwmFlush(); // DWMのVSync境界に同期してPresent位相を正規化
-            Frame::Init(); // ウォームアップ分の経過時間を除外
+            DwmFlush(); 
+            Frame::Init();
         }
 
         // 各フェーズのタイミングを記録
@@ -238,10 +238,10 @@ void KTFramework::RunGpuWarmup(int numFrames) {
 
     auto t0 = std::chrono::steady_clock::now();
     for (int i = 0; i < numFrames; ++i) {
-        srvMgr->PreDraw();            // デスクリプタヒープをコマンドリストに設定
-        dxCommon->PreRenderTexture(); // オフスクリーンRT: RENDER_TARGET + クリア
-        dxCommon->PreDraw();          // RT→SRV、バックバッファ→RENDER_TARGET
-        dxCommon->PostDraw();         // RENDER_TARGET→PRESENT + Execute + Present + Wait + Reset
+        srvMgr->PreDraw();            
+        dxCommon->PreRenderTexture(); 
+        dxCommon->PreDraw();          
+        dxCommon->PostDraw();         
     }
 
     float elapsed = std::chrono::duration<float, std::milli>(

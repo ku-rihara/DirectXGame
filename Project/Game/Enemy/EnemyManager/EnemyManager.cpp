@@ -197,9 +197,12 @@ void EnemyManager::UpdateTauntState() {
             continue;
         }
 
-        bool bossIsTaunting = false;
+        bool bossIsTaunting     = false;
+        Vector3 bossInitialPos  = boss->GetWorldPosition();
         if (HasColliderType(boss, GameColliderType::LeaderEnemy)) {
-            bossIsTaunting = static_cast<LeaderEnemy*>(boss)->IsTaunting();
+            auto* leader       = static_cast<LeaderEnemy*>(boss);
+            bossIsTaunting     = leader->IsTaunting();
+            bossInitialPos     = leader->GetInitialPosition();
         }
 
         for (EntourageEnemy* zako : minions) {
@@ -207,7 +210,12 @@ void EnemyManager::UpdateTauntState() {
                 continue;
             }
 
-            if (bossIsTaunting) {
+            // ボスの初期位置から一定距離以内にいる取り巻きだけがTauntに参加できる
+            Vector3 diff = zako->GetWorldPosition() - bossInitialPos;
+            diff.y       = 0.0f;
+            bool isNearBossInitialPos = diff.Length() <= zako->GetNormalParameter().tauntJoinDistance;
+
+            if (bossIsTaunting && isNearBossInitialPos) {
                 zako->StartTaunt();
             } else {
                 zako->StopTaunt();

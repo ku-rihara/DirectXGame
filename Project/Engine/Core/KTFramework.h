@@ -54,13 +54,13 @@ protected:
     /// フレーム各フェーズの計測結果
     /// </summary>
     struct FrameTimings {
-        float frameMs    = 0.0f; // フレーム全体
-        float fixFpsMs   = 0.0f; // FixFPS
-        float beginMs    = 0.0f; //  (WaitForNextFrame + ImGui + Input)
-        float updateMs   = 0.0f; //  (ゲームロジック + アニメーション)
-        float drawMs     = 0.0f; // (GPU コマンド積み)
-        float endFrameMs = 0.0f; //  (ExecuteCommand + Present(1) + WaitForGPU)
-        float workMs     = 0.0f; // FixFPS除いた実作業時間
+        float frameMs    = 0.0f; 
+        float fixFpsMs   = 0.0f; 
+        float beginMs    = 0.0f; 
+        float updateMs   = 0.0f; 
+        float drawMs     = 0.0f; 
+        float endFrameMs = 0.0f; 
+        float workMs     = 0.0f; 
     };
     FrameTimings frameTimings_;
 

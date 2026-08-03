@@ -22,5 +22,6 @@ public:
 
 private:
     EntourageEnemy* pEntourageEnemy_;
-    Phase phase_ = Phase::STUMBLE;
+    Phase phase_     = Phase::STUMBLE;
+    bool isMoving_   = true; 
 };

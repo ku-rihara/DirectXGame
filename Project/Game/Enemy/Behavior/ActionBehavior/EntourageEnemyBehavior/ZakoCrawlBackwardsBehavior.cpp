@@ -1,4 +1,4 @@
-﻿#include "ZakoCrawlBackwardsBehavior.h"
+#include "ZakoCrawlBackwardsBehavior.h"
 
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 #include "Enemy/Types/BaseEnemy.h"
@@ -72,18 +72,23 @@ void ZakoCrawlBackwardsBehavior::Update() {
         return;
     }
 
-    // CRAWLフェーズ：アニメーションが途切れていたら再生し直す
-    const std::string crawlName = "CrawlBackwards";
-    if (pBaseEnemy_->GetAnimator()->GetAnimationObject()->GetCurrentAnimationName() != crawlName) {
-        pEntourageEnemy_->PlayNormalAnimation(EntourageEnemy::NormalAnimationType::CrawlBackwards, true);
-    }
-
-    // CRAWLフェーズ：プレイヤーから十分離れたら停止
+    // プレイヤーから十分離れたら停止し、待機アニメーションへ戻す
     if (pBaseEnemy_->CalcDistanceToPlayer() >= pEntourageEnemy_->GetNormalParameter().fleeDistance) {
+        if (isMoving_) {
+            pBaseEnemy_->GetAnimator()->ResetToWaitAnimation();
+            isMoving_ = false;
+        }
         return;
     }
 
-    // プレイヤーと逆方向（後ろ）へ移動
+    // アニメーションが途切れていたら再生し直す
+    const std::string crawlName = "CrawlBackwards";
+    if (!isMoving_ || pBaseEnemy_->GetAnimator()->GetAnimationObject()->GetCurrentAnimationName() != crawlName) {
+        pEntourageEnemy_->PlayNormalAnimation(EntourageEnemy::NormalAnimationType::CrawlBackwards, true);
+        isMoving_ = true;
+    }
+
+    // プレイヤーと逆方向へ移動
     Vector3 fleeDir = toPlayer * -1.0f;
     pBaseEnemy_->AddPosition(fleeDir * (pEntourageEnemy_->GetNormalParameter().fleeSpeed * deltaTime));
 }

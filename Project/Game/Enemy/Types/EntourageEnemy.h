@@ -26,11 +26,12 @@ public:
     };
 
     /// <summary>
-    /// 通常個体の逃走行動パラメータ(速度・距離)
+    /// 通常個体の逃走行動パラメータ
     /// </summary>
     struct NormalParameter {
-        float fleeSpeed    = 5.0f;
-        float fleeDistance = 15.0f;
+        float fleeSpeed        = 5.0f;
+        float fleeDistance     = 15.0f;
+        float tauntJoinDistance = 20.0f;
     };
 
 public:

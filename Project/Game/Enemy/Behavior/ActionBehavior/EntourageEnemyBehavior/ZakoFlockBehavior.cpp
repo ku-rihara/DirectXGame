@@ -1,4 +1,4 @@
-﻿#include "ZakoFlockBehavior.h"
+#include "ZakoFlockBehavior.h"
 
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/Types/EntourageEnemy.h"
@@ -7,6 +7,7 @@
 #include "MathFunction.h"
 
 #include <algorithm>
+#include <cmath>
 
 ZakoFlockBehavior::ZakoFlockBehavior(EntourageEnemy* enemy)
     : BaseEnemyBehavior("ZakoFlock", static_cast<BaseEnemy*>(enemy)), pEntourageEnemy_(enemy) {
@@ -61,23 +62,24 @@ void ZakoFlockBehavior::Update() {
         targetPos.z = std::clamp(targetPos.z, -rz, rz);
     }
 
-    // 目標位置への距離と方向を算出
+    // 目標位置への距離を算出
     Vector3 diff = targetPos - pBaseEnemy_->GetWorldPosition();
     diff.y       = 0.0f;
     float dist   = diff.Length();
 
     // 十分に近づいていなければ移動
     if (dist > kCloseEnough) {
-        Vector3 dir = diff;
-        dir.Normalize();
-        float speed = pBaseEnemy_->GetBaseInfo()->GetParameter().chaseSpeed;
-        pBaseEnemy_->AddPosition(dir * (speed * dt));
-
-        // 移動中は進行方向を向く
-        pBaseEnemy_->SetRotationY(LerpShortAngle(
+        // 目標方向へ滑らかに旋回
+        float faceAngle = LerpShortAngle(
             pBaseEnemy_->GetBaseRotationY(),
             CalcFaceAngleY(pBaseEnemy_->GetWorldPosition(), targetPos, true),
-            0.8f));
+            0.8f);
+        pBaseEnemy_->SetRotationY(faceAngle);
+
+        // 旋回済みの自身の向きへ前進する
+        Vector3 moveDir(-std::sin(faceAngle), 0.0f, -std::cos(faceAngle));
+        float speed = pBaseEnemy_->GetBaseInfo()->GetParameter().chaseSpeed;
+        pBaseEnemy_->AddPosition(moveDir * (speed * dt));
 
         // アニメーションがDashでなければ再生
         auto animObj         = pBaseEnemy_->GetAnimator()->GetAnimationObject();

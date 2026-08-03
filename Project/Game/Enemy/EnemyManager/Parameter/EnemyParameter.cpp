@@ -66,6 +66,7 @@ void EnemyParameter::RegisterParams() {
 
     globalParameter_->Regist(groupName_, "normal_fleeSpeed",              &EntourageEnemyParam_.fleeSpeed);
     globalParameter_->Regist(groupName_, "normal_fleeDistance",           &EntourageEnemyParam_.fleeDistance);
+    globalParameter_->Regist(groupName_, "normal_tauntJoinDistance",      &EntourageEnemyParam_.tauntJoinDistance);
 
     globalParameter_->Regist(groupName_, "strong_fleeSpeed",              &LeaderEnemyParam_.fleeSpeed);
     globalParameter_->Regist(groupName_, "strong_fleeDistance",           &LeaderEnemyParam_.fleeDistance);
@@ -94,15 +95,18 @@ void EnemyParameter::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("basePosY",         &parameters_[i].basePosY, 0.01f);
     ImGui::DragFloat("burstTime",        &parameters_[i].burstTime, 0.01f);
 
-    ImGui::SeparatorText("追跡パラメータ");
-    ImGui::DragFloat("追跡開始距離",              &parameters_[i].chaseDistance, 0.01f, 0.0f);
-    ImGui::DragFloat("追跡速度",                  &parameters_[i].chaseSpeed, 0.01f, 0.0f);
-    ImGui::DragFloat("Wait後追跡クールダウン(秒)", &parameters_[i].waitCooldownTime, 0.1f, 0.0f);
-
     if (type == BaseEnemy::Type::NORMAL) {
+        ImGui::SeparatorText("追跡パラメータ");
+        ImGui::DragFloat("追跡開始距離",              &parameters_[i].chaseDistance, 0.01f, 0.0f);
+        ImGui::DragFloat("追跡速度",                  &parameters_[i].chaseSpeed, 0.01f, 0.0f);
+        ImGui::DragFloat("Wait後追跡クールダウン(秒)", &parameters_[i].waitCooldownTime, 0.1f, 0.0f);
+
         ImGui::SeparatorText("逃走パラメータ（EntourageEnemy）");
         ImGui::DragFloat("逃走速度", &EntourageEnemyParam_.fleeSpeed,    0.1f, 0.0f, 20.0f);
         ImGui::DragFloat("逃走距離", &EntourageEnemyParam_.fleeDistance, 0.5f, 0.0f, 100.0f);
+
+        ImGui::SeparatorText("Taunt参加パラメータ（EntourageEnemy）");
+        ImGui::DragFloat("Taunt参加距離（ボス初期位置から）", &EntourageEnemyParam_.tauntJoinDistance, 0.5f, 0.0f, 200.0f);
     }
 
     if (type == BaseEnemy::Type::STRONG) {

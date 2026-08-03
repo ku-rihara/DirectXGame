@@ -85,4 +85,6 @@ void EnemyInitializer::InitDamageReaction() {
 
 void EnemyInitializer::ApplyCollision() {
     enemy_->RefreshCollision();
+    // 生成時点でコリジョンを有効化する
+    enemy_->SetIsAdaptCollision(true);
 }

@@ -82,7 +82,7 @@
         "Gravity": 0.0,
         "IntervalTime": 2.819999933242798,
         "IsScreenPos": false,
-        "LifeTime": 1.7100000381469727,
+        "LifeTime": 1.159999966621399,
         "Max Particle Num": 1000,
         "Particle Count": 2,
         "Position Base": [
@@ -232,8 +232,8 @@
         "rotateForDirectionZ": true,
         "scaleEaseParam.backRatio": 0.0,
         "scaleEaseParam.easeTypeInt": 19,
-        "scaleEaseParam.endValueF.max": 9.0,
-        "scaleEaseParam.endValueF.min": 9.0,
+        "scaleEaseParam.endValueF.max": 7.0,
+        "scaleEaseParam.endValueF.min": 7.0,
         "scaleEaseParam.endValueV3.max": [
             0.0,
             0.0,

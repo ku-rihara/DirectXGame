@@ -68,6 +68,9 @@ private:
     bool isFleeing_         = false;
     StrongParameter strongParam_;
 
+    // スポーン時の初期位置
+    Vector3 initialPosition_;
+
     // Taunt演出用フォントオブジェクト
     std::unique_ptr<KetaEngine::Object3d> tauntFont_;
 
@@ -83,4 +86,5 @@ public:
     void SetStrongParameter(const StrongParameter& param) { strongParam_ = param; }
     bool IsTaunting() const { return isTaunting_; }
     KetaEngine::Object3d* GetTauntFont() const { return tauntFont_.get(); }
+    const Vector3& GetInitialPosition() const { return initialPosition_; }
 };

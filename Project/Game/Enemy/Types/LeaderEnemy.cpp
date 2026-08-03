@@ -40,6 +40,7 @@ void LeaderEnemy::Init(const Vector3& spawnPos) {
     isTaunting_        = false;
     isTauntFontMoving_ = false;
     isFleeing_         = false;
+    initialPosition_   = spawnPos;
 
     // 基底クラスの初期化
     BaseEnemy::Init(spawnPos);
