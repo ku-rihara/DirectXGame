@@ -2,12 +2,14 @@
 #include "CollisionBox/GameColliderType.h"
 #include "Utility/CollisionPush/CollisionPushUtils.h"
 #include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemySpawn.h"
-#include "Enemy/Behavior/ActionBehavior/CommonBehavior/EnemyWait.h"
 #include "Enemy/Behavior/ActionBehavior/EntourageEnemyBehavior/ZakoCrawlBackwardsBehavior.h"
 #include "Enemy/Behavior/ActionBehavior/EntourageEnemyBehavior/ZakoFlockBehavior.h"
 #include "Enemy/Behavior/ActionBehavior/EntourageEnemyBehavior/ZakoTauntBehavior.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
+#include "Field/Field.h"
 #include "Light/LightingType.h"
+#include <algorithm>
+#include <cmath>
 
 ///========================================================
 ///  初期化
@@ -93,11 +95,13 @@ void EntourageEnemy::StopTaunt() {
     if (zakoState_ != ZakoState::Taunt) {
         return;
     }
-    zakoState_ = ZakoState::Flock;
     if (pBoss_ && !pBoss_->GetIsDeath()) {
+        zakoState_ = ZakoState::Flock;
         ChangeBehavior(std::make_unique<ZakoFlockBehavior>(this));
     } else {
-        ChangeBehavior(std::make_unique<EnemyWait>(this));
+        // ボスが不在の場合はFlockではなくCrawlBackwardsへ
+        zakoState_ = ZakoState::CrawlBackwards;
+        ChangeBehavior(std::make_unique<ZakoCrawlBackwardsBehavior>(this));
     }
 }
 
@@ -126,6 +130,41 @@ void EntourageEnemy::AddNormalAnimation(NormalAnimationType type, const std::str
 bool EntourageEnemy::PlayNormalAnimation(NormalAnimationType type, bool isLoop) {
     const std::string& name = normalAnimationNames_[static_cast<size_t>(type)];
     return GetAnimator()->PlayAnimationByName(name, isLoop);
+}
+
+///========================================================
+/// ボスに対する自身の定位置をワールド座標で算出
+///========================================================
+Vector3 EntourageEnemy::CalcFlockSlotPosition() const {
+    if (!pBoss_) {
+        return GetWorldPosition();
+    }
+
+    Vector3 localOffset = spawnOffset_;
+    localOffset.y       = 0.0f;
+
+    float bossRotY = pBoss_->GetBaseRotationY();
+    float cosY     = cosf(bossRotY);
+    float sinY     = sinf(bossRotY);
+    Vector3 worldOffset(
+        cosY * localOffset.x + sinY * localOffset.z,
+        0.0f,
+        -sinY * localOffset.x + cosY * localOffset.z);
+
+    Vector3 targetPos = pBoss_->GetWorldPosition() + worldOffset;
+    targetPos.y       = GetWorldPosition().y;
+
+    // 目標位置をフィールド境界内に制限
+    const float rx = Field::baseScale_.x - GetBaseInfo()->GetParameter().baseScale_.x;
+    const float rz = Field::baseScale_.z - GetBaseInfo()->GetParameter().baseScale_.z;
+    if (rx > 0.0f) {
+        targetPos.x = std::clamp(targetPos.x, -rx, rx);
+    }
+    if (rz > 0.0f) {
+        targetPos.z = std::clamp(targetPos.z, -rz, rz);
+    }
+
+    return targetPos;
 }
 
 ///========================================================

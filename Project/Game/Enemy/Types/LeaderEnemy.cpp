@@ -12,9 +12,11 @@
 // manager
 #include "Enemy/EnemyManager/EnemyManager.h"
 
+#include "Field/Field.h"
 #include "Frame/Frame.h"
 #include "Light/LightingType.h"
 #include "Math/random.h"
+#include <algorithm>
 #include <cmath>
 
 
@@ -332,4 +334,27 @@ void LeaderEnemy::BackToDamageRoot() {
     // ダメージリアクションRootだけ設定して即座に逃走へ切り替える
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
     StartFlee();
+}
+
+// フィールド境界より fieldMargin 分だけ内側に移動範囲を制限する
+void LeaderEnemy::MoveToLimit() {
+    Vector3 fieldCenter = Vector3::ZeroVector();
+    Vector3 fieldScale  = Field::baseScale_;
+
+    float radiusX = fieldScale.x - baseTransform_.scale_.x - strongParam_.fieldMargin;
+    float radiusZ = fieldScale.z - baseTransform_.scale_.z - strongParam_.fieldMargin;
+
+    if (radiusX <= 0.0f || radiusZ <= 0.0f) {
+        return;
+    }
+
+    baseTransform_.translation_.x = std::clamp(
+        baseTransform_.translation_.x,
+        fieldCenter.x - radiusX,
+        fieldCenter.x + radiusX);
+
+    baseTransform_.translation_.z = std::clamp(
+        baseTransform_.translation_.z,
+        fieldCenter.z - radiusZ,
+        fieldCenter.z + radiusZ);
 }

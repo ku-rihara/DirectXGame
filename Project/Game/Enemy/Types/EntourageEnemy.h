@@ -70,6 +70,11 @@ public:
     void AddNormalAnimation(NormalAnimationType type, const std::string& name);
     bool PlayNormalAnimation(NormalAnimationType type, bool isLoop = false);
 
+    /// <summary>
+    /// ボスに対する自身の定位置をワールド座標で算出
+    /// </summary>
+    Vector3 CalcFlockSlotPosition() const;
+
 private:
     std::array<std::string, static_cast<size_t>(NormalAnimationType::Count)> normalAnimationNames_;
 

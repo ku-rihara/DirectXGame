@@ -16,6 +16,7 @@
 #include "LockOn/LockOn.h"
 #include "LockOn/LockOnController.h"
 // imGui
+#include <cmath>
 #include <imgui.h>
 
 ///========================================================================================
@@ -197,12 +198,10 @@ void EnemyManager::UpdateTauntState() {
             continue;
         }
 
-        bool bossIsTaunting     = false;
-        Vector3 bossInitialPos  = boss->GetWorldPosition();
+        bool bossIsTaunting = false;
         if (HasColliderType(boss, GameColliderType::LeaderEnemy)) {
-            auto* leader       = static_cast<LeaderEnemy*>(boss);
-            bossIsTaunting     = leader->IsTaunting();
-            bossInitialPos     = leader->GetInitialPosition();
+            auto* leader   = static_cast<LeaderEnemy*>(boss);
+            bossIsTaunting = leader->IsTaunting();
         }
 
         for (EntourageEnemy* zako : minions) {
@@ -210,15 +209,27 @@ void EnemyManager::UpdateTauntState() {
                 continue;
             }
 
-            // ボスの初期位置から一定距離以内にいる取り巻きだけがTauntに参加できる
-            Vector3 diff = zako->GetWorldPosition() - bossInitialPos;
-            diff.y       = 0.0f;
-            bool isNearBossInitialPos = diff.Length() <= zako->GetNormalParameter().tauntJoinDistance;
+            // 一度Taunt参加した取り巻きは、ボスがTauntをやめるまでは継続する
+            if (zako->GetZakoState() == EntourageEnemy::ZakoState::Taunt) {
+                if (!bossIsTaunting) {
+                    zako->StopTaunt();
+                }
+                continue;
+            }
 
-            if (bossIsTaunting && isNearBossInitialPos) {
+            // 未参加の取り巻きは、自分の定位置に実際に到達していないと参加できない。
+            Vector3 offsetXZ = zako->GetSpawnOffset();
+            offsetXZ.y       = 0.0f;
+            float slotRadius = offsetXZ.Length();
+
+            Vector3 toBoss = zako->GetWorldPosition() - boss->GetWorldPosition();
+            toBoss.y       = 0.0f;
+            float distToBoss = toBoss.Length();
+
+            bool isNearBoss = std::abs(distToBoss - slotRadius) <= zako->GetNormalParameter().tauntJoinDistance;
+
+            if (bossIsTaunting && isNearBoss) {
                 zako->StartTaunt();
-            } else {
-                zako->StopTaunt();
             }
         }
     }
@@ -387,6 +398,7 @@ void EnemyManager::AdjustParam() {
         if (minionsByBoss_.empty()) {
             ImGui::TextColored({1.0f, 0.4f, 0.4f, 1.0f}, "ボスが未リンク");
         }
+     
 
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);

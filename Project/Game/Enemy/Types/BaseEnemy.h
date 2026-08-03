@@ -151,8 +151,8 @@ private:
     /// <param name="viewProjection">ビュープロジェクション</param>
     bool IsInView(const KetaEngine::ViewProjection& viewProjection) const;
 
-private:
-    void MoveToLimit();
+protected:
+    virtual void MoveToLimit();
 
 private:
     // 敵グループのID

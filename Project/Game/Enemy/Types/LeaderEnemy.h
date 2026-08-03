@@ -22,6 +22,7 @@ public:
         float separationStrength;
         Vector3 tauntFontOffset;
         float tauntFontRotateSpeed;
+        float fieldMargin; 
     };
 
 public:
@@ -45,6 +46,10 @@ public:
     // ダメージ復帰
     void BackToDamageRoot() override;
     std::unique_ptr<BaseEnemyBehavior> CreatePostSpawnBehavior() override;
+
+protected:
+    // 取り巻きが定位置に着けるよう、フィールド境界より内側に移動範囲を制限する
+    void MoveToLimit() override;
 
 private:
     // 初期化
@@ -85,6 +90,7 @@ public:
     const StrongParameter& GetStrongParameter() const { return strongParam_; }
     void SetStrongParameter(const StrongParameter& param) { strongParam_ = param; }
     bool IsTaunting() const { return isTaunting_; }
+    bool IsFleeing() const { return isFleeing_; }
     KetaEngine::Object3d* GetTauntFont() const { return tauntFont_.get(); }
     const Vector3& GetInitialPosition() const { return initialPosition_; }
 };

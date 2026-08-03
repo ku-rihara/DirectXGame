@@ -1,23 +1,38 @@
 #include "ZakoFlockBehavior.h"
 
+#include "CollisionBox/GameColliderType.h"
 #include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/Types/EntourageEnemy.h"
-#include "Field/Field.h"
+#include "Enemy/Types/LeaderEnemy.h"
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 
-#include <algorithm>
 #include <cmath>
+
+namespace {
+// ボスがダメージリアクション中かどうか
+bool IsBossInDamageMotion(BaseEnemy* boss) {
+    auto* reaction = boss->GetDamageReactionBehavior();
+    return reaction && !reaction->IsReactionRoot();
+}
+
+bool IsBossFleeing(BaseEnemy* boss) {
+    if (!HasColliderType(boss, GameColliderType::LeaderEnemy)) {
+        return false;
+    }
+    return static_cast<LeaderEnemy*>(boss)->IsFleeing();
+}
+} 
 
 ZakoFlockBehavior::ZakoFlockBehavior(EntourageEnemy* enemy)
     : BaseEnemyBehavior("ZakoFlock", static_cast<BaseEnemy*>(enemy)), pEntourageEnemy_(enemy) {
 
-    // 生成時点でボスとの距離を見てアニメーションを決定する
+    // 生成時点で定位置との距離を見てアニメーションを決定する
     BaseEnemy* boss = pEntourageEnemy_->GetBoss();
-    if (boss && !boss->GetIsDeath()) {
-        Vector3 diff = boss->GetWorldPosition() - pBaseEnemy_->GetWorldPosition();
+    if (boss && !boss->GetIsDeath() && !IsBossInDamageMotion(boss)) {
+        Vector3 diff = pEntourageEnemy_->CalcFlockSlotPosition() - pBaseEnemy_->GetWorldPosition();
         diff.y       = 0.0f;
-        if (diff.Length() > kCloseEnough) {
+        if (diff.Length() > kCloseEnough || IsBossFleeing(boss)) {
             pBaseEnemy_->GetAnimator()->PlayAnimation(BaseEnemy::AnimationType::Dash, true);
             isRunning_ = true;
         } else {
@@ -36,39 +51,26 @@ void ZakoFlockBehavior::Update() {
         return;
     }
 
-    // スポーン時のローカルオフセットをボスの現在Y回転で変換してワールド目標位置を算出
-    Vector3 localOffset = pEntourageEnemy_->GetSpawnOffset();
-    localOffset.y       = 0.0f;
-
-    float bossRotY = boss->GetBaseRotationY();
-    float cosY     = cosf(bossRotY);
-    float sinY     = sinf(bossRotY);
-    Vector3 worldOffset(
-        cosY * localOffset.x + sinY * localOffset.z,
-        0.0f,
-        -sinY * localOffset.x + cosY * localOffset.z);
-
-    Vector3 targetPos = boss->GetWorldPosition() + worldOffset;
-    targetPos.y       = pBaseEnemy_->GetWorldPosition().y;
-
-    // 目標位置をフィールド境界内に制限
-
-    const float rx = Field::baseScale_.x - pBaseEnemy_->GetBaseInfo()->GetParameter().baseScale_.x;
-    const float rz = Field::baseScale_.z - pBaseEnemy_->GetBaseInfo()->GetParameter().baseScale_.z;
-    if (rx > 0.0f) {
-        targetPos.x = std::clamp(targetPos.x, -rx, rx);
+    // ボスがダメージモーション中は動かず待機を維持する
+    if (IsBossInDamageMotion(boss)) {
+        if (isRunning_) {
+            pBaseEnemy_->GetAnimator()->ResetToWaitAnimation();
+            isRunning_ = false;
+        }
+        pBaseEnemy_->DirectionToPlayer();
+        return;
     }
-    if (rz > 0.0f) {
-        targetPos.z = std::clamp(targetPos.z, -rz, rz);
-    }
+
+    // 定位置（Flockスロット）への目標位置を算出
+    Vector3 targetPos = pEntourageEnemy_->CalcFlockSlotPosition();
 
     // 目標位置への距離を算出
     Vector3 diff = targetPos - pBaseEnemy_->GetWorldPosition();
     diff.y       = 0.0f;
     float dist   = diff.Length();
 
-    // 十分に近づいていなければ移動
-    if (dist > kCloseEnough) {
+    //ボスが逃走中は、ボスの現在位置を追い続ける
+    if (dist > kCloseEnough || IsBossFleeing(boss)) {
         // 目標方向へ滑らかに旋回
         float faceAngle = LerpShortAngle(
             pBaseEnemy_->GetBaseRotationY(),

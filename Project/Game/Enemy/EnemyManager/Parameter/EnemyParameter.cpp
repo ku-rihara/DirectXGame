@@ -75,6 +75,7 @@ void EnemyParameter::RegisterParams() {
     globalParameter_->Regist(groupName_, "strong_separationStrength",     &LeaderEnemyParam_.separationStrength);
     globalParameter_->Regist(groupName_, "strong_tauntFontOffset",        &LeaderEnemyParam_.tauntFontOffset);
     globalParameter_->Regist(groupName_, "strong_tauntFontRotateSpeed",   &LeaderEnemyParam_.tauntFontRotateSpeed);
+    globalParameter_->Regist(groupName_, "strong_fieldMargin",            &LeaderEnemyParam_.fieldMargin);
 }
 
 void EnemyParameter::DrawManagerParamUI() {
@@ -118,6 +119,9 @@ void EnemyParameter::DrawEnemyParamUI(BaseEnemy::Type type) {
         ImGui::SeparatorText("分離パラメータ（LeaderEnemy）");
         ImGui::DragFloat("分離距離", &LeaderEnemyParam_.separationDistance, 0.1f, 0.0f, 50.0f);
         ImGui::DragFloat("分離強度", &LeaderEnemyParam_.separationStrength, 0.1f, 0.0f, 20.0f);
+
+        ImGui::SeparatorText("移動範囲パラメータ（LeaderEnemy）");
+        ImGui::DragFloat("フィールド境界マージン", &LeaderEnemyParam_.fieldMargin, 0.5f, 0.0f, 100.0f);
 
         ImGui::SeparatorText("TauntFont");
         ImGui::DragFloat3("FontOffset",      &LeaderEnemyParam_.tauntFontOffset.x,    0.05f);
