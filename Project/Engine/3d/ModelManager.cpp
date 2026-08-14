@@ -1,4 +1,5 @@
 #include "ModelManager.h"
+#include <filesystem>
 
 using namespace KetaEngine;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <unordered_set>
+#include "Utility/Registry/RegistryBase.h"
 
 // 前方宣言
 namespace KetaEngine {
@@ -11,22 +11,10 @@ class ViewProjection;
 /// <summary>
 /// Animationの登録管理クラス
 /// </summary>
-class AnimationRegistry {
-private:
-    AnimationRegistry() = default;
-    ~AnimationRegistry();
-
-    // コピー禁止
-    AnimationRegistry(const AnimationRegistry&)            = delete;
-    AnimationRegistry& operator=(const AnimationRegistry&) = delete;
-
+class AnimationRegistry : public RegistryBase<AnimationRegistry, Object3DAnimation> {
 public:
-
-    /// <summary>
-    /// シングルトンインスタンスを取得する
-    /// </summary>
-    /// <returns>AnimationRegistryのインスタンス</returns>
-    static AnimationRegistry* GetInstance();
+    AnimationRegistry()  = default;
+    ~AnimationRegistry() = default;
 
     /// ============================================================
     /// public methods
@@ -42,7 +30,7 @@ public:
     /// アニメーションの登録解除
     /// </summary>
     /// <param name="animation">解除するアニメーションオブジェクト</param>
-    void UnregisterAnimation(Object3DAnimation* animation);
+    void UnregisterAnimation(Object3DAnimation* animation) { UnregisterObject(animation); }
 
     /// <summary>
     /// 登録された全てのアニメーションを更新
@@ -73,26 +61,9 @@ public:
     void DebugLineAllSet();
 
     /// <summary>
-    /// 登録されたアニメーションをクリアする
-    /// </summary>
-    void Clear();
-
-    /// <summary>
     /// ImGuiデバッグ表示
     /// </summary>
     void DebugImGui();
-
-private:
-    std::unordered_set<Object3DAnimation*> animations_;
-    static AnimationRegistry* instance_;
-    static bool isDestroyed_;
-
-public:
-    /// <summary>
-    /// 登録されているアニメーションの数を取得する
-    /// </summary>
-    /// <returns>登録数</returns>
-    const size_t& GetRegisteredCount() const { return animations_.size(); }
 };
 
 }; // KetaEngine

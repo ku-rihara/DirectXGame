@@ -1,13 +1,16 @@
 #pragma once
+// Base
 #include "BaseMaterial.h"
+// Editor
 #include "Editor/DissolveEditor/DissolvePlayer.h"
+// Math
 #include "Matrix4x4.h"
 #include "Vector3.h"
 #include "Vector4.h"
+
 #include <d3d12.h>
 #include <memory>
 #include <string>
-#include <wrl.h>
 
 enum class BlendMode {
     None,
@@ -54,7 +57,8 @@ public:
     /// <param name="name">テクスチャ名</param>
     void SetDissolveNoizeTexture(const std::string& name);
 
-    void DebugImGui() override; //< ImGuiデバッグ
+    // ImGuiデバッグ
+    void DebugImGui() override; 
 
     // ディゾルブ更新、再生
     void UpdateDissolve(float speedRate = 1.0f);
@@ -75,7 +79,7 @@ private:
         float dissolveEdgeWidth;
         Vector3 dissolveEdgeColor;
         int32_t enableDissolve;
-        int32_t enableDither; // ディザ有効フラグ
+        int32_t enableDither;
         float padding2[3];
     };
 

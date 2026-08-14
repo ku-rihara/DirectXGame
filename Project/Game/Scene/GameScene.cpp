@@ -2,6 +2,8 @@
 // State
 #include "GameSceneState/GameSceneIntro.h"
 // Base
+// 3D
+#include "3D/Object3D/Object3DRegistry.h"
 // 2D
 #include "2D/SpriteRegistry.h"
 // Frame,Light
@@ -72,6 +74,7 @@ void GameScene::Debug() {
     gameObj_.operateUI_->Debug();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
+    KetaEngine::Object3DRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 
 

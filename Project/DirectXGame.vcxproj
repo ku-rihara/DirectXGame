@@ -92,6 +92,7 @@
         <ClCompile Include="Engine\Editor\DissolveEditor\DissolveEditor.cpp"/>
         <ClCompile Include="Engine\Editor\DissolveEditor\DissolvePlayer.cpp"/>
         <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.cpp"/>
+        <ClCompile Include="Engine\Editor\ObjectLightingEditor\ObjectLightingEditor.cpp"/>
         <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectInlineEditRequest.cpp"/>
         <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.cpp"/>
         <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.cpp"/>
@@ -229,6 +230,7 @@
         <ClCompile Include="Game\ObjectPool\ObjectPool.cpp"/>
         <ClCompile Include="Engine\Utility\CollisionPush\CollisionPushUtils.cpp"/>
         <ClCompile Include="Engine\Utility\Log\Log.cpp"/>
+        <ClCompile Include="Engine\Utility\Registry\RegistryBase.cpp"/>
         <ClCompile Include="Engine\Utility\TimeLine\TimelineDrawer.cpp"/>
         <ClCompile Include="Engine\Utility\TimeLine\TimelineRenderer.cpp"/>
         <ClCompile Include="Engine\Utility\TimeLine\TimelineInteractionHandler.cpp"/>
@@ -458,6 +460,7 @@
         <ClInclude Include="Engine\Editor\DissolveEditor\DissolveEditor.h"/>
         <ClInclude Include="Engine\Editor\DissolveEditor\DissolvePlayer.h"/>
         <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.h"/>
+        <ClInclude Include="Engine\Editor\ObjectLightingEditor\ObjectLightingEditor.h"/>
         <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.h"/>
         <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.h"/>
         <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.h"/>
@@ -616,6 +619,7 @@
         <ClInclude Include="Game\ObjectPool\ObjectPool.h"/>
         <ClInclude Include="Engine\Utility\CollisionPush\CollisionPushUtils.h"/>
         <ClInclude Include="Engine\Utility\Log\Log.h"/>
+        <ClInclude Include="Engine\Utility\Registry\RegistryBase.h"/>
         <ClInclude Include="Engine\Utility\TimeLine\TimelineDrawer.h"/>
         <ClInclude Include="Engine\Utility\TimeLine\TimelineRenderer.h"/>
         <ClInclude Include="Engine\Utility\TimeLine\TimelineInteractionHandler.h"/>

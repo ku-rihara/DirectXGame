@@ -1,5 +1,7 @@
 #include "BattleTestScene.h"
 // base
+// 3D
+#include "3D/Object3D/Object3DRegistry.h"
 // math
 #include "2D/SpriteRegistry.h"
 #include "Frame/Frame.h"
@@ -80,6 +82,7 @@ void BattleTestScene::Debug() {
     lockOnController_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
+    KetaEngine::Object3DRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 
     ImGui::Begin("EnemySpawn");

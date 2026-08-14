@@ -1,57 +1,35 @@
 #include "Object3DRegistry.h"
 
 using namespace KetaEngine;
+// log
+#include "../../Utility/Log/Log.h"
+// 3D
 #include "3D/Object3d/Object3d.h"
+// Base
 #include "Base/Dx/DirectXCommon.h"
+// Editor
+#include "Editor/ObjectLightingEditor/ObjectLightingEditor.h"
+// Pipeline
 #include "Pipeline/PipelineManager.h"
+// ImGui
 #include <imgui.h>
-
-bool Object3DRegistry::isDestroyed_ = false;
-
-///============================================================
-/// デストラクタ
-///============================================================
-Object3DRegistry::~Object3DRegistry() {
-    isDestroyed_ = true;
-    objects_.clear();
-}
-
-
-///============================================================
-/// シングルトンインスタンス取得
-///============================================================
-Object3DRegistry* Object3DRegistry::GetInstance() {
-    static Object3DRegistry instance;
-    static bool isAlive = true;
-
-    // アプリケーション終了処理中かチェック
-    if (!isAlive) {
-        return nullptr;
-    }
-
-    // 初回呼び出し時にAtexit登録
-    static bool registered = false;
-    if (!registered) {
-        std::atexit([]() { isAlive = false; });
-        registered = true;
-    }
-
-    return &instance;
-}
+// std
+#include <format>
 
 ///============================================================
 /// オブジェクト登録
 ///============================================================
 void Object3DRegistry::RegisterObject(Object3d* object) {
-    if (object != nullptr) {
-        objects_.insert(object);
+    if (object == nullptr) {
+        return;
     }
-}
 
-void Object3DRegistry::UnregisterObject(Object3d* object) {
-    if (object != nullptr) {
-        objects_.erase(object);
-    }
+    // 基底クラスの登録処理を呼び出す
+    RegistryBase<Object3DRegistry, Object3d>::RegisterObject(object);
+
+    // ログにモデル名とアドレスを出力
+    Log::Info(std::format("[Object3DRegistry] Registered: {} (addr={:p})",
+        object->GetModel()->GetModelName(), static_cast<void*>(object)));
 }
 
 ///============================================================
@@ -59,17 +37,19 @@ void Object3DRegistry::UnregisterObject(Object3d* object) {
 ///============================================================
 void Object3DRegistry::UpdateAll() {
 
-    auto objectsCopy = objects_;
-    for (Object3d* obj : objectsCopy) {
-        if (obj != nullptr && objects_.find(obj) != objects_.end()) {
+    ForEachAlive([](Object3d* obj) {
 
-            if (!obj->GetIsAutoUpdate()) {
-                continue;
-            }
+        // Editorのオブジェクトライティング情報を同期
+        ObjectLightingEditor::GetInstance()->SyncObject(obj);
 
-            obj->Update();
+        // 自動更新を無効にしているオブジェクトはスキップ
+        if (!obj->GetIsAutoUpdate()) {
+            return;
         }
-    }
+
+        // オブジェクトの更新
+        obj->Update();
+    });
 }
 
 ///============================================================
@@ -78,31 +58,18 @@ void Object3DRegistry::UpdateAll() {
 void Object3DRegistry::DrawAll(const ViewProjection& viewProjection) {
     PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, DirectXCommon::GetInstance()->GetCommandList());
 
-    auto objectsCopy = objects_;
-    for (Object3d* obj : objectsCopy) {
-        if (obj != nullptr && objects_.find(obj) != objects_.end()) {
-            obj->Draw(viewProjection);
-        }
-    }
+    ForEachAlive([&viewProjection](Object3d* obj) {
+        obj->Draw(viewProjection);
+    });
 }
 
 ///============================================================
 /// 全オブジェクトのシャドウ描画
 ///============================================================
 void Object3DRegistry::DrawAllShadow(const ViewProjection& viewProjection) {
-    auto objectsCopy = objects_;
-    for (Object3d* obj : objectsCopy) {
-        if (obj != nullptr && objects_.find(obj) != objects_.end()) {
-            obj->ShadowDraw(viewProjection);
-        }
-    }
-}
-
-///============================================================
-/// 全オブジェクトクリア
-///============================================================
-void Object3DRegistry::Clear() {
-    objects_.clear();
+    ForEachAlive([&viewProjection](Object3d* obj) {
+        obj->ShadowDraw(viewProjection);
+    });
 }
 
 ///============================================================
@@ -110,8 +77,12 @@ void Object3DRegistry::Clear() {
 ///============================================================
 void Object3DRegistry::DebugImGui() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
-    if (ImGui::CollapsingHeader("Object3D Registry")) {
-        ImGui::Text("Registered Objects: %zu", objects_.size());
+    if (ImGui::CollapsingHeader("登録されたオブジェクト情報")) {
+        ImGui::Text("登録された数: %zu", objects_.size());
+
+        if (ImGui::CollapsingHeader("オブジェクトライティング")) {
+            ObjectLightingEditor::GetInstance()->DebugImGui();
+        }
 
         ImGui::Separator();
 
@@ -120,10 +91,8 @@ void Object3DRegistry::DebugImGui() {
             if (obj != nullptr) {
                 ImGui::PushID(index);
 
-                if (ImGui::CollapsingHeader(("Object " +obj->GetModel()->GetModelName()).c_str())) {
-                    ImGui::Text("Object Address: %p", static_cast<void*>(obj));
-
-                    // オブジェクトのデバッグ情報を表示
+                // オブジェクトのデバッグ情報を表示
+                if (ImGui::CollapsingHeader(("Object " + obj->GetModel()->GetModelName()).c_str())) {
                     obj->DebugImGui();
                 }
 

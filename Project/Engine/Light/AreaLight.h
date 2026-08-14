@@ -1,7 +1,9 @@
 #pragma once
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include <d3d12.h>
+#include <string>
 #include <wrl.h>
 
 namespace KetaEngine {
@@ -30,6 +32,10 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> lightResource_;
     AreaLightData* lightData_;
 
+    // GlobalParameter
+    GlobalParameter* globalParameter_;
+    std::string groupName_;
+
 public:
     AreaLight()  = default;
     ~AreaLight() = default;
@@ -38,7 +44,8 @@ public:
     /// 初期化
     /// </summary>
     /// <param name="device">デバイス</param>
-    void Init(ID3D12Device* device);
+    /// <param name="groupName">グループ名</param>
+    void Init(ID3D12Device* device, const std::string& groupName);
 
     /// <summary>
     /// ライトの位置を設定
@@ -53,6 +60,7 @@ public:
     /// <param name="index">インデックス</param>
     void SetLightCommand(ID3D12GraphicsCommandList* commandList);
 
+    void RegisterParams(); //< パラメータバインド
     void DebugImGui(); //< ImGuiデバッグ表示
 public:
     //getter

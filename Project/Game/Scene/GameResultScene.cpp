@@ -1,5 +1,6 @@
 #include "GameResultScene.h"
 #include "2D/SpriteRegistry.h"
+#include "3D/Object3D/Object3DRegistry.h"
 #include "audio/Audio.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
@@ -68,6 +69,7 @@ void GameResultScene::Debug() {
     resultRunner_->AdjustParam();
     resultUI_->AdjustParam();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
+    KetaEngine::Object3DRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 #endif
 }

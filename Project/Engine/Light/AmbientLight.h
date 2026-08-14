@@ -1,6 +1,8 @@
 #pragma once
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector4.h"
 #include <d3d12.h>
+#include <string>
 #include <wrl.h>
 
 namespace KetaEngine {
@@ -21,6 +23,10 @@ class AmbientLight {
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> lightResource_;
     AmbientLightData* lightData_;
+
+    // GlobalParameter
+    GlobalParameter* globalParameter_;
+    const std::string groupName_ = "AmbientLight";
 
 public:
     AmbientLight()  = default;
@@ -50,6 +56,7 @@ public:
     /// <param name="commandList">コマンドリスト</param>
     void SetLightCommand(ID3D12GraphicsCommandList* commandList);
 
+    void RegisterParams(); //< パラメータバインド
     void DebugImGui(); //< ImGuiデバッグ表示
 public:
     // getter

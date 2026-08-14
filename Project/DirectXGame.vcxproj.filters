@@ -181,6 +181,9 @@
     <Filter Include="Engine\Editor\EffectEditorSuite">
       <UniqueIdentifier>{8EBFB565-C25E-474D-B0E3-2A2A0FA077CB}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Editor\ObjectLightingEditor">
+      <UniqueIdentifier>{5C6A9E2B-7F3D-4C1A-9E4B-2D8F1A6B3C90}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Editor\ObjEaseAnimation">
       <UniqueIdentifier>{31153789-03CD-4F15-9584-39D1EBFB26A0}</UniqueIdentifier>
     </Filter>
@@ -261,6 +264,9 @@
     </Filter>
     <Filter Include="Engine\Utility\Log">
       <UniqueIdentifier>{6CD4F889-FA38-4CFD-937E-E4401B1124A3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Utility\Registry">
+      <UniqueIdentifier>{2E7C7E2B-7A9E-4A0F-9A4E-6F4A2A9C9F31}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Utility\ObjectFromBlender">
       <UniqueIdentifier>{58E7753C-E8B4-421D-9278-91D926EC6ADE}</UniqueIdentifier>
@@ -741,6 +747,9 @@
     <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.cpp">
       <Filter>Engine\Editor\EffectEditorSuite</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Editor\ObjectLightingEditor\ObjectLightingEditor.cpp">
+      <Filter>Engine\Editor\ObjectLightingEditor</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectInlineEditRequest.cpp">
       <Filter>Engine\Editor\EffectEditorSuite</Filter>
     </ClCompile>
@@ -1151,6 +1160,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Utility\Log\Log.cpp">
       <Filter>Engine\Utility\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utility\Registry\RegistryBase.cpp">
+      <Filter>Engine\Utility\Registry</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utility\TimeLine\TimelineDrawer.cpp">
       <Filter>Engine\Utility\TimeLine</Filter>
@@ -1831,6 +1843,9 @@
     <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.h">
       <Filter>Engine\Editor\EffectEditorSuite</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Editor\ObjectLightingEditor\ObjectLightingEditor.h">
+      <Filter>Engine\Editor\ObjectLightingEditor</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.h">
       <Filter>Engine\Editor\ObjEaseAnimation</Filter>
     </ClInclude>
@@ -2304,6 +2319,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Utility\Log\Log.h">
       <Filter>Engine\Utility\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utility\Registry\RegistryBase.h">
+      <Filter>Engine\Utility\Registry</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utility\TimeLine\TimelineDrawer.h">
       <Filter>Engine\Utility\TimeLine</Filter>

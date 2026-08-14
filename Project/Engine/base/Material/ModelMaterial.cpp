@@ -1,13 +1,12 @@
 #include "ModelMaterial.h"
 
 using namespace KetaEngine;
-#include "Base/TextureManager.h"
 #include "Base/Dx/DirectXCommon.h"
+#include "Base/TextureManager.h"
 #include "Light/LightingType.h"
 #include "Pipeline/Object3D/Object3DPipeline.h"
 #include <cassert>
 #include <imgui.h>
-
 
 void ModelMaterial::Init(DirectXCommon* dxCommon) {
     assert(dxCommon);
@@ -19,10 +18,10 @@ void ModelMaterial::Init(DirectXCommon* dxCommon) {
     materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 
     // 初期値をセット
-    materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f); 
-    materialData_->shininess = 12.5f;
-    materialData_->uvTransform = MakeIdentity4x4();
-    materialData_->enableLighting = static_cast<int32_t>(LightingType::HalfLambert);
+    materialData_->color                  = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+    materialData_->shininess              = 12.5f;
+    materialData_->uvTransform            = MakeIdentity4x4();
+    materialData_->enableLighting         = static_cast<int32_t>(LightingType::HalfLambert);
     materialData_->environmentCoefficient = 0.0f;
 
     // Dissolve用の初期値
@@ -37,7 +36,7 @@ void ModelMaterial::Init(DirectXCommon* dxCommon) {
     materialData_->padding2[1]  = 0.0f;
     materialData_->padding2[2]  = 0.0f;
 
-     // DissolvePlayer初期化
+    // DissolvePlayer初期化
     dissolvePlayer_ = std::make_unique<DissolvePlayer>();
     dissolvePlayer_->Init();
 
@@ -83,11 +82,7 @@ void ModelMaterial::DebugImGui() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&materialData_->color));
     ImGui::DragFloat("Shininess", &materialData_->shininess, 0.01f);
-    ImGui::DragFloat("environmentCoefficient", &materialData_->environmentCoefficient, 0.01f);
-    const char* lightingModes[] = {"No Lighting", "Lambert", "Half Lambert", "Specular Reflection",
-        "PointLight", "SpotLight", "AreaLight", "Ambient"};
-    ImGui::Combo("Lighting Mode", &materialData_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
-
+   
     ImGui::Separator();
     ImGui::Text("Dissolve Settings");
 

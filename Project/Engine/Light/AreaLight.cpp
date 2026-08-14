@@ -7,7 +7,7 @@ using namespace KetaEngine;
 #include <numbers>
 
 // 初期化
-void AreaLight::Init(ID3D12Device* device) {
+void AreaLight::Init(ID3D12Device* device, const std::string& groupName) {
     lightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(AreaLightData));
     lightData_     = nullptr;
     lightResource_->Map(0, nullptr, reinterpret_cast<void**>(&lightData_));
@@ -21,10 +21,28 @@ void AreaLight::Init(ID3D12Device* device) {
     lightData_->height    = 0.29f;
     lightData_->up        = {0.0f, 0.0f, 1.0f};
     lightData_->decay     = 2.7f;
+
+    groupName_       = groupName;
+    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_);
+    RegisterParams();
+    globalParameter_->SyncParamForGroup(groupName_);
+}
+
+void AreaLight::RegisterParams() {
+    globalParameter_->Regist(groupName_, "Color", &lightData_->color);
+    globalParameter_->Regist(groupName_, "Position", &lightData_->position);
+    globalParameter_->Regist(groupName_, "Normal", &lightData_->normal);
+    globalParameter_->Regist(groupName_, "Intensity", &lightData_->intensity);
+    globalParameter_->Regist(groupName_, "Width", &lightData_->width);
+    globalParameter_->Regist(groupName_, "Height", &lightData_->height);
+    globalParameter_->Regist(groupName_, "Up", &lightData_->up);
+    globalParameter_->Regist(groupName_, "Decay", &lightData_->decay);
 }
 
 // ImGuiによるデバッグUI
 void AreaLight::DebugImGui() {
+    ImGui::PushID(groupName_.c_str());
     ImGui::ColorEdit4("Color", (float*)&lightData_->color);
     ImGui::DragFloat3("Position", (float*)&lightData_->position, 0.01f);
     ImGui::DragFloat3("Direction", (float*)&lightData_->normal, 0.01f);
@@ -37,6 +55,15 @@ void AreaLight::DebugImGui() {
 
     ImGui::DragFloat("Intensity", (float*)&lightData_->intensity, 0.01f);
     ImGui::DragFloat("Decay", (float*)&lightData_->decay, 0.01f);
+
+    // 登録が切れてたら再登録
+    if (!globalParameter_->HasRegisters(groupName_)) {
+        RegisterParams();
+    }
+
+    globalParameter_->ParamSaveForImGui(groupName_);
+    globalParameter_->ParamLoadForImGui(groupName_);
+    ImGui::PopID();
 }
 
 // ライトの位置を設定

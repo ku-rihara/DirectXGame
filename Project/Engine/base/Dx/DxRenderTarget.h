@@ -38,11 +38,11 @@ public:
     void Finalize(); //< 終了処理
 
     // ポストプロセスマルチパス用
-    /// <summary>ピンポンRTを出力先にセット（→RT遷移+OMSetRenderTargets）</summary>
+    /// <summary>ピンポンRTを出力先にセット</summary>
     void SetPingPongAsRenderTarget(ID3D12GraphicsCommandList* cmdList);
-    /// <summary>シーンRTを出力先にセット（→RT遷移+OMSetRenderTargets）</summary>
+    /// <summary>シーンRTを出力先にセット</summary>
     void SetSceneRTAsRenderTarget(ID3D12GraphicsCommandList* cmdList);
-    /// <summary>バックバッファを出力先に戻す（OMSetRenderTargets のみ）</summary>
+    /// <summary>バックバッファを出力先に戻す</summary>
     void SetBackBufferAsRenderTarget(ID3D12GraphicsCommandList* cmdList);
     /// <summary>ピンポンRTを任意の状態へ遷移</summary>
     void TransitionPingPongTo(ID3D12GraphicsCommandList* cmdList, D3D12_RESOURCE_STATES state);

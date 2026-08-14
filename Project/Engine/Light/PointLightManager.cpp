@@ -32,7 +32,7 @@ void PointLightManager::Init(ID3D12Device* device) {
 
 void PointLightManager::Add(ID3D12Device* device) {
     auto newLight = std::make_unique<PointLight>();
-    newLight->Init(device);
+    newLight->Init(device, std::format("PointLight{}", pointLights_.size()));
     pointLights_.push_back(std::move(newLight));
 
     UpdateStructuredBuffer();

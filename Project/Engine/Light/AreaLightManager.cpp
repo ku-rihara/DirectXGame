@@ -6,9 +6,9 @@ using namespace KetaEngine;
 #include<imgui.h>
 
 void AreaLightManager::Add(ID3D12Device* device) {
-    
+
     auto newLight = std::make_unique<AreaLight>();
-    newLight->Init(device);
+    newLight->Init(device, std::format("AreaLight{}", areaLights_.size()));
     areaLights_.push_back(std::move(newLight));
 }
 

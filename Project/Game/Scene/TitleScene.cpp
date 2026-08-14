@@ -1,6 +1,8 @@
 /// scene
 #include "TitleScene.h"
 #include "Scene/Manager/SceneManager.h"
+// 3D
+#include "3D/Object3D/Object3DRegistry.h"
 // 2D
 #include "2D/SpriteRegistry.h"
 // Light
@@ -85,6 +87,7 @@ void TitleScene::Debug() {
     // ライトとスプライトのデバッグ
     KetaEngine::Light::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
+    KetaEngine::Object3DRegistry::GetInstance()->DebugImGui();
 
     // タイトルシーンのカメラ設定
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
