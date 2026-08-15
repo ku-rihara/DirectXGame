@@ -1,14 +1,8 @@
 #include "GameScene.h"
 // State
 #include "GameSceneState/GameSceneIntro.h"
-// Base
-// 3D
-#include "3D/Object3D/Object3DRegistry.h"
-// 2D
-#include "2D/SpriteRegistry.h"
-// Frame,Light
+// Frame
 #include "Frame/Frame.h"
-#include "Light/Light.h"
 // ImGui
 #include <imgui.h>
 
@@ -51,7 +45,6 @@ void GameScene::Debug() {
 
     BaseScene::Debug();
 
-    KetaEngine::Light::GetInstance()->DebugImGui();
     gameObj_.operateUI_->Debug();
 
     ImGui::Begin("ParameterEditor");
@@ -72,9 +65,6 @@ void GameScene::Debug() {
     gameObj_.comboSupportSpriteUi_->AdjustParam();
     gameObj_.nextAttackHintUI_->AdjustParam();
     gameObj_.operateUI_->Debug();
-    KetaEngine::ShadowMap::GetInstance()->DebugImGui();
-    KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
-    KetaEngine::Object3DRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 
 

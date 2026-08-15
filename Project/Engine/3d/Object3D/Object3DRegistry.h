@@ -25,7 +25,7 @@ public:
     void DrawAllShadow(const ViewProjection& viewProjection);
 
     // ImGuiデバッグ表示
-    void DebugImGui(); 
+    void DebugImGui();
 };
 
 }; // KetaEngine

@@ -1,11 +1,6 @@
 #include "BattleTestScene.h"
-// base
-// 3D
-#include "3D/Object3D/Object3DRegistry.h"
-// math
-#include "2D/SpriteRegistry.h"
+
 #include "Frame/Frame.h"
-#include "Light/Light.h"
 #include "Scene/Manager/SceneManager.h"
 #include <imgui.h>
 
@@ -67,8 +62,6 @@ void BattleTestScene::Debug() {
 
     BaseScene::Debug();
 
-    KetaEngine::Light::GetInstance()->DebugImGui();
-
     ImGui::Begin("ParameterEditor");
     player_->AdjustParam();
     sideRopeController_->AdjustParam();
@@ -80,9 +73,6 @@ void BattleTestScene::Debug() {
     audienceController_->AdjustParam();
     backGroundObjectManager_->AdjustParam();
     lockOnController_->AdjustParam();
-    KetaEngine::ShadowMap::GetInstance()->DebugImGui();
-    KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
-    KetaEngine::Object3DRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 
     ImGui::Begin("EnemySpawn");

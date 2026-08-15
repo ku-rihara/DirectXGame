@@ -2,9 +2,10 @@
 #include "Light/Light.h"
 #include "Editor/CameraEditor/CameraEditor.h"
 #include "PostEffect/PostEffectRenderer.h"
-
-// editor
-
+// 3D
+#include "3D/Object3D/Object3DRegistry.h"
+// 2D
+#include "2D/SpriteRegistry.h"
 // Particle
 #include "Particle/CPUParticle/ParticleManager.h"
 #include "Particle/GPUParticle/GPUParticleManager.h"
@@ -147,7 +148,13 @@ void BaseScene::Debug() {
     ImGui::End();
 
     // ImGuiの描画
+    ImGui::Begin("グラフィック編集");
+    KetaEngine::Light::GetInstance()->DebugImGui();
+    KetaEngine::ShadowMap::GetInstance()->DebugImGui();
+    KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
+    KetaEngine::Object3DRegistry::GetInstance()->DebugImGui();
     KetaEngine::PostEffectRenderer::GetInstance()->DrawImGui();
+    ImGui::End();
 #endif
 }
 

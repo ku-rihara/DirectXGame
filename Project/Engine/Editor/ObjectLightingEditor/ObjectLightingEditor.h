@@ -37,21 +37,33 @@ public:
 
     void DebugImGui(); //< ImGuiデバッグ表示
 
+    /// <summary>
+    /// 前のシーンの設定を破棄し、以後の読み込み先を新しいシーンのフォルダに切り替える
+    /// </summary>
+    /// <param name="sceneName">これから始まるシーンの名前</param>
+    void OnSceneChanged(const std::string& sceneName);
+
 private:
     /// <summary>
-    /// モデル名に対応する設定を取得。未登録なら現在のマテリアル値でシードしてGlobalParameterに登録する
+    /// モデル名に対応する設定を取得。未登録なら現在のシーンのファイルから読み込む
     /// </summary>
     Settings& EnsureRegistered(const std::string& modelName, Object3d* seedSource);
 
     /// <summary>
-    /// モデル名からGlobalParameterのグループ名(≒保存ファイル名)を生成する
+    /// モデル名からGlobalParameterのグループ名を生成する
     /// </summary>
     static std::string MakeGroupName(const std::string& modelName);
 
+    /// <summary>
+    /// 現在のシーン名から保存先フォルダ名生成する
+    /// </summary>
+    std::string MakeSceneFolder() const;
+
 private:
     GlobalParameter* globalParameter_ = nullptr;
-    std::unordered_map<std::string, Settings> settings_; //< モデル名 -> 設定
+    std::unordered_map<std::string, Settings> settings_; 
     std::string selectedModelName_;
+    std::string currentSceneName_; 
 };
 
 }; // KetaEngine

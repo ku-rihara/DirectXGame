@@ -1,10 +1,6 @@
 /// scene
 #include "TitleScene.h"
 #include "Scene/Manager/SceneManager.h"
-// 3D
-#include "3D/Object3D/Object3DRegistry.h"
-// 2D
-#include "2D/SpriteRegistry.h"
 // Light
 #include "Light/Light.h"
 
@@ -81,13 +77,10 @@ void TitleScene::SkyBoxDraw() {
 void TitleScene::Debug() {
 #if defined(_DEBUG) || defined(DEVELOPMENT)
     ImGui::Begin("Param");
+
+    BaseScene::Debug();
     // 演出Editor更新
     effectEditorSuite_->EditorUpdate();
-
-    // ライトとスプライトのデバッグ
-    KetaEngine::Light::GetInstance()->DebugImGui();
-    KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
-    KetaEngine::Object3DRegistry::GetInstance()->DebugImGui();
 
     // タイトルシーンのカメラ設定
     if (ImGui::CollapsingHeader(groupName_.c_str())) {

@@ -18,6 +18,7 @@ using namespace KetaEngine;
 // input
 #include "Input/Input.h"
 // global parameter
+#include "Editor/ObjectLightingEditor/ObjectLightingEditor.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 // log
 #include "Utility/Log/Log.h"
@@ -183,4 +184,7 @@ void SceneManager::ClearAllRegistries() {
     AnimationRegistry::GetInstance()->Clear();
     RibbonTrailManager::GetInstance()->Clear();
     SpriteRegistry::GetInstance()->Clear();
+
+    // 次のシーン名を通知しつつ、前のシーンのライティング設定を破棄する
+    ObjectLightingEditor::GetInstance()->OnSceneChanged(pendingSceneName_);
 }

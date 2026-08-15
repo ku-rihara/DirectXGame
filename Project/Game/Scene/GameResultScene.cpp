@@ -1,6 +1,4 @@
 #include "GameResultScene.h"
-#include "2D/SpriteRegistry.h"
-#include "3D/Object3D/Object3DRegistry.h"
 #include "audio/Audio.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
@@ -11,21 +9,26 @@
 void GameResultScene::Init() {
     BaseScene::Init();
 
+    // 背景スプライトの初期化
     bgSprite_.reset(KetaEngine::Sprite::Create("screenChange.dds"));
     bgSprite_->SetIsDraw(true);
     bgSprite_->SetAlpha(0.f);
     alpha_ = 0.f;
 
+    // SkyBoxの初期化
     skyBox_ = std::make_unique<SkyBox>();
     skyBox_->Init();
 
+    // ステージオブジェクトの初期化
     resultStage_ = std::make_unique<ResultStage>();
     resultStage_->Init("ResultScene.json");
     resultStage_->SetViewProjection(&viewProjection_);
 
+    // 敗走する敵の初期化
     resultRunner_ = std::make_unique<ResultRunner>();
     resultRunner_->Init();
 
+    // UIの初期化
     resultUI_ = std::make_unique<GameResultUI>();
     resultUI_->Init();
 }
@@ -34,6 +37,7 @@ void GameResultScene::Update() {
     BaseScene::Update();
     KetaEngine::Frame::SetTimeScale(1.0f);
 
+    // 各オブジェクトの更新
     skyBox_->Update();
     resultStage_->Update();
     resultRunner_->Update();
@@ -68,8 +72,6 @@ void GameResultScene::Debug() {
     resultStage_->AdjustParam();
     resultRunner_->AdjustParam();
     resultUI_->AdjustParam();
-    KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
-    KetaEngine::Object3DRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 #endif
 }

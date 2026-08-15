@@ -1,8 +1,8 @@
 #include "ObjectLightingEditor.h"
 
 using namespace KetaEngine;
-#include "3D/Object3D/Object3d.h"
 #include "3D/Model.h"
+#include "3D/Object3D/Object3d.h"
 #include <imgui.h>
 
 ObjectLightingEditor* ObjectLightingEditor::GetInstance() {
@@ -18,6 +18,10 @@ std::string ObjectLightingEditor::MakeGroupName(const std::string& modelName) {
         }
     }
     return "ObjLighting_" + sanitized;
+}
+
+std::string ObjectLightingEditor::MakeSceneFolder() const {
+    return "Lighting/" + (currentSceneName_.empty() ? "Common" : currentSceneName_);
 }
 
 ObjectLightingEditor::Settings& ObjectLightingEditor::EnsureRegistered(const std::string& modelName, Object3d* seedSource) {
@@ -41,6 +45,10 @@ ObjectLightingEditor::Settings& ObjectLightingEditor::EnsureRegistered(const std
     // シーン遷移でGlobalParameterの登録がクリアされている場合は再登録する
     if (!globalParameter_->HasRegisters(groupName)) {
         globalParameter_->CreateGroup(groupName);
+
+        // 現在のシーン用フォルダに保存済みのファイルがあれば読み込む
+        globalParameter_->LoadFile(groupName, MakeSceneFolder());
+
         globalParameter_->Regist(groupName, "EnableLighting", &it->second.enableLighting);
         globalParameter_->Regist(groupName, "EnvironmentCoefficient", &it->second.environmentCoefficient);
         globalParameter_->SyncParamForGroup(groupName);
@@ -91,9 +99,15 @@ void ObjectLightingEditor::DebugImGui() {
     ImGui::Combo("Lighting Mode", &settings.enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
     ImGui::DragFloat("Environment Coefficient", &settings.environmentCoefficient, 0.01f);
 
-    globalParameter_->ParamSaveForImGui(groupName);
-    globalParameter_->ParamLoadForImGui(groupName);
+    globalParameter_->ParamSaveForImGui(groupName, MakeSceneFolder());
+    globalParameter_->ParamLoadForImGui(groupName, MakeSceneFolder());
 
     ImGui::PopID();
 #endif // _DEBUG
+}
+
+void ObjectLightingEditor::OnSceneChanged(const std::string& sceneName) {
+    settings_.clear();
+    selectedModelName_.clear();
+    currentSceneName_ = sceneName;
 }
