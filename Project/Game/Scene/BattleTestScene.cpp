@@ -39,6 +39,7 @@ void BattleTestScene::Update() {
     backGroundObjectManager_->Update(KetaEngine::Frame::DeltaTimeRate());
     gameCamera_->Update();
     lockOnController_->Update(player_.get(), viewProjection_);
+    pbdRopeTest_->Update();
 
     ViewProjectionUpdate();
 
@@ -87,6 +88,10 @@ void BattleTestScene::Debug() {
     enemyManager_->DamageReactionCreate();
     ImGui::End();
 
+    ImGui::Begin("PBDRopeTest");
+    pbdRopeTest_->DebugImGui();
+    ImGui::End();
+
 #endif
 }
 
@@ -122,8 +127,10 @@ void BattleTestScene::ObjectInit() {
     comboAssistController_        = std::make_unique<ComboAssistController>();
     unlockNotifier_              = std::make_unique<ComboUnlockNotifier>();
     operateUI_                   = std::make_unique<OperateUI>();
+    pbdRopeTest_                 = std::make_unique<PBDRopeTest>();
     unlockNotifier_->Init();
     operateUI_->Init();
+    pbdRopeTest_->Init();
 
     // 初期化
     field_->Init();
@@ -165,6 +172,8 @@ void BattleTestScene::SetClassPointer() {
     player_->SetDeathFragPointer(&StressGauge_->GetIsDeath());
 
     combo_->SetStressGauge(StressGauge_.get());
+
+    pbdRopeTest_->SetPlayer(player_.get());
 
     comboDirector_->SetPlayer(player_.get());
     comboDirector_->SetComboAndStressGauge(combo_.get(), StressGauge_.get());

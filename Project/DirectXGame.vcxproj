@@ -188,6 +188,7 @@
         <ClCompile Include="Engine\PostEffect\RadialBlur.cpp"/>
         <ClCompile Include="Engine\PostEffect\RandomNoize.cpp"/>
         <ClCompile Include="Engine\PostEffect\Vignette.cpp"/>
+        <ClCompile Include="Engine\Physics\PBD\PBDSolver.cpp"/>
         <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp"/>
         <ClCompile Include="Engine\Scene\Manager\SceneManager.cpp"/>
         <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp"/>
@@ -228,6 +229,7 @@
         <ClCompile Include="Game\Combo\ComboChainGauge.cpp"/>
         <ClCompile Include="Engine\Utility\ObjectFromBlender\ObjectFromBlender.cpp"/>
         <ClCompile Include="Game\ObjectPool\ObjectPool.cpp"/>
+        <ClCompile Include="Game\PBDRopeTest\PBDRopeTest.cpp"/>
         <ClCompile Include="Engine\Utility\CollisionPush\CollisionPushUtils.cpp"/>
         <ClCompile Include="Engine\Utility\Log\Log.cpp"/>
         <ClCompile Include="Engine\Utility\Registry\RegistryBase.cpp"/>
@@ -558,6 +560,10 @@
         <ClInclude Include="Engine\PostEffect\RadialBlur.h"/>
         <ClInclude Include="Engine\PostEffect\RandomNoize.h"/>
         <ClInclude Include="Engine\PostEffect\Vignette.h"/>
+        <ClInclude Include="Engine\Physics\PBD\PBDDistanceConstraint.h"/>
+        <ClInclude Include="Engine\Physics\PBD\PBDParticle.h"/>
+        <ClInclude Include="Engine\Physics\PBD\PBDSolver.h"/>
+        <ClInclude Include="Engine\Physics\PBD\PBDSphereObstacle.h"/>
         <ClInclude Include="Engine\Scene\Factory\AbstractSceneFactory.h"/>
         <ClInclude Include="Engine\Scene\Factory\SceneFactory.h"/>
         <ClInclude Include="Engine\Scene\Manager\SceneManager.h"/>
@@ -617,6 +623,7 @@
         <ClInclude Include="Game\Combo\ComboChainGauge.h"/>
         <ClInclude Include="Engine\Utility\ObjectFromBlender\ObjectFromBlender.h"/>
         <ClInclude Include="Game\ObjectPool\ObjectPool.h"/>
+        <ClInclude Include="Game\PBDRopeTest\PBDRopeTest.h"/>
         <ClInclude Include="Engine\Utility\CollisionPush\CollisionPushUtils.h"/>
         <ClInclude Include="Engine\Utility\Log\Log.h"/>
         <ClInclude Include="Engine\Utility\Registry\RegistryBase.h"/>

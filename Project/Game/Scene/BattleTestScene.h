@@ -17,6 +17,8 @@
 // Field
 #include "Field/Field.h"
 #include "Field/SideRope/SideRopeController.h"
+// PBD
+#include "PBDRopeTest/PBDRopeTest.h"
 // Camera
 #include "GameCamera/GameCamera.h"
 // LockOn
@@ -82,6 +84,7 @@ private:
     std::unique_ptr<ComboAssistController> comboAssistController_               = nullptr;
     std::unique_ptr<ComboUnlockNotifier> unlockNotifier_                      = nullptr;
     std::unique_ptr<OperateUI> operateUI_                                     = nullptr;
+    std::unique_ptr<PBDRopeTest> pbdRopeTest_                                 = nullptr;
 
 public:
 };

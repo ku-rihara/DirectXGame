@@ -58,6 +58,12 @@
     <Filter Include="Engine\PostEffect">
       <UniqueIdentifier>{5468A807-0B35-44FE-810A-F8223C95747E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Physics">
+      <UniqueIdentifier>{1C6E2A3B-7D4F-4B8E-9A2C-3F5D7E9B1A44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\PBD">
+      <UniqueIdentifier>{2D7F3B4C-8E5A-4C9F-AB3D-4A6E8F0C2B55}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Scene">
       <UniqueIdentifier>{5A6F090A-CC13-480D-8FF4-D8FC72E6B39D}</UniqueIdentifier>
     </Filter>
@@ -111,6 +117,9 @@
     </Filter>
     <Filter Include="Game\ObjectPool">
       <UniqueIdentifier>{27334616-09E9-4959-B358-56EF68D8F1FD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\PBDRopeTest">
+      <UniqueIdentifier>{3E8A5C1D-6F2B-4A7E-9C4D-5B7F9A1E3C66}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player">
       <UniqueIdentifier>{9ECB010B-5CC8-40B8-9A0C-560E574F8A80}</UniqueIdentifier>
@@ -1035,6 +1044,9 @@
     <ClCompile Include="Engine\PostEffect\Vignette.cpp">
       <Filter>Engine\PostEffect</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Physics\PBD\PBDSolver.cpp">
+      <Filter>Engine\Physics\PBD</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp">
       <Filter>Engine\Scene\Factory</Filter>
     </ClCompile>
@@ -1154,6 +1166,9 @@
     </ClCompile>
     <ClCompile Include="Game\ObjectPool\ObjectPool.cpp">
       <Filter>Game\ObjectPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\PBDRopeTest\PBDRopeTest.cpp">
+      <Filter>Game\PBDRopeTest</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utility\CollisionPush\CollisionPushUtils.cpp">
       <Filter>Engine\Utility\CollisionPush</Filter>
@@ -2137,6 +2152,18 @@
     <ClInclude Include="Engine\PostEffect\Vignette.h">
       <Filter>Engine\PostEffect</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Physics\PBD\PBDDistanceConstraint.h">
+      <Filter>Engine\Physics\PBD</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\PBD\PBDParticle.h">
+      <Filter>Engine\Physics\PBD</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\PBD\PBDSolver.h">
+      <Filter>Engine\Physics\PBD</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\PBD\PBDSphereObstacle.h">
+      <Filter>Engine\Physics\PBD</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Scene\Factory\AbstractSceneFactory.h">
       <Filter>Engine\Scene\Factory</Filter>
     </ClInclude>
@@ -2313,6 +2340,9 @@
     </ClInclude>
     <ClInclude Include="Game\ObjectPool\ObjectPool.h">
       <Filter>Game\ObjectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PBDRopeTest\PBDRopeTest.h">
+      <Filter>Game\PBDRopeTest</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utility\CollisionPush\CollisionPushUtils.h">
       <Filter>Engine\Utility\CollisionPush</Filter>

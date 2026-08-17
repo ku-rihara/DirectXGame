@@ -3,9 +3,10 @@
 using namespace KetaEngine;
 #include "Base/WinApp.h"
 #include "Player/ComboCreator/PlayerAttackRenditionData.h"
+#include "Utility/Log/Log.h"
 #include <fstream>
+#include <format>
 #include <imgui.h>
-#include <iostream>
 
 GlobalParameter* GlobalParameter::GetInstance() {
     static GlobalParameter instance;
@@ -165,7 +166,7 @@ void GlobalParameter::LoadFiles() {
     // kDirectoryPath 直下のJSONファイルを処理
     for (const auto& entry : std::filesystem::directory_iterator(dir, ec)) {
         if (ec) {
-            std::cerr << "Error accessing directory: " << ec.message() << std::endl;
+            Log::Warn(std::format("GlobalParameter: Error accessing directory: {}", ec.message()));
             break;
         }
 
@@ -193,7 +194,7 @@ void GlobalParameter::LoadFiles() {
     // kDirectoryPath 直下のフォルダを処理
     for (const auto& entry : std::filesystem::directory_iterator(dir, ec)) {
         if (ec) {
-            std::cerr << "Error accessing directory: " << ec.message() << std::endl;
+            Log::Warn(std::format("GlobalParameter: Error accessing directory: {}", ec.message()));
             break;
         }
 
@@ -210,7 +211,7 @@ void GlobalParameter::LoadFiles() {
         std::error_code folder_ec;
         for (const auto& fileEntry : std::filesystem::directory_iterator(folderPath, folder_ec)) {
             if (folder_ec) {
-                std::cerr << "Error accessing folder " << folderName << ": " << folder_ec.message() << std::endl;
+                Log::Warn(std::format("GlobalParameter: Error accessing folder {}: {}", folderName, folder_ec.message()));
                 break; // このフォルダをスキップして次に進む
             }
 
@@ -243,14 +244,14 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
 
     std::ifstream ifs(filePath);
     if (ifs.fail()) {
-        std::cerr << "Warning: Could not open file: " << filePath << std::endl;
+        Log::Warn(std::format("GlobalParameter: Could not open file: {}", filePath));
         return;
     }
 
     json root;
     ifs >> root;
     if (ifs.fail()) {
-        std::cerr << "Warning: Failed to parse JSON in file: " << filePath << std::endl;
+        Log::Warn(std::format("GlobalParameter: Failed to parse JSON in file: {}", filePath));
         ifs.close();
         return;
     }
@@ -259,7 +260,7 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
     // JSONの構造をチェック
     auto itGroup = root.find(groupName);
     if (itGroup == root.end()) {
-        std::cerr << "Warning: Group '" << groupName << "' not found in file: " << filePath << std::endl;
+        Log::Warn(std::format("GlobalParameter: Group '{}' not found in file: {}", groupName, filePath));
         return;
     }
 
