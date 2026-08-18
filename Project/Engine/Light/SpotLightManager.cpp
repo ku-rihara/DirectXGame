@@ -36,12 +36,12 @@ void SpotLightManager::Update() {
     }
 }
 
-void SpotLightManager::Add(ID3D12Device* device, const int32_t number) {
+void SpotLightManager::Add(ID3D12Device* device, const int32_t number, const std::string& sceneFolder) {
     auto newLight = std::make_unique<SpotLight>();
 
-    newLight->Init(device, std::format("{}{}", groupName_, number));
+    newLight->Init(device, std::format("{}{}", groupName_, number), sceneFolder);
     spotLights_.push_back(std::move(newLight));
-   
+
     UpdateStructuredBuffer();
 }
 
@@ -51,6 +51,10 @@ void SpotLightManager::Remove(int index) {
 
         UpdateStructuredBuffer();
     }
+}
+
+void SpotLightManager::Clear() {
+    spotLights_.clear();
 }
 
 void SpotLightManager::UpdateStructuredBuffer() {

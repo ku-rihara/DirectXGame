@@ -20,6 +20,8 @@ using namespace KetaEngine;
 // global parameter
 #include "Editor/ObjectLightingEditor/ObjectLightingEditor.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+// light
+#include "Light/Light.h"
 // log
 #include "Utility/Log/Log.h"
 
@@ -187,4 +189,5 @@ void SceneManager::ClearAllRegistries() {
 
     // 次のシーン名を通知しつつ、前のシーンのライティング設定を破棄する
     ObjectLightingEditor::GetInstance()->OnSceneChanged(pendingSceneName_);
+    Light::GetInstance()->OnSceneChanged(pendingSceneName_);
 }

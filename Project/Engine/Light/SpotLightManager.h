@@ -30,13 +30,19 @@ public:
     /// </summary>
     /// <param name="device">デバイス</param>
     /// <param name="number">番号</param>
-    void Add(ID3D12Device* device, const int32_t number);
+    /// <param name="sceneFolder">保存・読込先のシーン別フォルダ名</param>
+    void Add(ID3D12Device* device, const int32_t number, const std::string& sceneFolder);
 
     /// <summary>
     /// スポットライトを削除
     /// </summary>
     /// <param name="index">インデックス</param>
     void Remove(int index);
+
+    /// <summary>
+    /// 全スポットライトを破棄
+    /// </summary>
+    void Clear();
 
     /// <summary>
     /// ライトコマンドを設定

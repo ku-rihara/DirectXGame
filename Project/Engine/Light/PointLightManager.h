@@ -35,7 +35,8 @@ public:
     /// ポイントライトを追加
     /// </summary>
     /// <param name="device">デバイス</param>
-    void Add(ID3D12Device* device);
+    /// <param name="sceneFolder">保存・読込先のシーン別フォルダ名</param>
+    void Add(ID3D12Device* device, const std::string& sceneFolder);
 
     /// <summary>
     /// ポイントライトを削除
@@ -44,11 +45,17 @@ public:
     void Remove(int index);
 
     /// <summary>
+    /// 全ポイントライトを破棄
+    /// </summary>
+    void Clear();
+
+    /// <summary>
     /// ライトコマンドを設定
     /// </summary>
     /// <param name="commandList">コマンドリスト</param>
     void SetLightCommand(ID3D12GraphicsCommandList* commandList);
 
+    void Update(); //< 更新処理
     void UpdateStructuredBuffer(); //< StructuredBufferの更新
     void DebugImGui(); //< ImGuiデバッグ表示
     std::vector<PointLight*> GetLights();

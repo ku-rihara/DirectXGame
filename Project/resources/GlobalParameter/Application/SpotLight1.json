@@ -7,20 +7,20 @@
             1.0
         ],
         "Direction": [
-            0.0,
-            -1.0,
-            0.0
+            -0.2528,
+            -0.0900,
+            -0.9633
         ],
-        "Distance": 7.0,
+        "Distance": 240.0,
         "Pos": [
-            2.5799999237060547,
-            -4.28000020980835,
-            0.0
+            42.1346,
+            15.0,
+            160.5558
         ],
-        "cosAngle": 0.5,
-        "cosFalloffStart": 1.5,
+        "cosAngle": 0.991,
+        "cosFalloffStart": 0.9975,
         "decay": 0.05000000074505806,
-        "intenesity": 5.0,
+        "intenesity": 3.0,
         "isMove": false
     }
 }

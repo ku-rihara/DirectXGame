@@ -171,7 +171,4 @@ void BaseScene::ViewProjectionUpdate() {
     if (auto it = cameraUpdaters_.find(cameraMode_); it != cameraUpdaters_.end()) {
         it->second();
     }
-   
-    // ライトにカメラ位置を渡す
-    KetaEngine::Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }

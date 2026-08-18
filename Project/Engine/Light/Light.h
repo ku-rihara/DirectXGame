@@ -95,21 +95,49 @@ public:
     /// <param name="num">番号</param>
     void RemovePointLight(int num);
 
+    /// <summary>
+    /// シーン切替時に、ライト構成をそのシーン専用の保存データで作り直す
+    /// </summary>
+    /// <param name="sceneName">これから始まるシーンの名前</param>
+    void OnSceneChanged(const std::string& sceneName);
+
     void Update(); //< 更新処理
     void InitAllLights(); //< 全ライト初期化
     void DebugImGui(); //< ImGuiデバッグ表示
-    void AddSpotLight(); //< スポットライト追加
-    void AddPointLight(); //< ポイントライト追加
-    void RegisterParams(); //< パラメータバインド
+
+    // ライトの追加・削除
+    void AddSpotLight(); 
+    void AddPointLight(); 
+    // パラメータ登録
+    void RegisterParams(); 
+    void RegisterWorldCameraParams(); 
+
     void Finalize(); //< 終了処理
+
+private:
+    /// <summary>
+    /// シーン名から保存先フォルダ名を生成する
+    /// </summary>
+    std::string MakeSceneFolder(const std::string& sceneName) const;
+
+    /// <summary>
+    /// 現在のシーン用にPoint/SpotLightを全て作り直す
+    /// </summary>
+    void RebuildLightsForScene(const std::string& sceneName);
 
 private:
     DirectXCommon* dxCommon_;
     GlobalParameter* globalParameter_;
-    const std::string groupName_ = "LightCount";
+    const std::string groupName_           = "LightCount";
+    const std::string worldCameraGroupName_ = "WorldCamera";
 
     int32_t spotLightCountMax_;
+    int32_t pointLightCountMax_ = 0;
     int32_t current;
+
+    // シーンごとのライト構成
+    std::string currentSceneName_;   //< 現在ライトを構築済みのシーン名
+    std::string pendingSceneName_;   //< 切り替える予定のシーン名
 
     // Lights
     std::unique_ptr<DirectionalLight> directionalLight_;
@@ -121,6 +149,7 @@ private:
     // 鏡面反射
     Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
     CameraForGPU* cameraForGPUData_;
+    Vector3 worldCameraPos_; 
 
     // ディザオクルージョン
     Microsoft::WRL::ComPtr<ID3D12Resource> ditherOcclusionResource_;

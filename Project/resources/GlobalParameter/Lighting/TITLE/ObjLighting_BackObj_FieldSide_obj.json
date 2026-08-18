@@ -1,6 +1,6 @@
 {
     "ObjLighting_BackObj_FieldSide_obj": {
-        "EnableLighting": 2,
-        "EnvironmentCoefficient": 0.3100000023841858
+        "EnableLighting": 5,
+        "EnvironmentCoefficient": 0.7400000095367432
     }
 }

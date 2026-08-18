@@ -1,0 +1,6 @@
+{
+    "LightCount": {
+        "spotLightCountMax": 8,
+        "pointLightCountMax": 1
+    }
+}

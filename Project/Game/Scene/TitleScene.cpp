@@ -104,7 +104,6 @@ void TitleScene::RegisterParams() {
 // ビュープロジェクション更新
 void TitleScene::ViewProjectionUpdate() {
     BaseScene::ViewProjectionUpdate();
-    KetaEngine::Light::GetInstance()->SetWorldCameraPos(player_->GetWorldPosition());
 }
 
 void TitleScene::ViewProcess() {

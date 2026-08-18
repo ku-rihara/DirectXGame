@@ -30,9 +30,15 @@ void PointLightManager::Init(ID3D12Device* device) {
         sizeof(PointLightData));
 }
 
-void PointLightManager::Add(ID3D12Device* device) {
+void PointLightManager::Update() {
+    for (const auto& light : pointLights_) {
+        light->Update();
+    }
+}
+
+void PointLightManager::Add(ID3D12Device* device, const std::string& sceneFolder) {
     auto newLight = std::make_unique<PointLight>();
-    newLight->Init(device, std::format("PointLight{}", pointLights_.size()));
+    newLight->Init(device, std::format("PointLight{}", pointLights_.size()), sceneFolder);
     pointLights_.push_back(std::move(newLight));
 
     UpdateStructuredBuffer();
@@ -44,6 +50,10 @@ void PointLightManager::Remove(int index) {
 
         UpdateStructuredBuffer();
     }
+}
+
+void PointLightManager::Clear() {
+    pointLights_.clear();
 }
 
 void PointLightManager::UpdateStructuredBuffer() {
