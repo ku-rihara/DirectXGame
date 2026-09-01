@@ -6,7 +6,7 @@
 
 namespace KetaEngine {
 
-class Object3d;
+class BaseObject3d;
 
 /// <summary>
 /// Obj3Dのライティングモードやライティングパラメータを編集するクラス
@@ -33,7 +33,7 @@ public:
     /// 対象オブジェクトのモデル名に対応する設定を登録・同期し、マテリアルへ反映する
     /// </summary>
     /// <param name="obj">同期対象のオブジェクト</param>
-    void SyncObject(Object3d* obj);
+    void SyncObject(BaseObject3d* obj);
 
     void DebugImGui(); //< ImGuiデバッグ表示
 
@@ -47,7 +47,7 @@ private:
     /// <summary>
     /// モデル名に対応する設定を取得。未登録なら現在のシーンのファイルから読み込む
     /// </summary>
-    Settings& EnsureRegistered(const std::string& modelName, Object3d* seedSource);
+    Settings& EnsureRegistered(const std::string& modelName, BaseObject3d* seedSource);
 
     /// <summary>
     /// モデル名からGlobalParameterのグループ名を生成する

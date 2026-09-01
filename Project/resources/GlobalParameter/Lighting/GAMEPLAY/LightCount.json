@@ -1,6 +1,11 @@
 {
     "LightCount": {
-        "spotLightCountMax": 8,
-        "pointLightCountMax": 1
+        "WorldCameraPos": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "pointLightCountMax": 0,
+        "spotLightCountMax": 14
     }
 }

@@ -2,7 +2,7 @@
 
 using namespace KetaEngine;
 #include "3D/Model.h"
-#include "3D/Object3D/Object3d.h"
+#include "3D/Object3D/BaseObject3d.h"
 #include <imgui.h>
 
 ObjectLightingEditor* ObjectLightingEditor::GetInstance() {
@@ -24,7 +24,7 @@ std::string ObjectLightingEditor::MakeSceneFolder() const {
     return "Lighting/" + (currentSceneName_.empty() ? "Common" : currentSceneName_);
 }
 
-ObjectLightingEditor::Settings& ObjectLightingEditor::EnsureRegistered(const std::string& modelName, Object3d* seedSource) {
+ObjectLightingEditor::Settings& ObjectLightingEditor::EnsureRegistered(const std::string& modelName, BaseObject3d* seedSource) {
     if (!globalParameter_) {
         globalParameter_ = GlobalParameter::GetInstance();
     }
@@ -57,7 +57,7 @@ ObjectLightingEditor::Settings& ObjectLightingEditor::EnsureRegistered(const std
     return it->second;
 }
 
-void ObjectLightingEditor::SyncObject(Object3d* obj) {
+void ObjectLightingEditor::SyncObject(BaseObject3d* obj) {
     if (obj == nullptr || obj->GetModel() == nullptr || obj->GetModelMaterial() == nullptr) {
         return;
     }

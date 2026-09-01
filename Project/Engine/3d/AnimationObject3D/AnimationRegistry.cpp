@@ -4,6 +4,7 @@
 using namespace KetaEngine;
 #include "Base/Dx/DirectXCommon.h"
 #include "Base/Dx/DxResourceBarrier.h"
+#include "Editor/ObjectLightingEditor/ObjectLightingEditor.h"
 #include "Object3DAnimation.h"
 #include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/PipelineManager.h"
@@ -30,6 +31,10 @@ void AnimationRegistry::RegisterAnimation(Object3DAnimation* animation) {
 ///============================================================
 void AnimationRegistry::UpdateAll(float deltaTime) {
     ForEachAlive([deltaTime](Object3DAnimation* animation) {
+
+        // Editorのオブジェクトライティング情報を同期
+        ObjectLightingEditor::GetInstance()->SyncObject(animation);
+
         if (animation->IsActive()) {
             animation->Update(deltaTime);
         }
