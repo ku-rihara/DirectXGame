@@ -2,7 +2,6 @@
 
 using namespace KetaEngine;
 #include "Base/WinApp.h"
-#include "Player/ComboCreator/PlayerAttackRenditionData.h"
 #include "Utility/Log/Log.h"
 #include <fstream>
 #include <format>
@@ -522,10 +521,4 @@ template void GlobalParameter::Regist<Vector4>(const std::string& group, const s
 template void GlobalParameter::Regist<bool>(const std::string& group, const std::string& key, bool* variable);
 template void GlobalParameter::Regist<std::string>(const std::string& group, const std::string& key, std::string* variable);
 
-template void GlobalParameter::SetArrayValue<PlayerAttackRenditionData::RenditionParam>(const std::string& groupName, const std::string& key, const std::vector<PlayerAttackRenditionData::RenditionParam>& value);
-template void GlobalParameter::SetArrayValue<PlayerAttackRenditionData::ObjAnimationParam>(const std::string& groupName, const std::string& key, const std::vector<PlayerAttackRenditionData::ObjAnimationParam>& value);
-template void GlobalParameter::SetArrayValue<PlayerAttackRenditionData::VibrationParam>(const std::string& groupName, const std::string& key, const std::vector<PlayerAttackRenditionData::VibrationParam>& value);
 
-template std::vector<PlayerAttackRenditionData::RenditionParam> GlobalParameter::GetArrayValue<PlayerAttackRenditionData::RenditionParam>(const std::string& groupName, const std::string& key) const;
-template std::vector<PlayerAttackRenditionData::ObjAnimationParam> GlobalParameter::GetArrayValue<PlayerAttackRenditionData::ObjAnimationParam>(const std::string& groupName, const std::string& key) const;
-template std::vector<PlayerAttackRenditionData::VibrationParam> GlobalParameter::GetArrayValue<PlayerAttackRenditionData::VibrationParam>(const std::string& groupName, const std::string& key) const;

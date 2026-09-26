@@ -1,26 +1,11 @@
 #include "SceneFactory.h"
-#include "Scene/BattleTestScene.h"
-#include "Scene/GameResultScene.h"
-#include "Scene/GameScene.h"
-#include "Scene/TitleScene.h"
+#include "Scene/EngineScene.h"
 
 SceneFactory::SceneFactory() {
     // シーン名と生成処理をテーブルに登録する
-    // タイトルシーン
-    sceneCreators_["TITLE"] = []() {
-        return std::make_unique<TitleScene>();
-    };
-    // ゲームシーン
-    sceneCreators_["GAMEPLAY"] = []() {
-        return std::make_unique<GameScene>();
-    };
-    // バトルテストシーン
-    sceneCreators_["BATTLE_TEST"] = []() {
-        return std::make_unique<BattleTestScene>();
-    };
-    // リザルトシーン
-    sceneCreators_["RESULT"] = []() {
-        return std::make_unique<GameResultScene>();
+    // エンジン機能確認用シーン
+    sceneCreators_["ENGINE"] = []() {
+        return std::make_unique<EngineScene>();
     };
 }
 

@@ -57,16 +57,6 @@ void SceneManager::Update() {
     // シーン切り替えがあれば実行
     ApplyPendingSceneChange();
 
-    // 次のシーンが設定されている場合
-    if (Input::GetInstance()->PushKey(KeyboardKey::E) && Input::GetInstance()->PushKey(KeyboardKey::Escape)) {
-        ChangeScene("BATTLE_TEST");
-    }
-
-    // 次のシーンが設定されている場合
-    if (Input::GetInstance()->PushKey(KeyboardKey::R) && Input::GetInstance()->PushKey(KeyboardKey::T)) {
-        ChangeScene("RESULT");
-    }
-
     if (scene_) { scene_->Update(); }
 
     Object3DRegistry::GetInstance()->UpdateAll();

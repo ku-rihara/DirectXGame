@@ -52,7 +52,7 @@ private:
 
     // プレビュー設定
     bool showPreview_                 = true;
-    char previewModelNameBuffer_[128] = "Player/Player.obj";
+    char previewModelNameBuffer_[128] = "TestObj/DebugCube.obj";
     PreViewTransform previewBaseTransform_;
 
 public:

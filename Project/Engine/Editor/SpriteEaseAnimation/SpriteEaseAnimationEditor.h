@@ -52,7 +52,7 @@ private:
 
     // プレビュー設定
     bool showPreview_                     = false;
-    char previewTextureNameBuffer_[128]   = "UVChecker.dds";
+    char previewTextureNameBuffer_[128]   = "uvChecker.dds";
     PreViewTransform previewBaseTransform_;
 
 public:

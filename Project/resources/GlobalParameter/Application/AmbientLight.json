@@ -1,0 +1,11 @@
+{
+    "AmbientLight": {
+        "Color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Intensity": 0.3
+    }
+}
