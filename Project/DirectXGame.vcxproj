@@ -44,7 +44,6 @@
     <ClCompile Include="Engine\3D\ObjEaseTransformApplier.cpp" />
     <ClCompile Include="Engine\3D\WorldTransform.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
-    <ClCompile Include="Engine\Editor\AudioDSPEditor\AudioDSPEditor.cpp" />
     <ClCompile Include="Engine\Base\Descriptors\DsvManager.cpp" />
     <ClCompile Include="Engine\Base\Descriptors\RtvManager.cpp" />
     <ClCompile Include="Engine\Base\Descriptors\SrvManager.cpp" />
@@ -254,7 +253,6 @@
     <ClInclude Include="Engine\3D\ObjEaseTransformApplier.h" />
     <ClInclude Include="Engine\3D\WorldTransform.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
-    <ClInclude Include="Engine\Editor\AudioDSPEditor\AudioDSPEditor.h" />
     <ClInclude Include="Engine\Base\Descriptors\DsvManager.h" />
     <ClInclude Include="Engine\Base\Descriptors\RtvManager.h" />
     <ClInclude Include="Engine\Base\Descriptors\SrvManager.h" />

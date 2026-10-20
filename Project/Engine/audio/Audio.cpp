@@ -1,8 +1,6 @@
 #include "Audio.h"
 
 using namespace KetaEngine;
-#include "DSP/AudioFilter.h"
-#include "DSP/AudioPCM.h"
 #include <algorithm>
 #include <assert.h>
 #include <cmath>
@@ -30,7 +28,7 @@ void Audio::Init() {
     hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
     assert(SUCCEEDED(hr));
 
-    // 全体フィルター用のサブミックスボイスを作成(全ソースボイスはここを経由してマスターへ)
+    // 全体フィルター用のサブミックスボイスを作成
     XAUDIO2_VOICE_DETAILS masterDetails{};
     masterVoice_->GetVoiceDetails(&masterDetails);
     hr = xAudio2_->CreateSubmixVoice(&filterSubmixVoice_, masterDetails.InputChannels, masterDetails.InputSampleRate, XAUDIO2_VOICE_USEFILTER);
@@ -379,8 +377,7 @@ XAUDIO2_FILTER_PARAMETERS Audio::ToFilterParameters(const VoiceFilter& filter, U
     XAUDIO2_FILTER_PARAMETERS params{};
     params.Type = filter.type;
 
-    // 周波数[Hz]をXAudio2の係数に変換(OnePole系は変換式が異なる)
-    // (xaudio2.hのXAudio2CutoffFrequencyToRadians等と同じ式。あちらはXAUDIO2_HELPER_FUNCTIONS定義時のみ有効)
+    // 周波数[Hz]をXAudio2の係数に変換
     const float frequency = (std::max)(filter.frequency, 1.0f);
     const float rate      = static_cast<float>(sampleRate);
     if (filter.type == LowPassOnePoleFilter || filter.type == HighPassOnePoleFilter) {
@@ -401,35 +398,6 @@ XAUDIO2_FILTER_PARAMETERS Audio::ToFilterParameters(const VoiceFilter& filter, U
 int Audio::FindSoundId(const std::string& soundName) const {
     auto it = soundIndexMap_.find(filePath_ + soundName);
     return (it != soundIndexMap_.end()) ? it->second : -1;
-}
-
-bool Audio::GetPCM(const std::string& soundName, AudioPCM& outPCM) const {
-    const int soundId = FindSoundId(soundName);
-    if (soundId < 0) {
-        return false;
-    }
-    const SoundData& soundData = soundDatas_[soundId];
-    return outPCM.FromBytes(soundData.wfex, soundData.buffer);
-}
-
-int Audio::RegisterPCM(const std::string& soundName, const AudioPCM& pcm) {
-    if (pcm.IsEmpty()) {
-        return -1;
-    }
-    SoundData soundData{};
-    pcm.ToBytes16(soundData.wfex, soundData.buffer);
-    soundData.bufferSize = static_cast<unsigned int>(soundData.buffer.size());
-
-    return RegisterSoundData(filePath_ + soundName, std::move(soundData));
-}
-
-int Audio::CreateFilteredSound(const std::string& srcName, const std::string& dstName, AudioFilter& filter) {
-    AudioPCM pcm;
-    if (!GetPCM(srcName, pcm)) {
-        return -1;
-    }
-    filter.Process(pcm);
-    return RegisterPCM(dstName, pcm);
 }
 
 void Audio::Finalize() {

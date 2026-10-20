@@ -19,9 +19,6 @@
     <Filter Include="Engine\Audio">
       <UniqueIdentifier>{2B5FC89B-6EB1-4C8A-86BE-1714312F16F1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Editor\AudioDSPEditor">
-      <UniqueIdentifier>{10A45E97-C2E4-4094-94A7-2392C4B8DCC8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Base">
       <UniqueIdentifier>{52634DC3-209D-410C-8A40-8FA9DF1C5415}</UniqueIdentifier>
     </Filter>
@@ -380,9 +377,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Audio\Audio.cpp">
       <Filter>Engine\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Editor\AudioDSPEditor\AudioDSPEditor.cpp">
-      <Filter>Engine\Editor\AudioDSPEditor</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Base\Descriptors\DsvManager.cpp">
       <Filter>Engine\Base\Descriptors</Filter>
@@ -1002,9 +996,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Audio\Audio.h">
       <Filter>Engine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Editor\AudioDSPEditor\AudioDSPEditor.h">
-      <Filter>Engine\Editor\AudioDSPEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Base\Descriptors\DsvManager.h">
       <Filter>Engine\Base\Descriptors</Filter>
