@@ -34,10 +34,12 @@ void BaseScene::Init() {
     // 生成
     debugCamera_       = std::make_unique<KetaEngine::DebugCamera>();
     effectEditorSuite_ = std::make_unique<KetaEngine::EffectEditorSuite>();
+    audioDSPEditor_    = std::make_unique<KetaEngine::AudioDSPEditor>();
 
     // 初期化
     debugCamera_->Init();
     effectEditorSuite_->Init();
+    audioDSPEditor_->Init();
     viewProjection_.Init();
 
     // ビュープロジェクションのセットアップ
@@ -145,6 +147,11 @@ void BaseScene::Debug() {
     // エディター編集
     ImGui::Begin("Effect Editor Suite");
     effectEditorSuite_->EditorUpdate();
+    ImGui::End();
+
+    // サウンド編集
+    ImGui::Begin("サウンド編集");
+    audioDSPEditor_->EditorUpdate();
     ImGui::End();
 
     // ImGuiの描画

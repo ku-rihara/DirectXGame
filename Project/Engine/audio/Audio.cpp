@@ -1,9 +1,14 @@
 #include "Audio.h"
 
 using namespace KetaEngine;
+#include "DSP/AudioFilter.h"
+#include "DSP/AudioPCM.h"
+#include <algorithm>
 #include <assert.h>
+#include <cmath>
 #include <filesystem>
 #include <fstream>
+#include <numbers>
 #define ATTENUATION_TIME_MS 50
 #define ATTENUATION_FACTOR 0.01f 
 #pragma comment(lib, "xaudio2.lib")
@@ -24,6 +29,13 @@ void Audio::Init() {
     // マスターボイスを作成
     hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
     assert(SUCCEEDED(hr));
+
+    // 全体フィルター用のサブミックスボイスを作成(全ソースボイスはここを経由してマスターへ)
+    XAUDIO2_VOICE_DETAILS masterDetails{};
+    masterVoice_->GetVoiceDetails(&masterDetails);
+    hr = xAudio2_->CreateSubmixVoice(&filterSubmixVoice_, masterDetails.InputChannels, masterDetails.InputSampleRate, XAUDIO2_VOICE_USEFILTER);
+    assert(SUCCEEDED(hr));
+    ClearGlobalFilter();
 
     // Media Foundationの初期化
     hr = MFStartup(MF_VERSION);
@@ -124,14 +136,7 @@ int Audio::LoadWaveFile(const std::string& fullPath) {
     soundData.bufferSize = int(buffer.size());
     soundData.buffer     = std::move(buffer);
 
-    // soundDatas_に追加
-    soundDatas_.push_back(std::move(soundData));
-    int index = int(soundDatas_.size()) - 1;
-
-    // ファイル名とインデックスをマップに保存
-    soundIndexMap_[fullPath] = index;
-
-    return index;
+    return RegisterSoundData(fullPath, std::move(soundData));
 }
 
 int Audio::LoadMP3File(const std::string& fullPath) {
@@ -219,7 +224,12 @@ int Audio::LoadMP3File(const std::string& fullPath) {
     soundData.bufferSize = int(audioData.size());
     soundData.buffer     = std::move(audioData);
 
+    return RegisterSoundData(fullPath, std::move(soundData));
+}
+
+int Audio::RegisterSoundData(const std::string& fullPath, SoundData&& soundData) {
     // soundDatas_に追加
+    // 同名の差し替え時も、再生中のボイスが古いバッファを参照している可能性があるため上書きせず新規に追加する
     soundDatas_.push_back(std::move(soundData));
     int index = int(soundDatas_.size()) - 1;
 
@@ -254,18 +264,34 @@ void Audio::Play(const std::string& filename, float volume) {
     PlayForID(soundId, volume);
 }
 
-void Audio::PlayForID(int soundId, float volume) {
+void Audio::PlayForID(int soundId, float volume, const VoiceFilter* filter) {
     if (soundId < 0 || soundId >= soundDatas_.size()) {
         return;
     }
 
     const SoundData& soundData = soundDatas_[soundId];
+    if (soundData.buffer.empty()) {
+        return;
+    }
 
     HRESULT result;
     IXAudio2SourceVoice* pSourceVoice = nullptr;
 
-    result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
+    // 出力先を全体フィルター用のサブミックスに設定
+    XAUDIO2_SEND_DESCRIPTOR sendDescriptor = {0, filterSubmixVoice_};
+    XAUDIO2_VOICE_SENDS sendList           = {1, &sendDescriptor};
+    const UINT32 voiceFlags                = filter ? XAUDIO2_VOICE_USEFILTER : 0;
+
+    result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex, voiceFlags, XAUDIO2_DEFAULT_FREQ_RATIO, nullptr,
+        filterSubmixVoice_ ? &sendList : nullptr);
     assert(SUCCEEDED(result));
+
+    // 個別フィルター
+    if (filter) {
+        XAUDIO2_FILTER_PARAMETERS params = ToFilterParameters(*filter, soundData.wfex.nSamplesPerSec);
+        result                           = pSourceVoice->SetFilterParameters(&params);
+        assert(SUCCEEDED(result));
+    }
 
     // ボリューム調整
     float adjustedVolume = volume;
@@ -316,7 +342,101 @@ void Audio::Unload(int soundId) {
     }
 }
 
+void Audio::PlayWithFilter(const std::string& soundName, const VoiceFilter& filter, float volume) {
+    int soundId = FindSoundId(soundName);
+    if (soundId == -1) {
+        soundId = Load(soundName);
+    }
+    PlayForID(soundId, volume, &filter);
+}
+
+void Audio::SetGlobalFilter(const VoiceFilter& filter) {
+    if (!filterSubmixVoice_) {
+        return;
+    }
+    XAUDIO2_VOICE_DETAILS details{};
+    filterSubmixVoice_->GetVoiceDetails(&details);
+
+    XAUDIO2_FILTER_PARAMETERS params = ToFilterParameters(filter, details.InputSampleRate);
+    filterSubmixVoice_->SetFilterParameters(&params);
+
+    globalFilter_          = filter;
+    isGlobalFilterEnabled_ = true;
+}
+
+void Audio::ClearGlobalFilter() {
+    if (!filterSubmixVoice_) {
+        return;
+    }
+    // 既定値(LowPass, Frequency=1.0, OneOverQ=1.0)はフィルター無しと同等
+    XAUDIO2_FILTER_PARAMETERS params = {LowPassFilter, XAUDIO2_DEFAULT_FILTER_FREQUENCY, XAUDIO2_DEFAULT_FILTER_ONEOVERQ};
+    filterSubmixVoice_->SetFilterParameters(&params);
+
+    isGlobalFilterEnabled_ = false;
+}
+
+XAUDIO2_FILTER_PARAMETERS Audio::ToFilterParameters(const VoiceFilter& filter, UINT32 sampleRate) {
+    XAUDIO2_FILTER_PARAMETERS params{};
+    params.Type = filter.type;
+
+    // 周波数[Hz]をXAudio2の係数に変換(OnePole系は変換式が異なる)
+    // (xaudio2.hのXAudio2CutoffFrequencyToRadians等と同じ式。あちらはXAUDIO2_HELPER_FUNCTIONS定義時のみ有効)
+    const float frequency = (std::max)(filter.frequency, 1.0f);
+    const float rate      = static_cast<float>(sampleRate);
+    if (filter.type == LowPassOnePoleFilter || filter.type == HighPassOnePoleFilter) {
+        const float ratio = 1.0f - 2.0f * frequency / rate;
+        params.Frequency  = (frequency >= rate) ? XAUDIO2_MAX_FILTER_FREQUENCY : 1.0f - ratio * ratio;
+    } else {
+        // 状態変数フィルターはサンプリング周波数の1/6までしか扱えない
+        params.Frequency = (frequency * 6.0f >= rate) ? XAUDIO2_MAX_FILTER_FREQUENCY
+                                                      : 2.0f * std::sin(std::numbers::pi_v<float> * frequency / rate);
+    }
+
+    // 1/Qは0より大きくXAUDIO2_MAX_FILTER_ONEOVERQ以下
+    const float q    = (std::max)(filter.q, 1.0f / XAUDIO2_MAX_FILTER_ONEOVERQ);
+    params.OneOverQ  = (std::min)(1.0f / q, XAUDIO2_MAX_FILTER_ONEOVERQ);
+    return params;
+}
+
+int Audio::FindSoundId(const std::string& soundName) const {
+    auto it = soundIndexMap_.find(filePath_ + soundName);
+    return (it != soundIndexMap_.end()) ? it->second : -1;
+}
+
+bool Audio::GetPCM(const std::string& soundName, AudioPCM& outPCM) const {
+    const int soundId = FindSoundId(soundName);
+    if (soundId < 0) {
+        return false;
+    }
+    const SoundData& soundData = soundDatas_[soundId];
+    return outPCM.FromBytes(soundData.wfex, soundData.buffer);
+}
+
+int Audio::RegisterPCM(const std::string& soundName, const AudioPCM& pcm) {
+    if (pcm.IsEmpty()) {
+        return -1;
+    }
+    SoundData soundData{};
+    pcm.ToBytes16(soundData.wfex, soundData.buffer);
+    soundData.bufferSize = static_cast<unsigned int>(soundData.buffer.size());
+
+    return RegisterSoundData(filePath_ + soundName, std::move(soundData));
+}
+
+int Audio::CreateFilteredSound(const std::string& srcName, const std::string& dstName, AudioFilter& filter) {
+    AudioPCM pcm;
+    if (!GetPCM(srcName, pcm)) {
+        return -1;
+    }
+    filter.Process(pcm);
+    return RegisterPCM(dstName, pcm);
+}
+
 void Audio::Finalize() {
+    if (filterSubmixVoice_) {
+        filterSubmixVoice_->DestroyVoice();
+        filterSubmixVoice_ = nullptr;
+    }
     if (masterVoice_) {
         masterVoice_->DestroyVoice();
         masterVoice_ = nullptr;
