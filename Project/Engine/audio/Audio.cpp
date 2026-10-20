@@ -373,7 +373,7 @@ void Audio::ClearGlobalFilter() {
     isGlobalFilterEnabled_ = false;
 }
 
-XAUDIO2_FILTER_PARAMETERS Audio::ToFilterParameters(const VoiceFilter& filter, UINT32 sampleRate) {
+XAUDIO2_FILTER_PARAMETERS Audio::ToFilterParameters(const VoiceFilter& filter, UINT32 sampleRate) const {
     XAUDIO2_FILTER_PARAMETERS params{};
     params.Type = filter.type;
 
@@ -398,6 +398,25 @@ XAUDIO2_FILTER_PARAMETERS Audio::ToFilterParameters(const VoiceFilter& filter, U
 int Audio::FindSoundId(const std::string& soundName) const {
     auto it = soundIndexMap_.find(filePath_ + soundName);
     return (it != soundIndexMap_.end()) ? it->second : -1;
+}
+
+int Audio::RegisterSound(const std::string& soundName, const WAVEFORMATEX& format, std::vector<BYTE> buffer) {
+    if (buffer.empty()) {
+        return -1;
+    }
+    SoundData soundData{};
+    soundData.wfex       = format;
+    soundData.bufferSize = static_cast<unsigned int>(buffer.size());
+    soundData.buffer     = std::move(buffer);
+    return RegisterSoundData(filePath_ + soundName, std::move(soundData));
+}
+
+const Audio::SoundData* Audio::FindSoundData(const std::string& soundName) const {
+    const int soundId = FindSoundId(soundName);
+    if (soundId < 0 || soundDatas_[soundId].buffer.empty()) {
+        return nullptr;
+    }
+    return &soundDatas_[soundId];
 }
 
 void Audio::Finalize() {

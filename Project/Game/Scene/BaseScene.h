@@ -10,6 +10,7 @@
 // Input
 #include "Input/Input.h"
 // editor
+#include "Editor/AudioDSPEditor/AudioDSPEditor.h"
 #include "Editor/EffectEditorSuite/EffectEditorSuite.h"
 // debug
 #include "Utility/Debug/DebugCamera.h"
@@ -65,6 +66,9 @@ protected:
 
     // 演出エディターのまとまり
     std::unique_ptr<KetaEngine::EffectEditorSuite> effectEditorSuite_ = nullptr;
+
+    // 波形加工(音声合成・フィルター)エディター
+    std::unique_ptr<KetaEngine::AudioDSPEditor> audioDSPEditor_ = nullptr;
 
     // ViewProjection、デバッグカメラ、カメラモード
     KetaEngine::ViewProjection viewProjection_;

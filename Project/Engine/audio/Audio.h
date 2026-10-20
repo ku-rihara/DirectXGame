@@ -83,7 +83,7 @@ private:
     int LoadMP3File(const std::string& fullPath);
     int RegisterSoundData(const std::string& fullPath, SoundData&& soundData);
     void PlayForID(int soundId, float volume, const VoiceFilter* filter = nullptr);
-    static XAUDIO2_FILTER_PARAMETERS ToFilterParameters(const VoiceFilter& filter, UINT32 sampleRate);
+    XAUDIO2_FILTER_PARAMETERS ToFilterParameters(const VoiceFilter& filter, UINT32 sampleRate) const;
 
 public:
     // 全ファイルロード用
@@ -118,6 +118,16 @@ public:
 
     // サウンド名からIDを取得(未ロードは-1)
     int FindSoundId(const std::string& soundName) const;
+
+    ///------------------------------------------------------------
+    /// 生成サウンド
+    ///------------------------------------------------------------
+
+    // PCMバイト列をサウンドとして登録(同名は差し替え)。以後Play(soundName)で再生できる
+    int RegisterSound(const std::string& soundName, const WAVEFORMATEX& format, std::vector<BYTE> buffer);
+
+    // 読み込み済みサウンドのデータ(未ロードはnullptr)
+    const SoundData* FindSoundData(const std::string& soundName) const;
 
     IXAudio2* GetXAudio2() const { return xAudio2_.Get(); }
     bool IsGlobalFilterEnabled() const { return isGlobalFilterEnabled_; }

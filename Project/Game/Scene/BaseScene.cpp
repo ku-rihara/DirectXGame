@@ -1,5 +1,6 @@
 #include "BaseScene.h"
 #include "Light/Light.h"
+#include "Editor/AudioDSPEditor/AudioDSPEditorFactory.h"
 #include "Editor/CameraEditor/CameraEditor.h"
 #include "PostEffect/PostEffectRenderer.h"
 // 3D
@@ -34,6 +35,7 @@ void BaseScene::Init() {
     // 生成
     debugCamera_       = std::make_unique<KetaEngine::DebugCamera>();
     effectEditorSuite_ = std::make_unique<KetaEngine::EffectEditorSuite>();
+    audioDSPEditor_    = KetaEngine::AudioDSPEditorFactory().Create(*audio_);
 
     // 初期化
     debugCamera_->Init();
@@ -145,6 +147,11 @@ void BaseScene::Debug() {
     // エディター編集
     ImGui::Begin("Effect Editor Suite");
     effectEditorSuite_->EditorUpdate();
+    ImGui::End();
+
+    // サウンド編集
+    ImGui::Begin("サウンド編集");
+    audioDSPEditor_->EditorUpdate();
     ImGui::End();
 
     // ImGuiの描画

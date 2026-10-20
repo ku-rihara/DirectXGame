@@ -19,6 +19,33 @@
     <Filter Include="Engine\Audio">
       <UniqueIdentifier>{2B5FC89B-6EB1-4C8A-86BE-1714312F16F1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Audio\DSP">
+      <UniqueIdentifier>{AA1B2275-D761-47C2-8CEC-C44EBB646DBB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\DSP\Core">
+      <UniqueIdentifier>{9D7EDDAA-4FA4-4344-9584-46D9075CD5C3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\DSP\Effect">
+      <UniqueIdentifier>{83112460-D182-4ACF-9B27-16EAD01BC7FE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\DSP\Filter">
+      <UniqueIdentifier>{125B8885-9F4C-433B-8043-8A0013640A13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\DSP\IO">
+      <UniqueIdentifier>{94E26392-785C-49C5-A4B4-7F915B63E30A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\DSP\Source">
+      <UniqueIdentifier>{FB2EDB00-92D7-4B4C-9A06-380C613904F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\DSP\Voice">
+      <UniqueIdentifier>{7A25A31A-9571-440B-AF2E-8253434BD098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editor\AudioDSPEditor">
+      <UniqueIdentifier>{3263B7D2-A232-4796-ACBE-CC26892BC2E0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editor\AudioDSPEditor\Panel">
+      <UniqueIdentifier>{A0F6F60E-1CD4-429F-BEF9-2391918DADCA}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Base">
       <UniqueIdentifier>{52634DC3-209D-410C-8A40-8FA9DF1C5415}</UniqueIdentifier>
     </Filter>
@@ -377,6 +404,87 @@
     </ClCompile>
     <ClCompile Include="Engine\Audio\Audio.cpp">
       <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Core\AudioPCM.cpp">
+      <Filter>Engine\Audio\DSP\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Core\FFT.cpp">
+      <Filter>Engine\Audio\DSP\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Core\WindowFunction.cpp">
+      <Filter>Engine\Audio\DSP\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Effect\Vocoder.cpp">
+      <Filter>Engine\Audio\DSP\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Filter\AudioFilterBank.cpp">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Filter\AudioFilterChain.cpp">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Filter\FIRFilter.cpp">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Filter\FilterProcessor.cpp">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Filter\IIRFilter.cpp">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\IO\AudioSoundRegistry.cpp">
+      <Filter>Engine\Audio\DSP\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\IO\MP3Encoder.cpp">
+      <Filter>Engine\Audio\DSP\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\IO\PCMConverter.cpp">
+      <Filter>Engine\Audio\DSP\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Source\GlottalSource.cpp">
+      <Filter>Engine\Audio\DSP\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Source\OscillatorSource.cpp">
+      <Filter>Engine\Audio\DSP\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Voice\FormantTable.cpp">
+      <Filter>Engine\Audio\DSP\Voice</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Voice\MoraParser.cpp">
+      <Filter>Engine\Audio\DSP\Voice</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\DSP\Voice\VoiceSynthesizer.cpp">
+      <Filter>Engine\Audio\DSP\Voice</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\AudioDSPEditor\AudioDSPContext.cpp">
+      <Filter>Engine\Editor\AudioDSPEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\AudioDSPEditor\AudioDSPEditor.cpp">
+      <Filter>Engine\Editor\AudioDSPEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\AudioDSPEditor\AudioDSPEditorFactory.cpp">
+      <Filter>Engine\Editor\AudioDSPEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\AudioDSPEditor\AudioDSPGui.cpp">
+      <Filter>Engine\Editor\AudioDSPEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\AudioDSPEditor\Panel\FilterPanel.cpp">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\AudioDSPEditor\Panel\OscillatorPanel.cpp">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\AudioDSPEditor\Panel\PreviewPanel.cpp">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\AudioDSPEditor\Panel\RealtimeFilterPanel.cpp">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\AudioDSPEditor\Panel\VocoderPanel.cpp">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\AudioDSPEditor\Panel\VoiceSynthPanel.cpp">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Base\Descriptors\DsvManager.cpp">
       <Filter>Engine\Base\Descriptors</Filter>
@@ -996,6 +1104,102 @@
     </ClInclude>
     <ClInclude Include="Engine\Audio\Audio.h">
       <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Core\AudioPCM.h">
+      <Filter>Engine\Audio\DSP\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Core\FFT.h">
+      <Filter>Engine\Audio\DSP\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Core\WindowFunction.h">
+      <Filter>Engine\Audio\DSP\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Effect\Vocoder.h">
+      <Filter>Engine\Audio\DSP\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Filter\AudioFilterBank.h">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Filter\AudioFilterChain.h">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Filter\FIRFilter.h">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Filter\FilterProcessor.h">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Filter\IAudioFilter.h">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Filter\IIRFilter.h">
+      <Filter>Engine\Audio\DSP\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\IO\AudioSoundRegistry.h">
+      <Filter>Engine\Audio\DSP\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\IO\IAudioEncoder.h">
+      <Filter>Engine\Audio\DSP\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\IO\ISoundRegistry.h">
+      <Filter>Engine\Audio\DSP\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\IO\MP3Encoder.h">
+      <Filter>Engine\Audio\DSP\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\IO\PCMConverter.h">
+      <Filter>Engine\Audio\DSP\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Source\GlottalSource.h">
+      <Filter>Engine\Audio\DSP\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Source\ISoundSource.h">
+      <Filter>Engine\Audio\DSP\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Source\OscillatorSource.h">
+      <Filter>Engine\Audio\DSP\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Voice\FormantTable.h">
+      <Filter>Engine\Audio\DSP\Voice</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Voice\MoraParser.h">
+      <Filter>Engine\Audio\DSP\Voice</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\DSP\Voice\VoiceSynthesizer.h">
+      <Filter>Engine\Audio\DSP\Voice</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\AudioDSPContext.h">
+      <Filter>Engine\Editor\AudioDSPEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\AudioDSPEditor.h">
+      <Filter>Engine\Editor\AudioDSPEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\AudioDSPEditorFactory.h">
+      <Filter>Engine\Editor\AudioDSPEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\AudioDSPGui.h">
+      <Filter>Engine\Editor\AudioDSPEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\Panel\FilterPanel.h">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\Panel\IAudioDSPPanel.h">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\Panel\OscillatorPanel.h">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\Panel\PreviewPanel.h">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\Panel\RealtimeFilterPanel.h">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\Panel\VocoderPanel.h">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\AudioDSPEditor\Panel\VoiceSynthPanel.h">
+      <Filter>Engine\Editor\AudioDSPEditor\Panel</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Base\Descriptors\DsvManager.h">
       <Filter>Engine\Base\Descriptors</Filter>
